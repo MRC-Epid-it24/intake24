@@ -9,14 +9,14 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';
-import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Op, Permission, Role, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
 export type UserPasswordInput = {
   userId: string;
   password: string;
 };
 
-const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
+const adminUserService = ({ aclConfig, cache, db }: Pick<IoC, 'aclConfig' | 'cache' | 'db'>) => {
   /**
    * Flush ACL cache for specified user
    *
@@ -194,6 +194,27 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
   };
 
   /**
+   * Admin tool signup - create new user with researcher role
+   *
+   * @param {CreateUserInput} input
+   * @returns {Promise<User>}
+   */
+  const signUp = async (input: CreateUserInput): Promise<User> => {
+    const { enabled, permissions: permissionNames, roles: roleNames } = aclConfig.signup;
+    if (!enabled) throw new ForbiddenError();
+
+    const [permissionRecords, roleRecords] = await Promise.all([
+      Permission.findAll({ attributes: ['id'], where: { name: permissionNames } }),
+      Role.findAll({ attributes: ['id'], where: { name: roleNames } }),
+    ]);
+
+    const permissions = permissionRecords.map(({ id }) => id);
+    const roles = roleRecords.map(({ id }) => id);
+
+    return create({ ...input, permissions, roles });
+  };
+
+  /**
    * Update existing user and its associations. It updates:
    * - user record
    * - user custom fields
@@ -279,6 +300,12 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     await Promise.all([user.$remove('permissions', permission), flushUserACLCache(user.id)]);
   };
 
+  /**
+   * Fetch all user with survey support securable
+   *
+   * @param {string} surveyId
+   * @returns {Promise<User[]>}
+   */
   const getSurveySupportUsers = async (surveyId: string): Promise<User[]> =>
     User.findAll({
       where: { email: { [Op.ne]: null } },
@@ -291,6 +318,11 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       ],
     });
 
+  /**
+   * Fetch all users with `globalSupport` permission
+   *
+   * @returns {Promise<User[]>}
+   */
   const getGlobalSupportUsers = async (): Promise<User[]> => {
     const users = await Promise.all([
       User.findAll({
@@ -335,6 +367,7 @@ const adminUserService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     updateUserCustomFields,
     updatePassword,
     create,
+    signUp,
     update,
     destroy,
     addPermissionByName,

@@ -1,66 +1,57 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col cols="auto">
-      <v-card class="mt-10" outlined raised width="30rem">
-        <v-card-title class="justify-center pt-6">
-          <h2>{{ $t('users.password.reset._') }}</h2>
-        </v-card-title>
-        <v-card-text v-if="submitted">
-          <p class="text-h5 ma-4">{{ $t('users.password.reset.sent') }}</p>
-          <p class="text-subtitle-2 ma-4">
-            Please check your inbox (including spam / junk folder).
-          </p>
-          <v-card-actions class="d-flex justify-center">
-            <v-btn color="blue darken-3" exact text :to="{ name: 'login' }">
-              Back to login screen
-            </v-btn>
-          </v-card-actions>
-        </v-card-text>
-        <v-form
-          v-else
-          @keydown.native="form.errors.clear($event.target.name)"
-          @submit.prevent="submit"
-        >
-          <v-card-text class="px-6">
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.email"
-                  :error-messages="form.errors.get('email')"
-                  hide-details="auto"
-                  :label="$t('users.email')"
-                  outlined
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions class="px-6 pb-6">
-            <v-btn block color="secondary" type="submit" x-large>
-              {{ $t('users.password.reset.send') }}
-            </v-btn>
-          </v-card-actions>
-          <div v-if="captcha.enabled">
-            <v-divider class="mx-6 mt-3"></v-divider>
-            <component
-              :is="captcha.provider"
-              ref="captchaRef"
-              :sitekey="captcha.sitekey"
-              @expired="expired"
-              @verified="verified"
-            ></component>
-          </div>
-        </v-form>
-      </v-card>
-    </v-col>
-  </v-row>
+  <app-entry-screen
+    :logo="logo"
+    :subtitle="$t('common.password.request.subtitle').toString()"
+    :title="$t('common.password.request._').toString()"
+    width="30rem"
+  >
+    <v-card-text v-if="submitted" class="pa-6">
+      <p class="text-h5 ma-4">{{ $t('common.password.request.sent') }}</p>
+      <p class="text-subtitle-2 ma-4">{{ $t('common.password.request.spam') }}</p>
+    </v-card-text>
+    <v-form v-else @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="form.email"
+                :error-messages="form.errors.get('email')"
+                hide-details="auto"
+                :label="$t('common.email')"
+                name="email"
+                outlined
+                prepend-inner-icon="fas fa-envelope"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-btn block color="secondary" rounded type="submit" x-large>
+                {{ $t('common.password.request.send') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <captcha ref="captcha" @expired="expired" @verified="verified"></captcha>
+    </v-form>
+    <v-card-actions>
+      <v-btn color="blue darken-3" exact text :to="{ name: 'login' }">
+        <v-icon left>fas fa-angles-left</v-icon>
+        {{ $t('common.login.back') }}
+      </v-btn>
+    </v-card-actions>
+  </app-entry-screen>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
 
+import { logo } from '@intake24/admin/assets';
 import { form } from '@intake24/admin/helpers';
-import { HCaptcha, ReCaptcha } from '@intake24/ui';
+import { AppEntryScreen, Captcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 type PasswordRequestForm = {
@@ -71,30 +62,26 @@ type PasswordRequestForm = {
 export default defineComponent({
   name: 'PasswordRequest',
 
-  components: { HCaptcha, ReCaptcha },
+  components: { AppEntryScreen, Captcha },
 
   setup() {
-    const captchaRef = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
+    const captcha = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
       form: form<PasswordRequestForm>({
         email: null,
         captcha: null,
       }),
-      captcha: {
-        enabled: !!import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
-        provider: import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
-        sitekey: import.meta.env.VITE_APP_CAPTCHA_SITEKEY as string,
-      },
-      captchaRef,
+      captcha,
       submitted: false,
+      logo,
     });
   },
 
   methods: {
     resetCaptcha() {
       this.form.captcha = null;
-      this.captchaRef?.reset();
+      this.captcha?.reset();
     },
 
     async verified(token: string) {
@@ -113,7 +100,7 @@ export default defineComponent({
       } catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          useMessages().error(this.$t('users.password.reset.captcha').toString());
+          useMessages().error(this.$t('common.password.reset.captcha').toString());
         } else throw err;
       } finally {
         this.resetCaptcha();
@@ -121,8 +108,8 @@ export default defineComponent({
     },
 
     async submit() {
-      if (this.captcha.enabled === true && !this.form.captcha) {
-        this.captchaRef?.execute();
+      if (this.captcha) {
+        this.captcha.executeIfCan();
         return;
       }
 

@@ -1,6 +1,6 @@
 # Admin client
 
-Admin client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev/). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev/) docs if any further modifications are required.
+Admin client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev) docs if any further modifications are required.
 
 Basic configuration options can be set through `.env` file. Further vite configuration can be tweak through `vite.config.ts`.
 
@@ -81,6 +81,10 @@ Base URL where to server the `SPA`. Defaults to `$BASE_URL`.
 ### VITE_APP_PREFIX
 
 Prefix to be used for application data stored in browser storage. Defaults to `it24a`.
+
+### VITE_ACL_SIGNUP_ENABLED
+
+Flag whether to allow admin tool sign-ups. Defaults to `false`. Flag only enables sign-up view in the application. Sign-ups also has to be enabled in [API Server ACL settings](/config/api/acl#sign-up).
 
 ### Captcha settings
 

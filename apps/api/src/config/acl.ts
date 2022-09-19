@@ -6,6 +6,11 @@ export type ACLConfig = {
   roles: {
     superuser: string;
   };
+  signup: {
+    enabled: boolean;
+    permissions: string[];
+    roles: string[];
+  };
 };
 
 const aclConfig: ACLConfig = {
@@ -15,6 +20,13 @@ const aclConfig: ACLConfig = {
   },
   roles: {
     superuser: 'superuser',
+  },
+  signup: {
+    enabled: process.env.ACL_SIGNUP_ENABLED === 'true',
+    permissions: process.env.ACL_SIGNUP_PERMISSIONS
+      ? process.env.ACL_SIGNUP_PERMISSIONS.split(',')
+      : [],
+    roles: process.env.ACL_SIGNUP_ROLES ? process.env.ACL_SIGNUP_ROLES.split(',') : [],
   },
 };
 

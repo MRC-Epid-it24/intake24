@@ -1,6 +1,6 @@
 # Survey client
 
-Survey client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev/). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev/) docs if any further modifications are required.
+Survey client is [Vue.js](https://vuejs.org) based application and scaffolded with [vite](https://vitejs.dev). Docs outline specific settings for deployment of the application. But feel free to dive in to [vite](https://vitejs.dev) docs if any further modifications are required.
 
 Basic configuration options can be set through `.env` file. Further vite configuration can be tweak through `vite.config.ts`.
 

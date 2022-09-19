@@ -6,13 +6,18 @@ import type { LoginResponse, MFAResponse, RefreshResponse } from '@intake24/comm
 import { UnauthorizedError } from '@intake24/api/http/errors';
 
 const adminAuthenticationController = ({
+  adminUserService,
   authenticationService,
   jwtRotationService,
   mfaProvider,
   securityConfig,
 }: Pick<
   IoC,
-  'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
+  | 'adminUserService'
+  | 'authenticationService'
+  | 'jwtRotationService'
+  | 'mfaProvider'
+  | 'securityConfig'
 >) => {
   /**
    * Successful login response helper
@@ -72,11 +77,29 @@ const adminAuthenticationController = ({
     res.cookie(name, '', { maxAge: -1, httpOnly, path, secure, sameSite }).json();
   };
 
+  const signup = async (
+    req: Request,
+    res: Response<LoginResponse | MFAResponse>
+  ): Promise<void> => {
+    const { name, email, phone, password } = req.body;
+
+    await adminUserService.signUp({ name, email, phone, password });
+
+    const result = await authenticationService.adminLogin({ email, password }, { req });
+    if ('mfaRequestUrl' in result) {
+      res.json(result);
+      return;
+    }
+
+    sendTokenResponse(result, res);
+  };
+
   return {
     login,
     verify,
     refresh,
     logout,
+    signup,
   };
 };
 

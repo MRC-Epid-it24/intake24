@@ -4,7 +4,7 @@ import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Dictionary, ValidationError } from '@intake24/common/types';
-import { SubmitFooter } from '@intake24/admin/components/forms';
+import { ErrorList, SubmitFooter } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { useEntry, useMessages } from '@intake24/admin/stores';
 import { copy } from '@intake24/common/util';
@@ -18,7 +18,7 @@ type Method = 'get' | 'post' | 'patch' | 'put' | 'delete';
 export default defineComponent({
   name: 'FormMixin',
 
-  components: { Layout, SubmitFooter },
+  components: { ErrorList, Layout, SubmitFooter },
 
   mixins: [fetchEntry, watchEntry],
 

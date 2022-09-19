@@ -28,18 +28,7 @@
         </confirm-dialog>
       </template>
     </v-toolbar>
-    <v-card-text v-if="nonInputErrors.length">
-      <v-alert
-        v-for="error in nonInputErrors"
-        :key="error.param"
-        border="left"
-        class="my-2"
-        text
-        type="error"
-      >
-        {{ error.msg }}
-      </v-alert>
-    </v-card-text>
+    <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
     <v-list v-if="form.translations.length" two-line>
       <v-list-item
         v-for="translation in form.translations"

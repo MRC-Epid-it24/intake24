@@ -57,7 +57,7 @@
                   v-model="form.email"
                   :error-messages="form.errors.get('email')"
                   hide-details="auto"
-                  :label="$t('users.email')"
+                  :label="$t('common.email')"
                   name="email"
                   outlined
                   prepend-icon="fas fa-envelope"

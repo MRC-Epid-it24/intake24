@@ -44,7 +44,7 @@
                       disabled
                       :error-messages="form.errors.get('userId')"
                       hide-details="auto"
-                      :label="$t('users.email')"
+                      :label="$t('common.email')"
                       name="userId"
                       outlined
                       prepend-icon="fas fa-user"
@@ -61,7 +61,7 @@
                       hide-selected
                       item-text="email"
                       item-value="id"
-                      :label="$t('users.email')"
+                      :label="$t('common.email').toString()"
                       name="userId"
                       prepend-icon="fas fa-users"
                       @input="form.errors.clear('userId')"
@@ -80,7 +80,7 @@
                       v-model="form.email"
                       :error-messages="form.errors.get('email')"
                       hide-details="auto"
-                      :label="$t('users.email')"
+                      :label="$t('common.email')"
                       name="email"
                       outlined
                       prepend-icon="fa-at"
@@ -102,7 +102,7 @@
                       v-model="form.phone"
                       :error-messages="form.errors.get('phone')"
                       hide-details="auto"
-                      :label="$t('users.phone')"
+                      :label="$t('common.phone')"
                       name="phone"
                       outlined
                       prepend-icon="fa-phone"
@@ -128,18 +128,7 @@
               </v-checkbox>
             </v-col>
           </v-row>
-          <template v-if="nonInputErrors.length">
-            <v-alert
-              v-for="error in nonInputErrors"
-              :key="error.param"
-              class="my-2"
-              dense
-              text
-              type="error"
-            >
-              {{ error.msg }}
-            </v-alert>
-          </template>
+          <error-list :errors="nonInputErrors"></error-list>
         </v-card-text>
         <v-card-actions>
           <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -168,7 +157,7 @@ import { defineComponent } from 'vue';
 
 import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
-import { AutoComplete } from '@intake24/admin/components/forms';
+import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 
 export type UserDialogForm = {
@@ -182,7 +171,7 @@ export type UserDialogForm = {
 export default defineComponent({
   name: 'UserDialog',
 
-  components: { AutoComplete },
+  components: { AutoComplete, ErrorList },
 
   props: {
     api: {

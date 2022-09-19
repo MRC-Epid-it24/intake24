@@ -3,11 +3,51 @@ import type { LocaleMessageObject } from 'vue-i18n';
 const common: LocaleMessageObject = {
   _: 'Intake24 Admin Tool',
   title: 'Common',
-  register: 'Registration',
-  login: 'Sign in',
+  login: {
+    _: 'Sign in',
+    subtitle: 'Sign in to Intake24 Admin Tool account',
+    back: 'Back to login',
+  },
   logout: {
     _: 'Sign out',
     text: 'Sign out from application',
+  },
+  signup: {
+    _: 'Sign Up',
+    subtitle: 'Sign up for a new Intake24 Admin Tool account',
+    noAccount: 'No account yet?',
+  },
+  password: {
+    _: 'Password',
+    current: 'Current password',
+    new: 'New password',
+    confirm: 'Confirm new password',
+    forgot: 'Forgotten password?',
+    change: 'Change current password',
+    changed: 'Password has been changed.',
+    request: {
+      _: 'Request new password',
+      subtitle: `Enter your Intake24 account's email address and we'll send you instruction for password reset.`,
+      captcha: 'Invalid captcha challenge',
+      send: 'Send request',
+      sent: 'Password reset instructions has been sent to provided email address.',
+      spam: 'Please check your inbox (including spam / junk folder).',
+    },
+    reset: {
+      _: 'Reset password',
+      subtitle: 'Enter your email address and new password.',
+    },
+    update: 'Update password',
+    updated: 'Your password has been successfully updated.',
+  },
+  email: 'Email',
+  emailConfirm: 'Confirm email',
+  phone: 'Phone',
+  terms: {
+    _: 'Terms',
+    text: 'I agree with Intake24 {privacy} and {tos}.',
+    privacy: 'Privacy Policy',
+    tos: 'Terms of Service',
   },
 
   admin: 'Admin',

@@ -7,6 +7,7 @@ import { defineComponent } from 'vue';
 import {
   VBtn,
   VCard,
+  VCardTitle,
   VCol,
   VContainer,
   VDialog,
@@ -18,7 +19,6 @@ import {
   VToolbarItems,
   VToolbarTitle,
 } from 'vuetify/lib';
-import { VCardTitle } from 'vuetify/lib/components';
 
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';

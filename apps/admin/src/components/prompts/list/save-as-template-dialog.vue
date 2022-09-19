@@ -40,17 +40,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-text v-if="nonInputErrors.length">
-        <v-alert
-          v-for="error in nonInputErrors"
-          :key="error.param"
-          border="left"
-          outlined
-          type="error"
-        >
-          {{ error.msg }}
-        </v-alert>
-      </v-card-text>
+      <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
       <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
           <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
@@ -73,6 +63,7 @@ import { defineComponent } from 'vue';
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { ValidationError } from '@intake24/common/types';
 import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
+import { ErrorList } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
 import { useEntry } from '@intake24/admin/stores';
 import { copy } from '@intake24/common/util';
@@ -83,6 +74,8 @@ export type SchemeQuestionForm = {
 
 export default defineComponent({
   name: 'SaveAsTemplateDialog',
+
+  components: { ErrorList },
 
   props: {
     disabled: {

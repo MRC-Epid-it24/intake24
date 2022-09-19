@@ -8,9 +8,10 @@ export default validate(
       in: ['query'],
       custom: {
         options: async (value, meta): Promise<void> => {
-          if (typeof value !== 'string') throw new Error(customTypeErrorMessage('string._', meta));
+          if (typeof value !== 'string' && !Array.isArray(value))
+            throw new Error(customTypeErrorMessage('string.or.array', meta));
 
-          if (!Array.isArray(value) || value.some((item) => typeof item !== 'string'))
+          if (Array.isArray(value) && value.some((item) => typeof item !== 'string'))
             throw new Error(customTypeErrorMessage('array.string', meta));
         },
       },

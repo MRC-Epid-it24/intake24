@@ -11,11 +11,11 @@
           <td>{{ entry.name }}</td>
         </tr>
         <tr>
-          <th>{{ $t('users.email') }}</th>
+          <th>{{ $t('common.email') }}</th>
           <td>{{ entry.email }}</td>
         </tr>
         <tr>
-          <th>{{ $t('users.phone') }}</th>
+          <th>{{ $t('common.phone') }}</th>
           <td>{{ entry.phone }}</td>
         </tr>
         <tr>

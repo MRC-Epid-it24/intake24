@@ -19,7 +19,7 @@
                 v-model="form.email"
                 :error-messages="form.errors.get('email')"
                 hide-details="auto"
-                :label="$t('users.email')"
+                :label="$t('common.email')"
                 name="email"
                 outlined
               ></v-text-field>
@@ -29,7 +29,7 @@
                 v-model="form.phone"
                 :error-messages="form.errors.get('phone')"
                 hide-details="auto"
-                :label="$t('users.phone')"
+                :label="$t('common.phone')"
                 name="phone"
                 outlined
               ></v-text-field>
@@ -40,7 +40,7 @@
                   v-model="form.password"
                   :error-messages="form.errors.get('password')"
                   hide-details="auto"
-                  :label="$t('users.password._')"
+                  :label="$t('common.password._')"
                   name="password"
                   outlined
                   type="password"
@@ -51,7 +51,7 @@
                   v-model="form.passwordConfirm"
                   :error-messages="form.errors.get('passwordConfirm')"
                   hide-details="auto"
-                  :label="$t('users.password.confirm')"
+                  :label="$t('common.password.confirm')"
                   name="passwordConfirm"
                   outlined
                   type="password"

@@ -1,55 +1,80 @@
 <template>
-  <v-row justify="center" no-gutters>
-    <v-col cols="auto">
-      <v-card class="mt-10" max-width="30rem" outlined raised>
-        <v-card-title class="justify-center pt-6">
-          <h2>{{ $t('common._') }}</h2>
-        </v-card-title>
-        <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
-          <v-card-text class="px-6">
-            <v-row>
-              <v-col class="mb-3" cols="12">
-                <v-text-field
-                  v-model="email"
-                  autocomplete="email"
-                  :error-messages="errors.get('email')"
-                  hide-details="auto"
-                  :label="$t('users.email')"
-                  outlined
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col class="mb-3" cols="12">
-                <v-text-field
-                  v-model="password"
-                  :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-                  autocomplete="current-password"
-                  :error-messages="errors.get('password')"
-                  hide-details="auto"
-                  :label="$t('users.password._')"
-                  outlined
-                  required
-                  :type="showPassword ? 'text' : 'password'"
-                  @click:append="showPassword = !showPassword"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions class="px-6 pb-6">
-            <v-btn color="secondary" type="submit" width="100%" x-large>
-              {{ $t('common.login') }}
-            </v-btn>
-          </v-card-actions>
-          <v-divider class="mx-6"></v-divider>
-          <v-card-actions class="d-flex justify-end px-6 pb-6">
-            <v-btn color="blue darken-3" text :to="{ name: 'password-request' }">
-              {{ $t('users.password.forgot') }}
-            </v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-col>
-  </v-row>
+  <app-entry-screen
+    :logo="logo"
+    :subtitle="$t('common.login.subtitle').toString()"
+    :title="$t('common._').toString()"
+    width="30rem"
+  >
+    <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="email"
+                autocomplete="email"
+                :error-messages="errors.get('email')"
+                hide-details="auto"
+                :label="$t('common.email')"
+                name="email"
+                outlined
+                prepend-inner-icon="fas fa-envelope"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="password"
+                :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+                autocomplete="current-password"
+                :error-messages="errors.get('password')"
+                hide-details="auto"
+                :label="$t('common.password._')"
+                name="password"
+                outlined
+                prepend-inner-icon="fas fa-key"
+                required
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
+              ></v-text-field>
+              <v-btn
+                class="mt-2 font-weight-bold"
+                color="blue darken-3"
+                text
+                :to="{ name: 'password-request' }"
+              >
+                {{ $t('common.password.forgot') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-btn block color="secondary" rounded type="submit" x-large>
+                {{ $t('common.login._') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </v-form>
+    <template v-if="signupEnabled">
+      <v-divider class="mx-6"></v-divider>
+      <v-card-title class="text-h3 font-weight-medium justify-center pt-6">
+        {{ $t('common.signup.noAccount') }}
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-btn block color="secondary" outlined rounded :to="{ name: 'signup' }" x-large>
+                {{ $t('common.signup._') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </template>
+  </app-entry-screen>
 </template>
 
 <script lang="ts">
@@ -58,11 +83,15 @@ import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
+import { logo } from '@intake24/admin/assets';
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
+import { AppEntryScreen } from '@intake24/ui';
 
 export default defineComponent({
-  name: 'AppLogin',
+  name: 'SignIn',
+
+  components: { AppEntryScreen },
 
   data() {
     return {
@@ -70,6 +99,8 @@ export default defineComponent({
       password: '',
       showPassword: false,
       errors: new Errors(),
+      signupEnabled: import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true',
+      logo,
     };
   },
 

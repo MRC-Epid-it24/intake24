@@ -9,7 +9,18 @@ const common: LocaleMessageObject = {
     subtitle:
       'Intake24 is an open-source self-completed computerised dietary recall system based on multiple-pass 24-hour recall.',
   },
-  login: 'Sign in',
+  login: {
+    _: 'Sign in',
+    subtitle: 'Sign in with your username & password',
+    back: 'Back to login',
+
+    err: {
+      invalidCredentials: 'Invalid username & password credentials provided.',
+      invalidToken: 'Invalid access token provided.',
+      invalidSurvey: "This survey ({surveyId}) doesn't look like to be a valid survey login URL.",
+      checkCredentials: 'Please check your provided login credentials.',
+    },
+  },
   logout: {
     _: 'Sign out',
     text: 'Sign out of the application',
@@ -21,6 +32,7 @@ const common: LocaleMessageObject = {
   emailConfirm: 'Confirm email',
   password: 'Password',
   phone: 'Phone',
+  continue: 'Continue',
 
   help: {
     _: 'Help',

@@ -98,19 +98,19 @@ const routes: RouteConfig[] = [
     path: '/',
     name: 'login',
     component: authentication.login,
-    meta: { module: { current: 'login' }, public: true, title: 'common.login' },
+    meta: { module: { current: 'login' }, public: true, title: 'common.login._' },
   },
   {
     path: '/password',
     name: 'password-request',
     component: authentication.passwordRequest,
-    meta: { module: { current: 'password' }, public: true, title: 'users.password.reset._' },
+    meta: { module: { current: 'password' }, public: true, title: 'common.password.reset._' },
   },
   {
     path: '/password/reset/:token',
     name: 'password-reset',
     component: authentication.passwordReset,
-    meta: { module: { current: 'password' }, public: true, title: 'users.password.reset._' },
+    meta: { module: { current: 'password' }, public: true, title: 'common.password.reset._' },
   },
   {
     path: '/dashboard',
@@ -170,6 +170,15 @@ const routes: RouteConfig[] = [
     ],
   },
 ];
+
+if (import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true') {
+  routes.push({
+    path: '/signup',
+    name: 'signup',
+    component: authentication.signup,
+    meta: { module: { current: 'signup' }, public: true, title: 'common.signup._' },
+  });
+}
 
 resources.forEach((item) => {
   const { name, path = name, generateRoutes } = item;

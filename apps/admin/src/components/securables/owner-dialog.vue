@@ -34,7 +34,7 @@
                   hide-selected
                   item-text="email"
                   item-value="id"
-                  :label="$t('users.email')"
+                  :label="$t('common.email')"
                   name="userId"
                   prepend-icon="fas fa-user-shield"
                   :selected="owner"

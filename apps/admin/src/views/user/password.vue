@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" outlined :title="$t('users.password.change')" v-on="on">
-        {{ $t('users.password.change') }}
+      <v-btn v-bind="attrs" outlined :title="$t('common.password.change')" v-on="on">
+        {{ $t('common.password.change') }}
       </v-btn>
     </template>
     <v-card :loading="loading">
@@ -11,7 +11,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('users.password.change') }}
+          {{ $t('common.password.change') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
@@ -24,7 +24,7 @@
                 autocomplete="current-password"
                 :error-messages="form.errors.get('passwordCurrent')"
                 hide-details="auto"
-                :label="$t('users.password.current')"
+                :label="$t('common.password.current')"
                 name="passwordCurrent"
                 outlined
                 required
@@ -39,7 +39,7 @@
                 autocomplete="new-password"
                 :error-messages="form.errors.get('password')"
                 hide-details="auto"
-                :label="$t('users.password.new')"
+                :label="$t('common.password.new')"
                 name="password"
                 outlined
                 required
@@ -54,7 +54,7 @@
                 autocomplete="new-password"
                 :error-messages="form.errors.get('passwordConfirm')"
                 hide-details="auto"
-                :label="$t('users.password.confirm')"
+                :label="$t('common.password.confirm')"
                 name="passwordConfirm"
                 outlined
                 required
@@ -66,7 +66,7 @@
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
           <v-btn color="secondary" type="submit" width="100%" x-large>
-            {{ $t('users.password.update') }}
+            {{ $t('common.password.update') }}
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -116,7 +116,7 @@ export default defineComponent({
       try {
         await this.form.post('user/password');
         this.close();
-        useMessages().success(this.$t('users.password.updated').toString());
+        useMessages().success(this.$t('common.password.updated').toString());
       } finally {
         this.loading = false;
       }

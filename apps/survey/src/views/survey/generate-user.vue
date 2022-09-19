@@ -1,74 +1,53 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
-    <v-row justify="center" :no-gutters="isMobile">
-      <v-col cols="auto">
-        <v-card
-          :class="{ 'mt-10': !isMobile }"
-          :flat="isMobile"
-          :loading="loading"
-          max-width="32rem"
-          :tile="isMobile"
-        >
-          <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
-            <v-card-title>
-              <h2>{{ $t('login.title') }}</h2>
-            </v-card-title>
+    <app-entry-screen :logo="logo" :title="$t('common._').toString()" width="30rem">
+      <v-card-text class="pa-6">
+        <p>Thank you for choosing to take part in this study!</p>
+        <p>Please click on the 'Generate access' button generate new credentials for you.</p>
+        <p>
+          This survey will take approximately 30 minutes to complete. If you would like to be able
+          to stop filling out the survey and resume at a later time, please write down generated
+          credentials.
+        </p>
+        <v-btn v-if="!status" block class="my-5" color="secondary" rounded x-large @click="submit">
+          {{ $t('survey.generateUser._') }}
+        </v-btn>
+        <template v-if="status">
+          <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
+            <h4 class="my-2">{{ $t('common.username') }}: {{ username }}</h4>
+            <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
           </v-sheet>
-          <v-card-text class="pa-6">
-            <p>Thank you for choosing to take part in this study!</p>
-            <p>Please click on the 'Generate access' button generate new credentials for you.</p>
-            <p>
-              This survey will take approximately 30 minutes to complete. If you would like to be
-              able to stop filling out the survey and resume at a later time, please write down
-              generated credentials.
-            </p>
-            <v-btn
-              v-if="!status"
-              block
-              class="my-5"
-              color="deep-orange"
-              dark
-              x-large
-              @click="generateUser"
-            >
-              {{ $t('survey.generateUser._') }}
-            </v-btn>
-            <template v-if="status">
-              <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
-                <h4 class="my-2">{{ $t('common.username') }}: {{ username }}</h4>
-                <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
-              </v-sheet>
-              <v-alert v-else dark type="error">
-                {{ $t(`survey.generateUser.${status}`, { surveyId: survey?.name ?? surveyId }) }}
-              </v-alert>
-            </template>
-            <p>
-              If you close your browser window you can get back to your survey using the following
-              <router-link :to="{ name: 'survey-login', params: { surveyId } }">link</router-link>.
-            </p>
-            <p>
-              If you think you will be able to complete the survey in one sitting, please ignore
-              this and continue.
-            </p>
-          </v-card-text>
-          <v-card-actions class="px-6 pb-6">
-            <v-btn block color="secondary" :disabled="!canContinue" x-large @click="login">
-              {{ $t('common.action.continue') }}
-            </v-btn>
-          </v-card-actions>
-          <div v-if="captcha.enabled">
-            <v-divider class="mx-6 mt-3"></v-divider>
-            <component
-              :is="captcha.provider"
-              ref="captchaRef"
-              :sitekey="captcha.sitekey"
-              @expired="expired"
-              @verified="verified"
-            ></component>
-          </div>
-        </v-card>
-      </v-col>
-    </v-row>
+          <v-alert v-else dark type="error">
+            {{ $t(`survey.generateUser.${status}`, { surveyId: survey?.name ?? surveyId }) }}
+          </v-alert>
+        </template>
+        <p>
+          If you close your browser window you can get back to your survey using the following
+          <router-link :to="{ name: 'survey-login', params: { surveyId } }">link</router-link>.
+        </p>
+        <p>
+          If you think you will be able to complete the survey in one sitting, please ignore this
+          and continue.
+        </p>
+      </v-card-text>
+      <v-card-actions class="px-6 pb-6">
+        <v-btn block color="secondary" :disabled="!canContinue" rounded x-large @click="login">
+          {{ $t('common.action.continue') }}
+        </v-btn>
+      </v-card-actions>
+      <captcha ref="captchaRef" @expired="expired" @verified="verified"></captcha>
+      <v-card-actions>
+        <v-btn
+          color="blue darken-3"
+          exact
+          text
+          :to="{ name: 'survey-login', params: { surveyId } }"
+        >
+          <v-icon left>fas fa-angles-left</v-icon>
+          {{ $t('common.login.back') }}
+        </v-btn>
+      </v-card-actions>
+    </app-entry-screen>
   </v-container>
 </template>
 
@@ -78,15 +57,16 @@ import { mapActions } from 'pinia';
 import { defineComponent, reactive, ref } from 'vue';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import surveySvc from '@intake24/survey/services/survey.service';
+import { logo } from '@intake24/survey/assets';
+import { surveyService } from '@intake24/survey/services';
 import { useAuth } from '@intake24/survey/stores';
-import { HCaptcha, ReCaptcha } from '@intake24/ui';
+import { AppEntryScreen, Captcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'GenerateUser',
 
-  components: { HCaptcha, ReCaptcha },
+  components: { AppEntryScreen, Captcha },
 
   props: {
     surveyId: {
@@ -96,7 +76,7 @@ export default defineComponent({
   },
 
   setup() {
-    const captchaRef = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
+    const captchaRef = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
       loading: false,
@@ -104,13 +84,9 @@ export default defineComponent({
       survey: null as PublicSurveyEntry | null,
       username: '',
       password: '',
-      captcha: {
-        enabled: !!import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
-        provider: import.meta.env.VITE_APP_CAPTCHA_PROVIDER,
-        sitekey: import.meta.env.VITE_APP_CAPTCHA_SITEKEY as string,
-        token: null as string | null,
-      },
+      captcha: null as string | null,
       captchaRef,
+      logo,
     });
   },
 
@@ -137,19 +113,19 @@ export default defineComponent({
 
     async fetchSurveyPublicInfo() {
       try {
-        this.survey = await surveySvc.surveyPublicInfo(this.surveyId);
+        this.survey = await surveyService.surveyPublicInfo(this.surveyId);
       } catch (err) {
         if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
       }
     },
 
     resetCaptcha() {
-      this.captcha.token = null;
+      this.captcha = null;
       this.captchaRef?.reset();
     },
 
     async verified(token: string) {
-      this.captcha.token = token;
+      this.captcha = token;
       await this.generateUser();
     },
 
@@ -158,19 +134,12 @@ export default defineComponent({
     },
 
     async generateUser() {
-      const { enabled, token } = this.captcha;
-
-      if (enabled && !token) {
-        this.captchaRef?.execute();
-        return;
-      }
+      const { captcha } = this;
 
       this.loading = true;
 
       try {
-        const { username, password } = await surveySvc.generateUser(this.surveyId, {
-          captcha: token,
-        });
+        const { username, password } = await surveyService.generateUser(this.surveyId, { captcha });
 
         this.status = 200;
         this.username = username;
@@ -184,6 +153,15 @@ export default defineComponent({
       }
     },
 
+    async submit() {
+      if (this.captchaRef) {
+        this.captchaRef.executeIfCan();
+        return;
+      }
+
+      await this.generateUser();
+    },
+
     async login() {
       const { username, password, surveyId } = this;
       try {
@@ -193,7 +171,7 @@ export default defineComponent({
         await this.$router.push({ name: 'survey-home', params: { surveyId } });
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401)
-          useMessages().error(this.$t('login.err.invalidCredentials').toString());
+          useMessages().error(this.$t('common.login.err.invalidCredentials').toString());
       }
     },
   },

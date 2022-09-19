@@ -24,14 +24,14 @@ const routes: RouteConfig[] = [
     path: '/:surveyId',
     name: 'survey-login',
     component: views.survey.login,
-    meta: { module: 'login', title: 'login._' },
+    meta: { module: 'login', title: 'common.login._' },
     props: true,
   },
   {
     path: '/:surveyId/generate-user',
     name: 'survey-generate-user',
     component: views.survey.generateUser,
-    meta: { module: 'public', title: 'login._' },
+    meta: { module: 'public', title: 'common.login._' },
     props: true,
   },
   {

@@ -21,7 +21,7 @@ export default defineComponent({
           value: 'name',
         },
         {
-          text: this.$t('users.email'),
+          text: this.$t('common.email'),
           sortable: true,
           value: 'email',
         },

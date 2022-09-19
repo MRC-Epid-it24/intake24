@@ -6,6 +6,8 @@ Path: `apps/api/src/config/acl.ts`
 
 Controls the permissions / roles caching
 
+- object-path: `cache`
+
 ### Enabled
 
 Enables / disables caching for permissions / roles.
@@ -37,3 +39,36 @@ Any newly created permission will be associated with this role.
 - object-path: `roles.superuser`
 - type: `string`
 - default: `'superuser'`
+
+## Sign-up
+
+Admin tool sign-up settings.
+
+- object-path: `signup`
+
+### Enabled
+
+Enables / disables user sign-up (account creation) for Admin Tool.
+
+- object-path: `signup.enabled`
+- dotenv var: `ACL_SIGNUP_ENABLED`
+- type: `boolean`
+- default: `false`
+
+### Permissions
+
+List of permission names, that new account should be assigned with.
+
+- object-path: `signup.permissions`
+- dotenv var: `ACL_SIGNUP_PERMISSIONS` (`comma-delimited` string)
+- type: `string[]`
+- default: `[]`
+
+### Roles
+
+List of role names, that new account should be assigned with.
+
+- object-path: `signup.roles`
+- dotenv var: `ACL_SIGNUP_ROLES` (`comma-delimited` string)
+- type: `string[]`
+- default: `[]`

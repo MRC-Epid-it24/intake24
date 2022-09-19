@@ -33,17 +33,7 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-text v-if="nonInputErrors.length">
-          <v-alert
-            v-for="error in nonInputErrors"
-            :key="error.param"
-            border="left"
-            outlined
-            type="error"
-          >
-            {{ error.msg }}
-          </v-alert>
-        </v-card-text>
+        <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
         <v-card-text>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>

@@ -69,6 +69,9 @@ const attributes: LocaleMessageObject = {
   },
   string: {
     _: '{attribute} must be a string.',
+    or: {
+      array: '{attribute} must be a string or an array.',
+    },
     unique: '{attribute} must be a string of unique characters.',
   },
   structure: {

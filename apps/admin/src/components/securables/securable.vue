@@ -102,7 +102,7 @@ export default defineComponent({
           align: 'start',
         },
         {
-          text: this.$t('users.email'),
+          text: this.$t('common.email'),
           sortable: true,
           value: 'email',
           align: 'start',

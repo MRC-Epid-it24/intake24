@@ -52,18 +52,7 @@
                 :style="{ maxWidth: '75px' }"
               ></v-text-field>
             </v-toolbar>
-            <template v-if="nonInputErrors.length">
-              <v-alert
-                v-for="error in nonInputErrors"
-                :key="error.param"
-                class="my-2"
-                dense
-                text
-                type="error"
-              >
-                {{ error.msg }}
-              </v-alert>
-            </template>
+            <error-list :errors="nonInputErrors"></error-list>
             <color-list v-model="form.topFoods.colors" :scheme-id="id"></color-list>
           </v-col>
           <v-divider vertical></v-divider>
@@ -104,7 +93,14 @@ export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
 export default defineComponent({
   name: 'FeedbackSchemeTopFoods',
 
-  components: { ColorList, JsonEditor, NutrientList, OptionsMenu, Preview, SelectResource },
+  components: {
+    ColorList,
+    JsonEditor,
+    NutrientList,
+    OptionsMenu,
+    Preview,
+    SelectResource,
+  },
 
   mixins: [formMixin],
 

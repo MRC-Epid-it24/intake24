@@ -24,5 +24,7 @@ export default () => {
   router.post('/refresh', wrapAsync(adminAuthenticationController.refresh));
   router.post('/logout', wrapAsync(adminAuthenticationController.logout));
 
+  router.post('/signup', validation.signup, wrapAsync(adminAuthenticationController.signup));
+
   return router;
 };
