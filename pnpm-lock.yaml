@@ -77,7 +77,7 @@ importers:
       '@types/jsdom': ^20.0.0
       '@types/lodash': ^4.14.185
       '@types/node': ^18.7.15
-      '@vitejs/plugin-vue2': 1.1.2
+      '@vitejs/plugin-vue2': 2.0.0
       '@vue/eslint-config-prettier': ^7.0.0
       '@vue/eslint-config-typescript': ^11.0.1
       '@vueuse/core': ^9.2.0
@@ -152,7 +152,7 @@ importers:
       '@types/jsdom': 20.0.0
       '@types/lodash': 4.14.185
       '@types/node': 18.7.15
-      '@vitejs/plugin-vue2': 1.1.2_vite@3.1.0+vue@2.7.10
+      '@vitejs/plugin-vue2': 2.0.0_vite@3.1.0+vue@2.7.10
       '@vue/eslint-config-prettier': 7.0.0_eslint@8.23.1+prettier@2.7.1
       '@vue/eslint-config-typescript': 11.0.1_5cffc15e517148a7141cb89356e54186
       eslint: 8.23.1
@@ -512,7 +512,7 @@ importers:
       '@types/lodash': ^4.14.185
       '@types/node': ^18.7.15
       '@types/uuid': ^8.3.4
-      '@vitejs/plugin-vue2': 1.1.2
+      '@vitejs/plugin-vue2': 2.0.0
       '@vue/eslint-config-prettier': ^7.0.0
       '@vue/eslint-config-typescript': ^11.0.1
       axios: ^0.27.2
@@ -565,7 +565,7 @@ importers:
       '@types/lodash': 4.14.185
       '@types/node': 18.7.15
       '@types/uuid': 8.3.4
-      '@vitejs/plugin-vue2': 1.1.2_vite@3.1.0+vue@2.7.10
+      '@vitejs/plugin-vue2': 2.0.0_vite@3.1.0+vue@2.7.10
       '@vue/eslint-config-prettier': 7.0.0_eslint@8.23.1+prettier@2.7.1
       '@vue/eslint-config-typescript': 11.0.1_5cffc15e517148a7141cb89356e54186
       eslint: 8.23.1
@@ -3510,11 +3510,11 @@ packages:
       vue: 3.2.38
     dev: true
 
-  /@vitejs/plugin-vue2/1.1.2_vite@3.1.0+vue@2.7.10:
-    resolution: {integrity: sha512-y6OEA+2UdJ0xrEQHodq20v9r3SpS62IOHrgN92JPLvVpNkhcissu7yvD5PXMzMESyazj0XNWGsc8UQk8+mVrjQ==}
-    engines: {node: '>=14.6.0'}
+  /@vitejs/plugin-vue2/2.0.0_vite@3.1.0+vue@2.7.10:
+    resolution: {integrity: sha512-VJOCDtBNcRv7kYLQRbbERDP0OqW0EKgMQp6wwbqZRpU3kg38OP891avx6Xl3szntGkf9mK4i8k3TjsAlmkzWFg==}
+    engines: {node: ^14.18.0 || >= 16.0.0}
     peerDependencies:
-      vite: '>=2.5.10'
+      vite: ^3.0.0
       vue: ^2.7.0-0
     dependencies:
       vite: 3.1.0_sass@1.32.13
