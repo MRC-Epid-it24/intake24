@@ -53,7 +53,7 @@ Enables / disables user sign-up (account creation) for Admin Tool.
 - object-path: `signup.enabled`
 - dotenv var: `ACL_SIGNUP_ENABLED`
 - type: `boolean`
-- default: `false`
+- default: `true`
 
 ### Permissions
 

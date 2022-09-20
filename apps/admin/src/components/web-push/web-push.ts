@@ -51,7 +51,7 @@ export default defineComponent({
       if (!subscription) {
         subscription = await pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: import.meta.env.VITE_APP_WEBPUSH_PUBLIC_KEY,
+          applicationServerKey: import.meta.env.VITE_WEBPUSH_PUBLIC_KEY,
         });
       }
       await this.$http.post('subscriptions', { subscription });

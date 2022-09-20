@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
     PRODUCTION_SOURCE_MAP,
     DISABLE_PWA,
     VITE_APP_NAME: appName,
-    VITE_APP_CAPTCHA_PROVIDER: captchaProvider,
+    VITE_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
 
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');

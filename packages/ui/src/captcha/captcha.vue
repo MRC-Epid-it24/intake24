@@ -45,8 +45,8 @@ export default defineComponent({
 
   setup() {
     const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
-    const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_APP_CAPTCHA_PROVIDER || null);
-    const sitekey = ref<string>(import.meta.env.VITE_APP_CAPTCHA_SITEKEY || '');
+    const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);
+    const sitekey = ref<string>(import.meta.env.VITE_CAPTCHA_SITEKEY || '');
 
     return { captcha, provider, sitekey };
   },

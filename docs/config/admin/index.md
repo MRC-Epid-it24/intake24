@@ -66,13 +66,13 @@ Flag whether to disable PWA functionality. Defaults to `false`.
 
 SPA application name. Defaults to `Intake24 Admin`.
 
-### VITE_APP_API_HOST
+### VITE_API_HOST
 
 API Server base URL. Defaults to `$API_HOST`.
 
-### VITE_APP_API_URL
+### VITE_API_URL
 
-API Server context URL to be appended to `VITE_APP_API_HOST`. Defaults to `api`.
+API Server context URL to be appended to `VITE_API_HOST`. Defaults to `api`.
 
 ### VITE_APP_BASE_URL
 
@@ -84,18 +84,18 @@ Prefix to be used for application data stored in browser storage. Defaults to `i
 
 ### VITE_ACL_SIGNUP_ENABLED
 
-Flag whether to allow admin tool sign-ups. Defaults to `false`. Flag only enables sign-up view in the application. Sign-ups also has to be enabled in [API Server ACL settings](/config/api/acl#sign-up).
+Flag whether to allow admin tool sign-ups. Defaults to `true`. Flag only enables sign-up view in the application. Sign-ups also has to be enabled in [API Server ACL settings](/config/api/acl#sign-up).
 
 ### Captcha settings
 
-### VITE_APP_CAPTCHA_PROVIDER
+### VITE_CAPTCHA_PROVIDER
 
 Captcha provider. Possible values `g-captcha` or `re-captcha`.
 
-### VITE_APP_CAPTCHA_SITEKEY
+### VITE_CAPTCHA_SITEKEY
 
 Captcha provider sitekey. Please refer to your provider, how to obtain the key.
 
-### VITE_APP_WEBPUSH_PUBLIC_KEY
+### VITE_WEBPUSH_PUBLIC_KEY
 
 Webpush public key for we-push notifications.
