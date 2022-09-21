@@ -51,7 +51,7 @@ const userFeedbackController = ({
     if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();
 
     await scheduler.jobs.addJob({
-      type: 'SurveyRespondentFeedback',
+      type: 'SurveyFeedbackNotification',
       userId,
       params: { surveyId: survey.id, userId, to, submissions },
     });

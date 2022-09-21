@@ -113,6 +113,12 @@ const routes: RouteConfig[] = [
     meta: { module: { current: 'password' }, public: true, title: 'common.password.reset._' },
   },
   {
+    path: '/verify',
+    name: 'verify',
+    component: authentication.verify,
+    meta: { module: { current: 'verify' }, public: true, title: 'common.login._' },
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: views.dashboard,

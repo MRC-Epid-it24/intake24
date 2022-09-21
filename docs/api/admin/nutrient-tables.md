@@ -189,7 +189,7 @@ Authorization: Bearer {accessToken}
 Content-Type: multipart/form-data
 
 {
-    "type": 'NutrientTableImportData' | 'NutrientTableImportMapping',
+    "type": 'NutrientTableDataImport' | 'NutrientTableIMappingImport',
     "file": File
 }
 ```

@@ -29,6 +29,7 @@ export default (container: AwilixContainer): void => {
     referenceController: asFunction(controllers.admin.reference),
 
     adminAuthenticationController: asFunction(controllers.admin.authentication),
+    adminSignupController: asFunction(controllers.admin.signup),
     adminUserProfileController: asFunction(controllers.admin.user.profile),
     adminUserJobController: asFunction(controllers.admin.user.job),
 

@@ -66,7 +66,7 @@ const authenticationController = ({
     sendTokenResponse(tokens, res);
   };
 
-  const logout = async (req: Request, res: Response): Promise<void> => {
+  const logout = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
 
     const refreshToken = req.cookies[name];

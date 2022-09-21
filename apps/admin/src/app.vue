@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn" v-model="sidebar" app color="primary" dark>
+    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="primary" dark>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="my-1 title">{{ $t('common._') }}</v-list-item-title>
@@ -58,27 +58,22 @@
       ></menu-tree>
     </v-navigation-drawer>
 
-    <v-app-bar app color="secondary" dark fixed>
-      <template v-if="loggedIn">
-        <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
-        <v-spacer></v-spacer>
-        <v-btn text :to="{ name: 'user' }">
-          <span class="mr-2">{{ $t('user._') }}</span>
-          <v-icon>$user</v-icon>
-        </v-btn>
-        <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
-          <template #activator="{ attrs, on }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <span>{{ $t('common.logout._') }}</span>
-              <v-icon right>$logout</v-icon>
-            </v-btn>
-          </template>
-          {{ $t('common.logout.text') }}
-        </confirm-dialog>
-      </template>
-      <template v-else>
-        <v-toolbar-title>{{ $t('common._') }}</v-toolbar-title>
-      </template>
+    <v-app-bar v-if="loggedIn" app color="secondary" dark fixed>
+      <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar"></v-app-bar-nav-icon>
+      <v-spacer></v-spacer>
+      <v-btn v-if="isVerified" text :to="{ name: 'user' }">
+        <span class="mr-2">{{ $t('user._') }}</span>
+        <v-icon>$user</v-icon>
+      </v-btn>
+      <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
+        <template #activator="{ attrs, on }">
+          <v-btn text v-bind="attrs" v-on="on">
+            <span>{{ $t('common.logout._') }}</span>
+            <v-icon right>$logout</v-icon>
+          </v-btn>
+        </template>
+        {{ $t('common.logout.text') }}
+      </confirm-dialog>
     </v-app-bar>
 
     <v-main>
@@ -109,7 +104,7 @@ import Loader from '@intake24/admin/components/loader.vue';
 import MenuTree from '@intake24/admin/components/sidebar/menu-tree.vue';
 import webPush from '@intake24/admin/components/web-push/web-push';
 import resources from '@intake24/admin/router/resources';
-import { useApp, useAuth, useEntry } from '@intake24/admin/stores';
+import { useAuth, useEntry, useUser } from '@intake24/admin/stores';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
 type Breadcrumbs = {
@@ -136,9 +131,9 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useApp, ['app']),
     ...mapState(useAuth, ['loggedIn']),
     ...mapState(useEntry, { entry: 'data' }),
+    ...mapState(useUser, ['isVerified']),
 
     breadcrumbs(): Breadcrumbs[] {
       const { meta: { module, action } = {}, params } = this.$route;
@@ -149,13 +144,15 @@ export default defineComponent({
     },
 
     title(): string {
-      if (this.$route.meta?.title) return this.$t(this.$route.meta.title).toString();
+      const { meta: { title } = {} } = this.$route;
+      if (title) return this.$t(title).toString();
 
-      if (!this.module) return this.app.name;
+      const { module } = this;
+      if (!module) return this.$t('common._').toString();
 
       const { id, name } = this.entry;
 
-      return name ?? id ?? this.$t(`${this.module}.title`).toString();
+      return name ?? id ?? this.$t(`${module}.title`).toString();
     },
   },
 
@@ -182,7 +179,7 @@ export default defineComponent({
       if ([state, code].every((item) => typeof item === 'string' && item.length)) return;
 
       await useAuth().refresh();
-      await this.$router.push({ name: 'dashboard' });
+      await this.$router.push({ name: this.isVerified ? 'dashboard' : 'verify' });
     }
 
     if (!this.loggedIn) return;

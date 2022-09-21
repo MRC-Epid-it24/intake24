@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import securityConfig from '@intake24/api/config/security';
 import { suite } from '@intake24/api-tests/integration/helpers';
+import { User } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/auth/login';
@@ -38,5 +39,24 @@ export default () => {
         .get('Set-Cookie')
         .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name)
     ).toBeTrue();
+  });
+
+  describe('User disabled', () => {
+    beforeAll(async () => {
+      await User.update({ disabledAt: new Date() }, { where: { email: 'testUser@example.com' } });
+    });
+
+    it('should return 401 when user disabled', async () => {
+      const { status } = await request(suite.app)
+        .post(url)
+        .set('Accept', 'application/json')
+        .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+
+      expect(status).toBe(401);
+    });
+
+    afterAll(async () => {
+      await User.update({ disabledAt: null }, { where: { email: 'testUser@example.com' } });
+    });
   });
 };

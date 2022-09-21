@@ -9,14 +9,19 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
 import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';
-import { Op, Permission, Role, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
+import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
 export type UserPasswordInput = {
   userId: string;
   password: string;
 };
 
-const adminUserService = ({ aclConfig, cache, db }: Pick<IoC, 'aclConfig' | 'cache' | 'db'>) => {
+export type CreateUserOptions = {
+  notify?: boolean;
+  userAgent?: string;
+};
+
+const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | 'scheduler'>) => {
   /**
    * Flush ACL cache for specified user
    *
@@ -172,12 +177,14 @@ const adminUserService = ({ aclConfig, cache, db }: Pick<IoC, 'aclConfig' | 'cac
    * - user roles
    *
    * @param {CreateUserInput} input
+   * @param {CreateUserOptions} [options={}]
    * @returns {Promise<User>}
    */
-  const create = async (input: CreateUserInput): Promise<User> => {
+  const create = async (input: CreateUserInput, options: CreateUserOptions = {}): Promise<User> => {
+    const { notify, userAgent } = options;
     const { password, permissions = [], roles = [], ...rest } = input;
 
-    return db.system.transaction(async (transaction) => {
+    const user = await db.system.transaction(async (transaction) => {
       const user = await User.create(
         { ...rest, simpleName: toSimpleName(rest.name) },
         { include: [UserCustomField], transaction }
@@ -191,27 +198,16 @@ const adminUserService = ({ aclConfig, cache, db }: Pick<IoC, 'aclConfig' | 'cac
 
       return user;
     });
-  };
 
-  /**
-   * Admin tool signup - create new user with researcher role
-   *
-   * @param {CreateUserInput} input
-   * @returns {Promise<User>}
-   */
-  const signUp = async (input: CreateUserInput): Promise<User> => {
-    const { enabled, permissions: permissionNames, roles: roleNames } = aclConfig.signup;
-    if (!enabled) throw new ForbiddenError();
+    const { email } = user;
+    if (notify && email) {
+      await scheduler.jobs.addJob({
+        type: 'UserEmailVerificationNotification',
+        params: { email, userAgent },
+      });
+    }
 
-    const [permissionRecords, roleRecords] = await Promise.all([
-      Permission.findAll({ attributes: ['id'], where: { name: permissionNames } }),
-      Role.findAll({ attributes: ['id'], where: { name: roleNames } }),
-    ]);
-
-    const permissions = permissionRecords.map(({ id }) => id);
-    const roles = roleRecords.map(({ id }) => id);
-
-    return create({ ...input, permissions, roles });
+    return user;
   };
 
   /**
@@ -367,7 +363,6 @@ const adminUserService = ({ aclConfig, cache, db }: Pick<IoC, 'aclConfig' | 'cac
     updateUserCustomFields,
     updatePassword,
     create,
-    signUp,
     update,
     destroy,
     addPermissionByName,

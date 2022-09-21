@@ -13,6 +13,8 @@ export type UserInput = {
   customFields?: CustomField[];
   permissions?: string[];
   roles?: string[];
+  verifiedAt?: Date | null;
+  disabledAt?: Date | null;
 };
 
 export interface CreateUserInput extends UserInput {

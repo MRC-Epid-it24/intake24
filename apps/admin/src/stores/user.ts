@@ -13,14 +13,9 @@ export interface UserState {
     userId: string;
     subject: Subject;
   } | null;
-  profile: {
-    id: string;
-    email: string | null;
-    name: string | null;
-    phone: string | null;
-  } | null;
-  permissions: string[];
-  roles: string[];
+  profile: AdminUserProfileResponse['profile'] | null;
+  permissions: AdminUserProfileResponse['permissions'];
+  roles: AdminUserProfileResponse['roles'];
 }
 
 export const useUser = defineStore('user', {
@@ -31,10 +26,13 @@ export const useUser = defineStore('user', {
     roles: [],
   }),
   getters: {
+    isVerified: (state) => !!state.profile?.verifiedAt,
     loaded: (state) => !!state.profile,
   },
   actions: {
     can(permission: string | string[] | Permission, strict = false) {
+      if (!this.isVerified) return false;
+
       if (typeof permission === 'string') return this.permissions.includes(permission);
 
       if (Array.isArray(permission)) {

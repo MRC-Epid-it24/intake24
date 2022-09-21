@@ -67,6 +67,14 @@
                 outlined
                 @change="form.errors.clear('textDirection')"
               >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
               </v-select>
             </v-col>
           </v-row>
@@ -124,6 +132,7 @@ export default defineComponent({
       textDirections: textDirections.map((value) => ({
         value,
         text: this.$t(`languages.textDirections.${value}`),
+        icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
       })),
     };
   },

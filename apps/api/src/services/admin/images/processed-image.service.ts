@@ -35,7 +35,7 @@ const processedImageService = ({
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        logger.error(stack ?? `${name}: ${message}`);
+        logger.error(`${name}: ${message}`, { stack });
       } else logger.error(err);
 
       throw new NotFoundError();
@@ -154,7 +154,7 @@ const processedImageService = ({
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        logger.error(stack ?? `${name}: ${message}`);
+        logger.error(`${name}: ${message}`, { stack });
         return;
       }
 

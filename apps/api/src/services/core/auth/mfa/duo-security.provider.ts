@@ -18,10 +18,11 @@ const regenerate = (req: Request): Promise<void> =>
 
 export default ({
   jwtService,
-  logger,
+  logger: globalLogger,
   securityConfig,
   signInService,
 }: Pick<IoC, 'jwtService' | 'logger' | 'securityConfig' | 'signInService'>): MFAProvider => {
+  const logger = globalLogger.child({ service: 'DuoSecurityProvider' });
   const { mfa: mfaConfig } = securityConfig;
 
   /**
@@ -79,7 +80,7 @@ export default ({
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        logger.debug(stack ?? `${name}: ${message}`);
+        logger.debug(`${name}: ${message}`, { stack });
       }
 
       throw new UnauthorizedError();
@@ -140,7 +141,7 @@ export default ({
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        logger.debug(stack ?? `${name}: ${message}`);
+        logger.debug(`${name}: ${message}`, { stack });
 
         await signInService.log({ ...signInAttempt, message });
       }

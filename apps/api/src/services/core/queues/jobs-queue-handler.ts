@@ -53,7 +53,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
   private logEventError(err: Error) {
     const { message, name, stack } = err;
-    this.logger.error(stack ?? `${name}: ${message}`);
+    this.logger.error(`${name}: ${message}`, { stack });
   }
 
   /**
@@ -65,20 +65,28 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    */
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
-    this.scheduler.on('error', (err) => this.logEventError(err));
+    this.scheduler.on('error', (err) => {
+      this.logEventError(err);
+    });
 
     this.queue = new Queue(this.name, { connection, defaultJobOptions: { delay: 500 } });
-    this.queue.on('error', (err) => this.logEventError(err));
+    this.queue.on('error', (err) => {
+      this.logEventError(err);
+    });
 
     this.queueEvents = new QueueEvents(this.name, { connection });
-    this.queueEvents.on('error', (err) => this.logEventError(err));
+    this.queueEvents.on('error', (err) => {
+      this.logEventError(err);
+    });
 
     this.registerQueueEvents();
 
     for (let i = 0; i < this.config.workers; i++) {
       const worker = new Worker(this.name, this.processor, { connection });
 
-      worker.on('error', (err) => this.logEventError(err));
+      worker.on('error', (err) => {
+        this.logEventError(err);
+      });
 
       this.workers.push(worker);
     }

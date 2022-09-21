@@ -102,7 +102,7 @@ const httpClient: HttpClient = {
           isRefreshing = false;
 
           await auth.logout();
-          if (router.currentRoute.name !== 'login') router.push({ name: 'login' });
+          if (!router.currentRoute.meta?.public) router.push({ name: 'login' });
 
           return Promise.reject(err);
         }

@@ -2,21 +2,16 @@ import type { Job } from 'bullmq';
 import ms from 'ms';
 import nunjucks from 'nunjucks';
 import { Op } from 'sequelize';
-import parser from 'ua-parser-js';
 
 import type { IoC } from '@intake24/api/ioc';
-import { getFrontEndUrl } from '@intake24/api/util';
+import { getFrontEndUrl, getUAInfo } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import { User, UserPasswordReset } from '@intake24/db';
 
 import BaseJob from '../job';
 
-const getAgentInfo = (agent: { name?: string; version?: string }): string | undefined => {
-  return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
-};
-
-export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
-  readonly name = 'SendPasswordReset';
+export default class UserPasswordResetNotification extends BaseJob<'UserPasswordResetNotification'> {
+  readonly name = 'UserPasswordResetNotification';
 
   private readonly appConfig;
 
@@ -42,7 +37,7 @@ export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof SendPasswordReset
+   * @memberof UserPasswordResetNotification
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -52,9 +47,8 @@ export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
     const { email } = this.params;
 
     const user = await this.getUser();
-
     if (!user) {
-      this.logger.warn(`Password reset: email address (${email}) not found in database.`);
+      this.logger.warn(`User with email ${email} not found in database.`);
       return;
     }
 
@@ -74,8 +68,7 @@ export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
     const { email, userAgent } = this.params;
     const { id: userId, name } = user;
 
-    const { browser, os } = parser(userAgent);
-    const uaInfo = [browser, os].map(getAgentInfo).filter(Boolean).join(', ');
+    const uaInfo = getUAInfo(userAgent);
 
     const token = randomString(128);
     const { base, admin } = this.appConfig.urls;
@@ -86,14 +79,14 @@ export default class SendPasswordReset extends BaseJob<'SendPasswordReset'> {
 
     await UserPasswordReset.create({ userId, token });
 
-    const html = nunjucks.render('mail/password-reset.njk', {
+    const html = nunjucks.render('mail/user/password-reset.njk', {
       email,
       name: name ?? '',
       uaInfo,
-      expiresIn: ms(expiresIn, { long: true }),
+      expiresIn: ms(ms(expiresIn), { long: true }),
       action: { url, text: 'Reset password' },
     });
 
-    await this.mailer.sendMail({ to: email, subject: 'Intake24 password reset request', html });
+    await this.mailer.sendMail({ to: email, subject: '🍔 Intake24: Password reset', html });
   }
 }

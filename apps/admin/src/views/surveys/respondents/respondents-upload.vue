@@ -72,7 +72,7 @@ export default defineComponent({
   data() {
     return {
       form: form<RespondentsUploadForm>({ file: null }, { multipart: true }),
-      jobType: 'SurveyImportRespondents',
+      jobType: 'SurveyRespondentsImport',
     };
   },
 

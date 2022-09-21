@@ -318,6 +318,7 @@ export const initDatabase = async (): Promise<MockData> => {
   const admin = await ioc.cradle.adminUserService.create({
     email: 'testAdmin@example.com',
     password: 'testAdminPassword',
+    verifiedAt: new Date(),
     permissions: [],
     roles: [adminRole.id],
   });
@@ -327,6 +328,7 @@ export const initDatabase = async (): Promise<MockData> => {
   const user = await ioc.cradle.adminUserService.create({
     email: 'testUser@example.com',
     password: 'testUserPassword',
+    verifiedAt: new Date(),
     permissions: [],
     roles: [role.id],
   });

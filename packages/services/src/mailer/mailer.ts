@@ -60,7 +60,7 @@ export class Mailer {
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        this.logger.error(stack ?? `${name}: ${message}`);
+        this.logger.error(`${name}: ${message}`, { stack });
         return;
       }
 

@@ -7,7 +7,7 @@
   >
     <v-card-text v-if="submitted" class="pa-6">
       <p class="text-h5 ma-4">{{ $t('common.password.request.sent') }}</p>
-      <p class="text-subtitle-2 ma-4">{{ $t('common.password.request.spam') }}</p>
+      <p class="text-subtitle-2 ma-4">{{ $t('common.spam') }}</p>
     </v-card-text>
     <v-form v-else @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
@@ -28,7 +28,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="secondary" rounded type="submit" x-large>
+              <v-btn block color="secondary" :disabled="isAppLoading" rounded type="submit" x-large>
                 {{ $t('common.password.request.send') }}
               </v-btn>
             </v-col>

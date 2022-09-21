@@ -17,7 +17,7 @@ import {
 } from '@intake24/db';
 
 export type UploadCsvFileInput = {
-  type: Extract<JobType, 'NutrientTableImportData' | 'NutrientTableImportMapping'>;
+  type: Extract<JobType, 'NutrientTableDataImport' | 'NutrientTableIMappingImport'>;
   file: string;
   userId?: string;
 };

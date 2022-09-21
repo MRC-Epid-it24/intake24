@@ -5,7 +5,7 @@
     :title="$t('common._').toString()"
     width="30rem"
   >
-    <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="onLogin">
+    <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
       <v-card-text>
         <v-container>
           <v-row>
@@ -49,7 +49,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="secondary" rounded type="submit" x-large>
+              <v-btn block color="secondary" :disabled="isAppLoading" rounded type="submit" x-large>
                 {{ $t('common.login._') }}
               </v-btn>
             </v-col>
@@ -80,11 +80,10 @@
 <script lang="ts">
 import type { AxiosError } from 'axios';
 import axios from 'axios';
-import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import { logo } from '@intake24/admin/assets';
-import { useAuth, useMessages } from '@intake24/admin/stores';
+import { useAuth, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppEntryScreen } from '@intake24/ui';
 
@@ -94,7 +93,11 @@ export default defineComponent({
   components: { AppEntryScreen },
 
   data() {
+    const auth = useAuth();
+    const user = useUser();
     return {
+      auth,
+      user,
       email: '',
       password: '',
       showPassword: false,
@@ -104,19 +107,15 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    ...mapState(useAuth, ['loggedIn', 'mfaRequestUrl']),
-  },
-
   async mounted() {
     // Check for MFA response
     const { state, code } = this.$route.query;
     if (typeof state !== 'string' || typeof code !== 'string') return;
 
     try {
-      await this.verify({ state, code });
+      await this.auth.verify({ state, code });
 
-      if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
+      if (this.auth.loggedIn) await this.$router.push({ name: 'dashboard' });
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 401)
         useMessages().error('Invalid MFA authentication.');
@@ -125,21 +124,20 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useAuth, ['login', 'verify']),
-
-    async onLogin() {
+    async login() {
       const { email, password } = this;
       try {
-        await this.login({ email, password });
+        await this.auth.login({ email, password });
         this.email = '';
         this.password = '';
 
-        if (this.mfaRequestUrl) {
-          window.location.href = this.mfaRequestUrl;
+        if (this.auth.mfaRequestUrl) {
+          window.location.href = this.auth.mfaRequestUrl;
           return;
         }
 
-        if (this.loggedIn) await this.$router.push({ name: 'dashboard' });
+        if (this.auth.loggedIn)
+          await this.$router.push({ name: this.user.isVerified ? 'dashboard' : 'verify' });
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err as AxiosError<any>;

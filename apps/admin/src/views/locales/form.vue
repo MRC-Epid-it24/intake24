@@ -136,6 +136,14 @@
                 outlined
                 @change="form.errors.clear('textDirection')"
               >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
               </v-select>
             </v-col>
           </v-row>
@@ -153,6 +161,7 @@ import { defineComponent } from 'vue';
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { form } from '@intake24/admin/helpers';
+import { textDirections } from '@intake24/common/types';
 
 type LocaleForm = {
   id: string | null;
@@ -197,10 +206,11 @@ export default defineComponent({
         })),
         'text'
       ),
-      textDirections: [
-        { value: 'ltr', text: this.$t('languages.textDirections.ltr') },
-        { value: 'rtl', text: this.$t('languages.textDirections.rtl') },
-      ],
+      textDirections: textDirections.map((value) => ({
+        value,
+        text: this.$t(`languages.textDirections.${value}`),
+        icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
+      })),
     };
   },
 

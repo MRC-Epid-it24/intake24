@@ -27,8 +27,8 @@ export type Mappings = {
   nutrients: NutrientTableCsvMappingNutrient[];
 };
 
-export default class NutrientTableImportData extends StreamLockJob<'NutrientTableImportData'> {
-  readonly name = 'NutrientTableImportData';
+export default class NutrientTableDataImport extends StreamLockJob<'NutrientTableDataImport'> {
+  readonly name = 'NutrientTableDataImport';
 
   private file!: string;
 
@@ -45,7 +45,7 @@ export default class NutrientTableImportData extends StreamLockJob<'NutrientTabl
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportData
+   * @memberof NutrientTableDataImport
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -87,7 +87,7 @@ export default class NutrientTableImportData extends StreamLockJob<'NutrientTabl
    * @private
    * @param {number} [chunk=500]
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportData
+   * @memberof NutrientTableDataImport
    */
   private async validate(/* chunk = 500 */): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -130,7 +130,7 @@ export default class NutrientTableImportData extends StreamLockJob<'NutrientTabl
    * @private
    * @param {number} [chunk=10]
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportData
+   * @memberof NutrientTableDataImport
    */
   private async import(chunk = 10): Promise<void> {
     const { nutrientTableId } = this.params;
@@ -182,7 +182,7 @@ export default class NutrientTableImportData extends StreamLockJob<'NutrientTabl
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportData
+   * @memberof NutrientTableDataImport
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;

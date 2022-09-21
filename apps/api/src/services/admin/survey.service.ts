@@ -287,7 +287,7 @@ const adminSurveyService = ({
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob({
-      type: 'SurveyImportRespondents',
+      type: 'SurveyRespondentsImport',
       userId,
       params: { surveyId, file: file.path },
     });
@@ -306,7 +306,7 @@ const adminSurveyService = ({
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob({
-      type: 'SurveyExportRespondentAuthUrls',
+      type: 'SurveyAuthUrlsExport',
       userId,
       params: { surveyId },
     });

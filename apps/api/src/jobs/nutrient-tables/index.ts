@@ -1,7 +1,7 @@
-import NutrientTableImportData from './nutrient-table-import-data';
-import NutrientTableImportMapping from './nutrient-table-import-mapping';
+import NutrientTableDataImport from './nutrient-table-data-import';
+import NutrientTableIMappingImport from './nutrient-table-mapping-import';
 
 export default {
-  NutrientTableImportData,
-  NutrientTableImportMapping,
+  NutrientTableDataImport,
+  NutrientTableIMappingImport,
 };

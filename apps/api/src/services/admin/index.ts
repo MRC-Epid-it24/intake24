@@ -10,6 +10,8 @@ export * from './locale.service';
 export { default as localeService } from './locale.service';
 export * from './nutrient-table.service';
 export { default as nutrientTableService } from './nutrient-table.service';
+export * from './signup.service';
+export { default as adminSignupService } from './signup.service';
 export * from './survey.service';
 export { default as adminSurveyService } from './survey.service';
 export * from './user.service';

@@ -19,6 +19,7 @@ import type {
   AdminFoodController,
   AdminFoodDatabaseController,
   AdminFoodGroupController,
+  AdminSignupController,
   AdminSurveyController,
   AdminSurveyDataExportController,
   AdminSurveyRespondentController,
@@ -69,6 +70,7 @@ import type {
   ACLService,
   AdminCategoryService,
   AdminFoodService,
+  AdminSignupService,
   AdminSurveyService,
   AdminUserService,
   AsServedService,
@@ -166,6 +168,7 @@ export interface IoC extends Jobs {
   referenceController: ReferenceController;
 
   adminAuthenticationController: AdminAuthenticationController;
+  adminSignupController: AdminSignupController;
   adminUserProfileController: AdminUserProfileController;
   adminUserJobController: AdminUserJobController;
 
@@ -231,7 +234,6 @@ export interface IoC extends Jobs {
 
   // Authentication
   authenticationService: AuthenticationService;
-  // aclService: ACLService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
   signInService: SignInService;
@@ -271,6 +273,7 @@ export interface IoC extends Jobs {
   imageMapService: ImageMapService;
 
   // Survey / user
+  adminSignupService: AdminSignupService;
   adminSurveyService: AdminSurveyService;
   adminUserService: AdminUserService;
 

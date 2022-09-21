@@ -31,9 +31,9 @@ import type { JobParams } from '@intake24/common/types';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'SurveyExportRespondentAuthUrls',
+  name: 'SurveyAuthUrlsExport',
 
-  mixins: [jobParams<JobParams['SurveyExportRespondentAuthUrls']>()],
+  mixins: [jobParams<JobParams['SurveyAuthUrlsExport']>()],
 });
 </script>
 

@@ -21,8 +21,8 @@ export type CSVRow = {
 
 const requiredFields = ['username', 'password'];
 
-export default class SurveyImportRespondents extends StreamLockJob<'SurveyImportRespondents'> {
-  readonly name = 'SurveyImportRespondents';
+export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespondentsImport'> {
+  readonly name = 'SurveyRespondentsImport';
 
   private readonly adminSurveyService;
 
@@ -42,7 +42,7 @@ export default class SurveyImportRespondents extends StreamLockJob<'SurveyImport
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -67,7 +67,7 @@ export default class SurveyImportRespondents extends StreamLockJob<'SurveyImport
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -112,7 +112,7 @@ export default class SurveyImportRespondents extends StreamLockJob<'SurveyImport
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
@@ -156,7 +156,7 @@ export default class SurveyImportRespondents extends StreamLockJob<'SurveyImport
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   private async import(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -197,7 +197,7 @@ export default class SurveyImportRespondents extends StreamLockJob<'SurveyImport
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;

@@ -6,8 +6,8 @@ import type { IoC } from '@intake24/api/ioc';
 
 import BaseJob from '../job';
 
-export default class SurveyRespondentFeedback extends BaseJob<'SurveyRespondentFeedback'> {
-  readonly name = 'SurveyRespondentFeedback';
+export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackNotification'> {
+  readonly name = 'SurveyFeedbackNotification';
 
   private readonly feedbackService;
 
@@ -37,10 +37,10 @@ export default class SurveyRespondentFeedback extends BaseJob<'SurveyRespondentF
     this.logger.debug('Job started.');
 
     const { surveyId, userId, submissions, to, cc, bcc } = this.params;
-    const subject = 'Intake24: My dietary feedback';
+    const subject = '🍔 Intake24: My dietary feedback';
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
     const { path, url } = await this.feedbackService.getFeedbackFile(surveyId, userId, submissions);
-    const html = nunjucks.render('mail/surveys/respondent-feedback.njk', {
+    const html = nunjucks.render('mail/surveys/feedback.njk', {
       title: subject,
       action: { url, text: 'Download feedback' },
     });

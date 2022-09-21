@@ -39,7 +39,7 @@ export type MultiFactorAuthentication = {
 };
 
 export type PasswordsConfig = {
-  expiresIn: number;
+  expiresIn: string;
 };
 
 export type AuthTokensConfig = {
@@ -123,7 +123,7 @@ const securityConfig: SecurityConfig = {
     },
   },
   passwords: {
-    expiresIn: ms(process.env.PASSWORDS_EXPIRES_IN || '1h'),
+    expiresIn: process.env.PASSWORDS_EXPIRES_IN || '1h',
   },
   authTokens: {
     size: parseInt(process.env.AUTH_TOKENS_SIZE || '21', 10),

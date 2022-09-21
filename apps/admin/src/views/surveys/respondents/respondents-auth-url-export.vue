@@ -50,7 +50,7 @@ export default defineComponent({
 
   data() {
     return {
-      jobType: 'SurveyExportRespondentAuthUrls',
+      jobType: 'SurveyAuthUrlsExport',
     };
   },
 

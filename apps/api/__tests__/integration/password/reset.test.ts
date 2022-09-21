@@ -1,3 +1,4 @@
+import ms from 'ms';
 import request from 'supertest';
 
 import ioc from '@intake24/api/ioc';
@@ -85,7 +86,7 @@ export default () => {
 
   describe('shift time forward to expire token', () => {
     beforeAll(() => {
-      const timeShift = Date.now() + ioc.cradle.securityConfig.passwords.expiresIn;
+      const timeShift = Date.now() + ms(ioc.cradle.securityConfig.passwords.expiresIn);
       dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => timeShift);
     });
 

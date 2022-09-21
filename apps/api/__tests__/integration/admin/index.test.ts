@@ -10,15 +10,17 @@ import nutrientTables from './nutrient-tables/index.test';
 import permissions from './permissions/index.test';
 import roles from './roles/index.test';
 import signInLogs from './sign-in-logs/index.test';
+import signup from './signup/index.test';
 import surveySchemeQuestions from './survey-scheme-questions/index.test';
 import surveySchemes from './survey-schemes/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
-import user from './user/index.test';
+import user from './user/profile.test';
 import users from './users/index.test';
 
 export default () => {
   describe('/api/admin/auth', authentication);
+  describe('/api/admin/signup', signup);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);
   describe('/api/admin/food-groups', foodGroups);

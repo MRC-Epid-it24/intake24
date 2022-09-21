@@ -121,7 +121,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12" sm="6">
-              <v-btn block color="secondary" rounded type="submit" x-large>
+              <v-btn block color="secondary" :disabled="isAppLoading" rounded type="submit" x-large>
                 {{ $t('common.signup._') }}
               </v-btn>
             </v-col>
@@ -204,12 +204,12 @@ export default defineComponent({
 
     async sendRequest() {
       try {
-        const { accessToken } = await this.form.post<LoginResponse>('admin/auth/signup', {
+        const { accessToken } = await this.form.post<LoginResponse>('admin/signup', {
           withCredentials: true,
           withLoading: true,
         });
         await useAuth().successfulLogin(accessToken);
-        await this.$router.push({ name: 'dashboard' });
+        await this.$router.push({ name: 'verify' });
       } catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');

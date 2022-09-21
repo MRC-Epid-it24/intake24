@@ -17,8 +17,8 @@ export type CSVRow = {
 
 const requiredFields = ['Intake24 nutrient ID', 'NDB spreadsheet column index'];
 
-export default class NutrientTableImportMapping extends StreamLockJob<'NutrientTableImportMapping'> {
-  readonly name = 'NutrientTableImportMapping';
+export default class NutrientTableIMappingImport extends StreamLockJob<'NutrientTableIMappingImport'> {
+  readonly name = 'NutrientTableIMappingImport';
 
   private file!: string;
 
@@ -33,7 +33,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<'NutrientT
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableIMappingImport
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -61,7 +61,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<'NutrientT
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableIMappingImport
    */
   private async validate(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -106,7 +106,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<'NutrientT
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableIMappingImport
    */
   private async validateChunk(): Promise<void> {
     if (!this.content.length) return;
@@ -135,7 +135,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<'NutrientT
    * @private
    * @param {number} [chunk=100]
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableIMappingImport
    */
   private async import(chunk = 100): Promise<void> {
     const { nutrientTableId } = this.params;
@@ -181,7 +181,7 @@ export default class NutrientTableImportMapping extends StreamLockJob<'NutrientT
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof NutrientTableImportMapping
+   * @memberof NutrientTableIMappingImport
    */
   private async importChunk(): Promise<void> {
     if (!this.content.length) return;

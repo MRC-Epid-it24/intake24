@@ -1,3 +1,5 @@
+import pick from 'lodash/pick';
+
 export type ValidationError = {
   location: string;
   msg: string;
@@ -24,6 +26,12 @@ export class Errors {
 
   all(): ValidationErrors {
     return this.errors;
+  }
+
+  getErrors(field?: string[]): ValidationError[] {
+    if (!field) return Object.values(this.errors);
+
+    return Object.values(pick(this.errors, field));
   }
 
   record(errors?: ValidationErrors): void {

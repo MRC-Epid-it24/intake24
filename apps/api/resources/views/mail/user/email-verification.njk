@@ -1,0 +1,16 @@
+{% extends "mail/layouts/layout.njk" %}
+{% block body %}
+<p>Hello {{ name }},</p>
+<p>We have received a request to activate new Intake24 account assosicated with {{ email }}.</p>
+{% if uaInfo %}
+  <p>Device info: {{ uaInfo }}.</p>
+{% endif %}
+<p>Please click the button below to verify email address and activate the account.</p>
+{% include "mail/partials/action-button.njk" %}
+<p>If you did not request a new Intake24 account, please disregard this email.</p>
+<p>This email verification link is only valid for the next {{ expiresIn }}.</p>
+<p>
+Kind regards,<br />
+Intake24 Team
+</p>
+{% endblock %}

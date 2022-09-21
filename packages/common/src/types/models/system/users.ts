@@ -24,6 +24,8 @@ export type UserAttributes = {
   emailNotifications: boolean;
   smsNotifications: boolean;
   multiFactorAuthentication: boolean;
+  verifiedAt: Date | null;
+  disabledAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -38,6 +40,8 @@ export type UserCreationAttributes = OmitAndOptional<
   | 'emailNotifications'
   | 'smsNotifications'
   | 'multiFactorAuthentication'
+  | 'verifiedAt'
+  | 'disabledAt'
 >;
 
 export type UserCustomFieldAttributes = {

@@ -193,7 +193,7 @@ const adminSurveyRespondentController = ({
     const user = req.user as User;
 
     await scheduler.jobs.addJob({
-      type: 'SurveyRespondentFeedback',
+      type: 'SurveyFeedbackNotification',
       userId,
       params: {
         surveyId,

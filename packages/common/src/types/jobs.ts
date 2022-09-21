@@ -22,15 +22,15 @@ export type JobParams = {
     store: 'cache' | 'session';
   };
   CleanStorageFiles: EmptyJobParams;
-  LanguageSyncTranslations: EmptyJobParams;
+  LanguageTranslationsSync: EmptyJobParams;
   LocaleFoodNutrientMapping: {
     localeId: string;
   };
-  NutrientTableImportData: {
+  NutrientTableDataImport: {
     nutrientTableId: string;
     file: string;
   };
-  NutrientTableImportMapping: {
+  NutrientTableIMappingImport: {
     nutrientTableId: string;
     file: string;
   };
@@ -42,10 +42,6 @@ export type JobParams = {
     foodCodes: string[];
   };
   PurgeRefreshTokens: EmptyJobParams;
-  SendPasswordReset: {
-    email: string;
-    userAgent?: string;
-  };
   SurveyDataExport: {
     id?: string | string[];
     surveyId: string;
@@ -53,20 +49,20 @@ export type JobParams = {
     endDate?: Date;
     userId?: string;
   };
-  SurveyExportRespondentAuthUrls: {
+  SurveyAuthUrlsExport: {
     surveyId: string;
   };
-  SurveyImportRespondents: {
+  SurveyRespondentsImport: {
     surveyId: string;
     file: string;
   };
-  SurveyRequestHelp: {
+  SurveyHelpRequestNotification: {
     surveySlug: string;
     userId: string;
     name: string;
     phone: string;
   };
-  SurveyRespondentFeedback: {
+  SurveyFeedbackNotification: {
     surveyId: string;
     userId: string;
     submissions?: string[];
@@ -83,6 +79,14 @@ export type JobParams = {
     surveyId: string;
     submissionId: string;
   };
+  UserPasswordResetNotification: {
+    email: string;
+    userAgent?: string;
+  };
+  UserEmailVerificationNotification: {
+    email: string;
+    userAgent?: string;
+  };
 };
 
 export type JobType = keyof JobParams;
@@ -94,15 +98,15 @@ export type GetJobParams<P extends keyof JobParams> = JobParams[P];
 export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
-  LanguageSyncTranslations: {},
+  LanguageTranslationsSync: {},
   LocaleFoodNutrientMapping: {
     localeId: '',
   },
-  NutrientTableImportData: {
+  NutrientTableDataImport: {
     nutrientTableId: '',
     file: '',
   },
-  NutrientTableImportMapping: {
+  NutrientTableIMappingImport: {
     nutrientTableId: '',
     file: '',
   },
@@ -114,26 +118,23 @@ export const defaultJobsParams: JobParams = {
     foodCodes: [],
   },
   PurgeRefreshTokens: {},
-  SendPasswordReset: {
-    email: '',
-  },
   SurveyDataExport: {
     surveyId: '',
   },
-  SurveyExportRespondentAuthUrls: {
+  SurveyAuthUrlsExport: {
     surveyId: '',
   },
-  SurveyImportRespondents: {
+  SurveyRespondentsImport: {
     surveyId: '',
     file: '',
   },
-  SurveyRequestHelp: {
+  SurveyHelpRequestNotification: {
     surveySlug: '',
     userId: '',
     name: '',
     phone: '',
   },
-  SurveyRespondentFeedback: {
+  SurveyFeedbackNotification: {
     surveyId: '',
     userId: '',
     to: '',
@@ -146,6 +147,12 @@ export const defaultJobsParams: JobParams = {
   SurveySubmissionNotification: {
     surveyId: '',
     submissionId: '',
+  },
+  UserPasswordResetNotification: {
+    email: '',
+  },
+  UserEmailVerificationNotification: {
+    email: '',
   },
 };
 

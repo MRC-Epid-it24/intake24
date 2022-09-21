@@ -6,8 +6,8 @@ import { UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';
 
-export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
-  readonly name = 'SurveyRequestHelp';
+export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRequestNotification'> {
+  readonly name = 'SurveyHelpRequestNotification';
 
   private readonly adminUserService;
 
@@ -29,7 +29,7 @@ export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof SurveyRequestHelp
+   * @memberof SurveyHelpRequestNotification
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -48,7 +48,7 @@ export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
     const to = users.map(({ email }) => email).filter(Boolean) as string[];
 
     if (!to.length) {
-      this.logger.warn(`SurveyRequestHelp: no survey or global support users found.`);
+      this.logger.warn(`SurveyHelpRequestNotification: no survey or global support users found.`);
       return;
     }
 
@@ -67,7 +67,7 @@ export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
 
     if (!alias || !alias.survey) {
       this.logger.warn(
-        `SurveyRequestHelp: could not find user alias for survey: ${surveySlug}, userId: ${userId}`
+        `SurveyHelpRequestNotification: could not find user alias for survey: ${surveySlug}, userId: ${userId}`
       );
 
       return null;
@@ -81,13 +81,13 @@ export default class SurveyRequestHelp extends BaseJob<'SurveyRequestHelp'> {
   private async sendEmail(surveyName: string, username: string, to: string[]) {
     const { name, phone } = this.params;
 
-    const html = nunjucks.render('mail/surveys/request-help.njk', {
+    const html = nunjucks.render('mail/surveys/help-request.njk', {
       surveyName,
       username,
       name,
       phone,
     });
 
-    await this.mailer.sendMail({ to, subject: `Intake24: Help request (${surveyName})`, html });
+    await this.mailer.sendMail({ to, subject: `🍔 Intake24: Help request (${surveyName})`, html });
   }
 }

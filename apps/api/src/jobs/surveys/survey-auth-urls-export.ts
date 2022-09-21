@@ -14,8 +14,8 @@ import { Job as DbJob, Survey, UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';
 
-export default class SurveyExportRespondentAuthUrls extends BaseJob<'SurveyExportRespondentAuthUrls'> {
-  readonly name = 'SurveyExportRespondentAuthUrls';
+export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'> {
+  readonly name = 'SurveyAuthUrlsExport';
 
   private dbJob!: DbJob;
 
@@ -35,7 +35,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<'SurveyExpor
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof SurveyExportRespondentAuthUrls
+   * @memberof SurveyAuthUrlsExport
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -57,7 +57,7 @@ export default class SurveyExportRespondentAuthUrls extends BaseJob<'SurveyExpor
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof SurveyExportRespondentAuthUrls
+   * @memberof SurveyAuthUrlsExport
    */
   private async download(): Promise<void> {
     const { surveyId } = this.params;

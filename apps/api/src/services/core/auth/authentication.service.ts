@@ -39,7 +39,7 @@ export interface SignInAttempt extends Subject {
 const authenticationService = ({
   jwtRotationService,
   jwtService,
-  logger,
+  logger: globalLogger,
   mfaProvider,
   securityConfig,
   signInService,
@@ -52,6 +52,8 @@ const authenticationService = ({
   | 'securityConfig'
   | 'signInService'
 >) => {
+  const logger = globalLogger.child({ service: 'AuthenticationService' });
+
   /**
    * Login helper to verify user's password
    *
@@ -108,7 +110,16 @@ const authenticationService = ({
         message: 'Credentials not found in database.',
       });
 
-      throw new UnauthorizedError(`Provided credentials do not match our records.`);
+      throw new UnauthorizedError('Provided credentials do not match our records.');
+    }
+
+    if (user.isDisabled()) {
+      await signInService.log({
+        ...signInLog,
+        message: 'Account is disabled.',
+      });
+
+      throw new UnauthorizedError('Account is disabled.');
     }
 
     if (subject.provider !== 'URLToken' && !(await verifyPassword(password, user.password))) {
@@ -237,7 +248,7 @@ const authenticationService = ({
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
-        logger.error(stack ?? `${name}: ${message}`);
+        logger.error(`${name}: ${message}`, { stack });
       } else logger.error(err);
 
       throw new UnauthorizedError();

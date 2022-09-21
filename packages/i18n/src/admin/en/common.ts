@@ -17,6 +17,13 @@ const common: LocaleMessageObject = {
     subtitle: 'Sign up for a new Intake24 Admin Tool account',
     noAccount: 'No account yet?',
   },
+  verify: {
+    _: 'Account verification',
+    subtitle: 'Please verify your account using the link we sent you to your inbox.',
+    text: 'If you did not receive the email, please check your spam folder or click the button below to request a new one.',
+    resend: 'Resent verification email',
+    resent: 'Verification email was sent to your inbox',
+  },
   password: {
     _: 'Password',
     current: 'Current password',
@@ -31,7 +38,6 @@ const common: LocaleMessageObject = {
       captcha: 'Invalid captcha challenge',
       send: 'Send request',
       sent: 'Password reset instructions has been sent to provided email address.',
-      spam: 'Please check your inbox (including spam / junk folder).',
     },
     reset: {
       _: 'Reset password',
@@ -43,6 +49,7 @@ const common: LocaleMessageObject = {
   email: 'Email',
   emailConfirm: 'Confirm email',
   phone: 'Phone',
+  spam: 'If you did not receive the email, please check your spam / junk folder or click the button below to request a new one.',
   terms: {
     _: 'Terms',
     text: 'I agree with Intake24 {privacy} and {tos}.',

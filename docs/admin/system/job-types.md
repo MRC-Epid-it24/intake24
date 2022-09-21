@@ -2,22 +2,25 @@
 
 Jobs types available in system.
 
-<!-- prettier-ignore -->
+- [Job types](#job-types)
   - [CleanRedisStore](#cleanredisstore)
   - [CleanStorageFiles](#cleanstoragefiles)
-  - [LanguageSyncTranslations](#languagesynctranslations)
-  - [LocaleCopyPairwiseAssociations](#localecopypairwiseassociations)
-  - [NutrientTableImportData](#nutrienttableimportdata)
-  - [NutrientTableImportMapping](#nutrienttableimportmapping)
+  - [LanguageTranslationsSync](#languagetranslationssync)
+  - [LocaleFoodNutrientMapping](#localefoodnutrientmapping)
+  - [NutrientTableDataImport](#nutrienttabledataimport)
+  - [NutrientTableIMappingImport](#nutrienttableimappingimport)
+  - [PairwiseSearchCopyAssociations](#pairwisesearchcopyassociations)
+  - [PopularitySearchUpdateCounters](#popularitysearchupdatecounters)
   - [PurgeRefreshTokens](#purgerefreshtokens)
-  - [SendPasswordReset](#sendpasswordreset)
   - [SurveyDataExport](#surveydataexport)
-  - [SurveyExportRespondentAuthUrls](#surveyexportrespondentauthurls)
-  - [SurveyImportRespondents](#surveyimportrespondents)
-  - [SurveyRequestHelp](#surveyrequesthelp)
-  - [SurveyRespondentFeedback](#surveyrespondentfeedback)
+  - [SurveyAuthUrlsExport](#surveyauthurlsexport)
+  - [SurveyFeedbackNotification](#surveyfeedbacknotification)
+  - [SurveyRespondentsImport](#surveyrespondentsimport)
+  - [SurveyHelpRequestNotification](#surveyhelprequestnotification)
   - [SurveySubmission](#surveysubmission)
   - [SurveySubmissionNotification](#surveysubmissionnotification)
+  - [UserPasswordResetNotification](#userpasswordresetnotification)
+  - [UserEmailVerificationNotification](#useremailverificationnotification)
 
 ## CleanRedisStore
 
@@ -27,45 +30,53 @@ Jobs types available in system.
 
 `CleanStorageFiles` wipes temporary storage files, e.g. `downloads` and `uploads` folders.
 
-## LanguageSyncTranslations
+## LanguageTranslationsSync
 
-`LanguageSyncTranslations` synchronizes database language translation records with built-in English translation.
+`LanguageTranslationsSync` synchronizes database language translation records with built-in English translation.
 
 :::tip Built-in translations update
 This needs to be run if object structure changes, so all database records are synced to use same structure.
 :::
 
-## LocaleCopyPairwiseAssociations
+## LocaleFoodNutrientMapping
 
-`LocaleCopyPairwiseAssociations` copies pairwise associations data from source locale to target locale.
+`LocaleFoodNutrientMapping` export food nutrient mapping data for selected locale.
 
-## NutrientTableImportData
+## NutrientTableDataImport
 
-`NutrientTableImportData` imports data from CSV file containing nutrient data.
+`NutrientTableDataImport` imports data from CSV file containing nutrient data.
 
-## NutrientTableImportMapping
+## NutrientTableIMappingImport
 
-`NutrientTableImportMapping` imports Excel-based nutrient mappings from CSV file.
+`NutrientTableIMappingImport` imports Excel-based nutrient mappings from CSV file.
+
+## PairwiseSearchCopyAssociations
+
+`PairwiseSearchCopyAssociations` copies pairwise associations data from source locale to target locale.
+
+## PopularitySearchUpdateCounters
+
+`PopularitySearchUpdateCounters` increments popularity search counters based on provided food codes from survey submission.
 
 ## PurgeRefreshTokens
 
 `PurgeRefreshTokens` clean expired refresh tokens, that don't need to be hold in database store anymore.
 
-## SendPasswordReset
-
-`SendPasswordReset` is triggered when user requests password reset.
-
 ## SurveyDataExport
 
 `SurveyDataExport` survey submission data to CSV file based on scheme-defined export columns.
 
-## SurveyExportRespondentAuthUrls
+## SurveyAuthUrlsExport
 
-`SurveyExportRespondentAuthUrls` survey respondent authentication details (usernames and authentication URLs).
+`SurveyAuthUrlsExport` survey respondent authentication details (usernames and authentication URLs).
 
-## SurveyImportRespondents
+## SurveyFeedbackNotification
 
-`SurveyImportRespondents` imports survey respondent records from provided CSV file.
+`SurveyFeedbackNotification` sends email with attached survey feedback PDF file to provided email address.
+
+## SurveyRespondentsImport
+
+`SurveyRespondentsImport` imports survey respondent records from provided CSV file.
 
 **Available columns**
 
@@ -82,13 +93,9 @@ This needs to be run if object structure changes, so all database records are sy
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.
 :::
 
-## SurveyRequestHelp
+## SurveyHelpRequestNotification
 
-`SurveyRequestHelp` sends request help email to study support users.
-
-## SurveyRespondentFeedback
-
-`SurveyRespondentFeedback` sends email with attached survey feedback PDF file to provided email address.
+`SurveyHelpRequestNotification` sends request help email to study support users.
 
 ## SurveySubmission
 
@@ -114,3 +121,11 @@ Content-Type: application/json
     ...
 }
 ```
+
+## UserPasswordResetNotification
+
+`UserPasswordResetNotification` is triggered when user requests password reset.
+
+## UserEmailVerificationNotification
+
+`UserEmailVerificationNotification` is triggered when new user signs up.

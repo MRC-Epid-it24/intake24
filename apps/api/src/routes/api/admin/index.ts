@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authenticate } from '@intake24/api/http/middleware';
+import { authenticate, isAccountVerified } from '@intake24/api/http/middleware';
 
 import authentication from './authentication';
 import fdbs from './fdbs';
@@ -12,9 +12,11 @@ import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
 import permissions from './permissions';
+import profile from './profile';
 import references from './references';
 import roles from './roles';
 import signInLogs from './sign-in-logs';
+import signup from './signup';
 import surveySchemeQuestions from './survey-scheme-questions';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
@@ -25,9 +27,17 @@ import users from './users';
 export default () => {
   const router = Router();
 
+  // Unauthenticated
   router.use('/auth', authentication());
+  router.use('/signup', signup());
 
+  // Authenticated & not verified
   authenticate(router, 'admin');
+
+  router.use('/user', profile());
+
+  // Authenticated & verified
+  router.use(isAccountVerified);
 
   router.use('/fdbs', fdbs());
   router.use('/feedback-schemes', feedbackSchemes());

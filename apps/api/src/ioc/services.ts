@@ -5,6 +5,7 @@ import {
   aclService,
   adminCategoryService,
   adminFoodService,
+  adminSignupService,
   adminSurveyService,
   adminUserService,
   asServedService,
@@ -77,6 +78,7 @@ export default (container: AwilixContainer): void => {
     dataExportMapper: asFunction(dataExportMapper),
     dataExportService: asFunction(dataExportService),
 
+    adminSignupService: asFunction(adminSignupService),
     adminSurveyService: asFunction(adminSurveyService),
     adminUserService: asFunction(adminUserService),
 

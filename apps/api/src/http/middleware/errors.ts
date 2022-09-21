@@ -75,7 +75,7 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof InternalServerError) {
       const { message, name, stack } = err;
-      logger.error(stack ?? `${name}: ${message}`);
+      logger.error(`${name}: ${message}`, { stack });
       res.status(500).json({ message: 'Internal Server Error' });
       return;
     }
@@ -85,7 +85,7 @@ export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof DatabaseError) {
       const { message, name, stack } = err.original;
-      logger.error(stack ?? `${name}: ${message}`);
+      logger.error(`${name}: ${message}`, { stack });
       res.status(503).json({ message: 'Internal Database Error' });
       return;
     }
@@ -96,7 +96,7 @@ export default (app: Express, { logger }: Ops): void => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     const { message, name, stack } = err;
-    logger.error(stack ?? `${name}: ${message}`);
+    logger.error(`${name}: ${message}`, { stack });
     res.status(500).json({ message: 'Internal Server Error' });
   });
 };

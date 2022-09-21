@@ -4,7 +4,7 @@ import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
 import { csvFile } from '../generic';
 
-const typeOptions = ['NutrientTableImportData', 'NutrientTableImportMapping'];
+const typeOptions = ['NutrientTableDataImport', 'NutrientTableIMappingImport'];
 
 export default validate(
   checkSchema({

@@ -121,7 +121,7 @@ Survey respondents section allows to:
 
 1. Create / view / search / edit / remove respondents
 
-2. Bulk import respondents using CSV file. See [`SurveyImportRespondents`](/admin/system/job-types#surveyimportrespondents) for more details about CSV file structure.
+2. Bulk import respondents using CSV file. See [`SurveyRespondentsImport`](/admin/system/job-types#surveyimportrespondents) for more details about CSV file structure.
 
 3. Download respondents authentication details in CSV file
 

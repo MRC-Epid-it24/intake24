@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import ms from 'ms';
 
 import type { IoC } from '@intake24/api/ioc';
 import { ValidationError } from '@intake24/api/http/errors';
@@ -10,10 +11,15 @@ const passwordController = ({
   securityConfig,
 }: Pick<IoC, 'adminUserService' | 'securityConfig' | 'scheduler'>) => {
   const request = async (req: Request, res: Response<undefined>): Promise<void> => {
-    const { email } = req.body;
-    const userAgent = req.headers['user-agent'];
+    const {
+      body: { email },
+      headers: { 'user-agent': userAgent },
+    } = req;
 
-    await scheduler.jobs.addJob({ type: 'SendPasswordReset', params: { email, userAgent } });
+    await scheduler.jobs.addJob({
+      type: 'UserPasswordResetNotification',
+      params: { email, userAgent },
+    });
 
     res.json();
   };
@@ -21,7 +27,7 @@ const passwordController = ({
   const reset = async (req: Request, res: Response<undefined>): Promise<void> => {
     const { email, password, token } = req.body;
 
-    const expiredAt = new Date(Date.now() - securityConfig.passwords.expiresIn);
+    const expiredAt = new Date(Date.now() - ms(securityConfig.passwords.expiresIn));
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
     const passwordReset = await UserPasswordReset.findOne({

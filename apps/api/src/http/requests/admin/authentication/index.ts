@@ -1,5 +1,4 @@
 import login from './login';
-import mfaVerify from './mfa-verify';
-import signup from './signup';
+import verify from './verify';
 
-export default { login, mfaVerify, signup };
+export default { login, verify };

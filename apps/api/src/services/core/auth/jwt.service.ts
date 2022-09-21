@@ -47,18 +47,18 @@ const jwtService = ({
    * @param {SignOptions} [options={}]
    * @returns {Promise<TokenPayload>}
    */
-  const verify = async (
+  const verify = async <T = TokenPayload>(
     token: string,
     secret: Secret,
     options: SignOptions = {}
-  ): Promise<TokenPayload> =>
+  ): Promise<T> =>
     new Promise((resolve, reject) => {
       const { issuer } = securityConfig.jwt;
 
       jwt.verify(token, secret, { issuer, ...options }, (err, decoded) =>
         err || !decoded
           ? reject(err ?? new Error('Unable to verify refresh token.'))
-          : resolve(decoded as TokenPayload)
+          : resolve(decoded as T)
       );
     });
 
@@ -172,6 +172,7 @@ const jwtService = ({
 
   return {
     sign,
+    verify,
     signAccessToken,
     signRefreshToken,
     signTokens,

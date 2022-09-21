@@ -2,10 +2,10 @@ import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 
-import BaseJob from './job';
+import BaseJob from '../job';
 
-export default class LanguageSyncTranslations extends BaseJob<'LanguageSyncTranslations'> {
-  readonly name = 'LanguageSyncTranslations';
+export default class LanguageTranslationsSync extends BaseJob<'LanguageTranslationsSync'> {
+  readonly name = 'LanguageTranslationsSync';
 
   private readonly languageService;
 
@@ -21,7 +21,7 @@ export default class LanguageSyncTranslations extends BaseJob<'LanguageSyncTrans
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof SurveyImportRespondents
+   * @memberof SurveyRespondentsImport
    */
   public async run(job: Job): Promise<void> {
     this.init(job);

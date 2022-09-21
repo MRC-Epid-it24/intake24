@@ -32,7 +32,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
 
   private logEventError(err: Error) {
     const { message, name, stack } = err;
-    this.logger.error(stack ?? `${name}: ${message}`);
+    this.logger.error(`${name}: ${message}`, { stack });
   }
 
   /**
@@ -44,13 +44,17 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    */
   public async init(connection: ConnectionOptions): Promise<void> {
     this.scheduler = new QueueScheduler(this.name, { connection });
-    this.scheduler.on('error', (err) => this.logEventError(err));
+    this.scheduler.on('error', (err) => {
+      this.logEventError(err);
+    });
 
     this.queue = new Queue(this.name, {
       connection,
       defaultJobOptions: { removeOnComplete: true, removeOnFail: true },
     });
-    this.queue.on('error', (err) => this.logEventError(err));
+    this.queue.on('error', (err) => {
+      this.logEventError(err);
+    });
 
     const worker = new Worker(this.name, this.processor, { connection });
 
@@ -59,9 +63,16 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
         this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
       })
       .on('failed', (job, err) => {
-        this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`);
+        const { message, name, stack } = err;
+        this.logger.error(`${this.name}: ${job.name} | ${job.id} has failed with ${err.message}`, {
+          message,
+          name,
+          stack,
+        });
       })
-      .on('error', (err) => this.logEventError(err));
+      .on('error', (err) => {
+        this.logEventError(err);
+      });
 
     this.workers.push(worker);
 

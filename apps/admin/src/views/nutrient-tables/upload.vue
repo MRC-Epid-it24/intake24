@@ -81,7 +81,7 @@ export default defineComponent({
   },
 
   data() {
-    const jobType: JobType[] = ['NutrientTableImportMapping', 'NutrientTableImportData'];
+    const jobType: JobType[] = ['NutrientTableIMappingImport', 'NutrientTableDataImport'];
     const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
 
     return {

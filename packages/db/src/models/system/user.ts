@@ -121,6 +121,18 @@ export default class User
   })
   public smsNotifications!: boolean;
 
+  @Column({
+    allowNull: true,
+    type: DataType.DATE,
+  })
+  public verifiedAt!: Date | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.DATE,
+  })
+  public disabledAt!: Date | null;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;
@@ -262,5 +274,13 @@ export default class User
     if (!permissions.length) return false;
 
     return permissions.some((item) => permission.includes(item[key]));
+  }
+
+  public isVerified(): boolean {
+    return !!this.verifiedAt;
+  }
+
+  public isDisabled(): boolean {
+    return !!this.disabledAt;
   }
 }

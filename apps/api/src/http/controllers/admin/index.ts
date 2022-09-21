@@ -10,6 +10,7 @@ import locales from './locales';
 import nutrientTable from './nutrient-table.controller';
 import reference from './reference.controller';
 import signInLog from './sign-in-log.controller';
+import signup from './signup.controller';
 import surveyScheme from './survey-scheme.controller';
 import surveySchemeQuestion from './survey-scheme-question.controller';
 import surveys from './surveys';
@@ -29,6 +30,7 @@ export * from './nutrient-table.controller';
 export * from './reference.controller';
 export * from './securable.controller';
 export * from './sign-in-log.controller';
+export * from './signup.controller';
 export * from './survey-scheme.controller';
 export * from './survey-scheme-question.controller';
 export * from './surveys';
@@ -49,8 +51,9 @@ export default {
   locales,
   nutrientTable,
   reference,
+  signInLog,
+  signup,
   surveyScheme,
   surveySchemeQuestion,
-  signInLog,
   task,
 };

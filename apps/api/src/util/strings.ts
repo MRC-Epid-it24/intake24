@@ -1,6 +1,7 @@
 import trim from 'lodash/trim';
 import trimEnd from 'lodash/trimEnd';
 import slugify from 'slugify';
+import uaParser from 'ua-parser-js';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
@@ -56,4 +57,13 @@ export const getFrontEndUrl = (
   if (isUrlAbsolute(frontend)) return trimEnd(frontend, '/');
 
   return [base, frontend].map((item) => trim(item, '/')).join('/');
+};
+
+export const getAgentInfo = (agent: { name?: string; version?: string }): string | undefined => {
+  return agent.name && agent.version ? `${agent.name} (${agent.version})` : undefined;
+};
+
+export const getUAInfo = (userAgent?: string): string | undefined => {
+  const { browser, os } = uaParser(userAgent);
+  return [browser, os].map(getAgentInfo).filter(Boolean).join(', ');
 };

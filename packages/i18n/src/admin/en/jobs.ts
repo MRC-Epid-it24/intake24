@@ -29,17 +29,17 @@ const jobs: LocaleMessageObject = {
     PurgeRefreshTokens: {
       _: 'Purge expired refresh tokens',
     },
-    LanguageSyncTranslations: {
+    LanguageTranslationsSync: {
       _: 'Language - Synchronize translations',
     },
     LocaleFoodNutrientMapping: {
       _: 'Locale - Export food nutrient mapping',
       localeId: 'Locale ID',
     },
-    NutrientTableImportMapping: {
+    NutrientTableIMappingImport: {
       _: 'Nutrient table - import NDB mapping',
     },
-    NutrientTableImportData: {
+    NutrientTableDataImport: {
       _: 'Nutrient table - import NDB data',
     },
     PairwiseSearchCopyAssociations: {
@@ -51,19 +51,19 @@ const jobs: LocaleMessageObject = {
       _: 'Search - Update popularity counters',
       foodCodes: 'Food codes',
     },
-    SendPasswordReset: {
+    UserPasswordResetNotification: {
       _: 'Send password reset',
     },
-    SurveyRespondentFeedback: {
+    SurveyFeedbackNotification: {
       _: 'Survey - send respondent feedback',
     },
     SurveyDataExport: {
       _: 'Survey - data export',
     },
-    SurveyExportRespondentAuthUrls: {
+    SurveyAuthUrlsExport: {
       _: 'Survey - export respondent authentication URLs ',
     },
-    SurveyImportRespondents: {
+    SurveyRespondentsImport: {
       _: 'Survey - import respondents',
     },
     SurveySubmission: {

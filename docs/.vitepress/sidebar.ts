@@ -161,6 +161,10 @@ export const sidebar = {
           link: '/api/admin/authentication',
         },
         {
+          text: 'Sign-up',
+          link: '/api/admin/signup',
+        },
+        {
           text: 'User profile',
           link: '/api/admin/user/profile',
         },

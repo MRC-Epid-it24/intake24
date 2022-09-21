@@ -76,14 +76,14 @@ export default class Pusher {
         if (err instanceof WebPushError && err.statusCode === 410) {
           subscription.destroy().catch((dbErr) => {
             const { message, name, stack } = dbErr;
-            this.logger.error(stack ?? `${name}: ${message}`);
+            this.logger.error(`${name}: ${message}`, { stack });
           });
           continue;
         }
 
         if (err instanceof Error) {
           const { message, name, stack } = err;
-          this.logger.error(stack ?? `${name}: ${message}`);
+          this.logger.error(`${name}: ${message}`, { stack });
           continue;
         }
 

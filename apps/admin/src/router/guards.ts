@@ -8,10 +8,12 @@ export default (router: Router): void => {
     const { meta: { perm, public: unrestricted } = {} } = to;
 
     const auth = useAuth();
+    const user = useUser();
 
     // Login page
     if (unrestricted) {
-      if (auth.loggedIn) next({ name: 'dashboard' });
+      const name = user.isVerified ? 'dashboard' : 'verify';
+      if (auth.loggedIn && name !== to.name) next({ name });
       else next();
       return;
     }
@@ -25,8 +27,13 @@ export default (router: Router): void => {
       return;
     }
 
+    if (!user.isVerified) {
+      to.name === 'verify' ? next() : next({ name: 'verify' });
+      return;
+    }
+
     // Check correct permissions if any
-    if (perm && !useUser().can(perm)) {
+    if (perm && !user.can(perm)) {
       next({ name: 'dashboard' });
       return;
     }

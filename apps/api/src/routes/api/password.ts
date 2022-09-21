@@ -10,7 +10,7 @@ export default () => {
   const router = Router();
 
   const passwordResetLimiter = rateLimiter.createMiddleware('password', {
-    message: 'Password request has just been requested, please try again later.',
+    message: 'Password reset link has been recently requested, please try again later.',
     skipFailedRequests: true,
   });
 
