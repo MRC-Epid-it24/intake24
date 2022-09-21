@@ -17,6 +17,7 @@
       <recall-bread-crumbs
         v-if="showMealList && currentPrompt"
         :prompt-name="currentPrompt.prompt.props.name"
+        @restart="restart"
       ></recall-bread-crumbs>
       <transition mode="out-in" name="component-fade">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch

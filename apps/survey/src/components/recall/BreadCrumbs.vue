@@ -6,6 +6,15 @@
       </template>
     </v-breadcrumbs>
     <v-spacer v-if="!isNotDesktop"></v-spacer>
+    <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
+      <template #activator="{ attrs, on }">
+        <v-btn v-bind="attrs" class="mr-2" color="error" outlined v-on="on">
+          <v-icon left>fas fa-times</v-icon>
+          <span>Reset</span>
+        </v-btn>
+      </template>
+      Reset survey state
+    </confirm-dialog>
     <request-help :survey-id="$route.params.surveyId"></request-help>
   </v-toolbar>
 </template>
@@ -18,11 +27,12 @@ import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { BreadcrumbsElement } from '@intake24/survey/components/mixins/breadcrumbs';
 import { breadcrumbs } from '@intake24/survey/components/mixins';
 import RequestHelp from '@intake24/survey/components/request-help.vue';
+import { ConfirmDialog } from '@intake24/ui/components';
 
 export default defineComponent({
   name: 'RecallBreadCrumbs',
 
-  components: { RequestHelp },
+  components: { RequestHelp, ConfirmDialog },
 
   mixins: [breadcrumbs],
 
