@@ -158,7 +158,7 @@ export default class DynamicRecall {
           customPromptAnswers: {},
           foods: [],
         })),
-        nextMealId: this.surveyScheme.meals.length++,
+        nextMealId: this.surveyScheme.meals.length + 1,
       };
 
       await this.store.setState(initialState);
