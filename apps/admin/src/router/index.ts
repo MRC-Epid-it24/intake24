@@ -6,6 +6,7 @@ import VueRouter from 'vue-router';
 import views from '@intake24/admin/views';
 
 import type { Resource } from '../types';
+import guards from './guards';
 import resources from './resources';
 
 export interface GenerateRoutesOps extends Resource {
@@ -197,10 +198,14 @@ resources.forEach((item) => {
   routes.push(...generateResourceRoutes(name, [`/${first}`, ...rest], resourceViews, item));
 });
 
+routes.push({ path: '*', name: '404', redirect: '/' });
+
 const router = new VueRouter({
   mode: 'history',
   base: import.meta.env.VITE_APP_BASE_URL ?? '/',
   routes,
 });
+
+guards(router);
 
 export default router;
