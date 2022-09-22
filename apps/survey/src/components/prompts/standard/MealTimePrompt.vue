@@ -13,18 +13,9 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <confirm-dialog
-        color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }).toString()"
-        @confirm="removeMeal"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
-            {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
-          </v-btn>
-        </template>
-        {{ $t('prompts.mealDelete.message', { meal: getLocalMealName }) }}
-      </confirm-dialog>
+      <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
+        {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
+      </v-btn>
       <v-btn
         :block="isMobile"
         class="px-5"
@@ -46,7 +37,6 @@ import { defineComponent } from 'vue';
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime, RequiredLocaleTranslation } from '@intake24/common/types';
 import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import { ConfirmDialog } from '@intake24/ui';
 
 import BasePrompt from '../BasePrompt';
 
@@ -54,8 +44,6 @@ const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minut
 
 export default defineComponent({
   name: 'MealTimePrompt',
-
-  components: { ConfirmDialog },
 
   mixins: [BasePrompt],
 
