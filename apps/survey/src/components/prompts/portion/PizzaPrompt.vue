@@ -1,99 +1,91 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="text">
-      <template #headerText>
-        {{ $t('portion.common.completeBelow') }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="panelOpen">
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.pizza.label') }}
-                <template #actions>
-                  <valid-invalid-icon :valid="typeComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <image-map-selector
-                  :prompt-props="typePromptProps"
-                  @image-map-selector-submit="selectPizza($event)"
-                ></image-map-selector>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.pizza.thicknessLabel') }}
-                <template #actions>
-                  <valid-invalid-icon :valid="thicknessComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <image-map-selector
-                  :prompt-props="thickPromptProps"
-                  @image-map-selector-submit="selectThickness($event)"
-                ></image-map-selector>
-                <!-- <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img> -->
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.pizza.sizeLabel') }}
-                <template #actions>
-                  <valid-invalid-icon :valid="sizeComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <template v-if="!sizePromptProps.imageMapId">
-                  {{ $t('portion.common.completePreviousStep') }}
-                </template>
-                <template v-if="sizePromptProps.imageMapId">
-                  <v-btn :color="wholeSelected === true ? 'success' : ''" @click="selectWhole()">
-                    {{ $t('portion.pizza.wholePizzaButton') }}
-                  </v-btn>
-                  <image-map-selector
-                    :prompt-props="sizePromptProps"
-                    @image-map-selector-submit="selectSlice($event)"
-                  ></image-map-selector>
-                </template>
-                <!-- <v-img :src="pizzaSliceMapData.baseImageUrl" @click="selectSlice()"></v-img> -->
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                <template v-if="!wholeSelected">{{
-                  $t('portion.pizza.slicesQuantityLabel')
-                }}</template>
-                <template v-if="wholeSelected">{{
-                  $t('portion.pizza.wholeQuantityLabel')
-                }}</template>
-                <template #actions>
-                  <valid-invalid-icon :valid="quantityComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    <quantity-card fraction whole></quantity-card>
-                  </v-col>
-                </v-row>
-                <v-btn @click="selectQuantity()">
-                  {{ $t('portion.common.confirmButtonMany') }}
+  <portion-layout v-bind="{ description, text }">
+    <template #header>
+      {{ $t('portion.common.completeBelow') }}
+    </template>
+    <v-row>
+      <v-col>
+        <v-expansion-panels v-model="panelOpen">
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.pizza.label') }}
+              <template #actions>
+                <valid-invalid-icon :valid="typeComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <image-map-selector
+                :prompt-props="typePromptProps"
+                @image-map-selector-submit="selectPizza($event)"
+              ></image-map-selector>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.pizza.thicknessLabel') }}
+              <template #actions>
+                <valid-invalid-icon :valid="thicknessComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <image-map-selector
+                :prompt-props="thickPromptProps"
+                @image-map-selector-submit="selectThickness($event)"
+              ></image-map-selector>
+              <!-- <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img> -->
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.pizza.sizeLabel') }}
+              <template #actions>
+                <valid-invalid-icon :valid="sizeComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <template v-if="!sizePromptProps.imageMapId">
+                {{ $t('portion.common.completePreviousStep') }}
+              </template>
+              <template v-if="sizePromptProps.imageMapId">
+                <v-btn :color="wholeSelected === true ? 'success' : ''" @click="selectWhole()">
+                  {{ $t('portion.pizza.wholePizzaButton') }}
                 </v-btn>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-btn :color="submitButtonStyle()" @click="submit()">
-            {{ $t('common.action.continue') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+                <image-map-selector
+                  :prompt-props="sizePromptProps"
+                  @image-map-selector-submit="selectSlice($event)"
+                ></image-map-selector>
+              </template>
+              <!-- <v-img :src="pizzaSliceMapData.baseImageUrl" @click="selectSlice()"></v-img> -->
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              <template v-if="!wholeSelected">{{
+                $t('portion.pizza.slicesQuantityLabel')
+              }}</template>
+              <template v-if="wholeSelected">{{ $t('portion.pizza.wholeQuantityLabel') }}</template>
+              <template #actions>
+                <valid-invalid-icon :valid="quantityComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <quantity-card fraction whole></quantity-card>
+                </v-col>
+              </v-row>
+              <v-btn @click="selectQuantity()">
+                {{ $t('portion.common.confirmButtonMany') }}
+              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <template #actions>
+      <continue :disabled="!isValid" @click="submit"></continue>
+    </template>
+  </portion-layout>
 </template>
 
 <script lang="ts">
@@ -165,6 +157,11 @@ export default defineComponent({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    isValid() {
+      return (
+        this.typeComplete && this.thicknessComplete && this.sizeComplete && this.quantityComplete
+      );
+    },
   },
 
   mounted() {
@@ -224,17 +221,7 @@ export default defineComponent({
       this.setPanelOpen(4);
       this.quantityComplete = true;
     },
-    submitButtonStyle() {
-      if (
-        this.typeComplete &&
-        this.thicknessComplete &&
-        this.sizeComplete &&
-        this.quantityComplete
-      ) {
-        return 'success';
-      }
-      return '';
-    },
+
     submit() {
       console.log('submitted');
     },

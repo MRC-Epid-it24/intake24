@@ -1,99 +1,95 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="promptProps.text">
-      <template #headerText>
-        {{ localeDescription }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="panelOpen" flat>
-            <!-- Step 1: Select guide -->
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.drinkScale.label', { food: localeDescription }) }}
-                <template #actions>
-                  <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
-                  <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <guide-image-panel
-                  v-if="dataLoaded"
-                  :guide-image-api-response="guideImageData"
-                  :selected-index="selectedObjectIdx"
-                  @guide-object="selectObject"
-                ></guide-image-panel>
-                <v-row>
-                  <v-col>
-                    <v-btn color="success" @click="onSelectGuide()">
-                      {{ $t('common.action.continue') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <!-- Step 2: Select drink scale amount-->
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
-                <template #actions>
-                  <v-icon v-if="selectedDrink" color="success">fas fa-fw fa-check</v-icon>
-                  <v-icon v-if="!selectedDrink" color="error">fas fa-fw fa-exclamation</v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <drink-scale-panel
-                  v-if="dataLoaded"
-                  :drinkware-set-api-response="drinkwareSetData"
-                  :selected-image-overlay-url="selectedImageOverlayUrl"
-                  :selected-image-url="selectionImageUrl"
-                  :selected-max-slider-value="maxSliderValue"
-                  :selected-min-slider-value="minFillLevel"
-                  :selected-origin-image-height="originalImageUrlHeight"
-                  :selected-origin-image-width="originalImageUrlWidth"
-                  :selected-slider-value="sliderValue"
-                  @drink-scale-value="dragSlider"
-                >
-                </drink-scale-panel>
-                <v-row v-if="hasErrors">
-                  <v-col>
-                    <v-alert class="ma-0" color="error">
-                      <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-                    </v-alert>
-                  </v-col>
-                </v-row>
-                <v-row class="jopa">
-                  <v-col>
-                    <v-btn @click="modifySliderValue(-10)">
-                      {{ $t('portion.drinkScale.lessFullButton') }}
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn @click="modifySliderValue(10)">
-                      {{ $t('portion.drinkScale.moreFullButton') }}
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn color="success" @click="confirmAmount">
-                      {{ $t('portion.drinkScale.confirmFullButton') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row class="ma-2">
-        <v-col>
-          <v-form ref="form" @submit.prevent="submit">
-            <!-- Should be disabled if nothing selected? -->
-            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
-          </v-form>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+  <portion-layout :description="description" :text="promptProps.text">
+    <template #header>
+      {{ localeDescription }}
+    </template>
+    <v-row>
+      <v-col>
+        <v-expansion-panels v-model="panelOpen" flat>
+          <!-- Step 1: Select guide -->
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.drinkScale.label', { food: localeDescription }) }}
+              <template #actions>
+                <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
+                <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <guide-image-panel
+                v-if="dataLoaded"
+                :guide-image-api-response="guideImageData"
+                :selected-index="selectedObjectIdx"
+                @guide-object="selectObject"
+              ></guide-image-panel>
+              <v-row>
+                <v-col>
+                  <v-btn color="success" @click="onSelectGuide()">
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <!-- Step 2: Select drink scale amount-->
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
+              <template #actions>
+                <v-icon v-if="selectedDrink" color="success">fas fa-fw fa-check</v-icon>
+                <v-icon v-if="!selectedDrink" color="error">fas fa-fw fa-exclamation</v-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <drink-scale-panel
+                v-if="dataLoaded"
+                :drinkware-set-api-response="drinkwareSetData"
+                :selected-image-overlay-url="selectedImageOverlayUrl"
+                :selected-image-url="selectionImageUrl"
+                :selected-max-slider-value="maxSliderValue"
+                :selected-min-slider-value="minFillLevel"
+                :selected-origin-image-height="originalImageUrlHeight"
+                :selected-origin-image-width="originalImageUrlWidth"
+                :selected-slider-value="sliderValue"
+                @drink-scale-value="dragSlider"
+              >
+              </drink-scale-panel>
+              <v-row v-if="hasErrors">
+                <v-col>
+                  <v-alert class="ma-0" color="error">
+                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
+                  </v-alert>
+                </v-col>
+              </v-row>
+              <v-row class="jopa">
+                <v-col>
+                  <v-btn @click="modifySliderValue(-10)">
+                    {{ $t('portion.drinkScale.lessFullButton') }}
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="modifySliderValue(10)">
+                    {{ $t('portion.drinkScale.moreFullButton') }}
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn color="success" @click="confirmAmount">
+                    {{ $t('portion.drinkScale.confirmFullButton') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <template #actions>
+      <v-form ref="form" @submit.prevent="submit">
+        <!-- Should be disabled if nothing selected? -->
+        <continue :disabled="!continueEnabled" @click="submit"></continue>
+      </v-form>
+    </template>
+  </portion-layout>
 </template>
 
 <script lang="ts">

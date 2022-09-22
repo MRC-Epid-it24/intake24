@@ -1,5 +1,5 @@
 <template>
-  <v-chip v-if="valid" :color="getColor()" small>{{ getWeigth() }}</v-chip>
+  <v-chip v-if="valid && weight" :color="color" small>{{ weightWithUnit }}</v-chip>
 </template>
 
 <script lang="ts">
@@ -13,14 +13,17 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
-    valid: Boolean,
+    valid: {
+      type: Boolean,
+      required: true,
+    },
   },
 
-  methods: {
-    getColor(): string {
+  computed: {
+    color(): string {
       return this.valid ? 'success' : 'grey';
     },
-    getWeigth(): string {
+    weightWithUnit(): string {
       return this.weight > 0 ? this.weight.toString().concat('g') : '';
     },
   },

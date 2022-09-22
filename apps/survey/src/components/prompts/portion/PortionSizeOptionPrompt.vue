@@ -1,9 +1,9 @@
 <template>
   <portion-layout :description="promptProps.description" :text="promptProps.text">
-    <template #headerText>
+    <template #header>
       {{ $t('portion.option.label', { food: localeDescription }) }}
     </template>
-    <v-sheet class="ma-2">
+    <v-sheet>
       <v-row class="mt-2 ma-2">
         <v-col
           v-for="(method, index) in availableMethods"
@@ -38,14 +38,12 @@
           <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
         </v-col>
       </v-row>
-      <v-row class="ma-2">
-        <v-col>
-          <v-form ref="form" @submit.prevent="submit">
-            <!-- Should be disabled if nothing selected? -->
-            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
-          </v-form>
-        </v-col>
-      </v-row>
+      <template #actions>
+        <v-form ref="form" @submit.prevent="submit">
+          <!-- Should be disabled if nothing selected? -->
+          <continue :disabled="!continueEnabled" @click="submit"></continue>
+        </v-form>
+      </template>
     </v-sheet>
   </portion-layout>
 </template>

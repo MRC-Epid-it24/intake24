@@ -1,68 +1,64 @@
 <template>
-  <v-container>
-    <portion-layout :description="promptProps.description" :text="promptProps.text">
-      <template #headerText>
-        {{ localeDescription }}
-      </template>
-      <v-expansion-panels v-model="panelOpen">
-        <v-expansion-panel>
-          <v-expansion-panel-header disable-icon-rotate>
-            {{ $t('portion.standardPortion.portionMethodLabel', { food: localeDescription }) }}
-            <template #actions>
-              <v-icon v-if="unitValid()" color="success">fas fa-fw fa-check</v-icon>
-              <v-icon v-if="!unitValid()" color="error">fas fa-fw fa-exclamation</v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-radio-group
-              class="py-0"
-              :value="selectedUnitIndex"
-              @change="onSelectMethod(selectedUnitIndex, $event)"
-            >
-              <v-radio
-                v-for="(opt, i) in standardUnits"
-                :key="i"
-                :label="optionLabel(opt.name)"
-                :value="i"
-              ></v-radio>
-            </v-radio-group>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-expansion-panel>
-          <v-expansion-panel-header disable-icon-rotate>
-            {{ $t('portion.standardPortion.label', { food: localeDescription }) }}
-            <template #actions>
-              <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
-              <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <quantity-card
-              :fraction="true"
-              :whole="true"
-              @update-quantity="onUpdateQuantity"
-            ></quantity-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-
-      <v-card>
-        <v-row v-if="hasErrors">
-          <v-col>
-            <error-alert :errors="errors"></error-alert>
-          </v-col>
-        </v-row>
-
-        <v-row class="pa-2 mt-0">
-          <v-col>
-            <v-btn block color="success" @click="submit()">
-              {{ $t('common.action.continue') }}
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
-    </portion-layout>
-  </v-container>
+  <portion-layout :description="promptProps.description" :text="promptProps.text">
+    <template #header>
+      {{ localeDescription }}
+    </template>
+    <v-expansion-panels v-model="panelOpen">
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t('portion.standardPortion.portionMethodLabel', { food: localeDescription }) }}
+          <template #actions>
+            <v-icon v-if="unitValid()" color="success">fas fa-fw fa-check</v-icon>
+            <v-icon v-if="!unitValid()" color="error">fas fa-fw fa-exclamation</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-radio-group
+            class="py-0"
+            :value="selectedUnitIndex"
+            @change="onSelectMethod(selectedUnitIndex, $event)"
+          >
+            <v-radio
+              v-for="(opt, i) in standardUnits"
+              :key="i"
+              :label="optionLabel(opt.name)"
+              :value="i"
+            ></v-radio>
+          </v-radio-group>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t('portion.standardPortion.label', { food: localeDescription }) }}
+          <template #actions>
+            <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
+            <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <quantity-card
+            :fraction="true"
+            :whole="true"
+            @update-quantity="onUpdateQuantity"
+          ></quantity-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+    <v-card>
+      <v-row v-if="hasErrors">
+        <v-col>
+          <error-alert :errors="errors"></error-alert>
+        </v-col>
+      </v-row>
+      <v-row class="pa-2 mt-0">
+        <v-col>
+          <v-btn block color="success" @click="submit">
+            {{ $t('common.action.continue') }}
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card>
+  </portion-layout>
 </template>
 
 <script lang="ts">

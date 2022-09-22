@@ -1,22 +1,18 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="text">
-      <template #headerText>
-        {{ $t('portion.directWeight.label') }} - {{ localeDescription }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-card>
-            Portion: {{ weight }}g
-            <v-card-actions>
-              <v-btn @click="quantity(-1)"> - </v-btn>
-              <v-btn @click="quantity(1)"> + </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+  <portion-layout v-bind="{ description, text }">
+    <template #header> {{ $t('portion.directWeight.label') }} - {{ localeDescription }} </template>
+    <v-row>
+      <v-col>
+        <v-card>
+          Portion: {{ weight }}g
+          <v-card-actions>
+            <v-btn @click="quantity(-1)"> - </v-btn>
+            <v-btn @click="quantity(1)"> + </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </portion-layout>
 </template>
 
 <script lang="ts">

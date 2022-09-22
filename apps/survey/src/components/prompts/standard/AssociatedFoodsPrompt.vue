@@ -55,11 +55,9 @@
         </v-col>
       </v-row>
     </v-card-actions>
-    <v-row class="mt-2">
-      <v-col>
-        <continue class="px-2" :disabled="!continueEnabled" @click="onContinue"></continue>
-      </v-col>
-    </v-row>
+    <template #actions>
+      <continue :disabled="!continueEnabled" @click="onContinue"></continue>
+    </template>
   </prompt-layout>
 </template>
 

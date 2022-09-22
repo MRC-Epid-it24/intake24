@@ -1,93 +1,91 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="text">
-      <template #headerText>
-        {{ $t('portion.common.completeBelow') }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="panelOpenId">
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.cereal.label') }}
-                <template #actions>
-                  <valid-invalid-icon :valid="bowlComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <!-- <v-img :src="bowlImageMapData.baseImageUrl" @click="selectBowlType()"></v-img>
+  <portion-layout v-bind="{ description, text }">
+    <template #header>
+      {{ $t('portion.common.completeBelow') }}
+    </template>
+    <v-row>
+      <v-col>
+        <v-expansion-panels v-model="panelOpenId">
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.cereal.label') }}
+              <template #actions>
+                <valid-invalid-icon :valid="bowlComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <!-- <v-img :src="bowlImageMapData.baseImageUrl" @click="selectBowlType()"></v-img>
                 Image_maps gbowl -->
-                <image-map-selector
-                  :prompt-props="{ imageMapId }"
-                  @image-map-selector-submit="selectBowlType($event)"
-                ></image-map-selector>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
-                <template #actions>
-                  <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <as-served-selector
-                  :as-served-set-id="cerealType"
-                  @as-served-selector-submit="setAsServedStatus($event)"
-                ></as-served-selector>
-                <!-- cereal_hoopA -->
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
-                <template #actions>
-                  <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    <v-btn
-                      :color="toggleLeftoverAnswer === true ? 'success' : ''"
-                      @click="leftoverAnswer(true)"
-                    >
-                      {{ $t('common.action.confirm.yes') }}
-                    </v-btn>
-                    <v-btn
-                      :color="toggleLeftoverAnswer === false ? 'success' : ''"
-                      @click="leftoverAnswer(false)"
-                    >
-                      {{ $t('common.action.confirm.no') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
+              <image-map-selector
+                :prompt-props="{ imageMapId }"
+                @image-map-selector-submit="selectBowlType($event)"
+              ></image-map-selector>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
+              <template #actions>
+                <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <as-served-selector
+                :as-served-set-id="cerealType"
+                @as-served-selector-submit="setAsServedStatus($event)"
+              ></as-served-selector>
+              <!-- cereal_hoopA -->
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
+              <template #actions>
+                <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    :color="toggleLeftoverAnswer === true ? 'success' : ''"
+                    @click="leftoverAnswer(true)"
+                  >
+                    {{ $t('common.action.confirm.yes') }}
+                  </v-btn>
+                  <v-btn
+                    :color="toggleLeftoverAnswer === false ? 'success' : ''"
+                    @click="leftoverAnswer(false)"
+                  >
+                    {{ $t('common.action.confirm.no') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
 
-                <v-row v-show="displayLeftovers">
-                  <v-col>
-                    <as-served-selector
-                      :as-served-set-id="cerealType"
-                      @as-served-selector-submit="setLeftoverStatus($event)"
-                    ></as-served-selector>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-alert v-if="hasErrors" color="error">
-            <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-          </v-alert>
-          <v-btn :color="submitButtonStyle()" @click="submit()">
-            {{ $t('common.action.continue') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+              <v-row v-show="displayLeftovers">
+                <v-col>
+                  <as-served-selector
+                    :as-served-set-id="cerealType"
+                    @as-served-selector-submit="setLeftoverStatus($event)"
+                  ></as-served-selector>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-alert v-if="hasErrors" color="error">
+          <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
+        </v-alert>
+      </v-col>
+    </v-row>
+    <template #actions>
+      <continue :disabled="!isValid" @click="submit"></continue>
+    </template>
+  </portion-layout>
 </template>
 
 <script lang="ts">
@@ -219,13 +217,6 @@ export default defineComponent({
 
     clearErrors() {
       this.errors = [];
-    },
-
-    submitButtonStyle() {
-      if (this.isValid) {
-        return 'success';
-      }
-      return '';
     },
 
     submit() {

@@ -1,6 +1,6 @@
 <template>
-  <portion-layout id="test" :description="promptProps.description" :text="promptProps.text">
-    <template #headerText>
+  <portion-layout :description="promptProps.description" :text="promptProps.text">
+    <template #header>
       {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
     </template>
     <v-row>
@@ -14,7 +14,10 @@
                   :valid="servingCompleteStatus"
                   :weight="asServedData?.weight"
                 ></as-served-weight>
-                <valid-invalid-icon :valid="servingCompleteStatus"></valid-invalid-icon>
+                <valid-invalid-icon
+                  class="ml-1"
+                  :valid="servingCompleteStatus"
+                ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -43,7 +46,10 @@
                   :valid="leftoverCompleteStatus"
                   :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
                 ></as-served-weight>
-                <valid-invalid-icon :valid="leftoverCompleteStatus"></valid-invalid-icon>
+                <valid-invalid-icon
+                  class="ml-1"
+                  :valid="leftoverCompleteStatus"
+                ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -87,13 +93,9 @@
         </v-alert>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col md="3" xs="12">
-        <continue :disabled="!continueEnabled" @click="submit()">
-          {{ $t('common.action.continue') }}
-        </continue>
-      </v-col>
-    </v-row>
+    <template #actions>
+      <continue :disabled="!continueEnabled" @click="submit"></continue>
+    </template>
   </portion-layout>
 </template>
 

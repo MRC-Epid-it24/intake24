@@ -1,5 +1,5 @@
 <template>
-  <v-icon :color="getColor()">{{ getIcon() }}</v-icon>
+  <v-icon :color="color">{{ icon }}</v-icon>
 </template>
 
 <script lang="ts">
@@ -9,14 +9,17 @@ export default defineComponent({
   name: 'ValidInvalidIcon',
 
   props: {
-    valid: Boolean,
+    valid: {
+      type: Boolean,
+      required: true,
+    },
   },
 
-  methods: {
-    getColor(): string {
+  computed: {
+    color(): string {
       return this.valid ? 'success' : 'error';
     },
-    getIcon(): string {
+    icon(): string {
       return this.valid ? 'fas fa-fw fa-check' : 'fas fa-fw fa-exclamation';
     },
   },

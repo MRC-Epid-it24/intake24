@@ -1,16 +1,12 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="text">
-      <template #headerText>
-        {{ $t('portion.milkHotDrink.label') }} - {{ localeDescription }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-card>Milk Hot Drink content here</v-card>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+  <portion-layout v-bind="{ description, text }">
+    <template #header> {{ $t('portion.milkHotDrink.label') }} - {{ localeDescription }} </template>
+    <v-row>
+      <v-col>
+        <v-card>Milk Hot Drink content here</v-card>
+      </v-col>
+    </v-row>
+  </portion-layout>
 </template>
 
 <script lang="ts">

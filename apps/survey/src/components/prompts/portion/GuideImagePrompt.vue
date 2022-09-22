@@ -1,104 +1,100 @@
 <template>
-  <v-container>
-    <portion-layout :description="promptProps.description" :text="promptProps.text">
-      <template #headerText>
-        {{ localeDescription }}
-      </template>
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="panelOpen" flat>
-            <!-- Step 1: Select guide -->
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.guideImage.label') }}
-                <template #actions>
-                  <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
-                  <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col>
-                    <div v-if="dataLoaded" class="guides-drawer">
-                      <v-img
-                        ref="img"
-                        v-resize="onImgResize"
-                        :src="
-                          guideImageData.imageMap.baseImageUrl.replace(
-                            'http://localhost:3100',
-                            'https://api.intake24.org'
-                          )
-                        "
-                      >
-                        <template #placeholder>
-                          <image-placeholder></image-placeholder>
-                        </template>
-                      </v-img>
-                      <svg ref="svg" :height="height" :width="width">
-                        <polygon
-                          v-for="(polygon, idx) in polygons"
-                          :key="idx"
-                          class="guides-drawer-polygon"
-                          :class="{ active: idx === selectedObjectIdx }"
-                          :points="polygon"
-                          @click.stop="selectObject(idx)"
-                          @keypress.stop="selectObject(idx)"
-                        ></polygon>
-                      </svg>
-                    </div>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <!-- TODO: Value from image map/canvas -->
-                    <v-btn block color="success" @click="onSelectGuide()">
-                      {{ $t('common.action.continue') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <!-- Step 2: Specify quantity -->
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                {{ $t('portion.guideImage.quantity') }}
-                <template #actions>
-                  <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
-                  <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row align="center" justify="center">
-                  <v-col>
-                    <quantity-card :fraction="true" :whole="true" @update-quantity="updateQuantity">
-                    </quantity-card>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-alert v-if="hasErrors" color="error">
-                      <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-                    </v-alert>
-                    <v-btn block color="success" @click="confirmQuantity">
-                      {{ $t('portion.common.confirmButton') }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row class="ma-2">
-        <v-col>
-          <v-form ref="form" @submit.prevent="submit">
-            <!-- Should be disabled if nothing selected? -->
-            <continue class="px-2" :disabled="!continueEnabled" @click="submit"></continue>
-          </v-form>
-        </v-col>
-      </v-row>
-    </portion-layout>
-  </v-container>
+  <portion-layout :description="promptProps.description" :text="promptProps.text">
+    <template #header>
+      {{ localeDescription }}
+    </template>
+    <v-row>
+      <v-col>
+        <v-expansion-panels v-model="panelOpen" flat>
+          <!-- Step 1: Select guide -->
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.guideImage.label') }}
+              <template #actions>
+                <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
+                <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <div v-if="dataLoaded" class="guides-drawer">
+                    <v-img
+                      ref="img"
+                      v-resize="onImgResize"
+                      :src="
+                        guideImageData.imageMap.baseImageUrl.replace(
+                          'http://localhost:3100',
+                          'https://api.intake24.org'
+                        )
+                      "
+                    >
+                      <template #placeholder>
+                        <image-placeholder></image-placeholder>
+                      </template>
+                    </v-img>
+                    <svg ref="svg" :height="height" :width="width">
+                      <polygon
+                        v-for="(polygon, idx) in polygons"
+                        :key="idx"
+                        class="guides-drawer-polygon"
+                        :class="{ active: idx === selectedObjectIdx }"
+                        :points="polygon"
+                        @click.stop="selectObject(idx)"
+                        @keypress.stop="selectObject(idx)"
+                      ></polygon>
+                    </svg>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <!-- TODO: Value from image map/canvas -->
+                  <v-btn block color="success" @click="onSelectGuide()">
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <!-- Step 2: Specify quantity -->
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t('portion.guideImage.quantity') }}
+              <template #actions>
+                <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
+                <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row align="center" justify="center">
+                <v-col>
+                  <quantity-card :fraction="true" :whole="true" @update-quantity="updateQuantity">
+                  </quantity-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-alert v-if="hasErrors" color="error">
+                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
+                  </v-alert>
+                  <v-btn block color="success" @click="confirmQuantity">
+                    {{ $t('portion.common.confirmButton') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-col>
+    </v-row>
+    <template #actions>
+      <v-form ref="form" @submit.prevent="submit">
+        <!-- Should be disabled if nothing selected? -->
+        <continue :disabled="!continueEnabled" @click="submit"></continue>
+      </v-form>
+    </template>
+  </portion-layout>
 </template>
 
 <script lang="ts">

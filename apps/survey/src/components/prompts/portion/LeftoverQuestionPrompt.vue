@@ -1,20 +1,18 @@
 <template>
-  <v-container>
-    <portion-layout :description="description" :text="text">
-      <template #headerText>
-        {{ localeDescription }}
-      </template>
-      <v-card>
-        <v-card-text>
-          {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click="submit(true)">{{ $t('common.action.confirm.yes') }}</v-btn>
-          <v-btn @click="submit(false)">{{ $t('common.action.confirm.no') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </portion-layout>
-  </v-container>
+  <portion-layout v-bind="{ description, text }">
+    <template #header>
+      {{ localeDescription }}
+    </template>
+    <v-card>
+      <v-card-text>
+        {{ $t('portion.asServedLeftover.question', { food: localeDescription }) }}
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="submit(true)">{{ $t('common.action.confirm.yes') }}</v-btn>
+        <v-btn @click="submit(false)">{{ $t('common.action.confirm.no') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </portion-layout>
 </template>
 
 <script lang="ts">
