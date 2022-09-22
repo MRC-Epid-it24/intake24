@@ -6,23 +6,21 @@ const foodSearchController = () => {
   const lookup = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
 
-    if (typeof req.query.description !== 'string' || req.query.description.length === 0) {
+    if (typeof req.query.description !== 'string' || !req.query.description.length) {
       res.status(400).send('description cannot be empty');
-      return Promise.resolve();
+      return;
     }
 
-    return foodIndex.search(req.query.description).then(
-      (results) => {
-        res.json(results);
-      },
-      (error) => {
-        if (error instanceof IndexNotReadyError) {
-          res.sendStatus(503);
-          return Promise.resolve();
-        }
-        return Promise.reject(error);
+    try {
+      const results = await foodIndex.search(req.query.description);
+      res.json(results);
+    } catch (err) {
+      if (err instanceof IndexNotReadyError) {
+        res.sendStatus(503);
+        return;
       }
-    );
+      throw err;
+    }
   };
 
   const recipe = async (req: Request, res: Response): Promise<void> => {

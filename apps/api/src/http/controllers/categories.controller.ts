@@ -8,7 +8,7 @@ const categoriesController = ({
   const browseRoot = async (req: Request, res: Response): Promise<void> => {
     const { localeId, code } = req.params;
 
-    if (typeof req.query.code !== 'string' || code.length === 0) {
+    if (typeof req.query.code !== 'string' || !code.length) {
       res.status(400).send('code cannot be empty');
       return Promise.resolve();
     }

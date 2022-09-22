@@ -6,7 +6,7 @@ import type {
 } from '@intake24/common/types/models/foods';
 
 import BaseModel from '../model';
-import { FoodPortionSizeMethod } from '.';
+import { AsServedSet, FoodPortionSizeMethod, GuideImage } from '.';
 
 @Table({
   modelName: 'FoodPortionSizeMethodParameter',
@@ -49,4 +49,16 @@ export default class FoodPortionSizeMethodParameter
 
   @BelongsTo(() => FoodPortionSizeMethod, 'portionSizeMethodId')
   public portionSizeMethod?: FoodPortionSizeMethod;
+
+  @BelongsTo(() => AsServedSet, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  public asServedSet?: AsServedSet;
+
+  @BelongsTo(() => GuideImage, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  public guideImage?: GuideImage;
 }

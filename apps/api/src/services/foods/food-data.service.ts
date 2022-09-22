@@ -99,7 +99,7 @@ const foodDataService = () => {
   const getBrands = async (localeId: string, foodCode: string): Promise<string[]> => {
     const brands = await Brand.findAll({ where: { localeId, foodCode }, attributes: ['name'] });
 
-    return brands ? brands.map((brand) => brand.name) : [];
+    return brands.length ? brands.map((brand) => brand.name) : [];
   };
 
   const resolveAssociatedFoodPrompts = async (
@@ -108,7 +108,7 @@ const foodDataService = () => {
   ): Promise<UserAssociatedFoodPrompt[]> => {
     const localPrompts = await getLocalAssociatedFoodPrompts(localeId, foodCode);
 
-    if (localPrompts.length > 0) return localPrompts;
+    if (localPrompts.length) return localPrompts;
 
     const locale = await FoodsLocale.findOne({
       where: { id: localeId },

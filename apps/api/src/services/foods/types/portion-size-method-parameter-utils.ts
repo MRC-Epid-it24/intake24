@@ -6,24 +6,36 @@ import type {
 
 export function toUserPortionSizeMethodParameters(
   parameters: FoodPortionSizeMethodParameter[]
-): UserPortionSizeMethodParameters {
-  const result: UserPortionSizeMethodParameters = {};
+): [UserPortionSizeMethodParameters, string | undefined] {
+  return parameters.reduce<[UserPortionSizeMethodParameters, string | undefined]>(
+    (acc, parameter) => {
+      const { name, value } = parameter;
 
-  for (let i = 0; i < parameters.length; ++i) {
-    result[parameters[i].name] = parameters[i].value;
-  }
+      switch (name) {
+        case 'serving-image-set':
+          // case 'leftovers-image-set':
+          acc[1] = parameter.asServedSet?.selectionImage?.path;
+          break;
+        case 'guide-image-id':
+          acc[1] = parameter.guideImage?.selectionImage?.path;
+          break;
+        default:
+          break;
+      }
 
-  return result;
+      acc[0][name] = value;
+
+      return acc;
+    },
+    [{}, undefined]
+  );
 }
 
 export function toUserCategoryPortionSizeMethodParameters(
   parameters: CategoryPortionSizeMethodParameter[]
 ): UserPortionSizeMethodParameters {
-  const result: UserPortionSizeMethodParameters = {};
-
-  for (let i = 0; i < parameters.length; ++i) {
-    result[parameters[i].name] = parameters[i].value;
-  }
-
-  return result;
+  return parameters.reduce<UserPortionSizeMethodParameters>((acc, { name, value }) => {
+    acc[name] = value;
+    return acc;
+  }, {});
 }

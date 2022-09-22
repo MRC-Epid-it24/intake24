@@ -37,7 +37,7 @@ const inheritableAttributesService = () => {
   ): Promise<InheritableAttributes> => {
     const defaults = await AttributeDefaults.findAll({ limit: 1 });
 
-    if (defaults.length > 0)
+    if (defaults.length)
       return {
         readyMealOption: attributes.readyMealOption ?? defaults[0].readyMealOption,
         sameAsBeforeOption: attributes.sameAsBeforeOption ?? defaults[0].sameAsBeforeOption,
@@ -54,7 +54,7 @@ const inheritableAttributesService = () => {
     parentCategories: string[],
     attributes: InheritableAttributesTemp
   ): Promise<InheritableAttributes> => {
-    if (parentCategories.length === 0) return completeAttributesWithDefaults(attributes);
+    if (!parentCategories.length) return completeAttributesWithDefaults(attributes);
 
     const parentAttributesRows = await CategoryAttribute.findAll({
       where: { categoryCode: parentCategories },

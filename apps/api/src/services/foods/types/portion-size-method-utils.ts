@@ -20,12 +20,16 @@ export interface DatabasePortionSizeMethod {
 }
 
 export function toUserPortionSizeMethod(psm: FoodPortionSizeMethod): UserPortionSizeMethod {
+  const [parameters, imageUrl] = psm.parameters
+    ? toUserPortionSizeMethodParameters(psm.parameters)
+    : [{}, undefined];
+
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,
-    imageUrl: psm.imageUrl,
+    imageUrl: imageUrl ?? psm.imageUrl,
     method: psm.method,
-    parameters: psm.parameters ? toUserPortionSizeMethodParameters(psm.parameters) : {},
+    parameters,
     useForRecipes: psm.useForRecipes,
   };
 }
@@ -33,13 +37,7 @@ export function toUserPortionSizeMethod(psm: FoodPortionSizeMethod): UserPortion
 export function toDatabasePortionSizeMethodParameters(
   userParameters: UserPortionSizeMethodParameters
 ): { name: string; value: string }[] {
-  const parameters: { name: string; value: string }[] = [];
-
-  Object.keys(userParameters).forEach((k) =>
-    parameters.push({ name: k, value: userParameters[k] })
-  );
-
-  return parameters;
+  return Object.entries(userParameters).map(([name, value]) => ({ name, value }));
 }
 
 export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): DatabasePortionSizeMethod {

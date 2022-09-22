@@ -28,11 +28,34 @@ const portionSizeMethodsService = () => {
       order: [['id', 'ASC']],
       include: [
         { association: 'categoryLocal', where: { localeId, categoryCode } },
-        { association: 'parameters', attributes: ['name', 'value'] },
+        {
+          association: 'parameters',
+          attributes: ['name', 'value'],
+          include: [
+            {
+              association: 'asServedSet',
+              where: {
+                $method$: 'as-served',
+                '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
+              },
+              required: false,
+              include: [{ association: 'selectionImage' }],
+            },
+            {
+              association: 'guideImage',
+              where: {
+                $method$: 'guide-image',
+                '$parameters.name$': ['guide-image-id'],
+              },
+              required: false,
+              include: [{ association: 'selectionImage' }],
+            },
+          ],
+        },
       ],
     });
 
-    return categoryPortionMethods
+    return categoryPortionMethods.length
       ? categoryPortionMethods.map(toUserCategoryPortionSizeMethod)
       : [];
   };
@@ -44,12 +67,12 @@ const portionSizeMethodsService = () => {
     for (let i = 0; i < categoryCodes.length; ++i) {
       const methods = await getCategoryPortionSizeMethods(localeId, categoryCodes[i]);
 
-      if (methods.length > 0) return methods;
+      if (methods.length) return methods;
     }
 
     const parents = await getCategoryParentCategories(categoryCodes);
 
-    if (parents.length > 0) {
+    if (parents.length) {
       return getNearestLocalCategoryPortionSizeMethods(localeId, parents);
     }
     return [];
@@ -70,10 +93,36 @@ const portionSizeMethodsService = () => {
         {
           association: 'portionSizeMethods',
           attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-          include: [{ association: 'parameters', attributes: ['name', 'value'] }],
+          separate: true,
+          include: [
+            {
+              association: 'parameters',
+              attributes: ['name', 'value'],
+              include: [
+                {
+                  association: 'asServedSet',
+                  where: {
+                    $method$: 'as-served',
+                    '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
+                  },
+                  required: false,
+                  include: [{ association: 'selectionImage' }],
+                },
+                {
+                  association: 'guideImage',
+                  where: {
+                    $method$: 'guide-image',
+                    '$parameters.name$': ['guide-image-id'],
+                  },
+                  required: false,
+                  include: [{ association: 'selectionImage' }],
+                },
+              ],
+            },
+          ],
+          order: [['id', 'ASC']],
         },
       ],
-      order: [['portionSizeMethods', 'id', 'ASC']],
     });
 
     return food;
@@ -85,17 +134,17 @@ const portionSizeMethodsService = () => {
   ): Promise<UserPortionSizeMethod[]> => {
     const foodLocal = await getFoodLocal(localeId, foodCode);
 
-    if (foodLocal && foodLocal.portionSizeMethods && foodLocal.portionSizeMethods.length > 0) {
+    if (foodLocal && foodLocal.portionSizeMethods && foodLocal.portionSizeMethods.length) {
       return foodLocal.portionSizeMethods.map(toUserPortionSizeMethod);
     }
     const parentCategories = await getFoodParentCategories(foodCode);
 
-    if (parentCategories.length > 0) {
+    if (parentCategories.length) {
       const categoryPortionSizeMethods = await getNearestLocalCategoryPortionSizeMethods(
         localeId,
         parentCategories
       );
-      if (categoryPortionSizeMethods.length > 0) return categoryPortionSizeMethods;
+      if (categoryPortionSizeMethods.length) return categoryPortionSizeMethods;
     }
 
     const prototypeLocale = await getParentLocale(localeId);
