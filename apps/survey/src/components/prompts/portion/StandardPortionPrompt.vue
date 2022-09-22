@@ -126,6 +126,11 @@ export default defineComponent({
     },
   },
 
+  async mounted() {
+    if (this.selectedUnitIndex === -1 && this.standardUnits.length === 1)
+      this.onSelectMethod(-1, 0);
+  },
+
   methods: {
     optionLabel(unit: string) {
       return this.$t('portion.standardPortion.optionLabel', {
