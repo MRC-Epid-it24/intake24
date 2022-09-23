@@ -54,12 +54,16 @@ export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): Databas
 export function toUserCategoryPortionSizeMethod(
   psm: CategoryPortionSizeMethod
 ): UserPortionSizeMethod {
+  const [parameters, imageUrl] = psm.parameters
+    ? toUserCategoryPortionSizeMethodParameters(psm.parameters)
+    : [{}, undefined];
+
   return {
     conversionFactor: psm.conversionFactor,
     description: psm.description,
-    imageUrl: psm.imageUrl,
+    imageUrl: imageUrl ?? psm.imageUrl,
     method: psm.method,
-    parameters: psm.parameters ? toUserCategoryPortionSizeMethodParameters(psm.parameters) : {},
+    parameters,
     useForRecipes: psm.useForRecipes,
   };
 }
