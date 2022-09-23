@@ -36,6 +36,7 @@ import {
 import { useLoading } from '@intake24/ui/stores';
 
 import { surveyService } from '../services';
+import { promptStores } from './prompt';
 
 export type MealUndo = {
   type: 'meal';
@@ -183,6 +184,20 @@ export const useSurvey = defineStore('survey', {
     },
 
     async clearState() {
+      promptStores.forEach((store) => store().$reset());
+
+      /*
+       * Prompt stores are created dynamically so we need to clear local storage manually
+       * which can be out of sync if store is not created and stale data are in local storage
+       */
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        // TODO: prompt store should probably be prefixed with something as 'prompt-state' relies on ComponentType naming convention
+        if (!key || !key.endsWith('prompt-state')) continue;
+
+        localStorage.removeItem(key);
+      }
+
       this.setState(surveyInitialState());
     },
 
