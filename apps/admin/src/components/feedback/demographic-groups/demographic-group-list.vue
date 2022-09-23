@@ -125,7 +125,7 @@
                         :label="$t('nutrient-types._')"
                         name="nutrientTypeId"
                         outlined
-                        prepend-icon="fas fa-seedling"
+                        prepend-inner-icon="fas fa-seedling"
                       ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" md="6">
@@ -136,7 +136,7 @@
                         :label="$t('feedback-schemes.nutrientRuleTypes._')"
                         name="nutrientRuleType"
                         outlined
-                        prepend-icon="fas fa-divide"
+                        prepend-inner-icon="fas fa-divide"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" md="6">
@@ -147,7 +147,7 @@
                         :label="$t('feedback-schemes.sexes._')"
                         name="sex"
                         outlined
-                        prepend-icon="fas fa-genderless"
+                        prepend-inner-icon="fas fa-genderless"
                       >
                         <template #item="{ item }">
                           <span :class="`${item.icon} mr-3`"></span>
@@ -169,7 +169,7 @@
                         :label="$t('feedback-schemes.physicalActivityLevels._')"
                         name="physicalActivityLevelId"
                         outlined
-                        prepend-icon="fas fa-running"
+                        prepend-inner-icon="fas fa-running"
                       ></v-select>
                     </v-col>
                     <v-col v-for="item in ['age', 'height', 'weight']" :key="item" cols="12" md="6">

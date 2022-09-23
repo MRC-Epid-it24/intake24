@@ -13,6 +13,7 @@
                 :label="$t('languages.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$languages"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">

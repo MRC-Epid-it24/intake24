@@ -13,6 +13,7 @@
                 :label="$t('guide-images.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$guide-images"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -24,6 +25,7 @@
                 :label="$t('image-maps._')"
                 name="imageMapId"
                 outlined
+                prepend-inner-icon="$image-maps"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -34,6 +36,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>

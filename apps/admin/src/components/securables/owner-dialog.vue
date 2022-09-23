@@ -36,7 +36,7 @@
                   item-value="id"
                   :label="$t('common.email')"
                   name="userId"
-                  prepend-icon="fas fa-user-shield"
+                  prepend-inner-icon="fas fa-user-shield"
                   :selected="owner"
                   @input="form.errors.clear('userId')"
                   @update:object="internalOwner = $event"

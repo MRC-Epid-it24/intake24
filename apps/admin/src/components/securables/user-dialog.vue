@@ -47,7 +47,7 @@
                       :label="$t('common.email')"
                       name="userId"
                       outlined
-                      prepend-icon="fas fa-user"
+                      prepend-inner-icon="fas fa-user"
                       :value="`${selected.email} / ${selected.name}`"
                     ></v-text-field>
                   </template>
@@ -63,7 +63,7 @@
                       item-value="id"
                       :label="$t('common.email').toString()"
                       name="userId"
-                      prepend-icon="fas fa-users"
+                      prepend-inner-icon="fas fa-users"
                       @input="form.errors.clear('userId')"
                     ></auto-complete>
                   </template>
@@ -83,7 +83,7 @@
                       :label="$t('common.email')"
                       name="email"
                       outlined
-                      prepend-icon="fa-at"
+                      prepend-inner-icon="fa-at"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -94,7 +94,7 @@
                       :label="$t('users.name')"
                       name="name"
                       outlined
-                      prepend-icon="fa-user"
+                      prepend-inner-icon="fa-user"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -105,7 +105,7 @@
                       :label="$t('common.phone')"
                       name="phone"
                       outlined
-                      prepend-icon="fa-phone"
+                      prepend-inner-icon="fa-phone"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -121,7 +121,9 @@
                 v-model="form.actions"
                 dense
                 :label="$t(`${resource}.securables.actions.${action}`)"
-                :prepend-icon="form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`"
+                :prepend-inner-icon="
+                  form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`
+                "
                 :value="action"
                 @change="form.errors.clear('actions')"
               >

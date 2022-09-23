@@ -19,6 +19,14 @@ export default new Vuetify({
       edit: 'fas fa-edit',
       read: 'far fa-file',
       save: 'fas fa-save',
+      description: 'fas fa-note-sticky',
+      // Resource icons
+      languages: 'fas fa-language',
+      locales: 'fas fa-map-marked-alt',
+      'as-served-sets': 'fas fa-utensils',
+      'guide-images': 'fas fa-crosshairs',
+      'image-maps': 'fas fa-draw-polygon',
+      'drinkware-sets': 'fas fa-mug-saucer',
     },
   },
   theme: {

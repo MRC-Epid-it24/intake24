@@ -22,6 +22,8 @@
                 :label="$t('image-maps.baseImage')"
                 name="baseImage"
                 outlined
+                prepend-icon=""
+                prepend-inner-icon="fas fa-paperclip"
                 @change="form.errors.clear('baseImage')"
               ></v-file-input>
             </v-col>
@@ -33,6 +35,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>

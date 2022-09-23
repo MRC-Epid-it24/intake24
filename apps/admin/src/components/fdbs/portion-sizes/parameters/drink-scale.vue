@@ -9,7 +9,7 @@
             :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
             name="drinkware-set-id"
             outlined
-            prepend-inner-icon="fas fa-mug-saucer"
+            prepend-inner-icon="$drinkware-sets"
             readonly
             :value="drinkwareSetId"
             v-on="on"

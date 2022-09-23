@@ -30,7 +30,7 @@
             multiple
             name="nutrientTypeIds"
             outlined
-            prepend-icon="fas fa-seedling"
+            prepend-inner-icon="fas fa-seedling"
             :search-input.sync="nutrientTypeIdSearchInput"
             :value="nutrientTypeIds"
             @change="updateNutrientTypeId($event)"

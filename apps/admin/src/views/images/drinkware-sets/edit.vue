@@ -13,6 +13,7 @@
                 :label="$t('drinkware-sets.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$drinkware-sets"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -21,9 +22,10 @@
                 disabled
                 :error-messages="form.errors.get('guideImageId')"
                 hide-details="auto"
-                :label="$t('guide-images._')"
+                :label="$t('image-maps._')"
                 name="guideImageId"
                 outlined
+                prepend-inner-icon="$image-maps"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -34,6 +36,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>

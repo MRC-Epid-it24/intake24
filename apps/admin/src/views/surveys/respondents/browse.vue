@@ -41,7 +41,7 @@
                         :label="$t('users.username')"
                         name="username"
                         outlined
-                        prepend-icon="fas fa-user-secret"
+                        prepend-inner-icon="fas fa-user-secret"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -53,7 +53,7 @@
                         :label="$t('common.password._')"
                         name="password"
                         outlined
-                        prepend-icon="fas fa-unlock"
+                        prepend-inner-icon="fas fa-unlock"
                         type="password"
                       ></v-text-field>
                     </v-col>
@@ -66,7 +66,7 @@
                         :label="$t('common.password.confirm')"
                         name="passwordConfirm"
                         outlined
-                        prepend-icon="fas fa-unlock"
+                        prepend-inner-icon="fas fa-unlock"
                         type="password"
                       ></v-text-field>
                     </v-col>
@@ -79,7 +79,7 @@
                           :label="$t('users.name')"
                           name="name"
                           outlined
-                          prepend-icon="fas fa-user"
+                          prepend-inner-icon="fas fa-user"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -90,7 +90,7 @@
                           :label="$t('common.email')"
                           name="email"
                           outlined
-                          prepend-icon="fas fa-at"
+                          prepend-inner-icon="fas fa-at"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -101,7 +101,7 @@
                           :label="$t('common.phone')"
                           name="phone"
                           outlined
-                          prepend-icon="fas fa-phone"
+                          prepend-inner-icon="fas fa-phone"
                         ></v-text-field>
                       </v-col>
                     </template>

@@ -6,7 +6,7 @@
         hide-details="auto"
         :input-value="!!value"
         :label="$t(`feedback-schemes.${type}._`)"
-        :prepend-icon="getIcon(type)"
+        :prepend-inner-icon="getIcon(type)"
         @change="toggleRange($event)"
       ></v-switch>
     </v-col>

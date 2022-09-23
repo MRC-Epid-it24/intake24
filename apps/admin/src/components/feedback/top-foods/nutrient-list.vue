@@ -86,7 +86,7 @@
               :label="$t('nutrient-types._')"
               name="nutrientTypeId"
               outlined
-              prepend-icon="fas fa-seedling"
+              prepend-inner-icon="fas fa-seedling"
               :rules="rules"
               @change="updateNutrientLabel"
             >

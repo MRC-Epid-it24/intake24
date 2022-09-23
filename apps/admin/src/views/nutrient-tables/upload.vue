@@ -15,7 +15,7 @@
                     :label="$t('nutrient-tables.upload.type')"
                     name="type"
                     outlined
-                    prepend-icon="fa-running"
+                    prepend-inner-icon="fa-running"
                     @change="form.errors.clear('type')"
                   ></v-select>
                 </v-col>
@@ -27,7 +27,8 @@
                     :label="$t('nutrient-tables.upload.file')"
                     name="file"
                     outlined
-                    prepend-icon="fa-file-csv"
+                    prepend-icon=""
+                    prepend-inner-icon="fa-file-csv"
                     @change="form.errors.clear('file')"
                   ></v-file-input>
                 </v-col>

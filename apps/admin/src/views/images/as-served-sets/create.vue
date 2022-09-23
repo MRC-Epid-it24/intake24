@@ -12,6 +12,7 @@
                 :label="$t('as-served-sets.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$as-served-sets"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -22,6 +23,8 @@
                 :label="$t('as-served-sets.selectionImage')"
                 name="selectionImage"
                 outlined
+                prepend-icon=""
+                prepend-inner-icon="fas fa-paperclip"
                 @change="form.errors.clear('selectionImage')"
               ></v-file-input>
             </v-col>
@@ -33,6 +36,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>

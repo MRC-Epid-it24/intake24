@@ -27,7 +27,8 @@
                   :label="$t('surveys.respondents.upload.file')"
                   name="file"
                   outlined
-                  prepend-icon="fa-file-excel"
+                  prepend-icon=""
+                  prepend-inner-icon="fa-file-csv"
                   @change="form.errors.clear('file')"
                 ></v-file-input>
               </v-col>

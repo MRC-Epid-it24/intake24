@@ -23,6 +23,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>

@@ -13,6 +13,7 @@
                 :label="$t('locales.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$locales"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -29,11 +30,13 @@
                 @change="form.errors.clear('prototypeLocaleId')"
               >
                 <template #item="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+                  <span v-if="item.id" :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+                  <v-icon v-else left>fas fa-flag</v-icon>
                   {{ item.englishName }}
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+                  <span v-if="item.id" :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
+                  <v-icon v-else left>fas fa-flag</v-icon>
                   {{ item.englishName }}
                 </template>
               </v-select>

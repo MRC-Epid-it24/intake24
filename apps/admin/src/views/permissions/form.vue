@@ -33,6 +33,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-textarea>
             </v-col>
           </v-row>

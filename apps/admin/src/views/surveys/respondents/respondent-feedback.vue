@@ -60,7 +60,7 @@
                   :label="$t('common.email')"
                   name="email"
                   outlined
-                  prepend-icon="fas fa-envelope"
+                  prepend-inner-icon="fas fa-envelope"
                   @input="form.errors.clear('email')"
                 ></v-text-field>
               </v-col>

@@ -13,6 +13,7 @@
                 :label="$t('as-served-sets.id')"
                 name="id"
                 outlined
+                prepend-inner-icon="$as-served-sets"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -23,6 +24,7 @@
                 :label="$t('common.description')"
                 name="description"
                 outlined
+                prepend-inner-icon="$description"
               ></v-text-field>
             </v-col>
           </v-row>
