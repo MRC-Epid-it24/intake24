@@ -154,7 +154,28 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         {
           association: 'portionSizeMethods',
           separate: true,
-          include: [{ association: 'parameters', separate: true }],
+          include: [
+            {
+              association: 'parameters',
+              include: [
+                {
+                  association: 'asServedSet',
+                  where: {
+                    $method$: 'as-served',
+                    '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
+                  },
+                  required: false,
+                  include: [{ association: 'selectionImage' }],
+                },
+                {
+                  association: 'guideImage',
+                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
+                  required: false,
+                  include: [{ association: 'selectionImage' }],
+                },
+              ],
+            },
+          ],
         },
       ],
     });

@@ -68,10 +68,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
                 },
                 {
                   association: 'guideImage',
-                  where: {
-                    $method$: 'guide-image',
-                    '$parameters.name$': ['guide-image-id'],
-                  },
+                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
                   required: false,
                   include: [{ association: 'selectionImage' }],
                 },
