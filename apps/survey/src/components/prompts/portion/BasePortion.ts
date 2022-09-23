@@ -5,6 +5,8 @@ import { localeContent } from '@intake24/survey/components/mixins';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
 
 export default defineComponent({
+  name: 'BasePortion',
+
   components: { Continue, PortionLayout },
 
   mixins: [localeContent],

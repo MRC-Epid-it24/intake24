@@ -65,7 +65,7 @@ import type { MealState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
-import ContextMenu from '../elements/ContextMenu.vue';
+import { ContextMenu } from '../elements';
 import MealItem from './MealItem.vue';
 
 export type RecallAction = 'add-meal' | 'review-confirm';

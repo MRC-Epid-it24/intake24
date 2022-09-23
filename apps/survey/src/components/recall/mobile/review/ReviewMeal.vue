@@ -28,7 +28,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
+import { ContextMenu } from '@intake24/survey/components/elements';
 import ReviewFood from '@intake24/survey/components/recall/mobile/review/ReviewFood.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time';

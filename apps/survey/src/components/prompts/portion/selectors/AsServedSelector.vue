@@ -69,7 +69,7 @@ import { defineComponent } from 'vue';
 
 import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
-import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
+import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 export default defineComponent({
   name: 'AsServedSelector',

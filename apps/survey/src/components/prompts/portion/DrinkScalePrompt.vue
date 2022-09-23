@@ -101,9 +101,7 @@ import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types'
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import DrinkScalePanel from '@intake24/survey/components/elements/DrinkScalePanel.vue';
-import GuideImagePanel from '@intake24/survey/components/elements/GuideImagePanel.vue';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { DrinkScalePanel, GuideImagePanel } from '@intake24/survey/components/elements';
 
 import BasePortion from './BasePortion';
 
@@ -126,7 +124,7 @@ export default defineComponent({
 
   components: { GuideImagePanel, DrinkScalePanel },
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

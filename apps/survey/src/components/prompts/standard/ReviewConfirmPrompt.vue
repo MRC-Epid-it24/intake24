@@ -66,7 +66,7 @@ import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
-import SurveyProgressBar from '@intake24/survey/components/elements/SurveyProgressBar.vue';
+import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import { useSurvey } from '@intake24/survey/stores';
@@ -85,12 +85,12 @@ export default defineComponent({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    meals: {
+      type: Array as PropType<MealState[]>,
       required: true,
     },
   },

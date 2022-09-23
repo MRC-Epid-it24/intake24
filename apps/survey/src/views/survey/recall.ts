@@ -15,7 +15,7 @@ import type { RecallAction } from '@intake24/survey/components/recall/MealListDe
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { isSelectionEqual } from '@intake24/common/types';
-import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
+import { InfoAlert } from '@intake24/survey/components/elements';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
 import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';

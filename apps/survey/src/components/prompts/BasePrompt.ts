@@ -7,6 +7,8 @@ import { localeContent } from '@intake24/survey/components/mixins';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
 
 export default defineComponent({
+  name: 'BasePrompt',
+
   components: { Continue, PromptLayout },
 
   mixins: [localeContent],

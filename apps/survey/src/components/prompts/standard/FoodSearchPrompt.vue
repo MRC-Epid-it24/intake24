@@ -27,9 +27,9 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import { submitPromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import FoodSearchResults from '@intake24/survey/components/elements/FoodSearchResults.vue';
+import { FoodSearchResults } from '@intake24/survey/components/elements';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
-import foodSearchService from '@intake24/survey/services/foods.service';
+import { foodsService } from '@intake24/survey/services';
 
 import BasePrompt from '../BasePrompt';
 
@@ -81,7 +81,7 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        this.searchResults = await foodSearchService.search(this.localeId, this.searchTerm);
+        this.searchResults = await foodsService.search(this.localeId, this.searchTerm);
       } catch (e) {
         this.requestFailed = true;
       }
@@ -92,7 +92,7 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        const foodData = await foodSearchService.getData(this.localeId, code);
+        const foodData = await foodsService.getData(this.localeId, code);
         this.$emit('food-selected', foodData);
       } catch (e) {
         this.requestFailed = true;

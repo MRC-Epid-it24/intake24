@@ -107,19 +107,13 @@ import { defineComponent } from 'vue';
 import type { MilkCerealPromptProps } from '@intake24/common/prompts';
 import { milkCerealPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import { expansionPanelControls, localeContent } from '@intake24/survey/components/mixins';
 
-import BasePortion from './BasePortion';
+import BaseExpansionPortion from './BaseExpansionPortion';
 
 export default defineComponent({
   name: 'MilkCerealPrompt',
 
-  components: {
-    ValidInvalidIcon,
-  },
-
-  mixins: [BasePortion, localeContent, expansionPanelControls],
+  mixins: [BaseExpansionPortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

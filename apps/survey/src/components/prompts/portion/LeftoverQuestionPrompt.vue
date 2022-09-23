@@ -22,14 +22,13 @@ import { defineComponent } from 'vue';
 import type { LeftoverQuestionPromptProps } from '@intake24/common/prompts';
 import { leftoverQuestionPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import { localeContent } from '@intake24/survey/components/mixins';
 
 import BasePortion from './BasePortion';
 
 export default defineComponent({
   name: 'LeftoverQuestionPrompt',
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

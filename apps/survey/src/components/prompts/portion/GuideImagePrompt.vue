@@ -107,9 +107,7 @@ import { defineComponent, ref } from 'vue';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
-import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { ImagePlaceholder, QuantityCard } from '@intake24/survey/components/elements';
 
 import BasePortion from './BasePortion';
 
@@ -133,7 +131,7 @@ export default defineComponent({
 
   components: { ImagePlaceholder, QuantityCard },
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

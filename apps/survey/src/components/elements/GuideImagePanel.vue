@@ -40,7 +40,8 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
-import ImagePlaceholder from '@intake24/survey/components/elements/ImagePlaceholder.vue';
+
+import ImagePlaceholder from './ImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'GuideImagePanel',

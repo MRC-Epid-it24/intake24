@@ -67,9 +67,7 @@ import { defineComponent } from 'vue';
 
 import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
 import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
-import ErrorAlert from '@intake24/survey/components/elements/ErrorAlert.vue';
-import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
 
 import BasePortion from './BasePortion';
 
@@ -78,7 +76,7 @@ export default defineComponent({
 
   components: { ErrorAlert, QuantityCard },
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

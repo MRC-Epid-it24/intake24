@@ -96,9 +96,7 @@ import type { ImageMapSelectorProps, PizzaPromptProps } from '@intake24/common/p
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
 import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import QuantityCard from '@intake24/survey/components/elements/QuantityCard.vue';
-import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { QuantityCard, ValidInvalidIcon } from '@intake24/survey/components/elements';
 // import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
 
@@ -113,7 +111,7 @@ export default defineComponent({
     ImageMapSelector,
   },
 
-  mixins: [BasePortion, localeContent],
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt

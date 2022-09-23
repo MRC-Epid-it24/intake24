@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   data() {
     return {
-      panelOpenId: 0 as number,
+      panelOpenId: 0,
     };
   },
 

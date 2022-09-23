@@ -48,7 +48,7 @@ import { defineComponent } from 'vue';
 import type { MealState } from '@intake24/common/types';
 import ReviewMeal from '@intake24/survey/components/recall/mobile/review/ReviewMeal.vue';
 import SurveyProgress from '@intake24/survey/components/recall/mobile/review/SurveyProgress.vue';
-// import ContextMenu from '@intake24/survey/components/elements/ContextMenu.vue';
+// import { ContextMenu } from '@intake24/survey/components/elements';
 
 export type RecallAction = 'add-meal' | 'review-confirm';
 

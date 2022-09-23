@@ -50,7 +50,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import InfoAlert from '@intake24/survey/components/elements/InfoAlert.vue';
+import { InfoAlert } from '@intake24/survey/components/elements';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
 import MealListDesktop from '@intake24/survey/components/recall/MealListDesktop.vue';

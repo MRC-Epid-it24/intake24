@@ -36,8 +36,9 @@
 import { defineComponent } from 'vue';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
-import CategoryContentsView from '@intake24/survey/components/elements/CategoryContentsView.vue';
 import categoriesService from '@intake24/survey/services/categories.service';
+
+import CategoryContentsView from './CategoryContentsView.vue';
 
 export default defineComponent({
   name: 'FoodBrowser',

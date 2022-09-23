@@ -72,8 +72,7 @@ import type {
   EncodedFood,
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
-import FoodBrowser from '@intake24/survey/components/elements/FoodBrowser.vue';
-import ValidInvalidIcon from '@intake24/survey/components/elements/ValidInvalidIcon.vue';
+import { FoodBrowser, ValidInvalidIcon } from '@intake24/survey/components/elements';
 
 import BasePrompt from '../BasePrompt';
 

@@ -36,7 +36,7 @@ import { defineComponent } from 'vue';
 import type { MealState } from '@intake24/common/types';
 import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 
-import ContextMenu from '../elements/ContextMenu.vue';
+import { ContextMenu } from '../elements';
 import FoodItem from './FoodItem.vue';
 
 export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';

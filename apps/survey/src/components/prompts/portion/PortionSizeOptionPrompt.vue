@@ -17,23 +17,7 @@
                 >
                   <v-img :aspect-ratio="3 / 2" :src="method.imageUrl">
                     <template #placeholder>
-                      <div
-                        class="d-flex"
-                        style="
-                           {
-                            width: 100%;
-                            height: 100%;
-                          }
-                        "
-                      >
-                        <v-progress-circular
-                          class="ma-auto"
-                          color="primary"
-                          indeterminate
-                          :size="100"
-                          :width="10"
-                        ></v-progress-circular>
-                      </div>
+                      <image-placeholder></image-placeholder>
                     </template>
                   </v-img>
                   <v-card-actions class="d-flex justify-end">
@@ -65,8 +49,8 @@ import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { basePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import { localeContent } from '@intake24/survey/components/mixins';
 
+import { ImagePlaceholder } from '../../elements';
 import BasePortion from './BasePortion';
 
 export interface PortionSizeOptionState {
@@ -76,7 +60,9 @@ export interface PortionSizeOptionState {
 export default defineComponent({
   name: 'PortionSizeOptionPrompt',
 
-  mixins: [BasePortion, localeContent],
+  components: { ImagePlaceholder },
+
+  mixins: [BasePortion],
 
   props: {
     // Generic object 'props' used to store all props for each prompt
