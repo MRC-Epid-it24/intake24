@@ -28,12 +28,14 @@ export default defineConfig(({ mode }) => {
     OUTPUT_DIR: outDir = 'dist',
     PRODUCTION_SOURCE_MAP,
     DISABLE_PWA,
+    EMPTY_OUT_DIR = 'true',
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
 
   const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const disablePwa = !!(DISABLE_PWA === 'true');
+  const emptyOutDir = !!(EMPTY_OUT_DIR === 'true');
 
   if (captchaProvider && !isCaptchaProvider(captchaProvider))
     throw new Error('Invalid Captcha provider');
@@ -60,7 +62,7 @@ export default defineConfig(({ mode }) => {
     },
     base,
     build: {
-      emptyOutDir: true,
+      emptyOutDir,
       outDir,
       sourcemap,
       rollupOptions: {
@@ -144,6 +146,14 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
+          /* globIgnores: ['index.html'],
+          runtimeCaching: [
+            {
+              urlPattern: ({ request }) => request.destination === 'document',
+              handler: 'NetworkFirst',
+              options: { cacheName: 'index' },
+            },
+          ], */
         },
       }),
     ],

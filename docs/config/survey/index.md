@@ -54,6 +54,10 @@ API Server base URL. Defaults to `$API_HOST`.
 
 Directory to build the SPA. Defaults to `$BASE_DIR`.
 
+### EMPTY_OUT_DIR
+
+Whether to empty the output directory before building. Defaults to `true`.
+
 ### PRODUCTION_SOURCE_MAP
 
 Flag whether to include source maps to production build or not. Defaults to `false`.
