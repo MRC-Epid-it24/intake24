@@ -48,7 +48,7 @@ Directory, which should be served as public by the http server. Defaults to `$BA
 
 API Server base URL. Defaults to `$API_HOST`.
 
-## SPA variables
+## Vite build vars
 
 ### OUTPUT_DIR
 
@@ -66,9 +66,19 @@ Flag whether to include source maps to production build or not. Defaults to `fal
 
 Flag whether to disable PWA functionality. Defaults to `false`.
 
+## Vite public vars
+
 ### VITE_APP_NAME
 
 SPA application name. Defaults to `Intake24 Survey`.
+
+### VITE_APP_BASE_URL
+
+Base URL where to server the `SPA`. Defaults to `$BASE_URL`.
+
+### VITE_APP_PREFIX
+
+Prefix to be used for application data stored in browser storage. Defaults to `it24s`.
 
 ### VITE_API_HOST
 
@@ -78,13 +88,9 @@ API Server base URL. Defaults to `$API_HOST`.
 
 API Server context URL to be appended to `VITE_API_HOST`. Defaults to `api`.
 
-### VITE_APP_BASE_URL
+### VITE_ACL_SIGNUP_ENABLED
 
-Base URL where to server the `SPA`. Defaults to `$BASE_URL`.
-
-### VITE_APP_PREFIX
-
-Prefix to be used for application data stored in browser storage. Defaults to `it24s`.
+Flag whether to allow admin tool sign-ups. Defaults to `true`. Flag only enables sign-up view in the application. Sign-ups also has to be enabled in [API Server ACL settings](/config/api/acl#sign-up).
 
 ### Captcha settings
 

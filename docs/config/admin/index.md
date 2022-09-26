@@ -48,7 +48,7 @@ Directory, which should be served as public by the http server. Defaults to `$BA
 
 API Server base URL. Defaults to `$API_HOST`.
 
-## SPA variables
+## Vite build vars
 
 ### OUTPUT_DIR
 
@@ -66,17 +66,11 @@ Flag whether to include source maps to production build or not. Defaults to `fal
 
 Flag whether to disable PWA functionality. Defaults to `false`.
 
+## Vite public vars
+
 ### VITE_APP_NAME
 
 SPA application name. Defaults to `Intake24 Admin`.
-
-### VITE_API_HOST
-
-API Server base URL. Defaults to `$API_HOST`.
-
-### VITE_API_URL
-
-API Server context URL to be appended to `VITE_API_HOST`. Defaults to `api`.
 
 ### VITE_APP_BASE_URL
 
@@ -85,6 +79,14 @@ Base URL where to server the `SPA`. Defaults to `$BASE_URL`.
 ### VITE_APP_PREFIX
 
 Prefix to be used for application data stored in browser storage. Defaults to `it24a`.
+
+### VITE_API_HOST
+
+API Server base URL. Defaults to `$API_HOST`.
+
+### VITE_API_URL
+
+API Server context URL to be appended to `VITE_API_HOST`. Defaults to `api`.
 
 ### VITE_ACL_SIGNUP_ENABLED
 
