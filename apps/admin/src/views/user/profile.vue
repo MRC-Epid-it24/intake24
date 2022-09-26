@@ -43,7 +43,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>
-              <user-password></user-password>
+              <user-password :email="profile.email"></user-password>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

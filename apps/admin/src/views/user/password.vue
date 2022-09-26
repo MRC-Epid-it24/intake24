@@ -15,6 +15,13 @@
         </v-toolbar-title>
       </v-toolbar>
       <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
+        <input
+          autocomplete="username email"
+          class="d-none"
+          name="email"
+          type="text"
+          :value="email"
+        />
         <v-card-text class="pa-6">
           <v-row>
             <v-col cols="12">
@@ -27,6 +34,7 @@
                 :label="$t('common.password.current')"
                 name="passwordCurrent"
                 outlined
+                prepend-inner-icon="fas fa-key"
                 required
                 :type="showPassword.current ? 'text' : 'password'"
                 @click:append="showPassword.current = !showPassword.current"
@@ -42,6 +50,7 @@
                 :label="$t('common.password.new')"
                 name="password"
                 outlined
+                prepend-inner-icon="fas fa-key"
                 required
                 :type="showPassword.password ? 'text' : 'password'"
                 @click:append="showPassword.password = !showPassword.password"
@@ -57,6 +66,7 @@
                 :label="$t('common.password.confirm')"
                 name="passwordConfirm"
                 outlined
+                prepend-inner-icon="fas fa-key"
                 required
                 :type="showPassword.confirm ? 'text' : 'password'"
                 @click:append="showPassword.confirm = !showPassword.confirm"
@@ -82,6 +92,13 @@ import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'UserPassword',
+
+  props: {
+    email: {
+      type: String,
+      required: true,
+    },
+  },
 
   data() {
     return {
