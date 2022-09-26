@@ -46,6 +46,8 @@ import type {
   LocaleSplitWordController,
   LocaleSynonymSetController,
   NutrientTableController,
+  NutrientTypeController,
+  NutrientUnitController,
   PasswordController,
   PermissionController,
   PortionSizeController,
@@ -93,6 +95,8 @@ import type {
   LocaleService,
   MFAProvider,
   NutrientTableService,
+  NutrientTypeService,
+  NutrientUnitService,
   PairwiseSearchService,
   PopularitySearchService,
   PortionSizeService,
@@ -192,6 +196,8 @@ export interface IoC extends Jobs {
   localeSplitWordController: LocaleSplitWordController;
   localeSynonymSetController: LocaleSynonymSetController;
   nutrientTableController: NutrientTableController;
+  nutrientTypeController: NutrientTypeController;
+  nutrientUnitController: NutrientUnitController;
 
   // Schemes
   feedbackSchemeController: FeedbackSchemeController;
@@ -251,6 +257,8 @@ export interface IoC extends Jobs {
   languageService: LanguageService;
   localeService: LocaleService;
   nutrientTableService: NutrientTableService;
+  nutrientTypeService: NutrientTypeService;
+  nutrientUnitService: NutrientUnitService;
 
   feedbackService: FeedbackService;
 

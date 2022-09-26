@@ -221,6 +221,14 @@ export const sidebar = {
           link: '/api/admin/nutrient-tables',
         },
         {
+          text: 'Nutrient types',
+          link: '/api/admin/nutrient-types',
+        },
+        {
+          text: 'Nutrient units',
+          link: '/api/admin/nutrient-units',
+        },
+        {
           text: 'Permissions',
           link: '/api/admin/permissions',
         },

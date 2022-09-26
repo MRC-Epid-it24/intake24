@@ -11,6 +11,8 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
+import nutrientTypes from './nutrient-types';
+import nutrientUnits from './nutrient-units';
 import permissions from './permissions';
 import profile from './profile';
 import references from './references';
@@ -47,6 +49,8 @@ export default () => {
   router.use('/languages', languages());
   router.use('/locales', locales());
   router.use('/nutrient-tables', nutrientTables());
+  router.use('/nutrient-types', nutrientTypes());
+  router.use('/nutrient-units', nutrientUnits());
   router.use('/permissions', permissions());
   router.use('/references', references());
   router.use('/roles', roles());

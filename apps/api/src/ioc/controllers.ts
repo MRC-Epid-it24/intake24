@@ -55,6 +55,8 @@ export default (container: AwilixContainer): void => {
     localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
     nutrientTableController: asFunction(controllers.admin.nutrientTable),
+    nutrientTypeController: asFunction(controllers.admin.nutrientType),
+    nutrientUnitController: asFunction(controllers.admin.nutrientUnit),
 
     // Schemes
     feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),

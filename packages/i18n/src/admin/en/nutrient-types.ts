@@ -11,6 +11,9 @@ const nutrientTypes: LocaleMessageObject = {
   label: 'Nutrient type label',
   current: 'Current nutrient types',
   available: 'Available nutrient types',
+
+  id: 'Nutrient type ID',
+  kcalPerUnit: 'Kcal per unit',
 };
 
 export default nutrientTypes;

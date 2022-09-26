@@ -68,9 +68,9 @@ const sharedTests = (suite: typeof Suite) => {
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { status, body } = await call.send(input);
 
-    expect(status).toBe(code);
     expect(body).toContainAllKeys(['errors', 'success']);
     expect(body.errors).toContainAllKeys(fields);
+    expect(status).toBe(code);
   };
 
   const assertMissingRecord = async (method: Method, url: string, ops?: Options) => {
@@ -92,7 +92,6 @@ const sharedTests = (suite: typeof Suite) => {
 
     const { status, body } = await call.send();
 
-    expect(status).toBe(code);
     expect(body).toContainAllKeys(['data', 'meta']);
     expect(body.data).toBeArray();
 
@@ -107,6 +106,8 @@ const sharedTests = (suite: typeof Suite) => {
       const output = (body.data as { id: string }[]).find((item) => item.id === result);
       expect(output).toBeTruthy();
     }
+
+    expect(status).toBe(code);
   };
 
   const assertReferencesResult = async (
@@ -122,8 +123,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const { status, body } = await call.send();
 
-    expect(status).toBe(code);
     expect(body).toContainAllKeys(fields);
+    expect(status).toBe(code);
   };
 
   const assertAcknowledged = async (method: Method, url: string, ops?: Options) => {
@@ -134,8 +135,8 @@ const sharedTests = (suite: typeof Suite) => {
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(status).toBe(code);
     expect(body).toBeEmpty();
+    expect(status).toBe(code);
   };
 
   const assertBuffer = async (method: Method, url: string, ops?: Options) => {
@@ -146,8 +147,8 @@ const sharedTests = (suite: typeof Suite) => {
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(status).toBe(code);
     expect(body).toBeInstanceOf(Buffer);
+    expect(status).toBe(code);
   };
 
   const assertRecord = async (method: Method, url: string, output: any, ops?: Options) => {
@@ -158,12 +159,12 @@ const sharedTests = (suite: typeof Suite) => {
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(status).toBe(code);
-
     if (typeof output === 'boolean') {
       if (output) expect(body).not.toBeEmpty();
       else expect(body).toBeEmpty();
     } else expect(pick(body, Object.keys(output))).toEqual(output);
+
+    expect(status).toBe(code);
   };
 
   const assertRecordUpdated = async (method: Method, url: string, output: any, ops?: Options) => {
@@ -174,8 +175,8 @@ const sharedTests = (suite: typeof Suite) => {
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(status).toBe(code);
     expect(pick(body, Object.keys(output))).toEqual(output);
+    expect(status).toBe(code);
   };
 
   const assertRecordInserted = async (method: Method, url: string, output: any, ops?: Options) => {
@@ -190,8 +191,8 @@ const sharedTests = (suite: typeof Suite) => {
 
     const { status, body } = await call.send();
 
-    expect(status).toBe(204);
     expect(body).toBeEmpty();
+    expect(status).toBe(204);
   };
 
   return {

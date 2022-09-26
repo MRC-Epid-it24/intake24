@@ -50,6 +50,7 @@ declare module '@vue/runtime-core' {
     FeedbackTopFoodsColorList: typeof import('./src/components/feedback/top-foods/color-list.vue')['default']
     FeedbackTopFoodsNutrientList: typeof import('./src/components/feedback/top-foods/nutrient-list.vue')['default']
     FormsAutoComplete: typeof import('./src/components/forms/auto-complete.vue')['default']
+    FormsDatePicker: typeof import('./src/components/forms/date-picker.vue')['default']
     FormsErrorList: typeof import('./src/components/forms/error-list.vue')['default']
     FormsLanguageSelector: typeof import('./src/components/forms/language-selector.vue')['default']
     FormsSubmitFooter: typeof import('./src/components/forms/submit-footer.vue')['default']

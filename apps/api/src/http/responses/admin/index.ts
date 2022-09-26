@@ -2,6 +2,7 @@ export * from './categories';
 export * from './feedback-scheme';
 export * from './foods';
 export * from './images';
+export * from './nutrient-types';
 export * from './permissions';
 export * from './respondents';
 export * from './roles';

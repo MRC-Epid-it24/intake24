@@ -7,6 +7,8 @@ import type {
   CreateAsServedSetInput,
   CreateLocaleRequest,
   NutrientTableInput,
+  NutrientTypeRequest,
+  NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
 import { randomString } from '@intake24/common/util';
 
@@ -98,10 +100,29 @@ const nutrientTable = (): NutrientTableInput => {
   };
 };
 
+const nutrientType = (unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest => {
+  return {
+    id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
+    unitId,
+    description: faker.random.words(5),
+    kcalPerUnit,
+  };
+};
+
+const nutrientUnit = (): NutrientUnitRequest => {
+  return {
+    id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
+    description: faker.random.words(5),
+    symbol: faker.random.word(),
+  };
+};
+
 export default {
   food,
   foodGroup,
   asServedSet,
   locale,
   nutrientTable,
+  nutrientType,
+  nutrientUnit,
 };

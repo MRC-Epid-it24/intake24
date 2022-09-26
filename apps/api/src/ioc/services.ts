@@ -27,6 +27,8 @@ import {
   languageService,
   localeService,
   nutrientTableService,
+  nutrientTypeService,
+  nutrientUnitService,
   pairwiseSearchService,
   popularitySearchService,
   portionSizeService,
@@ -73,6 +75,8 @@ export default (container: AwilixContainer): void => {
     languageService: asFunction(languageService),
     localeService: asFunction(localeService),
     nutrientTableService: asFunction(nutrientTableService),
+    nutrientTypeService: asFunction(nutrientTypeService),
+    nutrientUnitService: asFunction(nutrientUnitService),
 
     dataExportFields: asFunction(dataExportFields),
     dataExportMapper: asFunction(dataExportMapper),

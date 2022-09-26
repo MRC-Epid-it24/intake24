@@ -20,6 +20,7 @@ export default class NutrientTypeInKcal
   implements NutrientTypeInKcalAttributes
 {
   @Column({
+    autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })

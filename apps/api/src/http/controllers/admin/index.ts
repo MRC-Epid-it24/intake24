@@ -8,6 +8,8 @@ import language from './language.controller';
 import languageTranslation from './language-translation.controller';
 import locales from './locales';
 import nutrientTable from './nutrient-table.controller';
+import nutrientType from './nutrient-type.controller';
+import nutrientUnit from './nutrient-unit.controller';
 import reference from './reference.controller';
 import signInLog from './sign-in-log.controller';
 import signup from './signup.controller';
@@ -27,6 +29,8 @@ export * from './language.controller';
 export * from './language-translation.controller';
 export * from './locales';
 export * from './nutrient-table.controller';
+export * from './nutrient-type.controller';
+export * from './nutrient-unit.controller';
 export * from './reference.controller';
 export * from './securable.controller';
 export * from './sign-in-log.controller';
@@ -50,6 +54,8 @@ export default {
   languageTranslation,
   locales,
   nutrientTable,
+  nutrientType,
+  nutrientUnit,
   reference,
   signInLog,
   signup,

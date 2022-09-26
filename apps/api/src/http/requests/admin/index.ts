@@ -6,6 +6,8 @@ import jobs from './jobs';
 import languages from './languages';
 import locales from './locales';
 import nutrientTables from './nutrient-tables';
+import nutrientTypes from './nutrient-types';
+import nutrientUnits from './nutrient-units';
 import permissions from './permissions';
 import roles from './roles';
 import securables from './securables';
@@ -26,6 +28,8 @@ export default {
   languages,
   locales,
   nutrientTables,
+  nutrientTypes,
+  nutrientUnits,
   permissions,
   roles,
   securables,

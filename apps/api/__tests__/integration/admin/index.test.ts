@@ -7,6 +7,8 @@ import jobs from './jobs/index.test';
 import languages from './languages/index.test';
 import locales from './locales/index.test';
 import nutrientTables from './nutrient-tables/index.test';
+import nutrientTypes from './nutrient-types/index.test';
+import nutrientUnits from './nutrient-units/index.test';
 import permissions from './permissions/index.test';
 import roles from './roles/index.test';
 import signInLogs from './sign-in-logs/index.test';
@@ -29,6 +31,8 @@ export default () => {
   describe('/api/admin/languages', languages);
   describe('/api/admin/locales', locales);
   describe('/api/admin/nutrient-tables', nutrientTables);
+  describe('/api/admin/nutrient-types', nutrientTypes);
+  describe('/api/admin/nutrient-units', nutrientUnits);
   describe('/api/admin/permissions', permissions);
   describe('/api/admin/roles', roles);
   describe('/api/admin/sign-in-logs', signInLogs);

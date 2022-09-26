@@ -43,6 +43,12 @@ const attributes: LocaleMessageObject = {
     _: '{attribute} must be allowed value.',
     options: '{attribute} must be one of the values: {options}.',
   },
+  int: {
+    _: '{attribute} must be a integer.',
+    min: '{attribute} must be a integer (min: {min}).',
+    max: '{attribute} must be a integer (max: {max}).',
+    minMax: '{attribute} must be a integer (min: {min}, max: {max}).',
+  },
   jwt: {
     _: '{attribute} must be valid JWT.',
   },
@@ -51,12 +57,6 @@ const attributes: LocaleMessageObject = {
   },
   match: {
     _: '{attribute} must match with {match} value.',
-  },
-  int: {
-    _: '{attribute} must be a integer.',
-    min: '{attribute} must be a integer (min: {min}).',
-    max: '{attribute} must be a integer (max: {max}).',
-    minMax: '{attribute} must be a integer (min: {min}, max: {max}).',
   },
   password: {
     _: 'Password must contain at least 10 chars of lower/upper chars and numbers.',

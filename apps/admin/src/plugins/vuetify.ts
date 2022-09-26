@@ -27,6 +27,9 @@ export default new Vuetify({
       'guide-images': 'fas fa-crosshairs',
       'image-maps': 'fas fa-draw-polygon',
       'drinkware-sets': 'fas fa-mug-saucer',
+      'nutrient-tables': 'fas fa-table-cells',
+      'nutrient-types': 'fas fa-seedling',
+      'nutrient-units': 'fas fa-calculator',
     },
   },
   theme: {

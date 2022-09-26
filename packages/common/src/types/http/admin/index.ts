@@ -11,6 +11,7 @@ export * from './languages';
 export * from './locales';
 export * from './nutrient-tables';
 export * from './nutrient-types';
+export * from './nutrient-units';
 export * from './permissions';
 export * from './roles';
 export * from './securables';

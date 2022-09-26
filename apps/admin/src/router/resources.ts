@@ -23,10 +23,26 @@ export const resources: Resource[] = [
   {
     group: 'fdb',
     name: 'nutrient-tables',
-    icon: 'fas fa-seedling',
+    icon: '$nutrient-tables',
     api: 'admin/nutrient-tables',
     generateRoutes: true,
     routes: [...routes, 'upload'],
+  },
+  {
+    group: 'fdb',
+    name: 'nutrient-types',
+    icon: '$nutrient-types',
+    api: 'admin/nutrient-types',
+    generateRoutes: true,
+    routes: [...routes],
+  },
+  {
+    group: 'fdb',
+    name: 'nutrient-units',
+    icon: '$nutrient-units',
+    api: 'admin/nutrient-units',
+    generateRoutes: true,
+    routes: [...routes],
   },
   // Localization
   {

@@ -21,7 +21,15 @@
         </v-list-item-group>
       </v-list>
       <menu-tree
-        v-if="can(['fdbs|browse', 'food-groups|browse', 'nutrient-tables|browse'])"
+        v-if="
+          can([
+            'fdbs|browse',
+            'food-groups|browse',
+            'nutrient-tables|browse',
+            'nutrient-types|browse',
+            'nutrient-units|browse',
+          ])
+        "
         icon="fas fa-fw fa-hamburger"
         name="fdb"
         :resources="resources.fdb"
