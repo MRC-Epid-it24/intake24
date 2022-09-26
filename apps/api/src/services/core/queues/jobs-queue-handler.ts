@@ -1,9 +1,9 @@
 import type { ConnectionOptions, JobsOptions } from 'bullmq';
-import { Job as BullJob, Queue, QueueEvents, QueueScheduler, Worker } from 'bullmq';
+import { Job as BullJob, Queue, QueueEvents, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
-import type { JobData, JobParams, JobType, JobTypeParams } from '@intake24/common/types';
+import type { JobData, JobParams, JobType } from '@intake24/common/types';
 import ioc from '@intake24/api/ioc';
 import { Job as DbJob } from '@intake24/db';
 
@@ -35,8 +35,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
   queueEvents!: QueueEvents;
 
-  scheduler!: QueueScheduler;
-
   workers: Worker<JobData>[] = [];
 
   /**
@@ -64,11 +62,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   public async init(connection: ConnectionOptions): Promise<void> {
-    this.scheduler = new QueueScheduler(this.name, { connection });
-    this.scheduler.on('error', (err) => {
-      this.logEventError(err);
-    });
-
     this.queue = new Queue(this.name, { connection, defaultJobOptions: { delay: 500 } });
     this.queue.on('error', (err) => {
       this.logEventError(err);
@@ -105,7 +98,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       await worker.close();
     }
 
-    await this.scheduler.close();
     await this.queue.close();
     await this.queueEvents.close();
   }

@@ -1,5 +1,5 @@
 import type { ConnectionOptions, Job as BullJob } from 'bullmq';
-import { Queue, QueueScheduler, Worker } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
@@ -16,8 +16,6 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   private readonly logger;
 
   queue!: Queue<JobData>;
-
-  scheduler!: QueueScheduler;
 
   workers: Worker<JobData>[] = [];
 
@@ -43,11 +41,6 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    * @memberof TasksQueueHandler
    */
   public async init(connection: ConnectionOptions): Promise<void> {
-    this.scheduler = new QueueScheduler(this.name, { connection });
-    this.scheduler.on('error', (err) => {
-      this.logEventError(err);
-    });
-
     this.queue = new Queue(this.name, {
       connection,
       defaultJobOptions: { removeOnComplete: true, removeOnFail: true },
@@ -93,7 +86,6 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
       await worker.close();
     }
 
-    await this.scheduler.close();
     await this.queue.close();
   }
 
