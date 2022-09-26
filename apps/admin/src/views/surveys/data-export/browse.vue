@@ -7,75 +7,19 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-row>
-                <v-col cols="12">
-                  <v-dialog
-                    ref="startDate"
-                    v-model="menus.startDate"
-                    persistent
-                    :return-value.sync="form.startDate"
-                    width="290px"
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="form.startDate"
-                        :error-messages="form.errors.get('startDate')"
-                        hide-details="auto"
-                        :label="$t('surveys.startDate')"
-                        outlined
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="form.startDate"
-                      scrollable
-                      @change="form.errors.clear('startDate')"
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn color="primary" text @click="menus.startDate = false">
-                        {{ $t('common.action.cancel') }}
-                      </v-btn>
-                      <v-btn color="primary" text @click="$refs.startDate.save(form.startDate)">
-                        {{ $t('common.action.ok') }}
-                      </v-btn>
-                    </v-date-picker>
-                  </v-dialog>
+                <v-col cols="12" md="6">
+                  <date-picker
+                    v-model="form.startDate"
+                    :error-messages="form.errors.get('startDate')"
+                    :label="$t('surveys.startDate').toString()"
+                  ></date-picker>
                 </v-col>
-                <v-col cols="12">
-                  <v-dialog
-                    ref="endDate"
-                    v-model="menus.endDate"
-                    persistent
-                    :return-value.sync="form.endDate"
-                    width="290px"
-                  >
-                    <template #activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="form.endDate"
-                        :error-messages="form.errors.get('endDate')"
-                        hide-details="auto"
-                        :label="$t('surveys.endDate')"
-                        outlined
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="form.endDate"
-                      scrollable
-                      @change="form.errors.clear('endDate')"
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn color="primary" text @click="menus.endDate = false">
-                        {{ $t('common.action.cancel') }}
-                      </v-btn>
-                      <v-btn color="primary" text @click="$refs.endDate.save(form.endDate)">
-                        {{ $t('common.action.ok') }}
-                      </v-btn>
-                    </v-date-picker>
-                  </v-dialog>
+                <v-col cols="12" md="6">
+                  <date-picker
+                    v-model="form.endDate"
+                    :error-messages="form.errors.get('endDate')"
+                    :label="$t('surveys.endDate').toString()"
+                  ></date-picker>
                 </v-col>
               </v-row>
               <v-row>
@@ -106,6 +50,7 @@ import { defineComponent } from 'vue';
 
 import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { DatePicker } from '@intake24/admin/components/forms';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
 import { form } from '@intake24/admin/helpers';
 
@@ -116,6 +61,8 @@ type SurveyDataExportForm = {
 
 export default defineComponent({
   name: 'SurveyDataExport',
+
+  components: { DatePicker },
 
   mixins: [detailMixin, PollsForJobs],
 
