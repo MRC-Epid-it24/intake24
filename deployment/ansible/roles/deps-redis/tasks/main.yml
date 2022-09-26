@@ -1,9 +1,10 @@
 ---
 - name: Add redis-server repository
-  apt_repository:
-    repo: ppa:chris-lea/redis-server
-    state: present
-    mode: '644'
+  shell: | 
+    curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+  args:
+    warn: no
 
 - name: Install redis-server
   apt:
