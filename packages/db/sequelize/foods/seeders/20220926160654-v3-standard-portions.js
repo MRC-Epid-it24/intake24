@@ -62,7 +62,6 @@ module.exports = {
   up: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const standardUnits = await fetchStandardUnits();
-      console.log(standardUnits);
 
       const created_at = new Date();
       const updated_at = created_at;

@@ -32,6 +32,10 @@ export const sidebar = {
           text: 'Get started',
           link: '/overview/get-started',
         },
+        {
+          text: 'Upgrade',
+          link: '/overview/upgrade',
+        },
       ],
     },
   ],
