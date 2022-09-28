@@ -4,6 +4,9 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   AsServedSetResponse,
   DrinkwareSetResponse,
+  GuideImageResponse,
+  ImageMapResponse,
+  StandardUnitResponse,
   WeightResponse,
 } from '@intake24/common/types/http';
 import {
@@ -54,7 +57,7 @@ const portionSizeController = ({
     res.json(records.map(drinkwareResponse(imagesBaseUrl).setResponse));
   };
 
-  const guideImage = async (req: Request, res: Response): Promise<void> => {
+  const guideImage = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {
     const { id } = req.params;
 
     const record = await portionSizeService.getGuideImage(id);
@@ -62,7 +65,7 @@ const portionSizeController = ({
     res.json(imageMapsResponse(imagesBaseUrl).guideResponse(record));
   };
 
-  const guideImages = async (req: Request, res: Response): Promise<void> => {
+  const guideImages = async (req: Request, res: Response<GuideImageResponse[]>): Promise<void> => {
     const id = req.query.id as string | string[];
 
     const records = await portionSizeService.getGuideImages(id);
@@ -72,7 +75,7 @@ const portionSizeController = ({
     res.json();
   };
 
-  const imageMap = async (req: Request, res: Response): Promise<void> => {
+  const imageMap = async (req: Request, res: Response<ImageMapResponse>): Promise<void> => {
     const { id } = req.params;
 
     const record = await portionSizeService.getImageMap(id);
@@ -80,12 +83,31 @@ const portionSizeController = ({
     res.json(imageMapsResponse(imagesBaseUrl).imageResponse(record));
   };
 
-  const imageMaps = async (req: Request, res: Response): Promise<void> => {
+  const imageMaps = async (req: Request, res: Response<ImageMapResponse[]>): Promise<void> => {
     const id = req.query.id as string | string[];
 
     const records = await portionSizeService.getImageMaps(id);
 
     res.json(records.map(imageMapsResponse(imagesBaseUrl).imageResponse));
+  };
+
+  const standardUnit = async (req: Request, res: Response<StandardUnitResponse>): Promise<void> => {
+    const { id } = req.params;
+
+    const record = await portionSizeService.getStandardUnit(id);
+
+    res.json(record);
+  };
+
+  const standardUnits = async (
+    req: Request,
+    res: Response<StandardUnitResponse[]>
+  ): Promise<void> => {
+    const id = req.query.id as string | string[];
+
+    const records = await portionSizeService.getStandardUnits(id);
+
+    res.json(records);
   };
 
   const weight = async (req: Request, res: Response<WeightResponse>): Promise<void> => {
@@ -108,6 +130,8 @@ const portionSizeController = ({
     guideImages,
     imageMap,
     imageMaps,
+    standardUnit,
+    standardUnits,
     weight,
   };
 };

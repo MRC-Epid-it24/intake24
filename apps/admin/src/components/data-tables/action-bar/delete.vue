@@ -1,11 +1,5 @@
 <template>
-  <confirm-dialog
-    color="error"
-    icon
-    icon-left="$delete"
-    :label="$t('common.action.delete').toString()"
-    @confirm="onClick"
-  >
+  <confirm-dialog color="error" icon icon-left="$delete" :label="internalTitle" @confirm="onClick">
     {{ $t('common.action.confirm.delete', { name: item.name ? item.name : item.id }) }}
   </confirm-dialog>
 </template>

@@ -1,6 +1,24 @@
-import type { PortionSizeMethodId } from '../..';
+import type { PortionSizeMethodId, RequiredLocaleTranslation } from '../..';
 
-export type UserPortionSizeMethodParameters = { [name: string]: string };
+type StandardUnitString =
+  | `unit${number}-name`
+  | `unit${number}-omit-food-description`
+  | `unit${number}-weight`;
+
+type StandardUnitTranslation = `unit${number}-howMany` | `unit${number}-estimateIn`;
+
+type StandardUnitTexts = {
+  [standardUnitString in StandardUnitString]: string;
+};
+
+type StandardUnitTranslations = {
+  [standardUnitTranslation in StandardUnitTranslation]: RequiredLocaleTranslation;
+};
+
+// TODO: generic mapping from DB -> should use union of methods?
+export interface UserPortionSizeMethodParameters {
+  [name: string]: string;
+}
 
 export interface AsServedParameters {
   'serving-image-set': string;
@@ -15,6 +33,10 @@ export interface DrinkScaleParameters {
   'drinkware-id': string;
   'initial-fill-level': string;
   'skip-fill-level': string;
+}
+
+export interface StandardPortionParams extends StandardUnitTexts, StandardUnitTranslations {
+  'units-count': string;
 }
 
 export interface UserPortionSizeMethod {

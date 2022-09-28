@@ -13,6 +13,7 @@ import roles from './roles';
 import securables from './securables';
 import signInLogs from './sign-in-logs';
 import signup from './signup';
+import standardUnits from './standard-units';
 import surveySchemeQuestions from './survey-scheme-questions';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
@@ -35,6 +36,7 @@ export default {
   securables,
   signInLogs,
   signup,
+  standardUnits,
   surveySchemeQuestions,
   surveySchemes,
   surveys,

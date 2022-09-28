@@ -97,16 +97,17 @@ const portion: LocaleMessageObject = {
     },
   },
   standardPortion: {
-    portionMethodLabel: 'How would you like to estimate your portion size?',
-    label: 'How many did you have?',
-    optionLabel: 'In {unit}', // E.g. In punnets, berries
+    label: 'How would you like to estimate the portion size of your {food}?',
+    estimateIn: 'In {unit}',
+    howMany: {
+      _: '{unit} did you have?',
+      placeholder: 'How many did you have?',
+      withFood: '{unit} of {food} did you have?',
+    },
     validation: {
       required: 'Please select an option from the list',
     },
-  },
-  standardUnits: {
-    berries_estimate_in: 'berries',
-    punnets_estimate_in: 'punnets',
+    continue: 'I had that many',
   },
   cereal: {
     label: 'Please select the bowl that looks most like the one you used.',

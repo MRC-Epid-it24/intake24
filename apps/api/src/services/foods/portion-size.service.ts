@@ -1,6 +1,13 @@
 import type { Includeable } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { AsServedImage, AsServedSet, DrinkwareSet, GuideImage, ImageMap } from '@intake24/db';
+import {
+  AsServedImage,
+  AsServedSet,
+  DrinkwareSet,
+  GuideImage,
+  ImageMap,
+  StandardUnit,
+} from '@intake24/db';
 
 const portionSizeService = () => {
   /**
@@ -173,6 +180,33 @@ const portionSizeService = () => {
     return drinkwareSet;
   };
 
+  /**
+   * Get multiple records of standard unit
+   *
+   * @param {(string | string[])} id
+   * @returns {Promise<StandardUnit[]>}
+   */
+  const getStandardUnits = async (id: string | string[]): Promise<StandardUnit[]> =>
+    StandardUnit.findAll({
+      where: { id },
+      attributes: ['id', 'estimateIn', 'howMany'],
+      order: [['id', 'ASC']],
+    });
+
+  /**
+   * Get single record of standard unit
+   *
+   * @param {string} id
+   * @returns {Promise<StandardUnit>}
+   */
+  const getStandardUnit = async (id: string): Promise<StandardUnit> => {
+    const [standardUnit] = await getStandardUnits(id);
+
+    if (!standardUnit) throw new NotFoundError('Standard unit not found.');
+
+    return standardUnit;
+  };
+
   return {
     getAsServedImage,
     getAsServedImages,
@@ -184,6 +218,8 @@ const portionSizeService = () => {
     getImageMaps,
     getDrinkwareSet,
     getDrinkwareSets,
+    getStandardUnit,
+    getStandardUnits,
   };
 };
 

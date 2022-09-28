@@ -13,6 +13,7 @@ import permissions from './permissions/index.test';
 import roles from './roles/index.test';
 import signInLogs from './sign-in-logs/index.test';
 import signup from './signup/index.test';
+import standardUnits from './standard-units/index.test';
 import surveySchemeQuestions from './survey-scheme-questions/index.test';
 import surveySchemes from './survey-schemes/index.test';
 import surveys from './surveys/index.test';
@@ -36,6 +37,7 @@ export default () => {
   describe('/api/admin/permissions', permissions);
   describe('/api/admin/roles', roles);
   describe('/api/admin/sign-in-logs', signInLogs);
+  describe('/api/admin/standard-units', standardUnits);
   describe('/api/admin/survey-schemes', surveySchemes);
   describe('/api/admin/survey-scheme-questions', surveySchemeQuestions);
   describe('/api/admin/surveys', surveys);

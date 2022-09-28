@@ -1,10 +1,5 @@
 <template>
-  <v-btn
-    color="primary"
-    icon
-    :title="$t('common.action.edit')"
-    :to="{ name: `${route}-edit`, params: { id: item.id } }"
-  >
+  <v-btn color="primary" icon :title="internalTitle" :to="internalTo">
     <v-icon dark>{{ icon }}</v-icon>
   </v-btn>
 </template>

@@ -4,7 +4,7 @@ import type {
   PortionSizeMethodParameterAttributes,
   PortionSizeMethodParameterCreationAttributes,
 } from '@intake24/common/types/models';
-import { AsServedSet, CategoryPortionSizeMethod, GuideImage } from '@intake24/db';
+import { AsServedSet, CategoryPortionSizeMethod, GuideImage, StandardUnit } from '@intake24/db';
 
 import BaseModel from '../model';
 
@@ -61,4 +61,10 @@ export default class CategoryPortionSizeMethodParameter
     constraints: false,
   })
   public guideImage?: GuideImage;
+
+  @BelongsTo(() => StandardUnit, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  public standardUnit?: StandardUnit;
 }

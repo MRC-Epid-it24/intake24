@@ -10,24 +10,22 @@ import type {
   NutrientTypeRequest,
   NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
+import type { StandardUnitCreationAttributes } from '@intake24/common/types/models';
+import { toStandardUnitId } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 
 import { downloadImage } from '../util';
 
-const food = (foodGroupId: string) => {
-  return {
-    code: randomString(8),
-    foodGroupId,
-    name: faker.random.words(5),
-    version: randomUUID(),
-  };
-};
+const food = (foodGroupId: string) => ({
+  code: randomString(8),
+  foodGroupId,
+  name: faker.random.words(5),
+  version: randomUUID(),
+});
 
-const foodGroup = () => {
-  return {
-    name: faker.random.words(10),
-  };
-};
+const foodGroup = () => ({
+  name: faker.random.words(10),
+});
 
 const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
   const id = asServedSetId ?? randomString(32);
@@ -100,22 +98,24 @@ const nutrientTable = (): NutrientTableInput => {
   };
 };
 
-const nutrientType = (unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest => {
-  return {
-    id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
-    unitId,
-    description: faker.random.words(5),
-    kcalPerUnit,
-  };
-};
+const nutrientType = (unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest => ({
+  id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
+  unitId,
+  description: faker.random.words(5),
+  kcalPerUnit,
+});
 
-const nutrientUnit = (): NutrientUnitRequest => {
-  return {
-    id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
-    description: faker.random.words(5),
-    symbol: faker.random.word(),
-  };
-};
+const nutrientUnit = (): NutrientUnitRequest => ({
+  id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
+  description: faker.random.words(5),
+  symbol: faker.random.word(),
+});
+
+const standardUnit = (): StandardUnitCreationAttributes => ({
+  id: toStandardUnitId(faker.random.words(3)),
+  estimateIn: { en: faker.random.words(5), es: faker.random.words(5) },
+  howMany: { en: faker.random.words(5), es: faker.random.words(5) },
+});
 
 export default {
   food,
@@ -125,4 +125,5 @@ export default {
   nutrientTable,
   nutrientType,
   nutrientUnit,
+  standardUnit,
 };

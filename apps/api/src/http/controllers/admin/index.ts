@@ -13,6 +13,7 @@ import nutrientUnit from './nutrient-unit.controller';
 import reference from './reference.controller';
 import signInLog from './sign-in-log.controller';
 import signup from './signup.controller';
+import standardUnit from './standard-unit.controller';
 import surveyScheme from './survey-scheme.controller';
 import surveySchemeQuestion from './survey-scheme-question.controller';
 import surveys from './surveys';
@@ -35,6 +36,7 @@ export * from './reference.controller';
 export * from './securable.controller';
 export * from './sign-in-log.controller';
 export * from './signup.controller';
+export * from './standard-unit.controller';
 export * from './survey-scheme.controller';
 export * from './survey-scheme-question.controller';
 export * from './surveys';
@@ -59,6 +61,7 @@ export default {
   reference,
   signInLog,
   signup,
+  standardUnit,
   surveyScheme,
   surveySchemeQuestion,
   task,

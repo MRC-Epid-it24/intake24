@@ -4,7 +4,7 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@intake24/api/services/foods/common';
-import { CategoryPortionSizeMethod, FoodLocal } from '@intake24/db';
+import { CategoryPortionSizeMethod, FoodLocal, Op } from '@intake24/db';
 
 import {
   toUserCategoryPortionSizeMethod,
@@ -39,17 +39,20 @@ const portionSizeMethodsService = () => {
                 '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
               },
               required: false,
-              include: [{ association: 'selectionImage' }],
+              include: [{ association: 'selectionImage', attributes: ['path'] }],
             },
             {
               association: 'guideImage',
-              where: {
-                $method$: 'guide-image',
-                '$parameters.name$': ['guide-image-id'],
-              },
+              where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
               required: false,
-              include: [{ association: 'selectionImage' }],
+              include: [{ association: 'selectionImage', attributes: ['path'] }],
             },
+            /* {
+              association: 'standardUnit',
+              attributes: ['id', 'estimateIn', 'howMany'],
+              where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
+              required: false,
+            }, */
           ],
         },
       ],
@@ -106,17 +109,20 @@ const portionSizeMethodsService = () => {
                     '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
                   },
                   required: false,
-                  include: [{ association: 'selectionImage' }],
+                  include: [{ association: 'selectionImage', attributes: ['path'] }],
                 },
                 {
                   association: 'guideImage',
-                  where: {
-                    $method$: 'guide-image',
-                    '$parameters.name$': ['guide-image-id'],
-                  },
+                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
                   required: false,
-                  include: [{ association: 'selectionImage' }],
+                  include: [{ association: 'selectionImage', attributes: ['path'] }],
                 },
+                /* {
+                  association: 'standardUnit',
+                  attributes: ['id', 'estimateIn', 'howMany'],
+                  where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
+                  required: false,
+                }, */
               ],
             },
           ],

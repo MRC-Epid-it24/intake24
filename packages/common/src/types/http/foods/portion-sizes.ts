@@ -3,6 +3,7 @@ import type {
   DrinkwareScaleAttributes,
   DrinkwareSetAttributes,
   DrinkwareVolumeSampleAttributes,
+  StandardUnitAttributes,
 } from '../../models';
 
 export type AsServedImageResponse = {
@@ -53,6 +54,8 @@ export interface DrinkwareScaleResponse
 export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'guideImageId'> {
   scales: DrinkwareScaleResponse[];
 }
+
+export type StandardUnitResponse = Pick<StandardUnitAttributes, 'id' | 'estimateIn' | 'howMany'>;
 
 export type WeightResponse = {
   method: string;

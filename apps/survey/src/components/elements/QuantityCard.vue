@@ -49,24 +49,34 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { QuantityValues } from '@intake24/common/prompts';
 
 export default defineComponent({
   name: 'QuantityCard',
-  // Purpose: Card that renders whole, fraction, or both, quantity counters for food items
 
   // Should probably fail if both are false as nothing to display
   props: {
-    whole: Boolean,
-    fraction: Boolean,
+    whole: {
+      type: Boolean,
+      required: true,
+    },
+    fraction: {
+      type: Boolean,
+      required: true,
+    },
+    value: {
+      type: Object as PropType<QuantityValues>,
+      default: () => ({ whole: 1, fraction: 0.0 }),
+    },
   },
 
   data() {
     return {
-      wholeNum: 1,
-      fracNum: 0.0,
+      wholeNum: this.value.whole,
+      fracNum: this.value.fraction,
     };
   },
 
@@ -77,16 +87,14 @@ export default defineComponent({
         // Currently no upper limit
         if (this.wholeNum + value >= 0) {
           this.wholeNum += value;
-          const emitValues: QuantityValues = { whole: this.wholeNum, fraction: this.fracNum };
-          this.$emit('update-quantity', emitValues);
+          this.update();
         }
       }
     },
     modifyFrac(value: number) {
       if (this.fracNum + value >= 0 && this.fracNum + value < 1) {
         this.fracNum += value;
-        const emitValues: QuantityValues = { whole: this.wholeNum, fraction: this.fracNum };
-        this.$emit('update-quantity', emitValues);
+        this.update();
       }
     },
     displayFrac(): string {
@@ -100,6 +108,10 @@ export default defineComponent({
         default:
           return this.fracNum.toString();
       }
+    },
+    update() {
+      const emitValues: QuantityValues = { whole: this.wholeNum, fraction: this.fracNum };
+      this.$emit('input', emitValues);
     },
   },
 });

@@ -165,14 +165,20 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
                     '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
                   },
                   required: false,
-                  include: [{ association: 'selectionImage' }],
+                  include: [{ association: 'selectionImage', attributes: ['path'] }],
                 },
                 {
                   association: 'guideImage',
                   where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
                   required: false,
-                  include: [{ association: 'selectionImage' }],
+                  include: [{ association: 'selectionImage', attributes: ['path'] }],
                 },
+                /* {
+                  association: 'standardUnit',
+                  attributes: ['id', 'estimateIn', 'howMany'],
+                  where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
+                  required: false,
+                }, */
               ],
             },
           ],

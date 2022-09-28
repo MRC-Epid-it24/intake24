@@ -2,7 +2,7 @@
 
 ## Browse nutrient units
 
-Browse paginated nutrient nutrient list
+Browse paginated nutrient unit list
 
 ### Request
 

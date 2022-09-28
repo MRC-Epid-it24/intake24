@@ -36,6 +36,13 @@ export default () => {
   router.get('/image-maps', validation.portionSizeId, wrapAsync(portionSizeController.imageMaps));
   router.get('/image-maps/:id', wrapAsync(portionSizeController.imageMap));
 
+  router.get(
+    '/standard-units',
+    validation.portionSizeId,
+    wrapAsync(portionSizeController.standardUnits)
+  );
+  router.get('/standard-units/:id', wrapAsync(portionSizeController.standardUnit));
+
   router.get('/weight', wrapAsync(portionSizeController.weight));
 
   return router;

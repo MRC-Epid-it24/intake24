@@ -21,12 +21,13 @@ const fdbs: LocaleMessageObject = {
     none: 'No category found for provided search.',
     global: {
       _: 'Global category settings',
-      code: 'Code',
+      code: 'Category code',
       name: 'English name',
       isHidden: 'Is hidden',
     },
     local: {
       _: 'Local category settings',
+      id: 'Local category ID',
       name: 'Local name',
     },
     attributes: {
@@ -42,12 +43,13 @@ const fdbs: LocaleMessageObject = {
     title: 'Foods',
     global: {
       _: 'Global food settings',
-      code: 'Code',
+      code: 'Food code',
       name: 'English name',
       foodGroup: 'Food group',
     },
     local: {
       _: 'Local food settings',
+      id: 'Local food ID',
       name: 'Local name',
     },
     attributes: {

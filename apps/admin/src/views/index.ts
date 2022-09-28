@@ -15,6 +15,7 @@ import nutrientUnits from './nutrient-units';
 import permissions from './permissions';
 import roles from './roles';
 import signInLogs from './sign-in-logs';
+import standardUnits from './standard-units';
 import surveySchemeQuestions from './survey-scheme-questions';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
@@ -35,9 +36,10 @@ const views: Dictionary = {
   'nutrient-tables': nutrientTables,
   'nutrient-types': nutrientTypes,
   'nutrient-units': nutrientUnits,
+  'sign-in-logs': signInLogs,
+  'standard-units': standardUnits,
   'survey-schemes': surveySchemes,
   'survey-scheme-questions': surveySchemeQuestions,
-  'sign-in-logs': signInLogs,
   surveys,
   permissions,
   roles,

@@ -43,4 +43,5 @@ export { default as SourceImage } from './source-image';
 export { default as SourceImageKeyword } from './source-image-keyword';
 export { default as SplitList } from './split-list';
 export { default as SplitWord } from './split-word';
+export { default as StandardUnit } from './standard-unit';
 export { default as SynonymSet } from './synonym-set';

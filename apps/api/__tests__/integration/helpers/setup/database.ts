@@ -16,6 +16,7 @@ import {
   Language,
   Permission,
   Role,
+  StandardUnit,
   Survey,
   SurveyScheme,
   SystemLocale,
@@ -160,6 +161,14 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'sign-in-logs|browse', displayName: 'Browse sign-in logs' },
     { name: 'sign-in-logs|read', displayName: 'Read sign-in logs' },
     { name: 'sign-in-logs|delete', displayName: 'Delete sign-in logs' },
+    { name: 'standard-units', displayName: 'Standard units resource access' },
+    { name: 'standard-units|browse', displayName: 'Browse standard units' },
+    { name: 'standard-units|read', displayName: 'Read standard units' },
+    { name: 'standard-units|create', displayName: 'Create standard units' },
+    { name: 'standard-units|edit', displayName: 'Edit standard units' },
+    { name: 'standard-units|delete', displayName: 'Delete standard units' },
+    { name: 'standard-units|categories', displayName: 'Standard unit categories' },
+    { name: 'standard-units|foods', displayName: 'Standard unit foods' },
     { name: 'survey-schemes', displayName: 'Survey schemes resource access' },
     { name: 'survey-schemes|browse', displayName: 'Browse survey schemes' },
     { name: 'survey-schemes|read', displayName: 'Read survey schemes' },
@@ -239,9 +248,15 @@ export const initDatabase = async (): Promise<MockData> => {
     { id: '6', description: 'International Units', symbol: 'IU' },
   ];
 
+  const standardUnits = [
+    { id: 'bags', estimateIn: { en: 'bags' }, howMany: { en: 'How many bags' } },
+    { id: 'bars', estimateIn: { en: 'bars' }, howMany: { en: 'How many bars' } },
+  ];
+
   await Promise.all([
     FoodsNutrientUnit.bulkCreate(nutrientUnits),
     SystemNutrientUnit.bulkCreate(nutrientUnits),
+    StandardUnit.bulkCreate(standardUnits),
   ]);
 
   const nutrientTypes = [

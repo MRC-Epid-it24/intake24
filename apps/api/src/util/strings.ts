@@ -6,8 +6,23 @@ import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
 
+/**
+ * Convention helper for user simple name
+ *
+ * @param {(string | null)} [name]
+ * @returns {(string | null)}
+ */
 export const toSimpleName = (name?: string | null): string | null =>
   name ? slugify(name, { replacement: ' ', lower: true }) : null;
+
+/**
+ * Convention helper for standard unit id
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+export const toStandardUnitId = (name: string): string =>
+  slugify(name, { replacement: '_', lower: true, strict: true });
 
 /**
  * Check whether string is a BigInt

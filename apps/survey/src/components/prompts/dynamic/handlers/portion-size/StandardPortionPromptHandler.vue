@@ -15,12 +15,13 @@ import { defineComponent } from 'vue';
 
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
+import type { StandardPortionParams } from '@intake24/common/types/http';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
-interface StandardPortionData {
+export interface StandardPortionData {
   unit: StandardPortionUnit;
   quantity: QuantityValues;
 }
@@ -44,10 +45,15 @@ export default defineComponent({
   },
 
   computed: {
-    standardUnits(): StandardPortionUnit[] {
-      const { method, parameters } = this.selectedPortionSize();
-      if (method !== 'standard-portion')
+    parameters(): StandardPortionParams {
+      if (this.selectedPortionSize().method !== 'standard-portion')
         throw new Error('Selected portion size method must be "standard-portion"');
+
+      return this.selectedPortionSize().parameters as unknown as StandardPortionParams;
+    },
+
+    standardUnits(): StandardPortionUnit[] {
+      const { parameters } = this;
 
       const units: StandardPortionUnit[] = [];
 

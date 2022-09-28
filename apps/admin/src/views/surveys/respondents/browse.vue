@@ -194,12 +194,6 @@ import RespondentFeedback from './respondent-feedback.vue';
 import RespondentsAuthUrlExport from './respondents-auth-url-export.vue';
 import RespondentsUpload from './respondents-upload.vue';
 
-export type RespondentsRefs = {
-  $refs: {
-    table: InstanceType<typeof EmbeddedDataTable>;
-  };
-};
-
 export type SurveyRespondentsForm = {
   userId: string | null;
   username: string | null;

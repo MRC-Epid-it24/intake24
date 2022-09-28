@@ -54,6 +54,7 @@ import type {
   ReferenceController,
   RoleController,
   SignInLogController,
+  StandardUnitController,
   SubscriptionController,
   SurveyController,
   SurveyRespondentController,
@@ -198,6 +199,7 @@ export interface IoC extends Jobs {
   nutrientTableController: NutrientTableController;
   nutrientTypeController: NutrientTypeController;
   nutrientUnitController: NutrientUnitController;
+  standardUnitController: StandardUnitController;
 
   // Schemes
   feedbackSchemeController: FeedbackSchemeController;

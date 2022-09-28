@@ -30,6 +30,7 @@ export default new Vuetify({
       'nutrient-tables': 'fas fa-table-cells',
       'nutrient-types': 'fas fa-seedling',
       'nutrient-units': 'fas fa-calculator',
+      'standard-units': 'fa-cubes-stacked',
     },
   },
   theme: {

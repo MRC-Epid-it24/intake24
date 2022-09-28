@@ -17,6 +17,7 @@ export * from './roles';
 export * from './securables';
 export * from './sign-in-logs';
 export * from './source-images';
+export * from './standard-units';
 export * from './survey-respondents';
 export * from './survey-scheme-questions';
 export * from './survey-schemes';

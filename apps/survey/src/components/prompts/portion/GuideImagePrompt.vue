@@ -11,8 +11,7 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.guideImage.label') }}
               <template #actions>
-                <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
-                <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
+                <valid-invalid-icon :valid="selectedGuide"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -62,15 +61,13 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.guideImage.quantity') }}
               <template #actions>
-                <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
-                <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
+                <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row align="center" justify="center">
                 <v-col>
-                  <quantity-card :fraction="true" :whole="true" @update-quantity="updateQuantity">
-                  </quantity-card>
+                  <quantity-card fraction whole @input="updateQuantity"></quantity-card>
                 </v-col>
               </v-row>
               <v-row>
@@ -107,7 +104,11 @@ import { defineComponent, ref } from 'vue';
 import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import { ImagePlaceholder, QuantityCard } from '@intake24/survey/components/elements';
+import {
+  ImagePlaceholder,
+  QuantityCard,
+  ValidInvalidIcon,
+} from '@intake24/survey/components/elements';
 
 import BasePortion from './BasePortion';
 
@@ -129,7 +130,7 @@ export interface GuideImageEncodedFood {
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { ImagePlaceholder, QuantityCard },
+  components: { ImagePlaceholder, QuantityCard, ValidInvalidIcon },
 
   mixins: [BasePortion],
 
@@ -215,6 +216,9 @@ export default defineComponent({
           .join(' ');
       });
     },
+    isValid() {
+      return this.selectedGuide;
+    },
   },
 
   created() {
@@ -223,8 +227,8 @@ export default defineComponent({
     }, 500);
   },
 
-  mounted() {
-    this.fetchGuideImageData();
+  async mounted() {
+    await this.fetchGuideImageData();
   },
 
   methods: {
@@ -300,14 +304,8 @@ export default defineComponent({
       this.errors = [];
     },
 
-    isValid() {
-      if (this.selectedGuide) {
-        return true;
-      }
-      return false;
-    },
     submit() {
-      if (!this.isValid()) {
+      if (!this.isValid) {
         // Should this also just accept the default value of 1?
         this.errors = [this.$t('portion.guideImage.validation.required').toString()];
         return;
@@ -323,6 +321,7 @@ export default defineComponent({
       this.selectedQuantity = false;
       this.onUpdate();
     },
+
     confirmQuantity() {
       this.selectedQuantity = true;
       this.panelOpen = -1;

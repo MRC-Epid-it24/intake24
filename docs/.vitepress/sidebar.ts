@@ -249,6 +249,10 @@ export const sidebar = {
           link: '/api/admin/sign-in-logs',
         },
         {
+          text: 'Standard units',
+          link: '/api/admin/standard-units',
+        },
+        {
           text: 'Survey schemes',
           link: '/api/admin/survey-schemes',
         },
@@ -303,8 +307,12 @@ export const sidebar = {
           link: '/api/survey/food-lookup',
         },
         {
-          text: 'Portion size data',
+          text: 'Food data',
           link: '/api/survey/food-data',
+        },
+        {
+          text: 'Portion size data',
+          link: '/api/survey/portion-sizes',
         },
         {
           text: 'Feedback',

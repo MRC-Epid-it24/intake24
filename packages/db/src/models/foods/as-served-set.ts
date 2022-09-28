@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import type { AsServedSetAttributes } from '@intake24/common/types/models';
 
@@ -50,13 +50,13 @@ export default class AsServedSet
   @HasMany(() => AsServedImage, 'asServedSetId')
   public asServedImages?: AsServedImage[];
 
-  @HasOne(() => CategoryPortionSizeMethodParameter, {
+  @HasMany(() => CategoryPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })
   public categoryPsmParameters?: CategoryPortionSizeMethodParameter[];
 
-  @HasOne(() => FoodPortionSizeMethodParameter, {
+  @HasMany(() => FoodPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })

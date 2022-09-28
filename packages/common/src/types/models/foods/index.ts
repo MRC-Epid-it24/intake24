@@ -16,4 +16,5 @@ export * from './processed-images';
 export * from './source-images';
 export * from './split-lists';
 export * from './split-words';
+export * from './standard-units';
 export * from './synonym-sets';

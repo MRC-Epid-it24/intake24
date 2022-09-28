@@ -4,7 +4,7 @@
     :href="`${app.api}/${route}/${item.id}`"
     icon
     target="_blank"
-    :title="$t('common.action.read')"
+    :title="internalTitle"
   >
     <v-icon dark>{{ icon }}</v-icon>
   </v-btn>

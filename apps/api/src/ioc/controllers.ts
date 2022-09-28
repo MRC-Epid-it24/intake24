@@ -57,6 +57,7 @@ export default (container: AwilixContainer): void => {
     nutrientTableController: asFunction(controllers.admin.nutrientTable),
     nutrientTypeController: asFunction(controllers.admin.nutrientType),
     nutrientUnitController: asFunction(controllers.admin.nutrientUnit),
+    standardUnitController: asFunction(controllers.admin.standardUnit),
 
     // Schemes
     feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),

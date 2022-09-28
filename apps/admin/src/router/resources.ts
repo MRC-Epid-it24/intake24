@@ -44,6 +44,14 @@ export const resources: Resource[] = [
     generateRoutes: true,
     routes: [...routes],
   },
+  {
+    group: 'fdb',
+    name: 'standard-units',
+    icon: '$standard-units',
+    api: 'admin/standard-units',
+    generateRoutes: true,
+    routes: [...routes, 'categories', 'foods'],
+  },
   // Localization
   {
     group: 'local',

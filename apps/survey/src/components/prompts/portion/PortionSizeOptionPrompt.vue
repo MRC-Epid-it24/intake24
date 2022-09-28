@@ -8,13 +8,8 @@
         <v-container>
           <v-row>
             <v-col v-for="(method, index) in availableMethods" :key="index" cols="12" md="4" sm="6">
-              <v-item v-slot="{ active, toggle }">
-                <v-card
-                  border-color="primary"
-                  :elevation="active ? 12 : 0"
-                  outlined
-                  @click="toggle"
-                >
+              <v-item v-slot="{ toggle }">
+                <v-card border-color="primary" hover outlined @click="toggle">
                   <v-img :aspect-ratio="3 / 2" :src="method.imageUrl">
                     <template #placeholder>
                       <image-placeholder></image-placeholder>

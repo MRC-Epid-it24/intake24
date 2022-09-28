@@ -3,61 +3,69 @@
     <template #header>
       {{ localeDescription }}
     </template>
-    <v-expansion-panels v-model="panelOpen">
+    <v-expansion-panels v-model="panelOpenId" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t('portion.standardPortion.portionMethodLabel', { food: localeDescription }) }}
+          <i18n path="portion.standardPortion.label">
+            <template #food>
+              <span class="font-weight-medium">{{ localeDescription }}</span>
+            </template>
+          </i18n>
           <template #actions>
-            <v-icon v-if="unitValid()" color="success">fas fa-fw fa-check</v-icon>
-            <v-icon v-if="!unitValid()" color="error">fas fa-fw fa-exclamation</v-icon>
+            <valid-invalid-icon :valid="unitValid"></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-radio-group
-            class="py-0"
-            :value="selectedUnitIndex"
-            @change="onSelectMethod(selectedUnitIndex, $event)"
-          >
+        <v-expansion-panel-content v-if="Object.keys(standardUnitRefs).length">
+          <v-radio-group v-model="selected.unit" @change="onSelectMethod">
             <v-radio
-              v-for="(opt, i) in standardUnits"
-              :key="i"
-              :label="optionLabel(opt.name)"
-              :value="i"
+              v-for="unit in standardUnits"
+              :key="unit.name"
+              :label="estimateInLabel(unit.name)"
+              :value="unit"
             ></v-radio>
           </v-radio-group>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t('portion.standardPortion.label', { food: localeDescription }) }}
+          <i18n
+            v-if="selected.unit"
+            :path="`portion.standardPortion.howMany.${
+              selected.unit.omitFoodDescription ? '_' : 'withFood'
+            }`"
+          >
+            <template #unit>
+              {{ getLocaleContent(standardUnitRefs[selected.unit.name].howMany) }}
+            </template>
+            <template #food>
+              <span class="font-weight-medium">{{ localeDescription }}</span>
+            </template>
+          </i18n>
+          <template v-else>{{ $t('portion.standardPortion.howMany.placeholder') }}</template>
           <template #actions>
-            <v-icon v-if="selectedQuantity" color="success">fas fa-fw fa-check</v-icon>
-            <v-icon v-if="!selectedQuantity" color="error">fas fa-fw fa-exclamation</v-icon>
+            <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <quantity-card
-            :fraction="true"
-            :whole="true"
-            @update-quantity="onUpdateQuantity"
-          ></quantity-card>
+          <v-row align="center" justify="center">
+            <v-col>
+              <quantity-card v-model="selected.quantity" fraction whole></quantity-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <error-alert :errors="errors"></error-alert>
+              <v-btn block color="success" @click="confirmQuantity">
+                {{ $t('portion.standardPortion.continue') }}
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <v-card>
-      <v-row v-if="hasErrors">
-        <v-col>
-          <error-alert :errors="errors"></error-alert>
-        </v-col>
-      </v-row>
-      <v-row class="pa-2 mt-0">
-        <v-col>
-          <v-btn block color="success" @click="submit">
-            {{ $t('common.action.continue') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
+    <template #actions>
+      <continue :disabled="!isValid" @click="submit"></continue>
+    </template>
   </portion-layout>
 </template>
 
@@ -66,34 +74,48 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
-import type { LocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
+import type {
+  LocaleTranslation,
+  RequiredLocaleTranslation,
+  StandardPortionUnit,
+} from '@intake24/common/types';
+import type { StandardUnitResponse } from '@intake24/common/types/http';
 import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
 
-import BasePortion from './BasePortion';
+import BaseExpansionPortion from './BaseExpansionPortion';
+
+export type StandardUnitRefs = Record<
+  string,
+  { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
+>;
+
+export type SelectedUnit = {
+  unit: StandardPortionUnit | null;
+  quantity: QuantityValues;
+};
 
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
   components: { ErrorAlert, QuantityCard },
 
-  mixins: [BasePortion],
+  mixins: [BaseExpansionPortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
-    promptProps: {
-      type: Object as PropType<ValidatedPromptProps>,
-      required: true,
-    },
     foodName: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
-    standardUnits: {
-      type: Array as PropType<StandardPortionUnit[]>,
-      required: true,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<ValidatedPromptProps>,
+      required: true,
+    },
+    standardUnits: {
+      type: Array as PropType<StandardPortionUnit[]>,
       required: true,
     },
   },
@@ -101,13 +123,15 @@ export default defineComponent({
   data() {
     return {
       errors: [] as string[],
-      selectedUnitIndex: -1,
+      selected: {
+        unit: null,
+        quantity: {
+          whole: 1,
+          fraction: 0,
+        },
+      } as SelectedUnit,
       selectedQuantity: false,
-      quantityValue: {
-        whole: 1,
-        fraction: 0,
-      },
-      panelOpen: 0,
+      standardUnitRefs: {} as StandardUnitRefs,
     };
   },
 
@@ -115,80 +139,69 @@ export default defineComponent({
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
+    unitValid() {
+      return !!this.selected.unit;
+    },
+    isValid() {
+      return this.unitValid && this.selectedQuantity;
     },
   },
 
   async mounted() {
-    if (this.selectedUnitIndex === -1 && this.standardUnits.length === 1)
-      this.onSelectMethod(-1, 0);
+    await this.fetchStandardUnits();
+
+    if (!this.selected.unit && this.standardUnits.length === 1)
+      this.selected.unit = this.standardUnits[0];
   },
 
   methods: {
-    optionLabel(unit: string) {
-      return this.$t('portion.standardPortion.optionLabel', {
-        unit: this.$t(`standard-units.${unit}_estimate_in`),
+    async fetchStandardUnits() {
+      const names = this.standardUnits.map(({ name }) => name);
+      const { data } = await this.$http.get<StandardUnitResponse[]>(
+        'portion-sizes/standard-units',
+        { params: { id: names } }
+      );
+
+      this.standardUnitRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
+        const { id, estimateIn, howMany } = unit;
+
+        acc[id] = { estimateIn, howMany };
+
+        return acc;
+      }, {});
+    },
+
+    estimateInLabel(unit: string) {
+      return this.$t('portion.standardPortion.estimateIn', {
+        unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
       });
     },
-    onSelectMethod(unit: number, event: number) {
+
+    onSelectMethod() {
       this.clearErrors();
-      this.panelOpen = 1;
-      console.log(unit, event);
-      this.selectedUnitIndex = event;
-      /* this.$emit('tempChanging', {
-        response: {
-          method: 'standard-portion',
-          unit: this.standardUnits[this.selectedUnitIndex],
-          quantity: this.quantityValue,
-        },
-        modified: true,
-        finished: false,
-        new: false,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-      }); */
+      this.setPanelOpen(1);
     },
+
     clearErrors() {
       this.errors = [];
     },
-    unitValid() {
-      return this.selectedUnitIndex > -1;
+
+    confirmQuantity() {
+      this.selectedQuantity = true;
+      this.closeAllPanels();
     },
-    isValid() {
-      return this.unitValid();
-    },
-    onUpdateQuantity(value: QuantityValues) {
-      this.quantityValue = value;
-      /* this.$emit('tempChanging', {
-        response: {
-          method: 'standard-portion',
-          unit: this.standardUnits[this.selectedUnitIndex],
-          quantity: this.quantityValue,
-        },
-        modified: true,
-        finished: true,
-        new: false,
-        mealIndex: this.selectedMealIndex,
-        foodIndex: this.selectedFoodIndex,
-        prompt: this.promptComponent,
-      }); */
-    },
+
     submit() {
-      if (!this.isValid()) {
+      if (!this.isValid) {
         this.errors = [
           this.getLocaleContent(this.promptProps.validation.message) ??
             this.$t('portion.standardPortion.validation.required').toString(),
         ];
         return;
       }
-      this.$emit('standard-portion-selected', {
-        unit: this.standardUnits[this.selectedUnitIndex],
-        quantity: this.quantityValue,
-      });
-      this.panelOpen = -1;
-      this.selectedQuantity = true;
+
+      const { unit, quantity } = this.selected;
+      this.$emit('standard-portion-selected', { unit, quantity });
     },
   },
 });

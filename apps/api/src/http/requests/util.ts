@@ -16,21 +16,23 @@ export const validate = (
 };
 
 export const errorMessage =
-  (key: string, params?: I18nParams) =>
+  (key: string, params: I18nParams = {}) =>
   (value: any, { path, req }: Meta) => {
     const { i18nService } = req.scope.cradle;
+    const { attributePath = path } = params;
 
     return i18nService.translate(key, {
-      attribute: i18nService.translate(`validation.attributes.${path}`, path),
+      attribute: i18nService.translate(`validation.attributes.${attributePath}`),
       ...params,
     });
   };
 
-export const customErrorMessage = (key: string, { path, req }: Meta, params?: I18nParams) => {
+export const customErrorMessage = (key: string, { path, req }: Meta, params: I18nParams = {}) => {
   const { i18nService } = req.scope.cradle;
+  const { attributePath = path } = params;
 
   return i18nService.translate(key, {
-    attribute: i18nService.translate(`validation.attributes.${path}`, path),
+    attribute: i18nService.translate(`validation.attributes.${attributePath}`),
     ...params,
   });
 };
@@ -39,9 +41,10 @@ export const typeErrorMessage =
   (type: string, params: I18nParams = {}) =>
   (value: any, { path, req }: Meta) => {
     const { i18nService } = req.scope.cradle;
+    const { attributePath = path } = params;
 
     return i18nService.translate(`validation.types.${type}`, {
-      attribute: i18nService.translate(`validation.attributes.${path}`, path),
+      attribute: i18nService.translate(`validation.attributes.${attributePath}`),
       ...params,
     });
   };
@@ -52,9 +55,10 @@ export const customTypeErrorMessage = (
   params: I18nParams = {}
 ) => {
   const { i18nService } = req.scope.cradle;
+  const { attributePath = path } = params;
 
   return i18nService.translate(`validation.types.${type}`, {
-    attribute: i18nService.translate(`validation.attributes.${path}`, path),
+    attribute: i18nService.translate(`validation.attributes.${attributePath}`),
     ...params,
   });
 };
