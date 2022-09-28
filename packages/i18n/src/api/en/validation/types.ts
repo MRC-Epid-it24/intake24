@@ -58,6 +58,9 @@ const attributes: LocaleMessageObject = {
   match: {
     _: '{attribute} must match with {match} value.',
   },
+  object: {
+    _: '{attribute} must be an object.',
+  },
   password: {
     _: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
   },

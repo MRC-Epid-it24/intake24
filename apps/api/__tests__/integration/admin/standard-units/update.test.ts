@@ -41,8 +41,8 @@ export default () => {
     });
 
     it('should return 422 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['estimateIn', 'howMany'], {
-        input: { estimateIn: [{ en: 'text' }], howMany: 10 },
+      await suite.sharedTests.assertInvalidInput('put', url, ['estimateIn.en', 'howMany'], {
+        input: { estimateIn: { en: ['text'] }, howMany: 10 },
       });
     });
 
