@@ -13,6 +13,11 @@ const jobs: LocaleMessageObject = {
   params: 'Job parameters',
   stackTrace: 'Error message',
 
+  repeat: {
+    _: 'Repeat job',
+    confirm: 'Push the job to the queue',
+  },
+
   types: {
     _: 'Job types',
     CleanRedisStore: {

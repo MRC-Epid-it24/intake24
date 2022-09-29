@@ -32,5 +32,12 @@ export default () => {
     wrapAsync(jobController.download)
   );
 
+  router.post(
+    '/:jobId/repeat',
+    permission('jobs|edit'),
+    validation.entry('jobId'),
+    wrapAsync(jobController.repeat)
+  );
+
   return router;
 };

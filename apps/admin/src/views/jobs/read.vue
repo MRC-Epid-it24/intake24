@@ -1,5 +1,17 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
+    <template #actions>
+      <confirm-dialog
+        v-if="can({ action: 'edit' })"
+        :activator-class="['ml-2']"
+        color="secondary"
+        icon-left="fas fa-play"
+        :label="$t('jobs.repeat._').toString()"
+        @confirm="repeat"
+      >
+        {{ $t('jobs.repeat.confirm') }}
+      </confirm-dialog>
+    </template>
     <v-simple-table>
       <tbody>
         <tr>
@@ -71,9 +83,12 @@ import { defineComponent } from 'vue';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { formatsDateTime } from '@intake24/admin/mixins';
+import { ConfirmDialog } from '@intake24/ui/components';
 
 export default defineComponent({
   name: 'JobDetail',
+
+  components: { ConfirmDialog },
 
   mixins: [formatsDateTime, detailMixin],
 
@@ -81,6 +96,12 @@ export default defineComponent({
     const { entry, entryLoaded } = useStoreEntry<JobEntry>(props.id);
 
     return { entry, entryLoaded };
+  },
+
+  methods: {
+    async repeat() {
+      await this.$http.post(`admin/jobs/${this.id}/repeat`);
+    },
   },
 });
 </script>

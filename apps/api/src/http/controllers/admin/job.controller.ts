@@ -10,7 +10,7 @@ import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Job, Op } from '@intake24/db';
 
-const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
+const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'scheduler'>) => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<JobsResponse>
@@ -82,12 +82,29 @@ const jobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     fs.createReadStream(file).pipe(res);
   };
 
+  const repeat = async (
+    req: Request<{ jobId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const { jobId } = req.params;
+
+    const job = await Job.findByPk(jobId);
+    if (!job) throw new NotFoundError();
+
+    const { type, userId, params } = job;
+
+    await scheduler.jobs.addJob({ type, userId, params });
+
+    res.json();
+  };
+
   return {
     browse,
     read,
     destroy,
     refs,
     download,
+    repeat,
   };
 };
 

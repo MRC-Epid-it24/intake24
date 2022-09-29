@@ -6,7 +6,7 @@
         :activator-class="['ml-2']"
         color="secondary"
         icon-left="fas fa-play"
-        :label="$t('tasks.run._')"
+        :label="$t('tasks.run._').toString()"
         @confirm="triggerJob"
       >
         {{ $t('tasks.run.confirm') }}

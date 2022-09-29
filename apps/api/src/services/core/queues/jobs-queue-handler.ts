@@ -77,9 +77,20 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
     for (let i = 0; i < this.config.workers; i++) {
       const worker = new Worker(this.name, this.processor, { connection });
 
-      worker.on('error', (err) => {
-        this.logEventError(err);
-      });
+      worker
+        .on('completed', (job) => {
+          this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
+        })
+        .on('failed', (job, err) => {
+          const { message, name, stack } = err;
+          this.logger.error(
+            `${this.name}: ${job.name} | ${job.id} has failed with: ${err.message}`,
+            { message, name, stack }
+          );
+        })
+        .on('error', (err) => {
+          this.logEventError(err);
+        });
 
       this.workers.push(worker);
     }
@@ -112,57 +123,56 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   private registerQueueEvents(): void {
-    this.queueEvents.on('progress', async ({ jobId, data }) => {
-      const job = await DbJob.findByPk(jobId);
-      if (!job) {
-        this.logger.error(`QueueEvent progress: Job entry not found (${jobId}).`);
-        return;
-      }
+    this.queueEvents
+      .on('progress', async ({ jobId, data }) => {
+        const job = await DbJob.findByPk(jobId);
+        if (!job) {
+          this.logger.error(`QueueEvent progress: Job entry not found (${jobId}).`);
+          return;
+        }
 
-      if (typeof data === 'number' && data < 1) await job.update({ progress: data });
-    });
+        if (typeof data === 'number' && data < 1) await job.update({ progress: data });
+      })
+      .on('completed', async ({ jobId }) => {
+        const job = await DbJob.findByPk(jobId);
+        if (!job) {
+          this.logger.error(`QueueEvent completed: Job entry not found (${jobId}).`);
+          return;
+        }
 
-    this.queueEvents.on('completed', async ({ jobId }) => {
-      const job = await DbJob.findByPk(jobId);
-      if (!job) {
-        this.logger.error(`QueueEvent completed: Job entry not found (${jobId}).`);
-        return;
-      }
+        await job.update({ completedAt: new Date(), progress: 1, successful: true });
 
-      await job.update({ completedAt: new Date(), progress: 1, successful: true });
+        await this.notify(job.userId, { jobId, status: 'success' });
+      })
+      .on('failed', async ({ jobId, failedReason }) => {
+        const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
+        if (!bullJob) {
+          this.logger.error(`QueueEvent failed: BullJob (${jobId}) not found.`);
+          return;
+        }
 
-      await this.notify(job.userId, { jobId, status: 'success' });
-    });
+        const { name, stacktrace } = bullJob;
 
-    this.queueEvents.on('failed', async ({ jobId, failedReason }) => {
-      const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
-      if (!bullJob) {
-        this.logger.error(`QueueEvent failed: BullJob (${jobId}) not found.`);
-        return;
-      }
+        this.logger.error(
+          `QueueEvent failed: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
+        );
 
-      const { name, stacktrace } = bullJob;
+        const job = await DbJob.findByPk(jobId);
+        if (!job) {
+          this.logger.error(`QueueEvent failed: Job entry not found (${jobId}).`);
+          return;
+        }
 
-      this.logger.error(
-        `QueueEvent failed: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
-      );
+        await job.update({
+          completedAt: new Date(),
+          progress: 1,
+          successful: false,
+          message: failedReason,
+          stackTrace: stacktrace,
+        });
 
-      const job = await DbJob.findByPk(jobId);
-      if (!job) {
-        this.logger.error(`QueueEvent failed: Job entry not found (${jobId}).`);
-        return;
-      }
-
-      await job.update({
-        completedAt: new Date(),
-        progress: 1,
-        successful: false,
-        message: failedReason,
-        stackTrace: stacktrace,
+        await this.notify(job.userId, { jobId, status: 'error', message: failedReason });
       });
-
-      await this.notify(job.userId, { jobId, status: 'error', message: failedReason });
-    });
 
     /*
      * Clean old jobs when queue is drained

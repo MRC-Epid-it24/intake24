@@ -89,3 +89,22 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+## Repeat job
+
+Repeat job with same parameters.
+
+### Request
+
+```json
+GET /api/admin/jobs/:jobId/repeat
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+```
