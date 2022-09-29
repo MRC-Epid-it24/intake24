@@ -178,6 +178,20 @@ export default defineComponent({
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
+    isValid(): boolean {
+      // Haven't filled in asServed, or answered leftover
+      if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
+
+      // asServed is complete, leftoverPromptAnswer is false (no leftover)
+      if (this.asServedData && this.leftoverPromptAnswer === false) {
+        return true;
+      }
+      // Both asServed and leftoverData are full
+      if (this.asServedData && this.leftoverData) {
+        return true;
+      }
+      return false;
+    },
   },
 
   methods: {
@@ -200,7 +214,7 @@ export default defineComponent({
     },
 
     setPanelOpen(panelIdComplete: number) {
-      if (this.isValid()) {
+      if (this.isValid) {
         this.panelOpen = -1;
         return;
       }
@@ -223,7 +237,7 @@ export default defineComponent({
     },
     onServingUpdate(update: SelectedAsServedImage | null) {
       this.asServedData = update;
-      if (this.isValid()) this.clearErrors();
+      if (this.isValid) this.clearErrors();
       this.emitUpdate();
     },
 
@@ -235,7 +249,7 @@ export default defineComponent({
 
     onLeftoversUpdate(update: SelectedAsServedImage | null) {
       this.leftoverData = update;
-      if (this.isValid()) this.clearErrors();
+      if (this.isValid) this.clearErrors();
       this.emitUpdate();
     },
 
@@ -249,20 +263,6 @@ export default defineComponent({
       this.emitUpdate();
     },
 
-    isValid(): boolean {
-      // Haven't filled in asServed, or answered leftover
-      if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
-
-      // asServed is complete, leftoverPromptAnswer is false (no leftover)
-      if (this.asServedData && this.leftoverPromptAnswer === false) {
-        return true;
-      }
-      // Both asServed and leftoverData are full
-      if (this.asServedData && this.leftoverData) {
-        return true;
-      }
-      return false;
-    },
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
@@ -270,7 +270,7 @@ export default defineComponent({
       this.errors = [];
     },
     submit() {
-      if (!this.isValid()) {
+      if (!this.isValid) {
         this.setErrors();
         return;
       }

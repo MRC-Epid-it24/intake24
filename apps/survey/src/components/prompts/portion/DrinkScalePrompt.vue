@@ -207,6 +207,9 @@ export default defineComponent({
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
     },
+    isValid() {
+      return this.sliderValue > 0;
+    },
   },
 
   mounted() {
@@ -302,12 +305,6 @@ export default defineComponent({
     clearErrors() {
       this.errors = [];
     },
-    isValid() {
-      if (this.sliderValue > 0) {
-        return true;
-      }
-      return false;
-    },
 
     confirmAmount() {
       this.selectedDrink = true;
@@ -316,7 +313,7 @@ export default defineComponent({
     },
 
     submit() {
-      if (!this.isValid()) {
+      if (!this.isValid) {
         this.errors = [this.$t('portion.drinkScale.validation.required').toString()];
         console.log(`Can't submit DrinkScale`);
         return;

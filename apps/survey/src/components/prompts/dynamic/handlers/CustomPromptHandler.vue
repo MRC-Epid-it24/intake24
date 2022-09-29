@@ -57,13 +57,12 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, ['selection']),
-  },
-
-  methods: {
     isValid(): boolean {
       return true;
     },
+  },
 
+  methods: {
     onAnswer(answer: CustomPromptAnswer) {
       this.answer = answer;
       this.$emit('continue');
