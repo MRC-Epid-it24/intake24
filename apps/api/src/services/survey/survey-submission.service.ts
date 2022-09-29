@@ -542,7 +542,7 @@ const surveySubmissionService = ({
               portionSizes.length
                 ? SurveySubmissionPortionSizeField.bulkCreate(portionSizes, { transaction })
                 : null,
-            ].map(Boolean)
+            ].filter(Boolean)
           );
         }
       }
@@ -558,7 +558,7 @@ const surveySubmissionService = ({
                 params: { surveyId, submissionId: surveySubmissionId },
               })
             : null,
-        ].map(Boolean)
+        ].filter(Boolean)
       );
     });
   };
