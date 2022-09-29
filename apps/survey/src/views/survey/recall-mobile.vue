@@ -33,6 +33,7 @@
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
           :submit-trigger="submitTrigger"
+          @complete="onComplete"
           @continue="onContinue"
           @meal-food-selected="onMealFoodMobileClick"
           @resetPromptTrigger="resetTrigger"
@@ -94,7 +95,6 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
-import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
 import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
@@ -114,15 +114,13 @@ export default defineComponent({
     FoodListMobileBottom,
     RecallBreadCrumbsMobile,
     MealFoodMobileContextMenu,
-    CustomPromptHandler,
     BottomNavigationMobile,
   },
 
   mixins: [Recall],
 
-  data: () => {
+  data() {
     return {
-      continueButtonEnabled: false,
       bottomNavTab: 2,
       mobileMealFoodContextMenu: {
         show: false,
@@ -130,7 +128,6 @@ export default defineComponent({
         foodIndex: 0,
         foodContext: false,
       },
-      submitTrigger: false,
       alert: false,
     };
   },
@@ -190,12 +187,6 @@ export default defineComponent({
 
     onMobileMealFoodContextMenu() {
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-    },
-
-    onContinue() {
-      this.promptHandle?.commitAnswer();
-      this.continueButtonEnabled = false;
-      this.nextPrompt();
     },
 
     onValidationUpdate(answerValid: boolean) {

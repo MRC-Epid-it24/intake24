@@ -19,14 +19,6 @@ import { InfoAlert } from '@intake24/survey/components/elements';
 import CustomPromptHandler from '@intake24/survey/components/prompts/dynamic/handlers/CustomPromptHandler.vue';
 import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/handlers/portion-size';
 import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
-import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
-import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
-import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
-import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
-import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
-// Mobile
-import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
-import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -36,17 +28,10 @@ interface SavedState {
 }
 
 export default defineComponent({
-  name: 'Recall',
+  name: 'RecallMixin',
 
   components: {
-    MealListMobileBottom,
-    FoodListMobileBottom,
-    MealList,
-    RecallBreadCrumbs,
-    RecallBreadCrumbsMobile,
-    MealFoodMobileContextMenu,
     CustomPromptHandler,
-    BottomNavigationMobile,
     InfoAlert,
     ...standardHandlers,
     ...portionSizeHandlers,
@@ -77,6 +62,9 @@ export default defineComponent({
       activeItem: 'meal',
       alert: false,
       savedState: null as SavedState | null,
+      continueButtonEnabled: false,
+      submitTrigger: false,
+      hideCurrentPrompt: false,
     };
   },
 
@@ -338,6 +326,37 @@ export default defineComponent({
           this.currentPrompt = nextPrompt;
         }
       }
+    },
+
+    async onContinue() {
+      this.continueButtonEnabled = false;
+
+      // Workaround for a crash that occurs if the currently selected prompt changes something
+      // in the recall data that makes it incompatible, for example changing from 'free-text'
+      // food entry type to 'encoded-food' in commitAnswer.
+      //
+      // In the current implementation an update/render event is triggered before the nextPrompt
+      // function is executed, because most prompts have a reactive dependency on the currently
+      // selected food.
+      //
+      // The correct implementation would be re-evaluating the current prompt type immediately
+      // (via the reactivity system) in response to changes in commitAnswer.
+      this.hideCurrentPrompt = true;
+
+      await this.promptHandle?.commitAnswer();
+      await this.nextPrompt();
+
+      this.hideCurrentPrompt = false;
+    },
+
+    // Same as onContinue but don't commit, for alternative prompt actions such as delete meal
+    async onComplete() {
+      this.continueButtonEnabled = false;
+      this.hideCurrentPrompt = true;
+
+      await this.nextPrompt();
+
+      this.hideCurrentPrompt = false;
     },
 
     async restart() {
