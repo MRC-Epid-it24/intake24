@@ -108,5 +108,5 @@ async function buildIndex() {
 (async () => {
   await buildIndex();
 })().catch((err) => {
-  console.log(err);
+  logger.error(err);
 });
