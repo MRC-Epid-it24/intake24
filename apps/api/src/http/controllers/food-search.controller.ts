@@ -12,7 +12,7 @@ const foodSearchController = () => {
     }
 
     try {
-      const results = await foodIndex.search(req.query.description);
+      const results = await foodIndex.search(req.query.description, localeId);
       res.json(results);
     } catch (err) {
       if (err instanceof IndexNotReadyError) {

@@ -3,7 +3,6 @@ import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import EnglishWordOps from '@intake24/api/food-index/english-word-ops';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
-import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 
 describe('Phrase index', () => {
@@ -26,13 +25,7 @@ describe('Phrase index', () => {
 
   const synonyms: Array<Set<string>> = [];
 
-  const index = new PhraseIndex(
-    phrases,
-    indexFilter,
-    new Metaphone3Encoder(),
-    new EnglishWordOps(),
-    synonyms
-  );
+  const index = new PhraseIndex(phrases, EnglishWordOps, synonyms);
 
   describe('Interpretation combinations', () => {
     it('Empty interpretations list', () => {

@@ -1,13 +1,19 @@
 import type { WordOps } from '@intake24/api/food-index/phrase-index';
 
-export default class EnglishWordOps implements WordOps {
-  // eslint-disable-next-line class-methods-use-this
+const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g);
+
+export default {
+  indexIgnore: ['and', 'the', 'with', 'from'],
+
   splitCompound(word: string): Array<string> {
     return new Array<string>(word);
-  }
+  },
 
-  // eslint-disable-next-line class-methods-use-this
   stem(word: string): string {
     return word;
-  }
-}
+  },
+
+  sanitiseDescription(description: string): string {
+    return description.replace(sanitiseRegexp, '');
+  },
+} as WordOps;

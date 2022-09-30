@@ -12,11 +12,21 @@ export type AppConfig = {
   secret: string;
 
   urls: SiteUrls;
+
+  enabledLocales: string[] | null;
 };
 
 const host = 'localhost';
 const port = 3100;
 const domain = `http://${host}:${port}`;
+
+// null stands for "all locales"
+function parseLocaleList(list: string | undefined): string[] | null {
+  if (list === undefined)
+    throw new Error('Missing required configuration setting: APP_ENABLED_LOCALES');
+  if (list.trim() === '*') return null;
+  return JSON.parse(list) as string[];
+}
 
 const appConfig: AppConfig = {
   env: (process.env.NODE_ENV || 'development') as Environment,
@@ -33,6 +43,8 @@ const appConfig: AppConfig = {
     images: process.env.APP_URL_IMAGES || `${domain}/images`,
     docs: process.env.APP_URL_DOCS || '/docs',
   },
+
+  enabledLocales: parseLocaleList(process.env.APP_ENABLED_LOCALES),
 };
 
 export default appConfig;

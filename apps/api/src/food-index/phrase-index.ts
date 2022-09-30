@@ -17,8 +17,12 @@ export interface PhraseWithKey<K> {
 }
 
 export interface WordOps {
-  stem(word: string): string;
+  indexIgnore: string[];
 
+  phoneticEncoder: PhoneticEncoder | undefined;
+
+  sanitiseDescription(description: string): string;
+  stem(word: string): string;
   splitCompound(word: string): Array<string>;
 }
 
@@ -52,8 +56,6 @@ export interface PhraseMatchResult<K> {
 }
 
 export class PhraseIndex<K> {
-  readonly indexFilter: Array<string>;
-
   readonly wordOps: WordOps;
 
   readonly dictionary: RichDictionary;
@@ -63,14 +65,10 @@ export class PhraseIndex<K> {
   readonly wordIndex: Map<string, Array<[number, number]>>;
 
   getWordList(phrase: string): Array<string> {
-    let p = phrase.toLocaleLowerCase();
-
-    for (const filterWord of this.indexFilter) {
-      p = p.replace(filterWord, ' ');
-    }
+    const sanitised = this.wordOps.sanitiseDescription(phrase.toLocaleLowerCase());
 
     return (
-      p
+      sanitised
         .split(/\s+/)
         .filter((s) => s.length > 1)
         // split compound words (e.g. for German and Nordic languages)
@@ -257,14 +255,7 @@ export class PhraseIndex<K> {
     }));
   }
 
-  constructor(
-    phrases: Array<PhraseWithKey<K>>,
-    indexFilter: Array<string>,
-    phoneticEncoder: PhoneticEncoder | undefined,
-    wordOps: WordOps,
-    synonymSets: Array<Set<string>>
-  ) {
-    this.indexFilter = indexFilter.map((s) => s.toLocaleLowerCase());
+  constructor(phrases: Array<PhraseWithKey<K>>, wordOps: WordOps, synonymSets: Array<Set<string>>) {
     this.wordOps = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
     this.wordIndex = new Map<string, Array<[number, number]>>();
@@ -283,6 +274,6 @@ export class PhraseIndex<K> {
       }
     }
 
-    this.dictionary = new RichDictionary(dictionaryWords, phoneticEncoder, synonymSets);
+    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, synonymSets);
   }
 }
