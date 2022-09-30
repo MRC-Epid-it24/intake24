@@ -176,6 +176,7 @@ const locale = (
   const countryFlagCode = faker.address.countryCode();
   const prototypeLocaleId = null;
   const textDirection = 'ltr';
+  const foodIndexLanguageBackendId = 'en';
 
   return {
     id,
@@ -186,6 +187,7 @@ const locale = (
     countryFlagCode,
     prototypeLocaleId,
     textDirection,
+    foodIndexLanguageBackendId,
   };
 };
 

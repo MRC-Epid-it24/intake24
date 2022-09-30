@@ -1,4 +1,5 @@
 import type {
+  FoodIndexBackendAttributes,
   LocaleAttributes,
   Pagination,
   SplitListAttributes,
@@ -19,6 +20,7 @@ export type LocaleRequest = {
   countryFlagCode: string;
   prototypeLocaleId: string | null;
   textDirection: string;
+  foodIndexLanguageBackendId: string;
 };
 
 export type CreateLocaleRequest = LocaleRequest;
@@ -35,6 +37,7 @@ export type LocaleListEntry = Pick<
 >;
 
 export type LocaleRefs = {
+  foodIndexLanguageBackends: FoodIndexBackendAttributes[];
   languages: LanguageListEntry[];
   locales: LocaleListEntry[];
 };

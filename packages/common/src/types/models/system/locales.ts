@@ -9,6 +9,7 @@ export type LocaleAttributes = {
   countryFlagCode: string;
   prototypeLocaleId: string | null;
   textDirection: string;
+  foodIndexLanguageBackendId: string;
 };
 
 export type LocaleCreationAttributes = Optional<

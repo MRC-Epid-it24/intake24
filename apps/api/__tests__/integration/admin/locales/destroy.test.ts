@@ -25,6 +25,7 @@ export default () => {
       countryFlagCode: 'en-au',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexLanguageBackendId: 'en',
     };
 
     await FoodsLocale.create(input);

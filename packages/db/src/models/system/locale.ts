@@ -15,6 +15,7 @@ import { foodDatabasePermissions } from '@intake24/common/security';
 
 import BaseModel from '../model';
 import { Language, Permission, Survey } from '.';
+import FoodIndexBackend from './food-index-backend';
 
 @Scopes(() => ({
   list: {
@@ -85,11 +86,20 @@ export default class Locale
   })
   public textDirection!: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+  })
+  public foodIndexLanguageBackendId!: string;
+
   @BelongsTo(() => Language, 'respondentLanguageId')
   public surveyLanguage?: Language;
 
   @BelongsTo(() => Language, 'adminLanguageId')
   public adminLanguage?: Language;
+
+  @BelongsTo(() => FoodIndexBackend, 'foodIndexLanguageBackendId')
+  public foodIndexLanguageBackend?: FoodIndexBackend;
 
   @BelongsTo(() => Locale, 'prototypeLocaleId')
   public parent?: Locale;

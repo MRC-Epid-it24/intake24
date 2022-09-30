@@ -149,6 +149,27 @@
                 </template>
               </v-select>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.foodIndexLanguageBackendId"
+                :error-messages="form.errors.get('foodIndexLanguageBackendId')"
+                hide-details="auto"
+                :items="foodIndexLanguageBackends"
+                :label="$t('languages.foodIndexLanguageBackend')"
+                name="textDirection"
+                outlined
+                @change="form.errors.clear('foodIndexLanguageBackendId')"
+              >
+                <template #item="{ item }">
+                  <span :class="`fi fi-${item.icon} mr-3`"></span>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <span :class="`fi fi-${item.icon} mr-3`"></span>
+                  {{ item.text }}
+                </template>
+              </v-select>
+            </v-col>
           </v-row>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
@@ -175,6 +196,7 @@ type LocaleForm = {
   adminLanguageId: string;
   countryFlagCode: string | null;
   textDirection: string;
+  foodIndexLanguageBackendId: string;
 };
 
 export default defineComponent({
@@ -201,6 +223,7 @@ export default defineComponent({
         adminLanguageId: 'en',
         countryFlagCode: null,
         textDirection: 'ltr',
+        foodIndexLanguageBackendId: 'en',
       }),
       flags: orderBy(
         Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
@@ -226,6 +249,19 @@ export default defineComponent({
       const availableLocales = this.refs.locales.filter((locale) => locale.id !== this.id);
 
       return [...locales, ...availableLocales];
+    },
+
+    foodIndexLanguageBackends() {
+      if (!this.refs.foodIndexLanguageBackends)
+        return [{ value: 'en', icon: 'gb', text: this.$t('common.none').toString() }];
+
+      return this.refs.foodIndexLanguageBackends.map((backend) => {
+        return {
+          value: backend.id,
+          text: backend.description,
+          icon: backend.flag,
+        };
+      });
     },
   },
 });

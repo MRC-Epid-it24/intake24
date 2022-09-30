@@ -10,6 +10,7 @@ export default async () => {
     prototypeLocaleId: undefined,
     respondentLanguageId: 'en',
     textDirection: 'ltr',
+    foodIndexLanguageBackendId: 'en',
   });
 
   await FoodsLocale.create({
@@ -21,5 +22,6 @@ export default async () => {
     prototypeLocaleId: 'en_GB',
     respondentLanguageId: 'en',
     textDirection: 'ltr',
+    foodIndexLanguageBackendId: 'en',
   });
 };

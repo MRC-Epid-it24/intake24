@@ -1,6 +1,7 @@
 export * from './client-error-reports';
 export * from './feedback-schemes';
 export * from './fixed-food-ranking';
+export * from './food-index-backend';
 export * from './gen-user-counters';
 export * from './jobs';
 export * from './languages';

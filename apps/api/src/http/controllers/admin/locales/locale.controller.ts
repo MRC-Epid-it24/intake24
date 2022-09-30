@@ -6,7 +6,7 @@ import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/
 import type { Job, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { pickJobParams } from '@intake24/common/types';
-import { FoodsLocale, Language, SystemLocale } from '@intake24/db';
+import { FoodIndexBackend, FoodsLocale, Language, SystemLocale } from '@intake24/db';
 
 const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const entry = async (
@@ -47,6 +47,7 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
       'countryFlagCode',
       'prototypeLocaleId',
       'textDirection',
+      'foodIndexLanguageBackendId',
     ]);
 
     const [locale] = await Promise.all([SystemLocale.create(input), FoodsLocale.create(input)]);
@@ -84,6 +85,7 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
       'countryFlagCode',
       'prototypeLocaleId',
       'textDirection',
+      'foodIndexLanguageBackendId',
     ]);
 
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
@@ -114,12 +116,13 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   };
 
   const refs = async (req: Request, res: Response<LocaleRefs>): Promise<void> => {
-    const [languages, locales] = await Promise.all([
+    const [languages, locales, foodIndexLanguageBackends] = await Promise.all([
       Language.scope('list').findAll(),
       SystemLocale.scope('list').findAll(),
+      FoodIndexBackend.scope('list').findAll(),
     ]);
 
-    res.json({ languages, locales });
+    res.json({ languages, locales, foodIndexLanguageBackends });
   };
 
   const tasks = async (req: Request<{ localeId: string }>, res: Response<Job>): Promise<void> => {

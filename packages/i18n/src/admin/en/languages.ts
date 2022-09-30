@@ -18,6 +18,7 @@ const languages: LocaleMessageObject = {
     ltr: 'Left to right',
     rtl: 'Right to left',
   },
+  foodIndexLanguageBackend: 'Food index language backend',
 
   translations: {
     _: 'Translation',

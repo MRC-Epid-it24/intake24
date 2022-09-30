@@ -24,6 +24,7 @@ export default () => {
       countryFlagCode: 'en-bz',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexLanguageBackendId: 'en',
     };
 
     await FoodsLocale.create(input);

@@ -19,6 +19,7 @@ export default () => {
       countryFlagCode: 'en-cb',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexLanguageBackendId: 'en',
     };
     output = { ...input };
   });

@@ -66,6 +66,12 @@ export default class Locale
   })
   public textDirection!: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+  })
+  public foodIndexLanguageBackendId!: string;
+
   @BelongsTo(() => Locale, 'prototypeLocaleId')
   public parent?: Locale | null;
 

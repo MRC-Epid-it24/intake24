@@ -62,6 +62,7 @@ export default () => {
         countryFlagCode: id,
         prototypeLocaleId: null,
         textDirection: 'ltr',
+        foodIndexLanguageBackendId: 'en',
       });
 
       const deleteUrl = `/api/admin/languages/${id}`;

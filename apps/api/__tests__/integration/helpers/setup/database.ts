@@ -232,6 +232,7 @@ export const initDatabase = async (): Promise<MockData> => {
     countryFlagCode: 'gb',
     prototypeLocaleId: null,
     textDirection: 'ltr',
+    foodIndexLanguageBackendId: 'en',
   };
 
   const [foodsLocale, systemLocale] = await Promise.all([

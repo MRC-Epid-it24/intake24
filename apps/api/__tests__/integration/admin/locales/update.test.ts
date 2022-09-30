@@ -25,6 +25,7 @@ export default () => {
       countryFlagCode: 'en-ie',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexLanguageBackendId: 'en',
     };
     updateInput = {
       id: 'en-jm',
@@ -35,6 +36,7 @@ export default () => {
       countryFlagCode: 'en-jm',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexLanguageBackendId: 'en',
     };
 
     const { id } = input;

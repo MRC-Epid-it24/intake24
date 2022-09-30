@@ -1,6 +1,7 @@
 export { default as ClientErrorReport } from './client-error-report';
 export { default as FeedbackScheme } from './feedback-scheme';
 export { default as FixedFoodRanking } from './fixed-food-ranking';
+export { default as FoodIndexBackend } from './food-index-backend';
 export { default as GenUserCounter } from './gen-user-counter';
 export { default as Job } from './job';
 export { default as Language } from './language';
