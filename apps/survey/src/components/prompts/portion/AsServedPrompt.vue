@@ -38,7 +38,7 @@
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="parameters['leftovers-image-set']">
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
               <template #actions>
@@ -73,21 +73,23 @@
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row v-if="leftoverPromptAnswer">
-                <v-col>
-                  {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
-                </v-col>
-              </v-row>
-              <v-row v-if="leftoverPromptAnswer">
-                <v-col>
-                  <as-served-selector
-                    :as-served-set-id="parameters['leftovers-image-set']"
-                    :initial-state="initialState.leftoversImage?.index"
-                    @confirm="leftoversConfirmed"
-                    @update="leftoversUpdate"
-                  ></as-served-selector>
-                </v-col>
-              </v-row>
+              <template v-if="leftoverPromptAnswer">
+                <v-row>
+                  <v-col>
+                    {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <as-served-selector
+                      :as-served-set-id="parameters['leftovers-image-set']"
+                      :initial-state="initialState.leftoversImage?.index"
+                      @confirm="leftoversConfirmed"
+                      @update="leftoversUpdate"
+                    ></as-served-selector>
+                  </v-col>
+                </v-row>
+              </template>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -178,20 +180,23 @@ export default defineComponent({
   },
 
   computed: {
+    hasLeftovers() {
+      return !!this.parameters['leftovers-image-set'];
+    },
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
     isValid(): boolean {
-      // Haven't filled in asServed, or answered leftover
-      if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
+      // Haven't filled in asServed
+      if (!this.asServedData || !this.servingCompleteStatus) return false;
 
-      // asServed is complete, leftoverPromptAnswer is false (no leftover)
-      if (this.asServedData && this.leftoverPromptAnswer === false) return true;
+      // Food has no leftovers
+      if (!this.hasLeftovers) return true;
 
-      // Both asServed and leftoverData are full
-      if (this.asServedData && this.leftoverData) return true;
+      // Haven't filled in leftovers
+      if (!this.leftoverData || !this.leftoverCompleteStatus) return false;
 
-      return false;
+      return true;
     },
   },
 

@@ -22,7 +22,7 @@ export interface UserPortionSizeMethodParameters {
 
 export interface AsServedParameters {
   'serving-image-set': string;
-  'leftovers-image-set': string;
+  'leftovers-image-set'?: string;
 }
 
 export interface GuideImageParameters {

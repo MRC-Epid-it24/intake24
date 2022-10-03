@@ -75,8 +75,9 @@ export default defineComponent({
         state.leftoversImage !== null &&
         state.leftoversImageSelected;
       const leftoversSkipped = state.leftoversConfirmed === false;
+      const noLeftovers = !this.parameters['leftovers-image-set'];
 
-      return servingValid && (leftoversSkipped || leftoversConfirmedAndValid);
+      return servingValid && (noLeftovers || leftoversSkipped || leftoversConfirmedAndValid);
     },
 
     async commitAnswer() {
