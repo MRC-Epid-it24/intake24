@@ -119,6 +119,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+      
+      - name: API - use Github test environment file to build the workers with
+        working-directory: apps/api
+        run: cp __tests__/.env-test-gh .env
 
       - name: API - build
         working-directory: apps/api
