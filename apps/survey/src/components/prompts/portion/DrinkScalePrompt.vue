@@ -48,6 +48,7 @@
                 :selected-image-url="selectionImageUrl"
                 :selected-max-slider-value="maxSliderValue"
                 :selected-min-slider-value="minFillLevel"
+                :selected-object-idx="selectedObjectIdx"
                 :selected-origin-image-height="originalImageUrlHeight"
                 :selected-origin-image-width="originalImageUrlWidth"
                 :selected-slider-value="sliderValue"

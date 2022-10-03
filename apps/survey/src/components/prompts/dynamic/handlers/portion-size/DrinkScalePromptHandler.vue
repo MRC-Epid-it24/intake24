@@ -106,10 +106,10 @@ export default defineComponent({
 
     isValid(state: DrinkScalePromptState | null): boolean {
       if (state === null) return false;
-      console.warn(
-        'Validation check: ',
-        state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed
-      );
+      // console.warn(
+      //   'Validation check: ',
+      //   state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed
+      // );
       return state.objectIdx !== undefined && state.objectConfirmed && state.drinkConfirmed;
     },
 
