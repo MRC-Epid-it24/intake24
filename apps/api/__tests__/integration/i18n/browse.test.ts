@@ -16,7 +16,13 @@ export default () => {
     expect(body).not.toBeEmpty();
 
     for (const language of body) {
-      expect(language).toContainAllKeys(['id', 'englishName', 'localName', 'countryFlagCode']);
+      expect(language).toContainAllKeys([
+        'code',
+        'englishName',
+        'localName',
+        'countryFlagCode',
+        'textDirection',
+      ]);
     }
   });
 };

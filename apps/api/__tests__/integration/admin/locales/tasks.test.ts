@@ -16,26 +16,29 @@ export default () => {
 
   beforeAll(async () => {
     sourceLocaleId = suite.data.system.locale.id;
-    const langId = suite.data.system.language.id;
+    const { code } = suite.data.system.language;
 
-    const localeInput = mocker.system.locale(langId, langId);
+    const localeInput = mocker.system.locale(code, code);
 
-    await Promise.all([FoodsLocale.create(localeInput), SystemLocale.create(localeInput)]);
+    const [locale] = await Promise.all([
+      SystemLocale.create(localeInput),
+      FoodsLocale.create({ ...localeInput, id: localeInput.code }),
+    ]);
 
     input = {
       job: 'PairwiseSearchCopyAssociations',
       params: {
         sourceLocaleId,
-        targetLocaleId: localeInput.id,
+        targetLocaleId: locale.id,
       },
     };
 
     url = `${baseUrl}/${sourceLocaleId}/tasks`;
-    invalidUrl = `${baseUrl}/invalid-locale/tasks`;
+    invalidUrl = `${baseUrl}/999999/tasks`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url, { permissions });
+    await suite.sharedTests.assert401and403('post', url, { input, permissions });
   });
 
   describe('authenticated / resource authorized', () => {

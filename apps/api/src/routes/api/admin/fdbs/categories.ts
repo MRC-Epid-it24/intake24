@@ -12,21 +12,17 @@ export default () => {
   router
     .route('')
     .post(permission('fdbs|create'), wrapAsync(adminCategoryController.store))
-    .get(permission('fdbs|read'), validation.browse, wrapAsync(adminCategoryController.browse));
+    .get(validation.browse, wrapAsync(adminCategoryController.browse));
 
-  router.get('/root', permission('fdbs|read'), wrapAsync(adminCategoryController.root));
+  router.get('/root', wrapAsync(adminCategoryController.root));
 
   router
     .route('/:categoryId')
-    .get(permission('fdbs|read'), wrapAsync(adminCategoryController.read))
-    .put(permission('fdbs|edit'), validation.update, wrapAsync(adminCategoryController.update))
-    .delete(permission('fdbs|delete'), wrapAsync(adminCategoryController.destroy));
+    .get(wrapAsync(adminCategoryController.read))
+    .put(validation.update, wrapAsync(adminCategoryController.update))
+    .delete(wrapAsync(adminCategoryController.destroy));
 
-  router.get(
-    '/:categoryId/contents',
-    permission('fdbs|read'),
-    wrapAsync(adminCategoryController.contents)
-  );
+  router.get('/:categoryId/contents', wrapAsync(adminCategoryController.contents));
 
   return router;
 };

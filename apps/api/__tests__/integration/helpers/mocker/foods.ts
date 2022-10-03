@@ -5,7 +5,7 @@ import slugify from 'slugify';
 
 import type {
   CreateAsServedSetInput,
-  CreateLocaleRequest,
+  // CreateLocaleRequest,
   NutrientTableInput,
   NutrientTypeRequest,
   NutrientUnitRequest,
@@ -41,7 +41,7 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
   };
 };
 
-const locale = (
+/* const locale = (
   respLangId: string | undefined,
   adminLangId: string | undefined
 ): CreateLocaleRequest => {
@@ -66,7 +66,7 @@ const locale = (
     textDirection,
     foodIndexLanguageBackendId,
   };
-};
+}; */
 
 const nutrientTable = (): NutrientTableInput => {
   return {
@@ -123,7 +123,7 @@ export default {
   food,
   foodGroup,
   asServedSet,
-  locale,
+  // locale,
   nutrientTable,
   nutrientType,
   nutrientUnit,

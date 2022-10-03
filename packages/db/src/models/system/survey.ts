@@ -104,7 +104,7 @@ export default class Survey
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.BIGINT,
   })
   public localeId!: string;
 

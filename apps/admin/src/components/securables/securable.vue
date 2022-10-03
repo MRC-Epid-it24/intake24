@@ -52,7 +52,7 @@ import { defineComponent, ref } from 'vue';
 import type { SecurableType } from '@intake24/common/security';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { securableDefs } from '@intake24/common/security';
-import { securableToResource } from '@intake24/common/util';
+import { getResourceFromSecurable } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type { Owner } from './owner-dialog.vue';
@@ -88,7 +88,7 @@ export default defineComponent({
 
   data() {
     const { securableType } = this;
-    const resource = securableToResource(securableType);
+    const resource = getResourceFromSecurable(securableType);
     const actions = securableDefs[securableType];
 
     return {

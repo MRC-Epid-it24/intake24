@@ -26,15 +26,19 @@ const surveyRespondentController = ({
 
     const survey = await Survey.findOne({
       where: { slug },
-      include: [{ association: 'surveyScheme' }, { association: 'feedbackScheme' }],
+      include: [
+        { association: 'surveyScheme' },
+        { association: 'feedbackScheme' },
+        { association: 'locale', attributes: ['id', 'code'] },
+      ],
     });
-    if (!survey || !survey.surveyScheme) throw new NotFoundError();
+    if (!survey || !survey.locale || !survey.surveyScheme) throw new NotFoundError();
 
     const {
       id,
       name,
       state,
-      localeId,
+      locale,
       surveyScheme,
       feedbackScheme,
       numberOfSubmissionsForFeedback,
@@ -74,7 +78,7 @@ const surveyRespondentController = ({
       slug,
       name,
       state,
-      localeId,
+      locale,
       surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, questions },
       feedbackScheme,
       numberOfSubmissionsForFeedback,

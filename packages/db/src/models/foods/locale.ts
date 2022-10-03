@@ -1,7 +1,10 @@
 /* eslint-disable no-use-before-define */
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import type { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
+import type {
+  FoodsLocaleAttributes,
+  FoodsLocaleCreationAttributes,
+} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
@@ -14,8 +17,8 @@ import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
   underscored: true,
 })
 export default class Locale
-  extends BaseModel<LocaleAttributes, LocaleCreationAttributes>
-  implements LocaleAttributes
+  extends BaseModel<FoodsLocaleAttributes, FoodsLocaleCreationAttributes>
+  implements FoodsLocaleAttributes
 {
   @Column({
     primaryKey: true,
@@ -68,6 +71,7 @@ export default class Locale
 
   @Column({
     allowNull: false,
+    defaultValue: 'en',
     type: DataType.STRING(16),
   })
   public foodIndexLanguageBackendId!: string;

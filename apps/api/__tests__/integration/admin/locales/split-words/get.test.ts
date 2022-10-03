@@ -14,17 +14,17 @@ export default () => {
   let splitWords: LocaleSplitWordInput[];
 
   beforeAll(async () => {
-    const { id: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.locale;
 
     splitWords = [
       { localeId, words: 'first1 first2 first3' },
       { localeId, words: 'second1 second2 second3' },
     ];
 
-    await ioc.cradle.localeService.setSplitWords(localeId, splitWords);
+    await ioc.cradle.localeService.setSplitWords(id, splitWords);
 
-    url = `${baseUrl}/${localeId}/split-words`;
-    invalidUrl = `${baseUrl}/invalid-locale/split-words`;
+    url = `${baseUrl}/${id}/split-words`;
+    invalidUrl = `${baseUrl}/999999/split-words`;
   });
 
   test('missing authentication / authorization', async () => {

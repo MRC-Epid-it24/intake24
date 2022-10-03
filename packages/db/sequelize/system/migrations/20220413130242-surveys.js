@@ -197,6 +197,12 @@ module.exports = {
         transaction,
       });
 
+      await queryInterface.addIndex('surveys', ['locale_id'], {
+        name: 'surveys_locale_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
       await queryInterface.addConstraint('surveys', {
         fields: ['survey_scheme_id'],
         type: 'foreign key',
@@ -210,6 +216,12 @@ module.exports = {
         transaction,
       });
 
+      await queryInterface.addIndex('surveys', ['survey_scheme_id'], {
+        name: 'surveys_survey_scheme_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
       await queryInterface.addConstraint('surveys', {
         fields: ['feedback_scheme_id'],
         type: 'foreign key',
@@ -220,6 +232,31 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'restrict',
         name: 'surveys_feedback_scheme_id_fk',
+        transaction,
+      });
+
+      await queryInterface.addIndex('surveys', ['feedback_scheme_id'], {
+        name: 'surveys_feedback_scheme_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addConstraint('surveys', {
+        fields: ['owner_id'],
+        type: 'foreign key',
+        references: {
+          table: 'users',
+          field: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
+        name: 'surveys_owner_id_fk',
+        transaction,
+      });
+
+      await queryInterface.addIndex('surveys', ['owner_id'], {
+        name: 'surveys_owner_id_idx',
+        indexType: 'btree',
         transaction,
       });
 

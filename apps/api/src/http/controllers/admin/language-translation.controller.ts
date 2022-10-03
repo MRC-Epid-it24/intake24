@@ -2,6 +2,9 @@ import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
+import { Language } from '@intake24/db';
+
+import { getAndCheckAccess } from './securable.controller';
 
 const languageTranslationController = ({ languageService }: Pick<IoC, 'languageService'>) => {
   const browse = async (
@@ -9,6 +12,8 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     res: Response<LanguageTranslationsResponse>
   ): Promise<void> => {
     const { languageId } = req.params;
+
+    await getAndCheckAccess(Language, 'translations', req);
 
     const translations = await languageService.getLanguageTranslations(languageId);
 
@@ -22,6 +27,8 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     const {
       params: { languageId },
     } = req;
+
+    await getAndCheckAccess(Language, 'translations', req);
 
     const translations = await languageService.getOrCreateLanguageTranslations(languageId);
 
@@ -37,6 +44,8 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
       params: { languageId },
     } = req;
 
+    await getAndCheckAccess(Language, 'translations', req);
+
     const translations = await languageService.updateLanguageTranslations(
       languageId,
       body.translations
@@ -51,6 +60,8 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
   ): Promise<void> => {
     const { languageId } = req.params;
 
+    await getAndCheckAccess(Language, 'translations', req);
+
     await languageService.deleteLanguageTranslations(languageId);
 
     res.status(204).json();
@@ -63,6 +74,8 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     const {
       params: { languageId },
     } = req;
+
+    await getAndCheckAccess(Language, 'translations', req);
 
     await languageService.syncLanguageTranslations(languageId);
     const translations = await languageService.getLanguageTranslations(languageId);

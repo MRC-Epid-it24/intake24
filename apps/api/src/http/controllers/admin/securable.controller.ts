@@ -13,13 +13,29 @@ import type {
   UserSecurableCreationAttributes,
 } from '@intake24/common/types/models';
 import type { ModelStatic, PaginateQuery, Securable } from '@intake24/db';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import { isSecurableType } from '@intake24/common/security';
-import { randomString, securableToResource } from '@intake24/common/util';
-import { Op, securableScope, User, UserSecurable } from '@intake24/db';
+import {
+  getRequestParamFromSecurable,
+  getResourceFromSecurable,
+  randomString,
+} from '@intake24/common/util';
+import { Op, User, UserSecurable } from '@intake24/db';
 
-const securableController = ({
+export const getAndCheckAccess = async <T extends Securable>(
+  securable: ModelStatic<T>,
+  action: string,
+  req: Request,
+  scope?: string | string[]
+): Promise<T> => {
+  const { aclService } = req.scope.cradle;
+  const { params } = req;
+
+  return aclService.getAndCheckRecordAccess(securable, action, { params, scope });
+};
+
+export const securableController = ({
   securable,
   ioc: { adminUserService },
 }: {
@@ -29,24 +45,8 @@ const securableController = ({
   const securableType = securable.name;
   if (!isSecurableType(securableType)) throw Error('Invalid securable type');
 
-  const resource = securableToResource(securableType);
-  const paramId = `${securableType[0].toLowerCase()}${securableType.substring(1)}Id`;
-
-  const getAndCheckAccess = async (req: Request, action: string): Promise<Securable> => {
-    const { [paramId]: securableId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    const record = await securable.findByPk(securableId, securableScope(userId));
-    if (!record) throw new NotFoundError();
-
-    if (
-      (await aclService.hasPermission(`${resource}|${action}`)) ||
-      (await aclService.canAccessRecord(record, action))
-    )
-      return record;
-
-    throw new ForbiddenError();
-  };
+  const resource = getResourceFromSecurable(securableType);
+  const paramId = getRequestParamFromSecurable(securableType);
 
   const addSecurableAccess = async (
     user: User,
@@ -84,7 +84,7 @@ const securableController = ({
     req: Request<Record<string, string>, any, any, PaginateQuery>,
     res: Response<UsersWithSecurablesResponse>
   ): Promise<void> => {
-    await getAndCheckAccess(req as Request, 'securables');
+    await getAndCheckAccess(securable, 'securables', req as Request);
 
     const { [paramId]: securableId } = req.params;
 
@@ -104,7 +104,7 @@ const securableController = ({
     req: Request<Record<string, string>, any, CreateUserWithSecurables>,
     res: Response<undefined>
   ): Promise<void> => {
-    await getAndCheckAccess(req, 'securables');
+    await getAndCheckAccess(securable, 'securables', req);
 
     const {
       params: { [paramId]: securableId },
@@ -140,7 +140,7 @@ const securableController = ({
     } = req;
 
     const [, user] = await Promise.all([
-      getAndCheckAccess(req, 'securables'),
+      getAndCheckAccess(securable, 'securables', req),
       User.findOne({
         where: { id: userId, email: { [Op.ne]: null } },
         include: [
@@ -154,7 +154,9 @@ const securableController = ({
 
     if (actions.length) {
       const currentActions = user.securables?.map((sec) => sec.action).sort() ?? [];
-      const actionsMatch = actions.sort().every((action, idx) => action === currentActions[idx]);
+      const actionsMatch =
+        actions.length === currentActions.length &&
+        actions.sort().every((action, idx) => action === currentActions[idx]);
 
       if (!actionsMatch) {
         const records = actions.map((action) => ({ ...securableInput, action }));
@@ -173,7 +175,7 @@ const securableController = ({
     } = req;
 
     const [, user] = await Promise.all([
-      getAndCheckAccess(req, 'securables'),
+      getAndCheckAccess(securable, 'securables', req),
       User.findOne({ where: { id: userId, email: { [Op.ne]: null } } }),
     ]);
     if (!user) throw new NotFoundError();
@@ -187,7 +189,7 @@ const securableController = ({
     req: Request<Record<string, string>, any, any, PaginateQuery>,
     res: Response<AvailableUsersWithSecurablesResponse>
   ): Promise<void> => {
-    await getAndCheckAccess(req as Request, 'securables');
+    await getAndCheckAccess(securable, 'securables', req as Request);
 
     const {
       params: { [paramId]: securableId },
@@ -231,7 +233,7 @@ const securableController = ({
     req: Request<Record<string, string>, any, UpdateSecurableOwnerRequest>,
     res: Response<undefined>
   ): Promise<void> => {
-    const securableRecord = await getAndCheckAccess(req, 'securables');
+    const securableRecord = await getAndCheckAccess(securable, 'securables', req);
 
     const {
       body: { userId },
@@ -251,7 +253,5 @@ const securableController = ({
     owner,
   };
 };
-
-export default securableController;
 
 export type SecurableController = ReturnType<typeof securableController>;

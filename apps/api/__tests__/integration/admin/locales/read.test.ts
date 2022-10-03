@@ -1,4 +1,4 @@
-import type { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
@@ -9,25 +9,25 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: LocaleAttributes;
-  let output: LocaleAttributes;
+  let input: LocaleCreationAttributes;
+  let output: LocaleCreationAttributes;
   let systemLocale: SystemLocale;
 
   beforeAll(async () => {
-    const { id: langId } = suite.data.system.language;
+    const { code } = suite.data.system.language;
     input = {
-      id: 'en-bz',
+      code: 'en-bz',
       englishName: 'English - Belize',
       localName: 'English - Belize',
-      respondentLanguageId: langId,
-      adminLanguageId: langId,
+      respondentLanguageId: code,
+      adminLanguageId: code,
       countryFlagCode: 'en-bz',
       prototypeLocaleId: null,
       textDirection: 'ltr',
       foodIndexLanguageBackendId: 'en',
     };
 
-    await FoodsLocale.create(input);
+    await FoodsLocale.create({ id: input.code, ...input });
     systemLocale = await SystemLocale.create(input);
 
     output = { ...input };

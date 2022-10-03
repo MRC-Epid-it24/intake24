@@ -6,7 +6,7 @@ import type {
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { FoodsLocale, Op, SplitList, SplitWord, SynonymSet } from '@intake24/db';
+import { Op, SplitList, SplitWord, SynonymSet, SystemLocale } from '@intake24/db';
 
 export type QueueLocaleTaskInput = {
   userId: string;
@@ -15,27 +15,30 @@ export type QueueLocaleTaskInput = {
 };
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
-  const getSplitLists = async (localeId: string) => {
-    const locale = await FoodsLocale.findByPk(localeId, {
-      include: { association: 'splitLists', order: [['id', 'ASC']] },
-    });
+  const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
+    const locale = typeof localeId === 'string' ? await SystemLocale.findByPk(localeId) : localeId;
     if (!locale) throw new NotFoundError();
 
-    const { splitLists = [] } = locale;
+    return locale;
+  };
+  const getSplitLists = async (localeId: string | SystemLocale) => {
+    const { code } = await resolveLocale(localeId);
 
-    return splitLists;
+    return SplitList.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
   };
 
-  const setSplitLists = async (localeId: string, splitLists: LocaleSplitListInput[]) => {
-    const locale = await FoodsLocale.findByPk(localeId);
-    if (!locale) throw new NotFoundError();
+  const setSplitLists = async (
+    localeId: string | SystemLocale,
+    splitLists: LocaleSplitListInput[]
+  ) => {
+    const { code } = await resolveLocale(localeId);
 
     const ids = splitLists.map(({ id }) => id) as string[];
-    await SplitList.destroy({ where: { localeId, id: { [Op.notIn]: ids } } });
+    await SplitList.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
     if (!splitLists.length) return [];
 
-    const records = await SplitList.findAll({ where: { localeId }, order: [['id', 'ASC']] });
+    const records = await SplitList.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SplitList[] = [];
 
     for (const splitList of splitLists) {
@@ -49,34 +52,31 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
         }
       }
 
-      const newRecord = await SplitList.create({ localeId, firstWord, words });
+      const newRecord = await SplitList.create({ localeId: code, firstWord, words });
       newRecords.push(newRecord);
     }
 
     return [...records, ...newRecords];
   };
 
-  const getSplitWords = async (localeId: string) => {
-    const locale = await FoodsLocale.findByPk(localeId, {
-      include: { association: 'splitWords', order: [['id', 'ASC']] },
-    });
-    if (!locale) throw new NotFoundError();
+  const getSplitWords = async (localeId: string | SystemLocale) => {
+    const { code } = await resolveLocale(localeId);
 
-    const { splitWords = [] } = locale;
-
-    return splitWords;
+    return SplitWord.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
   };
 
-  const setSplitWords = async (localeId: string, splitWords: LocaleSplitWordInput[]) => {
-    const locale = await FoodsLocale.findByPk(localeId);
-    if (!locale) throw new NotFoundError();
+  const setSplitWords = async (
+    localeId: string | SystemLocale,
+    splitWords: LocaleSplitWordInput[]
+  ) => {
+    const { code } = await resolveLocale(localeId);
 
     const ids = splitWords.map(({ id }) => id) as string[];
-    await SplitWord.destroy({ where: { localeId, id: { [Op.notIn]: ids } } });
+    await SplitWord.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
     if (!splitWords.length) return [];
 
-    const records = await SplitWord.findAll({ where: { localeId }, order: [['id', 'ASC']] });
+    const records = await SplitWord.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SplitWord[] = [];
 
     for (const splitWord of splitWords) {
@@ -90,34 +90,31 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
         }
       }
 
-      const newRecord = await SplitWord.create({ localeId, words });
+      const newRecord = await SplitWord.create({ localeId: code, words });
       newRecords.push(newRecord);
     }
 
     return [...records, ...newRecords];
   };
 
-  const getSynonymSets = async (localeId: string) => {
-    const locale = await FoodsLocale.findByPk(localeId, {
-      include: { association: 'synonymSets', order: [['id', 'ASC']] },
-    });
-    if (!locale) throw new NotFoundError();
+  const getSynonymSets = async (localeId: string | SystemLocale) => {
+    const { code } = await resolveLocale(localeId);
 
-    const { synonymSets = [] } = locale;
-
-    return synonymSets;
+    return SynonymSet.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
   };
 
-  const setSynonymSets = async (localeId: string, synonymSets: LocaleSynonymSetInput[]) => {
-    const locale = await FoodsLocale.findByPk(localeId);
-    if (!locale) throw new NotFoundError();
+  const setSynonymSets = async (
+    localeId: string | SystemLocale,
+    synonymSets: LocaleSynonymSetInput[]
+  ) => {
+    const { code } = await resolveLocale(localeId);
 
     const ids = synonymSets.map(({ id }) => id) as string[];
-    await SynonymSet.destroy({ where: { localeId, id: { [Op.notIn]: ids } } });
+    await SynonymSet.destroy({ where: { localeId: code, id: { [Op.notIn]: ids } } });
 
     if (!synonymSets.length) return [];
 
-    const records = await SynonymSet.findAll({ where: { localeId }, order: [['id', 'ASC']] });
+    const records = await SynonymSet.findAll({ where: { localeId: code }, order: [['id', 'ASC']] });
     const newRecords: SynonymSet[] = [];
 
     for (const synonymSet of synonymSets) {
@@ -131,7 +128,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
         }
       }
 
-      const newRecord = await SynonymSet.create({ localeId, synonyms });
+      const newRecord = await SynonymSet.create({ localeId: code, synonyms });
       newRecords.push(newRecord);
     }
 

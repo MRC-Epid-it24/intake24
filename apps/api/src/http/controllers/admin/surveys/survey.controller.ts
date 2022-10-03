@@ -17,6 +17,7 @@ import {
   FeedbackScheme,
   Language,
   Op,
+  securableIncludes,
   securableScope,
   Survey,
   SurveyScheme,
@@ -24,24 +25,10 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import securableController from '../securable.controller';
+import { getAndCheckAccess, securableController } from '../securable.controller';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
-};
-
-export const getAndCheckSurveyAccess = async (
-  req: Request<{ surveyId: string }>,
-  action: string,
-  scope?: string | string[]
-): Promise<Survey> => {
-  const { surveyId } = req.params;
-  const { aclService, userId } = req.scope.cradle;
-
-  return aclService.getAndCheckRecordAccess(
-    Survey.scope(scope).findByPk(surveyId, securableScope(userId)),
-    action
-  );
 };
 
 const adminSurveyController = (ioc: IoC) => {
@@ -55,6 +42,10 @@ const adminSurveyController = (ioc: IoC) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['slug', 'name'],
       order: [['name', 'ASC']],
+      include: [
+        { association: 'locale', attributes: ['code'] },
+        { association: 'surveyScheme', attributes: ['name'] },
+      ],
       transform: surveyListResponse,
     };
 
@@ -67,7 +58,11 @@ const adminSurveyController = (ioc: IoC) => {
     const surveys = await Survey.paginate({
       ...paginateOptions,
       where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
-      ...securableScope(userId),
+      include: [
+        { association: 'locale', attributes: ['code'] },
+        { association: 'surveyScheme', attributes: ['name'] },
+        ...securableIncludes(userId),
+      ],
       subQuery: false,
     });
 
@@ -95,7 +90,7 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
   ): Promise<void> => {
-    const survey = await getAndCheckSurveyAccess(req, 'read', [
+    const survey = await getAndCheckAccess(Survey, 'read', req, [
       'locale',
       'feedbackScheme',
       'surveyScheme',
@@ -108,7 +103,7 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
   ): Promise<void> => {
-    const survey = await getAndCheckSurveyAccess(req, 'edit', [
+    const survey = await getAndCheckAccess(Survey, 'edit', req, [
       'locale',
       'feedbackScheme',
       'surveyScheme',
@@ -118,7 +113,11 @@ const adminSurveyController = (ioc: IoC) => {
   };
 
   const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyEntry>) => {
-    const survey = await getAndCheckSurveyAccess(req, 'edit');
+    const survey = await getAndCheckAccess(Survey, 'edit', req, [
+      'locale',
+      'feedbackScheme',
+      'surveyScheme',
+    ]);
 
     await survey.update(
       pick(req.body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields])
@@ -133,7 +132,7 @@ const adminSurveyController = (ioc: IoC) => {
   ): Promise<void> => {
     const { aclService, userId } = req.scope.cradle;
 
-    const survey = await getAndCheckSurveyAccess(req, 'edit', [
+    const survey = await getAndCheckAccess(Survey, 'edit', req, [
       'locale',
       'feedbackScheme',
       'surveyScheme',
@@ -175,7 +174,7 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const survey = await getAndCheckSurveyAccess(req, 'delete', 'submissions');
+    const survey = await getAndCheckAccess(Survey, 'delete', req, 'submissions');
     const { id: securableId, submissions } = survey;
 
     if (!submissions || submissions.length)

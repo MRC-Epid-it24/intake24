@@ -1,3 +1,4 @@
+import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { LanguageCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { Language } from '@intake24/db';
@@ -13,9 +14,11 @@ export default () => {
   let output: LanguageCreationAttributes;
   let language: Language;
 
+  let securable: SetSecurableOptions;
+
   beforeAll(async () => {
     input = {
-      id: 'es-cl',
+      code: 'es-cl',
       englishName: 'Spanish - Chile',
       localName: 'Spanish - Chile',
       countryFlagCode: 'es-cl',
@@ -23,6 +26,8 @@ export default () => {
     };
     language = await Language.create(input);
     output = { ...input };
+
+    securable = { securableId: language.id, securableType: 'Language' };
 
     url = `${baseUrl}/${language.id}`;
     invalidUrl = `${baseUrl}/999999`;
@@ -42,6 +47,25 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
+      await suite.sharedTests.assertRecord('get', url, output);
+    });
+  });
+
+  describe('authenticated / securables authorized', () => {
+    beforeAll(async () => {
+      await suite.util.setPermission(['languages']);
+    });
+
+    it('should return 200 and data when securable set', async () => {
+      await suite.util.setSecurable({ ...securable, action: ['read'] });
+
+      await suite.sharedTests.assertRecord('get', url, output);
+    });
+
+    it('should return 200 and data when owner set', async () => {
+      await suite.util.setSecurable(securable);
+      await language.update({ ownerId: suite.data.system.user.id });
+
       await suite.sharedTests.assertRecord('get', url, output);
     });
   });

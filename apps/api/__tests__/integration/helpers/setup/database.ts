@@ -10,6 +10,7 @@ import {
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
 import {
   FeedbackScheme,
+  FoodIndexBackend,
   FoodsLocale,
   FoodsNutrientType,
   FoodsNutrientUnit,
@@ -115,6 +116,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'languages|create', displayName: 'Create languages' },
     { name: 'languages|edit', displayName: 'Edit languages' },
     { name: 'languages|delete', displayName: 'Delete languages' },
+    { name: 'languages|security', displayName: 'Languages security' },
     { name: 'languages|translations', displayName: 'Language translations' },
     { name: 'locales', displayName: 'Locales resource access' },
     { name: 'locales|browse', displayName: 'Browse locales' },
@@ -122,6 +124,9 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'locales|create', displayName: 'Create locales' },
     { name: 'locales|edit', displayName: 'Edit locales' },
     { name: 'locales|delete', displayName: 'Delete locales' },
+    { name: 'locales|copy', displayName: 'Copy locales' },
+    { name: 'locales|food-list', displayName: 'Locale food list' },
+    { name: 'locales|security', displayName: 'Locales security' },
     { name: 'locales|split-lists', displayName: 'Locale split lists' },
     { name: 'locales|split-words', displayName: 'Locale split words' },
     { name: 'locales|synonym-sets', displayName: 'Locale synonym sets' },
@@ -215,8 +220,10 @@ export const setupPermissions = async (): Promise<void> => {
 };
 
 export const initDatabase = async (): Promise<MockData> => {
+  await FoodIndexBackend.create({ id: 'en', flag: 'gb', description: 'English' });
+
   const language = await Language.create({
-    id: 'en',
+    code: 'en',
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
     countryFlagCode: 'gb',
@@ -224,11 +231,10 @@ export const initDatabase = async (): Promise<MockData> => {
   });
 
   const localeInput = {
-    id: 'en_GB',
     englishName: 'United Kingdom',
     localName: 'United Kingdom',
-    respondentLanguageId: language.id,
-    adminLanguageId: language.id,
+    respondentLanguageId: language.code,
+    adminLanguageId: language.code,
     countryFlagCode: 'gb',
     prototypeLocaleId: null,
     textDirection: 'ltr',
@@ -236,8 +242,8 @@ export const initDatabase = async (): Promise<MockData> => {
   };
 
   const [foodsLocale, systemLocale] = await Promise.all([
-    FoodsLocale.create(localeInput),
-    SystemLocale.create(localeInput),
+    FoodsLocale.create({ id: 'en_GB', ...localeInput }),
+    SystemLocale.create({ code: 'en_GB', ...localeInput }),
   ]);
 
   const nutrientUnits = [

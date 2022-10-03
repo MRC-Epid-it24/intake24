@@ -15,7 +15,7 @@ export default () => {
 
   beforeAll(async () => {
     input = {
-      id: 'es-co',
+      code: 'es-co',
       englishName: 'Spanish - Colombia',
       localName: 'Spanish - Colombia',
       countryFlagCode: 'es-co',

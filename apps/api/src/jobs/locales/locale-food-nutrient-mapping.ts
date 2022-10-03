@@ -10,7 +10,7 @@ import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { EMPTY } from '@intake24/api/services/admin/data-export';
 import { addTime } from '@intake24/api/util';
-import { FoodLocal, FoodsNutrientType, Job as DbJob } from '@intake24/db';
+import { FoodLocal, FoodsNutrientType, Job as DbJob, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -51,13 +51,18 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
   private async prepareExportInfo() {
     const { localeId } = this.params;
+    const locale = await SystemLocale.findByPk(localeId);
+    if (!locale) throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
+
+    const { code: localeCode } = locale;
+
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `${slugify(this.name)}-${localeId}-${timestamp}.csv`;
+    const filename = `${slugify(this.name)}-${localeCode}-${timestamp}.csv`;
 
     const [nutrients, total] = await Promise.all([
       FoodsNutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
       FoodLocal.count({
-        where: { localeId },
+        where: { localeId: localeCode },
         include: [{ association: 'main' }],
       }),
     ]);
@@ -109,7 +114,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
       },
     ];
 
-    return { filename, fields, total, transforms };
+    return { localeCode, filename, fields, total, transforms };
   }
 
   /**
@@ -120,8 +125,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
    * @memberof LocaleFoodNutrientMapping
    */
   private async exportData(): Promise<void> {
-    const { localeId } = this.params;
-    const { fields, filename, total, transforms } = await this.prepareExportInfo();
+    const { localeCode, fields, filename, total, transforms } = await this.prepareExportInfo();
 
     this.initProgress(total);
 
@@ -135,7 +139,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = FoodLocal.findAllWithStream({
-        where: { localeId },
+        where: { localeId: localeCode },
         include: [
           { association: 'main' },
           { association: 'nutrientRecords', include: [{ association: 'nutrients' }] },

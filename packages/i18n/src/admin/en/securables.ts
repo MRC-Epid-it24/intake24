@@ -30,6 +30,16 @@ const securables: LocaleMessageObject = {
     'demographic-groups': 'Demographic groups',
     'henry-coefficients': 'Henry coefficients',
 
+    // Languages
+    translations: 'Translations',
+
+    // Locales
+    'food-list': 'Food list',
+    'split-lists': 'Split lists',
+    'split-words': 'Split words',
+    'synonym-sets': 'Synonym sets',
+    tasks: 'Tasks',
+
     // Survey scheme
     questions: 'Questions',
     'data-export': 'Data export',

@@ -4,8 +4,22 @@ import type { Survey } from '@intake24/db';
 import { InternalServerError } from '../../errors';
 
 export const surveyListResponse = (survey: Survey): SurveyListEntry => {
-  const { id, slug, name, localeId, surveySchemeId, state, securables = [] } = survey;
-  return { id, slug, name, localeId, surveySchemeId, state, securables };
+  const {
+    id,
+    slug,
+    name,
+    localeId,
+    locale,
+    surveyScheme,
+    surveySchemeId,
+    state,
+    securables = [],
+  } = survey;
+
+  if (!locale || !surveyScheme)
+    throw new InternalServerError('surveyListResponse: not loaded relationships.');
+
+  return { id, slug, name, localeId, surveySchemeId, state, securables, locale, surveyScheme };
 };
 
 export const surveyResponse = (survey: Survey): SurveyEntry => {

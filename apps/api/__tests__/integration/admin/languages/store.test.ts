@@ -10,7 +10,7 @@ export default () => {
 
   beforeAll(async () => {
     input = {
-      id: 'es-cr',
+      code: 'es-cr',
       englishName: 'Spanish - Costa Rica',
       localName: 'Spanish - Costa Rica',
       countryFlagCode: 'es-cr',
@@ -30,7 +30,7 @@ export default () => {
 
     it('should return 422 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
-        'id',
+        'code',
         'englishName',
         'localName',
         'countryFlagCode',
@@ -42,7 +42,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
+        ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
         {
           input: {
             id: null,
@@ -60,9 +60,9 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['code'], {
         input: {
-          id: input.id,
+          code: input.code,
           englishName: 'Spanish - Dominican Republic',
           localName: 'Spanish - Dominican Republic',
           countryFlagCode: 'es-do',

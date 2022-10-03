@@ -2,7 +2,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Application } from '@intake24/common/types';
 import type {
   CreateLanguageRequest,
-  LanguageEntry,
   UpdateLanguageRequest,
 } from '@intake24/common/types/http/admin';
 import type {
@@ -32,9 +31,9 @@ const languageService = ({
    * Get language record with messages
    *
    * @param {string} languageId
-   * @returns {Promise<LanguageEntry>}
+   * @returns {Promise<Language>}
    */
-  const getLanguage = async (languageId: string): Promise<LanguageEntry> => {
+  const getLanguage = async (languageId: string): Promise<Language> => {
     const language = await Language.findByPk(languageId);
     if (!language) throw new NotFoundError();
 
@@ -102,9 +101,9 @@ const languageService = ({
    * Create language with messages
    *
    * @param {CreateLanguageRequest} input
-   * @returns {Promise<LanguageEntry>}
+   * @returns {Promise<Language>}
    */
-  const createLanguage = async (input: CreateLanguageRequest): Promise<LanguageEntry> => {
+  const createLanguage = async (input: CreateLanguageRequest): Promise<Language> => {
     const language = await Language.create(input);
 
     return language;
@@ -113,15 +112,17 @@ const languageService = ({
   /**
    * Update language
    *
-   * @param {string} languageId
+   * @param {(string | Language)} languageId
    * @param {UpdateLanguageRequest} input
-   * @returns {Promise<LanguageEntry>}
+   * @returns {Promise<Language>}
    */
   const updateLanguage = async (
-    languageId: string,
+    languageId: string | Language,
     input: UpdateLanguageRequest
-  ): Promise<LanguageEntry> => {
-    const language = await Language.findByPk(languageId);
+  ): Promise<Language> => {
+    const language =
+      typeof languageId === 'string' ? await Language.findByPk(languageId) : languageId;
+
     if (!language) throw new NotFoundError();
 
     await language.update(input);

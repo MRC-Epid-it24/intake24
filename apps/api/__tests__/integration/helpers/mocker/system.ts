@@ -149,14 +149,14 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
 };
 
 const language = (): CreateLanguageRequest => {
-  const id = faker.address.countryCode();
+  const code = faker.address.countryCode();
   const englishName = faker.address.country();
   const localName = faker.address.country();
   const countryFlagCode = faker.address.countryCode();
   const textDirection = 'ltr';
 
   return {
-    id,
+    code,
     englishName,
     localName,
     countryFlagCode,
@@ -168,7 +168,7 @@ const locale = (
   respLangId: string | undefined,
   adminLangId: string | undefined
 ): CreateLocaleRequest => {
-  const id = faker.address.countryCode();
+  const code = faker.address.countryCode();
   const englishName = faker.address.country();
   const localName = faker.address.country();
   const respondentLanguageId = respLangId ?? faker.address.countryCode();
@@ -179,7 +179,7 @@ const locale = (
   const foodIndexLanguageBackendId = 'en';
 
   return {
-    id,
+    code,
     englishName,
     localName,
     respondentLanguageId,
@@ -222,7 +222,7 @@ const surveySchemeQuestion = (): SurveySchemeQuestionCreationAttributes => {
 
 const survey = (
   surveySchemeId = '1',
-  localeId = 'en_GB',
+  localeId = '1',
   feedbackSchemeId = null
 ): CreateSurveyRequest => {
   const slug = slugify(randomString(16), { strict: true });

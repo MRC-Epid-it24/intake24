@@ -1,8 +1,8 @@
 <template>
   <data-table :headers="headers">
-    <template #[`item.id`]="{ item }">
+    <template #[`item.code`]="{ item }">
       <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-      {{ item.id }}
+      {{ item.code }}
     </template>
   </data-table>
 </template>
@@ -21,9 +21,9 @@ export default defineComponent({
     return {
       headers: [
         {
-          text: this.$t('languages.id'),
+          text: this.$t('languages.code'),
           sortable: true,
-          value: 'id',
+          value: 'code',
         },
         {
           text: this.$t('languages.englishName'),

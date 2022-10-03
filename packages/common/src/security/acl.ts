@@ -2,21 +2,12 @@ export const ACL_PERMISSIONS_KEY = 'acl:permissions';
 export const ACL_ROLES_KEY = 'acl:roles';
 
 export const respondentSuffix = '/respondent';
-export const foodDatabaseMaintainerPrefix = 'fdbm/';
 
 export const globalSupport = 'globalsupport';
-export const foodsAdmin = 'foodsadmin';
 
 export const surveyRespondent = (surveySlug: string): string => `${surveySlug}${respondentSuffix}`;
 
 export const surveyPermissions = (surveySlug: string): string[] => [surveyRespondent(surveySlug)];
-
-export const foodDatabaseMaintainer = (localeId: string): string =>
-  `${foodDatabaseMaintainerPrefix}${localeId}`;
-
-export const foodDatabasePermissions = (localeId: string): string[] => [
-  foodDatabaseMaintainer(localeId),
-];
 
 export const standardSecurableActions = ['read', 'edit', 'delete', 'securables'] as const;
 
@@ -28,6 +19,16 @@ export const securableDefs = {
     'cards',
     'demographic-groups',
     'henry-coefficients',
+  ] as const,
+  Language: [...standardSecurableActions, 'translations'] as const,
+  Locale: [
+    ...standardSecurableActions,
+    'copy',
+    'food-list',
+    'split-lists',
+    'split-words',
+    'synonym-sets',
+    'tasks',
   ] as const,
   SurveyScheme: [...standardSecurableActions, 'copy', 'questions', 'data-export'] as const,
   Survey: [

@@ -6,12 +6,12 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="form.code"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="form.errors.get('code')"
                 hide-details="auto"
-                :label="$t('locales.id')"
-                name="id"
+                :label="$t('locales.code')"
+                name="code"
                 outlined
                 prepend-inner-icon="$locales"
               ></v-text-field>
@@ -22,7 +22,7 @@
                 :error-messages="form.errors.get('prototypeLocaleId')"
                 hide-details="auto"
                 item-text="englishName"
-                item-value="id"
+                item-value="code"
                 :items="locales"
                 :label="$t('locales.prototypeLocaleId')"
                 name="locale"
@@ -67,7 +67,7 @@
                 :error-messages="form.errors.get('respondentLanguageId')"
                 hide-details="auto"
                 item-text="englishName"
-                item-value="id"
+                item-value="code"
                 :items="refs.languages"
                 :label="$t('locales.respondentLanguageId')"
                 name="respondentLanguageId"
@@ -90,7 +90,7 @@
                 :error-messages="form.errors.get('adminLanguageId')"
                 hide-details="auto"
                 item-text="englishName"
-                item-value="id"
+                item-value="code"
                 :items="refs.languages"
                 :label="$t('locales.adminLanguageId')"
                 name="adminLanguageId"
@@ -189,6 +189,7 @@ import { textDirections } from '@intake24/common/types';
 
 type LocaleForm = {
   id: string | null;
+  code: string | null;
   prototypeLocaleId: string | null;
   englishName: string | null;
   localName: string | null;
@@ -216,6 +217,7 @@ export default defineComponent({
     return {
       form: form<LocaleForm>({
         id: null,
+        code: null,
         prototypeLocaleId: null,
         englishName: null,
         localName: null,
@@ -242,7 +244,7 @@ export default defineComponent({
 
   computed: {
     locales() {
-      const locales = [{ id: null, englishName: this.$t('common.none').toString() }];
+      const locales = [{ code: null, englishName: this.$t('common.none').toString() }];
 
       if (!this.refs.locales) return locales;
 

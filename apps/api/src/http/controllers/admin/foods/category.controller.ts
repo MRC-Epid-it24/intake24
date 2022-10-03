@@ -11,27 +11,32 @@ import type {
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
-import { CategoryLocal } from '@intake24/db';
+import { CategoryLocal, SystemLocale } from '@intake24/db';
+
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCategoryService'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<CategoriesResponse>
   ): Promise<void> => {
-    const { localeId } = req.params;
+    const { code } = await getAndCheckAccess(
+      SystemLocale,
+      'food-list',
+      req as Request<{ localeId: string }>
+    );
 
     const categories = await adminCategoryService.browseCategories(
-      localeId,
+      code,
       pick(req.query, ['page', 'limit', 'sort', 'search'])
     );
 
     res.json(categories);
   };
 
-  const store = async (
-    req: Request<{ categoryId: string; localeId: string }>,
-    res: Response
-  ): Promise<void> => {
+  const store = async (req: Request<{ localeId: string }>, res: Response): Promise<void> => {
+    await getAndCheckAccess(SystemLocale, 'food-list', req);
+
     res.json();
   };
 
@@ -39,9 +44,10 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryLocalEntry>
   ): Promise<void> => {
-    const { categoryId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { categoryId } = req.params;
 
-    const categoryLocal = await adminCategoryService.getCategory(categoryId, localeId);
+    const categoryLocal = await adminCategoryService.getCategory(categoryId, code);
     if (!categoryLocal) throw new NotFoundError();
 
     res.json(categoryLocal);
@@ -51,9 +57,10 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryLocalEntry>
   ): Promise<void> => {
-    const { categoryId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { categoryId } = req.params;
 
-    const categoryLocal = await adminCategoryService.updateCategory(categoryId, localeId, req.body);
+    const categoryLocal = await adminCategoryService.updateCategory(categoryId, code, req.body);
     if (!categoryLocal) throw new NotFoundError();
 
     res.json(categoryLocal);
@@ -63,9 +70,12 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { categoryId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { categoryId } = req.params;
 
-    const categoryLocal = await CategoryLocal.findOne({ where: { id: categoryId, localeId } });
+    const categoryLocal = await CategoryLocal.findOne({
+      where: { id: categoryId, localeId: code },
+    });
     if (!categoryLocal) throw new NotFoundError();
 
     await categoryLocal.destroy();
@@ -77,9 +87,9 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     req: Request<{ localeId: string }>,
     res: Response<RootCategoriesResponse>
   ): Promise<void> => {
-    const { localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
 
-    const categories = await adminCategoryService.getRootCategories(localeId);
+    const categories = await adminCategoryService.getRootCategories(code);
 
     res.json(categories);
   };
@@ -88,21 +98,21 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryContentsResponse>
   ): Promise<void> => {
-    const { categoryId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { categoryId } = req.params;
 
     if (categoryId === 'no-category') {
-      const foods = await adminCategoryService.getNoCategoryContents(localeId);
+      const foods = await adminCategoryService.getNoCategoryContents(code);
       res.json(categoryContentsResponse({ categories: [], foods }));
       return;
     }
 
-    const categoryLocal = await CategoryLocal.findOne({ where: { id: categoryId, localeId } });
+    const categoryLocal = await CategoryLocal.findOne({
+      where: { id: categoryId, localeId: code },
+    });
     if (!categoryLocal) throw new NotFoundError();
 
-    const data = await adminCategoryService.getCategoryContents(
-      categoryLocal.categoryCode,
-      localeId
-    );
+    const data = await adminCategoryService.getCategoryContents(categoryLocal.categoryCode, code);
 
     res.json(categoryContentsResponse(data));
   };

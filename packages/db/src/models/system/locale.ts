@@ -1,25 +1,26 @@
 /* eslint-disable no-use-before-define */
 import {
-  AfterCreate,
-  AfterDestroy,
   BelongsTo,
+  BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
   HasMany,
   Scopes,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
 
 import type { LocaleAttributes, LocaleCreationAttributes } from '@intake24/common/types/models';
-import { foodDatabasePermissions } from '@intake24/common/security';
 
+import type { Securable } from '..';
 import BaseModel from '../model';
-import { Language, Permission, Survey } from '.';
+import { Language, Survey, User, UserSecurable } from '.';
 import FoodIndexBackend from './food-index-backend';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+    attributes: ['id', 'code', 'englishName', 'localName', 'countryFlagCode'],
     order: [['englishName', 'ASC']],
   },
   adminLanguage: { include: [{ model: Language, as: 'adminLanguage' }] },
@@ -30,18 +31,25 @@ import FoodIndexBackend from './food-index-backend';
   modelName: 'Locale',
   tableName: 'locales',
   freezeTableName: true,
-  timestamps: false,
   underscored: true,
 })
 export default class Locale
   extends BaseModel<LocaleAttributes, LocaleCreationAttributes>
-  implements LocaleAttributes
+  implements LocaleAttributes, Securable
 {
   @Column({
+    autoIncrement: true,
     primaryKey: true,
-    type: DataType.STRING(16),
+    type: DataType.BIGINT,
   })
   public id!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+    unique: true,
+  })
+  public code!: string;
 
   @Column({
     allowNull: false,
@@ -88,43 +96,76 @@ export default class Locale
 
   @Column({
     allowNull: false,
+    defaultValue: 'en',
     type: DataType.STRING(16),
   })
   public foodIndexLanguageBackendId!: string;
 
-  @BelongsTo(() => Language, 'respondentLanguageId')
-  public surveyLanguage?: Language;
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public ownerId!: string | null;
 
-  @BelongsTo(() => Language, 'adminLanguageId')
+  @CreatedAt
+  @Column
+  public readonly createdAt!: Date;
+
+  @UpdatedAt
+  @Column
+  public readonly updatedAt!: Date;
+
+  @BelongsTo(() => Language, {
+    foreignKey: 'adminLanguageId',
+    targetKey: 'code',
+  })
   public adminLanguage?: Language;
+
+  @BelongsTo(() => Language, {
+    foreignKey: 'respondentLanguageId',
+    targetKey: 'code',
+  })
+  public surveyLanguage?: Language;
 
   @BelongsTo(() => FoodIndexBackend, 'foodIndexLanguageBackendId')
   public foodIndexLanguageBackend?: FoodIndexBackend;
 
-  @BelongsTo(() => Locale, 'prototypeLocaleId')
+  @BelongsTo(() => Locale, {
+    foreignKey: 'prototypeLocaleId',
+    targetKey: 'code',
+  })
   public parent?: Locale;
 
-  @HasMany(() => Locale, 'prototypeLocaleId')
+  @HasMany(() => Locale, {
+    foreignKey: 'prototypeLocaleId',
+    sourceKey: 'code',
+  })
   public children?: Locale[];
 
   @HasMany(() => Survey, 'localeId')
   public surveys?: Survey[];
 
-  @AfterCreate
-  static async createLocalePermissions(instance: Locale): Promise<void> {
-    const permissions = foodDatabasePermissions(instance.id).map((item) => ({
-      name: item,
-      displayName: item,
-      description: `Food database specific permission (${item})`,
-    }));
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User | null;
 
-    await Permission.bulkCreate(permissions);
-  }
+  @BelongsToMany(() => User, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+      scope: {
+        securable_type: 'Locale',
+      },
+    },
+    foreignKey: 'securableId',
+    otherKey: 'userId',
+    constraints: false,
+  })
+  public securableUsers?: User[];
 
-  @AfterDestroy
-  static async destroyLocalePermissions(instance: Locale): Promise<void> {
-    await Permission.destroy({ where: { name: foodDatabasePermissions(instance.id) } });
-  }
-
-  // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'securableId',
+    constraints: false,
+    scope: { securable_type: 'Locale' },
+  })
+  public securables?: UserSecurable[];
 }

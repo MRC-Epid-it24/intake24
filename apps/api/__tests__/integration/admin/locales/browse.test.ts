@@ -1,16 +1,44 @@
-import { suite } from '@intake24/api-tests/integration/helpers';
+import { mocker, suite } from '@intake24/api-tests/integration/helpers';
+import { SystemLocale } from '@intake24/db';
 
 export default () => {
   const url = '/api/admin/locales';
   const permissions = ['locales', 'locales|browse'];
 
-  test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('get', url, { permissions });
+  let systemLocale: SystemLocale;
+
+  beforeAll(async () => {
+    const { code } = suite.data.system.language;
+    const input = mocker.system.locale(code, code);
+
+    systemLocale = await SystemLocale.create(input);
   });
 
-  it('should return 200 and paginated results', async () => {
-    await suite.util.setPermission(permissions);
+  test('missing authentication / authorization', async () => {
+    await suite.sharedTests.assert401and403('get', url);
+  });
 
-    await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
+  describe('authenticated / resource authorized', () => {
+    it('should return 200 and paginated results', async () => {
+      await suite.util.setPermission(permissions);
+
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: true });
+    });
+
+    it('should return 200 and empty paginated results', async () => {
+      await suite.util.setPermission('locales');
+
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
+    });
+
+    it('should return 200 and with record access', async () => {
+      await suite.util.setSecurable({
+        securableId: systemLocale.id,
+        securableType: 'Locale',
+        action: ['read'],
+      });
+
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: systemLocale.id });
+    });
   });
 };

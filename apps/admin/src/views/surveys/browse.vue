@@ -1,7 +1,10 @@
 <template>
   <data-table :headers="headers">
-    <template #[`item.state`]="{ item }">
-      {{ $t(`surveys.states.${item.state}`) }}
+    <template #[`item.locale`]="{ item }">
+      {{ item.locale.code }}
+    </template>
+    <template #[`item.surveyScheme`]="{ item }">
+      {{ item.surveyScheme.name }}
     </template>
   </data-table>
 </template>
@@ -25,19 +28,19 @@ export default defineComponent({
           value: 'slug',
         },
         {
-          text: this.$t('surveys.name'),
+          text: this.$t('common.name'),
           sortable: true,
           value: 'name',
         },
         {
           text: this.$t('locales._'),
           sortable: true,
-          value: 'localeId',
+          value: 'locale',
         },
         {
-          text: this.$t('surveys.states._'),
+          text: this.$t('survey-schemes._'),
           sortable: true,
-          value: 'state',
+          value: 'surveyScheme',
         },
         {
           text: this.$t('common.action._'),

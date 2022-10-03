@@ -6,12 +6,12 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.id"
+                v-model="form.code"
                 :disabled="isEdit"
-                :error-messages="form.errors.get('id')"
+                :error-messages="form.errors.get('code')"
                 hide-details="auto"
-                :label="$t('languages.id')"
-                name="id"
+                :label="$t('languages.code')"
+                name="code"
                 outlined
                 prepend-inner-icon="$languages"
               ></v-text-field>
@@ -97,6 +97,7 @@ import { textDirections } from '@intake24/common/types';
 
 type LanguageForm = {
   id: string | null;
+  code: string | null;
   englishName: string | null;
   localName: string | null;
   countryFlagCode: string;
@@ -118,6 +119,7 @@ export default defineComponent({
     return {
       form: form<LanguageForm>({
         id: null,
+        code: null,
         englishName: null,
         localName: null,
         countryFlagCode: 'gb',

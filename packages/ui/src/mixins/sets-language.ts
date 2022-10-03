@@ -49,12 +49,12 @@ export default defineComponent({
 
       try {
         const {
-          data: { id, messages, textDirection },
+          data: { code, messages, textDirection },
         } = await this.$http.get<I18nLanguageEntry>(`i18n/${language}`, { params: { app } });
 
-        if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(id, messages);
+        if (Object.keys(messages).length) this.$root.$i18n.setLocaleMessage(code, messages);
 
-        language = id;
+        language = code;
         isRrlLanguage = textDirection === 'rtl';
       } catch {
         //

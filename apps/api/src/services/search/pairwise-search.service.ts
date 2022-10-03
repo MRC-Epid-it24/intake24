@@ -20,21 +20,34 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
   const copyAssociations = async (options: CopyAssociationsOps) => {
     const { sourceLocaleId, targetLocaleId } = options;
 
-    const locales = await SystemLocale.findAll({ where: { id: [sourceLocaleId, targetLocaleId] } });
-    if (locales.length !== 2) throw new NotFoundError();
+    const [sourceLocale, targetLocale] = await Promise.all([
+      SystemLocale.findByPk(sourceLocaleId),
+      SystemLocale.findByPk(targetLocaleId),
+    ]);
+
+    if (!sourceLocale || !targetLocale) throw new NotFoundError();
+
+    const { code: sourceLocaleCode } = sourceLocale;
+    const { code: targetLocaleCode } = targetLocale;
 
     await db.system.transaction(async (transaction) => {
       await Promise.all([
-        PAOccurrence.destroy({ where: { localeId: targetLocaleId }, transaction }),
-        PACoOccurrence.destroy({ where: { localeId: targetLocaleId }, transaction }),
-        PAOccurrenceTransactionCount.destroy({ where: { localeId: targetLocaleId }, transaction }),
+        PAOccurrence.destroy({ where: { localeId: targetLocaleCode }, transaction }),
+        PACoOccurrence.destroy({ where: { localeId: targetLocaleCode }, transaction }),
+        PAOccurrenceTransactionCount.destroy({
+          where: { localeId: targetLocaleCode },
+          transaction,
+        }),
       ]);
 
       const { occurrences, coOccurrences, transactionsCount } = copyPairwiseAssociationsQueries();
 
       await Promise.all(
         [occurrences, coOccurrences, transactionsCount].map((query) =>
-          db.system.query(query, { replacements: { sourceLocaleId, targetLocaleId }, transaction })
+          db.system.query(query, {
+            replacements: { sourceLocaleCode, targetLocaleCode },
+            transaction,
+          })
         )
       );
     });

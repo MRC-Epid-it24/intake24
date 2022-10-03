@@ -45,7 +45,7 @@ export default defineComponent({
           value: 'foodCode',
         },
         {
-          text: this.$t('locales.id'),
+          text: this.$t('locales.code'),
           sortable: true,
           value: 'localeId',
         },

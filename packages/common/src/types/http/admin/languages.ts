@@ -1,25 +1,26 @@
-import type { TextDirection } from '../../common';
-import type { LanguageAttributes, LanguageTranslationAttributes, Pagination } from '../../models';
+import type {
+  LanguageAttributes,
+  LanguageCreationAttributes,
+  LanguageTranslationAttributes,
+  Pagination,
+} from '../../models';
+import type { Owner } from './users';
 
-export type LanguageRequest = {
-  id: string;
-  englishName: string;
-  localName: string;
-  countryFlagCode: string;
-  textDirection: TextDirection;
-};
+export type LanguageRequest = LanguageCreationAttributes;
 
 export type CreateLanguageRequest = LanguageRequest;
 
-export type UpdateLanguageRequest = Omit<LanguageRequest, 'id'>;
+export type UpdateLanguageRequest = Omit<LanguageRequest, 'code'>;
 
 export type LanguagesResponse = Pagination<LanguageAttributes>;
 
-export type LanguageEntry = LanguageAttributes;
+export interface LanguageEntry extends LanguageAttributes {
+  owner?: Owner;
+}
 
 export type LanguageListEntry = Pick<
   LanguageAttributes,
-  'id' | 'englishName' | 'localName' | 'countryFlagCode'
+  'id' | 'code' | 'englishName' | 'localName' | 'countryFlagCode'
 >;
 
 export type LanguageTranslationEntry = LanguageTranslationAttributes;

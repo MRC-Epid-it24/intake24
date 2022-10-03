@@ -34,7 +34,10 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url, { permissions });
+    await suite.sharedTests.assert401and403('put', url, {
+      input: { translations: updateTranslations },
+      permissions,
+    });
   });
 
   describe('authenticated / resource authorized', () => {

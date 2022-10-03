@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import type { Schema } from 'express-validator';
+import type { ParamSchema, Schema } from 'express-validator';
 
 import type { LocaleAttributes } from '@intake24/common/types/models';
 import type { WhereOptions } from '@intake24/db';
@@ -8,7 +8,20 @@ import { unique } from '@intake24/api/http/rules';
 import { textDirections } from '@intake24/common/types';
 import { Language, Op, SystemLocale } from '@intake24/db';
 
-const defaults: Schema = {
+export const code: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('string._'),
+  isString: { bail: true },
+  isEmpty: { negated: true, bail: true },
+  custom: {
+    options: async (value, meta): Promise<void> => {
+      if (!(await unique({ model: SystemLocale, condition: { field: 'code', value } })))
+        throw new Error(customTypeErrorMessage('unique._', meta));
+    },
+  },
+};
+
+export const defaults: Schema = {
   englishName: {
     in: ['body'],
     errorMessage: typeErrorMessage('string._'),
@@ -58,7 +71,7 @@ const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const language = await Language.findByPk(value);
+        const language = await Language.findOne({ where: { code: value } });
         if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
@@ -70,7 +83,7 @@ const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const language = await Language.findByPk(value);
+        const language = await Language.findOne({ where: { code: value } });
         if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
@@ -87,7 +100,7 @@ const defaults: Schema = {
     optional: { options: { nullable: true } },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const locale = await SystemLocale.findByPk(value);
+        const locale = await SystemLocale.findOne({ where: { code: value } });
         if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
@@ -103,5 +116,3 @@ const defaults: Schema = {
     },
   },
 };
-
-export default defaults;

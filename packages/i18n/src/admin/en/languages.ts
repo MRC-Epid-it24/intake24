@@ -1,8 +1,10 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
+import securables from './securables';
+
 const languages: LocaleMessageObject = {
   _: 'Languages',
-  id: 'Language ID',
+  code: 'Language code',
   title: 'Languages',
   all: 'All languages',
   read: 'Language detail',
@@ -54,6 +56,8 @@ const languages: LocaleMessageObject = {
     deleted: 'Language translations ({name}) has been deleted.',
     synced: 'Language translations ({name}) has been synchronized.',
   },
+
+  securables,
 };
 
 export default languages;

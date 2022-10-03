@@ -17,7 +17,7 @@
           </v-btn>
         </template>
         <v-list class="grey lighten-3">
-          <v-list-item v-for="lang in availableLanguages" :key="lang.id" @click="add(lang.id)">
+          <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="add(lang.code)">
             <span :class="`fi fi-${lang.countryFlagCode} mr-3`"></span>
             <span class="font-weight-medium">{{ lang.englishName }}</span>
           </v-list-item>
@@ -104,12 +104,12 @@ export default defineComponent({
     allLanguages(): LanguageListEntry[] {
       return (
         useEntry().refs.languages ?? [
-          { id: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
+          { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
         ]
       );
     },
     availableLanguages(): LanguageListEntry[] {
-      return this.allLanguages.filter((lang) => !this.languages.includes(lang.id));
+      return this.allLanguages.filter((lang) => !this.languages.includes(lang.code));
     },
     isRemoveDisabled(): boolean {
       if (this.selected === undefined) return true;
@@ -119,28 +119,28 @@ export default defineComponent({
   },
 
   methods: {
-    getLanguageFlag(langId: string) {
-      const language = this.allLanguages.find((lang) => lang.id === langId);
+    getLanguageFlag(code: string) {
+      const language = this.allLanguages.find((lang) => lang.code === code);
 
       return language?.countryFlagCode ?? 'gb';
     },
 
-    getLanguageName(langId: string) {
-      const language = this.allLanguages.find((lang) => lang.id === langId);
+    getLanguageName(code: string) {
+      const language = this.allLanguages.find((lang) => lang.code === code);
 
       return language?.englishName ?? 'English';
     },
 
-    async add(langId: string) {
-      this.$emit('input', { ...this.value, [langId]: this.default });
+    async add(code: string) {
+      this.$emit('input', { ...this.value, [code]: this.default });
       this.selected = this.languages.length - 1;
     },
 
     remove() {
       if (this.selected === undefined) return;
 
-      const langId = this.languages[this.selected];
-      const { [langId]: remove, ...rest } = this.value;
+      const code = this.languages[this.selected];
+      const { [code]: remove, ...rest } = this.value;
       this.$emit('input', { ...rest });
     },
   },

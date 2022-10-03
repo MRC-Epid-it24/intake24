@@ -16,7 +16,7 @@ export default () => {
 
   beforeAll(async () => {
     input = {
-      id: 'es-ar',
+      code: 'es-ar',
       englishName: 'Spanish - Argentina',
       localName: 'Spanish - Argentina',
       countryFlagCode: 'es-ar',
@@ -46,20 +46,20 @@ export default () => {
     });
 
     it(`should return 403 when language is assigned to locales`, async () => {
-      const { id } = await Language.create({
-        id: 'es-bo',
+      const { code, id } = await Language.create({
+        code: 'es-bo',
         englishName: 'Spanish - Bolivia',
         localName: 'Spanish - Bolivia',
         countryFlagCode: 'es-bo',
         textDirection: 'ltr',
       });
       await SystemLocale.create({
-        id,
+        code,
         englishName: 'Spanish - Bolivia',
         localName: 'Spanish - Bolivia',
-        respondentLanguageId: id,
-        adminLanguageId: id,
-        countryFlagCode: id,
+        respondentLanguageId: code,
+        adminLanguageId: code,
+        countryFlagCode: code,
         prototypeLocaleId: null,
         textDirection: 'ltr',
         foodIndexLanguageBackendId: 'en',

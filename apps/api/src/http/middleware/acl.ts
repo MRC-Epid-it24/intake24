@@ -6,7 +6,7 @@ import passport from 'passport';
 import type { FrontEnd } from '@intake24/common/types';
 import type { User } from '@intake24/db';
 import { ForbiddenError } from '@intake24/api/http/errors';
-import { foodDatabaseMaintainer, foodsAdmin, surveyRespondent } from '@intake24/common/security';
+import { surveyRespondent } from '@intake24/common/security';
 
 /**
  * Check if account is disabled
@@ -81,17 +81,6 @@ export const role = (role: string | string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasRole(role)
-      .then((result) => (result ? next() : next(new ForbiddenError())))
-      .catch((err) => next(err));
-  };
-};
-
-export const canManageFoodDatabase = () => {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    const { localeId } = req.params;
-
-    req.scope.cradle.aclService
-      .hasAnyPermission([foodsAdmin, foodDatabaseMaintainer(localeId)])
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

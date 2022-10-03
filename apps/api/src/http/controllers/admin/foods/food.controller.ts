@@ -5,17 +5,23 @@ import type { IoC } from '@intake24/api/ioc';
 import type { FoodLocalEntry, FoodsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { FoodLocal } from '@intake24/db';
+import { FoodLocal, SystemLocale } from '@intake24/db';
+
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>
   ): Promise<void> => {
-    const { localeId } = req.params;
+    const { code } = await getAndCheckAccess(
+      SystemLocale,
+      'food-list',
+      req as Request<{ localeId: string }>
+    );
 
     const foods = await adminFoodService.browseFoods(
-      localeId,
+      code,
       pick(req.query, ['page', 'limit', 'sort', 'search'])
     );
 
@@ -26,6 +32,8 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     req: Request<{ foodId: string; localeId: string }>,
     res: Response
   ): Promise<void> => {
+    await getAndCheckAccess(SystemLocale, 'food-list', req);
+
     res.json();
   };
 
@@ -33,9 +41,10 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
-    const { foodId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { foodId } = req.params;
 
-    const foodLocal = await adminFoodService.getFood(foodId, localeId);
+    const foodLocal = await adminFoodService.getFood(foodId, code);
     if (!foodLocal) throw new NotFoundError();
 
     res.json(foodLocal);
@@ -45,9 +54,10 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
-    const { foodId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { foodId } = req.params;
 
-    const foodLocal = await adminFoodService.updateFood(foodId, localeId, req.body);
+    const foodLocal = await adminFoodService.updateFood(foodId, code, req.body);
     if (!foodLocal) throw new NotFoundError();
 
     res.json(foodLocal);
@@ -57,9 +67,10 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { foodId, localeId } = req.params;
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { foodId } = req.params;
 
-    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId } });
+    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId: code } });
     if (!foodLocal) throw new NotFoundError();
 
     await foodLocal.destroy();

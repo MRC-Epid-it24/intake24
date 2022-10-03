@@ -2,11 +2,8 @@ import type { LanguageAttributes, LanguageTranslationAttributes } from '../model
 
 export type I18nLanguageListEntry = Pick<
   LanguageAttributes,
-  'id' | 'englishName' | 'localName' | 'countryFlagCode'
+  'code' | 'englishName' | 'localName' | 'countryFlagCode' | 'textDirection'
 >;
 
-export type I18nLanguageEntry = Pick<
-  LanguageAttributes,
-  'id' | 'englishName' | 'localName' | 'countryFlagCode' | 'textDirection'
-> &
+export type I18nLanguageEntry = I18nLanguageListEntry &
   Pick<LanguageTranslationAttributes, 'messages'>;

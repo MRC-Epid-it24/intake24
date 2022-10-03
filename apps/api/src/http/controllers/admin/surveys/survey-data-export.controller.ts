@@ -3,12 +3,13 @@ import type { Request, Response } from 'express';
 import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import type { User } from '@intake24/db';
+import { Survey } from '@intake24/db';
 
-import { getAndCheckSurveyAccess } from './survey.controller';
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminSurveyDataExportController = ({ dataExportService }: Pick<IoC, 'dataExportService'>) => {
   const sync = async (req: Request<{ surveyId: string }>, res: Response<Buffer>): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'data-export');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'data-export', req);
     const { startDate, endDate } = req.body;
 
     const { filename, stream } = await dataExportService.syncStream({
@@ -26,7 +27,7 @@ const adminSurveyDataExportController = ({ dataExportService }: Pick<IoC, 'dataE
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'data-export');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'data-export', req);
     const { startDate, endDate } = req.body;
     const { id: userId } = req.user as User;
 

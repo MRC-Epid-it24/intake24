@@ -1,8 +1,13 @@
 <template>
-  <data-table :actions="['read']" :api-url="`admin/locales`" :headers="headers">
-    <template #[`item.id`]="{ item }">
+  <data-table :actions="['read']" :api-url="`admin/fdbs`" :headers="headers">
+    <template #[`item.code`]="{ item }">
       <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-      {{ item.id }}
+      {{ item.code }}
+    </template>
+    <template #[`item.action`]="{ item }">
+      <v-btn color="primary" icon :to="{ name: 'fdbs-read', params: { id: item.id } }">
+        <v-icon>far fa-file</v-icon>
+      </v-btn>
     </template>
   </data-table>
 </template>
@@ -24,9 +29,9 @@ export default defineComponent({
     return {
       headers: [
         {
-          text: this.$t('locales.id'),
+          text: this.$t('locales.code'),
           sortable: true,
-          value: 'id',
+          value: 'code',
         },
         {
           text: this.$t('locales.englishName'),

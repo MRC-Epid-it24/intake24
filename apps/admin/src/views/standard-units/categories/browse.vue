@@ -49,7 +49,7 @@ export default defineComponent({
           value: 'categoryCode',
         },
         {
-          text: this.$t('locales.id'),
+          text: this.$t('locales.code'),
           sortable: true,
           value: 'localeId',
         },

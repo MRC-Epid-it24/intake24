@@ -6,34 +6,36 @@ import type {
   FoodDatabaseRefs,
   LocalesResponse,
 } from '@intake24/common/types/http/admin';
-import type { LocaleAttributes } from '@intake24/common/types/models';
-import type { PaginateQuery, WhereOptions } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
-import { foodDatabaseMaintainerPrefix, foodsAdmin } from '@intake24/common/security';
-import { FoodsLocale, NutrientTable, SystemLocale } from '@intake24/db';
+import type { PaginateOptions, PaginateQuery } from '@intake24/db';
+import { localeResponse } from '@intake24/api/http/responses/admin';
+import { NutrientTable, Op, securableScope, SystemLocale } from '@intake24/db';
+
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminFoodDatabaseController = () => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
   ): Promise<void> => {
-    const permissions = (await req.scope.cradle.aclService.getPermissions()).map(
-      ({ name }) => name
-    );
+    const { aclService, userId } = req.scope.cradle;
 
-    const where: WhereOptions<LocaleAttributes> = {};
-    if (!permissions.includes(foodsAdmin)) {
-      const fdbs = permissions
-        .filter((permission) => permission.startsWith(foodDatabaseMaintainerPrefix))
-        .map((permission) => permission.replace(foodDatabaseMaintainerPrefix, ''));
-
-      where.id = fdbs;
-    }
-
-    const locales = await SystemLocale.paginate({
+    const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'englishName', 'localName'],
       order: [['id', 'ASC']],
+    };
+
+    if (await aclService.hasPermission('locales|food-list')) {
+      const locales = await SystemLocale.paginate(paginateOptions);
+      res.json(locales);
+      return;
+    }
+
+    const locales = await SystemLocale.paginate({
+      ...paginateOptions,
+      where: { [Op.or]: { ownerId: userId, '$securables.action$': ['food-list'] } },
+      ...securableScope(userId),
+      subQuery: false,
     });
 
     res.json(locales);
@@ -43,15 +45,9 @@ const adminFoodDatabaseController = () => {
     req: Request<{ localeId: string }>,
     res: Response<FoodDatabaseEntry>
   ): Promise<void> => {
-    const { localeId } = req.params;
+    const locale = await getAndCheckAccess(SystemLocale, 'food-list', req);
 
-    const [systemLocale, foodsLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId),
-      FoodsLocale.findByPk(localeId),
-    ]);
-    if (!systemLocale || !foodsLocale) throw new NotFoundError();
-
-    res.json(systemLocale);
+    res.json(localeResponse(locale));
   };
 
   const refs = async (req: Request, res: Response<FoodDatabaseRefs>): Promise<void> => {

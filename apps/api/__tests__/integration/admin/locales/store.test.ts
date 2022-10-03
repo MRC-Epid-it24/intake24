@@ -1,21 +1,21 @@
-import type { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/locales';
   const permissions = ['locales', 'locales|create'];
 
-  let input: LocaleAttributes;
-  let output: LocaleAttributes;
+  let input: LocaleCreationAttributes;
+  let output: LocaleCreationAttributes;
 
   beforeAll(async () => {
-    const { id: langId } = suite.data.system.language;
+    const { code } = suite.data.system.language;
     input = {
-      id: 'en-cb',
+      code: 'en-cb',
       englishName: 'English - Caribbean',
       localName: 'English - Caribbean',
-      respondentLanguageId: langId,
-      adminLanguageId: langId,
+      respondentLanguageId: code,
+      adminLanguageId: code,
       countryFlagCode: 'en-cb',
       prototypeLocaleId: null,
       textDirection: 'ltr',
@@ -35,7 +35,7 @@ export default () => {
 
     it('should return 422 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
-        'id',
+        'code',
         'englishName',
         'localName',
         'respondentLanguageId',
@@ -50,7 +50,7 @@ export default () => {
         'post',
         url,
         [
-          'id',
+          'code',
           'englishName',
           'localName',
           'respondentLanguageId',
@@ -61,7 +61,7 @@ export default () => {
         ],
         {
           input: {
-            id: null,
+            code: null,
             englishName: [],
             localName: ['dddsds', 'dffd'],
             respondentLanguageId: 'nonLocaleString',
@@ -79,15 +79,15 @@ export default () => {
     });
 
     it('should return 422 for duplicate id', async () => {
-      const { id: langId } = suite.data.system.language;
+      const { code } = suite.data.system.language;
 
-      await suite.sharedTests.assertInvalidInput('post', url, ['id'], {
+      await suite.sharedTests.assertInvalidInput('post', url, ['code'], {
         input: {
-          id: input.id,
+          code: input.code,
           englishName: 'English - India',
           localName: 'English - India',
-          respondentLanguageId: langId,
-          adminLanguageId: langId,
+          respondentLanguageId: code,
+          adminLanguageId: code,
           countryFlagCode: 'en-in',
           prototypeLocaleId: null,
           textDirection: 'ltr',

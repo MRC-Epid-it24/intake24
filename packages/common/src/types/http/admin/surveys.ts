@@ -24,6 +24,8 @@ export type UpdateSurveyRequest = SurveyRequest;
 
 export interface SurveyListEntry
   extends Pick<SurveyAttributes, 'id' | 'slug' | 'name' | 'localeId' | 'surveySchemeId' | 'state'> {
+  locale: Pick<LocaleAttributes, 'code'>;
+  surveyScheme: Pick<SurveySchemeAttributes, 'name'>;
   securables: UserSecurableAttributes[];
 }
 

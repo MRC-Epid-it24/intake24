@@ -1,4 +1,6 @@
 import {
+  BelongsTo,
+  BelongsToMany,
   Column,
   CreatedAt,
   DataType,
@@ -11,17 +13,18 @@ import {
 import type { TextDirection } from '@intake24/common/types';
 import type { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
 
+import type { Securable } from '..';
 import BaseModel from '../model';
-import LanguageTranslation from './language-translation';
+import { LanguageTranslation, User, UserSecurable } from '.';
 import Locale from './locale';
 
 @Scopes(() => ({
   public: {
-    attributes: ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
+    attributes: ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
     order: [['englishName', 'ASC']],
   },
   list: {
-    attributes: ['id', 'englishName', 'localName', 'countryFlagCode'],
+    attributes: ['id', 'code', 'englishName', 'localName', 'countryFlagCode'],
     order: [['englishName', 'ASC']],
   },
   adminLocales: { include: [{ association: 'adminLocales' }] },
@@ -35,13 +38,21 @@ import Locale from './locale';
 })
 export default class Language
   extends BaseModel<LanguageAttributes, LanguageCreationAttributes>
-  implements LanguageAttributes
+  implements LanguageAttributes, Securable
 {
   @Column({
+    autoIncrement: true,
     primaryKey: true,
-    type: DataType.STRING(16),
+    type: DataType.BIGINT,
   })
   public id!: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+    unique: true,
+  })
+  public code!: string;
 
   @Column({
     allowNull: false,
@@ -68,6 +79,12 @@ export default class Language
   })
   public textDirection!: TextDirection;
 
+  @Column({
+    allowNull: true,
+    type: DataType.BIGINT,
+  })
+  public ownerId!: string | null;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;
@@ -79,9 +96,39 @@ export default class Language
   @HasMany(() => LanguageTranslation, 'languageId')
   public translations?: LanguageTranslation[];
 
-  @HasMany(() => Locale, 'adminLanguageId')
+  @HasMany(() => Locale, {
+    foreignKey: 'adminLanguageId',
+    sourceKey: 'code',
+  })
   public adminLocales?: Locale[];
 
-  @HasMany(() => Locale, 'respondentLanguageId')
+  @HasMany(() => Locale, {
+    foreignKey: 'respondentLanguageId',
+    sourceKey: 'code',
+  })
   public surveyLocales?: Locale[];
+
+  @BelongsTo(() => User, 'ownerId')
+  public owner?: User | null;
+
+  @BelongsToMany(() => User, {
+    through: {
+      model: () => UserSecurable,
+      unique: false,
+      scope: {
+        securable_type: 'Language',
+      },
+    },
+    foreignKey: 'securableId',
+    otherKey: 'userId',
+    constraints: false,
+  })
+  public securableUsers?: User[];
+
+  @HasMany(() => UserSecurable, {
+    foreignKey: 'securableId',
+    constraints: false,
+    scope: { securable_type: 'Language' },
+  })
+  public securables?: UserSecurable[];
 }

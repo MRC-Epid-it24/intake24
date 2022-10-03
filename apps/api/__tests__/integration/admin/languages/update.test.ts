@@ -16,22 +16,22 @@ export default () => {
 
   beforeAll(async () => {
     input = {
-      id: 'es-ec',
+      code: 'es-ec',
       englishName: 'Spanish - Ecuador',
       localName: 'Spanish - Ecuador',
       countryFlagCode: 'es-ec',
       textDirection: 'ltr',
     };
     updateInput = {
-      id: 'es-sv',
+      code: 'es-sv',
       englishName: 'Spanish - El Salvador',
       localName: 'Spanish - El Salvador',
       countryFlagCode: 'es-sv',
       textDirection: 'ltr',
     };
 
-    const { id } = input;
-    output = { ...updateInput, id };
+    const { code } = input;
+    output = { ...updateInput, code };
 
     language = await Language.create(input);
 
@@ -40,7 +40,7 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url, { permissions });
+    await suite.sharedTests.assert401and403('put', url, { input, permissions });
   });
 
   describe('authenticated / resource authorized', () => {

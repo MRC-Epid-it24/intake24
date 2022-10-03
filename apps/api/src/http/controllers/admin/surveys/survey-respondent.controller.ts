@@ -10,9 +10,9 @@ import type {
 import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
-import { UserSurveyAlias } from '@intake24/db';
+import { Survey, UserSurveyAlias } from '@intake24/db';
 
-import { getAndCheckSurveyAccess } from './survey.controller';
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminSurveyRespondentController = ({
   appConfig,
@@ -28,7 +28,7 @@ const adminSurveyRespondentController = ({
       id: surveyId,
       slug,
       authUrlDomainOverride,
-    } = await getAndCheckSurveyAccess(req, 'respondents');
+    } = await getAndCheckAccess(Survey, 'respondents', req);
     const { userId } = req.params;
 
     const respondent = await UserSurveyAlias.findOne({
@@ -50,7 +50,7 @@ const adminSurveyRespondentController = ({
       id: surveyId,
       slug,
       authUrlDomainOverride,
-    } = await getAndCheckSurveyAccess(req as Request<{ surveyId: string }>, 'respondents');
+    } = await getAndCheckAccess(Survey, 'respondents', req as Request<{ surveyId: string }>);
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
 
@@ -73,7 +73,7 @@ const adminSurveyRespondentController = ({
       id: surveyId,
       slug,
       authUrlDomainOverride,
-    } = await getAndCheckSurveyAccess(req, 'respondents');
+    } = await getAndCheckAccess(Survey, 'respondents', req);
 
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
@@ -107,7 +107,7 @@ const adminSurveyRespondentController = ({
       id: surveyId,
       slug,
       authUrlDomainOverride,
-    } = await getAndCheckSurveyAccess(req, 'respondents');
+    } = await getAndCheckAccess(Survey, 'respondents', req);
     const { userId } = req.params;
 
     const respondent = await adminSurveyService.updateRespondent(
@@ -129,7 +129,7 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
     const { userId } = req.params;
 
     await adminSurveyService.deleteRespondent(surveyId, userId);
@@ -141,7 +141,7 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
 
     const { file } = req;
     const { id: userId } = req.user as User;
@@ -157,7 +157,7 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
     const { id: userId } = req.user as User;
 
     const job = await adminSurveyService.exportAuthenticationUrls(surveyId, userId);
@@ -169,7 +169,7 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
     const { userId } = req.params;
 
     const { pdfStream, filename } = await feedbackService.getFeedbackStream(surveyId, userId);
@@ -184,7 +184,7 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'respondents');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
 
     const {
       params: { userId },

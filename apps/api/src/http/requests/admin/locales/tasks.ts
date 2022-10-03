@@ -7,7 +7,7 @@ import {
   validate,
 } from '@intake24/api/http/requests/util';
 import { pickJobParams } from '@intake24/common/types';
-import { FoodsLocale } from '@intake24/db';
+import { FoodsLocale, SystemLocale } from '@intake24/db';
 
 const jobOptions = ['LocaleFoodNutrientMapping', 'PairwiseSearchCopyAssociations'];
 
@@ -38,7 +38,7 @@ export default validate(
 
               const { sourceLocaleId, targetLocaleId } = value;
 
-              const locales = await FoodsLocale.findAll({
+              const locales = await SystemLocale.findAll({
                 where: { id: [sourceLocaleId, targetLocaleId] },
               });
               if (locales.length !== 2) throw new Error(customTypeErrorMessage('exists._', meta));
@@ -47,7 +47,7 @@ export default validate(
               if (typeof value?.localeId !== 'string')
                 throw new Error(customTypeErrorMessage('string._', meta));
 
-              const locale = await FoodsLocale.findOne({ where: { id: value.localeId } });
+              const locale = await SystemLocale.findByPk(value.localeId);
               if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
               break;
             default:

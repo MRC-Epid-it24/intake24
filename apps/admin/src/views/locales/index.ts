@@ -1,6 +1,7 @@
 import browse from './browse.vue';
 import form from './form.vue';
 import read from './read.vue';
+import securables from './securables';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import synonymSets from './synonym-sets';
@@ -11,6 +12,7 @@ export default {
   create: form,
   read,
   edit: form,
+  securables,
   'split-lists': splitLists,
   'split-words': splitWords,
   'synonym-sets': synonymSets,

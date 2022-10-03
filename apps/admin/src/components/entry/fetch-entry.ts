@@ -26,7 +26,7 @@ export default defineComponent({
     ...mapActions(useEntry, ['requestEntry']),
 
     async fetch(id?: string): Promise<void> {
-      await this.requestEntry({ id: id ?? this.id });
+      await this.requestEntry({ id: id ?? this.id, action: this.currentAction });
     },
   },
 });

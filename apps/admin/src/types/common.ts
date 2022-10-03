@@ -3,6 +3,7 @@ import type { Route } from 'vue-router';
 export interface Resource {
   group: string;
   name: string;
+  module?: string;
   path?: string;
   api: string;
   icon: string;

@@ -10,9 +10,10 @@ import type {
   SynonymSetsCreationAttributes,
 } from '../../models';
 import type { LanguageListEntry } from './languages';
+import type { Owner } from './users';
 
 export type LocaleRequest = {
-  id: string;
+  code: string;
   englishName: string;
   localName: string;
   respondentLanguageId: string;
@@ -25,15 +26,17 @@ export type LocaleRequest = {
 
 export type CreateLocaleRequest = LocaleRequest;
 
-export type UpdateLocaleRequest = Omit<LocaleRequest, 'id'>;
+export type UpdateLocaleRequest = Omit<LocaleRequest, 'code'>;
 
 export type LocalesResponse = Pagination<LocaleAttributes>;
 
-export type LocaleEntry = LocaleAttributes;
+export interface LocaleEntry extends LocaleAttributes {
+  owner?: Owner;
+}
 
 export type LocaleListEntry = Pick<
   LocaleAttributes,
-  'id' | 'englishName' | 'localName' | 'countryFlagCode'
+  'id' | 'code' | 'englishName' | 'localName' | 'countryFlagCode'
 >;
 
 export type LocaleRefs = {

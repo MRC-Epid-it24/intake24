@@ -1,5 +1,6 @@
 import type {
   FeedbackSchemeAttributes,
+  LocaleAttributes,
   SurveySchemeAttributes,
   SurveyState,
   UserSurveySessionAttributes,
@@ -32,12 +33,14 @@ export type SchemeEntryResponse = Pick<
 >;
 export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
+export type LocaleEntryResponse = Pick<LocaleAttributes, 'id' | 'code'>;
+
 export type SurveyEntryResponse = {
   id: string;
   slug: string;
   name: string;
   state: SurveyState;
-  localeId: string;
+  locale: LocaleEntryResponse;
   surveyScheme: SchemeEntryResponse;
   feedbackScheme?: FeedbackSchemeEntryResponse;
   numberOfSubmissionsForFeedback: number;

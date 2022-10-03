@@ -9,12 +9,11 @@ export default () => {
 
   let url: string;
   let invalidUrl: string;
-  let localeId: string;
 
   let splitLists: LocaleSplitListInput[];
 
   beforeAll(async () => {
-    localeId = suite.data.system.locale.id;
+    const { id, code: localeId } = suite.data.system.locale;
 
     splitLists = [
       { localeId, firstWord: 'first word', words: 'first1 first2 first3' },
@@ -22,12 +21,12 @@ export default () => {
       { localeId, firstWord: 'third word', words: 'third1 third2 third3' },
     ];
 
-    url = `${baseUrl}/${localeId}/split-lists`;
-    invalidUrl = `${baseUrl}/invalid-locale/split-lists`;
+    url = `${baseUrl}/${id}/split-lists`;
+    invalidUrl = `${baseUrl}/999999/split-lists`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url, { permissions });
+    await suite.sharedTests.assert401and403('post', url, { input: splitLists, permissions });
   });
 
   describe('authenticated / resource authorized', () => {

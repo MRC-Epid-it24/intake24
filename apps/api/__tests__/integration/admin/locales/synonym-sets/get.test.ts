@@ -14,17 +14,17 @@ export default () => {
   let synonymSets: LocaleSynonymSetInput[];
 
   beforeAll(async () => {
-    const { id: localeId } = suite.data.system.locale;
+    const { id, code: localeId } = suite.data.system.locale;
 
     synonymSets = [
       { localeId, synonyms: 'synonym1 synonym2 synonym3' },
       { localeId, synonyms: 'synonym11 synonym22 synonym33' },
     ];
 
-    await ioc.cradle.localeService.setSynonymSets(localeId, synonymSets);
+    await ioc.cradle.localeService.setSynonymSets(id, synonymSets);
 
-    url = `${baseUrl}/${localeId}/synonym-sets`;
-    invalidUrl = `${baseUrl}/invalid-locale/synonym-sets`;
+    url = `${baseUrl}/${id}/synonym-sets`;
+    invalidUrl = `${baseUrl}/999999/synonym-sets`;
   });
 
   test('missing authentication / authorization', async () => {

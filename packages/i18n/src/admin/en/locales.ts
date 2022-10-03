@@ -1,8 +1,10 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
+import securables from './securables';
+
 const locales: LocaleMessageObject = {
   _: 'Locale',
-  id: 'Locale ID',
+  code: 'Locale code',
   title: 'Locales',
   all: 'All locales',
   read: 'Locale detail',
@@ -53,6 +55,8 @@ const locales: LocaleMessageObject = {
     title: 'Locale tasks',
     tab: 'tasks',
   },
+
+  securables,
 };
 
 export default locales;

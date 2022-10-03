@@ -1,9 +1,17 @@
+import type { Request } from 'express';
+
 import type { RequestIoC } from '@intake24/api/ioc';
-import type { Permission, Role, Securable } from '@intake24/db';
+import type { Dictionary } from '@intake24/common/types';
+import type { ModelStatic, Permission, Role, Securable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
-import { securableToResource } from '@intake24/common/util';
-import { User } from '@intake24/db';
+import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
+import { securableScope, User } from '@intake24/db';
+
+export type CheckAccessOptions = {
+  params: Dictionary;
+  scope?: string | string[];
+};
 
 const aclService = ({
   aclConfig,
@@ -150,14 +158,18 @@ const aclService = ({
    * @param {string} action
    * @returns {Promise<boolean>}
    */
-  const canAccessRecord = async (record: Securable, action: string): Promise<boolean> => {
-    const resource = securableToResource(record.constructor.name);
-
-    const checkPermission = await hasPermission(`${resource}|${action}`);
-    if (checkPermission) return true;
-
-    const isOwner = record.ownerId === userId;
-    const canAccess = !!record.securables?.find(
+  /**
+   * Check is user can access record based on
+   * - securable actions
+   * - ownership
+   *
+   * @param {Securable} securable
+   * @param {string} action
+   * @returns {Promise<boolean>}
+   */
+  const hasSecurableAccess = async (securable: Securable, action: string): Promise<boolean> => {
+    const isOwner = securable.ownerId === userId;
+    const canAccess = !!securable.securables?.find(
       (sec) => sec.userId === userId && sec.action === action
     );
 
@@ -165,24 +177,67 @@ const aclService = ({
   };
 
   /**
-   * Retrieve securable record and check if user has access to it
+   * Check is user can access record based on
+   * - resource permissions
+   *
+   * @param {string} securableType
+   * @param {string} action
+   * @returns {Promise<boolean>}
+   */
+  const hasResourceAccess = async (securableType: string, action: string): Promise<boolean> => {
+    const resource = getResourceFromSecurable(securableType);
+
+    return hasPermission(`${resource}|${action}`);
+  };
+
+  /**
+   * Check if user has access to a record
    *
    * @template T
-   * @param {Promise<T>} recordPromise
+   * @param {Request} req
+   * @param {ModelStatic<T>} securable
    * @param {string} action
-   * @returns {Promise<T>}
+   * @returns {Promise<void>}
    */
-  const getAndCheckRecordAccess = async <T extends Securable>(
-    recordPromise: Promise<T | null>,
+  const checkAccess = async <T extends Securable>(
+    req: Request,
+    securable: ModelStatic<T>,
     action: string
-  ): Promise<T> => {
-    const record = await recordPromise;
+  ): Promise<void> => {
+    const securableType = securable.name;
+
+    if (await hasResourceAccess(securableType, action)) return;
+
+    const paramId = getRequestParamFromSecurable(securableType);
+    const { [paramId]: securableId } = req.params;
+
+    const record = await securable.findByPk(securableId, securableScope(userId));
     if (!record) throw new NotFoundError();
 
-    const hasAccess = await canAccessRecord(record, action);
-    if (!hasAccess) throw new ForbiddenError();
+    const casAccessRecord = await hasSecurableAccess(record, action);
+    if (!casAccessRecord) throw new ForbiddenError();
+  };
 
-    return record;
+  const getAndCheckRecordAccess = async <T extends Securable>(
+    securable: ModelStatic<T>,
+    action: string,
+    options: CheckAccessOptions
+  ): Promise<T> => {
+    const securableType = securable.name;
+    const paramId = getRequestParamFromSecurable(securableType);
+    const {
+      params: { [paramId]: securableId },
+      scope,
+    } = options;
+
+    const record = await securable.scope(scope).findByPk(securableId, securableScope(userId));
+    if (!record) throw new NotFoundError();
+
+    if (await hasResourceAccess(record.constructor.name, action)) return record;
+
+    if (await hasSecurableAccess(record, action)) return record;
+
+    throw new ForbiddenError();
   };
 
   /**
@@ -232,7 +287,7 @@ const aclService = ({
     hasAnyPermission,
     hasRole,
     hasAnyRole,
-    canAccessRecord,
+    checkAccess,
     getAndCheckRecordAccess,
     getResourceAccessActions,
     getSecurableAccessActions,

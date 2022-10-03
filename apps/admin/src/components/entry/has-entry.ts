@@ -13,6 +13,9 @@ export default defineComponent({
   },
 
   computed: {
+    currentAction(): string {
+      return this.$route.meta?.action;
+    },
     isCreate(): boolean {
       return this.id === 'create';
     },

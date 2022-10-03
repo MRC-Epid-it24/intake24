@@ -25,7 +25,10 @@
           <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
             <slot :name="scopedSlotName" v-bind="slotData" />
           </template>
-          <template #[`item.action`]="{ item }">
+          <template
+            v-if="!Object.keys($scopedSlots).includes('item.action')"
+            #[`item.action`]="{ item }"
+          >
             <action-bar
               :actions="actions.filter((action) => action !== 'create')"
               :api="api"

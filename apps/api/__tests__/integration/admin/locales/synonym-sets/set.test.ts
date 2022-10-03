@@ -9,12 +9,11 @@ export default () => {
 
   let url: string;
   let invalidUrl: string;
-  let localeId: string;
 
   let synonymSets: LocaleSynonymSetInput[];
 
   beforeAll(async () => {
-    localeId = suite.data.system.locale.id;
+    const { id, code: localeId } = suite.data.system.locale;
 
     synonymSets = [
       { localeId, synonyms: 'first1 first2 first3' },
@@ -22,12 +21,12 @@ export default () => {
       { localeId, synonyms: 'third1 third2 third3' },
     ];
 
-    url = `${baseUrl}/${localeId}/synonym-sets`;
-    invalidUrl = `${baseUrl}/invalid-locale/synonym-sets`;
+    url = `${baseUrl}/${id}/synonym-sets`;
+    invalidUrl = `${baseUrl}/999999/synonym-sets`;
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('post', url, { permissions });
+    await suite.sharedTests.assert401and403('post', url, { input: synonymSets, permissions });
   });
 
   describe('authenticated / resource authorized', () => {

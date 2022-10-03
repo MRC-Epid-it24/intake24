@@ -112,7 +112,7 @@ module.exports = {
           field: 'id',
         },
         onUpdate: 'cascade',
-        onDelete: 'restrict',
+        onDelete: 'set null',
         name: 'feedback_schemes_owner_id_fk',
         transaction,
       });

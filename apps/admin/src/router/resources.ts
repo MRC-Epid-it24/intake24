@@ -7,6 +7,7 @@ export const resources: Resource[] = [
   {
     group: 'fdb',
     name: 'fdbs',
+    module: 'locales',
     icon: 'fas fa-drumstick-bite',
     api: 'admin/fdbs',
     generateRoutes: false,
@@ -59,7 +60,8 @@ export const resources: Resource[] = [
     icon: '$languages',
     api: 'admin/languages',
     generateRoutes: true,
-    routes: [...routes, 'translations'],
+    securable: true,
+    routes: [...routes, 'translations', 'securables'],
   },
   {
     group: 'local',
@@ -67,7 +69,8 @@ export const resources: Resource[] = [
     icon: '$locales',
     api: 'admin/locales',
     generateRoutes: true,
-    routes: [...routes, 'split-lists', 'split-words', 'synonym-sets', 'tasks'],
+    securable: true,
+    routes: [...routes, 'split-lists', 'split-words', 'synonym-sets', 'tasks', 'securables'],
   },
   // Surveys
   {

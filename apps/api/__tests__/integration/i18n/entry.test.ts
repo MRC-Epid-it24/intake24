@@ -36,7 +36,7 @@ export default () => {
 
     expect(status).toBe(200);
     expect(body).toContainAllKeys([
-      'id',
+      'code',
       'englishName',
       'localName',
       'countryFlagCode',
@@ -52,7 +52,7 @@ export default () => {
 
     expect(status).toBe(200);
     expect(body).toContainAllKeys([
-      'id',
+      'code',
       'englishName',
       'localName',
       'countryFlagCode',

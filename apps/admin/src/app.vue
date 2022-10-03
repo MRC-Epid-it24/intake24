@@ -23,7 +23,7 @@
       <menu-tree
         v-if="
           can([
-            'fdbs|browse',
+            'locales',
             'food-groups|browse',
             'nutrient-tables|browse',
             'nutrient-types|browse',
@@ -35,7 +35,7 @@
         :resources="resources.fdb"
       ></menu-tree>
       <menu-tree
-        v-if="can(['languages|browse', 'locales|browse'])"
+        v-if="can(['languages', 'locales'])"
         icon="fas fa-fw fa-globe"
         name="local"
         :resources="resources.local"
@@ -158,9 +158,10 @@ export default defineComponent({
       const { module } = this;
       if (!module) return this.$t('common._').toString();
 
-      const { id, name } = this.entry;
+      const { id, name, englishName, description } = this.entry;
 
-      return name ?? id ?? this.$t(`${module}.title`).toString();
+      // TODO: we should resole breadcrumb name in better way based on entry field
+      return name ?? englishName ?? description ?? id ?? this.$t(`${module}.title`).toString();
     },
   },
 
@@ -235,12 +236,25 @@ export default defineComponent({
         return items;
       }
 
-      const { name: entryName, id: entryId } = this.entry;
+      // TODO: we should resole breadcrumb name in better way based on entry field
+      const {
+        id: entryId,
+        name: entryName,
+        englishName,
+        description,
+        securables = [],
+      } = this.entry;
+      const text = entryName ?? englishName ?? description ?? entryId ?? this.$t(`${title}.read`);
+
+      const itemAction =
+        this.can(`${module}|read`) || securables.find((item) => item.action === 'read')
+          ? 'read'
+          : 'edit';
 
       items.push({
         ...defaults,
-        text: parent ? this.$t(`${title}.read`) : entryName ?? entryId ?? this.$t(`${title}.read`),
-        to: { name: `${name}-read`, params },
+        text: parent ? this.$t(`${title}.${itemAction}`) : text,
+        to: { name: `${name}-${itemAction}`, params },
       });
 
       if (['edit'].includes(action)) {

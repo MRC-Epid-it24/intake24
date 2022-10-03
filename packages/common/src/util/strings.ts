@@ -14,10 +14,16 @@ export const kebabCase = (string: string): string =>
     .replace(/[\s_]+/g, '-')
     .toLowerCase();
 
-export const securableToResource = (securable: any): string => {
-  if (!isSecurableType(securable)) throw Error(`Invalid securable type: ${securable}`);
+export const getResourceFromSecurable = (securableType: any): string => {
+  if (!isSecurableType(securableType)) throw Error('Invalid securable type');
 
-  return kebabCase(plural(securable));
+  return kebabCase(plural(securableType));
+};
+
+export const getRequestParamFromSecurable = (securableType: any): string => {
+  if (!isSecurableType(securableType)) throw Error('Invalid securable type');
+
+  return `${securableType[0].toLowerCase()}${securableType.substring(1)}Id`;
 };
 
 /**

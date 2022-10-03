@@ -29,7 +29,7 @@ export default class LanguageTranslation
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.BIGINT,
     unique: 'language_translations_unique',
   })
   public languageId!: string;

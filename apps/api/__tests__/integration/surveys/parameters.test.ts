@@ -33,7 +33,7 @@ export default () => {
       'slug',
       'name',
       'state',
-      'localeId',
+      'locale',
       'surveyScheme',
       'feedbackScheme',
       'numberOfSubmissionsForFeedback',

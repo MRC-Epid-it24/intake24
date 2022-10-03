@@ -9,7 +9,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
 import type { PaginateOptions, PaginateQuery } from '@intake24/db';
-import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
 import {
   createFeedbackSchemeFields,
@@ -27,23 +27,9 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import securableController from './securable.controller';
+import { getAndCheckAccess, securableController } from './securable.controller';
 
 const feedbackSchemeController = (ioc: IoC) => {
-  const getAndCheckAccess = async (
-    req: Request<{ feedbackSchemeId: string }>,
-    action: string,
-    scope?: string | string[]
-  ): Promise<FeedbackScheme> => {
-    const { feedbackSchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
-
-    return aclService.getAndCheckRecordAccess(
-      FeedbackScheme.scope(scope).findByPk(feedbackSchemeId, securableScope(userId)),
-      action
-    );
-  };
-
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemesResponse>
@@ -90,7 +76,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const feedbackScheme = await getAndCheckAccess(req, 'read');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'read', req);
 
     res.json(feedbackSchemeResponse(feedbackScheme));
   };
@@ -99,7 +85,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const feedbackScheme = await getAndCheckAccess(req, 'edit');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'edit', req);
 
     res.json(feedbackSchemeResponse(feedbackScheme));
   };
@@ -108,7 +94,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const feedbackScheme = await getAndCheckAccess(req, 'edit');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'edit', req);
 
     await feedbackScheme.update(pick(req.body, createFeedbackSchemeFields));
 
@@ -121,7 +107,7 @@ const feedbackSchemeController = (ioc: IoC) => {
   ): Promise<void> => {
     const { aclService, userId } = req.scope.cradle;
 
-    const feedbackScheme = await getAndCheckAccess(req, 'edit');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'edit', req);
 
     const keysToUpdate: string[] = [];
     const [resourceActions, securableActions] = await Promise.all([
@@ -156,7 +142,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const feedbackScheme = await getAndCheckAccess(req, 'delete', 'surveys');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'delete', req, 'surveys');
     const { id: securableId, surveys } = feedbackScheme;
 
     if (!surveys || surveys.length)
@@ -176,7 +162,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<{ feedbackSchemeId: string }>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const feedbackScheme = await getAndCheckAccess(req, 'copy');
+    const feedbackScheme = await getAndCheckAccess(FeedbackScheme, 'copy', req);
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;

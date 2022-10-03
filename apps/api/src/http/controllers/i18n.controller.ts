@@ -2,14 +2,14 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
-import type { FindOptions } from '@intake24/db';
+import type { Includeable } from '@intake24/db';
 import type { LocaleMessageObject } from '@intake24/i18n';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Language } from '@intake24/db';
 
 const userI18nController = () => {
   const browse = async (req: Request, res: Response<I18nLanguageListEntry[]>): Promise<void> => {
-    const languages = await Language.scope('list').findAll();
+    const languages = await Language.scope('public').findAll();
 
     res.json(languages);
   };
@@ -23,23 +23,28 @@ const userI18nController = () => {
       query: { app },
     } = req;
 
-    const options: FindOptions = {
-      include: [
-        { association: 'translations', where: { application: [app, 'shared'] }, required: false },
-      ],
-    };
+    const include: Includeable[] = [
+      { association: 'translations', where: { application: [app, 'shared'] }, required: false },
+    ];
 
-    let language = await Language.scope('public').findByPk(languageId, options);
+    let language = await Language.scope('public').findOne({ where: { code: languageId }, include });
 
     if (!language && languageId.includes('-')) {
       const [fallback] = languageId.split('-');
-      language = await Language.scope('public').findByPk(fallback, options);
+      language = await Language.scope('public').findOne({ where: { code: fallback }, include });
     }
 
     if (!language) throw new NotFoundError();
 
     const response = {
-      ...pick(language, ['id', 'englishName', 'localName', 'countryFlagCode', 'textDirection']),
+      ...pick(language, [
+        'id',
+        'code',
+        'englishName',
+        'localName',
+        'countryFlagCode',
+        'textDirection',
+      ]),
       messages:
         language.translations?.reduce<LocaleMessageObject>((acc, { section, messages }) => {
           acc[section] = messages;

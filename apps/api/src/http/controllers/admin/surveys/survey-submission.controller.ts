@@ -9,18 +9,19 @@ import type {
 import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import type { PaginateQuery, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { submissionScope, SurveySubmission } from '@intake24/db';
+import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
-import { getAndCheckSurveyAccess } from './survey.controller';
+import { getAndCheckAccess } from '../securable.controller';
 
 const adminSurveySubmissionController = () => {
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveySubmissionsResponse>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(
-      req as Request<{ surveyId: string }>,
-      'submissions'
+    const { id: surveyId } = await getAndCheckAccess(
+      Survey,
+      'submissions',
+      req as Request<{ surveyId: string }>
     );
     const {
       query: { search },
@@ -45,7 +46,7 @@ const adminSurveySubmissionController = () => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<SurveySubmissionEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'submissions');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'submissions', req);
     const { submissionId } = req.params;
 
     const scope = submissionScope({ surveyId });
@@ -62,7 +63,7 @@ const adminSurveySubmissionController = () => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckSurveyAccess(req, 'submissions');
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'submissions', req);
     const { submissionId } = req.params;
 
     const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });

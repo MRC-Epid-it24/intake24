@@ -3,8 +3,8 @@
     <v-simple-table>
       <tbody>
         <tr>
-          <th>{{ $t('languages.id') }}</th>
-          <td>{{ entry.id }}</td>
+          <th>{{ $t('languages.code') }}</th>
+          <td>{{ entry.code }}</td>
         </tr>
         <tr>
           <th>{{ $t('languages.englishName') }}</th>

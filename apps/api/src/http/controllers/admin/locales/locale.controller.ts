@@ -3,43 +3,57 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
-import type { Job, PaginateQuery, User } from '@intake24/db';
+import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { localeResponse } from '@intake24/api/http/responses/admin';
 import { pickJobParams } from '@intake24/common/types';
-import { FoodIndexBackend, FoodsLocale, Language, SystemLocale } from '@intake24/db';
+import {
+  FoodIndexBackend,
+  FoodsLocale,
+  Language,
+  Op,
+  securableScope,
+  SystemLocale,
+} from '@intake24/db';
 
-const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
-  const entry = async (
-    req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
-  ): Promise<void> => {
-    const { localeId } = req.params;
+import { getAndCheckAccess, securableController } from '../securable.controller';
 
-    const [systemLocale, foodsLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId),
-      FoodsLocale.findByPk(localeId),
-    ]);
-    if (!systemLocale || !foodsLocale) throw new NotFoundError();
-
-    res.json(systemLocale);
-  };
+const localeController = (ioc: IoC) => {
+  const { localeService } = ioc;
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
   ): Promise<void> => {
-    const locales = await SystemLocale.paginate({
+    const { aclService, userId } = req.scope.cradle;
+
+    const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'englishName', 'localName'],
       order: [['id', 'ASC']],
+    };
+
+    if (await aclService.hasPermission('locales|browse')) {
+      const locales = await SystemLocale.paginate(paginateOptions);
+      res.json(locales);
+      return;
+    }
+
+    const locales = await SystemLocale.paginate({
+      ...paginateOptions,
+      where: { [Op.or]: { ownerId: userId, '$securables.action$': ['read', 'edit', 'delete'] } },
+      ...securableScope(userId),
+      subQuery: false,
     });
 
     res.json(locales);
   };
 
   const store = async (req: Request, res: Response<LocaleEntry>): Promise<void> => {
+    const { userId } = req.scope.cradle;
+
     const input = pick(req.body, [
-      'id',
+      'code',
       'englishName',
       'localName',
       'respondentLanguageId',
@@ -50,32 +64,42 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
       'foodIndexLanguageBackendId',
     ]);
 
-    const [locale] = await Promise.all([SystemLocale.create(input), FoodsLocale.create(input)]);
+    const { code, ...rest } = input;
+    const foodsInput = { id: code, ...rest };
 
-    res.status(201).json(locale);
+    const [locale] = await Promise.all([
+      SystemLocale.create({ ...input, ownerId: userId }),
+      FoodsLocale.create(foodsInput),
+    ]);
+
+    res.status(201).json(localeResponse(locale));
   };
 
   const read = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const locale = await getAndCheckAccess(SystemLocale, 'read', req);
+
+    res.json(localeResponse(locale));
+  };
 
   const edit = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
-  ): Promise<void> => entry(req, res);
+  ): Promise<void> => {
+    const locale = await getAndCheckAccess(SystemLocale, 'edit', req);
+
+    res.json(localeResponse(locale));
+  };
 
   const update = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const { localeId } = req.params;
-
-    const [systemLocale, foodsLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId),
-      FoodsLocale.findByPk(localeId),
-    ]);
-    if (!systemLocale || !foodsLocale) throw new NotFoundError();
+    const systemLocale = await getAndCheckAccess(SystemLocale, 'edit', req);
+    const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
+    if (!foodsLocale) throw new NotFoundError();
 
     const input = pick(req.body, [
       'englishName',
@@ -90,19 +114,15 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
 
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
 
-    res.json(systemLocale);
+    res.json(localeResponse(systemLocale));
   };
 
   const destroy = async (
     req: Request<{ localeId: string }> /* , res: Response<undefined> */
   ): Promise<void> => {
-    const { localeId } = req.params;
-
-    const [systemLocale, foodsLocale] = await Promise.all([
-      SystemLocale.scope('surveys').findByPk(localeId),
-      FoodsLocale.findByPk(localeId),
-    ]);
-    if (!systemLocale || !systemLocale.surveys || !foodsLocale) throw new NotFoundError();
+    const systemLocale = await getAndCheckAccess(SystemLocale, 'delete', req, 'surveys');
+    const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
+    if (!systemLocale.surveys || !foodsLocale) throw new NotFoundError();
 
     if (systemLocale.surveys.length)
       throw new ForbiddenError('Locale cannot be deleted. There are surveys using this locale.');
@@ -125,6 +145,15 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
     res.json({ languages, locales, foodIndexLanguageBackends });
   };
 
+  const copy = async (
+    req: Request<{ localeId: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => {
+    await getAndCheckAccess(SystemLocale, 'copy', req);
+
+    // TODO: implement locale copying
+  };
+
   const tasks = async (req: Request<{ localeId: string }>, res: Response<Job>): Promise<void> => {
     const {
       body: { job, params },
@@ -132,8 +161,7 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
     } = req;
     const { id: userId } = req.user as User;
 
-    const locale = await SystemLocale.findByPk(localeId);
-    if (!locale) throw new NotFoundError();
+    await getAndCheckAccess(SystemLocale, 'tasks', req);
 
     const jobEntry = await localeService.queueLocaleTask({
       userId,
@@ -152,7 +180,9 @@ const localeController = ({ localeService }: Pick<IoC, 'localeService'>) => {
     update,
     destroy,
     refs,
+    copy,
     tasks,
+    securables: securableController({ ioc, securable: SystemLocale }),
   };
 };
 

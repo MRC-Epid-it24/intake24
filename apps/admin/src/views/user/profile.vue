@@ -88,7 +88,7 @@
                   v-model="language"
                   hide-details="auto"
                   item-text="englishName"
-                  item-value="id"
+                  item-value="code"
                   :items="languages"
                   :label="$t('user.languages._')"
                   outlined

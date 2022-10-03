@@ -2,12 +2,18 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
+import type { UserSecurableAttributes } from '@intake24/common/types/models';
 
 import { httpService } from '../services';
 import { useResource } from './resource';
 
+export type ItemState = {
+  securables?: UserSecurableAttributes[];
+  [key: string]: any;
+};
+
 export type EntryState = {
-  data: Dictionary;
+  data: ItemState;
   refs: Dictionary;
 };
 
@@ -23,7 +29,7 @@ export const useEntry = defineStore('entry', {
     refsLoaded: (state) => !!Object.keys(state.refs).length,
   },
   actions: {
-    async requestEntry({ id, query }: { id: string; query?: any }) {
+    async requestEntry({ id, action, query }: { id: string; action?: string; query?: any }) {
       const { api } = useResource();
 
       this.clearEntry();
@@ -34,7 +40,9 @@ export const useEntry = defineStore('entry', {
         return;
       }
 
-      const { data } = await httpService.get(`${api}/${id}`, { params: query, withLoading: true });
+      const apiUrl = [api, id, action === 'edit' ? action : null].filter(Boolean).join('/');
+
+      const { data } = await httpService.get(apiUrl, { params: query, withLoading: true });
       this.setEntry(data);
 
       await this.requestRefs();

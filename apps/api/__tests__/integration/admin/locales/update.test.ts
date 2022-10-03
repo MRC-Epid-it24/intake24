@@ -1,4 +1,4 @@
-import type { LocaleAttributes } from '@intake24/common/types/models';
+import type { LocaleCreationAttributes } from '@intake24/common/types/models';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
@@ -9,40 +9,40 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: LocaleAttributes;
-  let updateInput: LocaleAttributes;
-  let output: LocaleAttributes;
+  let input: LocaleCreationAttributes;
+  let updateInput: LocaleCreationAttributes;
+  let output: LocaleCreationAttributes;
   let systemLocale: SystemLocale;
 
   beforeAll(async () => {
-    const { id: langId } = suite.data.system.language;
+    const { code: langCode } = suite.data.system.language;
     input = {
-      id: 'en-ie',
+      code: 'en-ie',
       englishName: 'English - Ireland',
       localName: 'English - Ireland',
-      respondentLanguageId: langId,
-      adminLanguageId: langId,
+      respondentLanguageId: langCode,
+      adminLanguageId: langCode,
       countryFlagCode: 'en-ie',
       prototypeLocaleId: null,
       textDirection: 'ltr',
       foodIndexLanguageBackendId: 'en',
     };
     updateInput = {
-      id: 'en-jm',
+      code: 'en-jm',
       englishName: 'English - Jamaica',
       localName: 'English - Jamaica',
-      respondentLanguageId: langId,
-      adminLanguageId: langId,
+      respondentLanguageId: langCode,
+      adminLanguageId: langCode,
       countryFlagCode: 'en-jm',
       prototypeLocaleId: null,
       textDirection: 'ltr',
       foodIndexLanguageBackendId: 'en',
     };
 
-    const { id } = input;
-    output = { ...updateInput, id };
+    const { code } = input;
+    output = { ...updateInput, code };
 
-    await FoodsLocale.create(input);
+    await FoodsLocale.create({ id: input.code, ...input });
     systemLocale = await SystemLocale.create(input);
 
     url = `${baseUrl}/${systemLocale.id}`;
@@ -50,7 +50,7 @@ export default () => {
   });
 
   test('missing authentication / authorization', async () => {
-    await suite.sharedTests.assert401and403('put', url, { permissions });
+    await suite.sharedTests.assert401and403('put', url, { input: updateInput, permissions });
   });
 
   describe('authenticated / resource authorized', () => {

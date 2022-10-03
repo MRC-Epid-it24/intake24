@@ -74,7 +74,7 @@ module.exports = {
 
       await queryInterface.addConstraint('locales', {
         fields: ['admin_language_id'],
-        name: 'locales_admin_language_id_languages_fk',
+        name: 'locales_admin_language_id_fk',
         type: 'foreign key',
         references: {
           table: 'languages',
@@ -87,7 +87,7 @@ module.exports = {
 
       await queryInterface.addConstraint('locales', {
         fields: ['respondent_language_id'],
-        name: 'locales_respondent_language_id_languages_fk',
+        name: 'locales_respondent_language_id_fk',
         type: 'foreign key',
         references: {
           table: 'languages',
@@ -101,15 +101,13 @@ module.exports = {
 
   down: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.removeConstraint('locales', 'locales_admin_language_id_languages_fk', {
+      await queryInterface.removeConstraint('locales', 'locales_admin_language_id_fk', {
         transaction,
       });
 
-      await queryInterface.removeConstraint(
-        'locales',
-        'locales_respondent_language_id_languages_fk',
-        { transaction }
-      );
+      await queryInterface.removeConstraint('locales', 'locales_respondent_language_id_fk', {
+        transaction,
+      });
 
       await queryInterface.dropTable('languages', { transaction });
     }),
