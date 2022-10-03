@@ -149,8 +149,10 @@ export default defineComponent({
   async mounted() {
     await this.fetchStandardUnits();
 
-    if (!this.selected.unit && this.standardUnits.length === 1)
+    if (!this.selected.unit && this.standardUnits.length === 1) {
       this.selected.unit = this.standardUnits[0];
+      this.onSelectMethod();
+    }
   },
 
   methods: {
