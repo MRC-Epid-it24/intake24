@@ -1,5 +1,8 @@
 <template>
-  <editor v-bind="{ init, value }" @input="$emit('input', $event)"></editor>
+  <div>
+    <editor v-bind="{ init, value }" @input="$emit('input', $event)"></editor>
+    <v-messages v-show="hasErrors" class="mt-3 mx-2" color="error" :value="errors"></v-messages>
+  </div>
 </template>
 
 <script lang="ts">
@@ -30,6 +33,10 @@ export default defineComponent({
   props: {
     initProps: {
       type: Object,
+    },
+    errorMessages: {
+      type: [String, Array],
+      default: () => [],
     },
     value: {
       type: String,
@@ -68,6 +75,12 @@ export default defineComponent({
   },
 
   computed: {
+    errors() {
+      return typeof this.errorMessages === 'string' ? [this.errorMessages] : this.errorMessages;
+    },
+    hasErrors(): boolean {
+      return !!this.errors.length;
+    },
     init() {
       return {
         ...this.tinymceDefaults,

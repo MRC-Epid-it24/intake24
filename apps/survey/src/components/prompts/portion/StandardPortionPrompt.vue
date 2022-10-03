@@ -17,12 +17,11 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content v-if="Object.keys(standardUnitRefs).length">
           <v-radio-group v-model="selected.unit" @change="onSelectMethod">
-            <v-radio
-              v-for="unit in standardUnits"
-              :key="unit.name"
-              :label="estimateInLabel(unit.name)"
-              :value="unit"
-            ></v-radio>
+            <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
+              <template #label>
+                <span v-html="estimateInLabel(unit.name)"></span>
+              </template>
+            </v-radio>
           </v-radio-group>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -35,7 +34,7 @@
             }`"
           >
             <template #unit>
-              {{ getLocaleContent(standardUnitRefs[selected.unit.name].howMany) }}
+              <span v-html="getLocaleContent(standardUnitRefs[selected.unit.name].howMany)"></span>
             </template>
             <template #food>
               <span class="font-weight-medium">{{ localeDescription }}</span>

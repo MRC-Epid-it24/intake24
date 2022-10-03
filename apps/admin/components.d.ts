@@ -153,6 +153,8 @@ declare module '@vue/runtime-core' {
     VListItemTitle: typeof import('vuetify/lib')['VListItemTitle']
     VMain: typeof import('vuetify/lib')['VMain']
     VMenu: typeof import('vuetify/lib')['VMenu']
+    VMessage: typeof import('vuetify/lib')['VMessage']
+    VMessages: typeof import('vuetify/lib')['VMessages']
     VNavigationDrawer: typeof import('vuetify/lib')['VNavigationDrawer']
     VPagination: typeof import('vuetify/lib')['VPagination']
     VProgressCircular: typeof import('vuetify/lib')['VProgressCircular']

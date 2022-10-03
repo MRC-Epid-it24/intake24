@@ -23,15 +23,17 @@
                 required
               >
                 <template v-for="lang in Object.keys(form.estimateIn)" #[`lang.${lang}`]>
-                  <v-text-field
+                  <html-editor
                     :key="lang"
                     v-model="form.estimateIn[lang]"
                     :error-messages="form.errors.get(`estimateIn.${lang}`)"
-                    hide-details="auto"
-                    :label="$t('standard-units.estimateIn').toString()"
+                    :init-props="{
+                      height: 150,
+                      toolbar: 'bold italic strikethrough',
+                    }"
                     :name="`estimateIn.${lang}`"
-                    outlined
-                  ></v-text-field>
+                    @input="form.errors.clear(`estimateIn.${lang}`)"
+                  ></html-editor>
                 </template>
               </language-selector>
             </v-col>
@@ -42,15 +44,17 @@
                 required
               >
                 <template v-for="lang in Object.keys(form.howMany)" #[`lang.${lang}`]>
-                  <v-text-field
+                  <html-editor
                     :key="lang"
                     v-model="form.howMany[lang]"
                     :error-messages="form.errors.get(`howMany.${lang}`)"
-                    hide-details="auto"
-                    :label="$t('standard-units.howMany').toString()"
+                    :init-props="{
+                      height: 150,
+                      toolbar: 'bold italic strikethrough',
+                    }"
                     :name="`howMany.${lang}`"
-                    outlined
-                  ></v-text-field>
+                    @input="form.errors.clear(`howMany.${lang}`)"
+                  ></html-editor>
                 </template>
               </language-selector>
             </v-col>
@@ -67,6 +71,7 @@ import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
+import { HtmlEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { form } from '@intake24/admin/helpers';
@@ -80,7 +85,7 @@ type StandardUnitForm = {
 export default defineComponent({
   name: 'StandardUnitForm',
 
-  components: { LanguageSelector },
+  components: { HtmlEditor, LanguageSelector },
 
   mixins: [formMixin],
 
