@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <v-row>
-      <v-img :aspect-ratio="16 / 9" class="align-end" :src="getMainImage()">
+      <v-img :aspect-ratio="16 / 9" class="align-end" :src="image">
         <template #placeholder>
           <image-placeholder></image-placeholder>
         </template>
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
-            <v-chip class="ma-2">
-              {{ mainWeight }}
+            <v-chip class="ma-2 font-weight-medium" color="black" outlined>
+              {{ weight }}
             </v-chip>
           </v-col>
         </v-row>
@@ -17,8 +17,8 @@
     </v-row>
     <v-row>
       <v-col class="pa-1" cols="3" lg="1" sm="2">
-        <v-card @click="hadLessInput()">
-          <v-img :src="getFirstThumbnail()">-</v-img>
+        <v-card @click="hadLessInput">
+          <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
             <v-btn icon>
               <v-icon>fas fa-fw fa-minus</v-icon>
@@ -34,8 +34,8 @@
         </v-col>
       </template>
       <v-col class="pa-1 mr-auto" cols="3" lg="1" sm="2">
-        <v-card @click="hadMoreInput()">
-          <v-img :src="getLastThumbnail()">-</v-img>
+        <v-card @click="hadMoreInput">
+          <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
             <v-btn icon>
               <v-icon>fas fa-fw fa-plus</v-icon>
@@ -45,18 +45,18 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col align="center">
-        <v-btn @click="hadLessInput()">
+      <v-col>
+        <v-btn block @click="hadLessInput">
           {{ $t('portion.common.lessButton') }}
         </v-btn>
       </v-col>
-      <v-col align="center">
-        <v-btn @click="hadMoreInput()">
+      <v-col>
+        <v-btn block @click="hadMoreInput">
           {{ $t('portion.common.moreButton') }}
         </v-btn>
       </v-col>
-      <v-col align="center" class="ma-2" md="4" xs="12">
-        <v-btn block color="success" @click="emitConfirm()">
+      <v-col align="center" md="4" xs="12">
+        <v-btn block color="success" @click="emitConfirm">
           {{ $t('portion.common.confirmButton') }}
         </v-btn>
       </v-col>
@@ -74,9 +74,7 @@ import { ImagePlaceholder } from '@intake24/survey/components/elements';
 export default defineComponent({
   name: 'AsServedSelector',
 
-  components: {
-    ImagePlaceholder,
-  },
+  components: { ImagePlaceholder },
 
   props: {
     asServedSetId: {
@@ -99,12 +97,31 @@ export default defineComponent({
   },
 
   computed: {
-    mainWeight(): string | null {
+    image(): string {
+      if (this.selectedObjectIdx === undefined) return '';
+
+      return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
+    },
+    weight(): string | null {
       if (!this.dataLoaded) return null;
 
       if (this.selectedObjectIdx === undefined) return null;
 
       return `${this.asServedData.images[this.selectedObjectIdx].weight}g`;
+    },
+    firstThumbnail(): string {
+      if (this.selectedObjectIdx === null) return '';
+
+      // This check is slightly redundant
+      return this.dataLoaded ? this.asServedData.images[0].thumbnailUrl : '';
+    },
+    lastThumbnail(): string {
+      if (this.selectedObjectIdx === null) return '';
+
+      // This check is slightly redundant
+      return this.dataLoaded
+        ? this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl
+        : '';
     },
   },
 
@@ -126,32 +143,29 @@ export default defineComponent({
         console.log(e);
       }
     },
-    getMainImage(): string {
-      if (this.selectedObjectIdx === undefined) {
-        return '';
-      }
-      return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
-    },
+
     setDataLoaded() {
       this.dataLoaded = true;
     },
+
     setDefaultSelection() {
       if (this.selectedObjectIdx === undefined) {
         // Variable length image sets: set default selected to middle value
-        this.selectedObjectIdx = Math.floor(this.asServedData.images.length / 2);
+        this.setSelection(Math.floor(this.asServedData.images.length / 2));
       }
     },
+
     setSelection(idx: number) {
       this.selectedObjectIdx = idx;
       this.emitUpdate();
     },
+
     isSelected(idx: number): string {
       return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
     },
+
     hadMoreInput() {
-      if (this.selectedObjectIdx === undefined) {
-        return;
-      }
+      if (this.selectedObjectIdx === undefined) return;
 
       const maxLength = this.asServedData.images.length - 1;
       if (this.selectedObjectIdx + 1 > maxLength) {
@@ -166,9 +180,8 @@ export default defineComponent({
       this.emitUpdate();
     },
     hadLessInput() {
-      if (this.selectedObjectIdx === undefined) {
-        return;
-      }
+      if (this.selectedObjectIdx === undefined) return;
+
       if (this.selectedObjectIdx - 1 < 0) {
         console.log('Trigger input quantity prompt');
         // User wants to input less than thumbnail quantities on screen
@@ -179,22 +192,7 @@ export default defineComponent({
       }
       this.emitUpdate();
     },
-    getFirstThumbnail(): string {
-      if (this.selectedObjectIdx === null) {
-        return '';
-      }
-      // This check is slightly redundant
-      return this.dataLoaded ? this.asServedData.images[0].thumbnailUrl : '';
-    },
-    getLastThumbnail(): string {
-      if (this.selectedObjectIdx === null) {
-        return '';
-      }
-      // This check is slightly redundant
-      return this.dataLoaded
-        ? this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl
-        : '';
-    },
+
     emitUpdate() {
       const newState: SelectedAsServedImage | null =
         this.selectedObjectIdx === undefined
@@ -208,8 +206,10 @@ export default defineComponent({
 
       this.$emit('update', newState);
     },
+
     emitConfirm() {
-      if (this.selectedObjectIdx === null) return;
+      if (this.selectedObjectIdx === undefined) return;
+
       this.$emit('confirm');
     },
   },
@@ -218,6 +218,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .selectedThumb {
-  border: 0.1em solid #2196f3;
+  border: 2px solid #2196f3;
 }
 </style>

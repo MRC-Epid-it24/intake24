@@ -31,8 +31,8 @@
                   <as-served-selector
                     :as-served-set-id="parameters['serving-image-set']"
                     :initial-state="initialState.servingImage?.index"
-                    @confirm="onServingConfirmed"
-                    @update="onServingUpdate"
+                    @confirm="servingConfirmed"
+                    @update="servingUpdate"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -58,10 +58,17 @@
                   <p>
                     {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
                   </p>
-                  <v-btn :color="leftoverButtonStyle('yes')" @click="leftoverAnswer(true)">
+                  <v-btn
+                    :color="leftoverPromptAnswer === true ? 'success' : ''"
+                    @click="leftoverAnswer(true)"
+                  >
                     {{ $t('common.action.confirm.yes') }}
                   </v-btn>
-                  <v-btn :color="leftoverButtonStyle('no')" @click="leftoverAnswer(false)">
+                  <v-btn
+                    class="ml-2"
+                    :color="leftoverPromptAnswer === false ? 'success' : ''"
+                    @click="leftoverAnswer(false)"
+                  >
                     {{ $t('common.action.confirm.no') }}
                   </v-btn>
                 </v-col>
@@ -76,8 +83,8 @@
                   <as-served-selector
                     :as-served-set-id="parameters['leftovers-image-set']"
                     :initial-state="initialState.leftoversImage?.index"
-                    @confirm="onLeftoversConfirmed"
-                    @update="onLeftoversUpdate"
+                    @confirm="leftoversConfirmed"
+                    @update="leftoversUpdate"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -162,15 +169,11 @@ export default defineComponent({
       errors: [] as string[],
       panelOpen: this.initialState.activePanel,
       leftoverPromptAnswer: this.initialState.leftoversConfirmed,
-      // selectionImageData: {} as AsServedSetResponse,
-      servingIdx: this.initialState.servingImage?.index,
       asServedData: this.initialState.servingImage,
       leftoverData: this.initialState.leftoversImage,
       servingCompleteStatus: this.initialState.servingImageSelected,
       leftoverCompleteStatus:
         this.initialState.leftoversConfirmed === false || this.initialState.leftoversImageSelected,
-      dataLoaded: false,
-      finished: false,
     };
   },
 
@@ -183,13 +186,11 @@ export default defineComponent({
       if (!this.asServedData || this.leftoverPromptAnswer === null) return false;
 
       // asServed is complete, leftoverPromptAnswer is false (no leftover)
-      if (this.asServedData && this.leftoverPromptAnswer === false) {
-        return true;
-      }
+      if (this.asServedData && this.leftoverPromptAnswer === false) return true;
+
       // Both asServed and leftoverData are full
-      if (this.asServedData && this.leftoverData) {
-        return true;
-      }
+      if (this.asServedData && this.leftoverData) return true;
+
       return false;
     },
   },
@@ -201,59 +202,43 @@ export default defineComponent({
       this.leftoverPromptAnswer = answer;
       this.emitUpdate();
     },
-    leftoverButtonStyle(buttonValue: string): string {
-      // Make button green for currently selection option
-      if (this.leftoverPromptAnswer === null) return '';
-      if (buttonValue === 'yes' && this.leftoverPromptAnswer) {
-        return 'success';
-      }
-      if (buttonValue === 'no' && !this.leftoverPromptAnswer) {
-        return 'success';
-      }
-      return '';
-    },
 
     setPanelOpen(panelIdComplete: number) {
       if (this.isValid) {
         this.panelOpen = -1;
         return;
       }
+
       // Completed asServed
-      if (panelIdComplete === 0) {
-        if (this.leftoverCompleteStatus) {
-          this.panelOpen = -1;
-        } else {
-          this.panelOpen = 1;
-        }
-      }
+      if (panelIdComplete === 0) this.panelOpen = this.leftoverCompleteStatus ? -1 : 1;
+
       // Completed leftover
-      if (panelIdComplete === 1) {
-        if (!this.servingCompleteStatus) {
-          this.panelOpen = 0;
-        } else {
-          this.panelOpen = -1;
-        }
-      }
+      if (panelIdComplete === 1) this.panelOpen = !this.servingCompleteStatus ? 0 : -1;
     },
-    onServingUpdate(update: SelectedAsServedImage | null) {
+
+    servingUpdate(update: SelectedAsServedImage | null) {
       this.asServedData = update;
+
       if (this.isValid) this.clearErrors();
+
       this.emitUpdate();
     },
 
-    onServingConfirmed() {
+    servingConfirmed() {
       this.servingCompleteStatus = true;
       this.setPanelOpen(0);
       this.emitUpdate();
     },
 
-    onLeftoversUpdate(update: SelectedAsServedImage | null) {
+    leftoversUpdate(update: SelectedAsServedImage | null) {
       this.leftoverData = update;
+
       if (this.isValid) this.clearErrors();
+
       this.emitUpdate();
     },
 
-    onLeftoversConfirmed() {
+    leftoversConfirmed() {
       this.leftoverCompleteStatus = true;
       this.setPanelOpen(1);
       this.emitUpdate();
@@ -266,9 +251,11 @@ export default defineComponent({
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
+
     clearErrors() {
       this.errors = [];
     },
+
     submit() {
       if (!this.isValid) {
         this.setErrors();
@@ -278,22 +265,15 @@ export default defineComponent({
       this.$emit('continue');
     },
 
-    // what's this for?
-    partialAnswerHandler() {
-      this.setPanelOpen(this.panelOpen || 0);
-    },
-
     emitUpdate() {
-      const newState: AsServedPromptState = {
+      this.$emit('update', {
         activePanel: this.panelOpen,
         servingImage: this.asServedData,
         servingImageSelected: this.servingCompleteStatus,
         leftoversConfirmed: this.leftoverPromptAnswer,
         leftoversImage: this.leftoverData,
         leftoversImageSelected: this.leftoverCompleteStatus,
-      };
-
-      this.$emit('update', newState);
+      });
     },
   },
 });
