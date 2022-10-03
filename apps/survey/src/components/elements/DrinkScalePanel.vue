@@ -5,6 +5,7 @@
         <v-img
           ref="imgDrink"
           v-resize="onImgResize"
+          class="drink-scale-image"
           :src="selectedImageUrl.replace('http://localhost:3100', 'https://api.intake24.org')"
         >
           <template #placeholder>
@@ -13,11 +14,12 @@
         </v-img>
         <v-img
           ref="imgOverlay"
-          class="overlay"
+          class="drink-scale-image overlay"
           :height="heightOverlay"
           :src="
             selectedImageOverlayUrl.replace('http://localhost:3100', 'https://api.intake24.org')
           "
+          :style="overlayBackground"
           :width="widthOverlay"
         >
         </v-img>
@@ -59,12 +61,15 @@ import { defineComponent, ref } from 'vue';
 
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 
+// import { drinkScaleUtils } from '@intake24/survey/components/mixins';
 import ImagePlaceholder from './ImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'DrinkScalePanel',
 
   components: { ImagePlaceholder },
+
+  // mixins: [drinkScaleUtils],
 
   props: {
     drinkwareSetApiResponse: {
@@ -99,6 +104,10 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    selectedObjectIdx: {
+      type: Number,
+      required: true,
+    },
   },
 
   setup() {
@@ -110,26 +119,48 @@ export default defineComponent({
 
   data() {
     const drinkwareSetData = this.drinkwareSetApiResponse;
+    const maxFillValue = drinkwareSetData.scales[this.selectedObjectIdx].volumeSamples[9].volume;
 
     return {
       heightOverlay: 0,
       widthOverlay: 0,
       drinkwareSetData,
       maxSliderValue: this.selectedMaxSliderValue ?? 100,
+      maxFillValue,
     };
   },
 
   computed: {
     drinkMilliliters(): string {
-      return `${this.sliderValue} ml`;
+      return `${this.fillValue} ml`;
     },
     sliderValue: {
       get() {
         return this.selectedSliderValue;
       },
       set(newValue: number) {
+        this.fillValue = Math.round((this.maxFillValue * newValue) / this.maxSliderValue);
         this.$emit('drink-scale-value', newValue);
       },
+    },
+    fillValue: {
+      get() {
+        return this.selectedSliderValue < this.selectedMaxSliderValue
+          ? Math.round((this.maxFillValue * this.sliderValue) / this.maxSliderValue)
+          : this.maxFillValue;
+      },
+      set(newValue: number) {
+        this.$emit('drink-fill-value', newValue);
+      },
+    },
+
+    overlayBackground() {
+      return {
+        '--clip-path': `inset(${
+          this.heightOverlay -
+          (this.heightOverlay * this.selectedSliderValue) / this.selectedOriginImageHeight
+        }px 0px 0px 0px)`,
+      };
     },
   },
 
@@ -138,6 +169,10 @@ export default defineComponent({
       this.updateOverlayDimensions();
     }, 500);
   },
+
+  // mounted() {
+  //   this.$nextTick(() => this.compareImages(this.imgOverlay?.$el));
+  // },
 
   methods: {
     updateOverlayDimensions() {
@@ -151,6 +186,12 @@ export default defineComponent({
       this.widthOverlay = width;
       this.heightOverlay = height;
       console.log(`${this.maxSliderValue}`);
+    },
+
+    onScaleMove(newValue: number) {
+      const overlayBackgroundHeigt =
+        this.heightOverlay - (this.heightOverlay * newValue) / this.selectedOriginImageHeight;
+      return overlayBackgroundHeigt;
     },
 
     onImgResize() {
@@ -179,10 +220,15 @@ export default defineComponent({
 .drink-scale-drawer {
   position: relative;
 
+  .drink-scale-image {
+    overflow: hidden;
+  }
+
   .overlay {
     position: absolute;
     top: 0;
     left: 0;
+    clip-path: var(--clip-path);
   }
 }
 .v-input__control :deep(v-input__slot) {
