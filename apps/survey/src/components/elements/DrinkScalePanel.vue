@@ -61,15 +61,12 @@ import { defineComponent, ref } from 'vue';
 
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 
-// import { drinkScaleUtils } from '@intake24/survey/components/mixins';
 import ImagePlaceholder from './ImagePlaceholder.vue';
 
 export default defineComponent({
   name: 'DrinkScalePanel',
 
   components: { ImagePlaceholder },
-
-  // mixins: [drinkScaleUtils],
 
   props: {
     drinkwareSetApiResponse: {
@@ -169,10 +166,6 @@ export default defineComponent({
       this.updateOverlayDimensions();
     }, 500);
   },
-
-  // mounted() {
-  //   this.$nextTick(() => this.compareImages(this.imgOverlay?.$el));
-  // },
 
   methods: {
     updateOverlayDimensions() {
