@@ -4,10 +4,7 @@ const portion: LocaleMessageObject = {
   common: {
     backStep: 'Go back to previous step',
     completeBelow: 'Please complete each of the sections below',
-    lessButton: 'I had less',
-    moreButton: 'I had more',
     // Maybe don't need both of these as semanitcally very similar
-    confirmButtonMany: 'I had that many',
     confirmButton: 'I had that much',
     quantityAnd: 'and', // E.g 1 and 3/4 bananas
     completePreviousStep: 'Please complete the previous step before answering this question.',
@@ -75,6 +72,16 @@ const portion: LocaleMessageObject = {
     leftoverHeader: 'Step 2. Select your leftover size.',
     leftoverQuestion: 'Did you leave some of your {food}?',
     leftoverLabel: 'Using these pictures, please choose how much {food} you left.',
+    serving: {
+      less: 'I had less',
+      more: 'I had more',
+      confirm: 'I had that much',
+    },
+    leftover: {
+      less: 'I left less',
+      more: 'I left more',
+      confirm: 'I left that much',
+    },
   },
   guideImage: {
     label: 'Please select the item you had or the closest match.',

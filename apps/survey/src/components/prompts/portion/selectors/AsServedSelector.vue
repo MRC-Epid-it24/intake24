@@ -17,7 +17,7 @@
     </v-row>
     <v-row>
       <v-col class="pa-1" cols="3" lg="1" sm="2">
-        <v-card @click="hadLessInput">
+        <v-card @click="hadLess">
           <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
             <v-btn icon>
@@ -34,7 +34,7 @@
         </v-col>
       </template>
       <v-col class="pa-1 mr-auto" cols="3" lg="1" sm="2">
-        <v-card @click="hadMoreInput">
+        <v-card @click="hadMore">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
             <v-btn icon>
@@ -46,18 +46,18 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn block @click="hadLessInput">
-          {{ $t('portion.common.lessButton') }}
+        <v-btn block @click="hadLess">
+          {{ $t(`portion.asServed.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn block @click="hadMoreInput">
-          {{ $t('portion.common.moreButton') }}
+        <v-btn block @click="hadMore">
+          {{ $t(`portion.asServed.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col align="center" md="4" xs="12">
-        <v-btn block color="success" @click="emitConfirm">
-          {{ $t('portion.common.confirmButton') }}
+        <v-btn block color="success" @click="confirm">
+          {{ $t(`portion.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
     </v-row>
@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { SelectedAsServedImage } from '@intake24/common/types';
@@ -83,6 +84,10 @@ export default defineComponent({
     },
     initialState: {
       type: Number,
+    },
+    type: {
+      type: String as PropType<'serving' | 'leftover'>,
+      default: 'serving',
     },
   },
 
@@ -157,14 +162,14 @@ export default defineComponent({
 
     setSelection(idx: number) {
       this.selectedObjectIdx = idx;
-      this.emitUpdate();
+      this.update();
     },
 
     isSelected(idx: number): string {
       return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
     },
 
-    hadMoreInput() {
+    hadMore() {
       if (this.selectedObjectIdx === undefined) return;
 
       const maxLength = this.asServedData.images.length - 1;
@@ -177,9 +182,10 @@ export default defineComponent({
         this.selectedObjectIdx =
           this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
       }
-      this.emitUpdate();
+      this.update();
     },
-    hadLessInput() {
+
+    hadLess() {
       if (this.selectedObjectIdx === undefined) return;
 
       if (this.selectedObjectIdx - 1 < 0) {
@@ -190,10 +196,10 @@ export default defineComponent({
       } else {
         this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
       }
-      this.emitUpdate();
+      this.update();
     },
 
-    emitUpdate() {
+    update() {
       const newState: SelectedAsServedImage | null =
         this.selectedObjectIdx === undefined
           ? null
@@ -207,7 +213,7 @@ export default defineComponent({
       this.$emit('update', newState);
     },
 
-    emitConfirm() {
+    confirm() {
       if (this.selectedObjectIdx === undefined) return;
 
       this.$emit('confirm');

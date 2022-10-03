@@ -84,6 +84,7 @@
                     <as-served-selector
                       :as-served-set-id="parameters['leftovers-image-set']"
                       :initial-state="initialState.leftoversImage?.index"
+                      :type="'leftover'"
                       @confirm="leftoversConfirmed"
                       @update="leftoversUpdate"
                     ></as-served-selector>
@@ -190,8 +191,8 @@ export default defineComponent({
       // Haven't filled in asServed
       if (!this.asServedData || !this.servingCompleteStatus) return false;
 
-      // Food has no leftovers
-      if (!this.hasLeftovers) return true;
+      // Food has no leftovers or leftovers have been confirmed
+      if (!this.hasLeftovers || this.leftoverPromptAnswer === false) return true;
 
       // Haven't filled in leftovers
       if (!this.leftoverData || !this.leftoverCompleteStatus) return false;
@@ -205,7 +206,7 @@ export default defineComponent({
       // Controls display of leftover selector
       this.leftoverCompleteStatus = !answer;
       this.leftoverPromptAnswer = answer;
-      this.emitUpdate();
+      this.update();
     },
 
     setPanelOpen(panelIdComplete: number) {
@@ -226,13 +227,13 @@ export default defineComponent({
 
       if (this.isValid) this.clearErrors();
 
-      this.emitUpdate();
+      this.update();
     },
 
     servingConfirmed() {
       this.servingCompleteStatus = true;
       this.setPanelOpen(0);
-      this.emitUpdate();
+      this.update();
     },
 
     leftoversUpdate(update: SelectedAsServedImage | null) {
@@ -240,17 +241,17 @@ export default defineComponent({
 
       if (this.isValid) this.clearErrors();
 
-      this.emitUpdate();
+      this.update();
     },
 
     leftoversConfirmed() {
       this.leftoverCompleteStatus = true;
       this.setPanelOpen(1);
-      this.emitUpdate();
+      this.update();
     },
 
     onActivePanelChanged() {
-      this.emitUpdate();
+      this.update();
     },
 
     setErrors() {
@@ -270,7 +271,7 @@ export default defineComponent({
       this.$emit('continue');
     },
 
-    emitUpdate() {
+    update() {
       this.$emit('update', {
         activePanel: this.panelOpen,
         servingImage: this.asServedData,
