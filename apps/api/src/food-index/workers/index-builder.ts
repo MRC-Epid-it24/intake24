@@ -4,7 +4,7 @@ import { parentPort as parentPortNullable, workerData } from 'worker_threads';
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import config from '@intake24/api/config/app';
-import EnglishWordOps from '@intake24/api/food-index/english-word-ops';
+import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, FoodLocalList, models, SequelizeTS, SynonymSet } from '@intake24/db';
@@ -38,6 +38,17 @@ async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
   return synSets.map((s) => parseSynonymSet(s.synonyms));
 }
 
+async function getLanguageBackendId(localeId: string): Promise<string> {
+  const row = await Locale.findOne({
+    attributes: ['foodIndexLanguageBackendId'],
+    where: { id: localeId },
+  });
+
+  if (row === null) throw new NotFoundError(`Locale "${localeId}" not found`);
+
+  return row.foodIndexLanguageBackendId;
+}
+
 async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string>> {
   const foodList = await FoodLocalList.findAll({
     attributes: ['foodCode'],
@@ -45,10 +56,15 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   });
 
   const foodCodes = foodList.map((row) => row.foodCode);
-
   const localFoods = await FoodLocal.findAll({ where: { foodCode: foodCodes, localeId } });
-
   const synonymSets = await getSynonymSets(localeId);
+  const languageBackendId = await getLanguageBackendId(localeId);
+  const languageBackend = LanguageBackends[languageBackendId];
+
+  if (!languageBackend)
+    throw new NotFoundError(
+      `Language backend "${languageBackendId}" for locale "${localeId}" not found`
+    );
 
   const foodDescriptions = new Array<PhraseWithKey<string>>();
 
@@ -58,7 +74,11 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
     foodDescriptions.push({ phrase: food.name, key: food.foodCode });
   }
 
-  return new PhraseIndex<string>(foodDescriptions, EnglishWordOps, synonymSets);
+  return new PhraseIndex<string>(
+    foodDescriptions,
+    LanguageBackends[languageBackendId],
+    synonymSets
+  );
 }
 
 async function buildIndex() {

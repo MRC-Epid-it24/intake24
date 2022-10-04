@@ -1,9 +1,12 @@
-import type { WordOps } from '@intake24/api/food-index/phrase-index';
+import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
+import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
 
 const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g);
 
 export default {
   indexIgnore: ['and', 'the', 'with', 'from'],
+
+  phoneticEncoder: new Metaphone3Encoder(),
 
   splitCompound(word: string): Array<string> {
     return new Array<string>(word);
@@ -16,4 +19,4 @@ export default {
   sanitiseDescription(description: string): string {
     return description.replace(sanitiseRegexp, '');
   },
-} as WordOps;
+} as LanguageBackend;

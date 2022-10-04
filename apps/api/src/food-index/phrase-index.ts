@@ -16,7 +16,7 @@ export interface PhraseWithKey<K> {
   key: K;
 }
 
-export interface WordOps {
+export interface LanguageBackend {
   indexIgnore: string[];
 
   phoneticEncoder: PhoneticEncoder | undefined;
@@ -56,7 +56,7 @@ export interface PhraseMatchResult<K> {
 }
 
 export class PhraseIndex<K> {
-  readonly wordOps: WordOps;
+  readonly wordOps: LanguageBackend;
 
   readonly dictionary: RichDictionary;
 
@@ -255,7 +255,11 @@ export class PhraseIndex<K> {
     }));
   }
 
-  constructor(phrases: Array<PhraseWithKey<K>>, wordOps: WordOps, synonymSets: Array<Set<string>>) {
+  constructor(
+    phrases: Array<PhraseWithKey<K>>,
+    wordOps: LanguageBackend,
+    synonymSets: Array<Set<string>>
+  ) {
     this.wordOps = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
     this.wordIndex = new Map<string, Array<[number, number]>>();
