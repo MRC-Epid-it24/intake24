@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :description="promptProps.description" :text="promptProps.text">
+  <portion-layout v-bind="{ description, text }">
     <template #header>
       {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
     </template>
@@ -113,10 +113,10 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { AsServedPromptProps } from '@intake24/common/prompts';
 import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
-import { basePromptProps } from '@intake24/common/prompts';
+import { asServedPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { AsServedWeight, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
@@ -161,14 +161,14 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<AsServedPromptProps>,
       required: true,
     },
   },
 
   data() {
     return {
-      ...merge(basePromptProps, this.promptProps),
+      ...merge(asServedPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       panelOpen: this.initialState.activePanel,
       leftoverPromptAnswer: this.initialState.leftoversConfirmed,

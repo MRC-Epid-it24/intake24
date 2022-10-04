@@ -113,7 +113,6 @@ export default defineComponent({
   mixins: [BaseExpansionPortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
     promptProps: {
       type: Object as PropType<CerealPromptProps>,
       required: true,

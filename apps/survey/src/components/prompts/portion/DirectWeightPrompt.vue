@@ -31,7 +31,6 @@ export default defineComponent({
   mixins: [BasePortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
     promptProps: {
       type: Object as PropType<DirectWeightPromptProps>,
       required: true,

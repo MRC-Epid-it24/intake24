@@ -84,11 +84,9 @@ const portion: LocaleMessageObject = {
     },
   },
   guideImage: {
-    label: 'Please select the item you had or the closest match.',
-    quantity: 'Please chose how many of those you had.',
-    validation: {
-      required: 'Please select the item you had or the closest match from the image.',
-    },
+    label: 'Please select the item you had or the closest match to {food}.',
+    quantity: 'Please choose how many of {food} you had.',
+    confirm: 'I had that many',
   },
   drinkScale: {
     label: 'Please select the cup or glass that looks most like the one you used for your {food}',
@@ -99,9 +97,6 @@ const portion: LocaleMessageObject = {
     moreFullButton: 'It was more full',
     confirmFullButton: 'It was that full',
     sliderHint: 'Slide this to indicate how full your cup or glass was.',
-    validation: {
-      required: 'Please select the amount you had or the closest match to it.',
-    },
   },
   standardPortion: {
     label: 'How would you like to estimate the portion size of your {food}?',
@@ -110,9 +105,6 @@ const portion: LocaleMessageObject = {
       _: '{unit} did you have?',
       placeholder: 'How many did you have?',
       withFood: '{unit} of {food} did you have?',
-    },
-    validation: {
-      required: 'Please select an option from the list',
     },
     continue: 'I had that many',
   },
@@ -124,9 +116,6 @@ const portion: LocaleMessageObject = {
     question: 'Did you have milk on your cereal?',
     searchLabel: 'Please select which type of milk you had',
     foodSelectButton: `I can't find my food`,
-    validation: {
-      required: 'Please complete the sections marked with !',
-    },
   },
   pizza: {
     label: 'Please select the pizza that is closest to the size you had.',

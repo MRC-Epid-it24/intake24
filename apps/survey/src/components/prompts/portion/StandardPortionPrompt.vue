@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :description="promptProps.description" :text="promptProps.text">
+  <portion-layout v-bind="{ description, text }">
     <template #header>
       {{ localeDescription }}
     </template>
@@ -74,14 +74,15 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { QuantityValues, ValidatedPromptProps } from '@intake24/common/prompts';
+import type { QuantityValues, StandardPortionPromptProps } from '@intake24/common/prompts';
 import type {
   LocaleTranslation,
   RequiredLocaleTranslation,
   StandardPortionUnit,
 } from '@intake24/common/types';
 import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
-import { copy } from '@intake24/common/util';
+import { standardPortionPromptDefaultProps } from '@intake24/common/prompts';
+import { copy, merge } from '@intake24/common/util';
 import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
 
 import BaseExpansionPortion from './BaseExpansionPortion';
@@ -126,13 +127,14 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<ValidatedPromptProps>,
+      type: Object as PropType<StandardPortionPromptProps>,
       required: true,
     },
   },
 
   data() {
     return {
+      ...merge(standardPortionPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       state: copy(this.initialState),
       standardUnitRefs: {} as StandardUnitRefs,
@@ -224,10 +226,7 @@ export default defineComponent({
     },
 
     setErrors() {
-      this.errors = [
-        this.getLocaleContent(this.promptProps.validation.message) ??
-          this.$t('portion.standardPortion.validation.required').toString(),
-      ];
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     submit() {

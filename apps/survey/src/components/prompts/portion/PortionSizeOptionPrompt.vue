@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :description="promptProps.description" :text="promptProps.text">
+  <portion-layout v-bind="{ description, text }">
     <template #header>
       {{ $t('portion.option.label', { food: localeDescription }) }}
     </template>
@@ -39,10 +39,10 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { PortionSizeOptionPromptProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { basePromptProps } from '@intake24/common/prompts';
+import { portionSizeOptionPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 
 import { ImagePlaceholder } from '../../elements';
@@ -60,9 +60,8 @@ export default defineComponent({
   mixins: [BasePortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<PortionSizeOptionPromptProps>,
       required: true,
     },
     foodName: {
@@ -84,7 +83,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(basePromptProps, this.promptProps),
+      ...merge(portionSizeOptionPromptDefaultProps, this.promptProps),
       errors: [] as string[],
       currentValue: this.initialValue?.option ?? undefined,
     };

@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :description="description" :text="promptProps.text">
+  <portion-layout v-bind="{ description, text }">
     <template #header>
       {{ localeDescription }}
     </template>
@@ -128,7 +128,6 @@ export default defineComponent({
   mixins: [BasePortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
     promptProps: {
       type: Object as PropType<DrinkScalePromptProps>,
       required: true,
@@ -303,8 +302,13 @@ export default defineComponent({
       this.selectedGuide = true;
       this.panelOpen = 1;
     },
+
     clearErrors() {
       this.errors = [];
+    },
+
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     confirmAmount() {
@@ -315,10 +319,10 @@ export default defineComponent({
 
     submit() {
       if (!this.isValid) {
-        this.errors = [this.$t('portion.drinkScale.validation.required').toString()];
-        console.log(`Can't submit DrinkScale`);
+        this.setErrors();
         return;
       }
+
       this.drinkScaleAmount = true; // This sets the icon on the panel, UI sugar
       console.log('DrinkScale Prompt Completed');
       this.$emit('continue');

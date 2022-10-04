@@ -1,5 +1,5 @@
 <template>
-  <portion-layout :description="promptProps.description" :text="promptProps.text">
+  <portion-layout v-bind="{ description, text }">
     <template #header>
       {{ localeDescription }}
     </template>
@@ -9,7 +9,11 @@
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.guideImage.label') }}
+              <i18n path="portion.guideImage.label">
+                <template #food>
+                  <span class="font-weight-medium">{{ localeDescription }}</span>
+                </template>
+              </i18n>
               <template #actions>
                 <valid-invalid-icon :valid="selectedGuide"></valid-invalid-icon>
               </template>
@@ -49,7 +53,7 @@
               <v-row>
                 <v-col>
                   <!-- TODO: Value from image map/canvas -->
-                  <v-btn block color="success" @click="onSelectGuide()">
+                  <v-btn :block="isMobile" color="success" @click="onSelectGuide()">
                     {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
@@ -59,7 +63,7 @@
           <!-- Step 2: Specify quantity -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.guideImage.quantity') }}
+              {{ $t('portion.guideImage.quantity', { food: localeDescription }) }}
               <template #actions>
                 <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
               </template>
@@ -101,9 +105,11 @@ import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
-import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
+import type { GuideImagePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
+import { guideImagePromptDefaultProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import {
   ImagePlaceholder,
   QuantityCard,
@@ -135,9 +141,8 @@ export default defineComponent({
   mixins: [BasePortion],
 
   props: {
-    // Generic object 'props' used to store all props for each prompt
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<GuideImagePromptProps>,
       required: true,
     },
     foodName: {
@@ -177,6 +182,7 @@ export default defineComponent({
     const selectedIndex = this.initialState.portionSize.object?.id;
 
     return {
+      ...merge(guideImagePromptDefaultProps, this.promptProps),
       errors: [] as string[],
       selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
       selectedQuantity: this.initialState.quantityConfirmed,
@@ -195,6 +201,7 @@ export default defineComponent({
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
+
     hasErrors(): boolean {
       return !!this.errors.length;
     },
@@ -202,6 +209,7 @@ export default defineComponent({
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
     },
+
     polygons(): string[] {
       if (!this.dataLoaded) return [];
 
@@ -278,7 +286,7 @@ export default defineComponent({
           this.guideImageData.weights[idx + 1] *
           (this.quantityValue.whole + this.quantityValue.fraction) *
           this.conversionFactor,
-        leftoversWeight: 0, // Guide image does not allow estimating leftovers
+        leftoversWeight: 0,
         object: {
           guideImageId: this.guideImageId,
           imageUrl: this.guideImageData.imageMap.baseImageUrl,
@@ -304,10 +312,13 @@ export default defineComponent({
       this.errors = [];
     },
 
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
+    },
+
     submit() {
       if (!this.isValid) {
-        // Should this also just accept the default value of 1?
-        this.errors = [this.$t('portion.guideImage.validation.required').toString()];
+        this.setErrors();
         return;
       }
 
