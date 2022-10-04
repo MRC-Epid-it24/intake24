@@ -34,7 +34,7 @@
                 color="#0d47a1"
                 :hint="$t('portion.drinkScale.lessFullButton')"
                 :max="maxSliderValue"
-                min="0"
+                :min="minSliderValue"
                 thumb-color="primary"
                 vertical
               ></v-slider>
@@ -123,6 +123,7 @@ export default defineComponent({
       widthOverlay: 0,
       drinkwareSetData,
       maxSliderValue: this.selectedMaxSliderValue ?? 100,
+      minSliderValue: this.selectedMinSliderValue ?? 50,
       maxFillValue,
     };
   },
@@ -143,7 +144,9 @@ export default defineComponent({
     fillValue: {
       get() {
         return this.selectedSliderValue < this.selectedMaxSliderValue
-          ? Math.round((this.maxFillValue * this.sliderValue) / this.maxSliderValue)
+          ? Math.round(
+              (this.maxFillValue * this.sliderValue) / this.maxFillValue - this.minSliderValue
+            )
           : this.maxFillValue;
       },
       set(newValue: number) {
@@ -155,7 +158,7 @@ export default defineComponent({
       return {
         '--clip-path': `inset(${
           this.heightOverlay -
-          (this.heightOverlay * this.selectedSliderValue) / this.selectedOriginImageHeight
+          (this.heightOverlay * this.sliderValue) / this.selectedOriginImageHeight
         }px 0px 0px 0px)`,
       };
     },
@@ -196,43 +199,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.drink-slider {
-  flex-grow: 1;
-  flex-shrink: 0;
-}
-.drink-lable {
-  height: 60px;
-  flex-grow: 0;
-  margin-top: 2px;
-}
-.slider-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.drink-scale-drawer {
-  position: relative;
-
-  .drink-scale-image {
-    overflow: hidden;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    clip-path: var(--clip-path);
-  }
-}
-.v-input__control :deep(v-input__slot) {
-  height: 90% !important;
-}
-@media only screen and (max-width: 600px) {
-  .drink-slider :deep(.v-slider--vertical .v-slider__track-container) {
-    left: 80%;
-  }
-  .drink-slider :deep(.v-slider__thumb-container) {
-    left: 80%;
-  }
-}
+@import '../../scss/drinkscale.scss';
 </style>
