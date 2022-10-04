@@ -1,3 +1,5 @@
+import { PorterStemmer } from 'natural';
+
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
 import Metaphone3Encoder from '@intake24/api/food-index/metaphone-encoder';
 
@@ -13,7 +15,7 @@ export default {
   },
 
   stem(word: string): string {
-    return word;
+    return PorterStemmer.stem(word);
   },
 
   sanitiseDescription(description: string): string {

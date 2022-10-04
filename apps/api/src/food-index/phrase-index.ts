@@ -56,7 +56,7 @@ export interface PhraseMatchResult<K> {
 }
 
 export class PhraseIndex<K> {
-  readonly wordOps: LanguageBackend;
+  readonly languageBackend: LanguageBackend;
 
   readonly dictionary: RichDictionary;
 
@@ -65,15 +65,15 @@ export class PhraseIndex<K> {
   readonly wordIndex: Map<string, Array<[number, number]>>;
 
   getWordList(phrase: string): Array<string> {
-    const sanitised = this.wordOps.sanitiseDescription(phrase.toLocaleLowerCase());
+    const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
 
     return (
       sanitised
         .split(/\s+/)
         .filter((s) => s.length > 1)
         // split compound words (e.g. for German and Nordic languages)
-        .flatMap((s) => this.wordOps.splitCompound(s))
-        .map((s) => this.wordOps.stem(s))
+        .flatMap((s) => this.languageBackend.splitCompound(s))
+        .map((s) => this.languageBackend.stem(s))
     );
   }
 
@@ -260,7 +260,7 @@ export class PhraseIndex<K> {
     wordOps: LanguageBackend,
     synonymSets: Array<Set<string>>
   ) {
-    this.wordOps = wordOps;
+    this.languageBackend = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
     this.wordIndex = new Map<string, Array<[number, number]>>();
 
