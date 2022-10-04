@@ -9,10 +9,13 @@
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.drinkScale.label', { food: localeDescription }) }}
+              <i18n path="portion.drinkScale.label">
+                <template #food>
+                  <span class="font-weight-medium">{{ localeDescription }}</span>
+                </template>
+              </i18n>
               <template #actions>
-                <v-icon v-if="selectedGuide" color="success">fas fa-fw fa-check</v-icon>
-                <v-icon v-if="!selectedGuide" color="error">fas fa-fw fa-exclamation</v-icon>
+                <valid-invalid-icon :valid="selectedGuide"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -36,8 +39,7 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
               <template #actions>
-                <v-icon v-if="selectedDrink" color="success">fas fa-fw fa-check</v-icon>
-                <v-icon v-if="!selectedDrink" color="error">fas fa-fw fa-exclamation</v-icon>
+                <valid-invalid-icon :valid="selectedDrink"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -62,19 +64,19 @@
                   </v-alert>
                 </v-col>
               </v-row>
-              <v-row class="jopa">
+              <v-row>
                 <v-col>
-                  <v-btn @click="modifySliderValue(-10)">
+                  <v-btn block @click="modifySliderValue(-10)">
                     {{ $t('portion.drinkScale.lessFullButton') }}
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn @click="modifySliderValue(10)">
+                  <v-btn block @click="modifySliderValue(10)">
                     {{ $t('portion.drinkScale.moreFullButton') }}
                   </v-btn>
                 </v-col>
-                <v-col>
-                  <v-btn color="success" @click="confirmAmount">
+                <v-col align="center" md="4" xs="12">
+                  <v-btn block color="success" @click="confirmAmount">
                     {{ $t('portion.drinkScale.confirmFullButton') }}
                   </v-btn>
                 </v-col>
@@ -102,7 +104,11 @@ import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types'
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import { DrinkScalePanel, GuideImagePanel } from '@intake24/survey/components/elements';
+import {
+  DrinkScalePanel,
+  GuideImagePanel,
+  ValidInvalidIcon,
+} from '@intake24/survey/components/elements';
 
 import BasePortion from './BasePortion';
 
@@ -123,7 +129,7 @@ export interface DrinkScalePromptState {
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { GuideImagePanel, DrinkScalePanel },
+  components: { GuideImagePanel, DrinkScalePanel, ValidInvalidIcon },
 
   mixins: [BasePortion],
 
@@ -212,8 +218,8 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.fetchDrinkScaleData();
+  async mounted() {
+    await this.fetchDrinkScaleData();
   },
 
   methods: {
@@ -298,6 +304,7 @@ export default defineComponent({
       this.selectedDrink = false;
       this.onUpdate();
     },
+
     onSelectGuide() {
       this.selectedGuide = true;
       this.panelOpen = 1;

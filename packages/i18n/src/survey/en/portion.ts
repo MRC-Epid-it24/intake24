@@ -89,10 +89,10 @@ const portion: LocaleMessageObject = {
     confirm: 'I had that many',
   },
   drinkScale: {
-    label: 'Please select the cup or glass that looks most like the one you used for your {food}',
+    label: 'Please select the cup or glass that looks most like the one you used for your {food}.',
     sliderLabel:
       'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
-    leftoverLabel: 'Please use the slider on the right to choose how much you had left',
+    leftoverLabel: 'Please use the slider on the right to choose how much you had left.',
     lessFullButton: 'It was less full',
     moreFullButton: 'It was more full',
     confirmFullButton: 'It was that full',
