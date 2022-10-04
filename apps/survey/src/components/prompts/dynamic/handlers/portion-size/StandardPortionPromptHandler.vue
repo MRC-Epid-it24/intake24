@@ -1,9 +1,10 @@
 <template>
   <standard-portion-prompt
-    v-bind="{ promptComponent, promptProps, standardUnits }"
+    v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
     :food-name="foodName()"
-    @standard-portion-selected="onAnswer"
-    @tempChanging="onTempChange"
+    :initial-state="initialStateNotNull"
+    @continue="$emit('continue')"
+    @update="onUpdate"
   >
   </standard-portion-prompt>
 </template>
@@ -13,25 +14,25 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, QuantityValues } from '@intake24/common/prompts';
-import type { PromptAnswer, StandardPortionUnit } from '@intake24/common/types';
+import type { BasePromptProps } from '@intake24/common/prompts';
 import type { StandardPortionParams } from '@intake24/common/types/http';
+import type { StandardPortionState } from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
+import {
+  createPromptHandlerStoreMixin,
+  foodPromptUtils,
+} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import StandardPortionPrompt from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-
-import foodPromptUtils from '../mixins/food-prompt-utils';
-
-export interface StandardPortionData {
-  unit: StandardPortionUnit;
-  quantity: QuantityValues;
-}
 
 export default defineComponent({
   name: 'StandardPortionPromptHandler',
 
   components: { StandardPortionPrompt },
 
-  mixins: [foodPromptUtils],
+  mixins: [
+    foodPromptUtils,
+    createPromptHandlerStoreMixin<StandardPortionState>('standard-portion-prompt'),
+  ],
 
   props: {
     promptProps: {
@@ -51,34 +52,29 @@ export default defineComponent({
 
       return this.selectedPortionSize().parameters as unknown as StandardPortionParams;
     },
-
-    standardUnits(): StandardPortionUnit[] {
-      const { parameters } = this;
-
-      const units: StandardPortionUnit[] = [];
-
-      const unitsCount = parseInt(parameters['units-count'], 10);
-
-      for (let i = 0; i < unitsCount; ++i) {
-        units.push({
-          name: parameters[`unit${i}-name`],
-          weight: parseFloat(parameters[`unit${i}-weight`]),
-          omitFoodDescription: parameters[`unit${i}-omit-food-description`] === 'true',
-        });
-      }
-
-      return units;
-    },
   },
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    onTempChange(tempStandardPortion: PromptAnswer) {
-      // this.setTempPromptAnswer(tempStandardPortion);
+    getFoodOrMealId(): number {
+      return this.selectedFood().id;
     },
 
-    onAnswer(data: StandardPortionData) {
+    getInitialState(): StandardPortionState {
+      return {
+        unit: null,
+        quantity: { whole: 1, fraction: 0 },
+        quantityConfirmed: false,
+      };
+    },
+
+    isValid(state: StandardPortionState): boolean {
+      return state.unit !== null && state.quantityConfirmed;
+    },
+
+    commitAnswer() {
+      const currentState = this.currentStateNotNull;
       const { conversionFactor } = this.selectedPortionSize();
 
       this.updateFood({
@@ -86,22 +82,16 @@ export default defineComponent({
         update: {
           portionSize: {
             method: 'standard-portion',
-            unit: data.unit,
-            quantity: data.quantity,
+            unit: currentState.unit,
+            quantity: currentState.quantity,
             servingWeight:
-              data.unit.weight * (data.quantity.whole + data.quantity.fraction) * conversionFactor,
-            leftoversWeight: 0, // standard portion does not allow estimating leftovers
+              (currentState.unit?.weight ?? 0) *
+              (currentState.quantity.whole + currentState.quantity.fraction) *
+              conversionFactor,
+            leftoversWeight: 0,
           },
         },
       });
-
-      this.$emit('complete');
-      // this.clearTempPromptAnswer();
-    },
-
-    onPartialAnswer(data: StandardPortionData) {
-      console.log('Called onPartialAnswer');
-      this.onAnswer(data);
     },
   },
 });

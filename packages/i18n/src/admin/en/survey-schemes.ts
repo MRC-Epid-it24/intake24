@@ -319,10 +319,6 @@ const surveySchemes: LocaleMessageObject = {
       title: 'As served portion size',
       subtitle: 'Use the "as served" method to estimate the portion size',
     },
-    'as-served-leftovers-prompt': {
-      title: 'As served leftovers',
-      subtitle: 'Use the "as served" method to estimate the leftovers',
-    },
     'guide-image-prompt': {
       title: 'Guide image',
       subtitle: 'Use the "guide image" method to estimate the portion size',
@@ -330,11 +326,6 @@ const surveySchemes: LocaleMessageObject = {
     'drink-scale-prompt': {
       title: 'Drink Scale',
       subtitle: 'Use the "drink scale" method to estimate the amount of liquid consumed',
-    },
-    'drinkware-prompt': {
-      title: 'Drink estimation portion',
-      subtitle:
-        'Use the "drinkware" method to  choose estimation reference for the amount of liquid consumed',
     },
     'standard-portion-prompt': {
       title: 'Standard portion',

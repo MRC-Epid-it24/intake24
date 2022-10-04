@@ -95,9 +95,9 @@ export default defineComponent({
     return {
       selectedObjectIdx: this.initialState,
       asServedData: {} as AsServedSetResponse,
-      dataLoaded: false as boolean,
+      dataLoaded: false,
       // Prototyping
-      overlay: false as boolean,
+      overlay: false,
     };
   },
 
@@ -130,8 +130,8 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.fetchAsServedImageData();
+  async mounted() {
+    await this.fetchAsServedImageData();
   },
 
   methods: {

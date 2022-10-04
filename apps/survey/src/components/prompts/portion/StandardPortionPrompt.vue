@@ -3,7 +3,7 @@
     <template #header>
       {{ localeDescription }}
     </template>
-    <v-expansion-panels v-model="panelOpenId" flat>
+    <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panelOpenId" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n path="portion.standardPortion.label">
@@ -15,8 +15,8 @@
             <valid-invalid-icon :valid="unitValid"></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
-        <v-expansion-panel-content v-if="Object.keys(standardUnitRefs).length">
-          <v-radio-group v-model="selected.unit" @change="onSelectMethod">
+        <v-expansion-panel-content>
+          <v-radio-group v-model="state.unit" @change="onSelectMethod">
             <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
               <template #label>
                 <span v-html="estimateInLabel(unit.name)"></span>
@@ -28,13 +28,13 @@
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
-            v-if="selected.unit"
+            v-if="state.unit"
             :path="`portion.standardPortion.howMany.${
-              selected.unit.omitFoodDescription ? '_' : 'withFood'
+              state.unit.omitFoodDescription ? '_' : 'withFood'
             }`"
           >
             <template #unit>
-              <span v-html="getLocaleContent(standardUnitRefs[selected.unit.name].howMany)"></span>
+              <span v-html="getLocaleContent(standardUnitRefs[state.unit.name].howMany)"></span>
             </template>
             <template #food>
               <span class="font-weight-medium">{{ localeDescription }}</span>
@@ -42,18 +42,20 @@
           </i18n>
           <template v-else>{{ $t('portion.standardPortion.howMany.placeholder') }}</template>
           <template #actions>
-            <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
+            <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row align="center" justify="center">
+          <v-row justify="center">
             <v-col>
-              <quantity-card v-model="selected.quantity" fraction whole></quantity-card>
+              <quantity-card v-model="state.quantity" fraction whole></quantity-card>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col>
+          <v-row justify="center">
+            <v-col cols="12">
               <error-alert :errors="errors"></error-alert>
+            </v-col>
+            <v-col md="4" xs="12">
               <v-btn block color="success" @click="confirmQuantity">
                 {{ $t('portion.standardPortion.continue') }}
               </v-btn>
@@ -63,7 +65,7 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <continue :disabled="!isValid" @click="submit"></continue>
+      <continue :disabled="!continueEnabled" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -78,7 +80,8 @@ import type {
   RequiredLocaleTranslation,
   StandardPortionUnit,
 } from '@intake24/common/types';
-import type { StandardUnitResponse } from '@intake24/common/types/http';
+import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
+import { copy } from '@intake24/common/util';
 import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
 
 import BaseExpansionPortion from './BaseExpansionPortion';
@@ -88,9 +91,10 @@ export type StandardUnitRefs = Record<
   { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
 >;
 
-export type SelectedUnit = {
+export type StandardPortionState = {
   unit: StandardPortionUnit | null;
   quantity: QuantityValues;
+  quantityConfirmed: boolean;
 };
 
 export default defineComponent({
@@ -101,8 +105,20 @@ export default defineComponent({
   mixins: [BaseExpansionPortion],
 
   props: {
+    initialState: {
+      type: Object as PropType<StandardPortionState>,
+      required: true,
+    },
+    continueEnabled: {
+      type: Boolean,
+      required: true,
+    },
     foodName: {
       type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
+    parameters: {
+      type: Object as PropType<StandardPortionParams>,
       required: true,
     },
     promptComponent: {
@@ -113,23 +129,12 @@ export default defineComponent({
       type: Object as PropType<ValidatedPromptProps>,
       required: true,
     },
-    standardUnits: {
-      type: Array as PropType<StandardPortionUnit[]>,
-      required: true,
-    },
   },
 
   data() {
     return {
       errors: [] as string[],
-      selected: {
-        unit: null,
-        quantity: {
-          whole: 1,
-          fraction: 0,
-        },
-      } as SelectedUnit,
-      selectedQuantity: false,
+      state: copy(this.initialState),
       standardUnitRefs: {} as StandardUnitRefs,
     };
   },
@@ -138,19 +143,43 @@ export default defineComponent({
     localeDescription(): string | null {
       return this.getLocaleContent(this.foodName);
     },
-    unitValid() {
-      return !!this.selected.unit;
+
+    standardUnits(): StandardPortionUnit[] {
+      const { parameters } = this;
+
+      const units: StandardPortionUnit[] = [];
+
+      const unitsCount = parseInt(parameters['units-count'], 10);
+
+      for (let i = 0; i < unitsCount; ++i) {
+        units.push({
+          name: parameters[`unit${i}-name`],
+          weight: parseFloat(parameters[`unit${i}-weight`]),
+          omitFoodDescription: parameters[`unit${i}-omit-food-description`] === 'true',
+        });
+      }
+
+      return units;
     },
+
+    unitValid() {
+      return !!this.state.unit;
+    },
+
+    quantityValid() {
+      return this.state.quantityConfirmed;
+    },
+
     isValid() {
-      return this.unitValid && this.selectedQuantity;
+      return this.unitValid && this.quantityValid;
     },
   },
 
   async mounted() {
     await this.fetchStandardUnits();
 
-    if (!this.selected.unit && this.standardUnits.length === 1) {
-      this.selected.unit = this.standardUnits[0];
+    if (!this.state.unit && this.standardUnits.length === 1) {
+      this.state.unit = this.standardUnits[0];
       this.onSelectMethod();
     }
   },
@@ -181,28 +210,38 @@ export default defineComponent({
     onSelectMethod() {
       this.clearErrors();
       this.setPanelOpen(1);
+      this.update();
+    },
+
+    confirmQuantity() {
+      this.state.quantityConfirmed = true;
+      this.closeAllPanels();
+      this.update();
     },
 
     clearErrors() {
       this.errors = [];
     },
 
-    confirmQuantity() {
-      this.selectedQuantity = true;
-      this.closeAllPanels();
+    setErrors() {
+      this.errors = [
+        this.getLocaleContent(this.promptProps.validation.message) ??
+          this.$t('portion.standardPortion.validation.required').toString(),
+      ];
     },
 
     submit() {
       if (!this.isValid) {
-        this.errors = [
-          this.getLocaleContent(this.promptProps.validation.message) ??
-            this.$t('portion.standardPortion.validation.required').toString(),
-        ];
+        this.setErrors();
         return;
       }
 
-      const { unit, quantity } = this.selected;
-      this.$emit('standard-portion-selected', { unit, quantity });
+      this.$emit('continue');
+    },
+
+    update() {
+      const { unit, quantity, quantityConfirmed } = this.state;
+      this.$emit('update', { unit, quantity, quantityConfirmed });
     },
   },
 });

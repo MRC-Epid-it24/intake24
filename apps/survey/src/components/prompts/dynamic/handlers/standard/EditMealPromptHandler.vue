@@ -88,8 +88,8 @@ export default defineComponent({
       const foods = this.prompt!.foodsDrinks();
       const mealId = this.selectedMeal.id;
 
-      this.setFoods({ mealId: mealId, foods });
-      this.setMealFlag({ mealId: mealId, flag: 'free-entry-complete' });
+      this.setFoods({ mealId, foods });
+      this.setMealFlag({ mealId, flag: 'free-entry-complete' });
       this.clearStoredState();
     },
   },

@@ -194,28 +194,6 @@ const checkFoodStandardConditions = (
       return false;
     }
 
-    case 'as-served-leftovers-prompt': {
-      if (
-        portionSizeMethodSelected(foodState, 'as-served') &&
-        !asServedLeftoversComplete(foodState)
-      ) {
-        recallLog().promptCheck(
-          'as-served-leftovers-prompt',
-          true,
-          'As served portion size method selected but leftovers not yet estimated'
-        );
-        return true;
-      }
-      recallLog().promptCheck(
-        'as-served-leftovers-prompt',
-        false,
-        portionSizeMethodSelected(foodState, 'as-served')
-          ? 'As served leftovers estimation already complete'
-          : 'As served portion size estimation not selected'
-      );
-      return false;
-    }
-
     case 'guide-image-prompt': {
       if (portionSizeMethodSelected(foodState, 'guide-image') && !guideImageComplete(foodState)) {
         recallLog().promptCheck(

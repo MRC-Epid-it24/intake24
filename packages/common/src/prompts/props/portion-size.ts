@@ -1,32 +1,29 @@
 import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
-import type { PromptQuestion, QuantityValues } from '..';
-import type { ValidatedPromptProps } from './base';
-import { basePromptProps, promptValidation } from './base';
+import type { PromptQuestion } from '..';
+import type { BasePromptProps } from './base';
+import { basePromptProps } from './base';
 
-export type LeftoverQuestionPromptProps = ValidatedPromptProps;
+export type PortionSizeOptionPromptProps = BasePromptProps;
 
-export type DrinkScalePromptProps = ValidatedPromptProps;
+export type AsServedPromptProps = BasePromptProps;
 
-export interface StandardPortionPromptProps extends ValidatedPromptProps {
-  quantityValue: QuantityValues;
-}
+export type CerealPromptProps = BasePromptProps;
 
-export type CerealPromptProps = ValidatedPromptProps;
+export type DrinkScalePromptProps = BasePromptProps;
 
-export type MilkCerealPromptProps = ValidatedPromptProps;
+export type GuideImagePromptProps = BasePromptProps;
 
-// export type PizzaPromptProps = ValidatedPromptProps;
-export interface PizzaPromptProps extends ValidatedPromptProps {
-  typeImageMapId: string;
-  thicknessImageMapId: string;
-  slicePrefix: string;
-}
+export type StandardPortionPromptProps = BasePromptProps;
 
-export type MilkHotDrinkPromptProps = ValidatedPromptProps;
+export type MilkCerealPromptProps = BasePromptProps;
 
-export type DirectWeightPromptProps = ValidatedPromptProps;
+export type MilkHotDrinkPromptProps = BasePromptProps;
+
+export type PizzaPromptProps = BasePromptProps;
+
+export type DirectWeightPromptProps = BasePromptProps;
 
 export interface AssociatedFoodsPanelProps {
   expansionPanelTotal: number;
@@ -41,54 +38,50 @@ export interface ImageMapSelectorEmit {
   selectedIdx: number;
 }
 
-// Default props
-
-export const drinkScalePromptDefaultProps: DrinkScalePromptProps = {
+export const portionSizeOptionPromptDefaultProps: PortionSizeOptionPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+  name: { en: 'Choose Portion Method' },
+});
 
-export const standardPortionPromptDefaultProps: StandardPortionPromptProps = {
+export const asServedPromptDefaultProps: AsServedPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-  quantityValue: {
-    whole: 1,
-    fraction: 0,
-  },
-};
+  name: { en: 'As served' },
+});
 
-export const cerealPromptDefaultProps: CerealPromptProps = {
+export const drinkScalePromptDefaultProps: DrinkScalePromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+  name: { en: 'Drink Scale' },
+});
 
-export const milkCerealPromptDefaultProps: MilkCerealPromptProps = {
+export const guideImagePromptDefaultProps: GuideImagePromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+  name: { en: 'Guide image' },
+});
 
-export const pizzaPromptDefaultProps: PizzaPromptProps = {
+export const standardPortionPromptDefaultProps: StandardPortionPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-  typeImageMapId: 'gpizza',
-  thicknessImageMapId: 'gpthick',
-  slicePrefix: 'gpiz',
-};
+  name: { en: 'Standard portion' },
+});
 
-export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = {
+export const cerealPromptDefaultProps: CerealPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+});
 
-export const directWeightPromptDefaultProps: DirectWeightPromptProps = {
+export const milkCerealPromptDefaultProps: MilkCerealPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+});
 
-export const leftoverQuestionPromptDefaultProps: LeftoverQuestionPromptProps = {
+export const pizzaPromptDefaultProps: PizzaPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
-};
+});
+
+export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = copy({
+  ...basePromptProps,
+});
+
+export const directWeightPromptDefaultProps: DirectWeightPromptProps = copy({
+  ...basePromptProps,
+});
 
 export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
   expansionPanelTotal: 3,
@@ -105,48 +98,34 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     type: 'portion-size',
     id: 'portion-size-option-prompt',
     name: 'Choose portion size method',
-    props: copy({ ...basePromptProps, name: { en: 'Choose Portion Method' } }),
+    props: copy(portionSizeOptionPromptDefaultProps),
   },
   {
     component: 'as-served-prompt',
     type: 'portion-size',
     id: 'as-served-prompt',
     name: 'As served',
-    props: copy({ ...basePromptProps, name: { en: 'As served' } }),
-  },
-  {
-    component: 'as-served-leftovers-prompt',
-    type: 'portion-size',
-    id: 'as-served-leftovers-prompt',
-    name: 'As served (leftovers)',
-    props: copy({ ...basePromptProps, name: { en: 'Leftovers' } }),
-  },
-  {
-    component: 'guide-image-prompt',
-    type: 'portion-size',
-    id: 'guide-image-prompt',
-    name: 'Guide image',
-    props: copy({ ...basePromptProps, name: { en: 'Guide image' } }),
-  },
-  {
-    component: 'drinkware-prompt',
-    type: 'portion-size',
-    id: 'drinkware-prompt',
-    name: 'Drinkware',
-    props: copy({ ...basePromptProps, name: { en: 'Drinkware' } }),
+    props: copy(asServedPromptDefaultProps),
   },
   {
     component: 'drink-scale-prompt',
     type: 'portion-size',
     id: 'drink-scale-prompt',
     name: 'Drink Scale',
-    props: copy({ ...basePromptProps, name: { en: 'Drink Scale' } }),
+    props: copy(drinkScalePromptDefaultProps),
+  },
+  {
+    component: 'guide-image-prompt',
+    type: 'portion-size',
+    id: 'guide-image-prompt',
+    name: 'Guide image',
+    props: copy(guideImagePromptDefaultProps),
   },
   {
     component: 'standard-portion-prompt',
     type: 'portion-size',
     id: 'standard-portion-prompt',
     name: 'Standard portion',
-    props: copy({ ...basePromptProps, name: { en: 'Standard portion' } }),
+    props: copy(standardPortionPromptDefaultProps),
   },
 ];
