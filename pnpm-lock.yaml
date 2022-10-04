@@ -237,6 +237,7 @@ importers:
       multer: ^1.4.5-lts.1
       natural: ^5.2.3
       negotiator: ^0.6.3
+      node-cache: ^5.1.2
       nodemon: ^2.0.20
       nodemon-webpack-plugin: ^4.8.1
       nunjucks: ^3.2.3
@@ -300,6 +301,7 @@ importers:
       multer: 1.4.5-lts.1
       natural: 5.2.3
       negotiator: 0.6.3
+      node-cache: 5.1.2
       nunjucks: 3.2.3
       passport: 0.6.0
       passport-jwt: 4.0.0
@@ -4929,6 +4931,11 @@ packages:
       shallow-clone: 3.0.1
     dev: true
 
+  /clone/2.1.2:
+    resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
+    engines: {node: '>=0.8'}
+    dev: false
+
   /cluster-key-slot/1.1.0:
     resolution: {integrity: sha512-2Nii8p3RwAPiFwsnZvukotvow2rIHM+yQ6ZcBXGHdniadkYGZYiGmkHJIbZPIV9nfv7m/U1IPMVVcAhoWFeklw==}
     engines: {node: '>=0.10.0'}
@@ -8988,6 +8995,13 @@ packages:
 
   /node-addon-api/5.0.0:
     resolution: {integrity: sha512-CvkDw2OEnme7ybCykJpVcKH+uAOLV2qLqiyla128dN9TkEWfrYmxG6C2boDe5KcNQqZF3orkqzGgOMvZ/JNekA==}
+    dev: false
+
+  /node-cache/5.1.2:
+    resolution: {integrity: sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      clone: 2.1.2
     dev: false
 
   /node-fetch/2.6.7:

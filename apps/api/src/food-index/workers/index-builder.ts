@@ -6,6 +6,7 @@ import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
+import { rankSearchResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, FoodLocalList, models, SequelizeTS, SynonymSet } from '@intake24/db';
 import Locale from '@intake24/db/models/foods/locale';
@@ -102,23 +103,20 @@ async function buildIndex() {
   parentPort.postMessage('ready');
 
   parentPort.on('message', (msg) => {
-    const { localeId } = msg;
+    const { query, localeId, matchScoreWeight, rankingAlgorithm } = msg;
 
     const localeIndex = foodIndex[localeId];
 
     if (!localeIndex)
       throw new NotFoundError(`Locale ${localeId} does not exist or is not enabled`);
 
-    const interpreted = localeIndex.interpretPhrase(msg.query, 'match-fewer');
+    const interpreted = localeIndex.interpretPhrase(query, 'match-fewer');
 
-    const results = localeIndex.findMatches(interpreted, 100, 100).map((m) => ({
-      code: m.key,
-      description: m.phrase,
-    }));
+    const results = localeIndex.findMatches(interpreted, 100, 100);
 
     parentPort.postMessage({
       queryId: msg.queryId,
-      results,
+      results: rankSearchResults(results, localeId, rankingAlgorithm, matchScoreWeight, logger),
     });
   });
 

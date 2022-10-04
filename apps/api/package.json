@@ -61,6 +61,7 @@
     "multer": "^1.4.5-lts.1",
     "natural": "^5.2.3",
     "negotiator": "^0.6.3",
+    "node-cache": "^5.1.2",
     "nunjucks": "^3.2.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",

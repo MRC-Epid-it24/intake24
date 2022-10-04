@@ -30,7 +30,11 @@ export default {
     await indexWorker.terminate();
   },
 
-  async search(query: string, localeId: string): Promise<FoodSearchResponse> {
+  async search(
+    query: string,
+    localeId: string,
+    matchScoreWeight: number
+  ): Promise<FoodSearchResponse> {
     if (indexReady) {
       queryIdCounter += 1;
 
@@ -50,6 +54,7 @@ export default {
           queryId,
           query,
           localeId,
+          matchScoreWeight,
         });
       });
     }
