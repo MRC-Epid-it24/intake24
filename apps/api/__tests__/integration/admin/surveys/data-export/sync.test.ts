@@ -47,10 +47,6 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, { input });
     });
 
-    it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['startDate', 'endDate']);
-    });
-
     it('should return 422 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['startDate', 'endDate'], {
         input: {
