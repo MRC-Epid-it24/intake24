@@ -50,6 +50,14 @@ const locales: LocaleMessageObject = {
     synonyms: 'Synonyms (space-delimited)',
   },
 
+  'food-ranking': {
+    _: 'Food ranking',
+    title: 'Food ranking',
+    tab: 'Food ranking',
+    delete: 'Delete',
+    upload: 'Upload',
+  },
+
   tasks: {
     _: 'Locale task',
     title: 'Locale tasks',

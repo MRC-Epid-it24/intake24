@@ -1,4 +1,5 @@
 import browse from './browse.vue';
+import foodRanking from './food-ranking';
 import form from './form.vue';
 import read from './read.vue';
 import securables from './securables';
@@ -16,5 +17,6 @@ export default {
   'split-lists': splitLists,
   'split-words': splitWords,
   'synonym-sets': synonymSets,
+  'food-ranking': foodRanking,
   tasks,
 };

@@ -28,6 +28,7 @@ export const securableDefs = {
     'split-lists',
     'split-words',
     'synonym-sets',
+    'food-ranking',
     'tasks',
   ] as const,
   SurveyScheme: [...standardSecurableActions, 'copy', 'questions', 'data-export'] as const,

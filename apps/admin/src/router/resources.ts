@@ -70,7 +70,15 @@ export const resources: Resource[] = [
     api: 'admin/locales',
     generateRoutes: true,
     securable: true,
-    routes: [...routes, 'split-lists', 'split-words', 'synonym-sets', 'tasks', 'securables'],
+    routes: [
+      ...routes,
+      'split-lists',
+      'split-words',
+      'synonym-sets',
+      'food-ranking',
+      'tasks',
+      'securables',
+    ],
   },
   // Surveys
   {
