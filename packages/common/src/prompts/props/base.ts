@@ -17,6 +17,19 @@ export interface PromptValidationProps {
 
 export interface ValidatedPromptProps extends BasePromptProps, PromptValidationProps {}
 
+export type ListOption = {
+  id?: number;
+  label: string;
+  value: string;
+};
+
+export type LocaleOptionList = {
+  en: ListOption[];
+  [locale: string]: ListOption[];
+};
+
+export type RadioOrientation = 'column' | 'row';
+
 export const basePromptProps: BasePromptProps = {
   name: { en: 'Enter name' },
   text: {},

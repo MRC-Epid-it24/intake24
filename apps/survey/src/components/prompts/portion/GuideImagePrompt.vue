@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ description, text }">
     <template #header>
-      {{ localeDescription }}
+      {{ localeFoodName }}
     </template>
     <v-row>
       <v-col>
@@ -11,7 +11,7 @@
             <v-expansion-panel-header disable-icon-rotate>
               <i18n path="portion.guideImage.label">
                 <template #food>
-                  <span class="font-weight-medium">{{ localeDescription }}</span>
+                  <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
               </i18n>
               <template #actions>
@@ -63,7 +63,7 @@
           <!-- Step 2: Specify quantity -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.guideImage.quantity', { food: localeDescription }) }}
+              {{ $t('portion.guideImage.quantity', { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
               </template>
@@ -198,7 +198,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string {
+    localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
 

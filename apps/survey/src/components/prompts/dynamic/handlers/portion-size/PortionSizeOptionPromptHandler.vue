@@ -14,7 +14,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { PortionSizeOptionPromptProps } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import type { PortionSizeOptionState } from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import {
@@ -22,7 +22,7 @@ import {
   foodPromptUtils,
   mealPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
 
   props: {
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<PortionSizeOptionPromptProps>,
       required: true,
     },
     promptComponent: {

@@ -105,6 +105,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MilkCerealPromptProps } from '@intake24/common/prompts';
+import type { LocaleTranslation } from '@intake24/common/types';
 import { milkCerealPromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 
@@ -116,6 +117,10 @@ export default defineComponent({
   mixins: [BaseExpansionPortion],
 
   props: {
+    foodName: {
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<MilkCerealPromptProps>,
       required: true,
@@ -146,9 +151,10 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string {
-      return this.getLocaleContent(this.description);
+    localeFoodName(): string {
+      return this.getLocaleContent(this.foodName);
     },
+
     hasErrors(): boolean {
       return !!this.errors.length;
     },

@@ -2,7 +2,12 @@ import { copy } from '@intake24/common/util';
 
 import type { LocaleTranslation } from '../../types';
 import type { PromptQuestion } from '..';
-import type { BasePromptProps, ValidatedPromptProps } from './base';
+import type {
+  BasePromptProps,
+  LocaleOptionList,
+  RadioOrientation,
+  ValidatedPromptProps,
+} from './base';
 import { promptValidation } from './base';
 
 export type DatePickerPromptProps = ValidatedPromptProps;
@@ -15,19 +20,6 @@ export interface TextareaPromptProps extends ValidatedPromptProps {
   label: LocaleTranslation;
   hint: LocaleTranslation;
 }
-
-export type ListOption = {
-  id?: number;
-  label: string;
-  value: string;
-};
-
-export type LocaleOptionList = {
-  en: ListOption[];
-  [locale: string]: ListOption[];
-};
-
-export type RadioOrientation = 'column' | 'row';
 
 export interface RadioListPromptProps extends ValidatedPromptProps {
   label: LocaleTranslation;

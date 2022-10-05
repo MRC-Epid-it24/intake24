@@ -19,10 +19,10 @@ import {
 import type { SurveyState } from '../stores';
 import { recallLog } from '../stores';
 import {
-  asServedLeftoversComplete,
   asServedServingComplete,
   drinkScaleComplete,
   guideImageComplete,
+  milkInAHotDrinkComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
 } from './portion-size-checks';
@@ -228,6 +228,28 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'drink-scale')
           ? 'Drink Scale estimation already complete'
           : 'Drink Scale estimation not selected'
+      );
+      return false;
+    }
+
+    case 'milk-in-a-hot-drink-prompt': {
+      if (
+        portionSizeMethodSelected(foodState, 'milk-in-a-hot-drink') &&
+        !milkInAHotDrinkComplete(foodState)
+      ) {
+        recallLog().promptCheck(
+          'milk-in-a-hot-drink-prompt',
+          true,
+          'Milk in hot drink selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        'milk-in-a-hot-drink-prompt',
+        false,
+        portionSizeMethodSelected(foodState, 'milk-in-a-hot-drink')
+          ? 'Milk in hot drink estimation already complete'
+          : 'Milk in hot drink estimation not selected'
       );
       return false;
     }

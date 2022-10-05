@@ -125,8 +125,10 @@ const portion: LocaleMessageObject = {
     slicesQuantityLabel: 'How many of these slices did you have?',
     wholeQuantityLabel: 'How many of these pizzas did you have?',
   },
-  milkHotDrink: {
+  milkInAHotDrink: {
     label: 'How much {food} did you have in your tea or coffee?',
+    optionsLabel: 'Select the amount you had.',
+    continue: 'I had that much',
   },
   directWeight: {
     label: 'Please enter how much you had.',

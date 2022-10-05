@@ -2,8 +2,14 @@ import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import type { PromptQuestion } from '..';
-import type { BasePromptProps } from './base';
-import { basePromptProps } from './base';
+import type {
+  BasePromptProps,
+  LocaleOptionList,
+  RadioOrientation,
+  ValidatedPromptProps,
+} from './base';
+import type { LocaleOptionList } from './custom';
+import { basePromptProps, promptValidation } from './base';
 
 export type PortionSizeOptionPromptProps = BasePromptProps;
 
@@ -19,7 +25,10 @@ export type StandardPortionPromptProps = BasePromptProps;
 
 export type MilkCerealPromptProps = BasePromptProps;
 
-export type MilkHotDrinkPromptProps = BasePromptProps;
+export interface MilkInAHotDrinkPromptProps extends ValidatedPromptProps {
+  options: LocaleOptionList;
+  orientation: RadioOrientation;
+}
 
 export type PizzaPromptProps = BasePromptProps;
 
@@ -71,11 +80,21 @@ export const milkCerealPromptDefaultProps: MilkCerealPromptProps = copy({
   ...basePromptProps,
 });
 
-export const pizzaPromptDefaultProps: PizzaPromptProps = copy({
+export const milkInAHotDrinkPromptDefaultProps: MilkInAHotDrinkPromptProps = copy({
   ...basePromptProps,
+  ...promptValidation,
+  name: { en: 'Milk in a hot drink' },
+  options: {
+    en: [
+      { value: '0.1', label: 'A little' },
+      { value: '0.16', label: 'Average amount' },
+      { value: '0.24', label: 'A lot' },
+    ],
+  },
+  orientation: 'column',
 });
 
-export const milkHotDrinkPromptDefaultProps: MilkHotDrinkPromptProps = copy({
+export const pizzaPromptDefaultProps: PizzaPromptProps = copy({
   ...basePromptProps,
 });
 
@@ -120,6 +139,13 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     id: 'guide-image-prompt',
     name: 'Guide image',
     props: copy(guideImagePromptDefaultProps),
+  },
+  {
+    component: 'milk-in-a-hot-drink-prompt',
+    type: 'portion-size',
+    id: 'milk-in-a-hot-drink-prompt',
+    name: 'Milk in a hot drink',
+    props: copy(milkInAHotDrinkPromptDefaultProps),
   },
   {
     component: 'standard-portion-prompt',

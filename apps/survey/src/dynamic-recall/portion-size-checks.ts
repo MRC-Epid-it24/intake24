@@ -39,23 +39,6 @@ export function asServedServingComplete(selectedFood: FoodState): boolean {
   return false;
 }
 
-export function asServedLeftoversComplete(selectedFood: FoodState): boolean {
-  if (selectedFood.type !== 'encoded-food') return false;
-
-  if (selectedFood.portionSize != null) {
-    if (selectedFood.portionSize.method !== 'as-served') {
-      console.warn(
-        `Selected portion size method is "as-served" but portion size data is for ${selectedFood.portionSize.method}`
-      );
-      return false;
-    }
-
-    return selectedFood.portionSize.leftovers != null;
-  }
-
-  return false;
-}
-
 export function guideImageComplete(selectedFood: FoodState): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 
@@ -88,6 +71,26 @@ export function drinkScaleComplete(selectedFood: FoodState): boolean {
       selectedFood.portionSize.imageUrl != null &&
       selectedFood.portionSize.servingWeight != null &&
       selectedFood.portionSize.drinkwareId != null
+    );
+  }
+
+  return false;
+}
+
+export function milkInAHotDrinkComplete(selectedFood: FoodState): boolean {
+  if (selectedFood.type !== 'encoded-food') return false;
+
+  if (selectedFood.portionSize !== null) {
+    if (selectedFood.portionSize.method !== 'milk-in-a-hot-drink') {
+      console.warn(
+        `Selected portion size method is "milk-in-a-hot-drink" but portion size data is for ${selectedFood.portionSize.method}`
+      );
+      return false;
+    }
+
+    return (
+      selectedFood.portionSize.milkPartIndex !== null &&
+      selectedFood.portionSize.milkVolumePercentage !== null
     );
   }
 

@@ -93,9 +93,11 @@ export default defineComponent({
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
+
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+
     isValid() {
       return this.currentValue !== undefined;
     },
@@ -107,19 +109,23 @@ export default defineComponent({
 
       if (val === undefined) return;
 
-      this.update(val);
+      this.update();
+      this.submit();
     },
   },
 
+  async mounted() {
+    if (this.currentValue === undefined && this.availableMethods.length === 1)
+      this.currentValue = 0;
+  },
+
   methods: {
-    update(index: number) {
-      this.$emit('update', { option: index });
-
-      this.submit();
-    },
-
     clearErrors() {
       this.errors = [];
+    },
+
+    update() {
+      this.$emit('update', { option: this.currentValue });
     },
 
     submit() {

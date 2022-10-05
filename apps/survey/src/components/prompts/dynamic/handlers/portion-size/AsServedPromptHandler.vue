@@ -13,14 +13,14 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { AsServedPromptProps } from '@intake24/common/prompts';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import {
   createPromptHandlerStoreMixin,
   foodPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import AsServedPrompt from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
+import { AsServedPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
@@ -32,7 +32,7 @@ export default defineComponent({
 
   props: {
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<AsServedPromptProps>,
       required: true,
     },
     promptComponent: {

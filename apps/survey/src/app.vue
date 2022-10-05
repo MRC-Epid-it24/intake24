@@ -34,18 +34,6 @@
                 <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item
-              v-if="surveyId"
-              link
-              :to="{ name: 'survey-portion-test', params: { surveyId } }"
-            >
-              <v-list-item-action>
-                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>Portions test</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
             <v-list-item v-if="surveyId" link :to="{ name: 'feedback-home', params: { surveyId } }">
               <v-list-item-action>
                 <v-icon>fas fa-fw fa-comments</v-icon>

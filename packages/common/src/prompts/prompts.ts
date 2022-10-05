@@ -33,9 +33,10 @@ export type StandardComponentType = typeof standardComponentTypes[number];
 export const portionSizeComponentTypes = [
   'portion-size-option-prompt',
   'as-served-prompt',
-  'guide-image-prompt',
-  'standard-portion-prompt',
   'drink-scale-prompt',
+  'guide-image-prompt',
+  'milk-in-a-hot-drink-prompt',
+  'standard-portion-prompt',
 ] as const;
 
 export type PortionSizeComponentType = typeof portionSizeComponentTypes[number];

@@ -109,7 +109,7 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['foods'],
   },
-  'as-served-leftovers-prompt': {
+  'drink-scale-prompt': {
     tabs: [...baseTab],
     sections: ['foods'],
   },
@@ -117,12 +117,8 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['foods'],
   },
-  'drink-scale-prompt': {
-    tabs: [...baseTab],
-    sections: ['foods'],
-  },
-  'drinkware-prompt': {
-    tabs: [...baseTab],
+  'milk-in-a-hot-drink-prompt': {
+    tabs: [...listTab],
     sections: ['foods'],
   },
   'standard-portion-prompt': {

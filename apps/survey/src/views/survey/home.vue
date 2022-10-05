@@ -13,18 +13,6 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-btn
-          class="pa-6"
-          color="success"
-          :to="{ name: 'survey-portion-test', params: { surveyId } }"
-          x-large
-        >
-          Portions test
-        </v-btn>
-      </v-col>
-    </v-row>
   </v-card>
 </template>
 

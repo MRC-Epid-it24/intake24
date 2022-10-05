@@ -15,11 +15,11 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import DrinkScalePrompt from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
+import { DrinkScalePrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
 import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 
@@ -37,7 +37,7 @@ export default defineComponent({
 
   props: {
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<DrinkScalePromptProps>,
       required: true,
     },
     promptComponent: {

@@ -327,6 +327,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Drink Scale',
       subtitle: 'Use the "drink scale" method to estimate the amount of liquid consumed',
     },
+    'milk-in-a-hot-drink-prompt': {
+      title: 'Milk in a hot drink',
+      subtitle: 'Use the "milk in a hot drink" method to estimate the amount of milk',
+    },
     'standard-portion-prompt': {
       title: 'Standard portion',
       subtitle: 'Use the "standard portion" method to estimate the portion size',

@@ -71,7 +71,11 @@ export type PortionSizeStates = {
   cereal: PortionSizeStateBase & { method: 'cereal' };
   'milk-on-cereal': PortionSizeStateBase & { method: 'milk-on-cereal' };
   pizza: PortionSizeStateBase & { method: 'pizza' };
-  'milk-in-a-hot-drink': PortionSizeStateBase & { method: 'milk-in-a-hot-drink' };
+  'milk-in-a-hot-drink': PortionSizeStateBase & {
+    method: 'milk-in-a-hot-drink';
+    milkPartIndex: number | null;
+    milkVolumePercentage: number | null;
+  };
   weight: PortionSizeStateBase & { method: 'weight' };
 };
 

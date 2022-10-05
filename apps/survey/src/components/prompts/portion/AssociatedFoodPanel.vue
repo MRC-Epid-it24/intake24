@@ -65,7 +65,7 @@ import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import { associatedFoodPanelDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
-import PortionSizeOptionPrompt from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
+import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts/portion';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 
 import BaseExpansionPortion from './BaseExpansionPortion';

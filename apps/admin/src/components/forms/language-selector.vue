@@ -53,6 +53,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { LocaleOptionList } from '@intake24/common/prompts';
 import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { LanguageListEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
@@ -66,7 +67,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Object as PropType<LocaleTranslation | RequiredLocaleTranslation>,
+      type: Object as PropType<LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList>,
       required: true,
     },
     default: {

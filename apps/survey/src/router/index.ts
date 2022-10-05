@@ -91,16 +91,6 @@ const routes: RouteConfig[] = [
     beforeEnter: feedbackParametersGuard,
     props: true,
   },
-
-  // TESTING Temporary route for testing portion size code before foods & meals are loaded
-  {
-    path: '/:surveyId/portion-test',
-    name: 'survey-portion-test',
-    component: views.survey.portionTest,
-    meta: { module: 'survey', title: 'portionTest._' },
-    beforeEnter: surveyParametersGuard,
-    props: true,
-  },
   // Catch any unmatched routes
   {
     path: '*',
