@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { SurveyState } from '@intake24/common/types';
 import type {
   SurveyEntryResponse,
   SurveyFollowUpResponse,
@@ -153,17 +154,23 @@ const surveyRespondentController = ({
   };
 
   const submission = async (
-    req: Request<{ slug: string }, any, any, { tzOffset: number }>,
+    req: Request<{ slug: string }, any, { submission: SurveyState }, { tzOffset: number }>,
     res: Response<SurveyFollowUpResponse>
   ): Promise<void> => {
     const {
+      headers: { 'user-agent': userAgent },
       params: { slug },
       query: { tzOffset },
     } = req;
     const user = req.user as User;
     const { submission } = req.body;
 
-    const followUpInfo = await surveySubmissionService.submit(slug, user, submission, tzOffset);
+    const followUpInfo = await surveySubmissionService.submit(
+      slug,
+      user,
+      { ...submission, userAgent },
+      tzOffset
+    );
 
     res.json(followUpInfo);
   };

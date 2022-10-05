@@ -62,7 +62,7 @@ const surveySubmissionService = ({
   scheduler,
   surveyService,
 }: Pick<IoC, 'cache' | 'db' | 'logger' | 'scheduler' | 'surveyService'>) => {
-  const logger = globalLogger.child({ service: 'surveySubmissionsService' });
+  const logger = globalLogger.child({ service: 'SurveySubmissionsService' });
 
   /**
    * Collect food and food group codes from submission state
@@ -339,13 +339,14 @@ const surveySubmissionService = ({
       Survey.findOne({
         where: { id: surveyId },
         include: [
+          { association: 'locale', required: true },
           { association: 'surveyScheme', required: true },
           { association: 'feedbackScheme' },
         ],
       }),
       SurveySubmission.findOne({ where: { surveyId, userId, uxSessionId } }),
     ]);
-    if (!survey || !survey.surveyScheme) throw new NotFoundError();
+    if (!survey || !survey.locale || !survey.surveyScheme) throw new NotFoundError();
 
     if (submission) {
       throw new Error(
@@ -354,7 +355,7 @@ const surveySubmissionService = ({
     }
 
     const {
-      localeId,
+      locale: { code: localeCode },
       surveyScheme: {
         questions: {
           preMeals,
@@ -376,7 +377,7 @@ const surveySubmissionService = ({
     const foodCustomQuestions = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
 
     await db.system.transaction(async (transaction) => {
-      const { startTime, endTime } = state;
+      const { startTime, endTime, userAgent } = state;
       const submissionTime = new Date();
 
       if (!startTime || !endTime) {
@@ -397,6 +398,7 @@ const surveySubmissionService = ({
           endTime: endTime ?? submissionTime,
           submissionTime,
           uxSessionId,
+          userAgent,
         },
         { transaction }
       );
@@ -413,7 +415,7 @@ const surveySubmissionService = ({
       const mealInputs = state.meals.map(({ name: { en: name }, time }) => ({
         surveySubmissionId,
         name,
-        hours: time?.hours ?? 8,
+        hours: time?.hours ?? 0,
         minutes: time?.minutes ?? 0,
       }));
 
@@ -451,7 +453,7 @@ const surveySubmissionService = ({
       // TODO: if food record not found, look for prototype?
       const [foodRecords, foodGroups] = await Promise.all([
         FoodLocal.findAll({
-          where: { foodCode: foodCodes, localeId },
+          where: { foodCode: foodCodes, localeId: localeCode },
           include: [
             { association: 'main' },
             {
@@ -463,7 +465,9 @@ const surveySubmissionService = ({
         }),
         FoodGroup.findAll({
           where: { id: groupCodes },
-          include: [{ association: 'localGroups', where: { localeId }, required: false }],
+          include: [
+            { association: 'localGroups', where: { localeId: localeCode }, required: false },
+          ],
         }),
       ]);
 

@@ -2,11 +2,11 @@ import { checkSchema } from 'express-validator';
 
 import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
-import { authHeaders } from '../generic';
+import { userAgent } from '../generic';
 
 export default validate(
   checkSchema({
-    ...authHeaders,
+    'user-agent': userAgent,
     email: {
       in: ['body'],
       errorMessage: typeErrorMessage('string._'),

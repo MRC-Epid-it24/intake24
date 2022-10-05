@@ -10,6 +10,7 @@
                 <v-col cols="12" md="6">
                   <date-picker
                     v-model="form.startDate"
+                    clearable
                     :error-messages="form.errors.get('startDate')"
                     :label="$t('surveys.startDate').toString()"
                   ></date-picker>
@@ -17,6 +18,7 @@
                 <v-col cols="12" md="6">
                   <date-picker
                     v-model="form.endDate"
+                    clearable
                     :error-messages="form.errors.get('endDate')"
                     :label="$t('surveys.endDate').toString()"
                   ></date-picker>

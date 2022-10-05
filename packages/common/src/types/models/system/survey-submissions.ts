@@ -12,6 +12,7 @@ export type SurveySubmissionAttributes = {
   submissionTime: Date;
   log: string | null;
   uxSessionId: string;
+  userAgent: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -25,7 +26,7 @@ export type SurveySubmissionAssociations = {
 export type SurveySubmissionCreationAttributes = OmitAndOptional<
   SurveySubmissionAttributes,
   'createdAt' | 'updatedAt',
-  'log'
+  'log' | 'userAgent'
 >;
 
 export type SurveySubmissionCustomFieldAttributes = {

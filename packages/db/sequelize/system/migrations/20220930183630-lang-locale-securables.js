@@ -17,7 +17,7 @@ const permissionToDelete = [
 ];
 
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.renameTable('languages', 'old_languages', { transaction });
 
@@ -404,7 +404,7 @@ module.exports = {
       );
     }),
 
-  down: () => {
+  down: async () => {
     throw new Error('This migration cannot be undone');
   },
 };

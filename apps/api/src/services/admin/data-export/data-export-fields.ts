@@ -1,4 +1,5 @@
 import { orderBy } from 'lodash';
+import uaParser from 'ua-parser-js';
 
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { ExportField as BaseExportField } from '@intake24/common/schemes';
@@ -123,6 +124,50 @@ const dataExportFields = () => {
       id: 'submissionTime',
       label: 'Submission DateTime',
       value: (food) => food.meal?.submission?.submissionTime?.toString(),
+    },
+    {
+      id: 'userAgent',
+      label: 'User Agent',
+      value: (food) => uaParser(food.meal?.submission?.userAgent ?? undefined).ua,
+    },
+    {
+      id: 'browser',
+      label: 'Browser',
+      value: (food) => {
+        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        return [uaInfo.browser.name, uaInfo.browser.version].filter(Boolean).join(' | ');
+      },
+    },
+    {
+      id: 'engine',
+      label: 'Engine',
+      value: (food) => {
+        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        return [uaInfo.engine.name, uaInfo.engine.version].filter(Boolean).join(' | ');
+      },
+    },
+    {
+      id: 'device',
+      label: 'Device',
+      value: (food) => {
+        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        return [uaInfo.device.model, uaInfo.device.type, uaInfo.device.vendor]
+          .filter(Boolean)
+          .join(' | ');
+      },
+    },
+    {
+      id: 'os',
+      label: 'OS',
+      value: (food) => {
+        const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
+        return [uaInfo.os.name, uaInfo.os.version].filter(Boolean).join(' | ');
+      },
+    },
+    {
+      id: 'cpu',
+      label: 'CPU',
+      value: (food) => uaParser(food.meal?.submission?.userAgent ?? undefined).cpu.architecture,
     },
   ];
 

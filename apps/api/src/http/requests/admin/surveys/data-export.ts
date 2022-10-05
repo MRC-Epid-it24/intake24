@@ -8,15 +8,15 @@ export default validate(
       in: ['body'],
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
-      isEmpty: { negated: true },
       toDate: true,
+      optional: { options: { nullable: true } },
     },
     endDate: {
       in: ['body'],
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
-      isEmpty: { negated: true },
       toDate: true,
+      optional: { options: { nullable: true } },
     },
   })
 );

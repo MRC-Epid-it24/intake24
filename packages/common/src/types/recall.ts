@@ -193,6 +193,7 @@ export type SurveyState = {
   endTime: Date | null;
   submissionTime: Date | null;
   uxSessionId: string;
+  userAgent?: string | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   continueButtonEnabled: boolean;

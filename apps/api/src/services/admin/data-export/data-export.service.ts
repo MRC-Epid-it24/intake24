@@ -6,6 +6,7 @@ import { Readable } from 'stream';
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection } from '@intake24/common/schemes';
 import type { JobParams } from '@intake24/common/types';
+import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
 import type { IncludeOptions, Job, Order, StreamFindOptions, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Op, Survey, SurveySubmissionFood, SurveySubmissionMissingFood } from '@intake24/db';
@@ -45,10 +46,19 @@ const dataExportService = ({
     startDate,
     endDate,
   }: DataExportInput): SubmissionFindOptions => {
-    const surveySubmissionConditions: WhereOptions = { surveyId };
+    const surveySubmissionConditions: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (id) surveySubmissionConditions.id = id;
-    if (startDate) surveySubmissionConditions.startTime = { [Op.gte]: startDate };
-    if (endDate) surveySubmissionConditions.endTime = { [Op.lte]: endDate };
+
+    if (startDate || endDate) {
+      const submissionTime = {
+        [Op.and]: [
+          startDate ? { [Op.gte]: startDate } : null,
+          endDate ? { [Op.lte]: endDate } : null,
+        ].filter(Boolean),
+      };
+
+      surveySubmissionConditions.submissionTime = submissionTime;
+    }
 
     const include: IncludeOptions[] = [
       {

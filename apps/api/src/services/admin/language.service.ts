@@ -25,7 +25,7 @@ const languageService = ({
   i18nStore,
   logger: globalLogger,
 }: Pick<IoC, 'i18nStore' | 'logger'>) => {
-  const logger = globalLogger.child({ service: 'languageService' });
+  const logger = globalLogger.child({ service: 'LanguageService' });
 
   /**
    * Get language record with messages

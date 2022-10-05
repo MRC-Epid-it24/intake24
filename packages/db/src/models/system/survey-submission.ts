@@ -81,6 +81,12 @@ export default class SurveySubmission
   })
   public uxSessionId!: string;
 
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(512),
+  })
+  public userAgent!: string | null;
+
   @CreatedAt
   @Column
   public readonly createdAt!: Date;

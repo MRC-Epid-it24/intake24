@@ -2,12 +2,12 @@ import { checkSchema } from 'express-validator';
 
 import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 
-import { authHeaders } from '../../generic';
+import { userAgent } from '../../generic';
 import { email, emailConfirm, name, password, phoneOptional } from '../users/defaults';
 
 export default validate(
   checkSchema({
-    ...authHeaders,
+    'user-agent': userAgent,
     email,
     emailConfirm,
     name,
