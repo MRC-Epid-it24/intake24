@@ -19,7 +19,9 @@ export default validate(
         options: {
           max: 120,
         },
+        errorMessage: 'Description cannot be longer than 120 characters',
       },
+      errorMessage: 'Description cannot be empty',
     },
     previous: {
       in: ['query'],
@@ -33,6 +35,7 @@ export default validate(
     },
     rankingAlgorithm: {
       in: ['query'],
+      optional: true,
       isIn: {
         options: [searchSortingAlgorithms],
       },
@@ -41,8 +44,14 @@ export default validate(
     matchScoreWeight: {
       in: ['query'],
       optional: true,
-      isNumeric: {
-        if: (v: number) => v >= 0 && v <= 1,
+      isFloat: {
+        errorMessage: 'Value must be a number',
+      },
+      custom: {
+        options: (value: number) => {
+          if (value >= 0 && value <= 100) return Promise.resolve();
+          else return Promise.reject('Value must be in the range [0, 100]');
+        },
       },
     },
   })

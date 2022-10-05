@@ -91,6 +91,7 @@ export default defineComponent({
           this.parameters?.searchSortingAlgorithm,
           this.parameters?.searchMatchScoreWeight
         );
+        this.requestFailed = false;
       } catch (e) {
         this.requestFailed = true;
       }

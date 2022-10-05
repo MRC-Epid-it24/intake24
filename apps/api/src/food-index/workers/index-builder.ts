@@ -18,9 +18,15 @@ if (parentPortNullable === null) throw new Error('This file can only be run as a
 
 const parentPort = parentPortNullable;
 
-const db = new SequelizeTS({
-  ...workerData.dbConnectionInfo,
+const foodsDb = new SequelizeTS({
+  ...workerData.dbConnectionInfo.foods,
   models: Object.values(models.foods),
+  logging: config.env === 'development' ? dbLogger : false,
+});
+
+const systemDb = new SequelizeTS({
+  ...workerData.dbConnectionInfo.system,
+  models: Object.values(models.system),
   logging: config.env === 'development' ? dbLogger : false,
 });
 
@@ -96,8 +102,8 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
   return rankSearchResults(
     results,
     query.localeId,
-    query.rankingAlgorithm ?? 'paRules',
-    query.matchScoreWeight ?? 0,
+    query.rankingAlgorithm,
+    query.matchScoreWeight,
     logger
   );
 }
@@ -141,7 +147,8 @@ async function buildIndex() {
   });
 
   parentPort.on('exit', async () => {
-    await db.close();
+    await systemDb.close();
+    await foodsDb.close();
   });
 }
 

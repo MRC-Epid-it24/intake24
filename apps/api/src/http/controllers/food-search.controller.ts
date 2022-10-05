@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 
+import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
 import { NotFoundError } from '@intake24/api/http/errors';
 
@@ -11,7 +12,7 @@ interface SearchQuery {
   description: string;
   previous: string[];
   limit?: string;
-  rankingAlgorithm?: string;
+  rankingAlgorithm?: SearchSortingAlgorithm;
   matchScoreWeight?: string;
 }
 
@@ -24,7 +25,8 @@ const foodSearchController = () => {
       const results = await foodIndex.search(
         req.query.description,
         req.params.localeId,
-        parseFloat(req.query.matchScoreWeight ?? '0')
+        req.query.rankingAlgorithm ?? 'popularity',
+        parseFloat(req.query.matchScoreWeight ?? '20')
       );
       res.json(results);
     } catch (err) {

@@ -4,6 +4,6 @@ export interface SearchQuery {
   description: string;
   previous: string[];
   limit?: string;
-  rankingAlgorithm?: string;
-  matchScoreWeight?: number;
+  rankingAlgorithm: string;
+  matchScoreWeight: number;
 }

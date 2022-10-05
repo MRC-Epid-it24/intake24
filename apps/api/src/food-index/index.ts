@@ -20,7 +20,9 @@ export default {
   async init(): Promise<void> {
     // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
-      workerData: { dbConnectionInfo: config.database[config.app.env].foods },
+      workerData: {
+        dbConnectionInfo: config.database[config.app.env],
+      },
     });
 
     const readyListener = (msg: any) => {
@@ -40,6 +42,7 @@ export default {
   async search(
     description: string,
     localeId: string,
+    rankingAlgorithm: string,
     matchScoreWeight: number
   ): Promise<FoodSearchResponse> {
     if (indexReady) {
@@ -66,7 +69,8 @@ export default {
           queryId,
           description,
           localeId,
-          matchScoreWeight,
+          rankingAlgorithm,
+          matchScoreWeight: matchScoreWeight / 100.0,
         });
       });
     }
