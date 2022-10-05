@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { mapGetters, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
@@ -30,6 +31,7 @@ import { merge } from '@intake24/common/util';
 import { FoodSearchResults } from '@intake24/survey/components/elements';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import { foodsService } from '@intake24/survey/services';
+import { useSurvey } from '@intake24/survey/stores';
 
 import BasePrompt from '../BasePrompt';
 
@@ -66,6 +68,8 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useSurvey, ['parameters']),
+
     promptTitle(): string {
       const { searchTerm } = this;
       return this.getLocaleContent(this.promptProps.text, { params: { searchTerm } });
@@ -81,7 +85,12 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        this.searchResults = await foodsService.search(this.localeId, this.searchTerm);
+        this.searchResults = await foodsService.search(
+          this.localeId,
+          this.searchTerm,
+          'paRules',
+          1.0
+        );
       } catch (e) {
         this.requestFailed = true;
       }

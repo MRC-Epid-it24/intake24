@@ -3,6 +3,8 @@ import type { FoodHeader } from '@intake24/common/types/http';
 import type Logger from '@intake24/services/logger/logger';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 
+export type RankingAlgorithm = '';
+
 export type RankingData = {
   [foodCode: string]: number;
 };

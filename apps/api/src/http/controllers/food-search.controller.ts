@@ -1,22 +1,39 @@
 import type { Request, Response } from 'express';
 
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
+import { NotFoundError } from '@intake24/api/http/errors';
+
+interface SearchParams {
+  localeId: string;
+}
+
+interface SearchQuery {
+  description: string;
+  previous: string[];
+  limit?: string;
+  rankingAlgorithm?: string;
+  matchScoreWeight?: string;
+}
 
 const foodSearchController = () => {
-  const lookup = async (req: Request, res: Response): Promise<void> => {
-    const { localeId } = req.params;
-
-    if (typeof req.query.description !== 'string' || !req.query.description.length) {
-      res.status(400).send('description cannot be empty');
-      return;
-    }
-
+  const search = async (
+    req: Request<SearchParams, unknown, unknown, SearchQuery>,
+    res: Response
+  ): Promise<void> => {
     try {
-      const results = await foodIndex.search(req.query.description, localeId);
+      const results = await foodIndex.search(
+        req.query.description,
+        req.params.localeId,
+        parseFloat(req.query.matchScoreWeight ?? '0')
+      );
       res.json(results);
     } catch (err) {
       if (err instanceof IndexNotReadyError) {
         res.sendStatus(503);
+        return;
+      }
+      if (err instanceof NotFoundError) {
+        res.sendStatus(404);
         return;
       }
       throw err;
@@ -41,7 +58,7 @@ const foodSearchController = () => {
   };
 
   return {
-    lookup,
+    search,
     recipe,
     category,
     splitDescription,

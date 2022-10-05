@@ -3,9 +3,14 @@ import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/ht
 import http from './http.service';
 
 export default {
-  search: async (localeId: string, description: string): Promise<FoodSearchResponse> => {
+  search: async (
+    localeId: string,
+    description: string,
+    rankingAlgorithm: string,
+    matchScoreWeight: number
+  ): Promise<FoodSearchResponse> => {
     const { data } = await http.get<FoodSearchResponse>(
-      `foods/${localeId}?description=${description}`
+      `foods/${localeId}?description=${description}&rankingAlgorithm=${rankingAlgorithm}&matchScoreWeight=${matchScoreWeight}`
     );
     return data;
   },

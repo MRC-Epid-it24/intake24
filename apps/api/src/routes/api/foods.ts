@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { authenticate } from '@intake24/api/http/middleware';
+import validation from '@intake24/api/http/requests/foods';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
@@ -12,7 +13,7 @@ export default () => {
   authenticate(router, 'survey');
 
   // Food search
-  router.get('/:localeId', wrapAsync(foodSearchController.lookup));
+  router.get('/:localeId', validation.search, wrapAsync(foodSearchController.search));
   router.get('/:localeId/recipes', wrapAsync(foodSearchController.recipe));
   router.get('/:localeId/category', wrapAsync(foodSearchController.category));
   router.get('/:localeId/split-description', wrapAsync(foodSearchController.splitDescription));

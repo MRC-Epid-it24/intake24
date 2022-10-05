@@ -3,6 +3,8 @@ import '@intake24/api/bootstrap';
 import { parentPort as parentPortNullable, workerData } from 'worker_threads';
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import type { SearchQuery } from '@intake24/api/food-index/search-query';
+import type { FoodHeader } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
@@ -82,6 +84,24 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   );
 }
 
+async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
+  const localeIndex = foodIndex[query.localeId];
+  if (!localeIndex)
+    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+
+  const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
+
+  const results = localeIndex.findMatches(interpreted, 100, 100);
+
+  return rankSearchResults(
+    results,
+    query.localeId,
+    query.rankingAlgorithm ?? 'paRules',
+    query.matchScoreWeight ?? 0,
+    logger
+  );
+}
+
 async function buildIndex() {
   let enabledLocales: string[];
 
@@ -102,22 +122,22 @@ async function buildIndex() {
 
   parentPort.postMessage('ready');
 
-  parentPort.on('message', (msg) => {
-    const { query, localeId, matchScoreWeight, rankingAlgorithm } = msg;
+  parentPort.on('message', async (msg: SearchQuery) => {
+    try {
+      const results = await queryIndex(msg);
 
-    const localeIndex = foodIndex[localeId];
-
-    if (!localeIndex)
-      throw new NotFoundError(`Locale ${localeId} does not exist or is not enabled`);
-
-    const interpreted = localeIndex.interpretPhrase(query, 'match-fewer');
-
-    const results = localeIndex.findMatches(interpreted, 100, 100);
-
-    parentPort.postMessage({
-      queryId: msg.queryId,
-      results: rankSearchResults(results, localeId, rankingAlgorithm, matchScoreWeight, logger),
-    });
+      parentPort.postMessage({
+        queryId: msg.queryId,
+        success: true,
+        results,
+      });
+    } catch (err) {
+      parentPort.postMessage({
+        queryId: msg.queryId,
+        success: false,
+        error: err,
+      });
+    }
   });
 
   parentPort.on('exit', async () => {
