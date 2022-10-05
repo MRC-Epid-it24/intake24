@@ -5,7 +5,11 @@
         <v-row align="center">
           <v-col>
             <v-card-text>
-              <slot name="header"></slot>
+              <slot name="header">
+                <span class="text-subtitle-1 font-weight-medium">
+                  {{ localeText }}
+                </span>
+              </slot>
             </v-card-text>
           </v-col>
           <v-col cols="auto">
@@ -32,7 +36,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation, PortionSizeMethodId } from '@intake24/common/types';
 import { localeContent } from '@intake24/survey/components/mixins';
 
 export default defineComponent({
@@ -41,6 +45,10 @@ export default defineComponent({
   mixins: [localeContent],
 
   props: {
+    method: {
+      type: String as PropType<PortionSizeMethodId | 'option'>,
+      required: true,
+    },
     text: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
@@ -49,11 +57,22 @@ export default defineComponent({
       type: Object as PropType<LocaleTranslation>,
       default: null,
     },
+    foodName: {
+      type: Object as PropType<LocaleTranslation>,
+      required: true,
+    },
   },
 
   computed: {
-    localeText(): string {
-      return this.getLocaleContent(this.text);
+    localeFoodName(): string {
+      return this.getLocaleContent(this.foodName);
+    },
+
+    localeText() {
+      return this.getLocaleContent(this.text, {
+        path: `portion.${this.method}.text`,
+        params: { food: this.localeFoodName },
+      });
     },
 
     localeDescription(): string {

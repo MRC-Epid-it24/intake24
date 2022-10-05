@@ -13,7 +13,10 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { MilkInAHotDrinkPromptProps } from '@intake24/common/prompts';
+import type {
+  MilkInAHotDrinkPromptProps,
+  PortionSizeComponentType,
+} from '@intake24/common/prompts';
 import type { MilkInAHotDrinkState } from '@intake24/survey/components/prompts/portion/MilkInAHotDrinkPrompt.vue';
 import {
   createPromptHandlerStoreMixin,
@@ -38,7 +41,7 @@ export default defineComponent({
       required: true,
     },
     promptComponent: {
-      type: String,
+      type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
   },

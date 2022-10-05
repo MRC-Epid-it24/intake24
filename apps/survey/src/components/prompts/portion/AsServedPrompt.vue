@@ -1,14 +1,11 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ $t('portion.asServed.promptLabel', { food: localeFoodName }) }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpen" flat @change="onActivePanelChanged">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.asServed.portionHeader') }}
+              {{ $t(`portion.${method}.serving.header`) }}
               <template #actions>
                 <as-served-weight
                   :valid="servingCompleteStatus"
@@ -23,7 +20,7 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  {{ $t('portion.asServed.portionLabel', { food: localeFoodName }) }}
+                  {{ $t(`portion.${method}.serving.label`, { food: localeFoodName }) }}
                 </v-col>
               </v-row>
               <v-row>
@@ -40,7 +37,7 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="parameters['leftovers-image-set']">
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.asServed.leftoverHeader', { food: localeFoodName }) }}
+              {{ $t(`portion.${method}.leftover.header`, { food: localeFoodName }) }}
               <template #actions>
                 <as-served-weight
                   :valid="leftoverCompleteStatus"
@@ -56,7 +53,7 @@
               <v-row>
                 <v-col>
                   <p>
-                    {{ $t('portion.asServed.leftoverQuestion', { food: localeFoodName }) }}
+                    {{ $t(`portion.${method}.leftover.question`, { food: localeFoodName }) }}
                   </p>
                   <v-btn
                     :color="leftoverPromptAnswer === true ? 'success' : ''"
@@ -76,7 +73,7 @@
               <template v-if="leftoverPromptAnswer">
                 <v-row>
                   <v-col>
-                    {{ $t('portion.asServed.leftoverHeader', { food: localeFoodName }) }}
+                    {{ $t(`portion.${method}.leftover.label`, { food: localeFoodName }) }}
                   </v-col>
                 </v-row>
                 <v-row>
@@ -114,14 +111,12 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { AsServedPromptProps } from '@intake24/common/prompts';
-import type { LocaleTranslation, SelectedAsServedImage } from '@intake24/common/types';
+import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
-import { asServedPromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
-import { AsServedWeight, ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { AsServedWeight } from '@intake24/survey/components/elements';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
 
 export interface AsServedPromptState {
   activePanel: number | null;
@@ -135,41 +130,20 @@ export interface AsServedPromptState {
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  components: { AsServedSelector, AsServedWeight, ValidInvalidIcon },
+  components: { AsServedSelector, AsServedWeight },
 
-  mixins: [BasePortion],
+  mixins: [createBasePortion<AsServedPromptProps, AsServedPromptState>()],
 
   props: {
-    initialState: {
-      type: Object as PropType<AsServedPromptState>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
     parameters: {
       type: Object as PropType<AsServedParameters>,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<AsServedPromptProps>,
       required: true,
     },
   },
 
   data() {
     return {
-      ...merge(asServedPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'as-served',
       panelOpen: this.initialState.activePanel,
       leftoverPromptAnswer: this.initialState.leftoversConfirmed,
       asServedData: this.initialState.servingImage,
@@ -184,9 +158,11 @@ export default defineComponent({
     hasLeftovers() {
       return !!this.parameters['leftovers-image-set'];
     },
+
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
+
     isValid(): boolean {
       // Haven't filled in asServed
       if (!this.asServedData || !this.servingCompleteStatus) return false;
@@ -256,10 +232,6 @@ export default defineComponent({
 
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
-    clearErrors() {
-      this.errors = [];
     },
 
     submit() {

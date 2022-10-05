@@ -1,14 +1,11 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ $t('portion.common.completeBelow') }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpen">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.pizza.label') }}
+              {{ $t(`portion.${method}.label`) }}
               <template #actions>
                 <valid-invalid-icon :valid="typeComplete"></valid-invalid-icon>
               </template>
@@ -22,7 +19,7 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.pizza.thicknessLabel') }}
+              {{ $t(`portion.${method}.thicknessLabel`) }}
               <template #actions>
                 <valid-invalid-icon :valid="thicknessComplete"></valid-invalid-icon>
               </template>
@@ -37,7 +34,7 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.pizza.sizeLabel') }}
+              {{ $t(`portion.${method}.sizeLabel`) }}
               <template #actions>
                 <valid-invalid-icon :valid="sizeComplete"></valid-invalid-icon>
               </template>
@@ -48,7 +45,7 @@
               </template>
               <template v-if="sizePromptProps.imageMapId">
                 <v-btn :color="wholeSelected === true ? 'success' : ''" @click="selectWhole()">
-                  {{ $t('portion.pizza.wholePizzaButton') }}
+                  {{ $t(`portion.${method}.wholePizzaButton`) }}
                 </v-btn>
                 <image-map-selector
                   :prompt-props="sizePromptProps"
@@ -61,7 +58,7 @@
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               <template v-if="!wholeSelected">{{
-                $t('portion.pizza.slicesQuantityLabel')
+                $t(`portion.${method}.slicesQuantityLabel`)
               }}</template>
               <template v-if="wholeSelected">{{ $t('portion.pizza.wholeQuantityLabel') }}</template>
               <template #actions>
@@ -94,9 +91,7 @@ import { defineComponent } from 'vue';
 
 import type { ImageMapSelectorProps, PizzaPromptProps } from '@intake24/common/prompts';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
-import { pizzaPromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
-import { QuantityCard, ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { QuantityCard } from '@intake24/survey/components/elements';
 // import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
 
@@ -105,11 +100,7 @@ import BasePortion from './BasePortion';
 export default defineComponent({
   name: 'PizzaPrompt',
 
-  components: {
-    ValidInvalidIcon,
-    QuantityCard,
-    ImageMapSelector,
-  },
+  components: { QuantityCard, ImageMapSelector },
 
   mixins: [BasePortion],
 
@@ -122,9 +113,8 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(pizzaPromptDefaultProps, this.promptProps),
+      method: 'pizza',
       // type, thickness and slice prefix are set as default
-      errors: [] as string[],
       panelOpen: 0 as number,
       pizzaThicknessMapData: [] as any,
       selectedSliceId: 0 as number,
@@ -151,9 +141,7 @@ export default defineComponent({
     localeDescription(): string {
       return this.getLocaleContent(this.description);
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
+
     isValid() {
       return (
         this.typeComplete && this.thicknessComplete && this.sizeComplete && this.quantityComplete

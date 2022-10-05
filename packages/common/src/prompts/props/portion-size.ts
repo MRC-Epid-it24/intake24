@@ -113,13 +113,6 @@ export const imageMapSelectorDefaultProps: ImageMapSelectorProps = {
 
 export const portionSizePromptQuestions: PromptQuestion[] = [
   {
-    component: 'portion-size-option-prompt',
-    type: 'portion-size',
-    id: 'portion-size-option-prompt',
-    name: 'Choose portion size method',
-    props: copy(portionSizeOptionPromptDefaultProps),
-  },
-  {
     component: 'as-served-prompt',
     type: 'portion-size',
     id: 'as-served-prompt',
@@ -146,6 +139,13 @@ export const portionSizePromptQuestions: PromptQuestion[] = [
     id: 'milk-in-a-hot-drink-prompt',
     name: 'Milk in a hot drink',
     props: copy(milkInAHotDrinkPromptDefaultProps),
+  },
+  {
+    component: 'portion-size-option-prompt',
+    type: 'portion-size',
+    id: 'portion-size-option-prompt',
+    name: 'Choose portion size method',
+    props: copy(portionSizeOptionPromptDefaultProps),
   },
   {
     component: 'standard-portion-prompt',

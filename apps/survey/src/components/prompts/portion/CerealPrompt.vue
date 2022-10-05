@@ -1,8 +1,5 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ $t('portion.common.completeBelow') }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpenId">
@@ -24,7 +21,7 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
+              {{ $t('portion.as-served.portionLabel', { food: localeDescription }) }}
               <template #actions>
                 <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
               </template>
@@ -39,7 +36,7 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
+              {{ $t('portion.as-served.leftoverQuestion', { food: localeDescription }) }}
               <template #actions>
                 <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
               </template>
@@ -93,34 +90,21 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { CerealPromptProps, ImageMapSelectorEmit } from '@intake24/common/prompts';
-import type { LocaleTranslation } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
-import { cerealPromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
+import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
 import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
 import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
 
-import BaseExpansionPortion from './BaseExpansionPortion';
+import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'CerealPrompt',
 
-  components: {
-    AsServedSelector,
-    ImageMapSelector,
-  },
+  components: { AsServedSelector, ImageMapSelector },
 
-  mixins: [BaseExpansionPortion],
+  mixins: [createBasePortion<CerealPromptProps, any>(), expansionPanelControls],
 
   props: {
-    promptProps: {
-      type: Object as PropType<CerealPromptProps>,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
     foodCode: {
       type: String,
       required: true,
@@ -137,8 +121,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(cerealPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'cereal',
       foodData: {} as UserFoodData,
       bowlTypeSelected: null as number | null,
       cerealType: 'cereal_hoopA' as string,
@@ -154,12 +137,11 @@ export default defineComponent({
     localeDescription(): string {
       return this.getLocaleContent(this.description);
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
+
     dataLoaded(): boolean {
       return !!Object.keys(this.foodData).length;
     },
+
     isValid(): boolean {
       if (this.bowlComplete && this.asServedComplete && this.leftoverComplete) {
         this.clearErrors();
@@ -169,8 +151,8 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.fetchFoodData();
+  async mounted() {
+    await this.fetchFoodData();
   },
 
   methods: {
@@ -212,10 +194,6 @@ export default defineComponent({
     onLeftoversUpdate(status: Record<string, unknown>) {
       this.leftoverComplete = true;
       this.setPanelOpen(-1);
-    },
-
-    clearErrors() {
-      this.errors = [];
     },
 
     submit() {

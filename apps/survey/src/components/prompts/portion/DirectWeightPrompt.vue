@@ -20,15 +20,13 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { DirectWeightPromptProps } from '@intake24/common/prompts';
-import { directWeightPromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'DirectWeightPrompt',
 
-  mixins: [BasePortion],
+  mixins: [createBasePortion<DirectWeightPromptProps, any>()],
 
   props: {
     promptProps: {
@@ -39,8 +37,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(directWeightPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
       // Prototyping variables
       weight: 50,
     };
@@ -49,9 +45,6 @@ export default defineComponent({
   computed: {
     localeDescription(): string {
       return this.getLocaleContent(this.description);
-    },
-    hasErrors(): boolean {
-      return !!this.errors.length;
     },
   },
 

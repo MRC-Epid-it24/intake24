@@ -1,15 +1,12 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ localeFoodName }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpen" flat>
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <i18n path="portion.guideImage.label">
+              <i18n :path="`portion.${method}.label`">
                 <template #food>
                   <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
@@ -63,7 +60,7 @@
           <!-- Step 2: Specify quantity -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.guideImage.quantity', { food: localeFoodName }) }}
+              {{ $t(`portion.${method}.quantity`, { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
               </template>
@@ -80,7 +77,7 @@
                     <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
                   </v-alert>
                   <v-btn block color="success" @click="confirmQuantity">
-                    {{ $t('portion.common.confirmButton') }}
+                    {{ $t(`portion.${method}.confirm`) }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -106,17 +103,11 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
 import type { GuideImagePromptProps, QuantityValues } from '@intake24/common/prompts';
-import type { EncodedFood, GuideImageState, LocaleTranslation } from '@intake24/common/types';
-import type { GuideImageResponse } from '@intake24/common/types/http/foods';
-import { guideImagePromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
-import {
-  ImagePlaceholder,
-  QuantityCard,
-  ValidInvalidIcon,
-} from '@intake24/survey/components/elements';
+import type { EncodedFood, GuideImageState } from '@intake24/common/types';
+import type { GuideImageParameters, GuideImageResponse } from '@intake24/common/types/http/foods';
+import { ImagePlaceholder, QuantityCard } from '@intake24/survey/components/elements';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
 
 export interface GuideImagePromptState {
   portionSize: GuideImageState;
@@ -136,37 +127,17 @@ export interface GuideImageEncodedFood {
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { ImagePlaceholder, QuantityCard, ValidInvalidIcon },
+  components: { ImagePlaceholder, QuantityCard },
 
-  mixins: [BasePortion],
+  mixins: [createBasePortion<GuideImagePromptProps, GuideImagePromptState>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<GuideImagePromptProps>,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
-    guideImageId: {
-      type: String,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
     conversionFactor: {
       type: Number,
       required: true,
     },
-    initialState: {
-      type: Object as PropType<GuideImagePromptState>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
+    parameters: {
+      type: Object as PropType<GuideImageParameters>,
       required: true,
     },
   },
@@ -182,8 +153,7 @@ export default defineComponent({
     const selectedIndex = this.initialState.portionSize.object?.id;
 
     return {
-      ...merge(guideImagePromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'guide-image',
       selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
       selectedQuantity: this.initialState.quantityConfirmed,
       guideImageData: {} as GuideImageResponse,
@@ -200,10 +170,6 @@ export default defineComponent({
   computed: {
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
-    },
-
-    hasErrors(): boolean {
-      return !!this.errors.length;
     },
 
     dataLoaded(): boolean {
@@ -224,6 +190,7 @@ export default defineComponent({
           .join(' ');
       });
     },
+
     isValid() {
       return this.selectedGuide;
     },
@@ -242,7 +209,7 @@ export default defineComponent({
   methods: {
     async fetchGuideImageData() {
       const { data } = await this.$http.get<GuideImageResponse>(
-        `portion-sizes/guide-images/${this.guideImageId}`
+        `portion-sizes/guide-images/${this.parameters['guide-image-id']}`
       );
 
       this.guideImageData = { ...data };
@@ -288,7 +255,7 @@ export default defineComponent({
           this.conversionFactor,
         leftoversWeight: 0,
         object: {
-          guideImageId: this.guideImageId,
+          guideImageId: this.parameters['guide-image-id'],
           imageUrl: this.guideImageData.imageMap.baseImageUrl,
           id: idx + 1,
           weight: this.guideImageData.weights[idx + 1],
@@ -306,10 +273,6 @@ export default defineComponent({
       this.selectedGuide = true;
       this.panelOpen = 1;
       this.onUpdate();
-    },
-
-    clearErrors() {
-      this.errors = [];
     },
 
     setErrors() {

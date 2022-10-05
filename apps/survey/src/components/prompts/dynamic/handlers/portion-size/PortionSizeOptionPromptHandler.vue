@@ -1,8 +1,8 @@
 <template>
   <portion-size-option-prompt
-    v-bind="{ continueEnabled, promptProps, availableMethods }"
+    v-bind="{ continueEnabled, promptComponent, promptProps, availableMethods }"
     :food-name="foodName()"
-    :initial-value="initialState ?? undefined"
+    :initial-state="initialStateNotNull"
     @continue="$emit('continue')"
     @update="onUpdate"
   >
@@ -14,7 +14,10 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { PortionSizeOptionPromptProps } from '@intake24/common/prompts';
+import type {
+  PortionSizeComponentType,
+  PortionSizeOptionPromptProps,
+} from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import type { PortionSizeOptionState } from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import {
@@ -42,7 +45,7 @@ export default defineComponent({
       required: true,
     },
     promptComponent: {
-      type: String,
+      type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
   },

@@ -1,14 +1,11 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ $t('portion.milkInAHotDrink.label', { food: localeFoodName }) }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpen" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.milkInAHotDrink.optionsLabel') }}
+              {{ $t(`portion.${method}.label`) }}
               <template #actions>
                 <valid-invalid-icon :valid="!!state.milkVolumePercentage"></valid-invalid-icon>
               </template>
@@ -51,16 +48,12 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { ListOption, MilkInAHotDrinkPromptProps } from '@intake24/common/prompts';
-import type { LocaleTranslation } from '@intake24/common/types';
-import { milkInAHotDrinkPromptDefaultProps } from '@intake24/common/prompts';
-import { copy, merge } from '@intake24/common/util';
-import { ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { copy } from '@intake24/common/util';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
 
 export interface MilkInAHotDrinkState {
   milkPartIndex: number | null;
@@ -70,53 +63,19 @@ export interface MilkInAHotDrinkState {
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',
 
-  components: { ValidInvalidIcon },
-
-  mixins: [BasePortion],
-
-  props: {
-    initialState: {
-      type: Object as PropType<MilkInAHotDrinkState>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<MilkInAHotDrinkPromptProps>,
-      required: true,
-    },
-  },
+  mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkState>()],
 
   data() {
     return {
-      ...merge(milkInAHotDrinkPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'milk-in-a-hot-drink',
       panelOpen: 0,
       state: copy(this.initialState),
     };
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     localeOptions(): ListOption[] {
       return this.options[this.$i18n.locale] ?? this.options.en;
-    },
-
-    hasErrors(): boolean {
-      return !!this.errors.length;
     },
 
     isValid() {
@@ -135,10 +94,6 @@ export default defineComponent({
   },
 
   methods: {
-    clearErrors() {
-      this.errors = [];
-    },
-
     setErrors() {
       this.errors = [];
     },

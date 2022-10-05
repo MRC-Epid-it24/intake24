@@ -1,12 +1,9 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ localeFoodName }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panelOpenId" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n path="portion.standardPortion.label">
+          <i18n :path="`portion.${method}.label`">
             <template #food>
               <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
@@ -29,9 +26,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
             v-if="state.unit"
-            :path="`portion.standardPortion.howMany.${
-              state.unit.omitFoodDescription ? '_' : 'withFood'
-            }`"
+            :path="`portion.${method}.howMany.${state.unit.omitFoodDescription ? '_' : 'withFood'}`"
           >
             <template #unit>
               <span v-html="getLocaleContent(standardUnitRefs[state.unit.name].howMany)"></span>
@@ -40,7 +35,7 @@
               <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
           </i18n>
-          <template v-else>{{ $t('portion.standardPortion.howMany.placeholder') }}</template>
+          <template v-else>{{ $t(`portion.${method}.howMany.placeholder`) }}</template>
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -57,7 +52,7 @@
             </v-col>
             <v-col md="4" xs="12">
               <v-btn block color="success" @click="confirmQuantity">
-                {{ $t('portion.standardPortion.continue') }}
+                {{ $t(`portion.${method}.continue`) }}
               </v-btn>
             </v-col>
           </v-row>
@@ -75,17 +70,13 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { QuantityValues, StandardPortionPromptProps } from '@intake24/common/prompts';
-import type {
-  LocaleTranslation,
-  RequiredLocaleTranslation,
-  StandardPortionUnit,
-} from '@intake24/common/types';
+import type { RequiredLocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
 import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
-import { standardPortionPromptDefaultProps } from '@intake24/common/prompts';
-import { copy, merge } from '@intake24/common/util';
+import { copy } from '@intake24/common/util';
 import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
+import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
 
-import BaseExpansionPortion from './BaseExpansionPortion';
+import createBasePortion from './createBasePortion';
 
 export type StandardUnitRefs = Record<
   string,
@@ -103,39 +94,21 @@ export default defineComponent({
 
   components: { ErrorAlert, QuantityCard },
 
-  mixins: [BaseExpansionPortion],
+  mixins: [
+    createBasePortion<StandardPortionPromptProps, StandardPortionState>(),
+    expansionPanelControls,
+  ],
 
   props: {
-    initialState: {
-      type: Object as PropType<StandardPortionState>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
-      required: true,
-    },
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
     parameters: {
       type: Object as PropType<StandardPortionParams>,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<StandardPortionPromptProps>,
       required: true,
     },
   },
 
   data() {
     return {
-      ...merge(standardPortionPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'standard-portion',
       state: copy(this.initialState),
       standardUnitRefs: {} as StandardUnitRefs,
     };
@@ -204,7 +177,7 @@ export default defineComponent({
     },
 
     estimateInLabel(unit: string) {
-      return this.$t('portion.standardPortion.estimateIn', {
+      return this.$t(`portion.${this.method}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
       });
     },
@@ -219,10 +192,6 @@ export default defineComponent({
       this.state.quantityConfirmed = true;
       this.closeAllPanels();
       this.update();
-    },
-
-    clearErrors() {
-      this.errors = [];
     },
 
     setErrors() {

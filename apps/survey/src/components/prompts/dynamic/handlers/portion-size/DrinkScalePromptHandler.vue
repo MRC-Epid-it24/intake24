@@ -15,7 +15,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { DrinkScalePromptProps } from '@intake24/common/prompts';
+import type { DrinkScalePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
 import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
@@ -41,7 +41,7 @@ export default defineComponent({
       required: true,
     },
     promptComponent: {
-      type: String,
+      type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
     promptId: {

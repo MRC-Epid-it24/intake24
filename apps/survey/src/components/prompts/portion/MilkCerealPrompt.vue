@@ -1,6 +1,5 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header> [Associated prompt] {{ $t('portion.milkCereal.label') }} </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-card>
@@ -20,7 +19,7 @@
     </v-row>
     <v-row v-if="displayQuestions">
       <v-col>
-        <v-expansion-panels v-model="panelOpen">
+        <v-expansion-panels v-model="panelOpenId">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               Please select the milk you had:
@@ -105,22 +104,16 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MilkCerealPromptProps } from '@intake24/common/prompts';
-import type { LocaleTranslation } from '@intake24/common/types';
-import { milkCerealPromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
+import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
 
-import BaseExpansionPortion from './BaseExpansionPortion';
+import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'MilkCerealPrompt',
 
-  mixins: [BaseExpansionPortion],
+  mixins: [createBasePortion<MilkCerealPromptProps, any>(), expansionPanelControls],
 
   props: {
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
     promptProps: {
       type: Object as PropType<MilkCerealPromptProps>,
       required: true,
@@ -129,22 +122,21 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(milkCerealPromptDefaultProps, this.promptProps),
-      errors: [] as string[],
-      displayQuestions: false as boolean,
+      method: 'milk-on-cereal',
+      displayQuestions: false,
       // Below are rough/testing vars to control UI prototype
-      bowlType: 'A' as string, // For testing until food linking
-      foodSelected: false as boolean,
-      foodValue: '' as string,
-      foodCode: 'SMLK' as string,
+      bowlType: 'A', // For testing until food linking
+      foodSelected: false,
+      foodValue: '',
+      foodCode: 'SMLK',
       foodData: [] as any,
-      portionMethodSelected: false as boolean,
-      portionMethodValue: '' as string,
-      portionSelected: false as boolean,
-      portionValue: '' as string,
+      portionMethodSelected: false,
+      portionMethodValue: '',
+      portionSelected: false,
+      portionValue: '',
       imageMapId: 'milkbowlA',
       imageMapData: [] as any,
-      imageMapLoaded: false as boolean,
+      imageMapLoaded: false,
       // If MCRL (milk_in_cereal) associated food category is triggered, we will wind up here
       // Associated_foods contains `text` field which is the question
     };
@@ -155,9 +147,6 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
     isValid() {
       return this.foodSelected && this.portionMethodSelected && this.portionSelected;
     },
@@ -171,6 +160,7 @@ export default defineComponent({
       }
       return '';
     },
+
     async fetchFoodData() {
       const locale = 'en_GB';
       try {
@@ -181,6 +171,7 @@ export default defineComponent({
         console.log(e);
       }
     },
+
     async fetchImageMapData() {
       try {
         const { data } = await this.$http.get(`portion-sizes/image-maps/${this.imageMapId}`);
@@ -190,14 +181,17 @@ export default defineComponent({
         console.log(e);
       }
     },
+
     setDisplayQuestions(value: boolean) {
       this.displayQuestions = value;
     },
+
     emitFoodSelected(value: string) {
       this.foodValue = value;
       this.foodSelected = true;
       this.setPanelOpen(1);
     },
+
     selectPortionMethod(value: string) {
       this.portionMethodSelected = true;
       this.portionMethodValue = value;
@@ -206,6 +200,7 @@ export default defineComponent({
         this.fetchImageMapData();
       }
     },
+
     selectPortion() {
       this.portionSelected = true;
       this.setPanelOpen(-1);

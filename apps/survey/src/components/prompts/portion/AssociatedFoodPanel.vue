@@ -73,10 +73,7 @@ import BaseExpansionPortion from './BaseExpansionPortion';
 export default defineComponent({
   name: 'AssociatedFoodPanel',
 
-  components: {
-    FoodSearchPrompt,
-    PortionSizeOptionPrompt,
-  },
+  components: { FoodSearchPrompt, PortionSizeOptionPrompt },
 
   mixins: [BaseExpansionPortion],
 

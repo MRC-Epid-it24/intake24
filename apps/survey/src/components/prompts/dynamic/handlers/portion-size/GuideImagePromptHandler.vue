@@ -1,10 +1,9 @@
 <template>
   <guide-image-prompt
     ref="promptHandleChild"
-    v-bind="{ continueEnabled, promptComponent, promptProps }"
+    v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
     :conversion-factor="selectedPortionSize().conversionFactor"
     :food-name="foodName()"
-    :guide-image-id="parameters['guide-image-id']"
     :initial-state="initialStateNotNull"
     @continue="$emit('continue')"
     @update="onUpdate"
@@ -17,7 +16,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { GuideImagePromptProps } from '@intake24/common/prompts';
+import type { GuideImagePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
 import type { GuideImageParameters } from '@intake24/common/types/http';
 import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
 import {
@@ -45,7 +44,7 @@ export default defineComponent({
       required: true,
     },
     promptComponent: {
-      type: String,
+      type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
   },

@@ -47,17 +47,17 @@
     <v-row>
       <v-col>
         <v-btn block @click="hadLess">
-          {{ $t(`portion.asServed.${type}.less`) }}
+          {{ $t(`portion.as-served.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
         <v-btn block @click="hadMore">
-          {{ $t(`portion.asServed.${type}.more`) }}
+          {{ $t(`portion.as-served.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col align="center" md="4" xs="12">
         <v-btn block color="success" @click="confirm">
-          {{ $t(`portion.asServed.${type}.confirm`) }}
+          {{ $t(`portion.as-served.${type}.confirm`) }}
         </v-btn>
       </v-col>
     </v-row>

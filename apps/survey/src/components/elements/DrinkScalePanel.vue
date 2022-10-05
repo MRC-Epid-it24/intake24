@@ -32,7 +32,7 @@
                 v-model="sliderValue"
                 class="full-height-slider ma-0"
                 color="#0d47a1"
-                :hint="$t('portion.drinkScale.lessFullButton')"
+                :hint="$t(`portion.drink-scale.serving.less`)"
                 :max="maxSliderValue"
                 :min="minSliderValue"
                 thumb-color="primary"

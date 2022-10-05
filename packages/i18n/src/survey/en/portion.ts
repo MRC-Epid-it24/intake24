@@ -10,8 +10,7 @@ const portion: LocaleMessageObject = {
     completePreviousStep: 'Please complete the previous step before answering this question.',
   },
   option: {
-    // Implementation of this needs looking at for RTL, as localDescription appears at end of line for label
-    label: 'How would you like to estimate the portion size of your {food}?',
+    text: 'How would you like to estimate the portion size of your {food}?',
     validation: {
       required: 'Please select how the portion will be measured.',
     },
@@ -64,41 +63,73 @@ const portion: LocaleMessageObject = {
       weight: 'Enter weight/volume',
     },
   },
-  asServed: {
-    promptLabel:
-      'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
-    portionHeader: 'Step 1. Select your portion size.',
-    portionLabel: 'Using these pictures, please choose how much {food} you had.',
-    leftoverHeader: 'Step 2. Select your leftover size.',
-    leftoverQuestion: 'Did you leave some of your {food}?',
-    leftoverLabel: 'Using these pictures, please choose how much {food} you left.',
+  'as-served': {
+    text: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     serving: {
+      header: 'Step 1. Select your portion size.',
+      label: 'Using these pictures, please choose how much {food} you had.',
       less: 'I had less',
       more: 'I had more',
       confirm: 'I had that much',
     },
     leftover: {
+      header: 'Step 2. Select your leftover size.',
+      question: 'Did you leave some of your {food}?',
+      label: 'Using these pictures, please choose how much {food} you left.',
       less: 'I left less',
       more: 'I left more',
       confirm: 'I left that much',
     },
   },
-  guideImage: {
+  cereal: {
+    text: 'Please select the bowl that looks most like the one you used.',
+  },
+  'drink-scale': {
+    text: '{food}',
+    container:
+      'Please select the cup or glass that looks most like the one you used for your {food}.',
+    serving: {
+      label:
+        'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
+      hint: 'Slide this to indicate how full your cup or glass was.',
+      less: 'It was less full',
+      more: 'It was more full',
+      confirm: 'It was that full',
+    },
+    leftover: {
+      label: 'Please use the slider on the right to choose how much you had left.',
+      less: 'I left less',
+      more: 'I left more',
+      confirm: 'I left that much',
+    },
+  },
+  'guide-image': {
+    text: '{food}',
     label: 'Please select the item you had or the closest match to {food}.',
     quantity: 'Please choose how many of {food} you had.',
     confirm: 'I had that many',
   },
-  drinkScale: {
-    label: 'Please select the cup or glass that looks most like the one you used for your {food}.',
-    sliderLabel:
-      'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
-    leftoverLabel: 'Please use the slider on the right to choose how much you had left.',
-    lessFullButton: 'It was less full',
-    moreFullButton: 'It was more full',
-    confirmFullButton: 'It was that full',
-    sliderHint: 'Slide this to indicate how full your cup or glass was.',
+  'milk-in-a-hot-drink': {
+    text: 'How much {food} did you have in your tea or coffee?',
+    label: 'Select the amount you had.',
+    continue: 'I had that much',
   },
-  standardPortion: {
+  'milk-on-cereal': {
+    text: 'Milk with your cereal',
+    question: 'Did you have milk on your cereal?',
+    searchLabel: 'Please select which type of milk you had',
+    foodSelectButton: `I can't find my food`,
+  },
+  pizza: {
+    text: 'Please select the pizza that is closest to the size you had.',
+    thicknessLabel: 'How thick was your pizza?',
+    sizeLabel: 'What size slice(s) did you have?',
+    wholePizzaButton: 'I had the whole pizza',
+    slicesQuantityLabel: 'How many of these slices did you have?',
+    wholeQuantityLabel: 'How many of these pizzas did you have?',
+  },
+  'standard-portion': {
+    text: '{food}',
     label: 'How would you like to estimate the portion size of your {food}?',
     estimateIn: 'In {unit}',
     howMany: {
@@ -108,33 +139,11 @@ const portion: LocaleMessageObject = {
     },
     continue: 'I had that many',
   },
-  cereal: {
-    label: 'Please select the bowl that looks most like the one you used.',
-  },
-  milkCereal: {
-    label: 'Milk with your cereal',
-    question: 'Did you have milk on your cereal?',
-    searchLabel: 'Please select which type of milk you had',
-    foodSelectButton: `I can't find my food`,
-  },
-  pizza: {
-    label: 'Please select the pizza that is closest to the size you had.',
-    thicknessLabel: 'How thick was your pizza?',
-    sizeLabel: 'What size slice(s) did you have?',
-    wholePizzaButton: 'I had the whole pizza',
-    slicesQuantityLabel: 'How many of these slices did you have?',
-    wholeQuantityLabel: 'How many of these pizzas did you have?',
-  },
-  milkInAHotDrink: {
-    label: 'How much {food} did you have in your tea or coffee?',
-    optionsLabel: 'Select the amount you had.',
-    continue: 'I had that much',
-  },
-  directWeight: {
-    label: 'Please enter how much you had.',
+  weight: {
+    text: 'Please enter how much you had.',
   },
   associatedFoods: {
-    searchLabel: 'Please select the {food} you had',
+    searchLabel: 'Please select the {food} you had.',
   },
 };
 

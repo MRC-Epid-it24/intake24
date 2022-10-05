@@ -13,7 +13,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { AsServedPromptProps } from '@intake24/common/prompts';
+import type { AsServedPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
 import {
@@ -36,7 +36,7 @@ export default defineComponent({
       required: true,
     },
     promptComponent: {
-      type: String,
+      type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
   },

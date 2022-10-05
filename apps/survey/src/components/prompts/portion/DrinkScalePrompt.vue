@@ -1,15 +1,12 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
-    <template #header>
-      {{ localeFoodName }}
-    </template>
+  <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panelOpen" flat>
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <i18n path="portion.drinkScale.label">
+              <i18n :path="`portion.${method}.container`">
                 <template #food>
                   <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
@@ -27,7 +24,7 @@
               ></guide-image-panel>
               <v-row>
                 <v-col>
-                  <v-btn color="success" @click="onSelectGuide()">
+                  <v-btn color="success" @click="onSelectGuide">
                     {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
@@ -37,7 +34,7 @@
           <!-- Step 2: Select drink scale amount-->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.drinkScale.sliderLabel', { food: localeFoodName }) }}
+              {{ $t(`portion.${method}.serving.label`, { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="selectedDrink"></valid-invalid-icon>
               </template>
@@ -67,17 +64,17 @@
               <v-row>
                 <v-col>
                   <v-btn block @click="modifySliderValue(-10)">
-                    {{ $t('portion.drinkScale.lessFullButton') }}
+                    {{ $t(`portion.${method}.serving.less`) }}
                   </v-btn>
                 </v-col>
                 <v-col>
                   <v-btn block @click="modifySliderValue(10)">
-                    {{ $t('portion.drinkScale.moreFullButton') }}
+                    {{ $t(`portion.${method}.serving.more`) }}
                   </v-btn>
                 </v-col>
                 <v-col align="center" md="4" xs="12">
                   <v-btn block color="success" @click="confirmAmount">
-                    {{ $t('portion.drinkScale.confirmFullButton') }}
+                    {{ $t(`portion.${method}.serving.confirm`) }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -100,18 +97,12 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
-import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types';
+import type { DrinkScaleState } from '@intake24/common/types';
 import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
-import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
-import {
-  DrinkScalePanel,
-  GuideImagePanel,
-  ValidInvalidIcon,
-} from '@intake24/survey/components/elements';
+import { DrinkScalePanel, GuideImagePanel } from '@intake24/survey/components/elements';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
 
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
@@ -130,34 +121,13 @@ export interface DrinkScalePromptState {
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { GuideImagePanel, DrinkScalePanel, ValidInvalidIcon },
+  components: { GuideImagePanel, DrinkScalePanel },
 
-  mixins: [BasePortion],
+  mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<DrinkScalePromptProps>,
-      required: true,
-    },
-    //for test
-    foodName: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
     parameters: {
       type: Object as PropType<DrinkScaleParameters>,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    initialState: {
-      type: Object as PropType<DrinkScalePromptState>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
       required: true,
     },
   },
@@ -173,8 +143,7 @@ export default defineComponent({
     const selectedOriginalImageUrlWidth = this.initialState.originalImageUrlWidth;
 
     return {
-      ...merge(drinkScalePromptDefaultProps, this.promptProps),
-      errors: [] as string[],
+      method: 'drink-scale',
       drinkwareSetData: {} as DrinkwareSetResponse,
       guideImageData: {} as ImageMapResponse,
       panelOpen: 0, // ID which panel is open
@@ -200,12 +169,11 @@ export default defineComponent({
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
+
     dataLoaded(): boolean {
       return !!Object.keys(this.guideImageData).length;
     },
+
     isValid() {
       return this.sliderValue > 0;
     },
@@ -304,10 +272,6 @@ export default defineComponent({
     onSelectGuide() {
       this.selectedGuide = true;
       this.panelOpen = 1;
-    },
-
-    clearErrors() {
-      this.errors = [];
     },
 
     setErrors() {
