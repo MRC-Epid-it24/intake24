@@ -34,8 +34,9 @@ export default validate(
     rankingAlgorithm: {
       in: ['query'],
       isIn: {
-        options: searchSortingAlgorithms,
+        options: [searchSortingAlgorithms],
       },
+      errorMessage: 'Invalid sorting algorithm',
     },
     matchScoreWeight: {
       in: ['query'],

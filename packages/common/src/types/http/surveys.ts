@@ -1,6 +1,7 @@
 import type {
   FeedbackSchemeAttributes,
   LocaleAttributes,
+  SearchSortingAlgorithm,
   SurveySchemeAttributes,
   SurveyState,
   UserSurveySessionAttributes,
@@ -46,6 +47,8 @@ export type SurveyEntryResponse = {
   numberOfSubmissionsForFeedback: number;
   storeUserSessionOnServer: boolean;
   suspensionReason: string | null;
+  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchMatchScoreWeight: number;
 };
 
 export type SurveyUserInfoResponse = {

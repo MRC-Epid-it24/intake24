@@ -46,6 +46,8 @@ const surveyRespondentController = ({
       storeUserSessionOnServer,
       suspensionReason,
       surveySchemeOverrides,
+      searchSortingAlgorithm,
+      searchMatchScoreWeight,
     } = survey;
 
     let { meals } = surveyScheme;
@@ -85,6 +87,8 @@ const surveyRespondentController = ({
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,
       suspensionReason,
+      searchSortingAlgorithm,
+      searchMatchScoreWeight,
     });
   };
 

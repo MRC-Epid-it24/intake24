@@ -88,8 +88,8 @@ export default defineComponent({
         this.searchResults = await foodsService.search(
           this.localeId,
           this.searchTerm,
-          'paRules',
-          1.0
+          this.parameters?.searchSortingAlgorithm,
+          this.parameters?.searchMatchScoreWeight
         );
       } catch (e) {
         this.requestFailed = true;
