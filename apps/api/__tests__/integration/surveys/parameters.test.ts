@@ -39,6 +39,8 @@ export default () => {
       'numberOfSubmissionsForFeedback',
       'storeUserSessionOnServer',
       'suspensionReason',
+      'searchSortingAlgorithm',
+      'searchMatchScoreWeight',
     ]);
   });
 };
