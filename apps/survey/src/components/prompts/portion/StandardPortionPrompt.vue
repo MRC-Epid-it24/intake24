@@ -1,14 +1,14 @@
 <template>
   <portion-layout v-bind="{ description, text }">
     <template #header>
-      {{ localeDescription }}
+      {{ localeFoodName }}
     </template>
     <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panelOpenId" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n path="portion.standardPortion.label">
             <template #food>
-              <span class="font-weight-medium">{{ localeDescription }}</span>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -37,7 +37,7 @@
               <span v-html="getLocaleContent(standardUnitRefs[state.unit.name].howMany)"></span>
             </template>
             <template #food>
-              <span class="font-weight-medium">{{ localeDescription }}</span>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
           </i18n>
           <template v-else>{{ $t('portion.standardPortion.howMany.placeholder') }}</template>
@@ -142,7 +142,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string | null {
+    localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
 

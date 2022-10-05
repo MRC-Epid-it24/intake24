@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ description, text }">
     <template #header>
-      {{ $t('portion.option.label', { food: localeDescription }) }}
+      {{ $t('portion.option.label', { food: localeFoodName }) }}
     </template>
     <v-sheet>
       <v-item-group v-model="currentValue">
@@ -90,7 +90,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string | null {
+    localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
     hasErrors(): boolean {

@@ -5,7 +5,7 @@ import type { EncodedFood, FoodState, LocaleTranslation } from '@intake24/common
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
-const mixin = defineComponent({
+export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['localeId', 'selectedFoodOptional']),
   },
@@ -51,7 +51,3 @@ const mixin = defineComponent({
     },
   },
 });
-
-export type FoodPromptUtilsType = InstanceType<typeof mixin>;
-
-export default mixin;

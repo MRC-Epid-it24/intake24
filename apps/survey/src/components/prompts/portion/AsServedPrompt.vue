@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ description, text }">
     <template #header>
-      {{ $t('portion.asServed.promptLabel', { food: localeDescription }) }}
+      {{ $t('portion.asServed.promptLabel', { food: localeFoodName }) }}
     </template>
     <v-row>
       <v-col>
@@ -23,7 +23,7 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  {{ $t('portion.asServed.portionLabel', { food: localeDescription }) }}
+                  {{ $t('portion.asServed.portionLabel', { food: localeFoodName }) }}
                 </v-col>
               </v-row>
               <v-row>
@@ -40,7 +40,7 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="parameters['leftovers-image-set']">
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+              {{ $t('portion.asServed.leftoverHeader', { food: localeFoodName }) }}
               <template #actions>
                 <as-served-weight
                   :valid="leftoverCompleteStatus"
@@ -56,7 +56,7 @@
               <v-row>
                 <v-col>
                   <p>
-                    {{ $t('portion.asServed.leftoverQuestion', { food: localeDescription }) }}
+                    {{ $t('portion.asServed.leftoverQuestion', { food: localeFoodName }) }}
                   </p>
                   <v-btn
                     :color="leftoverPromptAnswer === true ? 'success' : ''"
@@ -76,7 +76,7 @@
               <template v-if="leftoverPromptAnswer">
                 <v-row>
                   <v-col>
-                    {{ $t('portion.asServed.leftoverHeader', { food: localeDescription }) }}
+                    {{ $t('portion.asServed.leftoverHeader', { food: localeFoodName }) }}
                   </v-col>
                 </v-row>
                 <v-row>
@@ -184,7 +184,7 @@ export default defineComponent({
     hasLeftovers() {
       return !!this.parameters['leftovers-image-set'];
     },
-    localeDescription(): string | null {
+    localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
     isValid(): boolean {

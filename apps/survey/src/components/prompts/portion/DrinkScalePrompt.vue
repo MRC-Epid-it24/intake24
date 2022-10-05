@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ description, text }">
     <template #header>
-      {{ localeDescription }}
+      {{ localeFoodName }}
     </template>
     <v-row>
       <v-col>
@@ -11,7 +11,7 @@
             <v-expansion-panel-header disable-icon-rotate>
               <i18n path="portion.drinkScale.label">
                 <template #food>
-                  <span class="font-weight-medium">{{ localeDescription }}</span>
+                  <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
               </i18n>
               <template #actions>
@@ -37,7 +37,7 @@
           <!-- Step 2: Select drink scale amount-->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.drinkScale.sliderLabel', { food: localeDescription }) }}
+              {{ $t('portion.drinkScale.sliderLabel', { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="selectedDrink"></valid-invalid-icon>
               </template>
@@ -101,6 +101,7 @@ import { defineComponent } from 'vue';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleState, LocaleTranslation } from '@intake24/common/types';
+import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { drinkScalePromptDefaultProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
@@ -143,16 +144,8 @@ export default defineComponent({
       type: Object as PropType<LocaleTranslation>,
       required: true,
     },
-    drinkwareId: {
-      type: String,
-      required: true,
-    },
-    skipFillLevel: {
-      type: String,
-      required: true,
-    },
-    initialFillLevel: {
-      type: String,
+    parameters: {
+      type: Object as PropType<DrinkScaleParameters>,
       required: true,
     },
     promptComponent: {
@@ -204,7 +197,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string | null {
+    localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
     hasErrors(): boolean {
@@ -225,7 +218,7 @@ export default defineComponent({
   methods: {
     async fetchDrinkScaleData() {
       const dataDrinkwareSet = await this.$http.get<DrinkwareSetResponse>(
-        `portion-sizes/drinkware-sets/${this.drinkwareId}`
+        `portion-sizes/drinkware-sets/${this.parameters['drinkware-id']}`
       );
 
       this.drinkwareSetData = { ...dataDrinkwareSet.data };
@@ -257,16 +250,19 @@ export default defineComponent({
     },
 
     getCurrentState(idx: number): DrinkScaleState {
+      const { 'drinkware-id': drinkwareId, 'initial-fill-level': initialFillLevel } =
+        this.parameters;
+
       return {
         method: 'drink-scale',
         servingWeight: this.sliderValue,
         leftoversWeight: 0, // Guide image does not allow estimating leftovers
         leftoversLevel: 0,
-        initialFillLevel: this.initialFillLevel ?? '0.9',
-        fillLevel: parseInt(this.initialFillLevel) ?? 0,
+        initialFillLevel: initialFillLevel ?? '0.9',
+        fillLevel: parseInt(initialFillLevel) ?? 0,
         skipFillLevel: 'false',
         imageUrl: this.selectionImageUrl,
-        drinkwareId: this.drinkwareId,
+        drinkwareId: drinkwareId,
         containerIndex: this.selectedObjectIdx,
         leftovers: false,
       };

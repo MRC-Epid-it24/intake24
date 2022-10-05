@@ -127,18 +127,16 @@ export default defineComponent({
     },
 
     text(): string {
-      const text = this.promptProps.text[this.$i18n.locale];
-      return text
-        ? text.replace('{food}', this.foodName ?? '')
-        : this.$t('prompts.associatedFoods.text', {
-            food: this.foodName?.toLocaleLowerCase(),
-          }).toString();
+      return this.getLocaleContent(this.promptProps.text, {
+        path: 'prompts.associatedFoods.text',
+        params: { food: this.foodName.toLocaleLowerCase() },
+      });
     },
+
     description(): string {
-      const description = this.promptProps.description[this.$i18n.locale];
-      return description
-        ? description.replace('{food}', this.foodName ?? '')
-        : this.$t('prompts.associatedFoods.description', { meal: this.foodName }).toString();
+      return this.getLocaleContent(this.promptProps.text, {
+        path: 'prompts.associatedFoods.description',
+      });
     },
   },
 

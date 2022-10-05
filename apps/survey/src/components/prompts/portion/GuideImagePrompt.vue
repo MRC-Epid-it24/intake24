@@ -198,7 +198,7 @@ export default defineComponent({
   },
 
   computed: {
-    localeDescription(): string | null {
+    localeDescription(): string {
       return this.getLocaleContent(this.foodName);
     },
 
