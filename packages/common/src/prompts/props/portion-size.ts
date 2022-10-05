@@ -8,7 +8,6 @@ import type {
   RadioOrientation,
   ValidatedPromptProps,
 } from './base';
-import type { LocaleOptionList } from './custom';
 import { basePromptProps, promptValidation } from './base';
 
 export type PortionSizeOptionPromptProps = BasePromptProps;
