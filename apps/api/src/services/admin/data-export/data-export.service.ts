@@ -207,11 +207,12 @@ const dataExportService = ({
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 
+    const { slug, surveyScheme } = survey;
     const options = getSubmissionOptions(input);
 
-    const fields = await getExportFields(survey.surveyScheme.dataExport);
+    const fields = await getExportFields(surveyScheme.dataExport);
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `intake24-data-export-${surveyId}-${timestamp}.csv`;
+    const filename = `intake24-data-export-${slug}-${timestamp}.csv`;
 
     const [totalFoods, totalMissingFoods] = await Promise.all([
       SurveySubmissionFood.count(options.foods),
