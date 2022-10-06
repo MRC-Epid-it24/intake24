@@ -10,7 +10,6 @@
       :conditions="conditions"
       @update:conditions="update('conditions', $event)"
     ></prompt-conditions>
-    <prompt-validation v-bind.sync="validation"></prompt-validation>
     <v-tab-item key="options">
       <v-row class="mb-3">
         <v-col cols="12">
@@ -50,7 +49,6 @@ import { defineComponent } from 'vue';
 import type { LocaleOptionList } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
-// import selectListPrompt from '../partials/select-list-prompt';
 import basePrompt from '../partials/base-prompt';
 import PromptListOptions from '../partials/prompt-list-options.vue';
 

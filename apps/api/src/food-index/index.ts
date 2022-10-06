@@ -1,4 +1,4 @@
-import { Worker } from 'worker_threads';
+import { Worker } from 'node:worker_threads';
 
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';

@@ -76,7 +76,9 @@ export default defineComponent({
     },
 
     localeDescription(): string {
-      return this.getLocaleContent(this.description);
+      return this.getLocaleContent(this.description, {
+        params: { food: this.localeFoodName },
+      });
     },
   },
 });

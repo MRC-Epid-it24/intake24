@@ -2,13 +2,8 @@ import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import type { PromptQuestion } from '..';
-import type {
-  BasePromptProps,
-  LocaleOptionList,
-  RadioOrientation,
-  ValidatedPromptProps,
-} from './base';
-import { basePromptProps, promptValidation } from './base';
+import type { BasePromptProps, LocaleOptionList, RadioOrientation } from './base';
+import { basePromptProps } from './base';
 
 export type PortionSizeOptionPromptProps = BasePromptProps;
 
@@ -24,7 +19,7 @@ export type StandardPortionPromptProps = BasePromptProps;
 
 export type MilkCerealPromptProps = BasePromptProps;
 
-export interface MilkInAHotDrinkPromptProps extends ValidatedPromptProps {
+export interface MilkInAHotDrinkPromptProps extends BasePromptProps {
   options: LocaleOptionList;
   orientation: RadioOrientation;
 }
@@ -81,7 +76,6 @@ export const milkCerealPromptDefaultProps: MilkCerealPromptProps = copy({
 
 export const milkInAHotDrinkPromptDefaultProps: MilkInAHotDrinkPromptProps = copy({
   ...basePromptProps,
-  ...promptValidation,
   name: { en: 'Milk in a hot drink' },
   options: {
     en: [

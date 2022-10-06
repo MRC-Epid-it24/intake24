@@ -118,7 +118,7 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'milk-in-a-hot-drink-prompt': {
-    tabs: [...listTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'standard-portion-prompt': {

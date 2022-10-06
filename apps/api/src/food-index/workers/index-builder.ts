@@ -1,6 +1,6 @@
 import '@intake24/api/bootstrap';
 
-import { parentPort as parentPortNullable, workerData } from 'worker_threads';
+import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
