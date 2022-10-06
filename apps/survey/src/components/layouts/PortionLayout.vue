@@ -2,7 +2,7 @@
   <div>
     <v-card class="mb-3" elevation="0">
       <v-container class="px-0">
-        <v-row align="center">
+        <v-row align="center" no-gutters>
           <v-col>
             <v-card-text>
               <slot name="header">

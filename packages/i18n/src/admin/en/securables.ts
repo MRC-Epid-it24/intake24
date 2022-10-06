@@ -35,6 +35,7 @@ const securables: LocaleMessageObject = {
 
     // Locales
     'food-list': 'Food list',
+    'food-ranking': 'Food ranking',
     'split-lists': 'Split lists',
     'split-words': 'Split words',
     'synonym-sets': 'Synonym sets',
