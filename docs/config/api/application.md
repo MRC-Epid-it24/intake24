@@ -102,3 +102,21 @@ URL of images.
 ::: tip
 Default setup allows local images serving - ideal for development purposes. For production, use reverse proxy, CDN etc.
 :::
+
+## Enabled locales
+
+Enabled locales for food indexing.
+
+- object-path: `enabledLocales`
+- dotenv var: `APP_ENABLED_LOCALES`
+- type: `string[] | null`
+- default: `null`
+
+::: tip
+
+When setting `APP_ENABLED_LOCALES` env value:
+
+- for all locales use `*`, translates to `null`
+- for selected locales use JSON string array `["en", "fr"]`
+
+:::
