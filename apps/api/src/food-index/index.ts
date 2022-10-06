@@ -33,10 +33,13 @@ export default {
     };
 
     indexWorker.on('message', readyListener);
+    indexWorker.on('error', (err) => {
+      console.error(err);
+    });
   },
 
-  async close(): Promise<void> {
-    await indexWorker.terminate();
+  close() {
+    indexWorker.postMessage({ exit: true });
   },
 
   async search(

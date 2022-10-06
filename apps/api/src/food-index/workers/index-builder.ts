@@ -114,6 +114,8 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
   );
 }
 
+const cleanUpIndexBuilder = async () => Promise.all([foodsDb.close(), systemDb.close()]);
+
 async function buildIndex() {
   let enabledLocales: string[];
 
@@ -135,6 +137,12 @@ async function buildIndex() {
   parentPort.postMessage('ready');
 
   parentPort.on('message', async (msg: SearchQuery) => {
+    if (msg.exit) {
+      await cleanUpIndexBuilder();
+      logger.debug('Closing index builder');
+      process.exit(0);
+    }
+
     try {
       const results = await queryIndex(msg);
 
@@ -150,11 +158,6 @@ async function buildIndex() {
         error: err,
       });
     }
-  });
-
-  parentPort.on('exit', async () => {
-    await systemDb.close();
-    await foodsDb.close();
   });
 }
 

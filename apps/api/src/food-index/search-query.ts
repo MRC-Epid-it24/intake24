@@ -6,4 +6,5 @@ export interface SearchQuery {
   limit?: string;
   rankingAlgorithm: string;
   matchScoreWeight: number;
+  exit?: boolean;
 }

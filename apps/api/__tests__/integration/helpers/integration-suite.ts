@@ -88,16 +88,16 @@ class IntegrationSuite {
    */
   public async close() {
     // Close redis store connections
-    this.cache.close();
-    this.rateLimiter.close();
-    this.session.close();
+    await Promise.all([this.cache.close(), this.rateLimiter.close(), this.session.close()]);
 
     // Close redis queue connections
-    await this.scheduler.close();
+    await Promise.all([this.scheduler.close()]);
 
-    await this.db.foods.close();
-    await this.db.system.close();
-    await foodIndex.close();
+    // Close database connections
+    await Promise.all([this.db.foods.close(), this.db.system.close()]);
+
+    // Close worker threads
+    foodIndex.close();
 
     const { downloads, uploads, images } = this.config.filesystem.local;
     await Promise.all(
