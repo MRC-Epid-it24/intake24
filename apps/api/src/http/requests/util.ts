@@ -3,7 +3,7 @@ import type { CustomValidator, Meta, ValidationChain } from 'express-validator';
 
 import type { I18nParams } from '@intake24/i18n';
 import { validation } from '@intake24/api/http/middleware';
-import Locale from '@intake24/db/models/foods/locale';
+import { FoodsLocale } from '@intake24/db';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;
 
@@ -65,6 +65,6 @@ export const customTypeErrorMessage = (
 };
 
 export const localeIdValidator: CustomValidator = async (localeId: string, meta: Meta) => {
-  const row = await Locale.findOne({ attributes: ['id'], where: { id: localeId } });
+  const row = await FoodsLocale.findOne({ attributes: ['id'], where: { id: localeId } });
   if (!row) return Promise.reject(typeErrorMessage('locale._')(localeId, meta));
 };

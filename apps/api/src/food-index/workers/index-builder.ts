@@ -10,8 +10,14 @@ import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankSearchResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { FoodLocal, FoodLocalList, models, SequelizeTS, SynonymSet } from '@intake24/db';
-import Locale from '@intake24/db/models/foods/locale';
+import {
+  FoodLocal,
+  FoodLocalList,
+  FoodsLocale,
+  models,
+  SequelizeTS,
+  SynonymSet,
+} from '@intake24/db';
 import { dbLogger, logger as servicesLogger } from '@intake24/services';
 
 if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
@@ -48,7 +54,7 @@ async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
-  const row = await Locale.findOne({
+  const row = await FoodsLocale.findOne({
     attributes: ['foodIndexLanguageBackendId'],
     where: { id: localeId },
   });
@@ -112,7 +118,7 @@ async function buildIndex() {
   let enabledLocales: string[];
 
   if (config.enabledLocales === null) {
-    const allLocales = await Locale.findAll({ attributes: ['id'] });
+    const allLocales = await FoodsLocale.findAll({ attributes: ['id'] });
     enabledLocales = allLocales.map((l) => l.id);
   } else {
     enabledLocales = config.enabledLocales;
