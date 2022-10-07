@@ -60,7 +60,7 @@
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>
-                            {{ `${$t('feedback.submissions._')} #${idx + 1}` }} |
+                            {{ `${$t('feedback.submissions._')} ${idx + 1}` }} |
                             {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
                           </v-list-item-title>
                         </v-list-item-content>
