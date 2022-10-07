@@ -33,8 +33,9 @@ import { SVGRenderer } from 'echarts/renderers';
 import { defineComponent } from 'vue';
 import Chart from 'vue-echarts';
 
-import type { TopFoodData } from '@intake24/ui/feedback';
 import { round } from '@intake24/common/util';
+
+import type { TopFoodData } from './top-foods';
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 

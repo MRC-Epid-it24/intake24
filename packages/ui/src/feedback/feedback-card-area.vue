@@ -15,8 +15,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FeedbackCardParameters } from '@intake24/ui/feedback';
-
+import type { FeedbackCardParameters } from './cards-builder';
 import { PrintCard, ScreenCard } from './cards';
 
 export default defineComponent({

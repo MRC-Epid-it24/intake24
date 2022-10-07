@@ -50,7 +50,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { UserDemographic } from '@intake24/ui/feedback';
+import type { UserDemographic } from './classes';
 
 export default defineComponent({
   name: 'FeedbackUserInfo',

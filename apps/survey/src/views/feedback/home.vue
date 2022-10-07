@@ -107,12 +107,13 @@ import type {
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {
+  buildCardParams,
+  buildTopFoods,
   FeedbackCardArea,
   FeedbackChartArea,
   FeedbackOutputs,
   FeedbackUserInfo,
-} from '@intake24/ui/components/feedback';
-import { buildCardParams, buildTopFoods } from '@intake24/ui/feedback';
+} from '@intake24/ui/feedback';
 
 export default defineComponent({
   name: 'FeedbackHome',
