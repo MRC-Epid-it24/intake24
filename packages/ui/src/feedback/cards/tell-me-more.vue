@@ -1,13 +1,15 @@
 <template>
   <div>
-    <v-btn block class="button-bottom" @click.stop="open">
+    <v-btn block class="button-bottom" large @click.stop="open">
       {{ $t('feedback.intake.tellMeMore') }}
     </v-btn>
     <v-dialog v-model="dialog" max-width="600px" scrollable>
       <v-card>
         <v-toolbar flat>
           <v-icon left>fa-utensils</v-icon>
-          <v-toolbar-title>{{ detail.name }}</v-toolbar-title>
+          <v-toolbar-title class="font-weight-medium text-h3 tell-me-more-title">
+            {{ detail.name }}
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn icon :title="$t('common.action.ok')" @click.stop="close">
@@ -33,8 +35,15 @@
         <v-card-text>
           <div v-html="detail.description"></div>
         </v-card-text>
-        <v-btn block class="button-bottom" @click.stop="close">
-          {{ $t('common.action.ok') }}
+        <v-btn
+          block
+          class="button-bottom font-weight-bold"
+          color="primary lighten-2"
+          large
+          @click.stop="close"
+        >
+          <v-icon left>fas fa-thumbs-up</v-icon>
+          {{ $t('common.action.gotIt') }}
         </v-btn>
       </v-card>
     </v-dialog>
@@ -74,6 +83,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.tell-me-more-title {
+  letter-spacing: 0.1rem;
+}
 .button-bottom {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
