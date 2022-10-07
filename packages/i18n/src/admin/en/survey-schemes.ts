@@ -246,17 +246,34 @@ const surveySchemes: LocaleMessageObject = {
     },
   },
   prompts: {
-    'meal-time-prompt': {
-      title: 'Meal time',
-      subtitle: 'Confirm the time of the meal or remove the meal',
+    // Standard
+    'associated-foods-prompt': {
+      title: 'Associated foods',
+      subtitle: 'Suggest foods typically consumed together',
+    },
+    'edit-meal-prompt': {
+      title: 'Food list',
+      subtitle: 'List or edit foods in this meal as free text descriptions',
+    },
+    'final-prompt': {
+      title: 'Final',
+      subtitle: 'Final page after submission',
+    },
+    'food-search-prompt': {
+      title: 'Food database search',
+      subtitle: 'Choose a food from the database that best matches the description',
     },
     'meal-add-prompt': {
       title: 'Add meal',
       subtitle: 'Add a new meal to the meal list',
     },
-    'edit-meal-prompt': {
-      title: 'Food list',
-      subtitle: 'List or edit foods in this meal as free text descriptions',
+    'meal-time-prompt': {
+      title: 'Meal time',
+      subtitle: 'Confirm the time of the meal or remove the meal',
+    },
+    'redirect-prompt': {
+      title: 'Redirect',
+      subtitle: 'Final page for user redirect to external site',
     },
     'review-confirm-prompt': {
       title: 'Review and Confirm',
@@ -266,14 +283,7 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
     },
-    'final-prompt': {
-      title: 'Final',
-      subtitle: 'Final page after submission',
-    },
-    'redirect-prompt': {
-      title: 'Redirect',
-      subtitle: 'Final page for user redirect to external site',
-    },
+    // Custom
     'info-prompt': {
       title: 'Information',
       subtitle: 'Show a message or instructions and ask for confirmation',
@@ -302,22 +312,14 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Yes / No choice',
       subtitle: 'Ask to choose yes or no',
     },
-    'food-search-prompt': {
-      title: 'Food database search',
-      subtitle: 'Choose a food from the database that best matches the description',
-    },
-    'associated-foods-prompt': {
-      title: 'Associated foods',
-      subtitle: 'Suggest foods typically consumed together',
-    },
-    'portion-size-option-prompt': {
-      title: 'Portion size estimation method',
-      subtitle:
-        'Choose which portion size method to use in case more than one is available for the food',
-    },
+    // Portion sizes
     'as-served-prompt': {
       title: 'As served portion size',
       subtitle: 'Use the "as served" method to estimate the portion size',
+    },
+    'cereal-prompt': {
+      title: 'Cereal',
+      subtitle: 'Use the "cereal" method to estimate the portion size',
     },
     'guide-image-prompt': {
       title: 'Guide image',
@@ -330,6 +332,19 @@ const surveySchemes: LocaleMessageObject = {
     'milk-in-a-hot-drink-prompt': {
       title: 'Milk in a hot drink',
       subtitle: 'Use the "milk in a hot drink" method to estimate the amount of milk',
+    },
+    'milk-on-cereal-prompt': {
+      title: 'Milk on cereal',
+      subtitle: 'Use the "milk on cereal" method to estimate the portion size',
+    },
+    'pizza-prompt': {
+      title: 'Pizza',
+      subtitle: 'Use the "pizza" method to estimate the portion size',
+    },
+    'portion-size-option-prompt': {
+      title: 'Portion size estimation method',
+      subtitle:
+        'Choose which portion size method to use in case more than one is available for the food',
     },
     'standard-portion-prompt': {
       title: 'Standard portion',

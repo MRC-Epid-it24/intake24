@@ -101,11 +101,11 @@ export const promptSettings: PromptSettings = {
     sections: ['submission'],
   },
   // Portion size
-  'portion-size-option-prompt': {
+  'as-served-prompt': {
     tabs: [...baseTab],
     sections: ['foods'],
   },
-  'as-served-prompt': {
+  'cereal-prompt': {
     tabs: [...baseTab],
     sections: ['foods'],
   },
@@ -119,6 +119,18 @@ export const promptSettings: PromptSettings = {
   },
   'milk-in-a-hot-drink-prompt': {
     tabs: [...baseTab, 'options'],
+    sections: ['foods'],
+  },
+  'milk-on-cereal-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'pizza-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'portion-size-option-prompt': {
+    tabs: [...baseTab],
     sections: ['foods'],
   },
   'standard-portion-prompt': {
