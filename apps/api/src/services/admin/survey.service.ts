@@ -223,7 +223,7 @@ const adminSurveyService = ({
                 transaction
               )
             : null,
-          adminUserService.flushUserACLCache(user.id),
+          adminUserService.flushACLCacheByUserId(user.id),
         ].filter(Boolean)
       );
     });

@@ -1,12 +1,13 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
+import type { IoC } from '@intake24/api/ioc';
 import type { PermissionEntry, PermissionsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Permission } from '@intake24/db';
 
-const permissionController = () => {
+const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'>) => {
   const entry = async (
     req: Request<{ permissionId: string }>,
     res: Response<PermissionEntry>
@@ -34,7 +35,11 @@ const permissionController = () => {
 
   const store = async (req: Request, res: Response<PermissionEntry>): Promise<void> => {
     const { name, displayName, description } = req.body;
-    const permission = await Permission.create({ name, displayName, description });
+
+    const [permission] = await Promise.all([
+      Permission.create({ name, displayName, description }),
+      adminUserService.flushSuperuserACLCache(),
+    ]);
 
     res.status(201).json(permission);
   };

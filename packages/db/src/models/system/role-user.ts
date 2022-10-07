@@ -1,4 +1,12 @@
-import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
 
 import type { RoleUserAttributes, RoleUserCreationAttributes } from '@intake24/common/types/models';
 
@@ -28,6 +36,12 @@ export default class RoleUser
     type: DataType.BIGINT,
   })
   public userId!: string;
+
+  @BelongsTo(() => Role, 'roleId')
+  public role?: Role;
+
+  @BelongsTo(() => User, 'userId')
+  public user?: User;
 
   @CreatedAt
   @Column

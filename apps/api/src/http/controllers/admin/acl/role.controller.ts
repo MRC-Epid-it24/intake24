@@ -44,7 +44,7 @@ const roleController = ({
 
     await Promise.all([
       role.reload({ include: [{ association: 'permissions' }] }),
-      adminUserService.flushRoleACLCache(role.id),
+      adminUserService.flushACLCacheByRoleId(role.id),
     ]);
 
     res.status(201).json(roleEntryResponse(role));
@@ -77,7 +77,7 @@ const roleController = ({
 
     await Promise.all([
       role.reload({ include: [{ association: 'permissions' }] }),
-      adminUserService.flushRoleACLCache(role.id),
+      adminUserService.flushACLCacheByRoleId(role.id),
     ]);
 
     res.json(roleEntryResponse(role));

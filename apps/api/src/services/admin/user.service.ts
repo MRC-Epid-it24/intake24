@@ -21,29 +21,56 @@ export type CreateUserOptions = {
   userAgent?: string;
 };
 
-const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | 'scheduler'>) => {
+const adminUserService = ({
+  aclConfig,
+  cache,
+  db,
+  scheduler,
+}: Pick<IoC, 'aclConfig' | 'cache' | 'db' | 'scheduler'>) => {
   /**
-   * Flush ACL cache for specified user
+   * Flush user ACL cache by user ID
    *
    * @param {string} userId
    * @returns {Promise<void>}
    */
-  const flushUserACLCache = async (userId: string): Promise<void> => {
+  const flushACLCacheByUserId = async (userId: string): Promise<void> => {
     const keys = [`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`];
     await cache.forget(keys);
   };
 
   /**
-   * Flush ACL cache for specified role
+   * Flush user ACL cache by role ID
    *
    * @param {string} roleId
    * @returns {Promise<void>}
    */
-  const flushRoleACLCache = async (roleId: string): Promise<void> => {
+  const flushACLCacheByRoleId = async (roleId: string): Promise<void> => {
     const roleUsers = await RoleUser.findAll({ where: { roleId } });
 
-    await Promise.all(roleUsers.map(({ userId }) => flushUserACLCache(userId)));
+    await Promise.all(roleUsers.map(({ userId }) => flushACLCacheByUserId(userId)));
   };
+
+  /**
+   * Flush user ACL cache by role name
+   *
+   * @param {string} name
+   * @returns {Promise<void>}
+   */
+  const flushACLCacheByRoleName = async (name: string): Promise<void> => {
+    const roleUsers = await RoleUser.findAll({
+      include: { association: 'role', where: { name }, required: true },
+    });
+
+    await Promise.all(roleUsers.map(({ userId }) => flushACLCacheByUserId(userId)));
+  };
+
+  /**
+   * Flush superuser ACL cache
+   *
+   * @returns {Promise<void>}
+   */
+  const flushSuperuserACLCache = async (): Promise<void> =>
+    flushACLCacheByRoleName(aclConfig.roles.superuser);
 
   /**
    * Create password record
@@ -239,7 +266,7 @@ const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | '
       if (customFields && user.customFields)
         await updateUserCustomFields(userId, user.customFields, customFields, transaction);
 
-      await flushUserACLCache(user.id);
+      await flushACLCacheByUserId(user.id);
     });
 
     return user;
@@ -274,7 +301,7 @@ const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | '
     const permission = await Permission.findOne({ where: { name: permissionName } });
     if (!permission) throw new NotFoundError();
 
-    await Promise.all([user.$add('permissions', permission), flushUserACLCache(user.id)]);
+    await Promise.all([user.$add('permissions', permission), flushACLCacheByUserId(user.id)]);
   };
 
   /**
@@ -293,7 +320,7 @@ const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | '
     const permission = await Permission.findOne({ where: { name: permissionName } });
     if (!permission) throw new NotFoundError();
 
-    await Promise.all([user.$remove('permissions', permission), flushUserACLCache(user.id)]);
+    await Promise.all([user.$remove('permissions', permission), flushACLCacheByUserId(user.id)]);
   };
 
   /**
@@ -356,8 +383,10 @@ const adminUserService = ({ cache, db, scheduler }: Pick<IoC, 'cache' | 'db' | '
   };
 
   return {
-    flushUserACLCache,
-    flushRoleACLCache,
+    flushACLCacheByUserId,
+    flushACLCacheByRoleId,
+    flushACLCacheByRoleName,
+    flushSuperuserACLCache,
     createPassword,
     createPasswords,
     updateUserCustomFields,
