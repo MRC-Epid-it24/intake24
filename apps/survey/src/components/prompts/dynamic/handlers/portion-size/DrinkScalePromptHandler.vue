@@ -21,7 +21,6 @@ import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/
 import { createPromptHandlerStoreMixin } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { DrinkScalePrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
-import { useFoodGuideImageState } from '@intake24/survey/stores/guide-image';
 
 import foodPromptUtils from '../mixins/food-prompt-utils';
 
@@ -67,7 +66,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
-    ...mapActions(useFoodGuideImageState, ['updateFoodState', 'clearFoodState']),
 
     getInitialState(): DrinkScalePromptState {
       return (
@@ -93,7 +91,7 @@ export default defineComponent({
           objectIdx: undefined,
           drinkOverlayUrl: '',
           maxDrinkSliderValue: 100,
-          panelOpen: 0,
+          panel: 0,
           minDrinkSliderValue: 0,
           originalImageUrlHeight: 0,
           originalImageUrlWidth: 0,

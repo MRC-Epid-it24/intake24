@@ -2,7 +2,7 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" flat>
+        <v-expansion-panels v-model="panel" flat>
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
@@ -12,19 +12,19 @@
                 </template>
               </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="selectedGuide"></valid-invalid-icon>
+                <valid-invalid-icon :valid="objectConfirmed"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <guide-image-panel
+              <image-map-selector
                 v-if="dataLoaded"
-                :guide-image-api-response="guideImageData"
-                :selected-index="selectedObjectIdx"
-                @guide-object="selectObject"
-              ></guide-image-panel>
+                :image-map-data="imageMapData"
+                :value="objectIdx"
+                @input="selectObject"
+              ></image-map-selector>
               <v-row>
                 <v-col>
-                  <v-btn color="success" @click="onSelectGuide">
+                  <v-btn :block="isMobile" color="success" @click="confirmObject">
                     {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
@@ -47,7 +47,7 @@
                 :selected-image-url="selectionImageUrl"
                 :selected-max-slider-value="maxSliderValue"
                 :selected-min-slider-value="minFillLevel"
-                :selected-object-idx="selectedObjectIdx"
+                :selected-object-idx="objectIdx"
                 :selected-origin-image-height="originalImageUrlHeight"
                 :selected-origin-image-width="originalImageUrlWidth"
                 :selected-slider-value="sliderValue"
@@ -85,7 +85,6 @@
     </v-row>
     <template #actions>
       <v-form ref="form" @submit.prevent="submit">
-        <!-- Should be disabled if nothing selected? -->
         <continue :disabled="!continueEnabled" @click="submit"></continue>
       </v-form>
     </template>
@@ -100,9 +99,9 @@ import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleState } from '@intake24/common/types';
 import type { DrinkScaleParameters } from '@intake24/common/types/http';
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
-import { DrinkScalePanel, GuideImagePanel } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
+import { DrinkScalePanel, ImageMapSelector } from './selectors';
 
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
@@ -115,13 +114,13 @@ export interface DrinkScalePromptState {
   minDrinkSliderValue: number;
   originalImageUrlHeight: number;
   originalImageUrlWidth: number;
-  panelOpen: number;
+  panel: number;
 }
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { GuideImagePanel, DrinkScalePanel },
+  components: { DrinkScalePanel, ImageMapSelector },
 
   mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
 
@@ -145,15 +144,16 @@ export default defineComponent({
     return {
       method: 'drink-scale',
       drinkwareSetData: {} as DrinkwareSetResponse,
-      guideImageData: {} as ImageMapResponse,
-      panelOpen: 0, // ID which panel is open
-      //First Panel
-      selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
+      imageMapData: {} as ImageMapResponse,
+      panel: 0,
+
+      // First Panel
+      objectConfirmed: this.initialState.objectConfirmed && selectedIndex !== undefined,
+      objectIdx: selectedIndex ? selectedIndex - 1 : undefined,
       selectedDrink: this.initialState.drinkConfirmed,
       selectedLeftovers: this.initialState.leftoversConfirmed,
-      selectedObjectIdx: selectedIndex ?? 0,
-      selectedNodeIdx: null as number | null,
-      //Second Panel
+
+      // Second Panel
       sliderValue: selectedSliderValue ?? 75,
       maxSliderValue: selectedMaxSliderValue ?? 100,
       minFillLevel: selectedMinSliderValue ?? 0,
@@ -166,12 +166,12 @@ export default defineComponent({
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
+    dataLoaded(): boolean {
+      return !!Object.keys(this.imageMapData).length;
     },
 
-    dataLoaded(): boolean {
-      return !!Object.keys(this.guideImageData).length;
+    localeFoodName(): string {
+      return this.getLocaleContent(this.foodName);
     },
 
     isValid() {
@@ -185,32 +185,32 @@ export default defineComponent({
 
   methods: {
     async fetchDrinkScaleData() {
-      const dataDrinkwareSet = await this.$http.get<DrinkwareSetResponse>(
+      const { data: drinkwareSetData } = await this.$http.get<DrinkwareSetResponse>(
         `portion-sizes/drinkware-sets/${this.parameters['drinkware-id']}`
       );
 
-      this.drinkwareSetData = { ...dataDrinkwareSet.data };
+      this.drinkwareSetData = { ...drinkwareSetData };
 
-      const dataGuideImage = await this.$http.get<ImageMapResponse>(
+      const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
         `portion-sizes/image-maps/${this.drinkwareSetData.guideImageId}`
       );
 
-      this.guideImageData = { ...dataGuideImage.data };
+      this.imageMapData = { ...imageMapData };
     },
 
-    onUpdate() {
-      const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
+    update() {
+      const portionSizeState = this.getCurrentState(this.objectIdx);
 
       const update: DrinkScalePromptState = {
         portionSize: portionSizeState,
-        objectConfirmed: this.selectedGuide,
+        objectConfirmed: this.objectConfirmed,
         drinkConfirmed: this.selectedDrink,
         leftoversConfirmed: this.selectedLeftovers,
-        objectIdx: this.selectedObjectIdx + 1,
+        objectIdx: this.objectIdx + 1,
         drinkOverlayUrl: this.selectedImageOverlayUrl,
         maxDrinkSliderValue: this.maxSliderValue,
         minDrinkSliderValue: this.minFillLevel,
-        panelOpen: this.panelOpen,
+        panel: this.panel,
         originalImageUrlHeight: this.originalImageUrlHeight,
         originalImageUrlWidth: this.originalImageUrlWidth,
       };
@@ -231,14 +231,14 @@ export default defineComponent({
         skipFillLevel: 'false',
         imageUrl: this.selectionImageUrl,
         drinkwareId: drinkwareId,
-        containerIndex: this.selectedObjectIdx,
+        containerIndex: this.objectIdx,
         leftovers: false,
       };
     },
 
     selectObject(idx: number) {
-      if (idx !== this.selectedObjectIdx) this.selectedDrink = false;
-      this.selectedObjectIdx = idx;
+      if (idx !== this.objectIdx) this.selectedDrink = false;
+      this.objectIdx = idx;
       this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
       this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
       this.maxSliderValue = this.drinkwareSetData.scales[idx].fullLevel;
@@ -247,17 +247,17 @@ export default defineComponent({
       this.originalImageUrlHeight = this.drinkwareSetData.scales[idx].height;
       this.originalImageUrlWidth = this.drinkwareSetData.scales[idx].width;
 
-      this.onUpdate();
+      this.update();
     },
 
     dragSlider(value: number) {
       this.sliderValue = value;
-      this.onUpdate();
+      this.update();
     },
 
     modifySliderValue(value: number) {
       // Handle upper and lower bounds, otherwise assign.
-      const maxLevel = this.drinkwareSetData.scales[this.selectedObjectIdx].fullLevel;
+      const maxLevel = this.drinkwareSetData.scales[this.objectIdx].fullLevel;
       if (this.sliderValue + value > maxLevel) {
         this.sliderValue = maxLevel;
       } else if (this.sliderValue + value < 0) {
@@ -266,22 +266,23 @@ export default defineComponent({
         this.sliderValue += value;
       }
       this.selectedDrink = false;
-      this.onUpdate();
+      this.update();
     },
 
-    onSelectGuide() {
-      this.selectedGuide = true;
-      this.panelOpen = 1;
-    },
-
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
+    confirmObject() {
+      this.objectConfirmed = true;
+      this.setPanel(1);
+      this.update();
     },
 
     confirmAmount() {
       this.selectedDrink = true;
-      this.panelOpen = -1;
-      this.onUpdate();
+      this.setPanel(-1);
+      this.update();
+    },
+
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     submit() {

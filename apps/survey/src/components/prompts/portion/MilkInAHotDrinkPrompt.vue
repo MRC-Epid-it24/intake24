@@ -2,19 +2,19 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" flat>
+        <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${method}.label`) }}
               <template #actions>
-                <valid-invalid-icon :valid="!!state.milkVolumePercentage"></valid-invalid-icon>
+                <valid-invalid-icon :valid="!!milkVolumePercentage"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
                   <v-radio-group
-                    v-model="state.milkVolumePercentage"
+                    v-model="milkVolumePercentage"
                     :column="orientation === 'column'"
                     :error="hasErrors"
                     hide-details="auto"
@@ -68,8 +68,7 @@ export default defineComponent({
   data() {
     return {
       method: 'milk-in-a-hot-drink',
-      panelOpen: 0,
-      state: copy(this.initialState),
+      ...copy(this.initialState),
     };
   },
 
@@ -79,16 +78,15 @@ export default defineComponent({
     },
 
     isValid() {
-      return this.state.milkPartIndex !== null && this.state.milkVolumePercentage !== null;
+      return this.milkPartIndex !== null && this.milkVolumePercentage !== null;
     },
   },
 
   watch: {
-    'state.milkVolumePercentage'(val) {
-      this.state.milkPartIndex =
-        this.localeOptions.findIndex((option) => option.value === val) ?? null;
+    milkVolumePercentage(val) {
+      this.milkPartIndex = this.localeOptions.findIndex((option) => option.value === val) ?? null;
 
-      this.panelOpen = this.state.milkPartIndex === null ? 0 : -1;
+      this.setPanel(this.milkPartIndex === null ? 0 : -1);
       this.update();
     },
   },
@@ -108,7 +106,7 @@ export default defineComponent({
     },
 
     update() {
-      const { milkPartIndex, milkVolumePercentage } = this.state;
+      const { milkPartIndex, milkVolumePercentage } = this;
       this.$emit('update', { milkPartIndex, milkVolumePercentage });
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-expansion-panels v-model="panelOpenId">
+      <v-expansion-panels v-model="panel">
         <v-expansion-panel>
           <v-expansion-panel-header disable-icon-rotate>
             {{ $t('portion.common.completeBelow') }}
@@ -174,7 +174,7 @@ export default defineComponent({
     emitFoodSelected(value: UserFoodData) {
       this.selectedFoodData = value;
       this.foodSearchComplete = true;
-      this.setPanelOpen(1);
+      this.setPanel(1);
       this.submit();
     },
     selectPortionMethod(value: number) {
@@ -182,7 +182,7 @@ export default defineComponent({
       // PortionOption emits the # of option selected. Look this up then pass to portion method
       console.log(value, this.selectedFoodData.portionSizeMethods[value]);
       this.selectedMethodData = this.selectedFoodData.portionSizeMethods[value];
-      this.setPanelOpen(2);
+      this.setPanel(2);
       if (!this.imageMapLoaded) {
         this.fetchImageMapData();
       }
@@ -190,7 +190,7 @@ export default defineComponent({
     },
     selectPortion() {
       this.portionSelected = true;
-      this.setPanelOpen(-1);
+      this.setPanel(-1);
       this.submit();
     },
     submit() {

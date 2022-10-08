@@ -2,7 +2,7 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" flat>
+        <v-expansion-panels v-model="panel" flat>
           <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
@@ -12,45 +12,24 @@
                 </template>
               </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="selectedGuide"></valid-invalid-icon>
+                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <image-map-selector
+                v-if="dataLoaded"
+                :image-map-data="guideImageData.imageMap"
+                :value="objectIdx"
+                @input="selectObject"
+              ></image-map-selector>
               <v-row>
                 <v-col>
-                  <div v-if="dataLoaded" class="guides-drawer">
-                    <v-img
-                      ref="img"
-                      v-resize="onImgResize"
-                      :src="
-                        guideImageData.imageMap.baseImageUrl.replace(
-                          'http://localhost:3100',
-                          'https://api.intake24.org'
-                        )
-                      "
-                    >
-                      <template #placeholder>
-                        <image-placeholder></image-placeholder>
-                      </template>
-                    </v-img>
-                    <svg ref="svg" :height="height" :width="width">
-                      <polygon
-                        v-for="(polygon, idx) in polygons"
-                        :key="idx"
-                        class="guides-drawer-polygon"
-                        :class="{ active: idx === selectedObjectIdx }"
-                        :points="polygon"
-                        @click.stop="selectObject(idx)"
-                        @keypress.stop="selectObject(idx)"
-                      ></polygon>
-                    </svg>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <!-- TODO: Value from image map/canvas -->
-                  <v-btn :block="isMobile" color="success" @click="onSelectGuide()">
+                  <v-btn
+                    :block="isMobile"
+                    color="success"
+                    :disabled="objectIdx === undefined"
+                    @click="confirmObject"
+                  >
                     {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
@@ -62,7 +41,7 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${method}.quantity`, { food: localeFoodName }) }}
               <template #actions>
-                <valid-invalid-icon :valid="selectedQuantity"></valid-invalid-icon>
+                <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -88,7 +67,6 @@
     </v-row>
     <template #actions>
       <v-form ref="form" @submit.prevent="submit">
-        <!-- Should be disabled if nothing selected? -->
         <continue :disabled="!continueEnabled" @click="submit"></continue>
       </v-form>
     </template>
@@ -97,37 +75,34 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { VImg } from 'vuetify/lib';
-import chunk from 'lodash/chunk';
-import debounce from 'lodash/debounce';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { GuideImagePromptProps, QuantityValues } from '@intake24/common/prompts';
 import type { EncodedFood, GuideImageState } from '@intake24/common/types';
 import type { GuideImageParameters, GuideImageResponse } from '@intake24/common/types/http/foods';
-import { ImagePlaceholder, QuantityCard } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
+import { ImageMapSelector, QuantityCard } from './selectors';
 
 export interface GuideImagePromptState {
   portionSize: GuideImageState;
   objectConfirmed: boolean;
   quantityConfirmed: boolean;
   objectIdx: number | undefined;
-  panelOpen: number;
+  panel: number;
 }
 
 export interface GuideImageEncodedFood {
   objectIdx: number | null;
   food: EncodedFood;
   mealId: number | undefined;
-  panelOpen: number;
+  panel: number;
 }
 
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { ImagePlaceholder, QuantityCard },
+  components: { ImageMapSelector, QuantityCard },
 
   mixins: [createBasePortion<GuideImagePromptProps, GuideImagePromptState>()],
 
@@ -142,64 +117,40 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const img = ref<InstanceType<typeof VImg>>();
-    const svg = ref<SVGElement>();
-
-    return { img, svg };
-  },
-
   data() {
     const selectedIndex = this.initialState.portionSize.object?.id;
 
     return {
       method: 'guide-image',
-      selectedGuide: this.initialState.objectConfirmed && selectedIndex !== undefined,
-      selectedQuantity: this.initialState.quantityConfirmed,
       guideImageData: {} as GuideImageResponse,
-      width: 0,
-      height: 0,
-      selectedObjectIdx: selectedIndex !== undefined ? selectedIndex - 1 : 0,
-      selectedNodeIdx: null as number | null,
-
-      panelOpen: this.initialState.panelOpen,
+      panel: this.initialState.panel,
+      objectConfirmed: this.initialState.objectConfirmed && selectedIndex !== undefined,
+      objectIdx: selectedIndex ? selectedIndex - 1 : undefined,
+      quantityConfirmed: this.initialState.quantityConfirmed,
       quantityValue: this.initialState.portionSize.quantity,
     };
   },
 
   computed: {
+    dataLoaded() {
+      return !!Object.keys(this.guideImageData).length;
+    },
+
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
 
-    dataLoaded(): boolean {
-      return !!Object.keys(this.guideImageData).length;
+    objectValid() {
+      return this.objectIdx !== undefined && this.objectConfirmed;
     },
 
-    polygons(): string[] {
-      if (!this.dataLoaded) return [];
-
-      const { width } = this;
-
-      return this.guideImageData.imageMap.objects.map((object) => {
-        return chunk(
-          object.outline.map((coord) => coord * width),
-          2
-        )
-          .map((node) => node.join(','))
-          .join(' ');
-      });
+    quantityValid() {
+      return this.quantityConfirmed;
     },
 
     isValid() {
-      return this.selectedGuide;
+      return this.objectValid && this.quantityValid;
     },
-  },
-
-  created() {
-    this.debouncedImgResize = debounce(() => {
-      this.updateSvgDimensions();
-    }, 500);
   },
 
   async mounted() {
@@ -213,37 +164,6 @@ export default defineComponent({
       );
 
       this.guideImageData = { ...data };
-    },
-
-    updateSvgDimensions() {
-      const el = this.img?.$el;
-      if (!el) {
-        console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
-        return;
-      }
-
-      const { width, height } = el.getBoundingClientRect();
-      this.width = width;
-      this.height = height;
-    },
-
-    onImgResize() {
-      //@ts-expect-error fix debounced types
-      this.debouncedImgResize();
-    },
-
-    onUpdate() {
-      if (this.selectedObjectIdx == null) return;
-      const portionSizeState = this.getCurrentState(this.selectedObjectIdx);
-
-      const update: GuideImagePromptState = {
-        portionSize: portionSizeState,
-        objectConfirmed: this.selectedGuide,
-        quantityConfirmed: this.selectedQuantity,
-        objectIdx: this.selectedObjectIdx + 1,
-        panelOpen: this.panelOpen,
-      };
-      this.$emit('update', update);
     },
 
     getCurrentState(idx: number): GuideImageState {
@@ -265,14 +185,27 @@ export default defineComponent({
     },
 
     selectObject(idx: number) {
-      this.selectedObjectIdx = idx;
-      this.onUpdate();
+      this.objectIdx = idx;
+      this.objectConfirmed = false;
+      this.update();
     },
 
-    onSelectGuide() {
-      this.selectedGuide = true;
-      this.panelOpen = 1;
-      this.onUpdate();
+    confirmObject() {
+      this.objectConfirmed = true;
+      this.setPanel(1);
+      this.update();
+    },
+
+    updateQuantity(value: QuantityValues) {
+      this.quantityValue = value;
+      this.quantityConfirmed = false;
+      this.update();
+    },
+
+    confirmQuantity() {
+      this.quantityConfirmed = true;
+      this.setPanel(-1);
+      this.update();
     },
 
     setErrors() {
@@ -285,54 +218,26 @@ export default defineComponent({
         return;
       }
 
-      if (this.selectedObjectIdx === undefined) throw new Error('Selected object id is null');
+      if (this.objectIdx === undefined) throw new Error('Selected object id is null');
 
       this.$emit('continue');
     },
 
-    updateQuantity(value: QuantityValues) {
-      this.quantityValue = value;
-      this.selectedQuantity = false;
-      this.onUpdate();
-    },
+    update() {
+      if (this.objectIdx == null) return;
+      const portionSizeState = this.getCurrentState(this.objectIdx);
 
-    confirmQuantity() {
-      this.selectedQuantity = true;
-      this.panelOpen = -1;
-      this.onUpdate();
-    },
-
-    partialAnswerHandler() {
-      this.onSelectGuide();
+      const update: GuideImagePromptState = {
+        portionSize: portionSizeState,
+        objectConfirmed: this.objectConfirmed,
+        objectIdx: this.objectIdx + 1,
+        quantityConfirmed: this.quantityConfirmed,
+        panel: this.panel,
+      };
+      this.$emit('update', update);
     },
   },
 });
 </script>
 
-<style lang="scss" scoped>
-.guides-drawer {
-  position: relative;
-
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    .guides-drawer-polygon {
-      cursor: pointer;
-      fill: transparent;
-
-      &.active,
-      &:hover {
-        fill: #0d47a1;
-        fill-opacity: 0.4;
-        stroke-width: 8;
-        stroke: #0d47a1;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-opacity: 0.5;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

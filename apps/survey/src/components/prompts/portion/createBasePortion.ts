@@ -57,6 +57,7 @@ export default <P extends BasePromptProps, S extends object>() =>
       return {
         ...props,
         errors: [] as string[],
+        panel: 0,
       };
     },
 
@@ -67,6 +68,14 @@ export default <P extends BasePromptProps, S extends object>() =>
     },
 
     methods: {
+      setPanel(panel: number) {
+        this.panel = panel;
+      },
+
+      closePanels() {
+        this.panel = -1;
+      },
+
       clearErrors() {
         this.errors = [];
       },

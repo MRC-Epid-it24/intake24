@@ -2,7 +2,7 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen">
+        <v-expansion-panels v-model="panel">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${method}.label`) }}
@@ -86,45 +86,34 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { ImageMapSelectorProps, PizzaPromptProps } from '@intake24/common/prompts';
 import type { ImageMapEmit } from '@intake24/common/types/http/foods';
-import { QuantityCard } from '@intake24/survey/components/elements';
-// import GuideImagePrompt from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
 
-import BasePortion from './BasePortion';
+import createBasePortion from './createBasePortion';
+import { ImageMapSelector, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'PizzaPrompt',
 
   components: { QuantityCard, ImageMapSelector },
 
-  mixins: [BasePortion],
-
-  props: {
-    promptProps: {
-      type: Object as PropType<PizzaPromptProps>,
-      required: true,
-    },
-  },
+  mixins: [createBasePortion<PizzaPromptProps, any>()],
 
   data() {
     return {
       method: 'pizza',
       // type, thickness and slice prefix are set as default
-      panelOpen: 0 as number,
       pizzaThicknessMapData: [] as any,
-      selectedSliceId: 0 as number,
-      calculatedSliceMapId: '' as string, // Needs a default value for rendering (unless put some conditional logic)
+      selectedSliceId: 0,
+      calculatedSliceMapId: '', // Needs a default value for rendering (unless put some conditional logic)
 
-      typeComplete: false as boolean,
-      thicknessComplete: false as boolean,
-      sizeComplete: false as boolean,
-      quantityComplete: false as boolean,
-      wholeSelected: false as boolean,
+      typeComplete: false,
+      thicknessComplete: false,
+      sizeComplete: false,
+      quantityComplete: false,
+      wholeSelected: false,
       typePromptProps: {
         imageMapId: 'gpizza',
       } as ImageMapSelectorProps,
@@ -176,8 +165,8 @@ export default defineComponent({
     //     console.log(e);
     //   }
     // },
-    setPanelOpen(value: number) {
-      this.panelOpen = value;
+    setPanel(value: number) {
+      this.panel = value;
     },
 
     // Select type of pizza
@@ -185,25 +174,25 @@ export default defineComponent({
       console.log(value);
       this.selectedSliceId = value.selectedIdx;
       this.generateSliceId();
-      this.setPanelOpen(1);
+      this.setPanel(1);
       this.typeComplete = true;
     },
     selectThickness() {
-      this.setPanelOpen(2);
+      this.setPanel(2);
       this.thicknessComplete = true;
     },
     selectSlice(value: ImageMapEmit) {
-      this.setPanelOpen(3);
+      this.setPanel(3);
       this.sizeComplete = true;
       this.wholeSelected = false;
     },
     selectWhole() {
-      this.setPanelOpen(3);
+      this.setPanel(3);
       this.sizeComplete = true;
       this.wholeSelected = true;
     },
     selectQuantity() {
-      this.setPanelOpen(4);
+      this.setPanel(4);
       this.quantityComplete = true;
     },
 

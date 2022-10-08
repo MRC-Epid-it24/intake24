@@ -25,6 +25,10 @@ export interface AsServedParameters {
   'leftovers-image-set'?: string;
 }
 
+export interface CerealParameters {
+  type: 'hoop' | 'flake ' | 'rkris';
+}
+
 export interface GuideImageParameters {
   'guide-image-id': string;
 }
@@ -47,6 +51,7 @@ export interface UserPortionSizeMethod {
   conversionFactor: number;
   parameters: UserPortionSizeMethodParameters;
 }
+
 export type UserAssociatedFoodPrompt = {
   foodCode: string | undefined;
   categoryCode: string | undefined;

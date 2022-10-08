@@ -1,6 +1,6 @@
 <template>
   <portion-layout v-bind="{ method, description, text, foodName }">
-    <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panelOpenId" flat>
+    <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panel" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${method}.label`">
@@ -13,7 +13,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-radio-group v-model="state.unit" @change="onSelectMethod">
+          <v-radio-group v-model="unit" @change="selectMethod">
             <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
               <template #label>
                 <span v-html="estimateInLabel(unit.name)"></span>
@@ -25,11 +25,11 @@
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
-            v-if="state.unit"
-            :path="`portion.${method}.howMany.${state.unit.omitFoodDescription ? '_' : 'withFood'}`"
+            v-if="unit"
+            :path="`portion.${method}.howMany.${unit.omitFoodDescription ? '_' : 'withFood'}`"
           >
             <template #unit>
-              <span v-html="getLocaleContent(standardUnitRefs[state.unit.name].howMany)"></span>
+              <span v-html="getLocaleContent(standardUnitRefs[unit.name].howMany)"></span>
             </template>
             <template #food>
               <span class="font-weight-medium">{{ localeFoodName }}</span>
@@ -43,7 +43,7 @@
         <v-expansion-panel-content>
           <v-row justify="center">
             <v-col>
-              <quantity-card v-model="state.quantity" fraction whole></quantity-card>
+              <quantity-card v-model="quantity" fraction whole></quantity-card>
             </v-col>
           </v-row>
           <v-row justify="center">
@@ -73,10 +73,10 @@ import type { QuantityValues, StandardPortionPromptProps } from '@intake24/commo
 import type { RequiredLocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
 import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
-import { ErrorAlert, QuantityCard } from '@intake24/survey/components/elements';
-import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
+import { ErrorAlert } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
+import { QuantityCard } from './selectors';
 
 export type StandardUnitRefs = Record<
   string,
@@ -94,10 +94,7 @@ export default defineComponent({
 
   components: { ErrorAlert, QuantityCard },
 
-  mixins: [
-    createBasePortion<StandardPortionPromptProps, StandardPortionState>(),
-    expansionPanelControls,
-  ],
+  mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionState>()],
 
   props: {
     parameters: {
@@ -109,8 +106,8 @@ export default defineComponent({
   data() {
     return {
       method: 'standard-portion',
-      state: copy(this.initialState),
       standardUnitRefs: {} as StandardUnitRefs,
+      ...copy(this.initialState),
     };
   },
 
@@ -138,11 +135,11 @@ export default defineComponent({
     },
 
     unitValid() {
-      return !!this.state.unit;
+      return !!this.unit;
     },
 
     quantityValid() {
-      return this.state.quantityConfirmed;
+      return this.quantityConfirmed;
     },
 
     isValid() {
@@ -153,9 +150,9 @@ export default defineComponent({
   async mounted() {
     await this.fetchStandardUnits();
 
-    if (!this.state.unit && this.standardUnits.length === 1) {
-      this.state.unit = this.standardUnits[0];
-      this.onSelectMethod();
+    if (!this.unit && this.standardUnits.length === 1) {
+      this.unit = this.standardUnits[0];
+      this.selectMethod();
     }
   },
 
@@ -182,15 +179,15 @@ export default defineComponent({
       });
     },
 
-    onSelectMethod() {
+    selectMethod() {
       this.clearErrors();
-      this.setPanelOpen(1);
+      this.setPanel(1);
       this.update();
     },
 
     confirmQuantity() {
-      this.state.quantityConfirmed = true;
-      this.closeAllPanels();
+      this.quantityConfirmed = true;
+      this.closePanels();
       this.update();
     },
 
@@ -208,7 +205,7 @@ export default defineComponent({
     },
 
     update() {
-      const { unit, quantity, quantityConfirmed } = this.state;
+      const { unit, quantity, quantityConfirmed } = this;
       this.$emit('update', { unit, quantity, quantityConfirmed });
     },
   },

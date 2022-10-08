@@ -80,7 +80,7 @@ export default defineComponent({
           objectConfirmed: false,
           quantityConfirmed: false,
           objectIdx: undefined,
-          panelOpen: 0,
+          panel: 0,
         }
       );
     },

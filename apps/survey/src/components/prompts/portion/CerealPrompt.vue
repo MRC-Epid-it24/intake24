@@ -2,77 +2,120 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpenId">
+        <v-expansion-panels v-model="panel" flat>
+          <!-- Step 1: Select image map -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.cereal.label') }}
+              <i18n :path="`portion.${method}.container`">
+                <template #food>
+                  <span class="font-weight-medium">{{ localeFoodName }}</span>
+                </template>
+              </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="bowlComplete"></valid-invalid-icon>
+                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <!-- <v-img :src="bowlImageMapData.baseImageUrl" @click="selectBowlType()"></v-img>
-                Image_maps gbowl -->
               <image-map-selector
-                :prompt-props="{ imageMapId }"
-                @image-map-selector-submit="selectBowlType($event)"
+                v-if="dataLoaded"
+                :disabled="objectIdx === undefined"
+                :image-map-data="imageMapData"
+                :value="objectIdx"
+                @input="selectObject"
               ></image-map-selector>
+              <v-row>
+                <v-col>
+                  <v-btn color="success" @click="confirmObject">
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="servingImageSet">
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.as-served.portionLabel', { food: localeDescription }) }}
+              {{ $t(`portion.as-served.serving.header`) }}
               <template #actions>
-                <valid-invalid-icon :valid="asServedComplete"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <as-served-selector
-                :as-served-set-id="cerealType"
-                @as-served-selector-submit="setAsServedStatus($event)"
-              ></as-served-selector>
-              <!-- cereal_hoopA -->
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t('portion.as-served.leftoverQuestion', { food: localeDescription }) }}
-              <template #actions>
-                <valid-invalid-icon :valid="leftoverComplete"></valid-invalid-icon>
+                <as-served-weight
+                  :valid="servingImageConfirmed"
+                  :weight="servingImage?.weight"
+                ></as-served-weight>
+                <valid-invalid-icon
+                  class="ml-1"
+                  :valid="servingImageConfirmed"
+                ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  <v-btn
-                    :color="toggleLeftoverAnswer === true ? 'success' : ''"
-                    @click="leftoverAnswer(true)"
-                  >
-                    {{ $t('common.action.confirm.yes') }}
-                  </v-btn>
-                  <v-btn
-                    :color="toggleLeftoverAnswer === false ? 'success' : ''"
-                    @click="leftoverAnswer(false)"
-                  >
-                    {{ $t('common.action.confirm.no') }}
-                  </v-btn>
+                  {{ $t(`portion.as-served.serving.label`, { food: localeFoodName }) }}
                 </v-col>
               </v-row>
-
-              <v-row v-show="displayLeftovers">
+              <v-row>
                 <v-col>
                   <as-served-selector
-                    :as-served-set-id="cerealType"
-                    @as-served-selector-submit="setLeftoverStatus($event)"
+                    :as-served-set-id="servingImageSet"
+                    :initial-state="servingImage?.index"
+                    @confirm="confirmServing"
+                    @update="updateServing"
                   ></as-served-selector>
                 </v-col>
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
+          <v-expansion-panel v-if="leftoverImageSet">
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t(`portion.as-served.leftover.header`, { food: localeFoodName }) }}
+              <template #actions>
+                <as-served-weight
+                  :valid="leftoversImageConfirmed"
+                  :weight="leftoversImage?.weight"
+                ></as-served-weight>
+                <valid-invalid-icon
+                  class="ml-1"
+                  :valid="leftoversPrompt === false || leftoversImageConfirmed"
+                ></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <p>{{ $t(`portion.as-served.leftover.question`, { food: localeFoodName }) }}</p>
+                  <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
+                    <v-btn class="px-4" :value="true">
+                      {{ $t('common.action.confirm.yes') }}
+                    </v-btn>
+                    <v-btn class="px-4" :value="false">
+                      {{ $t('common.action.confirm.no') }}
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-col>
+              </v-row>
+              <template v-if="leftoversPrompt">
+                <v-row>
+                  <v-col>
+                    {{ $t(`portion.as-served.leftover.label`, { food: localeFoodName }) }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <as-served-selector
+                      :as-served-set-id="leftoverImageSet"
+                      :initial-state="leftoversImage?.index"
+                      :type="'leftover'"
+                      @confirm="confirmLeftovers"
+                      @update="updateLeftovers"
+                    ></as-served-selector>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-show="errors.length">
       <v-col>
         <v-alert v-if="hasErrors" color="error">
           <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
@@ -80,7 +123,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!isValid" @click="submit"></continue>
+      <continue :disabled="!continueEnabled" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -89,65 +132,104 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CerealPromptProps, ImageMapSelectorEmit } from '@intake24/common/prompts';
-import type { UserFoodData } from '@intake24/common/types/http';
-import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
-import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
-import ImageMapSelector from '@intake24/survey/components/prompts/portion/selectors/ImageMapSelector.vue';
+import type { CerealPromptProps } from '@intake24/common/prompts';
+import type { SelectedAsServedImage } from '@intake24/common/types';
+import type { CerealParameters, ImageMapResponse } from '@intake24/common/types/http';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
+import { AsServedSelector, AsServedWeight, ImageMapSelector } from './selectors';
+
+export interface CerealPromptState {
+  panel: number;
+  objectIdx: number | undefined;
+  objectConfirmed: boolean;
+  servingImage: SelectedAsServedImage | null;
+  servingImageConfirmed: boolean;
+  leftoversImage: SelectedAsServedImage | null;
+  leftoversImageConfirmed: boolean;
+  leftoversPrompt?: boolean;
+}
 
 export default defineComponent({
   name: 'CerealPrompt',
 
-  components: { AsServedSelector, ImageMapSelector },
+  components: { AsServedSelector, AsServedWeight, ImageMapSelector },
 
-  mixins: [createBasePortion<CerealPromptProps, any>(), expansionPanelControls],
+  mixins: [createBasePortion<CerealPromptProps, CerealPromptState>()],
 
   props: {
-    foodCode: {
-      type: String,
+    parameters: {
+      type: Object as PropType<CerealParameters>,
       required: true,
     },
-    imageMapId: {
+    bowlImageMapId: {
       type: String,
-      required: true,
-    },
-    localeTEMP: {
-      type: String,
-      required: true,
+      default: 'gbowl',
     },
   },
 
   data() {
     return {
       method: 'cereal',
-      foodData: {} as UserFoodData,
-      bowlTypeSelected: null as number | null,
-      cerealType: 'cereal_hoopA' as string,
-      bowlComplete: false as boolean,
-      asServedComplete: false as boolean,
-      leftoverComplete: false as boolean,
-      displayLeftovers: false as boolean,
-      toggleLeftoverAnswer: null as boolean | null,
+      imageMapData: {} as ImageMapResponse,
+      cerealSuffix: ['A', 'B', 'C', 'D', 'E', 'F'],
+
+      ...copy(this.initialState),
     };
   },
 
   computed: {
-    localeDescription(): string {
-      return this.getLocaleContent(this.description);
+    dataLoaded(): boolean {
+      return !!Object.keys(this.imageMapData).length;
     },
 
-    dataLoaded(): boolean {
-      return !!Object.keys(this.foodData).length;
+    localeFoodName(): string {
+      return this.getLocaleContent(this.foodName);
+    },
+
+    servingImageSet(): string | undefined {
+      const {
+        cerealSuffix,
+        method,
+        objectIdx,
+        parameters: { type },
+      } = this;
+      if (objectIdx === undefined) return undefined;
+
+      return `${method}_${type}${cerealSuffix[objectIdx]}`;
+    },
+
+    leftoverImageSet(): string | undefined {
+      const {
+        cerealSuffix,
+        method,
+        objectIdx,
+        parameters: { type },
+      } = this;
+      if (objectIdx === undefined) return undefined;
+
+      return `${method}_${type}${cerealSuffix[objectIdx]}_leftovers`;
+    },
+
+    objectValid() {
+      return this.objectIdx !== undefined && this.objectConfirmed;
     },
 
     isValid(): boolean {
-      if (this.bowlComplete && this.asServedComplete && this.leftoverComplete) {
-        this.clearErrors();
-        return true;
-      }
-      return false;
+      // object not yet selected
+      if (!this.objectValid) return false;
+
+      // serving not yet selected
+      if (!this.servingImage || !this.servingImageConfirmed) return false;
+
+      // no leftovers
+      if (this.leftoversPrompt === false) return true;
+
+      // leftovers not yet selected
+      if (!this.leftoversImage || !this.leftoversImageConfirmed) return false;
+
+      return true;
     },
   },
 
@@ -157,52 +239,79 @@ export default defineComponent({
 
   methods: {
     async fetchFoodData() {
-      try {
-        const { data } = await this.$http.get(`foods/${this.localeTEMP}/${this.foodCode}`);
-        this.foodData = { ...data };
-      } catch (e) {
-        console.log(e);
-      }
+      const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
+        `portion-sizes/image-maps/${this.bowlImageMapId}`
+      );
+
+      this.imageMapData = { ...imageMapData };
     },
 
-    leftoverAnswer(value: boolean) {
-      if (value) {
-        this.displayLeftovers = true;
-        this.leftoverComplete = false;
-        this.toggleLeftoverAnswer = true;
-      } else {
-        this.leftoverComplete = true;
-        this.toggleLeftoverAnswer = false;
-        this.setPanelOpen(3);
-      }
+    selectObject(idx: number) {
+      this.objectIdx = idx;
+      this.objectConfirmed = false;
+      this.update();
     },
 
-    selectBowlType(status: ImageMapSelectorEmit) {
-      this.bowlTypeSelected = status.selectedIdx;
-      this.bowlComplete = true;
-      this.setPanelOpen(1);
-      // Get as served now bowl is confirmed
+    confirmObject() {
+      this.objectConfirmed = true;
+      this.setPanel(1);
+      this.update();
     },
 
-    // TODO: Implement emission type
-    setAsServedStatus(status: Record<string, unknown>) {
-      this.asServedComplete = true;
-      this.setPanelOpen(2);
+    updateServing(update: SelectedAsServedImage | null) {
+      this.servingImage = update;
+
+      if (this.isValid) this.clearErrors();
+
+      this.update();
     },
 
-    // TODO: Implement emission type
-    onLeftoversUpdate(status: Record<string, unknown>) {
-      this.leftoverComplete = true;
-      this.setPanelOpen(-1);
+    confirmServing() {
+      this.servingImageConfirmed = true;
+      this.setPanel(2);
+      this.update();
+    },
+
+    updateLeftovers(update: SelectedAsServedImage | null) {
+      this.leftoversImage = update;
+
+      if (this.isValid) this.clearErrors();
+
+      this.update();
+    },
+
+    confirmLeftovers() {
+      this.leftoversImageConfirmed = true;
+      this.setPanel(-1);
+      this.update();
+    },
+
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     submit() {
-      if (this.isValid) {
-        // TODO Update state
-        console.log('submitted');
-      } else {
-        this.errors = [this.$t('portion.milkCereal.validation.required').toString()];
+      if (!this.isValid) {
+        this.setErrors();
+        return;
       }
+
+      this.$emit('continue');
+    },
+
+    update() {
+      const state: CerealPromptState = {
+        panel: this.panel,
+        objectIdx: this.objectIdx,
+        objectConfirmed: this.objectConfirmed,
+        servingImage: this.servingImage,
+        servingImageConfirmed: this.servingImageConfirmed,
+        leftoversImage: this.leftoversImage,
+        leftoversImageConfirmed: this.leftoversImageConfirmed,
+        leftoversPrompt: this.leftoversPrompt,
+      };
+
+      this.$emit('update', state);
     },
   },
 });

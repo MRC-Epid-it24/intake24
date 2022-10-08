@@ -82,7 +82,8 @@ const portion: LocaleMessageObject = {
     },
   },
   cereal: {
-    text: 'Please select the bowl that looks most like the one you used.',
+    text: '{food}',
+    container: 'Please select the bowl that looks most like the one you used for your {food}.',
   },
   'drink-scale': {
     text: '{food}',

@@ -22,7 +22,7 @@ export function portionSizeMethodSelected(
   return true;
 }
 
-export function asServedServingComplete(selectedFood: FoodState): boolean {
+export function asServedComplete(selectedFood: FoodState): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 
   if (selectedFood.portionSize != null) {
@@ -34,6 +34,23 @@ export function asServedServingComplete(selectedFood: FoodState): boolean {
     }
 
     return selectedFood.portionSize.serving != null;
+  }
+
+  return false;
+}
+
+export function cerealComplete(selectedFood: FoodState): boolean {
+  if (selectedFood.type !== 'encoded-food') return false;
+
+  if (selectedFood.portionSize !== null) {
+    if (selectedFood.portionSize.method !== 'cereal') {
+      console.warn(
+        `Selected portion size method is "cereal" but portion size data is for ${selectedFood.portionSize.method}`
+      );
+      return false;
+    }
+
+    return selectedFood.portionSize.servingWeight !== null;
   }
 
   return false;

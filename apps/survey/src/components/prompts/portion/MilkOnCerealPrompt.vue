@@ -19,7 +19,7 @@
     </v-row>
     <v-row v-if="displayQuestions">
       <v-col>
-        <v-expansion-panels v-model="panelOpenId">
+        <v-expansion-panels v-model="panel">
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               Please select the milk you had:
@@ -94,7 +94,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!isValid" @click="submit"></continue>
+      <continue :disabled="!continueEnabled" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -103,19 +103,18 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { MilkCerealPromptProps } from '@intake24/common/prompts';
-import expansionPanelControls from '@intake24/survey/components/mixins/expansionPanelControls';
+import type { MilkOnCerealPromptProps } from '@intake24/common/prompts';
 
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({
-  name: 'MilkCerealPrompt',
+  name: 'MilkOnCerealPrompt',
 
-  mixins: [createBasePortion<MilkCerealPromptProps, any>(), expansionPanelControls],
+  mixins: [createBasePortion<MilkOnCerealPromptProps, any>()],
 
   props: {
     promptProps: {
-      type: Object as PropType<MilkCerealPromptProps>,
+      type: Object as PropType<MilkOnCerealPromptProps>,
       required: true,
     },
   },
@@ -189,13 +188,13 @@ export default defineComponent({
     emitFoodSelected(value: string) {
       this.foodValue = value;
       this.foodSelected = true;
-      this.setPanelOpen(1);
+      this.setPanel(1);
     },
 
     selectPortionMethod(value: string) {
       this.portionMethodSelected = true;
       this.portionMethodValue = value;
-      this.setPanelOpen(2);
+      this.setPanel(2);
       if (!this.imageMapLoaded) {
         this.fetchImageMapData();
       }
@@ -203,7 +202,7 @@ export default defineComponent({
 
     selectPortion() {
       this.portionSelected = true;
-      this.setPanelOpen(-1);
+      this.setPanel(-1);
     },
 
     submit() {

@@ -2,18 +2,18 @@
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panelOpen" flat @change="onActivePanelChanged">
+        <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${method}.serving.header`) }}
               <template #actions>
                 <as-served-weight
-                  :valid="servingCompleteStatus"
-                  :weight="asServedData?.weight"
+                  :valid="servingImageConfirmed"
+                  :weight="servingImage?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
-                  :valid="servingCompleteStatus"
+                  :valid="servingImageConfirmed"
                 ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -27,9 +27,9 @@
                 <v-col>
                   <as-served-selector
                     :as-served-set-id="parameters['serving-image-set']"
-                    :initial-state="initialState.servingImage?.index"
-                    @confirm="servingConfirmed"
-                    @update="servingUpdate"
+                    :initial-state="servingImage?.index"
+                    @confirm="confirmServing"
+                    @update="updateServing"
                   ></as-served-selector>
                 </v-col>
               </v-row>
@@ -40,12 +40,12 @@
               {{ $t(`portion.${method}.leftover.header`, { food: localeFoodName }) }}
               <template #actions>
                 <as-served-weight
-                  :valid="leftoverCompleteStatus"
-                  :weight="leftoverPromptAnswer ? leftoverData?.weight : 0"
+                  :valid="leftoversImageConfirmed"
+                  :weight="leftoversImage?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
-                  :valid="leftoverCompleteStatus"
+                  :valid="leftoversPrompt === false || leftoversImageConfirmed"
                 ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -55,22 +55,17 @@
                   <p>
                     {{ $t(`portion.${method}.leftover.question`, { food: localeFoodName }) }}
                   </p>
-                  <v-btn
-                    :color="leftoverPromptAnswer === true ? 'success' : ''"
-                    @click="leftoverAnswer(true)"
-                  >
-                    {{ $t('common.action.confirm.yes') }}
-                  </v-btn>
-                  <v-btn
-                    class="ml-2"
-                    :color="leftoverPromptAnswer === false ? 'success' : ''"
-                    @click="leftoverAnswer(false)"
-                  >
-                    {{ $t('common.action.confirm.no') }}
-                  </v-btn>
+                  <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
+                    <v-btn class="px-4" :value="true">
+                      {{ $t('common.action.confirm.yes') }}
+                    </v-btn>
+                    <v-btn class="px-4" :value="false">
+                      {{ $t('common.action.confirm.no') }}
+                    </v-btn>
+                  </v-btn-toggle>
                 </v-col>
               </v-row>
-              <template v-if="leftoverPromptAnswer">
+              <template v-if="leftoversPrompt">
                 <v-row>
                   <v-col>
                     {{ $t(`portion.${method}.leftover.label`, { food: localeFoodName }) }}
@@ -80,10 +75,10 @@
                   <v-col>
                     <as-served-selector
                       :as-served-set-id="parameters['leftovers-image-set']"
-                      :initial-state="initialState.leftoversImage?.index"
+                      :initial-state="leftoversImage?.index"
                       :type="'leftover'"
-                      @confirm="leftoversConfirmed"
-                      @update="leftoversUpdate"
+                      @confirm="confirmLeftovers"
+                      @update="updateLeftovers"
                     ></as-served-selector>
                   </v-col>
                 </v-row>
@@ -113,18 +108,18 @@ import { defineComponent } from 'vue';
 import type { AsServedPromptProps } from '@intake24/common/prompts';
 import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
-import { AsServedWeight } from '@intake24/survey/components/elements';
-import AsServedSelector from '@intake24/survey/components/prompts/portion/selectors/AsServedSelector.vue';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
+import { AsServedSelector, AsServedWeight } from './selectors';
 
 export interface AsServedPromptState {
-  activePanel: number | null;
+  panel: number;
   servingImage: SelectedAsServedImage | null;
-  servingImageSelected: boolean;
-  leftoversConfirmed: boolean | null;
+  servingImageConfirmed: boolean;
   leftoversImage: SelectedAsServedImage | null;
-  leftoversImageSelected: boolean;
+  leftoversImageConfirmed: boolean;
+  leftoversPrompt?: boolean;
 }
 
 export default defineComponent({
@@ -144,13 +139,8 @@ export default defineComponent({
   data() {
     return {
       method: 'as-served',
-      panelOpen: this.initialState.activePanel,
-      leftoverPromptAnswer: this.initialState.leftoversConfirmed,
-      asServedData: this.initialState.servingImage,
-      leftoverData: this.initialState.leftoversImage,
-      servingCompleteStatus: this.initialState.servingImageSelected,
-      leftoverCompleteStatus:
-        this.initialState.leftoversConfirmed === false || this.initialState.leftoversImageSelected,
+
+      ...copy(this.initialState),
     };
   },
 
@@ -164,69 +154,58 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      // Haven't filled in asServed
-      if (!this.asServedData || !this.servingCompleteStatus) return false;
+      // serving not yet selected
+      if (!this.servingImage || !this.servingImageConfirmed) return false;
 
       // Food has no leftovers or leftovers have been confirmed
-      if (!this.hasLeftovers || this.leftoverPromptAnswer === false) return true;
+      if (!this.hasLeftovers || this.leftoversPrompt === false) return true;
 
-      // Haven't filled in leftovers
-      if (!this.leftoverData || !this.leftoverCompleteStatus) return false;
+      // leftovers not yet selected
+      if (!this.leftoversImage || !this.leftoversImageConfirmed) return false;
 
       return true;
     },
   },
 
   methods: {
-    leftoverAnswer(answer: boolean) {
-      // Controls display of leftover selector
-      this.leftoverCompleteStatus = !answer;
-      this.leftoverPromptAnswer = answer;
-      this.update();
-    },
-
-    setPanelOpen(panelIdComplete: number) {
+    setPanel(panelIdComplete: number) {
       if (this.isValid) {
-        this.panelOpen = -1;
+        this.panel = -1;
         return;
       }
 
       // Completed asServed
-      if (panelIdComplete === 0) this.panelOpen = this.leftoverCompleteStatus ? -1 : 1;
+      if (panelIdComplete === 0) this.panel = this.leftoversImageConfirmed ? -1 : 1;
 
       // Completed leftover
-      if (panelIdComplete === 1) this.panelOpen = !this.servingCompleteStatus ? 0 : -1;
+      if (panelIdComplete === 1) this.panel = !this.servingImageConfirmed ? 0 : -1;
     },
 
-    servingUpdate(update: SelectedAsServedImage | null) {
-      this.asServedData = update;
+    updateServing(update: SelectedAsServedImage | null) {
+      this.servingImage = update;
 
       if (this.isValid) this.clearErrors();
 
       this.update();
     },
 
-    servingConfirmed() {
-      this.servingCompleteStatus = true;
-      this.setPanelOpen(0);
+    confirmServing() {
+      this.servingImageConfirmed = true;
+      this.setPanel(0);
       this.update();
     },
 
-    leftoversUpdate(update: SelectedAsServedImage | null) {
-      this.leftoverData = update;
+    updateLeftovers(update: SelectedAsServedImage | null) {
+      this.leftoversImage = update;
 
       if (this.isValid) this.clearErrors();
 
       this.update();
     },
 
-    leftoversConfirmed() {
-      this.leftoverCompleteStatus = true;
-      this.setPanelOpen(1);
-      this.update();
-    },
-
-    onActivePanelChanged() {
+    confirmLeftovers() {
+      this.leftoversImageConfirmed = true;
+      this.setPanel(1);
       this.update();
     },
 
@@ -244,14 +223,16 @@ export default defineComponent({
     },
 
     update() {
-      this.$emit('update', {
-        activePanel: this.panelOpen,
-        servingImage: this.asServedData,
-        servingImageSelected: this.servingCompleteStatus,
-        leftoversConfirmed: this.leftoverPromptAnswer,
-        leftoversImage: this.leftoverData,
-        leftoversImageSelected: this.leftoverCompleteStatus,
-      });
+      const state: AsServedPromptState = {
+        panel: this.panel,
+        servingImage: this.servingImage,
+        servingImageConfirmed: this.servingImageConfirmed,
+        leftoversImage: this.leftoversImage,
+        leftoversImageConfirmed: this.leftoversImageConfirmed,
+        leftoversPrompt: this.leftoversPrompt,
+      };
+
+      this.$emit('update', state);
     },
   },
 });

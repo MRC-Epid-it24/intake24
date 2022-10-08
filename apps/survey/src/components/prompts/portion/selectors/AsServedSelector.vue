@@ -93,7 +93,7 @@ export default defineComponent({
 
   data() {
     return {
-      selectedObjectIdx: this.initialState,
+      objectIdx: this.initialState,
       asServedData: {} as AsServedSetResponse,
       dataLoaded: false,
       // Prototyping
@@ -103,30 +103,36 @@ export default defineComponent({
 
   computed: {
     image(): string {
-      if (this.selectedObjectIdx === undefined) return '';
+      if (this.objectIdx === undefined) return '';
 
-      return this.dataLoaded ? this.asServedData.images[this.selectedObjectIdx].mainImageUrl : '';
+      return this.dataLoaded ? this.asServedData.images[this.objectIdx].mainImageUrl : '';
     },
     weight(): string | null {
       if (!this.dataLoaded) return null;
 
-      if (this.selectedObjectIdx === undefined) return null;
+      if (this.objectIdx === undefined) return null;
 
-      return `${this.asServedData.images[this.selectedObjectIdx].weight}g`;
+      return `${this.asServedData.images[this.objectIdx].weight}g`;
     },
     firstThumbnail(): string {
-      if (this.selectedObjectIdx === null) return '';
+      if (this.objectIdx === null) return '';
 
       // This check is slightly redundant
       return this.dataLoaded ? this.asServedData.images[0].thumbnailUrl : '';
     },
     lastThumbnail(): string {
-      if (this.selectedObjectIdx === null) return '';
+      if (this.objectIdx === null) return '';
 
       // This check is slightly redundant
       return this.dataLoaded
         ? this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl
         : '';
+    },
+  },
+
+  watch: {
+    async asServedSetId() {
+      await this.fetchAsServedImageData();
     },
   },
 
@@ -154,67 +160,66 @@ export default defineComponent({
     },
 
     setDefaultSelection() {
-      if (this.selectedObjectIdx === undefined) {
+      if (this.objectIdx === undefined) {
         // Variable length image sets: set default selected to middle value
         this.setSelection(Math.floor(this.asServedData.images.length / 2));
       }
     },
 
     setSelection(idx: number) {
-      this.selectedObjectIdx = idx;
+      this.objectIdx = idx;
       this.update();
     },
 
     isSelected(idx: number): string {
-      return idx === this.selectedObjectIdx ? 'selectedThumb rounded-lg' : '';
+      return idx === this.objectIdx ? 'selectedThumb rounded-lg' : '';
     },
 
     hadMore() {
-      if (this.selectedObjectIdx === undefined) return;
+      if (this.objectIdx === undefined) return;
 
       const maxLength = this.asServedData.images.length - 1;
-      if (this.selectedObjectIdx + 1 > maxLength) {
+      if (this.objectIdx + 1 > maxLength) {
         console.log('Trigger input quantity prompt');
         // User wants to input more than thumbnail quantity on screen
         // TO DO Method for this
         this.overlay = true;
       } else {
-        this.selectedObjectIdx =
-          this.selectedObjectIdx + 1 === maxLength ? maxLength : this.selectedObjectIdx + 1;
+        this.objectIdx = this.objectIdx + 1 === maxLength ? maxLength : this.objectIdx + 1;
       }
       this.update();
     },
 
     hadLess() {
-      if (this.selectedObjectIdx === undefined) return;
+      if (this.objectIdx === undefined) return;
 
-      if (this.selectedObjectIdx - 1 < 0) {
+      if (this.objectIdx - 1 < 0) {
         console.log('Trigger input quantity prompt');
         // User wants to input less than thumbnail quantities on screen
         // TO DO Method for this
         this.overlay = true;
       } else {
-        this.selectedObjectIdx = this.selectedObjectIdx - 1 === 0 ? 0 : this.selectedObjectIdx - 1;
+        this.objectIdx = this.objectIdx - 1 === 0 ? 0 : this.objectIdx - 1;
       }
       this.update();
     },
 
     update() {
       const newState: SelectedAsServedImage | null =
-        this.selectedObjectIdx === undefined
+        this.objectIdx === undefined
           ? null
           : {
               asServedSetId: this.asServedSetId,
-              index: this.selectedObjectIdx,
-              weight: this.asServedData.images[this.selectedObjectIdx].weight,
-              imageUrl: this.asServedData.images[this.selectedObjectIdx].mainImageUrl,
+              index: this.objectIdx,
+              weight: this.asServedData.images[this.objectIdx].weight,
+              imageUrl: this.asServedData.images[this.objectIdx].mainImageUrl,
             };
 
       this.$emit('update', newState);
     },
 
     confirm() {
-      if (this.selectedObjectIdx === undefined) return;
+      if (this.objectIdx === undefined) return;
 
       this.$emit('confirm');
     },

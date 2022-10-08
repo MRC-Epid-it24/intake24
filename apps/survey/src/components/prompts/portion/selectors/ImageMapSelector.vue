@@ -1,18 +1,26 @@
 <template>
-  <div v-if="dataLoaded" class="guides-drawer">
-    <v-img ref="img" v-resize="onImgResize" :src="imageMapData.baseImageUrl"> </v-img>
-    <svg ref="svg" :height="height" :width="width">
-      <polygon
-        v-for="(polygon, idx) in polygons"
-        :key="idx"
-        class="guides-drawer-polygon"
-        :class="{ active: idx === selectedIdx }"
-        :points="polygon"
-        @click.stop="selectObject(idx)"
-        @keypress.stop="selectObject(idx)"
-      ></polygon>
-    </svg>
-  </div>
+  <v-row>
+    <v-col>
+      <div class="guides-drawer">
+        <v-img ref="img" v-resize="onImgResize" :src="imageMapData.baseImageUrl">
+          <template #placeholder>
+            <image-placeholder></image-placeholder>
+          </template>
+        </v-img>
+        <svg ref="svg" v-bind="{ height, width }">
+          <polygon
+            v-for="(polygon, idx) in polygons"
+            :key="idx"
+            class="guides-drawer-polygon"
+            :class="{ active: idx === value }"
+            :points="polygon"
+            @click.stop="$emit('input', idx)"
+            @keypress.stop="$emit('input', idx)"
+          ></polygon>
+        </svg>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -22,23 +30,21 @@ import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
-import type { ImageMapSelectorProps } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
-import type { ImageMapEmit } from '@intake24/common/types/http/foods';
-import { imageMapSelectorDefaultProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
-
-import BasePortion from '../BasePortion';
+import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 export default defineComponent({
   name: 'ImageMapSelector',
 
-  mixins: [BasePortion],
+  components: { ImagePlaceholder },
 
   props: {
-    promptProps: {
-      type: Object as PropType<ImageMapSelectorProps>,
+    imageMapData: {
+      type: Object as PropType<ImageMapResponse>,
       required: true,
+    },
+    value: {
+      type: Number,
     },
   },
 
@@ -51,26 +57,13 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(imageMapSelectorDefaultProps, this.promptProps),
-      errors: [] as string[],
-      imageMapData: {} as ImageMapResponse,
-      width: 0,
       height: 0,
-      selectedIdx: null as number | null,
+      width: 0,
     };
   },
 
   computed: {
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
-
-    dataLoaded(): boolean {
-      return !!Object.keys(this.imageMapData).length;
-    },
     polygons(): string[] {
-      if (!this.dataLoaded) return [];
-
       const { width } = this;
 
       return this.imageMapData.objects.map((object) => {
@@ -84,48 +77,27 @@ export default defineComponent({
     },
   },
 
-  // Appears to be a bug where $refs can't be found in PortionTest. Likely not an issue in production
   created() {
-    this.debouncedImgResize = debounce(() => {
+    this.debouncedGuideImgResize = debounce(() => {
       this.updateSvgDimensions();
     }, 500);
   },
 
-  mounted() {
-    this.fetchImageMap();
-  },
-
   methods: {
-    async fetchImageMap() {
-      try {
-        const { data } = await this.$http.get<ImageMapResponse>(
-          `portion-sizes/image-maps/${this.imageMapId}`
-        );
-        this.imageMapData = { ...data };
-      } catch (e) {
-        console.log(e);
-      }
+    onImgResize() {
+      //@ts-expect-error fix debounced types
+      this.debouncedGuideImgResize();
     },
+
     updateSvgDimensions() {
       const el = this.img?.$el;
       if (!el) {
-        console.warn(`GuideImagePrompt: could not update SVG dimensions.`);
+        console.warn(`GuideImagePanel: could not update SVG dimensions.`);
         return;
       }
-
       const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
-    },
-    onImgResize() {
-      //@ts-expect-error fix debounced types
-      this.debouncedImgResize();
-    },
-    selectObject(idx: number) {
-      this.selectedIdx = idx;
-      this.$emit('image-map-selector-submit', {
-        selectedIdx: this.selectedIdx,
-      } as ImageMapEmit);
     },
   },
 });

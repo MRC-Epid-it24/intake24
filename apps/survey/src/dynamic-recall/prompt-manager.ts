@@ -19,7 +19,8 @@ import {
 import type { SurveyState } from '../stores';
 import { recallLog } from '../stores';
 import {
-  asServedServingComplete,
+  asServedComplete,
+  cerealComplete,
   drinkScaleComplete,
   guideImageComplete,
   milkInAHotDrinkComplete,
@@ -173,10 +174,7 @@ const checkFoodStandardConditions = (
     }
 
     case 'as-served-prompt': {
-      if (
-        portionSizeMethodSelected(foodState, 'as-served') &&
-        !asServedServingComplete(foodState)
-      ) {
+      if (portionSizeMethodSelected(foodState, 'as-served') && !asServedComplete(foodState)) {
         recallLog().promptCheck(
           'as-served-prompt',
           true,
@@ -190,6 +188,25 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'as-served')
           ? 'As served portion size estimation not selected'
           : 'As served portion size estimation already complete'
+      );
+      return false;
+    }
+
+    case 'cereal-prompt': {
+      if (portionSizeMethodSelected(foodState, 'cereal') && !cerealComplete(foodState)) {
+        recallLog().promptCheck(
+          'cereal-prompt',
+          true,
+          'Cereal portion size method selected but yet not complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        'cereal-prompt',
+        false,
+        portionSizeMethodSelected(foodState, 'cereal')
+          ? 'Cereal portion size estimation not selected'
+          : 'Cereal portion size estimation already complete'
       );
       return false;
     }

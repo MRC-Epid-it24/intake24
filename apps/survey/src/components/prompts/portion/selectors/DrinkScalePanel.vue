@@ -60,8 +60,7 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
-
-import ImagePlaceholder from './ImagePlaceholder.vue';
+import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 export default defineComponent({
   name: 'DrinkScalePanel',
@@ -199,5 +198,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '../../scss/drinkscale.scss';
+@import '../../../../scss/drinkscale.scss';
 </style>

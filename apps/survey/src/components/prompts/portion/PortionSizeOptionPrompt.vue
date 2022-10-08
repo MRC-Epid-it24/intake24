@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-sheet>
-      <v-item-group v-model="currentValue">
+      <v-item-group v-model="option">
         <v-container>
           <v-row>
             <v-col
@@ -73,18 +73,18 @@ export default defineComponent({
   data() {
     return {
       method: 'option',
-      currentValue: this.initialState?.option ?? undefined,
+      option: this.initialState?.option ?? undefined,
     };
   },
 
   computed: {
     isValid() {
-      return this.currentValue !== undefined;
+      return this.option !== undefined;
     },
   },
 
   watch: {
-    currentValue(val) {
+    option(val) {
       this.clearErrors();
 
       if (val === undefined) return;
@@ -95,13 +95,12 @@ export default defineComponent({
   },
 
   async mounted() {
-    if (this.currentValue === undefined && this.availableMethods.length === 1)
-      this.currentValue = 0;
+    if (this.option === undefined && this.availableMethods.length === 1) this.option = 0;
   },
 
   methods: {
     update() {
-      this.$emit('update', { option: this.currentValue });
+      this.$emit('update', { option: this.option });
     },
 
     submit() {
