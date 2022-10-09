@@ -91,9 +91,9 @@ import { defineComponent } from 'vue';
 
 import type { SurveyRequestHelpInput } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
-import { useMessages } from '@intake24/ui/stores';
 
 import { surveyService } from '../services';
+import { useMessages } from '../stores';
 
 export default defineComponent({
   name: 'RequestHelp',

@@ -40,6 +40,11 @@ const common: LocaleMessageObject = {
     sent: 'Your help request has been sent.',
   },
 
+  clipboard: {
+    _: 'Copy to clipboard',
+    copied: 'Data copied to clipboard',
+  },
+
   sw: {
     check: 'Content update is available',
     update: 'Update',

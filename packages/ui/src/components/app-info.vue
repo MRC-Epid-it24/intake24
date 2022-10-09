@@ -12,6 +12,11 @@
           {{ app.build.date }}
         </v-list-item-subtitle>
       </v-list-item-content>
+      <v-list-item-action>
+        <v-btn icon :title="$t('common.clipboard._')" @click="copyInfoToClipboard">
+          <v-icon color="primary">far fa-clipboard</v-icon>
+        </v-btn>
+      </v-list-item-action>
     </v-list-item>
   </v-list>
 </template>
@@ -19,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { useApp } from '../stores';
+import { useApp, useMessages } from '../stores';
 
 export default defineComponent({
   name: 'AppInfo',
@@ -28,6 +33,14 @@ export default defineComponent({
     return {
       app: useApp().app,
     };
+  },
+
+  methods: {
+    async copyInfoToClipboard() {
+      const { version, revision, date } = this.app.build;
+      await navigator.clipboard.writeText([version, revision, date].join(' | '));
+      useMessages().info(this.$t('common.clipboard.copied').toString());
+    },
   },
 });
 </script>

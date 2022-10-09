@@ -59,9 +59,8 @@ import { defineComponent, reactive, ref } from 'vue';
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { logo } from '@intake24/survey/assets';
 import { surveyService } from '@intake24/survey/services';
-import { useAuth } from '@intake24/survey/stores';
+import { useAuth, useMessages } from '@intake24/survey/stores';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
-import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'GenerateUser',

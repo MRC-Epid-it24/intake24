@@ -88,6 +88,11 @@ const common: LocaleMessageObject = {
   updatedAt: 'Updated at',
   deletedAt: 'Deleted at',
 
+  clipboard: {
+    _: 'Copy to clipboard',
+    copied: 'Data copied to clipboard',
+  },
+
   sw: {
     check: 'Content update is available',
     update: 'Update',
