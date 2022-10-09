@@ -1,12 +1,12 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
           <!-- Step 1: Select image map -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${method}.container`">
+              <i18n :path="`portion.${portionSize.method}.container`">
                 <template #food>
                   <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
@@ -18,9 +18,9 @@
             <v-expansion-panel-content>
               <image-map-selector
                 v-if="dataLoaded"
-                :disabled="objectIdx === undefined"
+                :disabled="portionSize.bowlIndex === undefined"
                 :image-map-data="imageMapData"
-                :value="objectIdx"
+                :value="portionSize.bowlIndex"
                 @input="selectObject"
               ></image-map-selector>
               <v-row>
@@ -38,7 +38,7 @@
               <template #actions>
                 <as-served-weight
                   :valid="servingImageConfirmed"
-                  :weight="servingImage?.weight"
+                  :weight="portionSize.serving?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
@@ -56,7 +56,7 @@
                 <v-col>
                   <as-served-selector
                     :as-served-set-id="servingImageSet"
-                    :initial-state="servingImage?.index"
+                    :initial-state="portionSize.serving?.index"
                     @confirm="confirmServing"
                     @update="updateServing"
                   ></as-served-selector>
@@ -70,7 +70,7 @@
               <template #actions>
                 <as-served-weight
                   :valid="leftoversImageConfirmed"
-                  :weight="leftoversImage?.weight"
+                  :weight="portionSize.leftovers?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
@@ -102,7 +102,7 @@
                   <v-col>
                     <as-served-selector
                       :as-served-set-id="leftoverImageSet"
-                      :initial-state="leftoversImage?.index"
+                      :initial-state="portionSize.leftovers?.index"
                       :type="'leftover'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"
@@ -133,7 +133,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { CerealPromptProps } from '@intake24/common/prompts';
-import type { SelectedAsServedImage } from '@intake24/common/types';
+import type { CerealState, SelectedAsServedImage } from '@intake24/common/types';
 import type { CerealParameters, ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
@@ -141,12 +141,10 @@ import createBasePortion from './createBasePortion';
 import { AsServedSelector, AsServedWeight, ImageMapSelector } from './selectors';
 
 export interface CerealPromptState {
+  portionSize: CerealState;
   panel: number;
-  objectIdx: number | undefined;
   objectConfirmed: boolean;
-  servingImage: SelectedAsServedImage | null;
   servingImageConfirmed: boolean;
-  leftoversImage: SelectedAsServedImage | null;
   leftoversImageConfirmed: boolean;
   leftoversPrompt?: boolean;
 }
@@ -171,9 +169,8 @@ export default defineComponent({
 
   data() {
     return {
-      method: 'cereal',
       imageMapData: {} as ImageMapResponse,
-      cerealSuffix: ['A', 'B', 'C', 'D', 'E', 'F'],
+      bowls: ['A', 'B', 'C', 'D', 'E', 'F'],
 
       ...copy(this.initialState),
     };
@@ -190,30 +187,30 @@ export default defineComponent({
 
     servingImageSet(): string | undefined {
       const {
-        cerealSuffix,
-        method,
-        objectIdx,
+        bowls,
+        portionSize: { bowlIndex, method },
         parameters: { type },
       } = this;
-      if (objectIdx === undefined) return undefined;
+      if (bowlIndex === undefined) return undefined;
 
-      return `${method}_${type}${cerealSuffix[objectIdx]}`;
+      return `${method}_${type}${bowls[bowlIndex]}`;
     },
 
     leftoverImageSet(): string | undefined {
       const {
-        cerealSuffix,
-        method,
-        objectIdx,
+        bowls,
+        portionSize: { bowlIndex, method },
         parameters: { type },
       } = this;
-      if (objectIdx === undefined) return undefined;
+      if (bowlIndex === undefined) return undefined;
 
-      return `${method}_${type}${cerealSuffix[objectIdx]}_leftovers`;
+      return `${method}_${type}${bowls[bowlIndex]}_leftovers`;
     },
 
     objectValid() {
-      return this.objectIdx !== undefined && this.objectConfirmed;
+      return (
+        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.objectConfirmed
+      );
     },
 
     isValid(): boolean {
@@ -221,13 +218,13 @@ export default defineComponent({
       if (!this.objectValid) return false;
 
       // serving not yet selected
-      if (!this.servingImage || !this.servingImageConfirmed) return false;
+      if (!this.portionSize.serving || !this.servingImageConfirmed) return false;
 
       // no leftovers
       if (this.leftoversPrompt === false) return true;
 
       // leftovers not yet selected
-      if (!this.leftoversImage || !this.leftoversImageConfirmed) return false;
+      if (!this.portionSize.leftovers || !this.leftoversImageConfirmed) return false;
 
       return true;
     },
@@ -247,7 +244,8 @@ export default defineComponent({
     },
 
     selectObject(idx: number) {
-      this.objectIdx = idx;
+      this.portionSize.bowlIndex = idx;
+      this.portionSize.bowl = this.bowls[idx];
       this.objectConfirmed = false;
       this.update();
     },
@@ -259,7 +257,7 @@ export default defineComponent({
     },
 
     updateServing(update: SelectedAsServedImage | null) {
-      this.servingImage = update;
+      this.portionSize.serving = update;
 
       if (this.isValid) this.clearErrors();
 
@@ -273,7 +271,7 @@ export default defineComponent({
     },
 
     updateLeftovers(update: SelectedAsServedImage | null) {
-      this.leftoversImage = update;
+      this.portionSize.leftovers = update;
 
       if (this.isValid) this.clearErrors();
 
@@ -301,12 +299,10 @@ export default defineComponent({
 
     update() {
       const state: CerealPromptState = {
+        portionSize: this.portionSize,
         panel: this.panel,
-        objectIdx: this.objectIdx,
         objectConfirmed: this.objectConfirmed,
-        servingImage: this.servingImage,
         servingImageConfirmed: this.servingImageConfirmed,
-        leftoversImage: this.leftoversImage,
         leftoversImageConfirmed: this.leftoversImageConfirmed,
         leftoversPrompt: this.leftoversPrompt,
       };

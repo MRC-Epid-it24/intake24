@@ -15,18 +15,15 @@ type StandardUnitTranslations = {
   [standardUnitTranslation in StandardUnitTranslation]: RequiredLocaleTranslation;
 };
 
-// TODO: generic mapping from DB -> should use union of methods?
-export interface UserPortionSizeMethodParameters {
-  [name: string]: string;
-}
-
 export interface AsServedParameters {
   'serving-image-set': string;
   'leftovers-image-set'?: string;
 }
 
+export type CerealType = 'hoop' | 'flake ' | 'rkris';
+
 export interface CerealParameters {
-  type: 'hoop' | 'flake ' | 'rkris';
+  type: CerealType;
 }
 
 export interface GuideImageParameters {
@@ -41,6 +38,11 @@ export interface DrinkScaleParameters {
 
 export interface StandardPortionParams extends StandardUnitTexts, StandardUnitTranslations {
   'units-count': string;
+}
+
+// TODO: generic mapping from DB -> should use union of methods?
+export interface UserPortionSizeMethodParameters {
+  [name: string]: string;
 }
 
 export interface UserPortionSizeMethod {

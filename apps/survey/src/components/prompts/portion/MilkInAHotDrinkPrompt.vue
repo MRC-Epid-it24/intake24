@@ -1,20 +1,22 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.label`) }}
+              {{ $t(`portion.${portionSize.method}.label`) }}
               <template #actions>
-                <valid-invalid-icon :valid="!!milkVolumePercentage"></valid-invalid-icon>
+                <valid-invalid-icon
+                  :valid="!!portionSize.milkVolumePercentage"
+                ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
                   <v-radio-group
-                    v-model="milkVolumePercentage"
+                    v-model="portionSize.milkVolumePercentage"
                     :column="orientation === 'column'"
                     :error="hasErrors"
                     hide-details="auto"
@@ -51,23 +53,22 @@
 import { defineComponent } from 'vue';
 
 import type { ListOption, MilkInAHotDrinkPromptProps } from '@intake24/common/prompts';
+import type { MilkInAHotDrinkState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 
-export interface MilkInAHotDrinkState {
-  milkPartIndex: number | null;
-  milkVolumePercentage: number | null;
+export interface MilkInAHotDrinkPromptState {
+  portionSize: MilkInAHotDrinkState;
 }
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',
 
-  mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkState>()],
+  mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkPromptState>()],
 
   data() {
     return {
-      method: 'milk-in-a-hot-drink',
       ...copy(this.initialState),
     };
   },
@@ -78,15 +79,18 @@ export default defineComponent({
     },
 
     isValid() {
-      return this.milkPartIndex !== null && this.milkVolumePercentage !== null;
+      return (
+        this.portionSize.milkPartIndex !== null && this.portionSize.milkVolumePercentage !== null
+      );
     },
   },
 
   watch: {
-    milkVolumePercentage(val) {
-      this.milkPartIndex = this.localeOptions.findIndex((option) => option.value === val) ?? null;
+    'portionSize.milkVolumePercentage'(val) {
+      this.portionSize.milkPartIndex =
+        this.localeOptions.findIndex((option) => option.value === val) ?? null;
 
-      this.setPanel(this.milkPartIndex === null ? 0 : -1);
+      this.setPanel(this.portionSize.milkPartIndex === null ? 0 : -1);
       this.update();
     },
   },
@@ -106,8 +110,9 @@ export default defineComponent({
     },
 
     update() {
-      const { milkPartIndex, milkVolumePercentage } = this;
-      this.$emit('update', { milkPartIndex, milkVolumePercentage });
+      const { portionSize } = this;
+
+      this.$emit('update', { portionSize });
     },
   },
 });

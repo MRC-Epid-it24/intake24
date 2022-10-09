@@ -1,6 +1,5 @@
 <template>
   <drink-scale-prompt
-    ref="promptHandleChild"
     v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
     :food-name="foodName()"
     :initial-state="initialStateNotNull"
@@ -47,12 +46,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-  },
-
-  data() {
-    return {
-      currentState: null as DrinkScalePromptState | null,
-    };
   },
 
   computed: {
@@ -109,13 +102,11 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      if (this.currentState === null) throw new Error('currentState is null');
+      const { portionSize } = this.currentStateNotNull;
 
       this.updateFood({
         foodId: this.selectedFood().id,
-        update: {
-          portionSize: this.currentState.portionSize,
-        },
+        update: { portionSize },
       });
       this.clearStoredState();
     },

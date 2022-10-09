@@ -59,39 +59,44 @@ export default defineComponent({
 
     getInitialState(): CerealPromptState {
       return {
+        portionSize: {
+          method: 'cereal',
+          type: this.parameters.type,
+          bowl: null,
+          bowlIndex: undefined,
+          serving: null,
+          leftovers: null,
+          servingWeight: 0,
+          leftoversWeight: 0,
+        },
         panel: 0,
-        objectIdx: undefined,
         objectConfirmed: false,
-        servingImage: null,
         servingImageConfirmed: false,
         leftoversPrompt: undefined,
-        leftoversImage: null,
         leftoversImageConfirmed: false,
       };
     },
 
     isValid(state: CerealPromptState): boolean {
-      const objectValid = state.objectIdx !== undefined && state.objectConfirmed;
-      const servingValid = !!state.servingImage && state.servingImageConfirmed;
+      const objectValid = state.portionSize.bowlIndex !== undefined && state.objectConfirmed;
+      const servingValid = !!state.portionSize.serving && state.servingImageConfirmed;
       const leftoversValid =
         state.leftoversPrompt === false ||
-        (!!state.leftoversImage && state.leftoversImageConfirmed);
+        (!!state.portionSize.leftovers && state.leftoversImageConfirmed);
 
       return objectValid && servingValid && leftoversValid;
     },
 
     async commitAnswer() {
-      const currentState = this.currentStateNotNull;
+      const { portionSize } = this.currentStateNotNull;
 
       this.updateFood({
         foodId: this.selectedFood().id,
         update: {
           portionSize: {
-            method: 'cereal',
-            serving: currentState.servingImage,
-            leftovers: currentState.leftoversImage,
-            servingWeight: currentState.servingImage?.weight || 0,
-            leftoversWeight: currentState.leftoversImage?.weight || 0,
+            ...portionSize,
+            servingWeight: portionSize.serving?.weight ?? 0,
+            leftoversWeight: portionSize.leftovers?.weight ?? 0,
           },
         },
       });

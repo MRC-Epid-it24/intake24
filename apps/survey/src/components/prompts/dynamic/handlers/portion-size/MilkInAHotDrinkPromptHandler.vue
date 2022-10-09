@@ -17,7 +17,7 @@ import type {
   MilkInAHotDrinkPromptProps,
   PortionSizeComponentType,
 } from '@intake24/common/prompts';
-import type { MilkInAHotDrinkState } from '@intake24/survey/components/prompts/portion/MilkInAHotDrinkPrompt.vue';
+import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion/MilkInAHotDrinkPrompt.vue';
 import {
   createPromptHandlerStoreMixin,
   foodPromptUtils,
@@ -32,7 +32,7 @@ export default defineComponent({
 
   mixins: [
     foodPromptUtils,
-    createPromptHandlerStoreMixin<MilkInAHotDrinkState>('milk-in-a-hot-drink-prompt'),
+    createPromptHandlerStoreMixin<MilkInAHotDrinkPromptState>('milk-in-a-hot-drink-prompt'),
   ],
 
   props: {
@@ -53,27 +53,33 @@ export default defineComponent({
       return this.selectedFood().id;
     },
 
-    getInitialState(): MilkInAHotDrinkState {
+    getInitialState(): MilkInAHotDrinkPromptState {
       return {
-        milkPartIndex: null,
-        milkVolumePercentage: null,
+        portionSize: {
+          method: 'milk-in-a-hot-drink',
+          milkPartIndex: null,
+          milkVolumePercentage: null,
+          servingWeight: 0,
+          leftoversWeight: 0,
+        },
       };
     },
 
-    isValid(state: MilkInAHotDrinkState): boolean {
-      return state.milkPartIndex !== null && state.milkVolumePercentage !== null;
+    isValid(state: MilkInAHotDrinkPromptState): boolean {
+      return (
+        state.portionSize.milkPartIndex !== null && state.portionSize.milkVolumePercentage !== null
+      );
     },
 
     async commitAnswer() {
-      const currentState = this.currentStateNotNull;
+      const { portionSize } = this.currentStateNotNull;
 
       this.updateFood({
         foodId: this.selectedFood().id,
         update: {
           portionSize: {
-            method: 'milk-in-a-hot-drink',
-            milkPartIndex: currentState.milkPartIndex,
-            milkVolumePercentage: currentState.milkVolumePercentage,
+            ...portionSize,
+            // TODO: recalculate drink & food
             servingWeight: 0,
             leftoversWeight: 0,
           },

@@ -1,15 +1,15 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.serving.header`) }}
+              {{ $t(`portion.${portionSize.method}.serving.header`) }}
               <template #actions>
                 <as-served-weight
                   :valid="servingImageConfirmed"
-                  :weight="servingImage?.weight"
+                  :weight="portionSize.serving?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
@@ -20,14 +20,14 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  {{ $t(`portion.${method}.serving.label`, { food: localeFoodName }) }}
+                  {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
                   <as-served-selector
                     :as-served-set-id="parameters['serving-image-set']"
-                    :initial-state="servingImage?.index"
+                    :initial-state="portionSize.serving?.index"
                     @confirm="confirmServing"
                     @update="updateServing"
                   ></as-served-selector>
@@ -37,11 +37,11 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="parameters['leftovers-image-set']">
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.leftover.header`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.leftover.header`, { food: localeFoodName }) }}
               <template #actions>
                 <as-served-weight
                   :valid="leftoversImageConfirmed"
-                  :weight="leftoversImage?.weight"
+                  :weight="portionSize.leftovers?.weight"
                 ></as-served-weight>
                 <valid-invalid-icon
                   class="ml-1"
@@ -53,7 +53,11 @@
               <v-row>
                 <v-col>
                   <p>
-                    {{ $t(`portion.${method}.leftover.question`, { food: localeFoodName }) }}
+                    {{
+                      $t(`portion.${portionSize.method}.leftover.question`, {
+                        food: localeFoodName,
+                      })
+                    }}
                   </p>
                   <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
                     <v-btn class="px-4" :value="true">
@@ -68,14 +72,16 @@
               <template v-if="leftoversPrompt">
                 <v-row>
                   <v-col>
-                    {{ $t(`portion.${method}.leftover.label`, { food: localeFoodName }) }}
+                    {{
+                      $t(`portion.${portionSize.method}.leftover.label`, { food: localeFoodName })
+                    }}
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <as-served-selector
                       :as-served-set-id="parameters['leftovers-image-set']"
-                      :initial-state="leftoversImage?.index"
+                      :initial-state="portionSize.leftovers?.index"
                       :type="'leftover'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"
@@ -106,7 +112,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { AsServedPromptProps } from '@intake24/common/prompts';
-import type { SelectedAsServedImage } from '@intake24/common/types';
+import type { AsServedState, SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedParameters } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
@@ -114,10 +120,9 @@ import createBasePortion from './createBasePortion';
 import { AsServedSelector, AsServedWeight } from './selectors';
 
 export interface AsServedPromptState {
+  portionSize: AsServedState;
   panel: number;
-  servingImage: SelectedAsServedImage | null;
   servingImageConfirmed: boolean;
-  leftoversImage: SelectedAsServedImage | null;
   leftoversImageConfirmed: boolean;
   leftoversPrompt?: boolean;
 }
@@ -138,8 +143,6 @@ export default defineComponent({
 
   data() {
     return {
-      method: 'as-served',
-
       ...copy(this.initialState),
     };
   },
@@ -155,13 +158,13 @@ export default defineComponent({
 
     isValid(): boolean {
       // serving not yet selected
-      if (!this.servingImage || !this.servingImageConfirmed) return false;
+      if (!this.portionSize.serving || !this.servingImageConfirmed) return false;
 
       // Food has no leftovers or leftovers have been confirmed
       if (!this.hasLeftovers || this.leftoversPrompt === false) return true;
 
       // leftovers not yet selected
-      if (!this.leftoversImage || !this.leftoversImageConfirmed) return false;
+      if (!this.portionSize.leftovers || !this.leftoversImageConfirmed) return false;
 
       return true;
     },
@@ -182,7 +185,7 @@ export default defineComponent({
     },
 
     updateServing(update: SelectedAsServedImage | null) {
-      this.servingImage = update;
+      this.portionSize.serving = update;
 
       if (this.isValid) this.clearErrors();
 
@@ -196,7 +199,7 @@ export default defineComponent({
     },
 
     updateLeftovers(update: SelectedAsServedImage | null) {
-      this.leftoversImage = update;
+      this.portionSize.leftovers = update;
 
       if (this.isValid) this.clearErrors();
 
@@ -224,10 +227,9 @@ export default defineComponent({
 
     update() {
       const state: AsServedPromptState = {
+        portionSize: this.portionSize,
         panel: this.panel,
-        servingImage: this.servingImage,
         servingImageConfirmed: this.servingImageConfirmed,
-        leftoversImage: this.leftoversImage,
         leftoversImageConfirmed: this.leftoversImageConfirmed,
         leftoversPrompt: this.leftoversPrompt,
       };

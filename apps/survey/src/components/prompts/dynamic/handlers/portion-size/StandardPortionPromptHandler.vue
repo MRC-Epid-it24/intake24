@@ -19,7 +19,7 @@ import type {
   StandardPortionPromptProps,
 } from '@intake24/common/prompts';
 import type { StandardPortionParams } from '@intake24/common/types/http';
-import type { StandardPortionState } from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
+import type { StandardPortionPromptState } from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import {
   createPromptHandlerStoreMixin,
   foodPromptUtils,
@@ -34,7 +34,7 @@ export default defineComponent({
 
   mixins: [
     foodPromptUtils,
-    createPromptHandlerStoreMixin<StandardPortionState>('standard-portion-prompt'),
+    createPromptHandlerStoreMixin<StandardPortionPromptState>('standard-portion-prompt'),
   ],
 
   props: {
@@ -64,34 +64,36 @@ export default defineComponent({
       return this.selectedFood().id;
     },
 
-    getInitialState(): StandardPortionState {
+    getInitialState(): StandardPortionPromptState {
       return {
-        unit: null,
-        quantity: { whole: 1, fraction: 0 },
+        portionSize: {
+          method: 'standard-portion',
+          unit: null,
+          quantity: { whole: 1, fraction: 0 },
+          servingWeight: 0,
+          leftoversWeight: 0,
+        },
         quantityConfirmed: false,
       };
     },
 
-    isValid(state: StandardPortionState): boolean {
-      return state.unit !== null && state.quantityConfirmed;
+    isValid(state: StandardPortionPromptState): boolean {
+      return state.portionSize.unit !== null && state.quantityConfirmed;
     },
 
     commitAnswer() {
-      const currentState = this.currentStateNotNull;
+      const { portionSize } = this.currentStateNotNull;
       const { conversionFactor } = this.selectedPortionSize();
 
       this.updateFood({
         foodId: this.selectedFood().id,
         update: {
           portionSize: {
-            method: 'standard-portion',
-            unit: currentState.unit,
-            quantity: currentState.quantity,
+            ...portionSize,
             servingWeight:
-              (currentState.unit?.weight ?? 0) *
-              (currentState.quantity.whole + currentState.quantity.fraction) *
+              (portionSize.unit?.weight ?? 0) *
+              ((portionSize.quantity?.whole ?? 0) + (portionSize.quantity?.fraction ?? 0)) *
               conversionFactor,
-            leftoversWeight: 0,
           },
         },
       });

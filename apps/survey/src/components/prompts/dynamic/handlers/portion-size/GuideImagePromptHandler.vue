@@ -1,6 +1,5 @@
 <template>
   <guide-image-prompt
-    ref="promptHandleChild"
     v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
     :conversion-factor="selectedPortionSize().conversionFactor"
     :food-name="foodName()"
@@ -22,7 +21,6 @@ import type { GuideImagePromptState } from '@intake24/survey/components/prompts/
 import {
   createPromptHandlerStoreMixin,
   foodPromptUtils,
-  mealPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { GuideImagePrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
@@ -34,7 +32,6 @@ export default defineComponent({
 
   mixins: [
     foodPromptUtils,
-    mealPromptUtils,
     createPromptHandlerStoreMixin<GuideImagePromptState>('guide-image-prompt'),
   ],
 
@@ -92,13 +89,11 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      if (this.currentState === null) throw new Error('currentState is null');
+      const { portionSize } = this.currentStateNotNull;
 
       this.updateFood({
         foodId: this.selectedFood().id,
-        update: {
-          portionSize: this.currentState.portionSize,
-        },
+        update: { portionSize },
       });
 
       this.clearStoredState();

@@ -59,20 +59,25 @@ export default defineComponent({
 
     getInitialState(): AsServedPromptState {
       return {
+        portionSize: {
+          method: 'as-served',
+          serving: null,
+          leftovers: null,
+          servingWeight: 0,
+          leftoversWeight: 0,
+        },
         panel: 0,
-        servingImage: null,
         servingImageConfirmed: false,
         leftoversPrompt: undefined,
-        leftoversImage: null,
         leftoversImageConfirmed: false,
       };
     },
 
     isValid(state: AsServedPromptState): boolean {
-      const servingValid = !!state.servingImage && state.servingImageConfirmed;
+      const servingValid = !!state.portionSize.serving && state.servingImageConfirmed;
       const leftoversValid =
         state.leftoversPrompt === false ||
-        (!!state.leftoversImage && state.leftoversImageConfirmed);
+        (!!state.portionSize.leftovers && state.leftoversImageConfirmed);
 
       const noLeftovers = !this.parameters['leftovers-image-set'];
 
@@ -80,17 +85,15 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      const currentState = this.currentStateNotNull;
+      const { portionSize } = this.currentStateNotNull;
 
       this.updateFood({
         foodId: this.selectedFood().id,
         update: {
           portionSize: {
-            method: 'as-served',
-            serving: currentState.servingImage,
-            leftovers: currentState.leftoversImage,
-            servingWeight: currentState.servingImage?.weight || 0,
-            leftoversWeight: currentState.leftoversImage?.weight || 0,
+            ...portionSize,
+            servingWeight: portionSize.serving?.weight ?? 0,
+            leftoversWeight: portionSize.leftovers?.weight ?? 0,
           },
         },
       });

@@ -1,9 +1,9 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panel" flat>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${method}.label`">
+          <i18n :path="`portion.${portionSize.method}.label`">
             <template #food>
               <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
@@ -13,7 +13,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-radio-group v-model="unit" @change="selectMethod">
+          <v-radio-group v-model="portionSize.unit" @change="selectMethod">
             <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
               <template #label>
                 <span v-html="estimateInLabel(unit.name)"></span>
@@ -25,17 +25,21 @@
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
-            v-if="unit"
-            :path="`portion.${method}.howMany.${unit.omitFoodDescription ? '_' : 'withFood'}`"
+            v-if="portionSize.unit"
+            :path="`portion.${portionSize.method}.howMany.${
+              portionSize.unit.omitFoodDescription ? '_' : 'withFood'
+            }`"
           >
             <template #unit>
-              <span v-html="getLocaleContent(standardUnitRefs[unit.name].howMany)"></span>
+              <span
+                v-html="getLocaleContent(standardUnitRefs[portionSize.unit.name].howMany)"
+              ></span>
             </template>
             <template #food>
               <span class="font-weight-medium">{{ localeFoodName }}</span>
             </template>
           </i18n>
-          <template v-else>{{ $t(`portion.${method}.howMany.placeholder`) }}</template>
+          <template v-else>{{ $t(`portion.${portionSize.method}.howMany.placeholder`) }}</template>
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -43,7 +47,7 @@
         <v-expansion-panel-content>
           <v-row justify="center">
             <v-col>
-              <quantity-card v-model="quantity" fraction whole></quantity-card>
+              <quantity-card v-model="portionSize.quantity" fraction whole></quantity-card>
             </v-col>
           </v-row>
           <v-row justify="center">
@@ -52,7 +56,7 @@
             </v-col>
             <v-col md="4" xs="12">
               <v-btn block color="success" @click="confirmQuantity">
-                {{ $t(`portion.${method}.continue`) }}
+                {{ $t(`portion.${portionSize.method}.continue`) }}
               </v-btn>
             </v-col>
           </v-row>
@@ -69,8 +73,12 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { QuantityValues, StandardPortionPromptProps } from '@intake24/common/prompts';
-import type { RequiredLocaleTranslation, StandardPortionUnit } from '@intake24/common/types';
+import type { StandardPortionPromptProps } from '@intake24/common/prompts';
+import type {
+  RequiredLocaleTranslation,
+  StandardPortionState,
+  StandardPortionUnit,
+} from '@intake24/common/types';
 import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { ErrorAlert } from '@intake24/survey/components/elements';
@@ -83,9 +91,8 @@ export type StandardUnitRefs = Record<
   { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
 >;
 
-export type StandardPortionState = {
-  unit: StandardPortionUnit | null;
-  quantity: QuantityValues;
+export type StandardPortionPromptState = {
+  portionSize: StandardPortionState;
   quantityConfirmed: boolean;
 };
 
@@ -94,7 +101,7 @@ export default defineComponent({
 
   components: { ErrorAlert, QuantityCard },
 
-  mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionState>()],
+  mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionPromptState>()],
 
   props: {
     parameters: {
@@ -105,7 +112,6 @@ export default defineComponent({
 
   data() {
     return {
-      method: 'standard-portion',
       standardUnitRefs: {} as StandardUnitRefs,
       ...copy(this.initialState),
     };
@@ -135,7 +141,7 @@ export default defineComponent({
     },
 
     unitValid() {
-      return !!this.unit;
+      return !!this.portionSize.unit;
     },
 
     quantityValid() {
@@ -150,8 +156,8 @@ export default defineComponent({
   async mounted() {
     await this.fetchStandardUnits();
 
-    if (!this.unit && this.standardUnits.length === 1) {
-      this.unit = this.standardUnits[0];
+    if (!this.portionSize.unit && this.standardUnits.length === 1) {
+      this.portionSize.unit = this.standardUnits[0];
       this.selectMethod();
     }
   },
@@ -174,7 +180,7 @@ export default defineComponent({
     },
 
     estimateInLabel(unit: string) {
-      return this.$t(`portion.${this.method}.estimateIn`, {
+      return this.$t(`portion.${this.portionSize.method}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
       });
     },
@@ -205,8 +211,9 @@ export default defineComponent({
     },
 
     update() {
-      const { unit, quantity, quantityConfirmed } = this;
-      this.$emit('update', { unit, quantity, quantityConfirmed });
+      const { portionSize, quantityConfirmed } = this;
+
+      this.$emit('update', { portionSize, quantityConfirmed });
     },
   },
 });
