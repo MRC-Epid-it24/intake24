@@ -156,32 +156,43 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
+    servingValid(): boolean {
+      return !!(this.portionSize.serving && this.servingImageConfirmed);
+    },
+
+    leftoversValid(): boolean {
+      return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
+    },
+
     isValid(): boolean {
       // serving not yet selected
-      if (!this.portionSize.serving || !this.servingImageConfirmed) return false;
+      if (!this.servingValid) return false;
 
       // Food has no leftovers or leftovers have been confirmed
       if (!this.hasLeftovers || this.leftoversPrompt === false) return true;
 
       // leftovers not yet selected
-      if (!this.portionSize.leftovers || !this.leftoversImageConfirmed) return false;
+      if (!this.leftoversValid) return false;
 
       return true;
     },
   },
 
   methods: {
-    setPanel(panelIdComplete: number) {
+    updatePanel() {
       if (this.isValid) {
-        this.panel = -1;
+        this.closePanels();
         return;
       }
 
-      // Completed asServed
-      if (panelIdComplete === 0) this.panel = this.leftoversImageConfirmed ? -1 : 1;
+      if (!this.servingValid) {
+        this.setPanel(0);
+        return;
+      }
 
-      // Completed leftover
-      if (panelIdComplete === 1) this.panel = !this.servingImageConfirmed ? 0 : -1;
+      this.setPanel(
+        !this.hasLeftovers || this.leftoversPrompt === false || this.leftoversValid ? -1 : 1
+      );
     },
 
     updateServing(update: SelectedAsServedImage | null) {
@@ -194,7 +205,7 @@ export default defineComponent({
 
     confirmServing() {
       this.servingImageConfirmed = true;
-      this.setPanel(0);
+      this.updatePanel();
       this.update();
     },
 
@@ -208,7 +219,7 @@ export default defineComponent({
 
     confirmLeftovers() {
       this.leftoversImageConfirmed = true;
-      this.setPanel(1);
+      this.updatePanel();
       this.update();
     },
 

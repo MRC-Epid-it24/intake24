@@ -93,6 +93,7 @@ export type StandardUnitRefs = Record<
 
 export type StandardPortionPromptState = {
   portionSize: StandardPortionState;
+  panel: number;
   quantityConfirmed: boolean;
 };
 
@@ -179,6 +180,20 @@ export default defineComponent({
       }, {});
     },
 
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
+
+      if (!this.unitValid) {
+        this.setPanel(0);
+        return;
+      }
+
+      this.setPanel(this.quantityValid ? -1 : 1);
+    },
+
     estimateInLabel(unit: string) {
       return this.$t(`portion.${this.portionSize.method}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
@@ -187,13 +202,13 @@ export default defineComponent({
 
     selectMethod() {
       this.clearErrors();
-      this.setPanel(1);
+      this.updatePanel();
       this.update();
     },
 
     confirmQuantity() {
       this.quantityConfirmed = true;
-      this.closePanels();
+      this.updatePanel();
       this.update();
     },
 
@@ -211,9 +226,9 @@ export default defineComponent({
     },
 
     update() {
-      const { portionSize, quantityConfirmed } = this;
+      const { portionSize, panel, quantityConfirmed } = this;
 
-      this.$emit('update', { portionSize, quantityConfirmed });
+      this.$emit('update', { portionSize, panel, quantityConfirmed });
     },
   },
 });

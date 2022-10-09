@@ -62,6 +62,7 @@ export default defineComponent({
           servingWeight: 0,
           leftoversWeight: 0,
         },
+        panel: 0,
       };
     },
 

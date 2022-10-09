@@ -2,6 +2,7 @@ import type { UnwrapRef } from 'vue';
 import { defineComponent, reactive } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore } from '@intake24/survey/stores';
 
 export function createPromptHandlerStoreMixin<T extends object>(promptType: ComponentType) {
@@ -43,7 +44,9 @@ export function createPromptHandlerStoreMixin<T extends object>(promptType: Comp
       const storedState = this.stateStore.prompts[this.getFoodOrMealId()]?.[this.promptId] as T;
 
       // reactive does not work well with generic types, see https://github.com/vuejs/core/issues/2136
-      this.initialState = reactive(storedState ?? this.getInitialState()) as UnwrapRef<T>;
+      this.initialState = reactive(
+        storedState ? merge<T>(this.getInitialState(), storedState) : this.getInitialState()
+      ) as UnwrapRef<T>;
       this.currentState = this.initialState;
     },
 

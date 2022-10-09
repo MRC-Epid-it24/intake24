@@ -94,7 +94,7 @@ export default defineComponent({
     },
   },
 
-  async mounted() {
+  mounted() {
     if (this.option === undefined && this.availableMethods.length === 1) this.option = 0;
   },
 

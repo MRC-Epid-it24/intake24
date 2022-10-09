@@ -166,6 +166,20 @@ export default defineComponent({
       this.guideImageData = { ...data };
     },
 
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
+
+      if (!this.objectValid) {
+        this.setPanel(0);
+        return;
+      }
+
+      this.setPanel(this.quantityValid ? -1 : 1);
+    },
+
     getCurrentState(idx: number): GuideImageState {
       return {
         method: 'guide-image',
@@ -192,7 +206,7 @@ export default defineComponent({
 
     confirmObject() {
       this.objectConfirmed = true;
-      this.setPanel(1);
+      this.updatePanel();
       this.update();
     },
 
@@ -204,7 +218,7 @@ export default defineComponent({
 
     confirmQuantity() {
       this.quantityConfirmed = true;
-      this.setPanel(-1);
+      this.updatePanel();
       this.update();
     },
 

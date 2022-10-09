@@ -60,6 +60,7 @@ import createBasePortion from './createBasePortion';
 
 export interface MilkInAHotDrinkPromptState {
   portionSize: MilkInAHotDrinkState;
+  panel: number;
 }
 
 export default defineComponent({
@@ -78,10 +79,14 @@ export default defineComponent({
       return this.options[this.$i18n.locale] ?? this.options.en;
     },
 
-    isValid() {
+    milkValid() {
       return (
         this.portionSize.milkPartIndex !== null && this.portionSize.milkVolumePercentage !== null
       );
+    },
+
+    isValid() {
+      return this.milkValid;
     },
   },
 
@@ -90,12 +95,21 @@ export default defineComponent({
       this.portionSize.milkPartIndex =
         this.localeOptions.findIndex((option) => option.value === val) ?? null;
 
-      this.setPanel(this.portionSize.milkPartIndex === null ? 0 : -1);
+      this.updatePanel();
       this.update();
     },
   },
 
   methods: {
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
+
+      this.setPanel(this.milkValid ? -1 : 0);
+    },
+
     setErrors() {
       this.errors = [];
     },
@@ -110,9 +124,9 @@ export default defineComponent({
     },
 
     update() {
-      const { portionSize } = this;
+      const { portionSize, panel } = this;
 
-      this.$emit('update', { portionSize });
+      this.$emit('update', { portionSize, panel });
     },
   },
 });

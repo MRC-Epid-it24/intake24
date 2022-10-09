@@ -213,18 +213,26 @@ export default defineComponent({
       );
     },
 
+    servingValid(): boolean {
+      return !!(this.portionSize.serving && this.servingImageConfirmed);
+    },
+
+    leftoversValid(): boolean {
+      return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
+    },
+
     isValid(): boolean {
       // object not yet selected
       if (!this.objectValid) return false;
 
       // serving not yet selected
-      if (!this.portionSize.serving || !this.servingImageConfirmed) return false;
+      if (!this.servingValid) return false;
 
       // no leftovers
       if (this.leftoversPrompt === false) return true;
 
       // leftovers not yet selected
-      if (!this.portionSize.leftovers || !this.leftoversImageConfirmed) return false;
+      if (!this.leftoversValid) return false;
 
       return true;
     },
@@ -243,6 +251,25 @@ export default defineComponent({
       this.imageMapData = { ...imageMapData };
     },
 
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
+
+      if (!this.objectValid) {
+        this.setPanel(0);
+        return;
+      }
+
+      if (!this.servingValid) {
+        this.setPanel(1);
+        return;
+      }
+
+      this.setPanel(this.leftoversPrompt === false || this.leftoversValid ? -1 : 2);
+    },
+
     selectObject(idx: number) {
       this.portionSize.bowlIndex = idx;
       this.portionSize.bowl = this.bowls[idx];
@@ -252,7 +279,7 @@ export default defineComponent({
 
     confirmObject() {
       this.objectConfirmed = true;
-      this.setPanel(1);
+      this.updatePanel();
       this.update();
     },
 
@@ -266,7 +293,7 @@ export default defineComponent({
 
     confirmServing() {
       this.servingImageConfirmed = true;
-      this.setPanel(2);
+      this.updatePanel();
       this.update();
     },
 
@@ -280,7 +307,7 @@ export default defineComponent({
 
     confirmLeftovers() {
       this.leftoversImageConfirmed = true;
-      this.setPanel(-1);
+      this.updatePanel();
       this.update();
     },
 
