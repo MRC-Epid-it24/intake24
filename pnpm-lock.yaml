@@ -601,7 +601,7 @@ importers:
       ajv-formats: ^2.1.1
       deepmerge: ^4.2.2
       execa: ^5.1.1
-      fast-copy: ^2.1.7
+      fast-copy: ^3.0.0
       fs-extra: ^10.1.0
       lodash: ^4.17.21
       nanoid: ^3.3.4
@@ -611,7 +611,7 @@ importers:
       ajv: 8.11.0
       ajv-formats: 2.1.1
       deepmerge: 4.2.2
-      fast-copy: 2.1.7
+      fast-copy: 3.0.0
       lodash: 4.17.21
       nanoid: 3.3.4
       pluralize: 8.0.0
@@ -6741,8 +6741,8 @@ packages:
       - supports-color
     dev: false
 
-  /fast-copy/2.1.7:
-    resolution: {integrity: sha512-ozrGwyuCTAy7YgFCua8rmqmytECYk/JYAMXcswOcm0qvGoE3tPb7ivBeIHTOK2DiapBhDZgacIhzhQIKU5TCfA==}
+  /fast-copy/3.0.0:
+    resolution: {integrity: sha512-4HzS+9pQ5Yxtv13Lhs1Z1unMXamBdn5nA4bEi1abYpDNSpSp7ODYQ1KPMF6nTatfEzgH6/zPvXKU1zvHiUjWlA==}
     dev: false
 
   /fast-csv/4.3.6:
