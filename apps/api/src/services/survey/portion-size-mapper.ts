@@ -29,6 +29,28 @@ export const asServedMapper = (
   ];
 };
 
+export const cerealMapper = (
+  foodId: string,
+  state: PortionSizeStates['cereal']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const { type, bowl, bowlIndex, leftoversWeight, servingWeight, serving, leftovers } = state;
+
+  return [
+    { foodId, name: 'type', value: type },
+    { foodId, name: 'bowl', value: bowl ?? '' },
+    { foodId, name: 'type', value: bowlIndex?.toString() ?? '' },
+    { foodId, name: 'leftovers', value: (!!leftovers).toString() },
+    { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
+    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '0' },
+    { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '0' },
+  ];
+};
+
 export const guideImageMapper = (
   foodId: string,
   state: PortionSizeStates['guide-image']
@@ -87,7 +109,7 @@ export const portionSizeMappers: Record<
   (...arg: any[]) => SurveySubmissionPortionSizeFieldCreationAttributes[]
 > = {
   'as-served': asServedMapper,
-  cereal: genericMapper,
+  cereal: cerealMapper,
   'drink-scale': drinkScaleMapper,
   'guide-image': guideImageMapper,
   'milk-in-a-hot-drink': genericMapper,
