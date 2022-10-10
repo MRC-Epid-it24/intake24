@@ -105,7 +105,7 @@ export default defineComponent({
       } = this.options;
       const { search } = this;
 
-      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
+      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : undefined;
 
       const {
         data: { data, meta },

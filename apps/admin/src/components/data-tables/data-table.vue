@@ -126,7 +126,7 @@ export default defineComponent({
         sortDesc: [desc],
       } = this.options;
 
-      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : null;
+      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : undefined;
 
       const {
         data: { data, meta },
