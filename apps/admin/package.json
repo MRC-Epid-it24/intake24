@@ -22,7 +22,7 @@
     "@fortawesome/fontawesome-free": "^6.2.0",
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^9.3.0",
-    "axios": "^0.27.2",
+    "axios": "^1.1.2",
     "cronstrue": "^2.12.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
