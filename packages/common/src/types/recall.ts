@@ -16,6 +16,63 @@ export type MealFlag = 'free-entry-complete';
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
+// Portion size parameters
+
+export type CerealType = 'hoop' | 'flake' | 'rkris';
+
+export type StandardUnitString =
+  | `unit${number}-name`
+  | `unit${number}-omit-food-description`
+  | `unit${number}-weight`;
+
+export type StandardUnitTranslation = `unit${number}-howMany` | `unit${number}-estimateIn`;
+
+export type StandardUnitTexts = {
+  [standardUnitString in StandardUnitString]: string;
+};
+
+export type StandardUnitTranslations = {
+  [standardUnitTranslation in StandardUnitTranslation]: RequiredLocaleTranslation;
+};
+
+export type PortionSizeParameters = {
+  'as-served': {
+    'serving-image-set': string;
+    'leftovers-image-set'?: string;
+  };
+  cereal: {
+    type: CerealType;
+  };
+  'drink-scale': {
+    'drinkware-id': string;
+    'initial-fill-level': string;
+    'skip-fill-level': string;
+  };
+  'guide-image': {
+    'guide-image-id': string;
+  };
+  'milk-in-a-hot-drink': never;
+  'milk-on-cereal': never;
+  pizza: never;
+  'standard-portion': StandardUnitTexts &
+    StandardUnitTranslations & {
+      'units-count': string;
+    };
+  weight: never;
+};
+
+export type AsServedParameters = PortionSizeParameters['as-served'];
+
+export type CerealParameters = PortionSizeParameters['cereal'];
+
+export type DrinkScaleParameters = PortionSizeParameters['drink-scale'];
+
+export type GuideImageParameters = PortionSizeParameters['guide-image'];
+
+export type StandardPortionParams = PortionSizeParameters['standard-portion'];
+
+// Portion size states
+
 export interface PortionSizeStateBase {
   servingWeight: number | null;
   leftoversWeight: number | null;

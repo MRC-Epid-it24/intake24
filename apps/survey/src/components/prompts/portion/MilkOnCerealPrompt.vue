@@ -94,7 +94,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!continueEnabled" @click="submit"></continue>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -146,9 +146,9 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
-    isValid() {
+    /* isValid() {
       return this.foodSelected && this.portionMethodSelected && this.portionSelected;
-    },
+    }, */
   },
 
   methods: {

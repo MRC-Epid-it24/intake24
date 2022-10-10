@@ -123,7 +123,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!continueEnabled" @click="submit"></continue>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -133,8 +133,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { CerealPromptProps } from '@intake24/common/prompts';
-import type { CerealState, SelectedAsServedImage } from '@intake24/common/types';
-import type { CerealParameters, ImageMapResponse } from '@intake24/common/types/http';
+import type { CerealParameters, CerealState, SelectedAsServedImage } from '@intake24/common/types';
+import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
@@ -182,7 +182,7 @@ export default defineComponent({
     },
 
     disabledLeftovers() {
-      return this.leftovers;
+      return !this.leftovers;
     },
 
     localeFoodName(): string {
@@ -223,22 +223,6 @@ export default defineComponent({
 
     leftoversValid(): boolean {
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
-    },
-
-    isValid(): boolean {
-      // object not yet selected
-      if (!this.objectValid) return false;
-
-      // serving not yet selected
-      if (!this.servingValid) return false;
-
-      // Leftover disables || leftovers have been confirmed
-      if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
-
-      // leftovers not yet selected
-      if (!this.leftoversValid) return false;
-
-      return true;
     },
   },
 

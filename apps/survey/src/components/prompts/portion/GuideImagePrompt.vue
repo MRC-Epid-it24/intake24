@@ -67,7 +67,7 @@
     </v-row>
     <template #actions>
       <v-form ref="form" @submit.prevent="submit">
-        <continue :disabled="!continueEnabled" @click="submit"></continue>
+        <continue :disabled="!isValid" @click="submit"></continue>
       </v-form>
     </template>
   </portion-layout>
@@ -78,8 +78,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { GuideImagePromptProps, QuantityValues } from '@intake24/common/prompts';
-import type { EncodedFood, GuideImageState } from '@intake24/common/types';
-import type { GuideImageParameters, GuideImageResponse } from '@intake24/common/types/http/foods';
+import type { EncodedFood, GuideImageParameters, GuideImageState } from '@intake24/common/types';
+import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
@@ -146,10 +146,6 @@ export default defineComponent({
 
     quantityValid() {
       return this.quantityConfirmed;
-    },
-
-    isValid() {
-      return this.objectValid && this.quantityValid;
     },
   },
 

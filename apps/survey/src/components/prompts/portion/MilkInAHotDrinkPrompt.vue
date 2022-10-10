@@ -44,7 +44,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!continueEnabled" @click="submit"></continue>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -83,10 +83,6 @@ export default defineComponent({
       return (
         this.portionSize.milkPartIndex !== null && this.portionSize.milkVolumePercentage !== null
       );
-    },
-
-    isValid() {
-      return this.milkValid;
     },
   },
 

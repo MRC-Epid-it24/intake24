@@ -85,7 +85,7 @@
     </v-row>
     <template #actions>
       <v-form ref="form" @submit.prevent="submit">
-        <continue :disabled="!continueEnabled" @click="submit"></continue>
+        <continue :disabled="!isValid" @click="submit"></continue>
       </v-form>
     </template>
   </portion-layout>
@@ -96,8 +96,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
-import type { DrinkScaleState } from '@intake24/common/types';
-import type { DrinkScaleParameters } from '@intake24/common/types/http';
+import type { DrinkScaleParameters, DrinkScaleState } from '@intake24/common/types';
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 
 import createBasePortion from './createBasePortion';
@@ -172,10 +171,6 @@ export default defineComponent({
 
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
-    },
-
-    isValid() {
-      return this.sliderValue > 0;
     },
   },
 

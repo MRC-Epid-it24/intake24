@@ -1,10 +1,15 @@
 <template>
   <standard-portion-prompt
-    v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
-    :food-name="foodName()"
-    :initial-state="initialStateNotNull"
+    v-bind="{
+      foodName: foodName(),
+      initialState: state,
+      isValid,
+      parameters,
+      promptComponent,
+      promptProps,
+    }"
     @continue="$emit('continue')"
-    @update="onUpdate"
+    @update="update"
   >
   </standard-portion-prompt>
 </template>
@@ -18,11 +23,10 @@ import type {
   PortionSizeComponentType,
   StandardPortionPromptProps,
 } from '@intake24/common/prompts';
-import type { StandardPortionParams } from '@intake24/common/types/http';
 import type { StandardPortionPromptState } from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
 import {
-  createPromptHandlerStoreMixin,
-  foodPromptUtils,
+  useFoodPromptUtils,
+  usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { StandardPortionPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
@@ -32,58 +36,74 @@ export default defineComponent({
 
   components: { StandardPortionPrompt },
 
-  mixins: [
-    foodPromptUtils,
-    createPromptHandlerStoreMixin<StandardPortionPromptState>('standard-portion-prompt'),
-  ],
-
   props: {
-    promptProps: {
-      type: Object as PropType<StandardPortionPromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
+    promptId: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<StandardPortionPromptProps>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
+      useFoodPromptUtils<'standard-portion'>();
+
+    const getInitialState = (): StandardPortionPromptState => ({
+      portionSize: {
+        method: 'standard-portion',
+        unit: null,
+        quantity: { whole: 1, fraction: 0 },
+        servingWeight: 0,
+        leftoversWeight: 0,
+      },
+      panel: 0,
+      quantityConfirmed: false,
+    });
+
+    const { state, update, clearStoredState } = usePromptHandlerStore(
+      props.promptId,
+      props.promptComponent,
+      getInitialState
+    );
+
+    return {
+      encodedSelectedFood,
+      foodName,
+      parameters,
+      selectedFood,
+      selectedPortionSize,
+      state,
+      update,
+      clearStoredState,
+    };
   },
 
   computed: {
-    parameters(): StandardPortionParams {
-      if (this.selectedPortionSize().method !== 'standard-portion')
-        throw new Error('Selected portion size method must be "standard-portion"');
+    unitValid() {
+      return !!this.state.portionSize.unit;
+    },
 
-      return this.selectedPortionSize().parameters as unknown as StandardPortionParams;
+    quantityValid() {
+      return this.state.quantityConfirmed;
+    },
+
+    isValid() {
+      return this.unitValid && this.quantityValid;
     },
   },
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    getFoodOrMealId(): number {
-      return this.selectedFood().id;
-    },
-
-    getInitialState(): StandardPortionPromptState {
-      return {
-        portionSize: {
-          method: 'standard-portion',
-          unit: null,
-          quantity: { whole: 1, fraction: 0 },
-          servingWeight: 0,
-          leftoversWeight: 0,
-        },
-        panel: 0,
-        quantityConfirmed: false,
-      };
-    },
-
-    isValid(state: StandardPortionPromptState): boolean {
-      return state.portionSize.unit !== null && state.quantityConfirmed;
-    },
-
     commitAnswer() {
-      const { portionSize } = this.currentStateNotNull;
+      const { portionSize } = this.state;
       const { conversionFactor } = this.selectedPortionSize();
 
       this.updateFood({
@@ -98,6 +118,8 @@ export default defineComponent({
           },
         },
       });
+
+      this.clearStoredState();
     },
   },
 });

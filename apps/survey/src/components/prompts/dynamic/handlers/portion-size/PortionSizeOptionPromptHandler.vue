@@ -1,10 +1,15 @@
 <template>
   <portion-size-option-prompt
-    v-bind="{ continueEnabled, promptComponent, promptProps, availableMethods }"
-    :food-name="foodName()"
-    :initial-state="initialStateNotNull"
+    v-bind="{
+      foodName: foodName(),
+      initialState: state,
+      isValid,
+      promptComponent,
+      promptProps,
+      availableMethods,
+    }"
     @continue="$emit('continue')"
-    @update="onUpdate"
+    @update="update"
   >
   </portion-size-option-prompt>
 </template>
@@ -21,9 +26,8 @@ import type {
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import type { PortionSizeOptionState } from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
 import {
-  createPromptHandlerStoreMixin,
-  foodPromptUtils,
-  mealPromptUtils,
+  useFoodPromptUtils,
+  usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
@@ -33,52 +37,62 @@ export default defineComponent({
 
   components: { PortionSizeOptionPrompt },
 
-  mixins: [
-    foodPromptUtils,
-    mealPromptUtils,
-    createPromptHandlerStoreMixin<PortionSizeOptionState>('portion-size-option-prompt'),
-  ],
-
   props: {
-    promptProps: {
-      type: Object as PropType<PortionSizeOptionPromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
+    promptId: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<PortionSizeOptionPromptProps>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const { encodedSelectedFood, foodName } = useFoodPromptUtils();
+
+    const getInitialState = (): PortionSizeOptionState => ({
+      option: encodedSelectedFood().portionSizeMethodIndex,
+    });
+
+    const { state, update, clearStoredState } = usePromptHandlerStore(
+      props.promptId,
+      props.promptComponent,
+      getInitialState
+    );
+
+    return {
+      encodedSelectedFood,
+      foodName,
+      state,
+      update,
+      clearStoredState,
+    };
   },
 
   computed: {
     availableMethods(): UserPortionSizeMethod[] {
       return this.encodedSelectedFood().data.portionSizeMethods;
     },
+
+    isValid(): boolean {
+      return this.state.option !== null;
+    },
   },
 
   methods: {
     ...mapActions(useSurvey, ['replaceFood']),
-
-    getInitialState(): PortionSizeOptionState {
-      return {
-        option: this.encodedSelectedFood().portionSizeMethodIndex,
-      };
-    },
-
-    isValid(state: PortionSizeOptionState): boolean {
-      return state.option !== null;
-    },
-
-    getFoodOrMealId(): number {
-      return this.selectedFood().id;
-    },
 
     commitAnswer() {
       const encodedSelectedFood = this.encodedSelectedFood();
 
       this.replaceFood({
         foodId: encodedSelectedFood.id,
-        food: { ...encodedSelectedFood, portionSizeMethodIndex: this.currentStateNotNull.option },
+        food: { ...encodedSelectedFood, portionSizeMethodIndex: this.state.option },
       });
 
       this.clearStoredState();

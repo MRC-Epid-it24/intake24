@@ -77,12 +77,6 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    isValid() {
-      return this.option !== undefined;
-    },
-  },
-
   watch: {
     option(val) {
       this.clearErrors();

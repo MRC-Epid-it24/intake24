@@ -64,7 +64,7 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <continue :disabled="!continueEnabled" @click="submit"></continue>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -76,10 +76,11 @@ import { defineComponent } from 'vue';
 import type { StandardPortionPromptProps } from '@intake24/common/prompts';
 import type {
   RequiredLocaleTranslation,
+  StandardPortionParams,
   StandardPortionState,
   StandardPortionUnit,
 } from '@intake24/common/types';
-import type { StandardPortionParams, StandardUnitResponse } from '@intake24/common/types/http';
+import type { StandardUnitResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { ErrorAlert } from '@intake24/survey/components/elements';
 
@@ -147,10 +148,6 @@ export default defineComponent({
 
     quantityValid() {
       return this.quantityConfirmed;
-    },
-
-    isValid() {
-      return this.unitValid && this.quantityValid;
     },
   },
 

@@ -1,10 +1,14 @@
 <template>
   <milk-in-a-hot-drink-prompt
-    v-bind="{ continueEnabled, promptComponent, promptProps }"
-    :food-name="foodName()"
-    :initial-state="initialStateNotNull"
+    v-bind="{
+      foodName: foodName(),
+      initialState: state,
+      isValid,
+      promptComponent,
+      promptProps,
+    }"
     @continue="$emit('continue')"
-    @update="onUpdate"
+    @update="update"
   ></milk-in-a-hot-drink-prompt>
 </template>
 
@@ -19,8 +23,8 @@ import type {
 } from '@intake24/common/prompts';
 import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion/MilkInAHotDrinkPrompt.vue';
 import {
-  createPromptHandlerStoreMixin,
-  foodPromptUtils,
+  useFoodPromptUtils,
+  usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
@@ -30,50 +34,71 @@ export default defineComponent({
 
   components: { MilkInAHotDrinkPrompt },
 
-  mixins: [
-    foodPromptUtils,
-    createPromptHandlerStoreMixin<MilkInAHotDrinkPromptState>('milk-in-a-hot-drink-prompt'),
-  ],
-
   props: {
+    promptComponent: {
+      type: String as PropType<PortionSizeComponentType>,
+      required: true,
+    },
+    promptId: {
+      type: String,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<MilkInAHotDrinkPromptProps>,
       required: true,
     },
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
+  },
+
+  setup(props) {
+    const { encodedSelectedFood, foodName, selectedFood, selectedPortionSize } =
+      useFoodPromptUtils();
+
+    const getInitialState = (): MilkInAHotDrinkPromptState => ({
+      portionSize: {
+        method: 'milk-in-a-hot-drink',
+        milkPartIndex: null,
+        milkVolumePercentage: null,
+        servingWeight: 0,
+        leftoversWeight: 0,
+      },
+      panel: 0,
+    });
+
+    const { state, update, clearStoredState } = usePromptHandlerStore(
+      props.promptId,
+      props.promptComponent,
+      getInitialState
+    );
+
+    return {
+      encodedSelectedFood,
+      foodName,
+      selectedFood,
+      selectedPortionSize,
+      state,
+      update,
+      clearStoredState,
+    };
+  },
+
+  computed: {
+    milkValid() {
+      return (
+        this.state.portionSize.milkPartIndex !== null &&
+        this.state.portionSize.milkVolumePercentage !== null
+      );
+    },
+
+    isValid() {
+      return this.milkValid;
     },
   },
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    getFoodOrMealId(): number {
-      return this.selectedFood().id;
-    },
-
-    getInitialState(): MilkInAHotDrinkPromptState {
-      return {
-        portionSize: {
-          method: 'milk-in-a-hot-drink',
-          milkPartIndex: null,
-          milkVolumePercentage: null,
-          servingWeight: 0,
-          leftoversWeight: 0,
-        },
-        panel: 0,
-      };
-    },
-
-    isValid(state: MilkInAHotDrinkPromptState): boolean {
-      return (
-        state.portionSize.milkPartIndex !== null && state.portionSize.milkVolumePercentage !== null
-      );
-    },
-
     async commitAnswer() {
-      const { portionSize } = this.currentStateNotNull;
+      const { portionSize } = this.state;
 
       this.updateFood({
         foodId: this.selectedFood().id,
@@ -86,6 +111,8 @@ export default defineComponent({
           },
         },
       });
+
+      this.clearStoredState();
     },
   },
 });

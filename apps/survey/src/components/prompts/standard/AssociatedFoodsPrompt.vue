@@ -56,7 +56,7 @@
       </v-row>
     </v-card-actions>
     <template #actions>
-      <continue :disabled="!continueEnabled" @click="onContinue"></continue>
+      <continue :disabled="!isValid" @click="onContinue"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -84,6 +84,18 @@ export default defineComponent({
   mixins: [BasePrompt],
 
   props: {
+    initialState: {
+      type: Object as PropType<AssociatedFoodsState>,
+      required: true,
+    },
+    isValid: {
+      type: Boolean,
+      required: true,
+    },
+    food: {
+      type: Object as PropType<EncodedFood>,
+      required: true,
+    },
     localeId: {
       type: String,
       required: true,
@@ -94,18 +106,6 @@ export default defineComponent({
     },
     promptProps: {
       type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
-    initialState: {
-      type: Object as PropType<AssociatedFoodsState>,
-      required: true,
-    },
-    food: {
-      type: Object as PropType<EncodedFood>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
       required: true,
     },
   },

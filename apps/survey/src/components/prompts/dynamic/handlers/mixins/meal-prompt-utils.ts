@@ -20,5 +20,3 @@ const component = defineComponent({
 });
 
 export default component;
-
-export type MealPromptUtilsType = InstanceType<typeof component>;

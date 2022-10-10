@@ -18,6 +18,7 @@ import {
   foodPromptUtils,
   mealPromptUtils,
   promptHandlerStateless,
+  useFoodPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -26,13 +27,9 @@ export default defineComponent({
 
   components: { ...customPrompts },
 
-  mixins: [foodPromptUtils, mealPromptUtils, promptHandlerStateless],
+  mixins: [mealPromptUtils, promptHandlerStateless],
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String,
       required: true,
@@ -41,12 +38,17 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
   },
 
   setup() {
+    const { selectedFood } = useFoodPromptUtils();
     const survey = useSurvey();
 
-    return { survey };
+    return { selectedFood, survey };
   },
 
   data() {

@@ -1,10 +1,15 @@
 <template>
   <cereal-prompt
-    v-bind="{ continueEnabled, parameters, promptComponent, promptProps }"
-    :food-name="foodName()"
-    :initial-state="initialStateNotNull"
+    v-bind="{
+      foodName: foodName(),
+      initialState: state,
+      isValid,
+      parameters,
+      promptComponent,
+      promptProps,
+    }"
     @continue="$emit('continue')"
-    @update="onUpdate"
+    @update="update"
   ></cereal-prompt>
 </template>
 
@@ -14,11 +19,10 @@ import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { CerealPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { CerealParameters } from '@intake24/common/types/http';
 import type { CerealPromptState } from '@intake24/survey/components/prompts/portion/CerealPrompt.vue';
 import {
-  createPromptHandlerStoreMixin,
-  foodPromptUtils,
+  useFoodPromptUtils,
+  usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { CerealPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
@@ -28,69 +32,104 @@ export default defineComponent({
 
   components: { CerealPrompt },
 
-  mixins: [foodPromptUtils, createPromptHandlerStoreMixin<CerealPromptState>('cereal-prompt')],
-
   props: {
-    promptProps: {
-      type: Object as PropType<CerealPromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String as PropType<PortionSizeComponentType>,
       required: true,
     },
+    promptId: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<CerealPromptProps>,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
+      useFoodPromptUtils<'cereal'>();
+
+    const getInitialState = (): CerealPromptState => ({
+      portionSize: {
+        method: 'cereal',
+        type: parameters.value.type,
+        bowl: null,
+        bowlIndex: undefined,
+        serving: null,
+        leftovers: null,
+        servingWeight: 0,
+        leftoversWeight: 0,
+      },
+      panel: 0,
+      objectConfirmed: false,
+      servingImageConfirmed: false,
+      leftoversPrompt: undefined,
+      leftoversImageConfirmed: false,
+    });
+
+    const { state, update, clearStoredState } = usePromptHandlerStore(
+      props.promptId,
+      props.promptComponent,
+      getInitialState
+    );
+
+    return {
+      encodedSelectedFood,
+      foodName,
+      parameters,
+      selectedFood,
+      selectedPortionSize,
+      state,
+      update,
+      clearStoredState,
+    };
   },
 
   computed: {
-    parameters(): CerealParameters {
-      if (this.selectedPortionSize().method !== 'cereal')
-        throw new Error('Selected portion size method must be "cereal"');
+    disabledLeftovers() {
+      return !this.promptProps.leftovers;
+    },
 
-      return this.selectedPortionSize().parameters as unknown as CerealParameters;
+    objectValid() {
+      return (
+        this.state.portionSize.bowlIndex !== undefined &&
+        this.state.portionSize.bowl &&
+        this.state.objectConfirmed
+      );
+    },
+
+    servingValid(): boolean {
+      return !!(this.state.portionSize.serving && this.state.servingImageConfirmed);
+    },
+
+    leftoversValid(): boolean {
+      return !!(this.state.portionSize.leftovers && this.state.leftoversImageConfirmed);
+    },
+
+    isValid(): boolean {
+      // object not yet selected
+      if (!this.objectValid) return false;
+
+      // serving not yet selected
+      if (!this.servingValid) return false;
+
+      // Leftover disables || leftovers have been confirmed
+      if (this.disabledLeftovers || this.state.leftoversPrompt === false) return true;
+
+      // leftovers not yet selected
+      if (!this.leftoversValid) return false;
+
+      return true;
     },
   },
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    getFoodOrMealId(): number {
-      return this.selectedFood().id;
-    },
-
-    getInitialState(): CerealPromptState {
-      return {
-        portionSize: {
-          method: 'cereal',
-          type: this.parameters.type,
-          bowl: null,
-          bowlIndex: undefined,
-          serving: null,
-          leftovers: null,
-          servingWeight: 0,
-          leftoversWeight: 0,
-        },
-        panel: 0,
-        objectConfirmed: false,
-        servingImageConfirmed: false,
-        leftoversPrompt: undefined,
-        leftoversImageConfirmed: false,
-      };
-    },
-
-    isValid(state: CerealPromptState): boolean {
-      const objectValid = state.portionSize.bowlIndex !== undefined && state.objectConfirmed;
-      const servingValid = !!state.portionSize.serving && state.servingImageConfirmed;
-      const leftoversValid =
-        state.leftoversPrompt === false ||
-        (!!state.portionSize.leftovers && state.leftoversImageConfirmed);
-
-      const disabledLeftovers = this.promptProps.leftovers;
-
-      return objectValid && servingValid && (disabledLeftovers || leftoversValid);
-    },
-
     async commitAnswer() {
-      const { portionSize } = this.currentStateNotNull;
+      const { portionSize } = this.state;
 
       this.updateFood({
         foodId: this.selectedFood().id,
@@ -102,6 +141,8 @@ export default defineComponent({
           },
         },
       });
+
+      this.clearStoredState();
     },
   },
 });

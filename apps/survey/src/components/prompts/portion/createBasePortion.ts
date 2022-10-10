@@ -23,16 +23,16 @@ export default <P extends BasePromptProps, S extends object>() =>
     mixins: [localeContent],
 
     props: {
-      continueEnabled: {
-        type: Boolean,
-        required: true,
-      },
       foodName: {
         type: Object as PropType<LocaleTranslation>,
         required: true,
       },
       initialState: {
         type: Object as PropType<S>,
+        required: true,
+      },
+      isValid: {
+        type: Boolean,
         required: true,
       },
       promptComponent: {
