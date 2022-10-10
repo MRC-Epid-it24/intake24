@@ -177,6 +177,7 @@ const surveySchemes: LocaleMessageObject = {
       noQuestions: 'No portion size questions available for this section',
     },
     label: 'Options list label',
+    leftovers: 'Allow leftovers',
     other: 'Allow custom other option',
     orientation: {
       _: 'Orientation',

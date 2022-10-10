@@ -84,7 +84,9 @@ export default defineComponent({
         state.leftoversPrompt === false ||
         (!!state.portionSize.leftovers && state.leftoversImageConfirmed);
 
-      return objectValid && servingValid && leftoversValid;
+      const disabledLeftovers = this.promptProps.leftovers;
+
+      return objectValid && servingValid && (disabledLeftovers || leftoversValid);
     },
 
     async commitAnswer() {

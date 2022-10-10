@@ -79,9 +79,10 @@ export default defineComponent({
         state.leftoversPrompt === false ||
         (!!state.portionSize.leftovers && state.leftoversImageConfirmed);
 
+      const disabledLeftovers = this.promptProps.leftovers;
       const noLeftovers = !this.parameters['leftovers-image-set'];
 
-      return servingValid && (noLeftovers || leftoversValid);
+      return servingValid && (disabledLeftovers || noLeftovers || leftoversValid);
     },
 
     async commitAnswer() {

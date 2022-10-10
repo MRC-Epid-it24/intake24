@@ -35,7 +35,7 @@
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel v-if="parameters['leftovers-image-set']">
+          <v-expansion-panel v-if="!disabledLeftovers && parameters['leftovers-image-set']">
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${portionSize.method}.leftover.header`, { food: localeFoodName }) }}
               <template #actions>
@@ -148,6 +148,10 @@ export default defineComponent({
   },
 
   computed: {
+    disabledLeftovers() {
+      return this.leftovers;
+    },
+
     hasLeftovers() {
       return !!this.parameters['leftovers-image-set'];
     },
@@ -168,8 +172,9 @@ export default defineComponent({
       // serving not yet selected
       if (!this.servingValid) return false;
 
-      // Food has no leftovers or leftovers have been confirmed
-      if (!this.hasLeftovers || this.leftoversPrompt === false) return true;
+      // Leftover disables || food has no leftovers || leftovers have been confirmed
+      if (this.disabledLeftovers || !this.hasLeftovers || this.leftoversPrompt === false)
+        return true;
 
       // leftovers not yet selected
       if (!this.leftoversValid) return false;

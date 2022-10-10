@@ -7,9 +7,13 @@ import { basePromptProps } from './base';
 
 export type PortionSizeOptionPromptProps = BasePromptProps;
 
-export type AsServedPromptProps = BasePromptProps;
+export interface AsServedPromptProps extends BasePromptProps {
+  leftovers: boolean;
+}
 
-export type CerealPromptProps = BasePromptProps;
+export interface CerealPromptProps extends BasePromptProps {
+  leftovers: boolean;
+}
 
 export type DrinkScalePromptProps = BasePromptProps;
 
@@ -44,11 +48,13 @@ export interface ImageMapSelectorEmit {
 export const asServedPromptDefaultProps: AsServedPromptProps = copy({
   ...basePromptProps,
   name: { en: 'As served' },
+  leftovers: true,
 });
 
 export const cerealPromptDefaultProps: CerealPromptProps = copy({
   ...basePromptProps,
   name: { en: 'Cereal' },
+  leftovers: true,
 });
 
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = copy({

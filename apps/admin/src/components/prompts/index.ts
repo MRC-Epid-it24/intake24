@@ -102,11 +102,11 @@ export const promptSettings: PromptSettings = {
   },
   // Portion size
   'as-served-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'cereal-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'drink-scale-prompt': {
