@@ -1,12 +1,11 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
-          <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${method}.label`">
+              <i18n :path="`portion.${portionSize.method}.label`">
                 <template #food>
                   <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
@@ -17,9 +16,9 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <image-map-selector
-                v-if="dataLoaded"
+                v-if="guideImageData"
                 :image-map-data="guideImageData.imageMap"
-                :value="objectIdx"
+                :value="portionSize.objectIndex"
                 @input="selectObject"
               ></image-map-selector>
               <v-row>
@@ -27,7 +26,7 @@
                   <v-btn
                     :block="isMobile"
                     color="success"
-                    :disabled="objectIdx === undefined"
+                    :disabled="portionSize.objectIndex === undefined"
                     @click="confirmObject"
                   >
                     {{ $t('common.action.continue') }}
@@ -36,27 +35,23 @@
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <!-- Step 2: Specify quantity -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.quantity`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.quantity`, { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-row align="center" justify="center">
+              <v-row justify="center">
                 <v-col>
-                  <quantity-card fraction whole @input="updateQuantity"></quantity-card>
+                  <quantity-card v-model="portionSize.quantity" fraction whole></quantity-card>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col>
-                  <v-alert v-if="hasErrors" color="error">
-                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-                  </v-alert>
+              <v-row justify="center">
+                <v-col md="4" xs="12">
                   <v-btn block color="success" @click="confirmQuantity">
-                    {{ $t(`portion.${method}.confirm`) }}
+                    {{ $t(`portion.${portionSize.method}.confirm`) }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -66,9 +61,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <v-form ref="form" @submit.prevent="submit">
-        <continue :disabled="!isValid" @click="submit"></continue>
-      </v-form>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -77,26 +70,19 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { GuideImagePromptProps, QuantityValues } from '@intake24/common/prompts';
-import type { EncodedFood, GuideImageParameters, GuideImageState } from '@intake24/common/types';
+import type { GuideImagePromptProps } from '@intake24/common/prompts';
+import type { GuideImageParameters, GuideImageState } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
 
 export interface GuideImagePromptState {
   portionSize: GuideImageState;
+  panel: number;
   objectConfirmed: boolean;
   quantityConfirmed: boolean;
-  objectIdx: number | undefined;
-  panel: number;
-}
-
-export interface GuideImageEncodedFood {
-  objectIdx: number | null;
-  food: EncodedFood;
-  mealId: number | undefined;
-  panel: number;
 }
 
 export default defineComponent({
@@ -118,30 +104,22 @@ export default defineComponent({
   },
 
   data() {
-    const selectedIndex = this.initialState.portionSize.object?.id;
+    const state = copy(this.initialState);
+    state.portionSize.guideImageId = this.parameters['guide-image-id'];
 
     return {
-      method: 'guide-image',
-      guideImageData: {} as GuideImageResponse,
-      panel: this.initialState.panel,
-      objectConfirmed: this.initialState.objectConfirmed && selectedIndex !== undefined,
-      objectIdx: selectedIndex ? selectedIndex - 1 : undefined,
-      quantityConfirmed: this.initialState.quantityConfirmed,
-      quantityValue: this.initialState.portionSize.quantity,
+      guideImageData: null as GuideImageResponse | null,
+      ...state,
     };
   },
 
   computed: {
-    dataLoaded() {
-      return !!Object.keys(this.guideImageData).length;
-    },
-
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
 
     objectValid() {
-      return this.objectIdx !== undefined && this.objectConfirmed;
+      return this.portionSize.objectIndex !== undefined && this.objectConfirmed;
     },
 
     quantityValid() {
@@ -164,6 +142,7 @@ export default defineComponent({
       );
 
       this.guideImageData = { ...data };
+      this.portionSize.imageUrl = data.imageMap.baseImageUrl;
     },
 
     updatePanel() {
@@ -180,26 +159,8 @@ export default defineComponent({
       this.setPanel(this.quantityValid ? -1 : 1);
     },
 
-    getCurrentState(idx: number): GuideImageState {
-      return {
-        method: 'guide-image',
-        servingWeight:
-          this.guideImageData.weights[idx + 1] *
-          (this.quantityValue.whole + this.quantityValue.fraction) *
-          this.conversionFactor,
-        leftoversWeight: 0,
-        object: {
-          guideImageId: this.parameters['guide-image-id'],
-          imageUrl: this.guideImageData.imageMap.baseImageUrl,
-          id: idx + 1,
-          weight: this.guideImageData.weights[idx + 1],
-        },
-        quantity: this.quantityValue,
-      };
-    },
-
     selectObject(idx: number) {
-      this.objectIdx = idx;
+      this.portionSize.objectIndex = idx;
       this.objectConfirmed = false;
       this.update();
     },
@@ -207,12 +168,6 @@ export default defineComponent({
     confirmObject() {
       this.objectConfirmed = true;
       this.updatePanel();
-      this.update();
-    },
-
-    updateQuantity(value: QuantityValues) {
-      this.quantityValue = value;
-      this.quantityConfirmed = false;
       this.update();
     },
 
@@ -232,23 +187,28 @@ export default defineComponent({
         return;
       }
 
-      if (this.objectIdx === undefined) throw new Error('Selected object id is null');
-
       this.$emit('continue');
     },
 
     update() {
-      if (this.objectIdx == null) return;
-      const portionSizeState = this.getCurrentState(this.objectIdx);
+      if (this.guideImageData && this.portionSize.objectIndex !== undefined) {
+        const idx = this.portionSize.objectIndex;
 
-      const update: GuideImagePromptState = {
-        portionSize: portionSizeState,
-        objectConfirmed: this.objectConfirmed,
-        objectIdx: this.objectIdx + 1,
-        quantityConfirmed: this.quantityConfirmed,
+        this.portionSize.objectWeight = this.guideImageData.weights[idx] ?? 0;
+        this.portionSize.servingWeight =
+          this.guideImageData.weights[idx] *
+          (this.portionSize.quantity.whole + this.portionSize.quantity.fraction) *
+          this.conversionFactor;
+      }
+
+      const state: GuideImagePromptState = {
+        portionSize: this.portionSize,
         panel: this.panel,
+        objectConfirmed: this.objectConfirmed,
+        quantityConfirmed: this.quantityConfirmed,
       };
-      this.$emit('update', update);
+
+      this.$emit('update', state);
     },
   },
 });

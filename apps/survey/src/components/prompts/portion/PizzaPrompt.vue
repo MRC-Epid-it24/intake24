@@ -345,15 +345,12 @@ export default defineComponent({
     update() {
       const { portionSize } = this;
 
-      const servingWeight =
+      this.portionSize.servingWeight =
         this.sliceWeight(portionSize.pizzaType, portionSize.sliceType, portionSize.pizzaThickness) *
         (portionSize.sliceQuantity.whole + portionSize.sliceQuantity.fraction);
 
       const state: PizzaPromptState = {
-        portionSize: {
-          ...portionSize,
-          servingWeight,
-        },
+        portionSize: this.portionSize,
         panel: this.panel,
         confirmed: this.confirmed,
       };

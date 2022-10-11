@@ -33,12 +33,14 @@ export const cerealMapper = (
   foodId: string,
   state: PortionSizeStates['cereal']
 ): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
-  const { type, bowl, bowlIndex, leftoversWeight, servingWeight, serving, leftovers } = state;
+  const { type, bowl, bowlIndex, imageUrl, leftoversWeight, servingWeight, serving, leftovers } =
+    state;
 
   return [
     { foodId, name: 'type', value: type },
     { foodId, name: 'bowl', value: bowl ?? '' },
-    { foodId, name: 'type', value: bowlIndex?.toString() ?? '' },
+    { foodId, name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
+    { foodId, name: 'imageUrl', value: imageUrl ?? '' },
     { foodId, name: 'leftovers', value: (!!leftovers).toString() },
     { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
     { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
@@ -58,16 +60,19 @@ export const guideImageMapper = (
   const {
     leftoversWeight,
     servingWeight,
-    object,
+    guideImageId,
+    imageUrl,
+    objectIndex,
+    objectWeight,
     quantity: { whole, fraction },
   } = state;
 
   return [
-    { foodId, name: 'guide-image-id', value: object?.guideImageId ?? '' },
-    { foodId, name: 'imageUrl', value: object?.imageUrl ?? '' },
+    { foodId, name: 'guide-image-id', value: guideImageId },
+    { foodId, name: 'imageUrl', value: imageUrl ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'objectIndex', value: object?.id?.toString() ?? '0' },
-    { foodId, name: 'objectWeight', value: object?.weight?.toString() ?? '0' },
+    { foodId, name: 'objectIndex', value: objectIndex?.toString() ?? '0' },
+    { foodId, name: 'objectWeight', value: objectWeight.toString() },
     { foodId, name: 'quantity', value: (whole + fraction).toString() },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
   ];

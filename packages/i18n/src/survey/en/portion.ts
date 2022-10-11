@@ -116,10 +116,9 @@ const portion: LocaleMessageObject = {
     confirm: 'I had that much',
   },
   'milk-on-cereal': {
-    text: 'Milk with your cereal',
-    question: 'Did you have milk on your cereal?',
-    searchLabel: 'Please select which type of milk you had',
-    foodSelectButton: `I can't find my food`,
+    text: '{food}',
+    container: 'Please select the bowl that looks most like the one you used for your {food}.',
+    milk: 'Please choose the level your milk came up to (without cereal).',
   },
   pizza: {
     text: '{food}',

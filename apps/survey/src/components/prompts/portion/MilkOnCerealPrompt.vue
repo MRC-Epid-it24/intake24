@@ -1,96 +1,68 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
-      <v-col>
-        <v-card>
-          <v-card-text>
-            {{ $t('portion.milkCereal.question') }}
-          </v-card-text>
-          <v-card-actions>
-            <v-btn :color="displayQuestionStyle('yes')" @click="setDisplayQuestions(true)">
-              {{ $t('common.action.confirm.yes') }}
-            </v-btn>
-            <v-btn :color="displayQuestionStyle('no')" @click="setDisplayQuestions(false)">
-              {{ $t('common.action.confirm.no') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-if="displayQuestions">
       <v-col>
         <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              Please select the milk you had:
+              <i18n :path="`portion.${portionSize.method}.container`">
+                <template #food>
+                  <span class="font-weight-medium">{{ localeFoodName }}</span>
+                </template>
+              </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="foodSelected"></valid-invalid-icon>
+                <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <!-- Likely call from /api/foods/{locale}/lookup-in-category, below is mockup -->
-              <h4>Foods in this category:</h4>
-              <v-list>
-                <v-list-item @click="selectFood('almond milk')">Almond milk</v-list-item>
-                <v-list-item @click="selectFood('hot milk')">Hot milk, semi-skimmed</v-list-item>
-                <v-list-item @click="selectFood('hot milk')">Hot milk, whole</v-list-item>
-                <v-list-item @click="selectFood('milk')">Milk, semi-skimmed</v-list-item>
-                <v-list-item @click="selectFood('milk')">Milk, skimmed</v-list-item>
-              </v-list>
-              <v-btn>{{ $t('portion.milkCereal.foodSelectButton') }}</v-btn>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-
-          <v-expansion-panel v-if="foodSelected">
-            <v-expansion-panel-header disable-icon-rotate>
-              How would you like to measure the milk?
-              <template #actions>
-                <valid-invalid-icon :valid="portionMethodSelected"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <!-- Portion method - unless we should be assuming they'll measure it in bowls (as per the cerreal)? -->
+              <image-map-selector
+                v-if="bowlImageMap"
+                :image-map-data="bowlImageMap"
+                :value="portionSize.bowlIndex"
+                @input="selectBowl"
+              ></image-map-selector>
               <v-row>
-                <v-col class="col-6">
-                  <v-card @click="selectPortionMethod('glasses')">
-                    <v-img
-                      src="https://it24-dev.mrc-epid.cam.ac.uk/images/portion/gsoftdrnk.jpg"
-                    ></v-img>
-                    <v-card-title>In glasses</v-card-title>
-                    <v-card-actions></v-card-actions>
-                  </v-card>
-                </v-col>
-                <v-col class="col-6">
-                  <v-card @click="selectPortionMethod('bowls')">
-                    <v-img
-                      src="https://it24-dev.mrc-epid.cam.ac.uk/images/cereal/milkbowlA.jpg"
-                    ></v-img>
-                    <v-card-title>In bowls</v-card-title>
-                    <v-card-actions></v-card-actions>
-                  </v-card>
+                <v-col>
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.bowlIndex === undefined"
+                    @click="confirmBowl"
+                  >
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
 
-          <v-expansion-panel v-if="foodSelected">
+          <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              Select how much milk you had:
+              <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
               <template #actions>
-                <valid-invalid-icon :valid="portionSelected"></valid-invalid-icon>
+                <valid-invalid-icon :valid="milkLevelValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <p>Please choose the level your milk came up to (without cereal).</p>
-              <!-- Portion estimation - this will display the asServed gallery for the selected milk, using the bowl reference it was passed -->
-              <v-img :src="imageMapData.baseImageUrl" @click="selectPortion()"></v-img>
+              <image-map-selector
+                v-if="milkLevelImageMap"
+                :image-map-data="milkLevelImageMap"
+                :value="portionSize.milkLevelChoice"
+                @input="selectMilk"
+              ></image-map-selector>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.milkLevelChoice === undefined"
+                    @click="confirmMilk"
+                  >
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <!-- <v-card>Milk Cereal Prompt content here</v-card> -->
-        <!-- select food -->
-        <!-- portion size estimation -->
-        <!-- portion size method -->
       </v-col>
     </v-row>
     <template #actions>
@@ -104,40 +76,47 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MilkOnCerealPromptProps } from '@intake24/common/prompts';
+import type { MilkOnCerealState } from '@intake24/common/types';
+import type { ImageMapResponse } from '@intake24/common/types/http';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
+
+export interface MilkOnCerealPromptState {
+  portionSize: MilkOnCerealState;
+  panel: number;
+  bowlConfirmed: boolean;
+  milkLevelConfirmed: boolean;
+}
 
 export default defineComponent({
   name: 'MilkOnCerealPrompt',
 
-  mixins: [createBasePortion<MilkOnCerealPromptProps, any>()],
+  mixins: [createBasePortion<MilkOnCerealPromptProps, MilkOnCerealPromptState>()],
 
   props: {
     promptProps: {
       type: Object as PropType<MilkOnCerealPromptProps>,
       required: true,
     },
+    bowlImageMapId: {
+      type: String,
+      default: 'gbowl',
+    },
   },
 
   data() {
+    const bowls = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const milkLevelImageMapPrefix = 'milkbowl';
+
     return {
-      method: 'milk-on-cereal',
-      displayQuestions: false,
-      // Below are rough/testing vars to control UI prototype
-      bowlType: 'A', // For testing until food linking
-      foodSelected: false,
-      foodValue: '',
-      foodCode: 'SMLK',
-      foodData: [] as any,
-      portionMethodSelected: false,
-      portionMethodValue: '',
-      portionSelected: false,
-      portionValue: '',
-      imageMapId: 'milkbowlA',
-      imageMapData: [] as any,
-      imageMapLoaded: false,
-      // If MCRL (milk_in_cereal) associated food category is triggered, we will wind up here
-      // Associated_foods contains `text` field which is the question
+      bowls,
+      milkLevelImageMapPrefix,
+
+      bowlImageMap: null as ImageMapResponse | null,
+      milkLevelImageMap: null as ImageMapResponse | null,
+
+      ...copy(this.initialState),
     };
   },
 
@@ -146,42 +125,136 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
-    /* isValid() {
-      return this.foodSelected && this.portionMethodSelected && this.portionSelected;
-    }, */
+    milkLevelImageMapId(): string | undefined {
+      const {
+        bowls,
+        milkLevelImageMapPrefix,
+        portionSize: { bowlIndex },
+      } = this;
+      if (bowlIndex === undefined) return undefined;
+
+      return `${milkLevelImageMapPrefix}${bowls[bowlIndex]}`;
+    },
+
+    bowlValid() {
+      return (
+        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.bowlConfirmed
+      );
+    },
+
+    milkLevelValid() {
+      return this.portionSize.milkLevelChoice !== undefined && this.milkLevelConfirmed;
+    },
+
+    isValid(): boolean {
+      // bowl not yet selected
+      if (!this.bowlValid) return false;
+
+      // milk level selected
+      if (!this.milkLevelValid) return false;
+
+      return true;
+    },
+  },
+
+  watch: {
+    async milkLevelImageMapId(val) {
+      if (!val) return;
+
+      await this.fetchMilkLevelImageMap();
+    },
+  },
+
+  async mounted() {
+    await this.fetchBowlImageMap();
   },
 
   methods: {
-    // TODO: fix this as no milk will be false and not validate
-    displayQuestionStyle(button: string) {
-      if (button === 'yes' && this.displayQuestions) {
-        return 'success';
-      }
-      return '';
+    async fetchBowlImageMap() {
+      const { data } = await this.$http.get<ImageMapResponse>(
+        `portion-sizes/image-maps/${this.bowlImageMapId}`
+      );
+
+      this.bowlImageMap = { ...data };
+      this.portionSize.imageUrl = data.baseImageUrl;
     },
 
-    async fetchFoodData() {
-      const locale = 'en_GB';
-      try {
-        const { data } = await this.$http.get(`foods/image-maps/${locale}/${this.foodCode}`);
-        this.foodData = { ...data };
-        // this.imageMapLoaded = true;
-      } catch (e) {
-        console.log(e);
-      }
+    async fetchMilkLevelImageMap() {
+      const { data } = await this.$http.get<ImageMapResponse>(
+        `portion-sizes/image-maps/${this.milkLevelImageMapId}`
+      );
+
+      this.milkLevelImageMap = { ...data };
+      this.portionSize.milkLevelImage = data.baseImageUrl;
     },
 
-    async fetchImageMapData() {
-      try {
-        const { data } = await this.$http.get(`portion-sizes/image-maps/${this.imageMapId}`);
-        this.imageMapData = { ...data };
-        this.imageMapLoaded = true;
-      } catch (e) {
-        console.log(e);
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
       }
+
+      if (!this.bowlValid) {
+        this.setPanel(0);
+        return;
+      }
+
+      this.setPanel(this.milkLevelValid ? -1 : 1);
     },
 
-    setDisplayQuestions(value: boolean) {
+    selectBowl(idx: number) {
+      this.portionSize.bowlIndex = idx;
+      this.portionSize.bowl = this.bowls[idx];
+      this.bowlConfirmed = false;
+      this.update();
+    },
+
+    confirmBowl() {
+      this.bowlConfirmed = true;
+      this.updatePanel();
+      this.update();
+    },
+
+    selectMilk(idx: number) {
+      this.portionSize.milkLevelChoice = idx;
+      this.milkLevelConfirmed = false;
+      this.update();
+    },
+
+    confirmMilk() {
+      this.milkLevelConfirmed = true;
+      this.updatePanel();
+      this.update();
+    },
+
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
+    },
+
+    submit() {
+      if (!this.isValid) {
+        this.setErrors();
+        return;
+      }
+
+      this.$emit('continue');
+    },
+
+    update() {
+      /* this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
+      this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0; */
+
+      const state: MilkOnCerealPromptState = {
+        portionSize: this.portionSize,
+        panel: this.panel,
+        bowlConfirmed: this.bowlConfirmed,
+        milkLevelConfirmed: this.milkLevelConfirmed,
+      };
+
+      this.$emit('update', state);
+    },
+
+    /* setDisplayQuestions(value: boolean) {
       this.displayQuestions = value;
     },
 
@@ -211,7 +284,7 @@ export default defineComponent({
       } else {
         console.log('not complete');
       }
-    },
+    }, */
   },
 });
 </script>

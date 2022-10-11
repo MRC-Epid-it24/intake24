@@ -67,7 +67,7 @@ export function guideImageComplete(selectedFood: FoodState): boolean {
       return false;
     }
 
-    return selectedFood.portionSize.object != null && selectedFood.portionSize.quantity != null;
+    return selectedFood.portionSize.servingWeight !== null;
   }
 
   return false;
@@ -142,7 +142,7 @@ export function standardPortionComplete(selectedFood: FoodState): boolean {
       return false;
     }
 
-    return selectedFood.portionSize.unit != null && selectedFood.portionSize.quantity != null;
+    return selectedFood.portionSize.servingWeight !== null;
   }
 
   return false;

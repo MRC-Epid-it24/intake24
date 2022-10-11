@@ -231,18 +231,17 @@ export default defineComponent({
     },
 
     update() {
-      const { portionSize, panel, quantityConfirmed } = this;
+      const { portionSize } = this;
+
+      this.portionSize.servingWeight =
+        (portionSize.unit?.weight ?? 0) *
+        (portionSize.quantity.whole + portionSize.quantity.fraction) *
+        this.conversionFactor;
 
       const state: StandardPortionPromptState = {
-        portionSize: {
-          ...portionSize,
-          servingWeight:
-            (portionSize.unit?.weight ?? 0) *
-            ((portionSize.quantity?.whole ?? 0) + (portionSize.quantity?.fraction ?? 0)) *
-            this.conversionFactor,
-        },
-        panel,
-        quantityConfirmed,
+        portionSize: this.portionSize,
+        panel: this.panel,
+        quantityConfirmed: this.quantityConfirmed,
       };
 
       this.$emit('update', state);

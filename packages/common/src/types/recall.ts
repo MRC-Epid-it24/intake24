@@ -115,18 +115,21 @@ export type PortionSizeStates = {
   };
   'drink-scale': PortionSizeStateBase & {
     method: 'drink-scale';
+    drinkwareId: string;
+    imageUrl: string;
     leftoversLevel: number;
     initialFillLevel: string;
     fillLevel: number;
     skipFillLevel: string;
-    imageUrl: string;
-    drinkwareId: string;
     containerIndex: number;
     leftovers: boolean;
   };
   'guide-image': PortionSizeStateBase & {
     method: 'guide-image';
-    object: SelectedGuideImageObject | null;
+    guideImageId: string;
+    imageUrl: string | null;
+    objectIndex?: number;
+    objectWeight: number;
     quantity: QuantityValues;
   };
   'milk-in-a-hot-drink': PortionSizeStateBase & {
@@ -134,7 +137,14 @@ export type PortionSizeStates = {
     milkPartIndex: number | null;
     milkVolumePercentage: number | null;
   };
-  'milk-on-cereal': PortionSizeStateBase & { method: 'milk-on-cereal' };
+  'milk-on-cereal': PortionSizeStateBase & {
+    method: 'milk-on-cereal';
+    imageUrl: string | null;
+    bowl: string | null;
+    bowlIndex?: number;
+    milkLevelChoice?: number;
+    milkLevelImage: string | null;
+  };
   pizza: PortionSizeStateBase & {
     method: 'pizza';
     imageUrl: string | null;
@@ -147,7 +157,7 @@ export type PortionSizeStates = {
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
     unit: StandardPortionUnit | null;
-    quantity: QuantityValues | null;
+    quantity: QuantityValues;
   };
   weight: PortionSizeStateBase & { method: 'weight' };
 };
@@ -157,6 +167,7 @@ export type CerealState = PortionSizeStates['cereal'];
 export type GuideImageState = PortionSizeStates['guide-image'];
 export type DrinkScaleState = PortionSizeStates['drink-scale'];
 export type MilkInAHotDrinkState = PortionSizeStates['milk-in-a-hot-drink'];
+export type MilkOnCerealState = PortionSizeStates['milk-on-cereal'];
 export type PizzaState = PortionSizeStates['pizza'];
 export type StandardPortionState = PortionSizeStates['standard-portion'];
 

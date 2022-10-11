@@ -245,14 +245,11 @@ export default defineComponent({
     },
 
     update() {
-      const { portionSize } = this;
+      this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
+      this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0;
 
       const state: AsServedPromptState = {
-        portionSize: {
-          ...portionSize,
-          servingWeight: portionSize.serving?.weight ?? 0,
-          leftoversWeight: portionSize.leftovers?.weight ?? 0,
-        },
+        portionSize: this.portionSize,
         panel: this.panel,
         servingImageConfirmed: this.servingImageConfirmed,
         leftoversImageConfirmed: this.leftoversImageConfirmed,

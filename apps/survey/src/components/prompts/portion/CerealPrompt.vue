@@ -3,7 +3,6 @@
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
-          <!-- Step 1: Select image map -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               <i18n :path="`portion.${portionSize.method}.container`">
@@ -20,14 +19,14 @@
                 v-if="bowlImageMap"
                 :image-map-data="bowlImageMap"
                 :value="portionSize.bowlIndex"
-                @input="selectObject"
+                @input="selectBowl"
               ></image-map-selector>
               <v-row>
                 <v-col>
                   <v-btn
                     color="success"
                     :disabled="portionSize.bowlIndex === undefined"
-                    @click="confirmObject"
+                    @click="confirmBowl"
                   >
                     {{ $t('common.action.continue') }}
                   </v-btn>
@@ -171,9 +170,12 @@ export default defineComponent({
   },
 
   data() {
+    const bowls = ['A', 'B', 'C', 'D', 'E', 'F'];
+
     return {
+      bowls,
+
       bowlImageMap: null as ImageMapResponse | null,
-      bowls: ['A', 'B', 'C', 'D', 'E', 'F'],
 
       ...copy(this.initialState),
     };
@@ -242,16 +244,17 @@ export default defineComponent({
   },
 
   async mounted() {
-    await this.fetchBowImageMap();
+    await this.fetchBowlImageMap();
   },
 
   methods: {
-    async fetchBowImageMap() {
+    async fetchBowlImageMap() {
       const { data } = await this.$http.get<ImageMapResponse>(
         `portion-sizes/image-maps/${this.bowlImageMapId}`
       );
 
       this.bowlImageMap = { ...data };
+      this.portionSize.imageUrl = data.baseImageUrl;
     },
 
     updatePanel() {
@@ -273,14 +276,14 @@ export default defineComponent({
       this.setPanel(this.leftoversPrompt === false || this.leftoversValid ? -1 : 2);
     },
 
-    selectObject(idx: number) {
+    selectBowl(idx: number) {
       this.portionSize.bowlIndex = idx;
       this.portionSize.bowl = this.bowls[idx];
       this.bowlConfirmed = false;
       this.update();
     },
 
-    confirmObject() {
+    confirmBowl() {
       this.bowlConfirmed = true;
       this.updatePanel();
       this.update();
@@ -328,14 +331,11 @@ export default defineComponent({
     },
 
     update() {
-      const { portionSize } = this;
+      this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
+      this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0;
 
       const state: CerealPromptState = {
-        portionSize: {
-          ...portionSize,
-          servingWeight: portionSize.serving?.weight ?? 0,
-          leftoversWeight: portionSize.leftovers?.weight ?? 0,
-        },
+        portionSize: this.portionSize,
         panel: this.panel,
         bowlConfirmed: this.bowlConfirmed,
         servingImageConfirmed: this.servingImageConfirmed,

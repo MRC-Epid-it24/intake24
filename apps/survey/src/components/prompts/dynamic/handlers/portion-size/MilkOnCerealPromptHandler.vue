@@ -1,17 +1,14 @@
 <template>
-  <guide-image-prompt
+  <milk-on-cereal-prompt
     v-bind="{
-      conversionFactor,
       foodName: foodName(),
       initialState: state,
-      parameters,
       promptComponent,
       promptProps,
     }"
     @continue="$emit('continue')"
     @update="update"
-  >
-  </guide-image-prompt>
+  ></milk-on-cereal-prompt>
 </template>
 
 <script lang="ts">
@@ -19,19 +16,19 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { GuideImagePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
+import type { MilkOnCerealPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { MilkOnCerealPromptState } from '@intake24/survey/components/prompts/portion/MilkOnCerealPrompt.vue';
 import {
   useFoodPromptUtils,
   usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { GuideImagePrompt } from '@intake24/survey/components/prompts/portion';
+import { MilkOnCerealPrompt } from '@intake24/survey/components/prompts/portion';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
-  name: 'GuideImagePromptHandler',
+  name: 'MilkOnCerealPromptHandler',
 
-  components: { GuideImagePrompt },
+  components: { MilkOnCerealPrompt },
 
   props: {
     promptComponent: {
@@ -43,29 +40,28 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<GuideImagePromptProps>,
+      type: Object as PropType<MilkOnCerealPromptProps>,
       required: true,
     },
   },
 
   setup(props) {
-    const { conversionFactor, foodName, parameters, selectedFood } =
-      useFoodPromptUtils<'guide-image'>();
+    const { foodName, selectedFood, selectedPortionSize } = useFoodPromptUtils();
 
-    const getInitialState = (): GuideImagePromptState => ({
+    const getInitialState = (): MilkOnCerealPromptState => ({
       portionSize: {
-        method: 'guide-image',
-        guideImageId: '',
+        method: 'milk-on-cereal',
         imageUrl: null,
-        objectIndex: undefined,
-        objectWeight: 0,
-        quantity: { whole: 1, fraction: 0 },
+        bowl: null,
+        bowlIndex: undefined,
+        milkLevelChoice: undefined,
+        milkLevelImage: null,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
-      objectConfirmed: false,
-      quantityConfirmed: false,
+      bowlConfirmed: false,
+      milkLevelConfirmed: false,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -75,10 +71,9 @@ export default defineComponent({
     );
 
     return {
-      conversionFactor,
       foodName,
-      parameters,
       selectedFood,
+      selectedPortionSize,
       state,
       update,
       clearStoredState,

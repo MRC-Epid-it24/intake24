@@ -3,7 +3,6 @@
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
-          <!-- Step 1: Select guide -->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               <i18n :path="`portion.${method}.container`">
@@ -31,7 +30,6 @@
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <!-- Step 2: Select drink scale amount-->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${method}.serving.label`, { food: localeFoodName }) }}
