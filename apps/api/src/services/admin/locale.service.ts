@@ -8,7 +8,6 @@ import type {
 import type { Job } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Op, SplitList, SplitWord, SynonymSet, SystemLocale } from '@intake24/db';
-import Locale from '@intake24/db/models/system/locale';
 
 export type QueueLocaleTaskInput = {
   userId: string;
@@ -143,7 +142,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     userId: string,
     file: Express.Multer.File
   ): Promise<Job> => {
-    const locale = await Locale.findByPk(localeId);
+    const locale = await SystemLocale.findByPk(localeId);
     if (!locale) throw new NotFoundError();
 
     return scheduler.jobs.addJob({
