@@ -26,18 +26,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [
-        'name',
-        'type',
-        'outputs',
-        'physicalDataFields',
-        'topFoods.max',
-        'topFoods.colors',
-        'topFoods.nutrientTypes',
-        // 'cards',
-        'demographicGroups',
-        'henryCoefficients',
-      ]);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {
@@ -46,7 +35,11 @@ export default () => {
         type: 'invalidType',
         outputs: ['print', 'invalid', 'download'],
         physicalDataFields: ['sex', 'invalid', 'weightKg'],
-        topFoods: [],
+        topFoods: {
+          max: true,
+          colors: 'color',
+          nutrientTypes: null,
+        },
         // cards: 'notAnArray',
         demographicGroups: [
           {

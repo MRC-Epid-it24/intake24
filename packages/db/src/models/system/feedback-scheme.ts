@@ -58,12 +58,14 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
+    defaultValue: 'default',
     type: DataType.STRING(64),
   })
   public type!: FeedbackType;
 
   @Column({
     allowNull: true,
+    defaultValue: () => JSON.stringify([]),
     type: DataType.TEXT,
   })
   get outputs(): FeedbackOutput[] {
@@ -78,6 +80,7 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: true,
+    defaultValue: JSON.stringify([]),
     type: DataType.TEXT,
   })
   get physicalDataFields(): FeedbackPhysicalDataField[] {
@@ -92,6 +95,7 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
+    defaultValue: () => JSON.stringify(defaultTopFoods),
     type: DataType.TEXT({ length: 'long' }),
   })
   get topFoods(): TopFoods {
@@ -106,6 +110,7 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
+    defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
   get cards(): Card[] {
@@ -120,6 +125,7 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
+    defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
   get demographicGroups(): DemographicGroup[] {
@@ -134,6 +140,7 @@ export default class FeedbackScheme
 
   @Column({
     allowNull: false,
+    defaultValue: JSON.stringify([]),
     type: DataType.TEXT({ length: 'long' }),
   })
   get henryCoefficients(): HenryCoefficient[] {

@@ -26,13 +26,7 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, [
-        'name',
-        'type',
-        'meals',
-        'questions',
-        'dataExport',
-      ]);
+      await suite.sharedTests.assertInvalidInput('post', url, ['name']);
     });
 
     it('should return 422 for invalid input data', async () => {

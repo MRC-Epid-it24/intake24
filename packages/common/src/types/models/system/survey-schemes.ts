@@ -18,7 +18,7 @@ export type SurveySchemeAttributes = {
 export type SurveySchemeCreationAttributes = OmitAndOptional<
   SurveySchemeAttributes,
   'id' | 'createdAt' | 'updatedAt',
-  'ownerId'
+  'type' | 'questions' | 'meals' | 'dataExport' | 'ownerId'
 >;
 
 export type SurveySchemeQuestionAttributes = {

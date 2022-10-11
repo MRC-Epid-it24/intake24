@@ -52,12 +52,14 @@ export default class SurveyScheme
 
   @Column({
     allowNull: false,
+    defaultValue: 'default',
     type: DataType.STRING(64),
   })
   public type!: SchemeType;
 
   @Column({
     allowNull: true,
+    defaultValue: () => JSON.stringify(defaultQuestions),
     type: DataType.TEXT({ length: 'long' }),
   })
   get questions(): RecallQuestions {
@@ -72,6 +74,7 @@ export default class SurveyScheme
 
   @Column({
     allowNull: true,
+    defaultValue: () => JSON.stringify(defaultMeals),
     type: DataType.TEXT({ length: 'long' }),
   })
   get meals(): Meal[] {
@@ -86,6 +89,7 @@ export default class SurveyScheme
 
   @Column({
     allowNull: true,
+    defaultValue: () => JSON.stringify(defaultExport),
     type: DataType.TEXT({ length: 'long' }),
   })
   get dataExport(): ExportSection[] {

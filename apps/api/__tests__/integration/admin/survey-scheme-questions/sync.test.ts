@@ -25,10 +25,12 @@ export default () => {
 
     schemeInput = {
       ...schemeInput,
-      questions: {
-        ...schemeInput.questions,
-        preMeals: [schemeQuestionInput.question],
-      },
+      questions: schemeInput.questions
+        ? {
+            ...schemeInput.questions,
+            preMeals: [schemeQuestionInput.question],
+          }
+        : undefined,
     };
 
     schemeQuestion = await SurveySchemeQuestion.create(schemeQuestionInput);

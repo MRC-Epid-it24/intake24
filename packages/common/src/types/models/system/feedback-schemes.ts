@@ -28,7 +28,14 @@ export type FeedbackSchemeAttributes = {
 export type FeedbackSchemeCreationAttributes = OmitAndOptional<
   FeedbackSchemeAttributes,
   'id' | 'createdAt' | 'updatedAt',
-  'ownerId'
+  | 'type'
+  | 'outputs'
+  | 'physicalDataFields'
+  | 'topFoods'
+  | 'cards'
+  | 'demographicGroups'
+  | 'henryCoefficients'
+  | 'ownerId'
 >;
 
 export type FeedbackSchemeAssociations = {
