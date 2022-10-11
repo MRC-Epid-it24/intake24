@@ -55,7 +55,10 @@ const locales: LocaleMessageObject = {
     title: 'Food ranking',
     tab: 'Food ranking',
     delete: 'Delete',
-    upload: 'Upload',
+    upload: 'Upload food ranking CSV',
+    description:
+      'To enable the "predetermined order" food ranking algorithm in studies using this locale,\n' +
+      '        please upload a food ranking spreadsheet.',
   },
 
   tasks: {

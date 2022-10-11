@@ -169,6 +169,10 @@ const common: LocaleMessageObject = {
     _: 'Raw JSON',
     title: 'JSON Content editor',
   },
+
+  csvUpload: {
+    file: 'Choose CSV file to upload',
+  },
 };
 
 export default common;

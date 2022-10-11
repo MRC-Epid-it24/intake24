@@ -87,6 +87,11 @@ export type JobParams = {
     email: string;
     userAgent?: string;
   };
+  FoodRankingCsvUpload: {
+    localeId: number;
+    localeCode: string;
+    file: string;
+  };
 };
 
 export type JobType = keyof JobParams;
@@ -153,6 +158,11 @@ export const defaultJobsParams: JobParams = {
   },
   UserEmailVerificationNotification: {
     email: '',
+  },
+  FoodRankingCsvUpload: {
+    localeId: 0,
+    localeCode: '',
+    file: '',
   },
 };
 

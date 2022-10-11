@@ -77,6 +77,9 @@ const jobs: LocaleMessageObject = {
     SurveySubmissionNotification: {
       _: 'Survey - submission notification',
     },
+    FoodRankingCsvUpload: {
+      _: 'Locales — food ranking CSV upload',
+    },
   },
 };
 

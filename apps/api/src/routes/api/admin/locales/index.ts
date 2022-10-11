@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import multer from 'multer';
 
+import adminSurveyRespondentController from '@intake24/api/http/controllers/admin/surveys/survey-respondent.controller';
 import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/locales';
 import ioc from '@intake24/api/ioc';
@@ -11,8 +13,9 @@ import splitWords from './split-words';
 import synonymSets from './synonym-sets';
 
 export default () => {
-  const { localeController } = ioc.cradle;
+  const { localeController, fsConfig } = ioc.cradle;
   const router = Router();
+  const upload = multer({ dest: fsConfig.local.uploads });
 
   router.use(permission('locales'));
 
@@ -38,6 +41,13 @@ export default () => {
   router.use('/:localeId/split-lists', splitLists());
   router.use('/:localeId/split-words', splitWords());
   router.use('/:localeId/synonym-sets', synonymSets());
+
+  router.post(
+    '/:localeId/food-ranking',
+    upload.single('file'),
+    validation.fixedFoodRanking,
+    wrapAsync(localeController.uploadFoodRanking)
+  );
 
   router.use('/:localeId/securables', securables('Locale', localeController.securables));
 

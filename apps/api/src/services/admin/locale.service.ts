@@ -5,8 +5,10 @@ import type {
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
+import type { Job } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Op, SplitList, SplitWord, SynonymSet, SystemLocale } from '@intake24/db';
+import Locale from '@intake24/db/models/system/locale';
 
 export type QueueLocaleTaskInput = {
   userId: string;
@@ -135,6 +137,22 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     return [...records, ...newRecords];
   };
 
+  const uploadFoodRanking = async (
+    localeId: number,
+    localeCode: string,
+    userId: string,
+    file: Express.Multer.File
+  ): Promise<Job> => {
+    const locale = await Locale.findByPk(localeId);
+    if (!locale) throw new NotFoundError();
+
+    return scheduler.jobs.addJob({
+      type: 'FoodRankingCsvUpload',
+      userId,
+      params: { localeId, localeCode, file: file.path },
+    });
+  };
+
   /**
    * Queue locale tasks
    *
@@ -154,6 +172,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     setSplitWords,
     getSynonymSets,
     setSynonymSets,
+    uploadFoodRanking,
     queueLocaleTask,
   };
 };

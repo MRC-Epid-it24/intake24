@@ -1,5 +1,5 @@
 export type FixedFoodRankingAttributes = {
-  id: number;
+  id?: number;
   localeId: string;
   foodCode: string;
   rank: number;

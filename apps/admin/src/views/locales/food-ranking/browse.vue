@@ -1,38 +1,36 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave">
-    <v-container>
-      Has food ranking data (last uploaded at time) / no ranking data
-      <confirm-dialog
-        color="error"
-        icon-left="$delete"
-        :label="$t('common.action.delete').toString()"
-        @confirm="deleteRankingData"
-      >
-        {{ $t('common.action.confirm.delete', { name: 'Food ranking data' }) }}
-      </confirm-dialog>
-
-      <v-btn color="success">Upload</v-btn>
-    </v-container>
+    <v-toolbar bottom color="grey lighten-5" flat tile>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('locales.food-ranking.title') }}
+      </v-toolbar-title>
+    </v-toolbar>
+    <v-card>
+      <v-card-title>{{ $t('locales.food-ranking.description') }} </v-card-title>
+      <v-card-actions>
+        <csv-upload
+          :dialog-title="$t('locales.food-ranking.upload')"
+          :endpoint="endpoint"
+          :job-type="FoodRankingCsvUpload"
+          :label="$t('locales.food-ranking.upload')"
+          :survey-id="id"
+        ></csv-upload>
+      </v-card-actions>
+    </v-card>
   </layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type {
-  LocaleEntry,
-  LocaleSynonymSet,
-  LocaleSynonymSetInput,
-} from '@intake24/common/types/http/admin';
+import type { LocaleEntry } from '@intake24/common/types/http/admin';
+import CsvUpload from '@intake24/admin/components/dialogs/csv-upload/csv-upload.vue';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { ConfirmDialog } from '@intake24/ui';
-
-export type LocaleSynonymSetsForm = { items: LocaleSynonymSetInput[] };
 
 export default defineComponent({
-  name: 'LocaleSynonymSets',
+  name: 'LocaleFoodRanking',
 
-  components: { ConfirmDialog },
+  components: { CsvUpload },
 
   mixins: [formMixin],
 
@@ -40,6 +38,12 @@ export default defineComponent({
     const { entry, entryLoaded } = useStoreEntry<LocaleEntry>(props.id);
 
     return { entry, entryLoaded };
+  },
+
+  computed: {
+    endpoint() {
+      return `admin/locales/${this.entry.id}/food-ranking`;
+    },
   },
 
   methods: {

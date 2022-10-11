@@ -2,9 +2,14 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
+import type {
+  JobEntry,
+  LocaleEntry,
+  LocaleRefs,
+  LocalesResponse,
+} from '@intake24/common/types/http/admin';
 import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
-import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
+import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { pickJobParams } from '@intake24/common/types';
 import {
@@ -15,6 +20,7 @@ import {
   securableScope,
   SystemLocale,
 } from '@intake24/db';
+import Locale from '@intake24/db/models/system/locale';
 
 import { getAndCheckAccess, securableController } from '../securable.controller';
 
@@ -154,6 +160,23 @@ const localeController = (ioc: IoC) => {
     // TODO: implement locale copying
   };
 
+  const uploadFoodRanking = async (
+    req: Request<{ surveyId: string }>,
+    res: Response<JobEntry>
+  ): Promise<void> => {
+    const { id, code } = await getAndCheckAccess(Locale, 'food-ranking', req);
+
+    const { file } = req;
+    const { id: userId } = req.user as User;
+
+    if (!file) throw new ValidationError('File not found.', { param: 'file' });
+
+    // FIXME: change id field type to number in Locale model rather than parsing
+    const job = await localeService.uploadFoodRanking(parseInt(id), code, userId, file);
+
+    res.json(job);
+  };
+
   const tasks = async (req: Request<{ localeId: string }>, res: Response<Job>): Promise<void> => {
     const {
       body: { job, params },
@@ -181,6 +204,7 @@ const localeController = (ioc: IoC) => {
     destroy,
     refs,
     copy,
+    uploadFoodRanking,
     tasks,
     securables: securableController({ ioc, securable: SystemLocale }),
   };
