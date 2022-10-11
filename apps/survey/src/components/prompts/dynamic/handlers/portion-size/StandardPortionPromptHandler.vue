@@ -1,6 +1,7 @@
 <template>
   <standard-portion-prompt
     v-bind="{
+      conversionFactor,
       foodName: foodName(),
       initialState: state,
       parameters,
@@ -89,19 +90,7 @@ export default defineComponent({
     commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({
-        foodId: this.selectedFood().id,
-        update: {
-          portionSize: {
-            ...portionSize,
-            servingWeight:
-              (portionSize.unit?.weight ?? 0) *
-              ((portionSize.quantity?.whole ?? 0) + (portionSize.quantity?.fraction ?? 0)) *
-              this.conversionFactor,
-          },
-        },
-      });
-
+      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

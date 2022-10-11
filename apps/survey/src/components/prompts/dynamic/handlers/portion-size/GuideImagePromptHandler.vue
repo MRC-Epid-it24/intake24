@@ -89,11 +89,7 @@ export default defineComponent({
     async commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({
-        foodId: this.selectedFood().id,
-        update: { portionSize },
-      });
-
+      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

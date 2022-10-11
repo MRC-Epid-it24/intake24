@@ -126,7 +126,17 @@ export default defineComponent({
     update() {
       const { portionSize, panel } = this;
 
-      this.$emit('update', { portionSize, panel });
+      const state: MilkInAHotDrinkPromptState = {
+        portionSize: {
+          ...portionSize,
+          // TODO: recalculate drink & food
+          servingWeight: 0,
+          leftoversWeight: 0,
+        },
+        panel,
+      };
+
+      this.$emit('update', state);
     },
   },
 });

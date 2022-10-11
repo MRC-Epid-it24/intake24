@@ -106,6 +106,10 @@ export default defineComponent({
   mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionPromptState>()],
 
   props: {
+    conversionFactor: {
+      type: Number,
+      required: true,
+    },
     parameters: {
       type: Object as PropType<StandardPortionParams>,
       required: true,
@@ -229,7 +233,19 @@ export default defineComponent({
     update() {
       const { portionSize, panel, quantityConfirmed } = this;
 
-      this.$emit('update', { portionSize, panel, quantityConfirmed });
+      const state: StandardPortionPromptState = {
+        portionSize: {
+          ...portionSize,
+          servingWeight:
+            (portionSize.unit?.weight ?? 0) *
+            ((portionSize.quantity?.whole ?? 0) + (portionSize.quantity?.fraction ?? 0)) *
+            this.conversionFactor,
+        },
+        panel,
+        quantityConfirmed,
+      };
+
+      this.$emit('update', state);
     },
   },
 });
