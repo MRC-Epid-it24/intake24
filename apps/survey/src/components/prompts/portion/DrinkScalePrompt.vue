@@ -172,6 +172,10 @@ export default defineComponent({
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
+
+    isValid(): boolean {
+      return this.objectIdx !== undefined && this.objectConfirmed && this.selectedDrink;
+    },
   },
 
   async mounted() {

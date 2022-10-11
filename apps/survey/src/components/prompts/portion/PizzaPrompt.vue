@@ -255,6 +255,10 @@ export default defineComponent({
     quantityValid() {
       return this.confirmed.quantity;
     },
+
+    isValid() {
+      return this.typeValid && this.thicknessValid && this.sliceValid && this.quantityValid;
+    },
   },
 
   watch: {

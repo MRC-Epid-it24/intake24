@@ -3,7 +3,6 @@
     v-bind="{
       foodName: foodName(),
       initialState: state,
-      isValid,
       promptComponent,
       promptProps,
       availableMethods,
@@ -77,10 +76,6 @@ export default defineComponent({
   computed: {
     availableMethods(): UserPortionSizeMethod[] {
       return this.encodedSelectedFood().data.portionSizeMethods;
-    },
-
-    isValid(): boolean {
-      return this.state.option !== null;
     },
   },
 

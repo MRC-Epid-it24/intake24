@@ -3,7 +3,6 @@
     v-bind="{
       food: encodedSelectedFood(),
       initialState: state,
-      isValid,
       localeId,
       promptComponent,
       promptProps,
@@ -61,8 +60,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, localeId, selectedFood, selectedPortionSize } =
-      useFoodPromptUtils();
+    const { encodedSelectedFood, localeId } = useFoodPromptUtils();
 
     const getInitialState = (): AssociatedFoodsState => {
       return {
@@ -79,24 +77,11 @@ export default defineComponent({
 
     return {
       encodedSelectedFood,
-      foodName,
       localeId,
-      selectedFood,
-      selectedPortionSize,
       state,
       update,
       clearStoredState,
     };
-  },
-
-  computed: {
-    isValid(): boolean {
-      return this.state.prompts.every(
-        (prompt) =>
-          prompt.confirmed === false ||
-          (prompt.confirmed === true && prompt.selectedFood !== undefined)
-      );
-    },
   },
 
   methods: {

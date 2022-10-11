@@ -170,6 +170,20 @@ export default defineComponent({
     leftoversValid(): boolean {
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
+
+    isValid(): boolean {
+      // serving not yet selected
+      if (!this.servingValid) return false;
+
+      // Leftover disables || food has no leftovers || leftovers have been confirmed
+      if (this.disabledLeftovers || !this.hasLeftovers || this.leftoversPrompt === false)
+        return true;
+
+      // leftovers not yet selected
+      if (!this.leftoversValid) return false;
+
+      return true;
+    },
   },
 
   methods: {

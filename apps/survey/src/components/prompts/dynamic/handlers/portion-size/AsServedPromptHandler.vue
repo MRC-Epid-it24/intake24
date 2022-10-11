@@ -3,7 +3,6 @@
     v-bind="{
       foodName: foodName(),
       initialState: state,
-      isValid,
       parameters,
       promptComponent,
       promptProps,
@@ -80,38 +79,6 @@ export default defineComponent({
       update,
       clearStoredState,
     };
-  },
-
-  computed: {
-    disabledLeftovers() {
-      return !this.promptProps.leftovers;
-    },
-
-    hasLeftovers() {
-      return !!this.parameters['leftovers-image-set'];
-    },
-
-    servingValid(): boolean {
-      return !!(this.state.portionSize.serving && this.state.servingImageConfirmed);
-    },
-
-    leftoversValid(): boolean {
-      return !!(this.state.portionSize.leftovers && this.state.leftoversImageConfirmed);
-    },
-
-    isValid(): boolean {
-      // serving not yet selected
-      if (!this.servingValid) return false;
-
-      // Leftover disables || food has no leftovers || leftovers have been confirmed
-      if (this.disabledLeftovers || !this.hasLeftovers || this.state.leftoversPrompt === false)
-        return true;
-
-      // leftovers not yet selected
-      if (!this.leftoversValid) return false;
-
-      return true;
-    },
   },
 
   methods: {

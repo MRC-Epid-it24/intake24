@@ -3,7 +3,6 @@
     v-bind="{
       foodName: foodName(),
       initialState: state,
-      isValid,
       parameters,
       promptComponent,
       promptProps,
@@ -82,20 +81,6 @@ export default defineComponent({
       update,
       clearStoredState,
     };
-  },
-
-  computed: {
-    unitValid() {
-      return !!this.state.portionSize.unit;
-    },
-
-    quantityValid() {
-      return this.state.quantityConfirmed;
-    },
-
-    isValid() {
-      return this.unitValid && this.quantityValid;
-    },
   },
 
   methods: {

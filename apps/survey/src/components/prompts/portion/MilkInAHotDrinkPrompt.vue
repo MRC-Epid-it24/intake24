@@ -84,6 +84,10 @@ export default defineComponent({
         this.portionSize.milkPartIndex !== null && this.portionSize.milkVolumePercentage !== null
       );
     },
+
+    isValid() {
+      return this.milkValid;
+    },
   },
 
   watch: {

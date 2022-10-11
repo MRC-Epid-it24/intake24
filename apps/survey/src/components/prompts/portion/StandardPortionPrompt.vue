@@ -149,6 +149,10 @@ export default defineComponent({
     quantityValid() {
       return this.quantityConfirmed;
     },
+
+    isValid() {
+      return this.unitValid && this.quantityValid;
+    },
   },
 
   async mounted() {

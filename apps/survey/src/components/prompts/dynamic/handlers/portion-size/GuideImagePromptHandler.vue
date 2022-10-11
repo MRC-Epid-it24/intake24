@@ -4,7 +4,6 @@
       conversionFactor,
       foodName: foodName(),
       initialState: state,
-      isValid,
       parameters,
       promptComponent,
       promptProps,
@@ -82,20 +81,6 @@ export default defineComponent({
       update,
       clearStoredState,
     };
-  },
-
-  computed: {
-    objectValid() {
-      return this.state.objectIdx !== undefined && this.state.objectConfirmed;
-    },
-
-    quantityValid() {
-      return this.state.quantityConfirmed;
-    },
-
-    isValid() {
-      return this.objectValid && this.quantityValid;
-    },
   },
 
   methods: {

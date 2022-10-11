@@ -31,10 +31,6 @@ export default <P extends BasePromptProps, S extends object>() =>
         type: Object as PropType<S>,
         required: true,
       },
-      isValid: {
-        type: Boolean,
-        required: true,
-      },
       promptComponent: {
         type: String as PropType<PortionSizeComponentType>,
         required: true,

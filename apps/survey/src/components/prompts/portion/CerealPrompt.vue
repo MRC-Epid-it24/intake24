@@ -223,6 +223,22 @@ export default defineComponent({
     leftoversValid(): boolean {
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
+
+    isValid(): boolean {
+      // bowl not yet selected
+      if (!this.bowlValid) return false;
+
+      // serving not yet selected
+      if (!this.servingValid) return false;
+
+      // Leftover disables || leftovers have been confirmed
+      if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
+
+      // leftovers not yet selected
+      if (!this.leftoversValid) return false;
+
+      return true;
+    },
   },
 
   async mounted() {

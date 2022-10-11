@@ -24,10 +24,10 @@
                   </v-btn-toggle>
                 </v-container>
                 <v-card v-if="prompt.confirmed === true && prompt.selectedFood !== undefined" flat>
-                  <v-card-title
-                    ><span class="fa fa-check mr-2"></span
-                    >{{ prompt.selectedFood.description }}</v-card-title
-                  >
+                  <v-card-title>
+                    <span class="fa fa-check mr-2"></span>
+                    {{ prompt.selectedFood.description }}
+                  </v-card-title>
                   <v-card-actions>
                     <v-btn @click="onSelectDifferentFood(prompt)">Select a different food </v-btn>
                   </v-card-actions>
@@ -41,11 +41,11 @@
                       >Please select an item from this category:</v-card-title
                     >
                     <v-card-text class="pl-0">
-                      <FoodBrowser
+                      <food-browser
                         :locale-id="localeId"
                         :root-category="associatedFoodPrompts[index].categoryCode"
                         @food-selected="(food) => onFoodSelected(food, index)"
-                      ></FoodBrowser>
+                      ></food-browser>
                     </v-card-text>
                   </v-card>
                 </v-expand-transition>
@@ -86,10 +86,6 @@ export default defineComponent({
   props: {
     initialState: {
       type: Object as PropType<AssociatedFoodsState>,
-      required: true,
-    },
-    isValid: {
-      type: Boolean,
       required: true,
     },
     food: {
@@ -137,6 +133,14 @@ export default defineComponent({
       return this.getLocaleContent(this.promptProps.text, {
         path: 'prompts.associatedFoods.description',
       });
+    },
+
+    isValid(): boolean {
+      return this.prompts.every(
+        (prompt) =>
+          prompt.confirmed === false ||
+          (prompt.confirmed === true && prompt.selectedFood !== undefined)
+      );
     },
   },
 
