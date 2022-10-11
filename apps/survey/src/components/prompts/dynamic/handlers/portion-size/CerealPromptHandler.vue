@@ -48,12 +48,12 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
-      useFoodPromptUtils<'cereal'>();
+    const { foodName, parameters, selectedFood } = useFoodPromptUtils<'cereal'>();
 
     const getInitialState = (): CerealPromptState => ({
       portionSize: {
         method: 'cereal',
+        imageUrl: null,
         type: parameters.value.type,
         bowl: null,
         bowlIndex: undefined,
@@ -63,7 +63,7 @@ export default defineComponent({
         leftoversWeight: 0,
       },
       panel: 0,
-      objectConfirmed: false,
+      bowlConfirmed: false,
       servingImageConfirmed: false,
       leftoversPrompt: undefined,
       leftoversImageConfirmed: false,
@@ -76,11 +76,9 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
       foodName,
       parameters,
       selectedFood,
-      selectedPortionSize,
       state,
       update,
       clearStoredState,
@@ -92,11 +90,11 @@ export default defineComponent({
       return !this.promptProps.leftovers;
     },
 
-    objectValid() {
+    bowlValid() {
       return (
         this.state.portionSize.bowlIndex !== undefined &&
         this.state.portionSize.bowl &&
-        this.state.objectConfirmed
+        this.state.bowlConfirmed
       );
     },
 
@@ -109,8 +107,8 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      // object not yet selected
-      if (!this.objectValid) return false;
+      // bowl not yet selected
+      if (!this.bowlValid) return false;
 
       // serving not yet selected
       if (!this.servingValid) return false;

@@ -1,7 +1,7 @@
 <template>
   <guide-image-prompt
     v-bind="{
-      conversionFactor: selectedPortionSize().conversionFactor,
+      conversionFactor,
       foodName: foodName(),
       initialState: state,
       isValid,
@@ -50,7 +50,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
+    const { conversionFactor, foodName, parameters, selectedFood } =
       useFoodPromptUtils<'guide-image'>();
 
     const getInitialState = (): GuideImagePromptState => ({
@@ -74,11 +74,10 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
+      conversionFactor,
       foodName,
       parameters,
       selectedFood,
-      selectedPortionSize,
       state,
       update,
       clearStoredState,

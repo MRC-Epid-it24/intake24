@@ -48,7 +48,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
+    const { foodName, parameters, selectedFood, selectedPortionSize } =
       useFoodPromptUtils<'as-served'>();
 
     const getInitialState = (): AsServedPromptState => ({
@@ -72,7 +72,6 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
       foodName,
       parameters,
       selectedFood,

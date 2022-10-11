@@ -52,7 +52,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
+    const { conversionFactor, foodName, parameters, selectedFood } =
       useFoodPromptUtils<'standard-portion'>();
 
     const getInitialState = (): StandardPortionPromptState => ({
@@ -74,11 +74,10 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
+      conversionFactor,
       foodName,
       parameters,
       selectedFood,
-      selectedPortionSize,
       state,
       update,
       clearStoredState,
@@ -104,7 +103,6 @@ export default defineComponent({
 
     commitAnswer() {
       const { portionSize } = this.state;
-      const { conversionFactor } = this.selectedPortionSize();
 
       this.updateFood({
         foodId: this.selectedFood().id,
@@ -114,7 +112,7 @@ export default defineComponent({
             servingWeight:
               (portionSize.unit?.weight ?? 0) *
               ((portionSize.quantity?.whole ?? 0) + (portionSize.quantity?.fraction ?? 0)) *
-              conversionFactor,
+              this.conversionFactor,
           },
         },
       });

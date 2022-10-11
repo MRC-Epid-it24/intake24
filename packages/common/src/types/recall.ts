@@ -1,7 +1,7 @@
 import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
 
 import type { ComponentType, QuantityValues } from '../prompts';
-import type { CerealType, FoodHeader, UserFoodData } from './http';
+import type { FoodHeader, UserFoodData } from './http';
 
 /*
 Not currently used:
@@ -106,6 +106,7 @@ export type PortionSizeStates = {
   };
   cereal: PortionSizeStateBase & {
     method: 'cereal';
+    imageUrl: string | null;
     type: CerealType;
     bowl: string | null;
     bowlIndex?: number;
@@ -134,7 +135,15 @@ export type PortionSizeStates = {
     milkVolumePercentage: number | null;
   };
   'milk-on-cereal': PortionSizeStateBase & { method: 'milk-on-cereal' };
-  pizza: PortionSizeStateBase & { method: 'pizza' };
+  pizza: PortionSizeStateBase & {
+    method: 'pizza';
+    imageUrl: string | null;
+    pizzaType?: number;
+    pizzaThickness?: number;
+    sliceImage: string | null;
+    sliceType?: number;
+    sliceQuantity: QuantityValues;
+  };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
     unit: StandardPortionUnit | null;

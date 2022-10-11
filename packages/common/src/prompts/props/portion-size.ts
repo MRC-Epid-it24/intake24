@@ -32,19 +32,6 @@ export type PizzaPromptProps = BasePromptProps;
 
 export type DirectWeightPromptProps = BasePromptProps;
 
-export interface AssociatedFoodsPanelProps {
-  expansionPanelTotal: number;
-  assocPromptData: UserAssociatedFoodPrompt | null;
-}
-
-export interface ImageMapSelectorProps {
-  imageMapId: string;
-}
-
-export interface ImageMapSelectorEmit {
-  selectedIdx: number;
-}
-
 export const asServedPromptDefaultProps: AsServedPromptProps = copy({
   ...basePromptProps,
   name: { en: 'As served' },
@@ -102,15 +89,6 @@ export const standardPortionPromptDefaultProps: StandardPortionPromptProps = cop
 export const directWeightPromptDefaultProps: DirectWeightPromptProps = copy({
   ...basePromptProps,
 });
-
-export const associatedFoodPanelDefaultProps: AssociatedFoodsPanelProps = {
-  expansionPanelTotal: 3,
-  assocPromptData: null,
-};
-
-export const imageMapSelectorDefaultProps: ImageMapSelectorProps = {
-  imageMapId: '',
-};
 
 export const portionSizePromptQuestions: PromptQuestion[] = [
   {

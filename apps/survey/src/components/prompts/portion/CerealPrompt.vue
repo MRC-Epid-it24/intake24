@@ -12,20 +12,23 @@
                 </template>
               </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
+                <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <image-map-selector
-                v-if="dataLoaded"
-                :disabled="portionSize.bowlIndex === undefined"
-                :image-map-data="imageMapData"
+                v-if="bowlImageMap"
+                :image-map-data="bowlImageMap"
                 :value="portionSize.bowlIndex"
                 @input="selectObject"
               ></image-map-selector>
               <v-row>
                 <v-col>
-                  <v-btn color="success" @click="confirmObject">
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.bowlIndex === undefined"
+                    @click="confirmObject"
+                  >
                     {{ $t('common.action.continue') }}
                   </v-btn>
                 </v-col>
@@ -143,7 +146,7 @@ import { AsServedSelector, AsServedWeight, ImageMapSelector } from './selectors'
 export interface CerealPromptState {
   portionSize: CerealState;
   panel: number;
-  objectConfirmed: boolean;
+  bowlConfirmed: boolean;
   servingImageConfirmed: boolean;
   leftoversImageConfirmed: boolean;
   leftoversPrompt?: boolean;
@@ -169,7 +172,7 @@ export default defineComponent({
 
   data() {
     return {
-      imageMapData: {} as ImageMapResponse,
+      bowlImageMap: null as ImageMapResponse | null,
       bowls: ['A', 'B', 'C', 'D', 'E', 'F'],
 
       ...copy(this.initialState),
@@ -177,10 +180,6 @@ export default defineComponent({
   },
 
   computed: {
-    dataLoaded(): boolean {
-      return !!Object.keys(this.imageMapData).length;
-    },
-
     disabledLeftovers() {
       return !this.leftovers;
     },
@@ -211,9 +210,9 @@ export default defineComponent({
       return `${method}_${type}${bowls[bowlIndex]}_leftovers`;
     },
 
-    objectValid() {
+    bowlValid() {
       return (
-        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.objectConfirmed
+        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.bowlConfirmed
       );
     },
 
@@ -227,16 +226,16 @@ export default defineComponent({
   },
 
   async mounted() {
-    await this.fetchFoodData();
+    await this.fetchBowImageMap();
   },
 
   methods: {
-    async fetchFoodData() {
-      const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
+    async fetchBowImageMap() {
+      const { data } = await this.$http.get<ImageMapResponse>(
         `portion-sizes/image-maps/${this.bowlImageMapId}`
       );
 
-      this.imageMapData = { ...imageMapData };
+      this.bowlImageMap = { ...data };
     },
 
     updatePanel() {
@@ -245,7 +244,7 @@ export default defineComponent({
         return;
       }
 
-      if (!this.objectValid) {
+      if (!this.bowlValid) {
         this.setPanel(0);
         return;
       }
@@ -261,12 +260,12 @@ export default defineComponent({
     selectObject(idx: number) {
       this.portionSize.bowlIndex = idx;
       this.portionSize.bowl = this.bowls[idx];
-      this.objectConfirmed = false;
+      this.bowlConfirmed = false;
       this.update();
     },
 
     confirmObject() {
-      this.objectConfirmed = true;
+      this.bowlConfirmed = true;
       this.updatePanel();
       this.update();
     },
@@ -316,7 +315,7 @@ export default defineComponent({
       const state: CerealPromptState = {
         portionSize: this.portionSize,
         panel: this.panel,
-        objectConfirmed: this.objectConfirmed,
+        bowlConfirmed: this.bowlConfirmed,
         servingImageConfirmed: this.servingImageConfirmed,
         leftoversImageConfirmed: this.leftoversImageConfirmed,
         leftoversPrompt: this.leftoversPrompt,

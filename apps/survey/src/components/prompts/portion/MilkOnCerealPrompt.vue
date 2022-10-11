@@ -19,7 +19,7 @@
     </v-row>
     <v-row v-if="displayQuestions">
       <v-col>
-        <v-expansion-panels v-model="panel">
+        <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               Please select the milk you had:

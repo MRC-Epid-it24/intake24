@@ -65,7 +65,3 @@ export type WeightResponse = {
   useForRecipes: boolean;
   conversionFactor: number;
 };
-
-export interface ImageMapEmit {
-  selectedIdx: number;
-}

@@ -114,6 +114,23 @@ export function milkInAHotDrinkComplete(selectedFood: FoodState): boolean {
   return false;
 }
 
+export function pizzaComplete(selectedFood: FoodState): boolean {
+  if (selectedFood.type !== 'encoded-food') return false;
+
+  if (selectedFood.portionSize !== null) {
+    if (selectedFood.portionSize.method !== 'pizza') {
+      console.warn(
+        `Selected portion size method is "pizza" but portion size data is for ${selectedFood.portionSize.method}`
+      );
+      return false;
+    }
+
+    return selectedFood.portionSize.servingWeight !== null;
+  }
+
+  return false;
+}
+
 export function standardPortionComplete(selectedFood: FoodState): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 

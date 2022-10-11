@@ -7,6 +7,9 @@
             <image-placeholder></image-placeholder>
           </template>
         </v-img>
+        <div v-if="hasLabelSlot" class="label">
+          <slot name="label"></slot>
+        </div>
         <svg ref="svg" v-bind="{ height, width }">
           <polygon
             v-for="(polygon, idx) in polygons"
@@ -63,6 +66,10 @@ export default defineComponent({
   },
 
   computed: {
+    hasLabelSlot(): boolean {
+      return !!this.$slots.label;
+    },
+
     polygons(): string[] {
       const { width } = this;
 
@@ -107,10 +114,18 @@ export default defineComponent({
 .guides-drawer {
   position: relative;
 
+  .label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+  }
+
   svg {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
 
     .guides-drawer-polygon {
       cursor: pointer;

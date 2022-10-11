@@ -24,6 +24,7 @@ import {
   drinkScaleComplete,
   guideImageComplete,
   milkInAHotDrinkComplete,
+  pizzaComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
 } from './portion-size-checks';
@@ -267,6 +268,25 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'milk-in-a-hot-drink')
           ? 'Milk in hot drink estimation already complete'
           : 'Milk in hot drink estimation not selected'
+      );
+      return false;
+    }
+
+    case 'pizza-prompt': {
+      if (portionSizeMethodSelected(foodState, 'pizza') && !pizzaComplete(foodState)) {
+        recallLog().promptCheck(
+          'pizza-prompt',
+          true,
+          'Pizza selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        'pizza-prompt',
+        false,
+        portionSizeMethodSelected(foodState, 'pizza')
+          ? 'Pizza estimation already complete'
+          : 'Pizza estimation not selected'
       );
       return false;
     }

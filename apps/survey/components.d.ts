@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     PromptsDynamicHandlersPortionsizeDrinkScalePromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/DrinkScalePromptHandler.vue')['default']
     PromptsDynamicHandlersPortionsizeGuideImagePromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/GuideImagePromptHandler.vue')['default']
     PromptsDynamicHandlersPortionsizeMilkInAHotDrinkPromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/MilkInAHotDrinkPromptHandler.vue')['default']
+    PromptsDynamicHandlersPortionsizePizzaPromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/PizzaPromptHandler.vue')['default']
     PromptsDynamicHandlersPortionsizePortionSizeOptionPromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/PortionSizeOptionPromptHandler.vue')['default']
     PromptsDynamicHandlersPortionsizeStandardPortionPromptHandler: typeof import('./src/components/prompts/dynamic/handlers/portion-size/StandardPortionPromptHandler.vue')['default']
     PromptsDynamicHandlersStandardAssociatedFoodsPromptHandler: typeof import('./src/components/prompts/dynamic/handlers/standard/AssociatedFoodsPromptHandler.vue')['default']

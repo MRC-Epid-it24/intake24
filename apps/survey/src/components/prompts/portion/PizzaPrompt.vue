@@ -1,79 +1,128 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
-        <v-expansion-panels v-model="panel">
+        <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.label`) }}
+              {{ $t(`portion.${portionSize.method}.typeLabel`) }}
               <template #actions>
-                <valid-invalid-icon :valid="typeComplete"></valid-invalid-icon>
+                <valid-invalid-icon :valid="confirmed.pizzaType"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <image-map-selector
-                :prompt-props="typePromptProps"
-                @image-map-selector-submit="selectPizza($event)"
+                v-if="imageMaps.pizzaType"
+                :image-map-data="imageMaps.pizzaType"
+                :value="portionSize.pizzaType"
+                @input="selectType('pizzaType', $event)"
               ></image-map-selector>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.thicknessLabel`) }}
-              <template #actions>
-                <valid-invalid-icon :valid="thicknessComplete"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                :prompt-props="thickPromptProps"
-                @image-map-selector-submit="selectThickness($event)"
-              ></image-map-selector>
-              <!-- <v-img :src="pizzaThicknessMapData.baseImageUrl" @click="selectThickness()"></v-img> -->
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.sizeLabel`) }}
-              <template #actions>
-                <valid-invalid-icon :valid="sizeComplete"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <template v-if="!sizePromptProps.imageMapId">
-                {{ $t('portion.common.completePreviousStep') }}
-              </template>
-              <template v-if="sizePromptProps.imageMapId">
-                <v-btn :color="wholeSelected === true ? 'success' : ''" @click="selectWhole()">
-                  {{ $t(`portion.${method}.wholePizzaButton`) }}
-                </v-btn>
-                <image-map-selector
-                  :prompt-props="sizePromptProps"
-                  @image-map-selector-submit="selectSlice($event)"
-                ></image-map-selector>
-              </template>
-              <!-- <v-img :src="pizzaSliceMapData.baseImageUrl" @click="selectSlice()"></v-img> -->
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <template v-if="!wholeSelected">{{
-                $t(`portion.${method}.slicesQuantityLabel`)
-              }}</template>
-              <template v-if="wholeSelected">{{ $t('portion.pizza.wholeQuantityLabel') }}</template>
-              <template #actions>
-                <valid-invalid-icon :valid="quantityComplete"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  <quantity-card fraction whole></quantity-card>
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.pizzaType === undefined"
+                    @click="confirmType('pizzaType')"
+                  >
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
                 </v-col>
               </v-row>
-              <v-btn @click="selectQuantity()">
-                {{ $t('portion.common.confirmButtonMany') }}
-              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t(`portion.${portionSize.method}.thicknessLabel`) }}
+              <template #actions>
+                <valid-invalid-icon :valid="confirmed.pizzaThickness"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <image-map-selector
+                v-if="imageMaps.pizzaThickness"
+                :image-map-data="imageMaps.pizzaThickness"
+                :value="portionSize.pizzaThickness"
+                @input="selectType('pizzaThickness', $event)"
+              ></image-map-selector>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.pizzaThickness === undefined"
+                    @click="confirmType('pizzaThickness')"
+                  >
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t(`portion.${portionSize.method}.sizeLabel`) }}
+              <template #actions>
+                <valid-invalid-icon :valid="confirmed.sliceType"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <image-map-selector
+                v-if="imageMaps.sliceType"
+                :image-map-data="imageMaps.sliceType"
+                :value="portionSize.sliceType ? portionSize.sliceType - 1 : undefined"
+                @input="selectType('sliceType', $event + 1)"
+              >
+                <template #label>
+                  <v-btn
+                    class="ma-2 font-weight-medium"
+                    :color="isWholeSelected ? 'blue darken-3' : ''"
+                    :dark="isWholeSelected"
+                    link
+                    rounded
+                    :title="$t(`portion.${portionSize.method}.whole.confirm`)"
+                    @click="selectType('sliceType', 0)"
+                  >
+                    {{ $t(`portion.${portionSize.method}.whole.confirm`) }}
+                  </v-btn>
+                </template>
+              </image-map-selector>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    color="success"
+                    :disabled="portionSize.sliceType === undefined"
+                    @click="confirmType('sliceType')"
+                  >
+                    {{ $t('common.action.continue') }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              <template v-if="isWholeSelected">
+                {{ $t(`portion.${portionSize.method}.whole.label`) }}
+              </template>
+              <template v-else>
+                {{ $t(`portion.${portionSize.method}.slices.label`) }}
+              </template>
+              <template #actions>
+                <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row justify="center">
+                <v-col>
+                  <quantity-card v-model="portionSize.sliceQuantity" fraction whole></quantity-card>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col md="4" xs="12">
+                  <v-btn block color="success" @click="confirmType('quantity')">
+                    {{ $t(`portion.${portionSize.method}.confirm`) }}
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -88,116 +137,224 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { ImageMapSelectorProps, PizzaPromptProps } from '@intake24/common/prompts';
-import type { ImageMapEmit } from '@intake24/common/types/http/foods';
+import type { PizzaPromptProps } from '@intake24/common/prompts';
+import type { PizzaState } from '@intake24/common/types';
+import type { ImageMapResponse } from '@intake24/common/types/http/foods';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
+
+export type PizzaImageMapType = 'pizzaType' | 'pizzaThickness' | 'sliceType';
+
+export type PizzaPromptState = {
+  portionSize: PizzaState;
+  panel: number;
+  confirmed: {
+    pizzaType: boolean;
+    pizzaThickness: boolean;
+    sliceType: boolean;
+    quantity: boolean;
+  };
+};
+
+const thicknessFactors = [
+  [0.9, 1.0, 1.1, 1.4, 1.6],
+  [1.0, 1.2, 1.3, 1.7, 1.8],
+  [0.7, 0.8, 0.8, 1.1, 1.2],
+  [0.6, 0.7, 0.8, 1.0, 1.1],
+  [1.2, 1.4, 1.5, 2.0, 2.2],
+  [0.5, 0.6, 0.7, 0.9, 1.0],
+  [0.9, 1.1, 1.2, 1.5, 1.7],
+  [0.8, 0.9, 1.0, 1.3, 1.5],
+  [1.0, 1.2, 1.3, 1.7, 1.8],
+];
+
+const sliceWeights = [
+  [335, 167.5, 83.8, 41.9],
+  [379, 189.5, 94.8, 47.4],
+  [390, 195.0, 97.5, 48.8],
+  [162, 81.0, 40.5, 20.3],
+  [68, 34.0, 17.0, 8.5],
+  [135, 67.5, 33.8],
+  [562, 281.0, 140.5, 70.3],
+  [288, 144.0, 72.0, 36.0],
+  [131, 65.5, 32.8, 16.4],
+];
 
 export default defineComponent({
   name: 'PizzaPrompt',
 
   components: { QuantityCard, ImageMapSelector },
 
-  mixins: [createBasePortion<PizzaPromptProps, any>()],
+  mixins: [createBasePortion<PizzaPromptProps, PizzaPromptState>()],
 
   data() {
-    return {
-      method: 'pizza',
-      // type, thickness and slice prefix are set as default
-      pizzaThicknessMapData: [] as any,
-      selectedSliceId: 0,
-      calculatedSliceMapId: '', // Needs a default value for rendering (unless put some conditional logic)
+    const pizzaImageMapId = 'gpizza';
+    const pizzaThicknessImageMapId = 'gpthick';
+    const pizzaSliceImageMapPrefix = 'gpiz';
 
-      typeComplete: false,
-      thicknessComplete: false,
-      sizeComplete: false,
-      quantityComplete: false,
-      wholeSelected: false,
-      typePromptProps: {
-        imageMapId: 'gpizza',
-      } as ImageMapSelectorProps,
-      thickPromptProps: {
-        imageMapId: 'gpthick',
-      } as ImageMapSelectorProps,
-      sizePromptProps: {
-        imageMapId: '',
-      } as ImageMapSelectorProps,
+    return {
+      thicknessFactors,
+      sliceWeights,
+
+      pizzaImageMapId,
+      pizzaThicknessImageMapId,
+      pizzaSliceImageMapPrefix,
+
+      imageMaps: {
+        pizzaType: null,
+        pizzaThickness: null,
+        sliceType: null,
+      } as Record<PizzaImageMapType, ImageMapResponse | null>,
+
+      ...copy(this.initialState),
     };
   },
 
   computed: {
+    imageMapIds(): Record<PizzaImageMapType, string> {
+      return {
+        pizzaType: this.pizzaImageMapId,
+        pizzaThickness: this.pizzaThicknessImageMapId,
+        sliceType: this.pizzaSliceImageMapId,
+      };
+    },
+
+    isWholeSelected(): boolean {
+      return this.portionSize.sliceType === 0;
+    },
+
     localeDescription(): string {
       return this.getLocaleContent(this.description);
     },
 
-    isValid() {
-      return (
-        this.typeComplete && this.thicknessComplete && this.sizeComplete && this.quantityComplete
-      );
+    pizzaSliceImageMapId(): string {
+      const {
+        pizzaSliceImageMapPrefix,
+        portionSize: { pizzaType },
+      } = this;
+
+      if (pizzaType === undefined) return '';
+
+      return `${pizzaSliceImageMapPrefix}${pizzaType + 1}`;
+    },
+
+    typeValid() {
+      return this.portionSize.pizzaType !== undefined && this.confirmed.pizzaType;
+    },
+
+    thicknessValid() {
+      return this.portionSize.pizzaThickness !== undefined && this.confirmed.pizzaThickness;
+    },
+
+    sliceValid() {
+      return this.confirmed.sliceType;
+    },
+
+    quantityValid() {
+      return this.confirmed.quantity;
     },
   },
 
-  mounted() {
-    this.fetchThicknessImageMapData();
+  watch: {
+    async pizzaSliceImageMapId(val) {
+      if (!val) return;
+
+      await this.fetchPizzaImageMap('sliceType');
+    },
+  },
+
+  async mounted() {
+    await Promise.all(
+      Object.keys(this.imageMapIds).map((key) => this.fetchPizzaImageMap(key as PizzaImageMapType))
+    );
   },
 
   methods: {
-    generateSliceId() {
-      this.calculatedSliceMapId = `${this.slicePrefix}${(this.selectedSliceId + 1).toString()}`;
-      this.sizePromptProps.imageMapId = this.calculatedSliceMapId;
-    },
-    async fetchThicknessImageMapData() {
-      try {
-        const { data } = await this.$http.get(
-          `portion-sizes/image-maps/${this.thicknessImageMapId}`
-        );
-        this.pizzaThicknessMapData = { ...data };
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    // async fetchSliceImageMapData() {
-    //   try {
-    //     const { data } = await this.$http.get(`portion-sizes/image-maps/${this.calculatedSliceMapId}`);
-    //     this.pizzaSliceMapData = { ...data };
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // },
-    setPanel(value: number) {
-      this.panel = value;
+    async fetchPizzaImageMap(type: PizzaImageMapType) {
+      const imageMapId = this.imageMapIds[type];
+      if (!imageMapId) return;
+
+      const { data } = await this.$http.get<ImageMapResponse>(
+        `portion-sizes/image-maps/${imageMapId}`
+      );
+
+      this.imageMaps[type] = { ...data };
     },
 
-    // Select type of pizza
-    selectPizza(value: ImageMapEmit) {
-      console.log(value);
-      this.selectedSliceId = value.selectedIdx;
-      this.generateSliceId();
-      this.setPanel(1);
-      this.typeComplete = true;
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
+
+      if (!this.typeValid) {
+        this.setPanel(0);
+        return;
+      }
+
+      if (!this.thicknessValid) {
+        this.setPanel(1);
+        return;
+      }
+
+      if (!this.sliceValid) {
+        this.setPanel(2);
+        return;
+      }
+
+      this.setPanel(this.quantityValid ? -1 : 3);
     },
-    selectThickness() {
-      this.setPanel(2);
-      this.thicknessComplete = true;
+
+    selectType(type: PizzaImageMapType, idx: number) {
+      this.portionSize[type] = idx;
+      this.confirmed[type] = false;
+      this.update();
     },
-    selectSlice(value: ImageMapEmit) {
-      this.setPanel(3);
-      this.sizeComplete = true;
-      this.wholeSelected = false;
+
+    confirmType(type: PizzaImageMapType | 'quantity') {
+      this.confirmed[type] = true;
+      this.updatePanel();
+      this.update();
     },
-    selectWhole() {
-      this.setPanel(3);
-      this.sizeComplete = true;
-      this.wholeSelected = true;
-    },
-    selectQuantity() {
-      this.setPanel(4);
-      this.quantityComplete = true;
+
+    setErrors() {
+      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     submit() {
-      console.log('submitted');
+      if (!this.isValid) {
+        this.setErrors();
+        return;
+      }
+
+      this.$emit('continue');
+    },
+
+    sliceWeight(pizzaType?: number, sliceType?: number, thickness?: number) {
+      if (pizzaType === undefined || sliceType === undefined || thickness === undefined) return 0;
+
+      return sliceWeights[pizzaType][sliceType] * thicknessFactors[pizzaType][thickness];
+    },
+
+    update() {
+      const { portionSize } = this;
+
+      const servingWeight =
+        this.sliceWeight(portionSize.pizzaType, portionSize.sliceType, portionSize.pizzaThickness) *
+        (portionSize.sliceQuantity.whole + portionSize.sliceQuantity.fraction);
+
+      const state: PizzaPromptState = {
+        portionSize: {
+          ...portionSize,
+          servingWeight,
+        },
+        panel: this.panel,
+        confirmed: this.confirmed,
+      };
+
+      this.$emit('update', state);
     },
   },
 });

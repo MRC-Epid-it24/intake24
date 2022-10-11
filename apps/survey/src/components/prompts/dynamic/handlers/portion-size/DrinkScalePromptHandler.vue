@@ -49,8 +49,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { encodedSelectedFood, foodName, parameters, selectedFood, selectedPortionSize } =
-      useFoodPromptUtils<'drink-scale'>();
+    const { foodName, parameters, selectedFood } = useFoodPromptUtils<'drink-scale'>();
 
     const getInitialState = (): DrinkScalePromptState => ({
       portionSize: {
@@ -85,11 +84,9 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
       foodName,
       parameters,
       selectedFood,
-      selectedPortionSize,
       state,
       update,
       clearStoredState,

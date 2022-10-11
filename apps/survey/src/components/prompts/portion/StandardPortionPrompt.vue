@@ -56,7 +56,7 @@
             </v-col>
             <v-col md="4" xs="12">
               <v-btn block color="success" @click="confirmQuantity">
-                {{ $t(`portion.${portionSize.method}.continue`) }}
+                {{ $t(`portion.${portionSize.method}.confirm`) }}
               </v-btn>
             </v-col>
           </v-row>

@@ -47,6 +47,8 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return selectedFood.data.portionSizeMethods[selectedFood.portionSizeMethodIndex];
   };
 
+  const conversionFactor = computed(() => selectedPortionSize().conversionFactor);
+
   const parameters = computed(
     () => selectedPortionSize().parameters as unknown as PortionSizeParameters[T]
   );
@@ -58,6 +60,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     encodedSelectedFood,
     foodName,
     selectedPortionSize,
+    conversionFactor,
     parameters,
   };
 };

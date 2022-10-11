@@ -113,7 +113,7 @@ const portion: LocaleMessageObject = {
   'milk-in-a-hot-drink': {
     text: 'How much {food} did you have in your tea or coffee?',
     label: 'Select the amount you had.',
-    continue: 'I had that much',
+    confirm: 'I had that much',
   },
   'milk-on-cereal': {
     text: 'Milk with your cereal',
@@ -122,12 +122,18 @@ const portion: LocaleMessageObject = {
     foodSelectButton: `I can't find my food`,
   },
   pizza: {
-    text: 'Please select the pizza that is closest to the size you had.',
+    text: '{food}',
+    typeLabel: 'Please select the pizza that is closest to the size you had.',
     thicknessLabel: 'How thick was your pizza?',
     sizeLabel: 'What size slice(s) did you have?',
-    wholePizzaButton: 'I had the whole pizza',
-    slicesQuantityLabel: 'How many of these slices did you have?',
-    wholeQuantityLabel: 'How many of these pizzas did you have?',
+    whole: {
+      label: 'How many of these pizzas did you have?',
+      confirm: 'I had the whole pizza',
+    },
+    slices: {
+      label: 'How many of these slices did you have?',
+    },
+    confirm: 'I had that many',
   },
   'standard-portion': {
     text: '{food}',
@@ -138,7 +144,7 @@ const portion: LocaleMessageObject = {
       placeholder: 'How many did you have?',
       withFood: '{unit} of {food} did you have?',
     },
-    continue: 'I had that many',
+    confirm: 'I had that many',
   },
   weight: {
     text: 'Please enter how much you had.',
