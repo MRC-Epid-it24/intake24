@@ -146,7 +146,7 @@ export default defineComponent({
 
       // First Panel
       objectConfirmed: this.initialState.objectConfirmed && selectedIndex !== undefined,
-      objectIdx: selectedIndex ? selectedIndex - 1 : undefined,
+      objectIdx: selectedIndex ? selectedIndex : undefined,
       selectedDrink: this.initialState.drinkConfirmed,
       selectedLeftovers: this.initialState.leftoversConfirmed,
 

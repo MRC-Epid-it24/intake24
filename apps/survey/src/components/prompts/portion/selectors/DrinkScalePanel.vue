@@ -114,8 +114,9 @@ export default defineComponent({
   },
 
   data() {
-    const drinkwareSetData = this.drinkwareSetApiResponse;
-    const maxFillValue = drinkwareSetData.scales[this.selectedObjectIdx].volumeSamples[9].volume;
+    const drinkwareSetData: DrinkwareSetResponse = this.drinkwareSetApiResponse;
+    const maxFillValue: number =
+      drinkwareSetData.scales[this.selectedObjectIdx].volumeSamples.at(-1)?.volume || 100; //FIX Hack since volume can be unidentified;
 
     return {
       heightOverlay: 0,
@@ -180,7 +181,7 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.widthOverlay = width;
       this.heightOverlay = height;
-      console.log(`${this.maxSliderValue}`);
+      console.log(`${this.selectedMaxSliderValue}`);
     },
 
     onScaleMove(newValue: number) {
