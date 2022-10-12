@@ -24,10 +24,6 @@ function camelCaseHeaders(headers: (string | undefined | null)[]): string[] {
   });
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'> {
   readonly name = 'FoodRankingCsvUpload';
 
@@ -91,7 +87,6 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
               chunkOps.push(chunkPromise);
               await this.validateChunk(chunkRows);
               await this.importChunk(chunkRows, tx);
-              await sleep(2000);
               chunkResolve?.();
             } catch (err) {
               if (err instanceof Error) {
