@@ -39,6 +39,7 @@ export type JobParams = {
     targetLocaleId: string;
   };
   PopularitySearchUpdateCounters: {
+    localeCode: string;
     foodCodes: string[];
   };
   PurgeRefreshTokens: EmptyJobParams;
@@ -120,6 +121,7 @@ export const defaultJobsParams: JobParams = {
     targetLocaleId: '',
   },
   PopularitySearchUpdateCounters: {
+    localeCode: '',
     foodCodes: [],
   },
   PurgeRefreshTokens: {},

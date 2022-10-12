@@ -113,6 +113,7 @@ import type {
   UserService,
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import type PopularityCountersService from '@intake24/api/services/survey/popularity-counters.service';
 import type { Environment } from '@intake24/common/types';
 import type { DatabaseConfig, DatabasesInterface, User } from '@intake24/db';
 import type { LogConfig, Logger, MailConfig, Mailer } from '@intake24/services';
@@ -289,6 +290,7 @@ export interface IoC extends Jobs {
 
   surveyService: SurveyService;
   surveySubmissionService: SurveySubmissionService;
+  popularityCountersService: PopularityCountersService;
   userService: UserService;
 }
 

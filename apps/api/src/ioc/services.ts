@@ -45,6 +45,7 @@ import {
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
+import PopularityCountersService from '@intake24/api/services/survey/popularity-counters.service';
 import { logger, Mailer } from '@intake24/services';
 
 export default (container: AwilixContainer): void => {
@@ -88,6 +89,7 @@ export default (container: AwilixContainer): void => {
 
     surveyService: asFunction(surveyService),
     surveySubmissionService: asFunction(surveySubmissionService),
+    popularityCountersService: asClass(PopularityCountersService).singleton(),
     userService: asFunction(userService),
 
     cache: asClass(Cache).singleton(),

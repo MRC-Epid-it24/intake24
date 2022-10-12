@@ -22,7 +22,7 @@ export default class PAOccurrence
   public localeId!: string;
 
   @Column({
-    allowNull: false,
+    primaryKey: true,
     type: DataType.STRING(50),
   })
   public foodCode!: string;

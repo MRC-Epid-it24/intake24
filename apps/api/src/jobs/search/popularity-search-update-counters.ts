@@ -7,15 +7,15 @@ import BaseJob from '../job';
 export default class PopularitySearchUpdateCounters extends BaseJob<'PopularitySearchUpdateCounters'> {
   readonly name = 'PopularitySearchUpdateCounters';
 
-  private readonly popularitySearchService;
+  private readonly popularityCountersService;
 
   constructor({
     logger,
-    popularitySearchService,
-  }: Pick<IoC, 'logger' | 'popularitySearchService'>) {
+    popularityCountersService,
+  }: Pick<IoC, 'logger' | 'popularityCountersService'>) {
     super({ logger });
 
-    this.popularitySearchService = popularitySearchService;
+    this.popularityCountersService = popularityCountersService;
   }
 
   /**
@@ -30,9 +30,12 @@ export default class PopularitySearchUpdateCounters extends BaseJob<'PopularityS
 
     this.logger.debug('Job started.');
 
-    const { foodCodes } = this.params;
+    const { localeCode, foodCodes } = this.params;
 
-    await this.popularitySearchService.updateCounters(foodCodes);
+    await Promise.all([
+      this.popularityCountersService.updateGlobalCounters(foodCodes),
+      this.popularityCountersService.updateLocalCounters(localeCode, foodCodes),
+    ]);
 
     this.logger.debug('Job finished.');
   }

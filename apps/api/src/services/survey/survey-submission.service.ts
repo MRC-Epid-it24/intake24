@@ -437,7 +437,7 @@ const surveySubmissionService = ({
         scheduler.jobs.addJob({
           type: 'PopularitySearchUpdateCounters',
           userId,
-          params: { foodCodes },
+          params: { localeCode, foodCodes },
         }),
         SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
         SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
