@@ -20,7 +20,6 @@ import {
   securableScope,
   SystemLocale,
 } from '@intake24/db';
-import Locale from '@intake24/db/models/system/locale';
 
 import { getAndCheckAccess, securableController } from '../securable.controller';
 
@@ -164,7 +163,7 @@ const localeController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id, code } = await getAndCheckAccess(Locale, 'food-ranking', req);
+    const { id, code } = await getAndCheckAccess(SystemLocale, 'food-ranking', req);
 
     const { file } = req;
     const { id: userId } = req.user as User;
