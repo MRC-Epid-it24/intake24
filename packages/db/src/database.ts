@@ -21,6 +21,14 @@ export type DatabaseOptions = {
   logger: Logger;
 };
 
+export function databaseLogQuery(sql: string, logger: Logger, limit: number) {
+  if (limit > 0 && sql.length > limit) {
+    logger.debug(sql.substring(0, limit) + '...');
+  } else {
+    logger.debug(sql);
+  }
+}
+
 export class Database implements DatabasesInterface {
   private readonly config;
 
@@ -48,9 +56,7 @@ export class Database implements DatabasesInterface {
         ...dbConf,
         models: Object.values(models[database]),
         logging: isDev
-          ? (sql: string): void => {
-              this.logger.debug(sql);
-            }
+          ? (sql) => databaseLogQuery(sql, this.logger, dbConf.debugQueryLimit)
           : false,
       });
 

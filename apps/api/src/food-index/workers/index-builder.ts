@@ -11,6 +11,7 @@ import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankSearchResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
+  databaseLogQuery,
   FoodLocal,
   FoodLocalList,
   FoodsLocale,
@@ -18,22 +19,30 @@ import {
   SequelizeTS,
   SynonymSet,
 } from '@intake24/db';
-import { dbLogger, logger as servicesLogger } from '@intake24/services';
+import { logger as servicesLogger } from '@intake24/services';
 
 if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
 
 const parentPort = parentPortNullable;
 
+const dbLogger = servicesLogger.child({ service: 'Database (food index)' });
+
 const foodsDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.foods,
   models: Object.values(models.foods),
-  logging: config.env === 'development' ? dbLogger : false,
+  logging:
+    config.env === 'development'
+      ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.foods.debugQueryLimit)
+      : false,
 });
 
 const systemDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.system,
   models: Object.values(models.system),
-  logging: config.env === 'development' ? dbLogger : false,
+  logging:
+    config.env === 'development'
+      ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.system.debugQueryLimit)
+      : false,
 });
 
 interface FoodIndex {
