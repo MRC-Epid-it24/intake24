@@ -1,6 +1,10 @@
 import type { MatchStrategy, PhoneticEncoder } from '@intake24/api/food-index/dictionary';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
+import {
+  countDistanceViolations,
+  countOrderViolations,
+} from '@intake24/api/food-index/match-quality-helpers';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
@@ -139,9 +143,23 @@ export class PhraseIndex<K> {
     return result;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private evaluateMatchQuality(input: InterpretedPhrase, matchedWords: Array<WordMatch>): number {
-    return 1;
+    const matchedIndices = matchedWords.map((w) => w.matched.wordIndex);
+
+    const orderViolations = countOrderViolations(matchedIndices);
+    const distanceViolations = countDistanceViolations(matchedIndices);
+
+    const dictionaryPhraseLength =
+      this.phraseIndex[matchedWords[0].matched.phraseIndex].words.length;
+
+    // In some rare cases words can be matched multiple times, clamp to 0 avoid negative cost values
+    const unmatchedWords = Math.max(0, dictionaryPhraseLength - matchedWords.length);
+
+    return (
+      orderViolations * ORDER_COST +
+      distanceViolations * DISTANCE_COST +
+      unmatchedWords * UNMATCHED_WORD_COST
+    );
   }
 
   private matchCombination(
