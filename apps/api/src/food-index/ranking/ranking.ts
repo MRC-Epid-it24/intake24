@@ -1,17 +1,16 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import type { FoodHeader } from '@intake24/common/types/http';
+import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 import type Logger from '@intake24/services/logger/logger';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
+import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
+import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/local-popularity';
 
 export type RankingAlgorithm = '';
 
 export type RankingData = {
   [foodCode: string]: number;
 };
-
-export interface FoodSearchRankingAlgorithm {
-  getFoodRanking(localeId: string, foodCodes: string[]): Promise<RankingData>;
-}
 
 function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
   return results
@@ -97,24 +96,39 @@ function applyRankingData(
     .map((h) => h.header);
 }
 
+async function getRankingData(
+  algorithm: SearchSortingAlgorithm,
+  localeId: string,
+  foodCodes: string[],
+  logger: typeof Logger
+): Promise<RankingData | null> {
+  switch (algorithm) {
+    case 'fixed':
+      return getFixedRanking(localeId, foodCodes);
+    case 'globalPop':
+      return getGlobalPopularityRanking(foodCodes);
+    case 'popularity':
+      return getLocalPopularityRanking(localeId, foodCodes);
+    default: {
+      logger.warn(`Ranking algorithm "${algorithm}" is not supported`);
+      return null;
+    }
+  }
+}
+
 export async function rankSearchResults(
   results: PhraseMatchResult<string>[],
   localeId: string,
-  algorithm: string,
+  algorithm: SearchSortingAlgorithm,
   matchScoreWeight: number,
   logger: typeof Logger
 ): Promise<FoodHeader[]> {
-  switch (algorithm) {
-    case 'fixed': {
-      const rankingData = await getFixedRanking(
-        localeId,
-        results.map((result) => result.key)
-      );
+  const foodCodes = results.map((result) => result.key);
+  const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);
 
-      return applyRankingData(rankingData, results, matchScoreWeight, logger);
-    }
-    default:
-      logger.warn(`Ranking algorithm "${algorithm}" is not supported`);
-      return noAlgorithmRanking(results);
+  if (rankingData !== null) {
+    return applyRankingData(rankingData, results, matchScoreWeight, logger);
+  } else {
+    return noAlgorithmRanking(results);
   }
 }
