@@ -24,6 +24,10 @@ function camelCaseHeaders(headers: (string | undefined | null)[]): string[] {
   });
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'> {
   readonly name = 'FoodRankingCsvUpload';
 
@@ -69,18 +73,26 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
         .pipe(parse({ headers: camelCaseHeaders, trim: true }));
 
       let parsedRows: CSVRow[] = [];
+      const chunkOps: Promise<void>[] = [];
 
       stream
         .on('data', async (row: CSVRow) => {
           parsedRows.push(row);
 
           if (chunk > 0 && parsedRows.length === chunk) {
+            const chunkRows = parsedRows;
+            parsedRows = [];
+
             try {
-              stream.pause();
-              await this.validateChunk(parsedRows);
-              await this.importChunk(parsedRows, tx);
-              parsedRows = [];
-              stream.resume();
+              let chunkResolve: (() => void) | undefined;
+              const chunkPromise = new Promise<void>((resolve) => {
+                chunkResolve = resolve;
+              });
+              chunkOps.push(chunkPromise);
+              await this.validateChunk(chunkRows);
+              await this.importChunk(chunkRows, tx);
+              await sleep(2000);
+              chunkResolve?.();
             } catch (err) {
               if (err instanceof Error) {
                 stream.destroy(err);
@@ -95,6 +107,7 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
           try {
             await this.validateChunk(parsedRows);
             await this.importChunk(parsedRows, tx);
+            await Promise.all(chunkOps);
             resolve();
           } catch (err) {
             if (err instanceof Error) {
