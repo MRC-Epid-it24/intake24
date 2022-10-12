@@ -215,6 +215,7 @@ export interface FreeTextFood extends AbstractFoodState {
 export interface EncodedFood extends AbstractFoodState {
   type: 'encoded-food';
   data: UserFoodData;
+  searchTerm: string;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
   associatedFoodsComplete: boolean;

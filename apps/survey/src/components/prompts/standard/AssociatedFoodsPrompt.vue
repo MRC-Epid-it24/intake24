@@ -65,7 +65,7 @@
 import type { PropType } from 'vue';
 import Vue, { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { AssociatedFoodsPromptProps } from '@intake24/common/prompts';
 import type {
   AssociatedFoodPromptState,
   AssociatedFoodsState,
@@ -101,7 +101,7 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<AssociatedFoodsPromptProps>,
       required: true,
     },
   },

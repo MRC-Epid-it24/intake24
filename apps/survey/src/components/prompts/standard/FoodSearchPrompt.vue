@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout :description="promptProps.description" :text="promptTitle">
+  <prompt-layout :description="description" :text="promptTitle">
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
     <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
@@ -21,12 +21,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapGetters, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import { submitPromptProps } from '@intake24/common/prompts';
+import { foodSearchPromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { FoodSearchResults } from '@intake24/survey/components/elements';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
@@ -48,21 +48,21 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<FoodSearchPromptProps>,
       required: true,
     },
-    initialSearchTerm: {
+    value: {
       type: String,
-      default: '',
+      required: true,
     },
   },
 
   data() {
     return {
-      ...merge(submitPromptProps, this.promptProps),
+      ...merge(foodSearchPromptProps, this.promptProps),
       requestInProgress: true,
       requestFailed: false,
-      searchTerm: this.initialSearchTerm,
+      searchTerm: this.value,
       searchResults: null as FoodSearchResponse | null,
     };
   },
@@ -72,18 +72,20 @@ export default defineComponent({
 
     promptTitle(): string {
       const { searchTerm } = this;
-      return this.getLocaleContent(this.promptProps.text, { params: { searchTerm } });
+      return this.getLocaleContent(this.text, { params: { searchTerm } });
     },
   },
 
-  mounted() {
-    this.search();
+  async mounted() {
+    await this.search();
   },
 
   methods: {
     async search() {
+      this.$emit('input', this.searchTerm);
       this.requestInProgress = true;
       this.searchResults = null;
+
       try {
         this.searchResults = await foodsService.search(
           this.localeId,

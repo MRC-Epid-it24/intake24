@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import type {
   EncodedFood,
   FoodState,
+  FreeTextFood,
   LocaleTranslation,
   PortionSizeMethodId,
   PortionSizeParameters,
@@ -26,8 +27,15 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const encodedSelectedFood = (): EncodedFood => {
     const food = selectedFood();
 
-    if (food?.type !== 'encoded-food')
-      throw new Error('This selected food must be an encoded food');
+    if (food.type !== 'encoded-food') throw new Error('This selected food must be an encoded food');
+
+    return food;
+  };
+
+  const freeTextSelectedFood = (): FreeTextFood => {
+    const food = selectedFood();
+
+    if (food.type !== 'free-text') throw new Error('This selected food must be an encoded food');
 
     return food;
   };
@@ -58,6 +66,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     selectedFoodOptional,
     selectedFood,
     encodedSelectedFood,
+    freeTextSelectedFood,
     foodName,
     selectedPortionSize,
     conversionFactor,

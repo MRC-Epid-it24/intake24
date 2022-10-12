@@ -116,6 +116,7 @@ const surveySubmissionService = ({
         data: { code, groupCode, readyMealOption, reasonableAmount, brandNames },
         linkedFoods,
         portionSize,
+        searchTerm,
       } = foodState;
 
       const foodRecord = foods[code];
@@ -163,7 +164,7 @@ const surveySubmissionService = ({
         englishName,
         localName,
         readyMeal: readyMealOption,
-        searchTerm: '???', // TODO
+        searchTerm,
         portionSizeMethodId: portionSize.method,
         reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify
         foodGroupId,

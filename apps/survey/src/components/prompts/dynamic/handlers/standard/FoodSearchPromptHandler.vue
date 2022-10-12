@@ -1,22 +1,22 @@
 <template>
   <food-search-prompt
     v-bind="{ localeId, promptProps }"
-    :initial-search-term="selectedFoodDescription"
-    @food-selected="onFoodSelected"
+    v-model="searchTerm"
+    @food-selected="foodSelected"
   ></food-search-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import {
-  foodPromptUtils,
   promptHandlerStateless,
+  useFoodPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
@@ -26,7 +26,7 @@ export default defineComponent({
 
   components: { FoodSearchPrompt },
 
-  mixins: [promptHandlerStateless, foodPromptUtils],
+  mixins: [promptHandlerStateless],
 
   props: {
     promptProps: {
@@ -35,22 +35,18 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      foodData: undefined as UserFoodData | undefined,
-    };
+  setup() {
+    const { freeTextSelectedFood, localeId } = useFoodPromptUtils();
+
+    const foodData = ref<UserFoodData | undefined>(undefined);
+    const searchTerm = ref(freeTextSelectedFood().description);
+
+    return { foodData, searchTerm, freeTextSelectedFood, localeId };
   },
 
   computed: {
     selectedFoodDescription(): string {
-      const selectedFood = this.selectedFood();
-
-      if (selectedFood.type !== 'free-text')
-        throw new Error(
-          'This prompt can only be displayed for foods that have not yet been encoded'
-        );
-
-      return selectedFood.description;
+      return this.freeTextSelectedFood().description;
     },
   },
 
@@ -61,39 +57,38 @@ export default defineComponent({
       return false; // Continue button should always be disabled for this prompt
     },
 
-    onFoodSelected(data: UserFoodData) {
-      this.foodData = data;
+    foodSelected(foodData: UserFoodData) {
+      this.foodData = foodData;
       this.$emit('continue');
     },
 
     commitAnswer() {
-      if (this.foodData === undefined) {
-        console.warn('foodData is undefined');
+      const { foodData, searchTerm } = this;
+      if (foodData === undefined) {
+        console.warn('FoodSearchPromptHandler: foodData is undefined.');
         return;
       }
 
-      const selectedFood = this.selectedFood();
+      const { id, customPromptAnswers, flags } = this.freeTextSelectedFood();
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt
-      const portionSizeMethodIndex = this.foodData.portionSizeMethods.length === 1 ? 0 : null;
+      const portionSizeMethodIndex = foodData.portionSizeMethods.length === 1 ? 0 : null;
 
       const newState: FoodState = {
-        id: selectedFood.id,
+        id,
         type: 'encoded-food',
-        data: this.foodData,
+        data: foodData,
+        searchTerm,
         portionSizeMethodIndex,
         portionSize: null,
-        customPromptAnswers: selectedFood?.customPromptAnswers ?? {},
-        flags: selectedFood?.flags ?? [],
+        customPromptAnswers,
+        flags,
         linkedFoods: [],
         associatedFoodsComplete: false,
       };
 
-      this.replaceFood({
-        foodId: selectedFood.id,
-        food: newState,
-      });
+      this.replaceFood({ foodId: id, food: newState });
     },
   },
 });

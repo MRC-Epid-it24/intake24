@@ -21,6 +21,30 @@ export interface FoodSearchPromptProps extends BasePromptProps {
   dualLanguage: boolean;
 }
 
+export type AssociatedFoodsPromptProps = BasePromptProps;
+
+export const associatedFoodsPromptProps: AssociatedFoodsPromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Associated foods' },
+});
+
+export const editMealPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Edit Meal' },
+});
+
+export const finalPromptProps: BasePromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Final page' },
+});
+
+export const foodSearchPromptProps: FoodSearchPromptProps = copy({
+  ...basePromptProps,
+  allowBrowsing: true,
+  dualLanguage: false,
+  name: { en: 'Search Food' },
+});
+
 export const mealTimePromptProps: MealTimePromptProps = copy({
   ...basePromptProps,
   ...promptValidation,
@@ -33,9 +57,12 @@ export const mealAddPromptProps: BasePromptProps = copy({
   name: { en: 'Add Meal' },
 });
 
-export const editMealPromptProps: BasePromptProps = copy({
+export const redirectPromptProps: RedirectPromptProps = copy({
   ...basePromptProps,
-  name: { en: 'Edit Meal' },
+  url: null,
+  identifier: 'username',
+  timer: 0,
+  name: { en: 'Redirect' },
 });
 
 export const reviewConfirmPromptProps: BasePromptProps = copy({
@@ -46,31 +73,6 @@ export const reviewConfirmPromptProps: BasePromptProps = copy({
 export const submitPromptProps: BasePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Submit page' },
-});
-
-export const finalPromptProps: BasePromptProps = copy({
-  ...basePromptProps,
-  name: { en: 'Final page' },
-});
-
-export const redirectPromptProps: RedirectPromptProps = copy({
-  ...basePromptProps,
-  url: null,
-  identifier: 'username',
-  timer: 0,
-  name: { en: 'Redirect' },
-});
-
-export const foodSearchPromptProps: FoodSearchPromptProps = copy({
-  ...basePromptProps,
-  allowBrowsing: true,
-  dualLanguage: false,
-  name: { en: 'Search Food' },
-});
-
-export const associatedFoodsPromptProps: BasePromptProps = copy({
-  ...basePromptProps,
-  name: { en: 'Associated foods' },
 });
 
 export const standardPromptQuestions: PromptQuestion[] = [

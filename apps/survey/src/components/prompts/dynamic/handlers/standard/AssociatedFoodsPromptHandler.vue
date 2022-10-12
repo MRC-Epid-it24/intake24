@@ -18,7 +18,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { AssociatedFoodsPromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import {
@@ -54,7 +54,7 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<BasePromptProps>,
+      type: Object as PropType<AssociatedFoodsPromptProps>,
       required: true,
     },
   },
@@ -113,6 +113,7 @@ export default defineComponent({
         linkedFoods: [],
         customPromptAnswers: {},
         data,
+        searchTerm: 'associated food prompt',
         portionSizeMethodIndex: null,
         portionSize: null,
         associatedFoodsComplete: false,
@@ -120,10 +121,7 @@ export default defineComponent({
 
       this.updateFood({
         foodId: this.encodedSelectedFood().id,
-        update: {
-          associatedFoodsComplete: true,
-          linkedFoods: linkedFoods,
-        },
+        update: { associatedFoodsComplete: true, linkedFoods },
       });
 
       this.clearStoredState();

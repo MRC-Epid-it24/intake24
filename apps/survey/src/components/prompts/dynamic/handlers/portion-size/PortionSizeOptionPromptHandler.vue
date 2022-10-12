@@ -80,14 +80,12 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['replaceFood']),
+    ...mapActions(useSurvey, ['updateFood']),
 
     commitAnswer() {
-      const encodedSelectedFood = this.encodedSelectedFood();
-
-      this.replaceFood({
-        foodId: encodedSelectedFood.id,
-        food: { ...encodedSelectedFood, portionSizeMethodIndex: this.state.option },
+      this.updateFood({
+        foodId: this.encodedSelectedFood().id,
+        update: { portionSizeMethodIndex: this.state.option },
       });
 
       this.clearStoredState();
