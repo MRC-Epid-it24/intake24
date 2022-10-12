@@ -1,7 +1,7 @@
 <template>
   <v-row>
-    <v-col>
-      <div class="guides-drawer">
+    <v-col cols="12">
+      <div class="guide-drawer">
         <v-img ref="img" v-resize="onImgResize" :src="imageMapData.baseImageUrl">
           <template #placeholder>
             <image-placeholder></image-placeholder>
@@ -14,7 +14,7 @@
           <polygon
             v-for="(polygon, idx) in polygons"
             :key="idx"
-            class="guides-drawer-polygon"
+            class="guide-drawer-polygon"
             :class="{ active: idx === value }"
             :points="polygon"
             @click.stop="$emit('input', idx)"
@@ -23,7 +23,7 @@
         </svg>
       </div>
     </v-col>
-    <v-col>
+    <v-col cols="12" sm="auto">
       <v-btn :block="isMobile" color="success" :disabled="disabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
@@ -126,7 +126,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.guides-drawer {
+.guide-drawer {
   position: relative;
 
   .label {
@@ -142,7 +142,7 @@ export default defineComponent({
     left: 0;
     z-index: 1;
 
-    .guides-drawer-polygon {
+    .guide-drawer-polygon {
       cursor: pointer;
       fill: transparent;
 
