@@ -19,22 +19,11 @@
                 v-if="bowlImageMap"
                 :image-map-data="bowlImageMap"
                 :value="portionSize.bowlIndex"
+                @confirm="confirmBowl"
                 @input="selectBowl"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    color="success"
-                    :disabled="portionSize.bowlIndex === undefined"
-                    @click="confirmBowl"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
-
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
@@ -47,19 +36,9 @@
                 v-if="milkLevelImageMap"
                 :image-map-data="milkLevelImageMap"
                 :value="portionSize.milkLevelChoice"
+                @confirm="confirmMilk"
                 @input="selectMilk"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    color="success"
-                    :disabled="portionSize.milkLevelChoice === undefined"
-                    @click="confirmMilk"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>

@@ -23,6 +23,11 @@
         </svg>
       </div>
     </v-col>
+    <v-col>
+      <v-btn :block="isMobile" color="success" :disabled="disabled" @click="confirm">
+        {{ $t('common.action.continue') }}
+      </v-btn>
+    </v-col>
   </v-row>
 </template>
 
@@ -42,6 +47,12 @@ export default defineComponent({
   components: { ImagePlaceholder },
 
   props: {
+    disabled: {
+      type: Boolean,
+      default() {
+        this.value === undefined;
+      },
+    },
     imageMapData: {
       type: Object as PropType<ImageMapResponse>,
       required: true,
@@ -105,6 +116,10 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
+    },
+
+    confirm() {
+      this.$emit('confirm');
     },
   },
 });

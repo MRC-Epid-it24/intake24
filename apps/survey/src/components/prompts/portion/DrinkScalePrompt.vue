@@ -19,15 +19,9 @@
                 v-if="dataLoaded"
                 :image-map-data="imageMapData"
                 :value="objectIdx"
+                @confirm="confirmObject"
                 @input="selectObject"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn :block="isMobile" color="success" @click="confirmObject">
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>

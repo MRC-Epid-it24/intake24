@@ -15,19 +15,9 @@
                 v-if="imageMaps.pizzaType"
                 :image-map-data="imageMaps.pizzaType"
                 :value="portionSize.pizzaType"
+                @confirm="confirmType('pizzaType')"
                 @input="selectType('pizzaType', $event)"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    color="success"
-                    :disabled="portionSize.pizzaType === undefined"
-                    @click="confirmType('pizzaType')"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -42,19 +32,9 @@
                 v-if="imageMaps.pizzaThickness"
                 :image-map-data="imageMaps.pizzaThickness"
                 :value="portionSize.pizzaThickness"
+                @confirm="confirmType('pizzaThickness')"
                 @input="selectType('pizzaThickness', $event)"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    color="success"
-                    :disabled="portionSize.pizzaThickness === undefined"
-                    @click="confirmType('pizzaThickness')"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
@@ -67,8 +47,10 @@
             <v-expansion-panel-content>
               <image-map-selector
                 v-if="imageMaps.sliceType"
+                :disabled="portionSize.sliceType === undefined"
                 :image-map-data="imageMaps.sliceType"
                 :value="portionSize.sliceType ? portionSize.sliceType - 1 : undefined"
+                @confirm="confirmType('sliceType')"
                 @input="selectType('sliceType', $event + 1)"
               >
                 <template #label>
@@ -85,27 +67,15 @@
                   </v-btn>
                 </template>
               </image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    color="success"
-                    :disabled="portionSize.sliceType === undefined"
-                    @click="confirmType('sliceType')"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <template v-if="isWholeSelected">
-                {{ $t(`portion.${portionSize.method}.whole.label`) }}
-              </template>
-              <template v-else>
-                {{ $t(`portion.${portionSize.method}.slices.label`) }}
-              </template>
+              {{
+                $t(
+                  `portion.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}whole.label`
+                )
+              }}
               <template #actions>
                 <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
               </template>

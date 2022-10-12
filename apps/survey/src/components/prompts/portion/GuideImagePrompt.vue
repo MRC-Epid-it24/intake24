@@ -19,20 +19,9 @@
                 v-if="guideImageData"
                 :image-map-data="guideImageData.imageMap"
                 :value="portionSize.objectIndex"
+                @confirm="confirmObject"
                 @input="selectObject"
               ></image-map-selector>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    :block="isMobile"
-                    color="success"
-                    :disabled="portionSize.objectIndex === undefined"
-                    @click="confirmObject"
-                  >
-                    {{ $t('common.action.continue') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
