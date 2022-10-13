@@ -10,7 +10,7 @@ export default class PopularityCountersService {
     this.db = db;
   }
 
-  private countOccurrences(foodCodes: string[]): Record<string, number> {
+  private static countOccurrences(foodCodes: string[]): Record<string, number> {
     const result: Record<string, number> = {};
 
     for (const code of foodCodes) {
@@ -21,7 +21,7 @@ export default class PopularityCountersService {
   }
 
   public async updateGlobalCounters(foodCodes: string[]): Promise<void> {
-    const occurrences = this.countOccurrences(foodCodes);
+    const occurrences = PopularityCountersService.countOccurrences(foodCodes);
     return this.db.system.transaction(async (tx) => {
       const counters = await PopularityCounter.findAll({
         where: { foodCode: foodCodes },
@@ -49,7 +49,7 @@ export default class PopularityCountersService {
   implement it is still pending so handle it here for now.
   */
   public async updateLocalCounters(localeId: string, foodCodes: string[]): Promise<void> {
-    const occurrences = this.countOccurrences(foodCodes);
+    const occurrences = PopularityCountersService.countOccurrences(foodCodes);
 
     return this.db.system.transaction(async (tx) => {
       const counters = await PAOccurrence.findAll({

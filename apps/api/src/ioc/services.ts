@@ -30,7 +30,7 @@ import {
   nutrientTypeService,
   nutrientUnitService,
   pairwiseSearchService,
-  popularitySearchService,
+  PopularityCountersService,
   portionSizeService,
   processedImageService,
   Pusher,
@@ -45,7 +45,6 @@ import {
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
-import PopularityCountersService from '@intake24/api/services/survey/popularity-counters.service';
 import { logger, Mailer } from '@intake24/services';
 
 export default (container: AwilixContainer): void => {
@@ -69,7 +68,6 @@ export default (container: AwilixContainer): void => {
     categoryContentsService: asFunction(categoryContentsService),
 
     pairwiseSearchService: asFunction(pairwiseSearchService),
-    popularitySearchService: asFunction(popularitySearchService),
 
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),
