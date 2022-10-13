@@ -59,11 +59,6 @@ export interface PromptQuestionWithSection<T extends BasePromptProps = BasePromp
   section: SurveyQuestionSection | MealSection;
 }
 
-export interface QuantityValues {
-  whole: number;
-  fraction: number;
-}
-
 export interface DisplayAssocPromptControl {
   '0': boolean;
   '1': boolean;

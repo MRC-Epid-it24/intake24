@@ -72,27 +72,19 @@
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{
-                $t(
-                  `portion.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}whole.label`
-                )
+                $t(`portion.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}.label`)
               }}
               <template #actions>
                 <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-row justify="center">
-                <v-col>
-                  <quantity-card v-model="portionSize.sliceQuantity" fraction whole></quantity-card>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-col md="4" xs="12">
-                  <v-btn block color="success" @click="confirmType('quantity')">
-                    {{ $t(`portion.${portionSize.method}.confirm`) }}
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <quantity-card
+                v-model="portionSize.sliceQuantity"
+                :confirm.sync="confirmed.quantity"
+                @input="selectQuantity"
+                @update:confirm="confirmType('quantity', $event)"
+              ></quantity-card>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -287,8 +279,12 @@ export default defineComponent({
       this.update();
     },
 
-    confirmType(type: PizzaImageMapType | 'quantity') {
-      this.confirmed[type] = true;
+    selectQuantity() {
+      this.update();
+    },
+
+    confirmType(type: PizzaImageMapType | 'quantity', value = true) {
+      this.confirmed[type] = value;
       this.updatePanel();
       this.update();
     },
@@ -317,7 +313,7 @@ export default defineComponent({
 
       this.portionSize.servingWeight =
         this.sliceWeight(portionSize.pizzaType, portionSize.sliceType, portionSize.pizzaThickness) *
-        (portionSize.sliceQuantity.whole + portionSize.sliceQuantity.fraction);
+        portionSize.sliceQuantity;
 
       const state: PizzaPromptState = {
         portionSize: this.portionSize,

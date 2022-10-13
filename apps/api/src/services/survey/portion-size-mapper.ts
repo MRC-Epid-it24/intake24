@@ -77,7 +77,7 @@ export const guideImageMapper = (
     objectIndex,
     objectWeight,
     leftoversWeight,
-    quantity: { whole, fraction },
+    quantity,
     servingWeight,
   } = state;
 
@@ -89,7 +89,7 @@ export const guideImageMapper = (
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'objectIndex', value: objectIndexValue },
     { foodId, name: 'objectWeight', value: objectWeight.toString() },
-    { foodId, name: 'quantity', value: (whole + fraction).toString() },
+    { foodId, name: 'quantity', value: quantity.toString() },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
   ];
 };

@@ -59,7 +59,7 @@ export default defineComponent({
         imageUrl: null,
         objectIndex: undefined,
         objectWeight: 0,
-        quantity: { whole: 1, fraction: 0 },
+        quantity: 1,
         servingWeight: 0,
         leftoversWeight: 0,
       },

@@ -45,21 +45,12 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row justify="center">
-            <v-col>
-              <quantity-card v-model="portionSize.quantity" fraction whole></quantity-card>
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-col cols="12">
-              <error-alert :errors="errors"></error-alert>
-            </v-col>
-            <v-col md="4" xs="12">
-              <v-btn block color="success" @click="confirmQuantity">
-                {{ $t(`portion.${portionSize.method}.confirm`) }}
-              </v-btn>
-            </v-col>
-          </v-row>
+          <quantity-card
+            v-model="portionSize.quantity"
+            :confirm.sync="quantityConfirmed"
+            @input="selectQuantity"
+            @update:confirm="confirmQuantity($event)"
+          ></quantity-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -82,7 +73,6 @@ import type {
 } from '@intake24/common/types';
 import type { StandardUnitResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
-import { ErrorAlert } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
 import { QuantityCard } from './selectors';
@@ -101,7 +91,7 @@ export type StandardPortionPromptState = {
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
-  components: { ErrorAlert, QuantityCard },
+  components: { QuantityCard },
 
   mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionPromptState>()],
 
@@ -211,8 +201,11 @@ export default defineComponent({
       this.update();
     },
 
+    selectQuantity() {
+      this.update();
+    },
+
     confirmQuantity() {
-      this.quantityConfirmed = true;
       this.updatePanel();
       this.update();
     },
@@ -234,9 +227,7 @@ export default defineComponent({
       const { portionSize } = this;
 
       this.portionSize.servingWeight =
-        (portionSize.unit?.weight ?? 0) *
-        (portionSize.quantity.whole + portionSize.quantity.fraction) *
-        this.conversionFactor;
+        (portionSize.unit?.weight ?? 0) * portionSize.quantity * this.conversionFactor;
 
       const state: StandardPortionPromptState = {
         portionSize: this.portionSize,

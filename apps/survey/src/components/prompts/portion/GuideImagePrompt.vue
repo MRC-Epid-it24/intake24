@@ -32,18 +32,12 @@
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-row justify="center">
-                <v-col>
-                  <quantity-card v-model="portionSize.quantity" fraction whole></quantity-card>
-                </v-col>
-              </v-row>
-              <v-row justify="center">
-                <v-col md="4" xs="12">
-                  <v-btn block color="success" @click="confirmQuantity">
-                    {{ $t(`portion.${portionSize.method}.confirm`) }}
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <quantity-card
+                v-model="portionSize.quantity"
+                :confirm.sync="quantityConfirmed"
+                @input="selectQuantity"
+                @update:confirm="confirmQuantity"
+              ></quantity-card>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -160,8 +154,11 @@ export default defineComponent({
       this.update();
     },
 
+    selectQuantity() {
+      this.update();
+    },
+
     confirmQuantity() {
-      this.quantityConfirmed = true;
       this.updatePanel();
       this.update();
     },
@@ -185,9 +182,7 @@ export default defineComponent({
 
         this.portionSize.objectWeight = this.guideImageData.weights[idx] ?? 0;
         this.portionSize.servingWeight =
-          this.guideImageData.weights[idx] *
-          (this.portionSize.quantity.whole + this.portionSize.quantity.fraction) *
-          this.conversionFactor;
+          this.guideImageData.weights[idx] * this.portionSize.quantity * this.conversionFactor;
       }
 
       const state: GuideImagePromptState = {

@@ -1,13 +1,11 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
 const portion: LocaleMessageObject = {
-  common: {
-    backStep: 'Go back to previous step',
-    completeBelow: 'Please complete each of the sections below',
-    // Maybe don't need both of these as semanitcally very similar
-    confirmButton: 'I had that much',
-    quantityAnd: 'and', // E.g 1 and 3/4 bananas
-    completePreviousStep: 'Please complete the previous step before answering this question.',
+  quantity: {
+    whole: 'Whole',
+    fraction: 'Fraction',
+    and: 'and',
+    confirm: 'I had that many',
   },
   option: {
     text: 'How would you like to estimate the portion size of your {food}?',

@@ -1,6 +1,6 @@
 import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
 
-import type { ComponentType, QuantityValues } from '../prompts';
+import type { ComponentType } from '../prompts';
 import type { FoodHeader, UserFoodData } from './http';
 
 /*
@@ -130,7 +130,7 @@ export type PortionSizeStates = {
     imageUrl: string | null;
     objectIndex?: number;
     objectWeight: number;
-    quantity: QuantityValues;
+    quantity: number;
   };
   'milk-in-a-hot-drink': PortionSizeStateBase & {
     method: 'milk-in-a-hot-drink';
@@ -152,12 +152,12 @@ export type PortionSizeStates = {
     pizzaThickness?: number;
     sliceImage: string | null;
     sliceType?: number;
-    sliceQuantity: QuantityValues;
+    sliceQuantity: number;
   };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
     unit: StandardPortionUnit | null;
-    quantity: QuantityValues;
+    quantity: number;
   };
   weight: PortionSizeStateBase & { method: 'weight' };
 };

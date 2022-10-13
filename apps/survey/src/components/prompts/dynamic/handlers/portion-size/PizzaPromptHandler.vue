@@ -55,7 +55,7 @@ export default defineComponent({
         pizzaType: undefined,
         pizzaThickness: undefined,
         sliceImage: null,
-        sliceQuantity: { whole: 1, fraction: 0 },
+        sliceQuantity: 1,
         sliceType: undefined,
         servingWeight: 0,
         leftoversWeight: 0,

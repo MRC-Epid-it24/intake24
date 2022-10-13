@@ -59,7 +59,7 @@ export default defineComponent({
       portionSize: {
         method: 'standard-portion',
         unit: null,
-        quantity: { whole: 1, fraction: 0 },
+        quantity: 1,
         servingWeight: 0,
         leftoversWeight: 0,
       },
