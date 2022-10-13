@@ -1,10 +1,12 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import type { FoodHeader } from '@intake24/common/types/http';
 import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
-import type Logger from '@intake24/services/logger/logger';
+import type { logger } from '@intake24/services/logger/logger';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
 import { getLocalPopularityRanking } from '@intake24/api/food-index/ranking/local-popularity';
+
+type Logger = typeof logger;
 
 export type RankingAlgorithm = '';
 
@@ -67,7 +69,7 @@ function applyRankingData(
   rankingData: RankingData,
   results: PhraseMatchResult<string>[],
   matchScoreWeight: number,
-  logger: typeof Logger
+  logger: Logger
 ): FoodHeader[] {
   const normalisedRankingData = normaliseRankingData(rankingData);
   const normalisedSearchResults = normaliseMatchCost(results);
@@ -100,7 +102,7 @@ async function getRankingData(
   algorithm: SearchSortingAlgorithm,
   localeId: string,
   foodCodes: string[],
-  logger: typeof Logger
+  logger: Logger
 ): Promise<RankingData | null> {
   switch (algorithm) {
     case 'fixed':
@@ -121,7 +123,7 @@ export async function rankSearchResults(
   localeId: string,
   algorithm: SearchSortingAlgorithm,
   matchScoreWeight: number,
-  logger: typeof Logger
+  logger: Logger
 ): Promise<FoodHeader[]> {
   const foodCodes = results.map((result) => result.key);
   const rankingData = await getRankingData(algorithm, localeId, foodCodes, logger);

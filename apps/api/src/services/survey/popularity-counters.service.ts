@@ -10,8 +10,8 @@ export default class PopularityCountersService {
     this.db = db;
   }
 
-  private countOccurrences(foodCodes: string[]): { [k: string]: number } {
-    const result: { [k: string]: number } = {};
+  private countOccurrences(foodCodes: string[]): Record<string, number> {
+    const result: Record<string, number> = {};
 
     for (const code of foodCodes) {
       result[code] = (result[code] ?? 0) + 1;
@@ -30,9 +30,9 @@ export default class PopularityCountersService {
 
       const currentCounts = Object.fromEntries(counters.map((row) => [row.foodCode, row.counter]));
 
-      for (const k in occurrences) {
-        const count = currentCounts[k];
-        if (count) occurrences[k] += count;
+      for (const foodCode in occurrences) {
+        const count = currentCounts[foodCode];
+        if (count) occurrences[foodCode] += count;
       }
 
       const updates = Object.entries(occurrences).map((e) => ({ foodCode: e[0], counter: e[1] }));
