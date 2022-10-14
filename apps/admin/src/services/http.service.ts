@@ -21,7 +21,6 @@ const httpClient: HttpClient = {
     baseURL: [import.meta.env.VITE_API_HOST, import.meta.env.VITE_API_URL]
       .map((item) => trim(item, '/'))
       .join('/'),
-    // @ts-expect-error: Axios typings issue, remove when fixed
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
   }),
 

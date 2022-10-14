@@ -58,6 +58,7 @@ declare module '@vue/runtime-core' {
     PromptsPortionPortionSizeOptionPrompt: typeof import('./src/components/prompts/portion/PortionSizeOptionPrompt.vue')['default']
     PromptsPortionSelectorsAsServedSelector: typeof import('./src/components/prompts/portion/selectors/AsServedSelector.vue')['default']
     PromptsPortionSelectorsAsServedWeight: typeof import('./src/components/prompts/portion/selectors/AsServedWeight.vue')['default']
+    PromptsPortionSelectorsAsServedWeightFactor: typeof import('./src/components/prompts/portion/selectors/AsServedWeightFactor.vue')['default']
     PromptsPortionSelectorsDrinkScalePanel: typeof import('./src/components/prompts/portion/selectors/DrinkScalePanel.vue')['default']
     PromptsPortionSelectorsImageMapSelector: typeof import('./src/components/prompts/portion/selectors/ImageMapSelector.vue')['default']
     PromptsPortionSelectorsQuantityCard: typeof import('./src/components/prompts/portion/selectors/QuantityCard.vue')['default']

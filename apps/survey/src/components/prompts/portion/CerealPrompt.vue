@@ -48,7 +48,7 @@
                 <v-col>
                   <as-served-selector
                     :as-served-set-id="servingImageSet"
-                    :initial-state="portionSize.serving?.index"
+                    :initial-object="portionSize.serving ?? undefined"
                     @confirm="confirmServing"
                     @update="updateServing"
                   ></as-served-selector>

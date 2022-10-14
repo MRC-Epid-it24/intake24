@@ -78,6 +78,20 @@ const portion: LocaleMessageObject = {
       more: 'I left more',
       confirm: 'I left that much',
     },
+    weightFactor: {
+      serving: {
+        more: 'I had {whole} and {fraction}',
+        less: 'I had {fraction}',
+      },
+      leftover: {
+        more: 'I left {whole} and {fraction}',
+        less: 'I left {fraction}',
+      },
+      // and: 'and',
+      less: 'of the smallest portion',
+      more: 'of the largest portion',
+      weight: '({amount}g)',
+    },
   },
   cereal: {
     text: '{food}',

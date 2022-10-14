@@ -49,7 +49,7 @@
             v-model="portionSize.quantity"
             :confirm.sync="quantityConfirmed"
             @input="selectQuantity"
-            @update:confirm="confirmQuantity($event)"
+            @update:confirm="confirmQuantity"
           ></quantity-card>
         </v-expansion-panel-content>
       </v-expansion-panel>

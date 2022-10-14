@@ -7,37 +7,40 @@
         </template>
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
-            <v-chip class="ma-2 font-weight-medium" color="black" outlined>
-              {{ weight }}
+            <v-chip class="ma-2 font-weight-medium white text-black bordered">
+              {{ thumbnailWeight }}
             </v-chip>
           </v-col>
         </v-row>
-        <v-overlay absolute :value="overlay"> Input: Enter how much more/less you had </v-overlay>
+        <as-served-weight-factor
+          v-bind="weightFactorProps"
+          @input="updateWeightFactor"
+        ></as-served-weight-factor>
       </v-img>
     </v-row>
-    <v-row>
-      <v-col class="pa-1" cols="3" lg="1" sm="2">
-        <v-card @click="hadLess">
+    <v-row v-if="asServedData">
+      <v-col class="pa-1 rounded-lg" cols="3" lg="1" sm="2">
+        <v-card @click="updateSelection(-1)">
           <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn icon>
+            <v-btn icon large>
               <v-icon>fas fa-fw fa-minus</v-icon>
             </v-btn>
           </v-overlay>
         </v-card>
       </v-col>
       <template v-for="(images, idx) in asServedData.images">
-        <v-col :key="idx" class="pa-1" :class="isSelected(idx)" cols="3" lg="1" sm="2">
+        <v-col :key="idx" class="pa-1 rounded-lg" :class="isSelected(idx)" cols="3" lg="1" sm="2">
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
         </v-col>
       </template>
-      <v-col class="pa-1 mr-auto" cols="3" lg="1" sm="2">
-        <v-card @click="hadMore">
+      <v-col class="pa-1 mr-auto rounded-lg" cols="3" lg="1" sm="2">
+        <v-card @click="updateSelection(1)">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn icon>
+            <v-btn icon large>
               <v-icon>fas fa-fw fa-plus</v-icon>
             </v-btn>
           </v-overlay>
@@ -46,12 +49,12 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn block @click="hadLess">
+        <v-btn block @click="updateSelection(-1)">
           {{ $t(`portion.as-served.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn block @click="hadMore">
+        <v-btn block @click="updateSelection(1)">
           {{ $t(`portion.as-served.${type}.more`) }}
         </v-btn>
       </v-col>
@@ -66,24 +69,27 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { SelectedAsServedImage } from '@intake24/common/types';
 import type { AsServedSetResponse } from '@intake24/common/types/http/foods';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
+import type { WeightFactorProps } from './AsServedWeightFactor.vue';
+import AsServedWeightFactor from './AsServedWeightFactor.vue';
+
 export default defineComponent({
   name: 'AsServedSelector',
 
-  components: { ImagePlaceholder },
+  components: { AsServedWeightFactor, ImagePlaceholder },
 
   props: {
     asServedSetId: {
       type: String,
       required: true,
     },
-    initialState: {
-      type: Number,
+    initialObject: {
+      type: Object as PropType<SelectedAsServedImage>,
     },
     type: {
       type: String as PropType<'serving' | 'leftover'>,
@@ -91,13 +97,62 @@ export default defineComponent({
     },
   },
 
-  data() {
+  setup(props) {
+    const denominator = 4;
+    const objectIdx = ref<number | undefined>(undefined);
+    const asServedData = ref<AsServedSetResponse | null>(null);
+
+    const noWeightFactor = (weight: number): WeightFactorProps => ({
+      show: false,
+      type: props.type,
+      subType: 'less',
+      minNumerator: denominator,
+      maxNumerator: denominator,
+      denominator,
+      weight,
+      value: denominator,
+    });
+
+    const lessWeightFactor = (
+      show: boolean,
+      weight: number,
+      value?: number
+    ): WeightFactorProps => ({
+      show,
+      type: props.type,
+      subType: 'less',
+      minNumerator: 1,
+      maxNumerator: denominator - 1,
+      denominator,
+      weight,
+      value: value ?? denominator - 1,
+    });
+
+    const moreWeightFactor = (
+      show: boolean,
+      weight: number,
+      value?: number
+    ): WeightFactorProps => ({
+      show,
+      type: props.type,
+      subType: 'more',
+      minNumerator: denominator + 1,
+      maxNumerator: denominator * 5,
+      denominator,
+      weight,
+      value: value ?? denominator + 1,
+    });
+
+    const weightFactorProps = ref(noWeightFactor(0));
+
     return {
-      objectIdx: this.initialState,
-      asServedData: {} as AsServedSetResponse,
-      dataLoaded: false,
-      // Prototyping
-      overlay: false,
+      denominator,
+      objectIdx,
+      asServedData,
+      weightFactorProps,
+      noWeightFactor,
+      lessWeightFactor,
+      moreWeightFactor,
     };
   },
 
@@ -105,28 +160,25 @@ export default defineComponent({
     image(): string {
       if (this.objectIdx === undefined) return '';
 
-      return this.dataLoaded ? this.asServedData.images[this.objectIdx].mainImageUrl : '';
+      return this.asServedData?.images[this.objectIdx].mainImageUrl ?? '';
     },
-    weight(): string | null {
-      if (!this.dataLoaded) return null;
-
-      if (this.objectIdx === undefined) return null;
+    thumbnailWeight(): string | null {
+      if (this.objectIdx === undefined || !this.asServedData) return null;
 
       return `${this.asServedData.images[this.objectIdx].weight}g`;
     },
     firstThumbnail(): string {
-      if (this.objectIdx === null) return '';
+      if (this.objectIdx === undefined) return '';
 
-      // This check is slightly redundant
-      return this.dataLoaded ? this.asServedData.images[0].thumbnailUrl : '';
+      return this.asServedData?.images[0].thumbnailUrl ?? '';
     },
     lastThumbnail(): string {
-      if (this.objectIdx === null) return '';
+      if (this.objectIdx === undefined || !this.asServedData) return '';
 
-      // This check is slightly redundant
-      return this.dataLoaded
-        ? this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl
-        : '';
+      return this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl;
+    },
+    weightFactor(): number {
+      return this.weightFactorProps.value / this.weightFactorProps.denominator;
     },
   },
 
@@ -147,75 +199,109 @@ export default defineComponent({
           `portion-sizes/as-served-sets/${this.asServedSetId}`
         );
         this.asServedData = { ...data };
-        this.setDataLoaded();
-        this.setDefaultSelection();
+        this.initSelection();
       } catch (e) {
         //FIXME: proper error handling
         console.log(e);
       }
     },
 
-    setDataLoaded() {
-      this.dataLoaded = true;
+    initSelection() {
+      if (!this.asServedData || this.objectIdx !== undefined) return;
+
+      if (this.initialObject?.index !== undefined)
+        this.setSelection(this.initialObject.index, true);
+      else this.setSelection(Math.floor(this.asServedData.images.length / 2));
     },
 
-    setDefaultSelection() {
-      if (this.objectIdx === undefined) {
-        // Variable length image sets: set default selected to middle value
-        this.setSelection(Math.floor(this.asServedData.images.length / 2));
+    initWeightFactor(asServedData: AsServedSetResponse, objectIdx: number) {
+      const objectWeight = asServedData.images[objectIdx].weight;
+      const initWeight = this.initialObject?.weight;
+
+      if (initWeight === undefined) return;
+
+      const value = Math.round((initWeight / objectWeight) * this.denominator);
+
+      if (initWeight > objectWeight && objectIdx === asServedData.images.length - 1) {
+        console.log(`more`);
+        this.weightFactorProps = this.moreWeightFactor(
+          true,
+          asServedData.images[objectIdx].weight,
+          value
+        );
+
+        return;
       }
+
+      if (initWeight < objectWeight && objectIdx === 0) {
+        console.log(`less`);
+        this.weightFactorProps = this.lessWeightFactor(
+          true,
+          asServedData.images[objectIdx].weight,
+          value
+        );
+
+        return;
+      }
+
+      console.log(`weird`);
+      this.noWeightFactor(asServedData.images[objectIdx].weight);
     },
 
-    setSelection(idx: number) {
-      this.objectIdx = idx;
+    setSelection(objectIdx: number, init = false) {
+      const { asServedData } = this;
+      if (!asServedData) return;
+
+      if (objectIdx >= asServedData.images.length) {
+        this.weightFactorProps = this.moreWeightFactor(
+          true,
+          asServedData.images[asServedData.images.length - 1].weight
+        );
+        this.update();
+        return;
+      }
+
+      if (objectIdx < 0) {
+        this.weightFactorProps = this.lessWeightFactor(true, asServedData.images[0].weight);
+        this.update();
+        return;
+      }
+
+      this.objectIdx = objectIdx;
+
+      if (init) this.initWeightFactor(asServedData, objectIdx);
+      else this.weightFactorProps = this.noWeightFactor(asServedData.images[objectIdx].weight);
+      this.update();
+    },
+
+    updateSelection(value: number) {
+      const { objectIdx } = this;
+      if (objectIdx === undefined) return;
+
+      this.setSelection(objectIdx + value);
+    },
+
+    updateWeightFactor(value: number) {
+      this.weightFactorProps.value = value;
       this.update();
     },
 
     isSelected(idx: number): string {
-      return idx === this.objectIdx ? 'selectedThumb rounded-lg' : '';
-    },
-
-    hadMore() {
-      if (this.objectIdx === undefined) return;
-
-      const maxLength = this.asServedData.images.length - 1;
-      if (this.objectIdx + 1 > maxLength) {
-        console.log('Trigger input quantity prompt');
-        // User wants to input more than thumbnail quantity on screen
-        // TO DO Method for this
-        this.overlay = true;
-      } else {
-        this.objectIdx = this.objectIdx + 1 === maxLength ? maxLength : this.objectIdx + 1;
-      }
-      this.update();
-    },
-
-    hadLess() {
-      if (this.objectIdx === undefined) return;
-
-      if (this.objectIdx - 1 < 0) {
-        console.log('Trigger input quantity prompt');
-        // User wants to input less than thumbnail quantities on screen
-        // TO DO Method for this
-        this.overlay = true;
-      } else {
-        this.objectIdx = this.objectIdx - 1 === 0 ? 0 : this.objectIdx - 1;
-      }
-      this.update();
+      return idx === this.objectIdx ? 'selected-thumb' : '';
     },
 
     update() {
-      const newState: SelectedAsServedImage | null =
-        this.objectIdx === undefined
-          ? null
-          : {
-              asServedSetId: this.asServedSetId,
-              index: this.objectIdx,
-              weight: this.asServedData.images[this.objectIdx].weight,
-              imageUrl: this.asServedData.images[this.objectIdx].mainImageUrl,
-            };
+      const { objectIdx, asServedData, asServedSetId } = this;
+      if (objectIdx === undefined || !asServedData) return;
 
-      this.$emit('update', newState);
+      const state: SelectedAsServedImage = {
+        asServedSetId,
+        index: objectIdx,
+        weight: asServedData.images[objectIdx].weight * this.weightFactor,
+        imageUrl: asServedData.images[objectIdx].mainImageUrl,
+      };
+
+      this.$emit('update', state);
     },
 
     confirm() {
@@ -228,7 +314,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.selectedThumb {
+.bordered {
+  border: 1px solid black !important;
+}
+.selected-thumb {
   border: 2px solid #2196f3;
 }
 </style>

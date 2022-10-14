@@ -27,7 +27,7 @@
                 <v-col>
                   <as-served-selector
                     :as-served-set-id="parameters['serving-image-set']"
-                    :initial-state="portionSize.serving?.index"
+                    :initial-object="portionSize.serving ?? undefined"
                     @confirm="confirmServing"
                     @update="updateServing"
                   ></as-served-selector>
@@ -81,7 +81,7 @@
                   <v-col>
                     <as-served-selector
                       :as-served-set-id="parameters['leftovers-image-set']"
-                      :initial-state="portionSize.leftovers?.index"
+                      :initial-object="portionSize.leftovers ?? undefined"
                       :type="'leftover'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"
