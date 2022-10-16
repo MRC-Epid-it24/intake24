@@ -11,6 +11,12 @@ export const ajv = new Ajv({
   useDefaults: true,
 });
 
+//FIX: Workaround with AJV issue om MacOS: https://github.com/ajv-validator/ajv-formats/issues/69
+if (!ajv.opts) {
+  // @ts-ignore
+  ajv.opts = { code: {}, allErrors: true, coerceTypes: false, useDefaults: true };
+}
+
 addFormats(ajv, { /* mode: 'fast', */ formats: ['date-time'] });
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

@@ -19,5 +19,6 @@
     "dist": true,
     "node_modules": true,
     "tmp": true
-  }
+  },
+  "typescript.inlayHints.enumMemberValues.enabled": true
 }
