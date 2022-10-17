@@ -144,7 +144,7 @@ export default class DemographicGroup {
       const energy = foods.map((f) => f.getAverageEnergyIntake()).reduce((a, b) => a + b, 0);
       if (energy === 0) return 0;
 
-      return (this.nutrientTypeKCalPerUnit ?? 0 * 100) / energy;
+      return (consumption * (this.nutrientTypeKCalPerUnit ?? 0) * 100) / energy;
     }
 
     if (this.nutrientRuleType === 'range') return consumption;
