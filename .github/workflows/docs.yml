@@ -17,12 +17,12 @@ jobs:
         uses: actions/checkout@v3.1.0
       
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.2
+        uses: pnpm/action-setup@v2.2.4
         with:
           version: 6
 
       - name: Use Node.js
-        uses: actions/setup-node@v3.5.0
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: 16.x
           cache: 'pnpm'
@@ -37,7 +37,7 @@ jobs:
         run: echo "docs.intake24.org" > docs/.vitepress/dist/CNAME
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.4.0
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: ghp-docs
           folder: docs/.vitepress/dist
