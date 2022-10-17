@@ -30,11 +30,11 @@
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.25.2",
-    "sequelize-typescript": "^2.1.4"
+    "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.186",
-    "@types/node": "^18.7.21",
+    "@types/node": "^18.11.0",
     "@types/pg": "^8.6.5",
     "@types/validator": "^13.7.8",
     "sequelize-cli": "^6.5.1"
