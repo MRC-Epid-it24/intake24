@@ -224,7 +224,7 @@ export default defineComponent({
       }
     },
 
-    onMealMobileClick(mealIndex: number, name: string, foods: FoodState[]) {
+    onMealMobileClick(mealIndex: number, name: string) {
       this.activeMeal = name;
       this.mobileMealFoodContextMenu.foodContext = false;
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
@@ -244,8 +244,7 @@ export default defineComponent({
         | { mealIndex: number; name: string; foods: FoodState[]; entity: 'meal' }
         | { foodIndex: number; mealIndex: number; name: string; entity: 'food' }
     ) {
-      if (payload.entity === 'meal')
-        this.onMealMobileClick(payload.mealIndex, payload.name, payload.foods);
+      if (payload.entity === 'meal') this.onMealMobileClick(payload.mealIndex, payload.name);
       if (payload.entity === 'food')
         this.onFoodMobileClick(payload.foodIndex, payload.mealIndex, payload.name);
     },
@@ -330,7 +329,6 @@ export default defineComponent({
 
     async onContinue() {
       this.continueButtonEnabled = false;
-
       // Workaround for a crash that occurs if the currently selected prompt changes something
       // in the recall data that makes it incompatible, for example changing from 'free-text'
       // food entry type to 'encoded-food' in commitAnswer.

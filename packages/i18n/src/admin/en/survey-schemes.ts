@@ -284,6 +284,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
     },
+    'no-more-information-prompt': {
+      title: 'No More Information',
+      subtitle: 'Show a message that no more information needed for the current selection',
+    },
     // Custom
     'info-prompt': {
       title: 'Information',

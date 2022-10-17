@@ -89,6 +89,22 @@ const checkMealStandardConditions = (
       return mealState.foods.length === 0;
     case 'info-prompt':
       return mealState.flags.includes(`${prompt.id}-acknowledged`);
+    case 'no-more-information-prompt':
+      if (surveyState.data.selection.mode === 'manual') {
+        recallLog().promptCheck(
+          'no-more-information-prompt',
+          true,
+          `Manual: no more prompts left for ${mealState.name.en}`
+        );
+        return true;
+      } else {
+        recallLog().promptCheck(
+          'no-more-information-prompt',
+          false,
+          `Auto: no more prompts left for ${mealState.name.en}`
+        );
+        return false;
+      }
     default:
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }
@@ -322,6 +338,23 @@ const checkFoodStandardConditions = (
       );
     }
 
+    case 'no-more-information-prompt':
+      if (surveyState.data.selection.mode === 'manual') {
+        recallLog().promptCheck(
+          'no-more-information-prompt',
+          true,
+          `Manual: no more prompts left for ${foodState.id}`
+        );
+        return true;
+      } else {
+        recallLog().promptCheck(
+          'no-more-information-prompt',
+          false,
+          `Auto: no more prompts left for ${foodState.id}`
+        );
+        return false;
+      }
+
     default: {
       if (foodState.customPromptAnswers[prompt.id] === undefined) {
         recallLog().promptCheck(
@@ -413,7 +446,13 @@ export default class PromptManager {
     // TODO: Probably should include food custom questions as well
     if (section === 'postFoods') {
       const meal = findMeal(state.data.meals, mealId);
-      if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) return undefined;
+      if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) {
+        if (state.data.selection.mode === 'manual')
+          return this.scheme.questions.meals['postFoods'].find((question) => {
+            return checkMealStandardConditions(state, mealState, question);
+          });
+        return undefined;
+      }
     }
 
     return this.scheme.questions.meals[section].find((question) => {

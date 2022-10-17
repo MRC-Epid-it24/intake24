@@ -200,11 +200,17 @@ export default class DynamicRecall {
               mealId
             );
 
-            if (mealPrompt)
+            if (mealPrompt) {
               return {
                 prompt: mealPrompt,
                 section: 'postFoods',
               };
+            } else if (recallState.selection.mode === 'manual') {
+              console.log(
+                recallState.selection.mode,
+                'Break - No Meal or Food or PostFood prompts for this meal'
+              );
+            }
           }
           break;
         }
@@ -212,19 +218,20 @@ export default class DynamicRecall {
           const { foodId } = recallState.selection.element;
           const foodPrompt = this.promptManager.nextFoodsPrompt(surveyState, foodId);
 
-          if (foodPrompt)
+          if (foodPrompt) {
             return {
               prompt: foodPrompt,
               section: 'foods',
             };
-
+          } else if (recallState.selection.mode === 'manual') {
+            console.log(recallState.selection.mode, 'Break - No Food prompts for this food');
+          }
           break;
         }
         default:
           break;
       }
     }
-
     return undefined;
   }
 
