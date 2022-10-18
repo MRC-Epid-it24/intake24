@@ -71,6 +71,7 @@ const feedback: LocaleMessageObject = {
     estimated: 'Estimated intake',
     recommended: 'Recommended intake',
     tellMeMore: 'Tell me more',
+    gotIt: 'Got it!',
   },
 
   unitDescription: {

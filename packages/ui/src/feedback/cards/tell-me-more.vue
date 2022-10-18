@@ -43,7 +43,7 @@
           @click.stop="close"
         >
           <v-icon left>fas fa-thumbs-up</v-icon>
-          {{ $t('common.action.gotIt') }}
+          {{ $t('feedback.intake.gotIt') }}
         </v-btn>
       </v-card>
     </v-dialog>
