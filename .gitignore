@@ -35,3 +35,8 @@ tmp
 # Allow only pnpm lock file
 package-lock.json
 yarn.lock
+
+# Exclude generated files
+apps/admin/components.d.ts
+apps/survey/components.d.ts
+apps/api/components.d.ts
