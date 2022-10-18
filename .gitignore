@@ -37,6 +37,4 @@ package-lock.json
 yarn.lock
 
 # Exclude generated files
-apps/admin/components.d.ts
-apps/survey/components.d.ts
-apps/api/components.d.ts
+!apps/**/components.d.ts
