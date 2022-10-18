@@ -2,10 +2,20 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodInput } from '@intake24/common/types/http/admin';
-import type { FoodLocalAttributes } from '@intake24/common/types/models';
-import type { FindOptions, PaginateQuery } from '@intake24/db';
+import type {
+  FoodLocalAttributes,
+  FoodPortionSizeMethodUpdateAttributes,
+  PortionSizeMethodParameterUpdateAttributes,
+} from '@intake24/common/types/models';
+import type { FindOptions, PaginateQuery, Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Food, FoodLocal, Op } from '@intake24/db';
+import {
+  Food,
+  FoodLocal,
+  FoodPortionSizeMethod,
+  FoodPortionSizeMethodParameter,
+  Op,
+} from '@intake24/db';
 
 const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
@@ -29,11 +39,11 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     return FoodLocal.paginate({ query, ...options });
   };
 
-  const getFood = async (foodId: string, localeId?: string) => {
+  const getFood = async (foodLocalId: string, localeId?: string) => {
     const where = localeId ? { localeId } : {};
 
     return FoodLocal.findOne({
-      where: { ...where, id: foodId },
+      where: { ...where, id: foodLocalId },
       include: [
         {
           association: 'main',
@@ -81,17 +91,111 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
               ],
             },
           ],
+          order: [['orderBy', 'ASC']],
         },
       ],
     });
   };
 
-  const updateFood = async (foodId: string, localeId: string, input: FoodInput) => {
-    const foodLocal = await getFood(foodId, localeId);
+  const updateParameters = async (
+    portionSizeMethodId: string,
+    parameters: FoodPortionSizeMethodParameter[],
+    inputs: PortionSizeMethodParameterUpdateAttributes[],
+    { transaction }: { transaction: Transaction }
+  ) => {
+    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
+
+    await FoodPortionSizeMethodParameter.destroy({
+      where: { portionSizeMethodId, id: { [Op.notIn]: ids } },
+      transaction,
+    });
+
+    if (!inputs.length) return [];
+
+    const newParameters: FoodPortionSizeMethodParameter[] = [];
+
+    for (const input of inputs) {
+      const { id, ...rest } = input;
+
+      if (id) {
+        const match = parameters.find((parameter) => parameter.id === id);
+        if (match) {
+          await match.update(rest, { transaction });
+          continue;
+        }
+      }
+
+      const newParameter = await FoodPortionSizeMethodParameter.create(
+        { ...rest, portionSizeMethodId },
+        { transaction }
+      );
+      newParameters.push(newParameter);
+    }
+
+    return [...parameters, ...newParameters];
+  };
+
+  const updatePortionSizeMethods = async (
+    foodLocalId: string,
+    methods: FoodPortionSizeMethod[],
+    inputs: FoodPortionSizeMethodUpdateAttributes[],
+    { transaction }: { transaction: Transaction }
+  ) => {
+    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
+
+    await FoodPortionSizeMethod.destroy({
+      where: { foodLocalId, id: { [Op.notIn]: ids } },
+      transaction,
+    });
+
+    if (!inputs.length) return [];
+
+    const newMethods: FoodPortionSizeMethod[] = [];
+
+    for (const input of inputs) {
+      const { id, parameters, ...rest } = input;
+
+      if (id) {
+        const match = methods.find((method) => method.id === id);
+        if (match) {
+          if (!match.parameters) await match.reload({ include: [{ association: 'parameters' }] });
+          if (!match.parameters) throw new NotFoundError();
+
+          await match.update(rest, { transaction });
+          await updateParameters(match.id, match.parameters, parameters, { transaction });
+          continue;
+        }
+      }
+
+      const newMethod = await FoodPortionSizeMethod.create(
+        { ...rest, foodLocalId },
+        { transaction }
+      );
+      newMethods.push(newMethod);
+
+      if (parameters.length) {
+        const records = parameters.map((item) => ({
+          ...item,
+          portionSizeMethodId: newMethod.id,
+        }));
+        await FoodPortionSizeMethodParameter.bulkCreate(records, { transaction });
+      }
+    }
+
+    return [...methods, ...newMethods];
+  };
+
+  const updateFood = async (foodLocalId: string, localeId: string, input: FoodInput) => {
+    const foodLocal = await getFood(foodLocalId, localeId);
     if (!foodLocal) throw new NotFoundError();
 
-    const { main } = foodLocal;
-    if (!main) throw new NotFoundError();
+    const { main, portionSizeMethods } = foodLocal;
+    if (
+      !main ||
+      !portionSizeMethods ||
+      portionSizeMethods.some((psm) => psm.parameters === undefined)
+    )
+      throw new NotFoundError();
 
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
@@ -114,13 +218,16 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
         ),
         main.$set('parentCategories', categories, { transaction }),
         foodLocal.$set('nutrientRecords', nutrientRecords, { transaction }),
+        updatePortionSizeMethods(foodLocalId, portionSizeMethods, input.portionSizeMethods, {
+          transaction,
+        }),
       ]);
 
       if (main.code !== input.main.code)
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
     });
 
-    return getFood(foodId, localeId);
+    return getFood(foodLocalId, localeId);
   };
 
   return {

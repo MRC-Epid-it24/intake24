@@ -76,6 +76,12 @@ export default class AssociatedFood
   })
   public genericName!: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public orderBy!: string;
+
   @BelongsTo(() => Food, 'foodCode')
   public food?: Food;
 

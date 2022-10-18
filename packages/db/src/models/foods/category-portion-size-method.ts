@@ -63,6 +63,12 @@ export default class CategoryPortionSizeMethod
 
   @Column({
     allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public orderBy!: string;
+
+  @Column({
+    allowNull: false,
     type: DataType.FLOAT(17),
   })
   public conversionFactor!: number;

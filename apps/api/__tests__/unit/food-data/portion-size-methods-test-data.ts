@@ -62,6 +62,7 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
       imageUrl: faker.internet.url(),
       method: 'as-served',
       useForRecipes: false,
+      orderBy: i.toString(),
       parameters,
     });
   }
@@ -96,6 +97,7 @@ async function createCategoryPortionSizeMethods(
         useForRecipes: portionSizeMethods[i].useForRecipes,
         conversionFactor: portionSizeMethods[i].conversionFactor,
         parameters: toDatabasePortionSizeMethodParameters(portionSizeMethods[i].parameters),
+        orderBy: i.toString(),
       },
       { include: [CategoryPortionSizeMethodParameter] }
     );

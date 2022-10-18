@@ -77,6 +77,7 @@ const foodDataService = () => {
         'linkAsMain',
         'genericName',
       ],
+      order: [['orderBy', 'ASC']],
     });
 
     return associatedFoods.map((row) => ({

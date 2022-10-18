@@ -11,6 +11,7 @@ export interface UserPortionSizeMethod {
   imageUrl: string;
   useForRecipes: boolean;
   conversionFactor: number;
+  orderBy: string;
   parameters: UserPortionSizeMethodParameters;
 }
 

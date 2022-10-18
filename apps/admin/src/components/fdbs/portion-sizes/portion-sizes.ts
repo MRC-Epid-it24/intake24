@@ -23,15 +23,19 @@ export type PortionSizeMethodEvent = {
   item: InternalPortionSizeMethodItem;
 };
 
-export const withInternalId = (item: PortionSizeMethodItem): InternalPortionSizeMethodItem => ({
+export const withInternalId = (
+  item: PortionSizeMethodItem,
+  index: number
+): InternalPortionSizeMethodItem => ({
   ...item,
   _id: randomString(6),
+  orderBy: index.toString(),
 });
 
-export const withoutInternalId = ({
-  _id,
-  ...rest
-}: InternalPortionSizeMethodItem): PortionSizeMethodItem => rest;
+export const withoutInternalId = (
+  { _id, ...rest }: InternalPortionSizeMethodItem,
+  index: number
+): PortionSizeMethodItem => ({ ...rest, orderBy: index.toString() });
 
 export type PortionSizeMethodDialog = {
   show: boolean;
@@ -44,6 +48,7 @@ export const psmDefaultAttributes: Omit<PortionSizeMethodItem, 'id' | 'method'> 
   imageUrl: '',
   useForRecipes: false,
   conversionFactor: 1,
+  orderBy: '0',
   parameters: [],
 };
 

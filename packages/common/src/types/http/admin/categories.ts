@@ -3,6 +3,7 @@ import type {
   CategoryAssociations,
   CategoryAttributes,
   CategoryLocalAttributes,
+  CategoryPortionSizeMethodUpdateAttributes,
   Pagination,
 } from '../../models';
 import type { FoodListEntry } from './foods';
@@ -16,6 +17,7 @@ export type CategoryInput = {
     attributes: Attributes;
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
+  portionSizeMethods: CategoryPortionSizeMethodUpdateAttributes[];
 };
 
 export type CategoryListEntry = {

@@ -2,7 +2,9 @@ import { checkSchema } from 'express-validator';
 
 import { validate } from '@intake24/api/http/requests/util';
 
-import { attributes, categories } from '../common';
+import { attributes, categories, portionSizeMethods } from '../common';
 import defaults from './defaults';
 
-export default validate(checkSchema({ ...defaults, ...attributes, ...categories }));
+export default validate(
+  checkSchema({ ...defaults, ...attributes, ...categories, ...portionSizeMethods })
+);

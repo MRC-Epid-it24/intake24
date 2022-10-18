@@ -4,7 +4,7 @@ import {
   getFoodParentCategories,
   getParentLocale,
 } from '@intake24/api/services/foods/common';
-import { CategoryPortionSizeMethod, FoodLocal, Op } from '@intake24/db';
+import { CategoryPortionSizeMethod, FoodLocal } from '@intake24/db';
 
 import {
   toUserCategoryPortionSizeMethod,
@@ -24,8 +24,15 @@ const portionSizeMethodsService = () => {
     categoryCode: string
   ): Promise<UserPortionSizeMethod[]> => {
     const categoryPortionMethods = await CategoryPortionSizeMethod.findAll({
-      attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
-      order: [['id', 'ASC']],
+      attributes: [
+        'method',
+        'description',
+        'imageUrl',
+        'useForRecipes',
+        'conversionFactor',
+        'orderBy',
+      ],
+      order: [['orderBy', 'ASC']],
       include: [
         { association: 'categoryLocal', where: { localeId, categoryCode } },
         {
@@ -95,7 +102,14 @@ const portionSizeMethodsService = () => {
       include: [
         {
           association: 'portionSizeMethods',
-          attributes: ['method', 'description', 'imageUrl', 'useForRecipes', 'conversionFactor'],
+          attributes: [
+            'method',
+            'description',
+            'imageUrl',
+            'useForRecipes',
+            'conversionFactor',
+            'orderBy',
+          ],
           separate: true,
           include: [
             {
@@ -126,7 +140,7 @@ const portionSizeMethodsService = () => {
               ],
             },
           ],
-          order: [['id', 'ASC']],
+          order: [['orderBy', 'ASC']],
         },
       ],
     });

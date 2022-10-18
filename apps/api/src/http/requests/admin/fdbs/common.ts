@@ -1,6 +1,7 @@
 import type { Schema } from 'express-validator';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
+import { portionSizeMethods as portionSizeMethodIds } from '@intake24/common/types';
 import { useInRecipeTypes } from '@intake24/common/types/models';
 import { Category, NutrientTableRecord } from '@intake24/db';
 
@@ -72,5 +73,78 @@ export const nutrients: Schema = {
           throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
+  },
+};
+
+export const portionSizeMethods: Schema = {
+  portionSizeMethods: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
+  },
+  'portionSizeMethods.*.id': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isInt: true,
+    optional: true,
+  },
+  'portionSizeMethods.*.method': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isIn: {
+      options: [portionSizeMethodIds],
+      errorMessage: typeErrorMessage('in.options', { options: portionSizeMethodIds }),
+    },
+  },
+  'portionSizeMethods.*.description': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
+  },
+  'portionSizeMethods.*.imageUrl': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
+  },
+  'portionSizeMethods.*.useForRecipes': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+  },
+  'portionSizeMethods.*.conversionFactor': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('float._'),
+    isFloat: true,
+    toFloat: true,
+  },
+  'portionSizeMethods.*.orderBy': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('number._'),
+    isInt: true,
+  },
+  'portionSizeMethods.*.parameters': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
+  },
+  'portionSizeMethods.*.parameters.*.id': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isInt: true,
+    optional: true,
+  },
+  'portionSizeMethods.*.parameters.*.name': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
+  },
+  'portionSizeMethods.*.parameters.*.value': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
   },
 };

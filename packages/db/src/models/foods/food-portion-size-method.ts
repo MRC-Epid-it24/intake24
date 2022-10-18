@@ -63,6 +63,12 @@ export default class FoodPortionSizeMethod
   })
   public conversionFactor!: number;
 
+  @Column({
+    allowNull: false,
+    type: DataType.BIGINT,
+  })
+  public orderBy!: string;
+
   @BelongsTo(() => FoodLocal, 'foodLocalId')
   public foodLocal?: FoodLocal;
 

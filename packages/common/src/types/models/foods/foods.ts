@@ -75,6 +75,7 @@ export type AssociatedFoodAttributes = {
   text: string;
   linkAsMain: boolean;
   genericName: string;
+  orderBy: string;
 };
 
 export type AssociatedFoodCreationAttributes = OmitAndOptional<

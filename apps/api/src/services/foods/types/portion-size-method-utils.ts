@@ -16,6 +16,7 @@ export interface DatabasePortionSizeMethod {
   imageUrl: string;
   useForRecipes: boolean;
   conversionFactor: number;
+  orderBy: string;
   parameters: { name: string; value: string }[];
 }
 
@@ -31,6 +32,7 @@ export function toUserPortionSizeMethod(psm: FoodPortionSizeMethod): UserPortion
     method: psm.method,
     parameters,
     useForRecipes: psm.useForRecipes,
+    orderBy: psm.orderBy,
   };
 }
 
@@ -48,6 +50,7 @@ export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): Databas
     method: psm.method,
     parameters: toDatabasePortionSizeMethodParameters(psm.parameters),
     useForRecipes: psm.useForRecipes,
+    orderBy: psm.orderBy,
   };
 }
 
@@ -65,5 +68,6 @@ export function toUserCategoryPortionSizeMethod(
     method: psm.method,
     parameters,
     useForRecipes: psm.useForRecipes,
+    orderBy: psm.orderBy,
   };
 }

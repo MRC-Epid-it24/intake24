@@ -5,6 +5,7 @@ import type {
   FoodAttributes,
   FoodGroupAttributes,
   FoodLocalAttributes,
+  FoodPortionSizeMethodUpdateAttributes,
   NutrientTableRecordAttributes,
   Pagination,
 } from '../../models';
@@ -19,6 +20,7 @@ export type FoodInput = {
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
+  portionSizeMethods: FoodPortionSizeMethodUpdateAttributes[];
 };
 
 export type FoodListEntry = {

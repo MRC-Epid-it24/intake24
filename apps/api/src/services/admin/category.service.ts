@@ -2,11 +2,23 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { CategoryInput, CategoryListEntry } from '@intake24/common/types/http/admin';
-import type { CategoryLocalAttributes } from '@intake24/common/types/models';
-import type { FindOptions, PaginateQuery } from '@intake24/db';
+import type {
+  CategoryLocalAttributes,
+  CategoryPortionSizeMethodUpdateAttributes,
+  PortionSizeMethodParameterUpdateAttributes,
+} from '@intake24/common/types/models';
+import type { FindOptions, PaginateQuery, Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
-import { Category, CategoryLocal, FoodLocal, Op, QueryTypes } from '@intake24/db';
+import {
+  Category,
+  CategoryLocal,
+  CategoryPortionSizeMethod,
+  CategoryPortionSizeMethodParameter,
+  FoodLocal,
+  Op,
+  QueryTypes,
+} from '@intake24/db';
 
 const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
@@ -182,17 +194,115 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
               ],
             },
           ],
+          order: [['orderBy', 'ASC']],
         },
       ],
     });
   };
 
-  const updateCategory = async (categoryId: string, localeId: string, input: CategoryInput) => {
-    const categoryLocal = await getCategory(categoryId, localeId);
+  const updateParameters = async (
+    portionSizeMethodId: string,
+    parameters: CategoryPortionSizeMethodParameter[],
+    inputs: PortionSizeMethodParameterUpdateAttributes[],
+    { transaction }: { transaction: Transaction }
+  ) => {
+    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
+
+    await CategoryPortionSizeMethodParameter.destroy({
+      where: { portionSizeMethodId, id: { [Op.notIn]: ids } },
+      transaction,
+    });
+
+    if (!inputs.length) return [];
+
+    const newParameters: CategoryPortionSizeMethodParameter[] = [];
+
+    for (const input of inputs) {
+      const { id, ...rest } = input;
+
+      if (id) {
+        const match = parameters.find((parameter) => parameter.id === id);
+        if (match) {
+          await match.update(rest, { transaction });
+          continue;
+        }
+      }
+
+      const newParameter = await CategoryPortionSizeMethodParameter.create(
+        { ...rest, portionSizeMethodId },
+        { transaction }
+      );
+      newParameters.push(newParameter);
+    }
+
+    return [...parameters, ...newParameters];
+  };
+
+  const updatePortionSizeMethods = async (
+    categoryLocalId: string,
+    methods: CategoryPortionSizeMethod[],
+    inputs: CategoryPortionSizeMethodUpdateAttributes[],
+    { transaction }: { transaction: Transaction }
+  ) => {
+    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
+
+    await CategoryPortionSizeMethod.destroy({
+      where: { categoryLocalId, id: { [Op.notIn]: ids } },
+      transaction,
+    });
+
+    if (!inputs.length) return [];
+
+    const newMethods: CategoryPortionSizeMethod[] = [];
+
+    for (const input of inputs) {
+      const { id, parameters, ...rest } = input;
+
+      if (id) {
+        const match = methods.find((method) => method.id === id);
+        if (match) {
+          if (!match.parameters) await match.reload({ include: [{ association: 'parameters' }] });
+          if (!match.parameters) throw new NotFoundError();
+
+          await match.update(rest, { transaction });
+          await updateParameters(match.id, match.parameters, parameters, { transaction });
+          continue;
+        }
+      }
+
+      const newMethod = await CategoryPortionSizeMethod.create(
+        { ...rest, categoryLocalId },
+        { transaction }
+      );
+      newMethods.push(newMethod);
+
+      if (parameters.length) {
+        const records = parameters.map((item) => ({
+          ...item,
+          portionSizeMethodId: newMethod.id,
+        }));
+        await CategoryPortionSizeMethodParameter.bulkCreate(records, { transaction });
+      }
+    }
+
+    return [...methods, ...newMethods];
+  };
+
+  const updateCategory = async (
+    categoryLocalId: string,
+    localeId: string,
+    input: CategoryInput
+  ) => {
+    const categoryLocal = await getCategory(categoryLocalId, localeId);
     if (!categoryLocal) throw new NotFoundError();
 
-    const { main } = categoryLocal;
-    if (!main) throw new NotFoundError();
+    const { main, portionSizeMethods } = categoryLocal;
+    if (
+      !main ||
+      !portionSizeMethods ||
+      portionSizeMethods.some((psm) => psm.parameters === undefined)
+    )
+      throw new NotFoundError();
 
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
@@ -213,6 +323,9 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
           { transaction }
         ),
         main.$set('parentCategories', categories, { transaction }),
+        updatePortionSizeMethods(categoryLocalId, portionSizeMethods, input.portionSizeMethods, {
+          transaction,
+        }),
       ]);
 
       if (main.code !== input.main.code)
@@ -222,7 +335,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         );
     });
 
-    return getCategory(categoryId, localeId);
+    return getCategory(categoryLocalId, localeId);
   };
 
   return {
