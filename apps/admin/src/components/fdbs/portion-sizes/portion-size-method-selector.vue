@@ -193,11 +193,7 @@ export default defineComponent({
         return;
       }
 
-      this.dialog = {
-        show: true,
-        index,
-        item: copy(merge(defaults, item)),
-      };
+      this.dialog = { show: true, index, item: copy(merge(defaults, item)) };
     },
 
     save() {

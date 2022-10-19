@@ -52,45 +52,6 @@ export const psmDefaultAttributes: Omit<PortionSizeMethodItem, 'id' | 'method'> 
   parameters: [],
 };
 
-export const psmDefaults: PortionSizeMethodItem[] = [
-  {
-    method: 'as-served',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'guide-image',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'drink-scale',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'standard-portion',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'cereal',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'milk-on-cereal',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'pizza',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'milk-in-a-hot-drink',
-    ...psmDefaultAttributes,
-  },
-  {
-    method: 'weight',
-    ...psmDefaultAttributes,
-  },
-];
-
 export const portionSizeSelectionImages = {
   grated: 'portion/cheg3.jpg',
   in_a_bag: 'portion/Gcri.jpg',
@@ -138,3 +99,60 @@ export const portionSizeSelectionImages = {
   use_tortilla_chips_in_a_bowl: 'portion/tort4.jpg',
   weight: 'portion/weight.png',
 };
+
+export const psmDefaults: PortionSizeMethodItem[] = [
+  {
+    method: 'as-served',
+    ...psmDefaultAttributes,
+    description: 'use_an_image',
+    imageUrl: portionSizeSelectionImages.use_an_image,
+  },
+  {
+    method: 'guide-image',
+    ...psmDefaultAttributes,
+    description: 'in_a_can',
+    imageUrl: portionSizeSelectionImages.in_a_can,
+  },
+  {
+    method: 'drink-scale',
+    ...psmDefaultAttributes,
+    description: 'in_a_mug',
+    imageUrl: portionSizeSelectionImages.in_a_mug,
+  },
+  {
+    method: 'standard-portion',
+    ...psmDefaultAttributes,
+    description: 'use_a_standard_portion',
+    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
+  },
+  {
+    method: 'cereal',
+    ...psmDefaultAttributes,
+    description: 'use_an_image',
+    imageUrl: portionSizeSelectionImages.use_an_image,
+  },
+  {
+    method: 'milk-on-cereal',
+    ...psmDefaultAttributes,
+    description: 'in_a_bowl',
+    imageUrl: portionSizeSelectionImages.in_a_bowl,
+  },
+  {
+    method: 'pizza',
+    ...psmDefaultAttributes,
+    description: 'use_an_image',
+    imageUrl: portionSizeSelectionImages.use_an_image,
+  },
+  {
+    method: 'milk-in-a-hot-drink',
+    ...psmDefaultAttributes,
+    description: 'use_a_standard_portion',
+    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
+  },
+  {
+    method: 'weight',
+    ...psmDefaultAttributes,
+    description: 'weight',
+    imageUrl: portionSizeSelectionImages.weight,
+  },
+];
