@@ -27,11 +27,14 @@ export const usePromptHandlerStore = <T extends object>(
     storedState ? merge<T>(getInitialState(), storedState) : getInitialState()
   ) as Ref<T>;
 
-  const update = (data: { state: T; valid: boolean }) => {
-    promptStore.updateState(getFoodId(), promptId, data.state);
-    state.value = data.state;
+  const update = (data: { state?: T; valid?: boolean }) => {
+    const { state: newState, valid } = data;
+    if (newState) {
+      promptStore.updateState(getFoodId(), promptId, newState);
+      state.value = newState;
+    }
 
-    context.emit('valid', data.valid);
+    if (valid !== undefined) context.emit('valid', data.valid);
   };
 
   const clearStoredState = () => {

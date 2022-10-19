@@ -61,6 +61,13 @@ export default <P extends BasePromptProps, S extends object>() =>
       hasErrors(): boolean {
         return !!this.errors.length;
       },
+      isValid(): boolean {
+        return false;
+      },
+    },
+
+    mounted() {
+      this.$emit('update', { valid: this.isValid });
     },
 
     methods: {
