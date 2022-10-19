@@ -91,7 +91,8 @@ export default defineComponent({
           this.localeId,
           this.searchTerm,
           this.parameters?.searchSortingAlgorithm,
-          this.parameters?.searchMatchScoreWeight
+          this.parameters?.searchMatchScoreWeight,
+          false
         );
         this.requestFailed = false;
       } catch (e) {

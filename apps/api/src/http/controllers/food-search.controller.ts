@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express';
 
+import type { IoC } from '@intake24/api/ioc';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -14,9 +16,45 @@ interface SearchQuery {
   limit?: string;
   rankingAlgorithm?: SearchSortingAlgorithm;
   matchScoreWeight?: string;
+  recipe?: string;
 }
 
-const foodSearchController = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ATTR_USE_ANYWHERE = 0;
+const ATTR_AS_REGULAR_FOOD_ONLY = 1;
+const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
+
+const foodSearchController = ({
+  cachedInheritableAttributesService,
+}: Pick<IoC, 'cachedInheritableAttributesService'>) => {
+  function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
+    const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
+
+    switch (attr) {
+      case ATTR_AS_REGULAR_FOOD_ONLY:
+        return !recipe;
+      case ATTR_AS_RECIPE_INGREDIENT_ONLY:
+        return recipe;
+      default:
+        return true;
+    }
+  }
+
+  async function filterRecipeIngredients(
+    recipe: boolean,
+    items: FoodSearchResponse
+  ): Promise<FoodSearchResponse> {
+    const attrs = await cachedInheritableAttributesService.getInheritableAttributes(
+      items.foods.map((r) => r.code)
+    );
+
+    return {
+      foods: items.foods.filter((header) =>
+        acceptForQuery(recipe, attrs[header.code]?.useInRecipes)
+      ),
+    };
+  }
+
   const search = async (
     req: Request<SearchParams, unknown, unknown, SearchQuery>,
     res: Response
@@ -28,7 +66,13 @@ const foodSearchController = () => {
         req.query.rankingAlgorithm ?? 'popularity',
         parseFloat(req.query.matchScoreWeight ?? '20')
       );
-      res.json(results);
+
+      const withFilteredIngredients = await filterRecipeIngredients(
+        req.query.recipe === 'true',
+        results
+      );
+
+      res.json(withFilteredIngredients);
     } catch (err) {
       if (err instanceof IndexNotReadyError) {
         res.sendStatus(503);

@@ -79,6 +79,7 @@ import type {
   AsServedService,
   AuthenticationService,
   Cache,
+  CachedInheritableAttributesService,
   CategoryContentsService,
   DataExportFields,
   DataExportMapper,
@@ -113,6 +114,7 @@ import type {
   UserService,
 } from '@intake24/api/services';
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Environment } from '@intake24/common/types';
 import type { DatabaseConfig, DatabasesInterface, User } from '@intake24/db';
 import type { LogConfig, Logger, MailConfig, Mailer } from '@intake24/services';
@@ -267,6 +269,8 @@ export interface IoC extends Jobs {
   // Foods
   foodDataService: FoodDataService;
   portionSizeService: PortionSizeService;
+  inheritableAttributesService: InheritableAttributesService;
+  cachedInheritableAttributesService: CachedInheritableAttributesService;
 
   // Categories
   categoryContentsService: CategoryContentsService;

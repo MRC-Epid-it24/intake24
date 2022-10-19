@@ -8,10 +8,11 @@ export default {
     localeId: string,
     description: string,
     rankingAlgorithm: SearchSortingAlgorithm | undefined,
-    matchScoreWeight: number | undefined
+    matchScoreWeight: number | undefined,
+    recipe: boolean | undefined
   ): Promise<FoodSearchResponse> => {
     const { data } = await http.get<FoodSearchResponse>(
-      `foods/${localeId}?description=${description}&rankingAlgorithm=${rankingAlgorithm}&matchScoreWeight=${matchScoreWeight}`
+      `foods/${localeId}?description=${description}&rankingAlgorithm=${rankingAlgorithm}&matchScoreWeight=${matchScoreWeight}&recipe=${recipe}`
     );
     return data;
   },

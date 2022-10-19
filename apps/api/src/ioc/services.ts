@@ -44,7 +44,9 @@ import {
   userService,
 } from '@intake24/api/services';
 import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
+import cachedInheritableAttributesService from '@intake24/api/services/foods/cached-inheritable-attributes-service';
 import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
+import inheritableAttributesService from '@intake24/api/services/foods/inheritable-attributes-service';
 import { logger, Mailer } from '@intake24/services';
 
 export default (container: AwilixContainer): void => {
@@ -66,6 +68,8 @@ export default (container: AwilixContainer): void => {
     foodDataService: asFunction(foodDataService),
     portionSizeService: asFunction(portionSizeService),
     categoryContentsService: asFunction(categoryContentsService),
+    inheritableAttributesService: asFunction(inheritableAttributesService).singleton(),
+    cachedInheritableAttributesService: asFunction(cachedInheritableAttributesService).singleton(),
 
     pairwiseSearchService: asFunction(pairwiseSearchService),
 
