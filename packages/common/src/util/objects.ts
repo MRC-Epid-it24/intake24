@@ -28,3 +28,11 @@ export const getObjectNestedKeys = <T extends Dictionary>(object: T, prefix?: st
     acc.push(...items);
     return acc;
   }, []);
+
+export function mapKeys<T>(
+  obj: { [k: string]: T },
+  fn: (value: string) => string
+): { [k: string]: T } {
+  const entries = Object.entries(obj);
+  return Object.fromEntries(entries.map((entry) => [fn(entry[0]), entry[1]]));
+}
