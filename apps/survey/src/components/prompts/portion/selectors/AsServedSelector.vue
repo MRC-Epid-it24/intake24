@@ -36,7 +36,7 @@
           </v-card>
         </v-col>
       </template>
-      <v-col class="pa-1 mr-auto rounded-lg" cols="3" lg="1" sm="2">
+      <v-col v-if="showMoreWeightFactor" class="pa-1 mr-auto rounded-lg" cols="3" lg="1" sm="2">
         <v-card @click="updateSelection(1)">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
@@ -91,6 +91,9 @@ export default defineComponent({
     initialObject: {
       type: Object as PropType<SelectedAsServedImage>,
     },
+    maxWeight: {
+      type: Number,
+    },
     type: {
       type: String as PropType<'serving' | 'leftover'>,
       default: 'serving',
@@ -128,20 +131,38 @@ export default defineComponent({
       value: value ?? denominator - 1,
     });
 
-    const moreWeightFactor = (
-      show: boolean,
-      weight: number,
-      value?: number
-    ): WeightFactorProps => ({
-      show,
-      type: props.type,
-      subType: 'more',
-      minNumerator: denominator + 1,
-      maxNumerator: denominator * 5,
-      denominator,
-      weight,
-      value: value ?? denominator + 1,
-    });
+    const moreWeightFactor = (show: boolean, weight: number, value?: number): WeightFactorProps => {
+      let minNumerator = denominator + 1;
+      let maxNumerator = denominator * 5;
+
+      if (props.maxWeight) {
+        if ((minNumerator / denominator) * weight >= props.maxWeight) {
+          minNumerator = denominator;
+          maxNumerator = denominator;
+          value = denominator;
+        } else {
+          maxNumerator = denominator;
+
+          while (
+            ((maxNumerator + 1) / denominator) * weight < props.maxWeight &&
+            maxNumerator <= denominator * 5
+          ) {
+            maxNumerator += 1;
+          }
+        }
+      }
+
+      return {
+        show,
+        type: props.type,
+        subType: 'more',
+        minNumerator,
+        maxNumerator,
+        denominator,
+        weight,
+        value: value ?? denominator + 1,
+      };
+    };
 
     const weightFactorProps = ref(noWeightFactor(0));
 
@@ -177,6 +198,16 @@ export default defineComponent({
 
       return this.asServedData.images[this.asServedData.images.length - 1].thumbnailUrl;
     },
+    showMoreWeightFactor(): boolean {
+      if (this.maxWeight === undefined) return true;
+
+      if (this.objectIdx === undefined || !this.asServedData || !this.asServedData.images.length)
+        return false;
+
+      const { weight } = this.asServedData.images[this.asServedData.images.length - 1];
+
+      return ((this.denominator + 1) / this.denominator) * weight < this.maxWeight;
+    },
     weightFactor(): number {
       return this.weightFactorProps.value / this.weightFactorProps.denominator;
     },
@@ -184,6 +215,11 @@ export default defineComponent({
 
   watch: {
     async asServedSetId() {
+      await this.fetchAsServedImageData();
+    },
+    async maxWeight(val) {
+      if (!val) return;
+
       await this.fetchAsServedImageData();
     },
   },
@@ -209,6 +245,14 @@ export default defineComponent({
     initSelection() {
       if (!this.asServedData || this.objectIdx !== undefined) return;
 
+      const { maxWeight } = this;
+
+      if (maxWeight) {
+        this.asServedData.images = this.asServedData.images.filter(
+          (image) => image.weight <= maxWeight
+        );
+      }
+
       if (this.initialObject?.index !== undefined)
         this.setSelection(this.initialObject.index, true);
       else this.setSelection(Math.floor(this.asServedData.images.length / 2));
@@ -223,7 +267,6 @@ export default defineComponent({
       const value = Math.round((initWeight / objectWeight) * this.denominator);
 
       if (initWeight > objectWeight && objectIdx === asServedData.images.length - 1) {
-        console.log(`more`);
         this.weightFactorProps = this.moreWeightFactor(
           true,
           asServedData.images[objectIdx].weight,
@@ -234,7 +277,6 @@ export default defineComponent({
       }
 
       if (initWeight < objectWeight && objectIdx === 0) {
-        console.log(`less`);
         this.weightFactorProps = this.lessWeightFactor(
           true,
           asServedData.images[objectIdx].weight,
@@ -244,7 +286,6 @@ export default defineComponent({
         return;
       }
 
-      console.log(`weird`);
       this.noWeightFactor(asServedData.images[objectIdx].weight);
     },
 

@@ -101,7 +101,7 @@ export default defineComponent({
 
   computed: {
     amount() {
-      return (this.numerator / this.denominator) * this.weight;
+      return ((this.numerator / this.denominator) * this.weight).toFixed(2);
     },
     whole() {
       return Math.floor(this.numerator / this.denominator);

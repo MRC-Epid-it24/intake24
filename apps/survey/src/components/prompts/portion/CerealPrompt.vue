@@ -94,7 +94,8 @@
                   <v-col>
                     <as-served-selector
                       :as-served-set-id="leftoverImageSet"
-                      :initial-state="portionSize.leftovers?.index"
+                      :initial-object="portionSize.leftovers ?? undefined"
+                      :max-weight="portionSize.serving?.weight"
                       :type="'leftover'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"

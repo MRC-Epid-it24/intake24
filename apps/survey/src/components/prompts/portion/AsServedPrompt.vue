@@ -82,6 +82,7 @@
                     <as-served-selector
                       :as-served-set-id="parameters['leftovers-image-set']"
                       :initial-object="portionSize.leftovers ?? undefined"
+                      :max-weight="portionSize.serving?.weight"
                       :type="'leftover'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"
@@ -186,6 +187,14 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    leftoversPrompt(val) {
+      if (val !== false) return;
+
+      this.portionSize.leftovers = null;
+    },
+  },
+
   methods: {
     updatePanel() {
       if (this.isValid) {
@@ -205,6 +214,7 @@ export default defineComponent({
 
     updateServing(update: SelectedAsServedImage | null) {
       this.portionSize.serving = update;
+      this.clearLeftovers();
 
       if (this.isValid) this.clearErrors();
 
@@ -215,6 +225,12 @@ export default defineComponent({
       this.servingImageConfirmed = true;
       this.updatePanel();
       this.update();
+    },
+
+    clearLeftovers() {
+      this.portionSize.leftovers = null;
+      this.leftoversImageConfirmed = true;
+      this.leftoversPrompt = undefined;
     },
 
     updateLeftovers(update: SelectedAsServedImage | null) {
