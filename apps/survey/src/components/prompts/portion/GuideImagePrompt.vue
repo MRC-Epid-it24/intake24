@@ -192,7 +192,7 @@ export default defineComponent({
         quantityConfirmed: this.quantityConfirmed,
       };
 
-      this.$emit('update', state);
+      this.$emit('update', { state, valid: this.isValid });
     },
   },
 });

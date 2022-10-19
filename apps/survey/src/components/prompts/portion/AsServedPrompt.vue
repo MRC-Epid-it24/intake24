@@ -229,7 +229,7 @@ export default defineComponent({
 
     clearLeftovers() {
       this.portionSize.leftovers = null;
-      this.leftoversImageConfirmed = true;
+      this.leftoversImageConfirmed = false;
       this.leftoversPrompt = undefined;
     },
 
@@ -272,7 +272,7 @@ export default defineComponent({
         leftoversPrompt: this.leftoversPrompt,
       };
 
-      this.$emit('update', state);
+      this.$emit('update', { state, valid: this.isValid });
     },
   },
 });

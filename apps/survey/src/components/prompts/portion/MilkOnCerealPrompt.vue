@@ -230,7 +230,7 @@ export default defineComponent({
         milkLevelConfirmed: this.milkLevelConfirmed,
       };
 
-      this.$emit('update', state);
+      this.$emit('update', { state, valid: this.isValid });
     },
 
     /* setDisplayQuestions(value: boolean) {

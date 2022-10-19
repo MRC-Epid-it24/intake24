@@ -192,7 +192,7 @@ export default defineComponent({
     update() {
       const portionSizeState = this.getCurrentState(this.objectIdx);
 
-      const update: DrinkScalePromptState = {
+      const state: DrinkScalePromptState = {
         portionSize: portionSizeState,
         objectConfirmed: this.objectConfirmed,
         drinkConfirmed: this.selectedDrink,
@@ -205,7 +205,7 @@ export default defineComponent({
         originalImageUrlHeight: this.originalImageUrlHeight,
         originalImageUrlWidth: this.originalImageUrlWidth,
       };
-      this.$emit('update', update);
+      this.$emit('update', { state, valid: this.isValid });
     },
 
     getCurrentState(idx: number): DrinkScaleState {

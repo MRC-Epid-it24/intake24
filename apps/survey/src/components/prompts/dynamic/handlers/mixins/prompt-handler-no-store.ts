@@ -37,7 +37,7 @@ export function createPromptHandlerNoStoreMixin<T extends object>() {
 
       setValidationState(valid: boolean) {
         this.continueEnabled = valid;
-        this.$emit('validation-update', valid);
+        this.$emit('valid', valid);
       },
 
       getInitialState(): T {

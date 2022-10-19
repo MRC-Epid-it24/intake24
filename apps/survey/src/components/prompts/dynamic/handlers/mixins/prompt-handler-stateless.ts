@@ -19,7 +19,7 @@ export default defineComponent({
 
     setValidationState(valid: boolean) {
       this.continueEnabled = valid;
-      this.$emit('validation-update', valid);
+      this.$emit('valid', valid);
     },
   },
 });

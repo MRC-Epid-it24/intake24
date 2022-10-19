@@ -86,14 +86,15 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
 
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        this.parameters ?? {};
+
       try {
-        this.searchResults = await foodsService.search(
-          this.localeId,
-          this.searchTerm,
-          this.parameters?.searchSortingAlgorithm,
-          this.parameters?.searchMatchScoreWeight,
-          false
-        );
+        this.searchResults = await foodsService.search(this.localeId, this.searchTerm, {
+          rankingAlgorithm,
+          matchScoreWeight,
+          recipe: false,
+        });
         this.requestFailed = false;
       } catch (e) {
         this.requestFailed = true;

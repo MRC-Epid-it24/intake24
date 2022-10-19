@@ -83,7 +83,7 @@ export function createPromptHandlerStoreMixin<T extends object>(promptType: Comp
 
       setValidationState(valid: boolean) {
         this.continueEnabled = valid;
-        this.$emit('validation-update', valid);
+        this.$emit('valid', valid);
       },
 
       // Should be called after commitAnswer

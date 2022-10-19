@@ -3,17 +3,21 @@ import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 
 import http from './http.service';
 
+export type SearchOptions = {
+  rankingAlgorithm?: SearchSortingAlgorithm;
+  matchScoreWeight?: number;
+  recipe?: boolean;
+};
+
 export default {
   search: async (
     localeId: string,
     description: string,
-    rankingAlgorithm: SearchSortingAlgorithm | undefined,
-    matchScoreWeight: number | undefined,
-    recipe: boolean | undefined
+    options: SearchOptions = {}
   ): Promise<FoodSearchResponse> => {
-    const { data } = await http.get<FoodSearchResponse>(
-      `foods/${localeId}?description=${description}&rankingAlgorithm=${rankingAlgorithm}&matchScoreWeight=${matchScoreWeight}&recipe=${recipe}`
-    );
+    const { data } = await http.get<FoodSearchResponse>(`foods/${localeId}`, {
+      params: { description, ...options },
+    });
     return data;
   },
 

@@ -100,7 +100,9 @@ export default defineComponent({
 
   methods: {
     update() {
-      this.$emit('update', { option: this.option });
+      const state: PortionSizeOptionState = { option: this.option };
+
+      this.$emit('update', { state, valid: this.isValid });
     },
 
     submit() {

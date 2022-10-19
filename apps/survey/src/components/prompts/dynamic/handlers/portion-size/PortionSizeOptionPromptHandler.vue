@@ -51,7 +51,7 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, context) {
     const { encodedSelectedFood, foodName } = useFoodPromptUtils();
 
     const getInitialState = (): PortionSizeOptionState => ({
@@ -61,7 +61,8 @@ export default defineComponent({
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.promptId,
       props.promptComponent,
-      getInitialState
+      getInitialState,
+      context
     );
 
     return {

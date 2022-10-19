@@ -38,7 +38,7 @@
           @meal-food-selected="onMealFoodMobileClick"
           @resetPromptTrigger="resetTrigger"
           @restart="restart"
-          @validation-update="onValidationUpdate"
+          @valid="updateValidation"
         ></component>
       </transition>
     </v-col>
@@ -91,7 +91,7 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
@@ -118,6 +118,12 @@ export default defineComponent({
   },
 
   mixins: [Recall],
+
+  setup() {
+    const bottomNavMobile = ref<InstanceType<typeof BottomNavigationMobile>>();
+
+    return { bottomNavMobile };
+  },
 
   data() {
     return {
@@ -150,7 +156,8 @@ export default defineComponent({
 
     onMealActionMobile(payload: { action: MealAction; mealId: number }) {
       this.onMealAction(payload);
-      this.$refs.bottomNavMobile.tabIndex = 2;
+
+      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
     },
 
     resetTrigger() {
@@ -184,10 +191,6 @@ export default defineComponent({
 
     onMobileMealFoodContextMenu() {
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-    },
-
-    onValidationUpdate(answerValid: boolean) {
-      this.continueButtonEnabled = answerValid;
     },
   },
 });

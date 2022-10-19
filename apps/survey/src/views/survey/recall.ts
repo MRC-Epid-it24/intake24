@@ -326,6 +326,10 @@ export default defineComponent({
       }
     },
 
+    updateValidation(valid: boolean) {
+      this.continueButtonEnabled = valid;
+    },
+
     async onContinue() {
       this.continueButtonEnabled = false;
       // Workaround for a crash that occurs if the currently selected prompt changes something

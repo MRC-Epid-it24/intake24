@@ -1,4 +1,4 @@
-import type { Ref } from 'vue';
+import type { Ref, SetupContext } from 'vue';
 import { ref } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
@@ -8,7 +8,8 @@ import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores'
 export const usePromptHandlerStore = <T extends object>(
   promptId: string,
   promptType: ComponentType,
-  getInitialState: () => T
+  getInitialState: () => T,
+  context: SetupContext
 ) => {
   const promptStore = getOrCreatePromptStateStore<T>(promptType)();
   const survey = useSurvey();
@@ -26,9 +27,11 @@ export const usePromptHandlerStore = <T extends object>(
     storedState ? merge<T>(getInitialState(), storedState) : getInitialState()
   ) as Ref<T>;
 
-  const update = (newState: T) => {
-    promptStore.updateState(getFoodId(), promptId, newState);
-    state.value = newState;
+  const update = (data: { state: T; valid: boolean }) => {
+    promptStore.updateState(getFoodId(), promptId, data.state);
+    state.value = data.state;
+
+    context.emit('valid', data.valid);
   };
 
   const clearStoredState = () => {

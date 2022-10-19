@@ -34,7 +34,7 @@
           @complete="onComplete"
           @continue="onContinue"
           @restart="restart"
-          @validation-update="onValidationUpdate"
+          @valid="updateValidation"
         ></component>
       </transition>
     </v-col>
@@ -61,12 +61,6 @@ export default defineComponent({
   components: { MealList, RecallBreadCrumbs },
 
   mixins: [Recall],
-
-  methods: {
-    onValidationUpdate(answerValid: boolean) {
-      this.continueButtonEnabled = answerValid;
-    },
-  },
 });
 </script>
 

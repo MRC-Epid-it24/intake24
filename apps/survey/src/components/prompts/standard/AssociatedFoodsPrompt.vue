@@ -160,7 +160,8 @@ export default defineComponent({
 
     updatePrompts() {
       const { activePrompt, prompts } = this;
-      this.$emit('update', { activePrompt, prompts });
+
+      this.$emit('update', { state: { activePrompt, prompts }, valid: this.isValid });
     },
 
     onContinue() {

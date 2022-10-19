@@ -46,7 +46,7 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, context) {
     const { foodName, parameters, selectedFood, selectedPortionSize } =
       useFoodPromptUtils<'as-served'>();
 
@@ -67,7 +67,8 @@ export default defineComponent({
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.promptId,
       props.promptComponent,
-      getInitialState
+      getInitialState,
+      context
     );
 
     return {

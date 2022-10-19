@@ -129,7 +129,7 @@ export default defineComponent({
       // TODO: recalculate drink & food
       const state: MilkInAHotDrinkPromptState = { portionSize, panel };
 
-      this.$emit('update', state);
+      this.$emit('update', { state, valid: this.isValid });
     },
   },
 });
