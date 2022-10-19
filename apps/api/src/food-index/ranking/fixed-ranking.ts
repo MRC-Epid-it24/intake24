@@ -1,7 +1,8 @@
 import NodeCache from 'node-cache';
 
 import type { RankingData } from '@intake24/api/food-index/ranking/ranking';
-import { mapKeys, toCacheKey, toFoodCode } from '@intake24/api/food-index/ranking/utils';
+import { toCacheKey, toFoodCode } from '@intake24/api/food-index/ranking/utils';
+import { mapKeys } from '@intake24/common/util';
 import { FixedFoodRanking } from '@intake24/db';
 
 const cache = new NodeCache({ stdTTL: 600, checkperiod: 600 });
