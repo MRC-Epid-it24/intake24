@@ -93,7 +93,7 @@
 import { mapState } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
@@ -121,8 +121,9 @@ export default defineComponent({
 
   setup() {
     const bottomNavMobile = ref<InstanceType<typeof BottomNavigationMobile>>();
+    const promptHandle = ref<RecallPromptHandler>();
 
-    return { bottomNavMobile };
+    return { bottomNavMobile, promptHandle };
   },
 
   data() {
