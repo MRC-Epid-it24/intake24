@@ -7,13 +7,7 @@
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <v-card dense flat>
         <v-list class="flex-grow-1 flex-shrink-0" dense>
-          <v-list-item
-            v-for="(meal, idx) in meals"
-            :key="meal.id"
-            :inactive="true"
-            link
-            :ripple="false"
-          >
+          <v-list-item v-for="meal in meals" :key="meal.id" :inactive="true" link :ripple="false">
             <v-list-item-icon>
               <v-icon> $meal</v-icon>
             </v-list-item-icon>
@@ -22,7 +16,7 @@
                 <template #activator>
                   <v-list-item-title
                     class="font-weight-bold text-wrap"
-                    @click="chooseMeal(idx, meal.name.en, meal.foods, 'meal')"
+                    @click="chooseMeal(meal.id, meal.name.en, meal.foods, 'meal')"
                   >
                     {{ meal.name[$i18n.locale] }}
                   </v-list-item-title>
@@ -37,15 +31,17 @@
                   <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
                     <v-list-item-title
                       class="text-wrap"
-                      @click="chooseFood(i, idx, foodDisplayName(food), 'food')"
+                      @click="chooseFood(food.id, foodDisplayName(food), 'food')"
                     >
                       {{ foodDisplayName(food) }}
                     </v-list-item-title>
                     <v-list-item-action>
-                      <v-icon v-if="food.data" color="sucess" x-small>fa-check</v-icon>
+                      <v-icon v-if="food.data" color="success" x-small>fa-check</v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon v-if="food.portionSizeMethod" color="sucess" x-small>fa-check</v-icon>
+                      <v-icon v-if="food.portionSizeMethod" color="success" x-small
+                        >fa-check</v-icon
+                      >
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
@@ -119,11 +115,11 @@ export default defineComponent({
     submit() {
       this.$emit('submit');
     },
-    chooseMeal(mealIndex: number, name: string, foods: FoodState[], entity: string) {
-      this.$emit('meal-selected', { mealIndex, name, foods, entity });
+    chooseMeal(mealId: number, name: string, foods: FoodState[], entity: string) {
+      this.$emit('meal-selected', { mealId, name, foods, entity });
     },
-    chooseFood(foodIndex: number, mealIndex: number, name: string, entity: string) {
-      this.$emit('food-selected', { foodIndex, mealIndex, name, entity });
+    chooseFood(foodId: number, name: string, entity: string) {
+      this.$emit('food-selected', { foodId, name, entity });
     },
     foodDisplayName(food: FoodState) {
       let dispalyName = '???';

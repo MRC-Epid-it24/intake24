@@ -217,7 +217,6 @@ export default defineComponent({
           break;
         case 'delete-meal':
           console.log('About to delete the Meal: ', payload.mealId);
-          this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
           this.deleteMeal(payload.mealId);
           await this.nextPrompt();
           break;

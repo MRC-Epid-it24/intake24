@@ -1,6 +1,12 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  data() {
+    return {
+      continueEnabled: false,
+    };
+  },
+
   mounted() {
     this.setValidationState(this.isValid());
     this.continueEnabled = this.isValid();

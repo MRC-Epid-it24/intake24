@@ -6,6 +6,7 @@ export function createPromptHandlerNoStoreMixin<T extends object>() {
     data() {
       return {
         currentState: null as T | null,
+        continueEnabled: false,
       };
     },
 

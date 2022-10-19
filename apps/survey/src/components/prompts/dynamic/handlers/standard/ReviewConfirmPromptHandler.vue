@@ -42,10 +42,10 @@ export default defineComponent({
       await this.submitRecall();
       this.$emit('complete');
     },
-    onMealClick(payload: { mealIndex: number; name: string; foods: FoodState[]; entity: 'meal' }) {
+    onMealClick(payload: { mealId: number; name: string; foods: FoodState[]; entity: 'meal' }) {
       this.$emit('meal-food-selected', payload);
     },
-    onFoodClick(payload: { foodIndex: number; mealIndex: number; name: string; entity: 'food' }) {
+    onFoodClick(payload: { foodId: number; name: string; entity: 'food' }) {
       this.$emit('meal-food-selected', payload);
     },
     // Method required and intentionally empty

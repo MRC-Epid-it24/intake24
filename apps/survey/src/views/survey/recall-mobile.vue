@@ -51,7 +51,6 @@
       <meal-list-mobile-bottom
         v-show="meals.length > 0"
         :meals="meals"
-        :selected-meal-index="selectedMealIndex"
         @meal-selected="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       >
@@ -61,6 +60,7 @@
     <transition type="fade">
       <bottom-navigation-mobile
         v-if="showMealList"
+        ref="bottomNavMobile"
         :continue-button-enabled="continueButtonEnabled"
         @navigation-item-click="onBottomNavChange"
       />
@@ -68,17 +68,16 @@
 
     <!-- Context menu for Meal or Food with actions options -->
     <meal-food-mobile-context-menu
-      :entity-index="
+      :entity-id="
         mobileMealFoodContextMenu.foodContext
-          ? mobileMealFoodContextMenu.foodIndex
-          : mobileMealFoodContextMenu.mealIndex
+          ? mobileMealFoodContextMenu.foodId
+          : mobileMealFoodContextMenu.mealId
       "
       :entity-name="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
       :entity-type="mobileMealFoodContextMenu.foodContext"
-      :meal-index="mobileMealFoodContextMenu.mealIndex"
       :show="mobileMealFoodContextMenu.show"
       @continue="onContinue"
-      @meal-action="onMealAction"
+      @meal-action="onMealActionMobile"
       @toggleMobileMealContext="onMobileMealFoodContextMenu"
     ></meal-food-mobile-context-menu>
 
@@ -95,6 +94,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
+import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
 import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
@@ -124,8 +124,8 @@ export default defineComponent({
       bottomNavTab: 2,
       mobileMealFoodContextMenu: {
         show: false,
-        mealIndex: 0,
-        foodIndex: 0,
+        mealId: 0,
+        foodId: 0,
         foodContext: false,
       },
       alert: false,
@@ -133,13 +133,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, [
-      'selectedMeal',
-      'selectedFood',
-      'selectedMealIndex',
-      'selectedFoodIndex',
-      'currentTempPromptAnswer',
-    ]),
+    ...mapState(useSurvey, ['selectedFoodOptional', 'selectedMealOptional']),
   },
 
   methods: {
@@ -154,6 +148,11 @@ export default defineComponent({
       }
     },
 
+    onMealActionMobile(payload: { action: MealAction; mealId: number }) {
+      this.onMealAction(payload);
+      this.$refs.bottomNavMobile.tabIndex = 2;
+    },
+
     resetTrigger() {
       this.submitTrigger = false;
       console.log('Trigger Reseted', this.submitTrigger);
@@ -161,28 +160,26 @@ export default defineComponent({
 
     onMealFoodMobileClick(
       payload:
-        | { mealIndex: number; name: string; foods: FoodState[]; entity: 'meal' }
-        | { foodIndex: number; mealIndex: number; name: string; entity: 'food' }
+        | { mealId: number; name: string; foods: FoodState[]; entity: 'meal' }
+        | { foodId: number; name: string; entity: 'food' }
     ) {
       if (payload.entity === 'meal')
-        this.onMealMobileClick(payload.mealIndex, payload.name, payload.foods);
-      if (payload.entity === 'food')
-        this.onFoodMobileClick(payload.foodIndex, payload.mealIndex, payload.name);
+        this.onMealMobileClick(payload.mealId, payload.name, payload.foods);
+      if (payload.entity === 'food') this.onFoodMobileClick(payload.foodId, payload.name);
     },
 
-    onMealMobileClick(mealIndex: number, name: string, foods: FoodState[]) {
+    onMealMobileClick(mealId: number, name: string, foods: FoodState[]) {
       this.activeMeal = name;
       this.mobileMealFoodContextMenu.foodContext = false;
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
+      this.mobileMealFoodContextMenu.mealId = mealId;
     },
 
-    onFoodMobileClick(foodIndex: number, mealIndex: number, name: string) {
+    onFoodMobileClick(foodId: number, name: string) {
       this.activeFood = name;
       this.mobileMealFoodContextMenu.foodContext = true;
       this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
-      this.mobileMealFoodContextMenu.foodIndex = foodIndex;
+      this.mobileMealFoodContextMenu.foodId = foodId;
     },
 
     onMobileMealFoodContextMenu() {

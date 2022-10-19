@@ -18,8 +18,8 @@
     </v-btn>
 
     <v-btn
-      :color="canContinue ? 'success' : 'primary'"
-      :disabled="!isContinueEnabled()"
+      :color="isContinueEnabled ? 'success' : 'primary'"
+      :disabled="!isContinueEnabled"
       @click="onItemClick(2)"
     >
       <span>{{ $t('common.action.continue') }}</span>
@@ -55,6 +55,12 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    isContinueEnabled() {
+      return this.continueButtonEnabled || this.tabIndex !== 2;
+    },
+  },
+
   watch: {
     currentTempPromptAnswer: {
       immediate: true,
@@ -73,9 +79,6 @@ export default defineComponent({
       if (this.tabIndex == tab && tab !== 2) return;
       if (!tab) this.$emit('navigation-item-click', this.$props.bottomNavigation);
       this.$emit('navigation-item-click', tab);
-    },
-    isContinueEnabled() {
-      return this.continueButtonEnabled || this.tabIndex !== 2;
     },
   },
 });

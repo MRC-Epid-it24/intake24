@@ -4,9 +4,9 @@
       <v-tabs v-model="activeTab" center-active height="56px" icons-and-text slider-size="4" touch>
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab
-          v-for="(meal, idx) in meals"
+          v-for="meal in meals"
           :key="meal.id"
-          @click="emitFoodsList(idx, meal.name.en, meal.foods, entity)"
+          @click="emitFoodsList(meal.id, meal.name.en, meal.foods, entity)"
         >
           <v-badge
             bordered
@@ -83,8 +83,8 @@ export default defineComponent({
   },
 
   methods: {
-    emitFoodsList(mealIndex: number, name: string, foods: FoodState[], entity: string) {
-      this.$emit('meal-selected', { mealIndex, name, foods, entity });
+    emitFoodsList(mealId: number, name: string, foods: FoodState[], entity: string) {
+      this.$emit('meal-selected', { mealId, name, foods, entity });
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);

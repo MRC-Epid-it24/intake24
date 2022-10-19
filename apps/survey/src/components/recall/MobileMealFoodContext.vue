@@ -39,9 +39,8 @@ export default defineComponent({
   props: {
     show: Boolean,
     entityName: String,
-    entityIndex: Number,
+    entityId: Number,
     entityType: Boolean,
-    mealIndex: Number,
   },
 
   computed: {
@@ -62,7 +61,7 @@ export default defineComponent({
 
     onContextMenuAction(action: string) {
       this.$emit('meal-action', {
-        mealIndex: this.$props.entityIndex,
+        mealId: this.$props.entityId,
         action,
       });
       this.$emit('toggleMobileMealContext');
@@ -74,25 +73,25 @@ export default defineComponent({
     },
 
     deleteMeal() {
-      const { entityIndex } = this;
-      if (entityIndex === undefined) {
+      const { entityId } = this;
+      if (entityId === undefined) {
         console.log(`Missing entityIndex`);
         return;
       }
 
-      this.storeDeleteMeal(entityIndex);
+      this.storeDeleteMeal(entityId);
       this.$emit('toggleMobileMealContext');
       this.$emit('complete');
     },
 
     deleteFood() {
-      const { mealIndex, entityIndex: foodIndex } = this;
-      if (mealIndex === undefined || foodIndex === undefined) {
+      const { entityId } = this;
+      if (entityId === undefined) {
         console.log(`Missing mealIndex / foodIndex`);
         return;
       }
 
-      this.storeDeleteFood({ mealIndex, foodIndex });
+      this.storeDeleteFood({ foodId: entityId });
       this.$emit('toggleMobileMealContext');
     },
   },
