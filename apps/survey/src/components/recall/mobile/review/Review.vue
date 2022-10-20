@@ -1,10 +1,10 @@
 <template>
-  <v-card denses flat>
+  <v-card dense flat>
     <survey-progress :items="meals"></survey-progress>
     <v-list class="flex-grow-1 flex-shrink-0" dense flat nav>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title"> Recall</v-list-item-title>
+          <v-list-item-title class="title">Recall</v-list-item-title>
           <v-list-item-subtitle>
             {{ surveyName }}
           </v-list-item-subtitle>

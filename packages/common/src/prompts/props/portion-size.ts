@@ -1,4 +1,3 @@
-import type { UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import type { PromptQuestion } from '..';

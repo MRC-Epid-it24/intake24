@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
 
-import adminSurveyRespondentController from '@intake24/api/http/controllers/admin/surveys/survey-respondent.controller';
 import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/locales';
 import ioc from '@intake24/api/ioc';

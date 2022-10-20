@@ -7,7 +7,7 @@ import {
   validate,
 } from '@intake24/api/http/requests/util';
 import { pickJobParams } from '@intake24/common/types';
-import { FoodsLocale, SystemLocale } from '@intake24/db';
+import { SystemLocale } from '@intake24/db';
 
 const jobOptions = ['LocaleFoodNutrientMapping', 'PairwiseSearchCopyAssociations'];
 

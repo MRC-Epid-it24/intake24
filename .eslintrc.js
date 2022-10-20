@@ -41,5 +41,14 @@ module.exports = defineConfig({
     ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "{}": false
+        },
+        "extendDefaults": true
+      }
+    ]
   },
 });

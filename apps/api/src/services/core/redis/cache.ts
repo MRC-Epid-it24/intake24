@@ -7,6 +7,8 @@ import { mapKeys } from '@intake24/common/util';
 
 import HasRedisClient from './redis-store';
 
+export type CacheValue = string | number | unknown[] | null | boolean | object;
+
 export default class Cache extends HasRedisClient {
   constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
     super({ config: cacheConfig.redis, logger: logger.child({ service: 'Cache' }) });
@@ -55,12 +57,12 @@ export default class Cache extends HasRedisClient {
    * Store item in cache, for given time optionally
    *
    * @param {string} key
-   * @param {*} value
-   * @param {(number | string)} [expiresIn] ('ms' string format or seconds)
+   * @param {CacheValue} value
+   * @param {(number | string)} [expiresIn]
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async set(key: string, value: any, expiresIn?: number | string): Promise<boolean> {
+  async set(key: string, value: CacheValue, expiresIn?: number | string): Promise<boolean> {
     if (!expiresIn) {
       const result = await this.redis.set(key, stringify(value));
       return !!result;
@@ -85,7 +87,7 @@ export default class Cache extends HasRedisClient {
    * @param keyValues a record/object with key/value pairs
    * @param expiresIn expiration time in seconds or 'ms' string format
    */
-  async mset(keyValues: Record<string, any>, expiresIn?: number | string): Promise<boolean> {
+  async mset(keyValues: Record<string, CacheValue>, expiresIn?: number | string): Promise<boolean> {
     const serialised = mapValues(keyValues, (v) => stringify(v));
 
     if (!expiresIn) {
@@ -128,7 +130,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<T>}
    * @memberof Cache
    */
-  async remember<T>(
+  async remember<T extends {}>(
     key: string,
     expiresIn: number | string,
     getData: () => Promise<T>
@@ -156,7 +158,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<Record<string, T | null>>}
    * @memberof Cache
    */
-  async rememberMany<T>(
+  async rememberMany<T extends {}>(
     keys: string[],
     cacheKeyPrefix: string,
     expiresIn: number | string,
@@ -188,7 +190,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<T>}
    * @memberof Cache
    */
-  async rememberForever<T>(key: string, getData: () => Promise<T>): Promise<T> {
+  async rememberForever<T extends {}>(key: string, getData: () => Promise<T>): Promise<T> {
     const cachedData = await this.get<T>(key);
     if (cachedData !== null) return cachedData;
 

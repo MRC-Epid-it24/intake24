@@ -15,7 +15,6 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 import {
-  foodPromptUtils,
   mealPromptUtils,
   promptHandlerStateless,
   useFoodPromptUtils,
