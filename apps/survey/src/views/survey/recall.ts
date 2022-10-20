@@ -21,6 +21,7 @@ import portionSizeHandlers from '@intake24/survey/components/prompts/dynamic/han
 import standardHandlers from '@intake24/survey/components/prompts/dynamic/handlers/standard';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
+import { getFoodIndex, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
 interface SavedState {
   prompt: PromptInstance | null;
@@ -185,6 +186,10 @@ export default defineComponent({
       };
     },
 
+    clearSavedState() {
+      this.savedState = null;
+    },
+
     showSurveyPrompt(promptSection: SurveyQuestionSection, promptType: ComponentType) {
       this.setSelection({
         element: null,
@@ -221,35 +226,6 @@ export default defineComponent({
           await this.nextPrompt();
           break;
       }
-    },
-
-    onMealMobileClick(mealIndex: number, name: string) {
-      this.activeMeal = name;
-      this.mobileMealFoodContextMenu.foodContext = false;
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
-    },
-
-    onFoodMobileClick(foodIndex: number, mealIndex: number, name: string) {
-      this.activeFood = name;
-      this.mobileMealFoodContextMenu.foodContext = true;
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.mealIndex = mealIndex;
-      this.mobileMealFoodContextMenu.foodIndex = foodIndex;
-    },
-
-    onMealFoodMobileClick(
-      payload:
-        | { mealIndex: number; name: string; foods: FoodState[]; entity: 'meal' }
-        | { foodIndex: number; mealIndex: number; name: string; entity: 'food' }
-    ) {
-      if (payload.entity === 'meal') this.onMealMobileClick(payload.mealIndex, payload.name);
-      if (payload.entity === 'food')
-        this.onFoodMobileClick(payload.foodIndex, payload.mealIndex, payload.name);
-    },
-
-    onMobileMealFoodContextMenu() {
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
     },
 
     onRecallAction(action: RecallAction) {
@@ -294,18 +270,37 @@ export default defineComponent({
       await this.nextPrompt();
     },
 
+    isSavedStateValid(): boolean {
+      if (this.savedState == null) return false;
+
+      const selection = this.savedState.selection;
+
+      // No element selected means only survey prompts are applicable
+      // that are always valid
+      if (selection.element == null) return true;
+
+      // Otherwise, make sure selected element id is still valid (it could have been
+      // deleted since the state was saved)
+      if (selection.element.type == 'food')
+        return getFoodIndex(this.survey.meals, selection.element.foodId) !== undefined;
+      else return getMealIndex(this.survey.meals, selection.element.mealId) !== undefined;
+    },
+
     async nextPrompt() {
       // Special-case prompts like the mobile review save the current state when they are triggered
       // by user actions.
 
       // If a saved state exists, then use it as the next prompt (i.e., go back to the prompt that
       // was active before.
-      if (this.savedState != null) {
+
+      if (this.savedState != null && this.isSavedStateValid()) {
         console.debug(`Using saved state ${this.savedState.prompt?.prompt.component}`);
         this.setSelection(this.savedState.selection);
         this.currentPrompt = this.savedState.prompt;
         this.savedState = null;
       } else {
+        this.savedState = null;
+
         const nextPrompt = this.recallController
           ? this.recallController.getNextPrompt()
           : undefined;

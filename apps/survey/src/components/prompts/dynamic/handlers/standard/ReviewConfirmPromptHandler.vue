@@ -42,11 +42,11 @@ export default defineComponent({
       await this.submitRecall();
       this.$emit('complete');
     },
-    onMealClick(payload: { mealId: number; name: string; foods: FoodState[]; entity: 'meal' }) {
-      this.$emit('meal-food-selected', payload);
+    onMealClick(payload: { mealId: number }) {
+      this.$emit('meal-context-menu', payload);
     },
-    onFoodClick(payload: { foodId: number; name: string; entity: 'food' }) {
-      this.$emit('meal-food-selected', payload);
+    onFoodClick(payload: { foodId: number }) {
+      this.$emit('food-context-menu', payload);
     },
     // Method required and intentionally empty
     // eslint-disable-next-line @typescript-eslint/no-empty-function

@@ -35,7 +35,8 @@
           :submit-trigger="submitTrigger"
           @complete="onComplete"
           @continue="onContinue"
-          @meal-food-selected="onMealFoodMobileClick"
+          @food-context-menu="onFoodContextMenu"
+          @meal-context-menu="onMealContextMenu"
           @resetPromptTrigger="resetTrigger"
           @restart="restart"
           @valid="updateValidation"
@@ -51,7 +52,6 @@
       <meal-list-mobile-bottom
         v-show="meals.length > 0"
         :meals="meals"
-        @meal-selected="onMealFoodMobileClick"
         @recall-action="onRecallAction"
       >
       </meal-list-mobile-bottom>
@@ -67,19 +67,20 @@
     </transition>
 
     <!-- Context menu for Meal or Food with actions options -->
-    <meal-food-mobile-context-menu
-      :entity-id="
-        mobileMealFoodContextMenu.foodContext
-          ? mobileMealFoodContextMenu.foodId
-          : mobileMealFoodContextMenu.mealId
-      "
-      :entity-name="mobileMealFoodContextMenu.foodContext ? activeFood : activeMeal"
-      :entity-type="mobileMealFoodContextMenu.foodContext"
-      :show="mobileMealFoodContextMenu.show"
-      @continue="onContinue"
-      @meal-action="onMealActionMobile"
-      @toggleMobileMealContext="onMobileMealFoodContextMenu"
-    ></meal-food-mobile-context-menu>
+    <food-mobile-context-menu
+      :food-id="foodContextMenu.foodId"
+      :show="foodContextMenu.show"
+      @close="closeFoodContextMenu(false)"
+      @continue="closeFoodContextMenu(true)"
+    ></food-mobile-context-menu>
+
+    <meal-mobile-context-menu
+      :meal-id="mealContextMenu.mealId"
+      :show="mealContextMenu.show"
+      @close="closeMealContextMenu(false)"
+      @continue="closeMealContextMenu(true)"
+      @meal-action="onContextMenuMealAction"
+    ></meal-mobile-context-menu>
 
     <info-alert
       :info="undo ? 'Undo deletion of ' + undo.type : ''"
@@ -93,14 +94,15 @@
 import { mapState } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
-import type { FoodState, RecallPromptHandler } from '@intake24/common/types';
+import type { RecallPromptHandler } from '@intake24/common/types';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
+import FoodMobileContextMenu from '@intake24/survey/components/recall/FoodMobileContextMenu.vue';
+import MealMobileContextMenu from '@intake24/survey/components/recall/MealMobileContextMenu.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
 import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
 import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
-import MealFoodMobileContextMenu from '@intake24/survey/components/recall/MobileMealFoodContext.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
 import Recall from './recall';
@@ -113,8 +115,9 @@ export default defineComponent({
     MealListMobileBottom,
     FoodListMobileBottom,
     RecallBreadCrumbsMobile,
-    MealFoodMobileContextMenu,
     BottomNavigationMobile,
+    FoodMobileContextMenu,
+    MealMobileContextMenu,
   },
 
   mixins: [Recall],
@@ -129,11 +132,13 @@ export default defineComponent({
   data() {
     return {
       bottomNavTab: 2,
-      mobileMealFoodContextMenu: {
+      foodContextMenu: {
+        show: false,
+        foodId: 0,
+      },
+      mealContextMenu: {
         show: false,
         mealId: 0,
-        foodId: 0,
-        foodContext: false,
       },
       alert: false,
     };
@@ -141,6 +146,14 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, ['selectedFoodOptional', 'selectedMealOptional']),
+
+    selectedFoodId(): number | undefined {
+      return this.selectedFoodOptional?.id;
+    },
+
+    selectedMealId(): number | undefined {
+      return this.selectedMealOptional?.id;
+    },
   },
 
   methods: {
@@ -155,7 +168,7 @@ export default defineComponent({
       }
     },
 
-    onMealActionMobile(payload: { action: MealAction; mealId: number }) {
+    onContextMenuMealAction(payload: { action: MealAction; mealId: number }) {
       this.onMealAction(payload);
 
       if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
@@ -166,32 +179,30 @@ export default defineComponent({
       console.log('Trigger Reseted', this.submitTrigger);
     },
 
-    onMealFoodMobileClick(
-      payload:
-        | { mealId: number; name: string; foods: FoodState[]; entity: 'meal' }
-        | { foodId: number; name: string; entity: 'food' }
-    ) {
-      if (payload.entity === 'meal')
-        this.onMealMobileClick(payload.mealId, payload.name, payload.foods);
-      if (payload.entity === 'food') this.onFoodMobileClick(payload.foodId, payload.name);
+    onMealContextMenu(ev: { mealId: number }) {
+      this.mealContextMenu.mealId = ev.mealId;
+      this.mealContextMenu.show = true;
     },
 
-    onMealMobileClick(mealId: number, name: string, foods: FoodState[]) {
-      this.activeMeal = name;
-      this.mobileMealFoodContextMenu.foodContext = false;
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.mealId = mealId;
+    onFoodContextMenu(ev: { foodId: number }) {
+      this.foodContextMenu.foodId = ev.foodId;
+      this.foodContextMenu.show = true;
     },
 
-    onFoodMobileClick(foodId: number, name: string) {
-      this.activeFood = name;
-      this.mobileMealFoodContextMenu.foodContext = true;
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
-      this.mobileMealFoodContextMenu.foodId = foodId;
+    closeFoodContextMenu(showNextPrompt: boolean) {
+      this.foodContextMenu.show = false;
+      if (showNextPrompt) this.contextMenuNextPrompt();
     },
 
-    onMobileMealFoodContextMenu() {
-      this.mobileMealFoodContextMenu.show = !this.mobileMealFoodContextMenu.show;
+    closeMealContextMenu(showNextPrompt: boolean) {
+      this.mealContextMenu.show = false;
+      if (showNextPrompt) this.contextMenuNextPrompt();
+    },
+
+    contextMenuNextPrompt() {
+      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
+      this.clearSavedState();
+      this.nextPrompt();
     },
   },
 });

@@ -3,11 +3,7 @@
     <v-toolbar bottom class="sticky_toolbar" flat>
       <v-tabs v-model="activeTab" center-active height="56px" icons-and-text slider-size="4" touch>
         <v-tabs-slider color="success"></v-tabs-slider>
-        <v-tab
-          v-for="meal in meals"
-          :key="meal.id"
-          @click="emitFoodsList(meal.id, meal.name.en, meal.foods, entity)"
-        >
+        <v-tab v-for="meal in meals" :key="meal.id" @click="onMealSelected">
           <v-badge
             bordered
             class="meail_badge"
@@ -30,7 +26,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
@@ -83,8 +79,16 @@ export default defineComponent({
   },
 
   methods: {
-    emitFoodsList(mealId: number, name: string, foods: FoodState[], entity: string) {
-      this.$emit('meal-selected', { mealId, name, foods, entity });
+    ...mapActions(useSurvey, ['setSelection']),
+
+    onMealSelected(mealId: number) {
+      this.setSelection({
+        element: {
+          type: 'meal',
+          mealId,
+        },
+        mode: 'manual',
+      });
     },
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);

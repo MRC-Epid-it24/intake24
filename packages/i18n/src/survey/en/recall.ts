@@ -21,6 +21,15 @@ const recall: LocaleMessageObject = {
       addMeal: 'Add Meal',
     },
   },
+  contextMenu: {
+    close: 'Close',
+    select: 'Continue with {name}',
+    editFoods: 'Revise foods',
+    delete: 'Delete {name}',
+    confirmDeletion: "Are you sure you want to delete '{name}'?",
+    confirm: 'Confirm {name}',
+    changeTime: 'Change time',
+  },
 };
 
 export default recall;
