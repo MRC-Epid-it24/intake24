@@ -20,10 +20,10 @@
     </v-row>
     <v-row v-if="asServedData">
       <v-col class="pa-1 rounded-lg" cols="3" lg="1" sm="2">
-        <v-card @click="updateSelection(-1)">
+        <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn icon large>
+            <v-btn :disabled="isLessWeightFactorActive" icon large>
               <v-icon>fas fa-fw fa-minus</v-icon>
             </v-btn>
           </v-overlay>
@@ -37,10 +37,10 @@
         </v-col>
       </template>
       <v-col v-if="showMoreWeightFactor" class="pa-1 mr-auto rounded-lg" cols="3" lg="1" sm="2">
-        <v-card @click="updateSelection(1)">
+        <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn icon large>
+            <v-btn :disabled="isMoreWeightFactorActive" icon large>
               <v-icon>fas fa-fw fa-plus</v-icon>
             </v-btn>
           </v-overlay>
@@ -49,12 +49,12 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn block @click="updateSelection(-1)">
+        <v-btn block :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           {{ $t(`portion.as-served.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn block @click="updateSelection(1)">
+        <v-btn block :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           {{ $t(`portion.as-served.${type}.more`) }}
         </v-btn>
       </v-col>
@@ -182,6 +182,12 @@ export default defineComponent({
       if (this.objectIdx === undefined) return '';
 
       return this.asServedData?.images[this.objectIdx].mainImageUrl ?? '';
+    },
+    isLessWeightFactorActive(): boolean {
+      return this.weightFactorProps.show && this.weightFactorProps.subType === 'less';
+    },
+    isMoreWeightFactorActive(): boolean {
+      return this.weightFactorProps.show && this.weightFactorProps.subType === 'more';
     },
     thumbnailWeight(): string | null {
       if (this.objectIdx === undefined || !this.asServedData) return null;
