@@ -3,7 +3,7 @@
     <v-toolbar bottom class="sticky_toolbar" flat>
       <v-tabs v-model="activeTab" center-active height="56px" icons-and-text slider-size="4" touch>
         <v-tabs-slider color="success"></v-tabs-slider>
-        <v-tab v-for="meal in meals" :key="meal.id" @click="onMealSelected">
+        <v-tab v-for="meal in meals" :key="meal.id" @click="onMealSelected(meal.id)">
           <v-badge
             bordered
             class="meail_badge"
@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { FoodState, MealState, MealTime } from '@intake24/common/types';
+import type { MealTime } from '@intake24/common/types';
 import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
+import { getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
 export default defineComponent({
   // components: { MealItemMobile },
@@ -39,30 +39,14 @@ export default defineComponent({
 
   mixins: [localeContent],
 
-  props: {
-    meals: {
-      type: Array as PropType<MealState[]>,
-      required: true,
-    },
-    // selectedMealIndex: {
-    //   type: Number,
-    //   default: 0,
-    // },
-  },
-
-  data() {
-    return {
-      entity: 'meal',
-      // activeTab: this.selectedMealIndex,
-    };
-  },
-
   computed: {
-    ...mapState(useSurvey, ['selectedMealOptional', 'selectedFoodOptional']),
+    ...mapState(useSurvey, ['meals', 'selectedMealOptional']),
 
     activeTab: {
       get(): number {
-        return this.selectedMealOptional?.id || 0;
+        if (this.selectedMealOptional === undefined) return 0;
+
+        return getMealIndex(this.meals, this.selectedMealOptional.id) ?? 0;
       },
       set(id: number) {
         return id;
@@ -89,7 +73,9 @@ export default defineComponent({
         },
         mode: 'manual',
       });
+      this.$emit('meal-selected', mealId);
     },
+
     emitAddMeal(action: string) {
       this.$emit('recall-action', action);
     },

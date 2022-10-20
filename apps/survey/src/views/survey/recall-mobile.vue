@@ -51,7 +51,7 @@
     <v-col v-show="showMealList && bottomNavTab === 2" class="stickybottom" cols="12">
       <meal-list-mobile-bottom
         v-show="meals.length > 0"
-        :meals="meals"
+        @meal-selected="onBottomListMealSelected"
         @recall-action="onRecallAction"
       >
       </meal-list-mobile-bottom>
@@ -172,6 +172,11 @@ export default defineComponent({
       this.onMealAction(payload);
 
       if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
+    },
+
+    onBottomListMealSelected() {
+      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
+      this.nextPrompt();
     },
 
     resetTrigger() {
