@@ -40,8 +40,10 @@
     "sitemap": "^7.1.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.14",
     "@types/fs-extra": "^9.0.13",
     "@types/morgan": "^1.9.3",
+    "@types/nunjucks": "^3.2.1",
     "@types/supertest": "^2.0.12",
     "@types/webpack-env": "1.18.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",

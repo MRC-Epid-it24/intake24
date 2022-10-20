@@ -36,8 +36,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
@@ -108,8 +106,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
@@ -197,8 +193,6 @@ jobs:
 
   #     - name: Install pnpm
   #       uses: pnpm/action-setup@v2.0.1
-  #       with:
-  #         version: 6
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v3.4.1
@@ -284,8 +278,6 @@ jobs:
 
   #     - name: Install pnpm
   #       uses: pnpm/action-setup@v2.0.1
-  #       with:
-  #         version: 6
 
   #     - name: Use Node.js ${{ matrix.node-version }}
   #       uses: actions/setup-node@v3.4.1
@@ -328,8 +320,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
@@ -362,8 +352,6 @@ jobs:
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
@@ -396,8 +384,6 @@ jobs:
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
@@ -438,8 +424,6 @@ jobs:
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 6
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3.5.1
