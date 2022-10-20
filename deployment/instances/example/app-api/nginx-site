@@ -18,6 +18,9 @@ server {
   ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
   ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
 
+  access_log /var/log/nginx/intake24-api.access.log;
+  error_log /var/log/nginx/intake24-api.error.log;
+
   location /images/ {
     alias /var/www/intake24/images/;
     include includes/security_headers_api_static;

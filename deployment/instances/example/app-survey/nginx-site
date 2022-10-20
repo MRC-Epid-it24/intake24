@@ -18,6 +18,9 @@ server {
   ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
   ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
 
+  access_log /var/log/nginx/intake24-survey.access.log;
+  error_log /var/log/nginx/intake24-survey.error.log;
+
   root /opt/intake24/apps/survey/dist/;
   index index.html;
 
