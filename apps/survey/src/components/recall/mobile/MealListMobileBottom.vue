@@ -1,9 +1,17 @@
 <template>
   <v-card class="sticky_toolbar_card" flat>
     <v-toolbar bottom class="sticky_toolbar" flat>
-      <v-tabs v-model="activeTab" center-active height="56px" icons-and-text slider-size="4" touch>
+      <v-tabs
+        ref="tabsComponent"
+        center-active
+        height="56px"
+        icons-and-text
+        slider-size="4"
+        touch
+        :value="activeTab"
+      >
         <v-tabs-slider color="success"></v-tabs-slider>
-        <v-tab v-for="meal in meals" :key="meal.id" @click="onMealSelected(meal.id)">
+        <v-tab v-for="(meal, index) in meals" :key="index" @click="onMealSelected(meal.id)">
           <v-badge
             bordered
             class="meail_badge"
@@ -42,23 +50,10 @@ export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['meals', 'selectedMealOptional']),
 
-    activeTab: {
-      get(): number {
-        if (this.selectedMealOptional === undefined) return 0;
-
-        return getMealIndex(this.meals, this.selectedMealOptional.id) ?? 0;
-      },
-      set(id: number) {
-        return id;
-      },
-    },
-  },
-  watch: {
-    selectedMealIndex: {
-      handler(value: number) {
-        console.log('Meal Index changed', value);
-        this.activeTab = value;
-      },
+    activeTab() {
+      if (this.selectedMealOptional === undefined) return 0;
+      const selectedMealIndex = getMealIndex(this.meals, this.selectedMealOptional.id);
+      return selectedMealIndex ?? 0;
     },
   },
 
