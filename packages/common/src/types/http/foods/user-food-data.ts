@@ -35,4 +35,5 @@ export interface UserFoodData {
   portionSizeMethods: UserPortionSizeMethod[];
   associatedFoodPrompts: UserAssociatedFoodPrompt[];
   brandNames: string[];
+  categories: string[];
 }

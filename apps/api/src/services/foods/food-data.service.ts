@@ -4,7 +4,16 @@ import type {
 } from '@intake24/common/types/http/foods/user-food-data';
 import { getParentLocale } from '@intake24/api/services/foods/common';
 import InvalidIdError from '@intake24/api/services/foods/invalid-id-error';
-import { AssociatedFood, Brand, Food, FoodLocal, FoodLocalList, FoodsLocale } from '@intake24/db';
+import {
+  AssociatedFood,
+  Brand,
+  CategoryCategory,
+  Food,
+  FoodCategory,
+  FoodLocal,
+  FoodLocalList,
+  FoodsLocale,
+} from '@intake24/db';
 
 import InheritableAttributesImpl from './inheritable-attributes-service';
 import PortionSizeMethodsImpl from './portion-size-methods-service';
@@ -103,6 +112,32 @@ const foodDataService = () => {
     return brands.length ? brands.map((brand) => brand.name) : [];
   };
 
+  /**
+   * Finds all parent categories including transitive for foodCode
+   * @param foodCode
+   */
+  const getAllCategories = async (foodCode: string): Promise<string[]> => {
+    const visited = new Set<string>();
+
+    let queue: { categoryCode: string }[] = await FoodCategory.findAll({
+      where: { foodCode },
+      attributes: ['categoryCode'],
+    });
+
+    while (queue.length > 0) {
+      const newCodes = queue.map((row) => row.categoryCode).filter((code) => !visited.has(code));
+
+      newCodes.forEach((code) => visited.add(code));
+
+      queue = await CategoryCategory.findAll({
+        where: { subcategoryCode: newCodes },
+        attributes: ['categoryCode'],
+      });
+    }
+
+    return [...visited.values()];
+  };
+
   const resolveAssociatedFoodPrompts = async (
     localeId: string,
     foodCode: string
@@ -154,12 +189,14 @@ const foodDataService = () => {
       kcalPer100g,
       portionSizeMethods,
       inheritableAttributes,
+      categories,
     ] = await Promise.all([
       resolveAssociatedFoodPrompts(localeId, foodCode),
       getBrands(localeId, foodCode),
       getNutrientKCalPer100G(localeId, foodCode),
       portionSizeMethodsImpl.resolvePortionSizeMethods(localeId, foodCode),
       inheritableAttributesImpl.resolveInheritableAttributes(foodCode),
+      getAllCategories(foodCode),
     ]);
 
     return {
@@ -174,6 +211,7 @@ const foodDataService = () => {
       readyMealOption: inheritableAttributes.readyMealOption,
       reasonableAmount: inheritableAttributes.reasonableAmount,
       sameAsBeforeOption: inheritableAttributes.sameAsBeforeOption,
+      categories,
     };
   };
 
