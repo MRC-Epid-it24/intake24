@@ -16,6 +16,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
 
   const localeId = computed(() => survey.localeId);
   const selectedFoodOptional = computed(() => survey.selectedFoodOptional);
+  const meals = computed(() => survey.meals);
 
   const selectedFood = (): FoodState => {
     if (selectedFoodOptional.value === undefined)
@@ -64,6 +65,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   return {
     localeId,
     selectedFoodOptional,
+    meals,
     selectedFood,
     encodedSelectedFood,
     freeTextSelectedFood,

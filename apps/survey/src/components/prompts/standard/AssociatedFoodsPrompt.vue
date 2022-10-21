@@ -10,20 +10,42 @@
                 <template #actions>
                   <valid-invalid-icon
                     :valid="
-                      prompt.confirmed === false ||
-                      (prompt.confirmed === true && prompt.selectedFood !== undefined)
+                      prompt.confirmed === 'no' ||
+                      prompt.confirmed === 'existing' ||
+                      (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
                     "
                   ></valid-invalid-icon>
                 </template>
               </v-expansion-panel-header>
               <v-expansion-panel-content class="pl-0">
                 <v-container class="pl-0">
-                  <v-btn-toggle v-model="prompt.confirmed" @change="updatePrompts">
-                    <v-btn :value="false">{{ $t('prompts.associatedFoods.no') }}</v-btn>
-                    <v-btn :value="true">{{ $t('prompts.associatedFoods.yes') }}</v-btn>
-                  </v-btn-toggle>
+                  <v-radio-group
+                    v-model="prompt.confirmed"
+                    row
+                    @change="onConfirmStateChanged(index)"
+                  >
+                    <v-radio
+                      :label="$t('prompts.associatedFoods.no')"
+                      off-icon="fa-regular fa-circle"
+                      on-icon="fa-regular fa-circle-check"
+                      value="no"
+                    ></v-radio>
+                    <v-radio
+                      :label="$t('prompts.associatedFoods.yes')"
+                      off-icon="fa-regular fa-circle"
+                      on-icon="fa-regular fa-circle-check"
+                      value="yes"
+                    ></v-radio>
+                    <v-radio
+                      v-if="foodsAlreadyEntered[index] !== undefined"
+                      :label="$t('prompts.associatedFoods.alreadyEntered')"
+                      off-icon="fa-regular fa-circle"
+                      on-icon="fa-regular fa-circle-check"
+                      value="existing"
+                    ></v-radio>
+                  </v-radio-group>
                 </v-container>
-                <v-card v-if="prompt.confirmed === true && prompt.selectedFood !== undefined" flat>
+                <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
                   <v-card-title>
                     <span class="fa fa-check mr-2"></span>
                     {{ prompt.selectedFood.description }}
@@ -34,7 +56,7 @@
                 </v-card>
                 <v-expand-transition>
                   <v-card
-                    v-show="prompt.confirmed === true && prompt.selectedFood === undefined"
+                    v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined"
                     flat
                   >
                     <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
@@ -63,6 +85,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { mapState } from 'pinia';
 import Vue, { defineComponent } from 'vue';
 
 import type { AssociatedFoodsPromptProps } from '@intake24/common/prompts';
@@ -73,6 +96,8 @@ import type {
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { FoodBrowser, ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { useSurvey } from '@intake24/survey/stores';
+import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
 import BasePrompt from '../BasePrompt';
 
@@ -114,6 +139,35 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(useSurvey, ['meals']),
+
+    foodsAlreadyEntered(): (number | undefined)[] {
+      const foodIndex = getFoodIndexRequired(this.meals, this.food.id);
+      const foodsInThisMeal = this.meals[foodIndex.mealIndex].foods;
+
+      return this.associatedFoodPrompts.map((prompt) => {
+        for (const food of foodsInThisMeal) {
+          if (food.id === this.food.id) continue;
+
+          if (
+            prompt.foodCode !== undefined &&
+            food.type === 'encoded-food' &&
+            food.data.code === prompt.foodCode
+          )
+            return food.id;
+
+          if (
+            prompt.categoryCode !== undefined &&
+            food.type === 'encoded-food' &&
+            food.data.categories.includes(prompt.categoryCode)
+          )
+            return food.id;
+        }
+
+        return undefined;
+      });
+    },
+
     associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
       return this.food.data.associatedFoodPrompts;
     },
@@ -138,13 +192,31 @@ export default defineComponent({
     isValid(): boolean {
       return this.prompts.every(
         (prompt) =>
-          prompt.confirmed === false ||
-          (prompt.confirmed === true && prompt.selectedFood !== undefined)
+          prompt.confirmed === 'no' ||
+          prompt.confirmed === 'existing' ||
+          (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
       );
     },
   },
 
   methods: {
+    onConfirmStateChanged(index: number) {
+      if (this.prompts[index].confirmed === 'existing') {
+        Vue.set(this.prompts, index, {
+          confirmed: 'existing',
+          existingFoodId: this.foodsAlreadyEntered[index],
+          selectedFood: this.prompts[index].selectedFood,
+        });
+      } else {
+        Vue.set(this.prompts, index, {
+          confirmed: this.prompts[index].confirmed,
+          selectedFood: this.prompts[index].selectedFood,
+        });
+      }
+
+      this.updatePrompts();
+    },
+
     onSelectDifferentFood(prompt: AssociatedFoodPromptState) {
       prompt.selectedFood = undefined;
       this.updatePrompts();
@@ -152,7 +224,7 @@ export default defineComponent({
 
     onFoodSelected(food: FoodHeader, promptIndex: number): void {
       Vue.set(this.prompts, promptIndex, {
-        confirmed: true,
+        confirmed: 'yes',
         selectedFood: food,
       });
       this.updatePrompts();

@@ -189,8 +189,9 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
 ];
 
 export interface AssociatedFoodPromptState {
-  confirmed: boolean | undefined;
+  confirmed: 'yes' | 'no' | 'existing' | undefined;
   selectedFood: FoodHeader | undefined;
+  existingFoodId: number | undefined;
 }
 
 export interface AssociatedFoodsState {

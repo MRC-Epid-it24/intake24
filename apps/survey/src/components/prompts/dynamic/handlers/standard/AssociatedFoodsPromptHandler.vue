@@ -19,7 +19,12 @@ import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { AssociatedFoodsPromptProps, StandardComponentType } from '@intake24/common/prompts';
-import type { AssociatedFoodsState, EncodedFood } from '@intake24/common/types';
+import type {
+  AssociatedFoodPromptState,
+  AssociatedFoodsState,
+  EncodedFood,
+  FoodState,
+} from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import {
   useFoodPromptUtils,
@@ -28,15 +33,16 @@ import {
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
-
-interface AssociatedFoodPromptState {
-  confirmed: boolean | undefined;
-  selectedFood: FoodHeader | undefined;
-}
+import {
+  findMeal,
+  getFoodIndex,
+  getFoodIndexRequired,
+} from '@intake24/survey/stores/meal-food-utils';
 
 const initialPromptState = (): AssociatedFoodPromptState => ({
   confirmed: undefined,
   selectedFood: undefined,
+  existingFoodId: undefined,
 });
 
 export default defineComponent({
@@ -60,7 +66,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { encodedSelectedFood, localeId } = useFoodPromptUtils();
+    const { encodedSelectedFood, localeId, meals } = useFoodPromptUtils();
 
     const getInitialState = (): AssociatedFoodsState => {
       return {
@@ -79,6 +85,7 @@ export default defineComponent({
     return {
       encodedSelectedFood,
       localeId,
+      meals,
       state,
       update,
       clearStoredState,
@@ -86,7 +93,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'getNextFoodId']),
+    ...mapActions(useSurvey, ['updateFood', 'setFoods', 'getNextFoodId']),
 
     async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
@@ -97,15 +104,36 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      const headers: FoodHeader[] = [];
+      const newFoods: FoodHeader[] = [];
 
       this.state.prompts.forEach((prompt) => {
-        if (prompt.confirmed && prompt.selectedFood !== undefined) {
-          headers.push(prompt.selectedFood);
+        if (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined) {
+          newFoods.push(prompt.selectedFood);
         }
       });
 
-      const foodData = await this.fetchFoodData(headers);
+      const existingFoods = this.state.prompts
+        .filter((prompt) => prompt.confirmed === 'existing')
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .map((prompt) => prompt.existingFoodId!);
+
+      const foodId = this.encodedSelectedFood().id;
+      const foodIndex = getFoodIndexRequired(this.meals, foodId);
+      const mealIndex = foodIndex.mealIndex;
+      const mealId = this.meals[mealIndex].id;
+
+      const moveFoods: EncodedFood[] = [];
+      const keepFoods: FoodState[] = [];
+
+      this.meals[mealIndex].foods.forEach((food) => {
+        if (food.type === 'encoded-food' && existingFoods.includes(food.id)) {
+          moveFoods.push(food);
+        } else {
+          keepFoods.push(food);
+        }
+      });
+
+      const foodData = await this.fetchFoodData(newFoods);
 
       const linkedFoods: EncodedFood[] = foodData.map((data) => ({
         type: 'encoded-food',
@@ -119,6 +147,10 @@ export default defineComponent({
         portionSize: null,
         associatedFoodsComplete: false,
       }));
+
+      linkedFoods.push(...moveFoods);
+
+      this.setFoods({ mealId, foods: keepFoods });
 
       this.updateFood({
         foodId: this.encodedSelectedFood().id,

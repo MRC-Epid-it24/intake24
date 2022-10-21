@@ -76,6 +76,7 @@ const prompts: LocaleMessageObject = {
     description: 'These foods are often consumed together.',
     yes: 'Yes, I had some',
     no: 'No, I did not',
+    alreadyEntered: 'Yes, already entered',
   },
 };
 
