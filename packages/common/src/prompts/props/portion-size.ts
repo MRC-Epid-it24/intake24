@@ -23,7 +23,7 @@ export type StandardPortionPromptProps = BasePromptProps;
 export type MilkOnCerealPromptProps = BasePromptProps;
 
 export interface MilkInAHotDrinkPromptProps extends BasePromptProps {
-  options: LocaleOptionList;
+  options: LocaleOptionList<number>;
   orientation: RadioOrientation;
 }
 
@@ -58,9 +58,9 @@ export const milkInAHotDrinkPromptDefaultProps: MilkInAHotDrinkPromptProps = cop
   name: { en: 'Milk in a hot drink' },
   options: {
     en: [
-      { value: '0.1', label: 'A little' },
-      { value: '0.16', label: 'Average amount' },
-      { value: '0.24', label: 'A lot' },
+      { value: 0.1, label: 'A little' },
+      { value: 0.16, label: 'Average amount' },
+      { value: 0.24, label: 'A lot' },
     ],
   },
   orientation: 'column',

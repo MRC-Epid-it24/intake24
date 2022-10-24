@@ -49,7 +49,8 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { foodName, selectedFood, selectedPortionSize } = useFoodPromptUtils();
+    const { foodName, selectedFood, selectedParentFood, selectedPortionSize } =
+      useFoodPromptUtils();
 
     const getInitialState = (): MilkInAHotDrinkPromptState => ({
       portionSize: {
@@ -72,6 +73,7 @@ export default defineComponent({
     return {
       foodName,
       selectedFood,
+      selectedParentFood,
       selectedPortionSize,
       state,
       update,
@@ -83,9 +85,47 @@ export default defineComponent({
     ...mapActions(useSurvey, ['updateFood']),
 
     async commitAnswer() {
-      const { portionSize } = this.state;
+      const {
+        state: {
+          portionSize: { milkVolumePercentage },
+        },
+        selectedParentFood,
+      } = this;
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
+      if (!milkVolumePercentage) {
+        console.warn(`Milk volume percentage is not set yet.`);
+        return;
+      }
+
+      if (!selectedParentFood)
+        throw new Error('Milk in a hot drink prompt: parent food not found.');
+
+      if (
+        !selectedParentFood.portionSize ||
+        selectedParentFood.portionSize.servingWeight === null ||
+        selectedParentFood.portionSize.leftoversWeight === null
+      )
+        throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
+
+      const { servingWeight, leftoversWeight } = selectedParentFood.portionSize;
+
+      const drinkPortionSize = {
+        ...selectedParentFood.portionSize,
+        servingWeight: servingWeight * (1 - milkVolumePercentage),
+        leftoversWeight: leftoversWeight * (1 - milkVolumePercentage),
+      };
+
+      const milkPortionSize = {
+        ...this.state.portionSize,
+        servingWeight: servingWeight * milkVolumePercentage,
+        leftoversWeight: leftoversWeight * milkVolumePercentage,
+      };
+
+      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize: milkPortionSize } });
+      this.updateFood({
+        foodId: this.selectedParentFood.id,
+        update: { portionSize: drinkPortionSize },
+      });
       this.clearStoredState();
     },
   },

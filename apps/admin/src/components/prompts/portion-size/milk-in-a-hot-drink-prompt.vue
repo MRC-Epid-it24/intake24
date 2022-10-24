@@ -34,7 +34,8 @@
           <prompt-list-options
             :key="lang"
             :options="options[lang]"
-            @update:options="updateLanguage('options', lang, $event)"
+            :rules="rules"
+            @update:options="updateOptions(lang, $event)"
           ></prompt-list-options>
         </template>
       </language-selector>
@@ -46,7 +47,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { LocaleOptionList } from '@intake24/common/prompts';
+import type { ListOption, LocaleOptionList } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
 import basePrompt from '../partials/base-prompt';
@@ -76,7 +77,26 @@ export default defineComponent({
         text: this.$t(`survey-schemes.questions.orientation.${value}`),
         value,
       })),
+      rules: [
+        (value: any): boolean | string => {
+          const msg = 'Value must be between 0 and 1';
+          const number = Number.parseFloat(value);
+          if (Number.isNaN(number)) return msg;
+
+          return (number > 0 && number < 1) || msg;
+        },
+      ],
     };
+  },
+
+  methods: {
+    updateOptions(lang: string, options: ListOption[]) {
+      this.updateLanguage(
+        'options',
+        lang,
+        options.map((item) => ({ ...item, value: Number.parseFloat(item.value) }))
+      );
+    },
   },
 });
 </script>

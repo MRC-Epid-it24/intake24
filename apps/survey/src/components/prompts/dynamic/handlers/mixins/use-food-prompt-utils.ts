@@ -15,8 +15,15 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const survey = useSurvey();
 
   const localeId = computed(() => survey.localeId);
-  const selectedFoodOptional = computed(() => survey.selectedFoodOptional);
   const meals = computed(() => survey.meals);
+  const selectedFoodOptional = computed(() => survey.selectedFoodOptional);
+  const selectedParentFood = computed(() => {
+    const food = survey.selectedParentFood;
+    if (food?.type !== 'encoded-food')
+      throw new Error('This selected food must be an encoded food');
+
+    return food;
+  });
 
   const selectedFood = (): FoodState => {
     if (selectedFoodOptional.value === undefined)
@@ -41,11 +48,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return food;
   };
 
-  const foodName = (): LocaleTranslation => {
-    return {
-      en: encodedSelectedFood().data.englishName,
-    };
-  };
+  const foodName = (): LocaleTranslation => ({ en: encodedSelectedFood().data.englishName });
 
   const selectedPortionSize = (): UserPortionSizeMethod => {
     const selectedFood = encodedSelectedFood();
@@ -67,6 +70,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     selectedFoodOptional,
     meals,
     selectedFood,
+    selectedParentFood,
     encodedSelectedFood,
     freeTextSelectedFood,
     foodName,

@@ -131,25 +131,30 @@ export const useSurvey = defineStore('survey', {
 
       return meals[mealIndex];
     },
-
     undoEntity: (state) => state.undo,
-    selectedFoodOptional: (state) => {
-      const { element } = state.data.selection;
+    selectedFoodIndex(): MealFoodIndex | undefined {
+      const { element } = this.data.selection;
 
       if (element === null || element.type !== 'food') return undefined;
 
-      const meals = state.data.meals;
-
-      const foodIndex = getFoodIndex(meals, element.foodId);
-
+      return getFoodIndex(this.data.meals, element.foodId);
+    },
+    selectedFoodOptional(): FoodState | undefined {
+      const foodIndex = this.selectedFoodIndex;
       if (foodIndex === undefined) return undefined;
 
       if (foodIndex.linkedFoodIndex === undefined)
-        return meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+        return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
       else
-        return meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[
+        return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[
           foodIndex.linkedFoodIndex
         ];
+    },
+    selectedParentFood(): FoodState | undefined {
+      const foodIndex = this.selectedFoodIndex;
+      if (foodIndex === undefined || foodIndex.linkedFoodIndex === undefined) return undefined;
+
+      return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
     },
     continueButtonEnabled: (state) => {
       return state.data.continueButtonEnabled;

@@ -17,15 +17,15 @@ export interface PromptValidationProps {
 
 export interface ValidatedPromptProps extends BasePromptProps, PromptValidationProps {}
 
-export type ListOption = {
+export type ListOption<T = string> = {
   id?: number;
   label: string;
-  value: string;
+  value: T;
 };
 
-export type LocaleOptionList = {
-  en: ListOption[];
-  [locale: string]: ListOption[];
+export type LocaleOptionList<T = string> = {
+  en: ListOption<T>[];
+  [locale: string]: ListOption<T>[];
 };
 
 export type RadioOrientation = 'column' | 'row';

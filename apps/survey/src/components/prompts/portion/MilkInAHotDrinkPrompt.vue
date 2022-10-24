@@ -75,8 +75,13 @@ export default defineComponent({
   },
 
   computed: {
-    localeOptions(): ListOption[] {
-      return this.options[this.$i18n.locale] ?? this.options.en;
+    localeOptions(): ListOption<string | number>[] {
+      return (this.options[this.$i18n.locale] ?? this.options.en)
+        .map((item) => ({
+          ...item,
+          value: Number.parseFloat(item.value.toString()),
+        }))
+        .filter(({ value }) => !Number.isNaN(value));
     },
 
     milkValid() {
@@ -126,7 +131,6 @@ export default defineComponent({
     update() {
       const { portionSize, panel } = this;
 
-      // TODO: recalculate drink & food
       const state: MilkInAHotDrinkPromptState = { portionSize, panel };
 
       this.$emit('update', { state, valid: this.isValid });

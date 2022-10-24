@@ -84,14 +84,26 @@ export default defineComponent({
       type: Array as PropType<ListOption[]>,
       required: true,
     },
+    rules: {
+      type: Array as PropType<RuleCallback[]>,
+      default: () => [],
+    },
   },
+
   data() {
     const currentOptions: ListOption[] = this.options.map((option, idx) => ({
       id: idx + 1,
       ...option,
     }));
 
-    return { currentOptions };
+    const defaultValueRules = [
+      (value: string | null): boolean | string => {
+        const values = currentOptions.filter((item) => item.value === value);
+        return values.length < 2 || 'Value is already used.';
+      },
+    ];
+
+    return { currentOptions, defaultValueRules };
   },
 
   computed: {
@@ -99,12 +111,7 @@ export default defineComponent({
       return this.currentOptions.map(({ label, value }) => ({ label, value }));
     },
     optionValueRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string => {
-          const values = this.currentOptions.filter((item) => item.value === value);
-          return values.length < 2 || 'Value is already used.';
-        },
-      ];
+      return [...this.defaultValueRules, ...this.rules];
     },
   },
 
