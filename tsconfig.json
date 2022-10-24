@@ -30,9 +30,9 @@
       "@intake24/ui/*": ["packages/ui/src/*"],
       "@intake24/*": ["packages/*/src"]
     },
-    "types": ["node", "jest", "jest-extended", "webpack-env"]
+    "types": ["node", "jest", "jest-extended"]
   },
   "vueCompilerOptions": {
-    "target": 2.7,
+    "target": 2.7
   }
 }

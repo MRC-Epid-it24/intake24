@@ -7,7 +7,8 @@
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
       "@intake24/i18n": ["../../packages/i18n/src"]
-    }
+    },
+    "types": ["node", "jest", "jest-extended", "webpack-env"]
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
   "exclude": ["node_modules"]

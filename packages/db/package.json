@@ -34,10 +34,11 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.186",
-    "@types/node": "^18.11.2",
+    "@types/node": "^18.11.4",
     "@types/pg": "^8.6.5",
-    "@types/validator": "^13.7.8",
-    "sequelize-cli": "^6.5.1"
+    "@types/validator": "^13.7.9",
+    "sequelize-cli": "^6.5.1",
+    "typescript": "^4.8.4"
   },
   "bundledDependencies": [
     "@intake24/api",
