@@ -37,7 +37,9 @@
                       value="yes"
                     ></v-radio>
                     <v-radio
-                      v-if="foodsAlreadyEntered[index] !== undefined"
+                      v-if="
+                        prompt.confirmed === 'existing' || foodsAlreadyEntered[index] !== undefined
+                      "
                       :label="$t('prompts.associatedFoods.alreadyEntered')"
                       off-icon="fa-regular fa-circle"
                       on-icon="fa-regular fa-circle-check"
@@ -135,6 +137,7 @@ export default defineComponent({
     return {
       activePrompt: this.initialState.activePrompt,
       prompts: this.initialState.prompts,
+      usedExistingFoodIds: [] as number[],
     };
   },
 
@@ -147,7 +150,15 @@ export default defineComponent({
 
       return this.associatedFoodPrompts.map((prompt) => {
         for (const food of foodsInThisMeal) {
+          // Don't link food to itself
           if (food.id === this.food.id) continue;
+
+          // Rare corner case: two or more prompts from the same food refer to the same
+          // food or category
+          if (this.usedExistingFoodIds.includes(food.id)) continue;
+
+          // Don't allow linking foods that have linked foods of their own
+          if (food.linkedFoods.length > 0) continue;
 
           if (
             prompt.foodCode !== undefined &&
@@ -202,12 +213,24 @@ export default defineComponent({
   methods: {
     onConfirmStateChanged(index: number) {
       if (this.prompts[index].confirmed === 'existing') {
-        Vue.set(this.prompts, index, {
-          confirmed: 'existing',
-          existingFoodId: this.foodsAlreadyEntered[index],
-          selectedFood: this.prompts[index].selectedFood,
-        });
+        const foodId = this.foodsAlreadyEntered[index];
+
+        if (foodId !== undefined) {
+          Vue.set(this.prompts, index, {
+            confirmed: 'existing',
+            existingFoodId: foodId,
+            selectedFood: this.prompts[index].selectedFood,
+          });
+
+          this.usedExistingFoodIds.push(foodId);
+        }
       } else {
+        const existingFoodId = this.prompts[index].existingFoodId;
+
+        if (existingFoodId !== undefined) {
+          this.usedExistingFoodIds = this.usedExistingFoodIds.filter((id) => id !== existingFoodId);
+        }
+
         Vue.set(this.prompts, index, {
           confirmed: this.prompts[index].confirmed,
           selectedFood: this.prompts[index].selectedFood,
