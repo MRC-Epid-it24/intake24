@@ -258,7 +258,6 @@ export class PhraseIndex<K> {
     const bestMatches = matchedPhrases.filter((m) => m.matchedWords.length === bestMatchWordCount);
     bestMatches.sort((m1, m2) => m2.quality - m1.quality);
 
-    // TODO:
     // exclude duplicates which could have appeared due to different
     // variants of spelling correction on the same word matching
     // different words in the same phrase
@@ -266,7 +265,17 @@ export class PhraseIndex<K> {
     // to "oat" and "eat"
     // then it will match the phrase "eat oats" twice
 
-    return bestMatches.slice(0, maxMatches).map((m) => ({
+    const knownPhrases = new Set<number>();
+    const uniqueMatches: PhraseMatch[] = [];
+
+    for (const m of bestMatches) {
+      if (!knownPhrases.has(m.phraseIndex)) {
+        uniqueMatches.push(m);
+        knownPhrases.add(m.phraseIndex);
+      }
+    }
+
+    return uniqueMatches.slice(0, maxMatches).map((m) => ({
       phrase: this.phraseIndex[m.phraseIndex].asTyped,
       key: this.phraseIndex[m.phraseIndex].key,
       quality: m.quality,
