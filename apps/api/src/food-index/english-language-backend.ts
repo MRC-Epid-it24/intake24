@@ -19,6 +19,6 @@ export default {
   },
 
   sanitiseDescription(description: string): string {
-    return description.replace(sanitiseRegexp, '');
+    return description.replace(sanitiseRegexp, ' ');
   },
 } as LanguageBackend;
