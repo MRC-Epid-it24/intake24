@@ -333,6 +333,12 @@ const checkFoodStandardConditions = (
       if (foodState.type !== 'encoded-food') return false;
       if (!foodPortionSizeComplete(foodState)) return false;
 
+      const foodIndex = getFoodIndexRequired(surveyState.data.meals, foodState.id);
+
+      // Do not trigger associated food prompts for foods that are linked to another food to
+      // avoid prompt loops
+      if (foodIndex.linkedFoodIndex !== undefined) return false;
+
       return (
         foodState.data.associatedFoodPrompts.length !== 0 && !foodState.associatedFoodsComplete
       );
