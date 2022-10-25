@@ -118,12 +118,12 @@ export const drinkScaleMapper = (
     { foodId, name: 'drinkware-id', value: drinkwareId },
     { foodId, name: 'fillLevel', value: fillLevel.toString() },
     { foodId, name: 'imageUrl', value: imageUrl },
-    { foodId, name: 'initial-fill-level', value: initialFillLevel },
+    { foodId, name: 'initial-fill-level', value: initialFillLevel.toString() },
     { foodId, name: 'leftovers', value: leftovers.toString() },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { foodId, name: 'leftoversLevel', value: leftoversLevel.toString() },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'skip-fill-level', value: skipFillLevel },
+    { foodId, name: 'skip-fill-level', value: skipFillLevel.toString() },
   ];
 };
 

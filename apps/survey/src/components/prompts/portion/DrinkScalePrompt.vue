@@ -1,24 +1,24 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${method}.container`">
+              <i18n :path="`portion.${portionSize.method}.container`">
                 <template #food>
                   <span class="font-weight-medium">{{ localeFoodName }}</span>
                 </template>
               </i18n>
               <template #actions>
-                <valid-invalid-icon :valid="objectConfirmed"></valid-invalid-icon>
+                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <image-map-selector
-                v-if="dataLoaded"
+                v-if="imageMapData"
                 :image-map-data="imageMapData"
-                :value="objectIdx"
+                :value="portionSize.containerIndex"
                 @confirm="confirmObject"
                 @input="selectObject"
               ></image-map-selector>
@@ -26,23 +26,23 @@
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${method}.serving.label`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
               <template #actions>
-                <valid-invalid-icon :valid="selectedDrink"></valid-invalid-icon>
+                <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <drink-scale-panel
-                v-if="dataLoaded"
+                v-if="drinkwareSetData && portionSize.containerIndex !== undefined"
                 :drinkware-set-api-response="drinkwareSetData"
-                :selected-image-overlay-url="selectedImageOverlayUrl"
-                :selected-image-url="selectionImageUrl"
-                :selected-max-slider-value="maxSliderValue"
-                :selected-min-slider-value="minFillLevel"
-                :selected-object-idx="objectIdx"
+                :selected-image-overlay-url="overlayImageUrl"
+                :selected-image-url="portionSize.imageUrl"
+                :selected-max-slider-value="fullLevel"
+                :selected-min-slider-value="emptyLevel"
+                :selected-object-idx="portionSize.containerIndex"
                 :selected-origin-image-height="originalImageUrlHeight"
                 :selected-origin-image-width="originalImageUrlWidth"
-                :selected-slider-value="sliderValue"
+                :selected-slider-value="portionSize.servingWeight ?? 75"
                 @drink-scale-value="dragSlider"
               >
               </drink-scale-panel>
@@ -56,17 +56,17 @@
               <v-row>
                 <v-col>
                   <v-btn block @click="modifySliderValue(-10)">
-                    {{ $t(`portion.${method}.serving.less`) }}
+                    {{ $t(`portion.${portionSize.method}.serving.less`) }}
                   </v-btn>
                 </v-col>
                 <v-col>
                   <v-btn block @click="modifySliderValue(10)">
-                    {{ $t(`portion.${method}.serving.more`) }}
+                    {{ $t(`portion.${portionSize.method}.serving.more`) }}
                   </v-btn>
                 </v-col>
                 <v-col align="center" md="4" xs="12">
-                  <v-btn block color="success" @click="confirmAmount">
-                    {{ $t(`portion.${method}.serving.confirm`) }}
+                  <v-btn block color="success" @click="confirmQuantity">
+                    {{ $t(`portion.${portionSize.method}.serving.confirm`) }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -76,9 +76,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <v-form ref="form" @submit.prevent="submit">
-        <continue :disabled="!isValid" @click="submit"></continue>
-      </v-form>
+      <continue :disabled="!isValid" @click="submit"></continue>
     </template>
   </portion-layout>
 </template>
@@ -90,22 +88,22 @@ import { defineComponent } from 'vue';
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleParameters, DrinkScaleState } from '@intake24/common/types';
 import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
+import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { DrinkScalePanel, ImageMapSelector } from './selectors';
 
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
+  panel: number;
   objectConfirmed: boolean;
-  drinkConfirmed: boolean;
+  quantityConfirmed: boolean;
   leftoversConfirmed: boolean;
-  objectIdx: number | undefined;
-  drinkOverlayUrl: string;
-  maxDrinkSliderValue: number;
-  minDrinkSliderValue: number;
+  overlayImageUrl: string;
+  fullLevel: number;
+  emptyLevel: number;
   originalImageUrlHeight: number;
   originalImageUrlWidth: number;
-  panel: number;
 }
 
 export default defineComponent({
@@ -123,50 +121,37 @@ export default defineComponent({
   },
 
   data() {
-    const selectedIndex = this.initialState.portionSize.containerIndex;
-    const selectedOverlayImage = this.initialState.drinkOverlayUrl;
-    const selectedImage = this.initialState.portionSize.imageUrl;
-    const selectedSliderValue = this.initialState.portionSize.servingWeight;
-    const selectedMaxSliderValue = this.initialState.maxDrinkSliderValue;
-    const selectedMinSliderValue = this.initialState.minDrinkSliderValue;
-    const selectedOriginalImageUrlHeight = this.initialState.originalImageUrlHeight;
-    const selectedOriginalImageUrlWidth = this.initialState.originalImageUrlWidth;
+    const state = copy(this.initialState);
+    state.portionSize.drinkwareId = this.parameters['drinkware-id'];
+    state.portionSize.initialFillLevel = Number.parseFloat(this.parameters['initial-fill-level']);
+    state.portionSize.skipFillLevel = this.parameters['skip-fill-level'] === 'true';
 
     return {
-      method: 'drink-scale',
-      drinkwareSetData: {} as DrinkwareSetResponse,
-      imageMapData: {} as ImageMapResponse,
-      panel: 0,
-
-      // First Panel
-      objectConfirmed: this.initialState.objectConfirmed && selectedIndex !== undefined,
-      objectIdx: selectedIndex ? selectedIndex : undefined,
-      selectedDrink: this.initialState.drinkConfirmed,
-      selectedLeftovers: this.initialState.leftoversConfirmed,
-
-      // Second Panel
-      sliderValue: selectedSliderValue ?? 75,
-      maxSliderValue: selectedMaxSliderValue ?? 100,
-      minFillLevel: selectedMinSliderValue ?? 0,
-      selectionImageUrl: selectedImage ?? '',
-      selectedImageOverlayUrl: selectedOverlayImage ?? '',
-      originalImageUrlHeight: selectedOriginalImageUrlHeight ?? 0,
-      originalImageUrlWidth: selectedOriginalImageUrlWidth ?? 0,
-      drinkScaleAmount: false,
+      ...state,
+      drinkwareSetData: null as DrinkwareSetResponse | null,
+      imageMapData: null as ImageMapResponse | null,
     };
   },
 
   computed: {
-    dataLoaded(): boolean {
-      return !!Object.keys(this.imageMapData).length;
-    },
-
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
 
+    objectValid() {
+      return this.portionSize.containerIndex !== undefined && this.objectConfirmed;
+    },
+
+    quantityValid() {
+      return this.quantityConfirmed;
+    },
+
+    leftoversValid() {
+      return this.leftoversConfirmed;
+    },
+
     isValid(): boolean {
-      return this.objectIdx !== undefined && this.objectConfirmed && this.selectedDrink;
+      return this.objectValid && this.quantityValid /*&& this.leftoversValid */;
     },
   },
 
@@ -189,85 +174,95 @@ export default defineComponent({
       this.imageMapData = { ...imageMapData };
     },
 
-    update() {
-      const portionSizeState = this.getCurrentState(this.objectIdx);
+    updatePanel() {
+      if (this.isValid) {
+        this.closePanels();
+        return;
+      }
 
-      const state: DrinkScalePromptState = {
-        portionSize: portionSizeState,
-        objectConfirmed: this.objectConfirmed,
-        drinkConfirmed: this.selectedDrink,
-        leftoversConfirmed: this.selectedLeftovers,
-        objectIdx: this.objectIdx + 1,
-        drinkOverlayUrl: this.selectedImageOverlayUrl,
-        maxDrinkSliderValue: this.maxSliderValue,
-        minDrinkSliderValue: this.minFillLevel,
-        panel: this.panel,
-        originalImageUrlHeight: this.originalImageUrlHeight,
-        originalImageUrlWidth: this.originalImageUrlWidth,
-      };
-      this.$emit('update', { state, valid: this.isValid });
-    },
+      if (!this.objectValid) {
+        this.setPanel(0);
+        return;
+      }
 
-    getCurrentState(idx: number): DrinkScaleState {
-      const { 'drinkware-id': drinkwareId, 'initial-fill-level': initialFillLevel } =
-        this.parameters;
-
-      return {
-        method: 'drink-scale',
-        servingWeight: this.sliderValue,
-        leftoversWeight: 0, // Guide image does not allow estimating leftovers
-        leftoversLevel: 0,
-        initialFillLevel: initialFillLevel ?? '0.9',
-        fillLevel: parseInt(initialFillLevel) ?? 0,
-        skipFillLevel: 'false',
-        imageUrl: this.selectionImageUrl,
-        drinkwareId: drinkwareId,
-        containerIndex: this.objectIdx,
-        leftovers: false,
-      };
+      this.setPanel(this.quantityValid ? -1 : 1);
     },
 
     selectObject(idx: number) {
-      if (idx !== this.objectIdx) this.selectedDrink = false;
-      this.objectIdx = idx;
-      this.selectionImageUrl = this.drinkwareSetData.scales[idx].baseImageUrl;
-      this.selectedImageOverlayUrl = this.drinkwareSetData.scales[idx].overlayImageUrl;
-      this.maxSliderValue = this.drinkwareSetData.scales[idx].fullLevel;
-      this.minFillLevel = this.drinkwareSetData.scales[idx].emptyLevel;
-      this.sliderValue = this.maxSliderValue - this.maxSliderValue * 0.1;
-      this.originalImageUrlHeight = this.drinkwareSetData.scales[idx].height;
-      this.originalImageUrlWidth = this.drinkwareSetData.scales[idx].width;
+      const { drinkwareSetData } = this;
+      if (!drinkwareSetData) return;
 
-      this.update();
-    },
+      if (idx !== this.portionSize.containerIndex) this.quantityConfirmed = false;
 
-    dragSlider(value: number) {
-      this.sliderValue = value;
-      this.update();
-    },
+      this.portionSize.containerIndex = idx;
+      this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
+      this.overlayImageUrl = drinkwareSetData.scales[idx].overlayImageUrl;
+      this.fullLevel = drinkwareSetData.scales[idx].fullLevel;
+      this.emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
+      this.portionSize.servingWeight = this.fullLevel - this.emptyLevel * 0.1;
+      this.originalImageUrlHeight = drinkwareSetData.scales[idx].height;
+      this.originalImageUrlWidth = drinkwareSetData.scales[idx].width;
 
-    modifySliderValue(value: number) {
-      // Handle upper and lower bounds, otherwise assign.
-      const maxLevel = this.drinkwareSetData.scales[this.objectIdx].fullLevel;
-      if (this.sliderValue + value > maxLevel) {
-        this.sliderValue = maxLevel;
-      } else if (this.sliderValue + value < 0) {
-        this.sliderValue = 0;
-      } else {
-        this.sliderValue += value;
-      }
-      this.selectedDrink = false;
       this.update();
     },
 
     confirmObject() {
       this.objectConfirmed = true;
-      this.setPanel(1);
+      this.updatePanel();
       this.update();
     },
 
-    confirmAmount() {
-      this.selectedDrink = true;
+    dragSlider(value: number) {
+      this.portionSize.servingWeight = value;
+
+      this.updatePanel();
+      this.update();
+    },
+
+    modifySliderValue(value: number) {
+      const { containerIndex } = this.portionSize;
+      if (
+        containerIndex === undefined ||
+        !this.drinkwareSetData ||
+        this.portionSize.servingWeight === null
+      )
+        return;
+
+      // Handle upper and lower bounds, otherwise assign.
+      const maxLevel = this.drinkwareSetData.scales[containerIndex].fullLevel;
+      if (this.portionSize.servingWeight + value > maxLevel) {
+        this.portionSize.servingWeight = maxLevel;
+      } else if (this.portionSize.servingWeight + value < 0) {
+        this.portionSize.servingWeight = 0;
+      } else {
+        this.portionSize.servingWeight += value;
+      }
+
+      this.quantityConfirmed = false;
+
+      this.updatePanel();
+      this.update();
+    },
+
+    update() {
+      const state: DrinkScalePromptState = {
+        portionSize: this.portionSize,
+        panel: this.panel,
+        objectConfirmed: this.objectConfirmed,
+        quantityConfirmed: this.quantityConfirmed,
+        leftoversConfirmed: this.leftoversConfirmed,
+        overlayImageUrl: this.overlayImageUrl,
+        fullLevel: this.fullLevel,
+        emptyLevel: this.emptyLevel,
+        originalImageUrlHeight: this.originalImageUrlHeight,
+        originalImageUrlWidth: this.originalImageUrlWidth,
+      };
+
+      this.$emit('update', { state, valid: this.isValid });
+    },
+
+    confirmQuantity() {
+      this.quantityConfirmed = true;
       this.setPanel(-1);
       this.update();
     },
@@ -282,7 +277,6 @@ export default defineComponent({
         return;
       }
 
-      this.drinkScaleAmount = true; // This sets the icon on the panel, UI sugar
       console.log('DrinkScale Prompt Completed');
       this.$emit('continue');
     },

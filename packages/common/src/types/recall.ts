@@ -116,12 +116,12 @@ export type PortionSizeStates = {
   'drink-scale': PortionSizeStateBase & {
     method: 'drink-scale';
     drinkwareId: string;
+    initialFillLevel: number;
+    skipFillLevel: boolean;
     imageUrl: string;
-    leftoversLevel: number;
-    initialFillLevel: string;
+    containerIndex?: number;
     fillLevel: number;
-    skipFillLevel: string;
-    containerIndex: number;
+    leftoversLevel: number;
     leftovers: boolean;
   };
   'guide-image': PortionSizeStateBase & {

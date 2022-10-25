@@ -6,7 +6,7 @@
           ref="imgDrink"
           v-resize="onImgResize"
           class="drink-scale-image"
-          :src="selectedImageUrl.replace('http://localhost:3100', 'https://api.intake24.org')"
+          :src="selectedImageUrl"
         >
           <template #placeholder>
             <image-placeholder></image-placeholder>
@@ -16,9 +16,7 @@
           ref="imgOverlay"
           class="drink-scale-image overlay"
           :height="heightOverlay"
-          :src="
-            selectedImageOverlayUrl.replace('http://localhost:3100', 'https://api.intake24.org')
-          "
+          :src="selectedImageOverlayUrl"
           :style="overlayBackground"
           :width="widthOverlay"
         >
