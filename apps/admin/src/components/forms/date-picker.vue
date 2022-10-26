@@ -75,6 +75,7 @@ export default defineComponent({
       if (val === this.value) return;
 
       this.$emit('input', this.internalValue);
+      this.$emit('change');
     },
   },
 });

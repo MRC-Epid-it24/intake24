@@ -13,6 +13,7 @@
                     clearable
                     :error-messages="form.errors.get('startDate')"
                     :label="$t('surveys.startDate').toString()"
+                    @change="form.errors.clear('startDate')"
                   ></date-picker>
                 </v-col>
                 <v-col cols="12" md="6">
@@ -21,6 +22,7 @@
                     clearable
                     :error-messages="form.errors.get('endDate')"
                     :label="$t('surveys.endDate').toString()"
+                    @change="form.errors.clear('endDate')"
                   ></date-picker>
                 </v-col>
               </v-row>
