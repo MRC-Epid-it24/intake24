@@ -1,8 +1,8 @@
 <template>
-  <v-dialog ref="menu" v-model="menu" persistent :return-value.sync="internalValue" width="290px">
+  <v-dialog ref="menu" v-model="dialog" persistent :return-value.sync="internalValue" width="290px">
     <template #activator="{ on, attrs }">
       <v-text-field
-        v-model="internalValue"
+        v-model="formattedInternalValue"
         :clearable="clearable"
         :error-messages="errorMessages"
         hide-details="auto"
@@ -15,7 +15,7 @@
       ></v-text-field>
     </template>
     <v-date-picker v-model="internalValue" scrollable>
-      <v-btn class="font-weight-medium" color="error" text @click="menu = false">
+      <v-btn class="font-weight-medium" color="error" text @click="dialog = false">
         {{ $t('common.action.cancel') }}
       </v-btn>
       <v-spacer></v-spacer>
@@ -32,7 +32,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import { formatDate } from '@intake24/admin/util';
 
 export default defineComponent({
   name: 'DatePicker',
@@ -42,13 +45,13 @@ export default defineComponent({
       type: Boolean,
     },
     errorMessages: {
-      type: [String, Array as () => string[]],
+      type: [String, Array] as PropType<string | string[]>,
     },
     label: {
       type: String,
     },
     value: {
-      // type: String,
+      type: String as PropType<string | null>,
     },
   },
 
@@ -60,9 +63,15 @@ export default defineComponent({
 
   data() {
     return {
-      menu: false,
+      dialog: false,
       internalValue: this.value,
     };
+  },
+
+  computed: {
+    formattedInternalValue(): string {
+      return this.internalValue ? this.formatDate(this.internalValue, 'dd/MM/yyyy') : '';
+    },
   },
 
   watch: {
@@ -77,6 +86,10 @@ export default defineComponent({
       this.$emit('input', this.internalValue);
       this.$emit('change');
     },
+  },
+
+  methods: {
+    formatDate,
   },
 });
 </script>
