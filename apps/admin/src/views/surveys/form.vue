@@ -410,7 +410,6 @@ export default defineComponent({
 
   data() {
     return {
-      menus: { startDate: false, endDate: false },
       editMethod: 'patch',
       form: form<SurveyForm>(surveyForm),
       showGenUserKey: false,

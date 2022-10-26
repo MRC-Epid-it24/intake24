@@ -78,7 +78,6 @@ export default defineComponent({
 
   data() {
     return {
-      menus: { startDate: false, endDate: false },
       form: form<SurveyDataExportForm>(
         {
           startDate: null,
