@@ -39,8 +39,8 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     return FoodLocal.paginate({ query, ...options });
   };
 
-  const getFood = async (foodLocalId: string, localeId?: string) => {
-    const where = localeId ? { localeId } : {};
+  const getFood = async (foodLocalId: string, localeCode?: string) => {
+    const where = localeCode ? { localeId: localeCode } : {};
 
     return FoodLocal.findOne({
       where: { ...where, id: foodLocalId },
@@ -59,7 +59,13 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
             },
           ],
         },
-        { association: 'nutrientRecords', through: { attributes: [] } },
+        {
+          association: 'associatedFoods',
+          required: false,
+          separate: true,
+          where: { localeId: localeCode },
+          include: [{ association: 'associatedCategory' }, { association: 'associatedFood' }],
+        },
         {
           association: 'portionSizeMethods',
           separate: true,
@@ -93,6 +99,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
           ],
           order: [['orderBy', 'ASC']],
         },
+        { association: 'nutrientRecords', through: { attributes: [] } },
       ],
     });
   };

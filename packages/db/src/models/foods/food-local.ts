@@ -13,6 +13,7 @@ import type {
   FoodLocalCreationAttributes,
 } from '@intake24/common/types/models';
 import {
+  AssociatedFood,
   Food,
   FoodLocalList,
   FoodNutrient,
@@ -80,6 +81,9 @@ export default class FoodLocal
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   public locale?: FoodsLocale;
+
+  @HasMany(() => AssociatedFood, { foreignKey: 'foodCode', sourceKey: 'foodCode' })
+  public associatedFoods?: AssociatedFood[];
 
   @HasMany(() => FoodPortionSizeMethod, 'foodLocalId')
   public portionSizeMethods?: FoodPortionSizeMethod[];

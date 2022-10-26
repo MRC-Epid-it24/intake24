@@ -145,8 +145,8 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       order: [['name', 'ASC']],
     });
 
-  const getCategory = async (categoryId: string, localeId?: string) => {
-    const where = localeId ? { localeId } : {};
+  const getCategory = async (categoryId: string, localeCode?: string) => {
+    const where = localeCode ? { localeId: localeCode } : {};
 
     return CategoryLocal.findOne({
       where: { ...where, id: categoryId },
