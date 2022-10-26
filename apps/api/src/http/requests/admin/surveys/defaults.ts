@@ -198,6 +198,9 @@ export const defaults: Schema = {
     toInt: true,
     optional: true,
   },
+};
+
+export const userPersonalData: Schema = {
   userPersonalIdentifiers: {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._'),

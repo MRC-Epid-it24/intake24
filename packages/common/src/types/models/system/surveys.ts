@@ -102,7 +102,7 @@ export const updateSurveyFields = [
 
 export type UpdateSurveyField = typeof updateSurveyFields[number];
 
-export const createSurveyFields = ['slug', ...updateSurveyFields, ...guardedSurveyFields] as const;
+export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
 
 export type CreateSurveyField = typeof createSurveyFields[number];
 

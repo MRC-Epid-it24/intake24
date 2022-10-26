@@ -13,7 +13,12 @@ export default () => {
 
   beforeAll(async () => {
     input = mocker.system.survey();
-    output = { ...input, supportEmail: input.supportEmail.toLowerCase() };
+    output = {
+      ...input,
+      supportEmail: input.supportEmail.toLowerCase(),
+      userCustomFields: false,
+      userPersonalIdentifiers: false,
+    };
   });
 
   test('missing authentication / authorization', async () => {
@@ -64,8 +69,6 @@ export default () => {
           meals: ['shouldBeProperlyFormatMealList'],
           questions: 'invalidQuestions',
         },
-        userPersonalIdentifiers: { name: false },
-        userCustomFields: 20,
       };
 
       const fields = [
@@ -87,8 +90,6 @@ export default () => {
         'searchSortingAlgorithm',
         'searchMatchScoreWeight',
         'surveySchemeOverrides',
-        'userPersonalIdentifiers',
-        'userCustomFields',
       ];
 
       await suite.sharedTests.assertInvalidInput('post', url, fields, { input: invalidInput });

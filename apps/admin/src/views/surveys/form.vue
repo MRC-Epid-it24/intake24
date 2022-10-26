@@ -136,7 +136,7 @@
           <v-divider class="my-6"></v-divider>
           <div class="text-h5 mb-4">{{ $t('surveys.users._') }}</div>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col v-if="isEdit && can({ action: 'edit' })" cols="12" md="6">
               <v-switch
                 v-model="form.userPersonalIdentifiers"
                 class="mt-0"
