@@ -4,7 +4,17 @@ import { pick } from 'lodash';
 import type { StandardUnitEntry, StandardUnitsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { CategoryLocal, FoodLocal, Language, Op, StandardUnit } from '@intake24/db';
+import { CategoryLocal, FoodLocal, Language, Op, StandardUnit, SystemLocale } from '@intake24/db';
+
+const getLocaleMap = async (code: string[]) => {
+  if (code.length) return {};
+
+  const locales = await SystemLocale.findAll({ where: { code } });
+  return locales.reduce<Record<string, string>>((acc, locale) => {
+    acc[locale.code] = locale.id;
+    return acc;
+  }, {});
+};
 
 const standardUnitController = () => {
   const entry = async (
@@ -137,6 +147,16 @@ const standardUnitController = () => {
       order: [['categoryCode', 'ASC']],
     });
 
+    const localeMap = await getLocaleMap([
+      ...new Set(categories.data.map(({ localeId }) => localeId)),
+    ]);
+
+    categories.data = categories.data.map((item) => ({
+      ...item.get(),
+      localeCode: item.localeId,
+      localeId: localeMap[item.localeId],
+    }));
+
     res.json(categories);
   };
 
@@ -173,6 +193,14 @@ const standardUnitController = () => {
       ],
       order: [['foodCode', 'ASC']],
     });
+
+    const localeMap = await getLocaleMap([...new Set(foods.data.map(({ localeId }) => localeId))]);
+
+    foods.data = foods.data.map((item) => ({
+      ...item.get(),
+      localeCode: item.localeId,
+      localeId: localeMap[item.localeId],
+    }));
 
     res.json(foods);
   };

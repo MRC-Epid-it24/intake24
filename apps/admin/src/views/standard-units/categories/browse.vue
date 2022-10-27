@@ -51,7 +51,7 @@ export default defineComponent({
         {
           text: this.$t('locales.code'),
           sortable: true,
-          value: 'localeId',
+          value: 'localeCode',
         },
         {
           text: this.$t('fdbs.categories.local.id'),
