@@ -7,7 +7,7 @@ import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { CategoryLocal, FoodLocal, Language, Op, StandardUnit, SystemLocale } from '@intake24/db';
 
 const getLocaleMap = async (code: string[]) => {
-  if (code.length) return {};
+  if (!code.length) return {};
 
   const locales = await SystemLocale.findAll({ where: { code } });
   return locales.reduce<Record<string, string>>((acc, locale) => {
