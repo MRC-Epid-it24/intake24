@@ -6,7 +6,7 @@
           ref="imgDrink"
           v-resize="onImgResize"
           class="drink-scale-image"
-          :src="selectedImageUrl"
+          :src="scale.baseImageUrl"
         >
           <template #placeholder>
             <image-placeholder></image-placeholder>
@@ -16,7 +16,7 @@
           ref="imgOverlay"
           class="drink-scale-image overlay"
           :height="heightOverlay"
-          :src="selectedImageOverlayUrl"
+          :src="scale.overlayImageUrl"
           :style="overlayBackground"
           :width="widthOverlay"
         >
@@ -31,8 +31,8 @@
                 class="full-height-slider ma-0"
                 color="#0d47a1"
                 :hint="$t(`portion.drink-scale.serving.less`)"
-                :max="maxSliderValue"
-                :min="minSliderValue"
+                :max="scale.fullLevel"
+                :min="scale.emptyLevel"
                 thumb-color="primary"
                 vertical
               ></v-slider>
@@ -57,7 +57,7 @@ import type { VImg } from 'vuetify/lib';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
-import type { DrinkwareSetResponse } from '@intake24/common/types/http';
+import type { DrinkwareScaleResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 export default defineComponent({
@@ -66,39 +66,11 @@ export default defineComponent({
   components: { ImagePlaceholder },
 
   props: {
-    drinkwareSetApiResponse: {
-      type: Object as PropType<DrinkwareSetResponse>,
-      required: true,
-    },
-    selectedImageUrl: {
-      type: String,
-      required: true,
-    },
-    selectedImageOverlayUrl: {
-      type: String,
+    scale: {
+      type: Object as PropType<DrinkwareScaleResponse>,
       required: true,
     },
     selectedSliderValue: {
-      type: Number,
-      required: true,
-    },
-    selectedMaxSliderValue: {
-      type: Number,
-      required: true,
-    },
-    selectedMinSliderValue: {
-      type: Number,
-      required: true,
-    },
-    selectedOriginImageHeight: {
-      type: Number,
-      required: true,
-    },
-    selectedOriginImageWidth: {
-      type: Number,
-      required: true,
-    },
-    selectedObjectIdx: {
       type: Number,
       required: true,
     },
@@ -112,16 +84,13 @@ export default defineComponent({
   },
 
   data() {
-    const drinkwareSetData: DrinkwareSetResponse = this.drinkwareSetApiResponse;
-    const maxFillValue: number =
-      drinkwareSetData.scales[this.selectedObjectIdx].volumeSamples.at(-1)?.volume || 100; //FIX Hack since volume can be unidentified;
+    const maxFillValue: number = this.scale.volumeSamples.at(-1)?.volume || 100; //FIX Hack since volume can be unidentified;
 
     return {
       heightOverlay: 0,
       widthOverlay: 0,
-      drinkwareSetData,
-      maxSliderValue: this.selectedMaxSliderValue ?? 100,
-      minSliderValue: this.selectedMinSliderValue ?? 50,
+      maxSliderValue: this.scale.fullLevel ?? 100,
+      minSliderValue: this.scale.emptyLevel ?? 50,
       maxFillValue,
     };
   },
@@ -141,7 +110,7 @@ export default defineComponent({
     },
     fillValue: {
       get() {
-        return this.selectedSliderValue < this.selectedMaxSliderValue
+        return this.selectedSliderValue < this.scale.fullLevel
           ? Math.round(
               (this.maxFillValue * this.sliderValue) / this.maxFillValue - this.minSliderValue
             )
@@ -155,8 +124,7 @@ export default defineComponent({
     overlayBackground() {
       return {
         '--clip-path': `inset(${
-          this.heightOverlay -
-          (this.heightOverlay * this.sliderValue) / this.selectedOriginImageHeight
+          this.heightOverlay - (this.heightOverlay * this.sliderValue) / this.scale.height
         }px 0px 0px 0px)`,
       };
     },
@@ -179,14 +147,13 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.widthOverlay = width;
       this.heightOverlay = height;
-      console.log(`${this.selectedMaxSliderValue}`);
     },
 
-    onScaleMove(newValue: number) {
-      const overlayBackgroundHeigt =
-        this.heightOverlay - (this.heightOverlay * newValue) / this.selectedOriginImageHeight;
-      return overlayBackgroundHeigt;
-    },
+    /* onScaleMove(newValue: number) {
+      const overlayBackgroundHeight =
+        this.heightOverlay - (this.heightOverlay * newValue) / this.scale.height;
+      return overlayBackgroundHeight;
+    }, */
 
     onImgResize() {
       //@ts-expect-error fix debounced types

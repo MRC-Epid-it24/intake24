@@ -68,11 +68,6 @@ export default defineComponent({
       objectConfirmed: false,
       quantityConfirmed: false,
       leftoversConfirmed: false,
-      overlayImageUrl: '',
-      fullLevel: 100,
-      emptyLevel: 0,
-      originalImageUrlHeight: 0,
-      originalImageUrlWidth: 0,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(

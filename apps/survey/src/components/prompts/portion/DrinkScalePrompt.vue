@@ -34,14 +34,7 @@
             <v-expansion-panel-content>
               <drink-scale-panel
                 v-if="drinkwareSetData && portionSize.containerIndex !== undefined"
-                :drinkware-set-api-response="drinkwareSetData"
-                :selected-image-overlay-url="overlayImageUrl"
-                :selected-image-url="portionSize.imageUrl"
-                :selected-max-slider-value="fullLevel"
-                :selected-min-slider-value="emptyLevel"
-                :selected-object-idx="portionSize.containerIndex"
-                :selected-origin-image-height="originalImageUrlHeight"
-                :selected-origin-image-width="originalImageUrlWidth"
+                :scale="drinkwareSetData.scales[portionSize.containerIndex]"
                 :selected-slider-value="portionSize.servingWeight ?? 75"
                 @drink-scale-value="dragSlider"
               >
@@ -99,11 +92,6 @@ export interface DrinkScalePromptState {
   objectConfirmed: boolean;
   quantityConfirmed: boolean;
   leftoversConfirmed: boolean;
-  overlayImageUrl: string;
-  fullLevel: number;
-  emptyLevel: number;
-  originalImageUrlHeight: number;
-  originalImageUrlWidth: number;
 }
 
 export default defineComponent({
@@ -196,12 +184,10 @@ export default defineComponent({
 
       this.portionSize.containerIndex = idx;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
-      this.overlayImageUrl = drinkwareSetData.scales[idx].overlayImageUrl;
-      this.fullLevel = drinkwareSetData.scales[idx].fullLevel;
-      this.emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
-      this.portionSize.servingWeight = this.fullLevel - this.emptyLevel * 0.1;
-      this.originalImageUrlHeight = drinkwareSetData.scales[idx].height;
-      this.originalImageUrlWidth = drinkwareSetData.scales[idx].width;
+
+      const fullLevel = drinkwareSetData.scales[idx].fullLevel;
+      const emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
+      this.portionSize.servingWeight = fullLevel - emptyLevel * 0.1;
 
       this.update();
     },
@@ -230,13 +216,10 @@ export default defineComponent({
 
       // Handle upper and lower bounds, otherwise assign.
       const maxLevel = this.drinkwareSetData.scales[containerIndex].fullLevel;
-      if (this.portionSize.servingWeight + value > maxLevel) {
-        this.portionSize.servingWeight = maxLevel;
-      } else if (this.portionSize.servingWeight + value < 0) {
-        this.portionSize.servingWeight = 0;
-      } else {
-        this.portionSize.servingWeight += value;
-      }
+      this.portionSize.servingWeight = Math.min(
+        maxLevel,
+        Math.max(0, this.portionSize.servingWeight + value)
+      );
 
       this.quantityConfirmed = false;
 
@@ -251,11 +234,6 @@ export default defineComponent({
         objectConfirmed: this.objectConfirmed,
         quantityConfirmed: this.quantityConfirmed,
         leftoversConfirmed: this.leftoversConfirmed,
-        overlayImageUrl: this.overlayImageUrl,
-        fullLevel: this.fullLevel,
-        emptyLevel: this.emptyLevel,
-        originalImageUrlHeight: this.originalImageUrlHeight,
-        originalImageUrlWidth: this.originalImageUrlWidth,
       };
 
       this.$emit('update', { state, valid: this.isValid });
