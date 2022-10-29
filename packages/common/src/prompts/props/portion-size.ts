@@ -13,8 +13,9 @@ export interface AsServedPromptProps extends BasePromptProps {
 export interface CerealPromptProps extends BasePromptProps {
   leftovers: boolean;
 }
-
-export type DrinkScalePromptProps = BasePromptProps;
+export interface DrinkScalePromptProps extends BasePromptProps {
+  leftovers: boolean;
+}
 
 export type GuideImagePromptProps = BasePromptProps;
 

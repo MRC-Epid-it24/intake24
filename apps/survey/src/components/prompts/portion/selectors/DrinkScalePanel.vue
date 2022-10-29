@@ -104,6 +104,7 @@ export default defineComponent({
         return this.selectedSliderValue;
       },
       set(newValue: number) {
+        if (newValue < this.minSliderValue) newValue = this.minSliderValue;
         this.fillValue = Math.round((this.maxFillValue * newValue) / this.maxSliderValue);
         this.$emit('drink-scale-value', newValue);
       },
@@ -149,11 +150,11 @@ export default defineComponent({
       this.heightOverlay = height;
     },
 
-    /* onScaleMove(newValue: number) {
-      const overlayBackgroundHeight =
+    /*onScaleMove(newValue: number) {
+      const overlayBackgroundHeigt =
         this.heightOverlay - (this.heightOverlay * newValue) / this.scale.height;
-      return overlayBackgroundHeight;
-    }, */
+      return overlayBackgroundHeigt;
+    },*/
 
     onImgResize() {
       //@ts-expect-error fix debounced types

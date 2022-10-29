@@ -102,6 +102,7 @@ const portion: LocaleMessageObject = {
     container:
       'Please select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
+      header: 'Step 1. Select your portion size.',
       label:
         'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
@@ -109,7 +110,9 @@ const portion: LocaleMessageObject = {
       more: 'It was more full',
       confirm: 'It was that full',
     },
-    leftover: {
+    leftovers: {
+      header: 'Step 2. Select your leftover size.',
+      question: 'Did you leave some of your {food}?',
       label: 'Please use the slider on the right to choose how much you had left.',
       less: 'I left less',
       more: 'I left more',

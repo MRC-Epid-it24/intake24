@@ -68,6 +68,7 @@ export default defineComponent({
       objectConfirmed: false,
       quantityConfirmed: false,
       leftoversConfirmed: false,
+      leftoversPrompt: undefined,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(

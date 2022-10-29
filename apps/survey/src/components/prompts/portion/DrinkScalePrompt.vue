@@ -3,6 +3,7 @@
     <v-row>
       <v-col>
         <v-expansion-panels v-model="panel" flat>
+          <!-- Step 0: Select Volume to measure estimated portion-->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               <i18n :path="`portion.${portionSize.method}.container`">
@@ -24,14 +25,20 @@
               ></image-map-selector>
             </v-expansion-panel-content>
           </v-expansion-panel>
+          <!-- Step 1: Select Serving Weight ml-->
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
               <template #actions>
                 <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
+                </v-col>
+              </v-row>
               <drink-scale-panel
                 v-if="drinkwareSetData && portionSize.containerIndex !== undefined"
                 :scale="drinkwareSetData.scales[portionSize.containerIndex]"
@@ -65,6 +72,71 @@
               </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header disable-icon-rotate>
+              {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
+              <template #actions>
+                <valid-invalid-icon
+                  :valid="leftoversPrompt !== undefined && leftoversConfirmed"
+                ></valid-invalid-icon>
+              </template>
+            </v-expansion-panel-header>
+            <!-- Step 2: Select LeftOvers-->
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col>
+                  <p>
+                    {{
+                      $t(`portion.${portionSize.method}.leftovers.question`, {
+                        food: localeFoodName,
+                      })
+                    }}
+                  </p>
+                  <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
+                    <v-btn class="px-4" :value="true">
+                      {{ $t('common.action.confirm.yes') }}
+                    </v-btn>
+                    <v-btn class="px-4" :value="false">
+                      {{ $t('common.action.confirm.no') }}
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-col>
+              </v-row>
+              <drink-scale-panel
+                v-if="
+                  drinkwareSetData && portionSize.containerIndex !== undefined && leftoversPrompt
+                "
+                :scale="drinkwareSetData.scales[portionSize.containerIndex]"
+                :selected-slider-value="portionSize.leftoversWeight ?? 75"
+                @drink-scale-value="dragLeftOverSlider"
+              >
+              </drink-scale-panel>
+              <v-row v-if="hasErrors">
+                <v-col>
+                  <v-alert class="ma-0" color="error">
+                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
+                  </v-alert>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn block @click="modifySliderValue(-10)">
+                    {{ $t(`portion.${portionSize.method}.leftovers.less`) }}
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn block @click="modifySliderValue(10)">
+                    {{ $t(`portion.${portionSize.method}.leftovers.more`) }}
+                  </v-btn>
+                </v-col>
+                <v-col align="center" md="4" xs="12">
+                  <v-btn block color="success" @click="confirmleftOvers">
+                    {{ $t(`portion.${portionSize.method}.leftovers.confirm`) }}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-col>
     </v-row>
@@ -92,6 +164,7 @@ export interface DrinkScalePromptState {
   objectConfirmed: boolean;
   quantityConfirmed: boolean;
   leftoversConfirmed: boolean;
+  leftoversPrompt?: boolean;
 }
 
 export default defineComponent({
@@ -122,6 +195,10 @@ export default defineComponent({
   },
 
   computed: {
+    disabledLeftovers() {
+      return !this.leftovers;
+    },
+
     localeFoodName(): string {
       return this.getLocaleContent(this.foodName);
     },
@@ -139,7 +216,19 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      return this.objectValid && this.quantityValid /*&& this.leftoversValid */;
+      return this.objectValid && this.quantityValid && this.leftoversValid;
+    },
+  },
+
+  watch: {
+    leftoversPrompt(val) {
+      if (val !== false) {
+        this.leftoversConfirmed = false;
+        this.setPanel(2);
+        return;
+      }
+      this.leftoversConfirmed = true;
+      this.setPanel(-1);
     },
   },
 
@@ -173,7 +262,24 @@ export default defineComponent({
         return;
       }
 
-      this.setPanel(this.quantityValid ? -1 : 1);
+      if (!this.quantityValid) {
+        this.setPanel(1);
+        return;
+      }
+
+      if (!this.leftoversPrompt) {
+        this.setPanel(2);
+        return;
+      }
+
+      this.setPanel(this.leftoversConfirmed || this.leftoversValid ? -1 : 2);
+      console.warn('Confirmed: ', this.leftoversConfirmed, ' Valid: ', this.leftoversValid);
+    },
+
+    clearLeftovers() {
+      this.portionSize.leftovers = false;
+      this.leftoversConfirmed = false;
+      this.leftoversPrompt = undefined;
     },
 
     selectObject(idx: number) {
@@ -184,7 +290,6 @@ export default defineComponent({
 
       this.portionSize.containerIndex = idx;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
-
       const fullLevel = drinkwareSetData.scales[idx].fullLevel;
       const emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
       this.portionSize.servingWeight = fullLevel - emptyLevel * 0.1;
@@ -200,8 +305,13 @@ export default defineComponent({
 
     dragSlider(value: number) {
       this.portionSize.servingWeight = value;
+      this.clearLeftovers();
+      this.update();
+    },
 
-      this.updatePanel();
+    dragLeftOverSlider(value: number) {
+      this.portionSize.leftoversWeight = value;
+      this.leftoversConfirmed = true;
       this.update();
     },
 
@@ -234,6 +344,7 @@ export default defineComponent({
         objectConfirmed: this.objectConfirmed,
         quantityConfirmed: this.quantityConfirmed,
         leftoversConfirmed: this.leftoversConfirmed,
+        leftoversPrompt: this.leftoversPrompt,
       };
 
       this.$emit('update', { state, valid: this.isValid });
@@ -241,6 +352,12 @@ export default defineComponent({
 
     confirmQuantity() {
       this.quantityConfirmed = true;
+      this.setPanel(2);
+      this.update();
+    },
+
+    confirmleftOvers() {
+      this.leftoversConfirmed = true;
       this.setPanel(-1);
       this.update();
     },
