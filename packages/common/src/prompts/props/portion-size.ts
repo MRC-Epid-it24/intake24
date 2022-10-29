@@ -47,6 +47,7 @@ export const cerealPromptDefaultProps: CerealPromptProps = copy({
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Drink Scale' },
+  leftovers: true,
 });
 
 export const guideImagePromptDefaultProps: GuideImagePromptProps = copy({
