@@ -30,6 +30,10 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
               <template #actions>
+                <drink-scale-volume
+                  :valid="quantityConfirmed"
+                  :volume="portionSize.servingWeight ?? undefined"
+                ></drink-scale-volume>
                 <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -42,7 +46,7 @@
               <drink-scale-panel
                 v-if="drinkwareSetData && portionSize.containerIndex !== undefined"
                 :scale="drinkwareSetData.scales[portionSize.containerIndex]"
-                :selected-slider-value="portionSize.servingWeight ?? 75"
+                :selected-slider-value="portionSize.fillLevel ?? 75"
                 @drink-scale-value="dragSlider"
               >
               </drink-scale-panel>
@@ -53,29 +57,23 @@
                   </v-alert>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn block @click="modifySliderValue(-10)">
-                    {{ $t(`portion.${portionSize.method}.serving.less`) }}
-                  </v-btn>
-                </v-col>
-                <v-col>
-                  <v-btn block @click="modifySliderValue(10)">
-                    {{ $t(`portion.${portionSize.method}.serving.more`) }}
-                  </v-btn>
-                </v-col>
-                <v-col align="center" md="4" xs="12">
-                  <v-btn block color="success" @click="confirmQuantity">
-                    {{ $t(`portion.${portionSize.method}.serving.confirm`) }}
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <drink-scale-controls
+                :portion-size-method="portionSize.method"
+                :type="'serving'"
+                @confirm-estimate="confirmQuantityOrLeftOvers"
+                @modify-slider-value="modifySliderValue"
+              >
+              </drink-scale-controls>
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
               <template #actions>
+                <drink-scale-volume
+                  :valid="leftoversConfirmed"
+                  :volume="portionSize.leftoversWeight ?? undefined"
+                ></drink-scale-volume>
                 <valid-invalid-icon
                   :valid="leftoversPrompt !== undefined && leftoversConfirmed"
                 ></valid-invalid-icon>
@@ -107,7 +105,7 @@
                   drinkwareSetData && portionSize.containerIndex !== undefined && leftoversPrompt
                 "
                 :scale="drinkwareSetData.scales[portionSize.containerIndex]"
-                :selected-slider-value="portionSize.leftoversWeight ?? 75"
+                :selected-slider-value="portionSize.leftoversLevel ?? 75"
                 @drink-scale-value="dragLeftOverSlider"
               >
               </drink-scale-panel>
@@ -118,23 +116,12 @@
                   </v-alert>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn block @click="modifySliderValue(-10)">
-                    {{ $t(`portion.${portionSize.method}.leftovers.less`) }}
-                  </v-btn>
-                </v-col>
-                <v-col>
-                  <v-btn block @click="modifySliderValue(10)">
-                    {{ $t(`portion.${portionSize.method}.leftovers.more`) }}
-                  </v-btn>
-                </v-col>
-                <v-col align="center" md="4" xs="12">
-                  <v-btn block color="success" @click="confirmleftOvers">
-                    {{ $t(`portion.${portionSize.method}.leftovers.confirm`) }}
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <drink-scale-controls
+                :portion-size-method="portionSize.method"
+                :type="'leftovers'"
+                @confirm-estimate="confirmQuantityOrLeftOvers"
+              >
+              </drink-scale-controls>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -156,7 +143,12 @@ import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/ty
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { DrinkScalePanel, ImageMapSelector } from './selectors';
+import {
+  DrinkScaleControls,
+  DrinkScalePanel,
+  DrinkScaleVolume,
+  ImageMapSelector,
+} from './selectors';
 
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
@@ -167,10 +159,12 @@ export interface DrinkScalePromptState {
   leftoversPrompt?: boolean;
 }
 
+export type estimateType = 'serving' | 'leftovers';
+
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { DrinkScalePanel, ImageMapSelector },
+  components: { DrinkScaleControls, DrinkScalePanel, DrinkScaleVolume, ImageMapSelector },
 
   mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
 
@@ -227,8 +221,9 @@ export default defineComponent({
         this.setPanel(2);
         return;
       }
-      this.leftoversConfirmed = true;
+      this.clearLeftovers();
       this.setPanel(-1);
+      this.update();
     },
   },
 
@@ -278,8 +273,10 @@ export default defineComponent({
 
     clearLeftovers() {
       this.portionSize.leftovers = false;
+      this.portionSize.leftoversWeight = 0;
+      this.portionSize.leftoversLevel = 0;
       this.leftoversConfirmed = false;
-      this.leftoversPrompt = undefined;
+      this.leftovers = false;
     },
 
     selectObject(idx: number) {
@@ -292,7 +289,7 @@ export default defineComponent({
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
       const fullLevel = drinkwareSetData.scales[idx].fullLevel;
       const emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
-      this.portionSize.servingWeight = fullLevel - emptyLevel * 0.1;
+      this.portionSize.fillLevel = fullLevel - emptyLevel * 0.1;
 
       this.update();
     },
@@ -303,32 +300,38 @@ export default defineComponent({
       this.update();
     },
 
-    dragSlider(value: number) {
-      this.portionSize.servingWeight = value;
+    dragSlider(payload: { scaleValue: number; fillValue: number }) {
+      this.portionSize.servingWeight = payload.fillValue;
+      this.portionSize.fillLevel = payload.scaleValue;
+      this.leftoversPrompt = undefined;
       this.clearLeftovers();
       this.update();
     },
 
-    dragLeftOverSlider(value: number) {
-      this.portionSize.leftoversWeight = value;
+    dragLeftOverSlider(payload: { scaleValue: number; fillValue: number }) {
+      this.portionSize.leftoversWeight = payload.fillValue > 0 ? payload.fillValue : 0;
+      this.portionSize.leftoversLevel =
+        payload.scaleValue < this.portionSize.fillLevel
+          ? payload.scaleValue
+          : this.portionSize.fillLevel * 0.9;
       this.leftoversConfirmed = true;
       this.update();
     },
 
-    modifySliderValue(value: number) {
+    modifySliderValue(payload: { type: estimateType; delta: number }) {
       const { containerIndex } = this.portionSize;
       if (
         containerIndex === undefined ||
         !this.drinkwareSetData ||
-        this.portionSize.servingWeight === null
+        this.portionSize.fillLevel === null
       )
         return;
 
       // Handle upper and lower bounds, otherwise assign.
       const maxLevel = this.drinkwareSetData.scales[containerIndex].fullLevel;
-      this.portionSize.servingWeight = Math.min(
+      this.portionSize.fillLevel = Math.min(
         maxLevel,
-        Math.max(0, this.portionSize.servingWeight + value)
+        Math.max(0, this.portionSize.fillLevel + payload.delta)
       );
 
       this.quantityConfirmed = false;
@@ -356,9 +359,14 @@ export default defineComponent({
       this.update();
     },
 
-    confirmleftOvers() {
-      this.leftoversConfirmed = true;
-      this.setPanel(-1);
+    confirmQuantityOrLeftOvers(estimateType: estimateType) {
+      if (estimateType === 'leftovers') {
+        this.leftoversConfirmed = true;
+        this.setPanel(-1);
+      } else {
+        this.quantityConfirmed = true;
+        this.setPanel(2);
+      }
       this.update();
     },
 

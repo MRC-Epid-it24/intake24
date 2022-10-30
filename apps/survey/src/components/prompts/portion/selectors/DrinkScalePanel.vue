@@ -106,7 +106,7 @@ export default defineComponent({
       set(newValue: number) {
         if (newValue < this.minSliderValue) newValue = this.minSliderValue;
         this.fillValue = Math.round((this.maxFillValue * newValue) / this.maxSliderValue);
-        this.$emit('drink-scale-value', newValue);
+        this.$emit('drink-scale-value', { scaleValue: newValue, fillValue: this.fillValue });
       },
     },
     fillValue: {

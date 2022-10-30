@@ -24,6 +24,7 @@ export default defineComponent({
       return this.valid ? 'success' : 'grey';
     },
     volumeWithUnit(): string {
+      if (!this.volume) return '';
       return this.volume > 0 ? this.volume.toString().concat(' ml') : '';
     },
   },
