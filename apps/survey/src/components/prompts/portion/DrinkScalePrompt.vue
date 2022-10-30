@@ -30,10 +30,11 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
               <template #actions>
-                <drink-scale-volume
+                <quantity-badge
+                  :amount="portionSize.servingWeight ?? undefined"
+                  unit="ml"
                   :valid="quantityConfirmed"
-                  :volume="portionSize.servingWeight ?? undefined"
-                ></drink-scale-volume>
+                ></quantity-badge>
                 <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -44,38 +45,26 @@
                 </v-col>
               </v-row>
               <drink-scale-panel
-                v-if="drinkwareSetData && portionSize.containerIndex !== undefined"
-                :scale="drinkwareSetData.scales[portionSize.containerIndex]"
-                :selected-slider-value="portionSize.fillLevel ?? 75"
-                @drink-scale-value="dragSlider"
+                v-if="scale"
+                v-model="portionSize.fillLevel"
+                :scale="scale"
+                @confirm="confirmQuantity"
+                @input="updateQuantity"
               >
               </drink-scale-panel>
-              <v-row v-if="hasErrors">
-                <v-col>
-                  <v-alert class="ma-0" color="error">
-                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-                  </v-alert>
-                </v-col>
-              </v-row>
-              <drink-scale-controls
-                :portion-size-method="portionSize.method"
-                :type="'serving'"
-                @confirm-estimate="confirmQuantityOrLeftOvers"
-                @modify-slider-value="modifySliderValue"
-              >
-              </drink-scale-controls>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel v-if="!disabledLeftovers">
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
               <template #actions>
-                <drink-scale-volume
+                <quantity-badge
+                  :amount="portionSize.leftoversWeight ?? undefined"
+                  unit="ml"
                   :valid="leftoversConfirmed"
-                  :volume="portionSize.leftoversWeight ?? undefined"
-                ></drink-scale-volume>
+                ></quantity-badge>
                 <valid-invalid-icon
-                  :valid="leftoversPrompt !== undefined && leftoversConfirmed"
+                  :valid="leftoversPrompt === false || leftoversConfirmed"
                 ></valid-invalid-icon>
               </template>
             </v-expansion-panel-header>
@@ -100,28 +89,29 @@
                   </v-btn-toggle>
                 </v-col>
               </v-row>
-              <drink-scale-panel
-                v-if="
-                  drinkwareSetData && portionSize.containerIndex !== undefined && leftoversPrompt
-                "
-                :scale="drinkwareSetData.scales[portionSize.containerIndex]"
-                :selected-slider-value="portionSize.leftoversLevel ?? 75"
-                @drink-scale-value="dragLeftOverSlider"
-              >
-              </drink-scale-panel>
-              <v-row v-if="hasErrors">
-                <v-col>
-                  <v-alert class="ma-0" color="error">
-                    <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-                  </v-alert>
-                </v-col>
-              </v-row>
-              <drink-scale-controls
-                :portion-size-method="portionSize.method"
-                :type="'leftovers'"
-                @confirm-estimate="confirmQuantityOrLeftOvers"
-              >
-              </drink-scale-controls>
+              <template v-if="leftoversPrompt">
+                <v-row>
+                  <v-col>
+                    {{
+                      $t(`portion.${portionSize.method}.leftovers.label`, { food: localeFoodName })
+                    }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <drink-scale-panel
+                      v-if="scale"
+                      v-model="portionSize.leftoversLevel"
+                      :max-fill-level="portionSize.fillLevel"
+                      :scale="scale"
+                      :type="'leftovers'"
+                      @confirm="confirmLeftovers"
+                      @input="updateLeftovers"
+                    >
+                    </drink-scale-panel>
+                  </v-col>
+                </v-row>
+              </template>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -139,16 +129,15 @@ import { defineComponent } from 'vue';
 
 import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleParameters, DrinkScaleState } from '@intake24/common/types';
-import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
+import type {
+  DrinkwareSetResponse,
+  DrinkwareVolumeSampleResponse,
+  ImageMapResponse,
+} from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import {
-  DrinkScaleControls,
-  DrinkScalePanel,
-  DrinkScaleVolume,
-  ImageMapSelector,
-} from './selectors';
+import { calculateVolume, DrinkScalePanel, ImageMapSelector, QuantityBadge } from './selectors';
 
 export interface DrinkScalePromptState {
   portionSize: DrinkScaleState;
@@ -159,12 +148,10 @@ export interface DrinkScalePromptState {
   leftoversPrompt?: boolean;
 }
 
-export type estimateType = 'serving' | 'leftovers';
-
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { DrinkScaleControls, DrinkScalePanel, DrinkScaleVolume, ImageMapSelector },
+  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge },
 
   mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
 
@@ -180,6 +167,9 @@ export default defineComponent({
     state.portionSize.drinkwareId = this.parameters['drinkware-id'];
     state.portionSize.initialFillLevel = Number.parseFloat(this.parameters['initial-fill-level']);
     state.portionSize.skipFillLevel = this.parameters['skip-fill-level'] === 'true';
+
+    if (!state.portionSize.fillLevel)
+      state.portionSize.fillLevel = state.portionSize.initialFillLevel;
 
     return {
       ...state,
@@ -197,6 +187,16 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
+    scale() {
+      if (!this.drinkwareSetData || this.portionSize.containerIndex === undefined) return undefined;
+
+      return this.drinkwareSetData.scales[this.portionSize.containerIndex];
+    },
+
+    volumes(): DrinkwareVolumeSampleResponse[] | undefined {
+      return this.scale?.volumeSamples;
+    },
+
     objectValid() {
       return this.portionSize.containerIndex !== undefined && this.objectConfirmed;
     },
@@ -205,25 +205,18 @@ export default defineComponent({
       return this.quantityConfirmed;
     },
 
-    leftoversValid() {
+    leftoversValid(): boolean {
       return this.leftoversConfirmed;
     },
 
     isValid(): boolean {
-      return this.objectValid && this.quantityValid && this.leftoversValid;
-    },
-  },
+      // object || quantity not yet selected
+      if (!this.objectValid || !this.quantityValid) return false;
 
-  watch: {
-    leftoversPrompt(val) {
-      if (val !== false) {
-        this.leftoversConfirmed = false;
-        this.setPanel(2);
-        return;
-      }
-      this.clearLeftovers();
-      this.setPanel(-1);
-      this.update();
+      // Leftovers disables || leftovers have been confirmed
+      if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
+
+      return this.leftoversValid;
     },
   },
 
@@ -262,21 +255,7 @@ export default defineComponent({
         return;
       }
 
-      if (!this.leftoversPrompt) {
-        this.setPanel(2);
-        return;
-      }
-
-      this.setPanel(this.leftoversConfirmed || this.leftoversValid ? -1 : 2);
-      console.warn('Confirmed: ', this.leftoversConfirmed, ' Valid: ', this.leftoversValid);
-    },
-
-    clearLeftovers() {
-      this.portionSize.leftovers = false;
-      this.portionSize.leftoversWeight = 0;
-      this.portionSize.leftoversLevel = 0;
-      this.leftoversConfirmed = false;
-      this.leftovers = false;
+      this.setPanel(this.leftoversPrompt === false || this.leftoversValid ? -1 : 2);
     },
 
     selectObject(idx: number) {
@@ -287,9 +266,9 @@ export default defineComponent({
 
       this.portionSize.containerIndex = idx;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
-      const fullLevel = drinkwareSetData.scales[idx].fullLevel;
-      const emptyLevel = drinkwareSetData.scales[idx].emptyLevel;
-      this.portionSize.fillLevel = fullLevel - emptyLevel * 0.1;
+
+      if (this.volumes)
+        this.portionSize.servingWeight = calculateVolume(this.volumes, this.portionSize.fillLevel);
 
       this.update();
     },
@@ -300,47 +279,45 @@ export default defineComponent({
       this.update();
     },
 
-    dragSlider(payload: { scaleValue: number; fillValue: number }) {
-      this.portionSize.servingWeight = payload.fillValue;
-      this.portionSize.fillLevel = payload.scaleValue;
-      this.leftoversPrompt = undefined;
+    updateQuantity() {
+      this.quantityConfirmed = false;
       this.clearLeftovers();
       this.update();
     },
 
-    dragLeftOverSlider(payload: { scaleValue: number; fillValue: number }) {
-      this.portionSize.leftoversWeight = payload.fillValue > 0 ? payload.fillValue : 0;
-      this.portionSize.leftoversLevel =
-        payload.scaleValue < this.portionSize.fillLevel
-          ? payload.scaleValue
-          : this.portionSize.fillLevel * 0.9;
-      this.leftoversConfirmed = true;
+    confirmQuantity() {
+      this.quantityConfirmed = true;
+      this.updatePanel();
       this.update();
     },
 
-    modifySliderValue(payload: { type: estimateType; delta: number }) {
-      const { containerIndex } = this.portionSize;
-      if (
-        containerIndex === undefined ||
-        !this.drinkwareSetData ||
-        this.portionSize.fillLevel === null
-      )
-        return;
+    clearLeftovers() {
+      this.portionSize.leftovers = false;
+      this.leftoversConfirmed = false;
+      this.leftoversPrompt = undefined;
+    },
 
-      // Handle upper and lower bounds, otherwise assign.
-      const maxLevel = this.drinkwareSetData.scales[containerIndex].fullLevel;
-      this.portionSize.fillLevel = Math.min(
-        maxLevel,
-        Math.max(0, this.portionSize.fillLevel + payload.delta)
-      );
+    updateLeftovers() {
+      this.leftoversConfirmed = false;
+      this.update();
+    },
 
-      this.quantityConfirmed = false;
-
+    confirmLeftovers() {
+      this.leftoversConfirmed = true;
       this.updatePanel();
       this.update();
     },
 
     update() {
+      const { volumes } = this;
+      if (volumes) {
+        this.portionSize.servingWeight = calculateVolume(volumes, this.portionSize.fillLevel);
+        this.portionSize.leftoversWeight = calculateVolume(
+          volumes,
+          this.portionSize.leftoversLevel
+        );
+      }
+
       const state: DrinkScalePromptState = {
         portionSize: this.portionSize,
         panel: this.panel,
@@ -353,23 +330,6 @@ export default defineComponent({
       this.$emit('update', { state, valid: this.isValid });
     },
 
-    confirmQuantity() {
-      this.quantityConfirmed = true;
-      this.setPanel(2);
-      this.update();
-    },
-
-    confirmQuantityOrLeftOvers(estimateType: estimateType) {
-      if (estimateType === 'leftovers') {
-        this.leftoversConfirmed = true;
-        this.setPanel(-1);
-      } else {
-        this.quantityConfirmed = true;
-        this.setPanel(2);
-      }
-      this.update();
-    },
-
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
@@ -380,7 +340,6 @@ export default defineComponent({
         return;
       }
 
-      console.log('DrinkScale Prompt Completed');
       this.$emit('continue');
     },
   },

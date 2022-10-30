@@ -1,17 +1,21 @@
 <template>
-  <v-chip v-if="valid && weight" :color="color" small>{{ weightWithUnit }}</v-chip>
+  <v-chip v-if="valid && amount" :color="color" small>{{ amountWithUnit }}</v-chip>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'AsServedWeight',
+  name: 'QuantityBadge',
 
   props: {
-    weight: {
+    amount: {
       type: Number,
       default: 0,
+    },
+    unit: {
+      type: String,
+      default: 'g',
     },
     valid: {
       type: Boolean,
@@ -23,8 +27,9 @@ export default defineComponent({
     color(): string {
       return this.valid ? 'success' : 'grey';
     },
-    weightWithUnit(): string {
-      return this.weight > 0 ? this.weight.toString().concat('g') : '';
+
+    amountWithUnit(): string {
+      return this.amount > 0 ? Math.round(this.amount).toString().concat(this.unit) : '';
     },
   },
 });

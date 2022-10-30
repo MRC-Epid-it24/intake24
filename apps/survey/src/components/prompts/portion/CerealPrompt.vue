@@ -28,10 +28,10 @@
             <v-expansion-panel-header disable-icon-rotate>
               {{ $t(`portion.as-served.serving.header`) }}
               <template #actions>
-                <as-served-weight
+                <quantity-badge
+                  :amount="portionSize.serving?.weight"
                   :valid="servingImageConfirmed"
-                  :weight="portionSize.serving?.weight"
-                ></as-served-weight>
+                ></quantity-badge>
                 <valid-invalid-icon
                   class="ml-1"
                   :valid="servingImageConfirmed"
@@ -58,12 +58,12 @@
           </v-expansion-panel>
           <v-expansion-panel v-if="!disabledLeftovers && leftoverImageSet">
             <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.as-served.leftover.header`, { food: localeFoodName }) }}
+              {{ $t(`portion.as-served.leftovers.header`, { food: localeFoodName }) }}
               <template #actions>
-                <as-served-weight
+                <quantity-badge
+                  :amount="portionSize.leftovers?.weight"
                   :valid="leftoversImageConfirmed"
-                  :weight="portionSize.leftovers?.weight"
-                ></as-served-weight>
+                ></quantity-badge>
                 <valid-invalid-icon
                   class="ml-1"
                   :valid="leftoversPrompt === false || leftoversImageConfirmed"
@@ -73,7 +73,7 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col>
-                  <p>{{ $t(`portion.as-served.leftover.question`, { food: localeFoodName }) }}</p>
+                  <p>{{ $t(`portion.as-served.leftovers.question`, { food: localeFoodName }) }}</p>
                   <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
                     <v-btn class="px-4" :value="true">
                       {{ $t('common.action.confirm.yes') }}
@@ -87,7 +87,7 @@
               <template v-if="leftoversPrompt">
                 <v-row>
                   <v-col>
-                    {{ $t(`portion.as-served.leftover.label`, { food: localeFoodName }) }}
+                    {{ $t(`portion.as-served.leftovers.label`, { food: localeFoodName }) }}
                   </v-col>
                 </v-row>
                 <v-row>
@@ -96,7 +96,7 @@
                       :as-served-set-id="leftoverImageSet"
                       :initial-object="portionSize.leftovers ?? undefined"
                       :max-weight="portionSize.serving?.weight"
-                      :type="'leftover'"
+                      :type="'leftovers'"
                       @confirm="confirmLeftovers"
                       @update="updateLeftovers"
                     ></as-served-selector>
@@ -131,7 +131,7 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { AsServedSelector, AsServedWeight, ImageMapSelector } from './selectors';
+import { AsServedSelector, ImageMapSelector, QuantityBadge } from './selectors';
 
 export interface CerealPromptState {
   portionSize: CerealState;
@@ -145,7 +145,7 @@ export interface CerealPromptState {
 export default defineComponent({
   name: 'CerealPrompt',
 
-  components: { AsServedSelector, AsServedWeight, ImageMapSelector },
+  components: { AsServedSelector, ImageMapSelector, QuantityBadge },
 
   mixins: [createBasePortion<CerealPromptProps, CerealPromptState>()],
 
@@ -224,7 +224,7 @@ export default defineComponent({
       // serving not yet selected
       if (!this.servingValid) return false;
 
-      // Leftover disables || leftovers have been confirmed
+      // Leftovers disables || leftovers have been confirmed
       if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
 
       // leftovers not yet selected

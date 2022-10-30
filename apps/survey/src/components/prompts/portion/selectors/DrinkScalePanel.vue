@@ -1,54 +1,54 @@
 <template>
-  <v-row>
-    <v-col>
-      <div class="drink-scale-drawer">
-        <v-img
-          ref="imgDrink"
-          v-resize="onImgResize"
-          class="drink-scale-image"
-          :src="scale.baseImageUrl"
-        >
-          <template #placeholder>
-            <image-placeholder></image-placeholder>
-          </template>
-        </v-img>
-        <v-img
-          ref="imgOverlay"
-          class="drink-scale-image overlay"
-          :height="heightOverlay"
-          :src="scale.overlayImageUrl"
-          :style="overlayBackground"
-          :width="widthOverlay"
-        >
-        </v-img>
-        <v-container class="overlay slider-container">
-          <v-row class="drink-slider">
-            <v-spacer></v-spacer>
-            <v-col class="d-flex justify-end mr-auto" sm="1" xs="2">
-              <!-- TODO: Height of this -->
-              <v-slider
-                v-model="sliderValue"
-                class="full-height-slider ma-0"
-                color="#0d47a1"
-                :hint="$t(`portion.drink-scale.serving.less`)"
-                :max="scale.fullLevel"
-                :min="scale.emptyLevel"
-                thumb-color="primary"
-                vertical
-              ></v-slider>
-            </v-col>
-          </v-row>
-          <v-row class="drink-lable">
-            <v-col class="d-flex justify-end mr-auto">
-              <v-chip class="ma-2">
-                {{ drinkMilliliters }}
-              </v-chip>
-            </v-col>
-          </v-row>
-        </v-container>
-      </div>
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <div class="drink-scale-drawer" @mousedown="touchUpdateSlider">
+          <v-img ref="imgDrink" v-resize="onImgResize" :src="scale.baseImageUrl">
+            <template #placeholder>
+              <image-placeholder></image-placeholder>
+            </template>
+          </v-img>
+          <v-img
+            class="drink-scale-image-overlay"
+            :src="scale.overlayImageUrl"
+            :style="overlayBackground"
+          >
+          </v-img>
+          <div class="drink-scale-image-slider mx-5" :style="{ bottom: sliderBottom }">
+            <v-slider
+              v-model="sliderValue"
+              color="blue darken-4"
+              :height="sliderHeight"
+              :max="sliderMax"
+              :min="sliderMin"
+              thumb-color="primary"
+              vertical
+            ></v-slider>
+          </div>
+          <div class="drink-scale-image-label">
+            <v-chip class="ma-2 font-weight-medium">{{ label }}</v-chip>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn block :disabled="sliderValue <= sliderMin" @click="updateSlider(-10)">
+          {{ $t(`portion.drink-scale.${type}.less`) }}
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn block :disabled="sliderValue >= sliderMax" @click="updateSlider(10)">
+          {{ $t(`portion.drink-scale.${type}.more`) }}
+        </v-btn>
+      </v-col>
+      <v-col align="center" md="4" xs="12">
+        <v-btn block color="success" @click="confirm">
+          {{ $t(`portion.as-served.${type}.confirm`) }}
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -58,7 +58,10 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
 import type { DrinkwareScaleResponse } from '@intake24/common/types/http';
+import { round } from '@intake24/common/util';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
+
+import { calculateVolume } from './drink-scale';
 
 export default defineComponent({
   name: 'DrinkScalePanel',
@@ -66,11 +69,19 @@ export default defineComponent({
   components: { ImagePlaceholder },
 
   props: {
+    maxFillLevel: {
+      type: Number,
+      default: 1,
+    },
     scale: {
       type: Object as PropType<DrinkwareScaleResponse>,
       required: true,
     },
-    selectedSliderValue: {
+    type: {
+      type: String as PropType<'serving' | 'leftovers'>,
+      default: 'serving',
+    },
+    value: {
       type: Number,
       required: true,
     },
@@ -78,56 +89,60 @@ export default defineComponent({
 
   setup() {
     const imgDrink = ref<InstanceType<typeof VImg>>();
-    const imgOverlay = ref<InstanceType<typeof VImg>>();
 
-    return { imgDrink, imgOverlay };
+    return { imgDrink };
   },
 
   data() {
-    const maxFillValue: number = this.scale.volumeSamples.at(-1)?.volume || 100; //FIX Hack since volume can be unidentified;
+    const sliderMax = this.maxFillLevel * (this.scale.fullLevel - this.scale.emptyLevel);
+    const sliderMin = 0;
 
     return {
-      heightOverlay: 0,
-      widthOverlay: 0,
-      maxSliderValue: this.scale.fullLevel ?? 100,
-      minSliderValue: this.scale.emptyLevel ?? 50,
-      maxFillValue,
+      height: 0,
+      width: 0,
+      sliderMax,
+      sliderMin,
+      sliderValue: sliderMax * this.value,
     };
   },
 
   computed: {
-    drinkMilliliters(): string {
-      return `${this.fillValue} ml`;
+    fillLevel(): number {
+      return (this.sliderValue / this.sliderMax) * this.maxFillLevel;
     },
-    sliderValue: {
-      get() {
-        return this.selectedSliderValue;
-      },
-      set(newValue: number) {
-        if (newValue < this.minSliderValue) newValue = this.minSliderValue;
-        this.fillValue = Math.round((this.maxFillValue * newValue) / this.maxSliderValue);
-        this.$emit('drink-scale-value', { scaleValue: newValue, fillValue: this.fillValue });
-      },
+
+    fillVolume(): number {
+      return round(calculateVolume(this.scale.volumeSamples, this.fillLevel), 2);
     },
-    fillValue: {
-      get() {
-        return this.selectedSliderValue < this.scale.fullLevel
-          ? Math.round(
-              (this.maxFillValue * this.sliderValue) / this.maxFillValue - this.minSliderValue
-            )
-          : this.maxFillValue;
-      },
-      set(newValue: number) {
-        this.$emit('drink-fill-value', newValue);
-      },
+
+    label(): string {
+      return `${this.fillVolume} ml`;
+    },
+
+    imgScale() {
+      return this.height / this.scale.height;
+    },
+
+    sliderHeight() {
+      return this.sliderMax * this.imgScale;
+    },
+
+    sliderBottom() {
+      return `${this.scale.emptyLevel * this.imgScale}px`;
     },
 
     overlayBackground() {
       return {
         '--clip-path': `inset(${
-          this.heightOverlay - (this.heightOverlay * this.sliderValue) / this.scale.height
+          this.height - (this.scale.emptyLevel + this.sliderValue) * this.imgScale
         }px 0px 0px 0px)`,
       };
+    },
+  },
+
+  watch: {
+    fillLevel(val) {
+      this.$emit('input', val);
     },
   },
 
@@ -146,24 +161,75 @@ export default defineComponent({
       }
 
       const { width, height } = el.getBoundingClientRect();
-      this.widthOverlay = width;
-      this.heightOverlay = height;
+      this.width = width;
+      this.height = height;
     },
-
-    /*onScaleMove(newValue: number) {
-      const overlayBackgroundHeigt =
-        this.heightOverlay - (this.heightOverlay * newValue) / this.scale.height;
-      return overlayBackgroundHeigt;
-    },*/
 
     onImgResize() {
       //@ts-expect-error fix debounced types
       this.debouncedDrinkScaleImgResize();
     },
+
+    touchUpdateSlider(event: MouseEvent) {
+      const position = this.scale.height - event.offsetY / this.imgScale;
+
+      if (event.path[0].className.startsWith('v-slider__')) return;
+
+      if (
+        position > this.sliderMax + this.scale.emptyLevel ||
+        position < this.sliderMin + this.scale.emptyLevel
+      )
+        return;
+
+      this.sliderValue = Math.round(position - this.scale.emptyLevel);
+    },
+
+    updateSlider(value: number) {
+      this.sliderValue = Math.min(
+        this.sliderMax,
+        Math.max(this.sliderMin, this.sliderValue + value)
+      );
+    },
+
+    confirm() {
+      this.$emit('confirm');
+    },
   },
 });
 </script>
 
-<style lang="scss" scoped>
-@import '../../../../scss/drinkscale.scss';
+<style lang="scss">
+.drink-scale-drawer {
+  position: relative;
+
+  .drink-scale-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    clip-path: var(--clip-path);
+  }
+
+  .drink-scale-image-slider {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+  }
+
+  .drink-scale-image-label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+  }
+
+  .v-slider {
+    height: 100%;
+
+    .v-slider__track-container {
+      width: 5px;
+    }
+  }
+}
 </style>

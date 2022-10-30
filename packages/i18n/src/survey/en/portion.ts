@@ -70,7 +70,7 @@ const portion: LocaleMessageObject = {
       more: 'I had more',
       confirm: 'I had that much',
     },
-    leftover: {
+    leftovers: {
       header: 'Step 2. Select your leftover size.',
       question: 'Did you leave some of your {food}?',
       label: 'Using these pictures, please choose how much {food} you left.',
@@ -83,7 +83,7 @@ const portion: LocaleMessageObject = {
         more: 'I had {whole} and {fraction}',
         less: 'I had {fraction}',
       },
-      leftover: {
+      leftovers: {
         more: 'I left {whole} and {fraction}',
         less: 'I left {fraction}',
       },

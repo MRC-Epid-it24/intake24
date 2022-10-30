@@ -46,7 +46,7 @@ import { defineComponent } from 'vue';
 
 export type WeightFactorProps = {
   show: boolean;
-  type: 'serving' | 'leftover';
+  type: 'serving' | 'leftovers';
   subType: 'less' | 'more';
   minNumerator: number;
   maxNumerator: number;

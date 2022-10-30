@@ -95,7 +95,7 @@ export default defineComponent({
       type: Number,
     },
     type: {
-      type: String as PropType<'serving' | 'leftover'>,
+      type: String as PropType<'serving' | 'leftovers'>,
       default: 'serving',
     },
   },

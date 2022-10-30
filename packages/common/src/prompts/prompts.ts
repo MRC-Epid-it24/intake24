@@ -59,13 +59,3 @@ export interface PromptQuestionWithSection<T extends BasePromptProps = BasePromp
   extends PromptQuestion<T> {
   section: SurveyQuestionSection | MealSection;
 }
-
-export interface DisplayAssocPromptControl {
-  '0': boolean;
-  '1': boolean;
-}
-export interface ToggleAnswersStyle {
-  leftover: boolean | null;
-  assoc1: boolean | null;
-  assoc2: boolean | null;
-}
