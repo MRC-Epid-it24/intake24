@@ -28,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Repository checkout
@@ -69,7 +69,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         postgres-version: [13]
         redis-version: [6]
 
@@ -156,7 +156,7 @@ jobs:
 
   #   strategy:
   #     matrix:
-  #       node-version: [16.x]
+  #       node-version: [18.x]
   #       mariadb-version: [10]
   #       redis-version: [6]
 
@@ -240,7 +240,7 @@ jobs:
 
   #   strategy:
   #     matrix:
-  #       node-version: [16.x]
+  #       node-version: [18.x]
   #       mssql-version: [2019]
   #       redis-version: [6]
 
@@ -320,7 +320,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Repository checkout
@@ -354,7 +354,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Repository checkout
@@ -388,7 +388,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Repository checkout
@@ -430,7 +430,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Repository checkout

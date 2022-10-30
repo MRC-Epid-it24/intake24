@@ -1,6 +1,6 @@
 ---
-- name: Add Node.js 16 LTS repository
-  shell: 'curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -'
+- name: Add Node.js 18 LTS repository
+  shell: 'curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -'
   args:
     warn: no
 

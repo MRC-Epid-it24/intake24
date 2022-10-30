@@ -2,7 +2,7 @@
 
 ## Node.js
 
-Install [Node.js](https://nodejs.org), ideally latest LTS (v16).
+Install [Node.js](https://nodejs.org), ideally latest LTS.
 
 Source code is written in Typescript. Backend apps (`API server` / `CLI` / `Portal`) are using `Node.js`. Frontend apps (`Admin tool` and `Survey application`) are built using `Vue.js` framework.
 

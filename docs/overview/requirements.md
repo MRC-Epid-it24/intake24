@@ -1,6 +1,6 @@
 # Requirements
 
-- [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS (14.x | 16.x).
+- [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS.
 
 - [PNPM](https://pnpm.io) Package manager with support for workspaces & mono-repository setup.
 
