@@ -9,7 +9,7 @@ export type RepeatableBullJob = {
   id: string;
   endDate: number;
   tz: string;
-  cron: string;
+  pattern: string;
   next: number;
 };
 
