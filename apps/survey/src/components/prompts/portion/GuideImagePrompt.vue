@@ -142,7 +142,7 @@ export default defineComponent({
 
   async mounted() {
     await this.fetchGuideImageData();
-    await this.getscreenDimensions();
+    this.getScreenDimensions();
   },
 
   methods: {
@@ -155,11 +155,10 @@ export default defineComponent({
       this.portionSize.imageUrl = data.imageMap.baseImageUrl;
     },
 
-    getscreenDimensions() {
-      const width = window.screen.width;
-      const height = window.screen.height;
-      this.width = width;
+    getScreenDimensions() {
+      const { height, width } = window.screen;
       this.height = height;
+      this.width = width;
     },
 
     updatePanel() {

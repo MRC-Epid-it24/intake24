@@ -24,6 +24,7 @@ import {
   drinkScaleComplete,
   guideImageComplete,
   milkInAHotDrinkComplete,
+  milkOnCerealComplete,
   pizzaComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
@@ -284,6 +285,28 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'milk-in-a-hot-drink')
           ? 'Milk in hot drink estimation already complete'
           : 'Milk in hot drink estimation not selected'
+      );
+      return false;
+    }
+
+    case 'milk-on-cereal-prompt': {
+      if (
+        portionSizeMethodSelected(foodState, 'milk-on-cereal') &&
+        !milkOnCerealComplete(foodState)
+      ) {
+        recallLog().promptCheck(
+          'milk-on-cereal-prompt',
+          true,
+          'Milk on cereal selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        'milk-on-cereal-prompt',
+        false,
+        portionSizeMethodSelected(foodState, 'milk-on-cereal')
+          ? 'Milk on cereal estimation already complete'
+          : 'Milk on cereal estimation not selected'
       );
       return false;
     }

@@ -114,6 +114,26 @@ export function milkInAHotDrinkComplete(selectedFood: FoodState): boolean {
   return false;
 }
 
+export function milkOnCerealComplete(selectedFood: FoodState): boolean {
+  if (selectedFood.type !== 'encoded-food') return false;
+
+  if (selectedFood.portionSize !== null) {
+    if (selectedFood.portionSize.method !== 'milk-on-cereal') {
+      console.warn(
+        `Selected portion size method is "milk-on-cereal" but portion size data is for ${selectedFood.portionSize.method}`
+      );
+      return false;
+    }
+
+    return (
+      selectedFood.portionSize.bowlIndex !== undefined &&
+      selectedFood.portionSize.milkLevelChoice !== undefined
+    );
+  }
+
+  return false;
+}
+
 export function pizzaComplete(selectedFood: FoodState): boolean {
   if (selectedFood.type !== 'encoded-food') return false;
 

@@ -127,27 +127,19 @@ export const drinkScaleMapper = (
   ];
 };
 
-/* export const milkInAHotDrinkMapper = (
+export const milkInAHotDrinkMapper = (
   foodId: string,
   state: PortionSizeStates['milk-in-a-hot-drink']
 ): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
-  const { leftoversWeight, servingWeight } = state;
-
-  const containerIndexValue = containerIndex !== undefined ? (containerIndex + 1).toString() : '';
+  const { leftoversWeight, servingWeight, milkPartIndex, milkVolumePercentage } = state;
 
   return [
-    { foodId, name: 'containerIndex', value: containerIndex.toString() },
-    { foodId, name: 'drinkware-id', value: drinkwareId },
-    { foodId, name: 'fillLevel', value: fillLevel.toString() },
-    { foodId, name: 'imageUrl', value: imageUrl },
-    { foodId, name: 'initial-fill-level', value: initialFillLevel },
-    { foodId, name: 'leftovers', value: leftovers.toString() },
+    { foodId, name: 'milkPartIndex', value: milkPartIndex?.toString() ?? '' },
+    { foodId, name: 'milkVolumePercentage', value: milkVolumePercentage?.toString() ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversLevel', value: leftoversLevel.toString() },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'skip-fill-level', value: skipFillLevel },
   ];
-}; */
+};
 
 export const milkOnCerealMapper = (
   foodId: string,
@@ -186,7 +178,7 @@ export const portionSizeMappers: Record<
   cereal: cerealMapper,
   'drink-scale': drinkScaleMapper,
   'guide-image': guideImageMapper,
-  'milk-in-a-hot-drink': genericMapper,
+  'milk-in-a-hot-drink': milkInAHotDrinkMapper,
   'milk-on-cereal': milkOnCerealMapper,
   pizza: genericMapper,
   'standard-portion': genericMapper,

@@ -56,6 +56,7 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
+import { ImageMapSelector } from './selectors';
 
 export interface MilkOnCerealPromptState {
   portionSize: MilkOnCerealState;
@@ -64,8 +65,25 @@ export interface MilkOnCerealPromptState {
   milkLevelConfirmed: boolean;
 }
 
+const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
+
+type Bowl = typeof bowls[number];
+
+const milkDensity = 1.032;
+
+const volumeDefs: Record<Bowl, number[]> = {
+  A: [52.3, 100.0, 172.0, 267.7, 389.3, 522.3],
+  B: [62.7, 138.0, 249.0, 385.7],
+  C: [49.0, 121.3, 233.3, 358.7, 481.0, 622.3],
+  D: [18.3, 36.0, 70.3, 126.7, 195.3, 287.3],
+  E: [38.0, 103.7, 197.0, 305.7, 428.0, 559.3],
+  F: [49.3, 104.7, 187.7, 295.3, 420.0, 570.3],
+};
+
 export default defineComponent({
   name: 'MilkOnCerealPrompt',
+
+  components: { ImageMapSelector },
 
   mixins: [createBasePortion<MilkOnCerealPromptProps, MilkOnCerealPromptState>()],
 
@@ -81,11 +99,12 @@ export default defineComponent({
   },
 
   data() {
-    const bowls = ['A', 'B', 'C', 'D', 'E', 'F'];
     const milkLevelImageMapPrefix = 'milkbowl';
 
     return {
       bowls,
+      milkDensity,
+      volumeDefs,
       milkLevelImageMapPrefix,
 
       bowlImageMap: null as ImageMapResponse | null,
@@ -100,20 +119,22 @@ export default defineComponent({
       return this.getLocaleContent(this.foodName);
     },
 
-    milkLevelImageMapId(): string | undefined {
-      const {
-        bowls,
-        milkLevelImageMapPrefix,
-        portionSize: { bowlIndex },
-      } = this;
-      if (bowlIndex === undefined) return undefined;
+    bowl() {
+      return this.portionSize.bowl ?? undefined;
+    },
 
-      return `${milkLevelImageMapPrefix}${bowls[bowlIndex]}`;
+    milkLevelImageMapId(): string | undefined {
+      const { bowl, milkLevelImageMapPrefix } = this;
+      if (bowl === undefined) return undefined;
+
+      return `${milkLevelImageMapPrefix}${bowl}`;
     },
 
     bowlValid() {
-      return (
-        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.bowlConfirmed
+      return !!(
+        this.portionSize.bowlIndex !== undefined &&
+        this.portionSize.bowl &&
+        this.bowlConfirmed
       );
     },
 
@@ -122,13 +143,7 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      // bowl not yet selected
-      if (!this.bowlValid) return false;
-
-      // milk level selected
-      if (!this.milkLevelValid) return false;
-
-      return true;
+      return this.bowlValid && this.milkLevelValid;
     },
   },
 
@@ -141,7 +156,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    await this.fetchBowlImageMap();
+    await Promise.all([this.fetchBowlImageMap(), this.fetchMilkLevelImageMap()]);
   },
 
   methods: {
@@ -181,6 +196,8 @@ export default defineComponent({
       this.portionSize.bowlIndex = idx;
       this.portionSize.bowl = this.bowls[idx];
       this.bowlConfirmed = false;
+      this.clearMilk();
+
       this.update();
     },
 
@@ -188,6 +205,15 @@ export default defineComponent({
       this.bowlConfirmed = true;
       this.updatePanel();
       this.update();
+    },
+
+    clearMilk() {
+      this.portionSize.milkLevelChoice = undefined;
+      this.milkLevelConfirmed = false;
+    },
+
+    calculateMilkWeight(bowl: Bowl, idx: number) {
+      return volumeDefs[bowl][idx] * this.milkDensity;
     },
 
     selectMilk(idx: number) {
@@ -216,8 +242,12 @@ export default defineComponent({
     },
 
     update() {
-      /* this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
-      this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0; */
+      const {
+        portionSize: { bowl, milkLevelChoice },
+      } = this;
+
+      if (bowl && milkLevelChoice !== undefined)
+        this.portionSize.servingWeight = this.calculateMilkWeight(bowl as Bowl, milkLevelChoice);
 
       const state: MilkOnCerealPromptState = {
         portionSize: this.portionSize,
@@ -228,38 +258,6 @@ export default defineComponent({
 
       this.$emit('update', { state, valid: this.isValid });
     },
-
-    /* setDisplayQuestions(value: boolean) {
-      this.displayQuestions = value;
-    },
-
-    emitFoodSelected(value: string) {
-      this.foodValue = value;
-      this.foodSelected = true;
-      this.setPanel(1);
-    },
-
-    selectPortionMethod(value: string) {
-      this.portionMethodSelected = true;
-      this.portionMethodValue = value;
-      this.setPanel(2);
-      if (!this.imageMapLoaded) {
-        this.fetchImageMapData();
-      }
-    },
-
-    selectPortion() {
-      this.portionSelected = true;
-      this.setPanel(-1);
-    },
-
-    submit() {
-      if (this.foodSelected && this.portionMethodSelected && this.portionSelected) {
-        console.log('submitted');
-      } else {
-        console.log('not complete');
-      }
-    }, */
   },
 });
 </script>
