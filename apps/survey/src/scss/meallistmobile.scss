@@ -22,7 +22,7 @@
 
 .v-row :deep(.undoAlert) {
   position: absolute;
-  z-index: 10;
+  z-index: 5;
   top: 1rem;
   width: 80%;
   max-width: 300px;
@@ -33,7 +33,7 @@
   bottom: 56px;
   left: 0;
   width: 100%;
-  z-index: 9;
+  z-index: 4;
 }
 
 .alert {
@@ -41,7 +41,7 @@
   top: 5rem;
   left: 0;
   width: 100%;
-  z-index: 9;
+  z-index: 4;
   background-color: rgb(230, 186, 134);
 }
 
@@ -51,11 +51,6 @@
 
 .sticky_toolbar {
   border-top: 1px solid #cecdcdde;
-}
-
-.meail_badge {
-  position: relative;
-  z-index: 9;
 }
 
 .v-tab {

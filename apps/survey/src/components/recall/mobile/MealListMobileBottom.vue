@@ -14,7 +14,6 @@
         <v-tab v-for="(meal, index) in meals" :key="index" @click="onMealSelected(meal.id)">
           <v-badge
             bordered
-            class="meail_badge"
             color="grey"
             :content="meal.foods.length"
             left
