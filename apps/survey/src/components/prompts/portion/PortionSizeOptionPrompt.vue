@@ -29,11 +29,6 @@
           </v-row>
         </v-container>
       </v-item-group>
-      <v-row>
-        <v-col>
-          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
-        </v-col>
-      </v-row>
     </v-sheet>
   </portion-layout>
 </template>

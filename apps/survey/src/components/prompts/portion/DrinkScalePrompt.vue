@@ -193,6 +193,10 @@ export default defineComponent({
       return this.drinkwareSetData.scales[this.portionSize.containerIndex];
     },
 
+    skipFillLevel() {
+      return this.parameters['skip-fill-level'] === 'true';
+    },
+
     volumes(): DrinkwareVolumeSampleResponse[] | undefined {
       return this.scale?.volumeSamples;
     },
@@ -275,6 +279,9 @@ export default defineComponent({
 
     confirmObject() {
       this.objectConfirmed = true;
+
+      if (this.skipFillLevel) this.quantityConfirmed = true;
+
       this.updatePanel();
       this.update();
     },
