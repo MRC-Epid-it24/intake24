@@ -12,10 +12,7 @@
         type="warning"
         :value="alert"
       >
-        <span class="alert-text">
-          I'm a dense alert placeholder with the <strong>border</strong> prop and a
-          <strong>type</strong> of warning
-        </span>
+        <span class="alert-text"> Alert text placeholder </span>
       </v-alert>
     </transition>
     <v-col v-if="bottomNavTab !== 1" class="content mt-0 pa-0" cols="12" lg="9">

@@ -26,6 +26,7 @@ export default new Vuetify({
       check: 'fas fa-check',
       next: 'fa-angle-right',
       plus: 'fa-plus',
+      expandImage: 'fa-arrows-alt',
     },
   },
   theme: {

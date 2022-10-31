@@ -120,6 +120,7 @@ const common: LocaleMessageObject = {
     print: 'Print',
     remove: 'Remove',
     restore: 'Restore',
+    reset: 'Reset',
     save: 'Save',
     submit: 'Submit',
     sync: 'Synchronize',

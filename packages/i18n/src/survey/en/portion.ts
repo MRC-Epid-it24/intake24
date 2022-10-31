@@ -124,6 +124,7 @@ const portion: LocaleMessageObject = {
     label: 'Please select the item you had or the closest match to {food}.',
     quantity: 'Please choose how many of {food} you had.',
     confirm: 'I had that many',
+    expand: 'Expand Image',
   },
   'milk-in-a-hot-drink': {
     text: 'How much {food} did you have in your tea or coffee?',
