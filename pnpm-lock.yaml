@@ -211,7 +211,7 @@ importers:
       awilix: ^8.0.0
       axios: ^1.1.3
       body-parser: ^1.20.1
-      bullmq: ^2.4.0
+      bullmq: ^3.0.0
       connect-redis: ^6.1.3
       cookie-parser: ^1.4.6
       cors: ^2.8.5
@@ -276,7 +276,7 @@ importers:
       awilix: 8.0.0
       axios: 1.1.3
       body-parser: 1.20.1
-      bullmq: 2.4.0
+      bullmq: 3.0.0
       connect-redis: 6.1.3
       cookie-parser: 1.4.6
       cors: 2.8.5
@@ -4654,8 +4654,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bullmq/2.4.0:
-    resolution: {integrity: sha512-wchNwRagCfRjEqxpALD2P8Pjz110/lFnXjs/vBLWsHP5aYqyicl3EKDkrzEythZC+IEdyeaZ5wtmcSHWOAr7Sg==}
+  /bullmq/3.0.0:
+    resolution: {integrity: sha512-amw+YZhEo1B47iMpaLbtKwlzZjQi5NYjLCYl8n9qkQpkDDVAVJ9d++zdOgyXX6kG7i/pMP9tr2vyj3J6IcjbTA==}
     dependencies:
       cron-parser: 4.6.0
       glob: 8.0.3
