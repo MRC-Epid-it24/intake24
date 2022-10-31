@@ -9,6 +9,7 @@ export const customComponentTypes = [
   'date-picker-prompt',
   'time-picker-prompt',
   'checkbox-list-prompt',
+  'no-more-information-prompt',
   'radio-list-prompt',
   'textarea-prompt',
   'yes-no-prompt',
@@ -24,7 +25,6 @@ export const standardComponentTypes = [
   'food-search-prompt',
   'final-prompt',
   'submit-prompt',
-  'no-more-information-prompt',
   'review-confirm-prompt',
   'redirect-prompt',
 ] as const;

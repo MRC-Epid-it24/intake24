@@ -205,11 +205,6 @@ export default class DynamicRecall {
                 prompt: mealPrompt,
                 section: 'postFoods',
               };
-            } else if (recallState.selection.mode === 'manual') {
-              console.log(
-                recallState.selection.mode,
-                'Break - No Meal or Food or PostFood prompts for this meal'
-              );
             }
           }
           break;
@@ -223,8 +218,6 @@ export default class DynamicRecall {
               prompt: foodPrompt,
               section: 'foods',
             };
-          } else if (recallState.selection.mode === 'manual') {
-            console.log(recallState.selection.mode, 'Break - No Food prompts for this food');
           }
           break;
         }

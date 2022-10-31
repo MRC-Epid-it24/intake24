@@ -12,7 +12,6 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
 import ReviewConfirmPrompt from '@intake24/survey/components/prompts/standard/ReviewConfirmPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
 

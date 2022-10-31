@@ -36,6 +36,7 @@ export interface CheckboxListPromptProps extends ValidatedPromptProps {
 
 export type InfoPromptProps = BasePromptProps;
 export type YesNoPromptProps = BasePromptProps;
+export type NoMoreInformationPromptProps = BasePromptProps;
 
 export const baseCustomPromptProps: BasePromptProps = {
   name: { en: 'Enter name' },
@@ -47,6 +48,13 @@ export const baseCustomPromptProps: BasePromptProps = {
 export const infoPromptProps: InfoPromptProps = copy({
   ...baseCustomPromptProps,
   name: { en: 'Info / confirmation' },
+});
+
+export const noMoreInformationPromptProps: BasePromptProps = copy({
+  ...baseCustomPromptProps,
+  name: { en: 'No More Information Needed' },
+  text: { en: 'No More Information Needed' },
+  description: { en: 'No More Information Needed' },
 });
 
 export const yesNoPromptProps: YesNoPromptProps = copy({
@@ -108,6 +116,13 @@ export const customPromptQuestions: PromptQuestion[] = [
     id: 'date-picker-prompt',
     name: 'Date picker prompt',
     props: copy(datePickerPromptProps),
+  },
+  {
+    component: 'no-more-information-prompt',
+    type: 'custom',
+    id: 'no-more-information-prompt',
+    name: 'No More Information prompt',
+    props: copy(noMoreInformationPromptProps),
   },
   {
     component: 'time-picker-prompt',

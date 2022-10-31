@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
@@ -61,6 +61,8 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions(useSurvey, ['setSelection']),
+
     isValid(): boolean {
       return true;
     },
@@ -74,6 +76,12 @@ export default defineComponent({
       if (this.answer === undefined) {
         console.warn('Did not expect answer to be undefined');
         return;
+      }
+
+      if (this.promptComponent === 'no-more-information-prompt') {
+        const newSelection = this.selection;
+        newSelection.mode = 'auto';
+        this.setSelection(newSelection);
       }
 
       if (this.selection !== undefined && this.selection.element !== null) {

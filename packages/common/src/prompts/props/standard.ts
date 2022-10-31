@@ -22,7 +22,6 @@ export interface FoodSearchPromptProps extends BasePromptProps {
 }
 
 export type AssociatedFoodsPromptProps = BasePromptProps;
-export type NoMoreInformationPromptProps = BasePromptProps;
 
 export const associatedFoodsPromptProps: AssociatedFoodsPromptProps = copy({
   ...basePromptProps,
@@ -76,11 +75,6 @@ export const submitPromptProps: BasePromptProps = copy({
   name: { en: 'Submit page' },
 });
 
-export const noMoreInformationPromptProps: BasePromptProps = copy({
-  ...basePromptProps,
-  name: { en: 'No More Information Needed' },
-});
-
 export const standardPromptQuestions: PromptQuestion[] = [
   {
     component: 'associated-foods-prompt',
@@ -123,13 +117,6 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'submit-prompt',
     name: 'Submit prompt',
     props: copy(submitPromptProps),
-  },
-  {
-    component: 'no-more-information-prompt',
-    type: 'standard',
-    id: 'no-more-information-prompt',
-    name: 'No More Information prompt',
-    props: copy(noMoreInformationPromptProps),
   },
   {
     component: 'final-prompt',

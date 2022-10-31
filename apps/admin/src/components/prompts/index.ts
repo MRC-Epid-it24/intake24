@@ -26,7 +26,7 @@ const allExceptSubmission: (SurveyQuestionSection | MealSection)[] = [
   'postFoods',
 ];
 
-const FoodsAndPostFoods: (SurveyQuestionSection | MealSection)[] = ['foods', 'postFoods'];
+const FoodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
 
 export type PromptSettingsRecord = {
   tabs: string[];
@@ -65,6 +65,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: [...allExceptSubmission],
   },
+  'no-more-information-prompt': {
+    tabs: [...baseTab],
+    sections: [...FoodsAndPostFoods],
+  },
   // Standard
   'associated-foods-prompt': {
     tabs: [...baseTab],
@@ -85,10 +89,6 @@ export const promptSettings: PromptSettings = {
   'meal-time-prompt': {
     tabs: [...baseTab],
     sections: ['preFoods'],
-  },
-  'no-more-information-prompt': {
-    tabs: [...baseTab],
-    sections: [...FoodsAndPostFoods],
   },
   'submit-prompt': {
     tabs: [...baseTab],

@@ -37,7 +37,7 @@ export default defineComponent({
 
   methods: {
     submit() {
-      this.$emit('continue');
+      this.$emit('answer', this.currentValue);
     },
   },
 });

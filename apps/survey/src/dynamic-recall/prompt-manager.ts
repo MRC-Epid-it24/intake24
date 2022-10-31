@@ -346,12 +346,21 @@ const checkFoodStandardConditions = (
 
     case 'no-more-information-prompt':
       if (surveyState.data.selection.mode === 'manual') {
-        recallLog().promptCheck(
-          'no-more-information-prompt',
-          true,
-          `Manual: no more prompts left for ${foodState.id}`
-        );
-        return true;
+        if (surveyState.data.selection.element?.type === 'meal') {
+          recallLog().promptCheck(
+            'no-more-information-prompt',
+            true,
+            `Manual: no more prompts left for ${foodState.id} in this Meal`
+          );
+          return false;
+        } else {
+          recallLog().promptCheck(
+            'no-more-information-prompt',
+            true,
+            `Manual: no more prompts left for ${foodState.id}`
+          );
+          return true;
+        }
       } else {
         recallLog().promptCheck(
           'no-more-information-prompt',
@@ -453,10 +462,11 @@ export default class PromptManager {
     if (section === 'postFoods') {
       const meal = findMeal(state.data.meals, mealId);
       if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) {
-        if (state.data.selection.mode === 'manual')
+        if (state.data.selection.mode === 'manual') {
           return this.scheme.questions.meals['postFoods'].find((question) => {
             return checkMealStandardConditions(state, mealState, question);
           });
+        }
         return undefined;
       }
     }

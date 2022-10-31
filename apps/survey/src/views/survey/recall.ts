@@ -239,6 +239,10 @@ export default defineComponent({
           this.saveCurrentState();
           this.showSurveyPrompt('submission', 'review-confirm-prompt');
           break;
+        case 'no-more-information':
+          this.saveCurrentState();
+          this.showMealPrompt(0, 'postFoods', 'no-more-information-prompt');
+          break;
       }
     },
 
