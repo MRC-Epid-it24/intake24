@@ -1,83 +1,70 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
     <v-card-actions :class="isNotDesktop && 'justify-center'">
-      <v-row>
-        <v-col>
-          <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
-            <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
-              <v-expansion-panel-header class="text-body-1" color="#f5f5f5" disable-icon-rotate>
-                {{ associatedFoodPrompts[index].promptText }}
-                <template #actions>
-                  <valid-invalid-icon
-                    :valid="
-                      prompt.confirmed === 'no' ||
-                      prompt.confirmed === 'existing' ||
-                      (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
-                    "
-                  ></valid-invalid-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content class="pl-0">
-                <v-container class="pl-0">
-                  <v-radio-group
-                    v-model="prompt.confirmed"
-                    row
-                    @change="onConfirmStateChanged(index)"
-                  >
-                    <v-radio
-                      :label="$t('prompts.associatedFoods.no')"
-                      off-icon="fa-regular fa-circle"
-                      on-icon="fa-regular fa-circle-check"
-                      value="no"
-                    ></v-radio>
-                    <v-radio
-                      :label="$t('prompts.associatedFoods.yes')"
-                      off-icon="fa-regular fa-circle"
-                      on-icon="fa-regular fa-circle-check"
-                      value="yes"
-                    ></v-radio>
-                    <v-radio
-                      v-if="
-                        prompt.confirmed === 'existing' || foodsAlreadyEntered[index] !== undefined
-                      "
-                      :label="$t('prompts.associatedFoods.alreadyEntered')"
-                      off-icon="fa-regular fa-circle"
-                      on-icon="fa-regular fa-circle-check"
-                      value="existing"
-                    ></v-radio>
-                  </v-radio-group>
-                </v-container>
-                <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
-                  <v-card-title>
-                    <span class="fa fa-check mr-2"></span>
-                    {{ prompt.selectedFood.description }}
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-btn @click="onSelectDifferentFood(prompt)">Select a different food </v-btn>
-                  </v-card-actions>
-                </v-card>
-                <v-expand-transition>
-                  <v-card
-                    v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined"
-                    flat
-                  >
-                    <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
-                      >Please select an item from this category:</v-card-title
-                    >
-                    <v-card-text class="pl-0">
-                      <food-browser
-                        :locale-id="localeId"
-                        :root-category="associatedFoodPrompts[index].categoryCode"
-                        @food-selected="(food) => onFoodSelected(food, index)"
-                      ></food-browser>
-                    </v-card-text>
-                  </v-card>
-                </v-expand-transition>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
+      <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
+        <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
+          <v-expansion-panel-header class="text-body-1" color="#f5f5f5" disable-icon-rotate>
+            {{ associatedFoodPrompts[index].promptText }}
+            <template #actions>
+              <valid-invalid-icon
+                :valid="
+                  prompt.confirmed === 'no' ||
+                  prompt.confirmed === 'existing' ||
+                  (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
+                "
+              ></valid-invalid-icon>
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content class="pl-0">
+            <v-container class="pl-0">
+              <v-radio-group v-model="prompt.confirmed" row @change="onConfirmStateChanged(index)">
+                <v-radio
+                  :label="$t('prompts.associatedFoods.no')"
+                  off-icon="fa-regular fa-circle"
+                  on-icon="fa-regular fa-circle-check"
+                  value="no"
+                ></v-radio>
+                <v-radio
+                  :label="$t('prompts.associatedFoods.yes')"
+                  off-icon="fa-regular fa-circle"
+                  on-icon="fa-regular fa-circle-check"
+                  value="yes"
+                ></v-radio>
+                <v-radio
+                  v-if="prompt.confirmed === 'existing' || foodsAlreadyEntered[index] !== undefined"
+                  :label="$t('prompts.associatedFoods.alreadyEntered')"
+                  off-icon="fa-regular fa-circle"
+                  on-icon="fa-regular fa-circle-check"
+                  value="existing"
+                ></v-radio>
+              </v-radio-group>
+            </v-container>
+            <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
+              <v-card-title>
+                <span class="fa fa-check mr-2"></span>
+                {{ prompt.selectedFood.description }}
+              </v-card-title>
+              <v-card-actions>
+                <v-btn @click="onSelectDifferentFood(prompt)">Select a different food </v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-expand-transition>
+              <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
+                <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
+                  >Please select an item from this category:</v-card-title
+                >
+                <v-card-text class="pl-0">
+                  <food-browser
+                    :locale-id="localeId"
+                    :root-category="associatedFoodPrompts[index].categoryCode"
+                    @food-selected="(food) => onFoodSelected(food, index)"
+                  ></food-browser>
+                </v-card-text>
+              </v-card>
+            </v-expand-transition>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-card-actions>
     <template #actions>
       <continue :disabled="!isValid" @click="onContinue"></continue>

@@ -1,49 +1,45 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-row>
-      <v-col>
-        <v-expansion-panels v-model="panel" flat>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${portionSize.method}.container`">
-                <template #food>
-                  <span class="font-weight-medium">{{ localeFoodName }}</span>
-                </template>
-              </i18n>
-              <template #actions>
-                <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                v-if="bowlImageMap"
-                :image-map-data="bowlImageMap"
-                :value="portionSize.bowlIndex"
-                @confirm="confirmBowl"
-                @input="selectBowl"
-              ></image-map-selector>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
-              <template #actions>
-                <valid-invalid-icon :valid="milkLevelValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                v-if="milkLevelImageMap"
-                :image-map-data="milkLevelImageMap"
-                :value="portionSize.milkLevelChoice"
-                @confirm="confirmMilk"
-                @input="selectMilk"
-              ></image-map-selector>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
+    <v-expansion-panels v-model="panel" flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n :path="`portion.${portionSize.method}.container`">
+            <template #food>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <image-map-selector
+            v-if="bowlImageMap"
+            :image-map-data="bowlImageMap"
+            :value="portionSize.bowlIndex"
+            @confirm="confirmBowl"
+            @input="selectBowl"
+          ></image-map-selector>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="milkLevelValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <image-map-selector
+            v-if="milkLevelImageMap"
+            :image-map-data="milkLevelImageMap"
+            :value="portionSize.milkLevelChoice"
+            @confirm="confirmMilk"
+            @input="selectMilk"
+          ></image-map-selector>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <template #actions>
       <continue :disabled="!isValid" @click="submit"></continue>
     </template>

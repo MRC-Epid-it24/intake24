@@ -1,113 +1,106 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-row>
-      <v-col>
-        <v-expansion-panels v-model="panel" flat>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${portionSize.method}.container`">
-                <template #food>
-                  <span class="font-weight-medium">{{ localeFoodName }}</span>
-                </template>
-              </i18n>
-              <template #actions>
-                <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                v-if="bowlImageMap"
-                :image-map-data="bowlImageMap"
-                :value="portionSize.bowlIndex"
-                @confirm="confirmBowl"
-                @input="selectBowl"
-              ></image-map-selector>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="servingImageSet">
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.as-served.serving.header`) }}
-              <template #actions>
-                <quantity-badge
-                  :amount="portionSize.serving?.weight"
-                  :valid="servingImageConfirmed"
-                ></quantity-badge>
-                <valid-invalid-icon
-                  class="ml-1"
-                  :valid="servingImageConfirmed"
-                ></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-row>
-                <v-col>
-                  {{ $t(`portion.as-served.serving.label`, { food: localeFoodName }) }}
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <as-served-selector
-                    :as-served-set-id="servingImageSet"
-                    :initial-object="portionSize.serving ?? undefined"
-                    @confirm="confirmServing"
-                    @update="updateServing"
-                  ></as-served-selector>
-                </v-col>
-              </v-row>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="!disabledLeftovers && leftoverImageSet">
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.as-served.leftovers.header`, { food: localeFoodName }) }}
-              <template #actions>
-                <quantity-badge
-                  :amount="portionSize.leftovers?.weight"
-                  :valid="leftoversImageConfirmed"
-                ></quantity-badge>
-                <valid-invalid-icon
-                  class="ml-1"
-                  :valid="leftoversPrompt === false || leftoversImageConfirmed"
-                ></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-row>
-                <v-col>
-                  <p>{{ $t(`portion.as-served.leftovers.question`, { food: localeFoodName }) }}</p>
-                  <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
-                    <v-btn class="px-4" :value="true">
-                      {{ $t('common.action.confirm.yes') }}
-                    </v-btn>
-                    <v-btn class="px-4" :value="false">
-                      {{ $t('common.action.confirm.no') }}
-                    </v-btn>
-                  </v-btn-toggle>
-                </v-col>
-              </v-row>
-              <template v-if="leftoversPrompt">
-                <v-row>
-                  <v-col>
-                    {{ $t(`portion.as-served.leftovers.label`, { food: localeFoodName }) }}
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <as-served-selector
-                      :as-served-set-id="leftoverImageSet"
-                      :initial-object="portionSize.leftovers ?? undefined"
-                      :max-weight="portionSize.serving?.weight"
-                      :type="'leftovers'"
-                      @confirm="confirmLeftovers"
-                      @update="updateLeftovers"
-                    ></as-served-selector>
-                  </v-col>
-                </v-row>
-              </template>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
+    <v-expansion-panels v-model="panel" flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n :path="`portion.${portionSize.method}.container`">
+            <template #food>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="bowlValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <image-map-selector
+            v-if="bowlImageMap"
+            :image-map-data="bowlImageMap"
+            :value="portionSize.bowlIndex"
+            @confirm="confirmBowl"
+            @input="selectBowl"
+          ></image-map-selector>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel v-if="servingImageSet">
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t(`portion.as-served.serving.header`) }}
+          <template #actions>
+            <quantity-badge
+              :amount="portionSize.serving?.weight"
+              :valid="servingImageConfirmed"
+            ></quantity-badge>
+            <valid-invalid-icon class="ml-1" :valid="servingImageConfirmed"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              {{ $t(`portion.as-served.serving.label`, { food: localeFoodName }) }}
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <as-served-selector
+                :as-served-set-id="servingImageSet"
+                :initial-object="portionSize.serving ?? undefined"
+                @confirm="confirmServing"
+                @update="updateServing"
+              ></as-served-selector>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel v-if="!disabledLeftovers && leftoverImageSet">
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t(`portion.as-served.leftovers.header`, { food: localeFoodName }) }}
+          <template #actions>
+            <quantity-badge
+              :amount="portionSize.leftovers?.weight"
+              :valid="leftoversImageConfirmed"
+            ></quantity-badge>
+            <valid-invalid-icon
+              class="ml-1"
+              :valid="leftoversPrompt === false || leftoversImageConfirmed"
+            ></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              <p>{{ $t(`portion.as-served.leftovers.question`, { food: localeFoodName }) }}</p>
+              <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
+                <v-btn class="px-4" :value="true">
+                  {{ $t('common.action.confirm.yes') }}
+                </v-btn>
+                <v-btn class="px-4" :value="false">
+                  {{ $t('common.action.confirm.no') }}
+                </v-btn>
+              </v-btn-toggle>
+            </v-col>
+          </v-row>
+          <template v-if="leftoversPrompt">
+            <v-row>
+              <v-col>
+                {{ $t(`portion.as-served.leftovers.label`, { food: localeFoodName }) }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <as-served-selector
+                  :as-served-set-id="leftoverImageSet"
+                  :initial-object="portionSize.leftovers ?? undefined"
+                  :max-weight="portionSize.serving?.weight"
+                  :type="'leftovers'"
+                  @confirm="confirmLeftovers"
+                  @update="updateLeftovers"
+                ></as-served-selector>
+              </v-col>
+            </v-row>
+          </template>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <v-row v-show="errors.length">
       <v-col>
         <v-alert v-if="hasErrors" color="error">

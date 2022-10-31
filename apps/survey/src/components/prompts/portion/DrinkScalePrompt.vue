@@ -1,122 +1,116 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-row>
-      <v-col>
-        <v-expansion-panels v-model="panel" flat>
-          <!-- Step 0: Select Volume to measure estimated portion-->
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${portionSize.method}.container`">
-                <template #food>
-                  <span class="font-weight-medium">{{ localeFoodName }}</span>
-                </template>
-              </i18n>
-              <template #actions>
-                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                v-if="imageMapData"
-                :image-map-data="imageMapData"
-                :value="portionSize.containerIndex"
-                @confirm="confirmObject"
-                @input="selectObject"
-              ></image-map-selector>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <!-- Step 1: Select Serving Weight ml-->
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
-              <template #actions>
-                <quantity-badge
-                  :amount="portionSize.servingWeight ?? undefined"
-                  unit="ml"
-                  :valid="quantityConfirmed"
-                ></quantity-badge>
-                <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-row>
-                <v-col>
-                  {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
-                </v-col>
-              </v-row>
-              <drink-scale-panel
-                v-if="scale"
-                v-model="portionSize.fillLevel"
-                :scale="scale"
-                @confirm="confirmQuantity"
-                @input="updateQuantity"
-              >
-              </drink-scale-panel>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel v-if="!disabledLeftovers">
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
-              <template #actions>
-                <quantity-badge
-                  :amount="portionSize.leftoversWeight ?? undefined"
-                  unit="ml"
-                  :valid="leftoversConfirmed"
-                ></quantity-badge>
-                <valid-invalid-icon
-                  :valid="leftoversPrompt === false || leftoversConfirmed"
-                ></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <!-- Step 2: Select LeftOvers-->
-            <v-expansion-panel-content>
-              <v-row>
-                <v-col>
-                  <p>
-                    {{
-                      $t(`portion.${portionSize.method}.leftovers.question`, {
-                        food: localeFoodName,
-                      })
-                    }}
-                  </p>
-                  <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
-                    <v-btn class="px-4" :value="true">
-                      {{ $t('common.action.confirm.yes') }}
-                    </v-btn>
-                    <v-btn class="px-4" :value="false">
-                      {{ $t('common.action.confirm.no') }}
-                    </v-btn>
-                  </v-btn-toggle>
-                </v-col>
-              </v-row>
-              <template v-if="leftoversPrompt">
-                <v-row>
-                  <v-col>
-                    {{
-                      $t(`portion.${portionSize.method}.leftovers.label`, { food: localeFoodName })
-                    }}
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <drink-scale-panel
-                      v-if="scale"
-                      v-model="portionSize.leftoversLevel"
-                      :max-fill-level="portionSize.fillLevel"
-                      :scale="scale"
-                      :type="'leftovers'"
-                      @confirm="confirmLeftovers"
-                      @input="updateLeftovers"
-                    >
-                    </drink-scale-panel>
-                  </v-col>
-                </v-row>
-              </template>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
+    <v-expansion-panels v-model="panel" flat>
+      <!-- Step 0: Select Volume to measure estimated portion-->
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n :path="`portion.${portionSize.method}.container`">
+            <template #food>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <image-map-selector
+            v-if="imageMapData"
+            :image-map-data="imageMapData"
+            :value="portionSize.containerIndex"
+            @confirm="confirmObject"
+            @input="selectObject"
+          ></image-map-selector>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <!-- Step 1: Select Serving Weight ml-->
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
+          <template #actions>
+            <quantity-badge
+              :amount="portionSize.servingWeight ?? undefined"
+              unit="ml"
+              :valid="quantityConfirmed"
+            ></quantity-badge>
+            <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
+            </v-col>
+          </v-row>
+          <drink-scale-panel
+            v-if="scale"
+            v-model="portionSize.fillLevel"
+            :scale="scale"
+            @confirm="confirmQuantity"
+            @input="updateQuantity"
+          >
+          </drink-scale-panel>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel v-if="!disabledLeftovers">
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
+          <template #actions>
+            <quantity-badge
+              :amount="portionSize.leftoversWeight ?? undefined"
+              unit="ml"
+              :valid="leftoversConfirmed"
+            ></quantity-badge>
+            <valid-invalid-icon
+              :valid="leftoversPrompt === false || leftoversConfirmed"
+            ></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <!-- Step 2: Select LeftOvers-->
+        <v-expansion-panel-content>
+          <v-row>
+            <v-col>
+              <p>
+                {{
+                  $t(`portion.${portionSize.method}.leftovers.question`, {
+                    food: localeFoodName,
+                  })
+                }}
+              </p>
+              <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
+                <v-btn class="px-4" :value="true">
+                  {{ $t('common.action.confirm.yes') }}
+                </v-btn>
+                <v-btn class="px-4" :value="false">
+                  {{ $t('common.action.confirm.no') }}
+                </v-btn>
+              </v-btn-toggle>
+            </v-col>
+          </v-row>
+          <template v-if="leftoversPrompt">
+            <v-row>
+              <v-col>
+                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: localeFoodName }) }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <drink-scale-panel
+                  v-if="scale"
+                  v-model="portionSize.leftoversLevel"
+                  :max-fill-level="portionSize.fillLevel"
+                  :scale="scale"
+                  :type="'leftovers'"
+                  @confirm="confirmLeftovers"
+                  @input="updateLeftovers"
+                >
+                </drink-scale-panel>
+              </v-col>
+            </v-row>
+          </template>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <template #actions>
       <continue :disabled="!isValid" @click="submit"></continue>
     </template>

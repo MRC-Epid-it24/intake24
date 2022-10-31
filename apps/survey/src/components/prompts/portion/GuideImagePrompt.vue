@@ -1,77 +1,71 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-row>
-      <v-col>
-        <v-expansion-panels v-model="panel" flat>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              <i18n :path="`portion.${portionSize.method}.label`">
-                <template #food>
-                  <span class="font-weight-medium">{{ localeFoodName }}</span>
-                </template>
-              </i18n>
-              <template #actions>
-                <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <image-map-selector
-                v-if="guideImageData"
-                :image-map-data="guideImageData.imageMap"
-                :value="portionSize.objectIndex"
-                @confirm="confirmObject"
-                @input="selectObject"
+    <v-expansion-panels v-model="panel" flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n :path="`portion.${portionSize.method}.label`">
+            <template #food>
+              <span class="font-weight-medium">{{ localeFoodName }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <image-map-selector
+            v-if="guideImageData"
+            :image-map-data="guideImageData.imageMap"
+            :value="portionSize.objectIndex"
+            @confirm="confirmObject"
+            @input="selectObject"
+          >
+            <template v-if="isNotDesktop" #label>
+              <v-btn
+                class="ma-2 font-weight-medium"
+                :color="'grey darken-3'"
+                :dark="true"
+                icon
+                link
+                :title="$t(`portion.${portionSize.method}.expand`)"
+                @click="expandImage"
               >
-                <template v-if="isNotDesktop" #label>
-                  <v-btn
-                    class="ma-2 font-weight-medium"
-                    :color="'grey darken-3'"
-                    :dark="true"
-                    icon
-                    link
-                    :title="$t(`portion.${portionSize.method}.expand`)"
-                    @click="expandImage"
-                  >
-                    <v-icon
-                      aria-hidden="false"
-                      aria-label="$t(`portion.${portionSize.method}.expand`)"
-                      >$expandImage</v-icon
-                    >
-                  </v-btn>
-                </template>
-              </image-map-selector>
-              <guide-image-selector-mobile
-                v-if="guideImageData"
-                :height="height"
-                :image-map-data="guideImageData?.imageMap"
-                :show="showMobileImageContext && isNotDesktop"
-                :value="portionSize.objectIndex ?? 0"
-                :width="width"
-                @confirm="confirmObject"
-                @input="selectObject"
-              >
-              </guide-image-selector-mobile>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header disable-icon-rotate>
-              {{ $t(`portion.${portionSize.method}.quantity`, { food: localeFoodName }) }}
-              <template #actions>
-                <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <quantity-card
-                v-model="portionSize.quantity"
-                :confirm.sync="quantityConfirmed"
-                @input="selectQuantity"
-                @update:confirm="confirmQuantity"
-              ></quantity-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-col>
-    </v-row>
+                <v-icon aria-hidden="false" aria-label="$t(`portion.${portionSize.method}.expand`)"
+                  >$expandImage</v-icon
+                >
+              </v-btn>
+            </template>
+          </image-map-selector>
+          <guide-image-selector-mobile
+            v-if="guideImageData"
+            :height="height"
+            :image-map-data="guideImageData?.imageMap"
+            :show="showMobileImageContext && isNotDesktop"
+            :value="portionSize.objectIndex ?? 0"
+            :width="width"
+            @confirm="confirmObject"
+            @input="selectObject"
+          >
+          </guide-image-selector-mobile>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header disable-icon-rotate>
+          {{ $t(`portion.${portionSize.method}.quantity`, { food: localeFoodName }) }}
+          <template #actions>
+            <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <quantity-card
+            v-model="portionSize.quantity"
+            :confirm.sync="quantityConfirmed"
+            @input="selectQuantity"
+            @update:confirm="confirmQuantity"
+          ></quantity-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <template #actions>
       <continue :disabled="!isValid" @click="submit"></continue>
     </template>
