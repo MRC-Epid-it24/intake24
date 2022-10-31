@@ -24,7 +24,7 @@
       </div>
     </v-col>
     <v-col cols="12" sm="auto">
-      <v-btn :block="isMobile" color="success" :disabled="disabled" @click="confirm">
+      <v-btn :block="isMobile" color="success" :disabled="isDisabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
     </v-col>
@@ -49,9 +49,6 @@ export default defineComponent({
   props: {
     disabled: {
       type: Boolean,
-      default() {
-        this.value === undefined;
-      },
     },
     imageMapData: {
       type: Object as PropType<ImageMapResponse>,
@@ -77,6 +74,10 @@ export default defineComponent({
   },
 
   computed: {
+    isDisabled() {
+      return this.disabled || this.value === undefined;
+    },
+
     hasLabelSlot(): boolean {
       return !!this.$slots.label;
     },
