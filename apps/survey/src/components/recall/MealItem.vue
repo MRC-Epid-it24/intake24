@@ -15,7 +15,7 @@
         @context-menu-action="onContextMenuAction"
       ></context-menu>
       <v-list-item-action>
-        <v-list-item-action-text v-if="mealTimeString.length > 0">
+        <v-list-item-action-text v-if="mealTimeString.length">
           {{ mealTimeString }}
         </v-list-item-action-text>
         <v-icon v-else x-small>far fa-question-circle </v-icon>

@@ -37,12 +37,7 @@
       </v-card-actions>
       <captcha ref="captchaRef" @expired="expired" @verified="verified"></captcha>
       <v-card-actions>
-        <v-btn
-          color="blue darken-3"
-          exact
-          text
-          :to="{ name: 'survey-login', params: { surveyId } }"
-        >
+        <v-btn color="info" exact text :to="{ name: 'survey-login', params: { surveyId } }">
           <v-icon left>fas fa-angles-left</v-icon>
           {{ $t('common.login.back') }}
         </v-btn>

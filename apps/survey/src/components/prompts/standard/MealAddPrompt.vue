@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <v-col v-show="hasMeals === 0" md="8" sm="12">
+    <v-col v-show="hasMeals" md="8" sm="12">
       <h4>{{ $t('prompts.mealAdding.noMeal') }}</h4>
     </v-col>
     <v-col md="8" sm="12">

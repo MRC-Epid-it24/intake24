@@ -25,18 +25,26 @@
               <v-list-item-title>{{ $t('common.home') }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <template v-if="loggedIn">
-            <v-list-item v-if="surveyId" link :to="{ name: 'survey-recall', params: { surveyId } }">
+          <template v-if="loggedIn && surveyId">
+            <v-list-item
+              v-if="!limitReached"
+              link
+              :to="{ name: 'survey-recall', params: { surveyId } }"
+            >
               <v-list-item-action>
-                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+                <v-icon>$survey</v-icon>
               </v-list-item-action>
               <v-list-item-content>
-                <v-list-item-title>{{ $t('recall.dynamic') }}</v-list-item-title>
+                <v-list-item-title>{{ $t('recall._') }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item v-if="surveyId" link :to="{ name: 'feedback-home', params: { surveyId } }">
+            <v-list-item
+              v-if="feedbackAvailable"
+              link
+              :to="{ name: 'feedback-home', params: { surveyId } }"
+            >
               <v-list-item-action>
-                <v-icon>fas fa-fw fa-comments</v-icon>
+                <v-icon>$feedback</v-icon>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('feedback._') }}</v-list-item-title>
@@ -46,17 +54,18 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-
     <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <v-img class="mx-2" contain max-height="30" max-width="150" :src="logo"></v-img>
+        <router-link :to="{ name: 'survey-home', params: { surveyId } }">
+          <v-img class="mx-2" contain max-height="30" max-width="150" :src="logo"></v-img>
+        </router-link>
         <v-spacer></v-spacer>
         <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
           <span v-if="!isNotDesktop" class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
-        <confirm-dialog :label="$t('common.logout._')" @confirm="logout">
+        <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
           <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
               <span v-if="!isNotDesktop" class="mr-2">{{ $t('common.logout._') }}</span>
@@ -88,7 +97,7 @@ import logo from '@intake24/survey/assets/logo.svg';
 import Loader from '@intake24/survey/components/Loader.vue';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
-import { useAuth } from './stores';
+import { useAuth, useSurvey } from './stores';
 
 export default defineComponent({
   name: 'App',
@@ -106,6 +115,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuth, ['loggedIn']),
+    ...mapState(useSurvey, ['feedbackAvailable', 'limitReached']),
 
     surveyId(): string {
       return this.$route.params.surveyId;
@@ -138,7 +148,7 @@ export default defineComponent({
 
     async logout() {
       await useAuth().logout(true);
-      const { surveyId } = this.$route.params;
+      const { surveyId } = this;
       await this.$router.push(
         surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }
       );

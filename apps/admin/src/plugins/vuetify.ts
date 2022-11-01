@@ -39,6 +39,7 @@ export default new Vuetify({
         primary: colors.blueGrey.darken4,
         secondary: colors.orange.darken3,
         accent: colors.deepOrange,
+        info: colors.blue.darken3,
       },
     },
   },

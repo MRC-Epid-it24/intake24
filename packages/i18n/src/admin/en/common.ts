@@ -88,6 +88,12 @@ const common: LocaleMessageObject = {
   updatedAt: 'Updated at',
   deletedAt: 'Deleted at',
 
+  app: {
+    _: 'App',
+    info: 'Application Information',
+    build: 'Build',
+  },
+
   clipboard: {
     _: 'Copy to clipboard',
     copied: 'Data copied to clipboard',

@@ -1,41 +1,53 @@
 <template>
-  <v-toolbar class="brdcrmbs" dense flat style="overflow-y: hidden; white-space: nowrap">
-    <v-breadcrumbs class="pl-1" :items="breadcrumbs">
+  <v-toolbar class="breadcrumbs" dense flat style="overflow-y: hidden; white-space: nowrap">
+    <v-breadcrumbs class="pl-1" :items="items">
       <template #divider>
         <v-icon>{{ forwardIcon }}</v-icon>
       </template>
     </v-breadcrumbs>
+    <v-spacer></v-spacer>
+    <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
+      <template #activator="{ attrs, on }">
+        <v-btn v-bind="attrs" class="mr-2" color="error" icon small v-on="on">
+          <v-icon>fas fa-times</v-icon>
+        </v-btn>
+      </template>
+      Reset survey state
+    </confirm-dialog>
+    <request-help :survey-id="$route.params.surveyId">
+      <template #activator="{ attrs, on }">
+        <v-btn
+          v-bind="attrs"
+          color="grey"
+          dark
+          icon
+          small
+          :title="$t('common.help.title')"
+          v-on="on"
+        >
+          <v-icon>fas fa-circle-info</v-icon>
+        </v-btn>
+
+        <!-- <v-btn v-bind="attrs" class="mr-2" color="error" icon v-on="on">
+          <v-icon>fas fa-times</v-icon>
+        </v-btn> -->
+      </template>
+    </request-help>
   </v-toolbar>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { BreadcrumbsElement } from '@intake24/survey/components/mixins/breadcrumbs';
-import { breadcrumbs } from '@intake24/survey/components/mixins';
+import breadcrumbsMixin from '../breadcrumbs-mixin';
 
 export default defineComponent({
   name: 'RecallBreadCrumbsMobile',
 
-  mixins: [breadcrumbs],
-
-  props: {
-    promptName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
-      required: true,
-    },
-  },
-
-  data: () => {
-    return {
-      forwardIcon: 'fas fa-caret-right',
-    };
-  },
+  mixins: [breadcrumbsMixin],
 
   computed: {
-    breadcrumbs(): BreadcrumbsElement[] {
+    items() {
       return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
     },
   },
@@ -44,8 +56,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 /* Style the food bar */
-
-.brdcrmbs {
+.breadcrumbs {
   position: sticky;
   top: 0px;
   left: 0;

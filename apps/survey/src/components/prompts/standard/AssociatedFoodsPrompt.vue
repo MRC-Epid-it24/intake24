@@ -145,7 +145,7 @@ export default defineComponent({
           if (this.usedExistingFoodIds.includes(food.id)) continue;
 
           // Don't allow linking foods that have linked foods of their own
-          if (food.linkedFoods.length > 0) continue;
+          if (food.linkedFoods.length) continue;
 
           if (
             prompt.foodCode !== undefined &&

@@ -63,7 +63,7 @@
       </v-card-text>
     </v-form>
     <v-card-actions>
-      <v-btn color="blue darken-3" exact text :to="{ name: 'login' }">
+      <v-btn color="info" exact text :to="{ name: 'login' }">
         <v-icon left>fas fa-angles-left</v-icon>
         {{ $t('common.login.back') }}
       </v-btn>

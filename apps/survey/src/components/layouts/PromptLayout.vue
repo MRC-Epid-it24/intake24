@@ -1,9 +1,9 @@
 <template>
   <v-card :flat="isMobile" :tile="isMobile">
     <slot name="header">
-      <v-sheet class="pa-4">
-        <h3 class="mb-4">{{ localeText }}</h3>
-        <div v-if="localeDescription" v-html="localeDescription"></div>
+      <v-sheet class="px-4 pt-4">
+        <h3>{{ localeText }}</h3>
+        <div v-if="localeDescription" class="mt-4" v-html="localeDescription"></div>
       </v-sheet>
     </slot>
     <v-card-text v-if="hasDefaultSlot">

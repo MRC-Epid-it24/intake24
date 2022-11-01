@@ -106,7 +106,7 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon :title="$t('common.action.add')" @click.stop="add(field)">
-                      <v-icon color="blue darken-3">$add</v-icon>
+                      <v-icon color="info">$add</v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
@@ -151,7 +151,7 @@
               <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="editConfirm">
+            <v-btn class="font-weight-bold" color="info" text @click.stop="editConfirm">
               <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>

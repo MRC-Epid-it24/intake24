@@ -1,18 +1,18 @@
 <template>
   <v-list flat subheader two-line>
-    <v-subheader>{{ 'App Info' }}</v-subheader>
+    <v-subheader>{{ $t('common.app.info') }}</v-subheader>
     <v-list-item>
       <v-list-item-avatar>
         <v-icon class="primary" dark>fa-code-branch</v-icon>
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title> {{ 'App: ' }} {{ app.name }} </v-list-item-title>
+        <v-list-item-title> {{ $t('common.app._') }}: {{ app.name }} </v-list-item-title>
         <v-list-item-subtitle>
-          {{ 'Build: ' }}{{ app.build.version }} | {{ app.build.revision }} |
+          {{ $t('common.app.build') }}: {{ app.build.version }} | {{ app.build.revision }} |
           {{ app.build.date }}
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-action>
+      <v-list-item-action v-if="clipboardAvailable">
         <v-btn icon :title="$t('common.clipboard._')" @click="copyInfoToClipboard">
           <v-icon color="primary">far fa-clipboard</v-icon>
         </v-btn>
@@ -35,8 +35,16 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    clipboardAvailable() {
+      return !!navigator.clipboard;
+    },
+  },
+
   methods: {
     async copyInfoToClipboard() {
+      if (!this.clipboardAvailable) return;
+
       const { version, revision, date } = this.app.build;
       await navigator.clipboard.writeText([version, revision, date].join(' | '));
       useMessages().info(this.$t('common.clipboard.copied').toString());

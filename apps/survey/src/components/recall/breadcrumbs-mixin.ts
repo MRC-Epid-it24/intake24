@@ -1,11 +1,14 @@
+import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
+import { RequestHelp } from '@intake24/survey/components';
 import { useSurvey } from '@intake24/survey/stores';
 import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { ConfirmDialog } from '@intake24/ui/components';
 
-import localeContent from './localeContent';
+import localeContent from '../mixins/localeContent';
 
 export type BreadcrumbsElement = {
   text: string;
@@ -13,7 +16,24 @@ export type BreadcrumbsElement = {
 };
 
 export default defineComponent({
+  name: 'BreadcrumbsMixin',
+
+  components: { RequestHelp, ConfirmDialog },
+
   mixins: [localeContent],
+
+  props: {
+    promptName: {
+      type: Object as PropType<RequiredLocaleTranslation>,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      forwardIcon: 'fas fa-caret-right',
+    };
+  },
 
   computed: {
     ...mapState(useSurvey, ['selection', 'meals']),

@@ -1,6 +1,9 @@
 <template>
   <v-row class="pt-0" justify="center" :no-gutters="isMobile">
-    <recall-bread-crumbs-mobile :prompt-name="activePrompt"></recall-bread-crumbs-mobile>
+    <recall-bread-crumbs-mobile
+      :prompt-name="activePrompt"
+      @restart="restart"
+    ></recall-bread-crumbs-mobile>
     <transition mode="out-in" type="fade">
       <v-alert
         border="left"
@@ -47,7 +50,7 @@
 
     <v-col v-show="showMealList && bottomNavTab === 2" class="stickybottom" cols="12">
       <meal-list-mobile-bottom
-        v-show="meals.length > 0"
+        v-show="meals.length"
         @meal-selected="onBottomListMealSelected"
         @recall-action="onRecallAction"
       >
@@ -102,7 +105,7 @@ import MealListMobileBottom from '@intake24/survey/components/recall/mobile/Meal
 import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
-import Recall from './recall';
+import recallMixin from './recall-mixin';
 
 export default defineComponent({
   name: 'RecallMobile',
@@ -117,7 +120,7 @@ export default defineComponent({
     MealMobileContextMenu,
   },
 
-  mixins: [Recall],
+  mixins: [recallMixin],
 
   setup() {
     const bottomNavMobile = ref<InstanceType<typeof BottomNavigationMobile>>();

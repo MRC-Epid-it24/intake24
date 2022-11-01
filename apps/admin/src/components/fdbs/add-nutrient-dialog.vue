@@ -86,7 +86,7 @@
         <v-spacer></v-spacer>
         <v-btn
           class="font-weight-bold"
-          color="blue darken-3"
+          color="info"
           :disabled="!selectedRecordId || isAlreadyIncluded"
           text
           @click.stop="confirm"

@@ -1,15 +1,7 @@
 <template>
-  <v-card class="sticky_toolbar_card" flat>
+  <v-card class="sticky_toolbar_card" flat tile>
     <v-toolbar bottom class="sticky_toolbar" flat>
-      <v-tabs
-        ref="tabsComponent"
-        center-active
-        height="56px"
-        icons-and-text
-        slider-size="4"
-        touch
-        :value="activeTab"
-      >
+      <v-tabs center-active height="56px" icons-and-text slider-size="4" touch :value="activeTab">
         <v-tabs-slider color="success"></v-tabs-slider>
         <v-tab v-for="(meal, index) in meals" :key="index" @click="onMealSelected(meal.id)">
           <v-badge
@@ -17,10 +9,10 @@
             color="grey"
             :content="meal.foods.length"
             left
-            :value="meal.foods.length > 0"
+            :value="!!meal.foods.length"
           >
             <p v-if="mealTimeString(meal.time).length === 0">
-              <v-icon x-small>far fa-question-circle </v-icon>
+              <v-icon x-small>far fa-question-circle</v-icon>
             </p>
             <p v-else>{{ mealTimeString(meal.time) }}</p>
             {{ getLocaleContent(meal.name) }}

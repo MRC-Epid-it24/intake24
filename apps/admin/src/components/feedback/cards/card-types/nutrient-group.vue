@@ -70,7 +70,7 @@
                       :title="$t('nutrient-types.add')"
                       @click.stop="add(nutrientType.id)"
                     >
-                      <v-icon color="blue darken-3">$add</v-icon>
+                      <v-icon color="info">$add</v-icon>
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>

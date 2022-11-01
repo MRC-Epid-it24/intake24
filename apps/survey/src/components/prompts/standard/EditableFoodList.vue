@@ -1,9 +1,8 @@
 <template>
   <div>
     <h3 class="mb-4">{{ drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food') }}</h3>
-
     <v-row>
-      <v-col cols="8">
+      <v-col cols="12" sm="8">
         <v-text-field
           ref="foodsDrinksInput"
           v-model="newFoodDescription"
@@ -12,23 +11,29 @@
           :placeholder="$t('prompts.editMeal.food')"
           @focusout="onEditFocusLost"
           @keypress.enter.stop="addFood"
-        ></v-text-field>
+        >
+          <template v-if="isMobile" #append>
+            <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
+              fa-arrow-turn-down
+            </v-icon>
+          </template>
+        </v-text-field>
       </v-col>
-      <v-col cols="4">
+      <v-col v-if="!isMobile" cols="4">
         <v-btn
           color="success"
-          :disabled="newFoodDescription.length === 0"
+          :disabled="!newFoodDescription.length"
           elevation="2"
           x-large
           @click="addFood"
         >
-          <v-icon class="mr-2" style="transform: scaleX(-1)">fa-arrow-turn-down</v-icon>
+          <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
           {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
         </v-btn>
       </v-col>
     </v-row>
 
-    <v-list v-if="editableList.length > 0">
+    <v-list v-if="editableList.length">
       <v-list-item
         v-for="(food, idx) in editableList"
         :key="idx"
@@ -77,7 +82,7 @@ const component = defineComponent({
 
   data() {
     return {
-      editableList: copy(this.foodList) as FoodState[],
+      editableList: copy(this.foodList),
       newFoodDescription: '',
       editIndex: null as number | null,
     };
@@ -156,3 +161,9 @@ export default component;
 
 export type EditableFoodListType = InstanceType<typeof component>;
 </script>
+
+<style lang="scss" scoped>
+.flip {
+  transform: scaleX(-1);
+}
+</style>

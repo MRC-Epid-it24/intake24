@@ -8,12 +8,12 @@
         large
         :to="{ name: 'feedback-home', params: { surveyId } }"
       >
-        <v-icon left>fas fa-comments</v-icon>
+        <v-icon left>$feedback</v-icon>
         {{ $t('recall.feedback') }}
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn v-if="canRestart" class="px-5" color="success" large @click="restart">
-        <v-icon left>fas fa-tachometer-alt</v-icon>
+        <v-icon left>$survey</v-icon>
         {{ $t('recall.restart') }}
       </v-btn>
     </template>

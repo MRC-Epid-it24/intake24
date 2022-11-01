@@ -53,14 +53,14 @@ import { defineComponent } from 'vue';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
 import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
 
-import Recall from './recall';
+import recallMixin from './recall-mixin';
 
 export default defineComponent({
-  name: 'DynamicRecallDesktop',
+  name: 'RecallDesktop',
 
   components: { MealList, RecallBreadCrumbs },
 
-  mixins: [Recall],
+  mixins: [recallMixin],
 });
 </script>
 

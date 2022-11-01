@@ -2,6 +2,12 @@ import type { LocaleMessageObject } from 'vue-i18n';
 
 const feedback: LocaleMessageObject = {
   _: 'Feedback',
+  info: 'Feedback information',
+  status: {
+    available: 'Your feedback is available',
+    lowRecalls: 'Feedback will be available once you submitted at least {minRecalls} recalls.',
+    notAvailable: 'Feedback is not available for this survey.',
+  },
   title: 'Feedback from your Intake24 recalls',
   missingFoods:
     'Please note, any foods you reported as missing will not be included in your dietary feedback',
@@ -53,12 +59,6 @@ const feedback: LocaleMessageObject = {
     },
     retry: 'Feedback output has been recently requested, please try again in {secs} s.',
     print: 'Print',
-  },
-
-  submissions: {
-    _: 'Recall day',
-    title: 'Recall days',
-    all: 'all',
   },
 
   topFoods: {

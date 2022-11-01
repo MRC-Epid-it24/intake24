@@ -2,9 +2,25 @@ import type { LocaleMessageObject } from 'vue-i18n';
 
 const recall: LocaleMessageObject = {
   _: 'Recall',
+  info: 'Recall information',
+  none: 'The is no recall in progress at the moment.',
+  inProgress: 'There is a recall in progress started at: {startedAt}.',
+  limitReached: {
+    daily: 'You have reached the daily limit of recalls.',
+    total: 'You have reached the total limit of recalls.',
+  },
+  past: 'Past recalls',
+  submissions: {
+    _: 'Recall day',
+    title: 'Recall days',
+    all: 'all',
+  },
+  start: 'Start',
+  continue: 'Continue',
   dynamic: 'Dynamic recall flow',
   dynamicTitle: 'Intake24 dietary recall',
   submit: 'Submit the recall',
+  submittedAt: 'Submitted at',
   restart: 'New recall',
   feedback: 'Go to feedback',
   menu: {

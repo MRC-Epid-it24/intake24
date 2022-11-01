@@ -37,10 +37,10 @@
           <v-expansion-panels flat focusable tile>
             <v-expansion-panel>
               <v-expansion-panel-header class="text-subtitle-1 font-weight-medium">
-                {{ $t('feedback.submissions.title') }}
+                {{ $t('recall.submissions.title') }}
                 ({{
                   submissions.length === selectedSubmissions.length
-                    ? $t('feedback.submissions.all')
+                    ? $t('recall.submissions.all')
                     : selectedSubmissions.length
                 }})
               </v-expansion-panel-header>
@@ -56,11 +56,11 @@
                     >
                       <template #default="{ active }">
                         <v-list-item-action class="my-0">
-                          <v-checkbox color="blue darken-3" :input-value="active"></v-checkbox>
+                          <v-checkbox color="info" :input-value="active"></v-checkbox>
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>
-                            {{ `${$t('feedback.submissions._')} ${idx + 1}` }} |
+                            {{ `${$t('recall.submissions._')} ${idx + 1}` }} |
                             {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
                           </v-list-item-title>
                         </v-list-item-content>
@@ -75,7 +75,7 @@
       </v-row>
       <v-row class="px-4" justify="center" no-gutters>
         <v-col cols="auto">
-          <v-alert class="mb-0" color="blue darken-3" icon="fas fa-circle-exclamation" text>
+          <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
             {{ $t('feedback.missingFoods') }}
           </v-alert>
         </v-col>
@@ -119,6 +119,12 @@ export default defineComponent({
   name: 'FeedbackHome',
 
   components: { FeedbackCardArea, FeedbackChartArea, FeedbackOutputs, FeedbackUserInfo },
+
+  beforeRouteEnter({ params }, from, next) {
+    !(useSurvey().feedbackEnabled || !useSurvey().feedbackAvailable)
+      ? next({ name: 'survey-home', params })
+      : next();
+  },
 
   props: {
     surveyId: {

@@ -30,7 +30,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="close">
+        <v-btn class="font-weight-bold" color="info" text @click.stop="close">
           {{ $t('common.action.close') }}
         </v-btn>
       </v-card-actions>

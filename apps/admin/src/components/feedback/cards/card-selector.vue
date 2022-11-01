@@ -107,7 +107,7 @@
               <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text type="submit">
+            <v-btn class="font-weight-bold" color="info" text type="submit">
               <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>

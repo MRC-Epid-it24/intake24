@@ -7,13 +7,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { useSurvey } from '@intake24/survey/stores';
+
 import RecallDesktop from './recall-desktop.vue';
 import RecallMobile from './recall-mobile.vue';
 
 export default defineComponent({
-  name: 'RecallContainer',
+  name: 'SurveyRecall',
 
   components: { RecallDesktop, RecallMobile },
+
+  beforeRouteEnter({ params }, from, next) {
+    useSurvey().limitReached ? next({ name: 'survey-home', params }) : next();
+  },
 
   computed: {
     layout(): string {

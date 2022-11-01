@@ -55,7 +55,7 @@
           </v-row>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="blue darken-3" text @click="save">
+            <v-btn class="font-weight-bold" color="info" text @click="save">
               <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
             </v-btn>
           </v-card-actions>

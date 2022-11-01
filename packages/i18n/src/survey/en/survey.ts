@@ -2,6 +2,13 @@ import type { LocaleMessageObject } from 'vue-i18n';
 
 const survey: LocaleMessageObject = {
   _: 'Survey',
+  info: 'Survey information',
+  states: {
+    _: 'Status',
+    notStarted: 'Not started',
+    active: 'Active',
+    suspended: 'Suspended',
+  },
   openAccess: {
     _: 'Open access studies',
     none: {

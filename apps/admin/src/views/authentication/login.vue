@@ -39,7 +39,7 @@
               ></v-text-field>
               <v-btn
                 class="mt-2 font-weight-bold"
-                color="blue darken-3"
+                color="info"
                 text
                 :to="{ name: 'password-request' }"
               >

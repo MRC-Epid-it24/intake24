@@ -54,7 +54,7 @@
             <template #label>
               <v-btn
                 class="ma-2 font-weight-medium"
-                :color="isWholeSelected ? 'blue darken-3' : ''"
+                :color="isWholeSelected ? 'info' : ''"
                 :dark="isWholeSelected"
                 link
                 rounded

@@ -27,7 +27,7 @@
                     <v-icon v-else x-small>far fa-question-circle </v-icon>
                   </v-list-item-action>
                 </template>
-                <v-list v-if="meal.foods.length > 0 && meal.time ? true : false">
+                <v-list v-if="meal.foods.length && meal.time ? true : false">
                   <v-list-item v-for="(food, i) in meal.foods" :key="i" link>
                     <v-list-item-title
                       class="text-wrap"

@@ -86,12 +86,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            class="font-weight-bold"
-            color="blue darken-3"
-            text
-            @click.stop="email.dialog = false"
-          >
+          <v-btn class="font-weight-bold" color="info" text @click.stop="email.dialog = false">
             {{ $t('common.action.close') }}
           </v-btn>
         </v-card-actions>
@@ -147,12 +142,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            class="font-weight-bold"
-            color="blue darken-3"
-            text
-            @click.stop="download.dialog = false"
-          >
+          <v-btn class="font-weight-bold" color="info" text @click.stop="download.dialog = false">
             {{ $t('common.action.close') }}
           </v-btn>
         </v-card-actions>

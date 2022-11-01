@@ -153,7 +153,7 @@ const checkFoodStandardConditions = (
 
     case 'food-search-prompt': {
       const freeEntryComplete =
-        surveyState.data.meals.length > 0 &&
+        surveyState.data.meals.length &&
         surveyState.data.meals.every((meal) => meal.flags.includes('free-entry-complete'));
 
       if (foodState.type === 'free-text' && freeEntryComplete) {
@@ -465,12 +465,11 @@ export default class PromptManager {
     state: SurveyState,
     section: SurveyQuestionSection
   ): PromptQuestion | undefined {
-    return this.scheme.questions[section].find((question) => {
-      return (
+    return this.scheme.questions[section].find(
+      (question) =>
         checkSurveyStandardConditions(state, question) &&
         checkSurveyCustomConditions(state, question)
-      );
-    });
+    );
   }
 
   nextMealSectionPrompt(
@@ -494,12 +493,11 @@ export default class PromptManager {
       }
     }
 
-    return this.scheme.questions.meals[section].find((question) => {
-      return (
+    return this.scheme.questions.meals[section].find(
+      (question) =>
         checkMealStandardConditions(state, mealState, question) &&
         checkMealCustomConditions(state, mealState, question)
-      );
-    });
+    );
   }
 
   nextFoodsPrompt(state: SurveyState, foodId: number): PromptQuestion | undefined {
@@ -507,12 +505,11 @@ export default class PromptManager {
     const foodState = getFoodByIndex(state.data.meals, foodIndex);
     const mealState = state.data.meals[foodIndex.mealIndex];
 
-    return this.scheme.questions.meals.foods.find((question) => {
-      return (
+    return this.scheme.questions.meals.foods.find(
+      (question) =>
         checkFoodStandardConditions(state, foodState, question) &&
         checkFoodCustomConditions(state, mealState, foodState, question)
-      );
-    });
+    );
   }
 
   /**

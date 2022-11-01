@@ -106,15 +106,21 @@ export const useSurvey = defineStore('survey', {
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
     currentState: (state) => state.data,
+    feedbackEnabled: (state) => !!state.parameters?.feedbackScheme,
+    feedbackAvailable: (state) => !!state.user?.showFeedback,
     hasStarted: (state) => !!state.data.startTime,
     hasFinished: (state) => !!state.data.endTime,
+    dailyLimitReached: (state) => !!state.user?.maximumDailySubmissionsReached,
+    totalLimitReached: (state) => !!state.user?.maximumTotalSubmissionsReached,
+    limitReached: (state) =>
+      !!(state.user?.maximumDailySubmissionsReached || state.user?.maximumTotalSubmissionsReached),
     localeId: (state) => state.parameters?.locale.code ?? 'en_GB',
     meals: (state) => state.data.meals,
-    hasMeals: (state) => state.data.meals.length,
+    hasMeals: (state) => !!state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
     selection: (state) => state.data.selection,
     freeEntryComplete: (state) =>
-      state.data.meals.length > 0 &&
+      !!state.data.meals.length &&
       state.data.meals.every((meal) => meal.flags.includes('free-entry-complete')),
     currentTempPromptAnswer: (state): PromptAnswer | undefined => {
       return state.data.tempPromptAnswer;

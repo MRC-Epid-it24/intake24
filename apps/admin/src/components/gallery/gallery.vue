@@ -41,7 +41,7 @@
               <v-btn
                 v-if="can({ action: 'edit' })"
                 class="font-weight-bold"
-                color="blue darken-3"
+                color="info"
                 text
                 :to="{ name: `${module}-edit`, params: { id: item.id } }"
               >

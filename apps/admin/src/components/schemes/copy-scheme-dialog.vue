@@ -42,7 +42,7 @@
           <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn class="font-weight-bold" color="blue darken-3" text @click.stop="confirm">
+        <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
           <v-icon left>$success</v-icon> {{ $t(`${resource}.copy._`) }}
         </v-btn>
       </v-card-actions>

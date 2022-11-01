@@ -28,8 +28,20 @@ const surveyRespondentController = ({
     const survey = await Survey.findOne({
       where: { slug },
       include: [
-        { association: 'surveyScheme' },
-        { association: 'feedbackScheme' },
+        { association: 'surveyScheme', attributes: ['id', 'type', 'meals', 'questions'] },
+        {
+          association: 'feedbackScheme',
+          attributes: [
+            'id',
+            'cards',
+            'demographicGroups',
+            'henryCoefficients',
+            'outputs',
+            'physicalDataFields',
+            'topFoods',
+            'type',
+          ],
+        },
         { association: 'locale', attributes: ['id', 'code'] },
       ],
     });

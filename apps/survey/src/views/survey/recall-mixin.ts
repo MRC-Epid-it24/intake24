@@ -112,8 +112,8 @@ export default defineComponent({
       );
     },
 
-    foods(): FoodState[] | [] {
-      return this.selectedMealOptional ? this.selectedMealOptional.foods : [];
+    foods(): FoodState[] {
+      return this.selectedMealOptional?.foods ?? [];
     },
 
     activePrompt(): RequiredLocaleTranslation | undefined {
@@ -312,7 +312,7 @@ export default defineComponent({
         if (nextPrompt === undefined) {
           // TODO: handle completion
           console.log('No prompts remaining');
-          if (this.hasMeals === 0) {
+          if (this.hasMeals) {
             this.onRecallAction('add-meal');
           } else {
             this.currentPrompt = null;

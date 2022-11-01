@@ -40,6 +40,12 @@ const common: LocaleMessageObject = {
     sent: 'Your help request has been sent.',
   },
 
+  app: {
+    _: 'App',
+    info: 'Application Information',
+    build: 'Build',
+  },
+
   clipboard: {
     _: 'Copy to clipboard',
     copied: 'Data copied to clipboard',
@@ -63,6 +69,7 @@ const common: LocaleMessageObject = {
     },
     ok: 'OK',
     reload: 'Reload',
+    start: 'Start',
     submit: 'Submit',
     yes: 'Yes',
     no: 'No',

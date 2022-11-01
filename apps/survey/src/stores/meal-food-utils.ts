@@ -85,16 +85,16 @@ export function associatedFoodPromptsComplete(food: FoodState) {
 }
 
 export function mealPortionSizeComplete(meal: MealState) {
-  return meal.foods.length > 0 && meal.foods.every(foodPortionSizeComplete);
+  return !!meal.foods.length && meal.foods.every(foodPortionSizeComplete);
 }
 
 export function mealAssociatedFoodsComplete(meal: MealState) {
-  return meal.foods.length > 0 && meal.foods.every(associatedFoodPromptsComplete);
+  return !!meal.foods.length && meal.foods.every(associatedFoodPromptsComplete);
 }
 
 export function surveyFreeEntryComplete(survey: SurveyState) {
   return (
-    survey.meals.length > 0 &&
+    !!survey.meals.length &&
     survey.meals.every((meal) => meal.flags.includes('free-entry-complete'))
   );
 }
@@ -105,10 +105,7 @@ export function getMealIndexForSelection(
 ): number | undefined {
   const { element } = selection;
 
-  if (element === null) {
-    if (meals.length > 0) return meals[0].id;
-    return undefined;
-  }
+  if (element === null) return meals.length ? meals[0].id : undefined;
 
   return element.type === 'meal'
     ? getMealIndexRequired(meals, element.mealId)

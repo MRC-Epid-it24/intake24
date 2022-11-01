@@ -8,22 +8,21 @@
     grow
   >
     <v-btn @click="onItemClick(0)">
-      <span>Add meal</span>
-      <v-icon>$plus</v-icon>
+      <span class="text-overline font-weight-medium">Add meal</span>
+      <v-icon class="pb-1">$plus</v-icon>
     </v-btn>
-
+    <v-divider vertical></v-divider>
     <v-btn @click="onItemClick(1)">
-      <span>Review</span>
-      <v-icon>$survey</v-icon>
+      <span class="text-overline font-weight-medium">Review</span>
+      <v-icon class="pb-1">$survey</v-icon>
     </v-btn>
-
     <v-btn
       :color="isContinueEnabled ? 'success' : 'primary'"
       :disabled="!isContinueEnabled"
       @click="onItemClick(2)"
     >
-      <span>{{ $t('common.action.continue') }}</span>
-      <v-icon>$next</v-icon>
+      <span class="text-overline font-weight-medium">{{ $t('common.action.continue') }}</span>
+      <v-icon class="pb-1">$next</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>
@@ -58,18 +57,6 @@ export default defineComponent({
   computed: {
     isContinueEnabled() {
       return this.continueButtonEnabled || this.tabIndex !== 2;
-    },
-  },
-
-  watch: {
-    currentTempPromptAnswer: {
-      immediate: true,
-      deep: true,
-      handler(value: PromptAnswer) {
-        this.promptAnswer = value;
-        // TODO: Switch it ON once all prompts will be changed to work with the tempPromptAnswer State.
-        // if (this.promptAnswer.response) this.continue = true;
-      },
     },
   },
 

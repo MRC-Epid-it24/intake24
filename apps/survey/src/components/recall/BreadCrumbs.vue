@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="mb-4">
-    <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" divider="/" :items="breadcrumbs">
+    <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" :items="items">
       <template #divider>
         <v-icon x-small>fa-chevron-right</v-icon>
       </template>
@@ -20,31 +20,17 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { BreadcrumbsElement } from '@intake24/survey/components/mixins/breadcrumbs';
-import { breadcrumbs } from '@intake24/survey/components/mixins';
-import RequestHelp from '@intake24/survey/components/request-help.vue';
-import { ConfirmDialog } from '@intake24/ui/components';
+import breadcrumbsMixin from './breadcrumbs-mixin';
 
 export default defineComponent({
   name: 'RecallBreadCrumbs',
 
-  components: { RequestHelp, ConfirmDialog },
-
-  mixins: [breadcrumbs],
-
-  props: {
-    promptName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
-      required: true,
-    },
-  },
+  mixins: [breadcrumbsMixin],
 
   computed: {
-    breadcrumbs(): BreadcrumbsElement[] {
+    items() {
       return this.getBreadCrumbs(this.promptName);
     },
   },

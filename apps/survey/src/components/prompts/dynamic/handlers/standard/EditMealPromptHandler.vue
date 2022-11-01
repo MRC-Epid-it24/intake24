@@ -76,7 +76,7 @@ export default defineComponent({
     },
 
     isValid(state: EditMealState | null) {
-      return state != null && state.foods.length > 0;
+      return state !== null && !!state.foods.length;
     },
 
     onDeleteMeal() {

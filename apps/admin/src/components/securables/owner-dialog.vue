@@ -52,7 +52,7 @@
           <v-spacer></v-spacer>
           <v-btn
             class="font-weight-bold"
-            color="blue darken-3"
+            color="info"
             :disabled="form.errors.any()"
             text
             type="submit"

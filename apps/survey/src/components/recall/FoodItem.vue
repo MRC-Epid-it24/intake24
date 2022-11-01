@@ -1,5 +1,5 @@
 <template>
-  <v-list v-if="foods.length > 0" :class="{ 'pa-0': linked }">
+  <v-list v-if="foods.length" :class="{ 'pa-0': linked }">
     <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
       <v-list-item
         class="ma-0 small"

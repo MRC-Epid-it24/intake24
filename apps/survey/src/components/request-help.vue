@@ -22,12 +22,14 @@
         Please make sure that you've watched the Intake24 walkthrough video: Watch the tutorial
       </v-card-subtitle>
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="requestHelp">
-        <v-card-text class="px-6">
-          <p>
+        <v-card-text>
+          <p class="mx-2">
             If you would like someone from our team to help, please enter your name and the phone
             number that we can use to reach you.
           </p>
-          <p>One of our support staff will call you on that number as soon as they can.</p>
+          <p class="mx-2">
+            One of our support staff will call you on that number as soon as they can.
+          </p>
           <v-container>
             <v-row>
               <v-col cols="12">
@@ -38,7 +40,7 @@
                   :label="$t('common.name')"
                   name="name"
                   outlined
-                  prepend-icon="fas fa-user"
+                  prepend-inner-icon="fas fa-user"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -49,7 +51,7 @@
                   :label="$t('common.phone')"
                   name="phone"
                   outlined
-                  prepend-icon="fas fa-phone"
+                  prepend-inner-icon="fas fa-phone"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -69,7 +71,7 @@
           <v-spacer></v-spacer>
           <v-btn
             class="font-weight-bold"
-            color="blue darken-3"
+            color="info"
             :disabled="errors.any()"
             large
             text
