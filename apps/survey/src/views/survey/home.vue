@@ -4,7 +4,7 @@
       <v-col cols="12" lg="9">
         <v-card :flat="isMobile" :tile="isMobile">
           <!-- Survey info -->
-          <v-list subheader two-line>
+          <v-list class="list-no-wrap" subheader two-line>
             <v-subheader>{{ $t('survey.info') }}</v-subheader>
             <v-list-item>
               <v-list-item-content>
@@ -25,7 +25,7 @@
           </v-list>
           <v-divider></v-divider>
           <!-- Recall info -->
-          <v-list subheader>
+          <v-list class="list-no-wrap" subheader>
             <v-subheader>{{ $t('recall.info') }}</v-subheader>
             <template v-if="limitReached">
               <v-list-item>
@@ -207,3 +207,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.list-no-wrap {
+  .v-list-item__title {
+    white-space: initial !important;
+  }
+}
+</style>
