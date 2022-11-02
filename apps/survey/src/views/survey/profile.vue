@@ -51,6 +51,25 @@
           </v-list>
           <v-divider></v-divider>
           <app-info></app-info>
+          <v-card-text class="mt-6 d-flex justify-center">
+            <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
+              <template #activator="{ attrs, on }">
+                <v-btn
+                  v-bind="attrs"
+                  :block="isNotDesktop"
+                  class="px-10"
+                  color="secondary"
+                  outlined
+                  x-large
+                  v-on="on"
+                >
+                  <span class="mr-2">{{ $t('common.logout._') }}</span>
+                  <v-icon right>$logout</v-icon>
+                </v-btn>
+              </template>
+              {{ $t('common.logout.text') }}
+            </confirm-dialog>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -61,13 +80,13 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import { useUser } from '@intake24/survey/stores';
-import { AppInfo, setsLanguage } from '@intake24/ui';
+import { useAuth, useUser } from '@intake24/survey/stores';
+import { AppInfo, ConfirmDialog, setsLanguage } from '@intake24/ui';
 
 export default defineComponent({
   name: 'SurveyUserProfile',
 
-  components: { AppInfo },
+  components: { AppInfo, ConfirmDialog },
 
   mixins: [setsLanguage],
 
@@ -85,6 +104,14 @@ export default defineComponent({
   methods: {
     async updateLanguage(languageId: string) {
       await this.setLanguage('survey', languageId);
+    },
+
+    async logout() {
+      await useAuth().logout(true);
+      const { surveyId } = this;
+      await this.$router.push(
+        surveyId ? { name: 'survey-login', params: { surveyId } } : { name: 'home' }
+      );
     },
   },
 });

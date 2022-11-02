@@ -57,15 +57,25 @@
     <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <router-link :to="{ name: 'survey-home', params: { surveyId } }">
+        <router-link v-if="surveyId" :to="{ name: 'survey-home', params: { surveyId } }">
           <v-img class="mx-2" contain max-height="30" max-width="150" :src="logo"></v-img>
         </router-link>
         <v-spacer></v-spacer>
-        <v-btn v-if="surveyId" text :to="{ name: 'survey-profile', params: { surveyId } }">
+        <v-btn
+          v-if="surveyId"
+          :icon="isNotDesktop"
+          :large="isNotDesktop"
+          :text="!isNotDesktop"
+          :to="{ name: 'survey-profile', params: { surveyId } }"
+        >
           <span v-if="!isNotDesktop" class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
-        <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">
+        <confirm-dialog
+          v-if="!isNotDesktop"
+          :label="$t('common.logout._').toString()"
+          @confirm="logout"
+        >
           <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
               <span v-if="!isNotDesktop" class="mr-2">{{ $t('common.logout._') }}</span>
