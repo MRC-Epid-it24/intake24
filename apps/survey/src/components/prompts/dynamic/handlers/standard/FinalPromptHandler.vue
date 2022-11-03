@@ -1,6 +1,7 @@
 <template>
   <component
     :is="promptComponent"
+    :key="promptId"
     v-bind="{ canShowFeedback, canRestart, promptProps, surveyId }"
     @restart="restart"
   ></component>
@@ -21,12 +22,16 @@ export default defineComponent({
   components: { FinalPrompt /*, RedirectPrompt */ },
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    promptId: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },

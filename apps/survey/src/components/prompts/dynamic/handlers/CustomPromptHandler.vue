@@ -1,6 +1,7 @@
 <template>
   <component
     :is="promptComponent"
+    :key="promptId"
     v-bind="{
       promptComponent,
       promptProps,
@@ -74,14 +75,10 @@ export default defineComponent({
     ...mapActions(useSurvey, ['setSelection']),
 
     update(data: { state?: CustomPromptAnswer; valid?: boolean }) {
-      const { state /*, valid*/ } = data;
+      const { state, valid } = data;
       this.state = state;
 
-      /*
-       * TODO: this is needed to activate mobile nav continue button
-       * at the moment, it is causing to re-render the handler/prompt due to having random key on handler
-       */
-      // if (valid !== undefined) this.$emit('valid', valid);
+      if (valid !== undefined) this.$emit('valid', valid);
     },
 
     commitAnswer() {

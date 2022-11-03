@@ -1,5 +1,10 @@
 <template>
-  <component :is="promptComponent" v-bind="{ promptProps }" @submit="submit"></component>
+  <component
+    :is="promptComponent"
+    :key="promptId"
+    v-bind="{ promptProps }"
+    @submit="submit"
+  ></component>
 </template>
 
 <script lang="ts">
@@ -17,12 +22,16 @@ export default defineComponent({
   components: { SubmitPrompt },
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    promptId: {
+      type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },

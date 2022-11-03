@@ -8,6 +8,7 @@
         :label="getLocaleContent(label)"
         outlined
         :rules="rules"
+        @input="update"
       ></v-textarea>
     </v-form>
     <template #actions>
@@ -81,7 +82,6 @@ export default defineComponent({
       const isValid = this.form?.validate();
       if (!isValid) return;
 
-      this.update();
       this.$emit('continue');
     },
   },

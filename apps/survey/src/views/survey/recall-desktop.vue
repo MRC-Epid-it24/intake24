@@ -20,13 +20,10 @@
         @restart="restart"
       ></recall-bread-crumbs>
       <transition mode="out-in" name="component-fade">
-        <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
-        even if the next prompt uses the same component type, probably should be something like an internal counter,
-        or maybe not  ¯\_(ツ)_/¯  -->
         <component
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
-          :key="Math.random()"
+          :key="currentPrompt.prompt.id"
           ref="promptHandle"
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
