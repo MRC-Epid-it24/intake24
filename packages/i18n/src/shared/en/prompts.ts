@@ -58,10 +58,9 @@ const prompts: LocaleMessageObject = {
   },
   editMeal: {
     text: 'Please list everything you had for your {meal}, one item per line.',
-    description:
-      'For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>' +
-      '  <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>' +
-      '  <p><strong>Do not</strong> enter how much you had, just the food names.',
+    description: `For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
+      <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
+      <p><strong>Do not</strong> enter how much you had, just the food names.`,
     food: 'Your food and drinks',
     drinks: 'Drinks',
     addFood: 'Add',
@@ -81,13 +80,13 @@ const prompts: LocaleMessageObject = {
   noMoreInfo: {
     meal: {
       text: 'No more information needed',
-      description: `<p>We have all the information that we need regarding your {item} at this time.</p>
+      description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
         <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
     },
     food: {
       text: 'No more information needed',
-      description: `<p>We have all the information that we need about your {item} at this time.</p>
+      description: `<p>We have all the information that we need about your <strong>{item}</strong> at this time.</p>
         <p>To continue with the survey, click "Continue" below and we will automatically select the next food or meal that we still need information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
     },
