@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text, meal }">
-    <v-form ref="form" @submit.prevent="submit">
+    <v-form @submit.prevent="submit">
       <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
       <v-checkbox
         v-for="option in localeOptions"
@@ -11,7 +11,7 @@
         hide-details="auto"
         :label="option.label"
         :value="option.value"
-        @change="clearErrors"
+        @change="update"
       ></v-checkbox>
       <v-row v-if="other" align="center" no-gutters>
         <v-checkbox v-model="otherEnabled" class="mt-0 pb-2" hide-details></v-checkbox>
@@ -20,7 +20,7 @@
           :disabled="!otherEnabled"
           :error="hasErrors && otherEnabled"
           :label="$t('prompts.checkbox.other')"
-          @input="clearErrors"
+          @input="update"
         ></v-text-field>
       </v-row>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
@@ -77,6 +77,9 @@ export default defineComponent({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    isValid(): boolean {
+      return !this.validation.required || !!this.currentValue.length;
+    },
   },
 
   watch: {
@@ -90,8 +93,14 @@ export default defineComponent({
       this.errors = [];
     },
 
+    update() {
+      this.clearErrors();
+
+      this.$emit('update', { state: [...this.currentValue], valid: this.isValid });
+    },
+
     submit() {
-      if (this.validation.required && !this.currentValue.length) {
+      if (!this.isValid) {
         this.errors = [
           this.getLocaleContent(this.validation.message, {
             path: 'prompts.checkbox.validation.required',
@@ -100,7 +109,7 @@ export default defineComponent({
         return;
       }
 
-      this.$emit('answer', [...this.currentValue]);
+      this.$emit('continue');
     },
   },
 });

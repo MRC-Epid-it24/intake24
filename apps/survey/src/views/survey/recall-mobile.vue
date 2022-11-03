@@ -18,12 +18,11 @@
         <span class="alert-text"> Alert text placeholder </span>
       </v-alert>
     </transition>
-    <v-col v-if="bottomNavTab !== 1" class="content mt-0 pa-0" cols="12" lg="9">
+    <v-col class="content mt-0 pa-0" cols="12" lg="9">
       <transition mode="out-in" name="component-fade">
         <!-- FIXME: Random key is a hacky way to force Vue to re-create the dynamic component on prompt switch
         even if the next prompt uses the same component type, probably should be something like an internal counter,
         or maybe not  ¯\_(ツ)_/¯  -->
-
         <component
           :is="handlerComponent"
           v-if="currentPrompt"
@@ -44,11 +43,7 @@
       </transition>
     </v-col>
 
-    <v-col v-if="bottomNavTab === 1" class="content" cols="12" lg="9">
-      <review :active-meal-index="mealIndex" :meals="meals" :survey-name="surveyName"></review>
-    </v-col>
-
-    <v-col v-show="showMealList && bottomNavTab === 2" class="stickybottom" cols="12">
+    <v-col v-show="showMealList" class="stickybottom" cols="12">
       <meal-list-mobile-bottom
         v-show="meals.length"
         @meal-selected="onBottomListMealSelected"
@@ -57,14 +52,12 @@
       </meal-list-mobile-bottom>
     </v-col>
 
-    <transition type="fade">
-      <bottom-navigation-mobile
-        v-if="showMealList"
-        ref="bottomNavMobile"
-        :continue-button-enabled="continueButtonEnabled"
-        @navigation-item-click="onBottomNavChange"
-      />
-    </transition>
+    <bottom-navigation-mobile
+      v-if="showMealList"
+      :can-continue="continueButtonEnabled"
+      :tab.sync="bottomNavTab"
+      @update:tab="onBottomNavChange"
+    ></bottom-navigation-mobile>
 
     <!-- Context menu for Meal or Food with actions options -->
     <food-mobile-context-menu
@@ -100,9 +93,7 @@ import FoodMobileContextMenu from '@intake24/survey/components/recall/FoodMobile
 import MealMobileContextMenu from '@intake24/survey/components/recall/MealMobileContextMenu.vue';
 import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
-import FoodListMobileBottom from '@intake24/survey/components/recall/mobile/FoodListMobileBottom.vue';
 import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
-import Review from '@intake24/survey/components/recall/mobile/review/Review.vue';
 import { useSurvey } from '@intake24/survey/stores';
 
 import recallMixin from './recall-mixin';
@@ -111,9 +102,7 @@ export default defineComponent({
   name: 'RecallMobile',
 
   components: {
-    Review,
     MealListMobileBottom,
-    FoodListMobileBottom,
     RecallBreadCrumbsMobile,
     BottomNavigationMobile,
     FoodMobileContextMenu,
@@ -123,10 +112,9 @@ export default defineComponent({
   mixins: [recallMixin],
 
   setup() {
-    const bottomNavMobile = ref<InstanceType<typeof BottomNavigationMobile>>();
     const promptHandle = ref<RecallPromptHandler>();
 
-    return { bottomNavMobile, promptHandle };
+    return { promptHandle };
   },
 
   data() {
@@ -158,25 +146,25 @@ export default defineComponent({
 
   methods: {
     // FIXME: Should use nested router for this
-    onBottomNavChange(tab: number) {
+    async onBottomNavChange(tab: number) {
       if (tab === 0) {
         this.onRecallAction('add-meal');
       } else if (tab === 1) {
         this.onRecallAction('review-confirm');
       } else if (tab === 2) {
-        this.onContinue();
+        await this.onContinue();
       }
     },
 
     onContextMenuMealAction(payload: { action: MealAction; mealId: number }) {
       this.onMealAction(payload);
 
-      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
+      this.bottomNavTab = 2;
     },
 
-    onBottomListMealSelected() {
-      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
-      this.nextPrompt();
+    async onBottomListMealSelected() {
+      this.bottomNavTab = 2;
+      await this.nextPrompt();
     },
 
     resetTrigger() {
@@ -204,10 +192,10 @@ export default defineComponent({
       if (showNextPrompt) this.contextMenuNextPrompt();
     },
 
-    contextMenuNextPrompt() {
-      if (this.bottomNavMobile) this.bottomNavMobile.tabIndex = 2;
+    async contextMenuNextPrompt() {
+      this.bottomNavTab = 2;
       this.clearSavedState();
-      this.nextPrompt();
+      await this.nextPrompt();
     },
   },
 });

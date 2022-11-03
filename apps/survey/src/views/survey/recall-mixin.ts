@@ -1,14 +1,9 @@
 import { mapActions, mapState } from 'pinia';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import type {
-  FoodState,
-  RecallPromptHandler,
-  RequiredLocaleTranslation,
-  Selection,
-} from '@intake24/common/types';
+import type { FoodState, RequiredLocaleTranslation, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
 import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
@@ -38,12 +33,6 @@ export default defineComponent({
     ...portionSizeHandlers,
   },
 
-  setup() {
-    const promptHandle = ref<RecallPromptHandler>();
-
-    return { promptHandle };
-  },
-
   data: () => {
     const survey = useSurvey();
 
@@ -51,17 +40,6 @@ export default defineComponent({
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
-      clickedPrompt: null as ComponentType | null,
-      mobileMealFoodContextMenu: {
-        show: false,
-        mealIndex: 0,
-        foodIndex: 0,
-        foodContext: false,
-      },
-      activeMeal: '',
-      activeFood: '',
-      activeItem: 'meal',
-      alert: false,
       savedState: null as SavedState | null,
       continueButtonEnabled: false,
       submitTrigger: false,
@@ -244,10 +222,6 @@ export default defineComponent({
           this.showMealPrompt(0, 'postFoods', 'no-more-information-prompt');
           break;
       }
-    },
-
-    onBottomNavClick(item: string) {
-      this.activeItem = item;
     },
 
     async onMealSelected(mealId: number) {

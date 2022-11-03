@@ -48,8 +48,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
+import type { RecallPromptHandler } from '@intake24/common/types';
 import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
 import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
 
@@ -61,6 +62,12 @@ export default defineComponent({
   components: { MealList, RecallBreadCrumbs },
 
   mixins: [recallMixin],
+
+  setup() {
+    const promptHandle = ref<RecallPromptHandler>();
+
+    return { promptHandle };
+  },
 });
 </script>
 

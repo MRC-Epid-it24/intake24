@@ -66,12 +66,23 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    isValid(): boolean {
+      return !this.validation.required || !!this.currentValue;
+    },
+  },
+
   methods: {
+    update() {
+      this.$emit('update', { state: this.currentValue, valid: this.isValid });
+    },
+
     submit() {
       const isValid = this.form?.validate();
       if (!isValid) return;
 
-      this.$emit('answer', this.currentValue);
+      this.update();
+      this.$emit('continue');
     },
   },
 });

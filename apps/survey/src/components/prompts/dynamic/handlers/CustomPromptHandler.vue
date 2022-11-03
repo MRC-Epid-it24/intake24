@@ -7,7 +7,8 @@
       meal: selectedMealOptional,
       food: encodedFoodOptional(),
     }"
-    @answer="onAnswer"
+    @continue="$emit('continue')"
+    @update="update"
   ></component>
 </template>
 
@@ -20,7 +21,6 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 import {
-  promptHandlerStateless,
   useFoodPromptUtils,
   useMealPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
@@ -30,8 +30,6 @@ export default defineComponent({
   name: 'CustomPromptHandler',
 
   components: { ...customPrompts },
-
-  mixins: [promptHandlerStateless],
 
   props: {
     promptComponent: {
@@ -64,7 +62,7 @@ export default defineComponent({
 
   data() {
     return {
-      answer: undefined as CustomPromptAnswer | undefined,
+      state: undefined as CustomPromptAnswer | undefined,
     };
   },
 
@@ -75,17 +73,19 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setSelection']),
 
-    isValid(): boolean {
-      return true;
-    },
+    update(data: { state?: CustomPromptAnswer; valid?: boolean }) {
+      const { state /*, valid*/ } = data;
+      this.state = state;
 
-    onAnswer(answer: CustomPromptAnswer) {
-      this.answer = answer;
-      this.$emit('continue');
+      /*
+       * TODO: this is needed to activate mobile nav continue button
+       * at the moment, it is causing to re-render the handler/prompt due to having random key on handler
+       */
+      // if (valid !== undefined) this.$emit('valid', valid);
     },
 
     commitAnswer() {
-      if (this.answer === undefined) {
+      if (this.state === undefined) {
         console.warn('Did not expect answer to be undefined');
         return;
       }
@@ -109,7 +109,7 @@ export default defineComponent({
               this.survey.setFoodCustomPromptAnswer({
                 foodId: this.selectedFood().id,
                 promptId: this.promptId,
-                answer: this.answer,
+                answer: this.state,
               });
             break;
           }
@@ -123,7 +123,7 @@ export default defineComponent({
               this.survey.setMealCustomPromptAnswer({
                 mealId: this.selectedMeal.id,
                 promptId: this.promptId,
-                answer: this.answer,
+                answer: this.state,
               });
 
             break;
@@ -131,7 +131,7 @@ export default defineComponent({
         }
       } else if (this.promptComponent === 'info-prompt')
         this.survey.setSurveyFlag(`${this.promptId}-acknowledged`);
-      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.answer });
+      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.state });
     },
   },
 });

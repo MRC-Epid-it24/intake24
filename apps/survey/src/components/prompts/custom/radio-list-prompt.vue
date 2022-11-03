@@ -8,7 +8,7 @@
         hide-details="auto"
         :label="getLocaleContent(label)"
         :row="orientation === 'row'"
-        @change="clearErrors"
+        @change="update"
       >
         <v-radio
           v-for="option in localeOptions"
@@ -23,7 +23,7 @@
             :error="hasErrors"
             :label="$t('prompts.radio.other')"
             @focus="selected = 'other'"
-            @input="clearErrors"
+            @input="update"
           ></v-text-field>
         </v-row>
       </v-radio-group>
@@ -80,6 +80,9 @@ export default defineComponent({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    isValid(): boolean {
+      return !this.validation.required || !!this.currentValue;
+    },
   },
 
   methods: {
@@ -87,8 +90,14 @@ export default defineComponent({
       this.errors = [];
     },
 
+    update() {
+      this.clearErrors();
+
+      this.$emit('update', { state: this.currentValue, valid: this.isValid });
+    },
+
     submit() {
-      if (this.validation.required && !this.currentValue) {
+      if (!this.isValid) {
         this.errors = [
           this.getLocaleContent(this.validation.message, {
             path: 'prompts.radio.validation.required',
@@ -97,7 +106,7 @@ export default defineComponent({
         return;
       }
 
-      this.$emit('answer', this.currentValue);
+      this.$emit('continue');
     },
   },
 });

@@ -6,7 +6,7 @@
         :format="format"
         full-width
         :landscape="!isMobile"
-        @input="clearErrors"
+        @input="update"
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
@@ -54,11 +54,20 @@ export default defineComponent({
     hasErrors(): boolean {
       return !!this.errors.length;
     },
+    isValid(): boolean {
+      return !this.validation.required || !!this.currentValue;
+    },
   },
 
   methods: {
     clearErrors() {
       this.errors = [];
+    },
+
+    update() {
+      this.clearErrors();
+
+      this.$emit('update', { state: this.currentValue, valid: this.isValid });
     },
 
     submit() {
@@ -71,7 +80,7 @@ export default defineComponent({
         return;
       }
 
-      this.$emit('answer', this.currentValue);
+      this.$emit('continue');
     },
   },
 });

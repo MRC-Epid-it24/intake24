@@ -35,9 +35,20 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    isValid(): boolean {
+      return true;
+    },
+  },
+
   methods: {
+    update() {
+      this.$emit('update', { state: this.currentValue, valid: this.isValid });
+    },
+
     submit() {
-      this.$emit('answer', this.currentValue);
+      this.update();
+      this.$emit('continue');
     },
   },
 });

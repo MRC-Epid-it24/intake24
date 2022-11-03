@@ -7,7 +7,7 @@
         color="error"
         :title="$t('common.action.no')"
         x-large
-        @click.stop="answer(false)"
+        @click.stop="update(false)"
       >
         <v-icon left>far fa-times-circle</v-icon>
         {{ $t('common.action.no') }}
@@ -19,7 +19,7 @@
         color="success"
         :title="$t('common.action.yes')"
         x-large
-        @click.stop="answer(true)"
+        @click.stop="update(true)"
       >
         <v-icon left>far fa-circle-check</v-icon>
         {{ $t('common.action.yes') }}
@@ -57,8 +57,9 @@ export default defineComponent({
   },
 
   methods: {
-    answer(value: boolean) {
-      this.$emit('answer', value);
+    update(value: boolean) {
+      this.$emit('update', { state: value, valid: true });
+      this.$emit('continue');
     },
   },
 });
