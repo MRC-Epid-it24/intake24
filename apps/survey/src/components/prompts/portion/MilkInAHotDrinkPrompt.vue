@@ -1,6 +1,6 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-expansion-panels v-model="panel" flat>
+    <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.label`) }}

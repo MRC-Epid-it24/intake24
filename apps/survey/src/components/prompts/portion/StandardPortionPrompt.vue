@@ -1,6 +1,11 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-expansion-panels v-if="Object.keys(standardUnitRefs).length" v-model="panel" flat>
+    <v-expansion-panels
+      v-if="Object.keys(standardUnitRefs).length"
+      v-model="panel"
+      flat
+      :tile="isMobile"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.label`">

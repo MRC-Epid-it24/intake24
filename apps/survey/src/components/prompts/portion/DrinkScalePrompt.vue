@@ -1,6 +1,6 @@
 <template>
   <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
-    <v-expansion-panels v-model="panel" flat>
+    <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <!-- Step 0: Select Volume to measure estimated portion-->
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>

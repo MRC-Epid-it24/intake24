@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mb-3" elevation="0">
+    <v-card class="mb-3" flat :tile="isMobile">
       <v-container class="px-0">
         <v-row align="center" no-gutters>
           <v-col>
