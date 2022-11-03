@@ -1,7 +1,7 @@
 <template>
   <div>
     <prompt-content
-      v-bind="{ name, text, description, textRequired: true }"
+      v-bind="{ name, text, description }"
       @update:description="update('description', $event)"
       @update:name="update('name', $event)"
       @update:text="update('text', $event)"

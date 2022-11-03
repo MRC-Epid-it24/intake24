@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { MealState } from '@intake24/common/types';
+import type { EncodedFood, MealState } from '@intake24/common/types';
 import PromptLayout from '@intake24/survey/components/layouts/PromptLayout.vue';
 import { localeContent } from '@intake24/survey/components/mixins';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
@@ -16,6 +16,41 @@ export default defineComponent({
   props: {
     meal: {
       type: Object as PropType<MealState>,
+    },
+    food: {
+      type: Object as PropType<EncodedFood>,
+    },
+  },
+
+  computed: {
+    isFood() {
+      return !!this.food;
+    },
+
+    isMeal() {
+      return !!this.meal;
+    },
+
+    localeFoodName() {
+      if (!this.food) return undefined;
+
+      if (this.food.type !== 'encoded-food')
+        throw new Error('This selected food must be an encoded food');
+
+      return this.getLocaleContent(this.food.data.englishName);
+    },
+
+    localeMealName() {
+      if (!this.meal) return undefined;
+
+      return this.getLocaleContent(this.meal.name);
+    },
+
+    foodOrMealName() {
+      const name = this.localeMealName ?? this.localeFoodName;
+      if (!name) throw new Error('No food or meal selected!');
+
+      return name;
     },
   },
 });

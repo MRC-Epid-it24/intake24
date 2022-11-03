@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal }">
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText, meal }">
     <template #actions>
       <continue @click.native="submit"></continue>
     </template>
@@ -33,6 +33,22 @@ export default defineComponent({
       ...merge(noMoreInformationPromptProps, this.promptProps),
       currentValue: null,
     };
+  },
+
+  computed: {
+    localeText(): string {
+      return this.getLocaleContent(this.text, {
+        path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.text`,
+        params: { item: this.foodOrMealName },
+      });
+    },
+
+    localeDescription(): string {
+      return this.getLocaleContent(this.description, {
+        path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.description`,
+        params: { item: this.foodOrMealName },
+      });
+    },
   },
 
   methods: {

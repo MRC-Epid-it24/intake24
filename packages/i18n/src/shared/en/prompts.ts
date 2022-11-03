@@ -78,6 +78,20 @@ const prompts: LocaleMessageObject = {
     no: 'No, I did not',
     alreadyEntered: 'Yes, already entered',
   },
+  noMoreInfo: {
+    meal: {
+      text: 'No more information needed',
+      description: `<p>We have all the information that we need regarding your {item} at this time.</p>
+        <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
+        <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
+    },
+    food: {
+      text: 'No more information needed',
+      description: `<p>We have all the information that we need about your {item} at this time.</p>
+        <p>To continue with the survey, click "Continue" below and we will automatically select the next food or meal that we still need information about.</p>
+        <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
+    },
+  },
 };
 
 export default prompts;

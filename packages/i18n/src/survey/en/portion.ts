@@ -167,9 +167,6 @@ const portion: LocaleMessageObject = {
   weight: {
     text: 'Please enter how much you had.',
   },
-  associatedFoods: {
-    searchLabel: 'Please select the {food} you had.',
-  },
 };
 
 export default portion;

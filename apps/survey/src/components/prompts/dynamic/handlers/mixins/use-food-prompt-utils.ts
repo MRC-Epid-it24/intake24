@@ -40,6 +40,12 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return food;
   };
 
+  const encodedFoodOptional = (): EncodedFood | undefined => {
+    if (selectedFoodOptional.value === undefined) return undefined;
+
+    return encodedSelectedFood();
+  };
+
   const freeTextSelectedFood = (): FreeTextFood => {
     const food = selectedFood();
 
@@ -72,6 +78,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     selectedFood,
     selectedParentFood,
     encodedSelectedFood,
+    encodedFoodOptional,
     freeTextSelectedFood,
     foodName,
     selectedPortionSize,

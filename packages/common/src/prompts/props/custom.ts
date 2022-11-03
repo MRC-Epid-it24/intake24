@@ -53,8 +53,6 @@ export const infoPromptProps: InfoPromptProps = copy({
 export const noMoreInformationPromptProps: BasePromptProps = copy({
   ...baseCustomPromptProps,
   name: { en: 'No More Information Needed' },
-  text: { en: 'No More Information Needed' },
-  description: { en: 'No More Information Needed' },
 });
 
 export const yesNoPromptProps: YesNoPromptProps = copy({

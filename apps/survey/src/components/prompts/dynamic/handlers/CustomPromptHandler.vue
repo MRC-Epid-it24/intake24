@@ -1,7 +1,12 @@
 <template>
   <component
     :is="promptComponent"
-    v-bind="{ promptComponent, promptProps, meal: selectedMealOptional }"
+    v-bind="{
+      promptComponent,
+      promptProps,
+      meal: selectedMealOptional,
+      food: encodedFoodOptional(),
+    }"
     @answer="onAnswer"
   ></component>
 </template>
@@ -15,9 +20,9 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import customPrompts from '@intake24/survey/components/prompts/custom';
 import {
-  mealPromptUtils,
   promptHandlerStateless,
   useFoodPromptUtils,
+  useMealPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -26,7 +31,7 @@ export default defineComponent({
 
   components: { ...customPrompts },
 
-  mixins: [mealPromptUtils, promptHandlerStateless],
+  mixins: [promptHandlerStateless],
 
   props: {
     promptComponent: {
@@ -44,10 +49,17 @@ export default defineComponent({
   },
 
   setup() {
-    const { selectedFood } = useFoodPromptUtils();
+    const { encodedFoodOptional, selectedFood } = useFoodPromptUtils();
+    const { selectedMeal, selectedMealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
-    return { selectedFood, survey };
+    return {
+      encodedFoodOptional,
+      selectedFood,
+      selectedMeal,
+      selectedMealOptional,
+      survey,
+    };
   },
 
   data() {
