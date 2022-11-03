@@ -161,6 +161,9 @@ const portion: LocaleMessageObject = {
     },
     confirm: 'I had that many',
   },
+  unknown: {
+    text: 'There is currently no portion size estimation method for {food}.',
+  },
   weight: {
     text: 'Please enter how much you had.',
   },

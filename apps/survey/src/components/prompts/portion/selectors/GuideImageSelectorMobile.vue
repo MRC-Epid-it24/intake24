@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts">
-import type { PinchScrollZoomEmitData } from '@coddicat/vue-pinch-scroll-zoom';
 import type { PropType } from 'vue';
 import PinchScrollZoom from '@coddicat/vue-pinch-scroll-zoom';
 import chunk from 'lodash/chunk';

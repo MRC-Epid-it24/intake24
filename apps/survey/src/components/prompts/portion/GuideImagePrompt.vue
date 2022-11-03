@@ -23,16 +23,19 @@
             <template v-if="isNotDesktop" #label>
               <v-btn
                 class="ma-2 font-weight-medium"
-                :color="'grey darken-3'"
-                :dark="true"
+                color="grey darken-3"
+                dark
                 icon
                 link
                 :title="$t(`portion.${portionSize.method}.expand`)"
                 @click="expandImage"
               >
-                <v-icon aria-hidden="false" aria-label="$t(`portion.${portionSize.method}.expand`)"
-                  >$expandImage</v-icon
+                <v-icon
+                  aria-hidden="false"
+                  :aria-label="$t(`portion.${portionSize.method}.expand`)"
                 >
+                  $expandImage
+                </v-icon>
               </v-btn>
             </template>
           </image-map-selector>

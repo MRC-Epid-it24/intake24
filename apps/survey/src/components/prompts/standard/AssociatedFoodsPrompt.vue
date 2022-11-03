@@ -182,7 +182,7 @@ export default defineComponent({
     },
 
     description(): string {
-      return this.getLocaleContent(this.promptProps.text, {
+      return this.getLocaleContent(this.promptProps.description, {
         path: 'prompts.associatedFoods.description',
       });
     },

@@ -1,7 +1,7 @@
 <template>
   <portion-layout v-bind="{ method, description, text, foodName }">
     <v-sheet>
-      <v-item-group v-model="option">
+      <v-item-group v-if="availableMethods.length" v-model="option">
         <v-container>
           <v-row>
             <v-col
@@ -29,6 +29,9 @@
           </v-row>
         </v-container>
       </v-item-group>
+      <v-alert v-else border="left" outlined type="warning">
+        {{ $t('portion.unknown.text', { food: localeFoodName }) }}
+      </v-alert>
     </v-sheet>
   </portion-layout>
 </template>
@@ -73,6 +76,10 @@ export default defineComponent({
   },
 
   computed: {
+    localeFoodName(): string {
+      return this.getLocaleContent(this.foodName);
+    },
+
     isValid(): boolean {
       return this.option !== null;
     },
@@ -95,7 +102,7 @@ export default defineComponent({
 
   methods: {
     update() {
-      const state: PortionSizeOptionState = { option: this.option };
+      const state: PortionSizeOptionState = { option: this.option ?? null };
 
       this.$emit('update', { state, valid: this.isValid });
     },
