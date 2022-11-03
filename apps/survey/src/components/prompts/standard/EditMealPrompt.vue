@@ -1,19 +1,13 @@
 <template>
   <prompt-layout :description="promptDescription" :text="promptText">
-    <v-col class="px-0 px-sm-3" md="8" sm="10" xs="12">
-      <editable-food-list
-        ref="editableFoodList"
-        :drinks="false"
-        :food-list="foodList"
-        @food-added="onUpdate"
-        @food-deleted="onUpdate"
-      />
+    <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
+      <editable-food-list v-model="foods" @input="update"></editable-food-list>
     </v-col>
     <template v-if="!isMobile" #actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName })"
-        @confirm="onDeleteMeal"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }).toString()"
+        @confirm="removeMeal"
       >
         <template #activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
@@ -27,9 +21,9 @@
         class="px-5"
         :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
         color="success"
-        :disabled="!continueEnabled"
+        :disabled="!isValid"
         large
-        @click="onContinue"
+        @click="submit"
       >
         {{ $t('common.action.continue') }}
       </v-btn>
@@ -39,17 +33,21 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, RequiredLocaleTranslation } from '@intake24/common/types';
-import type { EditableFoodListType } from '@intake24/survey/components/prompts/standard/EditableFoodList.vue';
+import { copy } from '@intake24/common/util';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import { ConfirmDialog } from '@intake24/ui';
 
 import EditableFoodList from './EditableFoodList.vue';
 
-const component = defineComponent({
+export type EditMealPromptState = {
+  foods: FoodState[];
+};
+
+export default defineComponent({
   name: 'EditMealPrompt',
 
   components: { EditableFoodList, ConfirmDialog },
@@ -57,6 +55,14 @@ const component = defineComponent({
   mixins: [BasePrompt],
 
   props: {
+    initialState: {
+      type: Object as PropType<EditMealPromptState>,
+      required: true,
+    },
+    mealName: {
+      type: Object as PropType<RequiredLocaleTranslation>,
+      required: true,
+    },
     promptComponent: {
       type: String,
       required: true,
@@ -65,24 +71,12 @@ const component = defineComponent({
       type: Object as PropType<BasePromptProps>,
       required: true,
     },
-    foodList: {
-      type: Array as PropType<FoodState[]>,
-      required: true,
-    },
-    mealName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
-      required: true,
-    },
-    continueEnabled: {
-      type: Boolean,
-      required: true,
-    },
   },
 
-  setup() {
-    const editableFoodList = ref<EditableFoodListType>();
-
-    return { editableFoodList };
+  data() {
+    return {
+      ...copy(this.initialState),
+    };
   },
 
   computed: {
@@ -102,29 +96,27 @@ const component = defineComponent({
         path: 'prompts.editMeal.description',
       });
     },
+
+    isValid() {
+      return !!this.foods.length;
+    },
   },
 
   methods: {
-    onUpdate() {
-      const editedFoods = this.editableFoodList?.editableList;
-      this.$emit('update', { foods: editedFoods });
+    removeMeal() {
+      this.$emit('remove-meal');
     },
 
-    onContinue() {
+    update() {
+      const { foods } = this;
+      const state: EditMealPromptState = { foods };
+
+      this.$emit('update', { state, valid: this.isValid });
+    },
+
+    submit() {
       this.$emit('continue');
-    },
-
-    onDeleteMeal() {
-      this.$emit('delete-meal');
-    },
-
-    foodsDrinks(): FoodState[] {
-      return this.editableFoodList!.editableList;
     },
   },
 });
-
-export default component;
-
-export type EditMealPromptType = InstanceType<typeof component>;
 </script>

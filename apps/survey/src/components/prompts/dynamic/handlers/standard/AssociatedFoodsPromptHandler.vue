@@ -33,11 +33,7 @@ import {
 import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
-import {
-  findMeal,
-  getFoodIndex,
-  getFoodIndexRequired,
-} from '@intake24/survey/stores/meal-food-utils';
+import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
 const initialPromptState = (): AssociatedFoodPromptState => ({
   confirmed: undefined,

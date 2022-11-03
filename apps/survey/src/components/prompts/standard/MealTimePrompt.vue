@@ -13,13 +13,13 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" :class="{ 'ml-0': isMobile }" large @click="removeMeal">
+      <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
         {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
         class="px-5"
-        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
+        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
         large
         @click="submit"

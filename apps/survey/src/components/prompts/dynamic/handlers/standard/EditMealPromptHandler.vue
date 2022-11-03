@@ -1,91 +1,80 @@
 <template>
   <edit-meal-prompt
     ref="prompt"
-    v-bind="{ continueEnabled, promptComponent, promptProps }"
-    :food-list="initialState?.foods || []"
-    :meal-name="selectedMeal.name"
+    v-bind="{ initialState: state, mealName: selectedMeal.name, promptComponent, promptProps }"
     @continue="$emit('continue')"
-    @delete-meal="onDeleteMeal"
-    @update="onUpdate"
+    @remove-meal="removeMeal"
+    @update="update"
   >
   </edit-meal-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions, mapState } from 'pinia';
+import { mapActions } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
-import type { EditMealPromptType } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { EditMealPromptState } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import {
-  createPromptHandlerStoreMixin,
-  mealPromptUtils,
+  useMealPromptUtils,
+  usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { useSurvey } from '@intake24/survey/stores';
-
-interface EditMealState {
-  foods: FoodState[];
-}
 
 export default defineComponent({
   name: 'EditMealPromptHandler',
 
   components: { EditMealPrompt },
 
-  mixins: [mealPromptUtils, createPromptHandlerStoreMixin<EditMealState>('edit-meal-prompt')],
-
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
-      type: String,
+      type: String as PropType<StandardComponentType>,
       required: true,
     },
     promptId: {
       type: String,
       required: true,
     },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
   },
 
-  setup() {
-    const prompt = ref<EditMealPromptType>();
+  setup(props, context) {
+    const prompt = ref<InstanceType<typeof EditMealPrompt>>();
+    const { selectedMeal } = useMealPromptUtils();
 
-    return { prompt };
-  },
+    const getInitialState = (): EditMealPromptState => ({ foods: selectedMeal.value.foods });
 
-  computed: {
-    ...mapState(useSurvey, ['defaultSchemeMeals']),
+    const { state, update, clearStoredState } = usePromptHandlerStore(
+      props.promptId,
+      props.promptComponent,
+      getInitialState,
+      context
+    );
+
+    return {
+      prompt,
+      selectedMeal,
+      state,
+      update,
+      clearStoredState,
+    };
   },
 
   methods: {
     ...mapActions(useSurvey, ['setFoods', 'setMealFlag', 'deleteMeal']),
 
-    getInitialState(): EditMealState {
-      return {
-        foods: this.selectedMeal.foods,
-      };
-    },
-
-    getFoodOrMealId(): number {
-      return this.selectedMeal.id;
-    },
-
-    isValid(state: EditMealState | null) {
-      return state !== null && !!state.foods.length;
-    },
-
-    onDeleteMeal() {
+    removeMeal() {
       this.deleteMeal(this.selectedMeal.id);
-      this.clearStoredState();
+      this.$emit('complete');
     },
 
     async commitAnswer() {
-      const foods = this.prompt!.foodsDrinks();
+      const { foods } = this.state;
       const mealId = this.selectedMeal.id;
 
       this.setFoods({ mealId, foods });

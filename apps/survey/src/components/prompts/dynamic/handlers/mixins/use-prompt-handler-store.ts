@@ -21,7 +21,16 @@ export const usePromptHandlerStore = <T extends object>(
     return foodId;
   };
 
-  const storedState: T = promptStore.prompts[getFoodId()]?.[promptId];
+  const getMealId = () => {
+    const mealId = survey.selectedMealOptional?.id;
+    if (mealId === undefined) throw new Error('This prompt requires a meal to be selected');
+
+    return mealId;
+  };
+
+  const getFoodOrMealId = promptType === 'edit-meal-prompt' ? getMealId : getFoodId;
+
+  const storedState: T = promptStore.prompts[getFoodOrMealId()]?.[promptId];
 
   const state = ref(
     storedState ? merge<T>(getInitialState(), storedState) : getInitialState()
@@ -30,7 +39,7 @@ export const usePromptHandlerStore = <T extends object>(
   const update = (data: { state?: T; valid?: boolean }) => {
     const { state: newState, valid } = data;
     if (newState) {
-      promptStore.updateState(getFoodId(), promptId, newState);
+      promptStore.updateState(getFoodOrMealId(), promptId, newState);
       state.value = newState;
     }
 
@@ -38,13 +47,15 @@ export const usePromptHandlerStore = <T extends object>(
   };
 
   const clearStoredState = () => {
-    promptStore.clearState(getFoodId(), promptId);
+    promptStore.clearState(getFoodOrMealId(), promptId);
   };
 
   return {
     state,
     promptStore,
     getFoodId,
+    getMealId,
+    getFoodOrMealId,
     update,
     clearStoredState,
   };

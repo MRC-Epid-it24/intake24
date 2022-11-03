@@ -33,16 +33,11 @@
       </v-col>
     </v-row>
 
-    <v-list v-if="editableList.length">
-      <v-list-item
-        v-for="(food, idx) in editableList"
-        :key="idx"
-        :ripple="false"
-        @click="edit(idx)"
-      >
+    <v-list v-if="foods.length">
+      <v-list-item v-for="(food, idx) in foods" :key="idx" :ripple="false" @click="edit(idx)">
         <v-text-field
           v-if="editIndex === idx"
-          :value="foodDisplayName(editableList[idx])"
+          :value="foodDisplayName(foods[idx])"
           @focusout="onEditFocusLost"
           @keypress.enter.stop="addFood"
         ></v-text-field>
@@ -66,23 +61,23 @@ import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useSurvey } from '@intake24/survey/stores';
 
-const component = defineComponent({
+export default defineComponent({
   name: 'EditableFoodList',
 
   props: {
-    foodList: {
+    value: {
       type: Array as PropType<FoodState[]>,
       required: true,
     },
     drinks: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
 
   data() {
     return {
-      editableList: copy(this.foodList),
+      foods: copy(this.value),
       newFoodDescription: '',
       editIndex: null as number | null,
     };
@@ -93,7 +88,7 @@ const component = defineComponent({
 
     addFood() {
       if (this.editIndex != null) {
-        const editEntry = this.editableList[this.editIndex];
+        const editEntry = this.foods[this.editIndex];
 
         if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
       }
@@ -108,24 +103,24 @@ const component = defineComponent({
         linkedFoods: [],
       };
 
-      this.editableList.push(newFood);
+      this.foods.push(newFood);
 
-      this.edit(this.editableList.length - 1);
+      this.edit(this.foods.length - 1);
       this.newFoodDescription = '';
-      this.$emit('food-added', copy(this.editableList));
+      this.$emit('input', this.foods);
     },
 
     deleteFood() {
       if (this.editIndex != null) {
-        this.editableList.splice(this.editIndex, 1);
+        this.foods.splice(this.editIndex, 1);
         this.editIndex = null;
-        this.$emit('food-deleted', this.editableList.length, copy(this.editableList));
+        this.$emit('input', this.foods.length, copy(this.foods));
       }
     },
 
     onEditFocusLost() {
       if (this.editIndex != null) {
-        const editEntry = this.editableList[this.editIndex];
+        const editEntry = this.foods[this.editIndex];
         if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0)
           this.deleteFood();
       }
@@ -156,10 +151,6 @@ const component = defineComponent({
     },
   },
 });
-
-export default component;
-
-export type EditableFoodListType = InstanceType<typeof component>;
 </script>
 
 <style lang="scss" scoped>

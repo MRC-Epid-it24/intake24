@@ -4,7 +4,7 @@
     :initial-time="getInitialState()"
     :meal-name="selectedMeal.name"
     @continue="$emit('continue')"
-    @remove-meal="onRemoveMeal"
+    @remove-meal="removeMeal"
     @update="onUpdate"
   ></meal-time-prompt>
 </template>
@@ -55,7 +55,7 @@ export default defineComponent({
       return this.selectedMeal.time ?? this.selectedMeal.defaultTime;
     },
 
-    onRemoveMeal() {
+    removeMeal() {
       this.deleteMeal(this.selectedMeal.id);
       this.$emit('complete');
     },
