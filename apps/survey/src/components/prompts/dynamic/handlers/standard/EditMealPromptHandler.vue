@@ -78,8 +78,8 @@ export default defineComponent({
       const mealId = this.selectedMeal.id;
 
       this.setFoods({ mealId, foods });
-      this.setMealFlag({ mealId, flag: 'free-entry-complete' });
       this.clearStoredState();
+      this.setMealFlag({ mealId, flag: 'free-entry-complete' });
     },
   },
 });
