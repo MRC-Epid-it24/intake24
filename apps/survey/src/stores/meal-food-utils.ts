@@ -7,7 +7,15 @@ import type {
 } from '@intake24/common/types';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 
-export const fromMealTime = (time: MealTime): string => `${time.hours}:${time.minutes}`;
+export const fromMealTime = (time: MealTime, doubleDigit?: boolean): string => {
+  const { hours, minutes } = time;
+
+  if (!doubleDigit) return `${hours}:${minutes}`;
+
+  return [hours, minutes]
+    .map((item) => (item.toString().length === 1 ? `0${item}` : item.toString()))
+    .join(':');
+};
 
 export const toMealTime = (time: string): MealTime => {
   const [hours, minutes] = time.split(':');

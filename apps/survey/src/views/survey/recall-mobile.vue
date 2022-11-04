@@ -28,12 +28,10 @@
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          :submit-trigger="submitTrigger"
           @complete="onComplete"
           @continue="onContinue"
           @food-context-menu="onFoodContextMenu"
           @meal-context-menu="onMealContextMenu"
-          @resetPromptTrigger="resetTrigger"
           @restart="restart"
           @valid="updateValidation"
         ></component>
@@ -162,11 +160,6 @@ export default defineComponent({
     async onBottomListMealSelected() {
       this.bottomNavTab = 2;
       await this.nextPrompt();
-    },
-
-    resetTrigger() {
-      this.submitTrigger = false;
-      console.log('Trigger Reseted', this.submitTrigger);
     },
 
     onMealContextMenu(ev: { mealId: number }) {

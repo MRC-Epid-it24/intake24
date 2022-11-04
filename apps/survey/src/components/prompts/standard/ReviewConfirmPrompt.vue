@@ -63,9 +63,9 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
-import { timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
 import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import { useSurvey } from '@intake24/survey/stores';
+import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import BasePrompt from '../BasePrompt';
 
@@ -129,9 +129,7 @@ export default defineComponent({
       return dispalyName;
     },
     stringTime(time: MealTime): string {
-      return timeDoubleDigitsConvertor(time.hours)
-        .concat(':')
-        .concat(timeDoubleDigitsConvertor(time.minutes));
+      return fromMealTime(time, true);
     },
   },
 });

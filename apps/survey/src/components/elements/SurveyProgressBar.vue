@@ -27,7 +27,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
-import { timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
+import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 export default defineComponent({
   name: 'SurveyProgressBar',
@@ -42,9 +42,7 @@ export default defineComponent({
   setup() {
     const stringTime = (time: MealTime | undefined): string => {
       if (time === undefined) return '?';
-      return timeDoubleDigitsConvertor(time.hours)
-        .concat(':')
-        .concat(timeDoubleDigitsConvertor(time.minutes));
+      return fromMealTime(time, true);
     };
     const color = (item: MealState) => {
       if (!item.time) return 'primary';

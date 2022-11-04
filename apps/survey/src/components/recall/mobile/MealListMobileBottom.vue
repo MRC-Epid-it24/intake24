@@ -28,12 +28,11 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { MealTime } from '@intake24/common/types';
-import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
+import { localeContent } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
-import { getMealIndex } from '@intake24/survey/stores/meal-food-utils';
+import { fromMealTime, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
 export default defineComponent({
-  // components: { MealItemMobile },
   name: 'MealListMobileBottom',
 
   mixins: [localeContent],
@@ -67,11 +66,7 @@ export default defineComponent({
     },
 
     mealTimeString(time: MealTime | undefined): string {
-      return time
-        ? timeDoubleDigitsConvertor(time.hours)
-            .concat(':')
-            .concat(timeDoubleDigitsConvertor(time.minutes))
-        : '';
+      return time ? fromMealTime(time, true) : '';
     },
   },
 });

@@ -42,7 +42,6 @@ export default defineComponent({
       recallController: null as DynamicRecall | null,
       savedState: null as SavedState | null,
       continueButtonEnabled: false,
-      submitTrigger: false,
       hideCurrentPrompt: false,
     };
   },

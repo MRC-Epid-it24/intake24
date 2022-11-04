@@ -34,7 +34,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import { localeContent, timeDoubleDigitsConvertor } from '@intake24/survey/components/mixins';
+import { localeContent } from '@intake24/survey/components/mixins';
+import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import { ContextMenu } from '../elements';
 import FoodItem from './FoodItem.vue';
@@ -92,11 +93,7 @@ export default defineComponent({
 
   computed: {
     mealTimeString(): string {
-      return this.meal.time
-        ? timeDoubleDigitsConvertor(this.meal.time.hours)
-            .concat(':')
-            .concat(timeDoubleDigitsConvertor(this.meal.time.minutes))
-        : '';
+      return this.meal.time ? fromMealTime(this.meal.time, true) : '';
     },
   },
   methods: {

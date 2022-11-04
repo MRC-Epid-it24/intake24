@@ -1,11 +1,9 @@
 <template>
   <meal-time-prompt
-    v-bind="{ promptProps }"
-    :initial-time="getInitialState()"
-    :meal-name="selectedMeal.name"
+    v-bind="{ initialState: state, mealName: selectedMeal.name, promptComponent, promptProps }"
     @confirm="$emit('continue')"
     @remove-meal="removeMeal"
-    @update="onUpdate"
+    @update="update"
   ></meal-time-prompt>
 </template>
 
@@ -14,11 +12,11 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { MealTimePromptProps } from '@intake24/common/prompts';
+import type { MealTimePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
 import {
-  createPromptHandlerNoStoreMixin,
-  mealPromptUtils,
+  useMealPromptUtils,
+  usePromptHandlerNoStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -28,32 +26,38 @@ export default defineComponent({
 
   components: { MealTimePrompt },
 
-  mixins: [mealPromptUtils, createPromptHandlerNoStoreMixin<MealTime>()],
-
   props: {
+    promptComponent: {
+      type: String as PropType<StandardComponentType>,
+      required: true,
+    },
+    promptId: {
+      type: String,
+      required: true,
+    },
     promptProps: {
       type: Object as PropType<MealTimePromptProps>,
       required: true,
     },
-    submitTrigger: {
-      type: Boolean,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
+  },
+
+  setup(props, context) {
+    const { selectedMeal } = useMealPromptUtils();
+
+    const getInitialState = (): MealTime =>
+      selectedMeal.value.time ?? selectedMeal.value.defaultTime;
+
+    const { state, update } = usePromptHandlerNoStore(getInitialState, context);
+
+    return {
+      selectedMeal,
+      state,
+      update,
+    };
   },
 
   methods: {
     ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
-
-    isValid(): boolean {
-      return true;
-    },
-
-    getInitialState(): MealTime {
-      return this.selectedMeal.time ?? this.selectedMeal.defaultTime;
-    },
 
     removeMeal() {
       this.deleteMeal(this.selectedMeal.id);
@@ -61,10 +65,8 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      this.setMealTime({
-        mealId: this.selectedMeal.id,
-        time: this.currentStateNotNull,
-      });
+      console.log('commitAnswer', this.state);
+      this.setMealTime({ mealId: this.selectedMeal.id, time: this.state });
     },
   },
 });

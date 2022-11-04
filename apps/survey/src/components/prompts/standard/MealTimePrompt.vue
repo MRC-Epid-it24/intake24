@@ -1,14 +1,13 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText }">
     <v-form ref="form" @submit.prevent="confirm">
       <v-time-picker
         :format="promptProps.format"
         full-width
         :landscape="!isMobile"
         :v-model="currentValue"
-        :value="initialTimeString"
-        @change="onTimeChanged"
-        @input="clearErrors"
+        :value="currentValue"
+        @input="update"
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
@@ -36,6 +35,8 @@ import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime, RequiredLocaleTranslation } from '@intake24/common/types';
+import { mealTimePromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 import { fromMealTime, toMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import BasePrompt from '../BasePrompt';
@@ -46,24 +47,24 @@ export default defineComponent({
   mixins: [BasePrompt],
 
   props: {
-    promptProps: {
-      type: Object as PropType<MealTimePromptProps>,
+    initialState: {
+      type: Object as PropType<MealTime>,
       required: true,
     },
     mealName: {
       type: Object as PropType<RequiredLocaleTranslation>,
       required: true,
     },
-    initialTime: {
-      type: Object as PropType<MealTime>,
+    promptProps: {
+      type: Object as PropType<MealTimePromptProps>,
       required: true,
     },
   },
 
   data() {
     return {
-      currentValue: fromMealTime(this.initialTime),
-      validation: this.promptProps.validation,
+      ...merge(mealTimePromptProps, this.promptProps),
+      currentValue: fromMealTime(this.initialState),
       errors: [] as string[],
     };
   },
@@ -73,26 +74,26 @@ export default defineComponent({
       return this.getLocaleContent(this.mealName);
     },
 
-    initialTimeString(): string {
-      return fromMealTime(this.initialTime);
-    },
-
     hasErrors(): boolean {
       return !!this.errors.length;
     },
 
-    text(): string {
+    localeText(): string {
       return this.getLocaleContent(this.promptProps.text, {
         path: 'prompts.mealTime.text',
         params: { meal: this.getLocalMealName },
       });
     },
 
-    description(): string {
+    localeDescription(): string {
       return this.getLocaleContent(this.promptProps.description, {
         // path: 'prompts.mealTime.description',
         params: { meal: this.getLocalMealName },
       });
+    },
+
+    isValid(): boolean {
+      return !this.validation.required || !!this.currentValue;
     },
   },
 
@@ -105,12 +106,14 @@ export default defineComponent({
       this.$emit('remove-meal');
     },
 
-    onTimeChanged(time: string) {
-      this.$emit('update', toMealTime(time));
+    update(time: string) {
+      this.clearErrors();
+
+      this.$emit('update', { state: toMealTime(time), valid: this.isValid });
     },
 
     confirm() {
-      if (this.validation.required && !this.currentValue) {
+      if (!this.isValid) {
         this.errors = [
           this.getLocaleContent(this.validation.message, {
             path: 'prompts.mealTime.validation.required',
