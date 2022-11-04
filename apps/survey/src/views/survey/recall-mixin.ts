@@ -1,9 +1,14 @@
 import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import type { FoodState, RequiredLocaleTranslation, Selection } from '@intake24/common/types';
+import type {
+  FoodState,
+  RecallPromptHandler,
+  RequiredLocaleTranslation,
+  Selection,
+} from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
 import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
@@ -31,6 +36,12 @@ export default defineComponent({
     InfoAlert,
     ...standardHandlers,
     ...portionSizeHandlers,
+  },
+
+  setup() {
+    const promptHandle = ref<RecallPromptHandler>();
+
+    return { promptHandle };
   },
 
   data: () => {
@@ -333,6 +344,7 @@ export default defineComponent({
     },
 
     async restart() {
+      this.currentPrompt = null;
       useSurvey().clearState();
       await this.recallController?.initialiseSurvey();
       await this.nextPrompt();

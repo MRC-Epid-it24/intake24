@@ -65,7 +65,6 @@ export default defineComponent({
     },
 
     async commitAnswer() {
-      console.log('commitAnswer', this.state);
       this.setMealTime({ mealId: this.selectedMeal.id, time: this.state });
     },
   },
