@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   >
   </associated-foods-prompt>
@@ -30,7 +30,7 @@ import {
   useFoodPromptUtils,
   usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import AssociatedFoodsPrompt from '@intake24/survey/components/prompts/standard/AssociatedFoodsPrompt.vue';
+import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';

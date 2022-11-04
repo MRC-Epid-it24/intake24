@@ -23,7 +23,7 @@
         color="success"
         :disabled="!isValid"
         large
-        @click="submit"
+        @click="confirm"
       >
         {{ $t('common.action.continue') }}
       </v-btn>
@@ -114,8 +114,8 @@ export default defineComponent({
       this.$emit('update', { state, valid: this.isValid });
     },
 
-    submit() {
-      this.$emit('continue');
+    confirm() {
+      this.$emit('confirm');
     },
   },
 });

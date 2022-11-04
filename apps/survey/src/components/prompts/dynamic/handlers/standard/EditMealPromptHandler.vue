@@ -2,7 +2,7 @@
   <edit-meal-prompt
     ref="prompt"
     v-bind="{ initialState: state, mealName: selectedMeal.name, promptComponent, promptProps }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @remove-meal="removeMeal"
     @update="update"
   >
@@ -20,7 +20,7 @@ import {
   useMealPromptUtils,
   usePromptHandlerStore,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import EditMealPrompt from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

@@ -12,9 +12,8 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import FinalPrompt from '@intake24/survey/components/prompts/standard/FinalPrompt.vue';
+import { FinalPrompt /*RedirectPrompt*/ } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
-// import RedirectPrompt from '@intake24/survey/components/prompts/standard/RedirectPrompt.vue';
 
 export default defineComponent({
   name: 'FinalPromptHandler',

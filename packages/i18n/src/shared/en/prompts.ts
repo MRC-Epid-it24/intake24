@@ -46,10 +46,13 @@ const prompts: LocaleMessageObject = {
     },
   },
   addMeal: {
-    label: 'Select or enter meal name',
-    yes: 'Add Meal',
-    no: 'Abort adding',
-    hint: 'hit enter when finished typing',
+    text: 'Please enter the name of this meal',
+    description:
+      'You can either type your own name, or select one from the list below if it is appropriate.',
+    label: 'Select predefined or enter meal name',
+    yes: 'Add meal',
+    no: 'Cancel',
+    hint: 'Hit enter when finished typing',
     noMeal: 'No Meals remaining, please add at least one',
   },
   mealDelete: {
@@ -76,6 +79,14 @@ const prompts: LocaleMessageObject = {
     yes: 'Yes, I had some',
     no: 'No, I did not',
     alreadyEntered: 'Yes, already entered',
+    select: {
+      different: 'Select a different food',
+      item: 'Please select an item from this category',
+    },
+  },
+  foodBrowser: {
+    empty: 'There is nothing in our database that matches "{searchTerm}".',
+    reword: 'Please try re-wording your description.',
   },
   noMoreInfo: {
     meal: {

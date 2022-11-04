@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text }">
-    <v-form ref="form" @submit.prevent="submit">
+    <v-form ref="form" @submit.prevent="confirm">
       <v-time-picker
         :format="promptProps.format"
         full-width
@@ -22,7 +22,7 @@
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
         large
-        @click="submit"
+        @click="confirm"
       >
         {{ $t('prompts.mealTime.yes', { meal: getLocalMealName }) }}
       </v-btn>
@@ -111,7 +111,7 @@ export default defineComponent({
       this.$emit('update', parseMealTime(time));
     },
 
-    submit() {
+    confirm() {
       if (this.validation.required && !this.currentValue) {
         this.errors = [
           this.getLocaleContent(this.validation.message, {
@@ -121,7 +121,7 @@ export default defineComponent({
         return;
       }
 
-      this.$emit('continue');
+      this.$emit('confirm');
     },
   },
 });

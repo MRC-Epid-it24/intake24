@@ -6,7 +6,7 @@
       promptComponent,
       promptProps,
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   ></milk-on-cereal-prompt>
 </template>

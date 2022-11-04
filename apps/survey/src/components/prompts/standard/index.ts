@@ -1,13 +1,9 @@
-import AssociatedFoodsPrompt from './AssociatedFoodsPrompt.vue';
-import FinalPrompt from './FinalPrompt.vue';
-import FoodSearchPrompt from './FoodSearchPrompt.vue';
-import MealTimePrompt from './MealTimePrompt.vue';
-import SubmitPrompt from './SubmitPrompt.vue';
-
-export default {
-  MealTimePrompt,
-  FoodSearchPrompt,
-  AssociatedFoodsPrompt,
-  SubmitPrompt,
-  FinalPrompt,
-};
+export { default as AssociatedFoodsPrompt } from './AssociatedFoodsPrompt.vue';
+export { default as EditableFoodList } from './EditableFoodList.vue';
+export { default as EditMealPrompt } from './EditMealPrompt.vue';
+export { default as FinalPrompt } from './FinalPrompt.vue';
+export { default as FoodSearchPrompt } from './FoodSearchPrompt.vue';
+export { default as MealAddPrompt } from './MealAddPrompt.vue';
+export { default as MealTimePrompt } from './MealTimePrompt.vue';
+export { default as ReviewConfirmPrompt } from './ReviewConfirmPrompt.vue';
+export { default as SubmitPrompt } from './SubmitPrompt.vue';

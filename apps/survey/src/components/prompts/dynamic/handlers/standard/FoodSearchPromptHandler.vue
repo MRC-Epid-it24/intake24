@@ -14,19 +14,14 @@ import { defineComponent, ref } from 'vue';
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
-import {
-  promptHandlerStateless,
-  useFoodPromptUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import FoodSearchPrompt from '@intake24/survey/components/prompts/standard/FoodSearchPrompt.vue';
+import { useFoodPromptUtils } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
+import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',
 
   components: { FoodSearchPrompt },
-
-  mixins: [promptHandlerStateless],
 
   props: {
     promptProps: {
@@ -52,10 +47,6 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useSurvey, ['replaceFood', 'getNextFoodId']),
-
-    isValid(): boolean {
-      return false; // Continue button should always be disabled for this prompt
-    },
 
     foodSelected(foodData: UserFoodData) {
       this.foodData = foodData;

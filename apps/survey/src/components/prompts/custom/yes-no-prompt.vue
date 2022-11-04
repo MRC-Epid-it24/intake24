@@ -59,7 +59,7 @@ export default defineComponent({
   methods: {
     update(value: boolean) {
       this.$emit('update', { state: value, valid: true });
-      this.$emit('continue');
+      this.$emit('confirm');
     },
   },
 });

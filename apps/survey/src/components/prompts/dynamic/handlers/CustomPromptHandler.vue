@@ -8,7 +8,7 @@
       meal: selectedMealOptional,
       food: encodedFoodOptional(),
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   ></component>
 </template>

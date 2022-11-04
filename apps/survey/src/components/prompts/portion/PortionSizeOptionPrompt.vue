@@ -92,7 +92,7 @@ export default defineComponent({
       if (val === undefined) return;
 
       this.update();
-      this.submit();
+      this.confirm();
     },
   },
 
@@ -107,8 +107,8 @@ export default defineComponent({
       this.$emit('update', { state, valid: this.isValid });
     },
 
-    submit() {
-      this.$emit('continue');
+    confirm() {
+      this.$emit('confirm');
     },
   },
 });

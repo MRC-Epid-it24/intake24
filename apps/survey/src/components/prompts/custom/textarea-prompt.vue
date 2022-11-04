@@ -1,6 +1,6 @@
 <template>
   <prompt-layout v-bind="{ description, text, meal }">
-    <v-form ref="form" @submit.prevent="submit">
+    <v-form ref="form" @submit.prevent="confirm">
       <v-textarea
         v-model.trim="currentValue"
         hide-details="auto"
@@ -12,7 +12,7 @@
       ></v-textarea>
     </v-form>
     <template #actions>
-      <continue @click.native="submit"></continue>
+      <continue @click.native="confirm"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -78,11 +78,11 @@ export default defineComponent({
       this.$emit('update', { state: this.currentValue, valid: this.isValid });
     },
 
-    submit() {
+    confirm() {
       const isValid = this.form?.validate();
       if (!isValid) return;
 
-      this.$emit('continue');
+      this.$emit('confirm');
     },
   },
 });

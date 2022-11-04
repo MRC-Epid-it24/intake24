@@ -3,7 +3,7 @@
     v-bind="{ promptProps }"
     :initial-time="getInitialState()"
     :meal-name="selectedMeal.name"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @remove-meal="removeMeal"
     @update="onUpdate"
   ></meal-time-prompt>
@@ -20,7 +20,7 @@ import {
   createPromptHandlerNoStoreMixin,
   mealPromptUtils,
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import MealTimePrompt from '@intake24/survey/components/prompts/standard/MealTimePrompt.vue';
+import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({

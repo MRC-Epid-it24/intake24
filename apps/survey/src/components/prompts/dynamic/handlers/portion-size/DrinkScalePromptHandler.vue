@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   >
   </drink-scale-prompt>

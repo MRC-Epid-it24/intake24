@@ -1,45 +1,35 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
-    <v-col v-show="hasMeals" md="8" sm="12">
-      <h4>{{ $t('prompts.mealAdding.noMeal') }}</h4>
-    </v-col>
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText }">
     <v-col md="8" sm="12">
-      <v-form ref="form" @submit.prevent="submit">
+      <v-form ref="form" @submit.prevent="add">
         <v-combobox
           v-model="currentValue"
+          autofocus
           clearable
           hide-selected
-          :items="listofmeals"
+          :hint="$t('prompts.addMeal.hint')"
+          :items="meals"
           :label="$t('prompts.addMeal.label')"
           outlined
+          persistent-hint
           small-chips
         >
         </v-combobox>
       </v-form>
     </v-col>
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-5"
-        :class="{ 'ma-0': isMobile, 'mb-2': isMobile }"
-        color="success"
-        :disabled="!currentValue"
-        large
-        @click="submit"
-      >
-        {{ $t('prompts.addMeal.yes') }}
-      </v-btn>
+      <continue :disabled="!isValid" :label="$t('prompts.addMeal.yes')" @click="add"></continue>
     </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import { useSurvey } from '@intake24/survey/stores';
+import { mealAddPromptProps } from '@intake24/common/prompts';
+import { merge } from '@intake24/common/util';
 
 import BasePrompt from '../BasePrompt';
 
@@ -49,15 +39,15 @@ export default defineComponent({
   mixins: [BasePrompt],
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String,
       required: true,
     },
-    list: {
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
+      required: true,
+    },
+    meals: {
       type: Array as PropType<string[]>,
       required: true,
     },
@@ -65,52 +55,32 @@ export default defineComponent({
 
   data() {
     return {
+      ...merge(mealAddPromptProps, this.promptProps),
       currentValue: null,
     };
   },
 
   computed: {
-    ...mapState(useSurvey, ['hasMeals']),
-
-    text(): string {
-      const text = this.promptProps.text[this.$i18n.locale];
-      if (text) return text;
-      return '';
+    localeText(): string {
+      return this.getLocaleContent(this.text, { path: 'prompts.addMeal.text' });
     },
 
-    description(): string {
-      const description = this.promptProps.description[this.$i18n.locale];
-      if (description) return description;
-      return '';
+    localeDescription(): string {
+      return this.getLocaleContent(this.description, { path: 'prompts.addMeal.description' });
     },
 
-    listofmeals(): string[] {
-      if (this.list) return this.list;
-      return [];
+    isValid() {
+      return !!this.currentValue;
     },
   },
-  /* watch: {
-    currentValue: {
-      handler(value: string) {
-        this.$emit('tempChanging', {
-          response: value,
-          modified: true,
-          new: false,
-          mealIndex: this.selectedMealIndex,
-          foodIndex: this.selectedFoodIndex,
-          prompt: this.promptComponent,
-        });
-      },
-    },
-  }, */
 
   methods: {
-    submit() {
-      this.$emit('addMeal', this.currentValue);
+    add() {
+      this.$emit('add', this.currentValue);
     },
 
-    abortMeal() {
-      this.$emit('abortMeal');
+    cancel() {
+      this.$emit('cancel');
     },
   },
 });

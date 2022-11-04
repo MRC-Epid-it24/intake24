@@ -7,7 +7,7 @@
       promptProps,
       availableMethods,
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   >
   </portion-size-option-prompt>

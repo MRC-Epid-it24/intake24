@@ -45,14 +45,16 @@
                 {{ prompt.selectedFood.description }}
               </v-card-title>
               <v-card-actions>
-                <v-btn @click="onSelectDifferentFood(prompt)">Select a different food </v-btn>
+                <v-btn @click="onSelectDifferentFood(prompt)">
+                  {{ $t('prompts.associatedFoods.select.different') }}
+                </v-btn>
               </v-card-actions>
             </v-card>
             <v-expand-transition>
               <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
-                <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray"
-                  >Please select an item from this category:</v-card-title
-                >
+                <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray">
+                  {{ $t('prompts.associatedFoods.select.item') }}
+                </v-card-title>
                 <v-card-text class="pl-0">
                   <food-browser
                     :locale-id="localeId"
@@ -67,7 +69,7 @@
       </v-expansion-panels>
     </v-card-actions>
     <template #actions>
-      <continue :disabled="!isValid" @click="onContinue"></continue>
+      <continue :disabled="!isValid" @click="confirm"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -246,8 +248,8 @@ export default defineComponent({
       this.$emit('update', { state: { activePrompt, prompts }, valid: this.isValid });
     },
 
-    onContinue() {
-      this.$emit('continue');
+    confirm() {
+      this.$emit('confirm');
     },
   },
 });

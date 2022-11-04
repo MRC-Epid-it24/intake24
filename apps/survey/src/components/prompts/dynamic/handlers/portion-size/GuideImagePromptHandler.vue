@@ -8,7 +8,7 @@
       promptComponent,
       promptProps,
     }"
-    @continue="$emit('continue')"
+    @confirm="$emit('continue')"
     @update="update"
   >
   </guide-image-prompt>

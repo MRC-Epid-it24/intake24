@@ -60,7 +60,7 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <continue :disabled="!isValid" @click="submit"></continue>
+      <continue :disabled="!isValid" @click="confirm"></continue>
     </template>
   </portion-layout>
 </template>
@@ -219,13 +219,13 @@ export default defineComponent({
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
-    submit() {
+    confirm() {
       if (!this.isValid) {
         this.setErrors();
         return;
       }
 
-      this.$emit('continue');
+      this.$emit('confirm');
     },
 
     update() {

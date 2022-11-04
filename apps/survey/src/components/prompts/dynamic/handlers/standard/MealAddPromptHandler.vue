@@ -1,11 +1,5 @@
 <template>
-  <meal-add-prompt
-    v-bind="{ promptComponent, promptProps }"
-    :list="mealsList"
-    @abortMeal="onAbort"
-    @addMeal="onAnswer"
-    @tempChanging="onTempChange"
-  >
+  <meal-add-prompt v-bind="{ meals, promptComponent, promptProps }" @add="add" @cancel="cancel">
   </meal-add-prompt>
 </template>
 
@@ -15,8 +9,8 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { Meal, PromptAnswer } from '@intake24/common/types';
-import MealAddPrompt from '@intake24/survey/components/prompts/standard/MealAddPrompt.vue';
+import type { Meal } from '@intake24/common/types';
+import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
@@ -25,12 +19,12 @@ export default defineComponent({
   components: { MealAddPrompt },
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     promptComponent: {
       type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -38,7 +32,7 @@ export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['defaultSchemeMeals']),
 
-    mealsList(): string[] {
+    meals(): string[] {
       return (
         this.defaultSchemeMeals?.map(
           (meal: Meal) => meal.name[this.$i18n.locale] ?? meal.name.en
@@ -50,24 +44,13 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['addMeal']),
 
-    onTempChange(tempNewMeal: PromptAnswer) {
-      // this.setTempPromptAnswer(tempNewMeal);
-    },
-
-    onAnswer(newMeal: string) {
+    add(newMeal: string) {
       this.addMeal(newMeal, this.$i18n.locale);
       this.$emit('complete');
-      // this.clearTempPromptAnswer();
     },
 
-    onPartialAnswer(newMeal: string) {
-      console.log('Called onPartialAnswer first');
-      this.onAnswer(newMeal);
-    },
-
-    onAbort() {
+    cancel() {
       this.$emit('complete');
-      // this.clearTempPromptAnswer();
     },
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function

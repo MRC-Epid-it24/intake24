@@ -8,9 +8,9 @@
       prominent
       type="warning"
     >
-      <p>There is nothing in our database that matches "{{ searchTerm }}".</p>
-      <p>Please try re-wording your description.</p></v-alert
-    >
+      <p>{{ $t('prompts.foodBrowser.empty', { searchTerm }) }}</p>
+      <p>{{ $t('prompts.foodBrowser.reword') }}</p>
+    </v-alert>
     <food-search-results
       v-if="searchResults != null"
       :results="searchResults"
