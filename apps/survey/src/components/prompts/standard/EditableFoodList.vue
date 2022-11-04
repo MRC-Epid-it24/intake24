@@ -114,7 +114,7 @@ export default defineComponent({
       if (this.editIndex != null) {
         this.foods.splice(this.editIndex, 1);
         this.editIndex = null;
-        this.$emit('input', this.foods.length, copy(this.foods));
+        this.$emit('input', this.foods);
       }
     },
 
