@@ -58,7 +58,6 @@ import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
 import type { DrinkwareScaleResponse } from '@intake24/common/types/http';
-import { round } from '@intake24/common/util';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume } from './drink-scale';
@@ -112,7 +111,7 @@ export default defineComponent({
     },
 
     fillVolume(): number {
-      return round(calculateVolume(this.scale.volumeSamples, this.fillLevel), 2);
+      return Math.round(calculateVolume(this.scale.volumeSamples, this.fillLevel));
     },
 
     label(): string {
