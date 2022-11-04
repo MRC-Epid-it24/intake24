@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
-import type { MealTime, SurveyState as CurrentSurveyState } from '@intake24/common/types';
+import type { SurveyState as CurrentSurveyState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
@@ -11,6 +11,7 @@ import {
   getFoodIndexRequired,
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
+  toMealTime,
 } from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState, SurveyStore } from '../stores';
@@ -19,12 +20,6 @@ export interface PromptInstance {
   prompt: PromptQuestion;
   section: SurveySection | MealSection;
 }
-
-export const parseMealTime = (time: string): MealTime => {
-  const [hours, minutes] = time.split(':');
-
-  return { hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) };
-};
 
 export const surveyInitialState = (): CurrentSurveyState => ({
   schemeId: null,
@@ -152,7 +147,7 @@ export default class DynamicRecall {
         meals: this.surveyScheme.meals.map((meal, index) => ({
           id: index,
           name: meal.name,
-          defaultTime: parseMealTime(meal.time),
+          defaultTime: toMealTime(meal.time),
           time: undefined,
           flags: [],
           customPromptAnswers: {},

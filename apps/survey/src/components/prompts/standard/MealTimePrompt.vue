@@ -36,11 +36,9 @@ import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealTime, RequiredLocaleTranslation } from '@intake24/common/types';
-import { parseMealTime } from '@intake24/survey/dynamic-recall/dynamic-recall';
+import { fromMealTime, toMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import BasePrompt from '../BasePrompt';
-
-const mealTimeToString = (time: MealTime): string => `${time.hours}:${time.minutes}`;
 
 export default defineComponent({
   name: 'MealTimePrompt',
@@ -64,7 +62,7 @@ export default defineComponent({
 
   data() {
     return {
-      currentValue: mealTimeToString(this.initialTime),
+      currentValue: fromMealTime(this.initialTime),
       validation: this.promptProps.validation,
       errors: [] as string[],
     };
@@ -76,7 +74,7 @@ export default defineComponent({
     },
 
     initialTimeString(): string {
-      return mealTimeToString(this.initialTime);
+      return fromMealTime(this.initialTime);
     },
 
     hasErrors(): boolean {
@@ -108,7 +106,7 @@ export default defineComponent({
     },
 
     onTimeChanged(time: string) {
-      this.$emit('update', parseMealTime(time));
+      this.$emit('update', toMealTime(time));
     },
 
     confirm() {

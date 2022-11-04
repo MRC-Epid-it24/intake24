@@ -1,5 +1,19 @@
-import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/types';
+import type {
+  FoodState,
+  MealState,
+  MealTime,
+  Selection,
+  SurveyState,
+} from '@intake24/common/types';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
+
+export const fromMealTime = (time: MealTime): string => `${time.hours}:${time.minutes}`;
+
+export const toMealTime = (time: string): MealTime => {
+  const [hours, minutes] = time.split(':');
+
+  return { hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) };
+};
 
 export function getFoodIndexInMeal(meal: MealState, id: number): FoodIndex | undefined {
   for (let i = 0; i < meal.foods.length; ++i) {
