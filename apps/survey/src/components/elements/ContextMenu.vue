@@ -15,7 +15,7 @@
             <v-list-item-title>
               <confirm-dialog
                 color="warning"
-                :label="$t('prompts.editMeal.deleteMeal', { meal: entityName })"
+                :label="$t('prompts.editMeal.deleteMeal', { meal: entityName }).toString()"
                 @confirm="onClick(item.action)"
               >
                 <template #activator="{ on, attrs }">
@@ -34,9 +34,16 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import { ConfirmDialog } from '@intake24/ui';
+
+export type MenuItem = {
+  name: string;
+  action: string;
+  dialog?: boolean;
+};
 
 export default defineComponent({
   name: 'ContextMenu',
@@ -49,17 +56,13 @@ export default defineComponent({
       required: true,
     },
     menu: {
-      type: Array,
+      type: Array as PropType<MenuItem[]>,
       required: true,
     },
     entityName: {
       type: String,
       default: '',
     },
-  },
-
-  data() {
-    return {};
   },
 
   methods: {

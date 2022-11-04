@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-list class="flex-grow-1 flex-shrink-0" dense>
+    <v-list dense flat tile>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title"> {{ $t('recall._') }} </v-list-item-title>
@@ -16,29 +16,25 @@
         </context-menu>
       </v-list-item>
       <v-divider></v-divider>
-      <v-card-text class="scroll-y pl-0 pr-0" style="height: 40rem">
-        <v-list-item
-          v-for="meal in meals"
-          :key="meal.id"
-          class="pl-1 pr-1"
-          :inactive="true"
-          link
-          :ripple="false"
-        >
-          <v-list-item-content class="pl-1 pr-1">
-            <meal-item
-              :meal="meal"
-              :selected="selectedMealId === meal.id"
-              :selected-food-id="selectedFoodId"
-              :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
-              @breadcrumbFood="chooseFoodUp"
-              @breadcrumbMeal="chooseMealUp(meal.name.en)"
-              @food-selected="onFoodSelected"
-              @meal-action="onMealAction"
-              @meal-selected="onMealSelected"
-            ></meal-item>
-          </v-list-item-content>
-        </v-list-item>
+      <v-card-text class="scroll-y px-0">
+        <template v-for="(meal, idx) in meals">
+          <v-list-item :key="meal.id" class="px-0 meal-item" inactive link :ripple="false">
+            <v-list-item-content class="py-0">
+              <meal-item
+                :meal="meal"
+                :selected="selectedMealId === meal.id"
+                :selected-food-id="selectedFoodId"
+                :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
+                @breadcrumbFood="chooseFoodUp"
+                @breadcrumbMeal="chooseMealUp(meal.name.en)"
+                @food-selected="onFoodSelected"
+                @meal-action="onMealAction"
+                @meal-selected="onMealSelected"
+              ></meal-item>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider v-if="idx + 1 < meals.length" :key="`div-${meal.id}`"></v-divider>
+        </template>
       </v-card-text>
     </v-list>
     <v-card-actions>
@@ -148,5 +144,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '../../scss/meallist.scss';
+.meal-item {
+  .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon .v-icon {
+    transform: rotate(180deg);
+  }
+  .v-list-group__header__append-icon {
+    display: none !important;
+  }
+  .selected {
+    background: #f5f5f5;
+  }
+  .selected-food {
+    background: #f7f7f7;
+  }
+}
 </style>

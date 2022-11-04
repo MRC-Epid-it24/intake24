@@ -1,14 +1,13 @@
 <template>
-  <v-list v-if="foods.length" :class="{ 'pa-0': linked }">
-    <div v-for="(food, i) in foods" :key="i" :class="{ 'ml-4': linked }">
+  <v-list v-if="foods.length" class="pa-0">
+    <div v-for="(food, idx) in foods" :key="idx">
       <v-list-item
-        class="ma-0 small"
-        :class="{ selected: food.id === selectedFoodId }"
+        :class="{ selected: food.id === selectedFoodId, 'pl-8': linked }"
         link
         @click="emitFoodSelected(food.id)"
       >
-        <v-list-item-title class="text-wrap"
-          ><span :class="{ 'linked-food-title': linked }"> {{ foodDisplayName(food) }}</span>
+        <v-list-item-title class="text-wrap">
+          {{ foodDisplayName(food) }}
         </v-list-item-title>
         <v-list-item-action class="list-item">
           <v-tooltip v-if="food.type === 'encoded-food'" bottom>
@@ -77,10 +76,6 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {};
-  },
-
   methods: {
     onLinkedFoodSelected(foodId: number) {
       this.emitFoodSelected(foodId);
@@ -100,11 +95,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.linked-food-title {
-}
-.selected {
-  background: #f5f5f5;
-}
 .list-item {
   min-width: 0;
 }
