@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal }">
+  <prompt-layout v-bind="{ description, text, meal, food }">
     <v-form ref="form" @submit.prevent="confirm">
       <v-time-picker
         v-model="currentValue"
@@ -46,24 +46,16 @@ export default defineComponent({
     return {
       ...merge(timePickerPromptProps, this.promptProps),
       currentValue: this.value,
-      errors: [] as string[],
     };
   },
 
   computed: {
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
     isValid(): boolean {
       return !this.validation.required || !!this.currentValue;
     },
   },
 
   methods: {
-    clearErrors() {
-      this.errors = [];
-    },
-
     update() {
       this.clearErrors();
 

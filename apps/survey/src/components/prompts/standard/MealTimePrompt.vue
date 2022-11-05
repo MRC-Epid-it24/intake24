@@ -65,17 +65,12 @@ export default defineComponent({
     return {
       ...merge(mealTimePromptProps, this.promptProps),
       currentValue: fromMealTime(this.initialState),
-      errors: [] as string[],
     };
   },
 
   computed: {
     getLocalMealName(): string {
       return this.getLocaleContent(this.mealName);
-    },
-
-    hasErrors(): boolean {
-      return !!this.errors.length;
     },
 
     localeText(): string {
@@ -98,10 +93,6 @@ export default defineComponent({
   },
 
   methods: {
-    clearErrors() {
-      this.errors = [];
-    },
-
     removeMeal() {
       this.$emit('remove-meal');
     },

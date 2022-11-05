@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText, meal }">
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText, meal, food }">
     <template #actions>
       <continue @click.native="confirm"></continue>
     </template>

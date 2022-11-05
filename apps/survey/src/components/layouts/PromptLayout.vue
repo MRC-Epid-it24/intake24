@@ -25,6 +25,7 @@ import { defineComponent } from 'vue';
 
 import type {
   Dictionary,
+  EncodedFood,
   LocaleTranslation,
   MealState,
   RequiredLocaleTranslation,
@@ -38,32 +39,46 @@ export default defineComponent({
 
   props: {
     text: {
-      type: [Object as () => RequiredLocaleTranslation, String],
+      type: [Object, String] as PropType<RequiredLocaleTranslation | string>,
       required: true,
     },
     description: {
-      type: [Object as () => LocaleTranslation, String],
+      type: [Object, String] as PropType<LocaleTranslation | string | null>,
       default: null,
     },
     meal: {
       type: Object as PropType<MealState>,
     },
+    food: {
+      type: Object as PropType<EncodedFood>,
+    },
   },
 
   computed: {
-    localeMealName(): string | undefined {
-      return this.meal ? this.getLocaleContent(this.meal.name).toLocaleLowerCase() : undefined;
+    localeFoodName() {
+      return this.food && this.getLocaleContent(this.food.data.englishName);
+    },
+
+    localeMealName() {
+      return this.meal && this.getLocaleContent(this.meal.name);
     },
 
     localeText(): string {
       const params: Dictionary<string> = {};
-      if (this.localeMealName) params.meal = this.localeMealName;
+      const { localeFoodName, localeMealName } = this;
+      if (localeFoodName) params.food = localeFoodName;
+      if (localeMealName) params.meal = localeMealName;
 
       return this.getLocaleContent(this.text, { params });
     },
 
     localeDescription(): string {
-      return this.getLocaleContent(this.description);
+      const params: Dictionary<string> = {};
+      const { localeFoodName, localeMealName } = this;
+      if (localeFoodName) params.food = localeFoodName;
+      if (localeMealName) params.meal = localeMealName;
+
+      return this.getLocaleContent(this.description, { params });
     },
 
     hasDefaultSlot(): boolean {

@@ -3,7 +3,7 @@
     <v-list dense flat tile>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title"> {{ $t('recall._') }} </v-list-item-title>
+          <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
           <v-list-item-subtitle>
             {{ surveyName }}
           </v-list-item-subtitle>

@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal }">
+  <prompt-layout v-bind="{ description, text, meal, food }">
     <v-form @submit.prevent="confirm">
       <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
       <v-checkbox
@@ -60,7 +60,6 @@ export default defineComponent({
   data() {
     return {
       ...merge(checkboxListPromptProps, this.promptProps),
-      errors: [] as string[],
       otherEnabled: false,
       otherValue: '',
       selected: Array.isArray(this.value) ? this.value : [],
@@ -74,9 +73,6 @@ export default defineComponent({
     currentValue(): string[] {
       return [...this.selected, this.otherValue].filter((item) => item);
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
     isValid(): boolean {
       return !this.validation.required || !!this.currentValue.length;
     },
@@ -89,10 +85,6 @@ export default defineComponent({
   },
 
   methods: {
-    clearErrors() {
-      this.errors = [];
-    },
-
     update() {
       this.clearErrors();
 

@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal }">
+  <prompt-layout v-bind="{ description, text, meal, food }">
     <v-form ref="form" @submit.prevent="confirm">
       <v-radio-group
         v-model="selected"
@@ -64,7 +64,6 @@ export default defineComponent({
   data() {
     return {
       ...merge(radioListPromptProps, this.promptProps),
-      errors: [] as string[],
       otherValue: '',
       selected: this.value,
     };
@@ -77,19 +76,12 @@ export default defineComponent({
     currentValue(): string {
       return this.selected !== 'other' ? this.selected : this.otherValue;
     },
-    hasErrors(): boolean {
-      return !!this.errors.length;
-    },
     isValid(): boolean {
       return !this.validation.required || !!this.currentValue;
     },
   },
 
   methods: {
-    clearErrors() {
-      this.errors = [];
-    },
-
     update() {
       this.clearErrors();
 

@@ -22,7 +22,17 @@ export default defineComponent({
     },
   },
 
+  data() {
+    return {
+      errors: [] as string[],
+    };
+  },
+
   computed: {
+    hasErrors(): boolean {
+      return !!this.errors.length;
+    },
+
     isFood() {
       return !!this.food;
     },
@@ -41,9 +51,7 @@ export default defineComponent({
     },
 
     localeMealName() {
-      if (!this.meal) return undefined;
-
-      return this.getLocaleContent(this.meal.name);
+      return this.meal && this.getLocaleContent(this.meal.name);
     },
 
     foodOrMealName() {
@@ -51,6 +59,20 @@ export default defineComponent({
       if (!name) throw new Error('No food or meal selected!');
 
       return name;
+    },
+
+    isValid(): boolean {
+      return false;
+    },
+  },
+
+  mounted() {
+    this.$emit('update', { valid: this.isValid });
+  },
+
+  methods: {
+    clearErrors() {
+      this.errors = [];
     },
   },
 });
