@@ -4,24 +4,28 @@ import type { PromptQuestion } from '..';
 import type { BasePromptProps, ValidatedPromptProps } from './base';
 import { basePromptProps, promptValidation } from './base';
 
-export interface MealTimePromptProps extends ValidatedPromptProps {
-  format: 'ampm' | '24hr';
+export type AssociatedFoodsPromptProps = BasePromptProps;
+
+export interface EvergyValidationPromptProps extends BasePromptProps {
+  threshold: number;
 }
 
 export type FinalPromptProps = BasePromptProps;
-
-export interface RedirectPromptProps extends BasePromptProps {
-  url: string | null;
-  identifier: 'userId' | 'username' | 'token' | 'custom';
-  timer: number;
-}
 
 export interface FoodSearchPromptProps extends BasePromptProps {
   allowBrowsing: boolean;
   dualLanguage: boolean;
 }
 
-export type AssociatedFoodsPromptProps = BasePromptProps;
+export interface MealTimePromptProps extends ValidatedPromptProps {
+  format: 'ampm' | '24hr';
+}
+
+export interface RedirectPromptProps extends BasePromptProps {
+  url: string | null;
+  identifier: 'userId' | 'username' | 'token' | 'custom';
+  timer: number;
+}
 
 export const associatedFoodsPromptProps: AssociatedFoodsPromptProps = copy({
   ...basePromptProps,
@@ -84,39 +88,11 @@ export const standardPromptQuestions: PromptQuestion[] = [
     props: copy(associatedFoodsPromptProps),
   },
   {
-    component: 'meal-time-prompt',
-    type: 'standard',
-    id: 'meal-time-prompt',
-    name: 'Meal Time prompt',
-    props: copy(mealTimePromptProps),
-  },
-  {
-    component: 'meal-add-prompt',
-    type: 'standard',
-    id: 'meal-add-prompt',
-    name: 'Meal Add prompt',
-    props: copy(mealAddPromptProps),
-  },
-  {
-    component: 'food-search-prompt',
-    type: 'standard',
-    id: 'food-search-prompt',
-    name: 'Food search prompt',
-    props: copy(foodSearchPromptProps),
-  },
-  {
     component: 'edit-meal-prompt',
     type: 'standard',
     id: 'edit-meal-prompt',
     name: 'Meal Edit prompt',
     props: copy(editMealPromptProps),
-  },
-  {
-    component: 'submit-prompt',
-    type: 'standard',
-    id: 'submit-prompt',
-    name: 'Submit prompt',
-    props: copy(submitPromptProps),
   },
   {
     component: 'final-prompt',
@@ -126,11 +102,25 @@ export const standardPromptQuestions: PromptQuestion[] = [
     props: copy(finalPromptProps),
   },
   {
-    component: 'review-confirm-prompt',
+    component: 'food-search-prompt',
     type: 'standard',
-    id: 'review-confirm-prompt',
-    name: 'Review and Confirm prompt',
-    props: copy(reviewConfirmPromptProps),
+    id: 'food-search-prompt',
+    name: 'Food search prompt',
+    props: copy(foodSearchPromptProps),
+  },
+  {
+    component: 'meal-add-prompt',
+    type: 'standard',
+    id: 'meal-add-prompt',
+    name: 'Meal Add prompt',
+    props: copy(mealAddPromptProps),
+  },
+  {
+    component: 'meal-time-prompt',
+    type: 'standard',
+    id: 'meal-time-prompt',
+    name: 'Meal Time prompt',
+    props: copy(mealTimePromptProps),
   },
   {
     component: 'redirect-prompt',
@@ -138,5 +128,19 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'redirect-prompt',
     name: 'Redirect prompt',
     props: copy(redirectPromptProps),
+  },
+  {
+    component: 'review-confirm-prompt',
+    type: 'standard',
+    id: 'review-confirm-prompt',
+    name: 'Review and Confirm prompt',
+    props: copy(reviewConfirmPromptProps),
+  },
+  {
+    component: 'submit-prompt',
+    type: 'standard',
+    id: 'submit-prompt',
+    name: 'Submit prompt',
+    props: copy(submitPromptProps),
   },
 ];

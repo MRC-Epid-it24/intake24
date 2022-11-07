@@ -195,6 +195,12 @@ const promptConditions: Condition[] = [
     value: '',
     props: {},
   },
+  {
+    type: 'totalEnergy',
+    op: 'eq',
+    value: '',
+    props: {},
+  },
 ];
 
 export default defineComponent({

@@ -16,7 +16,7 @@ import {
   mealPortionSizeComplete,
 } from '@intake24/survey/stores/meal-food-utils';
 
-import type { SurveyState } from '../stores';
+import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';
 import {
   asServedComplete,
@@ -30,13 +30,16 @@ import {
   standardPortionComplete,
 } from './portion-size-checks';
 
-const checkRecallNumber = (state: SurveyState, condition: Condition) => {
-  if (state.user === null) {
+const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
+  if (store.user === null) {
     console.error('User information should not be null at this point');
     return false;
   }
-  return conditionOps[condition.op]([condition.value, state.user.submissions + 1]);
+  return conditionOps[condition.op]([condition.value, store.user.submissions + 1]);
 };
+
+const checkTotalEnergy = (store: SurveyStore, condition: Condition) =>
+  conditionOps[condition.op]([condition.value, store.getTotalEnergy()]);
 
 const showPrompt = (state: SurveyState, prompt: PromptQuestion, component: ComponentType) =>
   prompt.component === component;
@@ -56,16 +59,18 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: PromptQuestio
   }
 };
 
-const checkSurveyCustomConditions = (state: SurveyState, prompt: PromptQuestion) =>
+const checkSurveyCustomConditions = (store: SurveyStore, prompt: PromptQuestion) =>
   prompt.props.conditions.every((condition) => {
     switch (condition.type) {
       case 'surveyPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          state.data.customPromptAnswers[condition.props.promptId],
+          store.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
-        return checkRecallNumber(state, condition);
+        return checkRecallNumber(store, condition);
+      case 'totalEnergy':
+        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -112,7 +117,7 @@ const checkMealStandardConditions = (
 };
 
 const checkMealCustomConditions = (
-  surveyState: SurveyState,
+  store: SurveyStore,
   mealState: MealState,
   prompt: PromptQuestion
 ) =>
@@ -121,7 +126,7 @@ const checkMealCustomConditions = (
       case 'surveyPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          surveyState.data.customPromptAnswers[condition.props.promptId],
+          store.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'mealPromptAnswer':
         return conditionOps[condition.op]([
@@ -129,7 +134,9 @@ const checkMealCustomConditions = (
           mealState.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
-        return checkRecallNumber(surveyState, condition);
+        return checkRecallNumber(store, condition);
+      case 'totalEnergy':
+        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -413,7 +420,7 @@ const checkFoodStandardConditions = (
 };
 
 const checkFoodCustomConditions = (
-  surveyState: SurveyState,
+  store: SurveyStore,
   mealState: MealState,
   foodState: FoodState,
   prompt: PromptQuestion
@@ -423,7 +430,7 @@ const checkFoodCustomConditions = (
       case 'surveyPromptAnswer':
         return conditionOps[condition.op]([
           condition.value,
-          surveyState.data.customPromptAnswers[condition.props.promptId],
+          store.data.customPromptAnswers[condition.props.promptId],
         ]);
       case 'mealPromptAnswer':
         return conditionOps[condition.op]([
@@ -436,7 +443,9 @@ const checkFoodCustomConditions = (
           foodState.customPromptAnswers[condition.props.promptId],
         ]);
       case 'recallNumber':
-        return checkRecallNumber(surveyState, condition);
+        return checkRecallNumber(store, condition);
+      case 'totalEnergy':
+        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -446,8 +455,11 @@ const checkFoodCustomConditions = (
 export default class PromptManager {
   private scheme;
 
-  constructor(scheme: SchemeEntryResponse) {
+  private store;
+
+  constructor(store: SurveyStore, scheme: SchemeEntryResponse) {
     this.scheme = scheme;
+    this.store = store;
   }
 
   findMealPromptOfType(type: ComponentType, section: MealSection): PromptQuestion | undefined {
@@ -461,22 +473,16 @@ export default class PromptManager {
     return this.scheme.questions[section].find((question) => question.component === type);
   }
 
-  nextSurveySectionPrompt(
-    state: SurveyState,
-    section: SurveyQuestionSection
-  ): PromptQuestion | undefined {
+  nextSurveySectionPrompt(section: SurveyQuestionSection): PromptQuestion | undefined {
     return this.scheme.questions[section].find(
       (question) =>
-        checkSurveyStandardConditions(state, question) &&
-        checkSurveyCustomConditions(state, question)
+        checkSurveyStandardConditions(this.store.$state, question) &&
+        checkSurveyCustomConditions(this.store, question)
     );
   }
 
-  nextMealSectionPrompt(
-    state: SurveyState,
-    section: MealQuestionSection,
-    mealId: number
-  ): PromptQuestion | undefined {
+  nextMealSectionPrompt(section: MealQuestionSection, mealId: number): PromptQuestion | undefined {
+    const state = this.store.$state;
     const mealState = findMeal(state.data.meals, mealId);
 
     // Post foods prompts should only be triggered when all food data is collected
@@ -496,11 +502,12 @@ export default class PromptManager {
     return this.scheme.questions.meals[section].find(
       (question) =>
         checkMealStandardConditions(state, mealState, question) &&
-        checkMealCustomConditions(state, mealState, question)
+        checkMealCustomConditions(this.store, mealState, question)
     );
   }
 
-  nextFoodsPrompt(state: SurveyState, foodId: number): PromptQuestion | undefined {
+  nextFoodsPrompt(foodId: number): PromptQuestion | undefined {
+    const state = this.store.$state;
     const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
     const foodState = getFoodByIndex(state.data.meals, foodIndex);
     const mealState = state.data.meals[foodIndex.mealIndex];
@@ -508,19 +515,18 @@ export default class PromptManager {
     return this.scheme.questions.meals.foods.find(
       (question) =>
         checkFoodStandardConditions(state, foodState, question) &&
-        checkFoodCustomConditions(state, mealState, foodState, question)
+        checkFoodCustomConditions(this.store, mealState, foodState, question)
     );
   }
 
   /**
    * Set next Prompt in the Survey based on the type of the prompt component
-   * @param state state of the Survey
    * @param component type of the prompt component to find
    * @returns { PromptQuestion }
    */
-  setNextPreMealsPrompt(state: SurveyState, component: ComponentType): PromptQuestion | undefined {
+  setNextPreMealsPrompt(component: ComponentType): PromptQuestion | undefined {
     return this.scheme.questions.preMeals.find((question) =>
-      showPrompt(state, question, component)
+      showPrompt(this.store.$state, question, component)
     );
   }
 }

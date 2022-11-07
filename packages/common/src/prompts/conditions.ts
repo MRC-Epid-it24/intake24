@@ -5,6 +5,7 @@ export const conditionTypes = [
   'mealPromptAnswer',
   'foodPromptAnswer',
   'recallNumber',
+  'totalEnergy',
 ] as const;
 
 export type ConditionType = typeof conditionTypes[number];
@@ -28,19 +29,19 @@ export const conditionOps = {
   },
   gte: (values: ConditionOpInput) => {
     const [value, answer] = toNumber(values);
-    return value >= answer;
+    return answer >= value;
   },
   gt: (values: ConditionOpInput) => {
     const [value, answer] = toNumber(values);
-    return value > answer;
+    return answer > value;
   },
   lte: (values: ConditionOpInput) => {
     const [value, answer] = toNumber(values);
-    return value <= answer;
+    return answer <= value;
   },
   lt: (values: ConditionOpInput) => {
     const [value, answer] = toNumber(values);
-    return value < answer;
+    return answer < value;
   },
 };
 

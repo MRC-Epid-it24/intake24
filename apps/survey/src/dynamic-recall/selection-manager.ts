@@ -38,9 +38,7 @@ export default class SelectionManager {
   }
 
   private mealPromptsAvailable(mealId: number): boolean {
-    return (
-      this.promptManager.nextMealSectionPrompt(this.store.$state, 'preFoods', mealId) !== undefined
-    );
+    return this.promptManager.nextMealSectionPrompt('preFoods', mealId) !== undefined;
   }
 
   private selectMealIfPromptsAvailable(mealId: number): Selection | undefined {
@@ -48,7 +46,7 @@ export default class SelectionManager {
   }
 
   private foodPromptsAvailable(foodId: number): boolean {
-    return this.promptManager.nextFoodsPrompt(this.store.$state, foodId) !== undefined;
+    return this.promptManager.nextFoodsPrompt(foodId) !== undefined;
   }
 
   private selectFoodIfPromptsAvailable(foodId: number): Selection | undefined {

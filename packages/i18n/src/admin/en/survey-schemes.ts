@@ -52,12 +52,14 @@ const surveySchemes: LocaleMessageObject = {
       mealPromptAnswer: 'Meal prompt answer',
       foodPromptAnswer: 'Food prompt answer',
       recallNumber: 'Recall number',
+      totalEnergy: 'Total energy',
     },
     exTypes: {
       surveyPromptAnswer: 'Survey question answer: {promptId}',
       mealPromptAnswer: 'Meal question answer: {promptId}',
       foodPromptAnswer: 'Food question answer: {promptId}',
       recallNumber: 'Recall number',
+      totalEnergy: 'Total energy',
     },
     ops: {
       _: 'Operation',
