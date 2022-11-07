@@ -17,7 +17,11 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content class="pl-0">
             <v-container class="pl-0">
-              <v-radio-group v-model="prompt.confirmed" row @change="onConfirmStateChanged(index)">
+              <v-radio-group
+                v-model="prompt.confirmed"
+                :row="!isMobile"
+                @change="onConfirmStateChanged(index)"
+              >
                 <v-radio
                   :label="$t('prompts.associatedFoods.no')"
                   off-icon="fa-regular fa-circle"
@@ -91,6 +95,14 @@ import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
 import BasePrompt from '../BasePrompt';
+
+const isPromptValid = (prompt: AssociatedFoodPromptState): boolean =>
+  prompt.confirmed === 'no' ||
+  prompt.confirmed === 'existing' ||
+  (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined);
+
+const getNextPrompt = (prompts: AssociatedFoodPromptState[]) =>
+  prompts.findIndex((prompt) => !isPromptValid(prompt));
 
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
@@ -190,16 +202,17 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      return this.prompts.every(
-        (prompt) =>
-          prompt.confirmed === 'no' ||
-          prompt.confirmed === 'existing' ||
-          (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
-      );
+      return this.prompts.every(isPromptValid);
     },
   },
 
   methods: {
+    goToNextIfCan(index: number) {
+      if (!isPromptValid(this.prompts[index])) return;
+
+      this.activePrompt = getNextPrompt(this.prompts);
+    },
+
     onConfirmStateChanged(index: number) {
       if (this.prompts[index].confirmed === 'existing') {
         const foodId = this.foodsAlreadyEntered[index];
@@ -226,11 +239,13 @@ export default defineComponent({
         });
       }
 
+      this.goToNextIfCan(index);
       this.updatePrompts();
     },
 
     onSelectDifferentFood(prompt: AssociatedFoodPromptState) {
       prompt.selectedFood = undefined;
+
       this.updatePrompts();
     },
 
@@ -239,6 +254,8 @@ export default defineComponent({
         confirmed: 'yes',
         selectedFood: food,
       });
+
+      this.goToNextIfCan(promptIndex);
       this.updatePrompts();
     },
 
