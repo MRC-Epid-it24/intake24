@@ -6,6 +6,7 @@
       promptComponent,
       promptProps,
     }"
+    :original-serving="selectedParentFood.portionSize?.servingWeight ?? 100"
     @confirm="$emit('continue')"
     @update="update"
   ></milk-in-a-hot-drink-prompt>

@@ -19,12 +19,17 @@
                 :row="orientation === 'row'"
                 @change="clearErrors"
               >
-                <v-radio
-                  v-for="option in localeOptions"
-                  :key="option.value"
-                  :label="option.label"
-                  :value="option.value"
-                ></v-radio>
+                <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
+                  <template #label>
+                    {{ option.label }}
+                    <v-spacer></v-spacer>
+                    <quantity-badge
+                      :amount="Number(option.value) * originServ"
+                      unit="ml"
+                      :valid="true"
+                    ></quantity-badge>
+                  </template>
+                </v-radio>
               </v-radio-group>
               <v-messages
                 v-show="hasErrors"
@@ -51,6 +56,7 @@ import type { MilkInAHotDrinkState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
+import { QuantityBadge } from './selectors';
 
 export interface MilkInAHotDrinkPromptState {
   portionSize: MilkInAHotDrinkState;
@@ -60,11 +66,20 @@ export interface MilkInAHotDrinkPromptState {
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',
 
+  components: { QuantityBadge },
+
   mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkPromptState>()],
 
-  data() {
+  props: {
+    originalServing: {
+      type: Number,
+    },
+  },
+
+  data(props) {
     return {
       ...copy(this.initialState),
+      originServ: props.originalServing ?? 1,
     };
   },
 
