@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/command-line-args": "^5.2.0",
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "^4.14.188",
     "cross-env": "^7.0.3",
     "ts-loader": "^9.4.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
