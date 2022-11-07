@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 import validator from 'validator';
 
+import type { IoC } from '@intake24/api/ioc';
 import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
@@ -13,7 +14,7 @@ import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
 import { getAndCheckAccess } from '../securable.controller';
 
-const adminSurveySubmissionController = () => {
+const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveySubmissionsResponse>
@@ -69,7 +70,10 @@ const adminSurveySubmissionController = () => {
     const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });
     if (!submission) throw new NotFoundError();
 
-    await submission.destroy();
+    await Promise.all([
+      submission.destroy(),
+      cache.forget(`user:submissions:${submission.userId}`),
+    ]);
 
     res.status(204).json();
   };
