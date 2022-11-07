@@ -18,10 +18,10 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "vue": "^2.7.13",
-    "vue-i18n": "^8.28.1"
+    "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.186",
+    "@types/lodash": "^4.14.188",
     "typescript": "^4.8.4"
   },
   "bundledDependencies": [
