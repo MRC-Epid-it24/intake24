@@ -45,6 +45,7 @@
           <drink-scale-panel
             v-if="scale"
             v-model="portionSize.fillLevel"
+            :open="panel === 1"
             :scale="scale"
             @confirm="confirmQuantity"
             @input="updateQuantity"
@@ -99,6 +100,7 @@
                   v-if="scale"
                   v-model="portionSize.leftoversLevel"
                   :max-fill-level="portionSize.fillLevel"
+                  :open="panel === 2"
                   :scale="scale"
                   :type="'leftovers'"
                   @confirm="confirmLeftovers"
@@ -177,7 +179,7 @@ export default defineComponent({
       return !this.leftovers;
     },
 
-    localeFoodName(): string {
+    localeFoodName() {
       return this.getLocaleContent(this.foodName);
     },
 
@@ -203,11 +205,11 @@ export default defineComponent({
       return this.quantityConfirmed;
     },
 
-    leftoversValid(): boolean {
+    leftoversValid() {
       return this.leftoversConfirmed;
     },
 
-    isValid(): boolean {
+    isValid() {
       // object || quantity not yet selected
       if (!this.objectValid || !this.quantityValid) return false;
 
@@ -260,10 +262,13 @@ export default defineComponent({
       const { drinkwareSetData } = this;
       if (!drinkwareSetData) return;
 
-      if (idx !== this.portionSize.containerIndex) this.quantityConfirmed = false;
+      this.objectConfirmed = false;
 
       this.portionSize.containerIndex = idx;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
+
+      this.clearQuantity();
+      this.clearLeftovers();
 
       if (this.volumes)
         this.portionSize.servingWeight = calculateVolume(this.volumes, this.portionSize.fillLevel);
@@ -278,6 +283,11 @@ export default defineComponent({
 
       this.updatePanel();
       this.update();
+    },
+
+    clearQuantity() {
+      this.portionSize.fillLevel = this.portionSize.initialFillLevel;
+      this.quantityConfirmed = false;
     },
 
     updateQuantity() {

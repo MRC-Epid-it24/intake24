@@ -3,9 +3,7 @@
     <v-img ref="img" v-resize="onImgResize" :src="entry.baseImageUrl"></v-img>
     <svg
       ref="svg"
-      :height="height"
       :style="svgCursor"
-      :width="width"
       @dblclick.stop="isGuideImage || disabled ? undefined : addNode($event)"
     >
       <g v-for="(object, objectIdx) in scaled" :key="objectIdx" class="guides-drawer-group">
@@ -357,6 +355,8 @@ export default defineComponent({
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
 
     .guides-drawer-polygon {
       cursor: pointer;

@@ -10,7 +10,7 @@
         <div v-if="hasLabelSlot" class="label">
           <slot name="label"></slot>
         </div>
-        <svg ref="svg" v-bind="{ height, width }">
+        <svg ref="svg">
           <polygon
             v-for="(polygon, idx) in polygons"
             :key="idx"
@@ -141,6 +141,8 @@ export default defineComponent({
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1;
 
     .guide-drawer-polygon {

@@ -72,6 +72,10 @@ export default defineComponent({
       type: Number,
       default: 1,
     },
+    open: {
+      type: Boolean,
+      default: false,
+    },
     scale: {
       type: Object as PropType<DrinkwareScaleResponse>,
       required: true,
@@ -86,22 +90,21 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const imgDrink = ref<InstanceType<typeof VImg>>();
-
-    return { imgDrink };
-  },
-
-  data() {
-    const sliderMax = this.maxFillLevel * (this.scale.fullLevel - this.scale.emptyLevel);
-    const sliderMin = 0;
+    const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
+    const sliderMin = ref(0);
+    const sliderValue = ref(sliderMax.value * props.value);
+    const height = ref(0);
+    const width = ref(0);
 
     return {
-      height: 0,
-      width: 0,
+      imgDrink,
+      height,
+      width,
       sliderMax,
       sliderMin,
-      sliderValue: sliderMax * this.value,
+      sliderValue,
     };
   },
 
@@ -141,7 +144,14 @@ export default defineComponent({
 
   watch: {
     fillLevel(val) {
+      if (!this.open) return;
+
       this.$emit('input', val);
+    },
+    open() {
+      this.onImgResize();
+      this.sliderMax = this.maxFillLevel * (this.scale.fullLevel - this.scale.emptyLevel);
+      this.sliderValue = this.sliderMax * this.value;
     },
   },
 
