@@ -250,6 +250,12 @@ export const useSurvey = defineStore('survey', {
         const currentValue = this.data[key];
         if (typeof currentValue === 'string') this.data[key] = new Date(currentValue);
       });
+
+      // Pinia plugin rehydrates the store without reactive getters/setters on undefined -> investigate
+      this.data = {
+        ...this.data,
+        meals: this.data.meals.map((meal) => ({ ...meal, time: meal.time ?? undefined })),
+      };
     },
 
     loadState(state: CurrentSurveyState) {
