@@ -31,7 +31,7 @@ export default defineComponent({
   data() {
     return {
       ...merge(infoPromptProps, this.promptProps),
-      currentValue: null,
+      currentValue: 'ok',
     };
   },
 

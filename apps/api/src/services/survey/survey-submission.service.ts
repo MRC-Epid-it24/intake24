@@ -276,7 +276,7 @@ const surveySubmissionService = ({
       .map(([name, answer]) => ({
         [propId]: id,
         name,
-        value: Array.isArray(answer) ? answer.join(', ') : answer.toString(),
+        value: Array.isArray(answer) ? answer.join(', ') : answer?.toString() ?? 'N/A',
       }));
 
     return customAnswers as CustomAnswers<T>[];

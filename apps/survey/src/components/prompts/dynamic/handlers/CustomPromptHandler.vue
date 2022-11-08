@@ -27,6 +27,8 @@ import {
 } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 
+const infoPrompts = ['info-prompt', 'no-more-information-prompt'];
+
 export default defineComponent({
   name: 'CustomPromptHandler',
 
@@ -97,7 +99,7 @@ export default defineComponent({
         // eslint-disable-next-line default-case
         switch (this.selection.element.type) {
           case 'food': {
-            if (this.promptComponent === 'info-prompt')
+            if (infoPrompts.includes(this.promptComponent))
               this.survey.setFoodFlag({
                 foodId: this.selectedFood().id,
                 flag: `${this.promptId}-acknowledged`,
@@ -111,7 +113,7 @@ export default defineComponent({
             break;
           }
           case 'meal': {
-            if (this.promptComponent === 'info-prompt')
+            if (infoPrompts.includes(this.promptComponent))
               this.survey.setMealFlag({
                 mealId: this.selectedMeal.id,
                 flag: `${this.promptId}-acknowledged`,
@@ -126,9 +128,11 @@ export default defineComponent({
             break;
           }
         }
-      } else if (this.promptComponent === 'info-prompt')
+      } else if (infoPrompts.includes(this.promptComponent)) {
         this.survey.setSurveyFlag(`${this.promptId}-acknowledged`);
-      else this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.state });
+      } else {
+        this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.state });
+      }
     },
   },
 });
