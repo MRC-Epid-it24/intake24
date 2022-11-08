@@ -170,10 +170,6 @@ export default defineComponent({
       return !this.leftovers;
     },
 
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     servingImageSet(): string | undefined {
       const {
         bowls,

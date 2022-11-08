@@ -31,17 +31,17 @@ export default defineComponent({
   },
 
   setup() {
-    const { freeTextSelectedFood, localeId } = useFoodPromptUtils();
+    const { freeTextFood, localeId } = useFoodPromptUtils();
 
     const foodData = ref<UserFoodData | undefined>(undefined);
-    const searchTerm = ref(freeTextSelectedFood().description);
+    const searchTerm = ref(freeTextFood().description);
 
-    return { foodData, searchTerm, freeTextSelectedFood, localeId };
+    return { foodData, searchTerm, freeTextFood, localeId };
   },
 
   computed: {
     selectedFoodDescription(): string {
-      return this.freeTextSelectedFood().description;
+      return this.freeTextFood().description;
     },
   },
 
@@ -60,7 +60,7 @@ export default defineComponent({
         return;
       }
 
-      const { id, customPromptAnswers, flags } = this.freeTextSelectedFood();
+      const { id, customPromptAnswers, flags } = this.freeTextFood();
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt

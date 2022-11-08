@@ -119,10 +119,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     standardUnits(): StandardPortionUnit[] {
       const { parameters } = this;
 

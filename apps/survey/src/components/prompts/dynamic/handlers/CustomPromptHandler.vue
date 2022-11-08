@@ -5,8 +5,8 @@
     v-bind="{
       promptComponent,
       promptProps,
-      meal: selectedMealOptional,
-      food: encodedFoodOptional(),
+      meal: mealOptional,
+      food: foodOptional(),
     }"
     @confirm="$emit('continue')"
     @update="update"
@@ -50,15 +50,15 @@ export default defineComponent({
   },
 
   setup() {
-    const { encodedFoodOptional, selectedFood } = useFoodPromptUtils();
-    const { selectedMeal, selectedMealOptional } = useMealPromptUtils();
+    const { encodedFoodOptional: foodOptional, encodedFood: food } = useFoodPromptUtils();
+    const { meal, mealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
     return {
-      encodedFoodOptional,
-      selectedFood,
-      selectedMeal,
-      selectedMealOptional,
+      food,
+      foodOptional,
+      meal,
+      mealOptional,
       survey,
     };
   },
@@ -101,12 +101,12 @@ export default defineComponent({
           case 'food': {
             if (infoPrompts.includes(this.promptComponent))
               this.survey.setFoodFlag({
-                foodId: this.selectedFood().id,
+                foodId: this.food().id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setFoodCustomPromptAnswer({
-                foodId: this.selectedFood().id,
+                foodId: this.food().id,
                 promptId: this.promptId,
                 answer: this.state,
               });
@@ -115,12 +115,12 @@ export default defineComponent({
           case 'meal': {
             if (infoPrompts.includes(this.promptComponent))
               this.survey.setMealFlag({
-                mealId: this.selectedMeal.id,
+                mealId: this.meal.id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setMealCustomPromptAnswer({
-                mealId: this.selectedMeal.id,
+                mealId: this.meal.id,
                 promptId: this.promptId,
                 answer: this.state,
               });

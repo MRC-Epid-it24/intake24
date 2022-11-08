@@ -126,10 +126,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     objectValid() {
       return this.portionSize.objectIndex !== undefined && this.objectConfirmed;
     },

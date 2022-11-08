@@ -151,10 +151,6 @@ export default defineComponent({
       return !!this.parameters['leftovers-image-set'];
     },
 
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     servingValid(): boolean {
       return !!(this.portionSize.serving && this.servingImageConfirmed);
     },

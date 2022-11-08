@@ -76,10 +76,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     isValid(): boolean {
       return this.option !== null;
     },

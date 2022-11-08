@@ -11,8 +11,8 @@ export function requireMeal(meal: MealState | undefined): MealState {
 export const useMealPromptUtils = () => {
   const survey = useSurvey();
 
-  const selectedMeal = computed(() => requireMeal(survey.selectedMealOptional));
-  const selectedMealOptional = computed(() => survey.selectedMealOptional);
+  const meal = computed(() => requireMeal(survey.selectedMealOptional));
+  const mealOptional = computed(() => survey.selectedMealOptional);
 
-  return { selectedMeal, selectedMealOptional };
+  return { meal, mealOptional };
 };

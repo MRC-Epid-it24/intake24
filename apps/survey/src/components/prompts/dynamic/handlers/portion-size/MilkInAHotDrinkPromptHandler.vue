@@ -1,12 +1,12 @@
 <template>
   <milk-in-a-hot-drink-prompt
     v-bind="{
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       promptComponent,
       promptProps,
     }"
-    :original-serving="selectedParentFood.portionSize?.servingWeight ?? 100"
     @confirm="$emit('continue')"
     @update="update"
   ></milk-in-a-hot-drink-prompt>
@@ -50,8 +50,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { foodName, selectedFood, selectedParentFood, selectedPortionSize } =
-      useFoodPromptUtils();
+    const { encodedFood: food, parentFood, portionSize } = useFoodPromptUtils();
 
     const getInitialState = (): MilkInAHotDrinkPromptState => ({
       portionSize: {
@@ -72,10 +71,9 @@ export default defineComponent({
     );
 
     return {
-      foodName,
-      selectedFood,
-      selectedParentFood,
-      selectedPortionSize,
+      food,
+      parentFood,
+      portionSize,
       state,
       update,
       clearStoredState,
@@ -90,7 +88,7 @@ export default defineComponent({
         state: {
           portionSize: { milkVolumePercentage },
         },
-        selectedParentFood,
+        parentFood,
       } = this;
 
       if (!milkVolumePercentage) {
@@ -98,20 +96,19 @@ export default defineComponent({
         return;
       }
 
-      if (!selectedParentFood)
-        throw new Error('Milk in a hot drink prompt: parent food not found.');
+      if (!parentFood) throw new Error('Milk in a hot drink prompt: parent food not found.');
 
       if (
-        !selectedParentFood.portionSize ||
-        selectedParentFood.portionSize.servingWeight === null ||
-        selectedParentFood.portionSize.leftoversWeight === null
+        !parentFood.portionSize ||
+        parentFood.portionSize.servingWeight === null ||
+        parentFood.portionSize.leftoversWeight === null
       )
         throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
 
-      const { servingWeight, leftoversWeight } = selectedParentFood.portionSize;
+      const { servingWeight, leftoversWeight } = parentFood.portionSize;
 
       const drinkPortionSize = {
-        ...selectedParentFood.portionSize,
+        ...parentFood.portionSize,
         servingWeight: servingWeight * (1 - milkVolumePercentage),
         leftoversWeight: leftoversWeight * (1 - milkVolumePercentage),
       };
@@ -122,9 +119,9 @@ export default defineComponent({
         leftoversWeight: leftoversWeight * milkVolumePercentage,
       };
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize: milkPortionSize } });
+      this.updateFood({ foodId: this.food().id, update: { portionSize: milkPortionSize } });
       this.updateFood({
-        foodId: this.selectedParentFood.id,
+        foodId: this.parentFood.id,
         update: { portionSize: drinkPortionSize },
       });
       this.clearStoredState();

@@ -42,12 +42,7 @@ export default defineComponent({
     },
 
     localeFoodName() {
-      if (!this.food) return undefined;
-
-      if (this.food.type !== 'encoded-food')
-        throw new Error('This selected food must be an encoded food');
-
-      return this.getLocaleContent(this.food.data.englishName);
+      return this.food && this.getLocaleContent(this.food.data.englishName);
     },
 
     localeMealName() {

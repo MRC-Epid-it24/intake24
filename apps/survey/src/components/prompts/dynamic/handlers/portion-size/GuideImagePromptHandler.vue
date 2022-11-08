@@ -2,7 +2,8 @@
   <guide-image-prompt
     v-bind="{
       conversionFactor,
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       parameters,
       promptComponent,
@@ -49,8 +50,12 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { conversionFactor, foodName, parameters, selectedFood } =
-      useFoodPromptUtils<'guide-image'>();
+    const {
+      conversionFactor,
+      encodedFood: food,
+      parameters,
+      parentFoodOptional: parentFood,
+    } = useFoodPromptUtils<'guide-image'>();
 
     const getInitialState = (): GuideImagePromptState => ({
       portionSize: {
@@ -77,9 +82,9 @@ export default defineComponent({
 
     return {
       conversionFactor,
-      foodName,
+      food,
       parameters,
-      selectedFood,
+      parentFood,
       state,
       update,
       clearStoredState,
@@ -92,7 +97,7 @@ export default defineComponent({
     async commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
+      this.updateFood({ foodId: this.food().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

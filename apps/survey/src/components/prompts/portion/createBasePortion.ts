@@ -6,7 +6,7 @@ import type {
   PortionSizeComponentType,
   PromptQuestion,
 } from '@intake24/common/prompts';
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
 import { portionSizePromptQuestions } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
@@ -23,9 +23,12 @@ export default <P extends BasePromptProps, S extends object>() =>
     mixins: [localeContent],
 
     props: {
-      foodName: {
-        type: Object as PropType<LocaleTranslation>,
+      food: {
+        type: Object as PropType<EncodedFood>,
         required: true,
+      },
+      parentFood: {
+        type: Object as PropType<EncodedFood>,
       },
       initialState: {
         type: Object as PropType<S>,
@@ -58,6 +61,12 @@ export default <P extends BasePromptProps, S extends object>() =>
     },
 
     computed: {
+      foodName(): LocaleTranslation {
+        return { en: this.food.data.englishName };
+      },
+      localeFoodName(): string {
+        return this.getLocaleContent(this.foodName);
+      },
       hasErrors(): boolean {
         return !!this.errors.length;
       },

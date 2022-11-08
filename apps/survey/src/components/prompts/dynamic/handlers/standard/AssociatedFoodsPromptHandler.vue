@@ -1,7 +1,7 @@
 <template>
   <associated-foods-prompt
     v-bind="{
-      food: encodedSelectedFood(),
+      food: food(),
       initialState: state,
       localeId,
       promptComponent,
@@ -62,12 +62,12 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { encodedSelectedFood, localeId, meals } = useFoodPromptUtils();
+    const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
 
     const getInitialState = (): AssociatedFoodsState => {
       return {
         activePrompt: 0,
-        prompts: encodedSelectedFood().data.associatedFoodPrompts.map(() => initialPromptState()),
+        prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
       };
     };
 
@@ -79,7 +79,7 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
+      food,
       localeId,
       meals,
       state,
@@ -113,7 +113,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         .map((prompt) => prompt.existingFoodId!);
 
-      const foodId = this.encodedSelectedFood().id;
+      const foodId = this.food().id;
       const foodIndex = getFoodIndexRequired(this.meals, foodId);
       const mealIndex = foodIndex.mealIndex;
       const mealId = this.meals[mealIndex].id;
@@ -149,7 +149,7 @@ export default defineComponent({
       this.setFoods({ mealId, foods: keepFoods });
 
       this.updateFood({
-        foodId: this.encodedSelectedFood().id,
+        foodId: this.food().id,
         update: { associatedFoodsComplete: true, linkedFoods },
       });
 

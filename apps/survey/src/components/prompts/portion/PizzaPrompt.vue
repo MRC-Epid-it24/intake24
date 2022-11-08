@@ -181,10 +181,6 @@ export default defineComponent({
       return this.portionSize.sliceType === 0;
     },
 
-    localeDescription(): string {
-      return this.getLocaleContent(this.description);
-    },
-
     pizzaSliceImageMapId(): string {
       const {
         pizzaSliceImageMapPrefix,

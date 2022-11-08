@@ -1,7 +1,8 @@
 <template>
   <portion-size-option-prompt
     v-bind="{
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       promptComponent,
       promptProps,
@@ -52,10 +53,10 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { encodedSelectedFood, foodName } = useFoodPromptUtils();
+    const { encodedFood: food, parentFoodOptional: parentFood } = useFoodPromptUtils();
 
     const getInitialState = (): PortionSizeOptionState => ({
-      option: encodedSelectedFood().portionSizeMethodIndex,
+      option: food().portionSizeMethodIndex,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -66,8 +67,8 @@ export default defineComponent({
     );
 
     return {
-      encodedSelectedFood,
-      foodName,
+      food,
+      parentFood,
       state,
       update,
       clearStoredState,
@@ -76,7 +77,7 @@ export default defineComponent({
 
   computed: {
     availableMethods(): UserPortionSizeMethod[] {
-      return this.encodedSelectedFood().data.portionSizeMethods;
+      return this.food().data.portionSizeMethods;
     },
   },
 
@@ -85,7 +86,7 @@ export default defineComponent({
 
     commitAnswer() {
       this.updateFood({
-        foodId: this.encodedSelectedFood().id,
+        foodId: this.food().id,
         update: { portionSizeMethodIndex: this.state.option },
       });
 

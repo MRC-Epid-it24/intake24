@@ -1,7 +1,8 @@
 <template>
   <drink-scale-prompt
     v-bind="{
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       parameters,
       promptComponent,
@@ -48,7 +49,11 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { foodName, parameters, selectedFood } = useFoodPromptUtils<'drink-scale'>();
+    const {
+      encodedFood: food,
+      parameters,
+      parentFoodOptional: parentFood,
+    } = useFoodPromptUtils<'drink-scale'>();
 
     const getInitialState = (): DrinkScalePromptState => ({
       portionSize: {
@@ -79,9 +84,9 @@ export default defineComponent({
     );
 
     return {
-      foodName,
+      food,
       parameters,
-      selectedFood,
+      parentFood,
       state,
       update,
       clearStoredState,
@@ -94,7 +99,7 @@ export default defineComponent({
     async commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
+      this.updateFood({ foodId: this.food().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

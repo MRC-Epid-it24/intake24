@@ -24,7 +24,7 @@
                     {{ option.label }}
                     <v-spacer></v-spacer>
                     <quantity-badge
-                      :amount="Number(option.value) * originServ"
+                      :amount="Number(option.value) * parentServing"
                       unit="ml"
                       :valid="true"
                     ></quantity-badge>
@@ -49,10 +49,11 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { ListOption, MilkInAHotDrinkPromptProps } from '@intake24/common/prompts';
-import type { MilkInAHotDrinkState } from '@intake24/common/types';
+import type { EncodedFood, MilkInAHotDrinkState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
@@ -71,15 +72,15 @@ export default defineComponent({
   mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkPromptState>()],
 
   props: {
-    originalServing: {
-      type: Number,
+    parentFood: {
+      type: Object as PropType<EncodedFood>,
+      required: true,
     },
   },
 
-  data(props) {
+  data() {
     return {
       ...copy(this.initialState),
-      originServ: props.originalServing ?? 1,
     };
   },
 
@@ -91,6 +92,10 @@ export default defineComponent({
           value: Number.parseFloat(item.value.toString()),
         }))
         .filter(({ value }) => !Number.isNaN(value));
+    },
+
+    parentServing() {
+      return this.parentFood.portionSize?.servingWeight ?? 100;
     },
 
     milkValid() {

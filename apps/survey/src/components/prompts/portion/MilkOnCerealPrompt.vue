@@ -115,10 +115,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeFoodName(): string {
-      return this.getLocaleContent(this.foodName);
-    },
-
     bowl() {
       return this.portionSize.bowl ?? undefined;
     },
@@ -170,6 +166,8 @@ export default defineComponent({
     },
 
     async fetchMilkLevelImageMap() {
+      if (!this.milkLevelImageMapId) return;
+
       const { data } = await this.$http.get<ImageMapResponse>(
         `portion-sizes/image-maps/${this.milkLevelImageMapId}`
       );

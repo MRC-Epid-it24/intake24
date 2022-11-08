@@ -179,10 +179,6 @@ export default defineComponent({
       return !this.leftovers;
     },
 
-    localeFoodName() {
-      return this.getLocaleContent(this.foodName);
-    },
-
     scale() {
       if (!this.drinkwareSetData || this.portionSize.containerIndex === undefined) return undefined;
 

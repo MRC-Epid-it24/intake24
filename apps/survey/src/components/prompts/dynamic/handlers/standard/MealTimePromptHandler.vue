@@ -1,6 +1,6 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, mealName: selectedMeal.name, promptComponent, promptProps }"
+    v-bind="{ initialState: state, mealName: meal.name, promptComponent, promptProps }"
     @confirm="$emit('continue')"
     @remove-meal="removeMeal"
     @update="update"
@@ -42,30 +42,25 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { selectedMeal } = useMealPromptUtils();
+    const { meal } = useMealPromptUtils();
 
-    const getInitialState = (): MealTime =>
-      selectedMeal.value.time ?? selectedMeal.value.defaultTime;
+    const getInitialState = (): MealTime => meal.value.time ?? meal.value.defaultTime;
 
     const { state, update } = usePromptHandlerNoStore(getInitialState, context);
 
-    return {
-      selectedMeal,
-      state,
-      update,
-    };
+    return { meal, state, update };
   },
 
   methods: {
     ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
 
     removeMeal() {
-      this.deleteMeal(this.selectedMeal.id);
+      this.deleteMeal(this.meal.id);
       this.$emit('complete');
     },
 
     async commitAnswer() {
-      this.setMealTime({ mealId: this.selectedMeal.id, time: this.state });
+      this.setMealTime({ mealId: this.meal.id, time: this.state });
     },
   },
 });

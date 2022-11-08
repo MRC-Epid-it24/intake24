@@ -1,7 +1,8 @@
 <template>
   <milk-on-cereal-prompt
     v-bind="{
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       promptComponent,
       promptProps,
@@ -46,7 +47,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { foodName, selectedFood, selectedPortionSize } = useFoodPromptUtils();
+    const { encodedFood: food, parentFoodOptional: parentFood, portionSize } = useFoodPromptUtils();
 
     const getInitialState = (): MilkOnCerealPromptState => ({
       portionSize: {
@@ -72,9 +73,9 @@ export default defineComponent({
     );
 
     return {
-      foodName,
-      selectedFood,
-      selectedPortionSize,
+      food,
+      parentFood,
+      portionSize,
       state,
       update,
       clearStoredState,
@@ -87,7 +88,7 @@ export default defineComponent({
     async commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
+      this.updateFood({ foodId: this.food().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

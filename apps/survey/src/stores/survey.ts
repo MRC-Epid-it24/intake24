@@ -174,7 +174,7 @@ export const useSurvey = defineStore('survey', {
     },
     selectedParentFood(): FoodState | undefined {
       const foodIndex = this.selectedFoodIndex;
-      if (foodIndex === undefined || foodIndex.linkedFoodIndex === undefined) return undefined;
+      if (foodIndex?.linkedFoodIndex === undefined) return undefined;
 
       return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
     },

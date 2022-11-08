@@ -1,7 +1,8 @@
 <template>
   <as-served-prompt
     v-bind="{
-      foodName: foodName(),
+      food: food(),
+      parentFood,
       initialState: state,
       parameters,
       promptComponent,
@@ -47,8 +48,12 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { foodName, parameters, selectedFood, selectedPortionSize } =
-      useFoodPromptUtils<'as-served'>();
+    const {
+      encodedFood: food,
+      parameters,
+      parentFoodOptional: parentFood,
+      portionSize,
+    } = useFoodPromptUtils<'as-served'>();
 
     const getInitialState = (): AsServedPromptState => ({
       portionSize: {
@@ -72,10 +77,10 @@ export default defineComponent({
     );
 
     return {
-      foodName,
+      food,
       parameters,
-      selectedFood,
-      selectedPortionSize,
+      parentFood,
+      portionSize,
       state,
       update,
       clearStoredState,
@@ -88,7 +93,7 @@ export default defineComponent({
     async commitAnswer() {
       const { portionSize } = this.state;
 
-      this.updateFood({ foodId: this.selectedFood().id, update: { portionSize } });
+      this.updateFood({ foodId: this.food().id, update: { portionSize } });
       this.clearStoredState();
     },
   },

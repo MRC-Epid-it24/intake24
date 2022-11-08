@@ -1,7 +1,7 @@
 <template>
   <edit-meal-prompt
     ref="prompt"
-    v-bind="{ initialState: state, mealName: selectedMeal.name, promptComponent, promptProps }"
+    v-bind="{ initialState: state, mealName: meal.name, promptComponent, promptProps }"
     @confirm="$emit('continue')"
     @remove-meal="removeMeal"
     @update="update"
@@ -45,9 +45,9 @@ export default defineComponent({
 
   setup(props, context) {
     const prompt = ref<InstanceType<typeof EditMealPrompt>>();
-    const { selectedMeal } = useMealPromptUtils();
+    const { meal } = useMealPromptUtils();
 
-    const getInitialState = (): EditMealPromptState => ({ foods: selectedMeal.value.foods });
+    const getInitialState = (): EditMealPromptState => ({ foods: meal.value.foods });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.promptId,
@@ -58,7 +58,7 @@ export default defineComponent({
 
     return {
       prompt,
-      selectedMeal,
+      meal,
       state,
       update,
       clearStoredState,
@@ -69,13 +69,13 @@ export default defineComponent({
     ...mapActions(useSurvey, ['setFoods', 'setMealFlag', 'deleteMeal']),
 
     removeMeal() {
-      this.deleteMeal(this.selectedMeal.id);
+      this.deleteMeal(this.meal.id);
       this.$emit('complete');
     },
 
     async commitAnswer() {
       const { foods } = this.state;
-      const mealId = this.selectedMeal.id;
+      const mealId = this.meal.id;
 
       this.setFoods({ mealId, foods });
       this.clearStoredState();
