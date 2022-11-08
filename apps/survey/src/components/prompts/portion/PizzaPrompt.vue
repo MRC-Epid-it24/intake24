@@ -267,10 +267,24 @@ export default defineComponent({
       this.setPanel(this.quantityValid ? -1 : 3);
     },
 
+    clearType(type: PizzaImageMapType) {
+      this.portionSize[type] = undefined;
+      this.confirmed[type] = false;
+      this.updatePanel();
+      this.update();
+    },
+
     selectType(type: PizzaImageMapType, idx: number) {
       this.portionSize[type] = idx;
       this.confirmed[type] = false;
       this.update();
+
+      if (type === 'pizzaType') {
+        this.clearType('sliceType');
+        this.confirmType('quantity', false);
+      }
+
+      if (type === 'sliceType' && !this.isMobile) this.confirmType(type);
     },
 
     selectQuantity() {

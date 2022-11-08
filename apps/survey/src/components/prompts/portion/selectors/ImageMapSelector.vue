@@ -17,13 +17,13 @@
             class="guide-drawer-polygon"
             :class="{ active: idx === value }"
             :points="polygon"
-            @click.stop="$emit('input', idx)"
-            @keypress.stop="$emit('input', idx)"
+            @click.stop="select(idx)"
+            @keypress.stop="select(idx)"
           ></polygon>
         </svg>
       </div>
     </v-col>
-    <v-col cols="12" sm="auto">
+    <v-col v-if="isMobile" cols="12" sm="auto">
       <v-btn :block="isMobile" color="success" :disabled="isDisabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
@@ -117,6 +117,12 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
+    },
+
+    select(idx: number) {
+      this.$emit('input', idx);
+
+      if (!this.isMobile) this.confirm();
     },
 
     confirm() {
