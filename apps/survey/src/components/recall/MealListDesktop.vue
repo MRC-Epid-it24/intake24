@@ -145,8 +145,12 @@ export default defineComponent({
 
 <style lang="scss">
 .meal-item {
-  .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon .v-icon {
-    transform: rotate(180deg);
+  .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon {
+    margin-right: 6px;
+
+    .v-icon {
+      transform: rotate(180deg);
+    }
   }
   .v-list-group__header__append-icon {
     display: none !important;

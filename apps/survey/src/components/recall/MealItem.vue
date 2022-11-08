@@ -13,13 +13,13 @@
       <v-list-item-title class="font-weight-bold text-wrap">
         {{ getLocaleContent(meal.name) }}
       </v-list-item-title>
-      <v-list-item-action>
+      <v-list-item-action class="mr-4">
         <v-list-item-action-text v-if="mealTimeString.length">
           {{ mealTimeString }}
         </v-list-item-action-text>
         <v-icon v-else x-small>far fa-question-circle</v-icon>
       </v-list-item-action>
-      <v-list-item-action class="my-auto ml-4">
+      <v-list-item-action class="my-auto">
         <context-menu
           :entity-name="meal.name.en"
           :icon="menuMealIcon"

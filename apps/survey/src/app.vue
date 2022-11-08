@@ -19,7 +19,7 @@
             "
           >
             <v-list-item-action>
-              <v-icon>fas fa-fw fa-home</v-icon>
+              <v-icon>$home</v-icon>
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>{{ $t('common.home') }}</v-list-item-title>
@@ -91,7 +91,12 @@
     </v-app-bar>
     <v-main>
       <router-view></router-view>
+      <router-view name="nav"></router-view>
     </v-main>
+    <navigation
+      v-if="showNav"
+      v-bind="{ surveyId, recall: !limitReached, feedback: feedbackAvailable }"
+    ></navigation>
     <service-worker></service-worker>
     <message-box></message-box>
     <!-- <v-footer app> </v-footer> -->
@@ -104,7 +109,8 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import logo from '@intake24/survey/assets/logo.svg';
-import Loader from '@intake24/survey/components/Loader.vue';
+import { Loader } from '@intake24/survey/components';
+import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
 import { useAuth, useSurvey } from './stores';
@@ -112,7 +118,7 @@ import { useAuth, useSurvey } from './stores';
 export default defineComponent({
   name: 'App',
 
-  components: { ConfirmDialog, Loader, MessageBox, ServiceWorker },
+  components: { ConfirmDialog, Loader, MessageBox, Navigation, ServiceWorker },
 
   mixins: [setsLanguage],
 
@@ -135,6 +141,10 @@ export default defineComponent({
       if (this.$route.meta?.title) return this.$t(this.$route.meta.title);
 
       return this.$t('common._');
+    },
+
+    showNav(): boolean {
+      return this.loggedIn && !!this.surveyId && this.$route.name !== 'survey-recall';
     },
   },
 

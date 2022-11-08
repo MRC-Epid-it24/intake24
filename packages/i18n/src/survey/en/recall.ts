@@ -9,11 +9,12 @@ const recall: LocaleMessageObject = {
     daily: 'You have reached the daily limit of recalls.',
     total: 'You have reached the total limit of recalls.',
   },
-  past: 'Past recalls',
   submissions: {
     _: 'Recall day',
     title: 'Recall days',
     all: 'all',
+    past: 'Past recalls',
+    none: 'You do not have any past recalls yet.',
   },
   start: 'Start',
   continue: 'Continue',

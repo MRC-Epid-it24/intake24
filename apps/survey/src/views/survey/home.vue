@@ -86,7 +86,7 @@
           </v-list>
           <v-divider></v-divider>
           <!-- Feedback info -->
-          <v-list subheader>
+          <v-list class="list-no-wrap" subheader>
             <v-subheader>{{ $t('feedback.info') }}</v-subheader>
             <template v-if="feedbackEnabled">
               <v-list-item v-if="feedbackAvailable" link>
@@ -132,28 +132,40 @@
           </v-list>
           <v-divider></v-divider>
           <!-- Past recalls -->
-          <v-list subheader two-line>
-            <v-subheader>{{ $t('recall.past') }}</v-subheader>
-            <template v-for="(submission, idx) in submissions">
-              <v-list-item :key="submission.id" link>
-                <v-list-item-icon>
-                  <v-icon v-if="!idx" large>$survey</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ `${$t('recall.submissions._')} ${idx + 1}` }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider
-                v-if="idx + 1 < submissions.length"
-                :key="`div-${submission.id}`"
-                inset
-              ></v-divider>
+          <v-list class="list-no-wrap" subheader :two-line="!!submissions.length">
+            <v-subheader>{{ $t('recall.submissions.past') }}</v-subheader>
+            <template v-if="submissions.length">
+              <template v-for="(submission, idx) in submissions">
+                <v-list-item :key="submission.id" link>
+                  <v-list-item-icon>
+                    <v-icon v-if="!idx" large>$survey</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ `${$t('recall.submissions._')} ${idx + 1}` }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider
+                  v-if="idx + 1 < submissions.length"
+                  :key="`div-${submission.id}`"
+                  inset
+                ></v-divider>
+              </template>
             </template>
+            <v-list-item v-else>
+              <v-list-item-avatar>
+                <v-icon large>$survey</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ $t('recall.submissions.none') }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
         </v-card>
       </v-col>

@@ -18,6 +18,7 @@ export default new Vuetify({
       feedback: 'fas fa-comments',
       food: 'fas fa-cheese',
       forward: 'fas fa-caret-right',
+      home: 'fas fa-home',
       login: 'fas fa-sign-in-alt',
       logout: 'fas fa-sign-out-alt',
       meal: 'fas fa-utensils',
