@@ -67,6 +67,8 @@ export default defineComponent({
       servingImageConfirmed: false,
       leftoversPrompt: undefined,
       leftoversImageConfirmed: false,
+      linkedQuantity: 1,
+      linkedQuantityConfirmed: false,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(

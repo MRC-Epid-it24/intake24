@@ -208,8 +208,8 @@ export default defineComponent({
       return this.confirmed.quantity;
     },
 
-    isValid() {
-      return this.typeValid && this.thicknessValid && this.sliceValid && this.quantityValid;
+    validConditions(): boolean[] {
+      return [this.typeValid, this.thicknessValid, this.sliceValid, this.quantityValid];
     },
   },
 
@@ -237,30 +237,6 @@ export default defineComponent({
       );
 
       this.imageMaps[type] = { ...data };
-    },
-
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.typeValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      if (!this.thicknessValid) {
-        this.setPanel(1);
-        return;
-      }
-
-      if (!this.sliceValid) {
-        this.setPanel(2);
-        return;
-      }
-
-      this.setPanel(this.quantityValid ? -1 : 3);
     },
 
     clearType(type: PizzaImageMapType) {

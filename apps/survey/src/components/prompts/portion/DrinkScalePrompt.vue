@@ -6,7 +6,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.container`">
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -26,7 +26,7 @@
       <!-- Step 1: Select Serving Weight ml-->
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.serving.header`, { food: localeFoodName }) }}
+          {{ $t(`portion.${portionSize.method}.serving.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.servingWeight ?? undefined"
@@ -39,7 +39,7 @@
         <v-expansion-panel-content>
           <v-row>
             <v-col>
-              {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}
             </v-col>
           </v-row>
           <drink-scale-panel
@@ -55,7 +55,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
+          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftoversWeight ?? undefined"
@@ -74,7 +74,7 @@
               <p>
                 {{
                   $t(`portion.${portionSize.method}.leftovers.question`, {
-                    food: localeFoodName,
+                    food: foodName,
                   })
                 }}
               </p>
@@ -91,7 +91,7 @@
           <template v-if="leftoversPrompt">
             <v-row>
               <v-col>
-                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: localeFoodName }) }}
+                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}
               </v-col>
             </v-row>
             <v-row>
@@ -205,14 +205,13 @@ export default defineComponent({
       return this.leftoversConfirmed;
     },
 
-    isValid() {
-      // object || quantity not yet selected
-      if (!this.objectValid || !this.quantityValid) return false;
+    validConditions(): boolean[] {
+      const conditions = [this.objectValid, this.quantityValid];
 
-      // Leftovers disables || leftovers have been confirmed
-      if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
+      if (!this.disabledLeftovers)
+        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      return this.leftoversValid;
+      return conditions;
     },
   },
 
@@ -233,25 +232,6 @@ export default defineComponent({
       );
 
       this.imageMapData = { ...imageMapData };
-    },
-
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.objectValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      if (!this.quantityValid) {
-        this.setPanel(1);
-        return;
-      }
-
-      this.setPanel(this.leftoversPrompt === false || this.leftoversValid ? -1 : 2);
     },
 
     selectObject(idx: number) {

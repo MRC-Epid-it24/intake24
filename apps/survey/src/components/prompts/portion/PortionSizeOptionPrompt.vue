@@ -30,7 +30,7 @@
         </v-container>
       </v-item-group>
       <v-alert v-else border="left" outlined type="warning">
-        {{ $t('portion.unknown.text', { food: localeFoodName }) }}
+        {{ $t('portion.unknown.text', { food: foodName }) }}
       </v-alert>
     </v-sheet>
   </portion-layout>
@@ -76,8 +76,8 @@ export default defineComponent({
   },
 
   computed: {
-    isValid(): boolean {
-      return this.option !== null;
+    validConditions(): boolean[] {
+      return [this.option !== null];
     },
   },
 

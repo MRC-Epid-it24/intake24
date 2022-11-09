@@ -104,8 +104,8 @@ export default defineComponent({
       );
     },
 
-    isValid() {
-      return this.milkValid;
+    validConditions(): boolean[] {
+      return [this.milkValid];
     },
   },
 
@@ -120,15 +120,6 @@ export default defineComponent({
   },
 
   methods: {
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      this.setPanel(this.milkValid ? -1 : 0);
-    },
-
     setErrors() {
       this.errors = [];
     },

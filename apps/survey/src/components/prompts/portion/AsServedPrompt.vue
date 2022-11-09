@@ -15,7 +15,7 @@
         <v-expansion-panel-content>
           <v-row>
             <v-col>
-              {{ $t(`portion.${portionSize.method}.serving.label`, { food: localeFoodName }) }}
+              {{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}
             </v-col>
           </v-row>
           <v-row>
@@ -32,7 +32,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers && parameters['leftovers-image-set']">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: localeFoodName }) }}
+          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -50,7 +50,7 @@
               <p>
                 {{
                   $t(`portion.${portionSize.method}.leftovers.question`, {
-                    food: localeFoodName,
+                    food: foodName,
                   })
                 }}
               </p>
@@ -67,7 +67,7 @@
           <template v-if="leftoversPrompt">
             <v-row>
               <v-col>
-                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: localeFoodName }) }}
+                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}
               </v-col>
             </v-row>
             <v-row>
@@ -83,6 +83,31 @@
               </v-col>
             </v-row>
           </template>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-expansion-panel v-if="promptForLinkedQuantity">
+        <v-expansion-panel-header disable-icon-rotate>
+          <i18n path="portion.linkedAmount.label">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+            <template #quantity>
+              <span class="font-weight-medium">{{ parentQuantity }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <valid-invalid-icon :valid="linkedQuantityConfirmed"></valid-invalid-icon>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <quantity-card
+            v-model="linkedQuantity"
+            :confirm.sync="linkedQuantityConfirmed"
+            :max="parentQuantity"
+            :min="1"
+            @input="selectLinkedQuantity"
+            @update:confirm="confirmLinkedQuantity"
+          ></quantity-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -112,7 +137,7 @@ import type {
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { AsServedSelector, QuantityBadge } from './selectors';
+import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
 
 export interface AsServedPromptState {
   portionSize: AsServedState;
@@ -120,12 +145,14 @@ export interface AsServedPromptState {
   servingImageConfirmed: boolean;
   leftoversImageConfirmed: boolean;
   leftoversPrompt?: boolean;
+  linkedQuantity: number;
+  linkedQuantityConfirmed: boolean;
 }
 
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  components: { AsServedSelector, QuantityBadge },
+  components: { AsServedSelector, QuantityBadge, QuantityCard },
 
   mixins: [createBasePortion<AsServedPromptProps, AsServedPromptState>()],
 
@@ -159,18 +186,21 @@ export default defineComponent({
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
 
-    isValid(): boolean {
-      // serving not yet selected
-      if (!this.servingValid) return false;
+    linkedQuantityValid(): boolean {
+      return this.linkedQuantityConfirmed;
+    },
 
-      // Leftovers disables || food has no leftovers || leftovers have been confirmed
-      if (this.disabledLeftovers || !this.hasLeftovers || this.leftoversPrompt === false)
-        return true;
+    validConditions(): boolean[] {
+      const conditions = [this.servingValid];
 
-      // leftovers not yet selected
-      if (!this.leftoversValid) return false;
+      if (!this.disabledLeftovers && this.hasLeftovers)
+        conditions.push(
+          !this.hasLeftovers || this.leftoversPrompt === false || this.leftoversValid
+        );
 
-      return true;
+      if (this.promptForLinkedQuantity) conditions.push(this.linkedQuantityConfirmed);
+
+      return conditions;
     },
   },
 
@@ -183,24 +213,9 @@ export default defineComponent({
   },
 
   methods: {
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.servingValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      this.setPanel(
-        !this.hasLeftovers || this.leftoversPrompt === false || this.leftoversValid ? -1 : 1
-      );
-    },
-
     updateServing(update: SelectedAsServedImage | null) {
       this.portionSize.serving = update;
+      this.servingImageConfirmed = false;
       this.clearLeftovers();
 
       if (this.isValid) this.clearErrors();
@@ -222,6 +237,7 @@ export default defineComponent({
 
     updateLeftovers(update: SelectedAsServedImage | null) {
       this.portionSize.leftovers = update;
+      this.leftoversImageConfirmed = false;
 
       if (this.isValid) this.clearErrors();
 
@@ -230,6 +246,15 @@ export default defineComponent({
 
     confirmLeftovers() {
       this.leftoversImageConfirmed = true;
+      this.updatePanel();
+      this.update();
+    },
+
+    selectLinkedQuantity() {
+      this.update();
+    },
+
+    confirmLinkedQuantity() {
       this.updatePanel();
       this.update();
     },
@@ -248,8 +273,10 @@ export default defineComponent({
     },
 
     update() {
-      this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
-      this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0;
+      this.portionSize.servingWeight =
+        (this.portionSize.serving?.weight ?? 0) * this.linkedQuantity;
+      this.portionSize.leftoversWeight =
+        (this.portionSize.leftovers?.weight ?? 0) * this.linkedQuantity;
 
       const state: AsServedPromptState = {
         portionSize: this.portionSize,
@@ -257,6 +284,8 @@ export default defineComponent({
         servingImageConfirmed: this.servingImageConfirmed,
         leftoversImageConfirmed: this.leftoversImageConfirmed,
         leftoversPrompt: this.leftoversPrompt,
+        linkedQuantity: this.linkedQuantity,
+        linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
       this.$emit('update', { state, valid: this.isValid });

@@ -56,7 +56,7 @@ export default defineComponent({
 
   computed: {
     localeFoodName() {
-      return this.food && this.getLocaleContent(this.food.data.englishName);
+      return this.food && this.getLocaleContent(this.food.data.localName);
     },
 
     localeMealName() {
@@ -72,7 +72,9 @@ export default defineComponent({
       return this.getLocaleContent(this.text, { params });
     },
 
-    localeDescription(): string {
+    localeDescription(): string | null {
+      if (!this.description) return null;
+
       const params: Dictionary<string> = {};
       const { localeFoodName, localeMealName } = this;
       if (localeFoodName) params.food = localeFoodName;

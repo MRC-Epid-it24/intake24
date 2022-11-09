@@ -5,7 +5,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.label`">
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -54,7 +54,7 @@
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.quantity`, { food: localeFoodName }) }}
+          {{ $t(`portion.${portionSize.method}.quantity`, { food: foodName }) }}
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -134,8 +134,8 @@ export default defineComponent({
       return this.quantityConfirmed;
     },
 
-    isValid() {
-      return this.objectValid && this.quantityValid;
+    validConditions(): boolean[] {
+      return [this.objectValid, this.quantityValid];
     },
   },
 
@@ -158,20 +158,6 @@ export default defineComponent({
       const { height, width } = window.screen;
       this.height = height;
       this.width = width;
-    },
-
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.objectValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      this.setPanel(this.quantityValid ? -1 : 1);
     },
 
     selectObject(idx: number) {

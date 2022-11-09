@@ -63,7 +63,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return foodEntry;
   };
 
-  const foodName = (): LocaleTranslation => ({ en: encodedFood().data.englishName });
+  const foodName = (): LocaleTranslation => ({ en: encodedFood().data.localName });
 
   const portionSize = (): UserPortionSizeMethod => {
     const selectedFood = encodedFood();

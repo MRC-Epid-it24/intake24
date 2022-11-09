@@ -10,7 +10,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.label`">
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -41,7 +41,7 @@
               ></span>
             </template>
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template v-else>{{ $t(`portion.${portionSize.method}.howMany.placeholder`) }}</template>
@@ -145,8 +145,8 @@ export default defineComponent({
       return this.quantityConfirmed;
     },
 
-    isValid() {
-      return this.unitValid && this.quantityValid;
+    validConditions(): boolean[] {
+      return [this.unitValid, this.quantityValid];
     },
   },
 
@@ -174,20 +174,6 @@ export default defineComponent({
 
         return acc;
       }, {});
-    },
-
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.unitValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      this.setPanel(this.quantityValid ? -1 : 1);
     },
 
     estimateInLabel(unit: string) {

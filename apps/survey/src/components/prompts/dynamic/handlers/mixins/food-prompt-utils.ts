@@ -37,7 +37,7 @@ export default defineComponent({
     // en is hard-coded for now
     foodName(): LocaleTranslation {
       return {
-        en: this.encodedSelectedFood().data.englishName,
+        en: this.encodedSelectedFood().data.localName,
       };
     },
 

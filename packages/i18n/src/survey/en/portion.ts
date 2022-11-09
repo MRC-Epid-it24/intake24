@@ -61,6 +61,9 @@ const portion: LocaleMessageObject = {
       weight: 'Enter weight/volume',
     },
   },
+  linkedAmount: {
+    label: `How many slices (out of {quantity}) did you have {food} on?`,
+  },
   'as-served': {
     text: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     serving: {

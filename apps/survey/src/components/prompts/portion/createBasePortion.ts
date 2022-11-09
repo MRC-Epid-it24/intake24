@@ -6,13 +6,15 @@ import type {
   PortionSizeComponentType,
   PromptQuestion,
 } from '@intake24/common/prompts';
-import type { EncodedFood, LocaleTranslation } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/types';
 import { portionSizePromptQuestions } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
 import PortionLayout from '@intake24/survey/components/layouts/PortionLayout.vue';
 import { localeContent } from '@intake24/survey/components/mixins';
 import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
+
+export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
 
 export default <P extends BasePromptProps, S extends object>() =>
   defineComponent({
@@ -61,17 +63,37 @@ export default <P extends BasePromptProps, S extends object>() =>
     },
 
     computed: {
-      foodName(): LocaleTranslation {
-        return { en: this.food.data.englishName };
+      foodName(): string {
+        return this.getLocaleContent({ en: this.food.data.localName });
       },
-      localeFoodName(): string {
-        return this.getLocaleContent(this.foodName);
-      },
+
       hasErrors(): boolean {
         return !!this.errors.length;
       },
+
+      validConditions(): boolean[] {
+        return [false];
+      },
+
       isValid(): boolean {
-        return false;
+        return this.validConditions.every((conditions) => conditions);
+      },
+
+      parentQuantity(): number {
+        return this.parentFood?.portionSize?.method === 'guide-image'
+          ? this.parentFood.portionSize.quantity
+          : 0;
+      },
+
+      promptForLinkedQuantity(): boolean {
+        const { parentFood } = this;
+        if (!parentFood || !parentFood.portionSize) return false;
+
+        return (
+          parentFood.data.categories.includes(CATEGORY_BREAD_TOP_LEVEL) &&
+          parentFood.portionSize.method === 'guide-image' &&
+          parentFood.portionSize.quantity > 1
+        );
       },
     },
 
@@ -80,16 +102,27 @@ export default <P extends BasePromptProps, S extends object>() =>
     },
 
     methods: {
-      setPanel(panel: number) {
-        this.panel = panel;
+      clearErrors() {
+        this.errors = [];
       },
 
       closePanels() {
         this.panel = -1;
       },
 
-      clearErrors() {
-        this.errors = [];
+      setPanel(panel: number) {
+        this.panel = panel;
+      },
+
+      updatePanel() {
+        for (const [index, condition] of Object.entries(this.validConditions)) {
+          if (!condition) {
+            this.panel = Number.parseInt(index);
+            return;
+          }
+        }
+
+        this.closePanels();
       },
     },
   });

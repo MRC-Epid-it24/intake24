@@ -58,7 +58,7 @@ export default defineComponent({
       default: null,
     },
     foodName: {
-      type: Object as PropType<LocaleTranslation>,
+      type: [Object, String] as PropType<LocaleTranslation | string>,
       required: true,
     },
   },

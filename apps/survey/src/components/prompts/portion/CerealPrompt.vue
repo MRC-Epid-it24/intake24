@@ -5,7 +5,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.container`">
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -36,7 +36,7 @@
         <v-expansion-panel-content>
           <v-row>
             <v-col>
-              {{ $t(`portion.as-served.serving.label`, { food: localeFoodName }) }}
+              {{ $t(`portion.as-served.serving.label`, { food: foodName }) }}
             </v-col>
           </v-row>
           <v-row>
@@ -53,7 +53,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers && leftoverImageSet">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.as-served.leftovers.header`, { food: localeFoodName }) }}
+          {{ $t(`portion.as-served.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -68,7 +68,7 @@
         <v-expansion-panel-content>
           <v-row>
             <v-col>
-              <p>{{ $t(`portion.as-served.leftovers.question`, { food: localeFoodName }) }}</p>
+              <p>{{ $t(`portion.as-served.leftovers.question`, { food: foodName }) }}</p>
               <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
                 <v-btn class="px-4" :value="true">
                   {{ $t('common.action.confirm.yes') }}
@@ -82,7 +82,7 @@
           <template v-if="leftoversPrompt">
             <v-row>
               <v-col>
-                {{ $t(`portion.as-served.leftovers.label`, { food: localeFoodName }) }}
+                {{ $t(`portion.as-served.leftovers.label`, { food: foodName }) }}
               </v-col>
             </v-row>
             <v-row>
@@ -193,8 +193,10 @@ export default defineComponent({
     },
 
     bowlValid() {
-      return (
-        this.portionSize.bowlIndex !== undefined && this.portionSize.bowl && this.bowlConfirmed
+      return !!(
+        this.portionSize.bowlIndex !== undefined &&
+        this.portionSize.bowl &&
+        this.bowlConfirmed
       );
     },
 
@@ -206,20 +208,13 @@ export default defineComponent({
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
 
-    isValid(): boolean {
-      // bowl not yet selected
-      if (!this.bowlValid) return false;
+    validConditions(): boolean[] {
+      const conditions = [this.bowlValid, this.servingValid];
 
-      // serving not yet selected
-      if (!this.servingValid) return false;
+      if (!this.disabledLeftovers)
+        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      // Leftovers disables || leftovers have been confirmed
-      if (this.disabledLeftovers || this.leftoversPrompt === false) return true;
-
-      // leftovers not yet selected
-      if (!this.leftoversValid) return false;
-
-      return true;
+      return conditions;
     },
   },
 
@@ -237,25 +232,6 @@ export default defineComponent({
       this.portionSize.imageUrl = data.baseImageUrl;
     },
 
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.bowlValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      if (!this.servingValid) {
-        this.setPanel(1);
-        return;
-      }
-
-      this.setPanel(this.leftoversPrompt === false || this.leftoversValid ? -1 : 2);
-    },
-
     selectBowl(idx: number) {
       this.portionSize.bowlIndex = idx;
       this.portionSize.bowl = this.bowls[idx];
@@ -271,6 +247,7 @@ export default defineComponent({
 
     updateServing(update: SelectedAsServedImage | null) {
       this.portionSize.serving = update;
+      this.servingImageConfirmed = false;
 
       if (this.isValid) this.clearErrors();
 
@@ -285,6 +262,7 @@ export default defineComponent({
 
     updateLeftovers(update: SelectedAsServedImage | null) {
       this.portionSize.leftovers = update;
+      this.leftoversImageConfirmed = false;
 
       if (this.isValid) this.clearErrors();
 

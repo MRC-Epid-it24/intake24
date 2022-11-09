@@ -5,7 +5,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.container`">
             <template #food>
-              <span class="font-weight-medium">{{ localeFoodName }}</span>
+              <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -138,8 +138,8 @@ export default defineComponent({
       return this.portionSize.milkLevelChoice !== undefined && this.milkLevelConfirmed;
     },
 
-    isValid(): boolean {
-      return this.bowlValid && this.milkLevelValid;
+    validConditions(): boolean[] {
+      return [this.bowlValid, this.milkLevelValid];
     },
   },
 
@@ -174,20 +174,6 @@ export default defineComponent({
 
       this.milkLevelImageMap = { ...data };
       this.portionSize.milkLevelImage = data.baseImageUrl;
-    },
-
-    updatePanel() {
-      if (this.isValid) {
-        this.closePanels();
-        return;
-      }
-
-      if (!this.bowlValid) {
-        this.setPanel(0);
-        return;
-      }
-
-      this.setPanel(this.milkLevelValid ? -1 : 1);
     },
 
     selectBowl(idx: number) {
