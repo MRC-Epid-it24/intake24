@@ -14,12 +14,10 @@ import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
-import {
-  useMealPromptUtils,
-  usePromptHandlerNoStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useMealPromptUtils, usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({
   name: 'MealTimePromptHandler',

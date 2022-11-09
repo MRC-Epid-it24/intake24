@@ -20,12 +20,10 @@ import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
-import customPrompts from '@intake24/survey/components/prompts/custom';
-import {
-  useFoodPromptUtils,
-  useMealPromptUtils,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
+import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useFoodPromptUtils, useMealPromptUtils } from './mixins';
 
 const infoPrompts = ['info-prompt', 'no-more-information-prompt'];
 

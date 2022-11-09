@@ -16,12 +16,10 @@ import { defineComponent, ref } from 'vue';
 
 import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { EditMealPromptState } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
-import {
-  useMealPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'EditMealPromptHandler',

@@ -1,7 +1,6 @@
 <template>
-  <guide-image-prompt
+  <as-served-prompt
     v-bind="{
-      conversionFactor,
       food: food(),
       parentFood,
       initialState: state,
@@ -11,8 +10,7 @@
     }"
     @confirm="$emit('continue')"
     @update="update"
-  >
-  </guide-image-prompt>
+  ></as-served-prompt>
 </template>
 
 <script lang="ts">
@@ -20,19 +18,17 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { GuideImagePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { GuideImagePromptState } from '@intake24/survey/components/prompts/portion/GuideImagePrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { GuideImagePrompt } from '@intake24/survey/components/prompts/portion';
+import type { AsServedPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { AsServedPromptState } from '@intake24/survey/components/prompts';
+import { AsServedPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
-  name: 'GuideImagePromptHandler',
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-  components: { GuideImagePrompt },
+export default defineComponent({
+  name: 'AsServedPromptHandler',
+
+  components: { AsServedPrompt },
 
   props: {
     promptComponent: {
@@ -44,33 +40,33 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<GuideImagePromptProps>,
+      type: Object as PropType<AsServedPromptProps>,
       required: true,
     },
   },
 
   setup(props, context) {
     const {
-      conversionFactor,
       encodedFood: food,
       parameters,
       parentFoodOptional: parentFood,
-    } = useFoodPromptUtils<'guide-image'>();
+      portionSize,
+    } = useFoodPromptUtils<'as-served'>();
 
-    const getInitialState = (): GuideImagePromptState => ({
+    const getInitialState = (): AsServedPromptState => ({
       portionSize: {
-        method: 'guide-image',
-        guideImageId: '',
-        imageUrl: null,
-        objectIndex: undefined,
-        objectWeight: 0,
-        quantity: 1,
+        method: 'as-served',
+        serving: null,
+        leftovers: null,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
-      objectConfirmed: false,
-      quantityConfirmed: false,
+      servingImageConfirmed: false,
+      leftoversPrompt: undefined,
+      leftoversImageConfirmed: false,
+      linkedQuantity: 1,
+      linkedQuantityConfirmed: false,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -81,10 +77,10 @@ export default defineComponent({
     );
 
     return {
-      conversionFactor,
       food,
       parameters,
       parentFood,
+      portionSize,
       state,
       update,
       clearStoredState,

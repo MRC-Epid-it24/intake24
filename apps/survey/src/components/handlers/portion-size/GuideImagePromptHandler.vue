@@ -1,5 +1,5 @@
 <template>
-  <standard-portion-prompt
+  <guide-image-prompt
     v-bind="{
       conversionFactor,
       food: food(),
@@ -12,7 +12,7 @@
     @confirm="$emit('continue')"
     @update="update"
   >
-  </standard-portion-prompt>
+  </guide-image-prompt>
 </template>
 
 <script lang="ts">
@@ -20,22 +20,17 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type {
-  PortionSizeComponentType,
-  StandardPortionPromptProps,
-} from '@intake24/common/prompts';
-import type { StandardPortionPromptState } from '@intake24/survey/components/prompts/portion/StandardPortionPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { StandardPortionPrompt } from '@intake24/survey/components/prompts/portion';
+import type { GuideImagePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { GuideImagePromptState } from '@intake24/survey/components/prompts';
+import { GuideImagePrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
-  name: 'StandardPortionPromptHandler',
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-  components: { StandardPortionPrompt },
+export default defineComponent({
+  name: 'GuideImagePromptHandler',
+
+  components: { GuideImagePrompt },
 
   props: {
     promptComponent: {
@@ -47,7 +42,7 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<StandardPortionPromptProps>,
+      type: Object as PropType<GuideImagePromptProps>,
       required: true,
     },
   },
@@ -58,17 +53,21 @@ export default defineComponent({
       encodedFood: food,
       parameters,
       parentFoodOptional: parentFood,
-    } = useFoodPromptUtils<'standard-portion'>();
+    } = useFoodPromptUtils<'guide-image'>();
 
-    const getInitialState = (): StandardPortionPromptState => ({
+    const getInitialState = (): GuideImagePromptState => ({
       portionSize: {
-        method: 'standard-portion',
-        unit: null,
+        method: 'guide-image',
+        guideImageId: '',
+        imageUrl: null,
+        objectIndex: undefined,
+        objectWeight: 0,
         quantity: 1,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
+      objectConfirmed: false,
       quantityConfirmed: false,
     });
 
@@ -93,7 +92,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    commitAnswer() {
+    async commitAnswer() {
       const { portionSize } = this.state;
 
       this.updateFood({ foodId: this.food().id, update: { portionSize } });

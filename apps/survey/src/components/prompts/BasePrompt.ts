@@ -2,9 +2,10 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { EncodedFood, MealState } from '@intake24/common/types';
-import PromptLayout from '@intake24/survey/components/layouts/PromptLayout.vue';
 import { localeContent } from '@intake24/survey/components/mixins';
-import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
+
+import { Continue } from './actions';
+import { PromptLayout } from './layouts';
 
 export default defineComponent({
   name: 'BasePrompt',

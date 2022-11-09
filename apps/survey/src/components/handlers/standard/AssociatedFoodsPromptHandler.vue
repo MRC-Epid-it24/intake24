@@ -26,14 +26,12 @@ import type {
   FoodState,
 } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
 const initialPromptState = (): AssociatedFoodPromptState => ({
   confirmed: undefined,

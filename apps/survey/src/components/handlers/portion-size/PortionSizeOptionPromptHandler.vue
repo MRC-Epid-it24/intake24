@@ -24,13 +24,11 @@ import type {
   PortionSizeOptionPromptProps,
 } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
-import type { PortionSizeOptionState } from '@intake24/survey/components/prompts/portion/PortionSizeOptionPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts/portion';
+import type { PortionSizeOptionState } from '@intake24/survey/components/prompts';
+import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',

@@ -14,9 +14,10 @@ import { defineComponent, ref } from 'vue';
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
-import { useFoodPromptUtils } from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useFoodPromptUtils } from '../mixins';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',

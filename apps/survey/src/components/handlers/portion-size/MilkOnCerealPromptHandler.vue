@@ -1,5 +1,5 @@
 <template>
-  <pizza-prompt
+  <milk-on-cereal-prompt
     v-bind="{
       food: food(),
       parentFood,
@@ -9,7 +9,7 @@
     }"
     @confirm="$emit('continue')"
     @update="update"
-  ></pizza-prompt>
+  ></milk-on-cereal-prompt>
 </template>
 
 <script lang="ts">
@@ -17,19 +17,17 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { PizzaPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { PizzaPromptState } from '@intake24/survey/components/prompts/portion/PizzaPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { PizzaPrompt } from '@intake24/survey/components/prompts/portion';
+import type { MilkOnCerealPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { MilkOnCerealPromptState } from '@intake24/survey/components/prompts';
+import { MilkOnCerealPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
-  name: 'PizzaPromptHandler',
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-  components: { PizzaPrompt },
+export default defineComponent({
+  name: 'MilkOnCerealPromptHandler',
+
+  components: { MilkOnCerealPrompt },
 
   props: {
     promptComponent: {
@@ -41,7 +39,7 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<PizzaPromptProps>,
+      type: Object as PropType<MilkOnCerealPromptProps>,
       required: true,
     },
   },
@@ -49,25 +47,20 @@ export default defineComponent({
   setup(props, context) {
     const { encodedFood: food, parentFoodOptional: parentFood, portionSize } = useFoodPromptUtils();
 
-    const getInitialState = (): PizzaPromptState => ({
+    const getInitialState = (): MilkOnCerealPromptState => ({
       portionSize: {
-        method: 'pizza',
+        method: 'milk-on-cereal',
         imageUrl: null,
-        pizzaType: undefined,
-        pizzaThickness: undefined,
-        sliceImage: null,
-        sliceQuantity: 1,
-        sliceType: undefined,
+        bowl: null,
+        bowlIndex: undefined,
+        milkLevelChoice: undefined,
+        milkLevelImage: null,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
-      confirmed: {
-        pizzaType: false,
-        pizzaThickness: false,
-        sliceType: false,
-        quantity: false,
-      },
+      bowlConfirmed: false,
+      milkLevelConfirmed: false,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(

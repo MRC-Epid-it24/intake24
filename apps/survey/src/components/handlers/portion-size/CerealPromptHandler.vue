@@ -19,13 +19,11 @@ import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { CerealPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { CerealPromptState } from '@intake24/survey/components/prompts/portion/CerealPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { CerealPrompt } from '@intake24/survey/components/prompts/portion';
+import type { CerealPromptState } from '@intake24/survey/components/prompts';
+import { CerealPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'CerealPromptHandler',

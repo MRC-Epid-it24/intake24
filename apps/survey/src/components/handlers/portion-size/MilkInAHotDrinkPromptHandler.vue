@@ -21,13 +21,11 @@ import type {
   MilkInAHotDrinkPromptProps,
   PortionSizeComponentType,
 } from '@intake24/common/prompts';
-import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion/MilkInAHotDrinkPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts/portion';
+import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion';
+import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPromptHandler',

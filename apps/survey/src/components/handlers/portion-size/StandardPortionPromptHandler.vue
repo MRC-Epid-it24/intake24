@@ -1,6 +1,7 @@
 <template>
-  <drink-scale-prompt
+  <standard-portion-prompt
     v-bind="{
+      conversionFactor,
       food: food(),
       parentFood,
       initialState: state,
@@ -11,7 +12,7 @@
     @confirm="$emit('continue')"
     @update="update"
   >
-  </drink-scale-prompt>
+  </standard-portion-prompt>
 </template>
 
 <script lang="ts">
@@ -19,19 +20,20 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { DrinkScalePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { DrinkScalePromptState } from '@intake24/survey/components/prompts/portion/DrinkScalePrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { DrinkScalePrompt } from '@intake24/survey/components/prompts/portion';
+import type {
+  PortionSizeComponentType,
+  StandardPortionPromptProps,
+} from '@intake24/common/prompts';
+import type { StandardPortionPromptState } from '@intake24/survey/components/prompts';
+import { StandardPortionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
-  name: 'DrinkScalePromptHandler',
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-  components: { DrinkScalePrompt },
+export default defineComponent({
+  name: 'StandardPortionPromptHandler',
+
+  components: { StandardPortionPrompt },
 
   props: {
     promptComponent: {
@@ -43,37 +45,29 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<DrinkScalePromptProps>,
+      type: Object as PropType<StandardPortionPromptProps>,
       required: true,
     },
   },
 
   setup(props, context) {
     const {
+      conversionFactor,
       encodedFood: food,
       parameters,
       parentFoodOptional: parentFood,
-    } = useFoodPromptUtils<'drink-scale'>();
+    } = useFoodPromptUtils<'standard-portion'>();
 
-    const getInitialState = (): DrinkScalePromptState => ({
+    const getInitialState = (): StandardPortionPromptState => ({
       portionSize: {
-        method: 'drink-scale',
-        drinkwareId: '',
-        initialFillLevel: 0.9,
-        skipFillLevel: false,
-        imageUrl: '',
-        containerIndex: undefined,
-        fillLevel: 0,
+        method: 'standard-portion',
+        unit: null,
+        quantity: 1,
         servingWeight: 0,
-        leftoversLevel: 0,
         leftoversWeight: 0,
-        leftovers: false,
       },
       panel: 0,
-      objectConfirmed: false,
       quantityConfirmed: false,
-      leftoversConfirmed: false,
-      leftoversPrompt: undefined,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -84,6 +78,7 @@ export default defineComponent({
     );
 
     return {
+      conversionFactor,
       food,
       parameters,
       parentFood,
@@ -96,7 +91,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    async commitAnswer() {
+    commitAnswer() {
       const { portionSize } = this.state;
 
       this.updateFood({ foodId: this.food().id, update: { portionSize } });

@@ -10,9 +10,10 @@ import type { EncodedFood } from '@intake24/common/types';
 import { portionSizePromptQuestions } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
-import PortionLayout from '@intake24/survey/components/layouts/PortionLayout.vue';
 import { localeContent } from '@intake24/survey/components/mixins';
-import Continue from '@intake24/survey/components/prompts/actions/Continue.vue';
+
+import { Continue } from '../actions';
+import { PortionLayout } from '../layouts';
 
 export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
 

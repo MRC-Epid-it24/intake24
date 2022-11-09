@@ -1,16 +1,15 @@
 <template>
-  <as-served-prompt
+  <pizza-prompt
     v-bind="{
       food: food(),
       parentFood,
       initialState: state,
-      parameters,
       promptComponent,
       promptProps,
     }"
     @confirm="$emit('continue')"
     @update="update"
-  ></as-served-prompt>
+  ></pizza-prompt>
 </template>
 
 <script lang="ts">
@@ -18,19 +17,17 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { AsServedPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
-import type { AsServedPromptState } from '@intake24/survey/components/prompts/portion/AsServedPrompt.vue';
-import {
-  useFoodPromptUtils,
-  usePromptHandlerStore,
-} from '@intake24/survey/components/prompts/dynamic/handlers/mixins';
-import { AsServedPrompt } from '@intake24/survey/components/prompts/portion';
+import type { PizzaPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { PizzaPromptState } from '@intake24/survey/components/prompts';
+import { PizzaPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-export default defineComponent({
-  name: 'AsServedPromptHandler',
+import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-  components: { AsServedPrompt },
+export default defineComponent({
+  name: 'PizzaPromptHandler',
+
+  components: { PizzaPrompt },
 
   props: {
     promptComponent: {
@@ -42,33 +39,33 @@ export default defineComponent({
       required: true,
     },
     promptProps: {
-      type: Object as PropType<AsServedPromptProps>,
+      type: Object as PropType<PizzaPromptProps>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const {
-      encodedFood: food,
-      parameters,
-      parentFoodOptional: parentFood,
-      portionSize,
-    } = useFoodPromptUtils<'as-served'>();
+    const { encodedFood: food, parentFoodOptional: parentFood, portionSize } = useFoodPromptUtils();
 
-    const getInitialState = (): AsServedPromptState => ({
+    const getInitialState = (): PizzaPromptState => ({
       portionSize: {
-        method: 'as-served',
-        serving: null,
-        leftovers: null,
+        method: 'pizza',
+        imageUrl: null,
+        pizzaType: undefined,
+        pizzaThickness: undefined,
+        sliceImage: null,
+        sliceQuantity: 1,
+        sliceType: undefined,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
-      servingImageConfirmed: false,
-      leftoversPrompt: undefined,
-      leftoversImageConfirmed: false,
-      linkedQuantity: 1,
-      linkedQuantityConfirmed: false,
+      confirmed: {
+        pizzaType: false,
+        pizzaThickness: false,
+        sliceType: false,
+        quantity: false,
+      },
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -80,7 +77,6 @@ export default defineComponent({
 
     return {
       food,
-      parameters,
       parentFood,
       portionSize,
       state,
