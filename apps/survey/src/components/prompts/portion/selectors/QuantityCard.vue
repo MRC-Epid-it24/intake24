@@ -5,11 +5,11 @@
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
-              <v-btn color="primary" icon large @click="update(1)">
+              <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(1)">
                 <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ wholeLabel }}</span>
-              <v-btn color="primary" icon large @click="update(-1)">
+              <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-1)">
                 <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
               </v-btn>
             </v-card>
@@ -19,11 +19,11 @@
           </div>
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
-              <v-btn color="primary" icon large @click="update(0.25)">
+              <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(0.25)">
                 <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ fractionLabel }}</span>
-              <v-btn color="primary" icon large @click="update(-0.25)">
+              <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-0.25)">
                 <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
               </v-btn>
             </v-card>
@@ -87,6 +87,14 @@ export default defineComponent({
   },
 
   computed: {
+    maxDisabled(): boolean {
+      return this.currentValue === this.max;
+    },
+
+    minDisabled(): boolean {
+      return this.currentValue === this.min;
+    },
+
     fractionLabel(): string {
       const fraction = this.currentValue - Math.floor(this.currentValue);
 
@@ -112,7 +120,8 @@ export default defineComponent({
       this.currentValue = Math.min(this.max, Math.max(this.min, this.currentValue + value));
 
       this.updateValue();
-      this.updateConfirm(false);
+
+      if (this.confirm) this.updateConfirm(false);
     },
 
     updateConfirm(value: boolean) {
