@@ -9,6 +9,7 @@ import type {
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
+import type { SurveyState as SurveyStatus } from '@intake24/common/types/models';
 import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
@@ -50,7 +51,9 @@ const surveyRespondentController = ({
     const {
       id,
       name,
-      state,
+      state: initialState,
+      startDate,
+      endDate,
       locale,
       surveyScheme,
       feedbackScheme,
@@ -64,6 +67,12 @@ const surveyRespondentController = ({
 
     let { meals } = surveyScheme;
     const { questions } = surveyScheme;
+
+    let state: SurveyStatus;
+    const today = new Date();
+    if (startDate > today) state = 'notStarted';
+    else if (endDate < today) state = 'completed';
+    else state = initialState;
 
     // Merge survey's scheme overrides
     // 1) Meals - override whole list

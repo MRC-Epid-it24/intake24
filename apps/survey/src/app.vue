@@ -27,7 +27,7 @@
           </v-list-item>
           <template v-if="loggedIn && surveyId">
             <v-list-item
-              v-if="!limitReached"
+              v-if="allowRecall"
               link
               :to="{ name: 'survey-recall', params: { surveyId } }"
             >
@@ -39,7 +39,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-if="feedbackAvailable"
+              v-if="allowFeedback"
               link
               :to="{ name: 'feedback-home', params: { surveyId } }"
             >
@@ -95,7 +95,7 @@
     </v-main>
     <navigation
       v-if="showNav"
-      v-bind="{ surveyId, recall: !limitReached, feedback: feedbackAvailable }"
+      v-bind="{ surveyId, recall: allowRecall, feedback: allowFeedback }"
     ></navigation>
     <service-worker></service-worker>
     <message-box></message-box>
@@ -131,7 +131,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuth, ['loggedIn']),
-    ...mapState(useSurvey, ['feedbackAvailable', 'limitReached']),
+    ...mapState(useSurvey, ['allowFeedback', 'allowRecall']),
 
     surveyId(): string {
       return this.$route.params.surveyId;

@@ -18,6 +18,7 @@ const surveys: LocaleMessageObject = {
     notStarted: 'Not started',
     active: 'Active',
     suspended: 'Suspended',
+    completed: 'Completed',
   },
   startDate: 'Start date',
   endDate: 'End date',

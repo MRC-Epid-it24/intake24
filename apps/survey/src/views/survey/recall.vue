@@ -18,7 +18,7 @@ export default defineComponent({
   components: { RecallDesktop, RecallMobile },
 
   beforeRouteEnter({ params }, from, next) {
-    useSurvey().limitReached ? next({ name: 'survey-home', params }) : next();
+    useSurvey().allowRecall ? next() : next({ name: 'survey-home', params });
   },
 
   computed: {

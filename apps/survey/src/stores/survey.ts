@@ -122,14 +122,24 @@ export const useSurvey = defineStore('survey', {
   getters: {
     parametersLoaded: (state) => !!state.parameters && !!state.user,
     currentState: (state) => state.data,
-    feedbackEnabled: (state) => !!state.parameters?.feedbackScheme,
-    feedbackAvailable: (state) => !!state.user?.showFeedback,
-    hasStarted: (state) => !!state.data.startTime,
-    hasFinished: (state) => !!state.data.endTime,
+    surveyEnabled: (state) => state.parameters?.state === 'active',
     dailyLimitReached: (state) => !!state.user?.maximumDailySubmissionsReached,
     totalLimitReached: (state) => !!state.user?.maximumTotalSubmissionsReached,
-    limitReached: (state) =>
-      !!(state.user?.maximumDailySubmissionsReached || state.user?.maximumTotalSubmissionsReached),
+    limitReached(): boolean {
+      return !!(
+        this.user?.maximumDailySubmissionsReached || this.user?.maximumTotalSubmissionsReached
+      );
+    },
+    allowRecall(): boolean {
+      return this.surveyEnabled && !this.limitReached;
+    },
+    feedbackEnabled: (state) => !!state.parameters?.feedbackScheme,
+    feedbackAvailable: (state) => !!state.user?.showFeedback,
+    allowFeedback(): boolean {
+      return this.feedbackEnabled && this.feedbackAvailable;
+    },
+    hasStarted: (state) => !!state.data.startTime,
+    hasFinished: (state) => !!state.data.endTime,
     localeId: (state) => state.parameters?.locale.code ?? 'en_GB',
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,

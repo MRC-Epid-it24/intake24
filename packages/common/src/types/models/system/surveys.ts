@@ -1,7 +1,7 @@
 import type { SchemeOverrides } from '../../../schemes';
 import type { OmitAndOptional } from '../../common';
 
-export const surveyStates = ['notStarted', 'active', 'suspended'] as const;
+export const surveyStates = ['notStarted', 'active', 'suspended', 'completed'] as const;
 
 export type SurveyState = typeof surveyStates[number];
 

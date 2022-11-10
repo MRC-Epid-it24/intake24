@@ -121,9 +121,7 @@ export default defineComponent({
   components: { FeedbackCardArea, FeedbackChartArea, FeedbackOutputs, FeedbackUserInfo },
 
   beforeRouteEnter({ params }, from, next) {
-    !(useSurvey().feedbackEnabled || !useSurvey().feedbackAvailable)
-      ? next({ name: 'survey-home', params })
-      : next();
+    useSurvey().allowFeedback ? next() : next({ name: 'survey-home', params });
   },
 
   props: {

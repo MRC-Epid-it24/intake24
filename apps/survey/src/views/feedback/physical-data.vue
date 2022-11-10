@@ -17,7 +17,7 @@
                     :label="$t('feedback.physicalData.sexes._')"
                     name="sex"
                     outlined
-                    prepend-icon="fa-genderless"
+                    prepend-inner-icon="fa-genderless"
                     @change="errors.clear('sex')"
                   >
                     <template #item="{ item }">
@@ -38,7 +38,7 @@
                     :label="$t('feedback.physicalData.birthdate')"
                     name="birthdate"
                     outlined
-                    prepend-icon="fa-birthday-cake"
+                    prepend-inner-icon="fa-birthday-cake"
                   ></v-text-field>
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('heightCm')" cols="12" lg="6">
@@ -49,7 +49,7 @@
                     :label="$t('feedback.physicalData.heightCm')"
                     name="heightCm"
                     outlined
-                    prepend-icon="fa-arrows-alt-v"
+                    prepend-inner-icon="fa-arrows-alt-v"
                   ></v-text-field>
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('weightKg')" cols="12" lg="6">
@@ -60,7 +60,7 @@
                     :label="$t('feedback.physicalData.weightKg')"
                     name="weightKg"
                     outlined
-                    prepend-icon="fa-weight"
+                    prepend-inner-icon="fa-weight"
                   ></v-text-field>
                 </v-col>
                 <v-col v-if="collectPhysicalDataField('physicalActivityLevelId')" cols="12" lg="6">
@@ -74,7 +74,7 @@
                     :label="$t('feedback.physicalData.physicalActivityLevelId')"
                     name="physicalActivityLevelId"
                     outlined
-                    prepend-icon="fa-running"
+                    prepend-inner-icon="fa-running"
                     @change="errors.clear('physicalActivityLevelId')"
                   ></v-select>
                 </v-col>
@@ -87,7 +87,7 @@
                     :label="$t('feedback.physicalData.weightTargets._')"
                     name="weightTarget"
                     outlined
-                    prepend-icon="fa-crosshairs"
+                    prepend-inner-icon="fa-crosshairs"
                     @change="errors.clear('weightTarget')"
                   ></v-select>
                 </v-col>

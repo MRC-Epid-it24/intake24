@@ -5,9 +5,10 @@ const survey: LocaleMessageObject = {
   info: 'Survey information',
   states: {
     _: 'Status',
-    notStarted: 'Not started',
-    active: 'Active',
-    suspended: 'Suspended',
+    notStarted: 'Data collection has not started.',
+    active: 'Data collection is in progress.',
+    suspended: 'Data collection is suspended.',
+    completed: 'Data collection is completed.',
   },
   openAccess: {
     _: 'Open access studies',

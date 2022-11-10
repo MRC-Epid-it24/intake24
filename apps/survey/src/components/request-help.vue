@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog
+    v-model="dialog"
+    :fullscreen="isMobile"
+    max-width="500px"
+    transition="dialog-bottom-transition"
+  >
     <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
@@ -14,11 +19,14 @@
         </v-btn>
       </slot>
     </template>
-    <v-card>
-      <v-card-title class="text-h2 d-flex justify-center mb-6">
-        {{ $t('common.help.title') }}
-      </v-card-title>
-      <v-card-subtitle>
+    <v-card :tile="isMobile">
+      <v-toolbar color="primary" dark>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
+          <v-icon>$cancel</v-icon>
+        </v-btn>
+        <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
+      </v-toolbar>
+      <v-card-subtitle class="mt-4">
         Please make sure that you've watched the Intake24 walkthrough video: Watch the tutorial
       </v-card-subtitle>
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="requestHelp">
@@ -55,32 +63,25 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-row justify="center">
+              <v-col cols="auto">
+                <v-btn
+                  :block="isMobile"
+                  color="secondary"
+                  :disabled="errors.any()"
+                  outlined
+                  rounded
+                  :title="$t('common.help.title')"
+                  type="submit"
+                  x-large
+                >
+                  <v-icon left>fas fa-circle-question</v-icon>
+                  {{ $t('common.help.title') }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-btn
-            class="font-weight-bold"
-            color="error"
-            large
-            text
-            :title="$t('common.action.cancel')"
-            @click.stop="cancel"
-          >
-            <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="font-weight-bold"
-            color="info"
-            :disabled="errors.any()"
-            large
-            text
-            :title="$t('common.help.title')"
-            type="submit"
-          >
-            <v-icon left>fas fa-circle-question</v-icon>{{ $t('common.help.title') }}
-          </v-btn>
-        </v-card-actions>
       </v-form>
     </v-card>
   </v-dialog>

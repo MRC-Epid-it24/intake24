@@ -25,70 +25,72 @@
           </v-list>
           <v-divider></v-divider>
           <!-- Recall info -->
-          <v-list class="list-no-wrap" subheader>
-            <v-subheader>{{ $t('recall.info') }}</v-subheader>
-            <template v-if="limitReached">
-              <v-list-item>
-                <v-list-item-avatar>
-                  <v-icon color="error" large>fas fa-ban</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ $t(`recall.limitReached.${dailyLimitReached ? 'daily' : 'total'}`) }}
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-            <template v-else>
-              <v-list-item v-if="hasStarted" link>
-                <v-list-item-avatar>
-                  <v-icon color="info" large>fas fa-pause</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ $t('recall.inProgress', { startedAt: startTime?.toLocaleString() }) }}
-                  </v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn
-                    color="primary"
-                    outlined
-                    rounded
-                    :title="$t('recall.continue')"
-                    :to="{ name: 'survey-recall', params: { surveyId } }"
-                  >
-                    <v-icon :left="!isMobile">fas fa-beat fa-pause</v-icon>
-                    <span v-if="!isMobile">{{ $t('recall.continue') }}</span>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-              <v-list-item v-else link>
-                <v-list-item-avatar>
-                  <v-icon color="info" large>fas fa-play</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ $t('recall.none') }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn
-                    color="primary"
-                    outlined
-                    rounded
-                    :title="$t('recall.start')"
-                    :to="{ name: 'survey-recall', params: { surveyId } }"
-                  >
-                    <v-icon :left="!isMobile">fas fa-beat fa-play</v-icon>
-                    <span v-if="!isMobile">{{ $t('recall.start') }}</span>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-list>
-          <v-divider></v-divider>
+          <template v-if="allowRecall">
+            <v-list class="list-no-wrap" subheader>
+              <v-subheader>{{ $t('recall.info') }}</v-subheader>
+              <template v-if="limitReached">
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon color="error" large>fas fa-ban</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ $t(`recall.limitReached.${dailyLimitReached ? 'daily' : 'total'}`) }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+              <template v-else>
+                <v-list-item v-if="hasStarted" link>
+                  <v-list-item-avatar>
+                    <v-icon color="info" large>fas fa-pause</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ $t('recall.inProgress', { startedAt: startTime?.toLocaleString() }) }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      color="primary"
+                      outlined
+                      rounded
+                      :title="$t('recall.continue')"
+                      :to="{ name: 'survey-recall', params: { surveyId } }"
+                    >
+                      <v-icon :left="!isMobile">fas fa-beat fa-pause</v-icon>
+                      <span v-if="!isMobile">{{ $t('recall.continue') }}</span>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-list-item v-else link>
+                  <v-list-item-avatar>
+                    <v-icon color="info" large>fas fa-play</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ $t('recall.none') }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn
+                      color="primary"
+                      outlined
+                      rounded
+                      :title="$t('recall.start')"
+                      :to="{ name: 'survey-recall', params: { surveyId } }"
+                    >
+                      <v-icon :left="!isMobile">fas fa-beat fa-play</v-icon>
+                      <span v-if="!isMobile">{{ $t('recall.start') }}</span>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+            <v-divider></v-divider>
+          </template>
           <!-- Feedback info -->
-          <v-list class="list-no-wrap" subheader>
-            <v-subheader>{{ $t('feedback.info') }}</v-subheader>
-            <template v-if="feedbackEnabled">
+          <template v-if="allowFeedback">
+            <v-list class="list-no-wrap" subheader>
+              <v-subheader>{{ $t('feedback.info') }}</v-subheader>
               <v-list-item v-if="feedbackAvailable" link>
                 <v-list-item-avatar>
                   <v-icon color="info" large>$feedback</v-icon>
@@ -120,17 +122,9 @@
                   }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-            </template>
-            <v-list-item v-else>
-              <v-list-item-avatar>
-                <v-icon color="error">fas fa-ban</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t('feedback.status.notAvailable') }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-divider></v-divider>
+            </v-list>
+            <v-divider></v-divider>
+          </template>
           <!-- Past recalls -->
           <v-list class="list-no-wrap" subheader :two-line="!!submissions.length">
             <v-subheader>{{ $t('recall.submissions.past') }}</v-subheader>
@@ -204,8 +198,9 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, [
+      'allowFeedback',
+      'allowRecall',
       'feedbackAvailable',
-      'feedbackEnabled',
       'hasStarted',
       'dailyLimitReached',
       'totalLimitReached',
