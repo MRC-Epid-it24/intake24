@@ -23,7 +23,7 @@
         <slot name="title">{{ titleLabel }}</slot>
       </v-card-title>
       <v-card-text class="px-6 py-4">
-        <div class="subtitle-1 d-flex justify-center">
+        <div class="text-subtitle-1 d-flex justify-center">
           <v-icon left>fa-hand-point-right</v-icon>
           <slot></slot>
         </div>

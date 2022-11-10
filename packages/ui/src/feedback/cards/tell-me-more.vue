@@ -3,36 +3,35 @@
     <v-btn block class="button-bottom" large @click.stop="open">
       {{ $t('feedback.intake.tellMeMore') }}
     </v-btn>
-    <v-dialog v-model="dialog" max-width="600px" scrollable>
-      <v-card>
-        <v-toolbar flat>
-          <v-icon left>fa-utensils</v-icon>
-          <v-toolbar-title class="font-weight-medium text-h3 tell-me-more-title">
-            {{ detail.name }}
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn icon :title="$t('common.action.ok')" @click.stop="close">
-              <v-icon>$close</v-icon>
-            </v-btn>
-          </v-toolbar-items>
+    <v-dialog v-model="dialog" :fullscreen="isMobile" max-width="600px" scrollable>
+      <v-card :tile="isMobile">
+        <v-toolbar
+          class="font-weight-medium text-h3 tell-me-more-title"
+          color="primary lighten-1"
+          dark
+          flat
+        >
+          <v-btn dark icon :title="$t('common.action.ok')" @click.stop="close">
+            <v-icon>$close</v-icon>
+          </v-btn>
+          <v-toolbar-title class="pl-2">{{ detail.name }}</v-toolbar-title>
         </v-toolbar>
-        <v-card-text class="d-flex justify-space-between">
-          <div class="subtitle-1">
+        <v-card-text class="flex-grow-1 flex-shrink-0 pt-2 pb-1">
+          <div class="text-subtitle-1">
             <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
             <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
           </div>
-          <div v-if="detail.recommendedIntake" class="subtitle-1">
+          <div v-if="detail.recommendedIntake" class="text-subtitle-1">
             <span class="font-weight-medium">{{ $t('feedback.intake.recommended') }}: </span>
             {{ detail.recommendedIntake.toString() }}
             {{ detail.unit }}
           </div>
         </v-card-text>
-        <v-card-text class="d-flex">
+        <v-card-text class="flex-grow-1 flex-shrink-0 pt-1 pb-2">
           <div v-html="detail.unitDescription"></div>
         </v-card-text>
         <v-divider class="mx-4 mb-4"></v-divider>
-        <v-card-text>
+        <v-card-text class="flex-grow-0 flex-shrink-1">
           <div v-html="detail.description"></div>
         </v-card-text>
         <v-btn
