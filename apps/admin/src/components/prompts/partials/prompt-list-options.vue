@@ -68,11 +68,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { ListOption } from '@intake24/common/prompts';
+
+const toIndexedConditions = (options: ListOption[]) =>
+  options.map((option, idx) => ({ ...option, id: idx }));
 
 export default defineComponent({
   name: 'PromptListOptions',
@@ -91,10 +95,7 @@ export default defineComponent({
   },
 
   data() {
-    const currentOptions: ListOption[] = this.options.map((option, idx) => ({
-      id: idx + 1,
-      ...option,
-    }));
+    const currentOptions = toIndexedConditions(this.options);
 
     const defaultValueRules = [
       (value: string | null): boolean | string => {
@@ -116,6 +117,11 @@ export default defineComponent({
   },
 
   watch: {
+    options(val) {
+      if (isEqual(val, this.outputOptions)) return;
+
+      this.currentOptions = toIndexedConditions(val);
+    },
     outputOptions: {
       deep: true,
       handler() {

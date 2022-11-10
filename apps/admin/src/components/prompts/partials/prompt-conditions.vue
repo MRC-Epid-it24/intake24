@@ -136,14 +136,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Condition, ConditionOp } from '@intake24/common/prompts';
-import PromptAnswerProps from '@intake24/admin/components/prompts/partials/conditions/prompt-answer-props.vue';
-import RecallNumberProps from '@intake24/admin/components/prompts/partials/conditions/recall-number-props.vue';
 import { conditionOps } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
+
+import conditionProps from './conditions';
 
 export interface IndexedCondition extends Condition {
   id: number;
@@ -203,16 +204,13 @@ const promptConditions: Condition[] = [
   },
 ];
 
+export const toIndexedConditions = (conditions: Condition[]): IndexedCondition[] =>
+  conditions.map((condition, idx) => ({ ...condition, id: idx }));
+
 export default defineComponent({
   name: 'PromptConditions',
 
-  components: {
-    draggable,
-    surveyPromptAnswer: PromptAnswerProps,
-    mealPromptAnswer: PromptAnswerProps,
-    foodPromptAnswer: PromptAnswerProps,
-    recallNumber: RecallNumberProps,
-  },
+  components: { draggable, ...conditionProps },
 
   props: {
     conditions: {
@@ -222,11 +220,6 @@ export default defineComponent({
   },
 
   data() {
-    const currentConditions: IndexedCondition[] = this.conditions.map((condition, idx) => ({
-      id: idx + 1,
-      ...condition,
-    }));
-
     const dialog = (show = false): PromptConditionDialog => ({
       show,
       index: -1,
@@ -236,7 +229,7 @@ export default defineComponent({
     return {
       dialog: dialog(),
       newDialog: dialog,
-      currentConditions,
+      currentConditions: toIndexedConditions(this.conditions),
       promptConditions,
       opToIconMap,
     };
@@ -267,11 +260,10 @@ export default defineComponent({
   },
 
   watch: {
-    outputConditions: {
-      deep: true,
-      handler() {
-        this.update();
-      },
+    conditions(val) {
+      if (isEqual(val, this.outputConditions)) return;
+
+      this.currentConditions = toIndexedConditions(val);
     },
   },
 
