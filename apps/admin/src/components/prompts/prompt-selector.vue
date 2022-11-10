@@ -132,6 +132,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import pick from 'lodash/pick';
 import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -284,18 +285,23 @@ export default defineComponent({
     },
 
     updatePromptProps() {
-      const {
-        show,
-        index,
-        question: { id, component },
-      } = this.dialog;
+      const { show, index, question } = this.dialog;
+      const { origId, id, name, component } = question;
 
-      const question =
+      const newQuestion =
         this.availablePromptQuestions.find((item) => item.component === component) ??
         this.availablePromptQuestions[0];
-      if (!question) return;
+      if (!newQuestion) return;
 
-      this.dialog = { show, index, question: { origId: id, ...copy(question) } };
+      const propsKeys = Object.keys(newQuestion.props);
+      const originalProps = pick(question.props, propsKeys);
+      const { props, ...rest } = copy(newQuestion);
+
+      this.dialog = {
+        show,
+        index,
+        question: { ...rest, origId, id, name, props: merge(props, originalProps) },
+      };
     },
 
     updateQuestionTypeTab(type: PromptQuestion['type']) {
