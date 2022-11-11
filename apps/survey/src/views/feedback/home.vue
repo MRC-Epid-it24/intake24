@@ -1,10 +1,10 @@
 <template>
   <v-container class="pa-0" fluid>
     <v-sheet color="white py-4">
-      <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center mb-4">
+      <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center px-4 pb-4">
         {{ surveyName }}
       </h1>
-      <h2 class="text-h2 font-weight-medium text-center mb-4">{{ $t('feedback.title') }}</h2>
+      <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">{{ $t('feedback.title') }}</h2>
       <v-row class="pa-4 d-print-none" justify="center" no-gutters>
         <v-col cols="12" md="7">
           <v-row justify="space-around">

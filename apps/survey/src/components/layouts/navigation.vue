@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation v-if="isMobile" color="secondary" fixed grow>
+  <v-bottom-navigation v-if="isMobile" class="d-print-none" color="secondary" fixed grow>
     <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
       <span>{{ $t('common.home') }}</span>
       <v-icon>$home</v-icon>

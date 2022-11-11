@@ -8,7 +8,7 @@ const feedback: LocaleMessageObject = {
     lowRecalls: 'Feedback will be available once you submitted at least {minRecalls} recalls.',
     notAvailable: 'Feedback is not available for this survey.',
   },
-  title: 'Feedback from your Intake24 recalls',
+  title: 'Feedback from your recalls',
   missingFoods:
     'Please note, any foods you reported as missing will not be included in your dietary feedback',
 

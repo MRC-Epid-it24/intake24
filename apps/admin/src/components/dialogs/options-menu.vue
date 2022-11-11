@@ -11,7 +11,7 @@
           :title="$t('common.options')"
           v-on="on"
         >
-          <v-icon>fas fa-ellipsis-vertical</v-icon>
+          <v-icon>$options</v-icon>
         </v-btn>
       </slot>
     </template>

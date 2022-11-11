@@ -1,5 +1,5 @@
 <template>
-  <v-card class="d-flex flex-column" height="100%" width="320px">
+  <v-card class="d-flex flex-column" height="100%" min-width="320px">
     <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
     <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div>
     <v-card-subtitle class="font-weight-medium">
@@ -28,7 +28,8 @@ import { computed, defineComponent, ref, toRefs } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 
-import { formatOutput, getBackgroundImage, getDetails } from '.';
+import { formatOutput, getDetails } from './card-details';
+import { getBackgroundImage } from './card-images';
 import TellMeMore from './tell-me-more.vue';
 
 export default defineComponent({

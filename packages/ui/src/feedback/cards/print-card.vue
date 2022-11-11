@@ -39,7 +39,8 @@ import { computed, defineComponent } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 
-import { formatOutput, getBackgroundImage, getDetails } from '.';
+import { formatOutput, getDetails } from './card-details';
+import { getBackgroundImage } from './card-images';
 
 export default defineComponent({
   name: 'PrintCard',
