@@ -1,25 +1,19 @@
 <template>
-  <v-item-group>
-    <v-row dense justify-center style="flex-wrap: nowrap">
-      <v-col v-for="(item, idx) in meals" :key="idx" class="flex-grow-1 text-center justify-center">
-        <v-item>
-          <v-card
-            class="d-flex align-center text-center justify-center"
-            :color="color(item)"
-            dense
-            flat
-            height="1.2rem"
-            width="100%"
-          >
-            <span :class="item.time ? 'primary--text' : 'secondary--text'">{{
-              stringTime(item.time)
-            }}</span>
-          </v-card>
-        </v-item>
-        <span class="text-caption">{{ item.name[$i18n.locale] ?? item.name.en }}</span>
-      </v-col>
-    </v-row>
-  </v-item-group>
+  <div class="survey-progress">
+    <v-chip-group>
+      <div v-for="(item, idx) in meals" :key="idx" class="d-flex flex-column justify-start">
+        <v-chip
+          class="font-weight-medium"
+          :color="color(item)"
+          label
+          :text-color="item.time ? 'white' : 'secondary'"
+        >
+          {{ stringTime(item.time) }}
+        </v-chip>
+        <span class="text-caption">{{ getLocaleContent(item.name) }}</span>
+      </div>
+    </v-chip-group>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,8 +23,12 @@ import { defineComponent } from 'vue';
 import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
+import { localeContent } from '../mixins';
+
 export default defineComponent({
   name: 'SurveyProgressBar',
+
+  mixins: [localeContent],
 
   props: {
     meals: {
@@ -55,4 +53,17 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.survey-progress {
+  .v-chip-group .v-chip {
+    display: block;
+    margin: 4px 2px 4px 0;
+    padding: 0 4px;
+  }
+
+  .v-slide-group__content {
+    flex-shrink: 1;
+    white-space: initial;
+  }
+}
+</style>
