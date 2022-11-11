@@ -21,40 +21,17 @@
           <span>{{ $t('feedback.physicalData.change') }}</span>
         </v-tooltip>
       </v-toolbar>
-      <v-list class="py-0" dense>
-        <v-list-item v-if="userDemographic.physicalActivityLevel" link>
-          <v-list-item-content>
-            <v-list-item-subtitle>
-              {{ userDemographic.physicalActivityLevel.name }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item v-if="ageAndSex.length" link>
-          <v-list-item-content>
-            <v-list-item-subtitle>{{ ageAndSex.join(' | ') }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item v-if="weightAndHeight.length" link>
-          <v-list-item-content>
-            <v-list-item-subtitle>{{ weightAndHeight.join(' | ') }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item v-if="userDemographic.physicalData.weightTarget" link>
-          <v-list-item-content>
-            <v-list-item-subtitle>
-              {{
-                $t('feedback.physicalData.weightTarget', {
-                  target: $t(
-                    `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`
-                  ),
-                })
-              }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
+      <v-list v-if="physicalData.length" class="py-0" dense>
+        <template v-for="(item, idx) in physicalData">
+          <v-list-item :key="idx" link>
+            <v-list-item-content>
+              <v-list-item-subtitle>
+                {{ item }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider v-if="idx + 1 < physicalData.length" :key="`div-${idx}`"></v-divider>
+        </template>
       </v-list>
     </v-card>
     <v-btn
@@ -119,6 +96,28 @@ export default defineComponent({
 
       if (weightKg !== null)
         items.push(this.$t('feedback.physicalData.weight', { weight: weightKg }).toString());
+
+      return items;
+    },
+    physicalData() {
+      const { userDemographic } = this;
+      const items: string[] = [];
+
+      if (userDemographic.physicalActivityLevel)
+        items.push(userDemographic.physicalActivityLevel.name);
+
+      if (this.ageAndSex.length) items.push(this.ageAndSex.join(' | '));
+
+      if (this.weightAndHeight.length) items.push(this.weightAndHeight.join(' | '));
+
+      if (userDemographic.physicalData.weightTarget)
+        items.push(
+          this.$t('feedback.physicalData.weightTarget', {
+            target: this.$t(
+              `feedback.physicalData.weightTargets.${userDemographic.physicalData.weightTarget}`
+            ),
+          }).toString()
+        );
 
       return items;
     },
