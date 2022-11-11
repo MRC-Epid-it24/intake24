@@ -3,12 +3,11 @@
     <v-col v-if="showMealList" cols="3" height="45rem" lg="3" min-height="30rem">
       <meal-list
         :meals="meals"
-        :survey-id="surveyId"
         :survey-name="surveyName"
-        @food-selected="onFoodSelected"
-        @meal-action="onMealAction"
-        @meal-selected="onMealSelected"
-        @recall-action="onRecallAction"
+        @food-selected="foodSelected"
+        @meal-action="mealAction"
+        @meal-selected="mealSelected"
+        @recall-action="recallAction"
       >
       </meal-list>
     </v-col>
@@ -28,7 +27,7 @@
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          @complete="onComplete"
+          @complete="complete"
           @continue="onContinue"
           @restart="restart"
           @valid="updateValidation"
@@ -48,9 +47,9 @@
 import { defineComponent, ref } from 'vue';
 
 import type { RecallPromptHandler } from '@intake24/common/types';
-import RecallBreadCrumbs from '@intake24/survey/components/recall/BreadCrumbs.vue';
-import MealList from '@intake24/survey/components/recall/MealListDesktop.vue';
 
+import RecallBreadCrumbs from './BreadCrumbs.vue';
+import MealList from './MealList.vue';
 import recallMixin from './recall-mixin';
 
 export default defineComponent({

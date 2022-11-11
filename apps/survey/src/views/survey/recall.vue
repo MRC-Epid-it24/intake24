@@ -7,10 +7,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { RecallDesktop, RecallMobile } from '@intake24/survey/components';
 import { useSurvey } from '@intake24/survey/stores';
-
-import RecallDesktop from './recall-desktop.vue';
-import RecallMobile from './recall-mobile.vue';
 
 export default defineComponent({
   name: 'SurveyRecall',

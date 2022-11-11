@@ -3,7 +3,7 @@
     <v-toolbar bottom class="sticky_toolbar" flat>
       <v-tabs center-active height="56px" icons-and-text slider-size="4" touch :value="activeTab">
         <v-tabs-slider color="success"></v-tabs-slider>
-        <v-tab v-for="(meal, index) in meals" :key="index" @click="onMealSelected(meal.id)">
+        <v-tab v-for="(meal, index) in meals" :key="index" @click="mealSelected(meal.id)">
           <v-badge
             bordered
             color="grey"
@@ -42,27 +42,16 @@ export default defineComponent({
 
     activeTab() {
       if (this.selectedMealOptional === undefined) return 0;
-      const selectedMealIndex = getMealIndex(this.meals, this.selectedMealOptional.id);
-      return selectedMealIndex ?? 0;
+      return getMealIndex(this.meals, this.selectedMealOptional.id) ?? 0;
     },
   },
 
   methods: {
     ...mapActions(useSurvey, ['setSelection']),
 
-    onMealSelected(mealId: number) {
-      this.setSelection({
-        element: {
-          type: 'meal',
-          mealId,
-        },
-        mode: 'manual',
-      });
+    mealSelected(mealId: number) {
+      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
       this.$emit('meal-selected', mealId);
-    },
-
-    emitAddMeal(action: string) {
-      this.$emit('recall-action', action);
     },
 
     mealTimeString(time: MealTime | undefined): string {

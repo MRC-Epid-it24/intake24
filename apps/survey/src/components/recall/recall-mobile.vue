@@ -22,13 +22,13 @@
       <transition mode="out-in" name="component-fade">
         <component
           :is="handlerComponent"
-          v-if="currentPrompt"
+          v-if="currentPrompt && !hideCurrentPrompt"
           :key="currentPrompt.prompt.id"
           ref="promptHandle"
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          @complete="onComplete"
+          @complete="complete"
           @continue="onContinue"
           @food-context-menu="onFoodContextMenu"
           @meal-context-menu="onMealContextMenu"
@@ -42,7 +42,7 @@
       <meal-list-mobile-bottom
         v-show="meals.length"
         @meal-selected="onBottomListMealSelected"
-        @recall-action="onRecallAction"
+        @recall-action="recallAction"
       >
       </meal-list-mobile-bottom>
     </v-col>
@@ -79,18 +79,16 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
 import type { RecallPromptHandler } from '@intake24/common/types';
-import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
-import FoodMobileContextMenu from '@intake24/survey/components/recall/FoodMobileContextMenu.vue';
-import MealMobileContextMenu from '@intake24/survey/components/recall/MealMobileContextMenu.vue';
-import BottomNavigationMobile from '@intake24/survey/components/recall/mobile/BottomNavMobile.vue';
-import RecallBreadCrumbsMobile from '@intake24/survey/components/recall/mobile/BreadCrumbsMobile.vue';
-import MealListMobileBottom from '@intake24/survey/components/recall/mobile/MealListMobileBottom.vue';
-import { useSurvey } from '@intake24/survey/stores';
 
+import type { MealAction } from './recall-mixin';
+import BottomNavigationMobile from './mobile/BottomNavMobile.vue';
+import RecallBreadCrumbsMobile from './mobile/BreadCrumbsMobile.vue';
+import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
+import MealListMobileBottom from './mobile/MealListMobileBottom.vue';
+import MealMobileContextMenu from './mobile/MealMobileContextMenu.vue';
 import recallMixin from './recall-mixin';
 
 export default defineComponent({
@@ -127,32 +125,20 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    ...mapState(useSurvey, ['selectedFoodOptional', 'selectedMealOptional']),
-
-    selectedFoodId(): number | undefined {
-      return this.selectedFoodOptional?.id;
-    },
-
-    selectedMealId(): number | undefined {
-      return this.selectedMealOptional?.id;
-    },
-  },
-
   methods: {
     // FIXME: Should use nested router for this
     async onBottomNavChange(tab: number) {
       if (tab === 0) {
-        this.onRecallAction('add-meal');
+        this.recallAction('add-meal');
       } else if (tab === 1) {
-        this.onRecallAction('review-confirm');
+        this.recallAction('review-confirm');
       } else if (tab === 2) {
         await this.onContinue();
       }
     },
 
     onContextMenuMealAction(payload: { action: MealAction; mealId: number }) {
-      this.onMealAction(payload);
+      this.mealAction(payload);
 
       this.bottomNavTab = 2;
     },

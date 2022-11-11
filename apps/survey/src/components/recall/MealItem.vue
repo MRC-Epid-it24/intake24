@@ -4,7 +4,7 @@
     flat
     tile
     :value="selected || selectedFoodInMeal"
-    @click="chooseMeal"
+    @click="mealSelected"
   >
     <template #prependIcon>
       <v-icon :class="{ rotate: selected || selectedFoodInMeal }">$expand</v-icon>
@@ -24,14 +24,14 @@
           :entity-name="meal.name.en"
           :icon="menuMealIcon"
           :menu="menuMeal"
-          @context-menu-action="onContextMenuAction"
+          @context-menu-action="mealAction"
         ></context-menu>
       </v-list-item-action>
     </template>
     <food-item
       :foods="meal.foods"
       :selected-food-id="selectedFoodId"
-      @food-selected="onFoodSelected"
+      @food-selected="foodSelected"
     ></food-item>
   </v-list-group>
 </template>
@@ -46,8 +46,6 @@ import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import { ContextMenu } from '../elements';
 import FoodItem from './FoodItem.vue';
-
-export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';
 
 export default defineComponent({
   name: 'MealItem',
@@ -103,22 +101,16 @@ export default defineComponent({
       return this.meal.time ? fromMealTime(this.meal.time, true) : '';
     },
   },
+
   methods: {
-    chooseMeal() {
-      this.$emit('breadcrumbMeal', this.meal.name.en);
+    foodSelected(foodId: number) {
+      this.$emit('food-selected', foodId);
+    },
+    mealSelected() {
       this.$emit('meal-selected', this.meal.id);
     },
-    chooseFood(foodName: string) {
-      this.$emit('breadcrumbFood', foodName);
-    },
-    onContextMenuAction(action: string) {
-      this.$emit('meal-action', {
-        mealId: this.meal.id,
-        action,
-      });
-    },
-    onFoodSelected(foodId: number) {
-      this.$emit('food-selected', foodId);
+    mealAction(action: string) {
+      this.$emit('meal-action', { mealId: this.meal.id, action });
     },
   },
 });

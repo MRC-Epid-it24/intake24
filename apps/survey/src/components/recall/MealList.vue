@@ -4,15 +4,9 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ surveyName }}
-          </v-list-item-subtitle>
+          <v-list-item-subtitle>{{ surveyName }}</v-list-item-subtitle>
         </v-list-item-content>
-        <context-menu
-          :icon="menuRecallIcon"
-          :menu="menuRecall"
-          @context-menu-action="onRecallAction"
-        >
+        <context-menu :icon="menuRecallIcon" :menu="menuRecall" @context-menu-action="recallAction">
         </context-menu>
       </v-list-item>
       <v-divider></v-divider>
@@ -25,11 +19,9 @@
                 :selected="selectedMealId === meal.id"
                 :selected-food-id="selectedFoodId"
                 :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
-                @breadcrumbFood="chooseFoodUp"
-                @breadcrumbMeal="chooseMealUp(meal.name.en)"
-                @food-selected="onFoodSelected"
-                @meal-action="onMealAction"
-                @meal-selected="onMealSelected"
+                @food-selected="foodSelected"
+                @meal-action="mealAction"
+                @meal-selected="mealSelected"
               ></meal-item>
             </v-list-item-content>
           </v-list-item>
@@ -43,7 +35,7 @@
           block
           :color="hover ? 'success' : 'inherit'"
           elevation="0"
-          @click="onRecallAction('add-meal')"
+          @click="recallAction('add-meal')"
         >
           {{ $t('recall.menu.recall.addMeal') }}
         </v-btn>
@@ -64,8 +56,6 @@ import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 import { ContextMenu } from '../elements';
 import MealItem from './MealItem.vue';
 
-export type RecallAction = 'add-meal' | 'review-confirm';
-
 export default defineComponent({
   name: 'MealList',
 
@@ -73,10 +63,6 @@ export default defineComponent({
 
   props: {
     surveyName: {
-      type: String,
-      required: true,
-    },
-    surveyId: {
       type: String,
       required: true,
     },
@@ -102,42 +88,34 @@ export default defineComponent({
     ...mapState(useSurvey, ['selection']),
 
     selectedMealId() {
-      if (this.selection.element === null || this.selection.element.type !== 'meal')
-        return undefined;
+      if (this.selection.element?.type !== 'meal') return undefined;
       return this.selection.element.mealId;
     },
     selectedFoodId() {
-      if (this.selection.element === null || this.selection.element.type !== 'food')
-        return undefined;
+      if (this.selection.element?.type !== 'food') return undefined;
       return this.selection.element.foodId;
     },
   },
 
   methods: {
     isSelectedFoodInMeal(mealId: number): boolean {
-      if (this.selection.element === null || this.selection.element.type !== 'food') return false;
+      if (this.selection.element?.type !== 'food') return false;
 
       const foodIndex = getFoodIndexRequired(this.meals, this.selection.element.foodId);
 
       return this.meals[foodIndex.mealIndex].id === mealId;
     },
-    chooseMealUp(meal: string) {
-      this.$emit('breadcrimbMealUp', meal);
-    },
-    chooseFoodUp(e: string) {
-      this.$emit('breadcrimbFoodUp', e);
-    },
-    onMealAction(payload: { mealId: number; action: string }) {
-      this.$emit('meal-action', payload);
-    },
-    onRecallAction(action: string) {
+    recallAction(action: string) {
       this.$emit('recall-action', action);
     },
-    onFoodSelected(foodId: number) {
+    foodSelected(foodId: number) {
       this.$emit('food-selected', foodId);
     },
-    onMealSelected(mealId: number) {
+    mealSelected(mealId: number) {
       this.$emit('meal-selected', mealId);
+    },
+    mealAction(payload: { mealId: number; action: string }) {
+      this.$emit('meal-action', payload);
     },
   },
 });

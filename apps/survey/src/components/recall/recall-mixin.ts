@@ -10,12 +10,9 @@ import type {
   Selection,
 } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
-import type { MealAction } from '@intake24/survey/components/recall/MealItem.vue';
-import type { RecallAction } from '@intake24/survey/components/recall/MealListDesktop.vue';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { isSelectionEqual } from '@intake24/common/types';
-import { InfoAlert } from '@intake24/survey/components/elements';
 import {
   CustomPromptHandler,
   portionSizeHandlers,
@@ -25,10 +22,16 @@ import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
+import { InfoAlert } from '../elements';
+
 interface SavedState {
   prompt: PromptInstance | null;
   selection: Selection;
 }
+
+export type RecallAction = 'add-meal' | 'review-confirm';
+
+export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';
 
 export default defineComponent({
   name: 'RecallMixin',
@@ -84,10 +87,6 @@ export default defineComponent({
 
     surveyName(): string | undefined {
       return this.survey.parameters?.name;
-    },
-
-    surveyId(): string | undefined {
-      return this.survey.parameters?.id;
     },
 
     undo(): MealUndo | FoodUndo | null {
@@ -201,7 +200,7 @@ export default defineComponent({
       };
     },
 
-    async onMealAction(payload: { action: MealAction; mealId: number }) {
+    async mealAction(payload: { action: MealAction; mealId: number }) {
       // eslint-disable-next-line default-case
       switch (payload.action) {
         case 'edit-foods':
@@ -218,7 +217,7 @@ export default defineComponent({
       }
     },
 
-    onRecallAction(action: RecallAction) {
+    recallAction(action: RecallAction) {
       // eslint-disable-next-line default-case
       switch (action) {
         case 'add-meal':
@@ -236,26 +235,14 @@ export default defineComponent({
       }
     },
 
-    async onMealSelected(mealId: number) {
-      this.setSelection({
-        element: {
-          type: 'meal',
-          mealId,
-        },
-        mode: 'manual',
-      });
+    async mealSelected(mealId: number) {
+      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
       await this.nextPrompt();
     },
 
-    async onFoodSelected(foodId: number) {
-      this.setSelection({
-        element: {
-          type: 'food',
-          foodId,
-        },
-        mode: 'manual',
-      });
+    async foodSelected(foodId: number) {
+      this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
 
       await this.nextPrompt();
     },
@@ -299,7 +286,7 @@ export default defineComponent({
           // TODO: handle completion
           console.log('No prompts remaining');
           if (this.hasMeals) {
-            this.onRecallAction('add-meal');
+            this.recallAction('add-meal');
           } else {
             this.currentPrompt = null;
           }
@@ -336,7 +323,7 @@ export default defineComponent({
     },
 
     // Same as onContinue but don't commit, for alternative prompt actions such as delete meal
-    async onComplete() {
+    async complete() {
       this.continueButtonEnabled = false;
       this.hideCurrentPrompt = true;
 
