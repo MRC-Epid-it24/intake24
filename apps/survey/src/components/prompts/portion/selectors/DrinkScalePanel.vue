@@ -240,5 +240,9 @@ export default defineComponent({
       width: 5px;
     }
   }
+
+  .v-slider--vertical {
+    min-height: unset;
+  }
 }
 </style>
