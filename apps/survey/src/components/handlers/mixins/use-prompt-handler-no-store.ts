@@ -1,10 +1,7 @@
 import type { Ref, SetupContext } from 'vue';
 import { ref } from 'vue';
 
-export const usePromptHandlerNoStore = <T extends object>(
-  getInitialState: () => T,
-  context: SetupContext
-) => {
+export const usePromptHandlerNoStore = <T>(getInitialState: () => T, context: SetupContext) => {
   const state = ref(getInitialState()) as Ref<T>;
 
   const update = (data: { state?: T; valid?: boolean }) => {

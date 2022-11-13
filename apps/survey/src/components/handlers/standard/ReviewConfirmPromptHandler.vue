@@ -3,6 +3,7 @@
     v-bind="{ meals, promptComponent, promptProps }"
     @food-selected="onFoodClick"
     @meal-selected="onMealClick"
+    @nav-action="navAction"
   ></review-confirm-prompt>
 </template>
 
@@ -37,19 +38,22 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
+    navAction(action: string) {
+      this.$emit('nav-action', action);
+    },
+
     async submit() {
       await this.submitRecall();
-      this.$emit('complete');
+      this.$emit('nav-action', 'complete');
     },
+
     onMealClick(payload: { mealId: number }) {
       this.$emit('meal-context-menu', payload);
     },
+
     onFoodClick(payload: { foodId: number }) {
       this.$emit('food-context-menu', payload);
     },
-    // Method required and intentionally empty
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    async commitAnswer() {},
   },
 });
 </script>

@@ -1,5 +1,9 @@
 <template>
-  <meal-add-prompt v-bind="{ meals, promptComponent, promptProps }" @add="add" @cancel="cancel">
+  <meal-add-prompt
+    v-bind="{ meals, promptComponent, promptProps }"
+    @nav-action="navAction"
+    @update="update"
+  >
   </meal-add-prompt>
 </template>
 
@@ -12,6 +16,8 @@ import type { BasePromptProps } from '@intake24/common/prompts';
 import type { Meal } from '@intake24/common/types';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
+
+import { usePromptHandlerNoStore } from '../mixins';
 
 export default defineComponent({
   name: 'MealAddPromptHandler',
@@ -29,6 +35,14 @@ export default defineComponent({
     },
   },
 
+  setup(props, context) {
+    const getInitialState = (): string | undefined => undefined;
+
+    const { state, update } = usePromptHandlerNoStore(getInitialState, context);
+
+    return { state, update };
+  },
+
   computed: {
     ...mapState(useSurvey, ['defaultSchemeMeals']),
 
@@ -44,17 +58,20 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['addMeal']),
 
-    add(newMeal: string) {
-      this.addMeal(newMeal, this.$i18n.locale);
-      this.$emit('complete');
+    async navAction(action: 'next' | 'cancel') {
+      if (action === 'next' && this.state) this.commitAnswer();
+
+      this.$emit('nav-action', 'complete');
     },
 
-    cancel() {
-      this.$emit('complete');
-    },
+    commitAnswer() {
+      if (!this.state) {
+        console.warn('MealAddPromptHandler: no meal selected');
+        return;
+      }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    async commitAnswer() {},
+      this.addMeal(this.state, this.$i18n.locale);
+    },
   },
 });
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText }">
-    <v-form ref="form" @submit.prevent="confirm">
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText, isValid }">
+    <v-form ref="form" @submit.prevent="navAction('next')">
       <v-time-picker
         :format="promptProps.format"
         full-width
@@ -12,7 +12,7 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" large @click="removeMeal">
+      <v-btn :block="isMobile" class="px-5" large @click="navAction('cancel')">
         {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
       </v-btn>
       <v-btn
@@ -21,9 +21,24 @@
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
         large
-        @click="confirm"
+        @click="navAction('next')"
       >
         {{ $t('prompts.mealTime.yes', { meal: getLocalMealName }) }}
+      </v-btn>
+    </template>
+    <template #nav-actions>
+      <v-btn value="cancel">
+        <span class="text-overline font-weight-medium" @click="navAction('cancel')">
+          {{ $t('common.action.remove') }}
+        </span>
+        <v-icon class="pb-1">$cancel</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn color="success" :disabled="!isValid" value="next" @click="navAction('next')">
+        <span class="text-overline font-weight-medium">
+          {{ $t('common.action.confirm._') }}
+        </span>
+        <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
   </prompt-layout>
@@ -93,27 +108,8 @@ export default defineComponent({
   },
 
   methods: {
-    removeMeal() {
-      this.$emit('remove-meal');
-    },
-
     update(time: string) {
-      this.clearErrors();
-
       this.$emit('update', { state: toMealTime(time), valid: this.isValid });
-    },
-
-    confirm() {
-      if (!this.isValid) {
-        this.errors = [
-          this.getLocaleContent(this.validation.message, {
-            path: 'prompts.mealTime.validation.required',
-          }),
-        ];
-        return;
-      }
-
-      this.$emit('confirm');
     },
   },
 });

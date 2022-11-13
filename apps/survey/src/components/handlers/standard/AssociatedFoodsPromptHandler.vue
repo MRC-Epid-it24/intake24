@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @confirm="$emit('continue')"
+    @nav-action="navAction"
     @update="update"
   >
   </associated-foods-prompt>
@@ -95,6 +95,12 @@ export default defineComponent({
       return Promise.all(
         headers.map((header) => foodSearchService.getData(this.localeId, header.code))
       );
+    },
+
+    async navAction(action: string) {
+      if (action === 'next') await this.commitAnswer();
+
+      this.$emit('nav-action', action);
     },
 
     async commitAnswer() {

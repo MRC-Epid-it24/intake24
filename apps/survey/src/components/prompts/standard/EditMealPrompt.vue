@@ -1,5 +1,8 @@
 <template>
-  <prompt-layout :description="promptDescription" :text="promptText">
+  <prompt-layout
+    v-bind="{ description: promptDescription, text: promptText, isValid }"
+    @nav-action="navAction"
+  >
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
       <editable-food-list v-model="foods" @input="update"></editable-food-list>
     </v-col>
@@ -23,7 +26,7 @@
         color="success"
         :disabled="!isValid"
         large
-        @click="confirm"
+        @click="navAction('next')"
       >
         {{ $t('common.action.continue') }}
       </v-btn>
@@ -112,10 +115,6 @@ export default defineComponent({
       const state: EditMealPromptState = { foods };
 
       this.$emit('update', { state, valid: this.isValid });
-    },
-
-    confirm() {
-      this.$emit('confirm');
     },
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, foodName }">
+  <portion-layout v-bind="{ method, description, text, food, isValid }" @nav-action="navAction">
     <v-sheet>
       <v-item-group v-if="availableMethods.length" v-model="option">
         <v-container>
@@ -88,7 +88,7 @@ export default defineComponent({
       if (val === undefined) return;
 
       this.update();
-      this.confirm();
+      this.navAction('next');
     },
   },
 
@@ -101,10 +101,6 @@ export default defineComponent({
       const state: PortionSizeOptionState = { option: this.option ?? null };
 
       this.$emit('update', { state, valid: this.isValid });
-    },
-
-    confirm() {
-      this.$emit('confirm');
     },
   },
 });

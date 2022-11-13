@@ -1,5 +1,8 @@
 <template>
-  <portion-layout v-bind="{ method: portionSize.method, description, text, foodName }">
+  <portion-layout
+    v-bind="{ method: portionSize.method, description, text, food, isValid }"
+    @nav-action="navAction"
+  >
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
@@ -119,7 +122,7 @@
       </v-col>
     </v-row>
     <template #actions>
-      <continue :disabled="!isValid" @click="confirm"></continue>
+      <continue :disabled="!isValid" @click="navAction('next')"></continue>
     </template>
   </portion-layout>
 </template>
@@ -261,15 +264,6 @@ export default defineComponent({
 
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
-    confirm() {
-      if (!this.isValid) {
-        this.setErrors();
-        return;
-      }
-
-      this.$emit('confirm');
     },
 
     update() {

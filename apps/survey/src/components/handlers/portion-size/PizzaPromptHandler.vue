@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @confirm="$emit('continue')"
+    @nav-action="navAction"
     @update="update"
   ></pizza-prompt>
 </template>
@@ -88,7 +88,13 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    async commitAnswer() {
+    navAction(action: string) {
+      if (action === 'next') this.commitAnswer();
+
+      this.$emit('nav-action', action);
+    },
+
+    commitAnswer() {
       const { portionSize } = this.state;
 
       this.updateFood({ foodId: this.food().id, update: { portionSize } });

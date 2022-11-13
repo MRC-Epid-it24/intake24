@@ -1,7 +1,7 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
+  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
     <template #actions>
-      <submit @click.native="submit"></submit>
+      <submit @click.native="navAction('next')"></submit>
     </template>
   </prompt-layout>
 </template>
@@ -20,7 +20,7 @@ import BasePrompt from '../BasePrompt';
 export default defineComponent({
   name: 'SubmitPrompt',
 
-  components: { submit: Submit },
+  components: { Submit },
 
   mixins: [BasePrompt],
 
@@ -35,9 +35,9 @@ export default defineComponent({
     return { ...merge(submitPromptProps, this.promptProps) };
   },
 
-  methods: {
-    submit() {
-      this.$emit('submit');
+  computed: {
+    isValid(): boolean {
+      return true;
     },
   },
 });

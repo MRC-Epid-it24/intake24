@@ -1,7 +1,10 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText, meal, food }">
+  <prompt-layout
+    v-bind="{ description: localeDescription, text: localeText, meal, food, isValid }"
+    @nav-action="navAction"
+  >
     <template #actions>
-      <continue @click.native="confirm"></continue>
+      <continue @click.native="navAction('next')"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -62,7 +65,7 @@ export default defineComponent({
 
     confirm() {
       this.update();
-      this.$emit('confirm');
+      return true;
     },
   },
 });

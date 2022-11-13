@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food }">
-    <v-form ref="form" @submit.prevent="confirm">
+  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
+    <v-form ref="form" @submit.prevent="navAction('next')">
       <v-radio-group
         v-model="selected"
         :column="orientation === 'column'"
@@ -30,7 +30,7 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <continue @click.native="confirm"></continue>
+      <continue @click.native="navAction('next')"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -89,16 +89,14 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.isValid) {
-        this.errors = [
-          this.getLocaleContent(this.validation.message, {
-            path: 'prompts.radio.validation.required',
-          }),
-        ];
-        return;
-      }
+      if (this.isValid) return true;
 
-      this.$emit('confirm');
+      this.errors = [
+        this.getLocaleContent(this.validation.message, {
+          path: 'prompts.radio.validation.required',
+        }),
+      ];
+      return false;
     },
   },
 });

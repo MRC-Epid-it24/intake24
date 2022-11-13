@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food }">
-    <v-form ref="form" @submit.prevent="confirm">
+  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
+    <v-form ref="form" @submit.prevent="navAction('next')">
       <v-time-picker
         v-model="currentValue"
         :format="format"
@@ -11,7 +11,7 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <continue @click.native="confirm"></continue>
+      <continue @click.native="navAction('next')"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -63,16 +63,14 @@ export default defineComponent({
     },
 
     confirm() {
-      if (this.validation.required && !this.currentValue) {
-        this.errors = [
-          this.getLocaleContent(this.validation.message, {
-            path: 'prompts.timepicker.validation.required',
-          }),
-        ];
-        return;
-      }
+      if (!this.validation.required || this.currentValue) return true;
 
-      this.$emit('confirm');
+      this.errors = [
+        this.getLocaleContent(this.validation.message, {
+          path: 'prompts.timepicker.validation.required',
+        }),
+      ];
+      return false;
     },
   },
 });

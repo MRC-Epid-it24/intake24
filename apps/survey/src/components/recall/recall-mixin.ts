@@ -1,14 +1,9 @@
 import { mapActions, mapState } from 'pinia';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import type {
-  FoodState,
-  RecallPromptHandler,
-  RequiredLocaleTranslation,
-  Selection,
-} from '@intake24/common/types';
+import type { FoodState, RequiredLocaleTranslation, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
@@ -41,12 +36,6 @@ export default defineComponent({
     InfoAlert,
     ...standardHandlers,
     ...portionSizeHandlers,
-  },
-
-  setup() {
-    const promptHandle = ref<RecallPromptHandler>();
-
-    return { promptHandle };
   },
 
   data: () => {
@@ -302,7 +291,7 @@ export default defineComponent({
       this.continueButtonEnabled = valid;
     },
 
-    async onContinue() {
+    async next() {
       this.continueButtonEnabled = false;
       // Workaround for a crash that occurs if the currently selected prompt changes something
       // in the recall data that makes it incompatible, for example changing from 'free-text'
@@ -316,13 +305,12 @@ export default defineComponent({
       // (via the reactivity system) in response to changes in commitAnswer.
       this.hideCurrentPrompt = true;
 
-      await this.promptHandle?.commitAnswer();
       await this.nextPrompt();
 
       this.hideCurrentPrompt = false;
     },
 
-    // Same as onContinue but don't commit, for alternative prompt actions such as delete meal
+    // Same as next but don't commit, for alternative prompt actions such as delete meal
     async complete() {
       this.continueButtonEnabled = false;
       this.hideCurrentPrompt = true;
@@ -337,6 +325,22 @@ export default defineComponent({
       useSurvey().clearState();
       await this.recallController?.initialiseSurvey();
       await this.nextPrompt();
+    },
+
+    async navAction(action: string) {
+      switch (action) {
+        case 'next':
+        case 'complete':
+        case 'restart':
+          await this[action]();
+          break;
+        case 'add-meal':
+          this.recallAction('add-meal');
+          break;
+        case 'review':
+          this.recallAction('review-confirm');
+          break;
+      }
     },
   },
 });

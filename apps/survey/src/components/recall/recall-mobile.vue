@@ -24,15 +24,12 @@
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
           :key="currentPrompt.prompt.id"
-          ref="promptHandle"
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          @complete="complete"
-          @continue="onContinue"
           @food-context-menu="onFoodContextMenu"
           @meal-context-menu="onMealContextMenu"
-          @restart="restart"
+          @nav-action="navAction"
           @valid="updateValidation"
         ></component>
       </transition>
@@ -46,13 +43,6 @@
       >
       </meal-list-mobile-bottom>
     </v-col>
-
-    <bottom-navigation-mobile
-      v-if="showMealList"
-      :can-continue="continueButtonEnabled"
-      :tab.sync="bottomNavTab"
-      @update:tab="onBottomNavChange"
-    ></bottom-navigation-mobile>
 
     <!-- Context menu for Meal or Food with actions options -->
     <food-mobile-context-menu
@@ -79,12 +69,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-
-import type { RecallPromptHandler } from '@intake24/common/types';
+import { defineComponent } from 'vue';
 
 import type { MealAction } from './recall-mixin';
-import BottomNavigationMobile from './mobile/BottomNavMobile.vue';
 import RecallBreadCrumbsMobile from './mobile/BreadCrumbsMobile.vue';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
 import MealListMobileBottom from './mobile/MealListMobileBottom.vue';
@@ -97,22 +84,14 @@ export default defineComponent({
   components: {
     MealListMobileBottom,
     RecallBreadCrumbsMobile,
-    BottomNavigationMobile,
     FoodMobileContextMenu,
     MealMobileContextMenu,
   },
 
   mixins: [recallMixin],
 
-  setup() {
-    const promptHandle = ref<RecallPromptHandler>();
-
-    return { promptHandle };
-  },
-
   data() {
     return {
-      bottomNavTab: 2,
       foodContextMenu: {
         show: false,
         foodId: 0,
@@ -126,25 +105,11 @@ export default defineComponent({
   },
 
   methods: {
-    // FIXME: Should use nested router for this
-    async onBottomNavChange(tab: number) {
-      if (tab === 0) {
-        this.recallAction('add-meal');
-      } else if (tab === 1) {
-        this.recallAction('review-confirm');
-      } else if (tab === 2) {
-        await this.onContinue();
-      }
-    },
-
     onContextMenuMealAction(payload: { action: MealAction; mealId: number }) {
       this.mealAction(payload);
-
-      this.bottomNavTab = 2;
     },
 
     async onBottomListMealSelected() {
-      this.bottomNavTab = 2;
       await this.nextPrompt();
     },
 
@@ -169,7 +134,6 @@ export default defineComponent({
     },
 
     async contextMenuNextPrompt() {
-      this.bottomNavTab = 2;
       this.clearSavedState();
       await this.nextPrompt();
     },

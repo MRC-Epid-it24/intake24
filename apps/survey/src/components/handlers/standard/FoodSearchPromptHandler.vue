@@ -51,7 +51,8 @@ export default defineComponent({
 
     foodSelected(foodData: UserFoodData) {
       this.foodData = foodData;
-      this.$emit('continue');
+      this.commitAnswer();
+      this.$emit('nav-action', 'next');
     },
 
     commitAnswer() {

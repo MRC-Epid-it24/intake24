@@ -9,7 +9,7 @@
       promptComponent,
       promptProps,
     }"
-    @confirm="$emit('continue')"
+    @nav-action="navAction"
     @update="update"
   >
   </standard-portion-prompt>
@@ -90,6 +90,12 @@ export default defineComponent({
 
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
+
+    navAction(action: string) {
+      if (action === 'next') this.commitAnswer();
+
+      this.$emit('nav-action', action);
+    },
 
     commitAnswer() {
       const { portionSize } = this.state;

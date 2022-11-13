@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food }">
+  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
     <template #actions>
       <v-btn
         :block="isMobile"
@@ -59,7 +59,7 @@ export default defineComponent({
   methods: {
     update(value: boolean) {
       this.$emit('update', { state: value, valid: true });
-      this.$emit('confirm');
+      this.$emit('nav-action', 'next');
     },
   },
 });

@@ -3,7 +3,7 @@
     :is="promptComponent"
     :key="promptId"
     v-bind="{ canShowFeedback, canRestart, promptProps, surveyId }"
-    @restart="restart"
+    @nav-action="navAction"
   ></component>
 </template>
 
@@ -53,8 +53,8 @@ export default defineComponent({
   },
 
   methods: {
-    async restart() {
-      this.$emit('restart');
+    navAction(action: string) {
+      this.$emit('nav-action', action);
     },
   },
 });

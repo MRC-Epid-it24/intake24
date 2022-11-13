@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
+  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
         <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
@@ -73,7 +73,7 @@
       </v-expansion-panels>
     </v-card-actions>
     <template #actions>
-      <continue :disabled="!isValid" @click="confirm"></continue>
+      <continue :disabled="!isValid" @click="navAction('next')"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -263,10 +263,6 @@ export default defineComponent({
       const { activePrompt, prompts } = this;
 
       this.$emit('update', { state: { activePrompt, prompts }, valid: this.isValid });
-    },
-
-    confirm() {
-      this.$emit('confirm');
     },
   },
 });

@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food }">
-    <v-form ref="form" @submit.prevent="confirm">
+  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
+    <v-form ref="form" @submit.prevent="navAction('next')">
       <v-textarea
         v-model.trim="currentValue"
         hide-details="auto"
@@ -12,7 +12,7 @@
       ></v-textarea>
     </v-form>
     <template #actions>
-      <continue @click.native="confirm"></continue>
+      <continue @click.native="navAction('next')"></continue>
     </template>
   </prompt-layout>
 </template>
@@ -80,9 +80,7 @@ export default defineComponent({
 
     confirm() {
       const isValid = this.form?.validate();
-      if (!isValid) return;
-
-      this.$emit('confirm');
+      return isValid;
     },
   },
 });

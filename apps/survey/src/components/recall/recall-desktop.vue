@@ -23,13 +23,10 @@
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
           :key="currentPrompt.prompt.id"
-          ref="promptHandle"
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          @complete="complete"
-          @continue="onContinue"
-          @restart="restart"
+          @nav-action="navAction"
           @valid="updateValidation"
         ></component>
       </transition>
@@ -44,9 +41,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-
-import type { RecallPromptHandler } from '@intake24/common/types';
+import { defineComponent } from 'vue';
 
 import RecallBreadCrumbs from './BreadCrumbs.vue';
 import MealList from './MealList.vue';
@@ -58,12 +53,6 @@ export default defineComponent({
   components: { MealList, RecallBreadCrumbs },
 
   mixins: [recallMixin],
-
-  setup() {
-    const promptHandle = ref<RecallPromptHandler>();
-
-    return { promptHandle };
-  },
 });
 </script>
 

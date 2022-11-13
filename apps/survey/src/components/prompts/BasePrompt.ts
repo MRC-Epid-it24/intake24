@@ -51,10 +51,7 @@ export default defineComponent({
     },
 
     foodOrMealName() {
-      const name = this.localeMealName ?? this.localeFoodName;
-      if (!name) throw new Error('No food or meal selected!');
-
-      return name;
+      return this.localeMealName ?? this.localeFoodName ?? '';
     },
 
     isValid(): boolean {
@@ -69,6 +66,22 @@ export default defineComponent({
   methods: {
     clearErrors() {
       this.errors = [];
+    },
+
+    confirm() {
+      // to be implemented by components
+      return true;
+    },
+
+    navAction(action: string) {
+      if (action !== 'next') {
+        this.$emit('nav-action', action);
+        return;
+      }
+
+      if (!this.confirm()) return;
+
+      this.$emit('nav-action', action);
     },
   },
 });

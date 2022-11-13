@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
+  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
     <template #actions>
       <v-btn
         v-if="canShowFeedback"
@@ -12,7 +12,7 @@
         {{ $t('recall.feedback') }}
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="canRestart" class="px-5" color="success" large @click="restart">
+      <v-btn v-if="canRestart" class="px-5" color="success" large @click="navAction('restart')">
         <v-icon left>$survey</v-icon>
         {{ $t('recall.restart') }}
       </v-btn>

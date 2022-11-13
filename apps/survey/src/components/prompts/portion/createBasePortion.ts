@@ -125,5 +125,9 @@ export default <P extends BasePromptProps, S extends object>() =>
 
         this.closePanels();
       },
+
+      navAction(action: string) {
+        this.$emit('nav-action', action);
+      },
     },
   });

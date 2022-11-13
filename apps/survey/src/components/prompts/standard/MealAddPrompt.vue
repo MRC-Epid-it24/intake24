@@ -1,7 +1,15 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText }">
+  <prompt-layout
+    v-bind="{
+      description: localeDescription,
+      text: localeText,
+      meal,
+      food,
+      isValid,
+    }"
+  >
     <v-col md="8" sm="12">
-      <v-form ref="form" @submit.prevent="add">
+      <v-form ref="form" @submit.prevent="navAction('next')">
         <v-combobox
           v-model="currentValue"
           autofocus
@@ -13,12 +21,32 @@
           outlined
           persistent-hint
           small-chips
+          @change="update"
         >
         </v-combobox>
       </v-form>
     </v-col>
     <template #actions>
-      <continue :disabled="!isValid" :label="$t('prompts.addMeal.yes')" @click="add"></continue>
+      <continue
+        :disabled="!isValid"
+        :label="$t('prompts.addMeal.yes')"
+        @click="navAction('next')"
+      ></continue>
+    </template>
+    <template #nav-actions>
+      <v-btn value="cancel">
+        <span class="text-overline font-weight-medium" @click="navAction('cancel')">
+          {{ $t('common.action.cancel') }}
+        </span>
+        <v-icon class="pb-1">$cancel</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn color="success" :disabled="!isValid" value="next" @click="navAction('next')">
+        <span class="text-overline font-weight-medium">
+          {{ $t('common.action.continue') }}
+        </span>
+        <v-icon class="pb-1">$next</v-icon>
+      </v-btn>
     </template>
   </prompt-layout>
 </template>
@@ -56,7 +84,7 @@ export default defineComponent({
   data() {
     return {
       ...merge(mealAddPromptProps, this.promptProps),
-      currentValue: null,
+      currentValue: undefined as string | undefined,
     };
   },
 
@@ -75,12 +103,8 @@ export default defineComponent({
   },
 
   methods: {
-    add() {
-      this.$emit('add', this.currentValue);
-    },
-
-    cancel() {
-      this.$emit('cancel');
+    update() {
+      this.$emit('update', { state: this.currentValue, valid: this.isValid });
     },
   },
 });

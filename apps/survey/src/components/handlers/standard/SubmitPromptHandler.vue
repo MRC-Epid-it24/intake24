@@ -3,7 +3,7 @@
     :is="promptComponent"
     :key="promptId"
     v-bind="{ promptProps }"
-    @submit="submit"
+    @nav-action="navAction"
   ></component>
 </template>
 
@@ -39,9 +39,14 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
+    async navAction(action: string) {
+      if (action === 'next') await this.submit();
+
+      this.$emit('nav-action', 'complete');
+    },
+
     async submit() {
       await this.submitRecall();
-      this.$emit('complete');
     },
   },
 });

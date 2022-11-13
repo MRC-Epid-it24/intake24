@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text }">
+  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>
@@ -39,9 +39,9 @@
                       <v-icon v-if="food.data" color="success" x-small>fa-check</v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon v-if="food.portionSizeMethod" color="success" x-small
-                        >fa-check</v-icon
-                      >
+                      <v-icon v-if="food.portionSizeMethod" color="success" x-small>
+                        fa-check
+                      </v-icon>
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>
@@ -89,10 +89,6 @@ export default defineComponent({
       type: Array as PropType<MealState[]>,
       required: true,
     },
-  },
-
-  data() {
-    return {};
   },
 
   computed: {
