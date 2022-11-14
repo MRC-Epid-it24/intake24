@@ -1,5 +1,8 @@
 <template>
-  <prompt-layout v-bind="{ description, text: promptTitle, isValid }" @nav-action="navAction">
+  <prompt-layout
+    v-bind="{ description, text: promptTitle, food, meal, isValid }"
+    @nav-action="navAction"
+  >
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
     <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>

@@ -274,6 +274,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Meal time',
       subtitle: 'Confirm the time of the meal or remove the meal',
     },
+    'ready-meal-prompt': {
+      title: 'Ready meal',
+      subtitle: 'Ask about ready meals',
+    },
     'redirect-prompt': {
       title: 'Redirect',
       subtitle: 'Final page for user redirect to external site',

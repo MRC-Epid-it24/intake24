@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText, isValid }">
+  <prompt-layout v-bind="{ description: localeDescription, text: localeText, food, meal, isValid }">
     <v-form ref="form" @submit.prevent="navAction('next')">
       <v-time-picker
         :format="promptProps.format"
@@ -13,7 +13,7 @@
     </v-form>
     <template #actions>
       <v-btn :block="isMobile" class="px-5" large @click="navAction('cancel')">
-        {{ $t('prompts.mealTime.no', { meal: getLocalMealName }) }}
+        {{ $t('prompts.mealTime.no', { meal: localMealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -23,7 +23,7 @@
         large
         @click="navAction('next')"
       >
-        {{ $t('prompts.mealTime.yes', { meal: getLocalMealName }) }}
+        {{ $t('prompts.mealTime.yes', { meal: localMealName }) }}
       </v-btn>
     </template>
     <template #nav-actions>
@@ -49,7 +49,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
-import type { MealTime, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { MealState, MealTime } from '@intake24/common/types';
 import { mealTimePromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { fromMealTime, toMealTime } from '@intake24/survey/stores/meal-food-utils';
@@ -66,8 +66,8 @@ export default defineComponent({
       type: Object as PropType<MealTime>,
       required: true,
     },
-    mealName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
+    meal: {
+      type: Object as PropType<MealState>,
       required: true,
     },
     promptProps: {
@@ -84,21 +84,21 @@ export default defineComponent({
   },
 
   computed: {
-    getLocalMealName(): string {
-      return this.getLocaleContent(this.mealName);
+    localMealName(): string {
+      return this.getLocaleContent(this.meal.name);
     },
 
     localeText(): string {
       return this.getLocaleContent(this.promptProps.text, {
         path: 'prompts.mealTime.text',
-        params: { meal: this.getLocalMealName },
+        params: { meal: this.localMealName },
       });
     },
 
     localeDescription(): string {
       return this.getLocaleContent(this.promptProps.description, {
         // path: 'prompts.mealTime.description',
-        params: { meal: this.getLocalMealName },
+        params: { meal: this.localMealName },
       });
     },
 

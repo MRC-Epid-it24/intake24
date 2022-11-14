@@ -21,6 +21,8 @@ export interface MealTimePromptProps extends ValidatedPromptProps {
   format: 'ampm' | '24hr';
 }
 
+export type ReadyMealPromptProps = BasePromptProps;
+
 export interface RedirectPromptProps extends BasePromptProps {
   url: string | null;
   identifier: 'userId' | 'username' | 'token' | 'custom';
@@ -59,6 +61,11 @@ export const mealTimePromptProps: MealTimePromptProps = copy({
 export const mealAddPromptProps: BasePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Add Meal' },
+});
+
+export const readyMealPromptProps: ReadyMealPromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Ready meal' },
 });
 
 export const redirectPromptProps: RedirectPromptProps = copy({
@@ -121,6 +128,13 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'meal-time-prompt',
     name: 'Meal Time prompt',
     props: copy(mealTimePromptProps),
+  },
+  {
+    component: 'ready-meal-prompt',
+    type: 'standard',
+    id: 'ready-meal-prompt',
+    name: 'Ready meal prompt',
+    props: copy(readyMealPromptProps),
   },
   {
     component: 'redirect-prompt',

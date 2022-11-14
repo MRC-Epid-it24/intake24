@@ -1,7 +1,7 @@
 <template>
   <edit-meal-prompt
     ref="prompt"
-    v-bind="{ initialState: state, mealName: meal.name, promptComponent, promptProps }"
+    v-bind="{ initialState: state, meal, promptComponent, promptProps }"
     @nav-action="navAction"
     @remove-meal="removeMeal"
     @update="update"

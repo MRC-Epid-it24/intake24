@@ -1,6 +1,6 @@
 <template>
   <prompt-layout
-    v-bind="{ description: promptDescription, text: promptText, isValid }"
+    v-bind="{ description: promptDescription, text: promptText, food, meal, isValid }"
     @nav-action="navAction"
   >
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
@@ -9,15 +9,15 @@
     <template v-if="!isMobile" #actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }).toString()"
+        :label="$t('prompts.editMeal.deleteMeal', { meal: localMealName }).toString()"
         @confirm="removeMeal"
       >
         <template #activator="{ on, attrs }">
           <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
-            {{ $t('prompts.editMeal.deleteMeal', { meal: getLocalMealName }) }}
+            {{ $t('prompts.editMeal.deleteMeal', { meal: localMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.mealDelete.message', { meal: getLocalMealName }) }}
+        {{ $t('prompts.mealDelete.message', { meal: localMealName }) }}
       </confirm-dialog>
       <v-btn
         :block="isMobile"
@@ -39,7 +39,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import type { FoodState, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import { ConfirmDialog } from '@intake24/ui';
@@ -62,8 +62,8 @@ export default defineComponent({
       type: Object as PropType<EditMealPromptState>,
       required: true,
     },
-    mealName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
+    meal: {
+      type: Object as PropType<MealState>,
       required: true,
     },
     promptComponent: {
@@ -83,14 +83,14 @@ export default defineComponent({
   },
 
   computed: {
-    getLocalMealName(): string {
-      return this.getLocaleContent(this.mealName);
+    localMealName(): string {
+      return this.getLocaleContent(this.meal.name);
     },
 
     promptText(): string {
       return this.getLocaleContent(this.promptProps.text, {
         path: 'prompts.editMeal.text',
-        params: { meal: this.getLocalMealName.toLocaleLowerCase() },
+        params: { meal: this.localMealName.toLocaleLowerCase() },
       });
     },
 

@@ -176,21 +176,12 @@ export default class DynamicRecall {
           const { mealId } = recallState.selection.element;
           const mealPrompt = this.promptManager.nextMealSectionPrompt('preFoods', mealId);
 
-          if (mealPrompt)
-            return {
-              prompt: mealPrompt,
-              section: 'preFoods',
-            };
+          if (mealPrompt) return { prompt: mealPrompt, section: 'preFoods' };
 
           if (this.foodPromptsComplete(surveyState, mealId)) {
             const mealPrompt = this.promptManager.nextMealSectionPrompt('postFoods', mealId);
 
-            if (mealPrompt) {
-              return {
-                prompt: mealPrompt,
-                section: 'postFoods',
-              };
-            }
+            if (mealPrompt) return { prompt: mealPrompt, section: 'postFoods' };
           }
           break;
         }

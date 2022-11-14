@@ -4,6 +4,7 @@
     fullscreen
     hide-overlay
     persistent
+    :retain-focus="false"
     transition="dialog-bottom-transition"
   >
     <v-card tile>
@@ -287,6 +288,7 @@ export default defineComponent({
     updatePromptProps() {
       const { show, index, question } = this.dialog;
       const { origId, id, name, component } = question;
+      const identifiers = origId ? { origId, id, name } : {};
 
       const newQuestion =
         this.availablePromptQuestions.find((item) => item.component === component) ??
@@ -300,7 +302,7 @@ export default defineComponent({
       this.dialog = {
         show,
         index,
-        question: { ...rest, origId, id, name, props: merge(props, originalProps) },
+        question: { ...rest, ...identifiers, props: merge(props, originalProps) },
       };
     },
 

@@ -52,7 +52,7 @@ export const infoPromptProps: InfoPromptProps = copy({
 
 export const noMoreInformationPromptProps: BasePromptProps = copy({
   ...baseCustomPromptProps,
-  name: { en: 'No More Information Needed' },
+  name: { en: 'No more information needed' },
 });
 
 export const yesNoPromptProps: YesNoPromptProps = copy({
@@ -63,20 +63,20 @@ export const yesNoPromptProps: YesNoPromptProps = copy({
 export const datePickerPromptProps: DatePickerPromptProps = copy({
   ...baseCustomPromptProps,
   ...promptValidation,
-  name: { en: 'Pick Date' },
+  name: { en: 'Select date' },
 });
 
 export const timePickerPromptProps: TimePickerPromptProps = copy({
   ...baseCustomPromptProps,
   ...promptValidation,
-  name: { en: 'Pick Time' },
+  name: { en: 'Select time' },
   format: '24hr',
 });
 
 export const checkboxListPromptProps: CheckboxListPromptProps = copy({
   ...baseCustomPromptProps,
   ...promptValidation,
-  name: { en: 'Checkbox List' },
+  name: { en: 'Multi-choice list' },
   label: {},
   options: { en: [] },
   other: false,
@@ -85,7 +85,7 @@ export const checkboxListPromptProps: CheckboxListPromptProps = copy({
 export const radioListPromptProps: RadioListPromptProps = copy({
   ...baseCustomPromptProps,
   ...promptValidation,
-  name: { en: 'Radio List' },
+  name: { en: 'Single-choice list' },
   label: {},
   options: { en: [] },
   orientation: 'column',
@@ -95,7 +95,7 @@ export const radioListPromptProps: RadioListPromptProps = copy({
 export const textareaPromptProps: TextareaPromptProps = copy({
   ...baseCustomPromptProps,
   ...promptValidation,
-  name: { en: 'Fill Text' },
+  name: { en: 'Free text' },
   label: {},
   hint: {},
 });

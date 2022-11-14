@@ -5,5 +5,7 @@ export { default as FinalPrompt } from './FinalPrompt.vue';
 export { default as FoodSearchPrompt } from './FoodSearchPrompt.vue';
 export { default as MealAddPrompt } from './MealAddPrompt.vue';
 export { default as MealTimePrompt } from './MealTimePrompt.vue';
+export * from './ReadyMealPrompt.vue';
+export { default as ReadyMealPrompt } from './ReadyMealPrompt.vue';
 export { default as ReviewConfirmPrompt } from './ReviewConfirmPrompt.vue';
 export { default as SubmitPrompt } from './SubmitPrompt.vue';

@@ -1,6 +1,6 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, mealName: meal.name, promptComponent, promptProps }"
+    v-bind="{ initialState: state, meal, promptComponent, promptProps }"
     @nav-action="navAction"
     @update="update"
   ></meal-time-prompt>

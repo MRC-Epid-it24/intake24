@@ -113,7 +113,8 @@ const surveySubmissionService = ({
       }
 
       const {
-        data: { code, groupCode, readyMealOption, reasonableAmount, brandNames },
+        data: { code, groupCode, reasonableAmount, brandNames },
+        flags,
         linkedFoods,
         portionSize,
         searchTerm,
@@ -163,7 +164,7 @@ const surveySubmissionService = ({
         code,
         englishName,
         localName,
-        readyMeal: readyMealOption,
+        readyMeal: flags.includes('ready-meal'),
         searchTerm,
         portionSizeMethodId: portionSize.method,
         reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify

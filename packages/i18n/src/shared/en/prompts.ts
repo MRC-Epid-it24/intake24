@@ -102,6 +102,11 @@ const prompts: LocaleMessageObject = {
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
     },
   },
+  readyMeal: {
+    text: 'Was this a ready-made meal or food?',
+    description:
+      'Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).',
+  },
 };
 
 export default prompts;

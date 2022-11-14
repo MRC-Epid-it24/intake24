@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
         <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">

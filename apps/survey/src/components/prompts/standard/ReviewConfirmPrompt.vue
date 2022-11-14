@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>

@@ -83,6 +83,10 @@ const checkMealStandardConditions = (
   prompt: PromptQuestion
 ): boolean => {
   switch (prompt.component) {
+    case 'edit-meal-prompt':
+      return mealState.foods.length === 0;
+    case 'info-prompt':
+      return !mealState.flags.includes(`${prompt.id}-acknowledged`);
     case 'meal-time-prompt':
       if (mealState.time === undefined) {
         recallLog().promptCheck('meal-time-prompt', true, 'time is undefined');
@@ -91,10 +95,6 @@ const checkMealStandardConditions = (
         recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
         return false;
       }
-    case 'edit-meal-prompt':
-      return mealState.foods.length === 0;
-    case 'info-prompt':
-      return mealState.flags.includes(`${prompt.id}-acknowledged`);
     case 'no-more-information-prompt':
       if (surveyState.data.selection.mode === 'manual') {
         recallLog().promptCheck(
@@ -111,6 +111,8 @@ const checkMealStandardConditions = (
         );
         return false;
       }
+    case 'ready-meal-prompt':
+      return !mealState.flags.includes('ready-meal-complete');
     default:
       return mealState.customPromptAnswers[prompt.id] === undefined;
   }

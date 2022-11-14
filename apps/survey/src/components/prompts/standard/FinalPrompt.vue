@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
     <template #actions>
       <v-btn
         v-if="canShowFeedback"

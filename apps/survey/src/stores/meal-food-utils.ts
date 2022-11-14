@@ -103,7 +103,10 @@ export function foodPortionSizeComplete(food: FoodState) {
 }
 
 export function associatedFoodPromptsComplete(food: FoodState) {
-  return food.type === 'encoded-food' && food.associatedFoodsComplete;
+  return (
+    food.type === 'encoded-food' &&
+    (food.associatedFoodsComplete || !food.data.associatedFoodPrompts.length)
+  );
 }
 
 export function mealPortionSizeComplete(meal: MealState) {

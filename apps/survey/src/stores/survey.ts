@@ -8,6 +8,7 @@ import Vue from 'vue';
 import type {
   CustomPromptAnswer,
   EncodedFood,
+  FoodFlag,
   FoodState,
   FreeTextFood,
   MealFlag,
@@ -440,7 +441,7 @@ export const useSurvey = defineStore('survey', {
       food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    setFoodFlag(data: { foodId: number; flag: string }) {
+    setFoodFlag(data: { foodId: number; flag: FoodFlag }) {
       const food = findFood(this.data.meals, data.foodId);
 
       if (food.flags.includes(data.flag)) return;

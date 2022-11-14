@@ -26,7 +26,7 @@ const allExceptSubmission: (SurveyQuestionSection | MealSection)[] = [
   'postFoods',
 ];
 
-const FoodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
+const foodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
 
 export type PromptSettingsRecord = {
   tabs: string[];
@@ -67,24 +67,28 @@ export const promptSettings: PromptSettings = {
   },
   'no-more-information-prompt': {
     tabs: [...baseTab],
-    sections: [...FoodsAndPostFoods],
+    sections: [...foodsAndPostFoods],
   },
   // Standard
   'associated-foods-prompt': {
     tabs: [...baseTab],
     sections: ['foods'],
   },
+  'edit-meal-prompt': {
+    tabs: [...baseTab],
+    sections: ['preFoods'],
+  },
   'food-search-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
+  'final-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
   'meal-add-prompt': {
     tabs: [...baseTab],
     sections: ['preMeals'],
-  },
-  'edit-meal-prompt': {
-    tabs: [...baseTab],
-    sections: ['preFoods'],
   },
   'meal-time-prompt': {
     tabs: [...baseTab],
@@ -94,16 +98,16 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['submission'],
   },
-  'final-prompt': {
+  'ready-meal-prompt': {
     tabs: [...baseTab],
+    sections: ['postFoods'],
+  },
+  'redirect-prompt': {
+    tabs: [...baseTab, 'options'],
     sections: ['submission'],
   },
   'review-confirm-prompt': {
     tabs: [...baseTab],
-    sections: ['submission'],
-  },
-  'redirect-prompt': {
-    tabs: [...baseTab, 'options'],
     sections: ['submission'],
   },
   // Portion size
