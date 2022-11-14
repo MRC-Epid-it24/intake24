@@ -7,6 +7,9 @@
             <image-placeholder></image-placeholder>
           </template>
         </v-img>
+        <div v-if="size" class="size">
+          <v-chip class="font-weight-medium">{{ size }}</v-chip>
+        </div>
         <div v-if="hasLabelSlot" class="label">
           <slot name="label"></slot>
         </div>
@@ -19,6 +22,8 @@
             :points="polygon"
             @click.stop="select(idx)"
             @keypress.stop="select(idx)"
+            @mouseleave="hoverValue = undefined"
+            @mouseover="hoverValue = idx"
           ></polygon>
         </svg>
       </div>
@@ -54,6 +59,10 @@ export default defineComponent({
       type: Object as PropType<ImageMapResponse>,
       required: true,
     },
+    sizes: {
+      type: Array as PropType<string[]>,
+      default: () => [],
+    },
     value: {
       type: Number,
     },
@@ -63,7 +72,9 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    return { img, svg };
+    const hoverValue = ref<number | undefined>(undefined);
+
+    return { img, svg, hoverValue };
   },
 
   data() {
@@ -93,6 +104,16 @@ export default defineComponent({
           .map((node) => node.join(','))
           .join(' ');
       });
+    },
+
+    size(): string | undefined {
+      if (!this.sizes.length || (this.hoverValue === undefined && this.value === undefined))
+        return undefined;
+
+      const idx = this.hoverValue ?? this.value;
+      if (idx === undefined) return undefined;
+
+      return this.sizes[idx];
     },
   },
 
@@ -135,6 +156,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .guide-drawer {
   position: relative;
+
+  .size {
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%);
+  }
 
   .label {
     position: absolute;

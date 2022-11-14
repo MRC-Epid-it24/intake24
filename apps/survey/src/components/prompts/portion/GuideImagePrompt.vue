@@ -18,6 +18,7 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="guideImageData"
+            v-bind="{ sizes }"
             :image-map-data="guideImageData.imageMap"
             :value="portionSize.objectIndex"
             @confirm="confirmObject"
@@ -129,6 +130,15 @@ export default defineComponent({
   },
 
   computed: {
+    sizes() {
+      const { guideImageData } = this;
+      if (!guideImageData) return [];
+
+      return guideImageData.imageMap.objects.map(
+        (object) => `${Math.round(guideImageData.weights[object.id])} g`
+      );
+    },
+
     objectValid() {
       return this.portionSize.objectIndex !== undefined && this.objectConfirmed;
     },

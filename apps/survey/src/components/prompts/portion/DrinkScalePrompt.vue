@@ -19,8 +19,7 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMapData"
-            :image-map-data="imageMapData"
-            :value="portionSize.containerIndex"
+            v-bind="{ imageMapData, sizes, value: portionSize.containerIndex }"
             @confirm="confirmObject"
             @input="selectObject"
           ></image-map-selector>
@@ -190,6 +189,14 @@ export default defineComponent({
 
     skipFillLevel() {
       return this.parameters['skip-fill-level'] === 'true';
+    },
+
+    sizes() {
+      if (!this.drinkwareSetData) return [];
+
+      return this.drinkwareSetData.scales.map(
+        (scale) => `${Math.round(scale.volumeSamples[scale.volumeSamples.length - 1].volume)} ml`
+      );
     },
 
     volumes(): DrinkwareVolumeSampleResponse[] | undefined {
