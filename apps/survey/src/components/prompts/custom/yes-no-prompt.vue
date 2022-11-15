@@ -1,28 +1,21 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ description, text, meal, food, isValid }">
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-10 ml-0"
-        color="error"
-        :title="$t('common.action.no')"
-        x-large
-        @click.stop="update(false)"
-      >
-        <v-icon left>$no</v-icon>
-        {{ $t('common.action.no') }}
+      <yes-no-toggle v-model="currentValue" @change="update"></yes-no-toggle>
+    </template>
+    <template #nav-actions>
+      <v-btn value="no">
+        <span class="text-overline font-weight-medium" @click.stop="setValue(false)">
+          {{ $t('common.action.no') }}
+        </span>
+        <v-icon class="pb-1">$no</v-icon>
       </v-btn>
-      <v-btn
-        :block="isMobile"
-        class="px-10"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="success"
-        :title="$t('common.action.yes')"
-        x-large
-        @click.stop="update(true)"
-      >
-        <v-icon left>$yes</v-icon>
-        {{ $t('common.action.yes') }}
+      <v-divider vertical></v-divider>
+      <v-btn color="success" value="yes" @click.stop="setValue(true)">
+        <span class="text-overline font-weight-medium">
+          {{ $t('common.action.yes') }}
+        </span>
+        <v-icon class="pb-1">$yes</v-icon>
       </v-btn>
     </template>
   </prompt-layout>
@@ -35,11 +28,14 @@ import { defineComponent } from 'vue';
 import type { YesNoPromptProps } from '@intake24/common/prompts';
 import { yesNoPromptProps } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
+import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import BasePrompt from '../BasePrompt';
 
 export default defineComponent({
   name: 'YesNoPrompt',
+
+  components: { YesNoToggle },
 
   mixins: [BasePrompt],
 
@@ -53,12 +49,24 @@ export default defineComponent({
   data() {
     return {
       ...merge(yesNoPromptProps, this.promptProps),
+      currentValue: undefined as boolean | undefined,
     };
   },
 
+  computed: {
+    isValid(): boolean {
+      return this.currentValue !== undefined;
+    },
+  },
+
   methods: {
-    update(value: boolean) {
-      this.$emit('update', { state: value, valid: true });
+    setValue(value: boolean) {
+      this.currentValue = value;
+      this.update();
+    },
+
+    update() {
+      this.$emit('update', { state: this.currentValue, valid: true });
       this.$emit('nav-action', 'next');
     },
   },
