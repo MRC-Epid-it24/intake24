@@ -5,7 +5,7 @@
       :title="$t('common.action.confirm.yes')"
       :value="true"
     >
-      <v-icon left>$yes</v-icon>
+      <v-icon :color="value === true ? 'success' : 'primary '" left>$yes</v-icon>
       {{ $t('common.action.confirm.yes') }}
     </v-btn>
     <v-btn
@@ -13,7 +13,7 @@
       :title="$t('common.action.confirm.no')"
       :value="false"
     >
-      <v-icon left>$no</v-icon>
+      <v-icon :color="value === false ? 'success' : 'primary '" left>$no</v-icon>
       {{ $t('common.action.confirm.no') }}
     </v-btn>
   </v-btn-toggle>
