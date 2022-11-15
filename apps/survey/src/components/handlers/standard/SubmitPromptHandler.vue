@@ -42,7 +42,7 @@ export default defineComponent({
     async navAction(action: string) {
       if (action === 'next') await this.submit();
 
-      this.$emit('nav-action', 'complete');
+      this.$emit('nav-action', action);
     },
 
     async submit() {
