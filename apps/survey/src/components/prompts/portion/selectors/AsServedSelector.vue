@@ -7,7 +7,7 @@
         </template>
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
-            <v-chip class="ma-2 font-weight-medium white text-black bordered">
+            <v-chip class="ma-2 font-weight-medium white primary--text bordered">
               {{ thumbnailWeight }}
             </v-chip>
           </v-col>

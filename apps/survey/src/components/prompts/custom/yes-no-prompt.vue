@@ -9,7 +9,7 @@
         x-large
         @click.stop="update(false)"
       >
-        <v-icon left>far fa-times-circle</v-icon>
+        <v-icon left>$no</v-icon>
         {{ $t('common.action.no') }}
       </v-btn>
       <v-btn
@@ -21,7 +21,7 @@
         x-large
         @click.stop="update(true)"
       >
-        <v-icon left>far fa-circle-check</v-icon>
+        <v-icon left>$yes</v-icon>
         {{ $t('common.action.yes') }}
       </v-btn>
     </template>

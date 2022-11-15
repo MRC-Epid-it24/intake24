@@ -69,27 +69,10 @@
             ></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
-        <!-- Step 2: Select LeftOvers-->
+        <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
-          <v-row>
-            <v-col>
-              <p>
-                {{
-                  $t(`portion.${portionSize.method}.leftovers.question`, {
-                    food: foodName,
-                  })
-                }}
-              </p>
-              <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
-                <v-btn class="px-4" :value="true">
-                  {{ $t('common.action.confirm.yes') }}
-                </v-btn>
-                <v-btn class="px-4" :value="false">
-                  {{ $t('common.action.confirm.no') }}
-                </v-btn>
-              </v-btn-toggle>
-            </v-col>
-          </v-row>
+          <p>{{ $t(`portion.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <yes-no-toggle v-model="leftoversPrompt" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <v-row>
               <v-col>
@@ -104,7 +87,7 @@
                   :max-fill-level="portionSize.fillLevel"
                   :open="panel === 2"
                   :scale="scale"
-                  :type="'leftovers'"
+                  type="leftovers"
                   @confirm="confirmLeftovers"
                   @input="updateLeftovers"
                 >
@@ -133,6 +116,7 @@ import type {
   ImageMapResponse,
 } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
+import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
 import { calculateVolume, DrinkScalePanel, ImageMapSelector, QuantityBadge } from './selectors';
@@ -149,7 +133,7 @@ export interface DrinkScalePromptState {
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge },
+  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, YesNoToggle },
 
   mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
 

@@ -23,6 +23,7 @@ export default new Vuetify({
       logout: 'fas fa-sign-out-alt',
       meal: 'fas fa-utensils',
       next: 'fas fa-angle-right',
+      no: 'far fa-circle-xmark',
       options: 'fas fa-ellipsis-vertical',
       plus: 'fas fa-plus',
       profile: 'fas fa-user-circle',
@@ -30,6 +31,7 @@ export default new Vuetify({
       save: 'fas fa-save',
       show: 'far fa-file',
       survey: 'fas fa-poll-h',
+      yes: 'far fa-circle-check',
     },
   },
   theme: {

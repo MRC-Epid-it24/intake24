@@ -25,20 +25,20 @@
                 <v-radio
                   :label="$t('prompts.associatedFoods.no')"
                   off-icon="fa-regular fa-circle"
-                  on-icon="fa-regular fa-circle-check"
+                  on-icon="$yes"
                   value="no"
                 ></v-radio>
                 <v-radio
                   :label="$t('prompts.associatedFoods.yes')"
                   off-icon="fa-regular fa-circle"
-                  on-icon="fa-regular fa-circle-check"
+                  on-icon="$yes"
                   value="yes"
                 ></v-radio>
                 <v-radio
                   v-if="prompt.confirmed === 'existing' || foodsAlreadyEntered[index] !== undefined"
                   :label="$t('prompts.associatedFoods.alreadyEntered')"
                   off-icon="fa-regular fa-circle"
-                  on-icon="fa-regular fa-circle-check"
+                  on-icon="$yes"
                   value="existing"
                 ></v-radio>
               </v-radio-group>

@@ -48,25 +48,8 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row>
-            <v-col>
-              <p>
-                {{
-                  $t(`portion.${portionSize.method}.leftovers.question`, {
-                    food: foodName,
-                  })
-                }}
-              </p>
-              <v-btn-toggle v-model="leftoversPrompt" color="success" @change="update">
-                <v-btn class="px-4" :value="true">
-                  {{ $t('common.action.confirm.yes') }}
-                </v-btn>
-                <v-btn class="px-4" :value="false">
-                  {{ $t('common.action.confirm.no') }}
-                </v-btn>
-              </v-btn-toggle>
-            </v-col>
-          </v-row>
+          <p>{{ $t(`portion.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <yes-no-toggle v-model="leftoversPrompt" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <v-row>
               <v-col>
@@ -79,7 +62,7 @@
                   :as-served-set-id="parameters['leftovers-image-set']"
                   :initial-object="portionSize.leftovers ?? undefined"
                   :max-weight="portionSize.serving?.weight"
-                  :type="'leftovers'"
+                  type="leftovers"
                   @confirm="confirmLeftovers"
                   @update="updateLeftovers"
                 ></as-served-selector>
@@ -138,6 +121,7 @@ import type {
   SelectedAsServedImage,
 } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
@@ -155,7 +139,7 @@ export interface AsServedPromptState {
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  components: { AsServedSelector, QuantityBadge, QuantityCard },
+  components: { AsServedSelector, QuantityBadge, QuantityCard, YesNoToggle },
 
   mixins: [createBasePortion<AsServedPromptProps, AsServedPromptState>()],
 
