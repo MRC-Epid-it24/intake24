@@ -18,8 +18,6 @@ const recall: LocaleMessageObject = {
   },
   start: 'Start',
   continue: 'Continue',
-  dynamic: 'Dynamic recall flow',
-  dynamicTitle: 'Intake24 dietary recall',
   submit: 'Submit the recall',
   submittedAt: 'Submitted at',
   restart: 'New recall',
@@ -46,6 +44,17 @@ const recall: LocaleMessageObject = {
     confirmDeletion: "Are you sure you want to delete '{name}'?",
     confirm: 'Confirm {name}',
     changeTime: 'Change time',
+  },
+  actions: {
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    next: 'Continue',
+    remove: 'Remove',
+    review: 'Review',
+    addMeal: 'Add meal',
+    editFoods: 'Edit meal',
+    deleteMeal: 'Delete meal',
+    mealTime: 'Meal time',
   },
 };
 

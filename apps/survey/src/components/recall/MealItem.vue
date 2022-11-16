@@ -24,7 +24,7 @@
           :entity-name="meal.name.en"
           :icon="menuMealIcon"
           :menu="menuMeal"
-          @context-menu-action="mealAction"
+          @action="action"
         ></context-menu>
       </v-list-item-action>
     </template>
@@ -79,17 +79,17 @@ export default defineComponent({
       menuMeal: [
         {
           name: this.$t('recall.menu.meal.editFoodInMeal'),
-          action: 'edit-foods',
+          action: 'editFoods',
           dialog: false,
         },
         {
           name: this.$t('recall.menu.meal.editMealTime'),
-          action: 'edit-time',
+          action: 'mealTime',
           dialog: false,
         },
         {
           name: this.$t('recall.menu.meal.deleteMeal'),
-          action: 'delete-meal',
+          action: 'deleteMeal',
           dialog: true,
         },
       ],
@@ -109,8 +109,8 @@ export default defineComponent({
     mealSelected() {
       this.$emit('meal-selected', this.meal.id);
     },
-    mealAction(action: string) {
-      this.$emit('meal-action', { mealId: this.meal.id, action });
+    action(type: string) {
+      this.$emit('meal-action', { mealId: this.meal.id, type });
     },
   },
 });

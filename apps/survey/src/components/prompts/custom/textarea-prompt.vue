@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
-    <v-form ref="form" @submit.prevent="navAction('next')">
+  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+    <v-form ref="form" @submit.prevent="action('next')">
       <v-textarea
         v-model.trim="currentValue"
         hide-details="auto"
@@ -11,33 +11,23 @@
         @input="update"
       ></v-textarea>
     </v-form>
-    <template #actions>
-      <continue @click.native="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import type { VForm } from 'vuetify/lib';
 import { defineComponent, ref } from 'vue';
 
 import type { TextareaPromptProps } from '@intake24/common/prompts';
-import { textareaPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'TextareaPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<TextareaPromptProps>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<TextareaPromptProps>,
-      required: true,
-    },
     value: {
       type: String,
       default: null,
@@ -51,16 +41,13 @@ export default defineComponent({
   },
 
   data() {
-    const props: TextareaPromptProps = merge(textareaPromptProps, this.promptProps);
-
     return {
-      ...props,
       currentValue: this.value,
-      rules: props.validation.required
+      rules: this.validation.required
         ? [
             (v: string | null) =>
               !!v ||
-              (this.getLocaleContent(props.validation.message) ??
+              (this.getLocaleContent(this.validation.message) ??
                 this.$t('prompts.textarea.validation.required')),
           ]
         : [],

@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
-    <v-form @submit.prevent="navAction('next')">
+  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+    <v-form @submit.prevent="action('next')">
       <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
       <v-checkbox
         v-for="option in localeOptions"
@@ -25,9 +25,6 @@
       </v-row>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
-    <template #actions>
-      <continue @click.native="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
@@ -36,21 +33,15 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { CheckboxListPromptProps, ListOption } from '@intake24/common/prompts';
-import { checkboxListPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'CheckboxListPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<CheckboxListPromptProps>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<CheckboxListPromptProps>,
-      required: true,
-    },
     value: {
       type: Array as PropType<string[]>,
       default: () => [] as string[],
@@ -59,7 +50,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(checkboxListPromptProps, this.promptProps),
       otherEnabled: false,
       otherValue: '',
       selected: Array.isArray(this.value) ? this.value : [],

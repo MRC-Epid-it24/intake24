@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ description, text }">
+  <portion-layout v-bind="{ actions, description, text }">
     <template #header> {{ $t('portion.directWeight.label') }} - {{ localeDescription }} </template>
     <v-row>
       <v-col>

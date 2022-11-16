@@ -1,7 +1,7 @@
 <template>
   <ready-meal-prompt
     v-bind="{ initialState: state, meal, promptComponent, promptProps }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   ></ready-meal-prompt>
 </template>
@@ -62,15 +62,15 @@ export default defineComponent({
       survey.setMealFlag({ mealId: meal.value.id, flag: 'ready-meal-complete' });
     };
 
-    const navAction = (action: string) => {
-      if (action === 'next') commitAnswer();
+    const action = (type: string) => {
+      if (type === 'next') commitAnswer();
 
-      context.emit('nav-action', action);
+      context.emit('action', action);
     };
 
-    if (!state.value.foods.length) navAction('next');
+    if (!state.value.foods.length) action('next');
 
-    return { meal, state, update, navAction };
+    return { meal, state, update, action };
   },
 });
 </script>

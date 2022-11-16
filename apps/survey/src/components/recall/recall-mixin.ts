@@ -24,9 +24,9 @@ interface SavedState {
   selection: Selection;
 }
 
-export type RecallAction = 'add-meal' | 'review-confirm';
+export type RecallAction = 'addMeal' | 'review' | 'no-more-information';
 
-export type MealAction = 'edit-foods' | 'edit-time' | 'delete-meal';
+export type MealAction = 'editFoods' | 'mealTime' | 'deleteMeal';
 
 export default defineComponent({
   name: 'RecallMixin',
@@ -46,7 +46,6 @@ export default defineComponent({
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
       savedState: null as SavedState | null,
-      continueButtonEnabled: false,
       hideCurrentPrompt: false,
     };
   },
@@ -115,7 +114,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['deleteMeal', 'setContinueButtonEnabled']),
+    ...mapActions(useSurvey, ['deleteMeal']),
 
     setSelection(newSelection: Selection) {
       if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
@@ -189,16 +188,15 @@ export default defineComponent({
       };
     },
 
-    async mealAction(payload: { action: MealAction; mealId: number }) {
-      // eslint-disable-next-line default-case
-      switch (payload.action) {
-        case 'edit-foods':
+    async mealAction(payload: { type: MealAction; mealId: number }) {
+      switch (payload.type) {
+        case 'editFoods':
           this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
           break;
-        case 'edit-time':
+        case 'mealTime':
           this.showMealPrompt(payload.mealId, 'preFoods', 'meal-time-prompt');
           break;
-        case 'delete-meal':
+        case 'deleteMeal':
           console.log('About to delete the Meal: ', payload.mealId);
           this.deleteMeal(payload.mealId);
           await this.nextPrompt();
@@ -207,13 +205,12 @@ export default defineComponent({
     },
 
     recallAction(action: RecallAction) {
-      // eslint-disable-next-line default-case
       switch (action) {
-        case 'add-meal':
+        case 'addMeal':
           this.saveCurrentState();
           this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
-        case 'review-confirm':
+        case 'review':
           this.saveCurrentState();
           this.showSurveyPrompt('submission', 'review-confirm-prompt');
           break;
@@ -275,24 +272,18 @@ export default defineComponent({
           // TODO: handle completion
           console.log('No prompts remaining');
           if (this.hasMeals) {
-            this.recallAction('add-meal');
+            this.recallAction('addMeal');
           } else {
             this.currentPrompt = null;
           }
         } else {
-          this.setContinueButtonEnabled(false);
           console.debug(`Switching prompt to ${nextPrompt.prompt.component}`);
           this.currentPrompt = nextPrompt;
         }
       }
     },
 
-    updateValidation(valid: boolean) {
-      this.continueButtonEnabled = valid;
-    },
-
     async next() {
-      this.continueButtonEnabled = false;
       // Workaround for a crash that occurs if the currently selected prompt changes something
       // in the recall data that makes it incompatible, for example changing from 'free-text'
       // food entry type to 'encoded-food' in commitAnswer.
@@ -310,16 +301,6 @@ export default defineComponent({
       this.hideCurrentPrompt = false;
     },
 
-    // Same as next but don't commit, for alternative prompt actions such as delete meal
-    async complete() {
-      this.continueButtonEnabled = false;
-      this.hideCurrentPrompt = true;
-
-      await this.nextPrompt();
-
-      this.hideCurrentPrompt = false;
-    },
-
     async restart() {
       this.currentPrompt = null;
       useSurvey().clearState();
@@ -327,18 +308,15 @@ export default defineComponent({
       await this.nextPrompt();
     },
 
-    async navAction(action: string) {
-      switch (action) {
+    async action(type: string) {
+      switch (type) {
         case 'next':
-        case 'complete':
         case 'restart':
-          await this[action]();
+          await this[type]();
           break;
-        case 'add-meal':
-          this.recallAction('add-meal');
-          break;
+        case 'addMeal':
         case 'review':
-          this.recallAction('review-confirm');
+          this.recallAction(type);
           break;
       }
     },

@@ -4,10 +4,10 @@
       <meal-list
         :meals="meals"
         :survey-name="surveyName"
+        @action="recallAction"
         @food-selected="foodSelected"
         @meal-action="mealAction"
         @meal-selected="mealSelected"
-        @recall-action="recallAction"
       >
       </meal-list>
     </v-col>
@@ -26,8 +26,7 @@
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
-          @nav-action="navAction"
-          @valid="updateValidation"
+          @action="action"
         ></component>
       </transition>
     </v-col>

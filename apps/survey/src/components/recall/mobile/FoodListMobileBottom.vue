@@ -2,7 +2,7 @@
   <v-card flat :loading="loading">
     <v-toolbar dense flat>
       <v-tabs v-model="active_tab" center-active icons-and-text show-arrows touch>
-        <v-tab class="add_button" @click="onAddFood('edit-foods')">
+        <v-tab class="add_button" @click="action('editFoods')">
           <span>FOOD</span>
           <span>ADD</span>
         </v-tab>
@@ -76,11 +76,8 @@ export default defineComponent({
       if (dispalyName.length > 16) dispalyName = dispalyName.slice(0, 16).concat('...');
       return dispalyName;
     },
-    onAddFood(action: string) {
-      this.$emit('meal-action', {
-        mealIndex: this.$props.mealIndex,
-        action,
-      });
+    action(type: string) {
+      this.$emit('meal-action', { mealIndex: this.$props.mealIndex, type });
     },
   },
 });

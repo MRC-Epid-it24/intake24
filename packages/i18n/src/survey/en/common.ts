@@ -64,8 +64,6 @@ const common: LocaleMessageObject = {
       _: 'Confirm',
       title: 'Do you want to continue?',
       delete: `Do you want to delete {name}?`,
-      yes: 'Yes',
-      no: 'No',
     },
     ok: 'OK',
     reload: 'Reload',

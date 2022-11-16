@@ -1,5 +1,8 @@
 <template>
-  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
+  <prompt-layout
+    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
+    @action="action"
+  >
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
         <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
@@ -72,9 +75,6 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-card-actions>
-    <template #actions>
-      <continue :disabled="!isValid" @click="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
@@ -94,7 +94,7 @@ import { FoodBrowser, ValidInvalidIcon } from '@intake24/survey/components/eleme
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 const isPromptValid = (prompt: AssociatedFoodPromptState): boolean =>
   prompt.confirmed === 'no' ||
@@ -109,7 +109,7 @@ export default defineComponent({
 
   components: { FoodBrowser, ValidInvalidIcon },
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<AssociatedFoodsPromptProps>()],
 
   props: {
     initialState: {
@@ -122,14 +122,6 @@ export default defineComponent({
     },
     localeId: {
       type: String,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<AssociatedFoodsPromptProps>,
       required: true,
     },
   },
@@ -188,14 +180,14 @@ export default defineComponent({
       return this.food.data.localName;
     },
 
-    text(): string {
+    localeText(): string {
       return this.getLocaleContent(this.promptProps.text, {
         path: 'prompts.associatedFoods.text',
         params: { food: this.foodName.toLocaleLowerCase() },
       });
     },
 
-    description(): string {
+    localeDescription(): string {
       return this.getLocaleContent(this.promptProps.description, {
         path: 'prompts.associatedFoods.description',
       });

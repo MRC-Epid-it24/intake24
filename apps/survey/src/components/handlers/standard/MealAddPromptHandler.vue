@@ -1,7 +1,7 @@
 <template>
   <meal-add-prompt
     v-bind="{ meals, promptComponent, promptProps }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   >
   </meal-add-prompt>
@@ -12,7 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { Meal } from '@intake24/common/types';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -26,6 +26,10 @@ export default defineComponent({
 
   props: {
     promptComponent: {
+      type: String as PropType<StandardComponentType>,
+      required: true,
+    },
+    promptId: {
       type: String,
       required: true,
     },
@@ -58,10 +62,10 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['addMeal']),
 
-    async navAction(action: 'next' | 'cancel') {
-      if (action === 'next' && this.state) this.commitAnswer();
+    async action(type: 'next' | 'cancel') {
+      if (type === 'next' && this.state) this.commitAnswer();
 
-      this.$emit('nav-action', 'complete');
+      this.$emit('action', 'next');
     },
 
     commitAnswer() {

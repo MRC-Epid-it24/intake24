@@ -1,49 +1,74 @@
 <template>
   <prompt-layout
     v-bind="{
+      actions,
       description: localeDescription,
       text: localeText,
       meal,
       food,
       isValid,
     }"
+    @action="action"
   >
-    <v-col md="8" sm="12">
-      <v-form ref="form" @submit.prevent="navAction('next')">
-        <v-combobox
-          v-model="currentValue"
-          autofocus
-          clearable
-          hide-selected
-          :hint="$t('prompts.addMeal.hint')"
-          :items="meals"
-          :label="$t('prompts.addMeal.label')"
-          outlined
-          persistent-hint
-          small-chips
-          @change="update"
-        >
-        </v-combobox>
-      </v-form>
-    </v-col>
+    <v-row>
+      <v-col md="8" sm="12">
+        <v-form ref="form" @submit.prevent="action('next')">
+          <v-combobox
+            v-model="currentValue"
+            autofocus
+            clearable
+            hide-selected
+            :hint="$t('prompts.addMeal.hint')"
+            :items="meals"
+            :label="$t('prompts.addMeal.label')"
+            outlined
+            persistent-hint
+            small-chips
+            @change="update"
+          >
+          </v-combobox>
+        </v-form>
+      </v-col>
+    </v-row>
     <template #actions>
-      <continue
+      <v-btn
+        :block="isMobile"
+        class="px-5"
+        large
+        :title="$t('prompts.addMeal.no')"
+        @click.stop="action('cancel')"
+      >
+        {{ $t('prompts.addMeal.no') }}
+      </v-btn>
+      <v-btn
+        :block="isMobile"
+        class="px-5"
+        color="success"
         :disabled="!isValid"
-        :label="$t('prompts.addMeal.yes')"
-        @click="navAction('next')"
-      ></continue>
+        large
+        :title="$t('prompts.addMeal.yes')"
+        @click="action('next')"
+      >
+        {{ $t('prompts.addMeal.yes') }}
+      </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="cancel">
-        <span class="text-overline font-weight-medium" @click="navAction('cancel')">
-          {{ $t('common.action.cancel') }}
+      <v-btn :title="$t('prompts.addMeal.no')" value="cancel">
+        <span class="text-overline font-weight-medium" @click="action('cancel')">
+          {{ $t('prompts.addMeal.no') }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="success" :disabled="!isValid" value="next" @click="navAction('next')">
+      <v-btn
+        color="success"
+        :disabled="!isValid"
+        :title="$t('prompts.addMeal.yes')"
+        value="next"
+        @click="action('next')"
+      >
         <span class="text-overline font-weight-medium">
-          {{ $t('common.action.continue') }}
+          {{ $t('prompts.addMeal.yes') }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -56,25 +81,15 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import { mealAddPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealAddPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<BasePromptProps>()],
 
   props: {
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     meals: {
       type: Array as PropType<string[]>,
       required: true,
@@ -83,7 +98,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(mealAddPromptProps, this.promptProps),
       currentValue: undefined as string | undefined,
     };
   },

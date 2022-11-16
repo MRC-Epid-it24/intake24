@@ -66,7 +66,6 @@ export default () => {
           nextFoodId: 0,
           nextMealId: 0,
           customPromptAnswers: {},
-          continueButtonEnabled: false,
           selection: { element: null, mode: 'auto' },
         },
       };

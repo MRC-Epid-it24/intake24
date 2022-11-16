@@ -2,8 +2,14 @@
   <component
     :is="promptComponent"
     :key="promptId"
-    v-bind="{ canShowFeedback, canRestart, promptProps, surveyId }"
-    @nav-action="navAction"
+    v-bind="{
+      canShowFeedback,
+      canRestart,
+      promptComponent,
+      promptProps,
+      surveyId,
+    }"
+    @action="action"
   ></component>
 </template>
 
@@ -11,7 +17,7 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import { FinalPrompt /*RedirectPrompt*/ } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -22,7 +28,7 @@ export default defineComponent({
 
   props: {
     promptComponent: {
-      type: String,
+      type: String as PropType<StandardComponentType>,
       required: true,
     },
     promptId: {
@@ -53,8 +59,8 @@ export default defineComponent({
   },
 
   methods: {
-    navAction(action: string) {
-      this.$emit('nav-action', action);
+    action(type: string) {
+      this.$emit('action', type);
     },
   },
 });

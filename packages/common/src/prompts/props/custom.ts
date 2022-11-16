@@ -8,7 +8,7 @@ import type {
   RadioOrientation,
   ValidatedPromptProps,
 } from './base';
-import { promptValidation } from './base';
+import { basePromptProps, promptValidation } from './base';
 
 export type DatePickerPromptProps = ValidatedPromptProps;
 
@@ -39,10 +39,10 @@ export type YesNoPromptProps = BasePromptProps;
 export type NoMoreInformationPromptProps = BasePromptProps;
 
 export const baseCustomPromptProps: BasePromptProps = {
+  ...basePromptProps,
   name: { en: 'Enter name' },
   text: { en: 'Enter text' },
   description: { en: 'Enter description' },
-  conditions: [],
 };
 
 export const infoPromptProps: InfoPromptProps = copy({

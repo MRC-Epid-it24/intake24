@@ -27,10 +27,9 @@
           :prompt-component="currentPrompt.prompt.component"
           :prompt-id="currentPrompt.prompt.id"
           :prompt-props="currentPrompt.prompt.props"
+          @action="action"
           @food-context-menu="onFoodContextMenu"
           @meal-context-menu="onMealContextMenu"
-          @nav-action="navAction"
-          @valid="updateValidation"
         ></component>
       </transition>
     </v-col>
@@ -105,7 +104,7 @@ export default defineComponent({
   },
 
   methods: {
-    onContextMenuMealAction(payload: { action: MealAction; mealId: number }) {
+    onContextMenuMealAction(payload: { type: MealAction; mealId: number }) {
       this.mealAction(payload);
     },
 

@@ -189,9 +189,6 @@ export const useSurvey = defineStore('survey', {
 
       return this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
     },
-    continueButtonEnabled: (state) => {
-      return state.data.continueButtonEnabled;
-    },
   },
   actions: {
     async loadParameters(surveyId: string) {
@@ -377,10 +374,7 @@ export const useSurvey = defineStore('survey', {
 
         // If neither exists (i.e. only one food in the list) select nothing
 
-        return {
-          mode: 'auto',
-          element: null,
-        };
+        return { mode: 'auto', element: null };
       }
 
       const selectionMealIndex = getMealIndexForSelection(this.data.meals, this.data.selection);
@@ -425,10 +419,7 @@ export const useSurvey = defineStore('survey', {
     }) {
       const meal = findMeal(this.data.meals, data.mealId);
 
-      meal.customPromptAnswers = {
-        ...meal.customPromptAnswers,
-        [data.promptId]: data.answer,
-      };
+      meal.customPromptAnswers = { ...meal.customPromptAnswers, [data.promptId]: data.answer };
     },
 
     setFoodCustomPromptAnswer(data: {
@@ -497,10 +488,7 @@ export const useSurvey = defineStore('survey', {
       }
 
       // FIXME: update selection
-      this.data.selection = {
-        mode: 'auto',
-        element: null,
-      };
+      this.data.selection = { mode: 'auto', element: null };
     },
 
     addFood(data: { mealId: number; food: FoodState }) {
@@ -519,10 +507,6 @@ export const useSurvey = defineStore('survey', {
 
     getNextMealId(): number {
       return this.data.nextMealId++;
-    },
-
-    setContinueButtonEnabled(enabled: boolean): void {
-      this.data.continueButtonEnabled = enabled;
     },
 
     getTotalEnergy(): number {

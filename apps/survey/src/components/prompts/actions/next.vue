@@ -2,13 +2,16 @@
   <v-btn
     :block="isMobile"
     class="px-5"
-    color="success"
+    :color="color"
     :disabled="disabled"
     large
     :title="label"
     v-on="$listeners"
   >
-    {{ label }}
+    <v-icon v-if="icon" left>{{ icon }}</v-icon>
+    <slot>
+      {{ $t('recall.actions.next') }}
+    </slot>
   </v-btn>
 </template>
 
@@ -16,20 +19,24 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'PromptActionContinue',
+  name: 'PromptActionNext',
 
   props: {
-    label: {
+    color: {
       type: String,
-      default() {
-        // Display translated text on button
-        return this.$t('common.action.continue');
-      },
+      default: 'success',
     },
     disabled: {
       type: Boolean,
+      default: false,
+    },
+    icon: {
+      type: String,
+    },
+    label: {
+      type: String,
       default() {
-        return false;
+        return this.$t('recall.actions.next');
       },
     },
   },

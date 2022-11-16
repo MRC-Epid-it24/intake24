@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ method, description, text, food, isValid }" @nav-action="navAction">
+  <portion-layout v-bind="{ actions, method, description, text, food, isValid }" @action="action">
     <v-sheet>
       <v-item-group v-if="availableMethods.length" v-model="option">
         <v-container>
@@ -88,7 +88,7 @@ export default defineComponent({
       if (val === undefined) return;
 
       this.update();
-      this.navAction('next');
+      this.action('next');
     },
   },
 

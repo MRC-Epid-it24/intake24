@@ -1,7 +1,7 @@
 <template>
   <prompt-layout
-    v-bind="{ description, text: promptTitle, food, meal, isValid }"
-    @nav-action="navAction"
+    v-bind="{ actions, description, text: promptTitle, food, meal, isValid }"
+    @action="action"
   >
     <v-text-field v-model="searchTerm" @change="search"></v-text-field>
     <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
@@ -23,35 +23,27 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import { foodSearchPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 import { FoodSearchResults } from '@intake24/survey/components/elements';
-import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'FoodSearchPrompt',
 
   components: { FoodSearchResults },
 
-  mixins: [BasePrompt, Submit],
+  mixins: [createBasePrompt<FoodSearchPromptProps>()],
 
   props: {
     localeId: {
       type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<FoodSearchPromptProps>,
       required: true,
     },
     value: {
@@ -62,7 +54,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(foodSearchPromptProps, this.promptProps),
       requestInProgress: true,
       requestFailed: false,
       searchTerm: this.value,

@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
-    <v-form ref="form" @submit.prevent="navAction('next')">
+  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+    <v-form ref="form" @submit.prevent="action('next')">
       <v-radio-group
         v-model="selected"
         :column="orientation === 'column'"
@@ -29,32 +29,22 @@
       </v-radio-group>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
-    <template #actions>
-      <continue @click.native="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { ListOption, RadioListPromptProps } from '@intake24/common/prompts';
-import { radioListPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'RadioListPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<RadioListPromptProps>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<RadioListPromptProps>,
-      required: true,
-    },
     value: {
       type: String,
       default: null,
@@ -63,7 +53,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(radioListPromptProps, this.promptProps),
       otherValue: '',
       selected: this.value,
     };

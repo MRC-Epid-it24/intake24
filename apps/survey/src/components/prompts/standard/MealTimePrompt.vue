@@ -1,6 +1,8 @@
 <template>
-  <prompt-layout v-bind="{ description: localeDescription, text: localeText, food, meal, isValid }">
-    <v-form ref="form" @submit.prevent="navAction('next')">
+  <prompt-layout
+    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
+  >
+    <v-form ref="form" @submit.prevent="action('next')">
       <v-time-picker
         :format="promptProps.format"
         full-width
@@ -12,7 +14,7 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" large @click="navAction('cancel')">
+      <v-btn :block="isMobile" class="px-5" large @click.stop="action('cancel')">
         {{ $t('prompts.mealTime.no', { meal: localMealName }) }}
       </v-btn>
       <v-btn
@@ -21,22 +23,22 @@
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
         large
-        @click="navAction('next')"
+        @click.stop="action('next')"
       >
         {{ $t('prompts.mealTime.yes', { meal: localMealName }) }}
       </v-btn>
     </template>
     <template #nav-actions>
       <v-btn value="cancel">
-        <span class="text-overline font-weight-medium" @click="navAction('cancel')">
-          {{ $t('common.action.remove') }}
+        <span class="text-overline font-weight-medium" @click.stop="action('cancel')">
+          {{ $t('recall.actions.remove') }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="success" :disabled="!isValid" value="next" @click="navAction('next')">
+      <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
-          {{ $t('common.action.confirm._') }}
+          {{ $t('recall.actions.confirm') }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -50,16 +52,14 @@ import { defineComponent } from 'vue';
 
 import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealState, MealTime } from '@intake24/common/types';
-import { mealTimePromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 import { fromMealTime, toMealTime } from '@intake24/survey/stores/meal-food-utils';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealTimePrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<MealTimePromptProps>()],
 
   props: {
     initialState: {
@@ -70,15 +70,10 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    promptProps: {
-      type: Object as PropType<MealTimePromptProps>,
-      required: true,
-    },
   },
 
   data() {
     return {
-      ...merge(mealTimePromptProps, this.promptProps),
       currentValue: fromMealTime(this.initialState),
     };
   },

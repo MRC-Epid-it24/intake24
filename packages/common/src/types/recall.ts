@@ -291,7 +291,6 @@ export type SurveyState = {
   userAgent?: string | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  continueButtonEnabled: boolean;
   tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];

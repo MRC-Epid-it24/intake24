@@ -29,7 +29,6 @@ export const surveyInitialState = (): CurrentSurveyState => ({
   uxSessionId: v4(),
   flags: [],
   customPromptAnswers: {},
-  continueButtonEnabled: false,
   tempPromptAnswer: {
     response: null,
     modified: false,

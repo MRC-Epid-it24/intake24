@@ -1,39 +1,25 @@
 <template>
   <prompt-layout
-    v-bind="{ description: localeDescription, text: localeText, meal, food, isValid }"
-    @nav-action="navAction"
+    v-bind="{ actions, description: localeDescription, text: localeText, meal, food, isValid }"
+    @action="action"
   >
-    <template #actions>
-      <continue @click.native="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { NoMoreInformationPromptProps } from '@intake24/common/prompts';
-import { noMoreInformationPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'NoMoreInformationPrompt',
 
-  mixins: [BasePrompt],
-
-  props: {
-    promptProps: {
-      type: Object as PropType<NoMoreInformationPromptProps>,
-      required: true,
-    },
-  },
+  mixins: [createBasePrompt<NoMoreInformationPromptProps>()],
 
   data() {
     return {
-      ...merge(noMoreInformationPromptProps, this.promptProps),
       currentValue: 'ok',
     };
   },

@@ -40,6 +40,35 @@ const surveySchemes: LocaleMessageObject = {
       unique: 'Meal name already exists in current list.',
     },
   },
+
+  actions: {
+    _: 'Action',
+    title: 'Actions',
+    create: 'New action',
+    edit: 'Edit action',
+    color: 'Color',
+    icon: 'Icon',
+    label: 'Label',
+    text: 'Text',
+    layouts: {
+      _: 'Layout',
+      title: 'Layouts',
+      desktop: 'Desktop',
+      mobile: 'Mobile',
+    },
+    types: {
+      _: 'Action type',
+      title: 'Action types',
+      next: 'Next',
+      review: 'Review',
+      addMeal: 'Add meal',
+      editFoods: 'Edit foods',
+      deleteMeal: 'Delete meal',
+      mealTime: 'Meal time',
+    },
+    remove: 'Remove action',
+  },
+
   conditions: {
     _: 'Condition',
     title: 'Conditions',

@@ -141,14 +141,11 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Condition, ConditionOp } from '@intake24/common/prompts';
+import { toIndexedList } from '@intake24/admin/util';
 import { conditionOps } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
 import conditionProps from './conditions';
-
-export interface IndexedCondition extends Condition {
-  id: number;
-}
 
 export type PromptConditionDialog = {
   show: boolean;
@@ -204,9 +201,6 @@ const promptConditions: Condition[] = [
   },
 ];
 
-export const toIndexedConditions = (conditions: Condition[]): IndexedCondition[] =>
-  conditions.map((condition, idx) => ({ ...condition, id: idx }));
-
 export default defineComponent({
   name: 'PromptConditions',
 
@@ -229,7 +223,7 @@ export default defineComponent({
     return {
       dialog: dialog(),
       newDialog: dialog,
-      currentConditions: toIndexedConditions(this.conditions),
+      currentConditions: toIndexedList(this.conditions),
       promptConditions,
       opToIconMap,
     };
@@ -263,7 +257,7 @@ export default defineComponent({
     conditions(val) {
       if (isEqual(val, this.outputConditions)) return;
 
-      this.currentConditions = toIndexedConditions(val);
+      this.currentConditions = toIndexedList(val);
     },
   },
 
@@ -290,7 +284,7 @@ export default defineComponent({
     },
 
     edit(index: number, condition: Condition) {
-      const defaults = this.currentConditions.find((item) => item.type === condition.type);
+      const defaults = this.promptConditions.find((item) => item.type === condition.type);
 
       this.dialog = {
         show: true,

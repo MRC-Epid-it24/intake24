@@ -74,9 +74,7 @@ import draggable from 'vuedraggable';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { ListOption } from '@intake24/common/prompts';
-
-const toIndexedConditions = (options: ListOption[]) =>
-  options.map((option, idx) => ({ ...option, id: idx }));
+import { toIndexedList } from '@intake24/admin/util';
 
 export default defineComponent({
   name: 'PromptListOptions',
@@ -95,7 +93,7 @@ export default defineComponent({
   },
 
   data() {
-    const currentOptions = toIndexedConditions(this.options);
+    const currentOptions = toIndexedList(this.options);
 
     const defaultValueRules = [
       (value: string | null): boolean | string => {
@@ -120,7 +118,7 @@ export default defineComponent({
     options(val) {
       if (isEqual(val, this.outputOptions)) return;
 
-      this.currentOptions = toIndexedConditions(val);
+      this.currentOptions = toIndexedList(val);
     },
     outputOptions: {
       deep: true,

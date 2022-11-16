@@ -25,7 +25,6 @@ export default () => {
       uxSessionId: randomUUID(),
       flags: ['flag-1', 'flag-2'],
       customPromptAnswers: {},
-      continueButtonEnabled: false,
       nextFoodId: 0,
       nextMealId: 0,
       selection: {

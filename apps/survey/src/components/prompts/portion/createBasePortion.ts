@@ -12,7 +12,7 @@ import { merge } from '@intake24/common/util';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { localeContent } from '@intake24/survey/components/mixins';
 
-import { Continue } from '../actions';
+import { Next } from '../actions';
 import { PortionLayout } from '../layouts';
 
 export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
@@ -21,7 +21,7 @@ export default <P extends BasePromptProps, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
 
-    components: { Continue, PortionLayout, ValidInvalidIcon },
+    components: { Next, PortionLayout, ValidInvalidIcon },
 
     mixins: [localeContent],
 
@@ -126,8 +126,8 @@ export default <P extends BasePromptProps, S extends object>() =>
         this.closePanels();
       },
 
-      navAction(action: string) {
-        this.$emit('nav-action', action);
+      action(type: string) {
+        this.$emit('action', type);
       },
     },
   });

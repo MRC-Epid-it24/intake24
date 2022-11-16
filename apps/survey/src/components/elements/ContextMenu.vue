@@ -7,7 +7,7 @@
     </template>
     <v-list dense>
       <v-list-item-group color="primary">
-        <v-list-item v-for="item in menu" :key="item.name" @click="onClick(item.action)">
+        <v-list-item v-for="item in menu" :key="item.name" @click="action(item.action)">
           <v-list-item-content v-if="!item.dialog">
             <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item-content>
@@ -16,7 +16,7 @@
               <confirm-dialog
                 color="warning"
                 :label="$t('prompts.editMeal.deleteMeal', { meal: entityName }).toString()"
-                @confirm="onClick(item.action)"
+                @confirm="action(item.action)"
               >
                 <template #activator="{ on, attrs }">
                   <v-btn color="red" v-bind="attrs" small text v-on="on">
@@ -66,8 +66,8 @@ export default defineComponent({
   },
 
   methods: {
-    onClick(action: string) {
-      this.$emit('context-menu-action', action);
+    action(type: string) {
+      this.$emit('action', type);
     },
   },
 });

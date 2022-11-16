@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>
@@ -51,66 +51,35 @@
         </v-list>
       </v-card>
     </v-col>
-    <template #actions> </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
-import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
-import { useSurvey } from '@intake24/survey/stores';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'ReviewConfirmPrompt',
 
   components: { SurveyProgressBar },
 
-  mixins: [BasePrompt, Submit],
+  mixins: [createBasePrompt<BasePromptProps>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
     meals: {
       type: Array as PropType<MealState[]>,
       required: true,
     },
   },
 
-  computed: {
-    ...mapState(useSurvey, ['defaultSchemeMeals']),
-
-    text(): string {
-      const text = this.promptProps.text[this.$i18n.locale];
-      if (text) return text;
-      return '';
-    },
-
-    description(): string {
-      const description = this.promptProps.description[this.$i18n.locale];
-      if (description) return description;
-      return '';
-    },
-  },
-
   methods: {
-    submit() {
-      this.$emit('submit');
-    },
     chooseMeal(mealId: number, name: string, foods: FoodState[], entity: string) {
       this.$emit('meal-selected', { mealId, name, foods, entity });
     },

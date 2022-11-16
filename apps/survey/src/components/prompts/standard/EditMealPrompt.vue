@@ -1,7 +1,7 @@
 <template>
   <prompt-layout
-    v-bind="{ description: promptDescription, text: promptText, food, meal, isValid }"
-    @nav-action="navAction"
+    v-bind="{ actions, description: promptDescription, text: promptText, food, meal, isValid }"
+    @action="action"
   >
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
       <editable-food-list v-model="foods" @input="update"></editable-food-list>
@@ -26,9 +26,9 @@
         color="success"
         :disabled="!isValid"
         large
-        @click="navAction('next')"
+        @click="action('next')"
       >
-        {{ $t('common.action.continue') }}
+        {{ $t('recall.actions.next') }}
       </v-btn>
     </template>
   </prompt-layout>
@@ -41,9 +41,9 @@ import { defineComponent } from 'vue';
 import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
-import BasePrompt from '@intake24/survey/components/prompts/BasePrompt';
 import { ConfirmDialog } from '@intake24/ui';
 
+import createBasePrompt from '../createBasePrompt';
 import EditableFoodList from './EditableFoodList.vue';
 
 export type EditMealPromptState = {
@@ -55,7 +55,7 @@ export default defineComponent({
 
   components: { EditableFoodList, ConfirmDialog },
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<BasePromptProps>()],
 
   props: {
     initialState: {
@@ -66,20 +66,10 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    promptComponent: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
   },
 
   data() {
-    return {
-      ...copy(this.initialState),
-    };
+    return { ...copy(this.initialState) };
   },
 
   computed: {

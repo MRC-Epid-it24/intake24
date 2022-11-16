@@ -1,20 +1,12 @@
 <template>
   <v-btn-toggle class="d-flex" color="success" :value="value" @change="change">
-    <v-btn
-      class="px-10 flex-grow-1 flex-md-grow-0"
-      :title="$t('common.action.confirm.yes')"
-      :value="true"
-    >
+    <v-btn class="px-10 flex-grow-1 flex-md-grow-0" :title="$t('common.action.yes')" :value="true">
       <v-icon :color="value === true ? 'success' : 'primary '" left>$yes</v-icon>
-      {{ $t('common.action.confirm.yes') }}
+      {{ $t('common.action.yes') }}
     </v-btn>
-    <v-btn
-      class="px-10 flex-grow-1 flex-md-grow-0"
-      :title="$t('common.action.confirm.no')"
-      :value="false"
-    >
+    <v-btn class="px-10 flex-grow-1 flex-md-grow-0" :title="$t('common.action.no')" :value="false">
       <v-icon :color="value === false ? 'success' : 'primary '" left>$no</v-icon>
-      {{ $t('common.action.confirm.no') }}
+      {{ $t('common.action.no') }}
     </v-btn>
   </v-btn-toggle>
 </template>

@@ -1,9 +1,9 @@
 <template>
   <review-confirm-prompt
     v-bind="{ meals, promptComponent, promptProps }"
+    @action="action"
     @food-selected="onFoodClick"
     @meal-selected="onMealClick"
-    @nav-action="navAction"
   ></review-confirm-prompt>
 </template>
 
@@ -12,7 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import { ReviewConfirmPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -22,12 +22,16 @@ export default defineComponent({
   components: { ReviewConfirmPrompt },
 
   props: {
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
+    promptComponent: {
+      type: String as PropType<StandardComponentType>,
       required: true,
     },
-    promptComponent: {
+    promptId: {
       type: String,
+      required: true,
+    },
+    promptProps: {
+      type: Object as PropType<BasePromptProps>,
       required: true,
     },
   },
@@ -38,13 +42,13 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
-    navAction(action: string) {
-      this.$emit('nav-action', action);
+    action(type: string) {
+      this.$emit('action', type);
     },
 
     async submit() {
       await this.submitRecall();
-      this.$emit('nav-action', 'complete');
+      this.$emit('action', 'next');
     },
 
     onMealClick(payload: { mealId: number }) {

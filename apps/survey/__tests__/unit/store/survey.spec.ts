@@ -32,11 +32,7 @@ function initialState(): SurveyState {
     endTime: null,
     flags: [],
     customPromptAnswers: {},
-    continueButtonEnabled: false,
-    selection: {
-      element: null,
-      mode: 'auto',
-    },
+    selection: { element: null, mode: 'auto' },
     meals: dummyMeals(3),
     nextFoodId: 0,
     nextMealId: 0,

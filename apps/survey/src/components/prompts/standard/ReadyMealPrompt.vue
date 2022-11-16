@@ -1,9 +1,9 @@
 <template>
   <prompt-layout
-    v-bind="{ description: localeDescription, text: localeText, food, meal, isValid }"
-    @nav-action="navAction"
+    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
+    @action="action"
   >
-    <v-form ref="form" @submit.prevent="navAction('next')">
+    <v-form ref="form" @submit.prevent="action('next')">
       <v-checkbox
         v-for="food in foods"
         :key="food.id"
@@ -15,9 +15,6 @@
         @change="update"
       ></v-checkbox>
     </v-form>
-    <template #actions>
-      <continue :disabled="!isValid" @click="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
@@ -27,10 +24,9 @@ import { defineComponent } from 'vue';
 
 import type { ReadyMealPromptProps } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import { readyMealPromptProps } from '@intake24/common/prompts';
-import { copy, merge } from '@intake24/common/util';
+import { copy } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export interface ReadyMealPromptState {
   foods: { id: number; name: string; value: boolean }[];
@@ -39,7 +35,7 @@ export interface ReadyMealPromptState {
 export default defineComponent({
   name: 'ReadyMealPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<ReadyMealPromptProps>()],
 
   props: {
     initialState: {
@@ -50,14 +46,10 @@ export default defineComponent({
       type: Object as PropType<MealState>,
       required: true,
     },
-    promptProps: {
-      type: Object as PropType<ReadyMealPromptProps>,
-      required: true,
-    },
   },
 
   data() {
-    return { ...merge(readyMealPromptProps, this.promptProps), ...copy(this.initialState) };
+    return { ...copy(this.initialState) };
   },
 
   computed: {

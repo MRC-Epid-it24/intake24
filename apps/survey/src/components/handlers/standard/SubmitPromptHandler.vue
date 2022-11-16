@@ -2,8 +2,8 @@
   <component
     :is="promptComponent"
     :key="promptId"
-    v-bind="{ promptProps }"
-    @nav-action="navAction"
+    v-bind="{ promptComponent, promptProps }"
+    @action="action"
   ></component>
 </template>
 
@@ -12,7 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import { SubmitPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -23,7 +23,7 @@ export default defineComponent({
 
   props: {
     promptComponent: {
-      type: String,
+      type: String as PropType<StandardComponentType>,
       required: true,
     },
     promptId: {
@@ -39,10 +39,10 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
-    async navAction(action: string) {
-      if (action === 'next') await this.submit();
+    async action(type: string) {
+      if (type === 'next') await this.submit();
 
-      this.$emit('nav-action', action);
+      this.$emit('action', type);
     },
 
     async submit() {

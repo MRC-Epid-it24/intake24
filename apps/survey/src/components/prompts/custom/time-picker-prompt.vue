@@ -1,6 +1,6 @@
 <template>
-  <prompt-layout v-bind="{ description, text, meal, food, isValid }" @nav-action="navAction">
-    <v-form ref="form" @submit.prevent="navAction('next')">
+  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+    <v-form ref="form" @submit.prevent="action('next')">
       <v-time-picker
         v-model="currentValue"
         :format="format"
@@ -10,32 +10,22 @@
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
-    <template #actions>
-      <continue @click.native="navAction('next')"></continue>
-    </template>
   </prompt-layout>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { TimePickerPromptProps } from '@intake24/common/prompts';
-import { timePickerPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'TimePickerPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<TimePickerPromptProps>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<TimePickerPromptProps>,
-      required: true,
-    },
     value: {
       type: String,
       default: null,
@@ -44,7 +34,6 @@ export default defineComponent({
 
   data() {
     return {
-      ...merge(timePickerPromptProps, this.promptProps),
       currentValue: this.value,
     };
   },

@@ -11,10 +11,10 @@
             : $t('recall.contextMenu.confirm', { name: safeName() })
         }}
       </v-btn>
-      <v-btn v-if="confirmed" block class="mb-3" large @click="onContextMenuAction('edit-foods')">
+      <v-btn v-if="confirmed" block class="mb-3" large @click="action('editFoods')">
         {{ $t('recall.contextMenu.editFoods', { name: safeName() }) }}
       </v-btn>
-      <v-btn v-if="confirmed" block class="mb-8" large @click="onContextMenuAction('edit-time')">
+      <v-btn v-if="confirmed" block class="mb-8" large @click="action('mealTime')">
         {{ $t('recall.contextMenu.changeTime', { name: safeName() }) }}
       </v-btn>
       <confirm-dialog
@@ -109,11 +109,8 @@ export default defineComponent({
       this.$emit('close');
     },
 
-    onContextMenuAction(action: string) {
-      this.$emit('meal-action', {
-        mealId: this.mealId,
-        action,
-      });
+    action(type: string) {
+      this.$emit('meal-action', { mealId: this.mealId, type });
       this.$emit('close');
     },
 
@@ -123,13 +120,7 @@ export default defineComponent({
     },
 
     onSelect() {
-      this.setSelection({
-        element: {
-          type: 'meal',
-          mealId: this.mealId,
-        },
-        mode: 'manual',
-      });
+      this.setSelection({ element: { type: 'meal', mealId: this.mealId }, mode: 'manual' });
       this.$emit('continue');
     },
   },

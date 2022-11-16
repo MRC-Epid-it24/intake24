@@ -1,6 +1,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PromptAction } from '@intake24/common/prompts';
 import type {
   Dictionary,
   EncodedFood,
@@ -10,12 +11,20 @@ import type {
 } from '@intake24/common/types';
 import { localeContent } from '@intake24/survey/components/mixins';
 
+import { Next } from '../actions';
+
 export default defineComponent({
   name: 'LayoutMixin',
+
+  components: { Next },
 
   mixins: [localeContent],
 
   props: {
+    actions: {
+      type: Array as PropType<PromptAction[]>,
+      default: () => [],
+    },
     text: {
       type: [Object, String] as PropType<RequiredLocaleTranslation | string>,
       required: true,
@@ -41,6 +50,14 @@ export default defineComponent({
   },
 
   computed: {
+    desktopActions(): PromptAction[] {
+      return this.actions.filter((action) => action.layout.includes('desktop'));
+    },
+
+    mobileActions(): PromptAction[] {
+      return this.actions.filter((action) => action.layout.includes('mobile'));
+    },
+
     localeFoodName() {
       return this.food && this.getLocaleContent(this.food.data.localName);
     },
@@ -79,20 +96,20 @@ export default defineComponent({
   },
 
   methods: {
-    update(action: string) {
-      this.$emit('update:navAction', action);
+    update(type: string) {
+      this.$emit('update:navTab', type);
     },
 
-    navAction(action: string) {
-      if (action === 'next') return;
+    action(type: string) {
+      if (type === 'next') return;
 
-      this.update(action);
-      this.$emit('nav-action', action);
+      this.update(type);
+      this.$emit('action', type);
     },
 
     next() {
       this.update('next');
-      this.$emit('nav-action', 'next');
+      this.$emit('action', 'next');
     },
   },
 });

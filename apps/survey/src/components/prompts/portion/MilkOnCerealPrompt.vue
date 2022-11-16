@@ -1,7 +1,7 @@
 <template>
   <portion-layout
-    v-bind="{ method: portionSize.method, description, text, food, isValid }"
-    @nav-action="navAction"
+    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
+    @action="action"
   >
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
@@ -43,9 +43,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <template #actions>
-      <continue :disabled="!isValid" @click="navAction('next')"></continue>
-    </template>
   </portion-layout>
 </template>
 

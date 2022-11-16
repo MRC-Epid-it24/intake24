@@ -2,7 +2,7 @@
   <edit-meal-prompt
     ref="prompt"
     v-bind="{ initialState: state, meal, promptComponent, promptProps }"
-    @nav-action="navAction"
+    @action="action"
     @remove-meal="removeMeal"
     @update="update"
   >
@@ -68,13 +68,13 @@ export default defineComponent({
 
     removeMeal() {
       this.deleteMeal(this.meal.id);
-      this.$emit('nav-action', 'complete');
+      this.$emit('action', 'next');
     },
 
-    navAction(action: string) {
-      if (action === 'next') this.commitAnswer();
+    action(type: string) {
+      if (type === 'next') this.commitAnswer();
 
-      this.$emit('nav-action', action);
+      this.$emit('action', type);
     },
 
     commitAnswer() {

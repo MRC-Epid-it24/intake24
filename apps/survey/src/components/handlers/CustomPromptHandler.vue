@@ -8,7 +8,7 @@
       meal: mealOptional,
       food: foodOptional(),
     }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   ></component>
 </template>
@@ -81,10 +81,10 @@ export default defineComponent({
       if (valid !== undefined) this.$emit('valid', valid);
     },
 
-    navAction(action: string) {
-      if (action === 'next') this.commitAnswer();
+    action(type: string) {
+      if (type === 'next') this.commitAnswer();
 
-      this.$emit('nav-action', action);
+      this.$emit('action', type);
     },
 
     commitAnswer() {

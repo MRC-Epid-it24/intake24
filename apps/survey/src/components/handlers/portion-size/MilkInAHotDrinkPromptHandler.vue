@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   ></milk-in-a-hot-drink-prompt>
 </template>
@@ -81,10 +81,10 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    navAction(action: string) {
-      if (action === 'next') this.commitAnswer();
+    action(type: string) {
+      if (type === 'next') this.commitAnswer();
 
-      this.$emit('nav-action', action);
+      this.$emit('action', type);
     },
 
     commitAnswer() {

@@ -1,7 +1,7 @@
 <template>
   <meal-time-prompt
     v-bind="{ initialState: state, meal, promptComponent, promptProps }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   ></meal-time-prompt>
 </template>
@@ -51,13 +51,13 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
 
-    navAction(action: 'next' | 'cancel') {
-      if (action === 'next') {
+    action(type: 'next' | 'cancel') {
+      if (type === 'next') {
         this.commitAnswer();
-        this.$emit('nav-action', action);
+        this.$emit('action', type);
       } else {
         this.deleteMeal(this.meal.id);
-        this.$emit('nav-action', 'complete');
+        this.$emit('action', 'next');
       }
     },
 

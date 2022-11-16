@@ -1,19 +1,27 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Condition, PromptValidationProps } from '@intake24/common/prompts';
+import type { Condition, PromptAction, PromptValidationProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 
+import PromptActions from './prompt-actions.vue';
 import PromptConditions from './prompt-conditions.vue';
 import PromptContent from './prompt-content.vue';
 import PromptValidation from './prompt-validation.vue';
 
-export type LocaleTranslationKeys = 'name' | 'text' | 'description' | 'label' | 'options';
+export type LocaleTranslationKeys =
+  | 'name'
+  | 'text'
+  | 'description'
+  | 'label'
+  | 'actions'
+  | 'conditions'
+  | 'options';
 
 export default defineComponent({
   name: 'BasePrompt',
 
-  components: { PromptContent, PromptConditions, PromptValidation },
+  components: { PromptActions, PromptContent, PromptConditions, PromptValidation },
 
   props: {
     name: {
@@ -27,6 +35,10 @@ export default defineComponent({
     description: {
       type: Object as PropType<LocaleTranslation>,
       required: true,
+    },
+    actions: {
+      type: Array as PropType<PromptAction[]>,
+      default: () => [],
     },
     conditions: {
       type: Array as PropType<Condition[]>,

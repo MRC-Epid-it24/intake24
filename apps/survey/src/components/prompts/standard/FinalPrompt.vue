@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ description, text, food, meal, isValid }" @nav-action="navAction">
+  <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
     <template #actions>
       <v-btn
         v-if="canShowFeedback"
@@ -12,7 +12,7 @@
         {{ $t('recall.feedback') }}
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="canRestart" class="px-5" color="success" large @click="navAction('restart')">
+      <v-btn v-if="canRestart" class="px-5" color="success" large @click="action('restart')">
         <v-icon left>$survey</v-icon>
         {{ $t('recall.restart') }}
       </v-btn>
@@ -21,19 +21,16 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
-import { finalPromptProps } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
+import type { FinalPromptProps } from '@intake24/common/prompts';
 
-import BasePrompt from '../BasePrompt';
+import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'FinalPrompt',
 
-  mixins: [BasePrompt],
+  mixins: [createBasePrompt<FinalPromptProps>()],
 
   props: {
     canRestart: {
@@ -44,23 +41,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
-      required: true,
-    },
     surveyId: {
       type: String,
       required: true,
-    },
-  },
-
-  data() {
-    return { ...merge(finalPromptProps, this.promptProps) };
-  },
-
-  methods: {
-    restart() {
-      this.$emit('restart');
     },
   },
 });

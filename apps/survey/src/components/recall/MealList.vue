@@ -6,8 +6,7 @@
           <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
           <v-list-item-subtitle>{{ surveyName }}</v-list-item-subtitle>
         </v-list-item-content>
-        <context-menu :icon="menuRecallIcon" :menu="menuRecall" @context-menu-action="recallAction">
-        </context-menu>
+        <context-menu :icon="menuRecallIcon" :menu="menuRecall" @action="action"></context-menu>
       </v-list-item>
       <v-divider></v-divider>
       <v-card-text class="scroll-y px-0">
@@ -35,7 +34,7 @@
           block
           :color="hover ? 'success' : 'inherit'"
           elevation="0"
-          @click="recallAction('add-meal')"
+          @click="action('addMeal')"
         >
           {{ $t('recall.menu.recall.addMeal') }}
         </v-btn>
@@ -75,12 +74,7 @@ export default defineComponent({
   data() {
     return {
       menuRecallIcon: 'fas fa-angle-double-right',
-      menuRecall: [
-        {
-          name: 'Add Meal',
-          action: 'add-meal',
-        },
-      ],
+      menuRecall: [{ name: 'Add Meal', action: 'addMeal' }],
     };
   },
 
@@ -105,8 +99,8 @@ export default defineComponent({
 
       return this.meals[foodIndex.mealIndex].id === mealId;
     },
-    recallAction(action: string) {
-      this.$emit('recall-action', action);
+    action(type: string) {
+      this.$emit('action', type);
     },
     foodSelected(foodId: number) {
       this.$emit('food-selected', foodId);
@@ -114,7 +108,7 @@ export default defineComponent({
     mealSelected(mealId: number) {
       this.$emit('meal-selected', mealId);
     },
-    mealAction(payload: { mealId: number; action: string }) {
+    mealAction(payload: { mealId: number; type: string }) {
       this.$emit('meal-action', payload);
     },
   },

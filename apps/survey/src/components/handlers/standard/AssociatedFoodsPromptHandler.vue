@@ -7,7 +7,7 @@
       promptComponent,
       promptProps,
     }"
-    @nav-action="navAction"
+    @action="action"
     @update="update"
   >
   </associated-foods-prompt>
@@ -97,10 +97,10 @@ export default defineComponent({
       );
     },
 
-    async navAction(action: string) {
-      if (action === 'next') await this.commitAnswer();
+    async action(type: string) {
+      if (type === 'next') await this.commitAnswer();
 
-      this.$emit('nav-action', action);
+      this.$emit('action', type);
     },
 
     async commitAnswer() {
