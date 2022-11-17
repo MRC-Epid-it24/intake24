@@ -31,14 +31,14 @@
     <template #nav-actions>
       <v-btn value="cancel">
         <span class="text-overline font-weight-medium" @click.stop="action('cancel')">
-          {{ $t('recall.actions.remove') }}
+          {{ $t('recall.actions.nav.remove') }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
       <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.confirm') }}
+          {{ $t('recall.actions.nav.confirm') }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>

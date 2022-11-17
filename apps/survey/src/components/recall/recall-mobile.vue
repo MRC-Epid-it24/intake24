@@ -34,7 +34,7 @@
       </transition>
     </v-col>
 
-    <v-col v-show="showMealList" class="stickybottom" cols="12">
+    <v-col v-show="showMealList && !hasFinished" class="stickybottom" cols="12">
       <meal-list-mobile-bottom
         v-show="meals.length"
         @meal-selected="onBottomListMealSelected"

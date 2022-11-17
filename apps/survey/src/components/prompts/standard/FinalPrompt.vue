@@ -1,6 +1,10 @@
 <template>
   <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
     <template #actions>
+      <v-btn class="px-5" color="success" large :to="{ name: 'survey-home', params: { surveyId } }">
+        <v-icon left>$home</v-icon>
+        {{ $t('common.home') }}
+      </v-btn>
       <v-btn
         v-if="canShowFeedback"
         class="px-5"
@@ -9,12 +13,18 @@
         :to="{ name: 'feedback-home', params: { surveyId } }"
       >
         <v-icon left>$feedback</v-icon>
-        {{ $t('recall.feedback') }}
+        {{ $t('recall.actions.feedback') }}
       </v-btn>
-      <v-spacer></v-spacer>
-      <v-btn v-if="canRestart" class="px-5" color="success" large @click="action('restart')">
-        <v-icon left>$survey</v-icon>
-        {{ $t('recall.restart') }}
+    </template>
+    <template #nav-actions>
+      <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
+        <span>{{ $t('common.home') }}</span>
+        <v-icon>$home</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn v-if="canShowFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+        <span>{{ $t('recall.actions.nav.feedback') }}</span>
+        <v-icon>$feedback</v-icon>
       </v-btn>
     </template>
   </prompt-layout>

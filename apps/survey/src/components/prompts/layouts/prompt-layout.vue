@@ -80,13 +80,15 @@
         <slot name="nav-actions">
           <v-btn value="addMeal">
             <span class="text-overline font-weight-medium">
-              {{ $t('prompts.addMeal._') }}
+              {{ $t('recall.actions.nav.addMeal') }}
             </span>
-            <v-icon class="pb-1">$plus</v-icon>
+            <v-icon class="pb-1">$add</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
           <v-btn value="review">
-            <span class="text-overline font-weight-medium">Review</span>
+            <span class="text-overline font-weight-medium">
+              {{ $t('recall.actions.nav.review') }}
+            </span>
             <v-icon class="pb-1">$survey</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
@@ -97,7 +99,7 @@
             @click="next"
           >
             <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.next') }}
+              {{ $t('recall.actions.nav.next') }}
             </span>
             <v-icon class="pb-1">$next</v-icon>
           </v-btn>

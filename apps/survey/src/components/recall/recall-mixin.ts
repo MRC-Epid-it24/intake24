@@ -51,7 +51,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealOptional', 'hasMeals', 'meals']),
+    ...mapState(useSurvey, ['selectedMealOptional', 'hasFinished', 'hasMeals', 'meals']),
 
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
@@ -205,6 +205,8 @@ export default defineComponent({
     },
 
     recallAction(action: RecallAction) {
+      if (this.hasFinished) return;
+
       switch (action) {
         case 'addMeal':
           this.saveCurrentState();

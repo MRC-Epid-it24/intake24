@@ -1,7 +1,36 @@
 <template>
   <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
     <template #actions>
-      <submit @click.native="action('next')"></submit>
+      <next :disabled="!isValid" @click="action('next')">
+        {{ $t('recall.actions.submit') }}
+      </next>
+    </template>
+    <template #nav-actions>
+      <v-btn value="addMeal">
+        <span class="text-overline font-weight-medium">
+          {{ $t('recall.actions.nav.addMeal') }}
+        </span>
+        <v-icon class="pb-1">$add</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn value="review">
+        <span class="text-overline font-weight-medium">
+          {{ $t('recall.actions.nav.review') }}
+        </span>
+        <v-icon class="pb-1">$survey</v-icon>
+      </v-btn>
+      <v-divider vertical></v-divider>
+      <v-btn
+        :color="isValid ? 'success' : 'primary'"
+        :disabled="!isValid"
+        value="next"
+        @click="action('next')"
+      >
+        <span class="text-overline font-weight-medium">
+          {{ $t('recall.actions.nav.submit') }}
+        </span>
+        <v-icon class="pb-1">$next</v-icon>
+      </v-btn>
     </template>
   </prompt-layout>
 </template>
@@ -10,14 +39,11 @@
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps } from '@intake24/common/prompts';
-import Submit from '@intake24/survey/components/prompts/actions/Submit.vue';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'SubmitPrompt',
-
-  components: { Submit },
 
   mixins: [createBasePrompt<BasePromptProps>()],
 

@@ -257,6 +257,9 @@ export default class DynamicRecall {
     // Currently, option 1 is implemented to avoid excessive switching between pre-meals/meals
     // layout in the desktop version.
 
+    // If finished, do not allow any other manual selections
+    if (this.store.hasFinished) return this.getNextSurveySectionPrompt('submission');
+
     let nextPrompt = this.getNextSurveySectionPrompt('preMeals');
     if (nextPrompt) {
       this.store.setSelection({ mode: 'auto', element: null });
