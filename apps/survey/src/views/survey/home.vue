@@ -126,41 +126,42 @@
             <v-divider></v-divider>
           </template>
           <!-- Past recalls -->
-          <v-list class="list-no-wrap" subheader :two-line="!!submissions.length">
-            <v-subheader>{{ $t('recall.submissions.past') }}</v-subheader>
+          <v-card-subtitle>
+            {{ $t('recall.submissions.past') }}
+          </v-card-subtitle>
+          <v-card-text class="py-0">
             <template v-if="submissions.length">
-              <template v-for="(submission, idx) in submissions">
-                <v-list-item :key="submission.id" link>
-                  <v-list-item-icon>
-                    <v-icon v-if="!idx" large>$survey</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ `${$t('recall.submissions._')} ${idx + 1}` }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider
-                  v-if="idx + 1 < submissions.length"
-                  :key="`div-${submission.id}`"
-                  inset
-                ></v-divider>
-              </template>
+              <v-timeline dense>
+                <v-timeline-item
+                  v-for="(submission, idx) in submissions"
+                  :key="submission.id"
+                  :color="idx % 2 ? 'info' : 'secondary'"
+                  small
+                >
+                  <v-row class="pt-1">
+                    <v-col>
+                      <strong>{{ `${$t('recall.submissions._')} ${idx + 1}` }}</strong>
+                      <div class="text-caption">
+                        {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-timeline-item>
+              </v-timeline>
             </template>
-            <v-list-item v-else>
-              <v-list-item-avatar>
-                <v-icon large>$survey</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ $t('recall.submissions.none') }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+            <v-list v-else class="list-no-wrap">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon large>$survey</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ $t('recall.submissions.none') }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
