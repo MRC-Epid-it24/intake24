@@ -23,7 +23,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <template #extension>
+      <template v-if="languages.length" #extension>
         <v-tabs v-model="selected" background-color="grey lighten-4">
           <v-tabs-slider></v-tabs-slider>
           <v-tab v-for="lang in languages" :key="lang">

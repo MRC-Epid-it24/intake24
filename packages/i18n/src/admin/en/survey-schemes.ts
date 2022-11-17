@@ -44,8 +44,8 @@ const surveySchemes: LocaleMessageObject = {
   actions: {
     _: 'Action',
     title: 'Actions',
-    create: 'New action',
-    edit: 'Edit action',
+    add: 'New action',
+    remove: 'Remove action',
     color: 'Color',
     icon: 'Icon',
     label: 'Label',
@@ -66,14 +66,13 @@ const surveySchemes: LocaleMessageObject = {
       deleteMeal: 'Delete meal',
       mealTime: 'Meal time',
     },
-    remove: 'Remove action',
   },
 
   conditions: {
     _: 'Condition',
     title: 'Conditions',
-    create: 'New condition',
-    edit: 'Edit condition',
+    add: 'New condition',
+    remove: 'Remove condition',
     types: {
       _: 'Condition type',
       title: 'Condition types',
@@ -84,9 +83,9 @@ const surveySchemes: LocaleMessageObject = {
       totalEnergy: 'Total energy',
     },
     exTypes: {
-      surveyPromptAnswer: 'Survey question answer: {promptId}',
-      mealPromptAnswer: 'Meal question answer: {promptId}',
-      foodPromptAnswer: 'Food question answer: {promptId}',
+      surveyPromptAnswer: 'Survey prompt answer: {promptId}',
+      mealPromptAnswer: 'Meal prompt answer: {promptId}',
+      foodPromptAnswer: 'Food prompt answer: {promptId}',
       recallNumber: 'Recall number',
       totalEnergy: 'Total energy',
     },
@@ -102,7 +101,6 @@ const surveySchemes: LocaleMessageObject = {
     value: 'Condition value',
     promptId: 'Prompt ID',
     showIf: 'Show prompt if: ',
-    remove: 'Remove condition',
   },
   'data-export': {
     _: 'Data export',

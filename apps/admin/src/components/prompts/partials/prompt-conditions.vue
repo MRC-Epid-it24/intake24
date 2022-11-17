@@ -1,136 +1,88 @@
 <template>
   <v-tab-item key="conditions">
-    <v-expand-transition>
-      <v-card v-show="dialog.show" class="mb-6" outlined>
-        <v-toolbar color="grey lighten-4" flat>
-          <v-toolbar-title>
-            {{ $t(`survey-schemes.conditions.${isCreate ? 'create' : 'edit'}`) }}
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
-            <v-icon>$cancel</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-container>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="dialog.condition.type"
-                hide-details="auto"
-                item-value="type"
-                :items="conditionSelectList"
-                :label="$t('survey-schemes.conditions.types._', {})"
-                outlined
-                @change="updatePromptCondition"
-              ></v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="dialog.condition.op"
-                hide-details="auto"
-                item-value="op"
-                :items="operationSelectList"
-                :label="$t('survey-schemes.conditions.ops._')"
-                outlined
-              >
-                <template #item="{ item }">
-                  <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
-                  {{ item.text }}
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
-                  {{ item.text }}
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="dialog.condition.value"
-                hide-details="auto"
-                :label="$t('survey-schemes.conditions.value')"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <component :is="dialog.condition.type" v-bind.sync="dialog.condition.props"></component>
-          </v-row>
+    <v-tabs vertical>
+      <v-btn class="my-4" color="primary" @click="add">
+        <v-icon left>$add</v-icon>
+        {{ $t(`survey-schemes.conditions.add`) }}
+      </v-btn>
+      <draggable v-model="currentConditions" @end="update">
+        <transition-group name="drag-and-drop" type="transition">
+          <v-tab v-for="condition in currentConditions" :key="condition.id">
+            <v-icon left>fas fa-location-arrow</v-icon>
+            {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
+          </v-tab>
+        </transition-group>
+      </draggable>
+      <v-tab-item v-for="(condition, idx) in currentConditions" :key="condition.id">
+        <v-card class="mx-4" outlined>
+          <v-card-title>
+            <v-icon left>fas fa-location-arrow</v-icon>
+            {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
+          </v-card-title>
+          <v-card-text class="px-0 my-4">
+            <code class="pa-5 large" :style="{ width: '100%' }">
+              {{ $t(`survey-schemes.conditions.showIf`) }}
+              '{{
+                $t(`survey-schemes.conditions.exTypes.${condition.type}`, {
+                  ...condition.props,
+                })
+              }}'
+              <span :class="`fas fa-${opToIconMap[condition.op]} mx-2`"></span>
+              '{{ condition.value }}'
+            </code>
+          </v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="condition.type"
+                  hide-details="auto"
+                  item-value="type"
+                  :items="conditionSelectList"
+                  :label="$t('survey-schemes.conditions.types._')"
+                  outlined
+                  @change="updatePromptCondition"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="condition.op"
+                  hide-details="auto"
+                  item-value="op"
+                  :items="operationSelectList"
+                  :label="$t('survey-schemes.conditions.ops._')"
+                  outlined
+                >
+                  <template #item="{ item }">
+                    <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
+                    {{ item.text }}
+                  </template>
+                  <template #selection="{ item }">
+                    <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
+                    {{ item.text }}
+                  </template>
+                </v-select>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  v-model="condition.value"
+                  hide-details="auto"
+                  :label="$t('survey-schemes.conditions.value')"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <component :is="condition.type" v-bind.sync="condition.props"></component>
+            </v-row>
+          </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="font-weight-bold" color="info" text @click="save">
-              <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
+            <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
+              <v-icon left>$delete</v-icon> {{ $t('survey-schemes.conditions.remove') }}
             </v-btn>
           </v-card-actions>
-        </v-container>
-      </v-card>
-    </v-expand-transition>
-
-    <v-row>
-      <v-col cols="12">
-        <v-toolbar flat tile>
-          <v-toolbar-title class="font-weight-medium">
-            <div class="text-h5">{{ $t('survey-schemes.conditions.title') }}</div>
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="secondary"
-            fab
-            small
-            :title="$t('survey-schemes.conditions.create')"
-            @click.stop="add"
-          >
-            <v-icon small>$add</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-list dense>
-          <draggable v-model="currentConditions" handle=".drag-and-drop__handle" @end="update">
-            <transition-group name="drag-and-drop" type="transition">
-              <v-list-item
-                v-for="(condition, idx) in currentConditions"
-                :key="condition.id"
-                class="drag-and-drop__item"
-                draggable
-                link
-                :ripple="false"
-              >
-                <v-list-item-avatar class="drag-and-drop__handle">
-                  <v-icon>fa-grip-vertical</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content class="font-weight-medium">
-                  <code class="pa-5 large">
-                    {{ $t(`survey-schemes.conditions.showIf`) }}
-                    '{{
-                      $t(`survey-schemes.conditions.exTypes.${condition.type}`, {
-                        ...condition.props,
-                      })
-                    }}'
-                    <span :class="`fas fa-${opToIconMap[condition.op]} mx-2`"></span>
-                    '{{ condition.value }}'
-                  </code>
-                </v-list-item-content>
-                <v-list-item-action class="ml-2">
-                  <v-btn
-                    icon
-                    :title="$t('survey-schemes.conditions.edit')"
-                    @click.stop="edit(idx, condition)"
-                  >
-                    <v-icon color="primary lighten-2">$edit</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-                <v-list-item-action class="ml-2">
-                  <v-btn
-                    icon
-                    :title="$t('survey-schemes.conditions.remove')"
-                    @click.stop="remove(idx)"
-                  >
-                    <v-icon color="error">$delete</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </transition-group>
-          </draggable>
-        </v-list>
-      </v-col>
-    </v-row>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
   </v-tab-item>
 </template>
 
@@ -140,18 +92,12 @@ import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { Condition, ConditionOp } from '@intake24/common/prompts';
-import { toIndexedList } from '@intake24/admin/util';
+import type { Condition, ConditionOp, ConditionType } from '@intake24/common/prompts';
+import { withIdList } from '@intake24/admin/util';
 import { conditionOps } from '@intake24/common/prompts';
-import { copy, merge } from '@intake24/common/util';
+import { copy, randomString } from '@intake24/common/util';
 
 import conditionProps from './conditions';
-
-export type PromptConditionDialog = {
-  show: boolean;
-  index: number;
-  condition: Condition;
-};
 
 const opToIconMap: Record<ConditionOp, string> = {
   eq: 'equals',
@@ -214,28 +160,14 @@ export default defineComponent({
   },
 
   data() {
-    const dialog = (show = false): PromptConditionDialog => ({
-      show,
-      index: -1,
-      condition: copy(promptConditions[0]),
-    });
-
     return {
-      dialog: dialog(),
-      newDialog: dialog,
-      currentConditions: toIndexedList(this.conditions),
+      currentConditions: withIdList(this.conditions),
       promptConditions,
       opToIconMap,
     };
   },
 
   computed: {
-    isCreate(): boolean {
-      return this.dialog.index === -1;
-    },
-    isEdit(): boolean {
-      return !this.isCreate;
-    },
     conditionSelectList(): { type: string; text: string }[] {
       return this.promptConditions.map(({ type }) => ({
         type,
@@ -257,61 +189,30 @@ export default defineComponent({
     conditions(val) {
       if (isEqual(val, this.outputConditions)) return;
 
-      this.currentConditions = toIndexedList(val);
+      this.currentConditions = withIdList(val);
+    },
+    outputConditions: {
+      handler() {
+        this.update();
+      },
+      deep: true,
     },
   },
 
   methods: {
-    updatePromptCondition() {
-      const {
-        show,
-        index,
-        condition: { type },
-      } = this.dialog;
-
+    updatePromptCondition(idx: number, type: ConditionType) {
       const condition = this.promptConditions.find((item) => item.type === type);
       if (!condition) return;
 
-      this.dialog = { show, index, condition: copy(condition) };
+      this.currentConditions.splice(idx, 1, copy({ ...condition, id: randomString(6) }));
     },
 
     add() {
-      this.dialog = this.newDialog(true);
-    },
-
-    cancel() {
-      this.dialog = this.newDialog(false);
-    },
-
-    edit(index: number, condition: Condition) {
-      const defaults = this.promptConditions.find((item) => item.type === condition.type);
-
-      this.dialog = {
-        show: true,
-        index,
-        condition: merge(defaults ?? {}, condition),
-      };
-    },
-
-    save() {
-      const { index, condition } = this.dialog;
-
-      const newCondition = { id: this.currentConditions.length + 1, ...condition };
-
-      if (index === -1) this.currentConditions.push(newCondition);
-      else this.currentConditions.splice(index, 1, newCondition);
-
-      this.update();
-      this.reset();
+      this.currentConditions.push(copy({ ...this.promptConditions[0], id: randomString(6) }));
     },
 
     remove(index: number) {
       this.currentConditions.splice(index, 1);
-      this.update();
-    },
-
-    reset() {
-      this.dialog = this.newDialog();
     },
 
     update() {
