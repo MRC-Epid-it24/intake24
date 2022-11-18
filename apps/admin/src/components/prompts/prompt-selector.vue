@@ -33,8 +33,8 @@
       </v-toolbar>
 
       <v-form ref="form" @submit.prevent="save">
-        <v-container>
-          <v-tabs-items v-model="tab" class="pt-1">
+        <v-container class="prompt-container">
+          <v-tabs-items v-model="tab" class="pt-1 flex-grow-1">
             <v-tab-item key="general">
               <v-row>
                 <v-col cols="12">
@@ -367,3 +367,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.prompt-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 112px);
+}
+</style>
