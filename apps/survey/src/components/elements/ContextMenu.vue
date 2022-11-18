@@ -15,15 +15,15 @@
             <v-list-item-title>
               <confirm-dialog
                 color="warning"
-                :label="$t('prompts.editMeal.deleteMeal', { meal: entityName }).toString()"
+                :label="$t('prompts.editMeal.delete._', { item: entityName }).toString()"
                 @confirm="action(item.action)"
               >
                 <template #activator="{ on, attrs }">
                   <v-btn color="red" v-bind="attrs" small text v-on="on">
-                    {{ $t('prompts.editMeal.deleteMeal', { meal: entityName }) }}
+                    {{ $t('prompts.editMeal.delete._', { item: entityName }) }}
                   </v-btn>
                 </template>
-                {{ $t('prompts.mealDelete.message', { meal: entityName }) }}
+                {{ $t('prompts.editMeal.delete.confirm', { item: entityName }) }}
               </confirm-dialog>
             </v-list-item-title>
           </v-list-item-content>

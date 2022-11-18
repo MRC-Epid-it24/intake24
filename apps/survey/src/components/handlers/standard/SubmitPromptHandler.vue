@@ -39,10 +39,10 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
-    async action(type: string) {
+    async action(type: string, id?: number) {
       if (type === 'next') await this.submit();
 
-      this.$emit('action', type);
+      this.$emit('action', type, id);
     },
 
     async submit() {

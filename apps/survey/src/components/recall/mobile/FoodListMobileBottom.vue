@@ -2,7 +2,7 @@
   <v-card flat :loading="loading">
     <v-toolbar dense flat>
       <v-tabs v-model="active_tab" center-active icons-and-text show-arrows touch>
-        <v-tab class="add_button" @click="action('editFoods')">
+        <v-tab class="add_button" @click="action('editMeal')">
           <span>FOOD</span>
           <span>ADD</span>
         </v-tab>

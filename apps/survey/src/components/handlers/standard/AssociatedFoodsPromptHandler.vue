@@ -97,10 +97,10 @@ export default defineComponent({
       );
     },
 
-    async action(type: string) {
+    async action(type: string, id?: number) {
       if (type === 'next') await this.commitAnswer();
 
-      this.$emit('action', type);
+      this.$emit('action', type, id);
     },
 
     async commitAnswer() {

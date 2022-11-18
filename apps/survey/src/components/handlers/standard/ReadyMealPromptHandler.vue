@@ -62,10 +62,10 @@ export default defineComponent({
       survey.setMealFlag({ mealId: meal.value.id, flag: 'ready-meal-complete' });
     };
 
-    const action = (type: string) => {
+    const action = (type: string, id?: number) => {
       if (type === 'next') commitAnswer();
 
-      context.emit('action', action);
+      context.emit('action', type, id);
     };
 
     if (!state.value.foods.length) action('next');

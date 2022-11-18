@@ -83,10 +83,10 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['updateFood']),
 
-    action(type: string) {
+    action(type: string, id?: number) {
       if (type === 'next') this.commitAnswer();
 
-      this.$emit('action', type);
+      this.$emit('action', type, id);
     },
 
     commitAnswer() {

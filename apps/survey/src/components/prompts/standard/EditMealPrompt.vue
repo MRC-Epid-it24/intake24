@@ -6,29 +6,56 @@
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
       <editable-food-list v-model="foods" @input="update"></editable-food-list>
     </v-col>
-    <template v-if="!isMobile" #actions>
+    <template #actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.deleteMeal', { meal: localMealName }).toString()"
-        @confirm="removeMeal"
+        :label="$t('prompts.editMeal.delete._', { meal: localMealName }).toString()"
+        @confirm="action('deleteMeal', meal?.id)"
       >
         <template #activator="{ on, attrs }">
-          <v-btn :block="isMobile" class="px-5" large v-bind="attrs" v-on="on">
-            {{ $t('prompts.editMeal.deleteMeal', { meal: localMealName }) }}
+          <v-btn
+            :block="isMobile"
+            class="px-5"
+            :class="{ 'mr-2': !isMobile }"
+            color="error"
+            large
+            :title="$t('recall.actions.deleteMeal')"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>$delete</v-icon>
+            {{ $t('prompts.editMeal.delete._', { meal: localMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.mealDelete.message', { meal: localMealName }) }}
+        {{ $t('prompts.editMeal.delete.confirm', { meal: localMealName }) }}
       </confirm-dialog>
-      <v-btn
-        :block="isMobile"
-        class="px-5"
-        :class="{ 'ml-2': !isMobile, 'mb-2': isMobile }"
-        color="success"
+      <next
+        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         :disabled="!isValid"
-        large
         @click="action('next')"
+      ></next>
+    </template>
+    <template #nav-actions>
+      <confirm-dialog
+        color="warning"
+        :label="$t('prompts.editMeal.delete._', { meal: localMealName }).toString()"
+        @confirm="action('deleteMeal', meal?.id)"
       >
-        {{ $t('recall.actions.next') }}
+        <template #activator="{ on, attrs }">
+          <v-btn color="error" value="deleteMeal" v-bind="attrs" v-on="on">
+            <span class="text-overline font-weight-medium">
+              {{ $t('recall.actions.nav.deleteMeal') }}
+            </span>
+            <v-icon class="pb-1">$delete</v-icon>
+          </v-btn>
+        </template>
+        {{ $t('prompts.editMeal.delete.confirm', { meal: localMealName }) }}
+      </confirm-dialog>
+      <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
+        <span class="text-overline font-weight-medium">
+          {{ $t('recall.actions.nav.next') }}
+        </span>
+        <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
   </prompt-layout>
@@ -96,10 +123,6 @@ export default defineComponent({
   },
 
   methods: {
-    removeMeal() {
-      this.$emit('remove-meal');
-    },
-
     update() {
       const { foods } = this;
       const state: EditMealPromptState = { foods };

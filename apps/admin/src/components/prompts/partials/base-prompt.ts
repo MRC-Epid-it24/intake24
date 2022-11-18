@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Condition, PromptAction, PromptValidationProps } from '@intake24/common/prompts';
+import type { Actions, Condition, PromptValidationProps } from '@intake24/common/prompts';
 import type { LocaleTranslation } from '@intake24/common/types';
 
 import PromptActions from './prompt-actions.vue';
@@ -37,8 +37,7 @@ export default defineComponent({
       required: true,
     },
     actions: {
-      type: Array as PropType<PromptAction[]>,
-      default: () => [],
+      type: Object as PropType<Actions>,
     },
     conditions: {
       type: Array as PropType<Condition[]>,

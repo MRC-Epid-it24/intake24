@@ -79,7 +79,7 @@ export default defineComponent({
       menuMeal: [
         {
           name: this.$t('recall.menu.meal.editFoodInMeal'),
-          action: 'editFoods',
+          action: 'editMeal',
           dialog: false,
         },
         {

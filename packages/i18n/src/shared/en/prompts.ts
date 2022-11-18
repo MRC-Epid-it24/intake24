@@ -56,10 +56,6 @@ const prompts: LocaleMessageObject = {
     hint: 'Hit enter when finished typing',
     noMeal: 'No Meals remaining, please add at least one',
   },
-  mealDelete: {
-    title: 'Delete Meal/Food',
-    message: 'Do you want to delete {meal}',
-  },
   editMeal: {
     text: 'Please list everything you had for your {meal}, one item per line.',
     description: `For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
@@ -69,7 +65,10 @@ const prompts: LocaleMessageObject = {
     drinks: 'Drinks',
     addFood: 'Add',
     addDrink: 'Add a drink',
-    deleteMeal: 'Delete {meal}',
+    delete: {
+      _: 'Delete {item}',
+      confirm: 'Do you want to delete {item}?',
+    },
     deleteFoodFromMeal: 'Delete {food}',
     editMeal: 'Edit {meal}',
     editTime: 'Change Time',

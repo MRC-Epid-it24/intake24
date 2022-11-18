@@ -26,7 +26,7 @@ interface SavedState {
 
 export type RecallAction = 'addMeal' | 'review' | 'no-more-information';
 
-export type MealAction = 'editFoods' | 'mealTime' | 'deleteMeal';
+export type MealAction = 'editMeal' | 'mealTime' | 'deleteMeal';
 
 export default defineComponent({
   name: 'RecallMixin',
@@ -130,13 +130,7 @@ export default defineComponent({
     },
 
     showMealPrompt(mealId: number, promptSection: MealSection, promptType: ComponentType) {
-      this.setSelection({
-        element: {
-          type: 'meal',
-          mealId,
-        },
-        mode: 'manual',
-      });
+      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
       const prompt = this.recallController
         ? this.recallController.promptManager.findMealPromptOfType(promptType, promptSection)
@@ -147,20 +141,14 @@ export default defineComponent({
           `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`
         );
 
-      this.currentPrompt = {
-        section: promptSection,
-        prompt,
-      };
+      this.currentPrompt = { section: promptSection, prompt };
     },
 
     saveCurrentState() {
       // Don't save state if switching between special prompts
       if (this.savedState !== null) return;
 
-      this.savedState = {
-        selection: this.survey.selection,
-        prompt: this.currentPrompt,
-      };
+      this.savedState = { selection: this.survey.selection, prompt: this.currentPrompt };
     },
 
     clearSavedState() {
@@ -168,10 +156,7 @@ export default defineComponent({
     },
 
     showSurveyPrompt(promptSection: SurveyQuestionSection, promptType: ComponentType) {
-      this.setSelection({
-        element: null,
-        mode: 'manual',
-      });
+      this.setSelection({ element: null, mode: 'manual' });
 
       const prompt = this.recallController
         ? this.recallController.promptManager.findSurveyPromptOfType(promptType, promptSection)
@@ -182,22 +167,44 @@ export default defineComponent({
           `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`
         );
 
-      this.currentPrompt = {
-        section: promptSection,
-        prompt,
-      };
+      this.currentPrompt = { section: promptSection, prompt };
+    },
+
+    async action(type: string, id?: number) {
+      switch (type) {
+        case 'next':
+        case 'restart':
+          await this[type]();
+          break;
+        case 'addMeal':
+        case 'review':
+          this.recallAction(type);
+          break;
+        case 'editMeal':
+        case 'mealTime':
+        case 'deleteMeal':
+          if (id === undefined) {
+            console.warn('Recall: Meal id must be defined for meal action.', type, id);
+            return;
+          }
+
+          this.mealAction({ type, mealId: id });
+          break;
+        case 'deleteFood':
+        default:
+          console.warn(`Recall: Unknown action type: ${type}`);
+      }
     },
 
     async mealAction(payload: { type: MealAction; mealId: number }) {
       switch (payload.type) {
-        case 'editFoods':
+        case 'editMeal':
           this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
           break;
         case 'mealTime':
           this.showMealPrompt(payload.mealId, 'preFoods', 'meal-time-prompt');
           break;
         case 'deleteMeal':
-          console.log('About to delete the Meal: ', payload.mealId);
           this.deleteMeal(payload.mealId);
           await this.nextPrompt();
           break;
@@ -308,19 +315,6 @@ export default defineComponent({
       useSurvey().clearState();
       await this.recallController?.initialiseSurvey();
       await this.nextPrompt();
-    },
-
-    async action(type: string) {
-      switch (type) {
-        case 'next':
-        case 'restart':
-          await this[type]();
-          break;
-        case 'addMeal':
-        case 'review':
-          this.recallAction(type);
-          break;
-      }
     },
   },
 });

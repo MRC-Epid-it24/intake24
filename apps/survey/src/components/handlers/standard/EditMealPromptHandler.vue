@@ -1,9 +1,7 @@
 <template>
   <edit-meal-prompt
-    ref="prompt"
     v-bind="{ initialState: state, meal, promptComponent, promptProps }"
     @action="action"
-    @remove-meal="removeMeal"
     @update="update"
   >
   </edit-meal-prompt>
@@ -42,7 +40,6 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const prompt = ref<InstanceType<typeof EditMealPrompt>>();
     const { meal } = useMealPromptUtils();
 
     const getInitialState = (): EditMealPromptState => ({ foods: meal.value.foods });
@@ -55,7 +52,6 @@ export default defineComponent({
     );
 
     return {
-      prompt,
       meal,
       state,
       update,
@@ -64,17 +60,12 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setFoods', 'setMealFlag', 'deleteMeal']),
+    ...mapActions(useSurvey, ['setFoods', 'setMealFlag']),
 
-    removeMeal() {
-      this.deleteMeal(this.meal.id);
-      this.$emit('action', 'next');
-    },
-
-    action(type: string) {
+    action(type: string, id?: number) {
       if (type === 'next') this.commitAnswer();
 
-      this.$emit('action', type);
+      this.$emit('action', type, id);
     },
 
     commitAnswer() {

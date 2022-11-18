@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PromptAction } from '@intake24/common/prompts';
+import type { ActionItem, Actions } from '@intake24/common/prompts';
 import type {
   Dictionary,
   EncodedFood,
@@ -22,8 +22,8 @@ export default defineComponent({
 
   props: {
     actions: {
-      type: Array as PropType<PromptAction[]>,
-      default: () => [],
+      type: Object as PropType<Actions>,
+      default: () => ({ both: false, items: [] }),
     },
     text: {
       type: [Object, String] as PropType<RequiredLocaleTranslation | string>,
@@ -50,12 +50,12 @@ export default defineComponent({
   },
 
   computed: {
-    desktopActions(): PromptAction[] {
-      return this.actions.filter((action) => action.layout.includes('desktop'));
+    desktopActions(): ActionItem[] {
+      return this.actions.items.filter((action) => action.layout.includes('desktop'));
     },
 
-    mobileActions(): PromptAction[] {
-      return this.actions.filter((action) => action.layout.includes('mobile'));
+    mobileActions(): ActionItem[] {
+      return this.actions.items.filter((action) => action.layout.includes('mobile'));
     },
 
     localeFoodName() {
@@ -101,7 +101,7 @@ export default defineComponent({
     },
 
     action(type: string) {
-      if (type === 'next') return;
+      if (!['addMeal', 'review'].includes(type)) return;
 
       this.update(type);
       this.$emit('action', type);

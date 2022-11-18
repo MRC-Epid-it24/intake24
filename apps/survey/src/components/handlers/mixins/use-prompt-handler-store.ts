@@ -30,7 +30,7 @@ export const usePromptHandlerStore = <T extends object>(
 
   const getFoodOrMealId = promptType === 'edit-meal-prompt' ? getMealId : getFoodId;
 
-  const storedState: T = promptStore.prompts[getFoodOrMealId()]?.[promptId];
+  const storedState: T | undefined = promptStore.prompts[getFoodOrMealId()]?.[promptId];
 
   const state = ref(
     storedState ? merge<T>(getInitialState(), storedState) : getInitialState()

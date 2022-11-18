@@ -11,8 +11,8 @@
             : $t('recall.contextMenu.confirm', { name: safeName() })
         }}
       </v-btn>
-      <v-btn v-if="confirmed" block class="mb-3" large @click="action('editFoods')">
-        {{ $t('recall.contextMenu.editFoods', { name: safeName() }) }}
+      <v-btn v-if="confirmed" block class="mb-3" large @click="action('editMeal')">
+        {{ $t('recall.contextMenu.editMeal', { name: safeName() }) }}
       </v-btn>
       <v-btn v-if="confirmed" block class="mb-8" large @click="action('mealTime')">
         {{ $t('recall.contextMenu.changeTime', { name: safeName() }) }}

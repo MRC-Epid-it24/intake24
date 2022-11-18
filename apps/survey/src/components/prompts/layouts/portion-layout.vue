@@ -19,14 +19,11 @@
       </v-container>
     </v-card>
     <slot></slot>
-    <!-- <v-container>
-      <v-row>
-        <v-col cols="12" md="3">
-          <slot name="actions"></slot>
-        </v-col>
-      </v-row>
-    </v-container> -->
-    <div v-if="!isMobile" class="pa-4 px-md-0 d-flex" :class="{ 'flex-column-reverse': isMobile }">
+    <div
+      v-if="!isMobile || actions.both"
+      class="pa-4 px-md-0 d-flex"
+      :class="{ 'flex-column-reverse': isMobile }"
+    >
       <template v-if="desktopActions.length">
         <v-btn
           v-for="item in desktopActions"

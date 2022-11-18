@@ -38,7 +38,9 @@ export function getOrCreatePromptStateStore<T extends object>(
           };
         },
         clearState(foodOrMealId: number, promptId: string) {
-          Vue.delete(this.prompts[foodOrMealId], promptId);
+          if (this.prompts[foodOrMealId]?.[promptId])
+            Vue.delete(this.prompts[foodOrMealId], promptId);
+
           this.prompts = Object.fromEntries(
             Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length !== 0)
           );

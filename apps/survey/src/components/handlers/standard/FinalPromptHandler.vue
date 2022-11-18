@@ -59,8 +59,8 @@ export default defineComponent({
   },
 
   methods: {
-    action(type: string) {
-      this.$emit('action', type);
+    action(type: string, id?: number) {
+      this.$emit('action', type, id);
     },
   },
 });

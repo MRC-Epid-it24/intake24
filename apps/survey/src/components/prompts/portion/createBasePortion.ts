@@ -126,8 +126,8 @@ export default <P extends BasePromptProps, S extends object>() =>
         this.closePanels();
       },
 
-      action(type: string) {
-        this.$emit('action', type);
+      action(type: string, id?: number) {
+        this.$emit('action', type, id);
       },
     },
   });

@@ -33,6 +33,10 @@
         {{ $t('portion.unknown.text', { food: foodName }) }}
       </v-alert>
     </v-sheet>
+    <template #actions>
+      <!-- Should not have actions -> only click & select -->
+      <div></div>
+    </template>
   </portion-layout>
 </template>
 
@@ -77,7 +81,7 @@ export default defineComponent({
 
   computed: {
     validConditions(): boolean[] {
-      return [this.option !== null];
+      return [false];
     },
   },
 

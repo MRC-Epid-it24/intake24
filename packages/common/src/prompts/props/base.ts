@@ -4,16 +4,22 @@ import type { Condition } from '../conditions';
 export const promptLayouts = ['desktop', 'mobile'] as const;
 export type PromptLayout = typeof promptLayouts[number];
 
-export const promptGenericActionTypes = ['next', 'review'] as const;
-export const promptMealActionTypes = ['addMeal', 'editFoods', 'deleteMeal', 'mealTime'] as const;
-export const promptActionTypes = [...promptGenericActionTypes, ...promptMealActionTypes] as const;
+export const genericActionTypes = ['next', 'review'] as const;
+export const mealActionTypes = [
+  'addMeal',
+  'deleteFood',
+  'deleteMeal',
+  'editMeal',
+  'mealTime',
+] as const;
+export const actionTypes = [...genericActionTypes, ...mealActionTypes] as const;
 
-export type PromptGenericActionType = typeof promptGenericActionTypes[number];
-export type PromptMealActionType = typeof promptMealActionTypes[number];
-export type PromptActionType = typeof promptActionTypes[number];
+export type GenericActionType = typeof genericActionTypes[number];
+export type MealActionType = typeof mealActionTypes[number];
+export type ActionType = typeof actionTypes[number];
 
-export type PromptAction = {
-  type: PromptActionType;
+export type ActionItem = {
+  type: ActionType;
   text: LocaleTranslation;
   label: LocaleTranslation;
   color: string | null;
@@ -21,11 +27,16 @@ export type PromptAction = {
   layout: PromptLayout[];
 };
 
+export type Actions = {
+  both: boolean;
+  items: ActionItem[];
+};
+
 export type BasePromptProps = {
   name: RequiredLocaleTranslation;
   text: LocaleTranslation;
   description: LocaleTranslation;
-  actions?: PromptAction[];
+  actions?: Actions;
   conditions: Condition[];
 };
 
@@ -56,7 +67,7 @@ export const basePromptProps: BasePromptProps = {
   text: {},
   description: {},
   conditions: [],
-  actions: [],
+  actions: undefined,
 };
 
 export const promptValidation: PromptValidationProps = {

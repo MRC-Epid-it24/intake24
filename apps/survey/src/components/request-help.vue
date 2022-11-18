@@ -64,7 +64,7 @@
               </v-col>
             </v-row>
             <v-row justify="center">
-              <v-col cols="auto">
+              <v-col :cols="isMobile ? '12' : 'auto'">
                 <v-btn
                   :block="isMobile"
                   color="secondary"
