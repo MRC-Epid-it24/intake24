@@ -68,6 +68,14 @@ export default defineComponent({
     };
   },
 
+  watch: {
+    dialog(val) {
+      if (!val) return;
+
+      this.content = this.value;
+    },
+  },
+
   methods: {
     close() {
       this.dialog = false;
