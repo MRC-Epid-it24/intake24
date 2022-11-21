@@ -83,10 +83,13 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         })
         .on('failed', (job, err) => {
           const { message, name, stack } = err;
-          this.logger.error(
-            `${this.name}: ${job.name} | ${job.id} has failed with: ${err.message}`,
-            { message, name, stack }
-          );
+          const jobInfo = job ? `${job.name} | ${job.id}` : `"Removed job"`;
+
+          this.logger.error(`${this.name}: ${jobInfo} has failed with: ${err.message}`, {
+            message,
+            name,
+            stack,
+          });
         })
         .on('error', (err) => {
           this.logEventError(err);

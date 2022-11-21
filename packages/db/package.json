@@ -29,16 +29,16 @@
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.25.5",
+    "sequelize": "^6.25.7",
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.188",
+    "@types/lodash": "^4.14.189",
     "@types/node": "^18.11.9",
     "@types/pg": "^8.6.5",
     "@types/validator": "^13.7.10",
     "sequelize-cli": "^6.5.2",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.3"
   },
   "bundledDependencies": [
     "@intake24/api",
