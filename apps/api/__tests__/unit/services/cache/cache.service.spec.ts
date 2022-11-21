@@ -23,12 +23,12 @@ function getData(keys: string[], expectedKeys: string[]): Promise<Record<string,
 describe('Cache', () => {
   let cache: Cache;
 
-  beforeAll(async () => {
-    cache = await initCache();
+  beforeAll(() => {
+    cache = initCache();
   });
 
-  afterAll(async () => {
-    await releaseCache(cache);
+  afterAll(() => {
+    releaseCache(cache);
   });
 
   afterEach(async () => {
@@ -80,5 +80,13 @@ describe('Cache', () => {
     );
 
     expect(response).toEqual({ something: null });
+  });
+
+  it('Remember many - should not crash on empty input', async () => {
+    const response = await cache.rememberMany([], 'test:empty', 60, (keys: string[]) =>
+      getData(keys, [])
+    );
+
+    expect(response).toEqual({});
   });
 });

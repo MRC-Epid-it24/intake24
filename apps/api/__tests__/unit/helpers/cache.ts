@@ -4,16 +4,16 @@ import { default as cacheConfig } from '@intake24/api/config/cache';
 import { Cache } from '@intake24/api/services';
 import { logger } from '@intake24/services';
 
-export async function initCache(): Promise<Cache> {
+export function initCache(): Cache {
   console.info(`Using Redis instance on ${cacheConfig.redis.host}:${cacheConfig.redis.port}`);
 
   const cache = new Cache({ cacheConfig, logger });
 
-  await cache.init();
+  cache.init();
 
   return cache;
 }
 
-export async function releaseCache(cache: Cache): Promise<void> {
-  await cache.close();
+export function releaseCache(cache: Cache) {
+  cache.close();
 }

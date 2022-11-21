@@ -38,6 +38,8 @@ export default class Cache extends HasRedisClient {
    * @memberof Cache
    */
   async mget<T>(keys: string[]): Promise<(T | null)[]> {
+    if (!keys.length) return [];
+
     const cached = await this.redis.mget(keys);
     return cached.map((item) => (item ? (JSON.parse(item) as T) : null));
   }
@@ -164,6 +166,8 @@ export default class Cache extends HasRedisClient {
     expiresIn: number | string,
     getData: (keys: string[]) => Promise<Record<string, T | null>>
   ): Promise<Record<string, T | null>> {
+    if (!keys.length) return {};
+
     const cacheKeys = keys.map((k) => `${cacheKeyPrefix}:${k}`);
 
     const cached = await this.mget<T>(cacheKeys);

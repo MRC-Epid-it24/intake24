@@ -20,11 +20,11 @@
     "lint": "eslint . --ext .js,.ts --fix",
     "start": "node dist/server.js",
     "test:unit": "jest",
-    "test:unit:coverage": "pnpm test:unit -- --coverage",
-    "test:unit:watch": "pnpm test:unit -- --watch",
+    "test:unit:coverage": "pnpm test:unit --coverage",
+    "test:unit:watch": "pnpm test:unit --watch",
     "test:integration": "jest ./__tests__/integration/index.test.ts --runInBand --testMatch **/__tests__/integration/**/*.test.ts",
-    "test:integration:coverage": "pnpm test:integration -- --coverage",
-    "test:integration:watch": "pnpm test:integration -- --watch"
+    "test:integration:coverage": "pnpm test:integration --coverage",
+    "test:integration:watch": "pnpm test:integration --watch"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
