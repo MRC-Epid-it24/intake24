@@ -15,7 +15,12 @@
       <v-icon left>fas fa-print</v-icon>
       {{ $t('feedback.outputs.print') }}
     </v-btn>
-    <v-dialog v-if="outputs.includes('email')" v-model="email.dialog" max-width="450px">
+    <v-dialog
+      v-if="outputs.includes('email')"
+      v-model="email.dialog"
+      :fullscreen="isMobile"
+      max-width="500px"
+    >
       <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
@@ -32,6 +37,9 @@
       </template>
       <v-card>
         <v-toolbar color="primary" dark flat>
+          <v-btn dark icon :title="$t('common.action.close')" @click.stop="email.dialog = false">
+            <v-icon>$close</v-icon>
+          </v-btn>
           <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
         </v-toolbar>
         <v-card-text class="pa-4">
@@ -84,15 +92,14 @@
             </v-container>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="font-weight-bold" color="info" text @click.stop="email.dialog = false">
-            {{ $t('common.action.close') }}
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-if="outputs.includes('download')" v-model="download.dialog" max-width="450px">
+    <v-dialog
+      v-if="outputs.includes('download')"
+      v-model="download.dialog"
+      :fullscreen="isMobile"
+      max-width="500px"
+    >
       <template #activator="{ on, attrs }">
         <v-btn
           v-bind="attrs"
@@ -109,6 +116,9 @@
       </template>
       <v-card>
         <v-toolbar color="primary" dark flat>
+          <v-btn dark icon :title="$t('common.action.close')" @click.stop="download.dialog = false">
+            <v-icon>$close</v-icon>
+          </v-btn>
           <v-toolbar-title>{{ $t('feedback.outputs.download.title') }}</v-toolbar-title>
         </v-toolbar>
         <v-card-text class="pa-4">
@@ -140,12 +150,6 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="font-weight-bold" color="info" text @click.stop="download.dialog = false">
-            {{ $t('common.action.close') }}
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-col>

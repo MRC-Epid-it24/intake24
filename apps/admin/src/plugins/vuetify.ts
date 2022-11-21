@@ -9,6 +9,8 @@ export default new Vuetify({
     iconfont: 'fa',
     values: {
       add: 'fas fa-plus',
+      cancel: 'fas fa-circle-xmark',
+      close: 'fas fa-circle-xmark',
       create: 'fas fa-plus',
       back: 'fas fa-level-up-alt',
       dashboard: 'fas fa-tachometer-alt',

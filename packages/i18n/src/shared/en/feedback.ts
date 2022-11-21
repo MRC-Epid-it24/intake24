@@ -45,7 +45,7 @@ const feedback: LocaleMessageObject = {
     title: 'Outputs',
     download: {
       _: 'Download',
-      title: 'Download feedback as PDF',
+      title: 'Download as PDF',
       subtitle:
         'Download a copy of your feedback as PDF file. It will take a couple of seconds, bear with us.',
       send: 'Submit request',
@@ -53,7 +53,7 @@ const feedback: LocaleMessageObject = {
     },
     email: {
       _: 'Email',
-      title: 'Send feedback to email',
+      title: 'Send to email',
       send: 'Submit request',
       sent: 'We have sent your feedback to provided email address.',
     },

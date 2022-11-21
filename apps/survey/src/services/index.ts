@@ -10,6 +10,6 @@ export { default as surveyService } from './survey.service';
 export * from './survey.service';
 export { default as userService } from './user.service';
 export * from './user.service';
-export { tokenService } from '@intake24/ui/services';
+export { errorHandler, tokenService, warnHandler } from '@intake24/ui/services';
 
 export const feedbackService = createFeedbackService(http);

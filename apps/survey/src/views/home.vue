@@ -3,7 +3,7 @@
     <app-entry-screen
       :logo="logo"
       :subtitle="$t('common.welcome.subtitle').toString()"
-      :title="$t('common.welcome._').toString()"
+      :title="$t('common._').toString()"
       width="30rem"
     >
       <v-divider class="mt-4"></v-divider>

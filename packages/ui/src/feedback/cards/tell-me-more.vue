@@ -39,6 +39,7 @@
           class="button-bottom font-weight-bold"
           color="primary lighten-2"
           large
+          :title="$t('common.action.ok')"
           @click.stop="close"
         >
           <v-icon left>fas fa-thumbs-up</v-icon>

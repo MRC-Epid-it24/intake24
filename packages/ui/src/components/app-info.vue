@@ -8,8 +8,7 @@
       <v-list-item-content>
         <v-list-item-title> {{ $t('common.app._') }}: {{ app.name }} </v-list-item-title>
         <v-list-item-subtitle>
-          {{ $t('common.app.build') }}: {{ app.build.version }} | {{ app.build.revision }} |
-          {{ app.build.date }}
+          {{ $t('common.app.build') }}: {{ app.build.version }} ({{ app.build.revision }})
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action v-if="clipboardAvailable">
@@ -45,8 +44,8 @@ export default defineComponent({
     async copyInfoToClipboard() {
       if (!this.clipboardAvailable) return;
 
-      const { version, revision, date } = this.app.build;
-      await navigator.clipboard.writeText([version, revision, date].join(' | '));
+      const { version, revision } = this.app.build;
+      await navigator.clipboard.writeText(`${version} (${revision})`);
       useMessages().info(this.$t('common.clipboard.copied').toString());
     },
   },

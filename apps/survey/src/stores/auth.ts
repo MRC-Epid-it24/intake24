@@ -8,7 +8,6 @@ import { useUser } from './user';
 
 export type AuthState = {
   accessToken: string | null;
-  error: Error | null;
 };
 
 export type LoginPayload = { type: 'login'; payload: AliasLoginRequest };
@@ -18,7 +17,6 @@ export type AuthenticatePayload = LoginPayload | TokenPayload;
 export const useAuth = defineStore('auth', {
   state: (): AuthState => ({
     accessToken: null,
-    error: null,
   }),
   getters: {
     loggedIn: (state) => !!state.accessToken,
@@ -40,13 +38,6 @@ export const useAuth = defineStore('auth', {
             : await authService.token(payload.payload);
 
         this.setAccessToken(accessToken);
-        this.error = null;
-
-        return Promise.resolve();
-      } catch (err) {
-        if (err instanceof Error) this.error = err;
-
-        return Promise.reject(err);
       } finally {
         loading.removeItem('login');
       }
@@ -65,13 +56,8 @@ export const useAuth = defineStore('auth', {
         const accessToken = await authService.refresh();
 
         this.setAccessToken(accessToken);
-        this.error = null;
-
-        return Promise.resolve();
       } catch (err) {
-        if (err instanceof Error) this.error = err;
-
-        return withErr ? Promise.reject(err) : Promise.resolve();
+        if (withErr) throw err;
       }
     },
 
