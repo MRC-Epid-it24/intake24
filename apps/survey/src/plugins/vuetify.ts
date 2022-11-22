@@ -31,6 +31,7 @@ export default new Vuetify({
       profile: 'fas fa-user-circle',
       question: 'far fa-question-circle',
       save: 'fas fa-save',
+      search: 'fas fa-magnifying-glass',
       show: 'far fa-file',
       start: 'fas fa-play',
       survey: 'fas fa-poll-h',

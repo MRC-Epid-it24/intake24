@@ -25,7 +25,7 @@
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="servingImageSet">
+      <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.as-served.serving.header`) }}
           <template #actions>
@@ -37,24 +37,20 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row>
-            <v-col>
-              {{ $t(`portion.as-served.serving.label`, { food: foodName }) }}
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <as-served-selector
-                :as-served-set-id="servingImageSet"
-                :initial-object="portionSize.serving ?? undefined"
-                @confirm="confirmServing"
-                @update="updateServing"
-              ></as-served-selector>
-            </v-col>
-          </v-row>
+          <p>{{ $t(`portion.as-served.serving.label`, { food: foodName }) }}</p>
+          <as-served-selector
+            v-if="servingImageSet"
+            :as-served-set-id="servingImageSet"
+            :initial-object="portionSize.serving ?? undefined"
+            @confirm="confirmServing"
+            @update="updateServing"
+          ></as-served-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="!disabledLeftovers && leftoverImageSet">
+      <v-expansion-panel
+        v-if="!disabledLeftovers && leftoverImageSet"
+        :disabled="!servingImageConfirmed"
+      >
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.as-served.leftovers.header`, { food: foodName }) }}
           <template #actions>
@@ -70,25 +66,17 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <p>{{ $t(`portion.as-served.leftovers.question`, { food: foodName }) }}</p>
-          <yes-no-toggle v-model="leftoversPrompt" @change="update"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <v-row>
-              <v-col>
-                {{ $t(`portion.as-served.leftovers.label`, { food: foodName }) }}
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <as-served-selector
-                  :as-served-set-id="leftoverImageSet"
-                  :initial-object="portionSize.leftovers ?? undefined"
-                  :max-weight="portionSize.serving?.weight"
-                  type="leftovers"
-                  @confirm="confirmLeftovers"
-                  @update="updateLeftovers"
-                ></as-served-selector>
-              </v-col>
-            </v-row>
+            <p>{{ $t(`portion.as-served.leftovers.label`, { food: foodName }) }}</p>
+            <as-served-selector
+              :as-served-set-id="leftoverImageSet"
+              :initial-object="portionSize.leftovers ?? undefined"
+              :max-weight="portionSize.serving?.weight"
+              type="leftovers"
+              @confirm="confirmLeftovers"
+              @update="updateLeftovers"
+            ></as-served-selector>
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>

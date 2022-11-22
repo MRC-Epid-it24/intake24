@@ -26,7 +26,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <!-- Step 1: Select Serving Weight ml-->
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.serving.header`, { food: foodName }) }}
           <template #actions>
@@ -39,11 +39,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row>
-            <v-col>
-              {{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}
-            </v-col>
-          </v-row>
+          <p>{{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
           <drink-scale-panel
             v-if="scale"
             v-model="portionSize.fillLevel"
@@ -55,7 +51,7 @@
           </drink-scale-panel>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="!disabledLeftovers">
+      <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: foodName }) }}
           <template #actions>
@@ -72,28 +68,20 @@
         <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
           <p>{{ $t(`portion.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
-          <yes-no-toggle v-model="leftoversPrompt" @change="update"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <v-row>
-              <v-col>
-                {{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <drink-scale-panel
-                  v-if="scale"
-                  v-model="portionSize.leftoversLevel"
-                  :max-fill-level="portionSize.fillLevel"
-                  :open="panel === 2"
-                  :scale="scale"
-                  type="leftovers"
-                  @confirm="confirmLeftovers"
-                  @input="updateLeftovers"
-                >
-                </drink-scale-panel>
-              </v-col>
-            </v-row>
+            <p>{{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
+            <drink-scale-panel
+              v-if="scale"
+              v-model="portionSize.leftoversLevel"
+              :max-fill-level="portionSize.fillLevel"
+              :open="panel === 2"
+              :scale="scale"
+              type="leftovers"
+              @confirm="confirmLeftovers"
+              @input="updateLeftovers"
+            >
+            </drink-scale-panel>
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>

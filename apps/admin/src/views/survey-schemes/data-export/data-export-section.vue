@@ -80,7 +80,7 @@
               hide-details="auto"
               :label="$t('survey-schemes.data-export.fields.label')"
               outlined
-              prepend-inner-icon="fas fa-search"
+              prepend-inner-icon="$search"
             ></v-text-field>
             <v-list two-line>
               <transition-group name="drag-and-drop" type="transition">

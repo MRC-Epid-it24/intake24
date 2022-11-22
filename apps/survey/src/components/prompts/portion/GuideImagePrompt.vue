@@ -56,7 +56,7 @@
           </guide-image-selector-mobile>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.quantity`, { food: foodName }) }}
           <template #actions>

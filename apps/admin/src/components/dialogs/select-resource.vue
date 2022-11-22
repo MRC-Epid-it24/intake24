@@ -15,7 +15,7 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          append-icon="fas fa-search"
+          append-icon="$search"
           class="mb-4"
           clearable
           hide-details="auto"

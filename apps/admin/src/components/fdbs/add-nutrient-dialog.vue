@@ -33,7 +33,7 @@
           <v-col cols="12">
             <v-text-field
               v-model="search"
-              append-icon="fas fa-search"
+              append-icon="$search"
               class="mb-4"
               clearable
               hide-details="auto"

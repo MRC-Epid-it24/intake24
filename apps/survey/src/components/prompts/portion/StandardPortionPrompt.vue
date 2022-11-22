@@ -30,7 +30,7 @@
           </v-radio-group>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!unitValid">
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
             v-if="portionSize.unit"

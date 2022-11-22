@@ -8,7 +8,7 @@
         <v-col cols="12" sm>
           <v-text-field
             v-model="search"
-            append-icon="fas fa-search"
+            append-icon="$search"
             clearable
             dense
             hide-details="auto"

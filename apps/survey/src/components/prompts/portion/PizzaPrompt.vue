@@ -38,7 +38,7 @@
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!confirmed.pizzaType">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.sizeLabel`) }}
           <template #actions>
@@ -70,7 +70,7 @@
           </image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!confirmed.sliceType">
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`portion.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
@@ -256,7 +256,11 @@ export default defineComponent({
         this.confirmType('quantity', false);
       }
 
-      if (type === 'sliceType' && !this.isMobile) this.confirmType(type);
+      if (type === 'sliceType') {
+        this.confirmType('quantity', false);
+
+        if (!this.isMobile) this.confirmType(type);
+      }
     },
 
     selectQuantity() {

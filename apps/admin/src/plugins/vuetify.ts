@@ -21,6 +21,7 @@ export default new Vuetify({
       logout: 'fas fa-sign-out-alt',
       options: 'fas fa-ellipsis-vertical',
       read: 'far fa-file',
+      search: 'fas fa-magnifying-glass',
       save: 'fas fa-save',
       user: 'fas fa-user-circle',
       // Resource icons

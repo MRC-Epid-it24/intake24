@@ -1,19 +1,11 @@
 <template>
-  <div
-    class="d-flex"
-    style="
-       {
-        width: 100%;
-        height: 100%;
-      }
-    "
-  >
+  <div class="d-flex img-placeholder">
     <v-progress-circular
       class="ma-auto"
       color="primary"
       indeterminate
-      :size="100"
-      :width="10"
+      :size="size"
+      :width="width"
     ></v-progress-circular>
   </div>
 </template>
@@ -37,4 +29,9 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.img-placeholder {
+  width: 100%;
+  height: 100%;
+}
+</style>

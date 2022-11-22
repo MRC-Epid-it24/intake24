@@ -3,19 +3,23 @@
     v-bind="{ actions, description, text: promptTitle, food, meal, isValid }"
     @action="action"
   >
-    <v-text-field v-model="searchTerm" @change="search"></v-text-field>
-    <v-progress-circular v-if="requestInProgress" indeterminate></v-progress-circular>
+    <v-text-field
+      v-model="searchTerm"
+      clearable
+      hide-details="auto"
+      label="Search food"
+      outlined
+      prepend-inner-icon="$search"
+      @change="search"
+    ></v-text-field>
+    <image-placeholder v-if="requestInProgress"></image-placeholder>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
-    <v-alert
-      v-if="searchResults != null && searchResults.foods.length === 0"
-      prominent
-      type="warning"
-    >
+    <v-alert v-if="searchResults && !searchResults.foods.length" prominent type="warning">
       <p>{{ $t('prompts.foodBrowser.empty', { searchTerm }) }}</p>
       <p>{{ $t('prompts.foodBrowser.reword') }}</p>
     </v-alert>
     <food-search-results
-      v-if="searchResults != null"
+      v-if="searchResults"
       :results="searchResults"
       @food-selected="onFoodSelected"
     ></food-search-results>
@@ -28,7 +32,7 @@ import { defineComponent } from 'vue';
 
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import { FoodSearchResults } from '@intake24/survey/components/elements';
+import { FoodSearchResults, ImagePlaceholder } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -37,7 +41,7 @@ import createBasePrompt from '../createBasePrompt';
 export default defineComponent({
   name: 'FoodSearchPrompt',
 
-  components: { FoodSearchResults },
+  components: { FoodSearchResults, ImagePlaceholder },
 
   mixins: [createBasePrompt<FoodSearchPromptProps>()],
 

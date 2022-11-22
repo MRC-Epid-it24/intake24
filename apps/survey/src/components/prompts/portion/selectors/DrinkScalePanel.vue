@@ -1,36 +1,32 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <div class="drink-scale-drawer" @mousedown="touchUpdateSlider">
-          <v-img ref="imgDrink" v-resize="onImgResize" :src="scale.baseImageUrl">
-            <template #placeholder>
-              <image-placeholder></image-placeholder>
-            </template>
-          </v-img>
-          <v-img
-            class="drink-scale-image-overlay"
-            :src="scale.overlayImageUrl"
-            :style="overlayBackground"
-          >
-          </v-img>
-          <div class="drink-scale-image-slider mx-5" :style="{ bottom: sliderBottom }">
-            <v-slider
-              v-model="sliderValue"
-              color="blue darken-4"
-              :height="sliderHeight"
-              :max="sliderMax"
-              :min="sliderMin"
-              thumb-color="primary"
-              vertical
-            ></v-slider>
-          </div>
-          <div class="drink-scale-image-label">
-            <v-chip class="ma-2 font-weight-medium">{{ label }}</v-chip>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+  <div>
+    <div class="drink-scale-drawer mb-4" @mousedown="touchUpdateSlider">
+      <v-img ref="imgDrink" v-resize="onImgResize" :src="scale.baseImageUrl">
+        <template #placeholder>
+          <image-placeholder></image-placeholder>
+        </template>
+      </v-img>
+      <v-img
+        class="drink-scale-image-overlay"
+        :src="scale.overlayImageUrl"
+        :style="overlayBackground"
+      >
+      </v-img>
+      <div class="drink-scale-image-slider mx-5" :style="{ bottom: sliderBottom }">
+        <v-slider
+          v-model="sliderValue"
+          color="blue darken-4"
+          :height="sliderHeight"
+          :max="sliderMax"
+          :min="sliderMin"
+          thumb-color="primary"
+          vertical
+        ></v-slider>
+      </div>
+      <div class="drink-scale-image-label">
+        <v-chip class="ma-2 font-weight-medium">{{ label }}</v-chip>
+      </div>
+    </div>
     <v-row>
       <v-col>
         <v-btn block :disabled="sliderValue <= sliderMin" @click="updateSlider(-10)">
@@ -42,13 +38,13 @@
           {{ $t(`portion.drink-scale.${type}.more`) }}
         </v-btn>
       </v-col>
-      <v-col align="center" md="4" xs="12">
+      <v-col align="center" cols="12" md="4">
         <v-btn block color="success" @click="confirm">
           {{ $t(`portion.as-served.${type}.confirm`) }}
         </v-btn>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">

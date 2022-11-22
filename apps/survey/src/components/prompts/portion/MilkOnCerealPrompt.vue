@@ -25,7 +25,7 @@
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel>
+      <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
           <template #actions>

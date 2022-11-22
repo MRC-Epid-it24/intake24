@@ -12,36 +12,27 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-row>
-            <v-col>
-              <v-radio-group
-                v-model="portionSize.milkVolumePercentage"
-                :column="orientation === 'column'"
-                :error="hasErrors"
-                hide-details="auto"
-                :row="orientation === 'row'"
-                @change="clearErrors"
-              >
-                <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
-                  <template #label>
-                    {{ option.label }}
-                    <v-spacer></v-spacer>
-                    <quantity-badge
-                      :amount="Number(option.value) * parentServing"
-                      unit="ml"
-                      :valid="true"
-                    ></quantity-badge>
-                  </template>
-                </v-radio>
-              </v-radio-group>
-              <v-messages
-                v-show="hasErrors"
-                v-model="errors"
-                class="mt-3"
-                color="error"
-              ></v-messages>
-            </v-col>
-          </v-row>
+          <v-radio-group
+            v-model="portionSize.milkVolumePercentage"
+            :column="orientation === 'column'"
+            :error="hasErrors"
+            hide-details="auto"
+            :row="orientation === 'row'"
+            @change="clearErrors"
+          >
+            <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
+              <template #label>
+                {{ option.label }}
+                <v-spacer></v-spacer>
+                <quantity-badge
+                  :amount="Number(option.value) * parentServing"
+                  unit="ml"
+                  :valid="true"
+                ></quantity-badge>
+              </template>
+            </v-radio>
+          </v-radio-group>
+          <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>

@@ -58,7 +58,7 @@
           {{ $t(`portion.as-served.${type}.more`) }}
         </v-btn>
       </v-col>
-      <v-col align="center" md="4" xs="12">
+      <v-col align="center" cols="12" md="4">
         <v-btn block color="success" @click="confirm">
           {{ $t(`portion.as-served.${type}.confirm`) }}
         </v-btn>

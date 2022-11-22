@@ -9,7 +9,7 @@
           :title="$t('feedback-schemes.preview.title')"
           v-on="on"
         >
-          <v-icon left>fas fa-magnifying-glass</v-icon>
+          <v-icon left>$search</v-icon>
           {{ $t('feedback-schemes.preview._') }}
         </v-btn>
       </slot>

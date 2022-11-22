@@ -48,7 +48,7 @@
               hide-details="auto"
               :label="$t('nutrient-types._')"
               outlined
-              prepend-inner-icon="fas fa-search"
+              prepend-inner-icon="$search"
             ></v-text-field>
             <v-list>
               <transition-group name="drag-and-drop" type="transition">

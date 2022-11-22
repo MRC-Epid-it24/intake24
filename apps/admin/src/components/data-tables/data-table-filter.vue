@@ -4,13 +4,13 @@
       <v-col cols="12">
         <v-text-field
           v-model="filter.search"
-          append-icon="fas fa-search"
           clearable
           hide-details="auto"
           :label="$t('common.search._')"
           outlined
-          @click:append="setFilter"
+          prepend-inner-icon="$search"
           @click:clear="resetFilter"
+          @click:prepend="setFilter"
           @keyup.enter="setFilter"
         >
         </v-text-field>
