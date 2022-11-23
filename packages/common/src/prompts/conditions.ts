@@ -1,12 +1,6 @@
 import type { Dictionary } from '../types/common';
 
-export const conditionTypes = [
-  'surveyPromptAnswer',
-  'mealPromptAnswer',
-  'foodPromptAnswer',
-  'recallNumber',
-  'totalEnergy',
-] as const;
+export const conditionTypes = ['drinks', 'energy', 'promptAnswer', 'recallNumber'] as const;
 
 export type ConditionType = typeof conditionTypes[number];
 

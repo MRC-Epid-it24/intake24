@@ -286,7 +286,9 @@ export default defineComponent({
             this.currentPrompt = null;
           }
         } else {
-          console.debug(`Switching prompt to ${nextPrompt.prompt.component}`);
+          console.debug(
+            `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`
+          );
           this.currentPrompt = nextPrompt;
         }
       }

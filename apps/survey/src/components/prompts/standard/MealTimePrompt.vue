@@ -29,8 +29,8 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="cancel">
-        <span class="text-overline font-weight-medium" @click.stop="action('cancel')">
+      <v-btn value="cancel" @click.stop="action('cancel')">
+        <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.remove') }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>

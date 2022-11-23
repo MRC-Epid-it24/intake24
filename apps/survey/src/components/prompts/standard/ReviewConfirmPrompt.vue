@@ -79,6 +79,12 @@ export default defineComponent({
     },
   },
 
+  computed: {
+    isValid(): boolean {
+      return true;
+    },
+  },
+
   methods: {
     chooseMeal(mealId: number, name: string, foods: FoodState[], entity: string) {
       this.$emit('meal-selected', { mealId, name, foods, entity });

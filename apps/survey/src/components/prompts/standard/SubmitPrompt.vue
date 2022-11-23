@@ -6,14 +6,14 @@
       </next>
     </template>
     <template #nav-actions>
-      <v-btn value="addMeal">
+      <v-btn value="addMeal" @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.addMeal') }}
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="review">
+      <v-btn value="review" @click.stop="action('review')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.review') }}
         </span>

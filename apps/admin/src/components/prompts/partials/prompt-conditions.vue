@@ -33,7 +33,7 @@
           </v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <v-select
                   v-model="condition.type"
                   hide-details="auto"
@@ -41,7 +41,7 @@
                   :items="conditionSelectList"
                   :label="$t('survey-schemes.conditions.types._')"
                   outlined
-                  @change="updatePromptCondition"
+                  @change="updatePromptCondition(idx, $event)"
                 ></v-select>
               </v-col>
               <v-col cols="12" md="6">
@@ -71,8 +71,8 @@
                   outlined
                 ></v-text-field>
               </v-col>
-              <component :is="condition.type" v-bind.sync="condition.props"></component>
             </v-row>
+            <component :is="condition.type" v-bind.sync="condition.props"></component>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -110,37 +110,32 @@ const opToIconMap: Record<ConditionOp, string> = {
 
 const promptConditions: Condition[] = [
   {
-    type: 'surveyPromptAnswer',
+    type: 'drinks',
     op: 'eq',
     value: '',
     props: {
-      promptId: '',
+      section: 'survey',
     },
   },
   {
-    type: 'mealPromptAnswer',
+    type: 'energy',
     op: 'eq',
     value: '',
     props: {
-      promptId: '',
+      section: 'survey',
     },
   },
   {
-    type: 'foodPromptAnswer',
+    type: 'promptAnswer',
     op: 'eq',
     value: '',
     props: {
       promptId: '',
+      section: 'survey',
     },
   },
   {
     type: 'recallNumber',
-    op: 'eq',
-    value: '',
-    props: {},
-  },
-  {
-    type: 'totalEnergy',
     op: 'eq',
     value: '',
     props: {},

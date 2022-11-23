@@ -146,9 +146,9 @@ import { copy, randomString } from '@intake24/common/util';
 export const defaultAction: ActionItem = {
   type: 'next',
   text: { en: '' },
-  label: { en: '' },
-  color: 'primary',
-  icon: '',
+  label: {},
+  color: '',
+  icon: '$next',
   layout: [],
 };
 

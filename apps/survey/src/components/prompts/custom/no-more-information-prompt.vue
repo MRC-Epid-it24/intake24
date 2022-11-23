@@ -49,7 +49,6 @@
           {{ $t('prompts.editMeal.delete.confirm', { item: localeMealName }) }}
         </confirm-dialog>
         <v-btn
-          v-if="meal"
           :block="isMobile"
           class="px-5"
           large

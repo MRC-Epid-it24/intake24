@@ -50,6 +50,10 @@ export default defineComponent({
   },
 
   computed: {
+    foodOrMealId() {
+      return this.food?.id ?? this.meal?.id;
+    },
+
     desktopActions(): ActionItem[] {
       return this.actions.items.filter((action) => action.layout.includes('desktop'));
     },
@@ -100,13 +104,16 @@ export default defineComponent({
       this.$emit('update:navTab', type);
     },
 
-    action(type: string) {
-      if (!['addMeal', 'review'].includes(type)) return;
-
+    action(type: string, id?: number) {
       this.update(type);
-      this.$emit('action', type);
+      this.$emit('action', type, id);
     },
 
+    /*
+     * probably redundant at this point since nav actions is being handled by click rather than watching the navTab prop
+     * component -> nav -> is being rendered
+     * TODO remove
+     */
     next() {
       this.update('next');
       this.$emit('action', 'next');

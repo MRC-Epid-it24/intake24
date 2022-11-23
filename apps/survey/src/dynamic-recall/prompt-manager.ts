@@ -30,6 +30,35 @@ import {
   standardPortionComplete,
 } from './portion-size-checks';
 
+const foodEnergy = (energy: number, food: FoodState): number => {
+  if (food.type === 'free-text' || !food.portionSize) return energy;
+
+  const {
+    portionSize: { leftoversWeight, servingWeight },
+    data: { kcalPer100g },
+  } = food;
+  if (leftoversWeight === null || servingWeight === null) return energy;
+
+  energy += (kcalPer100g * (servingWeight - leftoversWeight)) / 100;
+
+  if (food.linkedFoods.length) energy += food.linkedFoods.reduce(foodEnergy, energy);
+
+  return energy;
+};
+
+const mealEnergy = (energy: number, meal: MealState): number =>
+  meal.foods.reduce(foodEnergy, energy);
+
+const surveyEnergy = (energy: number, meals: MealState[]): number =>
+  meals.reduce(mealEnergy, energy);
+
+const foodDrinks = (count: number, food: FoodState): number =>
+  food.type === 'encoded-food' && food.data.categories.includes('DRNK') ? ++count : count;
+
+const mealDrinks = (count: number, meal: MealState): number => meal.foods.reduce(foodDrinks, count);
+
+const surveyDrinks = (count: number, meals: MealState[]): number => meals.reduce(mealDrinks, count);
+
 const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
   if (store.user === null) {
     console.error('User information should not be null at this point');
@@ -37,9 +66,6 @@ const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
   }
   return conditionOps[condition.op]([condition.value, store.user.submissions + 1]);
 };
-
-const checkTotalEnergy = (store: SurveyStore, condition: Condition) =>
-  conditionOps[condition.op]([condition.value, store.getTotalEnergy()]);
 
 const showPrompt = (state: SurveyState, prompt: PromptQuestion, component: ComponentType) =>
   prompt.component === component;
@@ -62,15 +88,32 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: PromptQuestio
 const checkSurveyCustomConditions = (store: SurveyStore, prompt: PromptQuestion) =>
   prompt.props.conditions.every((condition) => {
     switch (condition.type) {
-      case 'surveyPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          store.data.customPromptAnswers[condition.props.promptId],
-        ]);
+      case 'drinks': {
+        if (condition.props.section === 'survey')
+          return conditionOps[condition.op]([condition.value, surveyDrinks(0, store.data.meals)]);
+
+        console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+        return false;
+      }
+      case 'energy': {
+        if (condition.props.section === 'survey')
+          return conditionOps[condition.op]([condition.value, surveyEnergy(0, store.data.meals)]);
+
+        console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+        return false;
+      }
+      case 'promptAnswer': {
+        if (condition.props.section === 'survey')
+          return conditionOps[condition.op]([
+            condition.value,
+            store.data.customPromptAnswers[condition.props.promptId],
+          ]);
+
+        console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+        return false;
+      }
       case 'recallNumber':
         return checkRecallNumber(store, condition);
-      case 'totalEnergy':
-        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -125,20 +168,47 @@ const checkMealCustomConditions = (
 ) =>
   prompt.props.conditions.every((condition) => {
     switch (condition.type) {
-      case 'surveyPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          store.data.customPromptAnswers[condition.props.promptId],
-        ]);
-      case 'mealPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          mealState.customPromptAnswers[condition.props.promptId],
-        ]);
+      case 'drinks': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([condition.value, surveyDrinks(0, store.data.meals)]);
+          case 'meal':
+            return conditionOps[condition.op]([condition.value, mealDrinks(0, mealState)]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
+      case 'energy': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([condition.value, surveyEnergy(0, store.data.meals)]);
+          case 'meal':
+            return conditionOps[condition.op]([condition.value, mealEnergy(0, mealState)]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
+      case 'promptAnswer': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([
+              condition.value,
+              store.data.customPromptAnswers[condition.props.promptId],
+            ]);
+          case 'meal':
+            return conditionOps[condition.op]([
+              condition.value,
+              mealState.customPromptAnswers[condition.props.promptId],
+            ]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
       case 'recallNumber':
         return checkRecallNumber(store, condition);
-      case 'totalEnergy':
-        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -429,25 +499,56 @@ const checkFoodCustomConditions = (
 ) =>
   prompt.props.conditions.every((condition) => {
     switch (condition.type) {
-      case 'surveyPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          store.data.customPromptAnswers[condition.props.promptId],
-        ]);
-      case 'mealPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          mealState.customPromptAnswers[condition.props.promptId],
-        ]);
-      case 'foodPromptAnswer':
-        return conditionOps[condition.op]([
-          condition.value,
-          foodState.customPromptAnswers[condition.props.promptId],
-        ]);
+      case 'drinks': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([condition.value, surveyDrinks(0, store.data.meals)]);
+          case 'meal':
+            return conditionOps[condition.op]([condition.value, mealDrinks(0, mealState)]);
+          case 'food':
+            return conditionOps[condition.op]([condition.value, foodDrinks(0, foodState)]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
+      case 'energy': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([condition.value, surveyEnergy(0, store.data.meals)]);
+          case 'meal':
+            return conditionOps[condition.op]([condition.value, mealEnergy(0, mealState)]);
+          case 'food':
+            return conditionOps[condition.op]([condition.value, foodEnergy(0, foodState)]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
+      case 'promptAnswer': {
+        switch (condition.props.section) {
+          case 'survey':
+            return conditionOps[condition.op]([
+              condition.value,
+              store.data.customPromptAnswers[condition.props.promptId],
+            ]);
+          case 'meal':
+            return conditionOps[condition.op]([
+              condition.value,
+              mealState.customPromptAnswers[condition.props.promptId],
+            ]);
+          case 'food':
+            return conditionOps[condition.op]([
+              condition.value,
+              foodState.customPromptAnswers[condition.props.promptId],
+            ]);
+          default:
+            console.error(`Unexpected condition: ${condition.type} & ${condition.props.section}`);
+            return false;
+        }
+      }
       case 'recallNumber':
         return checkRecallNumber(store, condition);
-      case 'totalEnergy':
-        return checkTotalEnergy(store, condition);
       default:
         console.error(`Unexpected condition type: ${condition.type}`);
         return false;
@@ -510,6 +611,7 @@ export default class PromptManager {
 
   nextFoodsPrompt(foodId: number): PromptQuestion | undefined {
     const state = this.store.$state;
+
     const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
     const foodState = getFoodByIndex(state.data.meals, foodIndex);
     const mealState = state.data.meals[foodIndex.mealIndex];

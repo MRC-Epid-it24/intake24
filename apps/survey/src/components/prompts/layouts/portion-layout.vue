@@ -38,7 +38,7 @@
               ? getLocaleContent(item.label)
               : getLocaleContent(item.text)
           "
-          @click="item.type === 'next' ? next() : action(item.type)"
+          @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
         >
           {{ getLocaleContent(item.text) }}
         </v-btn>
@@ -58,7 +58,6 @@
       fixed
       grow
       :value="navTab"
-      @change="action"
     >
       <template v-if="mobileActions.length">
         <template v-for="(item, idx) in mobileActions">
@@ -72,7 +71,7 @@
                 : getLocaleContent(item.text)
             "
             :value="item.type"
-            @click="item.type === 'next' ? next() : undefined"
+            @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
           >
             <span class="text-overline font-weight-medium">
               {{ getLocaleContent(item.text) }}
@@ -88,14 +87,14 @@
       </template>
       <template v-else>
         <slot name="nav-actions">
-          <v-btn value="addMeal">
+          <v-btn value="addMeal" @click.stop="action('addMeal')">
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.addMeal') }}
             </span>
             <v-icon class="pb-1">$add</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
-          <v-btn value="review">
+          <v-btn value="review" @click.stop="action('review')">
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.review') }}
             </span>

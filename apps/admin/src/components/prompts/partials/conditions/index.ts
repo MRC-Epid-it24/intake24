@@ -1,10 +1,10 @@
 import NoopProps from './noop-props.vue';
 import PromptAnswerProps from './prompt-answer-props.vue';
+import SectionProps from './section-props.vue';
 
 export default {
-  surveyPromptAnswer: PromptAnswerProps,
-  mealPromptAnswer: PromptAnswerProps,
-  foodPromptAnswer: PromptAnswerProps,
+  drinks: SectionProps,
+  energy: SectionProps,
+  promptAnswer: PromptAnswerProps,
   recallNumber: NoopProps,
-  totalEnergy: NoopProps,
 };

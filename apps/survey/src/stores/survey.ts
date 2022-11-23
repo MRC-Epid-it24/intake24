@@ -72,22 +72,6 @@ export interface FoodIndex {
   linkedFoodIndex: number | undefined;
 }
 
-export const getFoodEnergy = (energy: number, food: FoodState): number => {
-  if (food.type === 'free-text' || !food.portionSize) return energy;
-
-  const {
-    portionSize: { leftoversWeight, servingWeight },
-    data: { kcalPer100g },
-  } = food;
-  if (leftoversWeight === null || servingWeight === null) return energy;
-
-  energy += (kcalPer100g * (servingWeight - leftoversWeight)) / 100;
-
-  if (food.linkedFoods.length) energy += food.linkedFoods.reduce(getFoodEnergy, energy);
-
-  return energy;
-};
-
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
   if (parameters && !parameters.storeUserSessionOnServer) return false;
 
@@ -507,10 +491,6 @@ export const useSurvey = defineStore('survey', {
 
     getNextMealId(): number {
       return this.data.nextMealId++;
-    },
-
-    getTotalEnergy(): number {
-      return this.data.meals.reduce((acc, meal) => acc + meal.foods.reduce(getFoodEnergy, acc), 0);
     },
   },
 });
