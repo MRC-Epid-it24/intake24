@@ -154,12 +154,22 @@ export type PortionSizeStates = {
   };
   pizza: PortionSizeStateBase & {
     method: 'pizza';
-    imageUrl: string | null;
-    pizzaType?: number;
-    pizzaThickness?: number;
-    sliceImage: string | null;
-    sliceType?: number;
-    sliceQuantity: number;
+    type: {
+      id?: string;
+      index?: number;
+      image: string | null;
+    };
+    thickness: {
+      id?: string;
+      index?: number;
+      image: string | null;
+    };
+    slice: {
+      id?: string;
+      index?: number;
+      image: string | null;
+      quantity: number;
+    };
   };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';

@@ -51,21 +51,14 @@ export default defineComponent({
       portionSize: {
         method: 'pizza',
         imageUrl: null,
-        pizzaType: undefined,
-        pizzaThickness: undefined,
-        sliceImage: null,
-        sliceQuantity: 1,
-        sliceType: undefined,
+        type: { id: undefined, index: undefined },
+        thickness: { id: undefined, index: undefined },
+        slice: { id: undefined, index: undefined, image: null, quantity: 1 },
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
-      confirmed: {
-        pizzaType: false,
-        pizzaThickness: false,
-        sliceType: false,
-        quantity: false,
-      },
+      confirmed: { type: false, thickness: false, slice: false, quantity: false },
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(

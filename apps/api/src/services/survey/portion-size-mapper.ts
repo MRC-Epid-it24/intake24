@@ -20,20 +20,16 @@ export const asServedMapper = (
 ): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
   const { leftoversWeight, servingWeight, serving, leftovers } = state;
 
-  const leftoversChoiceIndex =
-    leftovers?.index !== undefined ? (leftovers.index + 1).toString() : '';
-  const servingChoiceIndex = serving?.index !== undefined ? (serving.index + 1).toString() : '';
-
   return [
     { foodId, name: 'leftovers', value: (!!leftovers).toString() },
     { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
     { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversChoiceIndex', value: leftoversChoiceIndex },
+    { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
     { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
     { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'servingChoiceIndex', value: servingChoiceIndex },
+    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
   ];
 };
 
@@ -53,10 +49,6 @@ export const cerealMapper = (
     leftovers,
   } = state;
 
-  const leftoversChoiceIndex =
-    leftovers?.index !== undefined ? (leftovers.index + 1).toString() : '';
-  const servingChoiceIndex = serving?.index !== undefined ? (serving.index + 1).toString() : '';
-
   return [
     { foodId, name: 'bowl', value: bowl ?? '' },
     { foodId, name: 'bowlId', value: bowlId?.toString() ?? '' },
@@ -66,11 +58,11 @@ export const cerealMapper = (
     { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
     { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversChoiceIndex', value: leftoversChoiceIndex },
+    { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
     { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
     { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'servingChoiceIndex', value: servingChoiceIndex },
+    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
     { foodId, name: 'type', value: type },
   ];
 };
@@ -178,6 +170,44 @@ export const milkOnCerealMapper = (
   ];
 };
 
+export const pizzaPortionMapper = (
+  foodId: string,
+  state: PortionSizeStates['pizza']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const { type, thickness, slice, leftoversWeight, servingWeight } = state;
+
+  return [
+    { foodId, name: 'typeId', value: type.id ?? '' },
+    { foodId, name: 'typeIndex', value: type.index?.toString() ?? '' },
+    { foodId, name: 'typeImage', value: type.image ?? '' },
+    { foodId, name: 'thicknessId', value: thickness.id ?? '' },
+    { foodId, name: 'thicknessIndex', value: thickness.index?.toString() ?? '' },
+    { foodId, name: 'thicknessImage', value: type.image ?? '' },
+    { foodId, name: 'sliceId', value: slice.id ?? '' },
+    { foodId, name: 'sliceIndex', value: slice.index?.toString() ?? '' },
+    { foodId, name: 'sliceImage', value: slice.image ?? '' },
+    { foodId, name: 'sliceQuantity', value: slice.quantity?.toString() ?? '' },
+    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ];
+};
+
+export const standardPortionMapper = (
+  foodId: string,
+  state: PortionSizeStates['standard-portion']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const { quantity, unit, leftoversWeight, servingWeight } = state;
+
+  return [
+    { foodId, name: 'quantity', value: quantity.toString() },
+    { foodId, name: 'unitName', value: unit?.name ?? '' },
+    { foodId, name: 'unitWeight', value: unit?.weight.toString() ?? '' },
+    { foodId, name: 'unitOmitFoodDescription', value: unit?.omitFoodDescription.toString() ?? '' },
+    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ];
+};
+
 export const portionSizeMappers: Record<
   keyof PortionSizeStates,
   (...arg: any[]) => SurveySubmissionPortionSizeFieldCreationAttributes[]
@@ -188,8 +218,8 @@ export const portionSizeMappers: Record<
   'guide-image': guideImageMapper,
   'milk-in-a-hot-drink': milkInAHotDrinkMapper,
   'milk-on-cereal': milkOnCerealMapper,
-  pizza: genericMapper,
-  'standard-portion': genericMapper,
+  pizza: pizzaPortionMapper,
+  'standard-portion': standardPortionMapper,
   weight: genericMapper,
 };
 
