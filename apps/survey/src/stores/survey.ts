@@ -446,7 +446,7 @@ export const useSurvey = defineStore('survey', {
       this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });
     },
 
-    deleteFood(data: { foodId: number }) {
+    deleteFood(foodId: number) {
       /*
       Undo system needs review & a more general solution
 
@@ -460,7 +460,7 @@ export const useSurvey = defineStore('survey', {
         };
       }*/
 
-      const foodIndex = getFoodIndexRequired(this.data.meals, data.foodId);
+      const foodIndex = getFoodIndexRequired(this.data.meals, foodId);
 
       if (foodIndex.linkedFoodIndex === undefined) {
         this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);

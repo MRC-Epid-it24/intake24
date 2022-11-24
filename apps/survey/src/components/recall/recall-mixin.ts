@@ -114,7 +114,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['deleteMeal']),
+    ...mapActions(useSurvey, ['deleteFood', 'deleteMeal']),
 
     setSelection(newSelection: Selection) {
       if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
@@ -191,6 +191,14 @@ export default defineComponent({
           this.mealAction({ type, mealId: id });
           break;
         case 'deleteFood':
+          if (id === undefined) {
+            console.warn('Recall: Food id must be defined for food action.', type, id);
+            return;
+          }
+
+          this.deleteFood(id);
+          await this.nextPrompt();
+          break;
         default:
           console.warn(`Recall: Unknown action type: ${type}`);
       }

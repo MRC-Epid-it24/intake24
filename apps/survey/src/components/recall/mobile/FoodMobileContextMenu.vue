@@ -106,7 +106,7 @@ export default defineComponent({
     },
 
     onDelete() {
-      this.deleteFood({ foodId: this.foodId });
+      this.deleteFood(this.foodId);
       this.$emit('close');
     },
 
