@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h2 font-weight-medium text-center mb-6">
+    <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.topFoods.title') }}
     </h2>
     <v-row class="d-print-none" justify="center" no-gutters>
@@ -152,6 +152,11 @@ export default defineComponent({
 }
 
 @media print {
+  .chart-print-title {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
   .chart-print-wrapper {
     page-break-inside: avoid;
     break-inside: avoid;
