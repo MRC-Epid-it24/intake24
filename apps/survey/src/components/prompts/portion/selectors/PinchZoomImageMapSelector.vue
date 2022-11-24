@@ -1,6 +1,9 @@
 <template>
-  <v-bottom-sheet v-model="showMenu" persistent>
-    <v-sheet class="text-center pa-3" :height="height">
+  <v-bottom-sheet v-model="dialog" persistent>
+    <template #activator="{ on, attrs }">
+      <slot name="activator" v-bind="{ on, attrs }"> </slot>
+    </template>
+    <v-sheet class="text-center pa-3" :heigh="height">
       <v-row dense no-gutter>
         <v-col cols="12">
           <PinchScrollZoom
@@ -11,16 +14,19 @@
             style="border: 1px solid grey"
             :width="width * 0.95"
           >
+            <div v-if="size" class="size">
+              <v-chip class="font-weight-medium">{{ size }}</v-chip>
+            </div>
             <img :src="imageMapData.baseImageUrl" :width="width" />
             <svg ref="svg" v-bind="{ height, width }">
               <polygon
-                v-for="(polygon, idx) in polygons"
+                v-for="(object, idx) in objects"
                 :key="idx"
                 class="guide-drawer-polygon"
                 :class="{ active: idx === value }"
-                :points="polygon"
-                @click.stop="$emit('input', idx)"
-                @keypress.stop="$emit('input', idx)"
+                :points="object.polygon"
+                @click.stop="select(idx, object.id)"
+                @keypress.stop="select(idx, object.id)"
               ></polygon>
             </svg>
           </PinchScrollZoom>
@@ -48,64 +54,84 @@ import { defineComponent, ref } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
 
+export type ImageMapObject = {
+  id: string;
+  polygon: string;
+};
+
 export default defineComponent({
-  name: 'GuideImageSelectorMobile',
+  name: 'PinchZoomImageMapSelector',
 
   components: { PinchScrollZoom },
 
   props: {
-    show: {
-      type: Boolean,
-      required: true,
-      default: true,
-    },
-    imageMapData: {
-      type: Object as PropType<ImageMapResponse>,
-      required: true,
-    },
-    width: {
-      type: Number,
-      required: true,
+    id: {
+      type: String,
     },
     height: {
       type: Number,
       required: true,
     },
+    imageMapData: {
+      type: Object as PropType<ImageMapResponse>,
+      required: true,
+    },
+    sizes: {
+      type: Array as PropType<string[]>,
+      default: () => [],
+    },
     value: {
       type: Number,
+    },
+    width: {
+      type: Number,
+      required: true,
     },
   },
 
   setup() {
+    const dialog = ref(false);
     const zoomer = ref<InstanceType<typeof PinchScrollZoom>>();
+
+    const hoverValue = ref<number | undefined>(undefined);
+
     return {
+      dialog,
+      hoverValue,
       scale: 1,
       zoomer,
     };
   },
 
   computed: {
-    showMenu(): boolean {
-      return this.show;
-    },
-
-    polygons(): string[] {
+    objects(): ImageMapObject[] {
       const { width } = this;
 
-      return this.imageMapData.objects.map((object) => {
-        return chunk(
+      return this.imageMapData.objects.map((object) => ({
+        id: object.id,
+        polygon: chunk(
           object.outline.map((coord) => coord * width),
           2
         )
           .map((node) => node.join(','))
-          .join(' ');
-      });
+          .join(' '),
+      }));
+    },
+
+    size(): string | undefined {
+      if (!this.sizes.length || (this.hoverValue === undefined && this.value === undefined))
+        return undefined;
+
+      const idx = this.hoverValue ?? this.value;
+      if (idx === undefined) return undefined;
+
+      return this.sizes[idx];
     },
   },
 
   methods: {
     resetScale() {
-      (this.zoomer as PinchScrollZoom).setData({
+      this.zoomer?.setData({
         scale: 1,
         originX: 0,
         originY: 0,
@@ -114,45 +140,16 @@ export default defineComponent({
       });
     },
 
+    select(idx: number, id: string) {
+      this.$emit('select', idx, id);
+    },
+
     confirm() {
+      this.dialog = false;
       this.$emit('confirm');
     },
   },
 });
 </script>
 
-<style lang="scss" scoped>
-.guide-drawer {
-  position: relative;
-
-  .label {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 2;
-  }
-
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-
-    .guide-drawer-polygon {
-      cursor: pointer;
-      fill: transparent;
-
-      &.active,
-      &:hover {
-        fill: #0d47a1;
-        fill-opacity: 0.4;
-        stroke-width: 8;
-        stroke: #0d47a1;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-opacity: 0.5;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

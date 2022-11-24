@@ -127,7 +127,7 @@ export function milkOnCerealComplete(selectedFood: FoodState): boolean {
 
     return (
       selectedFood.portionSize.bowlIndex !== undefined &&
-      selectedFood.portionSize.milkLevelChoice !== undefined
+      selectedFood.portionSize.milkLevelIndex !== undefined
     );
   }
 

@@ -111,6 +111,7 @@ export type PortionSizeStates = {
     imageUrl: string | null;
     type: CerealType;
     bowl: string | null;
+    bowlId?: string;
     bowlIndex?: number;
     serving: SelectedAsServedImage | null;
     leftovers: SelectedAsServedImage | null;
@@ -121,6 +122,7 @@ export type PortionSizeStates = {
     initialFillLevel: number;
     skipFillLevel: boolean;
     imageUrl: string;
+    containerId?: string;
     containerIndex?: number;
     fillLevel: number;
     leftoversLevel: number;
@@ -130,6 +132,7 @@ export type PortionSizeStates = {
     method: 'guide-image';
     guideImageId: string;
     imageUrl: string | null;
+    objectId?: string;
     objectIndex?: number;
     objectWeight: number;
     quantity: number;
@@ -143,8 +146,10 @@ export type PortionSizeStates = {
     method: 'milk-on-cereal';
     imageUrl: string | null;
     bowl: string | null;
+    bowlId?: string;
     bowlIndex?: number;
-    milkLevelChoice?: number;
+    milkLevelId?: string;
+    milkLevelIndex?: number;
     milkLevelImage: string | null;
   };
   pizza: PortionSizeStateBase & {

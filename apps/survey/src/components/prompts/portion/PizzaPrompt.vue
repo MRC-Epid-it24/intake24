@@ -50,6 +50,7 @@
             v-if="imageMaps.sliceType"
             :disabled="portionSize.sliceType === undefined"
             :image-map-data="imageMaps.sliceType"
+            :pinch-zoom="false"
             :value="portionSize.sliceType ? portionSize.sliceType - 1 : undefined"
             @confirm="confirmType('sliceType')"
             @input="selectType('sliceType', $event + 1)"

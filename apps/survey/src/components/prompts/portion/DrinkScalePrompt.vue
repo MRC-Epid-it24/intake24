@@ -20,6 +20,7 @@
           <image-map-selector
             v-if="imageMapData"
             v-bind="{ imageMapData, sizes, value: portionSize.containerIndex }"
+            :id.sync="portionSize.containerId"
             @confirm="confirmObject"
             @input="selectObject"
           ></image-map-selector>
@@ -151,9 +152,12 @@ export default defineComponent({
     },
 
     scale() {
-      if (!this.drinkwareSetData || this.portionSize.containerIndex === undefined) return undefined;
+      const { containerId } = this.portionSize;
+      if (containerId === undefined) return undefined;
 
-      return this.drinkwareSetData.scales[this.portionSize.containerIndex];
+      return this.drinkwareSetData?.scales.find(
+        (scale) => scale.choiceId === parseInt(containerId, 10)
+      );
     },
 
     skipFillLevel() {
@@ -161,10 +165,16 @@ export default defineComponent({
     },
 
     sizes() {
-      if (!this.drinkwareSetData) return [];
+      return (
+        this.imageMapData?.objects.map(({ id }) => {
+          const match = this.drinkwareSetData?.scales.find(
+            ({ choiceId }) => choiceId === parseInt(id, 10)
+          );
 
-      return this.drinkwareSetData.scales.map(
-        (scale) => `${Math.round(scale.volumeSamples[scale.volumeSamples.length - 1].volume)} ml`
+          return match
+            ? `${Math.round(match.volumeSamples[match.volumeSamples.length - 1].volume)} ml`
+            : 'Missing';
+        }) ?? []
       );
     },
 
@@ -173,7 +183,11 @@ export default defineComponent({
     },
 
     objectValid() {
-      return this.portionSize.containerIndex !== undefined && this.objectConfirmed;
+      return (
+        this.portionSize.containerId !== undefined &&
+        this.portionSize.containerIndex !== undefined &&
+        this.objectConfirmed
+      );
     },
 
     quantityValid() {

@@ -60,6 +60,7 @@ export default defineComponent({
         initialFillLevel: 0.9,
         skipFillLevel: false,
         imageUrl: '',
+        containerId: undefined,
         containerIndex: undefined,
         fillLevel: 0,
         servingWeight: 0,

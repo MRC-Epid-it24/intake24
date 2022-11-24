@@ -19,41 +19,13 @@
           <image-map-selector
             v-if="guideImageData"
             v-bind="{ sizes }"
+            :id.sync="portionSize.objectId"
             :image-map-data="guideImageData.imageMap"
             :value="portionSize.objectIndex"
             @confirm="confirmObject"
             @input="selectObject"
           >
-            <template v-if="isNotDesktop" #label>
-              <v-btn
-                class="ma-2 font-weight-medium"
-                color="grey darken-3"
-                dark
-                icon
-                link
-                :title="$t(`portion.${portionSize.method}.expand`)"
-                @click="expandImage"
-              >
-                <v-icon
-                  aria-hidden="false"
-                  :aria-label="$t(`portion.${portionSize.method}.expand`)"
-                >
-                  $expandImage
-                </v-icon>
-              </v-btn>
-            </template>
           </image-map-selector>
-          <guide-image-selector-mobile
-            v-if="guideImageData"
-            :height="height"
-            :image-map-data="guideImageData?.imageMap"
-            :show="showMobileImageContext && isNotDesktop"
-            :value="portionSize.objectIndex ?? 0"
-            :width="width"
-            @confirm="confirmObject"
-            @input="selectObject"
-          >
-          </guide-image-selector-mobile>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
@@ -86,7 +58,7 @@ import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { GuideImageSelectorMobile, ImageMapSelector, QuantityCard } from './selectors';
+import { ImageMapSelector, QuantityCard } from './selectors';
 
 export interface GuideImagePromptState {
   portionSize: GuideImageState;
@@ -98,7 +70,7 @@ export interface GuideImagePromptState {
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { GuideImageSelectorMobile, ImageMapSelector, QuantityCard },
+  components: { ImageMapSelector, QuantityCard },
 
   mixins: [createBasePortion<GuideImagePromptProps, GuideImagePromptState>()],
 
@@ -120,9 +92,6 @@ export default defineComponent({
     return {
       guideImageData: null as GuideImageResponse | null,
       ...state,
-      showMobileImageContext: false,
-      width: 0,
-      height: 0,
     };
   },
 
@@ -137,7 +106,11 @@ export default defineComponent({
     },
 
     objectValid() {
-      return this.portionSize.objectIndex !== undefined && this.objectConfirmed;
+      return (
+        this.portionSize.objectId !== undefined &&
+        this.portionSize.objectIndex !== undefined &&
+        this.objectConfirmed
+      );
     },
 
     quantityValid() {
@@ -151,7 +124,6 @@ export default defineComponent({
 
   async mounted() {
     await this.fetchGuideImageData();
-    this.getScreenDimensions();
   },
 
   methods: {
@@ -164,12 +136,6 @@ export default defineComponent({
       this.portionSize.imageUrl = data.imageMap.baseImageUrl;
     },
 
-    getScreenDimensions() {
-      const { height, width } = window.screen;
-      this.height = height;
-      this.width = width;
-    },
-
     selectObject(idx: number) {
       this.portionSize.objectIndex = idx;
       this.objectConfirmed = false;
@@ -180,7 +146,6 @@ export default defineComponent({
       this.objectConfirmed = true;
       this.updatePanel();
       this.update();
-      this.showMobileImageContext = false;
     },
 
     selectQuantity() {
@@ -194,10 +159,6 @@ export default defineComponent({
 
     setErrors() {
       this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
-    expandImage() {
-      this.showMobileImageContext = !this.showMobileImageContext;
     },
 
     update() {

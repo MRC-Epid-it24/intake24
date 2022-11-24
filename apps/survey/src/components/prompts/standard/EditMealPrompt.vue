@@ -24,10 +24,10 @@
             v-on="on"
           >
             <v-icon left>$delete</v-icon>
-            {{ $t('prompts.editMeal.delete._', { meal: localMealName }) }}
+            {{ $t('prompts.editMeal.delete._', { item: localMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.editMeal.delete.confirm', { meal: localMealName }) }}
+        {{ $t('prompts.editMeal.delete.confirm', { item: localMealName }) }}
       </confirm-dialog>
       <next
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
@@ -38,7 +38,7 @@
     <template #nav-actions>
       <confirm-dialog
         color="warning"
-        :label="$t('prompts.editMeal.delete._', { meal: localMealName }).toString()"
+        :label="$t('prompts.editMeal.delete._', { item: localMealName }).toString()"
         @confirm="action('deleteMeal', meal?.id)"
       >
         <template #activator="{ on, attrs }">
@@ -49,7 +49,7 @@
             <v-icon class="pb-1">$delete</v-icon>
           </v-btn>
         </template>
-        {{ $t('prompts.editMeal.delete.confirm', { meal: localMealName }) }}
+        {{ $t('prompts.editMeal.delete.confirm', { item: localMealName }) }}
       </confirm-dialog>
       <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">

@@ -18,6 +18,7 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="bowlImageMap"
+            :id.sync="portionSize.bowlId"
             :image-map-data="bowlImageMap"
             :value="portionSize.bowlIndex"
             @confirm="confirmBowl"
@@ -35,8 +36,9 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="milkLevelImageMap"
+            :id.sync="portionSize.milkLevelId"
             :image-map-data="milkLevelImageMap"
-            :value="portionSize.milkLevelChoice"
+            :value="portionSize.milkLevelIndex"
             @confirm="confirmMilk"
             @input="selectMilk"
           ></image-map-selector>
@@ -128,6 +130,7 @@ export default defineComponent({
 
     bowlValid() {
       return !!(
+        this.portionSize.bowlId !== undefined &&
         this.portionSize.bowlIndex !== undefined &&
         this.portionSize.bowl &&
         this.bowlConfirmed
@@ -135,7 +138,11 @@ export default defineComponent({
     },
 
     milkLevelValid() {
-      return this.portionSize.milkLevelChoice !== undefined && this.milkLevelConfirmed;
+      return (
+        this.portionSize.milkLevelId !== undefined &&
+        this.portionSize.milkLevelIndex !== undefined &&
+        this.milkLevelConfirmed
+      );
     },
 
     validConditions(): boolean[] {
@@ -192,7 +199,8 @@ export default defineComponent({
     },
 
     clearMilk() {
-      this.portionSize.milkLevelChoice = undefined;
+      this.portionSize.milkLevelId = undefined;
+      this.portionSize.milkLevelIndex = undefined;
       this.milkLevelConfirmed = false;
     },
 
@@ -201,7 +209,7 @@ export default defineComponent({
     },
 
     selectMilk(idx: number) {
-      this.portionSize.milkLevelChoice = idx;
+      this.portionSize.milkLevelIndex = idx;
       this.milkLevelConfirmed = false;
       this.update();
     },
@@ -218,11 +226,11 @@ export default defineComponent({
 
     update() {
       const {
-        portionSize: { bowl, milkLevelChoice },
+        portionSize: { bowl, milkLevelIndex },
       } = this;
 
-      if (bowl && milkLevelChoice !== undefined)
-        this.portionSize.servingWeight = this.calculateMilkWeight(bowl as Bowl, milkLevelChoice);
+      if (bowl && milkLevelIndex !== undefined)
+        this.portionSize.servingWeight = this.calculateMilkWeight(bowl as Bowl, milkLevelIndex);
 
       const state: MilkOnCerealPromptState = {
         portionSize: this.portionSize,

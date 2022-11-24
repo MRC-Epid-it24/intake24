@@ -18,6 +18,7 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="bowlImageMap"
+            :id.sync="portionSize.bowlId"
             :image-map-data="bowlImageMap"
             :value="portionSize.bowlIndex"
             @confirm="confirmBowl"
@@ -172,6 +173,7 @@ export default defineComponent({
 
     bowlValid() {
       return !!(
+        this.portionSize.bowlId !== undefined &&
         this.portionSize.bowlIndex !== undefined &&
         this.portionSize.bowl &&
         this.bowlConfirmed

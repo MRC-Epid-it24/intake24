@@ -60,6 +60,7 @@ export default defineComponent({
         method: 'guide-image',
         guideImageId: '',
         imageUrl: null,
+        objectId: undefined,
         objectIndex: undefined,
         objectWeight: 0,
         quantity: 1,

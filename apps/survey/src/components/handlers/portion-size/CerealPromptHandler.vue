@@ -58,6 +58,7 @@ export default defineComponent({
         imageUrl: null,
         type: parameters.value.type,
         bowl: null,
+        bowlId: undefined,
         bowlIndex: undefined,
         serving: null,
         leftovers: null,

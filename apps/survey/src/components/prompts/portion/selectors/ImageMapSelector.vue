@@ -10,18 +10,48 @@
         <div v-if="size" class="size">
           <v-chip class="font-weight-medium">{{ size }}</v-chip>
         </div>
-        <div v-if="hasLabelSlot" class="label">
+        <div class="label">
           <slot name="label"></slot>
+          <pinch-zoom-image-map-selector
+            v-if="pinchZoom"
+            v-bind="{
+              id,
+              height: screenHeight,
+              imageMapData,
+              sizes,
+              value,
+              width: screenWidth,
+            }"
+            @confirm="confirm"
+            @select="select"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn
+                class="ma-2 font-weight-medium"
+                color="grey darken-3"
+                dark
+                icon
+                link
+                :title="$t(`portion.guide-image.expand`)"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon aria-hidden="false" :aria-label="$t(`portion.guide-image.expand`)">
+                  $expandImage
+                </v-icon>
+              </v-btn>
+            </template>
+          </pinch-zoom-image-map-selector>
         </div>
         <svg ref="svg">
           <polygon
-            v-for="(polygon, idx) in polygons"
+            v-for="(object, idx) in objects"
             :key="idx"
             class="guide-drawer-polygon"
             :class="{ active: idx === value }"
-            :points="polygon"
-            @click.stop="select(idx)"
-            @keypress.stop="select(idx)"
+            :points="object.polygon"
+            @click.stop="select(idx, object.id)"
+            @keypress.stop="select(idx, object.id)"
             @mouseleave="hoverValue = undefined"
             @mouseover="hoverValue = idx"
           ></polygon>
@@ -46,10 +76,17 @@ import { defineComponent, ref } from 'vue';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
+import PinchZoomImageMapSelector from './PinchZoomImageMapSelector.vue';
+
+export type ImageMapObject = {
+  id: string;
+  polygon: string;
+};
+
 export default defineComponent({
   name: 'ImageMapSelector',
 
-  components: { ImagePlaceholder },
+  components: { PinchZoomImageMapSelector, ImagePlaceholder },
 
   props: {
     disabled: {
@@ -59,9 +96,16 @@ export default defineComponent({
       type: Object as PropType<ImageMapResponse>,
       required: true,
     },
+    pinchZoom: {
+      type: Boolean,
+      default: true,
+    },
     sizes: {
       type: Array as PropType<string[]>,
       default: () => [],
+    },
+    id: {
+      type: String,
     },
     value: {
       type: Number,
@@ -81,6 +125,8 @@ export default defineComponent({
     return {
       height: 0,
       width: 0,
+      screenHeight: 0,
+      screenWidth: 0,
     };
   },
 
@@ -93,17 +139,18 @@ export default defineComponent({
       return !!this.$slots.label;
     },
 
-    polygons(): string[] {
+    objects(): ImageMapObject[] {
       const { width } = this;
 
-      return this.imageMapData.objects.map((object) => {
-        return chunk(
+      return this.imageMapData.objects.map((object) => ({
+        id: object.id,
+        polygon: chunk(
           object.outline.map((coord) => coord * width),
           2
         )
           .map((node) => node.join(','))
-          .join(' ');
-      });
+          .join(' '),
+      }));
     },
 
     size(): string | undefined {
@@ -123,7 +170,17 @@ export default defineComponent({
     }, 500);
   },
 
+  mounted() {
+    this.getScreenDimensions();
+  },
+
   methods: {
+    getScreenDimensions() {
+      const { height, width } = window.screen;
+      this.screenHeight = height;
+      this.screenWidth = width;
+    },
+
     onImgResize() {
       //@ts-expect-error fix debounced types
       this.debouncedGuideImgResize();
@@ -140,8 +197,9 @@ export default defineComponent({
       this.height = height;
     },
 
-    select(idx: number) {
+    select(idx: number, id: string) {
       this.$emit('input', idx);
+      this.$emit('update:id', id);
 
       if (!this.isMobile) this.confirm();
     },
@@ -153,9 +211,16 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .guide-drawer {
   position: relative;
+
+  .label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+  }
 
   .size {
     position: absolute;
@@ -163,13 +228,6 @@ export default defineComponent({
     left: 50%;
     z-index: 2;
     transform: translate(-50%);
-  }
-
-  .label {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 2;
   }
 
   svg {
