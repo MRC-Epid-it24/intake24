@@ -1,5 +1,12 @@
 @import "fontawesome";
 
+// ConfirmDialog wrapped actions buttons
+.v-card__actions {
+    > .v-btn + .v-dialog__container + .v-btn {
+        margin-left: 8px;
+    }
+}
+
 @media print {
     @page {
         size: A4;

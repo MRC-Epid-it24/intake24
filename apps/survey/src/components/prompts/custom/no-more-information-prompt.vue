@@ -6,7 +6,7 @@
     <template #actions>
       <confirm-dialog
         v-if="food"
-        color="warning"
+        color="error"
         :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
         @confirm="action('deleteFood', food?.id)"
       >
@@ -28,7 +28,7 @@
       </confirm-dialog>
       <template v-if="meal">
         <confirm-dialog
-          color="warning"
+          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
@@ -64,7 +64,7 @@
     <template #nav-actions>
       <template v-if="food">
         <confirm-dialog
-          color="warning"
+          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
           @confirm="action('deleteFood', food?.id)"
         >
@@ -88,7 +88,7 @@
       </template>
       <template v-if="meal">
         <confirm-dialog
-          color="warning"
+          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >

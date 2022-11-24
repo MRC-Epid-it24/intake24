@@ -8,7 +8,7 @@
     </v-col>
     <template #actions>
       <confirm-dialog
-        color="warning"
+        color="error"
         :label="$t('prompts.editMeal.delete._', { meal: localMealName }).toString()"
         @confirm="action('deleteMeal', meal?.id)"
       >
@@ -37,7 +37,7 @@
     </template>
     <template #nav-actions>
       <confirm-dialog
-        color="warning"
+        color="error"
         :label="$t('prompts.editMeal.delete._', { item: localMealName }).toString()"
         @confirm="action('deleteMeal', meal?.id)"
       >
