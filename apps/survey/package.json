@@ -28,7 +28,7 @@
     "helmet": "^6.0.0",
     "lodash": "^4.17.21",
     "pinia": "^2.0.26",
-    "pinia-plugin-persistedstate": "^2.4.0",
+    "pinia-plugin-persistedstate": "^3.0.1",
     "uuid": "^9.0.0",
     "vue": "^2.7.14",
     "vue-i18n": "^8.28.2",

@@ -24,7 +24,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "pinia": "^2.0.26",
-    "pinia-plugin-persistedstate": "^2.4.0",
+    "pinia-plugin-persistedstate": "^3.0.1",
     "svg-gauge": "^1.0.7",
     "vue": "^2.7.14",
     "vue-echarts": "^6.2.3",
