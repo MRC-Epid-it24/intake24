@@ -1,4 +1,5 @@
 import type { NavigationGuard } from 'vue-router';
+import { isAxiosError } from 'axios';
 
 import { useAuth, useSurvey } from '../stores';
 
@@ -8,9 +9,19 @@ export const feedbackParametersGuard: NavigationGuard = async (to, from, next) =
     params: { surveyId },
   } = to;
 
+  const auth = useAuth();
   const survey = useSurvey();
 
-  if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
+  try {
+    if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 403) {
+      await auth.logout(true);
+      next({ name: 'survey-login', params: { surveyId } });
+      return;
+    }
+    throw error;
+  }
 
   if (!survey.parametersLoaded) {
     next({ name: `${module}-error`, params: { surveyId } });
@@ -31,9 +42,19 @@ export const surveyParametersGuard: NavigationGuard = async (to, from, next) => 
     params: { surveyId },
   } = to;
 
+  const auth = useAuth();
   const survey = useSurvey();
 
-  if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
+  try {
+    if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 403) {
+      await auth.logout(true);
+      next({ name: 'survey-login', params: { surveyId } });
+      return;
+    }
+    throw error;
+  }
 
   if (!survey.parametersLoaded) {
     next({ name: `${module}-error`, params: { surveyId } });

@@ -58,7 +58,6 @@ export interface SurveyState {
   data: CurrentSurveyState;
   isSubmitting: boolean;
   undo: MealUndo | FoodUndo | null;
-  error: AxiosError | null;
 }
 
 export interface MealFoodIndex {
@@ -76,7 +75,7 @@ const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryRe
   if (parameters && !parameters.storeUserSessionOnServer) return false;
 
   const { startTime, submissionTime } = state;
-  if (!startTime || submissionTime) return false;
+  if (!startTime /*|| submissionTime*/) return false;
 
   // TODO: check old stale data
 
@@ -90,7 +89,6 @@ export const useSurvey = defineStore('survey', {
     data: surveyInitialState(),
     isSubmitting: false,
     undo: null,
-    error: null,
   }),
   debounce: {
     storeUserSession: 2500,
@@ -180,18 +178,18 @@ export const useSurvey = defineStore('survey', {
       loading.addItem('loadParameters');
 
       try {
-        const [surveyInfo, userInfo, userSession] = await Promise.all([
+        const [surveyInfo, userInfo] = await Promise.all([
           surveyService.surveyInfo(surveyId),
           surveyService.userInfo(surveyId),
-          surveyService.getUserSession(surveyId),
         ]);
 
         this.setParameters(surveyInfo);
         this.setUserInfo(userInfo);
+
+        if (!surveyInfo.storeUserSessionOnServer) return;
+
+        const userSession = await surveyService.getUserSession(surveyId);
         if (userSession) this.loadUserSession(userSession.sessionData);
-      } catch (err) {
-        if (axios.isAxiosError(err)) this.error = err;
-        else console.error(err);
       } finally {
         loading.removeItem('loadParameters');
       }
