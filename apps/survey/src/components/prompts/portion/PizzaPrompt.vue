@@ -14,9 +14,12 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMaps.type"
+            v-bind="{
+              config: imageMap,
+              imageMapData: imageMaps.type,
+              value: portionSize.type.index,
+            }"
             :id.sync="portionSize.type.id"
-            :image-map-data="imageMaps.type"
-            :value="portionSize.type.index"
             @confirm="confirmType('type')"
             @input="selectType('type', $event)"
           ></image-map-selector>
@@ -32,9 +35,12 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMaps.thickness"
+            v-bind="{
+              config: imageMap,
+              imageMapData: imageMaps.thickness,
+              value: portionSize.thickness.index,
+            }"
             :id.sync="portionSize.thickness.id"
-            :image-map-data="imageMaps.thickness"
-            :value="portionSize.thickness.index"
             @confirm="confirmType('thickness')"
             @input="selectType('thickness', $event)"
           ></image-map-selector>
@@ -50,11 +56,13 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMaps.slice"
+            v-bind="{
+              config: imageMap,
+              disabled: portionSize.slice.index === undefined,
+              imageMapData: imageMaps.slice,
+              value: portionSize.slice.index ? portionSize.slice.index - 1 : undefined,
+            }"
             :id.sync="portionSize.slice.id"
-            :disabled="portionSize.slice.index === undefined"
-            :image-map-data="imageMaps.slice"
-            :pinch-zoom="false"
-            :value="portionSize.slice.index ? portionSize.slice.index - 1 : undefined"
             @confirm="confirmType('slice')"
             @input="selectType('slice', $event + 1)"
           >

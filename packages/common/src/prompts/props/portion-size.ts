@@ -4,6 +4,16 @@ import type { PromptQuestion } from '..';
 import type { BasePromptProps, LocaleOptionList, RadioOrientation } from './base';
 import { basePromptProps } from './base';
 
+export type ImageMap = {
+  labels: boolean;
+  pinchZoom: boolean;
+};
+
+export const imageMap: ImageMap = {
+  labels: false,
+  pinchZoom: false,
+};
+
 export type PortionSizeOptionPromptProps = BasePromptProps;
 
 export interface AsServedPromptProps extends BasePromptProps {
@@ -11,24 +21,32 @@ export interface AsServedPromptProps extends BasePromptProps {
 }
 
 export interface CerealPromptProps extends BasePromptProps {
+  imageMap: ImageMap;
   leftovers: boolean;
 }
 export interface DrinkScalePromptProps extends BasePromptProps {
+  imageMap: ImageMap;
   leftovers: boolean;
 }
 
-export type GuideImagePromptProps = BasePromptProps;
+export interface GuideImagePromptProps extends BasePromptProps {
+  imageMap: ImageMap;
+}
 
 export type StandardPortionPromptProps = BasePromptProps;
 
-export type MilkOnCerealPromptProps = BasePromptProps;
+export interface MilkOnCerealPromptProps extends BasePromptProps {
+  imageMap: ImageMap;
+}
 
 export interface MilkInAHotDrinkPromptProps extends BasePromptProps {
   options: LocaleOptionList<number>;
   orientation: RadioOrientation;
 }
 
-export type PizzaPromptProps = BasePromptProps;
+export interface PizzaPromptProps extends BasePromptProps {
+  imageMap: ImageMap;
+}
 
 export type DirectWeightPromptProps = BasePromptProps;
 
@@ -41,18 +59,21 @@ export const asServedPromptDefaultProps: AsServedPromptProps = copy({
 export const cerealPromptDefaultProps: CerealPromptProps = copy({
   ...basePromptProps,
   name: { en: 'Cereal' },
+  imageMap,
   leftovers: true,
 });
 
 export const drinkScalePromptDefaultProps: DrinkScalePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Drink Scale' },
+  imageMap,
   leftovers: true,
 });
 
 export const guideImagePromptDefaultProps: GuideImagePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Guide image' },
+  imageMap,
 });
 
 export const milkInAHotDrinkPromptDefaultProps: MilkInAHotDrinkPromptProps = copy({
@@ -71,10 +92,12 @@ export const milkInAHotDrinkPromptDefaultProps: MilkInAHotDrinkPromptProps = cop
 export const milkOnCerealPromptDefaultProps: MilkOnCerealPromptProps = copy({
   ...basePromptProps,
   name: { en: 'Milk on cereal' },
+  imageMap,
 });
 
 export const pizzaPromptDefaultProps: PizzaPromptProps = copy({
   ...basePromptProps,
+  imageMap,
 });
 
 export const portionSizeOptionPromptDefaultProps: PortionSizeOptionPromptProps = copy({

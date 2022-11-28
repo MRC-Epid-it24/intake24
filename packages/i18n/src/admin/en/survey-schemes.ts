@@ -213,6 +213,11 @@ const surveySchemes: LocaleMessageObject = {
       _: 'Portion size',
       noQuestions: 'No portion size questions available for this section',
     },
+    imageMap: {
+      _: 'Image map settings',
+      labels: 'Show labels',
+      pinchZoom: `Show PinchZoom for mobile UI`,
+    },
     label: 'Options list label',
     leftovers: 'Allow leftovers',
     other: 'Allow custom other option',

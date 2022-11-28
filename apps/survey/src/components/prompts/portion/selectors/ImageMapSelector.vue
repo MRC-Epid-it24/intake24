@@ -13,7 +13,7 @@
         <div class="label">
           <slot name="label"></slot>
           <pinch-zoom-image-map-selector
-            v-if="pinchZoom"
+            v-if="config.pinchZoom && isMobile"
             v-bind="{
               id,
               height: screenHeight,
@@ -73,6 +73,7 @@ import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
+import type { ImageMap } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
@@ -89,16 +90,16 @@ export default defineComponent({
   components: { PinchZoomImageMapSelector, ImagePlaceholder },
 
   props: {
+    config: {
+      type: Object as PropType<ImageMap>,
+      required: true,
+    },
     disabled: {
       type: Boolean,
     },
     imageMapData: {
       type: Object as PropType<ImageMapResponse>,
       required: true,
-    },
-    pinchZoom: {
-      type: Boolean,
-      default: true,
     },
     sizes: {
       type: Array as PropType<string[]>,
@@ -154,7 +155,11 @@ export default defineComponent({
     },
 
     size(): string | undefined {
-      if (!this.sizes.length || (this.hoverValue === undefined && this.value === undefined))
+      if (
+        !this.config.labels ||
+        !this.sizes.length ||
+        (this.hoverValue === undefined && this.value === undefined)
+      )
         return undefined;
 
       const idx = this.hoverValue ?? this.value;

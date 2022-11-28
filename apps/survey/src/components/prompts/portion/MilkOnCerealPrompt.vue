@@ -18,9 +18,8 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="bowlImageMap"
+            v-bind="{ config: imageMap, imageMapData: bowlImageMap, value: portionSize.bowlIndex }"
             :id.sync="portionSize.bowlId"
-            :image-map-data="bowlImageMap"
-            :value="portionSize.bowlIndex"
             @confirm="confirmBowl"
             @input="selectBowl"
           ></image-map-selector>
@@ -36,9 +35,12 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="milkLevelImageMap"
+            v-bind="{
+              config: imageMap,
+              imageMapData: milkLevelImageMap,
+              value: portionSize.milkLevelIndex,
+            }"
             :id.sync="portionSize.milkLevelId"
-            :image-map-data="milkLevelImageMap"
-            :value="portionSize.milkLevelIndex"
             @confirm="confirmMilk"
             @input="selectMilk"
           ></image-map-selector>

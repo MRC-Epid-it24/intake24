@@ -51,7 +51,7 @@ import { defineComponent } from 'vue';
 import type { ListOption, LocaleOptionList } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
-import basePrompt from '../partials/base-prompt';
+import { basePrompt } from '../partials';
 import PromptListOptions from '../partials/prompt-list-options.vue';
 
 export default defineComponent({

@@ -120,11 +120,11 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'drink-scale-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'guide-image-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'milk-in-a-hot-drink-prompt': {
@@ -132,11 +132,11 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'milk-on-cereal-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'pizza-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'portion-size-option-prompt': {

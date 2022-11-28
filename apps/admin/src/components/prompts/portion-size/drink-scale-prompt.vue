@@ -11,18 +11,34 @@
       :conditions="conditions"
       @update:conditions="update('conditions', $event)"
     ></prompt-conditions>
+    <v-tab-item key="options">
+      <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)">
+      </image-map-settings>
+    </v-tab-item>
   </div>
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import basePrompt from '../partials/base-prompt';
+import type { DrinkScalePromptProps } from '@intake24/common/prompts';
+
+import { basePrompt, ImageMapSettings } from '../partials';
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
+  components: { ImageMapSettings },
+
   mixins: [basePrompt],
+
+  props: {
+    imageMap: {
+      type: Object as PropType<DrinkScalePromptProps['imageMap']>,
+      required: true,
+    },
+  },
 });
 </script>
 

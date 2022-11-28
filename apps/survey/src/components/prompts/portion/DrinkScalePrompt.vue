@@ -19,7 +19,7 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMapData"
-            v-bind="{ imageMapData, sizes, value: portionSize.containerIndex }"
+            v-bind="{ config: imageMap, imageMapData, sizes, value: portionSize.containerIndex }"
             :id.sync="portionSize.containerId"
             @confirm="confirmObject"
             @input="selectObject"

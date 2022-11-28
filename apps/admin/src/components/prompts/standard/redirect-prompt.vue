@@ -66,7 +66,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 
-import basePrompt from '../partials/base-prompt';
+import { basePrompt } from '../partials';
 
 export default defineComponent({
   name: 'RedirectPrompt',

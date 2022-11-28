@@ -37,7 +37,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import basePrompt from '../partials/base-prompt';
+import { basePrompt } from '../partials';
 
 export default defineComponent({
   name: 'FoodSearchPrompt',
