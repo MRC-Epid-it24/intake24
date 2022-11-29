@@ -1,7 +1,7 @@
 <template>
   <v-card class="d-flex flex-column" height="100%" min-width="320px">
     <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
-    <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div>
+    <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
     <v-card-subtitle class="font-weight-medium">
       <i18n class="mb-2" path="feedback.intake.your" tag="div">
         <template #nutrient>
@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts">
-import type { GaugeInstance } from 'svg-gauge';
+/* import type { GaugeInstance } from 'svg-gauge';
+import SvgGauge from 'svg-gauge'; */
 import type { PropType } from 'vue';
-import SvgGauge from 'svg-gauge';
-import { computed, defineComponent, ref, toRefs } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 
@@ -47,8 +47,8 @@ export default defineComponent({
   setup(props) {
     const { parameters } = toRefs(props);
 
-    const gaugeRef = ref<InstanceType<typeof Element>>();
-    const gaugeInstance = ref<GaugeInstance>();
+    /* const gaugeRef = ref<InstanceType<typeof Element>>();
+    const gaugeInstance = ref<GaugeInstance>(); */
 
     const detail = computed(() => getDetails[parameters.value.type](parameters.value));
     const backgroundImage = computed(() =>
@@ -71,13 +71,13 @@ export default defineComponent({
       colorMap,
       detail,
       formatOutput,
-      gaugeRef,
-      gaugeInstance,
+      /* gaugeRef,
+      gaugeInstance, */
       isFiveADay,
     };
   },
 
-  watch: {
+  /* watch: {
     'parameters.portions': {
       handler(val) {
         if (typeof val !== 'number') return;
@@ -108,7 +108,7 @@ export default defineComponent({
 
       this.gaugeInstance.setValue(value);
     },
-  },
+  }, */
 });
 </script>
 
