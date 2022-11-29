@@ -1,8 +1,5 @@
-import { v4 } from 'uuid';
-
 import type { PromptQuestion } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
-import type { SurveyState as CurrentSurveyState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
@@ -11,7 +8,6 @@ import {
   getFoodIndexRequired,
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
-  toMealTime,
 } from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState, SurveyStore } from '../stores';
@@ -20,32 +16,6 @@ export interface PromptInstance {
   prompt: PromptQuestion;
   section: SurveySection | MealSection;
 }
-
-export const surveyInitialState = (): CurrentSurveyState => ({
-  schemeId: null,
-  startTime: null,
-  endTime: null,
-  submissionTime: null,
-  uxSessionId: v4(),
-  flags: [],
-  customPromptAnswers: {},
-  tempPromptAnswer: {
-    response: null,
-    modified: false,
-    new: true,
-    finished: false,
-    mealIndex: undefined,
-    foodIndex: undefined,
-    prompt: undefined,
-  },
-  selection: {
-    element: null,
-    mode: 'auto',
-  },
-  meals: [],
-  nextFoodId: 0,
-  nextMealId: 0,
-});
 
 export default class DynamicRecall {
   private store;
@@ -133,30 +103,6 @@ export default class DynamicRecall {
         await context.store.storeUserSession();
       });
     });
-  }
-
-  async initialiseSurvey() {
-    if (!this.store.hasStarted) {
-      console.debug('Current survey data is null, starting new survey');
-
-      const initialState: CurrentSurveyState = {
-        ...surveyInitialState(),
-        schemeId: this.surveyScheme.id,
-        startTime: new Date(),
-        meals: this.surveyScheme.meals.map((meal, index) => ({
-          id: index,
-          name: meal.name,
-          defaultTime: toMealTime(meal.time),
-          time: undefined,
-          flags: [],
-          customPromptAnswers: {},
-          foods: [],
-        })),
-        nextMealId: this.surveyScheme.meals.length + 1,
-      };
-
-      await this.store.setState(initialState);
-    }
   }
 
   foodPromptsComplete(surveyState: SurveyState, mealId: number): boolean {

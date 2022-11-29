@@ -15,7 +15,7 @@
           :title="$t('common.help.title')"
           v-on="on"
         >
-          <v-icon left>fas fa-circle-info</v-icon>{{ $t('common.help._') }}
+          <v-icon left>$info</v-icon>{{ $t('common.help._') }}
         </v-btn>
       </slot>
     </template>

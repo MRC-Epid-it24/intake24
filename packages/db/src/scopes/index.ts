@@ -63,6 +63,7 @@ export const submissionScope = (
         ],
       },
     ],
+    order: [['submissionTime', 'ASC']],
     ...ops,
   };
 };

@@ -3,8 +3,10 @@ import type { LocaleMessageObject } from 'vue-i18n';
 const recall: LocaleMessageObject = {
   _: 'Recall',
   info: 'Recall information',
-  none: 'The is no recall in progress at the moment.',
-  inProgress: 'There is a recall in progress started at: {startedAt}.',
+  none: 'No recall in progress at the moment.',
+  startedAt: 'Recall started at: {startedAt}.',
+  finishedAt: 'Recall finished at: {finishedAt}.',
+  submittedAt: 'Submitted at',
   limitReached: {
     daily: 'You have reached the daily limit of recalls.',
     total: 'You have reached the total limit of recalls.',
@@ -16,9 +18,16 @@ const recall: LocaleMessageObject = {
     past: 'Past recalls',
     none: 'You do not have any past recalls yet.',
   },
-  start: 'Start',
+  start: {
+    _: 'Start',
+    another: 'Start another',
+  },
   continue: 'Continue',
-  submittedAt: 'Submitted at',
+  abort: {
+    _: 'Abort',
+    label: 'Abort recall',
+    confirm: 'Abort current recall?',
+  },
   menu: {
     foodSearchTooltip: 'This food has not yet been matched with a food from our database',
     foodSearchCompleteTooltip: 'This food has been matched with a food from our database',

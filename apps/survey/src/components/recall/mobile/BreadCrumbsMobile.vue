@@ -25,7 +25,7 @@
           :title="$t('common.help.title')"
           v-on="on"
         >
-          <v-icon>fas fa-circle-info</v-icon>
+          <v-icon>$info</v-icon>
         </v-btn>
 
         <!-- <v-btn v-bind="attrs" class="mr-2" color="error" icon v-on="on">

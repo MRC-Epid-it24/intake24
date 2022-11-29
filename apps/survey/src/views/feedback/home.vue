@@ -32,7 +32,7 @@
         </v-col>
       </v-row>
       <v-row class="pa-4 d-print-none" justify="center" no-gutters>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="7">
           <v-divider></v-divider>
           <v-expansion-panels flat focusable tile>
             <v-expansion-panel>

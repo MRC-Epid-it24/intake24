@@ -98,15 +98,14 @@ export default defineComponent({
     },
   },
 
-  async created() {
+  created() {
     if (!this.surveyScheme) {
       console.error('Survey scheme must be known at this point');
       return;
     }
 
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
-
-    await this.recallController.initialiseSurvey();
+    this.survey.startRecall();
   },
 
   async mounted() {
@@ -114,8 +113,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['deleteFood', 'deleteMeal']),
-
     setSelection(newSelection: Selection) {
       if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
 
@@ -196,7 +193,7 @@ export default defineComponent({
             return;
           }
 
-          this.deleteFood(id);
+          this.survey.deleteFood(id);
           await this.nextPrompt();
           break;
         default:
@@ -213,7 +210,7 @@ export default defineComponent({
           this.showMealPrompt(payload.mealId, 'preFoods', 'meal-time-prompt');
           break;
         case 'deleteMeal':
-          this.deleteMeal(payload.mealId);
+          this.survey.deleteMeal(payload.mealId);
           await this.nextPrompt();
           break;
       }
@@ -322,8 +319,7 @@ export default defineComponent({
 
     async restart() {
       this.currentPrompt = null;
-      useSurvey().clearState();
-      await this.recallController?.initialiseSurvey();
+      useSurvey().startRecall(true);
       await this.nextPrompt();
     },
   },

@@ -40,48 +40,160 @@
                   </v-list-item-content>
                 </v-list-item>
               </template>
-              <template v-else>
-                <v-list-item v-if="hasStarted" link>
+              <template v-else-if="hasFinished">
+                <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>fas fa-pause</v-icon>
+                    <v-icon color="info" large>$check</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>
-                      {{ $t('recall.inProgress', { startedAt: startTime?.toLocaleString() }) }}
+                      {{ $t('recall.finishedAt', { finishedAt: endTime?.toLocaleString() }) }}
                     </v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action>
+                  <v-list-item-action v-if="!isMobile">
                     <v-btn
+                      block
+                      color="primary"
+                      outlined
+                      rounded
+                      :title="$t('recall.start.another')"
+                      @click.stop="startRecall"
+                    >
+                      <v-icon left>fas fa-beat fa-play</v-icon>
+                      {{ $t('recall.start.another') }}
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-list-item v-if="isMobile">
+                  <v-btn
+                    block
+                    color="primary"
+                    large
+                    outlined
+                    rounded
+                    :title="$t('recall.start.another')"
+                    @click.stop="startRecall"
+                  >
+                    <v-icon left>fas fa-beat fa-play</v-icon>
+                    {{ $t('recall.start.another') }}
+                  </v-btn>
+                </v-list-item>
+              </template>
+              <template v-else-if="hasStarted">
+                <v-list-item link>
+                  <v-list-item-avatar>
+                    <v-icon color="info" large>$pause</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ $t('recall.startedAt', { startedAt: startTime?.toLocaleString() }) }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action v-if="!isMobile" class="align-stretch">
+                    <v-btn
+                      class="mb-2"
                       color="primary"
                       outlined
                       rounded
                       :title="$t('recall.continue')"
                       :to="{ name: 'survey-recall', params: { surveyId } }"
                     >
-                      <v-icon :left="!isMobile">fas fa-beat fa-pause</v-icon>
-                      <span v-if="!isMobile">{{ $t('recall.continue') }}</span>
+                      <v-icon class="fa-beat" left>$pause</v-icon>
+                      {{ $t('recall.continue') }}
                     </v-btn>
+                    <confirm-dialog
+                      color="warning"
+                      :label="$t('recall.abort.label').toString()"
+                      @confirm="abortRecall"
+                    >
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          color="warning"
+                          outlined
+                          rounded
+                          :title="$t('recall.abort.label')"
+                          v-on="on"
+                        >
+                          <v-icon left>$cancel</v-icon>
+                          {{ $t('recall.abort._') }}
+                        </v-btn>
+                      </template>
+                      {{ $t('recall.abort.confirm') }}
+                    </confirm-dialog>
                   </v-list-item-action>
                 </v-list-item>
-                <v-list-item v-else link>
+                <v-list-item v-if="isMobile">
+                  <confirm-dialog
+                    color="warning"
+                    :label="$t('recall.abort.label').toString()"
+                    @confirm="abortRecall"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        class="flex-grow-1 mr-2"
+                        color="warning"
+                        large
+                        outlined
+                        rounded
+                        :title="$t('recall.abort.label')"
+                        v-on="on"
+                      >
+                        <v-icon left>$cancel</v-icon>
+                        {{ $t('recall.abort._') }}
+                      </v-btn>
+                    </template>
+                    {{ $t('recall.abort.confirm') }}
+                  </confirm-dialog>
+                  <v-btn
+                    class="flex-grow-1"
+                    color="primary"
+                    large
+                    outlined
+                    rounded
+                    :title="$t('recall.continue')"
+                    :to="{ name: 'survey-recall', params: { surveyId } }"
+                  >
+                    <v-icon class="fa-beat" left>$pause</v-icon>
+                    {{ $t('recall.continue') }}
+                  </v-btn>
+                </v-list-item>
+              </template>
+              <template v-else>
+                <v-list-item link>
                   <v-list-item-avatar>
-                    <v-icon color="info" large>fas fa-play</v-icon>
+                    <v-icon color="info" large>$start</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ $t('recall.none') }}</v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action>
+                  <v-list-item-action v-if="!isMobile">
                     <v-btn
                       color="primary"
                       outlined
                       rounded
-                      :title="$t('recall.start')"
+                      :title="$t('recall.start._')"
                       :to="{ name: 'survey-recall', params: { surveyId } }"
                     >
-                      <v-icon :left="!isMobile">fas fa-beat fa-play</v-icon>
-                      <span v-if="!isMobile">{{ $t('recall.start') }}</span>
+                      <v-icon class="fa-beat" left>$start</v-icon>
+                      {{ $t('recall.start._') }}
                     </v-btn>
                   </v-list-item-action>
+                </v-list-item>
+                <v-list-item v-if="isMobile">
+                  <v-btn
+                    block
+                    color="primary"
+                    large
+                    outlined
+                    rounded
+                    :title="$t('recall.start._')"
+                    :to="{ name: 'survey-recall', params: { surveyId } }"
+                  >
+                    <v-icon class="fa-beat" left>$start</v-icon>
+                    {{ $t('recall.start._') }}
+                  </v-btn>
                 </v-list-item>
               </template>
             </v-list>
@@ -91,16 +203,31 @@
           <template v-if="allowFeedback">
             <v-list class="list-no-wrap" subheader>
               <v-subheader>{{ $t('feedback.info') }}</v-subheader>
-              <v-list-item v-if="feedbackAvailable" link>
-                <v-list-item-avatar>
-                  <v-icon color="info" large>$feedback</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ $t('feedback.status.available') }}</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action>
+              <template v-if="feedbackAvailable">
+                <v-list-item link>
+                  <v-list-item-avatar>
+                    <v-icon color="info" large>$feedback</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ $t('feedback.status.available') }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action v-if="!isMobile">
+                    <v-btn
+                      color="primary"
+                      outlined
+                      rounded
+                      :to="{ name: 'feedback-home', params: { surveyId } }"
+                    >
+                      <v-icon left>$feedback</v-icon>
+                      {{ $t(`feedback._`) }}
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-list-item v-if="isMobile">
                   <v-btn
+                    block
                     color="primary"
+                    large
                     outlined
                     rounded
                     :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -108,11 +235,11 @@
                     <v-icon left>$feedback</v-icon>
                     {{ $t(`feedback._`) }}
                   </v-btn>
-                </v-list-item-action>
-              </v-list-item>
+                </v-list-item>
+              </template>
               <v-list-item v-else link>
                 <v-list-item-avatar>
-                  <v-icon color="info" large>fas fa-circle-info</v-icon>
+                  <v-icon color="info" large>$info</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{
@@ -175,9 +302,12 @@ import { computed, defineComponent, ref } from 'vue';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 import { userService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
   name: 'SurveyHome',
+
+  components: { ConfirmDialog },
 
   props: {
     surveyId: {
@@ -190,10 +320,13 @@ export default defineComponent({
     const submissions = ref<SurveySubmissionEntry[]>([]);
     const survey = useSurvey();
     const startTime = computed(() => survey.data.startTime);
+    const endTime = computed(() => survey.data.endTime);
 
     return {
+      survey,
       submissions,
       startTime,
+      endTime,
     };
   },
 
@@ -203,6 +336,7 @@ export default defineComponent({
       'allowRecall',
       'feedbackAvailable',
       'hasStarted',
+      'hasFinished',
       'dailyLimitReached',
       'totalLimitReached',
       'limitReached',
@@ -212,6 +346,17 @@ export default defineComponent({
 
   async mounted() {
     this.submissions = await userService.submissions(this.surveyId);
+  },
+
+  methods: {
+    async startRecall() {
+      this.survey.startRecall(true);
+      await this.$router.push({ name: 'survey-recall', params: { surveyId: this.surveyId } });
+    },
+
+    abortRecall() {
+      this.survey.cancelRecall();
+    },
   },
 });
 </script>

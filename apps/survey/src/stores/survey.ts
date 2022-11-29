@@ -1,8 +1,7 @@
 import 'lodash/debounce';
 
-import type { AxiosError } from 'axios';
-import axios from 'axios';
 import { defineStore } from 'pinia';
+import { v4 } from 'uuid';
 import Vue from 'vue';
 
 import type {
@@ -23,7 +22,6 @@ import type {
   SurveyFollowUpResponse,
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
-import { surveyInitialState } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { recallLog } from '@intake24/survey/stores';
 import {
   findFood,
@@ -33,6 +31,7 @@ import {
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
+  toMealTime,
 } from '@intake24/survey/stores/meal-food-utils';
 import { useLoading } from '@intake24/ui/stores';
 
@@ -70,6 +69,32 @@ export interface FoodIndex {
   foodIndex: number;
   linkedFoodIndex: number | undefined;
 }
+
+export const surveyInitialState = (): CurrentSurveyState => ({
+  schemeId: null,
+  startTime: null,
+  endTime: null,
+  submissionTime: null,
+  uxSessionId: v4(),
+  flags: [],
+  customPromptAnswers: {},
+  tempPromptAnswer: {
+    response: null,
+    modified: false,
+    new: true,
+    finished: false,
+    mealIndex: undefined,
+    foodIndex: undefined,
+    prompt: undefined,
+  },
+  selection: {
+    element: null,
+    mode: 'auto',
+  },
+  meals: [],
+  nextFoodId: 0,
+  nextMealId: 0,
+});
 
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
   if (parameters && !parameters.storeUserSessionOnServer) return false;
@@ -123,6 +148,7 @@ export const useSurvey = defineStore('survey', {
     },
     hasStarted: (state) => !!state.data.startTime,
     hasFinished: (state) => !!state.data.endTime,
+    isSubmitted: (state) => !!state.data.submissionTime,
     localeId: (state) => state.parameters?.locale.code ?? 'en_GB',
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,
@@ -195,12 +221,49 @@ export const useSurvey = defineStore('survey', {
       }
     },
 
-    async setState(payload: CurrentSurveyState) {
+    startRecall(force = false) {
+      if (!this.parameters) {
+        console.warn('Survey parameters are not loaded');
+        return;
+      }
+
+      if (this.hasStarted && !this.isSubmitted && !force) {
+        console.warn('Survey already started, not restarting.');
+        return;
+      }
+
+      this.clearState();
+
+      const initialState: CurrentSurveyState = {
+        ...surveyInitialState(),
+        schemeId: this.parameters.surveyScheme.id,
+        startTime: new Date(),
+        meals: this.parameters.surveyScheme.meals.map((meal, index) => ({
+          id: index,
+          name: meal.name,
+          defaultTime: toMealTime(meal.time),
+          time: undefined,
+          flags: [],
+          customPromptAnswers: {},
+          foods: [],
+        })),
+        nextMealId: this.parameters.surveyScheme.meals.length + 1,
+      };
+
+      this.setState(initialState);
+    },
+
+    cancelRecall() {
+      this.clearState();
+      this.setState(surveyInitialState());
+    },
+
+    setState(payload: CurrentSurveyState) {
       this.data = payload;
       this.undo = null;
     },
 
-    async clearState() {
+    clearState() {
       promptStores.forEach((store) => store().$reset());
 
       /*

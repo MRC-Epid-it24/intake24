@@ -69,13 +69,7 @@
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
-            <v-btn
-              color="error"
-              value="deleteFood"
-              v-bind="attrs"
-              v-on="on"
-              @click.stop="action('deleteFood', food?.id)"
-            >
+            <v-btn color="error" value="deleteFood" v-bind="attrs" v-on="on">
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteFood') }}
               </span>
