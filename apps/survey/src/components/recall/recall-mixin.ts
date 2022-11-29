@@ -1,4 +1,4 @@
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
@@ -319,8 +319,11 @@ export default defineComponent({
 
     async restart() {
       this.currentPrompt = null;
-      useSurvey().startRecall(true);
-      await this.nextPrompt();
+      useSurvey().cancelRecall();
+      await this.$router.push({
+        name: 'survey-home',
+        params: { surveyId: this.$route.params.surveyId },
+      });
     },
   },
 });
