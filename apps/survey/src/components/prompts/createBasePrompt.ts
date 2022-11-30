@@ -2,7 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { BasePromptProps, ComponentType, PromptQuestion } from '@intake24/common/prompts';
-import type { EncodedFood, MealState } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
 import { customPromptQuestions, standardPromptQuestions } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { localeContent } from '@intake24/survey/components/mixins';
@@ -10,7 +10,7 @@ import { localeContent } from '@intake24/survey/components/mixins';
 import { Next } from './actions';
 import { PromptLayout } from './layouts';
 
-export default <P extends BasePromptProps>() =>
+export default <P extends BasePromptProps, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
@@ -20,7 +20,7 @@ export default <P extends BasePromptProps>() =>
 
     props: {
       food: {
-        type: Object as PropType<EncodedFood>,
+        type: Object as PropType<F>,
       },
       meal: {
         type: Object as PropType<MealState>,
@@ -63,8 +63,15 @@ export default <P extends BasePromptProps>() =>
         return !!this.meal;
       },
 
-      localeFoodName() {
-        return this.food && this.getLocaleContent(this.food.data.englishName);
+      localeFoodName(): string | undefined {
+        if (!this.food) return undefined;
+
+        // temp ts-fix
+        const food = this.food as FoodState;
+
+        if (food.type === 'encoded-food') return this.getLocaleContent(food.data.localName);
+
+        return food.description;
       },
 
       localeMealName() {

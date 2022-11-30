@@ -27,6 +27,8 @@ export const standardComponentTypes = [
   'ready-meal-prompt',
   'redirect-prompt',
   'review-confirm-prompt',
+  'same-as-before-prompt',
+  'split-food-prompt',
   'submit-prompt',
 ] as const;
 

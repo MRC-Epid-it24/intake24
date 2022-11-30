@@ -14,7 +14,7 @@ private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-c
 
 export type MealFlag = 'free-entry-complete' | 'ready-meal-complete' | `${string}-acknowledged`;
 
-export type FoodFlag = 'ready-meal' | `${string}-acknowledged`;
+export type FoodFlag = 'ready-meal' | 'split-food-complete' | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
@@ -312,10 +312,6 @@ export type SurveyState = {
   nextFoodId: number;
   nextMealId: number;
 };
-
-export interface RecallPromptHandler {
-  commitAnswer(): Promise<void>;
-}
 
 export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
   if (s1.mode === s2.mode) {

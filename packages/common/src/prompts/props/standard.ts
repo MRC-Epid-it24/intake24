@@ -29,6 +29,10 @@ export interface RedirectPromptProps extends BasePromptProps {
   timer: number;
 }
 
+export type SameAsBeforePromptProps = BasePromptProps;
+
+export type SplitFoodPromptProps = BasePromptProps;
+
 export const associatedFoodsPromptProps: AssociatedFoodsPromptProps = copy({
   ...basePromptProps,
   name: { en: 'Associated foods' },
@@ -79,6 +83,16 @@ export const redirectPromptProps: RedirectPromptProps = copy({
 export const reviewConfirmPromptProps: BasePromptProps = copy({
   ...basePromptProps,
   name: { en: 'Review and Confirm' },
+});
+
+export const sameAsBeforePromptProps: SameAsBeforePromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Same as before' },
+});
+
+export const splitFoodPromptProps: SplitFoodPromptProps = copy({
+  ...basePromptProps,
+  name: { en: 'Split food' },
 });
 
 export const submitPromptProps: BasePromptProps = copy({
@@ -149,6 +163,20 @@ export const standardPromptQuestions: PromptQuestion[] = [
     id: 'review-confirm-prompt',
     name: 'Review and Confirm prompt',
     props: copy(reviewConfirmPromptProps),
+  },
+  {
+    component: 'same-as-before-prompt',
+    type: 'standard',
+    id: 'same-as-before-prompt',
+    name: 'Same as before prompt',
+    props: copy(sameAsBeforePromptProps),
+  },
+  {
+    component: 'split-food-prompt',
+    type: 'standard',
+    id: 'split-food-prompt',
+    name: 'Split food prompt',
+    props: copy(splitFoodPromptProps),
   },
   {
     component: 'submit-prompt',

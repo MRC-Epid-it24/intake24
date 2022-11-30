@@ -6,16 +6,18 @@ import MealAddPromptHandler from './MealAddPromptHandler.vue';
 import MealTimePromptHandler from './MealTimePromptHandler.vue';
 import ReadyMealPromptHandler from './ReadyMealPromptHandler.vue';
 import ReviewConfirmPromptHandler from './ReviewConfirmPromptHandler.vue';
+import SplitFoodPromptHandler from './SplitFoodPromptHandler.vue';
 import SubmitPromptHandler from './SubmitPromptHandler.vue';
 
 export default {
-  MealTimePromptHandler,
+  AssociatedFoodsPromptHandler,
+  EditMealPromptHandler,
+  FinalPromptHandler,
   FoodSearchPromptHandler,
   MealAddPromptHandler,
-  EditMealPromptHandler,
-  SubmitPromptHandler,
-  FinalPromptHandler,
+  MealTimePromptHandler,
   ReadyMealPromptHandler,
   ReviewConfirmPromptHandler,
-  AssociatedFoodsPromptHandler,
+  SplitFoodPromptHandler,
+  SubmitPromptHandler,
 };

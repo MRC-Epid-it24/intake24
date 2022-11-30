@@ -10,7 +10,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
 import type { EditMealPromptState } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';

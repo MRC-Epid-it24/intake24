@@ -18,7 +18,7 @@ import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
+import type { BasePromptProps, CustomComponentType } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -34,7 +34,7 @@ export default defineComponent({
 
   props: {
     promptComponent: {
-      type: String,
+      type: String as PropType<CustomComponentType>,
       required: true,
     },
     promptId: {
@@ -48,14 +48,12 @@ export default defineComponent({
   },
 
   setup() {
-    const { encodedFoodOptional: foodOptional, encodedFood: food } = useFoodPromptUtils();
-    const { meal, mealOptional } = useMealPromptUtils();
+    const { encodedFoodOptional: foodOptional } = useFoodPromptUtils();
+    const { mealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
     return {
-      food,
       foodOptional,
-      meal,
       mealOptional,
       survey,
     };
@@ -103,28 +101,36 @@ export default defineComponent({
         // eslint-disable-next-line default-case
         switch (this.selection.element.type) {
           case 'food': {
+            const food = this.foodOptional();
+            if (!food) {
+              console.warn('Expected meal to be defined');
+              return;
+            }
+
             if (infoPrompts.includes(this.promptComponent))
-              this.survey.setFoodFlag({
-                foodId: this.food().id,
-                flag: `${this.promptId}-acknowledged`,
-              });
+              this.survey.setFoodFlag({ foodId: food.id, flag: `${this.promptId}-acknowledged` });
             else
               this.survey.setFoodCustomPromptAnswer({
-                foodId: this.food().id,
+                foodId: food.id,
                 promptId: this.promptId,
                 answer: this.state,
               });
             break;
           }
           case 'meal': {
+            if (!this.mealOptional) {
+              console.warn('Expected meal to be defined');
+              return;
+            }
+
             if (infoPrompts.includes(this.promptComponent))
               this.survey.setMealFlag({
-                mealId: this.meal.id,
+                mealId: this.mealOptional.id,
                 flag: `${this.promptId}-acknowledged`,
               });
             else
               this.survey.setMealCustomPromptAnswer({
-                mealId: this.meal.id,
+                mealId: this.mealOptional.id,
                 promptId: this.promptId,
                 answer: this.state,
               });

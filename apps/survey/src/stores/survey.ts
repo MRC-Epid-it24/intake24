@@ -536,9 +536,11 @@ export const useSurvey = defineStore('survey', {
       this.data.selection = { mode: 'auto', element: null };
     },
 
-    addFood(data: { mealId: number; food: FoodState }) {
-      const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
-      this.data.meals[mealIndex].foods.push(data.food);
+    addFood({ mealId, food, at }: { mealId: number; food: FoodState; at?: number }) {
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+
+      if (at !== undefined) this.data.meals[mealIndex].foods.splice(at, 0, food);
+      else this.data.meals[mealIndex].foods.push(food);
     },
 
     setFoods(data: { mealId: number; foods: FoodState[] }) {

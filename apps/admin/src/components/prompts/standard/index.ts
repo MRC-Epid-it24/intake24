@@ -7,6 +7,8 @@ import MealTimePrompt from './meal-time-prompt.vue';
 import ReadyMealPrompt from './ready-meal-prompt.vue';
 import RedirectPrompt from './redirect-prompt.vue';
 import ReviewConfirmPrompt from './review-confirm-prompt.vue';
+import SameAsBeforePrompt from './same-as-before-prompt.vue';
+import SplitFoodPrompt from './split-food-prompt.vue';
 import SubmitPrompt from './submit-prompt.vue';
 
 export default {
@@ -19,5 +21,7 @@ export default {
   ReadyMealPrompt,
   RedirectPrompt,
   ReviewConfirmPrompt,
+  SameAsBeforePrompt,
+  SplitFoodPrompt,
   SubmitPrompt,
 };

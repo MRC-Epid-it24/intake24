@@ -5,6 +5,7 @@ import type { ActionItem, Actions } from '@intake24/common/prompts';
 import type {
   Dictionary,
   EncodedFood,
+  FoodState,
   LocaleTranslation,
   MealState,
   RequiredLocaleTranslation,
@@ -37,7 +38,7 @@ export default defineComponent({
       type: Object as PropType<MealState>,
     },
     food: {
-      type: Object as PropType<EncodedFood>,
+      type: Object as PropType<FoodState>,
     },
     isValid: {
       type: Boolean,
@@ -63,7 +64,11 @@ export default defineComponent({
     },
 
     localeFoodName() {
-      return this.food && this.getLocaleContent(this.food.data.localName);
+      if (!this.food) return undefined;
+
+      if (this.food.type === 'encoded-food') return this.getLocaleContent(this.food.data.localName);
+
+      return this.food.description;
     },
 
     localeMealName() {

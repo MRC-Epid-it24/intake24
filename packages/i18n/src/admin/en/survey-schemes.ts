@@ -326,6 +326,14 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Review and Confirm',
       subtitle: 'Review and Confirm completion and progress of the recall',
     },
+    'same-as-before-prompt': {
+      title: 'Same as before',
+      subtitle: 'Ask if food was same as before',
+    },
+    'split-food-prompt': {
+      title: 'Split food',
+      subtitle: 'Ask for split food description',
+    },
     'submit-prompt': {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',

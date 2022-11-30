@@ -94,6 +94,14 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preFoods'],
   },
+  'same-as-before-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'split-food-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
   'submit-prompt': {
     tabs: [...baseTab],
     sections: ['submission'],

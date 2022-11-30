@@ -84,7 +84,9 @@ const prompts: LocaleMessageObject = {
       item: 'Please select an item from this category',
     },
   },
-  foodBrowser: {
+  foodSearch: {
+    text: 'Below is the list of foods from our database that look like "{food}".',
+    description: 'Please choose the item you had, or the closest match.',
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Please try re-wording your description.',
   },
@@ -106,6 +108,19 @@ const prompts: LocaleMessageObject = {
     text: 'Was this a ready-made meal or food?',
     description:
       'Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).',
+  },
+  splitFood: {
+    text: 'It looks like you entered more than one food item on the line.',
+    searchTerm: 'Search term: {food}',
+    split: 'Are these separate foods?',
+    singleSuggestion:
+      'Please click on "keep as single food" if you meant a single food such as chicken and vegetable soup.',
+    singleSuggestionEx:
+      'Please click on "keep as single food" if you meant a single food such as {food}.',
+    separateSuggestion: 'Please click on "separate foods" for items such as fish and chips.',
+    separateSuggestionEx: 'Please click on "separate foods" for items such as {food}.',
+    separate: 'Separate foods',
+    single: 'Keep as single food',
   },
 };
 

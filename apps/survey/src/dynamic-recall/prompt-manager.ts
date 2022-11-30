@@ -14,6 +14,7 @@ import {
   getFoodIndexRequired,
   mealAssociatedFoodsComplete,
   mealPortionSizeComplete,
+  surveyFreeEntryComplete,
 } from '@intake24/survey/stores/meal-food-utils';
 
 import type { SurveyState, SurveyStore } from '../stores';
@@ -231,20 +232,43 @@ const checkFoodStandardConditions = (
     }
 
     case 'food-search-prompt': {
-      const freeEntryComplete =
-        surveyState.data.meals.length &&
-        surveyState.data.meals.every((meal) => meal.flags.includes('free-entry-complete'));
+      const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 
       if (foodState.type === 'free-text' && freeEntryComplete) {
         recallLog().promptCheck(
-          'food-search-prompt',
+          prompt.component,
           true,
           'Selected food entry type is free-text and all meals have free-entry-complete flag set'
         );
         return true;
       }
+
       recallLog().promptCheck(
-        'food-search-prompt',
+        prompt.component,
+        false,
+        `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
+      );
+      return false;
+    }
+
+    case 'split-food-prompt': {
+      const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
+
+      if (
+        foodState.type === 'free-text' &&
+        freeEntryComplete &&
+        !foodState.flags.includes('split-food-complete')
+      ) {
+        recallLog().promptCheck(
+          prompt.component,
+          true,
+          'Selected food entry type is free-text and all meals have free-entry-complete flag set'
+        );
+        return true;
+      }
+
+      recallLog().promptCheck(
+        prompt.component,
         false,
         `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
       );
