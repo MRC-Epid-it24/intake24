@@ -1,6 +1,6 @@
 <template>
   <prompt-layout
-    v-bind="{ actions, description, text: promptTitle, food, meal, isValid }"
+    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
     @action="action"
   >
     <v-text-field
@@ -15,14 +15,18 @@
     <image-placeholder v-if="requestInProgress"></image-placeholder>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
     <v-alert v-if="searchResults && !searchResults.foods.length" prominent type="warning">
-      <p>{{ $t('prompts.foodBrowser.empty', { searchTerm }) }}</p>
-      <p>{{ $t('prompts.foodBrowser.reword') }}</p>
+      <p>{{ $t('prompts.foodSearch.empty', { searchTerm }) }}</p>
+      <p>{{ $t('prompts.foodSearch.reword') }}</p>
     </v-alert>
     <food-search-results
       v-if="searchResults"
       :results="searchResults"
       @food-selected="onFoodSelected"
     ></food-search-results>
+    <template #actions>
+      <!-- Should not have actions -> only click & select -->
+      <div></div>
+    </template>
   </prompt-layout>
 </template>
 
@@ -31,6 +35,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodSearchPromptProps } from '@intake24/common/prompts';
+import type { FreeTextFood } from '@intake24/common/types';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import { FoodSearchResults, ImagePlaceholder } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
@@ -43,7 +48,7 @@ export default defineComponent({
 
   components: { FoodSearchResults, ImagePlaceholder },
 
-  mixins: [createBasePrompt<FoodSearchPromptProps>()],
+  mixins: [createBasePrompt<FoodSearchPromptProps, FreeTextFood>()],
 
   props: {
     localeId: {
@@ -68,9 +73,18 @@ export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['parameters']),
 
-    promptTitle(): string {
-      const { searchTerm } = this;
-      return this.getLocaleContent(this.text, { params: { searchTerm } });
+    localeText(): string {
+      return this.getLocaleContent(this.promptProps.text, {
+        path: 'prompts.foodSearch.text',
+        params: { food: this.localeFoodName ?? '' },
+      });
+    },
+
+    localeDescription(): string {
+      return this.getLocaleContent(this.promptProps.description, {
+        path: 'prompts.foodSearch.description',
+        params: { food: this.localeFoodName ?? '' },
+      });
     },
   },
 

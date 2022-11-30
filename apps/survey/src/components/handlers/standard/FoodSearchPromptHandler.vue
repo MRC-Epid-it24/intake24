@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ localeId, promptComponent, promptProps }"
+    v-bind="{ food: freeTextFood(), localeId, promptComponent, promptProps }"
     v-model="searchTerm"
     @food-selected="foodSelected"
   ></food-search-prompt>
@@ -45,13 +45,7 @@ export default defineComponent({
     const foodData = ref<UserFoodData | undefined>(undefined);
     const searchTerm = ref(freeTextFood().description);
 
-    return { foodData, searchTerm, freeTextFood, localeId };
-  },
-
-  computed: {
-    selectedFoodDescription(): string {
-      return this.freeTextFood().description;
-    },
+    return { freeTextFood, localeId, foodData, searchTerm };
   },
 
   methods: {
