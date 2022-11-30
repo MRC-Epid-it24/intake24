@@ -50,9 +50,8 @@ export default defineComponent({
     const getInitialState = (): PizzaPromptState => ({
       portionSize: {
         method: 'pizza',
-        imageUrl: null,
-        type: { id: undefined, index: undefined },
-        thickness: { id: undefined, index: undefined },
+        type: { id: undefined, index: undefined, image: null },
+        thickness: { id: undefined, index: undefined, image: null },
         slice: { id: undefined, index: undefined, image: null, quantity: 1 },
         servingWeight: 0,
         leftoversWeight: 0,

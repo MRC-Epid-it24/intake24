@@ -9,7 +9,7 @@
       </v-btn>
       <confirm-dialog
         color="error"
-        :label="$t('recall.contextMenu.delete', { name: safeName() })"
+        :label="$t('recall.contextMenu.delete', { name: safeName() }).toString()"
         @confirm="onDelete"
       >
         <template #activator="{ on, attrs }">
