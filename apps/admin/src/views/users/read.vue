@@ -19,6 +19,14 @@
           <td>{{ entry.phone }}</td>
         </tr>
         <tr>
+          <th>{{ $t('users.verified') }}</th>
+          <td>{{ entry.verifiedAt ? $t('common.yes') : $t('common.no') }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('users.disabled') }}</th>
+          <td>{{ entry.disabledAt ? $t('common.yes') : $t('common.no') }}</td>
+        </tr>
+        <tr>
           <th>{{ $t('users.mfa._') }}</th>
           <td>{{ entry.multiFactorAuthentication ? $t('common.yes') : $t('common.no') }}</td>
         </tr>

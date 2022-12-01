@@ -13,6 +13,8 @@ const users: LocaleMessageObject = {
   name: 'Name',
   simpleName: 'Simple name',
   username: 'Username',
+  verified: 'Verified',
+  disabled: 'Disabled',
   aliases: {
     _: 'User alias',
     title: 'User aliases',

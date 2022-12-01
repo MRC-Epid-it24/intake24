@@ -137,17 +137,17 @@ export const user: Schema = {
     isBoolean: { options: { strict: true } },
     optional: true,
   },
-  isDisabled: {
+  disabledAt: {
     in: ['body'],
     errorMessage: typeErrorMessage('date._'),
-    isDate: true,
+    isISO8601: { options: { strict: true, strictSeparator: true } },
     toDate: true,
     optional: { options: { nullable: true } },
   },
-  isVerified: {
+  verifiedAt: {
     in: ['body'],
     errorMessage: typeErrorMessage('date._'),
-    isDate: true,
+    isISO8601: { options: { strict: true, strictSeparator: true } },
     toDate: true,
     optional: { options: { nullable: true } },
   },

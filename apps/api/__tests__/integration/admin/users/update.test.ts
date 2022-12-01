@@ -66,6 +66,8 @@ export default () => {
           'customFields',
           'permissions',
           'roles',
+          'disabledAt',
+          'verifiedAt',
         ],
         {
           input: {
@@ -76,6 +78,8 @@ export default () => {
             customFields: [{ name: 'fieldName', missingValueKey: false }],
             permissions: [1, 'invalidId', 2],
             roles: [1, 'invalidId', 2],
+            disabledAt: 'invalidDate',
+            verifiedAt: [false],
           },
         }
       );

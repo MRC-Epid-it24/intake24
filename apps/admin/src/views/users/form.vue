@@ -117,6 +117,28 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-switch
+                v-model="toggles.verifiedAt"
+                :error-messages="form.errors.get('verifiedAt')"
+                hide-details="auto"
+                :label="$t('users.verified')"
+                name="verifiedAt"
+                @change="toggle('verifiedAt')"
+              ></v-switch>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-switch
+                v-model="toggles.disabledAt"
+                :error-messages="form.errors.get('disabledAt')"
+                hide-details="auto"
+                :label="$t('users.disabled')"
+                name="disabledAt"
+                @change="toggle('disabledAt')"
+              ></v-switch>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-switch
                 v-model="form.emailNotifications"
                 :error-messages="form.errors.get('emailNotifications')"
                 hide-details="auto"
@@ -161,6 +183,8 @@ type UserForm = {
   multiFactorAuthentication: boolean;
   emailNotifications: boolean;
   smsNotifications: boolean;
+  verifiedAt: Date | null;
+  disabledAt: Date | null;
   customFields: CustomField[];
   permissions: string[];
   roles: string[];
@@ -179,6 +203,10 @@ export default defineComponent({
 
   data() {
     return {
+      toggles: {
+        disabledAt: false,
+        verifiedAt: false,
+      },
       form: form<UserForm>({
         id: null,
         name: null,
@@ -189,6 +217,8 @@ export default defineComponent({
         multiFactorAuthentication: false,
         emailNotifications: true,
         smsNotifications: true,
+        verifiedAt: null,
+        disabledAt: null,
         customFields: [],
         permissions: [],
         roles: [],
@@ -208,6 +238,14 @@ export default defineComponent({
 
       this.setOriginalEntry(input);
       this.form.load(input);
+
+      this.toggles.disabledAt = !!data.disabledAt;
+      this.toggles.verifiedAt = !!data.verifiedAt;
+    },
+
+    toggle(field: 'verifiedAt' | 'disabledAt') {
+      this.form[field] = this.toggles[field] ? new Date() : null;
+      this.form.errors.clear(field);
     },
   },
 });
