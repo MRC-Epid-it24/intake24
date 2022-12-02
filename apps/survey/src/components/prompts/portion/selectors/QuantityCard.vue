@@ -2,6 +2,9 @@
   <v-row justify="center">
     <v-col cols="auto">
       <div class="d-flex flex-column">
+        <div class="pa-2">
+          <v-btn block @click.stop="setAll">{{ $t('prompts.linkedQuantity.all') }}</v-btn>
+        </div>
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
@@ -115,7 +118,20 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    value(val: number) {
+      if (val === this.currentValue) return;
+
+      this.currentValue = Math.min(this.max, Math.max(this.min, val));
+    },
+  },
+
   methods: {
+    setAll() {
+      this.update(this.max);
+      this.updateConfirm(true);
+    },
+
     update(value: number) {
       this.currentValue = Math.min(this.max, Math.max(this.min, this.currentValue + value));
 

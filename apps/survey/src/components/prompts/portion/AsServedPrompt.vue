@@ -77,7 +77,6 @@
             v-model="linkedQuantity"
             :confirm.sync="linkedQuantityConfirmed"
             :max="parentQuantity"
-            :min="1"
             @input="selectLinkedQuantity"
             @update:confirm="confirmLinkedQuantity"
           ></quantity-card>
@@ -181,6 +180,11 @@ export default defineComponent({
 
       this.portionSize.leftovers = null;
     },
+  },
+
+  mounted() {
+    if (this.promptForLinkedQuantity && !this.linkedQuantityConfirmed)
+      this.linkedQuantity = this.parentQuantity;
   },
 
   methods: {

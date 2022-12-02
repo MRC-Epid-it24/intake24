@@ -90,6 +90,9 @@ const prompts: LocaleMessageObject = {
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Please try re-wording your description.',
   },
+  linkedQuantity: {
+    all: 'On all of them',
+  },
   noMoreInfo: {
     meal: {
       text: 'No more information needed',
