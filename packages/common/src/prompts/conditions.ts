@@ -1,9 +1,3 @@
-import type { Dictionary } from '../types/common';
-
-export const conditionTypes = ['drinks', 'energy', 'promptAnswer', 'recallNumber'] as const;
-
-export type ConditionType = typeof conditionTypes[number];
-
 export type ConditionOpInput = [number | string, number | string | (number | string)[]];
 
 const toNumber = (values: ConditionOpInput) =>
@@ -43,9 +37,38 @@ export type ConditionOps = typeof conditionOps;
 
 export type ConditionOp = keyof ConditionOps;
 
-export interface Condition<T = Dictionary> {
-  type: ConditionType;
-  op: ConditionOp;
-  value: string;
-  props: T;
-}
+export const conditionTypes = ['drinks', 'energy', 'promptAnswer', 'recallNumber'] as const;
+
+export type ConditionType = typeof conditionTypes[number];
+
+export type ConditionSection = 'survey' | 'meal' | 'food';
+
+export type BaseCondition = { type: ConditionType; op: ConditionOp; value: string };
+
+export type Conditions = {
+  drinks: BaseCondition & {
+    type: 'drinks';
+    props: {
+      section: ConditionSection;
+    };
+  };
+  energy: BaseCondition & {
+    type: 'energy';
+    props: {
+      section: ConditionSection;
+    };
+  };
+  promptAnswer: BaseCondition & {
+    type: 'promptAnswer';
+    props: {
+      promptId: string;
+      section: ConditionSection;
+    };
+  };
+  recallNumber: BaseCondition & {
+    type: 'recallNumber';
+    props: {};
+  };
+};
+
+export type Condition = Conditions[keyof Conditions];
