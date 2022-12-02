@@ -42,7 +42,6 @@ export const baseCustomPromptProps: BasePromptProps = {
   ...basePromptProps,
   name: { en: 'Enter name' },
   text: { en: 'Enter text' },
-  description: { en: 'Enter description' },
 };
 
 export const infoPromptProps: InfoPromptProps = copy({
@@ -53,6 +52,7 @@ export const infoPromptProps: InfoPromptProps = copy({
 export const noMoreInformationPromptProps: BasePromptProps = copy({
   ...baseCustomPromptProps,
   name: { en: 'No more information needed' },
+  text: {},
 });
 
 export const yesNoPromptProps: YesNoPromptProps = copy({
