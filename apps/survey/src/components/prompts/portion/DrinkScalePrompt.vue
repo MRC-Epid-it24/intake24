@@ -7,7 +7,7 @@
       <!-- Step 0: Select Volume to measure estimated portion-->
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${portionSize.method}.container`">
+          <i18n :path="`prompts.${portionSize.method}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -34,7 +34,7 @@
       <!-- Step 1: Select Serving Weight ml-->
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.serving.header`, { food: foodName }) }}
+          {{ $t(`prompts.${portionSize.method}.serving.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.servingWeight ?? undefined"
@@ -45,7 +45,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
           <drink-scale-panel
             v-if="scale"
             v-model="portionSize.fillLevel"
@@ -59,7 +59,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.${portionSize.method}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftoversWeight ?? undefined"
@@ -73,10 +73,10 @@
         </v-expansion-panel-header>
         <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
             <drink-scale-panel
               v-if="scale"
               v-model="portionSize.leftoversLevel"

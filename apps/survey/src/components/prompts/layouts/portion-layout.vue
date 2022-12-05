@@ -149,7 +149,7 @@ export default defineComponent({
       if (localeFoodName) params.food = localeFoodName;
       if (localeMealName) params.meal = localeMealName;
 
-      return this.getLocaleContent(this.text, { path: `portion.${this.method}.text`, params });
+      return this.getLocaleContent(this.text, { path: `prompts.${this.method}.text`, params });
     },
   },
 });

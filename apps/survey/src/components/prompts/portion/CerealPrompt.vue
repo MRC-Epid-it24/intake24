@@ -6,7 +6,7 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${portionSize.method}.container`">
+          <i18n :path="`prompts.${portionSize.method}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -31,7 +31,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.as-served.serving.header`) }}
+          {{ $t(`prompts.as-served.serving.header`) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -41,7 +41,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.as-served.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.as-served.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             v-if="servingImageSet"
             :as-served-set-id="servingImageSet"
@@ -56,7 +56,7 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.as-served.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.as-served.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -69,10 +69,10 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.as-served.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.as-served.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`portion.as-served.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.as-served.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
               :as-served-set-id="leftoverImageSet"
               :initial-object="portionSize.leftovers ?? undefined"

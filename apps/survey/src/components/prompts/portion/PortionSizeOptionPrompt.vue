@@ -20,7 +20,7 @@
                   </v-img>
                   <v-card-actions class="d-flex justify-end">
                     <v-chip class="font-weight-medium px-4" rounded>
-                      {{ $t(`portion.${method}.description.${availableMethod.description}`) }}
+                      {{ $t(`prompts.${method}.description.${availableMethod.description}`) }}
                     </v-chip>
                   </v-card-actions>
                 </v-card>
@@ -30,7 +30,7 @@
         </v-container>
       </v-item-group>
       <v-alert v-else border="left" outlined type="warning">
-        {{ $t('portion.unknown.text', { food: foodName }) }}
+        {{ $t('prompts.unknown.text', { food: foodName }) }}
       </v-alert>
     </v-sheet>
     <template #actions>

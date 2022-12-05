@@ -3,7 +3,7 @@
     <v-col cols="auto">
       <div class="d-flex flex-column">
         <div v-if="showAll" class="pa-2">
-          <v-btn block @click.stop="setAll">{{ $t('prompts.linkedQuantity.all') }}</v-btn>
+          <v-btn block @click.stop="setAll">{{ $t('prompts.linkedAmount.all') }}</v-btn>
         </div>
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
@@ -18,7 +18,7 @@
             </v-card>
           </div>
           <div v-if="whole && fraction" class="d-flex flex-column justify-center align-center mx-6">
-            <span class="font-weight-medium">{{ $t('portion.quantity.and') }}</span>
+            <span class="font-weight-medium">{{ $t('prompts.quantity.and') }}</span>
           </div>
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
@@ -34,15 +34,15 @@
         </div>
         <div class="px-3 d-flex flex-row justify-space-between">
           <span class="font-weight-medium text-button">
-            {{ $t('portion.quantity.whole') }}
+            {{ $t('prompts.quantity.whole') }}
           </span>
           <span class="font-weight-medium text-button">
-            {{ $t('portion.quantity.fraction') }}
+            {{ $t('prompts.quantity.fraction') }}
           </span>
         </div>
         <div class="pa-3">
           <v-btn block color="success" @click="updateConfirm(true)">
-            {{ $t('portion.quantity.confirm') }}
+            {{ $t('prompts.quantity.confirm') }}
           </v-btn>
         </div>
       </div>

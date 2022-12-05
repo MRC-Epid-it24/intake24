@@ -32,11 +32,11 @@
                 dark
                 icon
                 link
-                :title="$t(`portion.guide-image.expand`)"
+                :title="$t(`prompts.guide-image.expand`)"
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon aria-hidden="false" :aria-label="$t(`portion.guide-image.expand`)">
+                <v-icon aria-hidden="false" :aria-label="$t(`prompts.guide-image.expand`)">
                   $expandImage
                 </v-icon>
               </v-btn>

@@ -15,13 +15,13 @@
               <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
             </v-btn>
             <span class="mt-3 font-weight-medium text-h6">
-              {{ $t(`portion.as-served.weightFactor.${type}.${subType}`, { whole, fraction }) }}
+              {{ $t(`prompts.as-served.weightFactor.${type}.${subType}`, { whole, fraction }) }}
             </span>
             <span class="my-1 font-weight-medium text-h6">
-              {{ $t(`portion.as-served.weightFactor.${subType}`) }}
+              {{ $t(`prompts.as-served.weightFactor.${subType}`) }}
             </span>
             <span class="mb-3 font-weight-medium text-h6">
-              {{ $t(`portion.as-served.weightFactor.weight`, { amount }) }}
+              {{ $t(`prompts.as-served.weightFactor.weight`, { amount }) }}
             </span>
             <v-btn
               color="primary"

@@ -6,7 +6,7 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.label`) }}
+          {{ $t(`prompts.${portionSize.method}.label`) }}
           <template #actions>
             <valid-invalid-icon :valid="!!portionSize.milkVolumePercentage"></valid-invalid-icon>
           </template>

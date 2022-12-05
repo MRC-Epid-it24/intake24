@@ -11,7 +11,7 @@
     >
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${portionSize.method}.label`">
+          <i18n :path="`prompts.${portionSize.method}.label`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -34,7 +34,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
             v-if="portionSize.unit"
-            :path="`portion.${portionSize.method}.howMany.${
+            :path="`prompts.${portionSize.method}.howMany.${
               portionSize.unit.omitFoodDescription ? '_' : 'withFood'
             }`"
           >
@@ -47,7 +47,7 @@
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
-          <template v-else>{{ $t(`portion.${portionSize.method}.howMany.placeholder`) }}</template>
+          <template v-else>{{ $t(`prompts.${portionSize.method}.howMany.placeholder`) }}</template>
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -177,7 +177,7 @@ export default defineComponent({
     },
 
     estimateInLabel(unit: string) {
-      return this.$t(`portion.${this.portionSize.method}.estimateIn`, {
+      return this.$t(`prompts.${this.portionSize.method}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
       });
     },

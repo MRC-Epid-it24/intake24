@@ -6,7 +6,7 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${portionSize.method}.container`">
+          <i18n :path="`prompts.${portionSize.method}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -31,7 +31,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`portion.${portionSize.method}.milk`"></i18n>
+          <i18n :path="`prompts.${portionSize.method}.milk`"></i18n>
           <template #actions>
             <valid-invalid-icon :valid="milkLevelValid"></valid-invalid-icon>
           </template>

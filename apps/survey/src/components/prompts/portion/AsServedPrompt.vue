@@ -6,7 +6,7 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.serving.header`) }}
+          {{ $t(`prompts.${portionSize.method}.serving.header`) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -16,7 +16,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             :as-served-set-id="parameters['serving-image-set']"
             :initial-object="portionSize.serving ?? undefined"
@@ -30,7 +30,7 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.${portionSize.method}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -43,10 +43,10 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`portion.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`portion.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
               :as-served-set-id="parameters['leftovers-image-set']"
               :initial-object="portionSize.leftovers ?? undefined"
@@ -60,7 +60,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="promptForLinkedQuantity">
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n path="portion.linkedAmount.label">
+          <i18n path="prompts.linkedAmount.label">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>

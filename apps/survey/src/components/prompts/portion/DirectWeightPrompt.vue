@@ -1,6 +1,6 @@
 <template>
   <portion-layout v-bind="{ actions, description, text }">
-    <template #header> {{ $t('portion.directWeight.label') }} - {{ localeDescription }} </template>
+    <template #header> {{ $t('prompts.directWeight.label') }} - {{ localeDescription }} </template>
     <v-row>
       <v-col>
         <v-card>

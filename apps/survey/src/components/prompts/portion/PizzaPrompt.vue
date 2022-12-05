@@ -6,7 +6,7 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.typeLabel`) }}
+          {{ $t(`prompts.${portionSize.method}.typeLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.type"></valid-invalid-icon>
           </template>
@@ -27,7 +27,7 @@
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.thicknessLabel`) }}
+          {{ $t(`prompts.${portionSize.method}.thicknessLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.thickness"></valid-invalid-icon>
           </template>
@@ -48,7 +48,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.type">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.sizeLabel`) }}
+          {{ $t(`prompts.${portionSize.method}.sizeLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.slice"></valid-invalid-icon>
           </template>
@@ -73,10 +73,10 @@
                 :dark="isWholeSelected"
                 link
                 rounded
-                :title="$t(`portion.${portionSize.method}.whole.confirm`)"
+                :title="$t(`prompts.${portionSize.method}.whole.confirm`)"
                 @click="selectType('slice', 0, '0')"
               >
-                {{ $t(`portion.${portionSize.method}.whole.confirm`) }}
+                {{ $t(`prompts.${portionSize.method}.whole.confirm`) }}
               </v-btn>
             </template>
           </image-map-selector>
@@ -84,7 +84,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.slice">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`portion.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
+          {{ $t(`prompts.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
           </template>
