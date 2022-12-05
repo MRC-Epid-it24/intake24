@@ -77,6 +77,7 @@
             v-model="linkedQuantity"
             :confirm.sync="linkedQuantityConfirmed"
             :max="parentQuantity"
+            :show-all="promptForLinkedQuantity"
             @input="selectLinkedQuantity"
             @update:confirm="confirmLinkedQuantity"
           ></quantity-card>

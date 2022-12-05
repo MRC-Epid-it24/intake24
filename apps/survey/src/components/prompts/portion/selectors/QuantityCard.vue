@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-col cols="auto">
       <div class="d-flex flex-column">
-        <div class="pa-2">
+        <div v-if="showAll" class="pa-2">
           <v-btn block @click.stop="setAll">{{ $t('prompts.linkedQuantity.all') }}</v-btn>
         </div>
         <div class="pa-2 d-flex flex-row">
@@ -64,6 +64,10 @@ export default defineComponent({
     max: {
       type: Number,
       default: 30,
+    },
+    showAll: {
+      type: Boolean,
+      default: false,
     },
     value: {
       type: Number,
