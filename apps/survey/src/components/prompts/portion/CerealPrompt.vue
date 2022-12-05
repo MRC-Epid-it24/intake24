@@ -18,10 +18,14 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="bowlImageMap"
-            v-bind="{ config: imageMap, imageMapData: bowlImageMap, value: portionSize.bowlIndex }"
-            :id.sync="portionSize.bowlId"
+            v-bind="{
+              config: imageMap,
+              imageMapData: bowlImageMap,
+              id: portionSize.bowlId,
+              index: portionSize.bowlIndex,
+            }"
             @confirm="confirmBowl"
-            @input="selectBowl"
+            @select="selectBowl"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -211,8 +215,9 @@ export default defineComponent({
       this.portionSize.imageUrl = data.baseImageUrl;
     },
 
-    selectBowl(idx: number) {
+    selectBowl(idx: number, id: string) {
       this.portionSize.bowlIndex = idx;
+      this.portionSize.bowlId = id;
       this.portionSize.bowl = this.bowls[idx];
       this.bowlConfirmed = false;
       this.update();

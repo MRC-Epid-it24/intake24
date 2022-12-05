@@ -19,10 +19,15 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="imageMapData"
-            v-bind="{ config: imageMap, imageMapData, sizes, value: portionSize.containerIndex }"
-            :id.sync="portionSize.containerId"
+            v-bind="{
+              config: imageMap,
+              imageMapData,
+              id: portionSize.containerId,
+              index: portionSize.containerIndex,
+              sizes,
+            }"
             @confirm="confirmObject"
-            @input="selectObject"
+            @select="selectObject"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -227,13 +232,14 @@ export default defineComponent({
       this.imageMapData = { ...imageMapData };
     },
 
-    selectObject(idx: number) {
+    selectObject(idx: number, id: string) {
       const { drinkwareSetData } = this;
       if (!drinkwareSetData) return;
 
       this.objectConfirmed = false;
 
       this.portionSize.containerIndex = idx;
+      this.portionSize.containerId = id;
       this.portionSize.imageUrl = drinkwareSetData.scales[idx].baseImageUrl;
 
       this.clearQuantity();

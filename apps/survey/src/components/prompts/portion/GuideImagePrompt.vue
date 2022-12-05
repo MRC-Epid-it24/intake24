@@ -21,12 +21,12 @@
             v-bind="{
               config: imageMap,
               imageMapData: guideImageData.imageMap,
+              id: portionSize.objectId,
+              index: portionSize.objectIndex,
               sizes,
-              value: portionSize.objectIndex,
             }"
-            :id.sync="portionSize.objectId"
             @confirm="confirmObject"
-            @input="selectObject"
+            @select="selectObject"
           >
           </image-map-selector>
         </v-expansion-panel-content>
@@ -139,8 +139,9 @@ export default defineComponent({
       this.portionSize.imageUrl = data.imageMap.baseImageUrl;
     },
 
-    selectObject(idx: number) {
+    selectObject(idx: number, id: string) {
       this.portionSize.objectIndex = idx;
+      this.portionSize.objectId = id;
       this.objectConfirmed = false;
       this.update();
     },

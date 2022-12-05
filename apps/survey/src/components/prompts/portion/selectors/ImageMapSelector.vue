@@ -16,10 +16,10 @@
             v-if="config.pinchZoom && isMobile"
             v-bind="{
               id,
-              height: screenHeight,
+              index,
               imageMapData,
               sizes,
-              value,
+              height: screenHeight,
               width: screenWidth,
             }"
             @confirm="confirm"
@@ -48,12 +48,12 @@
             v-for="(object, idx) in objects"
             :key="idx"
             class="guide-drawer-polygon"
-            :class="{ active: idx === value }"
+            :class="{ active: idx === index }"
             :points="object.polygon"
             @click.stop="select(idx, object.id)"
             @keypress.stop="select(idx, object.id)"
-            @mouseleave="hoverValue = undefined"
-            @mouseover="hoverValue = idx"
+            @mouseleave="hoverIndex = undefined"
+            @mouseover="hoverIndex = idx"
           ></polygon>
         </svg>
       </div>
@@ -97,6 +97,12 @@ export default defineComponent({
     disabled: {
       type: Boolean,
     },
+    id: {
+      type: String,
+    },
+    index: {
+      type: Number,
+    },
     imageMapData: {
       type: Object as PropType<ImageMapResponse>,
       required: true,
@@ -105,21 +111,15 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => [],
     },
-    id: {
-      type: String,
-    },
-    value: {
-      type: Number,
-    },
   },
 
   setup() {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    const hoverValue = ref<number | undefined>(undefined);
+    const hoverIndex = ref<number | undefined>(undefined);
 
-    return { img, svg, hoverValue };
+    return { img, svg, hoverIndex };
   },
 
   data() {
@@ -133,7 +133,7 @@ export default defineComponent({
 
   computed: {
     isDisabled() {
-      return this.disabled || this.value === undefined;
+      return this.disabled || this.index === undefined;
     },
 
     hasLabelSlot(): boolean {
@@ -158,11 +158,11 @@ export default defineComponent({
       if (
         !this.config.labels ||
         !this.sizes.length ||
-        (this.hoverValue === undefined && this.value === undefined)
+        (this.hoverIndex === undefined && this.index === undefined)
       )
         return undefined;
 
-      const idx = this.hoverValue ?? this.value;
+      const idx = this.hoverIndex ?? this.index;
       if (idx === undefined) return undefined;
 
       return this.sizes[idx];
@@ -203,8 +203,7 @@ export default defineComponent({
     },
 
     select(idx: number, id: string) {
-      this.$emit('input', idx);
-      this.$emit('update:id', id);
+      this.$emit('select', idx, id);
 
       if (!this.isMobile) this.confirm();
     },

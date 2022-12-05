@@ -17,11 +17,11 @@
             v-bind="{
               config: imageMap,
               imageMapData: imageMaps.type,
-              value: portionSize.type.index,
+              id: portionSize.type.id,
+              index: portionSize.type.index,
             }"
-            :id.sync="portionSize.type.id"
             @confirm="confirmType('type')"
-            @input="selectType('type', $event)"
+            @select="(idx, id) => selectType('type', idx, id)"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,11 +38,11 @@
             v-bind="{
               config: imageMap,
               imageMapData: imageMaps.thickness,
-              value: portionSize.thickness.index,
+              id: portionSize.thickness.id,
+              index: portionSize.thickness.index,
             }"
-            :id.sync="portionSize.thickness.id"
             @confirm="confirmType('thickness')"
-            @input="selectType('thickness', $event)"
+            @select="(idx, id) => selectType('thickness', idx, id)"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -60,11 +60,11 @@
               config: imageMap,
               disabled: portionSize.slice.index === undefined,
               imageMapData: imageMaps.slice,
-              value: portionSize.slice.index ? portionSize.slice.index - 1 : undefined,
+              id: portionSize.slice.id,
+              index: portionSize.slice.index ? portionSize.slice.index - 1 : undefined,
             }"
-            :id.sync="portionSize.slice.id"
             @confirm="confirmType('slice')"
-            @input="selectType('slice', $event + 1)"
+            @select="(idx, id) => selectType('slice', idx + 1, id)"
           >
             <template #label>
               <v-btn
@@ -74,7 +74,7 @@
                 link
                 rounded
                 :title="$t(`portion.${portionSize.method}.whole.confirm`)"
-                @click="selectType('slice', 0)"
+                @click="selectType('slice', 0, '0')"
               >
                 {{ $t(`portion.${portionSize.method}.whole.confirm`) }}
               </v-btn>
@@ -274,8 +274,9 @@ export default defineComponent({
       this.update();
     },
 
-    selectType(type: PizzaImageMap, idx: number) {
+    selectType(type: PizzaImageMap, idx: number, id: string) {
       this.portionSize[type].index = idx;
+      this.portionSize[type].id = id;
       this.confirmed[type] = false;
       this.update();
 
@@ -285,9 +286,6 @@ export default defineComponent({
       }
 
       if (type === 'slice') {
-        // Whole pizza selected
-        if (idx === 0) this.portionSize[type].id = '0';
-
         this.confirmType('quantity', false);
 
         if (!this.isMobile) this.confirmType(type);

@@ -23,7 +23,7 @@
                 v-for="(object, idx) in objects"
                 :key="idx"
                 class="guide-drawer-polygon"
-                :class="{ active: idx === value }"
+                :class="{ active: idx === index }"
                 :points="object.polygon"
                 @click.stop="select(idx, object.id)"
                 @keypress.stop="select(idx, object.id)"
@@ -68,6 +68,9 @@ export default defineComponent({
     id: {
       type: String,
     },
+    index: {
+      type: Number,
+    },
     height: {
       type: Number,
       required: true,
@@ -80,9 +83,6 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => [],
     },
-    value: {
-      type: Number,
-    },
     width: {
       type: Number,
       required: true,
@@ -93,11 +93,11 @@ export default defineComponent({
     const dialog = ref(false);
     const zoomer = ref<InstanceType<typeof PinchScrollZoom>>();
 
-    const hoverValue = ref<number | undefined>(undefined);
+    const hoverIndex = ref<number | undefined>(undefined);
 
     return {
       dialog,
-      hoverValue,
+      hoverIndex,
       scale: 1,
       zoomer,
     };
@@ -119,10 +119,10 @@ export default defineComponent({
     },
 
     size(): string | undefined {
-      if (!this.sizes.length || (this.hoverValue === undefined && this.value === undefined))
+      if (!this.sizes.length || (this.hoverIndex === undefined && this.index === undefined))
         return undefined;
 
-      const idx = this.hoverValue ?? this.value;
+      const idx = this.hoverIndex ?? this.index;
       if (idx === undefined) return undefined;
 
       return this.sizes[idx];

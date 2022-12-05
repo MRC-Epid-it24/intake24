@@ -18,10 +18,14 @@
         <v-expansion-panel-content>
           <image-map-selector
             v-if="bowlImageMap"
-            v-bind="{ config: imageMap, imageMapData: bowlImageMap, value: portionSize.bowlIndex }"
-            :id.sync="portionSize.bowlId"
+            v-bind="{
+              config: imageMap,
+              imageMapData: bowlImageMap,
+              id: portionSize.bowlId,
+              index: portionSize.bowlIndex,
+            }"
             @confirm="confirmBowl"
-            @input="selectBowl"
+            @select="selectBowl"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,11 +42,11 @@
             v-bind="{
               config: imageMap,
               imageMapData: milkLevelImageMap,
-              value: portionSize.milkLevelIndex,
+              id: portionSize.milkLevelId,
+              index: portionSize.milkLevelIndex,
             }"
-            :id.sync="portionSize.milkLevelId"
             @confirm="confirmMilk"
-            @input="selectMilk"
+            @select="selectMilk"
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -162,6 +166,14 @@ export default defineComponent({
 
   async mounted() {
     await Promise.all([this.fetchBowlImageMap(), this.fetchMilkLevelImageMap()]);
+    if (this.parentFood?.portionSize?.method !== 'cereal') return;
+
+    const { bowlIndex, bowlId } = this.parentFood.portionSize;
+
+    if (bowlIndex !== undefined && bowlId !== undefined) {
+      this.selectBowl(bowlIndex, bowlId);
+      this.confirmBowl();
+    }
   },
 
   methods: {
@@ -185,8 +197,9 @@ export default defineComponent({
       this.portionSize.milkLevelImage = data.baseImageUrl;
     },
 
-    selectBowl(idx: number) {
+    selectBowl(idx: number, id: string) {
       this.portionSize.bowlIndex = idx;
+      this.portionSize.bowlId = id;
       this.portionSize.bowl = this.bowls[idx];
       this.bowlConfirmed = false;
       this.clearMilk();
@@ -210,8 +223,9 @@ export default defineComponent({
       return volumeDefs[bowl][idx] * this.milkDensity;
     },
 
-    selectMilk(idx: number) {
+    selectMilk(idx: number, id: string) {
       this.portionSize.milkLevelIndex = idx;
+      this.portionSize.milkLevelId = id;
       this.milkLevelConfirmed = false;
       this.update();
     },
