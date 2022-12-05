@@ -128,18 +128,22 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private registerQueueEvents(): void {
     this.queueEvents
       .on('progress', async ({ jobId, data }) => {
-        const job = await DbJob.findByPk(jobId);
+        const dbId = jobId.replace('db:', '');
+
+        const job = await DbJob.findByPk(dbId);
         if (!job) {
-          this.logger.error(`QueueEvent progress: Job entry not found (${jobId}).`);
+          this.logger.error(`QueueEvent progress: Job entry not found (${dbId}).`);
           return;
         }
 
         if (typeof data === 'number' && data < 1) await job.update({ progress: data });
       })
       .on('completed', async ({ jobId }) => {
-        const job = await DbJob.findByPk(jobId);
+        const dbId = jobId.replace('db:', '');
+
+        const job = await DbJob.findByPk(dbId);
         if (!job) {
-          this.logger.error(`QueueEvent completed: Job entry not found (${jobId}).`);
+          this.logger.error(`QueueEvent completed: Job entry not found (${dbId}).`);
           return;
         }
 
@@ -148,6 +152,8 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         await this.notify(job.userId, { jobId, status: 'success' });
       })
       .on('failed', async ({ jobId, failedReason }) => {
+        const dbId = jobId.replace('db:', '');
+
         const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
         if (!bullJob) {
           this.logger.error(`QueueEvent failed: BullJob (${jobId}) not found.`);
@@ -160,9 +166,9 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
           `QueueEvent failed: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
         );
 
-        const job = await DbJob.findByPk(jobId);
+        const job = await DbJob.findByPk(dbId);
         if (!job) {
-          this.logger.error(`QueueEvent failed: Job entry not found (${jobId}).`);
+          this.logger.error(`QueueEvent failed: Job entry not found (${dbId}).`);
           return;
         }
 
@@ -202,9 +208,10 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       return;
     }
 
-    const dbJob = await DbJob.findByPk(id);
+    const dbId = id.replace('db:', '');
+    const dbJob = await DbJob.findByPk(dbId);
     if (!dbJob) {
-      this.logger.error(`Queue ${this.name}: Job entry not found (${id}).`);
+      this.logger.error(`Queue ${this.name}: Job entry not found (${dbId}).`);
       return;
     }
 
@@ -226,7 +233,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private async queueJob(job: DbJob, options: JobsOptions = {}): Promise<void> {
     const { id, type, params } = job;
 
-    await this.queue.add(type, { params }, { ...options, jobId: id });
+    await this.queue.add(type, { params }, { ...options, jobId: `db:${id}` });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }

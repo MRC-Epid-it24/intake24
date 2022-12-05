@@ -42,8 +42,8 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
   public async run(job: Job): Promise<void> {
     this.init(job);
 
-    const dbJob = await DbJob.findByPk(this.id);
-    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.id}).`);
+    const dbJob = await DbJob.findByPk(this.dbId);
+    if (!dbJob) throw new NotFoundError(`Job ${this.name}: Job record not found (${this.dbId}).`);
 
     this.dbJob = dbJob;
 
