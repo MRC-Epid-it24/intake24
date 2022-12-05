@@ -526,7 +526,7 @@ importers:
       '@types/jsdom': ^20.0.1
       '@types/lodash': ^4.14.190
       '@types/node': ^18.11.9
-      '@types/uuid': ^8.3.4
+      '@types/uuid': ^9.0.0
       '@vitejs/plugin-vue2': 2.0.1
       '@vue/eslint-config-prettier': ^7.0.0
       '@vue/eslint-config-typescript': ^11.0.2
@@ -580,7 +580,7 @@ importers:
       '@types/jsdom': 20.0.1
       '@types/lodash': 4.14.190
       '@types/node': 18.11.9
-      '@types/uuid': 8.3.4
+      '@types/uuid': 9.0.0
       '@vitejs/plugin-vue2': 2.0.1_vite@3.2.4+vue@2.7.14
       '@vue/eslint-config-prettier': 7.0.0_5qrnzwqb344w6up62gv3safeoi
       '@vue/eslint-config-typescript': 11.0.2_5ma4o5namqj2syekqcvrgakwe4
@@ -3389,8 +3389,8 @@ packages:
     resolution: {integrity: sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==}
     dev: true
 
-  /@types/uuid/8.3.4:
-    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+  /@types/uuid/9.0.0:
+    resolution: {integrity: sha512-kr90f+ERiQtKWMz5rP32ltJ/BtULDI5RVO0uavn1HQUOwjx0R1h0rnDYNL0CepF1zL5bSY6FISAfd9tOdDhU5Q==}
     dev: true
 
   /@types/validator/13.7.10:
