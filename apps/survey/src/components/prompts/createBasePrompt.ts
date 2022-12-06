@@ -1,16 +1,16 @@
 import type { PropType } from 'vue';
+import camelCase from 'lodash/camelCase';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, ComponentType, PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
-import { customPromptQuestions, standardPromptQuestions } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 import { localeContent } from '@intake24/survey/components/mixins';
+import { promptType } from '@intake24/survey/util';
 
 import { Next } from './actions';
 import { PromptLayout } from './layouts';
 
-export default <P extends BasePromptProps, F extends FoodState = EncodedFood>() =>
+export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
@@ -25,27 +25,14 @@ export default <P extends BasePromptProps, F extends FoodState = EncodedFood>() 
       meal: {
         type: Object as PropType<MealState>,
       },
-      promptComponent: {
-        type: String as PropType<ComponentType>,
-        required: true,
-      },
-      promptProps: {
-        type: Object as PropType<P>,
+      prompt: {
+        type: Object as PropType<Prompts[P]>,
         required: true,
       },
     },
 
     data() {
-      const question = [...customPromptQuestions, ...standardPromptQuestions].find(
-        ({ component }) => component === this.promptComponent
-      ) as PromptQuestion<P> | undefined;
-
-      const props = (
-        question ? merge(question.props, this.promptProps as P) : this.promptProps
-      ) as P;
-
       return {
-        ...props,
         errors: [] as string[],
       };
     },
@@ -84,6 +71,10 @@ export default <P extends BasePromptProps, F extends FoodState = EncodedFood>() 
 
       isValid(): boolean {
         return false;
+      },
+
+      type() {
+        return promptType((this.prompt as Prompt).component);
       },
     },
 

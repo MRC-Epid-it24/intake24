@@ -1,6 +1,6 @@
 <template>
   <ready-meal-prompt
-    v-bind="{ initialState: state, meal, promptComponent, promptProps }"
+    v-bind="{ initialState: state, meal, prompt }"
     @action="action"
     @update="update"
   ></ready-meal-prompt>
@@ -10,7 +10,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ReadyMealPromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
 import type { ReadyMealPromptState } from '@intake24/survey/components/prompts/standard';
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
@@ -24,16 +24,8 @@ export default defineComponent({
   components: { ReadyMealPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<ReadyMealPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['ready-meal-prompt']>,
       required: true,
     },
   },

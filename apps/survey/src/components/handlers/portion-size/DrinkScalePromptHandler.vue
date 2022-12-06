@@ -2,11 +2,10 @@
   <drink-scale-prompt
     v-bind="{
       food: food(),
-      parentFood,
       initialState: state,
       parameters,
-      promptComponent,
-      promptProps,
+      parentFood,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -19,7 +18,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { DrinkScalePromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { DrinkScalePromptState } from '@intake24/survey/components/prompts';
 import { DrinkScalePrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -32,16 +31,8 @@ export default defineComponent({
   components: { DrinkScalePrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<DrinkScalePromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['drink-scale-prompt']>,
       required: true,
     },
   },
@@ -76,8 +67,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

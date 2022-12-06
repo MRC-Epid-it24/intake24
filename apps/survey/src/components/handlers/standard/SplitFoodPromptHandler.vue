@@ -1,8 +1,5 @@
 <template>
-  <split-food-prompt
-    v-bind="{ food: freeTextFood(), promptComponent, promptProps, suggestions }"
-    @action="action"
-  >
+  <split-food-prompt v-bind="{ food: freeTextFood(), prompt, suggestions }" @action="action">
   </split-food-prompt>
 </template>
 
@@ -11,7 +8,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { SplitFoodPromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
@@ -25,16 +22,8 @@ export default defineComponent({
   components: { SplitFoodPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<SplitFoodPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['split-food-prompt']>,
       required: true,
     },
   },

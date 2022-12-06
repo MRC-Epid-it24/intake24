@@ -48,7 +48,7 @@ export default defineComponent({
 
   computed: {
     items() {
-      return this.getBreadCrumbs(this.promptName).filter((el) => !el.disabled);
+      return this.getBreadCrumbs().filter((el) => !el.disabled);
     },
   },
 });

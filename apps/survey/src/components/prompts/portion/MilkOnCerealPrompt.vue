@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.container`">
+          <i18n :path="`prompts.${type}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -19,7 +16,7 @@
           <image-map-selector
             v-if="bowlImageMap"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: bowlImageMap,
               id: portionSize.bowlId,
               index: portionSize.bowlIndex,
@@ -31,7 +28,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.milk`"></i18n>
+          <i18n :path="`prompts.${type}.milk`"></i18n>
           <template #actions>
             <valid-invalid-icon :valid="milkLevelValid"></valid-invalid-icon>
           </template>
@@ -40,7 +37,7 @@
           <image-map-selector
             v-if="milkLevelImageMap"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: milkLevelImageMap,
               id: portionSize.milkLevelId,
               index: portionSize.milkLevelIndex,
@@ -55,10 +52,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { MilkOnCerealPromptProps } from '@intake24/common/prompts';
 import type { MilkOnCerealState } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
@@ -93,13 +88,9 @@ export default defineComponent({
 
   components: { ImageMapSelector },
 
-  mixins: [createBasePortion<MilkOnCerealPromptProps, MilkOnCerealPromptState>()],
+  mixins: [createBasePortion<'milk-on-cereal-prompt', MilkOnCerealPromptState>()],
 
   props: {
-    promptProps: {
-      type: Object as PropType<MilkOnCerealPromptProps>,
-      required: true,
-    },
     bowlImageMapId: {
       type: String,
       default: 'gbowl',

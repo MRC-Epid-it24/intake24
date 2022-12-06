@@ -1,4 +1,4 @@
-import type { ComponentType, Condition, PromptQuestion } from '@intake24/common/prompts';
+import type { ComponentType, Condition, Prompt } from '@intake24/common/prompts';
 import type {
   MealQuestionSection,
   MealSection,
@@ -68,10 +68,10 @@ const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
   return conditionOps[condition.op]([condition.value, store.user.submissions + 1]);
 };
 
-const showPrompt = (state: SurveyState, prompt: PromptQuestion, component: ComponentType) =>
+const showPrompt = (state: SurveyState, prompt: Prompt, component: ComponentType) =>
   prompt.component === component;
 
-const checkSurveyStandardConditions = (state: SurveyState, prompt: PromptQuestion): boolean => {
+const checkSurveyStandardConditions = (state: SurveyState, prompt: Prompt): boolean => {
   switch (prompt.component) {
     case 'info-prompt':
       return !state.data.flags.includes(`${prompt.id}-acknowledged`);
@@ -86,8 +86,8 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: PromptQuestio
   }
 };
 
-const checkSurveyCustomConditions = (store: SurveyStore, prompt: PromptQuestion) =>
-  prompt.props.conditions.every((condition) => {
+const checkSurveyCustomConditions = (store: SurveyStore, prompt: Prompt) =>
+  prompt.conditions.every((condition) => {
     const { op, props, type, value } = condition;
 
     switch (type) {
@@ -123,7 +123,7 @@ const checkSurveyCustomConditions = (store: SurveyStore, prompt: PromptQuestion)
 const checkMealStandardConditions = (
   surveyState: SurveyState,
   mealState: MealState,
-  prompt: PromptQuestion
+  prompt: Prompt
 ): boolean => {
   switch (prompt.component) {
     case 'edit-meal-prompt':
@@ -161,12 +161,8 @@ const checkMealStandardConditions = (
   }
 };
 
-const checkMealCustomConditions = (
-  store: SurveyStore,
-  mealState: MealState,
-  prompt: PromptQuestion
-) =>
-  prompt.props.conditions.every((condition) => {
+const checkMealCustomConditions = (store: SurveyStore, mealState: MealState, prompt: Prompt) =>
+  prompt.conditions.every((condition) => {
     const { op, props, type, value } = condition;
 
     switch (type) {
@@ -214,7 +210,7 @@ const checkMealCustomConditions = (
 const checkFoodStandardConditions = (
   surveyState: SurveyState,
   foodState: FoodState,
-  prompt: PromptQuestion
+  prompt: Prompt
 ): boolean => {
   switch (prompt.component) {
     case 'info-prompt': {
@@ -514,9 +510,9 @@ const checkFoodCustomConditions = (
   store: SurveyStore,
   mealState: MealState,
   foodState: FoodState,
-  prompt: PromptQuestion
+  prompt: Prompt
 ) =>
-  prompt.props.conditions.every((condition) => {
+  prompt.conditions.every((condition) => {
     const { op, props, type, value } = condition;
 
     switch (type) {
@@ -577,18 +573,15 @@ export default class PromptManager {
     this.store = store;
   }
 
-  findMealPromptOfType(type: ComponentType, section: MealSection): PromptQuestion | undefined {
+  findMealPromptOfType(type: ComponentType, section: MealSection): Prompt | undefined {
     return this.scheme.questions.meals[section].find((question) => question.component === type);
   }
 
-  findSurveyPromptOfType(
-    type: ComponentType,
-    section: SurveyQuestionSection
-  ): PromptQuestion | undefined {
+  findSurveyPromptOfType(type: ComponentType, section: SurveyQuestionSection): Prompt | undefined {
     return this.scheme.questions[section].find((question) => question.component === type);
   }
 
-  nextSurveySectionPrompt(section: SurveyQuestionSection): PromptQuestion | undefined {
+  nextSurveySectionPrompt(section: SurveyQuestionSection): Prompt | undefined {
     return this.scheme.questions[section].find(
       (question) =>
         checkSurveyStandardConditions(this.store.$state, question) &&
@@ -596,7 +589,7 @@ export default class PromptManager {
     );
   }
 
-  nextMealSectionPrompt(section: MealQuestionSection, mealId: number): PromptQuestion | undefined {
+  nextMealSectionPrompt(section: MealQuestionSection, mealId: number): Prompt | undefined {
     const state = this.store.$state;
     const mealState = findMeal(state.data.meals, mealId);
 
@@ -621,7 +614,7 @@ export default class PromptManager {
     );
   }
 
-  nextFoodsPrompt(foodId: number): PromptQuestion | undefined {
+  nextFoodsPrompt(foodId: number): Prompt | undefined {
     const state = this.store.$state;
 
     const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
@@ -640,7 +633,7 @@ export default class PromptManager {
    * @param component type of the prompt component to find
    * @returns { PromptQuestion }
    */
-  setNextPreMealsPrompt(component: ComponentType): PromptQuestion | undefined {
+  setNextPreMealsPrompt(component: ComponentType): Prompt | undefined {
     return this.scheme.questions.preMeals.find((question) =>
       showPrompt(this.store.$state, question, component)
     );

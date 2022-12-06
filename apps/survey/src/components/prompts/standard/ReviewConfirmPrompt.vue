@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>
@@ -58,7 +58,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
@@ -70,7 +69,7 @@ export default defineComponent({
 
   components: { SurveyProgressBar },
 
-  mixins: [createBasePrompt<BasePromptProps>()],
+  mixins: [createBasePrompt<'review-confirm-prompt'>()],
 
   props: {
     meals: {

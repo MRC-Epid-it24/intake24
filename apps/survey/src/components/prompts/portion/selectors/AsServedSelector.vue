@@ -50,17 +50,17 @@
     <v-row>
       <v-col>
         <v-btn block :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
-          {{ $t(`prompts.as-served.${type}.less`) }}
+          {{ $t(`prompts.asServed.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
         <v-btn block :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
-          {{ $t(`prompts.as-served.${type}.more`) }}
+          {{ $t(`prompts.asServed.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col align="center" cols="12" md="4">
         <v-btn block color="success" @click="confirm">
-          {{ $t(`prompts.as-served.${type}.confirm`) }}
+          {{ $t(`prompts.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
     </v-row>

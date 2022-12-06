@@ -1,7 +1,7 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form @submit.prevent="action('next')">
-      <v-label v-if="label">{{ getLocaleContent(label) }}</v-label>
+      <v-label v-if="prompt.i18n.label">{{ getLocaleContent(prompt.i18n.label) }}</v-label>
       <v-checkbox
         v-for="option in localeOptions"
         :key="option.value"
@@ -13,7 +13,7 @@
         :value="option.value"
         @change="update"
       ></v-checkbox>
-      <v-row v-if="other" align="center" no-gutters>
+      <v-row v-if="prompt.other" align="center" no-gutters>
         <v-checkbox v-model="otherEnabled" class="mt-0 pb-2" hide-details></v-checkbox>
         <v-text-field
           v-model.trim="otherValue"
@@ -32,14 +32,14 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CheckboxListPromptProps, ListOption } from '@intake24/common/prompts';
+import type { ListOption } from '@intake24/common/prompts';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'CheckboxListPrompt',
 
-  mixins: [createBasePrompt<CheckboxListPromptProps>()],
+  mixins: [createBasePrompt<'checkbox-list-prompt'>()],
 
   props: {
     value: {
@@ -58,13 +58,13 @@ export default defineComponent({
 
   computed: {
     localeOptions(): ListOption[] {
-      return this.options[this.$i18n.locale] ?? this.options.en;
+      return this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en;
     },
     currentValue(): string[] {
       return [...this.selected, this.otherValue].filter((item) => item);
     },
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue.length;
+      return !this.prompt.validation.required || !!this.currentValue.length;
     },
   },
 
@@ -85,7 +85,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.validation.message, {
+        this.getLocaleContent(this.prompt.validation.message, {
           path: 'prompts.checkbox.validation.required',
         }),
       ];

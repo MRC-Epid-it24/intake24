@@ -10,7 +10,7 @@
       <slot></slot>
     </v-card-text>
     <v-card-actions
-      v-if="!isMobile || actions.both"
+      v-if="!isMobile || prompt.actions?.both"
       class="pa-4 d-flex"
       :class="{ 'flex-column-reverse': isMobile }"
     >

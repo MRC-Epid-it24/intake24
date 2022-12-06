@@ -4,8 +4,7 @@
       food: food(),
       initialState: state,
       localeId,
-      promptComponent,
-      promptProps,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -18,7 +17,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { AssociatedFoodsPromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type {
   AssociatedFoodPromptState,
   AssociatedFoodsState,
@@ -45,16 +44,8 @@ export default defineComponent({
   components: { AssociatedFoodsPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<AssociatedFoodsPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['associated-foods-prompt']>,
       required: true,
     },
   },
@@ -70,8 +61,8 @@ export default defineComponent({
     };
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

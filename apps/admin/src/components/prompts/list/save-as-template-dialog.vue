@@ -60,7 +60,7 @@ import pick from 'lodash/pick';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { ValidationError } from '@intake24/common/types';
 import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
 import { ErrorList } from '@intake24/admin/components/forms';
@@ -69,7 +69,7 @@ import { useEntry } from '@intake24/admin/stores';
 import { copy } from '@intake24/common/util';
 
 export type SchemeQuestionForm = {
-  question: PromptQuestion;
+  question: Prompt;
 };
 
 export default defineComponent({
@@ -83,7 +83,7 @@ export default defineComponent({
       default: false,
     },
     question: {
-      type: Object as PropType<PromptQuestion>,
+      type: Object as PropType<Prompt>,
       required: true,
     },
   },

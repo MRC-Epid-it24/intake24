@@ -107,7 +107,7 @@ import type { PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -128,7 +128,7 @@ export default defineComponent({
       default: 'full',
     },
     question: {
-      type: Object as PropType<PromptQuestion>,
+      type: Object as PropType<Prompt>,
       required: true,
     },
     index: {
@@ -140,7 +140,7 @@ export default defineComponent({
       default: () => [],
     },
     templates: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as PropType<Prompt[]>,
       default: () => [],
     },
   },
@@ -157,7 +157,7 @@ export default defineComponent({
       return this.mode === 'override';
     },
 
-    template(): PromptQuestion | undefined {
+    template(): Prompt | undefined {
       return this.templates.find((template) => template.id === this.question.id);
     },
 

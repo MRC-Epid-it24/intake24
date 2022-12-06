@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.typeLabel`) }}
+          {{ $t(`prompts.${type}.typeLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.type"></valid-invalid-icon>
           </template>
@@ -15,7 +12,7 @@
           <image-map-selector
             v-if="imageMaps.type"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: imageMaps.type,
               id: portionSize.type.id,
               index: portionSize.type.index,
@@ -27,7 +24,7 @@
       </v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.thicknessLabel`) }}
+          {{ $t(`prompts.${type}.thicknessLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.thickness"></valid-invalid-icon>
           </template>
@@ -36,7 +33,7 @@
           <image-map-selector
             v-if="imageMaps.thickness"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: imageMaps.thickness,
               id: portionSize.thickness.id,
               index: portionSize.thickness.index,
@@ -48,7 +45,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.type">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.sizeLabel`) }}
+          {{ $t(`prompts.${type}.sizeLabel`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.slice"></valid-invalid-icon>
           </template>
@@ -57,7 +54,7 @@
           <image-map-selector
             v-if="imageMaps.slice"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               disabled: portionSize.slice.index === undefined,
               imageMapData: imageMaps.slice,
               id: portionSize.slice.id,
@@ -73,10 +70,10 @@
                 :dark="isWholeSelected"
                 link
                 rounded
-                :title="$t(`prompts.${portionSize.method}.whole.confirm`)"
+                :title="$t(`prompts.${type}.whole.confirm`)"
                 @click="selectType('slice', 0, '0')"
               >
-                {{ $t(`prompts.${portionSize.method}.whole.confirm`) }}
+                {{ $t(`prompts.${type}.whole.confirm`) }}
               </v-btn>
             </template>
           </image-map-selector>
@@ -84,7 +81,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.slice">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
+          {{ $t(`prompts.${type}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
             <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
           </template>
@@ -105,7 +102,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { PizzaPromptProps } from '@intake24/common/prompts';
 import type { PizzaState } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
@@ -155,7 +151,7 @@ export default defineComponent({
 
   components: { QuantityCard, ImageMapSelector },
 
-  mixins: [createBasePortion<PizzaPromptProps, PizzaPromptState>()],
+  mixins: [createBasePortion<'pizza-prompt', PizzaPromptState>()],
 
   data() {
     const typeImageMapId = 'gpizza';

@@ -1,23 +1,19 @@
 import type { PropType } from 'vue';
+import camelCase from 'lodash/camelCase';
 import { defineComponent } from 'vue';
 
-import type {
-  BasePromptProps,
-  PortionSizeComponentType,
-  PromptQuestion,
-} from '@intake24/common/prompts';
+import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
-import { portionSizePromptQuestions } from '@intake24/common/prompts';
-import { merge } from '@intake24/common/util';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { localeContent } from '@intake24/survey/components/mixins';
+import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
 import { PortionLayout } from '../layouts';
 
 export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
 
-export default <P extends BasePromptProps, S extends object>() =>
+export default <P extends keyof Prompts, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
 
@@ -37,27 +33,14 @@ export default <P extends BasePromptProps, S extends object>() =>
         type: Object as PropType<S>,
         required: true,
       },
-      promptComponent: {
-        type: String as PropType<PortionSizeComponentType>,
-        required: true,
-      },
-      promptProps: {
-        type: Object as PropType<P>,
+      prompt: {
+        type: Object as PropType<Prompts[P]>,
         required: true,
       },
     },
 
     data() {
-      const question = portionSizePromptQuestions.find(
-        ({ component }) => component === this.promptComponent
-      ) as PromptQuestion<P> | undefined;
-
-      const props = (
-        question ? merge(question.props, this.promptProps as P) : this.promptProps
-      ) as P;
-
       return {
-        ...props,
         errors: [] as string[],
         panel: 0,
       };
@@ -95,6 +78,10 @@ export default <P extends BasePromptProps, S extends object>() =>
           parentFood.portionSize.method === 'guide-image' &&
           parentFood.portionSize.quantity > 1
         );
+      },
+
+      type() {
+        return promptType((this.prompt as Prompt).component);
       },
     },
 

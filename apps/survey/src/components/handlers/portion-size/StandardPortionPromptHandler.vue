@@ -3,11 +3,10 @@
     v-bind="{
       conversionFactor,
       food: food(),
-      parentFood,
       initialState: state,
       parameters,
-      promptComponent,
-      promptProps,
+      parentFood,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -20,10 +19,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type {
-  PortionSizeComponentType,
-  StandardPortionPromptProps,
-} from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { StandardPortionPromptState } from '@intake24/survey/components/prompts';
 import { StandardPortionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -36,16 +32,8 @@ export default defineComponent({
   components: { StandardPortionPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<StandardPortionPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['standard-portion-prompt']>,
       required: true,
     },
   },
@@ -71,8 +59,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

@@ -1,4 +1,4 @@
-import type { PromptQuestion } from '../../../prompts';
+import type { Prompt } from '../../../prompts';
 import type { ExportField, ExportSectionId } from '../../../schemes';
 import type {
   Pagination,
@@ -26,7 +26,7 @@ export type SurveySchemeListEntry = Pick<SurveySchemeAttributes, 'id' | 'name'>;
 
 export type SurveySchemeRefs = {
   languages: LanguageListEntry[];
-  templates: PromptQuestion[];
+  templates: Prompt[];
 };
 
 export type SurveySchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;

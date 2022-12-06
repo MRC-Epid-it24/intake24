@@ -1,8 +1,8 @@
 <template>
   <component
-    :is="promptComponent"
-    :key="promptId"
-    v-bind="{ promptComponent, promptProps }"
+    :is="prompt.component"
+    :key="prompt.id"
+    v-bind="{ prompt }"
     @action="action"
   ></component>
 </template>
@@ -12,7 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import { SubmitPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -22,16 +22,8 @@ export default defineComponent({
   components: { SubmitPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['submit-prompt']>,
       required: true,
     },
   },

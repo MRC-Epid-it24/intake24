@@ -1,4 +1,5 @@
 import type { TranslateResult } from 'vue-i18n';
+import has from 'lodash/has';
 import { defineComponent } from 'vue';
 
 import type {
@@ -26,7 +27,8 @@ export default defineComponent({
       const localeContent = content[this.$i18n.locale];
       if (localeContent) return replaceParams(localeContent, params);
 
-      if (path) return this.$t(path, params).toString();
+      if (path && has(this.$i18n.messages[this.$i18n.locale], path))
+        return this.$t(path, params).toString();
 
       return content.en ? replaceParams(content.en, params) : '';
     },

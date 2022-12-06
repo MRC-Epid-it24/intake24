@@ -1,6 +1,6 @@
 <template>
-  <portion-layout v-bind="{ actions, description, text }">
-    <template #header> {{ $t('prompts.directWeight.label') }} - {{ localeDescription }} </template>
+  <portion-layout v-bind="{ food, prompt, isValid }">
+    <template #header>{{ $t('prompts.directWeight.label') }} - {{ localeDescription }}</template>
     <v-row>
       <v-col>
         <v-card>
@@ -16,24 +16,14 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-
-import type { DirectWeightPromptProps } from '@intake24/common/prompts';
 
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'DirectWeightPrompt',
 
-  mixins: [createBasePortion<DirectWeightPromptProps, any>()],
-
-  props: {
-    promptProps: {
-      type: Object as PropType<DirectWeightPromptProps>,
-      required: true,
-    },
-  },
+  mixins: [createBasePortion<'direct-weight-prompt', any>()],
 
   data() {
     return {

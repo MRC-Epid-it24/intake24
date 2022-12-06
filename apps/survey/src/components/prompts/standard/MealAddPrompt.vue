@@ -1,15 +1,5 @@
 <template>
-  <prompt-layout
-    v-bind="{
-      actions,
-      description: localeDescription,
-      text: localeText,
-      meal,
-      food,
-      isValid,
-    }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-row>
       <v-col md="8" sm="12">
         <v-form ref="form" @submit.prevent="action('next')">
@@ -18,9 +8,9 @@
             autofocus
             clearable
             hide-selected
-            :hint="$t('prompts.addMeal.hint')"
+            :hint="$t(`prompts.${type}.hint`)"
             :items="meals"
-            :label="$t('prompts.addMeal.label')"
+            :label="$t(`prompts.${type}.label`)"
             outlined
             persistent-hint
             small-chips
@@ -35,10 +25,10 @@
         :block="isMobile"
         class="px-5"
         large
-        :title="$t('prompts.addMeal.no')"
+        :title="$t(`prompts.${type}.no`)"
         @click.stop="action('cancel')"
       >
-        {{ $t('prompts.addMeal.no') }}
+        {{ $t(`prompts.${type}.no`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -46,16 +36,16 @@
         color="success"
         :disabled="!isValid"
         large
-        :title="$t('prompts.addMeal.yes')"
+        :title="$t(`prompts.${type}.yes`)"
         @click="action('next')"
       >
-        {{ $t('prompts.addMeal.yes') }}
+        {{ $t(`prompts.${type}.yes`) }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="$t('prompts.addMeal.no')" value="cancel">
+      <v-btn :title="$t(`prompts.${type}.no`)" value="cancel">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
-          {{ $t('prompts.addMeal.no') }}
+          {{ $t(`prompts.${type}.no`) }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
@@ -63,12 +53,12 @@
       <v-btn
         color="success"
         :disabled="!isValid"
-        :title="$t('prompts.addMeal.yes')"
+        :title="$t(`prompts.${type}.yes`)"
         value="next"
         @click="action('next')"
       >
         <span class="text-overline font-weight-medium">
-          {{ $t('prompts.addMeal.yes') }}
+          {{ $t(`prompts.${type}.yes`) }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -80,14 +70,12 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealAddPrompt',
 
-  mixins: [createBasePrompt<BasePromptProps>()],
+  mixins: [createBasePrompt<'meal-add-prompt'>()],
 
   props: {
     meals: {
@@ -103,14 +91,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeText(): string {
-      return this.getLocaleContent(this.text, { path: 'prompts.addMeal.text' });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.description, { path: 'prompts.addMeal.description' });
-    },
-
     isValid() {
       return !!this.currentValue;
     },

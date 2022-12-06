@@ -52,7 +52,7 @@ import isEqual from 'lodash/isEqual';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
@@ -66,7 +66,7 @@ export type MoveSection = { value: string; text: string };
 
 export type PromptQuestionEvent = {
   index: number;
-  question: PromptQuestion;
+  question: Prompt;
 };
 
 export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
@@ -98,11 +98,11 @@ export default defineComponent({
       default: () => [],
     },
     templates: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as PropType<Prompt[]>,
       default: () => [],
     },
     items: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as PropType<Prompt[]>,
       required: true,
     },
   },
@@ -151,7 +151,7 @@ export default defineComponent({
       this.selector?.create();
     },
 
-    load(question: PromptQuestion) {
+    load(question: Prompt) {
       this.questions.push(question);
     },
 
@@ -164,7 +164,7 @@ export default defineComponent({
       else this.questions.splice(index, 1, question);
     },
 
-    moveSections(question: PromptQuestion): MoveSection[] {
+    moveSections(question: Prompt): MoveSection[] {
       return this.promptSettings[question.component].sections
         .filter((item) => item !== this.section)
         .map((item) => ({

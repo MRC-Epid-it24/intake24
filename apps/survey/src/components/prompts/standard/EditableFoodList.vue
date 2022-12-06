@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h3 class="mb-4">{{ drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food') }}</h3>
+    <h3 class="mb-4">
+      {{ drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food') }}
+    </h3>
     <v-row>
       <v-col cols="12" sm="8">
         <v-text-field

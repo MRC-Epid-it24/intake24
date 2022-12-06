@@ -92,7 +92,7 @@ import type { PropType } from 'vue';
 import debounce from 'lodash/debounce';
 import { defineComponent } from 'vue';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({
@@ -108,7 +108,7 @@ export default defineComponent({
       default: () => [],
     },
     items: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as PropType<Prompt[]>,
     },
   },
 
@@ -117,13 +117,13 @@ export default defineComponent({
       dialog: false,
       loading: false,
       search: null as string | null,
-      questions: [] as PromptQuestion[],
+      questions: [] as Prompt[],
       selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
-    selectedQuestion(): PromptQuestion | undefined {
+    selectedQuestion(): Prompt | undefined {
       const { selectedId } = this;
       if (!selectedId) return undefined;
 
@@ -192,7 +192,7 @@ export default defineComponent({
     async fetchFromApi() {
       const { search } = this;
 
-      const { data } = await this.$http.get<PromptQuestion[]>(
+      const { data } = await this.$http.get<Prompt[]>(
         `admin/survey-schemes/${this.schemeId}/templates`,
         { params: { search, limit: 5 } }
       );

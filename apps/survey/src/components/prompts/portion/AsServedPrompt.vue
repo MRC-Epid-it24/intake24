@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.serving.header`) }}
+          {{ $t(`prompts.${type}.serving.header`) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -16,7 +13,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${type}.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             :as-served-set-id="parameters['serving-image-set']"
             :initial-object="portionSize.serving ?? undefined"
@@ -30,7 +27,7 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.${type}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -43,10 +40,10 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
               :as-served-set-id="parameters['leftovers-image-set']"
               :initial-object="portionSize.leftovers ?? undefined"
@@ -98,7 +95,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { AsServedPromptProps } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type {
   AsServedParameters,
   AsServedState,
@@ -125,7 +122,7 @@ export default defineComponent({
 
   components: { AsServedSelector, QuantityBadge, QuantityCard, YesNoToggle },
 
-  mixins: [createBasePortion<AsServedPromptProps, AsServedPromptState>()],
+  mixins: [createBasePortion<'as-served-prompt', AsServedPromptState>()],
 
   props: {
     parameters: {
@@ -142,7 +139,7 @@ export default defineComponent({
 
   computed: {
     disabledLeftovers() {
-      return !this.leftovers;
+      return !this.prompt.leftovers;
     },
 
     hasLeftovers() {

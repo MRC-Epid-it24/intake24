@@ -1,7 +1,8 @@
 <template>
   <v-row class="pt-0" justify="center" :no-gutters="isMobile">
     <recall-bread-crumbs-mobile
-      :prompt-name="activePrompt"
+      v-if="promptName"
+      :prompt-name="promptName"
       @restart="restart"
     ></recall-bread-crumbs-mobile>
     <transition mode="out-in" type="fade">
@@ -24,9 +25,7 @@
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
           :key="currentPrompt.prompt.id"
-          :prompt-component="currentPrompt.prompt.component"
-          :prompt-id="currentPrompt.prompt.id"
-          :prompt-props="currentPrompt.prompt.props"
+          :prompt="currentPrompt.prompt"
           @action="action"
           @food-context-menu="onFoodContextMenu"
           @meal-context-menu="onMealContextMenu"

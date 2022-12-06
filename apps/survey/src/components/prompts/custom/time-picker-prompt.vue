@@ -1,9 +1,9 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-time-picker
         v-model="currentValue"
-        :format="format"
+        :format="prompt.format"
         full-width
         :landscape="!isMobile"
         @input="update"
@@ -16,14 +16,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { TimePickerPromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'TimePickerPrompt',
 
-  mixins: [createBasePrompt<TimePickerPromptProps>()],
+  mixins: [createBasePrompt<'time-picker-prompt'>()],
 
   props: {
     value: {
@@ -40,7 +38,7 @@ export default defineComponent({
 
   computed: {
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentValue;
     },
   },
 
@@ -52,10 +50,10 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.validation.required || this.currentValue) return true;
+      if (!this.prompt.validation.required || this.currentValue) return true;
 
       this.errors = [
-        this.getLocaleContent(this.validation.message, {
+        this.getLocaleContent(this.prompt.validation.message, {
           path: 'prompts.timepicker.validation.required',
         }),
       ];

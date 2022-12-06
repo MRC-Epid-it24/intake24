@@ -1,8 +1,5 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-card-actions :class="isNotDesktop && 'justify-center'">
       <v-expansion-panels v-model="activePrompt" @change="updatePrompts">
         <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
@@ -26,20 +23,20 @@
                 @change="onConfirmStateChanged(index)"
               >
                 <v-radio
-                  :label="$t('prompts.associatedFoods.no')"
+                  :label="$t(`prompts.${type}.no`)"
                   off-icon="fa-regular fa-circle"
                   on-icon="$yes"
                   value="no"
                 ></v-radio>
                 <v-radio
-                  :label="$t('prompts.associatedFoods.yes')"
+                  :label="$t(`prompts.${type}.yes`)"
                   off-icon="fa-regular fa-circle"
                   on-icon="$yes"
                   value="yes"
                 ></v-radio>
                 <v-radio
                   v-if="prompt.confirmed === 'existing' || foodsAlreadyEntered[index] !== undefined"
-                  :label="$t('prompts.associatedFoods.alreadyEntered')"
+                  :label="$t(`prompts.${type}.alreadyEntered`)"
                   off-icon="fa-regular fa-circle"
                   on-icon="$yes"
                   value="existing"
@@ -53,14 +50,14 @@
               </v-card-title>
               <v-card-actions>
                 <v-btn @click="onSelectDifferentFood(prompt)">
-                  {{ $t('prompts.associatedFoods.select.different') }}
+                  {{ $t(`prompts.${type}.select.different`) }}
                 </v-btn>
               </v-card-actions>
             </v-card>
             <v-expand-transition>
               <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
                 <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray">
-                  {{ $t('prompts.associatedFoods.select.item') }}
+                  {{ $t(`prompts.${type}.select.item`) }}
                 </v-card-title>
                 <v-card-text class="pl-0">
                   <food-browser
@@ -83,7 +80,6 @@ import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import Vue, { defineComponent } from 'vue';
 
-import type { AssociatedFoodsPromptProps } from '@intake24/common/prompts';
 import type {
   AssociatedFoodPromptState,
   AssociatedFoodsState,
@@ -109,7 +105,7 @@ export default defineComponent({
 
   components: { FoodBrowser, ValidInvalidIcon },
 
-  mixins: [createBasePrompt<AssociatedFoodsPromptProps>()],
+  mixins: [createBasePrompt<'associated-foods-prompt'>()],
 
   props: {
     initialState: {
@@ -174,23 +170,6 @@ export default defineComponent({
 
     associatedFoodPrompts(): UserAssociatedFoodPrompt[] {
       return this.food.data.associatedFoodPrompts;
-    },
-
-    foodName(): string {
-      return this.food.data.localName;
-    },
-
-    localeText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.associatedFoods.text',
-        params: { food: this.foodName.toLocaleLowerCase() },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        path: 'prompts.associatedFoods.description',
-      });
     },
 
     isValid(): boolean {

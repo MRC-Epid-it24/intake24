@@ -1,8 +1,7 @@
-import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { RequiredLocaleTranslation } from '@intake24/common/types';
+import type { LocaleTranslation } from '@intake24/common/types';
 import { RequestHelp } from '@intake24/survey/components';
 import { useSurvey } from '@intake24/survey/stores';
 import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
@@ -24,7 +23,7 @@ export default defineComponent({
 
   props: {
     promptName: {
-      type: Object as PropType<RequiredLocaleTranslation>,
+      type: String,
       required: true,
     },
   },
@@ -81,15 +80,12 @@ export default defineComponent({
       }
     },
 
-    getBreadCrumbs(promptName: RequiredLocaleTranslation): BreadcrumbsElement[] {
+    getBreadCrumbs(): BreadcrumbsElement[] {
       const elements: BreadcrumbsElement[] = [];
 
       const mealElement = this.getMealElement();
       const foodElement = this.getFoodElement();
-      const promptElement = {
-        text: this.getLocaleContent(promptName),
-        disabled: false,
-      };
+      const promptElement = { text: this.promptName, disabled: false };
 
       if (mealElement) {
         elements.push(mealElement);

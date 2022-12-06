@@ -1,8 +1,5 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels
       v-if="Object.keys(standardUnitRefs).length"
       v-model="panel"
@@ -11,7 +8,7 @@
     >
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.label`">
+          <i18n :path="`prompts.${type}.label`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -34,7 +31,7 @@
         <v-expansion-panel-header disable-icon-rotate>
           <i18n
             v-if="portionSize.unit"
-            :path="`prompts.${portionSize.method}.howMany.${
+            :path="`prompts.${type}.howMany.${
               portionSize.unit.omitFoodDescription ? '_' : 'withFood'
             }`"
           >
@@ -47,7 +44,7 @@
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
-          <template v-else>{{ $t(`prompts.${portionSize.method}.howMany.placeholder`) }}</template>
+          <template v-else>{{ $t(`prompts.${type}.howMany.placeholder`) }}</template>
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -69,7 +66,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { StandardPortionPromptProps } from '@intake24/common/prompts';
 import type {
   RequiredLocaleTranslation,
   StandardPortionParams,
@@ -98,7 +94,7 @@ export default defineComponent({
 
   components: { QuantityCard },
 
-  mixins: [createBasePortion<StandardPortionPromptProps, StandardPortionPromptState>()],
+  mixins: [createBasePortion<'standard-portion-prompt', StandardPortionPromptState>()],
 
   props: {
     conversionFactor: {
@@ -177,7 +173,7 @@ export default defineComponent({
     },
 
     estimateInLabel(unit: string) {
-      return this.$t(`prompts.${this.portionSize.method}.estimateIn`, {
+      return this.$t(`prompts.${this.type}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
       });
     },

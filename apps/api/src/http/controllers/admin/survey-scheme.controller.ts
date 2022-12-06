@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { ExportField, ExportSectionId } from '@intake24/common/schemes';
 import type {
   SurveySchemeEntry,
@@ -195,7 +195,7 @@ const surveySchemeController = (ioc: IoC) => {
 
   const templates = async (
     req: Request<{ surveySchemeId: string }, any, any, PaginateQuery>,
-    res: Response<PromptQuestion[]>
+    res: Response<Prompt[]>
   ): Promise<void> => {
     const {
       query: { search, limit },

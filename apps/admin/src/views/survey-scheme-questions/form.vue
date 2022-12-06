@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
@@ -57,7 +57,7 @@ import { form } from '@intake24/admin/helpers';
 import { customPromptQuestions } from '@intake24/common/prompts';
 
 export type SchemeQuestionForm = {
-  question: PromptQuestion;
+  question: Prompt;
 };
 
 export default defineComponent({
@@ -98,7 +98,7 @@ export default defineComponent({
       this.selector?.edit(0, this.form.question);
     },
 
-    save({ question }: { question: PromptQuestion; index: number }) {
+    save({ question }: { question: Prompt; index: number }) {
       this.form.errors.clear('question');
 
       this.form.question = question;

@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.container`">
+          <i18n :path="`prompts.${type}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -19,7 +16,7 @@
           <image-map-selector
             v-if="bowlImageMap"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: bowlImageMap,
               id: portionSize.bowlId,
               index: portionSize.bowlIndex,
@@ -31,7 +28,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.as-served.serving.header`) }}
+          {{ $t(`prompts.asServed.serving.header`) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -41,7 +38,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.as-served.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.asServed.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             v-if="servingImageSet"
             :as-served-set-id="servingImageSet"
@@ -56,7 +53,7 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.as-served.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.asServed.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -69,10 +66,10 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.as-served.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.asServed.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.as-served.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.asServed.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
               :as-served-set-id="leftoverImageSet"
               :initial-object="portionSize.leftovers ?? undefined"
@@ -99,7 +96,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CerealPromptProps } from '@intake24/common/prompts';
 import type { CerealParameters, CerealState, SelectedAsServedImage } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
@@ -122,7 +118,7 @@ export default defineComponent({
 
   components: { AsServedSelector, ImageMapSelector, QuantityBadge, YesNoToggle },
 
-  mixins: [createBasePortion<CerealPromptProps, CerealPromptState>()],
+  mixins: [createBasePortion<'cereal-prompt', CerealPromptState>()],
 
   props: {
     parameters: {
@@ -149,7 +145,7 @@ export default defineComponent({
 
   computed: {
     disabledLeftovers() {
-      return !this.leftovers;
+      return !this.prompt.leftovers;
     },
 
     servingImageSet(): string | undefined {

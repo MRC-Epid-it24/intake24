@@ -1,13 +1,13 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-radio-group
         v-model="selected"
-        :column="orientation === 'column'"
+        :column="prompt.orientation === 'column'"
         :error="hasErrors"
         hide-details="auto"
-        :label="getLocaleContent(label)"
-        :row="orientation === 'row'"
+        :label="getLocaleContent(prompt.i18n.label)"
+        :row="prompt.orientation === 'row'"
         @change="update"
       >
         <v-radio
@@ -16,7 +16,7 @@
           :label="option.label"
           :value="option.value"
         ></v-radio>
-        <v-row v-if="other" align="center" no-gutters>
+        <v-row v-if="prompt.other" align="center" no-gutters>
           <v-radio hide-details value="other"></v-radio>
           <v-text-field
             v-model.trim="otherValue"
@@ -35,14 +35,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { ListOption, RadioListPromptProps } from '@intake24/common/prompts';
+import type { ListOption } from '@intake24/common/prompts';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'RadioListPrompt',
 
-  mixins: [createBasePrompt<RadioListPromptProps>()],
+  mixins: [createBasePrompt<'radio-list-prompt'>()],
 
   props: {
     value: {
@@ -60,13 +60,13 @@ export default defineComponent({
 
   computed: {
     localeOptions(): ListOption[] {
-      return this.options[this.$i18n.locale] ?? this.options.en;
+      return this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en;
     },
     currentValue(): string {
       return this.selected !== 'other' ? this.selected : this.otherValue;
     },
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentValue;
     },
   },
 
@@ -81,7 +81,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.validation.message, {
+        this.getLocaleContent(this.prompt.validation.message, {
           path: 'prompts.radio.validation.required',
         }),
       ];

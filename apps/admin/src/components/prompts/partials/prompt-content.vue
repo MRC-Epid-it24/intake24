@@ -1,68 +1,53 @@
 <template>
   <v-tab-item key="content">
-    <language-selector
-      :label="$t('survey-schemes.questions.name._').toString()"
-      :required="nameRequired"
-      :value="name"
-      @input="update('name', $event)"
-    >
-      <template v-for="lang in Object.keys(name)" #[`lang.${lang}`]>
-        <v-text-field
-          :key="lang"
-          hide-details="auto"
-          :label="$t('survey-schemes.questions.name._')"
-          outlined
-          :rules="nameRules"
-          :value="name[lang]"
-          @input="updateLanguage('name', lang, $event)"
-        ></v-text-field>
-      </template>
-    </language-selector>
-    <language-selector
-      :label="$t('survey-schemes.questions.text._').toString()"
-      :required="textRequired"
-      :value="text"
-      @input="update('text', $event)"
-    >
-      <template v-for="lang in Object.keys(text)" #[`lang.${lang}`]>
-        <v-text-field
-          :key="lang"
-          hide-details="auto"
-          :label="$t('survey-schemes.questions.text._')"
-          outlined
-          :rules="textRules"
-          :value="text[lang]"
-          @input="updateLanguage('text', lang, $event)"
-        ></v-text-field>
-      </template>
-    </language-selector>
-    <language-selector
-      :label="$t('survey-schemes.questions.description._').toString()"
-      :required="descriptionRequired"
-      :value="description"
-      @input="update('description', $event)"
-    >
-      <template v-for="lang in Object.keys(description)" #[`lang.${lang}`]>
-        <html-editor
-          :key="lang"
-          :value="description[lang]"
-          @input="updateLanguage('description', lang, $event)"
-        ></html-editor>
-      </template>
-    </language-selector>
+    <v-tabs vertical>
+      <v-tab v-for="(item, key) in items" :key="key">
+        <v-icon left>fas fa-location-arrow</v-icon>{{ key }}
+      </v-tab>
+      <v-tab-item v-for="(item, key) in items" :key="key" class="pl-3">
+        <language-selector
+          v-model="items[key]"
+          :label="$t('survey-schemes.questions.name._').toString()"
+          @input="update"
+        >
+          <template v-for="lang in Object.keys(items[key])" #[`lang.${lang}`]>
+            <v-text-field
+              v-if="['name', 'text'].includes(key.toString())"
+              :key="lang"
+              v-model="items[key][lang]"
+              hide-details="auto"
+              :label="$t('survey-schemes.questions.name._')"
+              outlined
+              @input="update"
+            ></v-text-field>
+            <html-editor
+              v-else
+              :key="lang"
+              v-model="items[key][lang]"
+              @input="update"
+            ></html-editor>
+          </template>
+        </language-selector>
+      </v-tab-item>
+    </v-tabs>
   </v-tab-item>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { BasePrompt } from '@intake24/common/prompts';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { copy } from '@intake24/common/util';
 
-export type LocaleTranslationKeys = 'name' | 'text' | 'description';
+/*
+ * TODO
+ * - it loads basic/common keys - name/text/description
+ * - Add support to load other keys in i18n.prompts.[promptType].*
+ */
 
 export default defineComponent({
   name: 'PromptContent',
@@ -70,33 +55,19 @@ export default defineComponent({
   components: { HtmlEditor, LanguageSelector },
 
   props: {
-    name: {
-      type: Object as PropType<LocaleTranslation>,
+    i18n: {
+      type: Object as PropType<BasePrompt['i18n']>,
       required: true,
-    },
-    nameRequired: {
-      type: Boolean,
-      default: true,
-    },
-    text: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
-    textRequired: {
-      type: Boolean,
-      default: false,
-    },
-    description: {
-      type: Object as PropType<LocaleTranslation>,
-      required: true,
-    },
-    descriptionRequired: {
-      type: Boolean,
-      default: false,
     },
   },
 
-  computed: {
+  data() {
+    return {
+      items: copy(this.i18n),
+    };
+  },
+
+  /* computed: {
     nameRules(): RuleCallback[] {
       if (!this.nameRequired) return [];
 
@@ -112,18 +83,24 @@ export default defineComponent({
 
       return [this.valueRequiredCallBack('description')];
     },
+  }, */
+
+  watch: {
+    i18n(val) {
+      if (isEqual(val, this.items)) return;
+
+      this.items = copy(val);
+    },
   },
 
   methods: {
-    valueRequiredCallBack(field: 'name' | 'text' | 'description') {
+    /* valueRequiredCallBack(field: 'name' | 'text' | 'description') {
       return (value: string | null): boolean | string =>
         !!value || this.$t(`survey-schemes.questions.${field}.required`).toString();
-    },
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
-    },
-    updateLanguage(field: LocaleTranslationKeys, locale: string, value: any) {
-      this.$emit(`update:${field}`, { ...this.$props[field], [locale]: value });
+    }, */
+
+    update() {
+      this.$emit('update:i18n', this.items);
     },
   },
 });

@@ -70,7 +70,7 @@
 import { defineComponent } from 'vue';
 
 import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/schemes';
 import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
@@ -121,14 +121,14 @@ export default defineComponent({
 
   computed: {
     selected: {
-      get(): PromptQuestion[] {
+      get(): Prompt[] {
         const { section } = this;
 
         return isMealSection(section)
           ? this.form.questions.meals[section]
           : this.form.questions[section];
       },
-      set(value: PromptQuestion[]): void {
+      set(value: Prompt[]): void {
         const { section } = this;
 
         if (isMealSection(section)) {
@@ -144,7 +144,7 @@ export default defineComponent({
 
       return scheme.map((question) => question.id);
     },
-    templates(): PromptQuestion[] {
+    templates(): Prompt[] {
       if (!this.refsLoaded) return [];
 
       return this.refs.templates.filter((template) => this.questionIds.includes(template.id));

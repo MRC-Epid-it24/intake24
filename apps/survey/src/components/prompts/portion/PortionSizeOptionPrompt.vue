@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ actions, method, description, text, food, isValid }" @action="action">
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-sheet>
       <v-item-group v-if="availableMethods.length" v-model="option">
         <v-container>
@@ -20,7 +20,7 @@
                   </v-img>
                   <v-card-actions class="d-flex justify-end">
                     <v-chip class="font-weight-medium px-4" rounded>
-                      {{ $t(`prompts.${method}.description.${availableMethod.description}`) }}
+                      {{ $t(`prompts.${type}.description.${availableMethod.description}`) }}
                     </v-chip>
                   </v-card-actions>
                 </v-card>
@@ -44,7 +44,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PortionSizeOptionPromptProps } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 
 import { ImagePlaceholder } from '../../elements';
@@ -59,22 +58,17 @@ export default defineComponent({
 
   components: { ImagePlaceholder },
 
-  mixins: [createBasePortion<PortionSizeOptionPromptProps, PortionSizeOptionState>()],
+  mixins: [createBasePortion<'portion-size-option-prompt', PortionSizeOptionState>()],
 
   props: {
     availableMethods: {
       type: Array as PropType<UserPortionSizeMethod[]>,
       required: true,
     },
-    promptProps: {
-      type: Object as PropType<PortionSizeOptionPromptProps>,
-      required: true,
-    },
   },
 
   data() {
     return {
-      method: 'option',
       option: this.initialState?.option ?? undefined,
     };
   },

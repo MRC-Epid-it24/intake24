@@ -1,16 +1,11 @@
 import type { PropType } from 'vue';
+import camelCase from 'lodash/camelCase';
 import { defineComponent } from 'vue';
 
-import type { ActionItem, Actions } from '@intake24/common/prompts';
-import type {
-  Dictionary,
-  EncodedFood,
-  FoodState,
-  LocaleTranslation,
-  MealState,
-  RequiredLocaleTranslation,
-} from '@intake24/common/types';
+import type { ActionItem, Prompt } from '@intake24/common/prompts';
+import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
 import { localeContent } from '@intake24/survey/components/mixins';
+import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
 
@@ -22,7 +17,11 @@ export default defineComponent({
   mixins: [localeContent],
 
   props: {
-    actions: {
+    prompt: {
+      type: Object as PropType<Prompt>,
+      required: true,
+    },
+    /* actions: {
       type: Object as PropType<Actions>,
       default: () => ({ both: false, items: [] }),
     },
@@ -33,12 +32,12 @@ export default defineComponent({
     description: {
       type: [Object, String] as PropType<LocaleTranslation | string | null>,
       default: null,
+    }, */
+    food: {
+      type: Object as PropType<FoodState>,
     },
     meal: {
       type: Object as PropType<MealState>,
-    },
-    food: {
-      type: Object as PropType<FoodState>,
     },
     isValid: {
       type: Boolean,
@@ -56,11 +55,19 @@ export default defineComponent({
     },
 
     desktopActions(): ActionItem[] {
-      return this.actions.items.filter((action) => action.layout.includes('desktop'));
+      return this.prompt.actions?.items.filter((action) => action.layout.includes('desktop')) ?? [];
+    },
+
+    hasDefaultSlot(): boolean {
+      return !!this.$slots.default;
+    },
+
+    hasActionsSlot(): boolean {
+      return !!this.$slots.actions;
     },
 
     mobileActions(): ActionItem[] {
-      return this.actions.items.filter((action) => action.layout.includes('mobile'));
+      return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
     },
 
     localeFoodName() {
@@ -76,31 +83,32 @@ export default defineComponent({
     },
 
     localeText(): string {
-      const params: Dictionary<string> = {};
-      const { localeFoodName, localeMealName } = this;
-      if (localeFoodName) params.food = localeFoodName;
-      if (localeMealName) params.meal = localeMealName;
-
-      return this.getLocaleContent(this.text, { params });
+      return this.getLocaleContent(this.prompt.i18n.text, {
+        path: `prompts.${this.type}.text`,
+        params: this.params,
+      });
     },
 
     localeDescription(): string | null {
-      if (!this.description) return null;
+      if (!this.prompt.i18n.description) return null;
 
+      return this.getLocaleContent(this.prompt.i18n.description, {
+        path: `prompts.${this.type}.description`,
+        params: this.params,
+      });
+    },
+
+    params(): Dictionary<string> {
       const params: Dictionary<string> = {};
       const { localeFoodName, localeMealName } = this;
       if (localeFoodName) params.food = localeFoodName;
       if (localeMealName) params.meal = localeMealName;
 
-      return this.getLocaleContent(this.description, { params });
+      return params;
     },
 
-    hasDefaultSlot(): boolean {
-      return !!this.$slots.default;
-    },
-
-    hasActionsSlot(): boolean {
-      return !!this.$slots.actions;
+    type() {
+      return promptType(this.prompt.component);
     },
   },
 

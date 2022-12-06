@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-date-picker
         v-model="currentValue"
@@ -15,14 +15,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { DatePickerPromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'DatePickerPrompt',
 
-  mixins: [createBasePrompt<DatePickerPromptProps>()],
+  mixins: [createBasePrompt<'date-picker-prompt'>()],
 
   props: {
     value: {
@@ -39,7 +37,7 @@ export default defineComponent({
 
   computed: {
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentValue;
     },
   },
 
@@ -54,7 +52,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.validation.message, {
+        this.getLocaleContent(this.prompt.validation.message, {
           path: 'prompts.datepicker.validation.required',
         }),
       ];

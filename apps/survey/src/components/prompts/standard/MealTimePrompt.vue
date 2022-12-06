@@ -1,10 +1,8 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-time-picker
-        :format="promptProps.format"
+        :format="prompt.format"
         full-width
         :landscape="!isMobile"
         :v-model="currentValue"
@@ -15,7 +13,7 @@
     </v-form>
     <template #actions>
       <v-btn :block="isMobile" class="px-5" large @click.stop="action('cancel')">
-        {{ $t('prompts.mealTime.no', { meal: localMealName }) }}
+        {{ $t(`prompts.${type}.no`, { meal: localMealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -25,7 +23,7 @@
         large
         @click.stop="action('next')"
       >
-        {{ $t('prompts.mealTime.yes', { meal: localMealName }) }}
+        {{ $t(`prompts.${type}.yes`, { meal: localMealName }) }}
       </v-btn>
     </template>
     <template #nav-actions>
@@ -50,7 +48,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { MealTimePromptProps } from '@intake24/common/prompts';
 import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime, toMealTime } from '@intake24/survey/stores/meal-food-utils';
 
@@ -59,7 +56,7 @@ import createBasePrompt from '../createBasePrompt';
 export default defineComponent({
   name: 'MealTimePrompt',
 
-  mixins: [createBasePrompt<MealTimePromptProps>()],
+  mixins: [createBasePrompt<'meal-time-prompt'>()],
 
   props: {
     initialState: {
@@ -83,22 +80,8 @@ export default defineComponent({
       return this.getLocaleContent(this.meal.name);
     },
 
-    localeText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.mealTime.text',
-        params: { meal: this.localMealName },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        // path: 'prompts.mealTime.description',
-        params: { meal: this.localMealName },
-      });
-    },
-
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentValue;
     },
   },
 

@@ -380,13 +380,17 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Cereal',
       subtitle: 'Use the "cereal" method to estimate the portion size',
     },
-    'guide-image-prompt': {
-      title: 'Guide image',
-      subtitle: 'Use the "guide image" method to estimate the portion size',
+    'direct-weight-prompt': {
+      title: 'Direct weight',
+      subtitle: 'Direct weight',
     },
     'drink-scale-prompt': {
       title: 'Drink Scale',
       subtitle: 'Use the "drink scale" method to estimate the amount of liquid consumed',
+    },
+    'guide-image-prompt': {
+      title: 'Guide image',
+      subtitle: 'Use the "guide image" method to estimate the portion size',
     },
     'milk-in-a-hot-drink-prompt': {
       title: 'Milk in a hot drink',

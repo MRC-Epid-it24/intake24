@@ -33,18 +33,18 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PromptQuestion, QuestionType } from '@intake24/common/prompts';
+import type { Prompt, PromptType } from '@intake24/common/prompts';
 
 export default defineComponent({
   name: 'PromptTypeSelector',
 
   props: {
     type: {
-      type: String as PropType<QuestionType>,
+      type: String as PropType<PromptType>,
       required: true,
     },
     questions: {
-      type: Array as PropType<PromptQuestion[]>,
+      type: Array as PropType<Prompt[]>,
       default: () => [],
     },
   },

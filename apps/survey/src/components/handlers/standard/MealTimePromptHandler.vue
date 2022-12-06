@@ -1,6 +1,6 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, meal, promptComponent, promptProps }"
+    v-bind="{ initialState: state, meal, prompt }"
     @action="action"
     @update="update"
   ></meal-time-prompt>
@@ -11,7 +11,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { MealTimePromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { MealTime } from '@intake24/common/types';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -24,16 +24,8 @@ export default defineComponent({
   components: { MealTimePrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<MealTimePromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['meal-time-prompt']>,
       required: true,
     },
   },

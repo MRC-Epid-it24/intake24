@@ -2,10 +2,9 @@
   <pizza-prompt
     v-bind="{
       food: food(),
-      parentFood,
       initialState: state,
-      promptComponent,
-      promptProps,
+      parentFood,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -17,7 +16,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { PizzaPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { PizzaPromptState } from '@intake24/survey/components/prompts';
 import { PizzaPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -30,16 +29,8 @@ export default defineComponent({
   components: { PizzaPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<PizzaPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['pizza-prompt']>,
       required: true,
     },
   },
@@ -61,8 +52,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

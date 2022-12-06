@@ -118,13 +118,13 @@ export default defineComponent({
   },
 
   watch: {
-    $route() {
-      this.fetch();
+    async $route() {
+      await this.fetch();
     },
   },
 
   async created() {
-    this.fetchExportRefs();
+    await this.fetchExportRefs();
   },
 
   methods: {

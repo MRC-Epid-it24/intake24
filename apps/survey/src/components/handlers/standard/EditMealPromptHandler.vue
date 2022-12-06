@@ -1,6 +1,6 @@
 <template>
   <edit-meal-prompt
-    v-bind="{ initialState: state, meal, promptComponent, promptProps }"
+    v-bind="{ initialState: state, meal, prompt }"
     @action="action"
     @update="update"
   >
@@ -12,7 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { EditMealPromptState } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
 import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -25,16 +25,8 @@ export default defineComponent({
   components: { EditMealPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['edit-meal-prompt']>,
       required: true,
     },
   },
@@ -45,8 +37,8 @@ export default defineComponent({
     const getInitialState = (): EditMealPromptState => ({ foods: meal.value.foods });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

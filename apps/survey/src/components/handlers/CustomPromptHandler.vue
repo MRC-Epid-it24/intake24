@@ -1,12 +1,11 @@
 <template>
   <component
-    :is="promptComponent"
-    :key="promptId"
+    :is="prompt.component"
+    :key="prompt.id"
     v-bind="{
-      promptComponent,
-      promptProps,
       meal: mealOptional,
       food: foodOptional(),
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -18,7 +17,7 @@ import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps, CustomComponentType } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -33,16 +32,8 @@ export default defineComponent({
   components: { ...customPrompts },
 
   props: {
-    promptComponent: {
-      type: String as PropType<CustomComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<BasePromptProps>,
+    prompt: {
+      type: Object as PropType<Prompt>,
       required: true,
     },
   },
@@ -91,7 +82,7 @@ export default defineComponent({
         return;
       }
 
-      if (this.promptComponent === 'no-more-information-prompt') {
+      if (this.prompt.component === 'no-more-information-prompt') {
         const newSelection = this.selection;
         newSelection.mode = 'auto';
         this.setSelection(newSelection);
@@ -107,12 +98,12 @@ export default defineComponent({
               return;
             }
 
-            if (infoPrompts.includes(this.promptComponent))
-              this.survey.setFoodFlag({ foodId: food.id, flag: `${this.promptId}-acknowledged` });
+            if (infoPrompts.includes(this.prompt.component))
+              this.survey.setFoodFlag({ foodId: food.id, flag: `${this.prompt.id}-acknowledged` });
             else
               this.survey.setFoodCustomPromptAnswer({
                 foodId: food.id,
-                promptId: this.promptId,
+                promptId: this.prompt.id,
                 answer: this.state,
               });
             break;
@@ -123,25 +114,25 @@ export default defineComponent({
               return;
             }
 
-            if (infoPrompts.includes(this.promptComponent))
+            if (infoPrompts.includes(this.prompt.component))
               this.survey.setMealFlag({
                 mealId: this.mealOptional.id,
-                flag: `${this.promptId}-acknowledged`,
+                flag: `${this.prompt.id}-acknowledged`,
               });
             else
               this.survey.setMealCustomPromptAnswer({
                 mealId: this.mealOptional.id,
-                promptId: this.promptId,
+                promptId: this.prompt.id,
                 answer: this.state,
               });
 
             break;
           }
         }
-      } else if (infoPrompts.includes(this.promptComponent)) {
-        this.survey.setSurveyFlag(`${this.promptId}-acknowledged`);
+      } else if (infoPrompts.includes(this.prompt.component)) {
+        this.survey.setSurveyFlag(`${this.prompt.id}-acknowledged`);
       } else {
-        this.survey.setCustomPromptAnswer({ promptId: this.promptId, answer: this.state });
+        this.survey.setCustomPromptAnswer({ promptId: this.prompt.id, answer: this.state });
       }
     },
   },

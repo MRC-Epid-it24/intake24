@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
       <next :disabled="!isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
@@ -38,14 +38,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'SubmitPrompt',
 
-  mixins: [createBasePrompt<BasePromptProps>()],
+  mixins: [createBasePrompt<'submit-prompt'>()],
 
   computed: {
     isValid(): boolean {

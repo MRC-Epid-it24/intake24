@@ -16,8 +16,9 @@ const defaults: Schema = {
 
         if (
           !isPlainObject(value) ||
-          ['id', 'name', 'type', 'component', 'props'].some((key) => !(key in value)) ||
-          ['id', 'name', 'type', 'component'].some((key) => typeof value[key] !== 'string')
+          ['id', 'name', 'type', 'component'].some(
+            (key) => !(key in value) || typeof value[key] !== 'string'
+          )
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
 

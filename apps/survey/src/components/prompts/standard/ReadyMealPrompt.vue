@@ -1,8 +1,5 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-checkbox
         v-for="food in foods"
@@ -22,7 +19,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ReadyMealPromptProps } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
@@ -35,7 +31,7 @@ export interface ReadyMealPromptState {
 export default defineComponent({
   name: 'ReadyMealPrompt',
 
-  mixins: [createBasePrompt<ReadyMealPromptProps>()],
+  mixins: [createBasePrompt<'ready-meal-prompt'>()],
 
   props: {
     initialState: {
@@ -53,24 +49,6 @@ export default defineComponent({
   },
 
   computed: {
-    localMealName(): string {
-      return this.getLocaleContent(this.meal.name);
-    },
-
-    localeText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.readyMeal.text',
-        params: { meal: this.localMealName },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        path: 'prompts.readyMeal.description',
-        params: { meal: this.localMealName },
-      });
-    },
-
     isValid(): boolean {
       return true;
     },

@@ -1,19 +1,8 @@
 <template>
   <div>
-    <prompt-content
-      v-bind="{ name, text, description, textRequired: true }"
-      @update:description="update('description', $event)"
-      @update:name="update('name', $event)"
-      @update:text="update('text', $event)"
-    ></prompt-content>
-    <prompt-actions :actions="actions" @update:actions="update('actions', $event)"></prompt-actions>
-    <prompt-conditions
-      :conditions="conditions"
-      @update:conditions="update('conditions', $event)"
-    ></prompt-conditions>
     <prompt-validation v-bind.sync="validation"></prompt-validation>
     <v-tab-item key="options">
-      <v-row>
+      <v-row class="mb-3">
         <v-col cols="12">
           <v-switch
             hide-details="auto"
@@ -21,25 +10,6 @@
             :label="$t('survey-schemes.questions.other')"
             @change="update('other', $event)"
           ></v-switch>
-        </v-col>
-        <v-col cols="12">
-          <language-selector
-            :default="[]"
-            :label="$t('survey-schemes.questions.label')"
-            :value="label"
-            @input="update('label', $event)"
-          >
-            <template v-for="lang in Object.keys(label)" #[`lang.${lang}`]>
-              <v-text-field
-                :key="lang"
-                hide-details="auto"
-                :label="$t('survey-schemes.questions.label')"
-                outlined
-                :value="label[lang]"
-                @input="updateLanguage('label', lang, $event)"
-              ></v-text-field>
-            </template>
-          </language-selector>
         </v-col>
       </v-row>
       <language-selector

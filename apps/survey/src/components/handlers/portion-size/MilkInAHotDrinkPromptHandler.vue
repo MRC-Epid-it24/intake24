@@ -2,10 +2,9 @@
   <milk-in-a-hot-drink-prompt
     v-bind="{
       food: food(),
-      parentFood,
       initialState: state,
-      promptComponent,
-      promptProps,
+      parentFood,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -17,10 +16,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type {
-  MilkInAHotDrinkPromptProps,
-  PortionSizeComponentType,
-} from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -33,16 +29,8 @@ export default defineComponent({
   components: { MilkInAHotDrinkPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<MilkInAHotDrinkPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']>,
       required: true,
     },
   },
@@ -62,8 +50,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

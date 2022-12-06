@@ -1,13 +1,10 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <!-- Step 0: Select Volume to measure estimated portion-->
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.container`">
+          <i18n :path="`prompts.${type}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -20,7 +17,7 @@
           <image-map-selector
             v-if="imageMapData"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData,
               id: portionSize.containerId,
               index: portionSize.containerIndex,
@@ -34,7 +31,7 @@
       <!-- Step 1: Select Serving Weight ml-->
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.serving.header`, { food: foodName }) }}
+          {{ $t(`prompts.${type}.serving.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.servingWeight ?? undefined"
@@ -45,7 +42,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${portionSize.method}.serving.label`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${type}.serving.label`, { food: foodName }) }}</p>
           <drink-scale-panel
             v-if="scale"
             v-model="portionSize.fillLevel"
@@ -59,7 +56,7 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.leftovers.header`, { food: foodName }) }}
+          {{ $t(`prompts.${type}.leftovers.header`, { food: foodName }) }}
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftoversWeight ?? undefined"
@@ -73,10 +70,10 @@
         </v-expansion-panel-header>
         <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${portionSize.method}.leftovers.question`, { food: foodName }) }}</p>
+          <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.${portionSize.method}.leftovers.label`, { food: foodName }) }}</p>
+            <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
             <drink-scale-panel
               v-if="scale"
               v-model="portionSize.leftoversLevel"
@@ -99,7 +96,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { DrinkScalePromptProps } from '@intake24/common/prompts';
 import type { DrinkScaleParameters, DrinkScaleState } from '@intake24/common/types';
 import type {
   DrinkwareSetResponse,
@@ -126,7 +122,7 @@ export default defineComponent({
 
   components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, YesNoToggle },
 
-  mixins: [createBasePortion<DrinkScalePromptProps, DrinkScalePromptState>()],
+  mixins: [createBasePortion<'drink-scale-prompt', DrinkScalePromptState>()],
 
   props: {
     parameters: {
@@ -153,7 +149,7 @@ export default defineComponent({
 
   computed: {
     disabledLeftovers() {
-      return !this.leftovers;
+      return !this.prompt.leftovers;
     },
 
     scale() {

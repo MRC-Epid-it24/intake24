@@ -5,8 +5,7 @@
       parentFood,
       initialState: state,
       parameters,
-      promptComponent,
-      promptProps,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -18,7 +17,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { AsServedPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { AsServedPromptState } from '@intake24/survey/components/prompts';
 import { AsServedPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -31,16 +30,8 @@ export default defineComponent({
   components: { AsServedPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<AsServedPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['as-served-prompt']>,
       required: true,
     },
   },
@@ -70,8 +61,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 
 import type { ComponentType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
-import type { FoodState, RequiredLocaleTranslation, Selection } from '@intake24/common/types';
+import type { FoodState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
@@ -13,9 +13,11 @@ import {
   portionSizeHandlers,
   standardHandlers,
 } from '@intake24/survey/components/handlers';
+import { localeContent } from '@intake24/survey/components/mixins';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
+import { promptType } from '@intake24/survey/util';
 
 import { InfoAlert } from '../elements';
 
@@ -38,7 +40,9 @@ export default defineComponent({
     ...portionSizeHandlers,
   },
 
-  data: () => {
+  mixins: [localeContent],
+
+  data() {
     const survey = useSurvey();
 
     return {
@@ -69,6 +73,17 @@ export default defineComponent({
       }
     },
 
+    promptName() {
+      const { currentPrompt } = this;
+      if (!currentPrompt) return undefined;
+
+      const type = promptType(currentPrompt.prompt.component);
+
+      return this.getLocaleContent(currentPrompt.prompt.i18n.name, {
+        path: `prompts.${type}.name`,
+      });
+    },
+
     surveyScheme(): SchemeEntryResponse | undefined {
       return this.survey.parameters?.surveyScheme;
     },
@@ -91,10 +106,6 @@ export default defineComponent({
 
     foods(): FoodState[] {
       return this.selectedMealOptional?.foods ?? [];
-    },
-
-    activePrompt(): RequiredLocaleTranslation | undefined {
-      return this.currentPrompt?.prompt.props.name || { en: 'Prompt name missing!' };
     },
   },
 

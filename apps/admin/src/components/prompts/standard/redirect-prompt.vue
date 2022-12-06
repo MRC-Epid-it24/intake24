@@ -1,16 +1,5 @@
 <template>
   <div>
-    <prompt-content
-      v-bind="{ name, text, description, textRequired: true }"
-      @update:description="update('description', $event)"
-      @update:name="update('name', $event)"
-      @update:text="update('text', $event)"
-    ></prompt-content>
-    <prompt-actions :actions="actions" @update:actions="update('actions', $event)"></prompt-actions>
-    <prompt-conditions
-      :conditions="conditions"
-      @update:conditions="update('conditions', $event)"
-    ></prompt-conditions>
     <v-tab-item key="options">
       <v-card-title>{{ $t('survey-schemes.redirect.url.title') }}</v-card-title>
       <v-card-subtitle>{{ $t('survey-schemes.redirect.url.subtitle') }}</v-card-subtitle>

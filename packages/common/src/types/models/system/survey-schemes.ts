@@ -1,4 +1,4 @@
-import type { PromptQuestion } from '../../../prompts';
+import type { Prompt } from '../../../prompts';
 import type { ExportSection, RecallQuestions, SchemeType } from '../../../schemes';
 import type { Meal } from '../..';
 import type { OmitAndOptional } from '../../common';
@@ -25,7 +25,7 @@ export type SurveySchemeQuestionAttributes = {
   id: string;
   questionId: string;
   name: string;
-  question: PromptQuestion;
+  question: Prompt;
   createdAt: Date;
   updatedAt: Date;
 };

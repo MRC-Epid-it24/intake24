@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ food: freeTextFood(), localeId, promptComponent, promptProps }"
+    v-bind="{ food: freeTextFood(), localeId, prompt }"
     v-model="searchTerm"
     @food-selected="foodSelected"
   ></food-search-prompt>
@@ -11,7 +11,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
-import type { FoodSearchPromptProps, StandardComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
@@ -25,16 +25,8 @@ export default defineComponent({
   components: { FoodSearchPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<StandardComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<FoodSearchPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['food-search-prompt']>,
       required: true,
     },
   },

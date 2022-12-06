@@ -1,8 +1,5 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-text-field
       v-model="searchTerm"
       clearable
@@ -15,8 +12,8 @@
     <image-placeholder v-if="requestInProgress"></image-placeholder>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
     <v-alert v-if="searchResults && !searchResults.foods.length" prominent type="warning">
-      <p>{{ $t('prompts.foodSearch.empty', { searchTerm }) }}</p>
-      <p>{{ $t('prompts.foodSearch.reword') }}</p>
+      <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
+      <p>{{ $t(`prompts.${type}.reword`) }}</p>
     </v-alert>
     <food-search-results
       v-if="searchResults"
@@ -34,7 +31,6 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { FoodSearchPromptProps } from '@intake24/common/prompts';
 import type { FreeTextFood } from '@intake24/common/types';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import { FoodSearchResults, ImagePlaceholder } from '@intake24/survey/components/elements';
@@ -48,7 +44,7 @@ export default defineComponent({
 
   components: { FoodSearchResults, ImagePlaceholder },
 
-  mixins: [createBasePrompt<FoodSearchPromptProps, FreeTextFood>()],
+  mixins: [createBasePrompt<'food-search-prompt', FreeTextFood>()],
 
   props: {
     localeId: {
@@ -72,20 +68,6 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, ['parameters']),
-
-    localeText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.foodSearch.text',
-        params: { food: this.localeFoodName ?? '' },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        path: 'prompts.foodSearch.description',
-        params: { food: this.localeFoodName ?? '' },
-      });
-    },
   },
 
   async mounted() {

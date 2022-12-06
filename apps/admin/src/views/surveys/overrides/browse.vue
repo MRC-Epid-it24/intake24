@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { SchemeOverrides } from '@intake24/common/schemes';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
@@ -64,7 +64,7 @@ export default defineComponent({
   },
 
   computed: {
-    questions(): PromptQuestion[] {
+    questions(): Prompt[] {
       if (!this.entryLoaded || !this.refsLoaded) return [];
 
       const scheme = this.refs.surveySchemes.find((item) => item.id === this.entry.surveySchemeId);

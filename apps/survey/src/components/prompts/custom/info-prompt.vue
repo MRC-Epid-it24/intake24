@@ -1,19 +1,16 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
-  </prompt-layout>
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action"> </prompt-layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
-import type { InfoPromptProps } from '@intake24/common/prompts';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'InfoPrompt',
 
-  mixins: [createBasePrompt<InfoPromptProps>()],
+  mixins: [createBasePrompt<'info-prompt'>()],
 
   data() {
     return {

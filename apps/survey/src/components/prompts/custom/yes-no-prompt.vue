@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }">
     <template #actions>
       <yes-no-toggle v-model="currentValue" @change="update"></yes-no-toggle>
     </template>
@@ -24,7 +24,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { YesNoPromptProps } from '@intake24/common/prompts';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import createBasePrompt from '../createBasePrompt';
@@ -34,7 +33,7 @@ export default defineComponent({
 
   components: { YesNoToggle },
 
-  mixins: [createBasePrompt<YesNoPromptProps>()],
+  mixins: [createBasePrompt<'yes-no-prompt'>()],
 
   data() {
     return {

@@ -14,8 +14,8 @@
 
     <v-col class="content mt-0" cols="12" lg="9">
       <recall-bread-crumbs
-        v-if="showMealList && currentPrompt"
-        :prompt-name="currentPrompt.prompt.props.name ?? { en: 'WARNING: Untitled prompt!' }"
+        v-if="showMealList && promptName"
+        :prompt-name="promptName"
         @restart="restart"
       ></recall-bread-crumbs>
       <transition mode="out-in" name="component-fade">
@@ -23,9 +23,7 @@
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
           :key="currentPrompt.prompt.id"
-          :prompt-component="currentPrompt.prompt.component"
-          :prompt-id="currentPrompt.prompt.id"
-          :prompt-props="currentPrompt.prompt.props"
+          :prompt="currentPrompt.prompt"
           @action="action"
         ></component>
       </transition>

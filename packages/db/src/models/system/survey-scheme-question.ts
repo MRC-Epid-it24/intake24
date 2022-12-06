@@ -1,6 +1,6 @@
 import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type {
   SurveySchemeQuestionAttributes,
   SurveySchemeQuestionCreationAttributes,
@@ -41,12 +41,12 @@ export default class SurveySchemeQuestion
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get question(): PromptQuestion {
+  get question(): Prompt {
     const val = this.getDataValue('question') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set question(value: PromptQuestion) {
+  set question(value: Prompt) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('question', JSON.stringify(value ?? {}));
   }

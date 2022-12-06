@@ -1,15 +1,12 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: promptDescription, text: promptText, food, meal, isValid }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
       <editable-food-list v-model="foods" @input="update"></editable-food-list>
     </v-col>
     <template #actions>
       <confirm-dialog
         color="error"
-        :label="$t('prompts.editMeal.delete._', { meal: localMealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`, { meal: localMealName }).toString()"
         @confirm="action('deleteMeal', meal?.id)"
       >
         <template #activator="{ on, attrs }">
@@ -24,10 +21,10 @@
             v-on="on"
           >
             <v-icon left>$delete</v-icon>
-            {{ $t('prompts.editMeal.delete._', { item: localMealName }) }}
+            {{ $t(`prompts.${type}.delete._`, { item: localMealName }) }}
           </v-btn>
         </template>
-        {{ $t('prompts.editMeal.delete.confirm', { item: localMealName }) }}
+        {{ $t(`prompts.${type}.delete.confirm`, { item: localMealName }) }}
       </confirm-dialog>
       <next
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
@@ -38,7 +35,7 @@
     <template #nav-actions>
       <confirm-dialog
         color="error"
-        :label="$t('prompts.editMeal.delete._', { item: localMealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`, { item: localMealName }).toString()"
         @confirm="action('deleteMeal', meal?.id)"
       >
         <template #activator="{ on, attrs }">
@@ -49,7 +46,7 @@
             <v-icon class="pb-1">$delete</v-icon>
           </v-btn>
         </template>
-        {{ $t('prompts.editMeal.delete.confirm', { item: localMealName }) }}
+        {{ $t(`prompts.${type}.delete.confirm`, { item: localMealName }) }}
       </confirm-dialog>
       <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
@@ -65,7 +62,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { BasePromptProps } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
@@ -82,7 +78,7 @@ export default defineComponent({
 
   components: { EditableFoodList, ConfirmDialog },
 
-  mixins: [createBasePrompt<BasePromptProps>()],
+  mixins: [createBasePrompt<'edit-meal-prompt'>()],
 
   props: {
     initialState: {
@@ -102,19 +98,6 @@ export default defineComponent({
   computed: {
     localMealName(): string {
       return this.getLocaleContent(this.meal.name);
-    },
-
-    promptText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.editMeal.text',
-        params: { meal: this.localMealName.toLocaleLowerCase() },
-      });
-    },
-
-    promptDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        path: 'prompts.editMeal.description',
-      });
     },
 
     isValid() {

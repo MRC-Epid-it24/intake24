@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.label`) }}
+          {{ $t(`prompts.${type}.label`) }}
           <template #actions>
             <valid-invalid-icon :valid="!!portionSize.milkVolumePercentage"></valid-invalid-icon>
           </template>
@@ -14,10 +11,10 @@
         <v-expansion-panel-content>
           <v-radio-group
             v-model="portionSize.milkVolumePercentage"
-            :column="orientation === 'column'"
+            :column="prompt.orientation === 'column'"
             :error="hasErrors"
             hide-details="auto"
-            :row="orientation === 'row'"
+            :row="prompt.orientation === 'row'"
             @change="clearErrors"
           >
             <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
@@ -43,7 +40,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, MilkInAHotDrinkPromptProps } from '@intake24/common/prompts';
+import type { ListOption } from '@intake24/common/prompts';
 import type { EncodedFood, MilkInAHotDrinkState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
@@ -60,7 +57,7 @@ export default defineComponent({
 
   components: { QuantityBadge },
 
-  mixins: [createBasePortion<MilkInAHotDrinkPromptProps, MilkInAHotDrinkPromptState>()],
+  mixins: [createBasePortion<'milk-in-a-hot-drink-prompt', MilkInAHotDrinkPromptState>()],
 
   props: {
     parentFood: {
@@ -77,7 +74,7 @@ export default defineComponent({
 
   computed: {
     localeOptions(): ListOption<string | number>[] {
-      return (this.options[this.$i18n.locale] ?? this.options.en)
+      return (this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en)
         .map((item) => ({
           ...item,
           value: Number.parseFloat(item.value.toString()),

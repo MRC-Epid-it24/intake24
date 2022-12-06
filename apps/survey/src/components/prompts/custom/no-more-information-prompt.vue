@@ -1,6 +1,6 @@
 <template>
   <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, meal, food, isValid }"
+    v-bind="{ food, meal, prompt, localeDescription, localeText, isValid }"
     @action="action"
   >
     <template #actions>
@@ -118,7 +118,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NoMoreInformationPromptProps } from '@intake24/common/prompts';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
@@ -128,7 +127,7 @@ export default defineComponent({
 
   components: { ConfirmDialog },
 
-  mixins: [createBasePrompt<NoMoreInformationPromptProps>()],
+  mixins: [createBasePrompt<'no-more-information-prompt'>()],
 
   data() {
     return {
@@ -138,14 +137,14 @@ export default defineComponent({
 
   computed: {
     localeText(): string {
-      return this.getLocaleContent(this.text, {
+      return this.getLocaleContent(this.prompt.i18n.text, {
         path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.text`,
         params: { item: this.foodOrMealName },
       });
     },
 
     localeDescription(): string {
-      return this.getLocaleContent(this.description, {
+      return this.getLocaleContent(this.prompt.i18n.description, {
         path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.description`,
         params: { item: this.foodOrMealName },
       });

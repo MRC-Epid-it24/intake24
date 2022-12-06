@@ -31,7 +31,7 @@ export default defineComponent({
 
   computed: {
     items() {
-      return this.getBreadCrumbs(this.promptName);
+      return this.getBreadCrumbs();
     },
   },
 });

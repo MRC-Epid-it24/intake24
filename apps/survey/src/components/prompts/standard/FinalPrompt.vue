@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, food, meal, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
       <v-btn class="px-5" color="success" large :to="{ name: 'survey-home', params: { surveyId } }">
         <v-icon left>$home</v-icon>
@@ -33,14 +33,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FinalPromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'FinalPrompt',
 
-  mixins: [createBasePrompt<FinalPromptProps>()],
+  mixins: [createBasePrompt<'final-prompt'>()],
 
   props: {
     canRestart: {

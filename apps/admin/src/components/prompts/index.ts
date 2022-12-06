@@ -37,21 +37,21 @@ export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
 
 export const promptSettings: PromptSettings = {
   // Custom
-  'info-prompt': {
-    tabs: [...baseTab],
+  'checkbox-list-prompt': {
+    tabs: [...listTab],
     sections: [...allExceptSubmission],
   },
   'date-picker-prompt': {
     tabs: [...validatedTab],
     sections: [...allExceptSubmission],
   },
-  'time-picker-prompt': {
-    tabs: [...validatedTab],
+  'info-prompt': {
+    tabs: [...baseTab],
     sections: [...allExceptSubmission],
   },
-  'checkbox-list-prompt': {
-    tabs: [...listTab],
-    sections: [...allExceptSubmission],
+  'no-more-information-prompt': {
+    tabs: [...baseTab],
+    sections: [...foodsAndPostFoods],
   },
   'radio-list-prompt': {
     tabs: [...listTab],
@@ -61,13 +61,13 @@ export const promptSettings: PromptSettings = {
     tabs: [...validatedTab],
     sections: [...allExceptSubmission],
   },
+  'time-picker-prompt': {
+    tabs: [...validatedTab],
+    sections: [...allExceptSubmission],
+  },
   'yes-no-prompt': {
     tabs: [...baseTab],
     sections: [...allExceptSubmission],
-  },
-  'no-more-information-prompt': {
-    tabs: [...baseTab],
-    sections: [...foodsAndPostFoods],
   },
   // Standard
   'associated-foods-prompt': {
@@ -78,13 +78,13 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preFoods'],
   },
-  'food-search-prompt': {
-    tabs: [...baseTab, 'options'],
-    sections: ['foods'],
-  },
   'final-prompt': {
     tabs: [...baseTab],
     sections: ['submission'],
+  },
+  'food-search-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['foods'],
   },
   'meal-add-prompt': {
     tabs: [...baseTab],
@@ -93,18 +93,6 @@ export const promptSettings: PromptSettings = {
   'meal-time-prompt': {
     tabs: [...baseTab],
     sections: ['preFoods'],
-  },
-  'same-as-before-prompt': {
-    tabs: [...baseTab],
-    sections: ['foods'],
-  },
-  'split-food-prompt': {
-    tabs: [...baseTab],
-    sections: ['foods'],
-  },
-  'submit-prompt': {
-    tabs: [...baseTab],
-    sections: ['submission'],
   },
   'ready-meal-prompt': {
     tabs: [...baseTab],
@@ -118,12 +106,28 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['submission'],
   },
+  'same-as-before-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'split-food-prompt': {
+    tabs: [...baseTab],
+    sections: ['foods'],
+  },
+  'submit-prompt': {
+    tabs: [...baseTab],
+    sections: ['submission'],
+  },
   // Portion size
   'as-served-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'cereal-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['foods'],
+  },
+  'direct-weight-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },

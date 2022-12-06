@@ -1,12 +1,9 @@
 <template>
-  <portion-layout
-    v-bind="{ actions, method: portionSize.method, description, text, food, isValid }"
-    @action="action"
-  >
+  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          <i18n :path="`prompts.${portionSize.method}.label`">
+          <i18n :path="`prompts.${type}.label`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -19,7 +16,7 @@
           <image-map-selector
             v-if="guideImageData"
             v-bind="{
-              config: imageMap,
+              config: prompt.imageMap,
               imageMapData: guideImageData.imageMap,
               id: portionSize.objectId,
               index: portionSize.objectIndex,
@@ -33,7 +30,7 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${portionSize.method}.quantity`, { food: foodName }) }}
+          {{ $t(`prompts.${type}.quantity`, { food: foodName }) }}
           <template #actions>
             <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
           </template>
@@ -55,7 +52,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { GuideImagePromptProps } from '@intake24/common/prompts';
 import type { GuideImageParameters, GuideImageState } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
@@ -75,7 +71,7 @@ export default defineComponent({
 
   components: { ImageMapSelector, QuantityCard },
 
-  mixins: [createBasePortion<GuideImagePromptProps, GuideImagePromptState>()],
+  mixins: [createBasePortion<'guide-image-prompt', GuideImagePromptState>()],
 
   props: {
     conversionFactor: {

@@ -20,7 +20,7 @@
     </v-card>
     <slot></slot>
     <div
-      v-if="!isMobile || actions.both"
+      v-if="!isMobile || prompt.actions?.both"
       class="pa-4 px-md-0 d-flex"
       :class="{ 'flex-column-reverse': isMobile }"
     >
@@ -122,7 +122,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Dictionary, EncodedFood, PortionSizeMethodId } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/types';
 
 import layoutMixin from './layout-mixin';
 
@@ -135,21 +135,6 @@ export default defineComponent({
     food: {
       type: Object as PropType<EncodedFood>,
       required: true,
-    },
-    method: {
-      type: String as PropType<PortionSizeMethodId | 'option'>,
-      required: true,
-    },
-  },
-
-  computed: {
-    localeText() {
-      const params: Dictionary<string> = {};
-      const { localeFoodName, localeMealName } = this;
-      if (localeFoodName) params.food = localeFoodName;
-      if (localeMealName) params.meal = localeMealName;
-
-      return this.getLocaleContent(this.text, { path: `prompts.${this.method}.text`, params });
     },
   },
 });

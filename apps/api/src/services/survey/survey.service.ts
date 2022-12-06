@@ -2,7 +2,7 @@ import { addDays, addMinutes, startOfDay } from 'date-fns';
 import ms from 'ms';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { PromptQuestion, RedirectPromptProps } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { JobParams, SurveyState } from '@intake24/common/types';
 import type {
   CreateUserResponse,
@@ -281,7 +281,7 @@ const surveyService = ({
     if (!user) throw new NotFoundError();
     const { aliases = [], customFields = [] } = user;
 
-    const { identifier, url } = (redirectPrompt as PromptQuestion<RedirectPromptProps>).props;
+    const { identifier, url } = redirectPrompt as Prompts['redirect-prompt'];
 
     let identifierValue: string | null;
 

@@ -1,4 +1,4 @@
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
@@ -13,7 +13,7 @@ import {
 import type { SurveyState, SurveyStore } from '../stores';
 
 export interface PromptInstance {
-  prompt: PromptQuestion;
+  prompt: Prompt;
   section: SurveySection | MealSection;
 }
 

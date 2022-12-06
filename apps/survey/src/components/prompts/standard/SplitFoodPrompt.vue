@@ -1,16 +1,13 @@
 <template>
-  <prompt-layout
-    v-bind="{ actions, description: localeDescription, text: localeText, food, meal, isValid }"
-    @action="action"
-  >
-    <i18n class="text-subtitle-1" path="prompts.splitFood.searchTerm" tag="p">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <i18n class="text-subtitle-1" :path="`prompts.${type}.searchTerm`" tag="p">
       <template #food>
         <span class="font-weight-medium">{{ food.description }}</span>
       </template>
     </i18n>
     <v-card class="mb-4" flat outlined tile>
       <v-list color="grey lighten-5 py-0" subheader>
-        <v-subheader>{{ $t('prompts.splitFood.split') }}</v-subheader>
+        <v-subheader>{{ $t(`prompts.${type}.split`) }}</v-subheader>
         <template v-for="(suggestion, idx) in suggestions">
           <v-list-item :key="suggestion" link>
             <v-list-item-icon>
@@ -24,11 +21,11 @@
         </template>
       </v-list>
     </v-card>
-    <p class="font-italic">{{ $t('prompts.splitFood.separateSuggestion') }}</p>
-    <p class="font-italic">{{ $t('prompts.splitFood.singleSuggestion') }}</p>
+    <p class="font-italic">{{ $t(`prompts.${type}.separateSuggestion`) }}</p>
+    <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
     <template #actions>
       <v-btn :block="isMobile" class="px-5" large @click.stop="action('separate')">
-        {{ $t('prompts.splitFood.separate') }}
+        {{ $t(`prompts.${type}.separate`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -37,13 +34,13 @@
         large
         @click.stop="action('single')"
       >
-        {{ $t('prompts.splitFood.single') }}
+        {{ $t(`prompts.${type}.single`) }}
       </v-btn>
     </template>
     <template #nav-actions>
       <v-btn value="separate" @click.stop="action('separate')">
         <span class="text-overline font-weight-medium">
-          {{ $t('prompts.splitFood.separate') }}
+          {{ $t(`prompts.${type}.separate`) }}
         </span>
         <v-icon class="pb-1">fas fa-arrows-left-right-to-line</v-icon>
       </v-btn>
@@ -62,7 +59,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { SplitFoodPromptProps } from '@intake24/common/prompts';
 import type { FreeTextFood } from '@intake24/common/types';
 
 import createBasePrompt from '../createBasePrompt';
@@ -70,7 +66,7 @@ import createBasePrompt from '../createBasePrompt';
 export default defineComponent({
   name: 'SplitFoodPrompt',
 
-  mixins: [createBasePrompt<SplitFoodPromptProps, FreeTextFood>()],
+  mixins: [createBasePrompt<'split-food-prompt', FreeTextFood>()],
 
   props: {
     food: {
@@ -84,20 +80,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeText(): string {
-      return this.getLocaleContent(this.promptProps.text, {
-        path: 'prompts.splitFood.text',
-        params: { food: this.localeFoodName ?? '' },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.promptProps.description, {
-        // path: 'prompts.splitFood.description',
-        params: { food: this.localeFoodName ?? '' },
-      });
-    },
-
     isValid(): boolean {
       return true;
     },

@@ -2,10 +2,9 @@
   <milk-on-cereal-prompt
     v-bind="{
       food: food(),
-      parentFood,
       initialState: state,
-      promptComponent,
-      promptProps,
+      parentFood,
+      prompt,
     }"
     @action="action"
     @update="update"
@@ -17,7 +16,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { MilkOnCerealPromptProps, PortionSizeComponentType } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { MilkOnCerealPromptState } from '@intake24/survey/components/prompts';
 import { MilkOnCerealPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -30,16 +29,8 @@ export default defineComponent({
   components: { MilkOnCerealPrompt },
 
   props: {
-    promptComponent: {
-      type: String as PropType<PortionSizeComponentType>,
-      required: true,
-    },
-    promptId: {
-      type: String,
-      required: true,
-    },
-    promptProps: {
-      type: Object as PropType<MilkOnCerealPromptProps>,
+    prompt: {
+      type: Object as PropType<Prompts['milk-on-cereal-prompt']>,
       required: true,
     },
   },
@@ -66,8 +57,8 @@ export default defineComponent({
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.promptId,
-      props.promptComponent,
+      props.prompt.id,
+      props.prompt.component,
       getInitialState,
       context
     );

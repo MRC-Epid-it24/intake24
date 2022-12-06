@@ -1,11 +1,11 @@
 <template>
-  <prompt-layout v-bind="{ actions, description, text, meal, food, isValid }" @action="action">
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-form ref="form" @submit.prevent="action('next')">
       <v-textarea
         v-model.trim="currentValue"
         hide-details="auto"
-        :hint="getLocaleContent(hint)"
-        :label="getLocaleContent(label)"
+        :hint="getLocaleContent(prompt.i18n.hint)"
+        :label="getLocaleContent(prompt.i18n.label)"
         outlined
         :rules="rules"
         @input="update"
@@ -18,14 +18,12 @@
 import type { VForm } from 'vuetify/lib';
 import { defineComponent, ref } from 'vue';
 
-import type { TextareaPromptProps } from '@intake24/common/prompts';
-
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'TextareaPrompt',
 
-  mixins: [createBasePrompt<TextareaPromptProps>()],
+  mixins: [createBasePrompt<'textarea-prompt'>()],
 
   props: {
     value: {
@@ -43,11 +41,11 @@ export default defineComponent({
   data() {
     return {
       currentValue: this.value,
-      rules: this.validation.required
+      rules: this.prompt.validation.required
         ? [
             (v: string | null) =>
               !!v ||
-              (this.getLocaleContent(this.validation.message) ??
+              (this.getLocaleContent(this.prompt.validation.message) ??
                 this.$t('prompts.textarea.validation.required')),
           ]
         : [],
@@ -56,7 +54,7 @@ export default defineComponent({
 
   computed: {
     isValid(): boolean {
-      return !this.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentValue;
     },
   },
 

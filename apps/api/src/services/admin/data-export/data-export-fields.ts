@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash';
 import uaParser from 'ua-parser-js';
 
-import type { PromptQuestion } from '@intake24/common/prompts';
+import type { Prompt } from '@intake24/common/prompts';
 import type { ExportField as BaseExportField } from '@intake24/common/schemes';
 import type { SurveyScheme, SurveySubmissionFood } from '@intake24/db';
 import { NutrientTableCsvMappingField, SystemNutrientType, UserCustomField } from '@intake24/db';
@@ -18,23 +18,23 @@ export const EMPTY = 'N/A';
 
 const dataExportFields = () => {
   /**
-   * Helper to map custom PromptQuestion to ExportField
+   * Helper to map custom Prompt to ExportField
    *
-   * @param {PromptQuestion} question
+   * @param {Prompt} question
    * @returns {ExportField}
    */
-  const customQuestionMapper = ({ id, name: label }: PromptQuestion): ExportField => ({
+  const customQuestionMapper = ({ id, name: label }: Prompt): ExportField => ({
     id,
     label,
   });
 
   /**
-   * Helper to filter custom PromptQuestion to ExportField
+   * Helper to filter custom Prompt to ExportField
    *
-   * @param {PromptQuestion} { type }
+   * @param {Prompt} { type }
    * @returns {boolean}
    */
-  const customQuestionFilter = ({ type }: PromptQuestion): boolean => type === 'custom';
+  const customQuestionFilter = ({ type }: Prompt): boolean => type === 'custom';
 
   /**
    * Default user fields

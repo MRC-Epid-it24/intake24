@@ -110,19 +110,22 @@
                 </v-col>
               </v-row>
             </v-tab-item>
+            <prompt-content :i18n.sync="dialog.question.i18n"></prompt-content>
+            <prompt-actions :actions.sync="dialog.question.actions"></prompt-actions>
+            <prompt-conditions :conditions.sync="dialog.question.conditions"></prompt-conditions>
             <component
               :is="dialog.question.component"
-              v-bind.sync="dialog.question.props"
+              v-bind.sync="dialog.question"
               @validate="validate"
             ></component>
           </v-tabs-items>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-              <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+              <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn class="font-weight-bold" color="info" text type="submit">
-              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-card-actions>
         </v-container>
@@ -137,7 +140,7 @@ import pick from 'lodash/pick';
 import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
-import type { PromptQuestion, QuestionType } from '@intake24/common/prompts';
+import type { BasePrompt, PromptType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import {
   customPrompts,
@@ -152,10 +155,10 @@ import {
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
-import { LanguageSelector } from '../forms';
+import { PromptActions, PromptConditions, PromptContent } from './partials';
 import PromptTypeSelector from './prompt-type-selector.vue';
 
-export interface EditPromptQuestion extends PromptQuestion {
+export interface EditPromptQuestion extends BasePrompt {
   origId?: string;
 }
 
@@ -169,7 +172,9 @@ export default defineComponent({
   name: 'PromptSelector',
 
   components: {
-    LanguageSelector,
+    PromptActions,
+    PromptConditions,
+    PromptContent,
     PromptTypeSelector,
     ...customPrompts,
     ...standardPrompts,
@@ -203,7 +208,7 @@ export default defineComponent({
       ...portionSizePromptQuestions,
     ];
 
-    const groupedPromptQuestions: Record<QuestionType, PromptQuestion[]> = {
+    const groupedPromptQuestions: Record<PromptType, BasePrompt[]> = {
       custom: customPromptQuestions,
       standard: standardPromptQuestions,
       'portion-size': portionSizePromptQuestions,
@@ -229,7 +234,7 @@ export default defineComponent({
     isOverrideMode(): boolean {
       return this.mode === 'override';
     },
-    availablePromptQuestions(): PromptQuestion[] {
+    availablePromptQuestions(): BasePrompt[] {
       const { section } = this;
       if (!section) return this.promptQuestions;
 
@@ -237,16 +242,16 @@ export default defineComponent({
         this.promptSettings[prompt.component].sections.includes(section)
       );
     },
-    availableGroupedPromptQuestions(): Record<QuestionType, PromptQuestion[]> {
+    availableGroupedPromptQuestions(): Record<PromptType, BasePrompt[]> {
       const { section } = this;
       if (!section) return this.groupedPromptQuestions;
 
       return Object.entries(this.groupedPromptQuestions).reduce((acc, [key, value]) => {
-        acc[key as QuestionType] = value.filter((prompt) =>
+        acc[key as PromptType] = value.filter((prompt) =>
           this.promptSettings[prompt.component].sections.includes(section)
         );
         return acc;
-      }, {} as Record<QuestionType, PromptQuestion[]>);
+      }, {} as Record<PromptType, BasePrompt[]>);
     },
 
     questionIdRules(): RuleCallback[] {
@@ -287,26 +292,21 @@ export default defineComponent({
 
     updatePromptProps() {
       const { show, index, question } = this.dialog;
-      const { origId, id, name, component } = question;
-      const identifiers = origId ? { origId, id, name } : {};
+      const { component } = question;
 
       const newQuestion =
         this.availablePromptQuestions.find((item) => item.component === component) ??
         this.availablePromptQuestions[0];
       if (!newQuestion) return;
 
-      const propsKeys = Object.keys(newQuestion.props);
-      const originalProps = pick(question.props, propsKeys);
-      const { props, ...rest } = copy(newQuestion);
-
       this.dialog = {
         show,
         index,
-        question: { ...rest, ...identifiers, props: merge(props, originalProps) },
+        question: copy(newQuestion),
       };
     },
 
-    updateQuestionTypeTab(type: PromptQuestion['type']) {
+    updateQuestionTypeTab(type: BasePrompt['type']) {
       switch (type) {
         case 'standard':
           this.questionTypeTab = 1;
@@ -324,7 +324,7 @@ export default defineComponent({
       this.updateQuestionTypeTab(this.dialog.question.type);
     },
 
-    edit(index: number, question: PromptQuestion) {
+    edit(index: number, question: BasePrompt) {
       const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
       if (!promptDefaults) {
         console.warn(`Prompt defaults for question type '${question.component}' not found.`);
