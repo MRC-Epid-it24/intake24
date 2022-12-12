@@ -1,6 +1,7 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-text-field
+      :key="food?.description"
       v-model="searchTerm"
       clearable
       hide-details="auto"
@@ -17,6 +18,7 @@
     </v-alert>
     <food-search-results
       v-if="searchResults"
+      :key="food?.id"
       :results="searchResults"
       @food-selected="onFoodSelected"
     ></food-search-results>
@@ -70,11 +72,27 @@ export default defineComponent({
     ...mapState(useSurvey, ['parameters']),
   },
 
+  watch: {
+    //FORCE FoodSearch to react on manual changed or Food/Meal (V4-681)
+    $props: {
+      async handler() {
+        this.searchTerm = this.food?.description ?? '';
+        await this.search();
+      },
+      deep: true,
+    },
+  },
+
   async mounted() {
     await this.search();
   },
 
   methods: {
+    checkFoodSearchValidity() {
+      console.log(`Food: ${this.food?.description} - Search term: ${this.searchTerm}`);
+      return this.searchTerm !== this.food?.description;
+    },
+
     async search() {
       this.$emit('input', this.searchTerm);
       this.requestInProgress = true;
