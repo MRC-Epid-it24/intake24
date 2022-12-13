@@ -140,6 +140,15 @@ const promptConditions: Condition[] = [
     value: '',
     props: {},
   },
+  {
+    type: 'foodCategory',
+    op: 'eq',
+    value: '',
+    props: {
+      section: 'food',
+      categoryId: '',
+    },
+  },
 ];
 
 export default defineComponent({

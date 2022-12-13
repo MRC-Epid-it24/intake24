@@ -37,7 +37,13 @@ export type ConditionOps = typeof conditionOps;
 
 export type ConditionOp = keyof ConditionOps;
 
-export const conditionTypes = ['drinks', 'energy', 'promptAnswer', 'recallNumber'] as const;
+export const conditionTypes = [
+  'drinks',
+  'energy',
+  'promptAnswer',
+  'recallNumber',
+  'foodCategory',
+] as const;
 
 export type ConditionType = typeof conditionTypes[number];
 
@@ -68,6 +74,13 @@ export type Conditions = {
   recallNumber: BaseCondition & {
     type: 'recallNumber';
     props: {};
+  };
+  foodCategory: BaseCondition & {
+    type: 'foodCategory';
+    props: {
+      section: ConditionSection;
+      categoryId: string;
+    };
   };
 };
 

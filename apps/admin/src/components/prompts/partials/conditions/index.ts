@@ -7,4 +7,5 @@ export default {
   energy: SectionProps,
   promptAnswer: PromptAnswerProps,
   recallNumber: NoopProps,
+  foodCategory: NoopProps,
 };

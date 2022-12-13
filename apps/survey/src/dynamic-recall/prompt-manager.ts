@@ -557,6 +557,10 @@ const checkFoodCustomConditions = (
       }
       case 'recallNumber':
         return checkRecallNumber(store, condition);
+      case 'foodCategory': {
+        if (foodState.type !== 'encoded-food') return false;
+        return foodState.data.categories.some((code) => conditionOps[op]([value, code]));
+      }
       default:
         console.error(`Unexpected condition type: ${condition}`);
         return false;
