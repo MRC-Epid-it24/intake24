@@ -57,9 +57,6 @@
     <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <router-link v-if="surveyId" :to="{ name: 'survey-home', params: { surveyId } }">
-          <v-img class="mx-2" contain max-height="30" max-width="150" :src="logo"></v-img>
-        </router-link>
         <v-spacer></v-spacer>
         <v-btn
           v-if="surveyId"
@@ -108,7 +105,6 @@ import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import logo from '@intake24/survey/assets/logo.svg';
 import { Loader } from '@intake24/survey/components';
 import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
@@ -124,7 +120,6 @@ export default defineComponent({
 
   data() {
     return {
-      logo,
       sidebar: false,
     };
   },
