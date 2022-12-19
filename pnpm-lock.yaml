@@ -88,7 +88,7 @@ importers:
       cronstrue: ^2.21.0
       date-fns: ^2.29.3
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       eslint: ^8.29.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-simple-import-sort: ^8.0.0
@@ -132,7 +132,7 @@ importers:
       cronstrue: 2.21.0
       date-fns: 2.29.3
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       express: 4.18.2
       flag-icons: 6.6.6
       helmet: 6.0.1
@@ -219,7 +219,7 @@ importers:
       date-fns: ^2.29.3
       dompurify: ^2.4.1
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       express: ^4.18.2
       express-rate-limit: ^6.7.0
       express-session: ^1.17.3
@@ -284,7 +284,7 @@ importers:
       date-fns: 2.29.3
       dompurify: 2.4.1
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       express: 4.18.2
       express-rate-limit: 6.7.0_express@4.18.2
       express-session: 1.17.3
@@ -373,7 +373,7 @@ importers:
       '@types/web-push': ^3.3.2
       commander: ^9.4.1
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       fork-ts-checker-webpack-plugin: ^7.2.13
       fs-extra: ^11.1.0
       lodash: ^4.17.21
@@ -390,7 +390,7 @@ importers:
     dependencies:
       commander: 9.4.1
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       fs-extra: 11.1.0
       lodash: 4.17.21
       nanoid: 3.3.4
@@ -418,7 +418,7 @@ importers:
       cross-env: ^7.0.3
       csv-writer: ^1.6.0
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       lodash: ^4.17.21
       ts-loader: ^9.4.2
       tsconfig-paths-webpack-plugin: ^4.0.0
@@ -432,7 +432,7 @@ importers:
       command-line-args: 5.2.1
       csv-writer: 1.6.0
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       lodash: 4.17.21
     devDependencies:
       '@types/command-line-args': 5.2.0
@@ -458,7 +458,7 @@ importers:
       '@types/webpack-env': 1.18.0
       bootstrap: ^5.2.3
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       express: ^4.18.2
       fork-ts-checker-webpack-plugin: ^7.2.13
       fs-extra: ^11.1.0
@@ -487,7 +487,7 @@ importers:
       '@popperjs/core': 2.11.6
       bootstrap: 5.2.3_@popperjs+core@2.11.6
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       express: 4.18.2
       fs-extra: 11.1.0
       helmet: 6.0.1
@@ -532,7 +532,7 @@ importers:
       '@vue/eslint-config-typescript': ^11.0.2
       axios: ^1.2.1
       dotenv: ^16.0.3
-      dotenv-expand: ^9.0.0
+      dotenv-expand: ^10.0.0
       eslint: ^8.29.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-simple-import-sort: ^8.0.0
@@ -565,7 +565,7 @@ importers:
       '@fortawesome/fontawesome-free': 6.2.1
       axios: 1.2.1
       dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv-expand: 10.0.0
       express: 4.18.2
       helmet: 6.0.1
       lodash: 4.17.21
@@ -5917,15 +5917,15 @@ packages:
       is-obj: 2.0.0
     dev: true
 
+  /dotenv-expand/10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+    engines: {node: '>=12'}
+    dev: false
+
   /dotenv-expand/8.0.3:
     resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}
     engines: {node: '>=12'}
     dev: true
-
-  /dotenv-expand/9.0.0:
-    resolution: {integrity: sha512-uW8Hrhp5ammm9x7kBLR6jDfujgaDarNA02tprvZdyrJ7MpdzD1KyrIHG4l+YoC2fJ2UcdFdNWNWIjt+sexBHJw==}
-    engines: {node: '>=12'}
-    dev: false
 
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
@@ -8449,7 +8449,7 @@ packages:
       vanilla-jsoneditor: 0.11.3
       vue: 2.7.14
       vue-demi: 0.13.11_vue@2.7.14
-      vue-global-config: 0.3.0_vue@2.7.14
+      vue-global-config: 0.3.1_vue@2.7.14
     dev: false
 
   /json-parse-better-errors/1.0.2:
@@ -12244,8 +12244,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-global-config/0.3.0_vue@2.7.14:
-    resolution: {integrity: sha512-Fv5ApIBjMQs5gOVoJGHscrSdGFmghMhtcIJBeT5Haxcs9vIrtbHJGIWupSXrE0wx9QpERqSo4V9CXamR5C9yew==}
+  /vue-global-config/0.3.1_vue@2.7.14:
+    resolution: {integrity: sha512-c8YlGeL/+HfdEqoajvHOHImdsBraAdnSesZqQM491RaC9n9tXaTb0ZerPfkUcbNKiOWzTlw/p1qHw3qohop8Xw==}
     peerDependencies:
       '@vue/composition-api': '>=1'
       vue: 2 || 3
