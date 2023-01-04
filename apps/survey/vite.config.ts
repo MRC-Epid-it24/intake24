@@ -67,14 +67,13 @@ export default defineConfig(({ mode }) => {
       sourcemap,
       rollupOptions: {
         output: {
-          assetFileNames({ name }) {
-            if (name?.includes('@fortawesome')) return `assets/fonts/[name].[hash].[ext]`;
+          assetFileNames: ({ name }) => {
+            let subDir = '';
 
-            if (name?.includes('flag-icons')) return `assets/flags/[name].[hash].[ext]`;
+            if (name?.match(/\.(woff2|ttf)$/)) subDir = 'fonts/';
+            else if (name?.match(/\.(jpe?g|png|svg)$/)) subDir = 'imgs/';
 
-            if (name?.includes('feedback')) return `assets/feedback/[name].[hash].[ext]`;
-
-            return `assets/[name].[hash].[ext]`;
+            return `assets/${subDir}[name]-[hash][extname]`;
           },
         },
       },
