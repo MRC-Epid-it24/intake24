@@ -1,5 +1,4 @@
 import type { PropType } from 'vue';
-import camelCase from 'lodash/camelCase';
 import { defineComponent } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
