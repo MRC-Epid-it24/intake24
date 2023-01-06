@@ -9,10 +9,9 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { MealTime } from '@intake24/common/types';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -33,7 +32,7 @@ export default defineComponent({
   setup(props, context) {
     const { meal } = useMealPromptUtils();
 
-    const getInitialState = (): MealTime => meal.value.time ?? meal.value.defaultTime;
+    const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
     const { state, update } = usePromptHandlerNoStore(getInitialState, context);
 

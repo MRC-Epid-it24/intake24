@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action"> </prompt-layout>
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action"></prompt-layout>
 </template>
 
 <script lang="ts">

@@ -5,8 +5,7 @@
         :format="prompt.format"
         full-width
         :landscape="!isMobile"
-        :v-model="currentValue"
-        :value="currentValue"
+        :value="currentTime"
         @input="update"
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
@@ -69,19 +68,17 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      currentValue: fromMealTime(this.initialState),
-    };
-  },
-
   computed: {
+    currentTime(): string {
+      return fromMealTime(this.initialState);
+    },
+
     localMealName(): string {
       return this.getLocaleContent(this.meal.name);
     },
 
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.currentTime;
     },
   },
 

@@ -8,11 +8,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
-import type { ReadyMealPromptState } from '@intake24/survey/components/prompts/standard';
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -34,13 +33,13 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
-    const getInitialState = (): ReadyMealPromptState => ({
+    const getInitialState = computed(() => ({
       foods: (
         meal.value.foods.filter(
           (food) => food.type === 'encoded-food' && food.data.readyMealOption
         ) as EncodedFood[]
       ).map((food) => ({ id: food.id, name: food.data.localName, value: false })),
-    });
+    }));
 
     const { state, update } = usePromptHandlerNoStore(getInitialState, context);
 

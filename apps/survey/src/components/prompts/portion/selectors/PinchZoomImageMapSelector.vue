@@ -1,7 +1,7 @@
 <template>
   <v-bottom-sheet v-model="dialog" persistent>
     <template #activator="{ on, attrs }">
-      <slot name="activator" v-bind="{ on, attrs }"> </slot>
+      <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
     <v-sheet class="text-center pa-3" :heigh="height">
       <v-row dense no-gutter>

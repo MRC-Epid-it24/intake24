@@ -1,11 +1,11 @@
 <template>
-  <meal-add-prompt v-bind="{ meals, prompt }" @action="action" @update="update"> </meal-add-prompt>
+  <meal-add-prompt v-bind="{ meals, prompt }" @action="action" @update="update"></meal-add-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { Meal } from '@intake24/common/types';
@@ -27,7 +27,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const getInitialState = (): string | undefined => undefined;
+    const getInitialState = computed(() => undefined);
 
     const { state, update } = usePromptHandlerNoStore(getInitialState, context);
 
