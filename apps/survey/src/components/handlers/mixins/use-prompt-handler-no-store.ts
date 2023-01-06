@@ -1,21 +1,16 @@
-import type { ComputedRef, Ref, SetupContext } from 'vue';
+import type { ComputedRef, Ref } from 'vue';
 import { ref, watch } from 'vue';
 
-export const usePromptHandlerNoStore = <T>(
-  getInitialState: ComputedRef<T>,
-  context: SetupContext
-) => {
+export const usePromptHandlerNoStore = <T>(getInitialState: ComputedRef<T>) => {
   const state = ref(getInitialState.value) as Ref<T>;
 
   watch(getInitialState, (initialState) => {
     state.value = initialState;
   });
 
-  const update = (data: { state?: T; valid?: boolean }) => {
-    const { state: newState, valid } = data;
+  const update = (data: { state?: T }) => {
+    const { state: newState } = data;
     if (newState) state.value = newState;
-
-    if (valid !== undefined) context.emit('valid', data.valid);
   };
 
   return { state, update };

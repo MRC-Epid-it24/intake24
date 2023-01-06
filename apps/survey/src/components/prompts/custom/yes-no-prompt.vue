@@ -54,7 +54,7 @@ export default defineComponent({
     },
 
     update() {
-      this.$emit('update', { state: this.currentValue, valid: true });
+      this.$emit('update', { state: this.currentValue });
       this.$emit('action', 'next');
     },
   },

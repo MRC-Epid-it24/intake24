@@ -35,23 +35,20 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
-
-import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'SurveyError',
 
   props: {
+    error: {
+      type: String,
+      required: true,
+    },
     surveyId: {
       type: String,
       required: true,
     },
-  },
-
-  computed: {
-    ...mapState(useSurvey, ['error']),
   },
 });
 </script>

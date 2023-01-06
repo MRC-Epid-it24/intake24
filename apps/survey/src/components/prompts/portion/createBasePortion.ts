@@ -84,10 +84,6 @@ export default <P extends keyof Prompts, S extends object>() =>
       },
     },
 
-    mounted() {
-      this.$emit('update', { valid: this.isValid });
-    },
-
     methods: {
       clearErrors() {
         this.errors = [];

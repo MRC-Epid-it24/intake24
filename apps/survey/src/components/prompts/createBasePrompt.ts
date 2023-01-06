@@ -77,10 +77,6 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
       },
     },
 
-    mounted() {
-      this.$emit('update', { valid: this.isValid });
-    },
-
     methods: {
       clearErrors() {
         this.errors = [];

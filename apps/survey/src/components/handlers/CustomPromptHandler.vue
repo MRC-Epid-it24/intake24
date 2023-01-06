@@ -63,11 +63,8 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setSelection']),
 
-    update(data: { state?: CustomPromptAnswer; valid?: boolean }) {
-      const { state, valid } = data;
-      this.state = state;
-
-      if (valid !== undefined) this.$emit('valid', valid);
+    update(data: { state?: CustomPromptAnswer }) {
+      this.state = data.state;
     },
 
     action(type: string, id?: number) {

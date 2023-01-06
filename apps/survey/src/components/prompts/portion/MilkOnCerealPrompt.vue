@@ -246,7 +246,7 @@ export default defineComponent({
         milkLevelConfirmed: this.milkLevelConfirmed,
       };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

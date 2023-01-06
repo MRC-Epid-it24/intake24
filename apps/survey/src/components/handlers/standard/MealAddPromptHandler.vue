@@ -26,10 +26,10 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup() {
     const getInitialState = computed(() => undefined);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState, context);
+    const { state, update } = usePromptHandlerNoStore(getInitialState);
 
     return { state, update };
   },

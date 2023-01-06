@@ -56,7 +56,7 @@ export default defineComponent({
 
   methods: {
     update() {
-      this.$emit('update', { state: { foods: this.foods }, valid: this.isValid });
+      this.$emit('update', { state: { foods: this.foods } });
     },
   },
 });

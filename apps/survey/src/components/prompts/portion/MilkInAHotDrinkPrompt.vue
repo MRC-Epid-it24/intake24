@@ -117,7 +117,7 @@ export default defineComponent({
 
       const state: MilkInAHotDrinkPromptState = { portionSize, panel };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

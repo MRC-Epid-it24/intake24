@@ -272,7 +272,7 @@ export default defineComponent({
         leftoversPrompt: this.leftoversPrompt,
       };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

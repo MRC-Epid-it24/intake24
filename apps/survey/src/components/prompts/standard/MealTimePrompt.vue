@@ -84,7 +84,7 @@ export default defineComponent({
 
   methods: {
     update(time: string) {
-      this.$emit('update', { state: toMealTime(time), valid: this.isValid });
+      this.$emit('update', { state: toMealTime(time) });
     },
   },
 });

@@ -252,7 +252,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

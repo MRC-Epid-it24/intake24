@@ -74,7 +74,7 @@ export default defineComponent({
     update() {
       this.clearErrors();
 
-      this.$emit('update', { state: this.currentValue, valid: this.isValid });
+      this.$emit('update', { state: this.currentValue });
     },
 
     confirm() {

@@ -170,6 +170,7 @@ export default defineComponent({
   },
 
   created() {
+    //@ts-expect-error fix debounced types
     this.debouncedGuideImgResize = debounce(() => {
       this.updateSvgDimensions();
     }, 500);

@@ -324,7 +324,7 @@ export default defineComponent({
         confirmed: this.confirmed,
       };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

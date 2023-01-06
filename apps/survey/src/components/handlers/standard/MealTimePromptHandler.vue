@@ -29,12 +29,12 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup() {
     const { meal } = useMealPromptUtils();
 
     const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState, context);
+    const { state, update } = usePromptHandlerNoStore(getInitialState);
 
     return { meal, state, update };
   },

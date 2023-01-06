@@ -98,7 +98,7 @@ export default defineComponent({
     update() {
       const state: PortionSizeOptionState = { option: this.option ?? null };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });

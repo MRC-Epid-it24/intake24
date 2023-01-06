@@ -20,18 +20,6 @@ export default defineComponent({
       type: Object as PropType<Prompt>,
       required: true,
     },
-    /* actions: {
-      type: Object as PropType<Actions>,
-      default: () => ({ both: false, items: [] }),
-    },
-    text: {
-      type: [Object, String] as PropType<RequiredLocaleTranslation | string>,
-      required: true,
-    },
-    description: {
-      type: [Object, String] as PropType<LocaleTranslation | string | null>,
-      default: null,
-    }, */
     food: {
       type: Object as PropType<FoodState>,
     },

@@ -152,6 +152,7 @@ export default defineComponent({
   },
 
   created() {
+    //@ts-expect-error fix debounced types
     this.debouncedDrinkScaleImgResize = debounce(() => {
       this.updateOverlayDimensions();
     }, 500);

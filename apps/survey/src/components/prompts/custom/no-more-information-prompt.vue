@@ -157,7 +157,7 @@ export default defineComponent({
 
   methods: {
     update() {
-      this.$emit('update', { state: this.currentValue, valid: this.isValid });
+      this.$emit('update', { state: this.currentValue });
     },
 
     confirm() {

@@ -36,7 +36,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup(props) {
     const {
       encodedFood: food,
       parameters,
@@ -66,8 +66,7 @@ export default defineComponent({
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.prompt.id,
       props.prompt.component,
-      getInitialState,
-      context
+      getInitialState
     );
 
     return {

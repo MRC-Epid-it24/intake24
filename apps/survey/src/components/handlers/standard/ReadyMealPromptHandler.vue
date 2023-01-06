@@ -41,7 +41,7 @@ export default defineComponent({
       ).map((food) => ({ id: food.id, name: food.data.localName, value: false })),
     }));
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState, context);
+    const { state, update } = usePromptHandlerNoStore(getInitialState);
 
     const commitAnswer = () => {
       for (const food of state.value.foods) {

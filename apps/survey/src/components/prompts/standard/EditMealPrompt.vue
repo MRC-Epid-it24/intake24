@@ -110,7 +110,7 @@ export default defineComponent({
       const { foods } = this;
       const state: EditMealPromptState = { foods };
 
-      this.$emit('update', { state, valid: this.isValid });
+      this.$emit('update', { state });
     },
   },
 });
