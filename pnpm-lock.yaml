@@ -188,7 +188,7 @@ importers:
       '@types/dompurify': ^2.4.0
       '@types/express': ^4.17.15
       '@types/express-session': ^1.17.5
-      '@types/fs-extra': ^9.0.13
+      '@types/fs-extra': ^11.0.0
       '@types/jsdom': ^20.0.1
       '@types/json2csv': ^5.0.3
       '@types/jsonwebtoken': ^9.0.0
@@ -332,7 +332,7 @@ importers:
       '@types/dompurify': 2.4.0
       '@types/express': 4.17.15
       '@types/express-session': 1.17.5
-      '@types/fs-extra': 9.0.13
+      '@types/fs-extra': 11.0.0
       '@types/jsdom': 20.0.1
       '@types/json2csv': 5.0.3
       '@types/jsonwebtoken': 9.0.0
@@ -368,7 +368,7 @@ importers:
 
   apps/cli:
     specifiers:
-      '@types/fs-extra': ^9.0.13
+      '@types/fs-extra': ^11.0.0
       '@types/lodash': ^4.14.191
       '@types/web-push': ^3.3.2
       commander: ^9.4.1
@@ -396,7 +396,7 @@ importers:
       nanoid: 3.3.4
       web-push: 3.5.0
     devDependencies:
-      '@types/fs-extra': 9.0.13
+      '@types/fs-extra': 11.0.0
       '@types/lodash': 4.14.191
       '@types/web-push': 3.3.2
       fork-ts-checker-webpack-plugin: 7.2.14_3fkjkrd3audxnith3e7fo4fnxi
@@ -451,7 +451,7 @@ importers:
       '@fortawesome/fontawesome-free': ^6.2.1
       '@popperjs/core': ^2.11.6
       '@types/express': ^4.17.15
-      '@types/fs-extra': ^9.0.13
+      '@types/fs-extra': ^11.0.0
       '@types/morgan': ^1.9.4
       '@types/nunjucks': ^3.2.1
       '@types/supertest': ^2.0.12
@@ -496,7 +496,7 @@ importers:
       sitemap: 7.1.1
     devDependencies:
       '@types/express': 4.17.15
-      '@types/fs-extra': 9.0.13
+      '@types/fs-extra': 11.0.0
       '@types/morgan': 1.9.4
       '@types/nunjucks': 3.2.1
       '@types/supertest': 2.0.12
@@ -604,7 +604,7 @@ importers:
 
   packages/common:
     specifiers:
-      '@types/fs-extra': ^9.0.13
+      '@types/fs-extra': ^11.0.0
       '@types/lodash': ^4.14.191
       '@types/pluralize': ^0.0.29
       ajv: ^8.11.2
@@ -627,7 +627,7 @@ importers:
       nanoid: 3.3.4
       pluralize: 8.0.0
     devDependencies:
-      '@types/fs-extra': 9.0.13
+      '@types/fs-extra': 11.0.0
       '@types/lodash': 4.14.191
       '@types/pluralize': 0.0.29
       execa: 5.1.1
@@ -3334,9 +3334,10 @@ packages:
       '@types/serve-static': 1.15.0
     dev: true
 
-  /@types/fs-extra/9.0.13:
-    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+  /@types/fs-extra/11.0.0:
+    resolution: {integrity: sha512-zdV5odfHf95B4qr6bdpshG4VMm/3xgnPhSJLa3xh75CYr35e34k+4FQli82Q48sPqwHazJGy+6+jl4T+Vw1AMg==}
     dependencies:
+      '@types/jsonfile': 6.1.1
       '@types/node': 18.11.18
     dev: true
 
@@ -3410,6 +3411,12 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/jsonfile/6.1.1:
+    resolution: {integrity: sha512-GSgiRCVeapDN+3pqA35IkQwasaCh/0YFH5dEF6S88iDvEn901DjOeH3/QPY+XYP1DFzDZPvIvfeEgk+7br5png==}
+    dependencies:
+      '@types/node': 18.11.18
     dev: true
 
   /@types/jsonwebtoken/9.0.0:

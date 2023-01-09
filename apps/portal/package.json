@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.15",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.0",
     "@types/morgan": "^1.9.4",
     "@types/nunjucks": "^3.2.1",
     "@types/supertest": "^2.0.12",
