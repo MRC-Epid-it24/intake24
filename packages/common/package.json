@@ -18,7 +18,7 @@
     "validators": "node scripts/validators.js"
   },
   "dependencies": {
-    "ajv": "^8.11.2",
+    "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
     "deepmerge": "^4.2.2",
     "fast-copy": "^3.0.0",
@@ -27,7 +27,7 @@
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.0",
     "@types/lodash": "^4.14.191",
     "@types/pluralize": "^0.0.29",
     "execa": "^5.1.1",

@@ -23,7 +23,7 @@
     "lint": "eslint . --ext .js,.ts --fix"
   },
   "dependencies": {
-    "commander": "^9.4.1",
+    "commander": "^9.5.0",
     "dotenv": "^16.0.3",
     "dotenv-expand": "^10.0.0",
     "fs-extra": "^11.1.0",
@@ -32,13 +32,13 @@
     "web-push": "^3.5.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.0",
     "@types/lodash": "^4.14.191",
     "@types/web-push": "^3.3.2",
     "fork-ts-checker-webpack-plugin": "^7.2.14",
     "ts-loader": "^9.4.2",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
-    "tsx": "^3.12.1",
+    "tsx": "^3.12.2",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
