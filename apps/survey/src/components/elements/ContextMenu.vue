@@ -2,7 +2,7 @@
   <v-menu :close-on-click="true" :close-on-content-click="true" offset-y>
     <template #activator="{ on, attrs }">
       <v-btn icon v-bind="attrs" v-on="on">
-        <v-icon x-small>{{ icon }}</v-icon>
+        <v-icon small>{{ icon }}</v-icon>
       </v-btn>
     </template>
     <v-list dense>

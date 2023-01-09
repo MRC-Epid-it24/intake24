@@ -123,10 +123,10 @@ export default defineComponent({
     display: none !important;
   }
   .selected {
-    background: #f5f5f5;
+    background: #fff3e0;
   }
   .selected-food {
-    background: #f7f7f7;
+    background: #ffe0b2;
   }
 }
 </style>

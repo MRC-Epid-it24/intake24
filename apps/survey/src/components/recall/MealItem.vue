@@ -17,7 +17,7 @@
         <v-list-item-action-text v-if="mealTimeString.length">
           {{ mealTimeString }}
         </v-list-item-action-text>
-        <v-icon v-else x-small>far fa-question-circle</v-icon>
+        <v-icon v-else small>far fa-question-circle</v-icon>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
         <context-menu
@@ -75,7 +75,7 @@ export default defineComponent({
 
   data() {
     return {
-      menuMealIcon: 'far fa-edit',
+      menuMealIcon: 'fas fa-edit',
       menuMeal: [
         {
           name: this.$t('recall.menu.meal.editFoodInMeal'),
