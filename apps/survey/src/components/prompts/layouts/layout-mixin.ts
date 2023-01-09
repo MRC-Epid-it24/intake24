@@ -88,8 +88,15 @@ export default defineComponent({
     params(): Dictionary<string> {
       const params: Dictionary<string> = {};
       const { localeFoodName, localeMealName } = this;
-      if (localeFoodName) params.food = localeFoodName;
-      if (localeMealName) params.meal = localeMealName;
+
+      if (localeFoodName) {
+        params.item = localeFoodName;
+        params.food = localeFoodName;
+      }
+      if (localeMealName) {
+        params.item = localeMealName;
+        params.meal = localeMealName;
+      }
 
       return params;
     },

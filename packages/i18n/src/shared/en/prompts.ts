@@ -18,20 +18,12 @@ const prompts: LocaleMessageObject = {
   info: {
     name: 'Info / confirmation',
   },
-  noMoreInfo: {
+  noMoreInformation: {
     name: 'No more information needed',
-    meal: {
-      text: 'No more information needed',
-      description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
+    text: 'No more information needed',
+    description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
         <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
-    },
-    food: {
-      text: 'No more information needed',
-      description: `<p>We have all the information that we need about your <strong>{item}</strong> at this time.</p>
-        <p>To continue with the survey, click "Continue" below and we will automatically select the next food or meal that we still need information about.</p>
-        <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
-    },
   },
   radio: {
     name: 'Single-choice list',

@@ -1,8 +1,5 @@
 <template>
-  <prompt-layout
-    v-bind="{ food, meal, prompt, localeDescription, localeText, isValid }"
-    @action="action"
-  >
+  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
       <confirm-dialog
         v-if="food"
@@ -136,20 +133,6 @@ export default defineComponent({
   },
 
   computed: {
-    localeText(): string {
-      return this.getLocaleContent(this.prompt.i18n.text, {
-        path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.text`,
-        params: { item: this.foodOrMealName },
-      });
-    },
-
-    localeDescription(): string {
-      return this.getLocaleContent(this.prompt.i18n.description, {
-        path: `prompts.noMoreInfo.${this.isMeal ? 'meal' : 'food'}.description`,
-        params: { item: this.foodOrMealName },
-      });
-    },
-
     isValid(): boolean {
       return true;
     },
