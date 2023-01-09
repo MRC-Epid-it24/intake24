@@ -160,19 +160,19 @@ export const useSurvey = defineStore('survey', {
     currentTempPromptAnswer: (state): PromptAnswer | undefined => {
       return state.data.tempPromptAnswer;
     },
-    selectedMealOptional: (state) => {
-      const { element } = state.data.selection;
+    selectedMealIndex(): number | undefined {
+      const { element } = this.data.selection;
 
       if (element === null || element.type !== 'meal') return undefined;
 
-      const meals = state.data.meals;
-      const mealIndex = getMealIndex(meals, element.mealId);
-
+      return getMealIndex(this.data.meals, element.mealId);
+    },
+    selectedMealOptional(): MealState | undefined {
+      const mealIndex = this.selectedMealIndex;
       if (mealIndex === undefined) return undefined;
 
-      return meals[mealIndex];
+      return this.data.meals[mealIndex];
     },
-    undoEntity: (state) => state.undo,
     selectedFoodIndex(): MealFoodIndex | undefined {
       const { element } = this.data.selection;
 

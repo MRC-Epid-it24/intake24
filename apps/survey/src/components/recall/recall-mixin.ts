@@ -55,7 +55,14 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(useSurvey, ['selectedMealOptional', 'hasFinished', 'hasMeals', 'meals']),
+    ...mapState(useSurvey, [
+      'selectedMealOptional',
+      'hasFinished',
+      'hasMeals',
+      'meals',
+      'selectedFoodIndex',
+      'selectedMealIndex',
+    ]),
 
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
@@ -71,6 +78,23 @@ export default defineComponent({
         default:
           throw new Error(`Unexpected prompt type: ${prompt.type}`);
       }
+    },
+
+    /*
+     * Unique handler key to unsure handlers/prompts are reloaded between selection when using same handler/prompt
+     * - not best for performance as components needs to re-render more frequently
+     * - TODO: handlers/prompts should watch for selection changes and update themselves accordingly
+     */
+    handlerKey(): string {
+      const {
+        currentPrompt,
+        selectedFoodIndex: { foodIndex, mealIndex } = {},
+        selectedMealIndex,
+      } = this;
+
+      return [mealIndex ?? selectedMealIndex, foodIndex, currentPrompt?.prompt.id]
+        .filter((item) => item !== undefined)
+        .join('-');
     },
 
     promptName() {

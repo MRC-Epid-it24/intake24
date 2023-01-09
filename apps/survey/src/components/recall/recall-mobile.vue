@@ -24,7 +24,7 @@
         <component
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
-          :key="currentPrompt.prompt.id"
+          :key="handlerKey"
           :prompt="currentPrompt.prompt"
           @action="action"
           @food-context-menu="onFoodContextMenu"
