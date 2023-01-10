@@ -33,6 +33,7 @@
       :selected-food-id="selectedFoodId"
       @food-selected="foodSelected"
     ></food-item>
+    <v-divider v-if="meal.foods.length"></v-divider>
   </v-list-group>
 </template>
 

@@ -11,7 +11,6 @@
     </v-list>
     <v-list class="meal-list" dense flat tile>
       <template v-for="meal in meals">
-        <v-divider :key="`div-${meal.id}`"></v-divider>
         <component
           :is="expandable ? 'meal-item-expandable' : 'meal-item'"
           :key="meal.id"
