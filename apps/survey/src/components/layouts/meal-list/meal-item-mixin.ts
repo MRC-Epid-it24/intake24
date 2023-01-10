@@ -1,51 +1,12 @@
-<template>
-  <v-list-group
-    :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
-    :sub-group="true"
-    :value="true"
-    @click="mealSelected"
-  >
-    <template #prependIcon>
-      <v-icon :class="{ rotate: selected || selectedFoodInMeal }">$expand</v-icon>
-    </template>
-    <template #activator>
-      <v-list-item-title class="font-weight-bold text-wrap">
-        {{ getLocaleContent(meal.name) }}
-      </v-list-item-title>
-      <v-list-item-action class="mr-4">
-        <v-list-item-action-text v-if="mealTimeString.length">
-          {{ mealTimeString }}
-        </v-list-item-action-text>
-        <v-icon v-else small>far fa-question-circle</v-icon>
-      </v-list-item-action>
-      <v-list-item-action class="my-auto">
-        <context-menu
-          :entity-name="meal.name.en"
-          :icon="menuMealIcon"
-          :menu="menuMeal"
-          @action="action"
-        ></context-menu>
-      </v-list-item-action>
-    </template>
-    <v-divider></v-divider>
-    <food-item
-      :foods="meal.foods"
-      :selected-food-id="selectedFoodId"
-      @food-selected="foodSelected"
-    ></food-item>
-  </v-list-group>
-</template>
-
-<script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { ContextMenu } from '@intake24/survey/components/elements';
 import { localeContent } from '@intake24/survey/components/mixins';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
-import { ContextMenu } from '../elements';
-import FoodItem from './FoodItem.vue';
+import FoodItem from './food-item.vue';
 
 export default defineComponent({
   name: 'MealItem',
@@ -114,6 +75,3 @@ export default defineComponent({
     },
   },
 });
-</script>
-
-<style lang="scss"></style>

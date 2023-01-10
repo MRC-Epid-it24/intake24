@@ -24,7 +24,7 @@
                     <v-list-item-action-text v-if="meal.time">
                       {{ stringTime(meal.time) }}
                     </v-list-item-action-text>
-                    <v-icon v-else x-small>far fa-question-circle </v-icon>
+                    <v-icon v-else x-small>$question</v-icon>
                   </v-list-item-action>
                 </template>
                 <v-list v-if="meal.foods.length && meal.time ? true : false">

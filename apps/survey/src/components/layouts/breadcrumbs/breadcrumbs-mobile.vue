@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import breadcrumbsMixin from '../breadcrumbs-mixin';
+import breadcrumbsMixin from './breadcrumbs-mixin';
 
 export default defineComponent({
   name: 'RecallBreadCrumbsMobile',

@@ -29,10 +29,12 @@ const recall: LocaleMessageObject = {
     confirm: 'Abort current recall?',
   },
   menu: {
-    foodSearchTooltip: 'This food has not yet been matched with a food from our database',
-    foodSearchCompleteTooltip: 'This food has been matched with a food from our database',
-    portionSizeTooltip: 'Portion size has not yet been estimated',
-    portionSizeCompleteTooltip: 'Portion size estimation complete',
+    mealSuggested:
+      'This meal is suggested by the system but you have not yet confirmed that you have had it',
+    foodMatched: 'This food has been matched with a food from our database.',
+    foodNotMatched: 'This food has not yet been matched with a food from our database.',
+    portionSizeComplete: 'Portion size estimation for this food is complete.',
+    portionSizeIncomplete: 'Portion size for this food is not yet known.',
     meal: {
       editFoodInMeal: 'Edit/Change Foods',
       editMealTime: 'Edit/Change Time',

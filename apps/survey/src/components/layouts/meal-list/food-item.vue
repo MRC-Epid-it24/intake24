@@ -12,13 +12,13 @@
             <template #activator="{ on, attrs }">
               <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
             </template>
-            <span>{{ $t('recall.menu.foodSearchCompleteTooltip') }}</span>
+            <span>{{ $t('recall.menu.foodMatched') }}</span>
           </v-tooltip>
           <v-tooltip v-else bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="grey" small v-on="on">fa-question-circle</v-icon>
+              <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
             </template>
-            <span>{{ $t('recall.menu.foodSearchTooltip') }}</span>
+            <span>{{ $t('recall.menu.foodNotMatched') }}</span>
           </v-tooltip>
         </v-list-item-action>
         <v-list-item-action class="list-item">
@@ -26,13 +26,13 @@
             <template #activator="{ on, attrs }">
               <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
             </template>
-            <span>{{ $t('recall.menu.portionSizeCompleteTooltip') }}</span>
+            <span>{{ $t('recall.menu.portionSizeComplete') }}</span>
           </v-tooltip>
           <v-tooltip v-else bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="grey" small v-on="on">fa-question-circle</v-icon>
+              <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
             </template>
-            <span>{{ $t('recall.menu.portionSizeTooltip') }}</span>
+            <span>{{ $t('recall.menu.portionSizeIncomplete') }}</span>
           </v-tooltip>
         </v-list-item-action>
       </v-list-item>

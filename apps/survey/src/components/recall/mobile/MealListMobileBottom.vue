@@ -12,7 +12,7 @@
             :value="!!meal.foods.length"
           >
             <p v-if="mealTimeString(meal.time).length === 0">
-              <v-icon x-small>far fa-question-circle</v-icon>
+              <v-icon x-small>$question</v-icon>
             </p>
             <p v-else>{{ mealTimeString(meal.time) }}</p>
             {{ getLocaleContent(meal.name) }}

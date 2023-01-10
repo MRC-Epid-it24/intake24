@@ -70,7 +70,7 @@
 import { defineComponent } from 'vue';
 
 import type { MealAction } from './recall-mixin';
-import RecallBreadCrumbsMobile from './mobile/BreadCrumbsMobile.vue';
+import { RecallBreadCrumbsMobile } from '../layouts';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
 import MealListMobileBottom from './mobile/MealListMobileBottom.vue';
 import MealMobileContextMenu from './mobile/MealMobileContextMenu.vue';

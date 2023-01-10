@@ -9,10 +9,11 @@
         <context-menu :icon="menuRecallIcon" :menu="menuRecall" @action="action"></context-menu>
       </v-list-item>
     </v-list>
-    <v-list class="meal-list px-0" dense flat tile>
+    <v-list class="meal-list" dense flat tile>
       <template v-for="meal in meals">
         <v-divider :key="`div-${meal.id}`"></v-divider>
-        <meal-item
+        <component
+          :is="expandable ? 'meal-item-expandable' : 'meal-item'"
           :key="meal.id"
           :meal="meal"
           :selected="selectedMealId === meal.id"
@@ -21,7 +22,7 @@
           @food-selected="foodSelected"
           @meal-action="mealAction"
           @meal-selected="mealSelected"
-        ></meal-item>
+        ></component>
       </template>
     </v-list>
     <v-card-actions>
@@ -40,24 +41,29 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { ContextMenu } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
-import { ContextMenu } from '../elements';
-import MealItem from './MealItem.vue';
+import MealItem from './meal-item.vue';
+import MealItemExpandable from './meal-item-expandable.vue';
 
 export default defineComponent({
   name: 'MealList',
 
-  components: { MealItem, ContextMenu },
+  components: { ContextMenu, MealItem, MealItemExpandable },
 
   props: {
-    surveyName: {
-      type: String,
-      required: true,
+    expandable: {
+      type: Boolean,
+      default: false,
     },
     meals: {
       type: Array as PropType<MealState[]>,
+      required: true,
+    },
+    surveyName: {
+      type: String,
       required: true,
     },
   },

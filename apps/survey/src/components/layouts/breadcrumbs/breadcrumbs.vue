@@ -25,7 +25,7 @@ import { defineComponent } from 'vue';
 import breadcrumbsMixin from './breadcrumbs-mixin';
 
 export default defineComponent({
-  name: 'RecallBreadCrumbs',
+  name: 'RecallBreadcrumbs',
 
   mixins: [breadcrumbsMixin],
 

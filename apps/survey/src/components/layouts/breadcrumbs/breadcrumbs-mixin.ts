@@ -1,13 +1,11 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
 import { RequestHelp } from '@intake24/survey/components';
+import { localeContent } from '@intake24/survey/components/mixins';
 import { useSurvey } from '@intake24/survey/stores';
 import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 import { ConfirmDialog } from '@intake24/ui/components';
-
-import localeContent from '../mixins/localeContent';
 
 export type BreadcrumbsElement = {
   text: string;
@@ -40,23 +38,12 @@ export default defineComponent({
 
   methods: {
     getFoodElement(): BreadcrumbsElement | undefined {
-      if (this.selection.element === null || this.selection.element.type != 'food')
-        return undefined;
+      if (this.selection.element?.type != 'food') return undefined;
 
       const food = findFood(this.meals, this.selection.element.foodId);
+      if (food.type === 'free-text') return { text: food.description, disabled: false };
 
-      switch (food.type) {
-        case 'free-text':
-          return {
-            text: food.description,
-            disabled: false,
-          };
-        case 'encoded-food':
-          return {
-            text: food.data.localName ? food.data.englishName : food.data.localName,
-            disabled: false,
-          };
-      }
+      return { text: food.data.localName ?? food.data.englishName, disabled: false };
     },
 
     getMealElement(): BreadcrumbsElement | undefined {

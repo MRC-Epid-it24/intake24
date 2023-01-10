@@ -40,8 +40,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import RecallBreadCrumbs from './BreadCrumbs.vue';
-import MealList from './MealList.vue';
+import { MealList, RecallBreadCrumbs } from '../layouts';
 import recallMixin from './recall-mixin';
 
 export default defineComponent({
