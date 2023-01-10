@@ -3,6 +3,7 @@
     <v-text-field
       :key="food?.description"
       v-model="searchTerm"
+      class="mb-4"
       clearable
       hide-details="auto"
       label="Search food"
@@ -12,7 +13,13 @@
     ></v-text-field>
     <image-placeholder v-if="requestInProgress"></image-placeholder>
     <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
-    <v-alert v-if="searchResults && !searchResults.foods.length" prominent type="warning">
+    <v-alert
+      v-if="searchResults && !searchResults.foods.length"
+      border="left"
+      outlined
+      prominent
+      type="warning"
+    >
       <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
       <p>{{ $t(`prompts.${type}.reword`) }}</p>
     </v-alert>

@@ -8,25 +8,21 @@
         </v-list-item-content>
         <context-menu :icon="menuRecallIcon" :menu="menuRecall" @action="action"></context-menu>
       </v-list-item>
-      <v-divider></v-divider>
-      <v-card-text class="scroll-y px-0">
-        <template v-for="(meal, idx) in meals">
-          <v-list-item :key="meal.id" class="px-0 meal-item" inactive link :ripple="false">
-            <v-list-item-content class="py-0">
-              <meal-item
-                :meal="meal"
-                :selected="selectedMealId === meal.id"
-                :selected-food-id="selectedFoodId"
-                :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
-                @food-selected="foodSelected"
-                @meal-action="mealAction"
-                @meal-selected="mealSelected"
-              ></meal-item>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < meals.length" :key="`div-${meal.id}`"></v-divider>
-        </template>
-      </v-card-text>
+    </v-list>
+    <v-list class="meal-list px-0" dense flat tile>
+      <template v-for="meal in meals">
+        <v-divider :key="`div-${meal.id}`"></v-divider>
+        <meal-item
+          :key="meal.id"
+          :meal="meal"
+          :selected="selectedMealId === meal.id"
+          :selected-food-id="selectedFoodId"
+          :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
+          @food-selected="foodSelected"
+          @meal-action="mealAction"
+          @meal-selected="mealSelected"
+        ></meal-item>
+      </template>
     </v-list>
     <v-card-actions>
       <v-hover v-slot="{ hover }">
@@ -111,7 +107,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.meal-item {
+.meal-list {
+  .selected {
+    background: #fff3e0;
+  }
+
+  .selected-food {
+    background: #ffe0b2;
+  }
+
+  .v-list-group__header {
+    padding-left: 12px !important;
+  }
+
+  .v-list-item:hover {
+    background: #fff3e0;
+  }
+
   .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon {
     margin-right: 6px;
 
@@ -119,14 +131,9 @@ export default defineComponent({
       transform: rotate(180deg);
     }
   }
+
   .v-list-group__header__append-icon {
     display: none !important;
-  }
-  .selected {
-    background: #fff3e0;
-  }
-  .selected-food {
-    background: #ffe0b2;
   }
 }
 </style>

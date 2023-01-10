@@ -1,9 +1,8 @@
 <template>
   <v-list-group
     :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
-    flat
-    tile
-    :value="selected || selectedFoodInMeal"
+    :sub-group="true"
+    :value="true"
     @click="mealSelected"
   >
     <template #prependIcon>
@@ -28,6 +27,7 @@
         ></context-menu>
       </v-list-item-action>
     </template>
+    <v-divider></v-divider>
     <food-item
       :foods="meal.foods"
       :selected-food-id="selectedFoodId"
