@@ -19,7 +19,7 @@
           v-for="item in desktopActions"
           :key="item.type"
           :block="isMobile"
-          class="px-5"
+          class="px-4"
           :color="item.color"
           :disabled="item.type === 'next' && !isValid"
           large

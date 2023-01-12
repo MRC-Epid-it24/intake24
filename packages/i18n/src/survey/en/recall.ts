@@ -61,6 +61,7 @@ const recall: LocaleMessageObject = {
     deleteFood: 'Delete food',
     deleteMeal: 'Delete meal',
     editMeal: 'Add foods',
+    mealTime: 'Change meal time',
     nav: {
       cancel: 'Cancel',
       confirm: 'Confirm',

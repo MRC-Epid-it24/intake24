@@ -23,22 +23,26 @@
     <template #actions>
       <v-btn
         :block="isMobile"
-        class="px-5"
+        class="px-4"
+        color="error"
         large
+        outlined
         :title="$t(`prompts.${type}.no`)"
         @click.stop="action('cancel')"
       >
+        <v-icon left>$cancel</v-icon>
         {{ $t(`prompts.${type}.no`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
-        class="px-5"
+        class="px-4"
         color="success"
         :disabled="!isValid"
         large
         :title="$t(`prompts.${type}.yes`)"
         @click="action('next')"
       >
+        <v-icon left>$add</v-icon>
         {{ $t(`prompts.${type}.yes`) }}
       </v-btn>
     </template>

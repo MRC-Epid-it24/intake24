@@ -1,7 +1,7 @@
 <template>
   <v-btn
     :block="isMobile"
-    class="px-5"
+    class="px-4"
     :color="color"
     :disabled="disabled"
     large
@@ -32,6 +32,7 @@ export default defineComponent({
     },
     icon: {
       type: String,
+      // default: '$next',
     },
     label: {
       type: String,

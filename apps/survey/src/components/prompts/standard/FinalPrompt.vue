@@ -1,13 +1,13 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
-      <v-btn class="px-5" color="success" large :to="{ name: 'survey-home', params: { surveyId } }">
+      <v-btn class="px-4" color="success" large :to="{ name: 'survey-home', params: { surveyId } }">
         <v-icon left>$home</v-icon>
         {{ $t('common.home') }}
       </v-btn>
       <v-btn
         v-if="canShowFeedback"
-        class="px-5"
+        class="px-4"
         color="success"
         large
         :to="{ name: 'feedback-home', params: { surveyId } }"

@@ -10,7 +10,7 @@
         <template #activator="{ on, attrs }">
           <v-btn
             :block="isMobile"
-            class="px-5"
+            class="px-4"
             color="error"
             large
             :title="$t('recall.actions.deleteFood')"
@@ -32,7 +32,7 @@
           <template #activator="{ on, attrs }">
             <v-btn
               :block="isMobile"
-              class="px-5"
+              class="px-4"
               color="error"
               large
               :title="$t('recall.actions.deleteMeal')"
@@ -47,7 +47,7 @@
         </confirm-dialog>
         <v-btn
           :block="isMobile"
-          class="px-5"
+          class="px-4"
           large
           :title="$t('recall.actions.editMeal')"
           @click.stop="action('editMeal', meal?.id)"

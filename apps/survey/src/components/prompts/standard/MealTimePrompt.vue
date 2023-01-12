@@ -11,12 +11,12 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" large @click.stop="action('cancel')">
+      <v-btn :block="isMobile" class="px-4" large @click.stop="action('cancel')">
         {{ $t(`prompts.${type}.no`, { meal: localMealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
-        class="px-5"
+        class="px-4"
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         color="success"
         large

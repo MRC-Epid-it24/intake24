@@ -24,12 +24,12 @@
     <p class="font-italic">{{ $t(`prompts.${type}.separateSuggestion`) }}</p>
     <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
     <template #actions>
-      <v-btn :block="isMobile" class="px-5" large @click.stop="action('separate')">
+      <v-btn :block="isMobile" class="px-4" large @click.stop="action('separate')">
         {{ $t(`prompts.${type}.separate`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
-        class="px-5"
+        class="px-4"
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
         large
         @click.stop="action('single')"
