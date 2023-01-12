@@ -18,7 +18,7 @@ const common: LocaleMessageObject = {
       invalidCredentials: 'Invalid username & password credentials provided.',
       invalidToken: 'Invalid access token provided.',
       invalidSurvey: "This survey ({surveyId}) doesn't look like to be a valid survey login URL.",
-      checkCredentials: 'Please check your provided login credentials.',
+      checkCredentials: 'Check your provided login credentials.',
     },
   },
   logout: {
@@ -81,7 +81,7 @@ const common: LocaleMessageObject = {
   },
 
   errors: {
-    expansionIncomplete: 'Please complete all sections marked with !',
+    expansionIncomplete: 'Complete all sections marked with !',
   },
 };
 

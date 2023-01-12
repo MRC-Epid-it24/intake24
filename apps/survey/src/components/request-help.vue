@@ -27,13 +27,13 @@
         <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
       </v-toolbar>
       <v-card-subtitle class="mt-4">
-        Please make sure that you've watched the Intake24 walkthrough video: Watch the tutorial
+        Make sure that you've watched the Intake24 walkthrough video: Watch the tutorial
       </v-card-subtitle>
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="requestHelp">
         <v-card-text>
           <p class="mx-2">
-            If you would like someone from our team to help, please enter your name and the phone
-            number that we can use to reach you.
+            If you would like someone from our team to help, enter your name and the phone number
+            that we can use to reach you.
           </p>
           <p class="mx-2">
             One of our support staff will call you on that number as soon as they can.

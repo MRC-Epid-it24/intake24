@@ -35,7 +35,7 @@ const prompts: LocaleMessageObject = {
   },
   textarea: {
     name: 'Free text',
-    label: 'Please enter your answer in textarea',
+    label: 'Enter your answer in textarea',
     validation: {
       required: 'This field is required to be filled in.',
     },
@@ -59,12 +59,12 @@ const prompts: LocaleMessageObject = {
     alreadyEntered: 'Yes, already entered',
     select: {
       different: 'Select a different food',
-      item: 'Please select an item from this category',
+      item: 'Select the food you had',
     },
   },
   editMeal: {
     name: 'Edit Meal',
-    text: 'Please list everything you had for your {meal}, one item per line.',
+    text: 'List everything you had for your {meal}, one item per line.',
     description: `For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
       <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.`,
@@ -86,21 +86,21 @@ const prompts: LocaleMessageObject = {
   foodSearch: {
     name: 'Search Food',
     text: 'Below is the list of foods from our database that look like "{food}".',
-    description: 'Please choose the item you had, or the closest match.',
+    description: 'Choose the item you had, or the closest match.',
     empty: 'There is nothing in our database that matches "{searchTerm}".',
-    reword: 'Please try re-wording your description.',
+    reword: 'Try re-wording your description.',
   },
   mealAdd: {
     _: 'Add meal',
     name: 'Add Meal',
-    text: 'Please enter the name of this meal',
+    text: 'Enter the name of this meal',
     description:
       'You can either type your own name, or select one from the list below if it is appropriate.',
     label: 'Select predefined or enter meal name',
     yes: 'Add this meal',
     no: 'Cancel',
     hint: 'Hit enter when finished typing',
-    noMeal: 'No Meals remaining, please add at least one',
+    noMeal: 'No Meals remaining, add at least one',
   },
   mealTime: {
     name: 'Edit Time',
@@ -109,7 +109,7 @@ const prompts: LocaleMessageObject = {
     yes: 'Around that time',
     no: 'I did not have {meal}',
     validation: {
-      required: 'Please select time you had the meal.',
+      required: 'Select time you had the meal.',
     },
   },
   readyMeal: {
@@ -133,11 +133,10 @@ const prompts: LocaleMessageObject = {
     searchTerm: 'Search term: {food}',
     split: 'Are these separate foods?',
     singleSuggestion:
-      'Please click on "keep as single food" if you meant a single food such as chicken and vegetable soup.',
-    singleSuggestionEx:
-      'Please click on "keep as single food" if you meant a single food such as {food}.',
-    separateSuggestion: 'Please click on "separate foods" for items such as fish and chips.',
-    separateSuggestionEx: 'Please click on "separate foods" for items such as {food}.',
+      'Click on "keep as single food" if you meant a single food such as chicken and vegetable soup.',
+    singleSuggestionEx: 'Click on "keep as single food" if you meant a single food such as {food}.',
+    separateSuggestion: 'Click on "separate foods" for items such as fish and chips.',
+    separateSuggestionEx: 'Click on "separate foods" for items such as {food}.',
     separate: 'Separate foods',
     single: 'Keep as single food',
   },
@@ -212,7 +211,7 @@ const prompts: LocaleMessageObject = {
     text: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     serving: {
       header: 'Step 1. Select your portion size.',
-      label: 'Using these pictures, please choose how much {food} you had.',
+      label: 'Using these pictures, choose how much {food} you had.',
       less: 'I had less',
       more: 'I had more',
       confirm: 'I had that much',
@@ -220,7 +219,7 @@ const prompts: LocaleMessageObject = {
     leftovers: {
       header: 'Step 2. Select your leftover size.',
       question: 'Did you leave some of your {food}?',
-      label: 'Using these pictures, please choose how much {food} you left.',
+      label: 'Using these pictures, choose how much {food} you left.',
       less: 'I left less',
       more: 'I left more',
       confirm: 'I left that much',
@@ -243,17 +242,16 @@ const prompts: LocaleMessageObject = {
   cereal: {
     name: 'Cereal',
     text: '{food}',
-    container: 'Please select the bowl that looks most like the one you used for your {food}.',
+    container: 'Select the bowl that looks most like the one you used for your {food}.',
   },
   drinkScale: {
     name: 'Drink scale',
     text: '{food}',
-    container:
-      'Please select the cup or glass that looks most like the one you used for your {food}.',
+    container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
       header: 'Step 1. Select your portion size.',
       label:
-        'Please use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
+        'Use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
       less: 'It was less full',
       more: 'It was more full',
@@ -262,7 +260,7 @@ const prompts: LocaleMessageObject = {
     leftovers: {
       header: 'Step 2. Select your leftover size.',
       question: 'Did you leave some of your {food}?',
-      label: 'Please use the slider on the right to choose how much you had left.',
+      label: 'Use the slider on the right to choose how much you had left.',
       less: 'I left less',
       more: 'I left more',
       confirm: 'I left that much',
@@ -271,8 +269,8 @@ const prompts: LocaleMessageObject = {
   guideImage: {
     name: 'Guide image',
     text: '{food}',
-    label: 'Please select the item you had or the closest match to {food}.',
-    quantity: 'Please choose how many of {food} you had.',
+    label: 'Select the image this is the closest match to the size of {food} you had.',
+    quantity: 'Choose how many or how much you had.',
     confirm: 'I had that many',
     expand: 'Expand Image',
   },
@@ -285,13 +283,13 @@ const prompts: LocaleMessageObject = {
   milkOnCereal: {
     name: 'Milk on cereal',
     text: '{food}',
-    container: 'Please select the bowl that looks most like the one you used for your {food}.',
-    milk: 'Please choose the level your milk came up to (without cereal).',
+    container: 'Select the bowl that looks most like the one you used for your {food}.',
+    milk: 'Choose the level your milk came up to (without cereal).',
   },
   pizza: {
     name: 'Pizza',
     text: '{food}',
-    typeLabel: 'Please select the pizza that is closest to the size you had.',
+    typeLabel: 'Select the pizza that is closest to the size you had.',
     thicknessLabel: 'How thick was your pizza?',
     sizeLabel: 'What size slice(s) did you have?',
     whole: {
@@ -320,7 +318,7 @@ const prompts: LocaleMessageObject = {
   },
   weight: {
     name: 'Weight',
-    text: 'Please enter how much you had.',
+    text: 'Enter how much you had.',
   },
 };
 

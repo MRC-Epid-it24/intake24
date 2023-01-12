@@ -23,7 +23,7 @@ const survey: LocaleMessageObject = {
     403: `Survey {surveyId} doesn't allow user generation.`,
     404: `Survey {surveyId} hasn't been recognized.`,
     422: 'Invalid captcha provided.',
-    429: 'New user has just been generated, please try again later.',
+    429: 'New user has just been generated, try again later.',
   },
 };
 

@@ -9,8 +9,7 @@ const feedback: LocaleMessageObject = {
     notAvailable: 'Feedback is not available for this survey.',
   },
   title: 'Feedback from your recalls',
-  missingFoods:
-    'Please note, any foods you reported as missing will not be included in your dietary feedback',
+  missingFoods: 'Any foods reported as missing will not be included in your dietary feedback',
 
   physicalData: {
     title: 'About you',
@@ -57,7 +56,7 @@ const feedback: LocaleMessageObject = {
       send: 'Submit request',
       sent: 'We have sent your feedback to provided email address.',
     },
-    retry: 'Feedback output has been recently requested, please try again in {secs} s.',
+    retry: 'Feedback output has been recently requested, try again in {secs} s.',
     print: 'Print',
   },
 

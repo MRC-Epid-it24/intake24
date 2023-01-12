@@ -3,10 +3,10 @@
     <app-entry-screen :logo="logo" :title="$t('common._').toString()" width="30rem">
       <v-card-text class="pa-6">
         <p>Thank you for choosing to take part in this study!</p>
-        <p>Please click on the 'Generate access' button generate new credentials for you.</p>
+        <p>Click on the 'Generate access' button generate new credentials for you.</p>
         <p>
           This survey will take approximately 30 minutes to complete. If you would like to be able
-          to stop filling out the survey and resume at a later time, please write down generated
+          to stop filling out the survey and resume at a later time, write down generated
           credentials.
         </p>
         <v-btn v-if="!status" block class="my-5" color="secondary" rounded x-large @click="submit">
@@ -26,8 +26,8 @@
           <router-link :to="{ name: 'survey-login', params: { surveyId } }">link</router-link>.
         </p>
         <p>
-          If you think you will be able to complete the survey in one sitting, please ignore this
-          and continue.
+          If you think you will be able to complete the survey in one sitting, ignore this and
+          continue.
         </p>
       </v-card-text>
       <v-card-actions class="px-6 pb-6">
