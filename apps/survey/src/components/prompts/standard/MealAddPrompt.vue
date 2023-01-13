@@ -1,19 +1,19 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-row>
-      <v-col md="8" sm="12">
+      <v-col md="6" sm="12">
         <v-form ref="form" @submit.prevent="action('next')">
           <v-combobox
             v-model="currentValue"
             autofocus
+            chips
+            class="meal-add-prompt__combobox"
             clearable
-            hide-selected
             :hint="$t(`prompts.${type}.hint`)"
             :items="meals"
             :label="$t(`prompts.${type}.label`)"
             outlined
             persistent-hint
-            small-chips
             @change="update"
           >
           </v-combobox>
@@ -108,4 +108,20 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.meal-add-prompt__combobox {
+  .v-text-field--outlined .v-label {
+    top: 25px !important;
+  }
+
+  .v-input__append-inner {
+    margin-top: 20px;
+
+    .v-input__icon.v-input__icon--append {
+      .v-icon {
+        font-size: 30px;
+      }
+    }
+  }
+}
+</style>
