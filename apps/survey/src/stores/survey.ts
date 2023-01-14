@@ -438,10 +438,14 @@ export const useSurvey = defineStore('survey', {
     },
 
     addMeal(name: string, locale: string) {
+      const defaultTime = toMealTime(
+        this.defaultSchemeMeals?.find((meal) => meal.name[locale] === name)?.time ?? '8:00'
+      );
+
       this.data.meals.push({
         id: this.getNextMealId(),
         name: { en: name, [locale]: name },
-        defaultTime: { hours: 0, minutes: 0 },
+        defaultTime,
         time: undefined,
         flags: [],
         foods: [],
