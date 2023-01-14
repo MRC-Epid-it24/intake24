@@ -1,15 +1,17 @@
 <template>
   <div>
     <v-tab-item key="options">
-      <v-card-title>{{ $t('survey-schemes.redirect.url.title') }}</v-card-title>
-      <v-card-subtitle>{{ $t('survey-schemes.redirect.url.subtitle') }}</v-card-subtitle>
+      <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
+      <v-card-subtitle>
+        {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
+      </v-card-subtitle>
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
               hide-details="auto"
-              :hint="$t('survey-schemes.redirect.url.hint')"
-              :label="$t('survey-schemes.redirect.url._')"
+              :hint="$t('survey-schemes.prompts.redirect-prompt.url.hint')"
+              :label="$t('survey-schemes.prompts.redirect-prompt.url._')"
               name="url"
               outlined
               persistent-hint
@@ -21,7 +23,7 @@
             <v-select
               hide-details="auto"
               :items="identifiers"
-              :label="$t('survey-schemes.redirect.identifier._')"
+              :label="$t('survey-schemes.prompts.redirect-prompt.identifier._')"
               outlined
               :value="identifier"
               @change="update('identifier', $event)"
@@ -29,13 +31,13 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-title>{{ $t('survey-schemes.redirect.timer.title') }}</v-card-title>
+      <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.timer.title') }}</v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
               hide-details="auto"
-              :label="$t('survey-schemes.redirect.timer._')"
+              :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
               name="timer"
               outlined
               :rules="timerRules"
@@ -80,7 +82,7 @@ export default defineComponent({
   data() {
     return {
       identifiers: ['userId', 'username', 'token', 'custom'].map((value) => ({
-        text: this.$t(`survey-schemes.redirect.identifier.options.${value}`),
+        text: this.$t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
         value,
       })),
     };

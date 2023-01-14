@@ -264,32 +264,6 @@ const surveySchemes: LocaleMessageObject = {
       subtitle: 'Override specific scheme question prompt. Changes will get merged by Question ID.',
     },
   },
-  foodSearch: {
-    allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',
-    dualLanguage: 'Display alternative food names in another language',
-  },
-  redirect: {
-    url: {
-      _: 'Base URL',
-      title: 'URL Options',
-      subtitle: `Use '{identifier}' to indicate the place where user identifier should be to inserted.`,
-      hint: 'https://example.com/?arg={identifier}',
-    },
-    identifier: {
-      _: 'User identifier to embed into the URL',
-      subtitle: 'Specify which identifier to embed into the redirect URL',
-      options: {
-        userId: 'User ID',
-        username: 'Username',
-        token: 'Authentication token',
-        custom: 'Custom field',
-      },
-    },
-    timer: {
-      _: 'Number of seconds for redirect',
-      title: 'Timer options',
-    },
-  },
   prompts: {
     // Standard
     'associated-foods-prompt': {
@@ -307,10 +281,13 @@ const surveySchemes: LocaleMessageObject = {
     'food-search-prompt': {
       title: 'Food database search',
       subtitle: 'Choose a food from the database that best matches the description',
+      allowBrowsing: 'Allow respondents to search for foods by freely browsing food categories',
+      dualLanguage: 'Display alternative food names in another language',
     },
     'meal-add-prompt': {
       title: 'Add meal',
       subtitle: 'Add a new meal to the meal list',
+      custom: 'Allow custom meal names',
     },
     'meal-time-prompt': {
       title: 'Meal time',
@@ -323,6 +300,26 @@ const surveySchemes: LocaleMessageObject = {
     'redirect-prompt': {
       title: 'Redirect',
       subtitle: 'Final page for user redirect to external site',
+      url: {
+        _: 'Base URL',
+        title: 'URL Options',
+        subtitle: `Use '{identifier}' to indicate the place where user identifier should be to inserted.`,
+        hint: 'https://example.com/?arg={identifier}',
+      },
+      identifier: {
+        _: 'User identifier to embed into the URL',
+        subtitle: 'Specify which identifier to embed into the redirect URL',
+        options: {
+          userId: 'User ID',
+          username: 'Username',
+          token: 'Authentication token',
+          custom: 'Custom field',
+        },
+      },
+      timer: {
+        _: 'Number of seconds for redirect',
+        title: 'Timer options',
+      },
     },
     'review-confirm-prompt': {
       title: 'Review and Confirm',

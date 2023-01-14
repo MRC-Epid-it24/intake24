@@ -17,7 +17,7 @@ export type LocaleOptionList<T = string> = {
 export type RadioOrientation = 'column' | 'row';
 
 export const promptTypes = ['custom', 'standard', 'portion-size'] as const;
-export type PromptType = typeof promptTypes[number];
+export type PromptType = (typeof promptTypes)[number];
 
 export const customComponentTypes = [
   'info-prompt',
@@ -30,7 +30,7 @@ export const customComponentTypes = [
   'yes-no-prompt',
 ] as const;
 
-export type CustomComponentType = typeof customComponentTypes[number];
+export type CustomComponentType = (typeof customComponentTypes)[number];
 
 export const standardComponentTypes = [
   'associated-foods-prompt',
@@ -47,7 +47,7 @@ export const standardComponentTypes = [
   'submit-prompt',
 ] as const;
 
-export type StandardComponentType = typeof standardComponentTypes[number];
+export type StandardComponentType = (typeof standardComponentTypes)[number];
 
 export const portionSizeComponentTypes = [
   'as-served-prompt',
@@ -62,7 +62,7 @@ export const portionSizeComponentTypes = [
   'standard-portion-prompt',
 ] as const;
 
-export type PortionSizeComponentType = typeof portionSizeComponentTypes[number];
+export type PortionSizeComponentType = (typeof portionSizeComponentTypes)[number];
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
@@ -153,7 +153,9 @@ export type Prompts = {
     allowBrowsing: boolean;
     dualLanguage: boolean;
   };
-  'meal-add-prompt': BasePrompt;
+  'meal-add-prompt': BasePrompt & {
+    custom: boolean;
+  };
   'meal-time-prompt': ValidatedPrompt & {
     format: 'ampm' | '24hr';
   };

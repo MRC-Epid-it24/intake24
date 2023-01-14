@@ -94,12 +94,16 @@ const prompts: LocaleMessageObject = {
     _: 'Add meal',
     name: 'Add Meal',
     text: 'Enter the name of this meal',
-    description:
-      'You can either type your own name, or select one from the list below if it is appropriate.',
-    label: 'Select predefined or enter meal name',
+    description: 'Select one from the list below if it is appropriate.',
+    label: 'Select predefined meal',
+    custom: {
+      text: 'Enter the name of this meal',
+      description:
+        'You can either type your own name, or select one from the list below if it is appropriate.',
+      label: 'Select predefined or enter meal name',
+    },
     yes: 'Add this meal',
     no: 'Cancel',
-    hint: 'Hit enter when finished typing',
     noMeal: 'No Meals remaining, add at least one',
   },
   mealTime: {

@@ -1,23 +1,23 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <template #prompt-text>{{ $t(`${i18nPrefix}.text`) }}</template>
+    <template #prompt-description>
+      <div class="mt-4" v-html="$t(`${i18nPrefix}.description`)"></div>
+    </template>
     <v-row>
       <v-col md="6" sm="12">
-        <v-form ref="form" @submit.prevent="action('next')">
-          <v-combobox
-            v-model="currentValue"
-            autofocus
-            chips
-            class="meal-add-prompt__combobox"
-            clearable
-            :hint="$t(`prompts.${type}.hint`)"
-            :items="meals"
-            :label="$t(`prompts.${type}.label`)"
-            outlined
-            persistent-hint
-            @change="update"
-          >
-          </v-combobox>
-        </v-form>
+        <component
+          :is="prompt.custom ? 'v-combobox' : 'v-select'"
+          v-model="currentValue"
+          autofocus
+          class="meal-add-prompt__combobox"
+          clearable
+          :items="meals"
+          :label="$t(`${i18nPrefix}.label`)"
+          outlined
+          @change="update"
+        >
+        </component>
       </v-col>
     </v-row>
     <template #actions>
@@ -73,11 +73,14 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import { VCombobox, VSelect } from 'vuetify/lib';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'MealAddPrompt',
+
+  components: { VCombobox, VSelect },
 
   mixins: [createBasePrompt<'meal-add-prompt'>()],
 
@@ -95,6 +98,9 @@ export default defineComponent({
   },
 
   computed: {
+    i18nPrefix() {
+      return `prompts.${this.type}${this.prompt.custom ? '.custom' : ''}`;
+    },
     isValid() {
       return !!this.currentValue;
     },
@@ -110,18 +116,8 @@ export default defineComponent({
 
 <style lang="scss">
 .meal-add-prompt__combobox {
-  .v-text-field--outlined .v-label {
-    top: 25px !important;
-  }
-
-  .v-input__append-inner {
-    margin-top: 20px;
-
-    .v-input__icon.v-input__icon--append {
-      .v-icon {
-        font-size: 30px;
-      }
-    }
+  .v-input__append-inner .v-input__icon.v-input__icon--append .v-icon {
+    font-size: 30px;
   }
 }
 </style>

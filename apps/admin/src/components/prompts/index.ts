@@ -87,7 +87,7 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'meal-add-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['preMeals'],
   },
   'meal-time-prompt': {

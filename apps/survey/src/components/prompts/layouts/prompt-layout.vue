@@ -1,11 +1,13 @@
 <template>
   <v-card :flat="isMobile" :tile="isMobile">
-    <slot name="header">
-      <v-sheet class="px-4 pt-4" :class="{ 'pb-4': !hasDefaultSlot }">
-        <h3>{{ localeText }}</h3>
+    <v-sheet class="px-4 pt-4" :class="{ 'pb-4': !hasDefaultSlot }">
+      <h3>
+        <slot name="prompt-text">{{ localeText }}</slot>
+      </h3>
+      <slot name="prompt-description">
         <div v-if="localeDescription" class="mt-4" v-html="localeDescription"></div>
-      </v-sheet>
-    </slot>
+      </slot>
+    </v-sheet>
     <v-card-text v-if="hasDefaultSlot">
       <slot></slot>
     </v-card-text>
