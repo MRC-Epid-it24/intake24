@@ -27,7 +27,7 @@
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.0",
+    "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.191",
     "@types/pluralize": "^0.0.29",
     "execa": "^5.1.1",
