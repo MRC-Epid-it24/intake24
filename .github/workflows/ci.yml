@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -40,7 +40,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -99,7 +99,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
 
       - name: Create foods/system databases
         run: |
@@ -112,7 +112,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -324,7 +324,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -332,7 +332,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -358,7 +358,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -366,7 +366,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -392,7 +392,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -400,7 +400,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -434,7 +434,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.3.0
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -442,7 +442,7 @@ jobs:
           version: 7
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.5.1
+        uses: actions/setup-node@v3.6.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'

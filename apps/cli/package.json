@@ -32,10 +32,10 @@
     "web-push": "^3.5.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.0",
+    "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.191",
     "@types/web-push": "^3.3.2",
-    "fork-ts-checker-webpack-plugin": "^7.2.14",
+    "fork-ts-checker-webpack-plugin": "^7.3.0",
     "ts-loader": "^9.4.2",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "tsx": "^3.12.2",
