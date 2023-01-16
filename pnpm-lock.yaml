@@ -369,7 +369,7 @@ importers:
       '@types/fs-extra': ^11.0.0
       '@types/lodash': ^4.14.191
       '@types/web-push': ^3.3.2
-      commander: ^9.5.0
+      commander: ^10.0.0
       dotenv: ^16.0.3
       dotenv-expand: ^10.0.0
       fork-ts-checker-webpack-plugin: ^7.2.14
@@ -386,7 +386,7 @@ importers:
       webpack-node-externals: ^3.0.0
       webpackbar: ^5.0.2
     dependencies:
-      commander: 9.5.0
+      commander: 10.0.0
       dotenv: 16.0.3
       dotenv-expand: 10.0.0
       fs-extra: 11.1.0
@@ -5098,6 +5098,11 @@ packages:
       find-replace: 3.0.0
       lodash.camelcase: 4.3.0
       typical: 4.0.0
+    dev: false
+
+  /commander/10.0.0:
+    resolution: {integrity: sha512-zS5PnTI22FIRM6ylNW8G4Ap0IEOyk62fhLSD0+uHRT9McRCLGpkVNvao4bjimpK/GShynyQkFFxHhwMcETmduA==}
+    engines: {node: '>=14'}
     dev: false
 
   /commander/2.20.3:
