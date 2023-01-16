@@ -154,7 +154,7 @@ export default defineComponent({
     const selections = Object.keys(portionSizeSelectionImages)
       .map((value) => ({
         value,
-        text: this.$t(`fdbs.portionSizes.selections.${value}`),
+        text: this.$t(`prompts.portionSizeOption.selections.${value}`),
       }))
       .sort((a, b) => (a.text > b.text ? 1 : -1));
 

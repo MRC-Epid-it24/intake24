@@ -158,7 +158,8 @@ const prompts: LocaleMessageObject = {
   portionSizeOption: {
     name: 'Portion method',
     text: 'How would you like to estimate the portion size of your {food}?',
-    description: {
+    // description: 'Placeholder',
+    selections: {
       grated: 'Grated',
       in_a_bag: 'In a bag',
       in_a_bottle: 'In a bottle',
@@ -213,6 +214,7 @@ const prompts: LocaleMessageObject = {
   asServed: {
     name: 'As served',
     text: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    // description: 'Placeholder',
     serving: {
       header: 'Step 1. Select your portion size.',
       label: 'Using these pictures, choose how much {food} you had.',
@@ -246,11 +248,13 @@ const prompts: LocaleMessageObject = {
   cereal: {
     name: 'Cereal',
     text: '{food}',
+    // description: 'Placeholder',
     container: 'Select the bowl that looks most like the one you used for your {food}.',
   },
   drinkScale: {
     name: 'Drink scale',
     text: '{food}',
+    // description: 'Placeholder',
     container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
       header: 'Step 1. Select your portion size.',
@@ -273,6 +277,7 @@ const prompts: LocaleMessageObject = {
   guideImage: {
     name: 'Guide image',
     text: '{food}',
+    // description: 'Placeholder',
     label: 'Select the image this is the closest match to the size of {food} you had.',
     quantity: 'Choose how many or how much you had.',
     confirm: 'I had that many',
@@ -281,18 +286,21 @@ const prompts: LocaleMessageObject = {
   milkInAHotDrink: {
     name: 'Milk in a hot drink',
     text: 'How much {food} did you have in your tea or coffee?',
+    // description: 'Placeholder',
     label: 'Select the amount you had.',
     confirm: 'I had that much',
   },
   milkOnCereal: {
     name: 'Milk on cereal',
     text: '{food}',
+    // description: 'Placeholder',
     container: 'Select the bowl that looks most like the one you used for your {food}.',
     milk: 'Choose the level your milk came up to (without cereal).',
   },
   pizza: {
     name: 'Pizza',
     text: '{food}',
+    // description: 'Placeholder',
     typeLabel: 'Select the pizza that is closest to the size you had.',
     thicknessLabel: 'How thick was your pizza?',
     sizeLabel: 'What size slice(s) did you have?',
@@ -308,6 +316,7 @@ const prompts: LocaleMessageObject = {
   standardPortion: {
     name: 'Standard portion',
     text: '{food}',
+    // description: 'Placeholder',
     label: 'How would you like to estimate the portion size of your {food}?',
     estimateIn: 'In {unit}',
     howMany: {
@@ -318,11 +327,14 @@ const prompts: LocaleMessageObject = {
     confirm: 'I had that many',
   },
   unknown: {
+    name: 'Unknown',
     text: 'There is currently no portion size estimation method for {food}.',
+    // description: 'Placeholder',
   },
   weight: {
     name: 'Weight',
     text: 'Enter how much you had.',
+    // description: 'Placeholder',
   },
 };
 
