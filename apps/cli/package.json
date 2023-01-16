@@ -23,7 +23,7 @@
     "lint": "eslint . --ext .js,.ts --fix"
   },
   "dependencies": {
-    "commander": "^9.5.0",
+    "commander": "^10.0.0",
     "dotenv": "^16.0.3",
     "dotenv-expand": "^10.0.0",
     "fs-extra": "^11.1.0",
