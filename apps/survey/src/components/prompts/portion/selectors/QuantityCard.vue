@@ -9,11 +9,11 @@
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
               <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(1)">
-                <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
+                <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ wholeLabel }}</span>
               <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-1)">
-                <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
+                <v-icon aria-hidden="false">$decrement</v-icon>
               </v-btn>
             </v-card>
           </div>
@@ -23,11 +23,11 @@
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
               <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(0.25)">
-                <v-icon aria-hidden="false">fas fa-fw fa-plus</v-icon>
+                <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ fractionLabel }}</span>
               <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-0.25)">
-                <v-icon aria-hidden="false">fas fa-fw fa-minus</v-icon>
+                <v-icon aria-hidden="false">$decrement</v-icon>
               </v-btn>
             </v-card>
           </div>

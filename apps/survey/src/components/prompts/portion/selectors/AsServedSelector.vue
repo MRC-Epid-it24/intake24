@@ -19,29 +19,36 @@
       </v-img>
     </v-row>
     <v-row v-if="asServedData" class="mt-4">
-      <v-col class="pa-1 rounded-lg" cols="3" lg="1" sm="2">
+      <v-col class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn :disabled="isLessWeightFactorActive" icon large>
-              <v-icon>fas fa-fw fa-minus</v-icon>
+            <v-btn :disabled="isLessWeightFactorActive" icon x-large>
+              <v-icon>$decrement</v-icon>
             </v-btn>
           </v-overlay>
         </v-card>
       </v-col>
       <template v-for="(images, idx) in asServedData.images">
-        <v-col :key="idx" class="pa-1 rounded-lg" :class="isSelected(idx)" cols="3" lg="1" sm="2">
+        <v-col
+          :key="idx"
+          class="pa-1 rounded-lg"
+          :class="isSelected(idx)"
+          cols="3"
+          lg="auto"
+          sm="2"
+        >
           <v-card @click="setSelection(idx)">
             <v-img :src="images.thumbnailUrl"></v-img>
           </v-card>
         </v-col>
       </template>
-      <v-col v-if="showMoreWeightFactor" class="pa-1 mr-auto rounded-lg" cols="3" lg="1" sm="2">
+      <v-col v-if="showMoreWeightFactor" class="pa-1 rounded-lg" cols="3" lg="auto" sm="2">
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn :disabled="isMoreWeightFactorActive" icon large>
-              <v-icon>fas fa-fw fa-plus</v-icon>
+            <v-btn :disabled="isMoreWeightFactorActive" icon x-large>
+              <v-icon>$increment</v-icon>
             </v-btn>
           </v-overlay>
         </v-card>
