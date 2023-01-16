@@ -67,7 +67,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <p>{{ $t(`prompts.asServed.leftovers.question`, { food: foodName }) }}</p>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <p>{{ $t(`prompts.asServed.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
@@ -194,6 +194,15 @@ export default defineComponent({
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       return conditions;
+    },
+  },
+
+  watch: {
+    leftoversPrompt(val) {
+      if (val === true) this.portionSize.leftovers = null;
+
+      this.updatePanel();
+      this.update();
     },
   },
 

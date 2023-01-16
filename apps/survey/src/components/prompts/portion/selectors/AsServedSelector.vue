@@ -18,7 +18,7 @@
         ></as-served-weight-factor>
       </v-img>
     </v-row>
-    <v-row v-if="asServedData">
+    <v-row v-if="asServedData" class="mt-4">
       <v-col class="pa-1 rounded-lg" cols="3" lg="1" sm="2">
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img :src="firstThumbnail"></v-img>
@@ -365,6 +365,6 @@ export default defineComponent({
   border: 1px solid black !important;
 }
 .selected-thumb {
-  border: 2px solid #2196f3;
+  border: 2px solid #0d47a1;
 }
 </style>

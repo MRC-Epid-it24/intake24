@@ -41,7 +41,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
             <as-served-selector
@@ -95,7 +95,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
 import type {
   AsServedParameters,
   AsServedState,
@@ -174,9 +173,10 @@ export default defineComponent({
 
   watch: {
     leftoversPrompt(val) {
-      if (val !== false) return;
+      if (val === true) this.portionSize.leftovers = null;
 
-      this.portionSize.leftovers = null;
+      this.updatePanel();
+      this.update();
     },
   },
 
@@ -258,8 +258,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.selectedThumb {
-  border: 0.1em solid #2196f3;
-}
-</style>
+<style lang="scss" scoped></style>

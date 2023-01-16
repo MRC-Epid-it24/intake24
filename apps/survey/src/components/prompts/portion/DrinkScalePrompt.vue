@@ -71,7 +71,7 @@
         <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
           <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" @change="update"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
             <drink-scale-panel
@@ -206,6 +206,13 @@ export default defineComponent({
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       return conditions;
+    },
+  },
+
+  watch: {
+    leftoversPrompt() {
+      this.updatePanel();
+      this.update();
     },
   },
 
