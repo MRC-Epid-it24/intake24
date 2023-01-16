@@ -52,8 +52,8 @@ const prompts: LocaleMessageObject = {
   // Standard
   associatedFoods: {
     name: 'Associated foods',
-    text: 'Did you have any of these with your {food}?',
-    description: 'These foods are often consumed together.',
+    text: '{food}',
+    // description: 'Placeholder',
     yes: 'Yes, I had some',
     no: 'No, I did not',
     alreadyEntered: 'Yes, already entered',

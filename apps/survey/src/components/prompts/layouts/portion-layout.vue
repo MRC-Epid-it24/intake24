@@ -1,27 +1,17 @@
 <template>
   <div>
-    <v-card class="mb-3" flat :tile="isMobile">
-      <v-container class="px-0">
-        <v-row align="center" no-gutters>
-          <v-col>
-            <v-card-text>
-              <slot name="header">
-                <span class="text-subtitle-1 font-weight-medium">
-                  {{ localeText }}
-                </span>
-              </slot>
-            </v-card-text>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn class="mr-2" color="primary">{{ $t('common.help._') }}</v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+    <v-card class="px-5 py-4 mb-4" flat :tile="isMobile">
+      <h3>
+        <slot name="prompt-text">{{ localeText }}</slot>
+      </h3>
+      <slot name="prompt-description">
+        <div v-if="localeDescription" class="mt-4" v-html="localeDescription"></div>
+      </slot>
     </v-card>
     <slot></slot>
     <div
       v-if="!isMobile || prompt.actions?.both"
-      class="pa-4 px-md-0 d-flex"
+      class="pa-5 px-md-0 d-flex"
       :class="{ 'flex-column-reverse': isMobile }"
     >
       <template v-if="desktopActions.length">
