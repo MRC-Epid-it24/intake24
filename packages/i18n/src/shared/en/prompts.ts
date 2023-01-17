@@ -86,7 +86,7 @@ const prompts: LocaleMessageObject = {
   foodSearch: {
     name: 'Search Food',
     text: 'Below is the list of foods from our database that look like "{food}".',
-    description: 'Choose the item you had, or the closest match.',
+    description: 'Choose the item you had or the closest match.',
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
   },

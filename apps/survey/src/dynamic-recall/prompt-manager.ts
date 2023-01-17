@@ -225,7 +225,25 @@ const checkFoodStandardConditions = (
     case 'food-search-prompt': {
       const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 
-      if (foodState.type === 'free-text' && freeEntryComplete) {
+      if (foodState.type === 'encoded-food') {
+        recallLog().promptCheck(
+          prompt.component,
+          false,
+          `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
+        );
+        return false;
+      }
+
+      if (surveyState.data.selection.mode === 'manual') {
+        recallLog().promptCheck(
+          prompt.component,
+          true,
+          'Selected food entry type is free-text and selection mode is manual'
+        );
+        return true;
+      }
+
+      if (freeEntryComplete) {
         recallLog().promptCheck(
           prompt.component,
           true,
