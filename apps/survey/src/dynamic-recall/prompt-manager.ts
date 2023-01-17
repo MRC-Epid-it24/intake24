@@ -620,11 +620,12 @@ export default class PromptManager {
     if (section === 'postFoods') {
       const meal = findMeal(state.data.meals, mealId);
       if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) {
-        if (state.data.selection.mode === 'manual') {
+        // TODO: is this required?
+        /* if (state.data.selection.mode === 'manual') {
           return this.scheme.questions.meals['postFoods'].find((question) => {
             return checkMealStandardConditions(state, mealState, question);
           });
-        }
+        } */
         return undefined;
       }
     }

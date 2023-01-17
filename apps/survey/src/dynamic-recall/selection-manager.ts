@@ -7,25 +7,15 @@ import {
 
 import type { SurveyStore } from '../stores';
 
-function makeMealSelection(mealId: number): Selection {
-  return {
-    element: {
-      type: 'meal',
-      mealId,
-    },
-    mode: 'auto',
-  };
-}
+const makeMealSelection = (mealId: number): Selection => ({
+  element: { type: 'meal', mealId },
+  mode: 'auto',
+});
 
-function makeFoodSelection(foodId: number): Selection {
-  return {
-    element: {
-      type: 'food',
-      foodId,
-    },
-    mode: 'auto',
-  };
-}
+const makeFoodSelection = (foodId: number): Selection => ({
+  element: { type: 'food', foodId },
+  mode: 'auto',
+});
 
 export default class SelectionManager {
   private store;
@@ -38,7 +28,10 @@ export default class SelectionManager {
   }
 
   private mealPromptsAvailable(mealId: number): boolean {
-    return this.promptManager.nextMealSectionPrompt('preFoods', mealId) !== undefined;
+    return !!(
+      this.promptManager.nextMealSectionPrompt('preFoods', mealId) ||
+      this.promptManager.nextMealSectionPrompt('postFoods', mealId)
+    );
   }
 
   private selectMealIfPromptsAvailable(mealId: number): Selection | undefined {
