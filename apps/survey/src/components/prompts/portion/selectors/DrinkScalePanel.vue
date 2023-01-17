@@ -94,6 +94,10 @@ export default defineComponent({
     const height = ref(0);
     const width = ref(0);
 
+    const isInScale = (y: number) =>
+      y >= sliderMin.value + props.scale.emptyLevel &&
+      y <= sliderMax.value + props.scale.emptyLevel;
+
     return {
       imgDrink,
       height,
@@ -101,6 +105,7 @@ export default defineComponent({
       sliderMax,
       sliderMin,
       sliderValue,
+      isInScale,
     };
   },
 
@@ -181,11 +186,7 @@ export default defineComponent({
 
       if (event.path[0].className.startsWith('v-slider__')) return;
 
-      if (
-        position > this.sliderMax + this.scale.emptyLevel ||
-        position < this.sliderMin + this.scale.emptyLevel
-      )
-        return;
+      if (!this.isInScale(position)) return;
 
       this.sliderValue = Math.round(position - this.scale.emptyLevel);
     },
@@ -234,7 +235,36 @@ export default defineComponent({
     height: 100%;
 
     .v-slider__track-container {
-      width: 5px;
+      cursor: pointer;
+      width: 12px;
+    }
+
+    .v-slider__thumb-container {
+      cursor: pointer;
+
+      .v-slider__thumb {
+        height: 22px;
+        width: 22px;
+        left: -11px;
+      }
+
+      &:hover {
+        .v-slider__thumb::before {
+          height: 40px;
+          width: 40px;
+          top: -9px;
+          left: -9px;
+        }
+      }
+    }
+
+    .v-slider__thumb-container--focused {
+      .v-slider__thumb::before {
+        height: 40px;
+        width: 40px;
+        top: -9px;
+        left: -9px;
+      }
     }
   }
 

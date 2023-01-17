@@ -278,7 +278,7 @@ const prompts: LocaleMessageObject = {
     name: 'Guide image',
     text: '{food}',
     // description: 'Placeholder',
-    label: 'Select the image this is the closest match to the size of {food} you had.',
+    label: 'Select the image that is the closest match to the size of {food} you had.',
     quantity: 'Choose how many or how much you had.',
     confirm: 'I had that many',
     expand: 'Expand Image',
