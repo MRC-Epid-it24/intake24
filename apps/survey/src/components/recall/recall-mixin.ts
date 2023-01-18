@@ -256,7 +256,6 @@ export default defineComponent({
 
       switch (action) {
         case 'addMeal':
-          this.saveCurrentState();
           this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
         case 'review':

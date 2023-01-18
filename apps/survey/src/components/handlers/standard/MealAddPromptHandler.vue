@@ -27,7 +27,7 @@ export default defineComponent({
   },
 
   setup() {
-    const getInitialState = computed(() => undefined);
+    const getInitialState = computed<string | undefined>(() => undefined);
 
     const { state, update } = usePromptHandlerNoStore(getInitialState);
 
@@ -47,7 +47,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['addMeal']),
+    ...mapActions(useSurvey, ['addMeal', 'setSelection']),
 
     async action(type: 'next' | 'cancel') {
       if (type === 'next' && this.state) this.commitAnswer();
@@ -61,7 +61,8 @@ export default defineComponent({
         return;
       }
 
-      this.addMeal(this.state, this.$i18n.locale);
+      const mealId = this.addMeal(this.state, this.$i18n.locale);
+      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
     },
   },
 });
