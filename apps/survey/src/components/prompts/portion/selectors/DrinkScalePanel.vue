@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div class="drink-scale-drawer mb-4" @mousedown="touchUpdateSlider">
+    <div
+      class="drink-scale-drawer mb-4"
+      :class="{ selected: cursorInScale }"
+      @mousedown="touchUpdateSlider"
+      @mousemove="onTrackOverlay($event)"
+    >
       <v-img ref="imgDrink" v-resize="onImgResize" :src="scale.baseImageUrl">
         <template #placeholder>
           <image-placeholder></image-placeholder>
@@ -12,7 +17,7 @@
         :style="overlayBackground"
       >
       </v-img>
-      <div class="drink-scale-image-slider mx-5" :style="{ bottom: sliderBottom }">
+      <div class="drink-scale-image-slider mr-10" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
           color="blue darken-4"
@@ -24,7 +29,9 @@
         ></v-slider>
       </div>
       <div class="drink-scale-image-label">
-        <v-chip class="ma-2 font-weight-medium">{{ label }}</v-chip>
+        <v-chip class="ma-2 font-weight-medium white primary--text border-primary-1">
+          {{ label }}
+        </v-chip>
       </div>
     </div>
     <v-row>
@@ -98,6 +105,8 @@ export default defineComponent({
       y >= sliderMin.value + props.scale.emptyLevel &&
       y <= sliderMax.value + props.scale.emptyLevel;
 
+    const cursorInScale = ref(false);
+
     return {
       imgDrink,
       height,
@@ -106,6 +115,7 @@ export default defineComponent({
       sliderMin,
       sliderValue,
       isInScale,
+      cursorInScale,
     };
   },
 
@@ -161,6 +171,11 @@ export default defineComponent({
     this.debouncedDrinkScaleImgResize = debounce(() => {
       this.updateOverlayDimensions();
     }, 500);
+
+    //@ts-expect-error fix debounced types
+    this.debouncedTrackOverlay = debounce((event: MouseEvent) => {
+      this.trackOverlay(event);
+    }, 100);
   },
 
   methods: {
@@ -181,14 +196,23 @@ export default defineComponent({
       this.debouncedDrinkScaleImgResize();
     },
 
-    touchUpdateSlider(event: MouseEvent) {
-      const position = this.scale.height - event.offsetY / this.imgScale;
+    onTrackOverlay(event: MouseEvent) {
+      //@ts-expect-error fix debounced types
+      this.debouncedTrackOverlay(event);
+    },
 
+    touchUpdateSlider(event: MouseEvent) {
       if (event.path[0].className.startsWith('v-slider__')) return;
 
+      const position = this.scale.height - event.offsetY / this.imgScale;
       if (!this.isInScale(position)) return;
 
       this.sliderValue = Math.round(position - this.scale.emptyLevel);
+    },
+
+    trackOverlay(event: MouseEvent) {
+      const position = this.scale.height - event.offsetY / this.imgScale;
+      this.cursorInScale = this.isInScale(position);
     },
 
     updateSlider(value: number) {
@@ -208,6 +232,10 @@ export default defineComponent({
 <style lang="scss">
 .drink-scale-drawer {
   position: relative;
+
+  &.selected {
+    cursor: pointer;
+  }
 
   .drink-scale-image-overlay {
     position: absolute;
@@ -236,34 +264,34 @@ export default defineComponent({
 
     .v-slider__track-container {
       cursor: pointer;
-      width: 12px;
+      width: 20px;
     }
 
     .v-slider__thumb-container {
       cursor: pointer;
 
       .v-slider__thumb {
-        height: 22px;
-        width: 22px;
-        left: -11px;
+        height: 36px;
+        width: 36px;
+        left: -18px;
       }
 
-      &:hover {
-        .v-slider__thumb::before {
-          height: 40px;
-          width: 40px;
-          top: -9px;
-          left: -9px;
-        }
-      }
-    }
-
-    .v-slider__thumb-container--focused {
       .v-slider__thumb::before {
-        height: 40px;
-        width: 40px;
-        top: -9px;
-        left: -9px;
+        height: 50px;
+        width: 50px;
+        top: -8px;
+        left: -8px;
+      }
+
+      &:hover,
+      &.v-slider__thumb-container--active,
+      &.v-slider__thumb-container--focused {
+        .v-slider__thumb::before {
+          height: 60px;
+          width: 60px;
+          top: -12px;
+          left: -12px;
+        }
       }
     }
   }

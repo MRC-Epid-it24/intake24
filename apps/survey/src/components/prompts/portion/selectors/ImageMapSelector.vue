@@ -8,7 +8,9 @@
           </template>
         </v-img>
         <div v-if="size" class="size">
-          <v-chip class="font-weight-medium">{{ size }}</v-chip>
+          <v-chip class="ma-2 font-weight-medium white primary--text border-primary-1">
+            {{ size }}
+          </v-chip>
         </div>
         <div class="label">
           <slot name="label"></slot>

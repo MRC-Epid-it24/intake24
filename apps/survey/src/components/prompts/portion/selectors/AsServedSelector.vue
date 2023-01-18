@@ -7,7 +7,7 @@
         </template>
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
-            <v-chip class="ma-2 font-weight-medium white primary--text bordered">
+            <v-chip class="ma-2 font-weight-medium white primary--text border-primary-1">
               {{ thumbnailWeight }}
             </v-chip>
           </v-col>
@@ -341,7 +341,7 @@ export default defineComponent({
     },
 
     isSelected(idx: number): string {
-      return idx === this.objectIdx ? 'selected-thumb' : '';
+      return idx === this.objectIdx ? 'border-info-2' : '';
     },
 
     update() {
@@ -367,11 +367,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.bordered {
-  border: 1px solid black !important;
-}
-.selected-thumb {
-  border: 2px solid #0d47a1;
-}
-</style>
+<style lang="scss" scoped></style>

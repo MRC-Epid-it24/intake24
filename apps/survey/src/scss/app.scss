@@ -1,4 +1,13 @@
+@import 'vuetify/src/styles/styles.sass';
 @import "fontawesome";
+
+.border-primary-1 {
+    border: 1px solid map-get($blue-grey, 'darken-4') !important;
+}
+
+.border-info-2 {
+    border: 2px solid map-get($blue, 'darken-3') !important;
+}
 
 // ConfirmDialog wrapped actions buttons
 .v-card__actions {

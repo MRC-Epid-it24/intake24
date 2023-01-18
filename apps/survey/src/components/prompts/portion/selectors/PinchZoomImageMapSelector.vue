@@ -15,7 +15,9 @@
             :width="width * 0.95"
           >
             <div v-if="size" class="size">
-              <v-chip class="font-weight-medium">{{ size }}</v-chip>
+              <v-chip class="ma-2 font-weight-medium white primary--text border-primary-1">
+                {{ size }}
+              </v-chip>
             </div>
             <img :src="imageMapData.baseImageUrl" :width="width" />
             <svg ref="svg" v-bind="{ height, width }">
