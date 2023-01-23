@@ -39,6 +39,9 @@ export default defineComponent({
     loading: Boolean,
     mealIndex: Number || undefined,
   },
+
+  emits: ['displayFoodContext', 'meal-action'],
+
   data() {
     return {
       entity: 'food',

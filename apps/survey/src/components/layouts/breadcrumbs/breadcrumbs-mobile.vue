@@ -46,6 +46,8 @@ export default defineComponent({
 
   mixins: [breadcrumbsMixin],
 
+  emits: ['restart'],
+
   computed: {
     items() {
       return this.getBreadCrumbs().filter((el) => !el.disabled);

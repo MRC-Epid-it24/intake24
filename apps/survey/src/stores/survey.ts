@@ -99,7 +99,7 @@ export const surveyInitialState = (): CurrentSurveyState => ({
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
   if (parameters && !parameters.storeUserSessionOnServer) return false;
 
-  const { startTime, submissionTime } = state;
+  const { startTime /*, submissionTime */ } = state;
   if (!startTime /*|| submissionTime*/) return false;
 
   // TODO: check old stale data

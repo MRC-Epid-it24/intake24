@@ -28,6 +28,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected'],
+
   methods: {
     emitFoodSelected(foodCode: string): void {
       this.$emit('food-selected', foodCode);

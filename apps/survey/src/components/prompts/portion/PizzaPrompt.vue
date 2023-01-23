@@ -153,6 +153,8 @@ export default defineComponent({
 
   mixins: [createBasePortion<'pizza-prompt', PizzaPromptState>()],
 
+  emits: ['update'],
+
   data() {
     const typeImageMapId = 'gpizza';
     const thicknessImageMapId = 'gpthick';

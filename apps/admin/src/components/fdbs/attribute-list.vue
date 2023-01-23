@@ -125,6 +125,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       defaultAttributes,

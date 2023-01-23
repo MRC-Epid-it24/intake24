@@ -43,6 +43,8 @@ export default defineComponent({
 
   components: { HCaptcha, ReCaptcha },
 
+  emits: ['expired', 'verified'],
+
   setup() {
     const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
     const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);

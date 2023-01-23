@@ -131,6 +131,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     const state = copy(this.initialState);
     state.portionSize.drinkwareId = this.parameters['drinkware-id'];

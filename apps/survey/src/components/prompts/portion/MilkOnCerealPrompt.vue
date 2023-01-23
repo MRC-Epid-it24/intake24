@@ -70,7 +70,7 @@ export interface MilkOnCerealPromptState {
 
 const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 
-type Bowl = typeof bowls[number];
+type Bowl = (typeof bowls)[number];
 
 const milkDensity = 1.032;
 
@@ -96,6 +96,8 @@ export default defineComponent({
       default: 'gbowl',
     },
   },
+
+  emits: ['update'],
 
   data() {
     const milkLevelImageMapPrefix = 'milkbowl';

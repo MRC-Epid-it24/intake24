@@ -44,6 +44,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     const baseUrl = trimEnd(import.meta.env.VITE_APP_BASE_URL ?? '', '/');
 

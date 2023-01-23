@@ -52,6 +52,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   methods: {
     handleLeave(value: boolean) {
       if (value) return;

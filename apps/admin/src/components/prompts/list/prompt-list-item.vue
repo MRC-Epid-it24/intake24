@@ -145,6 +145,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['question:edit', 'question:move', 'question:remove', 'question:sync'],
+
   data() {
     return {
       contextMenu: false,

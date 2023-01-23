@@ -126,6 +126,8 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'no-more-information-prompt'>()],
 
+  emits: ['update'],
+
   data() {
     return {
       currentValue: 'ok',

@@ -92,6 +92,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:options'],
+
   data() {
     const currentOptions = toIndexedList(this.options);
 

@@ -36,6 +36,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['close', 'update'],
+
   data() {
     return {
       dialog: false,

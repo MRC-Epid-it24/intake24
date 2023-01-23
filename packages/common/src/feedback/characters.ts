@@ -35,10 +35,10 @@ export const characterTypes = [
   'folate',
   'co2',
 ] as const;
-export type CharacterType = typeof characterTypes[number];
+export type CharacterType = (typeof characterTypes)[number];
 
 export const characterSentimentTypes = ['danger', 'warning', 'happy', 'exciting'] as const;
-export type CharacterSentimentType = typeof characterSentimentTypes[number];
+export type CharacterSentimentType = (typeof characterSentimentTypes)[number];
 
 export type CharacterSentiment = {
   sentiment: Sentiment[];

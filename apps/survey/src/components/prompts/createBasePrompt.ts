@@ -30,6 +30,8 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
       },
     },
 
+    emits: ['action'],
+
     data() {
       return {
         errors: [] as string[],

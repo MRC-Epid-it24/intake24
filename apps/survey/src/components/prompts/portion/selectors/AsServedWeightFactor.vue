@@ -109,6 +109,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       numerator: this.value,

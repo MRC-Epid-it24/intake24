@@ -1,6 +1,8 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+  emits: ['valid'],
+
   data() {
     return {
       continueEnabled: false,

@@ -67,6 +67,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action', 'food-selected', 'meal-selected', 'meal-action'],
+
   data() {
     return {
       menuRecallIcon: 'fas fa-angle-double-right',

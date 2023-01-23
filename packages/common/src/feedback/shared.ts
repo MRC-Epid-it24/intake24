@@ -1,8 +1,8 @@
 export const feedbackTypes = ['default', 'playful'] as const;
-export type FeedbackType = typeof feedbackTypes[number];
+export type FeedbackType = (typeof feedbackTypes)[number];
 
 export const feedbackOutputs = ['download', 'email', 'print'] as const;
-export type FeedbackOutput = typeof feedbackOutputs[number];
+export type FeedbackOutput = (typeof feedbackOutputs)[number];
 
 export const feedbackPhysicalDataFields = [
   'sex',
@@ -12,7 +12,7 @@ export const feedbackPhysicalDataFields = [
   'birthdate',
   'weightTarget',
 ] as const;
-export type FeedbackPhysicalDataField = typeof feedbackPhysicalDataFields[number];
+export type FeedbackPhysicalDataField = (typeof feedbackPhysicalDataFields)[number];
 
 export const nutrientRuleTypes = [
   'energy_divided_by_bmr',
@@ -20,7 +20,7 @@ export const nutrientRuleTypes = [
   'per_unit_of_weight',
   'range',
 ] as const;
-export type NutrientRuleType = typeof nutrientRuleTypes[number];
+export type NutrientRuleType = (typeof nutrientRuleTypes)[number];
 
 export type Range = {
   start: number;
@@ -37,13 +37,13 @@ export const sentiments = [
   'bit_high',
   'too_high',
 ] as const;
-export type Sentiment = typeof sentiments[number];
+export type Sentiment = (typeof sentiments)[number];
 
 export const sexes = ['f', 'm'] as const;
-export type Sex = typeof sexes[number];
+export type Sex = (typeof sexes)[number];
 
 export const weightTargets = ['keep_weight', 'lose_weight', 'gain_weight'] as const;
-export type WeightTarget = typeof weightTargets[number];
+export type WeightTarget = (typeof weightTargets)[number];
 
 export type WeightTargetCoefficient = {
   id: string;

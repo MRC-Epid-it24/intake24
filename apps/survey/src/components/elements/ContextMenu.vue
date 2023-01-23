@@ -65,6 +65,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   methods: {
     action(type: string) {
       this.$emit('action', type);

@@ -28,6 +28,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action', 'food-context-menu', 'meal-context-menu'],
+
   computed: {
     ...mapState(useSurvey, ['meals']),
   },

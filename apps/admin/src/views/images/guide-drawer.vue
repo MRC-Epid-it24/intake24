@@ -147,6 +147,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['image-map-objects', 'guide-image-objects'],
+
   setup() {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();

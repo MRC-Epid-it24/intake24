@@ -115,6 +115,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['cancel', 'close', 'confirm'],
+
   data() {
     return {
       dialog: false,

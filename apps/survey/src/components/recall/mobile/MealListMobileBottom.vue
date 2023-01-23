@@ -37,6 +37,8 @@ export default defineComponent({
 
   mixins: [localeContent],
 
+  emits: ['meal-selected'],
+
   computed: {
     ...mapState(useSurvey, ['meals', 'selectedMealOptional']),
 

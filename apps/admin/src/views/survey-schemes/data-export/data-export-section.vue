@@ -185,6 +185,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['close', 'update'],
+
   setup(props) {
     const { refFields } = toRefs(props);
 

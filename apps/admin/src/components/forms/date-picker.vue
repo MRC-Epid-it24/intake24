@@ -55,6 +55,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input', 'change'],
+
   /* setup() {
     const menu = ref<InstanceType<typeof VMenu>>();
 

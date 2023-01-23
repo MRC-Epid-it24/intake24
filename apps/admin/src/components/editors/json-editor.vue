@@ -55,6 +55,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   setup() {
     const editor = ref<InstanceType<typeof JsonEditorVue>>();
 

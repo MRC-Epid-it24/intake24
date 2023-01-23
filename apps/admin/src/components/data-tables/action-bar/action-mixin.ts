@@ -23,6 +23,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   computed: {
     icon(): string {
       return `$${this.action}`;

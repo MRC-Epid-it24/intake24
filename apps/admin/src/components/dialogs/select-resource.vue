@@ -109,6 +109,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   setup(props) {
     const selectedItemId = ref<string | null>(null);
 

@@ -31,6 +31,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup() {
     const { freeTextFood, localeId } = useFoodPromptUtils();
 

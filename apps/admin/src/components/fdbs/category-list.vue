@@ -74,6 +74,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       items: [...this.value],

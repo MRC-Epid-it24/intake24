@@ -14,6 +14,8 @@ export function createPromptHandlerStoreMixin<T extends object>(promptType: Comp
       },
     },
 
+    emits: ['valid'],
+
     data() {
       const storeDef = getOrCreatePromptStateStore<T>(promptType);
 

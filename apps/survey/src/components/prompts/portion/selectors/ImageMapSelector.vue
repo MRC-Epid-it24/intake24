@@ -115,6 +115,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['confirm', 'select'],
+
   setup() {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();

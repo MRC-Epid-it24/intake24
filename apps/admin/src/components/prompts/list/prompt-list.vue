@@ -107,6 +107,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:items', 'move'],
+
   setup() {
     const selector = ref<InstanceType<typeof PromptSelector>>();
 

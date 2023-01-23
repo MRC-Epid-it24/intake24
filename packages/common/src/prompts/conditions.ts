@@ -45,7 +45,7 @@ export const conditionTypes = [
   'foodCategory',
 ] as const;
 
-export type ConditionType = typeof conditionTypes[number];
+export type ConditionType = (typeof conditionTypes)[number];
 
 export type ConditionSection = 'survey' | 'meal' | 'food';
 

@@ -91,6 +91,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       currentValue: undefined as string | undefined,

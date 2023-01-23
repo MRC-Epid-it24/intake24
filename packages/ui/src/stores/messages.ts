@@ -4,7 +4,7 @@ import { randomString } from '@intake24/common/util';
 
 export const messageTypes = ['info', 'success', 'warning', 'error'];
 
-export type MessageType = typeof messageTypes[number];
+export type MessageType = (typeof messageTypes)[number];
 
 export type Message = {
   id: string;

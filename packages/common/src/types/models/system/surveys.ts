@@ -3,11 +3,11 @@ import type { OmitAndOptional } from '../../common';
 
 export const surveyStates = ['notStarted', 'active', 'suspended', 'completed'] as const;
 
-export type SurveyState = typeof surveyStates[number];
+export type SurveyState = (typeof surveyStates)[number];
 
 export const searchSortingAlgorithms = ['paRules', 'popularity', 'globalPop', 'fixed'] as const;
 
-export type SearchSortingAlgorithm = typeof searchSortingAlgorithms[number];
+export type SearchSortingAlgorithm = (typeof searchSortingAlgorithms)[number];
 
 export type SurveyAttributes = {
   id: string;
@@ -100,11 +100,11 @@ export const updateSurveyFields = [
   'surveySchemeOverrides',
 ] as const;
 
-export type UpdateSurveyField = typeof updateSurveyFields[number];
+export type UpdateSurveyField = (typeof updateSurveyFields)[number];
 
 export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
 
-export type CreateSurveyField = typeof createSurveyFields[number];
+export type CreateSurveyField = (typeof createSurveyFields)[number];
 
 /* export const staffUpdateSurveyFields = [
   'name',
@@ -122,4 +122,4 @@ export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number]; */
 
 export const overridesFields = ['surveySchemeOverrides'] as const;
 
-export type OverridesField = typeof overridesFields[number];
+export type OverridesField = (typeof overridesFields)[number];

@@ -84,6 +84,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     const state = copy(this.initialState);
     state.portionSize.guideImageId = this.parameters['guide-image-id'];

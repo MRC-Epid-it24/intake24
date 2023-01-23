@@ -23,6 +23,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input', 'change'],
+
   methods: {
     change(event?: boolean) {
       this.$emit('input', event);

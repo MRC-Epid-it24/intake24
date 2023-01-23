@@ -49,6 +49,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['filter-set', 'filter-reset'],
+
   data() {
     return {
       items: [] as string[],

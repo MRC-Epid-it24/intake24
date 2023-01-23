@@ -30,6 +30,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['alert-dismissed'],
+
   data() {
     return {
       alert: false,

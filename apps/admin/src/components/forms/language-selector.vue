@@ -91,6 +91,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       selected: undefined as number | undefined,

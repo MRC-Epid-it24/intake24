@@ -53,6 +53,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:unit'],
+
   data() {
     return {
       internalUnit: copy(this.unit),

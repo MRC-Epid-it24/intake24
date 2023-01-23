@@ -36,6 +36,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action', 'update:navTab'],
+
   computed: {
     foodOrMealId() {
       return this.food?.id ?? this.meal?.id;

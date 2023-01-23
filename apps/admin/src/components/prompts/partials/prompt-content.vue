@@ -61,6 +61,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:i18n'],
+
   data() {
     return {
       items: copy(this.i18n),

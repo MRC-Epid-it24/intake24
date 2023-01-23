@@ -119,6 +119,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   setup(props) {
     const cards = ref<Card[]>(props.value);
     const selector = ref<InstanceType<typeof CardSelector>>();

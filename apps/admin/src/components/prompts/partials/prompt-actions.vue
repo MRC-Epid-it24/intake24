@@ -163,6 +163,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:actions'],
+
   data() {
     return {
       toggle: !!this.actions,

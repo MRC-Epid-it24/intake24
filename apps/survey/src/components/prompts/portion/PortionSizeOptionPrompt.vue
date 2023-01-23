@@ -67,6 +67,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       option: this.initialState?.option ?? undefined,

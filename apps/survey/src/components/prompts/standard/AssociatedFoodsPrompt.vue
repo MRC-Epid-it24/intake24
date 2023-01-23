@@ -121,6 +121,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       activePrompt: this.initialState.activePrompt,

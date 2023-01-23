@@ -35,6 +35,8 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'yes-no-prompt'>()],
 
+  emits: ['action', 'update'],
+
   data() {
     return {
       currentValue: undefined as boolean | undefined,

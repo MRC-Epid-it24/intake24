@@ -87,6 +87,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input', 'update:object'],
+
   data() {
     const items: Dictionary[] = [];
 

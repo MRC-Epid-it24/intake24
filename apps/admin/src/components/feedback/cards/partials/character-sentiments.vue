@@ -95,6 +95,9 @@ export default defineComponent({
     },
   },
 
+  // TODO: check modelValue logic
+  emits: ['update:sentiments'],
+
   data() {
     return {
       characterSentimentDefaults,

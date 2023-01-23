@@ -39,6 +39,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:imageMap'],
+
   methods: {
     update(field: keyof ImageMap, value: boolean) {
       this.$emit(`update:imageMap`, { ...this.imageMap, [field]: value });

@@ -1,6 +1,6 @@
 export const captchaProviders = ['h-captcha', 're-captcha'] as const;
 
-export type CaptchaProvider = typeof captchaProviders[number];
+export type CaptchaProvider = (typeof captchaProviders)[number];
 
 export const isCaptchaProvider = (provider: any): provider is CaptchaProvider =>
   captchaProviders.includes(provider);

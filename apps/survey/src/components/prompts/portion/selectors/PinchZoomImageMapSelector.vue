@@ -91,6 +91,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['confirm', 'select'],
+
   setup() {
     const dialog = ref(false);
     const zoomer = ref<InstanceType<typeof PinchScrollZoom>>();

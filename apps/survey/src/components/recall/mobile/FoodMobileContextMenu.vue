@@ -47,6 +47,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['close', 'continue'],
+
   data() {
     return {
       cachedName: '',

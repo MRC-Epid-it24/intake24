@@ -1,16 +1,16 @@
 export const frontEnds = ['admin', 'survey'] as const;
 
-export type FrontEnd = typeof frontEnds[number];
+export type FrontEnd = (typeof frontEnds)[number];
 
 export const applications = [...frontEnds, 'api', 'shared'] as const;
 
-export type Application = typeof applications[number];
+export type Application = (typeof applications)[number];
 
 export const isApplication = (app: any): app is Application => applications.includes(app);
 
 export const captchaProviders = ['h-captcha', 're-captcha'] as const;
 
-export type CaptchaProvider = typeof captchaProviders[number];
+export type CaptchaProvider = (typeof captchaProviders)[number];
 
 export const isCaptchaProvider = (provider: any): provider is CaptchaProvider =>
   captchaProviders.includes(provider);
@@ -40,7 +40,7 @@ export type WithKey<K extends string | number | symbol> = {
 
 export const emailCopy = ['cc', 'bcc', 'none'] as const;
 
-export type EmailCopy = typeof emailCopy[number];
+export type EmailCopy = (typeof emailCopy)[number];
 
 export type Environment = 'development' | 'test' | 'production';
 
@@ -63,4 +63,4 @@ export type ValidationError = {
 export type ValidationErrorResult = Record<string, ValidationError>;
 
 export const textDirections = ['ltr', 'rtl'] as const;
-export type TextDirection = typeof textDirections[number];
+export type TextDirection = (typeof textDirections)[number];

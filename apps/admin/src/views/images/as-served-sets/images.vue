@@ -105,6 +105,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['images'],
+
   setup() {
     const fileInput = ref<InstanceType<typeof HTMLInputElement>>();
 

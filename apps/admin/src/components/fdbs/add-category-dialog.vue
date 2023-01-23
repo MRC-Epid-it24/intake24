@@ -109,6 +109,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['add'],
+
   setup(props) {
     const selected = ref<string[]>([]);
 

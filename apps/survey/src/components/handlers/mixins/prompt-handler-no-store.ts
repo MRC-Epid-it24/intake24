@@ -3,6 +3,8 @@ import { defineComponent, reactive } from 'vue';
 
 export function createPromptHandlerNoStoreMixin<T extends object>() {
   return defineComponent({
+    emits: ['valid'],
+
     data() {
       return {
         currentState: null as T | null,

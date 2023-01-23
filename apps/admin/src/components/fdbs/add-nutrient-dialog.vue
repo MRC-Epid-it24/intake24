@@ -125,6 +125,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['add'],
+
   setup(props) {
     const selectedTableId = ref<string>(
       props.nutrientTables.length ? props.nutrientTables[0].id : ':id'

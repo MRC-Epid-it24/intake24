@@ -91,6 +91,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['save', 'update:routeLeave'],
+
   computed: {
     isCreate(): boolean {
       return this.id === 'create';

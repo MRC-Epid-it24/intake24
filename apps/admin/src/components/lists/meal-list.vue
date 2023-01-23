@@ -182,6 +182,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 

@@ -1,7 +1,7 @@
 import type { LocaleTranslation } from '../types';
 
 export const promptLayouts = ['desktop', 'mobile'] as const;
-export type PromptLayout = typeof promptLayouts[number];
+export type PromptLayout = (typeof promptLayouts)[number];
 
 export const genericActionTypes = ['next', 'review'] as const;
 export const mealActionTypes = [
@@ -13,9 +13,9 @@ export const mealActionTypes = [
 ] as const;
 export const actionTypes = [...genericActionTypes, ...mealActionTypes] as const;
 
-export type GenericActionType = typeof genericActionTypes[number];
-export type MealActionType = typeof mealActionTypes[number];
-export type ActionType = typeof actionTypes[number];
+export type GenericActionType = (typeof genericActionTypes)[number];
+export type MealActionType = (typeof mealActionTypes)[number];
+export type ActionType = (typeof actionTypes)[number];
 
 export type ActionItem = {
   type: ActionType;

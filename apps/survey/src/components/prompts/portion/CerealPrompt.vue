@@ -131,6 +131,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     const bowls = ['A', 'B', 'C', 'D', 'E', 'F'];
 

@@ -25,6 +25,8 @@ export default <T>() =>
       },
     },
 
+    emits: ['input'],
+
     methods: {
       input(key: string, value: any) {
         this.$emit('input', { ...this.value, [key]: value });

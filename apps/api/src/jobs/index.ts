@@ -23,7 +23,7 @@ const jobs = {
 };
 
 export type Jobs = {
-  [P in JobType]: new (...args: any[]) => typeof jobs[P];
+  [P in JobType]: new (...args: any[]) => (typeof jobs)[P];
 };
 
 export default jobs;

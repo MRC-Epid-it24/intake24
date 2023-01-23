@@ -68,6 +68,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   computed: {
     currentTime(): string {
       return fromMealTime(this.initialState);

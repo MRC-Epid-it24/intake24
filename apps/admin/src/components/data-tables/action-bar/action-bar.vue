@@ -53,6 +53,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['refresh'],
+
   computed: {
     currentActions(): string[] {
       const { ownerId, securables } = this.item;

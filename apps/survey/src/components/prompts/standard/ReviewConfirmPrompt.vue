@@ -78,6 +78,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['meal-selected', 'food-selected'],
+
   computed: {
     isValid(): boolean {
       return true;

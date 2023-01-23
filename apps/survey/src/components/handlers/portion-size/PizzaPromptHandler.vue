@@ -35,6 +35,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup(props) {
     const { encodedFood: food, parentFoodOptional: parentFood, portionSize } = useFoodPromptUtils();
 

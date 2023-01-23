@@ -1,6 +1,6 @@
 <template>
   <v-row class="pt-2" justify="center" :no-gutters="isNotDesktop">
-    <v-col v-if="showMealList" cols="3" height="45rem" lg="3" min-height="30rem">
+    <v-col v-if="showMealList && surveyName" cols="3" height="45rem" lg="3" min-height="30rem">
       <meal-list
         :meals="meals"
         :survey-name="surveyName"

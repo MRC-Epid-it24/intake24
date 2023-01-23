@@ -41,7 +41,10 @@ export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
 
 export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
-export default <T = Dictionary>(initData: T, formConfig: FormConfig<T> = {}): Form<T> => {
+export default <T extends object = Dictionary>(
+  initData: T,
+  formConfig: FormConfig<T> = {}
+): Form<T> => {
   const keys = Object.keys(initData) as (keyof T)[];
   const allKeys = formConfig.extractNestedKeys
     ? getObjectNestedKeys(initData)

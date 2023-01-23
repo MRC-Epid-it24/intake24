@@ -6,7 +6,7 @@ export const useInRecipeTypes = {
   USE_AS_RECIPE_INGREDIENT: 2,
 } as const;
 
-export type UseInRecipeType = typeof useInRecipeTypes[keyof typeof useInRecipeTypes];
+export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipeTypes];
 
 export type Attributes = {
   sameAsBeforeOption: boolean;

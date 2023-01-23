@@ -14,6 +14,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['intersected'],
+
   methods: {
     intersected(...arg: any[]) {
       this.$emit('intersected', ...arg);

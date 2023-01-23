@@ -163,6 +163,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:conditions'],
+
   data() {
     return {
       currentConditions: withIdList(this.conditions),

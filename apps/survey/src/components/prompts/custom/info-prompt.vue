@@ -12,6 +12,8 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'info-prompt'>()],
 
+  emits: ['update'],
+
   data() {
     return {
       currentValue: 'ok',

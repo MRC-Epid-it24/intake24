@@ -31,6 +31,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup(props) {
     const { meal } = useMealPromptUtils();
 

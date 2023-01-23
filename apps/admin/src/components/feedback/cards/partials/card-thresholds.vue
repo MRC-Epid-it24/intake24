@@ -60,6 +60,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:high', 'update:low'],
+
   data() {
     const { high, low } = this.thresholds;
 

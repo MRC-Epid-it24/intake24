@@ -136,7 +136,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import pick from 'lodash/pick';
 import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -194,6 +193,8 @@ export default defineComponent({
       default: () => [],
     },
   },
+
+  emits: ['save'],
 
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();

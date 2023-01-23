@@ -107,6 +107,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['confirm', 'update'],
+
   setup(props) {
     const denominator = 4;
     const objectIdx = ref<number | undefined>(undefined);

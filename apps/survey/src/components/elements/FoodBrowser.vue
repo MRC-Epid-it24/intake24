@@ -55,6 +55,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected'],
+
   data() {
     return {
       navigationHistory: [] as CategoryHeader[],

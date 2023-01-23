@@ -41,6 +41,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected', 'category-selected'],
+
   methods: {
     emitFoodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);

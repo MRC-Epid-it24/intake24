@@ -77,6 +77,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     return {
       foods: copy(this.value),

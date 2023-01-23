@@ -37,15 +37,15 @@ export type SurveySchemeQuestionCreationAttributes = Omit<
 
 export const updateSurveySchemeFields = ['name', 'type', 'meals'] as const;
 
-export type UpdateSurveySchemeField = typeof updateSurveySchemeFields[number];
+export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
 
 export const perCardSurveySchemeFields = ['questions', 'dataExport'] as const;
 
-export type PerCardSurveySchemeField = typeof perCardSurveySchemeFields[number];
+export type PerCardSurveySchemeField = (typeof perCardSurveySchemeFields)[number];
 
 export const createSurveySchemeFields = [
   ...updateSurveySchemeFields,
   ...perCardSurveySchemeFields,
 ] as const;
 
-export type CreateSurveySchemeField = typeof createSurveySchemeFields[number];
+export type CreateSurveySchemeField = (typeof createSurveySchemeFields)[number];

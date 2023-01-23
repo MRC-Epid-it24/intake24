@@ -130,6 +130,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       ...copy(this.initialState),

@@ -2,16 +2,16 @@ import type { Prompt, PromptWithSection } from '../prompts';
 import type { Meal } from '../types';
 
 export const schemeTypes = ['default'] as const;
-export type SchemeType = typeof schemeTypes[number];
+export type SchemeType = (typeof schemeTypes)[number];
 
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
-export type SurveyQuestionSection = typeof surveySections[number];
+export type SurveyQuestionSection = (typeof surveySections)[number];
 
 export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
-export type MealSection = typeof mealSections[number];
+export type MealSection = (typeof mealSections)[number];
 
 export const mealQuestionSections = ['preFoods', 'postFoods'] as const;
-export type MealQuestionSection = typeof mealQuestionSections[number];
+export type MealQuestionSection = (typeof mealQuestionSections)[number];
 
 export const isMealSection = (section: any): section is MealSection => {
   return mealSections.includes(section);

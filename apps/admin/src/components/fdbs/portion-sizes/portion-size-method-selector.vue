@@ -133,6 +133,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['save'],
+
   setup() {
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 

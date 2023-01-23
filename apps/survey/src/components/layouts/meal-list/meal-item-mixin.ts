@@ -34,6 +34,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected', 'meal-selected', 'meal-action'],
+
   data() {
     return {
       menuMealIcon: 'fas fa-edit',

@@ -112,6 +112,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['load'],
+
   data() {
     return {
       dialog: false,

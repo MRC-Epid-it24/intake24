@@ -64,6 +64,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected', 'input'],
+
   data() {
     return {
       requestInProgress: true,

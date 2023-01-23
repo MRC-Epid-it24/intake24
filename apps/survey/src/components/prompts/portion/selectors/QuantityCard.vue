@@ -87,6 +87,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input', 'update:confirm'],
+
   data() {
     return {
       currentValue: Math.min(this.max, Math.max(this.min, this.value)),

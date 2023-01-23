@@ -32,6 +32,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   setup() {
     const form = ref<InstanceType<typeof VForm>>();
 

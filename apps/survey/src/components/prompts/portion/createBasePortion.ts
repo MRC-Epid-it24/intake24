@@ -38,6 +38,8 @@ export default <P extends keyof Prompts, S extends object>() =>
       },
     },
 
+    emits: ['action'],
+
     data() {
       return {
         errors: [] as string[],

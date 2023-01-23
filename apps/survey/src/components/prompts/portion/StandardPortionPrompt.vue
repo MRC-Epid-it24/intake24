@@ -107,6 +107,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       standardUnitRefs: {} as StandardUnitRefs,

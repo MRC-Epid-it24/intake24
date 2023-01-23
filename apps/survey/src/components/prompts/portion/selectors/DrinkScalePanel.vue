@@ -93,6 +93,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['confirm', 'input'],
+
   setup(props) {
     const imgDrink = ref<InstanceType<typeof VImg>>();
     const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));

@@ -98,6 +98,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   setup(props) {
     const items = ref(props.value.map(withInternalId));
     const selector = ref<InstanceType<typeof PortionSizeMethodSelector>>();

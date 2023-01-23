@@ -56,6 +56,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['input'],
+
   data() {
     const defaultRange: Range = { start: 0, end: 0 };
 

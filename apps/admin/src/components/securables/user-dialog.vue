@@ -190,6 +190,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update:table'],
+
   data() {
     return {
       dialog: false,

@@ -26,6 +26,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup() {
     const getInitialState = computed<string | undefined>(() => undefined);
 

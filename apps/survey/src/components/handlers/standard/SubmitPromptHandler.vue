@@ -28,6 +28,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 

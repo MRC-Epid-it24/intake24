@@ -68,6 +68,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['refresh'],
+
   computed: {
     currentActions(): string[] {
       return this.actions.filter((action) => this.can({ action }));

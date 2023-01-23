@@ -71,6 +71,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['food-selected'],
+
   methods: {
     onLinkedFoodSelected(foodId: number) {
       this.emitFoodSelected(foodId);

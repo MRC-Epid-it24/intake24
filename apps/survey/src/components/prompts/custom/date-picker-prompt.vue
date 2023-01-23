@@ -29,6 +29,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['update'],
+
   data() {
     return {
       currentValue: this.value,

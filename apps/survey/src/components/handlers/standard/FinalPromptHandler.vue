@@ -32,6 +32,8 @@ export default defineComponent({
     },
   },
 
+  emits: ['action'],
+
   setup() {
     const { user } = useSurvey();
 
