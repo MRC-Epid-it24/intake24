@@ -18,7 +18,7 @@
   "dependencies": {
     "@hcaptcha/vue-hcaptcha": "0.3.2",
     "@pinia/plugin-debounce": "^0.1.0",
-    "axios": "^1.2.2",
+    "axios": "^1.2.3",
     "echarts": "^5.4.1",
     "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
