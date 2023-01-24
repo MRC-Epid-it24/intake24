@@ -1,6 +1,6 @@
-# Schemes questions
+# Question templates
 
-Schemes questions allows to define scheme question `templates` that can be reused throughout the schemes.
+Question / Prompt templates allows to define scheme question `template` that can be reused throughout the schemes.
 
 ## Detail
 

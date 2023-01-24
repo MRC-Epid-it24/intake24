@@ -16,4 +16,4 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
-Along the response, `http-only` cookie with `refresh token` is issued, which can be used to obtain fresh access token.
+Response includes cookie with `refresh token`, which can be used to obtain fresh `access token`. By default, cookie is `http-only` (prevents to be read by javascript code) and `secure` (sent over https-only), please refer to [security configuration](/config/api/security#json-web-tokens) for more details.

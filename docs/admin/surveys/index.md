@@ -85,15 +85,15 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 ### Feedback settings
 
-- `Feedback scheme` - associated feedback scheme. If not set, feedback feature is disabled.
+- `Feedback scheme` - Associated feedback scheme. If not set, feedback feature is disabled.
 
-- `Number of submissions for feedback` - minimal number of submissions per respondent account to allow to access the feedback
+- `Number of submissions for feedback` - Minimal number of submissions per respondent account to allow to access the feedback
 
 ## Overrides
 
 Overrides tab allows to override certain parts of the scheme without a need to create whole new scheme.
 
-There are two sections that can be overridden in limited way, so it doesn't influence the over scheme flow. UI is the same is in [`scheme section`](/admin/surveys/survey-schemes), so should feel familiar.
+There are two sections that can be overridden in limited way, so it doesn't influence the overall scheme flow. UI is the same is in [`question editor`](/admin/surveys/schemes), so should feel familiar.
 
 ### Scheme questions overrides
 
@@ -131,6 +131,6 @@ Survey submissions with limited ability to search / view / delete submissions. T
 
 ## Data export
 
-Data export allows to export survey submission data into the flattened CSV file. Structure is defined in [schemes](/admin/surveys/survey-schemes#data-export-tab).
+Data export allows to export survey submission data into the flattened CSV file. Structure is defined in [schemes](/admin/surveys/schemes#data-export-tab).
 
 `Start date` / `End date` can be specified for export. Export is submitted as background job and progress will appear below once export job is submitted.

@@ -36,7 +36,7 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 
 ## Dependencies
 
-Intake24 dependencies are set up with `pnpm`.
+Intake24 dependencies are set up with [pnpm](https://pnpm.io).
 
 Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
 
@@ -62,9 +62,9 @@ Please see [`scripts/verify-commit.ts`](https://github.com/MRC-Epid-it24/intake2
 
 Project is set up with [eslint](https://eslint.org/) and [prettier](https://prettier.io/) to help to keep clean and maintainable code.
 
-Both integrate very well with most of the IDEs. You will probably just need to install respective plugins / extensions and configure it to run on `save` to have immediate effect.
+Both integrate very well with most of the IDEs. Install respective plugins / extensions and configure it to run on `save` to have immediate effect.
 
-You can also run it manually from root-level or in each `app` / `package`.
+You can also run lint process manually from root-level or in each `app` / `package`.
 
 Run linting and try to fix as much as possible automatically
 
@@ -72,18 +72,18 @@ Run linting and try to fix as much as possible automatically
 pnpm lint
 ```
 
-Lint step also runs for each file, when changes are committed.
+Lint step also runs for each staged file, when changes are being committed (using git hooks).
 
 ## Renovate
 
-Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks the dependencies and prepares PRs. It runs on weekly basis and can be configured through [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
+Repository is set up with [renovate bot](https://github.com/renovatebot/renovate), which checks repository for up-to-date dependencies and prepares PRs to be merged. Renovate job runs on weekly basis and can be configured through [`.github/renovate.json5`](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/renovate.json5) config file.
 
 ## Continuous integration
 
 ### Build
 
-Main [CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on source code change and it runs lint / build / tests / steps for each components to ensure all is working as expected.
+[Main CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/ci.yml) action is triggered on any source code change and it runs lint / build / tests / steps for each of the components.
 
 ### Documentation
 
-Whenever `docs` source code is modified, [Docs CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/docs.yml) is triggered and documentation site is automatically rebuilt.
+[Docs CI](https://github.com/MRC-Epid-it24/intake24/blob/master/.github/workflows/docs.yml) action is triggered on `docs` folder source code change and documentation site is automatically rebuilt and deployed to GitHub pages.

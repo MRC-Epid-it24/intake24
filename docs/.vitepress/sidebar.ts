@@ -379,23 +379,36 @@ export const sidebar = {
       ],
     },
     {
+      text: 'Feedback',
+      items: [
+        {
+          text: 'Schemes',
+          link: '/admin/feedback/schemes',
+        },
+      ],
+    },
+    {
       text: 'Surveys MGMT',
       items: [
         {
-          text: 'Feedback schemes',
-          link: '/admin/surveys/feedback-schemes',
-        },
-        {
-          text: 'Survey schemes',
-          link: '/admin/surveys/survey-schemes',
-        },
-        {
-          text: 'Survey scheme questions',
-          link: '/admin/surveys/survey-scheme-questions',
-        },
-        {
           text: 'Surveys',
           link: '/admin/surveys/',
+        },
+        {
+          text: 'Schemes',
+          link: '/admin/surveys/schemes',
+        },
+        {
+          text: 'Question editor',
+          link: '/admin/surveys/question-editor',
+        },
+        {
+          text: 'Question types',
+          link: '/admin/surveys/question-types',
+        },
+        {
+          text: 'Question templates',
+          link: '/admin/surveys/question-templates',
         },
       ],
     },

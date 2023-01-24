@@ -4,12 +4,12 @@ Routes to handle user's password recovery.
 
 ## Password request
 
-Request a password reset. It sends an email to user with password recovery link.
+Request a password reset. It sends an email to user with an unique password recovery link.
 
 - route can be protected with captcha, see [API Services Config](/config/api/services#captcha) for more details.
 - route is rate-limited, see [API Rate Limiter Config](/config/api/rate-limiter#password).
 
-Field `captcha` can be omitted if `captcha` is disabled.
+Field `captcha` can be omitted if `captcha` functionality is disabled.
 
 ### Request
 
@@ -34,7 +34,7 @@ Content-Type: application/json
 
 Reset user's password.
 
-Field `token` value is received with password recovery email. It is valid to limited period of time specified in [API Security Config](/config/api/security#passwords).
+Field `token` value is received with password recovery email. It is valid for a limited time period specified in [API Security Config](/config/api/security#passwords).
 
 ### Request
 

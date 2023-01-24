@@ -28,7 +28,7 @@ Questions tab allows to design dietary survey recall flow and define details abo
 
 Questions are categorized to sections and they are asked in specified fixed order. See table below.
 
-#### Recall sections
+### Recall sections
 
 | Name          | Description                                                    |
 | ------------- | -------------------------------------------------------------- |
@@ -50,46 +50,13 @@ When question section is selected, list of questions appear below:
 - Question can be saved as `template` if it doesn't exist yet (determined by unique `question id`)
 - Question's settings can be synced from `template` if it exists (determined by unique `question id`)
 
-## Question editor
-
-Full screen modal opens when create or edit action triggered.
-
-Top level toolbar has:
-
-- Cancel button on the left - changes are discarded
-- Confirm button on the right - changes are confirmed, but not yet saved to server's database
-- Tab list with:
-  - `general` - Defines type & id & name of question for administrative purposes
-  - `content` - Defines localized content, which appears to user
-  - `conditions` - List of conditions to be met so question is displayed
-  - `validation` - Defines validation options, e.g. if question is optional or required
-  - `options` - Defines list of options for `list-based` question types like `checkbox` or `radio` lists
-
-#### General tab
-
-General tab defines administrative fields
-
-- `question type` - Type of question that is asked. Questions are further categorized to `custom`, `standard` and `portion size` groups
-- `question id` - ID assigned to question, which must be unique within the question list
-- `question name` - User friendly name for better orientation. It's only for admin use, it is not displayed to respondent
-
-#### Content tab
-
-Content tab defines respondent facing content
-
-- `question name` - Very short question name, used to be displayed in frontend UI breadcrumb component
-- `question text` - Main question text to be asked
-- `question description` - Any question details, allows to embed `html` content
-
-All three fields can be localized to various languages
-
-## Data export tab
+## Data export
 
 Data export tab allows to define fields, which will get exported to flattened CSV file having `food-per-row` with all additional fields.
 
 There is a fixed list of possible data export sections
 
-#### Sections
+### Sections
 
 | Name                    | Description |
 | ----------------------- | ----------- |
