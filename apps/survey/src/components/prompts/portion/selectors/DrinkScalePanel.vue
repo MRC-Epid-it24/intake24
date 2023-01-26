@@ -204,7 +204,7 @@ export default defineComponent({
     },
 
     touchUpdateSlider(event: MouseEvent) {
-      if (event.path[0].className.startsWith('v-slider__')) return;
+      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__')) return;
 
       const position = this.scale.height - event.offsetY / this.imgScale;
       if (!this.isInScale(position)) return;
