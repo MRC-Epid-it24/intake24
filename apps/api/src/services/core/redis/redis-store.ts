@@ -1,5 +1,5 @@
-import type { Redis, RedisOptions } from 'ioredis';
-import RedisStatic from 'ioredis';
+import type { RedisOptions } from 'ioredis';
+import { Redis } from 'ioredis';
 
 import type { Logger } from '@intake24/services';
 
@@ -27,7 +27,7 @@ export default abstract class RedisStore {
    * @memberof HasRedisClient
    */
   init(): Redis {
-    this.redis = new RedisStatic(this.config);
+    this.redis = new Redis(this.config);
 
     this.logger.info(`Redis connection (${this.constructor.name}) has been initialized.`);
 

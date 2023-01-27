@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 
 import type { User, UserSurveyAlias } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
