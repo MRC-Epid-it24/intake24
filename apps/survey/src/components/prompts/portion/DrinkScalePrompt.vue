@@ -31,7 +31,11 @@
       <!-- Step 1: Select Serving Weight ml-->
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${type}.serving.header`, { food: foodName }) }}
+          <i18n :path="`prompts.${type}.serving.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.servingWeight ?? undefined"
@@ -42,7 +46,6 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${type}.serving.label`, { food: foodName }) }}</p>
           <drink-scale-panel
             v-if="scale"
             v-model="portionSize.fillLevel"
@@ -56,7 +59,11 @@
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${type}.leftovers.header`, { food: foodName }) }}
+          <i18n :path="`prompts.${type}.leftovers.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftoversWeight ?? undefined"
@@ -70,10 +77,13 @@
         </v-expansion-panel-header>
         <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
+            <i18n class="mb-4" :path="`prompts.${type}.leftovers.label`" tag="div">
+              <template #food>
+                <span class="font-weight-medium">{{ foodName }}</span>
+              </template>
+            </i18n>
             <drink-scale-panel
               v-if="scale"
               v-model="portionSize.leftoversLevel"

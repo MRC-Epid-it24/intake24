@@ -28,7 +28,11 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!bowlValid">
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.asServed.serving.header`) }}
+          <i18n :path="`prompts.asServed.serving.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -38,7 +42,6 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.asServed.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             v-if="servingImageSet"
             :as-served-set-id="servingImageSet"
@@ -53,7 +56,11 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.asServed.leftovers.header`, { food: foodName }) }}
+          <i18n :path="`prompts.asServed.leftovers.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -66,10 +73,13 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.asServed.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.asServed.leftovers.label`, { food: foodName }) }}</p>
+            <i18n class="mb-4" :path="`prompts.asServed.leftovers.label`" tag="div">
+              <template #food>
+                <span class="font-weight-medium">{{ foodName }}</span>
+              </template>
+            </i18n>
             <as-served-selector
               :as-served-set-id="leftoverImageSet"
               :initial-object="portionSize.leftovers ?? undefined"

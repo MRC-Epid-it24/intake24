@@ -220,15 +220,13 @@ const prompts: LocaleMessageObject = {
     text: '{food}',
     // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     serving: {
-      header: 'Select your portion size.',
-      label: 'Using these pictures, choose how much {food} you had.',
+      header: 'Using these pictures, choose how much {food} you had.',
       less: 'I had less',
       more: 'I had more',
       confirm: 'I had that much',
     },
     leftovers: {
-      header: 'Select your leftover size.',
-      question: 'Did you leave some of your {food}?',
+      header: 'Did you leave some of your {food}?',
       label: 'Using these pictures, choose how much {food} you left.',
       less: 'I left less',
       more: 'I left more',
@@ -260,8 +258,7 @@ const prompts: LocaleMessageObject = {
     // description: 'Placeholder',
     container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
-      header: 'Select your portion size.',
-      label:
+      header:
         'Use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
       less: 'It was less full',
@@ -269,8 +266,7 @@ const prompts: LocaleMessageObject = {
       confirm: 'It was that full',
     },
     leftovers: {
-      header: 'Select your leftover size.',
-      question: 'Did you leave some of your {food}?',
+      header: 'Did you leave some of your {food}?',
       label: 'Use the slider on the right to choose how much you had left.',
       less: 'I left less',
       more: 'I left more',

@@ -3,7 +3,11 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${type}.serving.header`) }}
+          <i18n :path="`prompts.${type}.serving.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.serving?.weight"
@@ -13,7 +17,6 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${type}.serving.label`, { food: foodName }) }}</p>
           <as-served-selector
             :as-served-set-id="parameters['serving-image-set']"
             :initial-object="portionSize.serving ?? undefined"
@@ -27,7 +30,11 @@
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${type}.leftovers.header`, { food: foodName }) }}
+          <i18n :path="`prompts.${type}.leftovers.header`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <quantity-badge
               :amount="portionSize.leftovers?.weight"
@@ -40,10 +47,13 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <p>{{ $t(`prompts.${type}.leftovers.question`, { food: foodName }) }}</p>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">
-            <p>{{ $t(`prompts.${type}.leftovers.label`, { food: foodName }) }}</p>
+            <i18n class="mb-4" :path="`prompts.${type}.leftovers.label`" tag="div">
+              <template #food>
+                <span class="font-weight-medium">{{ foodName }}</span>
+              </template>
+            </i18n>
             <as-served-selector
               :as-served-set-id="parameters['leftovers-image-set']"
               :initial-object="portionSize.leftovers ?? undefined"
