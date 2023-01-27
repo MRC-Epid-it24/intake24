@@ -111,7 +111,7 @@ const prompts: LocaleMessageObject = {
   mealTime: {
     name: 'Edit Time',
     text: '{meal}',
-    description: '<p>Did you have <strong>{meal}</strong>? If so, when was this?</p>',
+    description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
     no: 'I did not have {meal}',
     validation: {
