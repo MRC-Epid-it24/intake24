@@ -49,10 +49,11 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['addMeal', 'setSelection']),
+    ...mapActions(useSurvey, ['addMeal', 'setAutoSelection', 'setSelection']),
 
     async action(type: 'next' | 'cancel') {
-      if (type === 'next' && this.state) this.commitAnswer();
+      if (type === 'next') this.commitAnswer();
+      else this.setAutoSelection();
 
       this.$emit('action', 'next');
     },
@@ -60,6 +61,7 @@ export default defineComponent({
     commitAnswer() {
       if (!this.state) {
         console.warn('MealAddPromptHandler: no meal selected');
+        this.setAutoSelection();
         return;
       }
 

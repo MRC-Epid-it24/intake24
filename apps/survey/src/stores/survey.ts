@@ -360,6 +360,10 @@ export const useSurvey = defineStore('survey', {
       recallLog().selectionChanged(selection);
     },
 
+    setAutoSelection() {
+      this.setSelection({ mode: 'auto', element: null });
+    },
+
     setCustomPromptAnswer(data: { promptId: string; answer: CustomPromptAnswer }) {
       this.data.customPromptAnswers = {
         ...this.data.customPromptAnswers,
