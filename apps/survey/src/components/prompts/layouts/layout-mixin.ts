@@ -4,6 +4,7 @@ import { defineComponent } from 'vue';
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
 import { localeContent } from '@intake24/survey/components/mixins';
+import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
@@ -71,6 +72,10 @@ export default defineComponent({
       return this.meal && this.getLocaleContent(this.meal.name);
     },
 
+    mealTime() {
+      return this.meal?.time ? fromMealTime(this.meal.time, true) : undefined;
+    },
+
     localeText(): string {
       return this.getLocaleContent(this.prompt.i18n.text, {
         path: `prompts.${this.type}.text`,
@@ -78,9 +83,19 @@ export default defineComponent({
       });
     },
 
-    localeDescription(): string | null {
-      if (!this.prompt.i18n.description) return null;
+    headerText(): string | undefined {
+      if (this.localeText) return this.localeText;
 
+      if (this.prompt.type !== 'custom') return undefined;
+
+      if (this.localeFoodName) return this.localeFoodName;
+
+      return this.localeMealName && this.mealTime
+        ? `${this.localeMealName} (${this.mealTime})`
+        : this.localeMealName;
+    },
+
+    localeDescription(): string | undefined {
       return this.getLocaleContent(this.prompt.i18n.description, {
         path: `prompts.${this.type}.description`,
         params: this.params,
@@ -89,15 +104,26 @@ export default defineComponent({
 
     params(): Dictionary<string> {
       const params: Dictionary<string> = {};
-      const { localeFoodName, localeMealName } = this;
+      const { localeFoodName, localeMealName, mealTime } = this;
 
       if (localeFoodName) {
         params.item = localeFoodName;
         params.food = localeFoodName;
       }
+
       if (localeMealName) {
-        params.item = localeMealName;
-        params.meal = localeMealName;
+        params.mealName = localeMealName;
+
+        if (mealTime) {
+          params.mealTime = mealTime;
+
+          const meal = `${localeMealName} (${mealTime})`;
+          params.item = meal;
+          params.meal = meal;
+        } else {
+          params.item = localeMealName;
+          params.meal = localeMealName;
+        }
       }
 
       return params;

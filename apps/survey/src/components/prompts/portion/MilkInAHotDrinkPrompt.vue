@@ -3,7 +3,11 @@
     <v-expansion-panels v-model="panel" flat :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
-          {{ $t(`prompts.${type}.label`) }}
+          <i18n :path="`prompts.${type}.label`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <valid-invalid-icon :valid="!!portionSize.milkVolumePercentage"></valid-invalid-icon>
           </template>

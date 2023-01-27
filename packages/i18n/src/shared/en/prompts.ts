@@ -20,7 +20,7 @@ const prompts: LocaleMessageObject = {
   },
   noMoreInformation: {
     name: 'No more information needed',
-    text: 'No more information needed',
+    text: '{item}',
     description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
         <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
@@ -64,8 +64,9 @@ const prompts: LocaleMessageObject = {
   },
   editMeal: {
     name: 'Edit Meal',
-    text: 'List everything you had for your {meal}, one item per line.',
-    description: `For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
+    text: '{meal}',
+    description: `<p>List everything you had for your <strong>{meal}</strong>, one item per line.</p>
+      For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
       <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.`,
     food: 'Your food and drinks',
@@ -85,21 +86,22 @@ const prompts: LocaleMessageObject = {
   },
   foodSearch: {
     name: 'Search Food',
-    text: 'Below is the list of foods from our database that look like "{food}".',
-    description: 'Choose the item you had or the closest match.',
+    text: '{food}',
+    description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
+      <p>Choose the item you had or the closest match.</p>`,
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
   },
   mealAdd: {
     _: 'Add meal',
     name: 'Add Meal',
-    text: 'Enter the name of this meal',
-    description: 'Select one from the list below if it is appropriate.',
+    // text: 'Placeholder',
+    description: '<p>Select one from the list below if it is appropriate.</p>',
     label: 'Select predefined meal',
     custom: {
-      text: 'Enter the name of this meal',
+      // text: 'Placeholder',
       description:
-        'You can either type your own name, or select one from the list below if it is appropriate.',
+        '<p>Enter the name of this meal. You can either type your own name, or select one from the list below if it is appropriate.</p>',
       label: 'Select predefined or enter meal name',
     },
     yes: 'Add this meal',
@@ -108,8 +110,8 @@ const prompts: LocaleMessageObject = {
   },
   mealTime: {
     name: 'Edit Time',
-    text: 'Did you have {meal}? If so, when was this?',
-    // description: 'Placeholder',
+    text: '{meal}',
+    description: '<p>Did you have <strong>{meal}</strong>? If so, when was this?</p>',
     yes: 'Around that time',
     no: 'I did not have {meal}',
     validation: {
@@ -118,9 +120,9 @@ const prompts: LocaleMessageObject = {
   },
   readyMeal: {
     name: 'Ready meal',
-    text: 'Was this a ready-made meal or food?',
-    description:
-      'Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).',
+    text: '{meal}',
+    description: `<p>Was this a ready-made meal or food?</p>
+      <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
   },
   redirect: {
     name: 'Redirect',
@@ -130,10 +132,12 @@ const prompts: LocaleMessageObject = {
   },
   sameAsBefore: {
     name: 'Same as before',
+    text: '{food}',
   },
   splitFood: {
     name: 'Split food',
-    text: 'It looks like you entered more than one food item on the line.',
+    text: '{food}',
+    description: 'It looks like you entered more than one food item on the line.',
     searchTerm: 'Search term: {food}',
     split: 'Are these separate foods?',
     singleSuggestion:
@@ -157,8 +161,8 @@ const prompts: LocaleMessageObject = {
   },
   portionSizeOption: {
     name: 'Portion method',
-    text: 'How would you like to estimate the portion size of your {food}?',
-    // description: 'Placeholder',
+    text: '{food}',
+    description: 'How would you like to estimate the portion size of your <strong>{food}</strong>?',
     selections: {
       grated: 'Grated',
       in_a_bag: 'In a bag',
@@ -213,17 +217,17 @@ const prompts: LocaleMessageObject = {
   },
   asServed: {
     name: 'As served',
-    text: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
-    // description: 'Placeholder',
+    text: '{food}',
+    // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
     serving: {
-      header: 'Step 1. Select your portion size.',
+      header: 'Select your portion size.',
       label: 'Using these pictures, choose how much {food} you had.',
       less: 'I had less',
       more: 'I had more',
       confirm: 'I had that much',
     },
     leftovers: {
-      header: 'Step 2. Select your leftover size.',
+      header: 'Select your leftover size.',
       question: 'Did you leave some of your {food}?',
       label: 'Using these pictures, choose how much {food} you left.',
       less: 'I left less',
@@ -257,7 +261,7 @@ const prompts: LocaleMessageObject = {
     // description: 'Placeholder',
     container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
-      header: 'Step 1. Select your portion size.',
+      header: 'Select your portion size.',
       label:
         'Use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
@@ -266,7 +270,7 @@ const prompts: LocaleMessageObject = {
       confirm: 'It was that full',
     },
     leftovers: {
-      header: 'Step 2. Select your leftover size.',
+      header: 'Select your leftover size.',
       question: 'Did you leave some of your {food}?',
       label: 'Use the slider on the right to choose how much you had left.',
       less: 'I left less',
@@ -285,9 +289,9 @@ const prompts: LocaleMessageObject = {
   },
   milkInAHotDrink: {
     name: 'Milk in a hot drink',
-    text: 'How much {food} did you have in your tea or coffee?',
+    text: '{food}',
     // description: 'Placeholder',
-    label: 'Select the amount you had.',
+    label: 'How much {food} did you have in your tea or coffee?',
     confirm: 'I had that much',
   },
   milkOnCereal: {

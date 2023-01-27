@@ -1,113 +1,120 @@
 <template>
-  <v-card :flat="isMobile" :tile="isMobile">
-    <v-sheet class="px-4 pt-4" :class="{ 'pb-4': !hasDefaultSlot }">
+  <div>
+    <v-card v-if="headerText" class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
       <h3>
-        <slot name="prompt-text">{{ localeText }}</slot>
+        <slot name="prompt-text">{{ headerText }}</slot>
       </h3>
+    </v-card>
+    <v-card :flat="isMobile" :tile="isMobile">
       <slot name="prompt-description">
-        <div v-if="localeDescription" class="mt-4" v-html="localeDescription"></div>
+        <div
+          v-if="localeDescription"
+          class="px-4 pt-4"
+          :class="{ 'pb-4': !hasDefaultSlot }"
+          v-html="localeDescription"
+        ></div>
       </slot>
-    </v-sheet>
-    <v-card-text v-if="hasDefaultSlot">
-      <slot></slot>
-    </v-card-text>
-    <v-card-actions
-      v-if="!isMobile || prompt.actions?.both"
-      class="pa-4 d-flex"
-      :class="{ 'flex-column-reverse': isMobile }"
-    >
-      <template v-if="desktopActions.length">
-        <v-btn
-          v-for="item in desktopActions"
-          :key="item.type"
-          :block="isMobile"
-          class="px-4"
-          :color="item.color"
-          :disabled="item.type === 'next' && !isValid"
-          large
-          :title="
-            Object.keys(item.label).length
-              ? getLocaleContent(item.label)
-              : getLocaleContent(item.text)
-          "
-          @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
-        >
-          {{ getLocaleContent(item.text) }}
-        </v-btn>
-      </template>
-      <template v-else>
-        <slot name="actions">
-          <next :disabled="!isValid" @click="next"></next>
-        </slot>
-      </template>
-    </v-card-actions>
-    <v-bottom-navigation
-      v-if="isMobile"
-      app
-      background-color="secondary"
-      class="bottom-navigation"
-      dark
-      fixed
-      grow
-      :value="navTab"
-    >
-      <template v-if="mobileActions.length">
-        <template v-for="(item, idx) in mobileActions">
+      <v-card-text v-if="hasDefaultSlot" :class="{ 'pt-2': localeDescription }">
+        <slot></slot>
+      </v-card-text>
+      <v-card-actions
+        v-if="!isMobile || prompt.actions?.both"
+        class="pa-4 d-flex"
+        :class="{ 'flex-column-reverse': isMobile }"
+      >
+        <template v-if="desktopActions.length">
           <v-btn
+            v-for="item in desktopActions"
             :key="item.type"
+            :block="isMobile"
+            class="px-4"
             :color="item.color"
             :disabled="item.type === 'next' && !isValid"
+            large
             :title="
               Object.keys(item.label).length
                 ? getLocaleContent(item.label)
                 : getLocaleContent(item.text)
             "
-            :value="item.type"
             @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
           >
-            <span class="text-overline font-weight-medium">
-              {{ getLocaleContent(item.text) }}
-            </span>
-            <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
+            {{ getLocaleContent(item.text) }}
           </v-btn>
-          <v-divider
-            v-if="idx + 1 < mobileActions.length"
-            :key="`div-${item.type}`"
-            vertical
-          ></v-divider>
         </template>
-      </template>
-      <template v-else>
-        <slot name="nav-actions">
-          <v-btn value="addMeal" @click.stop="action('addMeal')">
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.addMeal') }}
-            </span>
-            <v-icon class="pb-1">$add</v-icon>
-          </v-btn>
-          <v-divider vertical></v-divider>
-          <v-btn value="review" @click.stop="action('review')">
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.review') }}
-            </span>
-            <v-icon class="pb-1">$survey</v-icon>
-          </v-btn>
-          <v-divider vertical></v-divider>
-          <v-btn
-            :color="isValid ? 'success' : 'primary'"
-            :disabled="!isValid"
-            value="next"
-            @click="next"
-          >
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.next') }}
-            </span>
-            <v-icon class="pb-1">$next</v-icon>
-          </v-btn>
-        </slot>
-      </template>
-    </v-bottom-navigation>
-  </v-card>
+        <template v-else>
+          <slot name="actions">
+            <next :disabled="!isValid" @click="next"></next>
+          </slot>
+        </template>
+      </v-card-actions>
+      <v-bottom-navigation
+        v-if="isMobile"
+        app
+        background-color="secondary"
+        class="bottom-navigation"
+        dark
+        fixed
+        grow
+        :value="navTab"
+      >
+        <template v-if="mobileActions.length">
+          <template v-for="(item, idx) in mobileActions">
+            <v-btn
+              :key="item.type"
+              :color="item.color"
+              :disabled="item.type === 'next' && !isValid"
+              :title="
+                Object.keys(item.label).length
+                  ? getLocaleContent(item.label)
+                  : getLocaleContent(item.text)
+              "
+              :value="item.type"
+              @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
+            >
+              <span class="text-overline font-weight-medium">
+                {{ getLocaleContent(item.text) }}
+              </span>
+              <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
+            </v-btn>
+            <v-divider
+              v-if="idx + 1 < mobileActions.length"
+              :key="`div-${item.type}`"
+              vertical
+            ></v-divider>
+          </template>
+        </template>
+        <template v-else>
+          <slot name="nav-actions">
+            <v-btn value="addMeal" @click.stop="action('addMeal')">
+              <span class="text-overline font-weight-medium">
+                {{ $t('recall.actions.nav.addMeal') }}
+              </span>
+              <v-icon class="pb-1">$add</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
+            <v-btn value="review" @click.stop="action('review')">
+              <span class="text-overline font-weight-medium">
+                {{ $t('recall.actions.nav.review') }}
+              </span>
+              <v-icon class="pb-1">$survey</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
+            <v-btn
+              :color="isValid ? 'success' : 'primary'"
+              :disabled="!isValid"
+              value="next"
+              @click="next"
+            >
+              <span class="text-overline font-weight-medium">
+                {{ $t('recall.actions.nav.next') }}
+              </span>
+              <v-icon class="pb-1">$next</v-icon>
+            </v-btn>
+          </slot>
+        </template>
+      </v-bottom-navigation>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,43 +1,41 @@
 <template>
-  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
-    <v-sheet>
-      <v-item-group v-if="availableMethods.length" v-model="option">
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="(availableMethod, index) in availableMethods"
-              :key="index"
-              cols="12"
-              md="4"
-              sm="6"
-            >
-              <v-item v-slot="{ toggle }">
-                <v-card border-color="primary" hover outlined @click="toggle">
-                  <v-img :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
-                    <template #placeholder>
-                      <image-placeholder></image-placeholder>
-                    </template>
-                  </v-img>
-                  <v-card-actions class="d-flex justify-end">
-                    <v-chip class="font-weight-medium px-4" rounded>
-                      {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
-                    </v-chip>
-                  </v-card-actions>
-                </v-card>
-              </v-item>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-item-group>
-      <v-alert v-else border="left" outlined type="warning">
-        {{ $t('prompts.unknown.text', { food: foodName }) }}
-      </v-alert>
-    </v-sheet>
+  <prompt-layout v-bind="{ food, prompt, isValid }" @action="action">
+    <v-item-group v-if="availableMethods.length" v-model="option">
+      <v-container>
+        <v-row>
+          <v-col
+            v-for="(availableMethod, index) in availableMethods"
+            :key="index"
+            cols="12"
+            md="4"
+            sm="6"
+          >
+            <v-item v-slot="{ toggle }">
+              <v-card border-color="primary" hover outlined @click="toggle">
+                <v-img :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
+                  <template #placeholder>
+                    <image-placeholder></image-placeholder>
+                  </template>
+                </v-img>
+                <v-card-actions class="d-flex justify-end">
+                  <v-chip class="font-weight-medium px-4" rounded>
+                    {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
+                  </v-chip>
+                </v-card-actions>
+              </v-card>
+            </v-item>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-item-group>
+    <v-alert v-else border="left" outlined type="warning">
+      {{ $t('prompts.unknown.text', { food: foodName }) }}
+    </v-alert>
     <template #actions>
       <!-- Should not have actions -> only click & select -->
       <div></div>
     </template>
-  </portion-layout>
+  </prompt-layout>
 </template>
 
 <script lang="ts">

@@ -18,25 +18,17 @@ export const fromMealTime = (time: MealTime, doubleDigit?: boolean): string => {
 };
 
 export const toMealTime = (time: string): MealTime => {
-  const [hours, minutes] = time.split(':');
+  const [hours, minutes] = time.split(':').map((item) => parseInt(item, 10));
 
-  return { hours: parseInt(hours, 10), minutes: parseInt(minutes, 10) };
+  return { hours, minutes };
 };
 
 export function getFoodIndexInMeal(meal: MealState, id: number): FoodIndex | undefined {
   for (let i = 0; i < meal.foods.length; ++i) {
-    if (meal.foods[i].id === id)
-      return {
-        foodIndex: i,
-        linkedFoodIndex: undefined,
-      };
+    if (meal.foods[i].id === id) return { foodIndex: i, linkedFoodIndex: undefined };
 
     for (let li = 0; li < meal.foods[i].linkedFoods.length; ++li) {
-      if (meal.foods[i].linkedFoods[li].id === id)
-        return {
-          foodIndex: i,
-          linkedFoodIndex: li,
-        };
+      if (meal.foods[i].linkedFoods[li].id === id) return { foodIndex: i, linkedFoodIndex: li };
     }
   }
 
@@ -47,11 +39,7 @@ export function getFoodIndex(meals: MealState[], id: number): MealFoodIndex | un
   for (let mi = 0; mi < meals.length; ++mi) {
     const foodIndex = getFoodIndexInMeal(meals[mi], id);
 
-    if (foodIndex !== undefined)
-      return {
-        mealIndex: mi,
-        ...foodIndex,
-      };
+    if (foodIndex !== undefined) return { mealIndex: mi, ...foodIndex };
   }
 
   return undefined;

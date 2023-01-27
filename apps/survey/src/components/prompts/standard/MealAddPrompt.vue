@@ -1,8 +1,7 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <template #prompt-text>{{ $t(`${i18nPrefix}.text`) }}</template>
     <template #prompt-description>
-      <div class="mt-4" v-html="$t(`${i18nPrefix}.description`)"></div>
+      <div class="px-4 pt-4" v-html="localeDescription"></div>
     </template>
     <v-row>
       <v-col md="6" sm="12">
@@ -103,6 +102,13 @@ export default defineComponent({
     i18nPrefix() {
       return `prompts.${this.type}${this.prompt.custom ? '.custom' : ''}`;
     },
+
+    localeDescription(): string | undefined {
+      return this.getLocaleContent(this.prompt.i18n.description, {
+        path: `${this.i18nPrefix}.description`,
+      });
+    },
+
     isValid() {
       return !!this.currentValue;
     },

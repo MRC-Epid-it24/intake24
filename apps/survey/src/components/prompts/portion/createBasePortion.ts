@@ -8,7 +8,7 @@ import { localeContent } from '@intake24/survey/components/mixins';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
-import { PortionLayout } from '../layouts';
+import { PortionLayout, PromptLayout } from '../layouts';
 
 export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
 
@@ -16,7 +16,7 @@ export default <P extends keyof Prompts, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
 
-    components: { Next, PortionLayout, ValidInvalidIcon },
+    components: { Next, PortionLayout, PromptLayout, ValidInvalidIcon },
 
     mixins: [localeContent],
 
