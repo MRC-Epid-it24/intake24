@@ -246,7 +246,6 @@ const prompts: LocaleMessageObject = {
       // and: 'and',
       less: 'of the smallest portion',
       more: 'of the largest portion',
-      weight: '({amount}g)',
     },
   },
   cereal: {

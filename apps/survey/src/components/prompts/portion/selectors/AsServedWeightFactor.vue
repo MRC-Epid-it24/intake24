@@ -1,64 +1,74 @@
 <template>
   <v-overlay absolute :dark="false" :value="show">
-    <div class="d-flex justify-center align-center">
-      <v-card>
-        <v-card-text>
-          <div class="d-flex flex-column align-center">
-            <v-btn
-              v-if="!isMobile"
-              class="mb-3"
-              color="primary"
-              :disabled="numerator === maxNumerator"
-              icon
-              large
-              outlined
-              @click="update(1)"
-            >
-              <v-icon aria-hidden="false">$increment</v-icon>
-            </v-btn>
-            <span class="font-weight-medium text-h6">
-              {{ $t(`prompts.asServed.weightFactor.${type}.${subType}`, { whole, fraction }) }}
-            </span>
-            <span class="my-1 font-weight-medium text-h6">
-              {{ $t(`prompts.asServed.weightFactor.${subType}`) }}
-            </span>
-            <span class="mb-3 font-weight-medium text-h6">
-              {{ $t(`prompts.asServed.weightFactor.weight`, { amount }) }}
-            </span>
-            <div>
-              <v-btn
-                color="primary"
-                :disabled="numerator === minNumerator"
-                icon
-                large
-                outlined
-                @click="update(-1)"
-              >
-                <v-icon aria-hidden="false">$decrement</v-icon>
-              </v-btn>
-              <v-btn
-                v-if="isMobile"
-                class="ml-6"
-                color="primary"
-                :disabled="numerator === maxNumerator"
-                icon
-                large
-                outlined
-                @click="update(1)"
-              >
-                <v-icon aria-hidden="false">$increment</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-card class="card-overlay" :tile="isMobile">
+      <v-card-text class="d-flex flex-column align-center">
+        <v-btn
+          v-if="!isMobile"
+          class="mb-3"
+          color="primary"
+          :disabled="numerator === maxNumerator"
+          icon
+          large
+          outlined
+          :title="$t(`prompts.asServed.${type}.more`)"
+          @click="update(1)"
+        >
+          <v-icon aria-hidden="false">$increment</v-icon>
+        </v-btn>
+        <v-chip color="grey lighten-1">
+          <i18n
+            class="font-weight-medium text-h6"
+            :path="`prompts.asServed.weightFactor.${type}.${subType}`"
+          >
+            <template #whole>
+              <span class="font-weight-bold">{{ whole }}</span>
+            </template>
+            <template #fraction>
+              <span class="font-weight-bold">{{ fraction }}</span>
+            </template>
+          </i18n>
+        </v-chip>
+        <span class="my-1 font-weight-medium text-h6">
+          {{ $t(`prompts.asServed.weightFactor.${subType}`) }}
+        </span>
+        <span class="mb-3 font-weight-medium text-h6">
+          (<span class="font-weight-bold">{{ amount }}g</span>)
+        </span>
+        <div>
+          <v-btn
+            color="primary"
+            :disabled="numerator === minNumerator"
+            icon
+            large
+            outlined
+            :title="$t(`prompts.asServed.${type}.less`)"
+            @click="update(-1)"
+          >
+            <v-icon aria-hidden="false">$decrement</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="isMobile"
+            class="ml-6"
+            color="primary"
+            :disabled="numerator === maxNumerator"
+            icon
+            large
+            outlined
+            :title="$t(`prompts.asServed.${type}.more`)"
+            @click="update(1)"
+          >
+            <v-icon aria-hidden="false">$increment</v-icon>
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
   </v-overlay>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import { VChip } from 'vuetify/lib';
 
 export type WeightFactorProps = {
   show: boolean;
@@ -73,6 +83,8 @@ export type WeightFactorProps = {
 
 export default defineComponent({
   name: 'AsServedWeightFactor',
+
+  components: { VChip },
 
   props: {
     show: {
@@ -161,4 +173,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.card-overlay {
+  background-color: rgb(white, 0.85);
+}
+</style>

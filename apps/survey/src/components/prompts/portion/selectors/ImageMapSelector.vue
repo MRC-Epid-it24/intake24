@@ -8,7 +8,7 @@
           </template>
         </v-img>
         <div v-if="size" class="size">
-          <v-chip class="ma-2 font-weight-medium white primary--text border-primary-1">
+          <v-chip class="ma-2 pa-4 text-h6 font-weight-bold primary--text border-primary-1">
             {{ size }}
           </v-chip>
         </div>
