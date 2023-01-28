@@ -70,8 +70,8 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        postgres-version: [13]
-        redis-version: [6]
+        postgres-version: [15]
+        redis-version: [7]
 
     services:
       postgres:
@@ -158,7 +158,7 @@ jobs:
   #     matrix:
   #       node-version: [18.x]
   #       mariadb-version: [10]
-  #       redis-version: [6]
+  #       redis-version: [7]
 
   #   services:
   #     mariadb:
@@ -242,7 +242,7 @@ jobs:
   #     matrix:
   #       node-version: [18.x]
   #       mssql-version: [2019]
-  #       redis-version: [6]
+  #       redis-version: [7]
 
   #   services:
   #     mssql:
