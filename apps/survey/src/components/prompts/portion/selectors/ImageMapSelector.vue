@@ -34,11 +34,11 @@
                 dark
                 icon
                 link
-                :title="$t(`prompts.guide-image.expand`)"
+                :title="$t(`prompts.guideImage.expand`)"
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon aria-hidden="false" :aria-label="$t(`prompts.guide-image.expand`)">
+                <v-icon aria-hidden="false" :aria-label="$t(`prompts.guideImage.expand`)">
                   $expandImage
                 </v-icon>
               </v-btn>
@@ -46,6 +46,9 @@
           </pinch-zoom-image-map-selector>
         </div>
         <svg ref="svg">
+          <filter id="polygon-blur">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4"></feGaussianBlur>
+          </filter>
           <polygon
             v-for="(object, idx) in objects"
             :key="idx"
@@ -221,6 +224,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'vuetify/src/styles/styles.sass';
+
 .guide-drawer {
   position: relative;
 
@@ -253,13 +258,11 @@ export default defineComponent({
 
       &.active,
       &:hover {
-        //fill: #0d47a1;
-        //fill-opacity: 0.4;
         stroke-width: 8;
-        stroke: #ff9100;
+        stroke: map-get($orange, 'darken-3');
         stroke-linecap: round;
         stroke-linejoin: round;
-        stroke-opacity: 0.5;
+        filter: url(#polygon-blur);
       }
     }
   }

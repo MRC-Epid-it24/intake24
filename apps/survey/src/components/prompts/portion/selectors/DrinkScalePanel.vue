@@ -20,7 +20,6 @@
       <div class="drink-scale-image-slider mr-10" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
-          color="blue darken-4"
           :height="sliderHeight"
           :max="sliderMax"
           :min="sliderMin"

@@ -114,13 +114,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'vuetify/src/styles/styles.sass';
+
 .meal-list {
   .selected {
-    background: #fff3e0;
+    background: map-get($orange, 'lighten-5');
   }
 
   .selected-food {
-    background: #ffe0b2;
+    background: map-get($orange, 'lighten-4');
   }
 
   .v-list-group__header {
@@ -128,7 +130,7 @@ export default defineComponent({
   }
 
   .v-list-item:hover {
-    background: #fff3e0;
+    background: map-get($orange, 'lighten-5');
   }
 
   .v-list-group--active > .v-list-group__header > .v-list-group__header__prepend-icon {
