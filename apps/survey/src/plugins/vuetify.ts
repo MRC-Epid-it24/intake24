@@ -8,7 +8,7 @@ export default new Vuetify({
   icons: {
     iconfont: 'fa',
     values: {
-      add: 'fas fa-plus',
+      add: 'fas fa-circle-plus',
       back: 'fas fa-arrow-left',
       cancel: 'fas fa-circle-xmark',
       close: 'fas fa-circle-xmark',

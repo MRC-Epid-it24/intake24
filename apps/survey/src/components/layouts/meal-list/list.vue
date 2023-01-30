@@ -27,6 +27,7 @@
     <v-card-actions>
       <v-hover v-slot="{ hover }">
         <v-btn block :color="hover ? 'secondary' : 'inherit'" depressed @click="action('addMeal')">
+          <v-icon left>$add</v-icon>
           {{ $t('recall.menu.recall.addMeal') }}
         </v-btn>
       </v-hover>
