@@ -13,12 +13,12 @@ on:
       - 'docs/**'
 
 env:
-  DB_SYSTEM_DATABASE: it24_system_test
-  DB_SYSTEM_USERNAME: it24
-  DB_SYSTEM_PASSWORD: Intake24!
-  DB_FOODS_DATABASE: it24_foods_test
-  DB_FOODS_USERNAME: it24
-  DB_FOODS_PASSWORD: Intake24!
+  DB_TEST_SYSTEM_DATABASE: it24_system_test
+  DB_TEST_SYSTEM_USERNAME: it24
+  DB_TEST_SYSTEM_PASSWORD: Intake24!
+  DB_TEST_FOODS_DATABASE: it24_foods_test
+  DB_TEST_FOODS_USERNAME: it24
+  DB_TEST_FOODS_PASSWORD: Intake24!
 
 jobs:
   lint:
@@ -60,12 +60,12 @@ jobs:
     needs: lint
 
     env:
-      DB_SYSTEM_DRIVER: postgres
-      DB_SYSTEM_HOST: localhost
-      DB_SYSTEM_PORT: 5432
-      DB_FOODS_DRIVER: postgres
-      DB_FOODS_HOST: localhost
-      DB_FOODS_PORT: 5432
+      DB_TEST_SYSTEM_DRIVER: postgres
+      DB_TEST_SYSTEM_HOST: localhost
+      DB_TEST_SYSTEM_PORT: 5432
+      DB_TEST_FOODS_DRIVER: postgres
+      DB_TEST_FOODS_HOST: localhost
+      DB_TEST_FOODS_PORT: 5432
 
     strategy:
       matrix:
@@ -103,8 +103,8 @@ jobs:
 
       - name: Create foods/system databases
         run: |
-          PGPASSWORD=${{ env.DB_FOODS_PASSWORD }} psql -h ${{ env.DB_FOODS_HOST }} -p 5432 -U ${{ env.DB_FOODS_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_FOODS_DATABASE }};'
-          PGPASSWORD=${{ env.DB_SYSTEM_PASSWORD }} psql -h ${{ env.DB_SYSTEM_HOST }} -p 5432 -U ${{ env.DB_SYSTEM_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }};'
+          PGPASSWORD=${{ env.DB_TEST_FOODS_PASSWORD }} psql -h ${{ env.DB_TEST_FOODS_HOST }} -p 5432 -U ${{ env.DB_TEST_FOODS_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_TEST_FOODS_DATABASE }};'
+          PGPASSWORD=${{ env.DB_TEST_SYSTEM_PASSWORD }} psql -h ${{ env.DB_TEST_SYSTEM_HOST }} -p 5432 -U ${{ env.DB_TEST_SYSTEM_USERNAME }} -c 'CREATE DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }};'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -147,12 +147,12 @@ jobs:
   #   needs: lint
 
   #   env:
-  #     DB_SYSTEM_DRIVER: mariadb
-  #     DB_SYSTEM_HOST: 127.0.0.1
-  #     DB_SYSTEM_PORT: 3306
-  #     DB_FOODS_DRIVER: mariadb
-  #     DB_FOODS_HOST: 127.0.0.1
-  #     DB_FOODS_PORT: 3306
+  #     DB_TEST_SYSTEM_DRIVER: mariadb
+  #     DB_TEST_SYSTEM_HOST: 127.0.0.1
+  #     DB_TEST_SYSTEM_PORT: 3306
+  #     DB_TEST_FOODS_DRIVER: mariadb
+  #     DB_TEST_FOODS_HOST: 127.0.0.1
+  #     DB_TEST_FOODS_PORT: 3306
 
   #   strategy:
   #     matrix:
@@ -191,8 +191,8 @@ jobs:
 
   #     - name: Create foods/system databases
   #       run: |
-  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_FOODS_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_TEST_FOODS_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+  #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "CREATE DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
   #         mysql --host 127.0.0.1 --port 3306 -uroot -pIntake24! -e "GRANT ALL ON *.* TO 'it24'@'%' with grant option; FLUSH PRIVILEGES;"
 
   #     - name: Install pnpm
@@ -231,12 +231,12 @@ jobs:
   #   needs: lint
 
   #   env:
-  #     DB_SYSTEM_DRIVER: mssql
-  #     DB_SYSTEM_HOST: localhost
-  #     DB_SYSTEM_PORT: 1433
-  #     DB_FOODS_DRIVER: mssql
-  #     DB_FOODS_HOST: localhost
-  #     DB_FOODS_PORT: 1433
+  #     DB_TEST_SYSTEM_DRIVER: mssql
+  #     DB_TEST_SYSTEM_HOST: localhost
+  #     DB_TEST_SYSTEM_PORT: 1433
+  #     DB_TEST_FOODS_DRIVER: mssql
+  #     DB_TEST_FOODS_HOST: localhost
+  #     DB_TEST_FOODS_PORT: 1433
 
   #   strategy:
   #     matrix:
@@ -274,13 +274,13 @@ jobs:
 
   #     - name: Create foods/system databases
   #       run: |
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_FOODS_DATABASE }}; ALTER DATABASE ${{ env.DB_FOODS_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_SYSTEM_DATABASE }}; ALTER DATABASE ${{ env.DB_SYSTEM_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE LOGIN ${{ env.DB_SYSTEM_USERNAME }} WITH PASSWORD = '${{ env.DB_SYSTEM_PASSWORD }}';"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_SYSTEM_DATABASE }}; CREATE USER ${{ env.DB_SYSTEM_USERNAME }} FOR LOGIN ${{ env.DB_SYSTEM_USERNAME }};"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_SYSTEM_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_SYSTEM_USERNAME }}';"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_FOODS_DATABASE }}; CREATE USER ${{ env.DB_FOODS_USERNAME }} FOR LOGIN ${{ env.DB_FOODS_USERNAME }};"
-  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_FOODS_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_FOODS_USERNAME }}';"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_TEST_FOODS_DATABASE }}; ALTER DATABASE ${{ env.DB_TEST_FOODS_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }}; ALTER DATABASE ${{ env.DB_TEST_SYSTEM_DATABASE }} SET READ_COMMITTED_SNAPSHOT ON;"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "CREATE LOGIN ${{ env.DB_TEST_SYSTEM_USERNAME }} WITH PASSWORD = '${{ env.DB_TEST_SYSTEM_PASSWORD }}';"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_SYSTEM_DATABASE }}; CREATE USER ${{ env.DB_TEST_SYSTEM_USERNAME }} FOR LOGIN ${{ env.DB_TEST_SYSTEM_USERNAME }};"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_SYSTEM_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_TEST_SYSTEM_USERNAME }}';"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_FOODS_DATABASE }}; CREATE USER ${{ env.DB_TEST_FOODS_USERNAME }} FOR LOGIN ${{ env.DB_TEST_FOODS_USERNAME }};"
+  #         /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Intake24!" -Q "USE ${{ env.DB_TEST_FOODS_DATABASE }}; EXEC sp_addrolemember N'db_owner', N'${{ env.DB_TEST_FOODS_USERNAME }}';"
 
   #     - name: Install pnpm
   #       uses: pnpm/action-setup@v2.0.1

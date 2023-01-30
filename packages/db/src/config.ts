@@ -26,30 +26,71 @@ const dialectOptions: Record<OpsDialect, Dictionary> = {
   postgres: {},
 };
 
-const foods = {
-  host: process.env.DB_FOODS_HOST || 'localhost',
-  port: parseInt(process.env.DB_FOODS_PORT || '5432', 10),
-  database: process.env.DB_FOODS_DATABASE || 'intake24_foods',
-  username: process.env.DB_FOODS_USERNAME || 'intake24',
-  password: process.env.DB_FOODS_PASSWORD ?? '',
-  dialect: (process.env.DB_FOODS_DRIVER || 'postgres') as Dialect,
-  dialectOptions: dialectOptions[process.env.DB_FOODS_DRIVER as OpsDialect],
-  debugQueryLimit: parseInt(process.env.DB_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
-};
-
-const system = {
-  host: process.env.DB_SYSTEM_HOST || 'localhost',
-  port: parseInt(process.env.DB_SYSTEM_PORT || '5432', 10),
-  database: process.env.DB_SYSTEM_DATABASE || 'intake24_system',
-  username: process.env.DB_SYSTEM_USERNAME || 'intake24',
-  password: process.env.DB_SYSTEM_PASSWORD ?? '',
-  dialect: (process.env.DB_SYSTEM_DRIVER || 'postgres') as Dialect,
-  dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER as OpsDialect],
-  debugQueryLimit: parseInt(process.env.DB_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
-};
-
 export const databaseConfig: DatabaseConfig = {
-  development: { foods, system },
-  test: { foods, system },
-  production: { foods, system },
+  development: {
+    foods: {
+      host: process.env.DB_DEV_FOODS_HOST || 'localhost',
+      port: parseInt(process.env.DB_DEV_FOODS_PORT || '5432', 10),
+      database: process.env.DB_DEV_FOODS_DATABASE || 'intake24_foods_dev',
+      username: process.env.DB_DEV_FOODS_USERNAME || 'intake24',
+      password: process.env.DB_DEV_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_DEV_FOODS_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_DEV_FOODS_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_DEV_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+    system: {
+      host: process.env.DB_DEV_SYSTEM_HOST || 'localhost',
+      port: parseInt(process.env.DB_DEV_SYSTEM_PORT || '5432', 10),
+      database: process.env.DB_DEV_SYSTEM_DATABASE || 'intake24_system_dev',
+      username: process.env.DB_DEV_SYSTEM_USERNAME || 'intake24',
+      password: process.env.DB_DEV_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_DEV_SYSTEM_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_DEV_SYSTEM_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+  },
+  test: {
+    foods: {
+      host: process.env.DB_TEST_FOODS_HOST || 'localhost',
+      port: parseInt(process.env.DB_TEST_FOODS_PORT || '5432', 10),
+      database: process.env.DB_TEST_FOODS_DATABASE || 'intake24_foods_test',
+      username: process.env.DB_TEST_FOODS_USERNAME || 'intake24',
+      password: process.env.DB_TEST_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_TEST_FOODS_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_TEST_FOODS_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_TEST_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+    system: {
+      host: process.env.DB_TEST_SYSTEM_HOST || 'localhost',
+      port: parseInt(process.env.DB_TEST_SYSTEM_PORT || '5432', 10),
+      database: process.env.DB_TEST_SYSTEM_DATABASE || 'intake24_system_test',
+      username: process.env.DB_TEST_SYSTEM_USERNAME || 'intake24',
+      password: process.env.DB_TEST_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_TEST_SYSTEM_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_TEST_SYSTEM_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_TEST_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+  },
+  production: {
+    foods: {
+      host: process.env.DB_FOODS_HOST || 'localhost',
+      port: parseInt(process.env.DB_FOODS_PORT || '5432', 10),
+      database: process.env.DB_FOODS_DATABASE || 'intake24_foods',
+      username: process.env.DB_FOODS_USERNAME || 'intake24',
+      password: process.env.DB_FOODS_PASSWORD ?? '',
+      dialect: (process.env.DB_FOODS_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_FOODS_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_FOODS_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+    system: {
+      host: process.env.DB_SYSTEM_HOST || 'localhost',
+      port: parseInt(process.env.DB_SYSTEM_PORT || '5432', 10),
+      database: process.env.DB_SYSTEM_DATABASE || 'intake24_system',
+      username: process.env.DB_SYSTEM_USERNAME || 'intake24',
+      password: process.env.DB_SYSTEM_PASSWORD ?? '',
+      dialect: (process.env.DB_SYSTEM_DRIVER || 'postgres') as Dialect,
+      dialectOptions: dialectOptions[process.env.DB_SYSTEM_DRIVER as OpsDialect],
+      debugQueryLimit: parseInt(process.env.DB_SYSTEM_DEBUG_QUERY_LIMIT || '0', 10),
+    },
+  },
 };
