@@ -1,6 +1,6 @@
 <template>
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" flat :tile="isMobile">
+    <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           {{ $t(`prompts.${type}.typeLabel`) }}

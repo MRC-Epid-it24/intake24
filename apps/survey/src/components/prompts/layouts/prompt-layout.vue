@@ -2,7 +2,7 @@
   <div>
     <v-card v-if="headerText" class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
       <h3>
-        <slot name="prompt-text">{{ headerText }}</slot>
+        <slot name="prompt-text">{{ capitalize(headerText) }}</slot>
       </h3>
     </v-card>
     <v-card :flat="isMobile" :tile="isMobile">
@@ -31,6 +31,7 @@
             :color="item.color"
             :disabled="item.type === 'next' && !isValid"
             large
+            :text="item.type !== 'next'"
             :title="
               Object.keys(item.label).length
                 ? getLocaleContent(item.label)
@@ -50,9 +51,8 @@
       <v-bottom-navigation
         v-if="isMobile"
         app
-        background-color="secondary"
         class="bottom-navigation"
-        dark
+        color="secondary"
         fixed
         grow
         :value="navTab"
@@ -61,7 +61,7 @@
           <template v-for="(item, idx) in mobileActions">
             <v-btn
               :key="item.type"
-              :color="item.color"
+              :color="item.type === 'next' ? 'secondary' : undefined"
               :disabled="item.type === 'next' && !isValid"
               :title="
                 Object.keys(item.label).length
@@ -100,7 +100,7 @@
             </v-btn>
             <v-divider vertical></v-divider>
             <v-btn
-              :color="isValid ? 'success' : 'primary'"
+              :color="isValid ? 'secondary' : 'primary'"
               :disabled="!isValid"
               value="next"
               @click="next"
@@ -120,17 +120,28 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { capitalize } from '@intake24/common/util';
+
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
   name: 'PromptLayout',
 
   mixins: [layoutMixin],
+
+  methods: {
+    capitalize,
+  },
 });
 </script>
 
 <style lang="scss">
 .bottom-navigation .v-btn {
   max-width: unset !important;
+
+  // TODO: Review nav active state
+  &.v-btn--active {
+    color: white !important;
+  }
 }
 </style>

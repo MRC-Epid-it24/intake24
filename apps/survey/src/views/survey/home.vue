@@ -102,14 +102,13 @@
                       {{ $t('recall.continue') }}
                     </v-btn>
                     <confirm-dialog
-                      color="warning"
                       :label="$t('recall.abort.label').toString()"
                       @confirm="abortRecall"
                     >
                       <template #activator="{ on, attrs }">
                         <v-btn
                           v-bind="attrs"
-                          color="warning"
+                          color="secondary"
                           outlined
                           rounded
                           :title="$t('recall.abort.label')"
@@ -125,7 +124,6 @@
                 </v-list-item>
                 <v-list-item v-if="isMobile">
                   <confirm-dialog
-                    color="warning"
                     :label="$t('recall.abort.label').toString()"
                     @confirm="abortRecall"
                   >
@@ -133,7 +131,7 @@
                       <v-btn
                         v-bind="attrs"
                         class="flex-grow-1 mr-2"
-                        color="warning"
+                        color="secondary"
                         large
                         outlined
                         rounded

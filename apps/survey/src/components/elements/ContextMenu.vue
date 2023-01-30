@@ -14,12 +14,11 @@
           <v-list-item-content v-else>
             <v-list-item-title>
               <confirm-dialog
-                color="error"
                 :label="$t('prompts.editMeal.delete._', { item: entityName }).toString()"
                 @confirm="action(item.action)"
               >
                 <template #activator="{ on, attrs }">
-                  <v-btn color="error" v-bind="attrs" small text v-on="on">
+                  <v-btn color="secondary" v-bind="attrs" small text v-on="on">
                     {{ $t('prompts.editMeal.delete._', { item: entityName }) }}
                   </v-btn>
                 </template>

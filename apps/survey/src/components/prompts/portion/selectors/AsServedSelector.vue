@@ -56,7 +56,7 @@
     </v-row>
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
-        <v-btn :block="isMobile" color="success" @click="confirm">
+        <v-btn :block="isMobile" color="secondary" @click="confirm">
           {{ $t(`prompts.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -333,7 +333,7 @@ export default defineComponent({
     },
 
     isSelected(idx: number): string {
-      return idx === this.objectIdx ? 'border-info-2' : '';
+      return idx === this.objectIdx ? 'border-secondary-2' : '';
     },
 
     update() {

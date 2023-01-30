@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-list dense flat tile>
+    <v-list dense>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
@@ -26,7 +26,7 @@
     </v-list>
     <v-card-actions>
       <v-hover v-slot="{ hover }">
-        <v-btn block :color="hover ? 'success' : 'inherit'" depressed @click="action('addMeal')">
+        <v-btn block :color="hover ? 'secondary' : 'inherit'" depressed @click="action('addMeal')">
           {{ $t('recall.menu.recall.addMeal') }}
         </v-btn>
       </v-hover>

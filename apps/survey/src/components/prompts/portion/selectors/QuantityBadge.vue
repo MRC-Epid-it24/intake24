@@ -25,7 +25,7 @@ export default defineComponent({
 
   computed: {
     color(): string {
-      return this.valid ? 'success' : 'grey';
+      return this.valid ? 'secondary' : 'grey';
     },
 
     amountWithUnit(): string {

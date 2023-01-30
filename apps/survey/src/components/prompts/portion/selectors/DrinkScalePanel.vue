@@ -36,17 +36,29 @@
     </div>
     <v-row>
       <v-col>
-        <v-btn block :disabled="sliderValue <= sliderMin" @click="updateSlider(-10)">
+        <v-btn
+          block
+          color="secondary"
+          :disabled="sliderValue <= sliderMin"
+          text
+          @click="updateSlider(-10)"
+        >
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn block :disabled="sliderValue >= sliderMax" @click="updateSlider(10)">
+        <v-btn
+          block
+          color="secondary"
+          :disabled="sliderValue >= sliderMax"
+          text
+          @click="updateSlider(10)"
+        >
           {{ $t(`prompts.drinkScale.${type}.more`) }}
         </v-btn>
       </v-col>
       <v-col align="center" cols="12" md="4">
-        <v-btn block color="success" @click="confirm">
+        <v-btn block color="secondary" @click="confirm">
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
         </v-btn>
       </v-col>

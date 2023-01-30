@@ -18,12 +18,11 @@
         {{ $t('recall.contextMenu.changeTime', { name: safeName() }) }}
       </v-btn>
       <confirm-dialog
-        color="error"
         :label="$t('recall.contextMenu.delete', { name: safeName() }).toString()"
         @confirm="onDelete"
       >
         <template #activator="{ on, attrs }">
-          <v-btn block class="px-5" color="error" large v-bind="attrs" v-on="on">
+          <v-btn block class="px-5" color="secondary" large text v-bind="attrs" v-on="on">
             {{ $t('recall.contextMenu.delete', { name: safeName() }) }}
           </v-btn>
         </template>

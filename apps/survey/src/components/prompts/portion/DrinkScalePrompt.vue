@@ -1,7 +1,6 @@
 <template>
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" flat :tile="isMobile">
-      <!-- Step 0: Select Volume to measure estimated portion-->
+    <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`prompts.${type}.container`">
@@ -28,7 +27,6 @@
           ></image-map-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <!-- Step 1: Select Serving Weight ml-->
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header disable-icon-rotate>
           <i18n :path="`prompts.${type}.serving.header`">
@@ -75,7 +73,6 @@
             ></valid-invalid-icon>
           </template>
         </v-expansion-panel-header>
-        <!-- Step 2: Select Leftovers-->
         <v-expansion-panel-content>
           <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
           <template v-if="leftoversPrompt">

@@ -1,22 +1,24 @@
 <template>
-  <v-toolbar class="mb-4">
-    <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" :items="items">
-      <template #divider>
-        <v-icon x-small>fa-chevron-right</v-icon>
-      </template>
-    </v-breadcrumbs>
-    <v-spacer v-if="!isNotDesktop"></v-spacer>
-    <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
-      <template #activator="{ attrs, on }">
-        <v-btn v-bind="attrs" class="mr-2" color="error" outlined v-on="on">
-          <v-icon left>fas fa-times</v-icon>
-          <span>Reset</span>
-        </v-btn>
-      </template>
-      Reset survey state
-    </confirm-dialog>
-    <request-help :survey-id="$route.params.surveyId"></request-help>
-  </v-toolbar>
+  <v-card class="mb-4">
+    <v-toolbar class="elevation-0">
+      <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" :items="items">
+        <template #divider>
+          <v-icon x-small>fa-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+      <v-spacer v-if="!isNotDesktop"></v-spacer>
+      <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
+        <template #activator="{ attrs, on }">
+          <v-btn v-bind="attrs" class="mr-2" color="error" outlined v-on="on">
+            <v-icon left>fas fa-times</v-icon>
+            <span>Reset</span>
+          </v-btn>
+        </template>
+        Reset survey state
+      </confirm-dialog>
+      <request-help :survey-id="$route.params.surveyId"></request-help>
+    </v-toolbar>
+  </v-card>
 </template>
 
 <script lang="ts">

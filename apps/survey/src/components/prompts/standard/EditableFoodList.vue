@@ -23,7 +23,7 @@
       </v-col>
       <v-col v-if="!isMobile" cols="4">
         <v-btn
-          color="success"
+          color="secondary"
           :disabled="!newFoodDescription.length"
           elevation="2"
           x-large

@@ -34,12 +34,12 @@
           </PinchScrollZoom>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" color="success" @click="confirm">
+          <v-btn :block="isMobile" color="secondary" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" @click="resetScale">
+          <v-btn :block="isMobile" color="secondary" text @click="resetScale">
             {{ $t('common.action.reset') }}
           </v-btn>
         </v-col>

@@ -41,7 +41,7 @@
           </span>
         </div>
         <div class="pa-3">
-          <v-btn block color="success" @click="updateConfirm(true)">
+          <v-btn block color="secondary" @click="updateConfirm(true)">
             {{ $t('prompts.quantity.confirm') }}
           </v-btn>
         </div>

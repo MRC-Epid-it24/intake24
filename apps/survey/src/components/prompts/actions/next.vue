@@ -24,7 +24,7 @@ export default defineComponent({
   props: {
     color: {
       type: String,
-      default: 'success',
+      default: 'secondary',
     },
     disabled: {
       type: Boolean,

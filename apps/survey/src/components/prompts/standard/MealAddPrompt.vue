@@ -23,9 +23,9 @@
       <v-btn
         :block="isMobile"
         class="px-4"
-        color="error"
+        color="secondary"
         large
-        outlined
+        text
         :title="$t(`prompts.${type}.no`)"
         @click.stop="action('cancel')"
       >
@@ -35,7 +35,7 @@
       <v-btn
         :block="isMobile"
         class="px-4"
-        color="success"
+        color="secondary"
         :disabled="!isValid"
         large
         :title="$t(`prompts.${type}.yes`)"
@@ -52,9 +52,8 @@
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
       <v-btn
-        color="success"
+        color="secondary"
         :disabled="!isValid"
         :title="$t(`prompts.${type}.yes`)"
         value="next"

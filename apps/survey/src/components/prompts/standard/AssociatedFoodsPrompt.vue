@@ -1,6 +1,11 @@
 <template>
   <portion-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-expansion-panels v-model="activePrompt" flat :tile="isMobile" @change="updatePrompts">
+    <v-expansion-panels
+      v-model="activePrompt"
+      :flat="isMobile"
+      :tile="isMobile"
+      @change="updatePrompts"
+    >
       <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
         <v-expansion-panel-header disable-icon-rotate>
           {{ associatedFoodPrompts[index].promptText }}

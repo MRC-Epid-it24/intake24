@@ -11,14 +11,21 @@
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
     </v-form>
     <template #actions>
-      <v-btn :block="isMobile" class="px-4" large @click.stop="action('cancel')">
+      <v-btn
+        :block="isMobile"
+        class="px-4"
+        color="secondary"
+        large
+        text
+        @click.stop="action('cancel')"
+      >
         {{ $t(`prompts.${type}.no`, { meal: localMealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
         class="px-4"
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="success"
+        color="secondary"
         large
         @click.stop="action('next')"
       >
@@ -33,7 +40,7 @@
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
+      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.confirm') }}
         </span>

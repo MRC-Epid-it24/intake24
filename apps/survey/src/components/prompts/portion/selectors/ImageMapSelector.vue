@@ -61,7 +61,7 @@
       </div>
     </v-col>
     <v-col v-if="isMobile" cols="12" sm="auto">
-      <v-btn :block="isMobile" color="success" :disabled="isDisabled" @click="confirm">
+      <v-btn :block="isMobile" color="secondary" :disabled="isDisabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
     </v-col>
@@ -253,10 +253,10 @@ export default defineComponent({
 
       &.active,
       &:hover {
-        fill: #0d47a1;
-        fill-opacity: 0.4;
+        //fill: #0d47a1;
+        //fill-opacity: 0.4;
         stroke-width: 8;
-        stroke: #0d47a1;
+        stroke: #ff9100;
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-opacity: 0.5;

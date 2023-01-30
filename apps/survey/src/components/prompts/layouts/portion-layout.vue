@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="px-5 py-4 mb-4" flat :tile="isMobile">
+    <v-card class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
       <h3>
         <slot name="prompt-text">{{ localeText }}</slot>
       </h3>
@@ -42,9 +42,8 @@
     <v-bottom-navigation
       v-if="isMobile"
       app
-      background-color="secondary"
       class="bottom-navigation"
-      dark
+      color="secondary"
       fixed
       grow
       :value="navTab"
@@ -53,7 +52,7 @@
         <template v-for="(item, idx) in mobileActions">
           <v-btn
             :key="item.type"
-            :color="item.color"
+            :color="item.type === 'next' ? 'secondary' : undefined"
             :disabled="item.type === 'next' && !isValid"
             :title="
               Object.keys(item.label).length
@@ -92,7 +91,7 @@
           </v-btn>
           <v-divider vertical></v-divider>
           <v-btn
-            :color="isValid ? 'success' : 'primary'"
+            :color="isValid ? 'secondary' : 'primary'"
             :disabled="!isValid"
             value="next"
             @click="next"
@@ -130,8 +129,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.bottom-navigation .v-btn {
-  max-width: unset !important;
-}
-</style>
+<style lang="scss"></style>

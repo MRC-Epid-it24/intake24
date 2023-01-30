@@ -18,7 +18,7 @@
                   </template>
                 </v-img>
                 <v-card-actions class="d-flex justify-end">
-                  <v-chip class="font-weight-medium px-4" rounded>
+                  <v-chip class="font-weight-medium px-4" color="orange lighten-5">
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
                 </v-card-actions>

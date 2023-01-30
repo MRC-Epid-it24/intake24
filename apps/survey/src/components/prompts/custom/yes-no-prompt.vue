@@ -4,14 +4,14 @@
       <yes-no-toggle v-model="currentValue" @change="update"></yes-no-toggle>
     </template>
     <template #nav-actions>
-      <v-btn value="no">
-        <span class="text-overline font-weight-medium" @click.stop="setValue(false)">
+      <v-btn value="no" @click.stop="setValue(false)">
+        <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="success" value="yes" @click.stop="setValue(true)">
+      <v-btn value="yes" @click.stop="setValue(true)">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>

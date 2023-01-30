@@ -3,7 +3,6 @@
     <template #actions>
       <confirm-dialog
         v-if="food"
-        color="error"
         :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
         @confirm="action('deleteFood', food?.id)"
       >
@@ -11,8 +10,9 @@
           <v-btn
             :block="isMobile"
             class="px-4"
-            color="error"
+            color="secondary"
             large
+            text
             :title="$t('recall.actions.deleteFood')"
             v-bind="attrs"
             v-on="on"
@@ -25,7 +25,6 @@
       </confirm-dialog>
       <template v-if="meal">
         <confirm-dialog
-          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
@@ -33,8 +32,9 @@
             <v-btn
               :block="isMobile"
               class="px-4"
-              color="error"
+              color="secondary"
               large
+              text
               :title="$t('recall.actions.deleteMeal')"
               v-bind="attrs"
               v-on="on"
@@ -48,7 +48,9 @@
         <v-btn
           :block="isMobile"
           class="px-4"
+          color="secondary"
           large
+          text
           :title="$t('recall.actions.editMeal')"
           @click.stop="action('editMeal', meal?.id)"
         >
@@ -61,7 +63,6 @@
     <template #nav-actions>
       <template v-if="food">
         <confirm-dialog
-          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
           @confirm="action('deleteFood', food?.id)"
         >
@@ -79,7 +80,6 @@
       </template>
       <template v-if="meal">
         <confirm-dialog
-          color="error"
           :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >

@@ -5,6 +5,10 @@
     border: 1px solid map-get($blue-grey, 'darken-4') !important;
 }
 
+.border-secondary-2 {
+    border: 2px solid map-get($orange, 'darken-3') !important;
+}
+
 .border-info-2 {
     border: 2px solid map-get($blue, 'darken-3') !important;
 }
