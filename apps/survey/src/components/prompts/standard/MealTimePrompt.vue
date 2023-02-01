@@ -4,7 +4,7 @@
       <v-time-picker
         :format="prompt.format"
         full-width
-        :landscape="!isMobile"
+        :landscape="$vuetify.breakpoint.smAndUp"
         :value="currentTime"
         @input="update"
       ></v-time-picker>

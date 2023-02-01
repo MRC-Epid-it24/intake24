@@ -60,22 +60,22 @@
         <v-spacer></v-spacer>
         <v-btn
           v-if="surveyId"
-          :icon="isNotDesktop"
-          :large="isNotDesktop"
-          :text="!isNotDesktop"
+          :icon="isMobile"
+          :large="isMobile"
+          :text="!isMobile"
           :to="{ name: 'survey-profile', params: { surveyId } }"
         >
-          <span v-if="!isNotDesktop" class="mr-2">{{ $t('profile._') }}</span>
+          <span v-if="!isMobile" class="mr-2">{{ $t('profile._') }}</span>
           <v-icon>$profile</v-icon>
         </v-btn>
         <confirm-dialog
-          v-if="!isNotDesktop"
+          v-if="!isMobile"
           :label="$t('common.logout._').toString()"
           @confirm="logout"
         >
           <template #activator="{ attrs, on }">
             <v-btn text v-bind="attrs" v-on="on">
-              <span v-if="!isNotDesktop" class="mr-2">{{ $t('common.logout._') }}</span>
+              <span v-if="!isMobile" class="mr-2">{{ $t('common.logout._') }}</span>
               <v-icon right>$logout</v-icon>
             </v-btn>
           </template>

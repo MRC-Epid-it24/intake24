@@ -19,7 +19,7 @@
         <span class="alert-text"> Alert text placeholder </span>
       </v-alert>
     </transition>
-    <v-col class="content mt-0 pa-0" cols="12" lg="9">
+    <v-col class="pa-0" cols="12">
       <transition mode="out-in" name="component-fade">
         <component
           :is="handlerComponent"

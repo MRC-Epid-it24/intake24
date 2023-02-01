@@ -14,14 +14,14 @@
           @focusout="onEditFocusLost"
           @keypress.enter.stop="addFood"
         >
-          <template v-if="isMobile" #append>
+          <template v-if="$vuetify.breakpoint.xs" #append>
             <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
               fa-arrow-turn-down
             </v-icon>
           </template>
         </v-text-field>
       </v-col>
-      <v-col v-if="!isMobile" cols="4">
+      <v-col v-if="$vuetify.breakpoint.smAndUp" cols="4">
         <v-btn
           color="secondary"
           :disabled="!newFoodDescription.length"

@@ -1,12 +1,12 @@
 <template>
   <v-card class="mb-4">
-    <v-toolbar class="elevation-0">
-      <v-breadcrumbs v-if="!isNotDesktop" class="pl-0" :items="items">
+    <v-toolbar flat>
+      <v-breadcrumbs v-if="!isMobile" class="pl-0" :items="items">
         <template #divider>
           <v-icon x-small>fa-chevron-right</v-icon>
         </template>
       </v-breadcrumbs>
-      <v-spacer v-if="!isNotDesktop"></v-spacer>
+      <v-spacer v-if="!isMobile"></v-spacer>
       <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
         <template #activator="{ attrs, on }">
           <v-btn v-bind="attrs" class="mr-2" color="error" outlined v-on="on">

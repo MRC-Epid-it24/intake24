@@ -1,5 +1,5 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }">
+  <v-container :class="{ 'pa-0': isMobile }" :fluid="isMobile">
     <component :is="layout"></component>
   </v-container>
 </template>
@@ -21,7 +21,7 @@ export default defineComponent({
 
   computed: {
     layout(): string {
-      return this.isNotDesktop ? 'recall-mobile' : 'recall-desktop';
+      return this.isMobile ? 'recall-mobile' : 'recall-desktop';
     },
   },
 });

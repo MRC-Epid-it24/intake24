@@ -56,7 +56,7 @@
               <template #activator="{ attrs, on }">
                 <v-btn
                   v-bind="attrs"
-                  :block="isNotDesktop"
+                  :block="isMobile"
                   class="px-10"
                   color="secondary"
                   outlined

@@ -5,7 +5,7 @@
         v-model="currentValue"
         :format="prompt.format"
         full-width
-        :landscape="!isMobile"
+        :landscape="$vuetify.breakpoint.smAndUp"
         @input="update"
       ></v-time-picker>
       <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>

@@ -1,6 +1,6 @@
 <template>
-  <v-row class="pt-2" justify="center" :no-gutters="isNotDesktop">
-    <v-col v-if="showMealList && surveyName" cols="3" height="45rem" lg="3" min-height="30rem">
+  <v-row class="pt-2" justify="center" :no-gutters="isMobile">
+    <v-col v-if="showMealList && surveyName" cols="3">
       <meal-list
         :meals="meals"
         :survey-name="surveyName"
@@ -11,10 +11,9 @@
       >
       </meal-list>
     </v-col>
-
-    <v-col class="content mt-0" cols="12" lg="9">
+    <v-col cols="12" lg="9">
       <recall-bread-crumbs
-        v-if="showMealList && promptName"
+        v-if="promptName"
         :prompt-name="promptName"
         @restart="restart"
       ></recall-bread-crumbs>

@@ -9,7 +9,6 @@ declare module 'vue/types/vue' {
 
     // platform mixin
     isMobile: boolean;
-    isNotDesktop: boolean;
   }
 }
 
