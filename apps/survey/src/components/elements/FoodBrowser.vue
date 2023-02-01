@@ -22,12 +22,12 @@
         <v-progress-circular indeterminate></v-progress-circular>
       </v-container>
 
-      <CategoryContentsView
+      <category-contents-view
         v-if="currentCategoryContents && !requestInProgress"
         :contents="currentCategoryContents"
         @category-selected="onCategorySelected"
         @food-selected="onFoodSelected"
-      ></CategoryContentsView>
+      ></category-contents-view>
     </v-col>
   </v-row>
 </template>
@@ -90,7 +90,6 @@ export default defineComponent({
     },
 
     onCategorySelected(category: CategoryHeader): void {
-      this.currentCategory = category;
       this.browseCategory(category.code);
     },
 

@@ -235,14 +235,17 @@ export default defineComponent({
   },
 
   created() {
+    //@ts-expect-error debounced
     this.debouncedImgResize = debounce(() => {
       this.updateSvgDimensions();
     }, 500);
 
+    //@ts-expect-error debounced
     this.debouncedImageMapObjects = debounce(() => {
       this.$emit('image-map-objects', this.imageMapObjects);
     }, 200);
 
+    //@ts-expect-error debounced
     this.debouncedGuideImageObjects = debounce(() => {
       this.$emit('guide-image-objects', this.guideImageObjects);
     }, 200);

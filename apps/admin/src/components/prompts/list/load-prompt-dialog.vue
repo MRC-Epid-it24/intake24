@@ -148,6 +148,7 @@ export default defineComponent({
   },
 
   created() {
+    //@ts-expect-error fix debounced types
     this.debouncedFetch = debounce(() => {
       this.fetch();
     }, 500);

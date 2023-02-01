@@ -33,7 +33,7 @@
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.phone') }}</v-list-item-title>
             <v-list-item-subtitle>
-              {{ profile.phone || $t('common.not.provided') }}
+              {{ profile.phone ?? $t('common.not.provided') }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

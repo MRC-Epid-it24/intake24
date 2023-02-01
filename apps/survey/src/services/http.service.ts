@@ -59,11 +59,7 @@ const httpClient: HttpClient = {
     this.axios.interceptors.request.use((request) => {
       const { accessToken } = useAuth();
 
-      if (accessToken) {
-        const { headers = {} } = request;
-        // eslint-disable-next-line no-param-reassign
-        request.headers = { ...headers, Authorization: `Bearer ${accessToken}` };
-      }
+      if (accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
 
       return request;
     });

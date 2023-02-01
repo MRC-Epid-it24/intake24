@@ -9,10 +9,10 @@
       <v-card-title>{{ $t('locales.food-ranking.description') }} </v-card-title>
       <v-card-actions>
         <csv-upload
-          :dialog-title="$t('locales.food-ranking.upload')"
+          :dialog-title="$t('locales.food-ranking.upload').toString()"
           :endpoint="endpoint"
-          :job-type="FoodRankingCsvUpload"
-          :label="$t('locales.food-ranking.upload')"
+          job-type="FoodRankingCsvUpload"
+          :label="$t('locales.food-ranking.upload').toString()"
           :survey-id="id"
         ></csv-upload>
       </v-card-actions>

@@ -15,7 +15,7 @@
           color="error"
           icon
           icon-left="$delete"
-          :label="$t('common.action.delete')"
+          :label="$t('common.action.delete').toString()"
           @confirm="remove(item.id)"
         >
           {{ $t('common.action.confirm.delete', { name: item.id }) }}

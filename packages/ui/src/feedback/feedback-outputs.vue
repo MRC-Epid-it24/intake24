@@ -238,7 +238,7 @@ export default defineComponent({
           const { response: { status, headers = {} } = {} } = err;
 
           if (status === 429)
-            this.setFeedbackInterval(parseInt(headers['ratelimit-reset'] ?? '60', 10));
+            this.setFeedbackInterval(parseInt(headers['ratelimit-reset']?.toString() ?? '60', 10));
         }
       } finally {
         loading.removeItem('feedback-download');
@@ -269,7 +269,7 @@ export default defineComponent({
           if (status === 422 && 'errors' in data) this.email.errors.record(data.errors);
 
           if (status === 429)
-            this.setFeedbackInterval(parseInt(headers['ratelimit-reset'] ?? '60', 10));
+            this.setFeedbackInterval(parseInt(headers['ratelimit-reset']?.toString() ?? '60', 10));
         }
       } finally {
         loading.removeItem('feedback-email');

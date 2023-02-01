@@ -66,6 +66,7 @@ export default defineComponent({
     },
 
     confirm() {
+      //@ts-expect-error - not typed vuetify component
       const isValid = this.form?.validate();
       return isValid;
     },

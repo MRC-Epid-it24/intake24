@@ -147,6 +147,7 @@ export default defineComponent({
   },
 
   created() {
+    //@ts-expect-error fix debounced types
     this.debouncedUpdateColorList = debounce(() => {
       this.updateColorList();
     }, 300);

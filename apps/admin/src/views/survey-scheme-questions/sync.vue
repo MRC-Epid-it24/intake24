@@ -39,7 +39,7 @@
             color="warning"
             icon
             icon-left="fa-sync"
-            :label="$t('survey-scheme-questions.sync.synchronize')"
+            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
             @confirm="sync(scheme)"
           >
             <template #activator="{ attrs, on }">

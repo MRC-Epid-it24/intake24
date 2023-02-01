@@ -25,7 +25,7 @@
                   color="error"
                   icon
                   icon-left="$delete"
-                  :label="$t('as-served-sets.images.delete')"
+                  :label="$t('as-served-sets.images.delete').toString()"
                   @confirm="removeImage(image.id)"
                 >
                   {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
