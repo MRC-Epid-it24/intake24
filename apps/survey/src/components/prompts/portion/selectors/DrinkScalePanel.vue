@@ -263,6 +263,47 @@ export default defineComponent({
     position: absolute;
     right: 0;
     z-index: 1;
+
+    .v-slider {
+      height: 100%;
+
+      .v-slider__track-container {
+        cursor: pointer;
+        width: 20px;
+      }
+
+      .v-slider__thumb-container {
+        cursor: pointer;
+
+        .v-slider__thumb {
+          height: 36px;
+          width: 36px;
+          left: -18px;
+        }
+
+        .v-slider__thumb::before {
+          height: 50px;
+          width: 50px;
+          top: -8px;
+          left: -8px;
+        }
+
+        &:hover,
+        &.v-slider__thumb-container--active,
+        &.v-slider__thumb-container--focused {
+          .v-slider__thumb::before {
+            height: 60px;
+            width: 60px;
+            top: -12px;
+            left: -12px;
+          }
+        }
+      }
+    }
+
+    .v-slider--vertical {
+      min-height: unset;
+    }
   }
 
   .drink-scale-image-label {
@@ -270,47 +311,6 @@ export default defineComponent({
     bottom: 0;
     right: 0;
     z-index: 1;
-  }
-
-  .v-slider {
-    height: 100%;
-
-    .v-slider__track-container {
-      cursor: pointer;
-      width: 20px;
-    }
-
-    .v-slider__thumb-container {
-      cursor: pointer;
-
-      .v-slider__thumb {
-        height: 36px;
-        width: 36px;
-        left: -18px;
-      }
-
-      .v-slider__thumb::before {
-        height: 50px;
-        width: 50px;
-        top: -8px;
-        left: -8px;
-      }
-
-      &:hover,
-      &.v-slider__thumb-container--active,
-      &.v-slider__thumb-container--focused {
-        .v-slider__thumb::before {
-          height: 60px;
-          width: 60px;
-          top: -12px;
-          left: -12px;
-        }
-      }
-    }
-  }
-
-  .v-slider--vertical {
-    min-height: unset;
   }
 }
 </style>
