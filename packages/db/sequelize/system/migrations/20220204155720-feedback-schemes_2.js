@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const { nanoid } = require('nanoid');
 const { createPermissions } = require('../../utils.js');
+const foodDbConfig = require('../../foods/config.js');
 
 const permissions = [
   {
@@ -575,14 +576,8 @@ module.exports = {
 
       const { QueryTypes } = queryInterface.sequelize;
 
-      const foods = new Sequelize({
-        host: process.env.DB_FOODS_HOST,
-        port: process.env.DB_FOODS_PORT,
-        database: process.env.DB_FOODS_DATABASE,
-        username: process.env.DB_FOODS_USERNAME,
-        password: process.env.DB_FOODS_PASSWORD,
-        dialect: process.env.DB_FOODS_DRIVER,
-      });
+      const env = process.env.NODE_ENV;
+      const foods = new Sequelize(foodDbConfig[env]);
 
       const dbDemographicGroups = await foods.query(
         `SELECT * FROM demographic_groups ORDER BY id;`,
