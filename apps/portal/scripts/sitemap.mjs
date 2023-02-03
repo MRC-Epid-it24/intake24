@@ -1,10 +1,10 @@
 import { resolve } from 'node:path';
+import { Readable } from 'node:stream';
 
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import fs from 'fs-extra';
 import { SitemapStream } from 'sitemap';
-import { Readable } from 'stream';
 
 const env = dotenv.config();
 dotenvExpand.expand(env);

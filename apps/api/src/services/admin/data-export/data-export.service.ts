@@ -1,7 +1,8 @@
+import { Readable } from 'node:stream';
+
+import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
-import { Transform } from 'json2csv';
 import { groupBy } from 'lodash';
-import { Readable } from 'stream';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportSection } from '@intake24/common/schemes';
@@ -150,7 +151,10 @@ const dataExportService = ({
         const groupedMissingFoods = groupBy(missingFoods, 'mealId');
 
         for (const [id, records] of Object.entries(groupedFoods)) {
-          inputStream.push(JSON.stringify([...records, ...(groupedMissingFoods[id] ?? [])]));
+          records.forEach((record) => inputStream.push(record));
+
+          if (groupedMissingFoods[id]?.length)
+            groupedMissingFoods[id].forEach((missingFood) => inputStream.push(missingFood));
         }
       }
 
@@ -167,11 +171,10 @@ const dataExportService = ({
    * @returns {Readable}
    */
   const getSubmissionsWithStream = (options: SubmissionFindOptions): Readable => {
-    const inputStream = new Readable({
-      // objectMode: true,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      read() {},
-    });
+    const inputStream = new Readable({ objectMode: true });
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    inputStream._read = () => {};
+
     performSubmissionsSearch(inputStream, options);
 
     return inputStream;
@@ -244,7 +247,10 @@ const dataExportService = ({
     const { options, fields, filename } = await prepareExportInfo(input);
 
     const foods = SurveySubmissionFood.findAllWithStream(options.foods);
-    const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
+    const transform = new Transform(
+      { fields, defaultValue: EMPTY, withBOM: true },
+      { objectMode: true }
+    );
 
     foods.on('error', (err) => {
       throw err;

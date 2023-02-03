@@ -1,9 +1,10 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/ban-types */
+import { Readable } from 'node:stream';
+
 import type { CountOptions, FindOptions } from 'sequelize';
 import { Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
-import { Readable } from 'stream';
 
 import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
 
@@ -150,7 +151,7 @@ export default class Model<
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
         });
-        inputStream.push(JSON.stringify(items));
+        items.forEach((item) => inputStream.push(item));
       }
 
       inputStream.push(null);
@@ -176,11 +177,9 @@ export default class Model<
     // TODO: fix with sequelize types
     const model = this as BaseModelCtor<M>;
 
-    const inputStream = new Readable({
-      // objectMode: true,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      read() {},
-    });
+    const inputStream = new Readable({ objectMode: true });
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    inputStream._read = () => {};
     model.performSearch(inputStream, options);
 
     return inputStream;

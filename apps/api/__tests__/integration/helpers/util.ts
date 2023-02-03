@@ -2,9 +2,9 @@ import path from 'node:path';
 
 import type { ReadStream } from 'fs-extra';
 import { faker } from '@faker-js/faker';
+import { AsyncParser } from '@json2csv/node';
 import axios from 'axios';
 import fs from 'fs-extra';
-import { Parser } from 'json2csv';
 import { times } from 'lodash';
 
 import type { SecurableType } from '@intake24/common/security';
@@ -118,9 +118,7 @@ export const generateCSV = async (filename: string): Promise<string> => {
     phone: faker.phone.number(),
   }));
 
-  const json2csvParser = new Parser({ fields });
-  const csv = json2csvParser.parse(data);
-
+  const csv = await new AsyncParser({ fields }).parse(data).promise();
   await fs.writeFile(filePath, csv, { encoding: 'utf-8' });
 
   return filePath;

@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 
-function createWatchers(this: Vue) {
+function createWatchers(this: InstanceType<typeof whyDidYouRender>) {
   // eslint-disable-next-line guard-for-in
   for (const prop in this) {
     this.$watch(prop, (val, old) => {
@@ -11,7 +11,7 @@ function createWatchers(this: Vue) {
   this.$parent && createWatchers.call(this.$parent);
 }
 
-export default defineComponent({
+const whyDidYouRender = defineComponent({
   created() {
     createWatchers.call(this);
   },
@@ -19,3 +19,5 @@ export default defineComponent({
     console.log('[WhyDidYouRender:UPDATED]', this.$options.name);
   },
 });
+
+export default whyDidYouRender;

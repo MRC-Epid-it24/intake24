@@ -1,8 +1,8 @@
 import path from 'node:path';
 
 import type { Job } from 'bullmq';
+import { Transform } from '@json2csv/node';
 import fs from 'fs-extra';
-import { Transform } from 'json2csv';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -78,7 +78,10 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = this.dataExportService.getSubmissionsWithStream(options);
-      const transform = new Transform({ fields, defaultValue: EMPTY, withBOM: true });
+      const transform = new Transform(
+        { fields, defaultValue: EMPTY, withBOM: true },
+        { objectMode: true }
+      );
 
       foods.on('error', (err) => {
         clearInterval(progressInterval);

@@ -71,11 +71,12 @@ const httpClient: HttpClient = {
     this.axios.interceptors.response.use(
       (response) => response,
       async (err: AxiosError) => {
-        const { config = {}, response: { status } = {} } = err;
+        const { config, response: { status } = {} } = err;
         const origRequest = config;
 
         // Exclude non-401s and sign-in 401s (/login/alias and /login/token/:token)
-        if (status !== 401 || config.url?.includes('auth/login')) return Promise.reject(err);
+        if (!origRequest || status !== 401 || config.url?.includes('auth/login'))
+          return Promise.reject(err);
 
         // Refresh token has failed. Logout the user
         if (config.url?.includes('auth/refresh')) {

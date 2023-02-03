@@ -1,10 +1,10 @@
 import path from 'node:path';
 
+import type { FieldInfo } from '@json2csv/node';
 import type { Job } from 'bullmq';
-import type json2csv from 'json2csv';
+import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
 import fs from 'fs-extra';
-import { Transform } from 'json2csv';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -69,7 +69,7 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     const { slug, authUrlDomainOverride } = survey;
     const urlService = surveyUrlService(this.appConfig.urls, slug, authUrlDomainOverride);
 
-    const fields: json2csv.FieldInfo<UserSurveyAlias>[] = [
+    const fields: FieldInfo<UserSurveyAlias>[] = [
       { label: 'UserID', value: 'userId' },
       { label: 'Username', value: 'username' },
       { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
@@ -97,7 +97,7 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     }, 1500);
 
     return new Promise((resolve, reject) => {
-      const transform = new Transform({ fields, withBOM: true });
+      const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
         encoding: 'utf8',
         flags: 'w+',

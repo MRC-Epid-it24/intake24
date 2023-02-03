@@ -1,9 +1,9 @@
 import path from 'node:path';
 
 import type { Job } from 'bullmq';
+import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 import fs from 'fs-extra';
-import { Transform } from 'json2csv';
 import slugify from 'slugify';
 
 import type { IoC } from '@intake24/api/ioc';
