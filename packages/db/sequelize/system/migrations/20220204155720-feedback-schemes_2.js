@@ -580,12 +580,12 @@ module.exports = {
       const foods = new Sequelize(foodDbConfig[env]);
 
       const dbDemographicGroups = await foods.query(
-        `SELECT * FROM demographic_groups ORDER BY id;`,
+        `SELECT * FROM demographic_group ORDER BY id;`,
         { type: QueryTypes.SELECT }
       );
 
       const dbDemographicGroupScaleSectors = await foods.query(
-        `SELECT * FROM demographic_group_scale_sectors;`,
+        `SELECT * FROM demographic_group_scale_sector;`,
         { type: QueryTypes.SELECT }
       );
 
