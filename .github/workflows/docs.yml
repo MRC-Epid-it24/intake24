@@ -6,6 +6,9 @@ on:
     paths:
       - 'docs/**'
 
+permissions:
+  contents: write
+
 jobs:
   docs-deploy:
     name: Deploy

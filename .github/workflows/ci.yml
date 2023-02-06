@@ -12,6 +12,9 @@ on:
       - 'deployment/**'
       - 'docs/**'
 
+permissions:
+  contents: read
+
 env:
   DB_TEST_SYSTEM_DATABASE: it24_system_test
   DB_TEST_SYSTEM_USERNAME: it24
