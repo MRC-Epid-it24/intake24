@@ -174,4 +174,8 @@ export default defineComponent({
 
 <style lang="scss">
 @import './scss/app.scss';
+
+.v-main:has(.bottom-navigation):has(.meal-list-mobile) {
+  padding-bottom: 112px !important;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="sticky_toolbar_card" flat tile>
+  <v-card class="meal-list-mobile" flat tile>
     <v-toolbar bottom class="sticky_toolbar" flat>
       <v-tabs center-active height="56px" icons-and-text slider-size="4" touch :value="activeTab">
         <v-tabs-slider color="success"></v-tabs-slider>
@@ -33,7 +33,7 @@ import { useSurvey } from '@intake24/survey/stores';
 import { fromMealTime, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
 export default defineComponent({
-  name: 'MealListMobileBottom',
+  name: 'MealListMobile',
 
   mixins: [localeContent],
 
@@ -62,7 +62,7 @@ export default defineComponent({
   },
 });
 </script>
-//
+
 <style lang="scss" scoped>
 @import '../../../scss/meallistmobile.scss';
 </style>

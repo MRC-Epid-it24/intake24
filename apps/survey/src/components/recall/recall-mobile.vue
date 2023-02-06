@@ -33,13 +33,13 @@
       </transition>
     </v-col>
 
-    <v-col v-show="showMealList && !hasFinished" class="stickybottom" cols="12">
-      <meal-list-mobile-bottom
-        v-show="meals.length"
-        @meal-selected="onBottomListMealSelected"
-        @recall-action="recallAction"
-      >
-      </meal-list-mobile-bottom>
+    <v-col
+      v-if="showMealList && !hasFinished && meals.length"
+      class="meal-list-mobile__wrap"
+      cols="12"
+    >
+      <meal-list-mobile @meal-selected="onBottomListMealSelected" @recall-action="recallAction">
+      </meal-list-mobile>
     </v-col>
 
     <!-- Context menu for Meal or Food with actions options -->
@@ -70,9 +70,8 @@
 import { defineComponent } from 'vue';
 
 import type { MealAction } from './recall-mixin';
-import { RecallBreadCrumbsMobile } from '../layouts';
+import { MealListMobile, RecallBreadCrumbsMobile } from '../layouts';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
-import MealListMobileBottom from './mobile/MealListMobileBottom.vue';
 import MealMobileContextMenu from './mobile/MealMobileContextMenu.vue';
 import recallMixin from './recall-mixin';
 
@@ -80,7 +79,7 @@ export default defineComponent({
   name: 'RecallMobile',
 
   components: {
-    MealListMobileBottom,
+    MealListMobile,
     RecallBreadCrumbsMobile,
     FoodMobileContextMenu,
     MealMobileContextMenu,
@@ -139,4 +138,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.meal-list-mobile__wrap {
+  position: fixed;
+  bottom: 56px;
+  left: 0;
+  width: 100%;
+  z-index: 4;
+}
+</style>
