@@ -8,13 +8,6 @@ export type Application = (typeof applications)[number];
 
 export const isApplication = (app: any): app is Application => applications.includes(app);
 
-export const captchaProviders = ['h-captcha', 're-captcha'] as const;
-
-export type CaptchaProvider = (typeof captchaProviders)[number];
-
-export const isCaptchaProvider = (provider: any): provider is CaptchaProvider =>
-  captchaProviders.includes(provider);
-
 export type CustomField = {
   name: string;
   value: string;

@@ -1,5 +1,5 @@
-import type { CaptchaProvider } from '@intake24/common/types';
-import { isCaptchaProvider } from '@intake24/common/types';
+import type { CaptchaProvider } from '@intake24/common/security';
+import { isCaptchaProvider } from '@intake24/common/security';
 
 export type Captcha = {
   provider: CaptchaProvider | null;

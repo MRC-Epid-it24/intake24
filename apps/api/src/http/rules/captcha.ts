@@ -3,7 +3,7 @@ import { URLSearchParams } from 'node:url';
 import axios from 'axios';
 
 import type { Captcha } from '@intake24/api/config';
-import type { CaptchaProvider } from '@intake24/common/types';
+import type { CaptchaProvider } from '@intake24/common/security';
 
 export type CaptchaResponse = {
   success: boolean;
@@ -22,12 +22,7 @@ const hCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://hcaptcha.com/siteverify',
       new URLSearchParams({ secret, response }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept-Encoding': 'identity',
-        },
-      }
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
     if (!success) throw new Error();
 
@@ -42,12 +37,7 @@ const reCaptcha: CaptchaCallback = async (secret: string, response: string) => {
     const { data: { success } = {} } = await axios.post<CaptchaResponse>(
       'https://www.google.com/recaptcha/api/siteverify',
       new URLSearchParams({ secret, response }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept-Encoding': 'identity',
-        },
-      }
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
     if (!success) throw new Error();
 

@@ -9,7 +9,7 @@ import { VitePluginFonts } from 'vite-plugin-fonts';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 
-import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/ui-build';
+import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
 import pkg from './package.json';
 
 // Set build info for application

@@ -36,7 +36,7 @@ import HCaptcha from '@hcaptcha/vue-hcaptcha';
 import { defineComponent, ref } from 'vue';
 import ReCaptcha from 'vue-recaptcha';
 
-import type { CaptchaProvider } from '@intake24/common/types';
+import type { CaptchaProvider } from '@intake24/common/security';
 
 export default defineComponent({
   name: 'Captcha',
