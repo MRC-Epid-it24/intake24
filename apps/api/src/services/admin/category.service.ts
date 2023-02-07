@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { CategoryInput, CategoryListEntry } from '@intake24/common/types/http/admin';
 import type {
+  CategoryAttributes,
   CategoryLocalAttributes,
   CategoryPortionSizeMethodUpdateAttributes,
   PortionSizeMethodParameterUpdateAttributes,
@@ -44,6 +45,24 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
       transform: categoryResponse,
       ...options,
     });
+  };
+
+  const browseMainCategories = async (query: PaginateQuery) => {
+    const options: FindOptions<CategoryAttributes> = {};
+    const { search } = query;
+
+    if (search) {
+      const op =
+        Category.sequelize?.getDialect() === 'postgres'
+          ? { [Op.iLike]: `%${search}%` }
+          : { [Op.substring]: search };
+
+      const ops = ['name'].map((column) => ({ [column]: op }));
+
+      options.where = { ...options.where, [Op.or]: ops };
+    }
+
+    return Category.paginate({ query, ...options });
   };
 
   const getRootCategories = async (localeId: string) => {
@@ -340,6 +359,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
 
   return {
     browseCategories,
+    browseMainCategories,
     getRootCategories,
     getNoCategoryContents,
     getCategoryContents,

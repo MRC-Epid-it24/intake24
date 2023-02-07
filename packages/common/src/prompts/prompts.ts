@@ -120,6 +120,7 @@ export type Prompts = {
   // Portion size
   'as-served-prompt': BasePrompt & {
     leftovers: boolean;
+    linkedQuantityCategories: string[];
   };
   'cereal-prompt': BasePrompt & {
     imageMap: ImageMap;

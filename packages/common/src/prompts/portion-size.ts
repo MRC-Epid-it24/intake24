@@ -15,6 +15,7 @@ export const asServedPrompt: Prompts['as-served-prompt'] = copy({
   id: 'as-served-prompt',
   name: 'As served',
   leftovers: true,
+  linkedQuantityCategories: ['BREAD'],
 });
 
 export const cerealPrompt: Prompts['cereal-prompt'] = copy({

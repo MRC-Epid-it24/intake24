@@ -31,6 +31,8 @@ export type CategoryListEntry = {
 
 export type CategoriesResponse = Pagination<CategoryListEntry>;
 
+export type MainCategoriesResponse = Pagination<CategoryAttributes>;
+
 export type RootCategoriesResponse = CategoryListEntry[];
 
 export type CategoryContentsResponse = {

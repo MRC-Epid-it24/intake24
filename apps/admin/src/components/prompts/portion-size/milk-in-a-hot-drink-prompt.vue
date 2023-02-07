@@ -37,7 +37,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, LocaleOptionList } from '@intake24/common/prompts';
+import type { ListOption, Prompts } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
 import { basePrompt } from '../partials';
@@ -52,11 +52,11 @@ export default defineComponent({
 
   props: {
     options: {
-      type: Object as PropType<LocaleOptionList>,
+      type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']['options']>,
       required: true,
     },
     orientation: {
-      type: String,
+      type: String as PropType<Prompts['milk-in-a-hot-drink-prompt']['orientation']>,
       default: 'column',
     },
   },

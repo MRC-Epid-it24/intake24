@@ -1,3 +1,4 @@
+export * from './add-category-dialog.vue';
 export { default as AddCategoryDialog } from './add-category-dialog.vue';
 export { default as AddNutrientDialog } from './add-nutrient-dialog.vue';
 export { default as AttributeList } from './attribute-list.vue';

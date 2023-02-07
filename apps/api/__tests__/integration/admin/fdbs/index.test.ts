@@ -1,11 +1,14 @@
-/* import fdbs from './fdbs.test';
-import categories from './categories.test';
-import foods from './foods.test'; */
+import browse from './browse.test';
+import read from './read.test';
+import refs from './refs.test';
 
 export default () => {
+  describe('GET /api/admin/fdbs', browse);
+  describe('GET /api/admin/fdbs/:localeId', read);
+  describe('GET /api/admin/fdbs/refs', refs);
+
   /*
-  describe('GET /api/admin/fdbs', fdbs.browse);
-  describe('GET /api/admin/fdbs/:localeId', fdbs.read);
+  TODO: Implement tests for foods & categories
 
   describe('GET /api/admin/fdbs/:localeId/categories', categories.browse);
   describe('POST /api/admin/fdbs/:localeId/categories', categories.store);

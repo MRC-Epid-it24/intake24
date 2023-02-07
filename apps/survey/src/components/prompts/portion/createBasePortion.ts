@@ -10,8 +10,6 @@ import { promptType } from '@intake24/survey/util';
 import { Next } from '../actions';
 import { PortionLayout, PromptLayout } from '../layouts';
 
-export const CATEGORY_BREAD_TOP_LEVEL = 'BRED';
-
 export default <P extends keyof Prompts, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
@@ -72,10 +70,18 @@ export default <P extends keyof Prompts, S extends object>() =>
 
       promptForLinkedQuantity(): boolean {
         const { parentFood } = this;
-        if (!parentFood || !parentFood.portionSize) return false;
+        if (
+          !parentFood ||
+          !parentFood.portionSize ||
+          (this.prompt as Prompt).component !== 'as-served-prompt' ||
+          !(this.prompt as Prompts['as-served-prompt']).linkedQuantityCategories.length
+        )
+          return false;
 
         return (
-          parentFood.data.categories.includes(CATEGORY_BREAD_TOP_LEVEL) &&
+          parentFood.data.categories.some((cat) =>
+            (this.prompt as Prompts['as-served-prompt']).linkedQuantityCategories.includes(cat)
+          ) &&
           parentFood.portionSize.method === 'guide-image' &&
           parentFood.portionSize.quantity > 1
         );

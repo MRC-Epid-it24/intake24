@@ -2,7 +2,9 @@
   <v-card outlined>
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t('fdbs.categories.title') }}
+        <slot name="title">
+          {{ $t('fdbs.categories.title') }}
+        </slot>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <add-category-dialog
@@ -44,10 +46,10 @@ import type { PropType } from 'vue';
 import isEqual from 'lodash/isEqual';
 import { defineComponent } from 'vue';
 
-import type { CategoryAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
+import type { CategoryListItem } from '.';
 import { AddCategoryDialog } from '.';
 
 export default defineComponent({
@@ -62,14 +64,12 @@ export default defineComponent({
     },
     errors: {
       type: Object as PropType<Errors>,
-      required: true,
     },
     localeId: {
       type: String,
-      required: true,
     },
     value: {
-      type: Array as PropType<CategoryAttributes[]>,
+      type: Array as PropType<CategoryListItem[]>,
       required: true,
     },
   },
@@ -83,25 +83,26 @@ export default defineComponent({
   },
 
   watch: {
-    value(val: CategoryAttributes[]) {
+    value(val: CategoryListItem[]) {
       if (isEqual(val, this.items)) return;
 
       this.items = [...val];
     },
-    items(val: CategoryAttributes[]) {
-      if (isEqual(val, this.value)) return;
-
-      this.$emit('input', [...val]);
-    },
   },
 
   methods: {
-    add(items: CategoryAttributes[]) {
+    add(items: CategoryListItem[]) {
       this.items.push(...items);
+      this.update();
     },
 
     remove(code: string) {
       this.items = this.items.filter((item) => item.code !== code);
+      this.update();
+    },
+
+    update() {
+      this.$emit('input', this.items);
     },
   },
 });

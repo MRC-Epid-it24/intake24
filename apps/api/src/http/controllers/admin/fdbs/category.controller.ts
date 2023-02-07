@@ -6,6 +6,7 @@ import type {
   CategoriesResponse,
   CategoryContentsResponse,
   CategoryLocalEntry,
+  MainCategoriesResponse,
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
@@ -28,6 +29,17 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
 
     const categories = await adminCategoryService.browseCategories(
       code,
+      pick(req.query, ['page', 'limit', 'sort', 'search'])
+    );
+
+    res.json(categories);
+  };
+
+  const browseMain = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<MainCategoriesResponse>
+  ): Promise<void> => {
+    const categories = await adminCategoryService.browseMainCategories(
       pick(req.query, ['page', 'limit', 'sort', 'search'])
     );
 
@@ -119,6 +131,7 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
 
   return {
     browse,
+    browseMain,
     store,
     read,
     update,

@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { authenticate, isAccountVerified } from '@intake24/api/http/middleware';
 
 import authentication from './authentication';
+import categories from './categories';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import foodGroups from './food-groups';
@@ -42,6 +43,7 @@ export default () => {
   // Authenticated & verified
   router.use(isAccountVerified);
 
+  router.use('/categories', categories());
   router.use('/fdbs', fdbs());
   router.use('/feedback-schemes', feedbackSchemes());
   router.use('/food-groups', foodGroups());

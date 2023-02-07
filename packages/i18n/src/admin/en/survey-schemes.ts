@@ -374,6 +374,7 @@ const surveySchemes: LocaleMessageObject = {
     'as-served-prompt': {
       title: 'As served portion size',
       subtitle: 'Use the "as served" method to estimate the portion size',
+      linkedQuantityCategories: 'Linked quantity categories',
     },
     'cereal-prompt': {
       title: 'Cereal',

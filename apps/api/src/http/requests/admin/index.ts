@@ -1,6 +1,7 @@
 import authentication from './authentication';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
+import foodGroups from './food-groups';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -24,6 +25,7 @@ export default {
   authentication,
   fdbs,
   feedbackSchemes,
+  foodGroups,
   images,
   jobs,
   languages,

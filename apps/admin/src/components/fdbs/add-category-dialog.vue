@@ -89,23 +89,24 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { CategoriesResponse, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
 import type { CategoryAttributes } from '@intake24/common/types/models';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';
+
+export type CategoryListItem = Pick<CategoryAttributes, 'code' | 'name'>;
 
 export default defineComponent({
   name: 'AddCategoryDialog',
 
   props: {
     currentItems: {
-      type: Array as PropType<CategoryAttributes[]>,
+      type: Array as PropType<CategoryListItem[]>,
       required: true,
     },
     localeId: {
       type: String,
-      required: true,
     },
   },
 
@@ -115,20 +116,20 @@ export default defineComponent({
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      CategoriesResponse['data'][number]
-    >('admin/fdbs/:id/categories', props.localeId);
+      (CategoriesResponse | MainCategoriesResponse)['data'][number]
+    >(props.localeId ? 'admin/fdbs/:id/categories' : 'admin/categories', props.localeId);
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },
 
   computed: {
-    selectedItems(): CategoryListEntry[] {
+    selectedItems() {
       const { selected } = this;
       if (!selected.length) return [];
 
       return this.items.filter((item) => selected.includes(item.code));
     },
-    isAlreadyIncluded(): boolean {
+    isAlreadyIncluded() {
       if (!this.currentItems.length || !this.selectedItems.length) return false;
       const codes = this.currentItems.map((item) => item.code);
 

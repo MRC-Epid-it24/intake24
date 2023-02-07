@@ -73,8 +73,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `leftovers` - true/false whether to show leftovers option
-- `image map labels` - true/false whether to show image map labels
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+- `linked quantity categories` - Category list of parent food that should trigger quantity selection based on parent food quantity
 
 ### Cereal prompt
 

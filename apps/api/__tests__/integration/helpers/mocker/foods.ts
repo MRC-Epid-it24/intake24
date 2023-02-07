@@ -16,6 +16,13 @@ import { randomString } from '@intake24/common/util';
 
 import { downloadImage } from '../util';
 
+const category = () => ({
+  code: randomString(8),
+  name: faker.random.words(5),
+  isHidden: faker.datatype.boolean(),
+  version: randomUUID(),
+});
+
 const food = (foodGroupId: string) => ({
   code: randomString(8),
   foodGroupId,
@@ -120,6 +127,7 @@ const standardUnit = (): StandardUnitCreationAttributes => ({
 });
 
 export default {
+  category,
   food,
   foodGroup,
   asServedSet,

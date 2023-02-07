@@ -15,7 +15,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ImageMap } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt, ImageMapSettings } from '../partials';
 
@@ -28,7 +28,7 @@ export default defineComponent({
 
   props: {
     imageMap: {
-      type: Object as PropType<ImageMap>,
+      type: Object as PropType<Prompts['pizza-prompt']['imageMap']>,
       required: true,
     },
   },
