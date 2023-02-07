@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as s,a as n}from"./app.f1326be5.js";const C=JSON.parse('{"title":"Generate VAPID keys","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-vapid-keys.md"}'),t={name:"cli/generate-vapid-keys.md"},p=n("",3),o=[p];function r(c,l,i,d,_,y){return s(),a("div",null,o)}const A=e(t,[["render",r]]);export{C as __pageData,A as default};
