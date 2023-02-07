@@ -2,7 +2,7 @@ import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import { inspect } from 'util';
 
-import Config from './config';
+import type Config from './config';
 
 export const ajv = new Ajv({
   allErrors: true,
@@ -16,7 +16,6 @@ ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 export { Config };
 export const ConfigSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  defaultProperties: [],
   properties: {
     batchSize: {
       type: 'number',

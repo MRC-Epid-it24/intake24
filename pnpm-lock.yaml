@@ -366,15 +366,26 @@ importers:
     specifiers:
       '@types/fs-extra': ^11.0.1
       '@types/lodash': ^4.14.191
+      '@types/node': ^18.11.18
       '@types/web-push': ^3.3.2
+      '@types/webpack-env': ^1.18.0
+      ajv: ^8.12.0
       commander: ^10.0.0
+      csv-writer: ^1.6.0
       dotenv: ^16.0.3
       dotenv-expand: ^10.0.0
       fork-ts-checker-webpack-plugin: ^7.3.0
       fs-extra: ^11.1.0
       lodash: ^4.17.21
       nanoid: ^3.3.4
+      pg: ^8.9.0
+      pg-hstore: ^2.3.4
+      reflect-metadata: ^0.1.13
+      sequelize: ^6.28.0
+      sequelize-typescript: ^2.1.5
       ts-loader: ^9.4.2
+      ts-node: ^10.9.1
+      tsconfig-paths: ^4.1.2
       tsconfig-paths-webpack-plugin: ^4.0.0
       tsx: ^3.12.2
       typescript: ^4.9.5
@@ -384,19 +395,30 @@ importers:
       webpack-node-externals: ^3.0.0
       webpackbar: ^5.0.2
     dependencies:
+      ajv: 8.12.0
       commander: 10.0.0
+      csv-writer: 1.6.0
       dotenv: 16.0.3
       dotenv-expand: 10.0.0
       fs-extra: 11.1.0
       lodash: 4.17.21
       nanoid: 3.3.4
+      pg: 8.9.0
+      pg-hstore: 2.3.4
+      reflect-metadata: 0.1.13
+      sequelize: 6.28.0_pg-hstore@2.3.4+pg@8.9.0
+      sequelize-typescript: 2.1.5_xipa2ibnhogombmqznsezf66f4
       web-push: 3.5.0
     devDependencies:
       '@types/fs-extra': 11.0.1
       '@types/lodash': 4.14.191
+      '@types/node': 18.11.18
       '@types/web-push': 3.3.2
+      '@types/webpack-env': 1.18.0
       fork-ts-checker-webpack-plugin: 7.3.0_hhrrucqyg4eysmfpujvov2ym5u
       ts-loader: 9.4.2_hhrrucqyg4eysmfpujvov2ym5u
+      ts-node: 10.9.1_bdgp3l2zgaopogaavxusmetvge
+      tsconfig-paths: 4.1.2
       tsconfig-paths-webpack-plugin: 4.0.0
       tsx: 3.12.2
       typescript: 4.9.5
@@ -3632,7 +3654,7 @@ packages:
   /@types/sax/1.2.4:
     resolution: {integrity: sha512-pSAff4IAxJjfAXUG6tFkO7dsSbTmf8CtUpfhhZ5VhkRpC4628tJhh3+V6H1E+/Gs9piSzYKT5yzHO5M4GG9jkw==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.11.18
     dev: false
 
   /@types/semver/7.3.13:
@@ -10912,6 +10934,21 @@ packages:
       sequelize: 6.28.0_bgf77lecewn3fiz5muowvgln5e
     dev: false
 
+  /sequelize-typescript/2.1.5_xipa2ibnhogombmqznsezf66f4:
+    resolution: {integrity: sha512-x1CNODct8gJyfZPwEZBU5uVGNwgJI2Fda913ZxD5ZtCSRyTDPBTS/0uXciF+MlCpyqjpmoCAPtudQWzw579bzA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      '@types/node': '*'
+      '@types/validator': '*'
+      reflect-metadata: '*'
+      sequelize: '>=6.20.1'
+    dependencies:
+      '@types/node': 18.11.18
+      glob: 7.2.0
+      reflect-metadata: 0.1.13
+      sequelize: 6.28.0_pg-hstore@2.3.4+pg@8.9.0
+    dev: false
+
   /sequelize/6.28.0_bgf77lecewn3fiz5muowvgln5e:
     resolution: {integrity: sha512-+WHqvUQgTp19GLkt+gyQ+F6qg+FIEO2O5F9C0TOYV/PjZ2a/XwWvVkL1NCkS4VSIjVVvAUutiW6Wv9ofveGaVw==}
     engines: {node: '>=10.0.0'}
@@ -10952,6 +10989,61 @@ packages:
       inflection: 1.13.4
       lodash: 4.17.21
       mariadb: 3.0.2
+      moment: 2.29.4
+      moment-timezone: 0.5.40
+      pg: 8.9.0
+      pg-connection-string: 2.5.0
+      pg-hstore: 2.3.4
+      retry-as-promised: 7.0.3
+      semver: 7.3.8
+      sequelize-pool: 7.1.0
+      toposort-class: 1.0.1
+      uuid: 8.3.2
+      validator: 13.9.0
+      wkx: 0.5.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /sequelize/6.28.0_pg-hstore@2.3.4+pg@8.9.0:
+    resolution: {integrity: sha512-+WHqvUQgTp19GLkt+gyQ+F6qg+FIEO2O5F9C0TOYV/PjZ2a/XwWvVkL1NCkS4VSIjVVvAUutiW6Wv9ofveGaVw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      ibm_db: '*'
+      mariadb: '*'
+      mysql2: '*'
+      oracledb: '*'
+      pg: '*'
+      pg-hstore: '*'
+      snowflake-sdk: '*'
+      sqlite3: '*'
+      tedious: '*'
+    peerDependenciesMeta:
+      ibm_db:
+        optional: true
+      mariadb:
+        optional: true
+      mysql2:
+        optional: true
+      oracledb:
+        optional: true
+      pg:
+        optional: true
+      pg-hstore:
+        optional: true
+      snowflake-sdk:
+        optional: true
+      sqlite3:
+        optional: true
+      tedious:
+        optional: true
+    dependencies:
+      '@types/debug': 4.1.7
+      '@types/validator': 13.7.11
+      debug: 4.3.4
+      dottie: 2.0.2
+      inflection: 1.13.4
+      lodash: 4.17.21
       moment: 2.29.4
       moment-timezone: 0.5.40
       pg: 8.9.0

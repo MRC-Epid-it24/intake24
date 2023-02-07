@@ -13,6 +13,7 @@ export type BaseDatabasesInterface = Record<DatabaseType, Sequelize>;
 
 export interface DatabasesInterface extends BaseDatabasesInterface {
   init(): Promise<void>;
+  close(): Promise<void>;
 }
 
 export type DatabaseOptions = {
@@ -63,5 +64,9 @@ export class Database implements DatabasesInterface {
       // Force sync for TEST environment
       if (this.env === 'test') await this[database].sync({ force: true });
     }
+  }
+
+  async close(): Promise<void> {
+    await Promise.all([this.foods.close(), this.system.close()]);
   }
 }

@@ -130,7 +130,7 @@ class IntegrationSuite {
     await Promise.all([this.scheduler.close()]);
 
     // Close database connections
-    await Promise.all([this.db.foods.close(), this.db.system.close()]);
+    await this.db.close();
 
     // Close worker threads
     foodIndex.close();

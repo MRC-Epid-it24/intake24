@@ -1,10 +1,8 @@
-/* eslint-disable max-classes-per-file */
-import * as fs from 'node:fs';
+import { readFileSync } from 'node:fs';
 
-import commandLineArgs from 'command-line-args';
 import { createArrayCsvWriter } from 'csv-writer';
-import dotenv from 'dotenv';
 
+import type { Environment } from '@intake24/common/types';
 import {
   AsServedImage,
   AsServedSet,
@@ -29,8 +27,6 @@ import { logger } from '@intake24/services';
 
 import type Config from './config';
 import validate from './config.validator';
-
-dotenv.config();
 
 const energyKcalNutrientType = '1';
 
@@ -449,26 +445,22 @@ async function findPortionSizeImages(
 }
 
 async function main(config: Config, outputFilePath: string) {
-  const db = new Database({ databaseConfig, logger, environment: 'development' });
+  const db = new Database({
+    databaseConfig,
+    logger,
+    environment: (process.env.NODE_ENV || 'development') as Environment,
+  });
 
   await db.init();
 
-  /* const nutrientIds = (await LocalNutrientType.findAll({
-        where: {
-            localeId: config.locale
-        },
-        order: ['id']
-    })).map(r => r.nutrientTypeId); */
-
   const nutrientIds = (await FoodsNutrientType.findAll({ order: ['id'] })).map((r) => r.id);
 
-  const nutrientLabels = await getNutrientLabels(nutrientIds);
+  const [nutrientLabels, portionSizeImages] = await Promise.all([
+    getNutrientLabels(nutrientIds),
+    findPortionSizeImages(config, nutrientIds),
+  ]);
 
-  const portionSizeImages = await findPortionSizeImages(config, nutrientIds);
-
-  const writer = createArrayCsvWriter({
-    path: outputFilePath,
-  });
+  const writer = createArrayCsvWriter({ path: outputFilePath });
 
   const header = [
     'Intake24 food code',
@@ -540,21 +532,16 @@ async function main(config: Config, outputFilePath: string) {
       rows.push(columns);
     }
 
-    if (rows.length > 0) await writer.writeRecords(rows);
+    if (rows.length) await writer.writeRecords(rows);
   }
+
+  await db.close();
 }
 
-const optionDefinitions = [
-  { name: 'output', alias: 'o', type: String },
-  { name: 'config', alias: 'c', type: String },
-];
+export type FindPortionImagesArgs = { config: string; output: string };
 
-const options = commandLineArgs(optionDefinitions);
-
-if (!options.config) {
-  process.stderr.write('Configuration file argument (--config <path>, -c <path>) is required.');
-} else {
-  const fileContents = fs.readFileSync(options.config, { encoding: 'utf8' });
+export default async (cmd: FindPortionImagesArgs): Promise<void> => {
+  const fileContents = readFileSync(cmd.config, { encoding: 'utf8' });
   const config = validate(JSON.parse(fileContents));
 
   const now = new Date();
@@ -562,9 +549,7 @@ if (!options.config) {
     .toString()
     .padStart(2, '0')}${now.getFullYear()}`;
   const outputFilePath =
-    options.output || `${config.energyValueKcal}kcal-${config.locale}-${timeStamp}.csv`;
+    cmd.output || `${config.energyValueKcal}kcal-${config.locale}-${timeStamp}.csv`;
 
-  main(config, outputFilePath).catch((err) => {
-    throw err;
-  });
-}
+  await main(config, outputFilePath);
+};

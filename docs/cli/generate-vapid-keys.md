@@ -3,5 +3,5 @@
 Generate a pair of VAPID public and private keys.
 
 ```sh
-pnpm cli -- generate-vapid-keys
+pnpm cli generate-vapid-keys
 ```

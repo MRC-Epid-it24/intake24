@@ -507,6 +507,10 @@ export const sidebar = {
           text: 'Generate VAPID keys',
           link: '/cli/generate-vapid-keys',
         },
+        {
+          text: 'Find portion images',
+          link: '/cli/find-portion-images',
+        },
       ],
     },
   ],

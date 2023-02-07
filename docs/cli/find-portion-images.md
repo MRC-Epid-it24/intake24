@@ -5,11 +5,17 @@ target value.
 
 ## Usage
 
-1. Run the Webpack build:`npx webpack`
+1. Copy `config.json.example` to any location and edit the configuration.
 
-2. Copy `config.json.example` to any location and edit the configuration.
+```sh
+cp src/commands/find-portion-images/config.json.example config.json
+```
 
-3. Run the tool: `npm run find -- -c <config file path> -o <output file path>`
+2. Run the command
+
+```sh
+pnpm cli find-portion-images --config config.json --output output.csv
+```
 
 Output file name is optional and will be automatically generated in the current directory if omitted.
 

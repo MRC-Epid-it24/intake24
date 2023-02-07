@@ -30,8 +30,7 @@ export async function releaseDatabases(): Promise<void> {
   await databases.foods.drop({ cascade: true });
 
   // Close database connections to let jest test runner detect termination correctly
-  await databases.system.close();
-  await databases.foods.close();
+  await databases.close();
 }
 
 function logSql(sql: string, queryObject: any) {
