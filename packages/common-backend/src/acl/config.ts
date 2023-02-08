@@ -13,7 +13,7 @@ export type ACLConfig = {
   };
 };
 
-const aclConfig: ACLConfig = {
+export const aclConfig: ACLConfig = {
   cache: {
     enabled: process.env.ACL_CACHE_ENABLED === 'true',
     expiresIn: process.env.ACL_CACHE_EXPIRES_IN || '7d',
@@ -29,5 +29,3 @@ const aclConfig: ACLConfig = {
     roles: process.env.ACL_SIGNUP_ROLES ? process.env.ACL_SIGNUP_ROLES.split(',') : [],
   },
 };
-
-export default aclConfig;

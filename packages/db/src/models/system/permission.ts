@@ -14,14 +14,14 @@ import type {
   PermissionAttributes,
   PermissionCreationAttributes,
 } from '@intake24/common/types/models';
-import config from '@intake24/api/config/acl';
+import { aclConfig } from '@intake24/common-backend';
 
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
 // eslint-disable-next-line no-use-before-define
 export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<void> => {
-  const admin = await Role.findOne({ where: { name: config.roles.superuser } });
+  const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser } });
   if (admin) await admin.$add('permissions', permissions);
 };
 

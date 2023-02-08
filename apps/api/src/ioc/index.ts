@@ -1,7 +1,6 @@
 import { asClass, asValue, createContainer } from 'awilix';
 
 import type {
-  ACLConfig,
   AppConfig,
   CacheConfig,
   Config,
@@ -116,6 +115,7 @@ import type {
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Environment } from '@intake24/common/types';
+import type { ACLConfig } from '@intake24/common-backend';
 import type { DatabaseConfig, DatabasesInterface, User } from '@intake24/db';
 import type { LogConfig, Logger, MailConfig, Mailer } from '@intake24/services';
 import config from '@intake24/api/config';

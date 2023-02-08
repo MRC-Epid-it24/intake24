@@ -1,9 +1,10 @@
+import type { ACLConfig } from '@intake24/common-backend';
 import type { DatabaseConfig } from '@intake24/db';
 import type { LogConfig, MailConfig } from '@intake24/services';
+import { aclConfig as acl } from '@intake24/common-backend';
 import { databaseConfig as database } from '@intake24/db';
 import { logConfig as log, mailConfig as mail } from '@intake24/services';
 
-import type { ACLConfig } from './acl';
 import type { AppConfig } from './app';
 import type { CacheConfig } from './cache';
 import type { FileSystemConfig } from './filesystem';
@@ -12,7 +13,6 @@ import type { RateLimiterConfig } from './rate-limiter';
 import type { SecurityConfig } from './security';
 import type { ServicesConfig } from './services';
 import type { SessionConfig } from './session';
-import acl from './acl';
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
@@ -22,7 +22,6 @@ import security from './security';
 import services from './services';
 import session from './session';
 
-export * from './acl';
 export * from './app';
 export * from './cache';
 export * from './filesystem';

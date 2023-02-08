@@ -5,12 +5,13 @@
     "baseUrl": ".",
     "paths": {
       "@intake24/cli/*": ["src/*"],
-      "@intake24/api/*": ["../../apps/api/src/*"],
       "@intake24/common/*": ["../../packages/common/src/*"],
       "@intake24/common-backend/*": ["../../packages/common-backend/src/*"],
       "@intake24/db": ["../../packages/db/src"],
       "@intake24/i18n": ["../../packages/i18n/src"],
-      "@intake24/services": ["../../packages/services/src"]
+      "@intake24/services": ["../../packages/services/src"],
+
+      "@intake24/*": ["../../packages/*/src"]
     },
     "types": ["node", "jest", "jest-extended", "webpack-env"]
   },
