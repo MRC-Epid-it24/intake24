@@ -1,7 +1,7 @@
 <template>
   <v-col class="d-flex flex-column feedback-user-info" cols>
-    <v-card flat tile>
-      <v-toolbar flat tile>
+    <v-card>
+      <v-toolbar color="grey lighten-4" flat tile>
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
           {{ $t('feedback.physicalData.title') }}
         </v-toolbar-title>
@@ -21,9 +21,9 @@
           <span>{{ $t('feedback.physicalData.change') }}</span>
         </v-tooltip>
       </v-toolbar>
-      <v-list v-if="physicalData.length" class="py-0" dense>
+      <v-list v-if="physicalData.length" class="py-0">
         <template v-for="(item, idx) in physicalData">
-          <v-list-item :key="idx" link>
+          <v-list-item :key="idx">
             <v-list-item-content>
               <v-list-item-subtitle>
                 {{ item }}
@@ -34,7 +34,7 @@
         </template>
       </v-list>
     </v-card>
-    <v-btn
+    <!-- <v-btn
       class="mt-2 mx-auto"
       color="primary"
       link
@@ -44,7 +44,7 @@
     >
       <v-icon left>fas fa-bowl-food</v-icon>
       {{ $t('feedback.physicalData.recall') }}
-    </v-btn>
+    </v-btn> -->
   </v-col>
 </template>
 

@@ -13,13 +13,15 @@
         :value="option.value"
         @change="update"
       ></v-checkbox>
-      <v-row v-if="prompt.other" align="center" no-gutters>
-        <v-checkbox v-model="otherEnabled" class="mt-0 pb-2" hide-details></v-checkbox>
+      <v-row v-if="prompt.other" align="center" class="mt-2" no-gutters>
+        <v-checkbox v-model="otherEnabled" class="mb-auto" hide-details></v-checkbox>
         <v-text-field
           v-model.trim="otherValue"
           :disabled="!otherEnabled"
           :error="hasErrors && otherEnabled"
+          hide-details="auto"
           :label="$t('prompts.checkbox.other')"
+          outlined
           @input="update"
         ></v-text-field>
       </v-row>

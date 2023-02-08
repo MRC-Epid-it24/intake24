@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
-    <v-sheet class="text-center pa-3" :heigh="height">
+    <v-sheet class="text-center pa-3">
       <v-row dense no-gutter>
         <v-col cols="12">
           <PinchScrollZoom
@@ -14,8 +14,10 @@
             style="border: 1px solid grey"
             :width="width * 0.95"
           >
-            <div v-if="size" class="size">
-              <v-chip class="ma-2 pa-4 text-h6 font-weight-bold primary--text border-primary-1">
+            <div v-if="size" class="label">
+              <v-chip
+                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+              >
                 {{ size }}
               </v-chip>
             </div>

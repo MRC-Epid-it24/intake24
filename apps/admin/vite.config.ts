@@ -75,6 +75,11 @@ export default defineConfig(({ mode }) => {
 
             return `assets/${subDir}[name]-[hash][extname]`;
           },
+          manualChunks: (id) => {
+            if (id.includes('echarts')) return 'echarts';
+            if (id.includes('json-editor-vue')) return 'json-editor';
+            if (id.includes('tinymce')) return 'tinymce';
+          },
         },
       },
     },

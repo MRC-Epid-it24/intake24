@@ -1,157 +1,176 @@
 <template>
-  <v-col class="d-flex flex-column" cols="auto">
-    <div class="text-subtitle-1 font-weight-medium text-uppercase text-center mb-2">
-      {{ $t('feedback.outputs.title') }}
-    </div>
-    <v-btn
-      v-if="outputs.includes('print')"
-      class="mb-3"
-      color="primary"
-      link
-      outlined
-      :title="$t('feedback.outputs.print')"
-      @click="printFeedback"
-    >
-      <v-icon left>fas fa-print</v-icon>
-      {{ $t('feedback.outputs.print') }}
-    </v-btn>
-    <v-dialog
-      v-if="outputs.includes('email')"
-      v-model="email.dialog"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
-      max-width="500px"
-    >
-      <template #activator="{ on, attrs }">
+  <v-col class="d-flex flex-column" cols="12" sm="auto">
+    <v-card height="100%">
+      <v-toolbar color="grey lighten-4" flat tile>
+        <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
+          {{ $t('feedback.outputs.title') }}
+        </v-toolbar-title>
+      </v-toolbar>
+      <v-card-text class="d-flex flex-column">
         <v-btn
-          v-bind="attrs"
+          v-if="outputs.includes('print')"
           class="mb-3"
           color="primary"
           link
           outlined
-          :title="$t('feedback.outputs.email._')"
-          v-on="on"
+          rounded
+          :title="$t('feedback.outputs.print')"
+          @click="printFeedback"
         >
-          <v-icon left>fas fa-envelope</v-icon>
-          {{ $t('feedback.outputs.email._') }}
+          <v-icon left>fas fa-print</v-icon>
+          {{ $t('feedback.outputs.print') }}
         </v-btn>
-      </template>
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark>
-          <v-btn dark icon :title="$t('common.action.close')" @click.stop="email.dialog = false">
-            <v-icon>$close</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text class="pa-4">
-          <v-form ref="form" autocomplete="off" @submit.prevent="emailFeedback">
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="email.form.email"
-                    :error-messages="email.errors.get('email')"
-                    hide-details="auto"
-                    :label="$t('common.email')"
-                    name="email"
-                    outlined
-                    prepend-inner-icon="fas fa-envelope"
-                    @input="email.errors.clear('email')"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="email.form.emailConfirm"
-                    :error-messages="email.errors.get('emailConfirm')"
-                    hide-details="auto"
-                    :label="$t('common.emailConfirm')"
-                    name="emailConfirm"
-                    outlined
-                    prepend-inner-icon="fas fa-envelope"
-                    @input="email.errors.clear('emailConfirm')"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-alert v-if="message" outlined type="success">
-                    {{ message }}
-                  </v-alert>
-                  <v-alert v-if="retry.retryIn" outlined type="warning">
-                    {{ retryMessage }}
-                  </v-alert>
-                  <v-btn
-                    block
-                    color="secondary"
-                    :disabled="!!retry.retryIn || email.errors.any()"
-                    type="submit"
-                    x-large
-                  >
-                    <v-icon left>fas fa-paper-plane</v-icon>
-                    {{ $t('feedback.outputs.email.send') }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-if="outputs.includes('download')"
-      v-model="download.dialog"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
-      max-width="500px"
-    >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
-          class="mb-3"
-          color="primary"
-          link
-          outlined
-          :title="$t('feedback.outputs.download._')"
-          v-on="on"
+        <v-dialog
+          v-if="outputs.includes('email')"
+          v-model="email.dialog"
+          :fullscreen="$vuetify.breakpoint.smAndDown"
+          max-width="500px"
         >
-          <v-icon left>fas fa-download</v-icon>
-          {{ $t('feedback.outputs.download._') }}
-        </v-btn>
-      </template>
-      <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark>
-          <v-btn dark icon :title="$t('common.action.close')" @click.stop="download.dialog = false">
-            <v-icon>$close</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{ $t('feedback.outputs.download.title') }}</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text class="pa-4">
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <div class="text-subtitle-1 font-weight-medium">
-                  {{ $t('feedback.outputs.download.subtitle') }}
-                </div>
-              </v-col>
-              <v-col cols="12">
-                <v-alert v-if="message" outlined type="success">
-                  {{ message }}
-                </v-alert>
-                <v-alert v-if="retry.retryIn" outlined type="warning">
-                  {{ retryMessage }}
-                </v-alert>
-                <v-btn
-                  block
-                  color="secondary"
-                  :disabled="!!retry.retryIn"
-                  x-large
-                  @click.stop="downloadFeedback"
-                >
-                  <v-icon left>fas fa-paper-plane</v-icon>
-                  {{ $t('feedback.outputs.download.send') }}
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              class="mb-3"
+              color="primary"
+              link
+              outlined
+              rounded
+              :title="$t('feedback.outputs.email._')"
+              v-on="on"
+            >
+              <v-icon left>fas fa-envelope</v-icon>
+              {{ $t('feedback.outputs.email._') }}
+            </v-btn>
+          </template>
+          <v-card :tile="$vuetify.breakpoint.smAndDown">
+            <v-toolbar color="primary" dark>
+              <v-btn
+                dark
+                icon
+                :title="$t('common.action.close')"
+                @click.stop="email.dialog = false"
+              >
+                <v-icon>$close</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text class="pa-4">
+              <v-form ref="form" autocomplete="off" @submit.prevent="emailFeedback">
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="email.form.email"
+                        :error-messages="email.errors.get('email')"
+                        hide-details="auto"
+                        :label="$t('common.email')"
+                        name="email"
+                        outlined
+                        prepend-inner-icon="fas fa-envelope"
+                        @input="email.errors.clear('email')"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="email.form.emailConfirm"
+                        :error-messages="email.errors.get('emailConfirm')"
+                        hide-details="auto"
+                        :label="$t('common.emailConfirm')"
+                        name="emailConfirm"
+                        outlined
+                        prepend-inner-icon="fas fa-envelope"
+                        @input="email.errors.clear('emailConfirm')"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-alert v-if="message" outlined type="success">
+                        {{ message }}
+                      </v-alert>
+                      <v-alert v-if="retry.retryIn" outlined type="warning">
+                        {{ retryMessage }}
+                      </v-alert>
+                      <v-btn
+                        block
+                        color="secondary"
+                        :disabled="!!retry.retryIn || email.errors.any()"
+                        type="submit"
+                        x-large
+                      >
+                        <v-icon left>fas fa-paper-plane</v-icon>
+                        {{ $t('feedback.outputs.email.send') }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog
+          v-if="outputs.includes('download')"
+          v-model="download.dialog"
+          :fullscreen="$vuetify.breakpoint.smAndDown"
+          max-width="500px"
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              class="mb-3"
+              color="primary"
+              link
+              outlined
+              rounded
+              :title="$t('feedback.outputs.download._')"
+              v-on="on"
+            >
+              <v-icon left>fas fa-download</v-icon>
+              {{ $t('feedback.outputs.download._') }}
+            </v-btn>
+          </template>
+          <v-card :tile="$vuetify.breakpoint.smAndDown">
+            <v-toolbar color="primary" dark>
+              <v-btn
+                dark
+                icon
+                :title="$t('common.action.close')"
+                @click.stop="download.dialog = false"
+              >
+                <v-icon>$close</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ $t('feedback.outputs.download.title') }}</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text class="pa-4">
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <div class="text-subtitle-1 font-weight-medium">
+                      {{ $t('feedback.outputs.download.subtitle') }}
+                    </div>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-alert v-if="message" outlined type="success">
+                      {{ message }}
+                    </v-alert>
+                    <v-alert v-if="retry.retryIn" outlined type="warning">
+                      {{ retryMessage }}
+                    </v-alert>
+                    <v-btn
+                      block
+                      color="secondary"
+                      :disabled="!!retry.retryIn"
+                      x-large
+                      @click.stop="downloadFeedback"
+                    >
+                      <v-icon left>fas fa-paper-plane</v-icon>
+                      {{ $t('feedback.outputs.download.send') }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-card-text>
+    </v-card>
   </v-col>
 </template>
 

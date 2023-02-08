@@ -1,5 +1,7 @@
 <template>
-  <v-chip v-if="valid && amount" :color="color" small>{{ amountWithUnit }}</v-chip>
+  <v-chip v-if="amount" class="font-weight-medium" :color="color" link small>
+    {{ amountWithUnit }}
+  </v-chip>
 </template>
 
 <script lang="ts">
@@ -24,8 +26,8 @@ export default defineComponent({
   },
 
   computed: {
-    color(): string {
-      return this.valid ? 'secondary' : 'grey';
+    color() {
+      return this.valid ? 'secondary' : undefined;
     },
 
     amountWithUnit(): string {

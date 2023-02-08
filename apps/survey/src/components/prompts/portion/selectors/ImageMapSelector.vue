@@ -7,13 +7,7 @@
             <image-placeholder></image-placeholder>
           </template>
         </v-img>
-        <div v-if="size" class="size">
-          <v-chip class="ma-2 pa-4 text-h6 font-weight-bold primary--text border-primary-1">
-            {{ size }}
-          </v-chip>
-        </div>
-        <div class="label">
-          <slot name="label"></slot>
+        <div class="pinch-zoom-activator">
           <pinch-zoom-image-map-selector
             v-if="config.pinchZoom && isMobile"
             v-bind="{
@@ -29,7 +23,7 @@
           >
             <template #activator="{ on, attrs }">
               <v-btn
-                class="ma-2 font-weight-medium"
+                class="ma-1 font-weight-medium"
                 color="grey darken-3"
                 dark
                 icon
@@ -44,6 +38,15 @@
               </v-btn>
             </template>
           </pinch-zoom-image-map-selector>
+        </div>
+        <div class="label">
+          <slot name="label"></slot>
+          <v-chip
+            v-if="size"
+            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+          >
+            {{ size }}
+          </v-chip>
         </div>
         <svg ref="svg">
           <filter id="polygon-blur">
@@ -236,12 +239,11 @@ export default defineComponent({
     z-index: 2;
   }
 
-  .size {
+  .pinch-zoom-activator {
     position: absolute;
-    top: 2%;
-    left: 50%;
+    top: 0;
+    right: 0;
     z-index: 2;
-    transform: translate(-50%);
   }
 
   svg {

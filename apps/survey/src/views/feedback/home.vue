@@ -6,17 +6,12 @@
       </h1>
       <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">{{ $t('feedback.title') }}</h2>
       <v-row class="pa-4 d-print-none" justify="center" no-gutters>
-        <v-col cols="12" md="7">
+        <v-col cols="12" lg="7" md="8" xl="6">
           <v-row justify="space-around">
             <feedback-user-info
               v-if="userDemographic"
               v-bind="{ surveyId, userDemographic }"
             ></feedback-user-info>
-            <v-divider
-              v-if="userDemographic && !!outputs.length"
-              class="d-none d-sm-block"
-              vertical
-            ></v-divider>
             <feedback-outputs
               v-if="!!outputs.length"
               v-bind="{
@@ -32,11 +27,13 @@
         </v-col>
       </v-row>
       <v-row class="pa-4 d-print-none" justify="center" no-gutters>
-        <v-col cols="12" md="7">
-          <v-divider></v-divider>
-          <v-expansion-panels flat focusable tile>
+        <v-col cols="12" lg="7" md="8" xl="6">
+          <v-expansion-panels focusable>
             <v-expansion-panel>
-              <v-expansion-panel-header class="text-subtitle-1 font-weight-medium">
+              <v-expansion-panel-header
+                class="text-subtitle-1 font-weight-medium"
+                color="grey lighten-4"
+              >
                 {{ $t('recall.submissions.title') }}
                 ({{
                   submissions.length === selectedSubmissions.length
@@ -50,13 +47,12 @@
                     <v-list-item
                       v-for="(submission, idx) in submissions"
                       :key="submission.id"
-                      active-class="blue--text text--darken-3"
                       dense
                       :value="submission.id"
                     >
                       <template #default="{ active }">
                         <v-list-item-action class="my-0">
-                          <v-checkbox color="info" :input-value="active"></v-checkbox>
+                          <v-checkbox :input-value="active"></v-checkbox>
                         </v-list-item-action>
                         <v-list-item-content>
                           <v-list-item-title>
@@ -74,7 +70,7 @@
         </v-col>
       </v-row>
       <v-row class="px-4" justify="center" no-gutters>
-        <v-col cols="auto">
+        <v-col cols="12" lg="7" md="8" xl="6">
           <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
             {{ $t('feedback.missingFoods') }}
           </v-alert>

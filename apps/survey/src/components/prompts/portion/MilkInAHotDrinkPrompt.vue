@@ -28,7 +28,7 @@
                 <quantity-badge
                   :amount="Number(option.value) * parentServing"
                   unit="ml"
-                  :valid="true"
+                  :valid="portionSize.milkVolumePercentage === option.value"
                 ></quantity-badge>
               </template>
             </v-radio>

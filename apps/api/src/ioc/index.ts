@@ -1,16 +1,6 @@
 import { asClass, asValue, createContainer } from 'awilix';
 
-import type {
-  AppConfig,
-  CacheConfig,
-  Config,
-  FileSystemConfig,
-  QueueConfig,
-  RateLimiterConfig,
-  SecurityConfig,
-  ServicesConfig,
-  SessionConfig,
-} from '@intake24/api/config';
+import type { Config } from '@intake24/api/config';
 import type {
   // Admin
   AdminAuthenticationController,
@@ -115,9 +105,8 @@ import type {
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Environment } from '@intake24/common/types';
-import type { ACLConfig } from '@intake24/common-backend';
-import type { DatabaseConfig, DatabasesInterface, User } from '@intake24/db';
-import type { LogConfig, Logger, MailConfig, Mailer } from '@intake24/services';
+import type { DatabasesInterface, User } from '@intake24/db';
+import type { Logger, Mailer } from '@intake24/services';
 import config from '@intake24/api/config';
 import { Database, models } from '@intake24/db';
 
@@ -127,18 +116,18 @@ import services from './services';
 
 export interface IoC extends Jobs {
   config: Config;
-  aclConfig: ACLConfig;
-  appConfig: AppConfig;
-  cacheConfig: CacheConfig;
-  databaseConfig: DatabaseConfig;
-  fsConfig: FileSystemConfig;
-  logConfig: LogConfig;
-  mailConfig: MailConfig;
-  queueConfig: QueueConfig;
-  rateLimiterConfig: RateLimiterConfig;
-  securityConfig: SecurityConfig;
-  servicesConfig: ServicesConfig;
-  sessionConfig: SessionConfig;
+  aclConfig: Config['acl'];
+  appConfig: Config['app'];
+  cacheConfig: Config['cache'];
+  databaseConfig: Config['database'];
+  fsConfig: Config['filesystem'];
+  logConfig: Config['log'];
+  mailConfig: Config['mail'];
+  queueConfig: Config['queue'];
+  rateLimiterConfig: Config['rateLimiter'];
+  securityConfig: Config['security'];
+  servicesConfig: Config['services'];
+  sessionConfig: Config['session'];
   // Expose some config settings directly to avoid pulling in the whole config when it doesn't
   // make sense, e.g. for testing
   environment: Environment;
