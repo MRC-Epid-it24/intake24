@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import pick from 'lodash/pick';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
@@ -43,7 +43,7 @@ export default defineComponent({
       const original = pick(this.originalEntry, commonKeys);
       const updated = pick(this.form.getData(true), commonKeys);
 
-      return !isEqual(original, updated);
+      return !deepEqual(original, updated);
     },
     nonInputErrors(): ValidationError[] {
       return Object.values(pick(this.form.errors.all(), this.nonInputErrorKeys));
@@ -56,7 +56,7 @@ export default defineComponent({
 
       // Creating new record
       // TODO: might be better to load full blank templates directly in store
-      if (isEqual(val, { id: null })) {
+      if (deepEqual(val, { id: null })) {
         this.originalEntry = copy(this.form.getData(true));
         return;
       }

@@ -104,7 +104,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
@@ -168,7 +168,7 @@ export default defineComponent({
     },
 
     isInSyncWithTemplate(): boolean {
-      return !!this.template && isEqual(this.question, this.template);
+      return !!this.template && deepEqual(this.question, this.template);
     },
   },
 

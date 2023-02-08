@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import type { DataOptions } from 'vuetify';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -86,7 +86,7 @@ export default defineComponent({
   watch: {
     options: {
       async handler(val, oldVal) {
-        if (!isEqual(val, oldVal)) await this.fetch();
+        if (!deepEqual(val, oldVal)) await this.fetch();
       },
       deep: true,
     },

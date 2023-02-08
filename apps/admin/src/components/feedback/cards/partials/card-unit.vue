@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -74,7 +74,7 @@ export default defineComponent({
 
   watch: {
     unit(val: CustomCard['unit']) {
-      if (isEqual(val, this.internalUnit)) return;
+      if (deepEqual(val, this.internalUnit)) return;
 
       this.internalUnit = copy(val);
     },

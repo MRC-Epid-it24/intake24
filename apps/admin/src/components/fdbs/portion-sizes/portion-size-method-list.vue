@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -115,12 +115,12 @@ export default defineComponent({
 
   watch: {
     value(val: PortionSizeMethodItem[]) {
-      if (isEqual(val, this.outputItems)) return;
+      if (deepEqual(val, this.outputItems)) return;
 
       this.items = val.map(withInternalId);
     },
     outputItems(val: PortionSizeMethodItem[]) {
-      if (isEqual(val, this.value)) return;
+      if (deepEqual(val, this.value)) return;
 
       this.$emit('input', [...val]);
     },

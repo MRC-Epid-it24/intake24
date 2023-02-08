@@ -25,8 +25,6 @@ const hCaptcha: CaptchaCallback = async (secret: string, response: string) => {
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
     if (!success) throw new Error();
-
-    Promise.resolve();
   } catch (err) {
     throw new Error('Invalid hCaptcha challenge.');
   }
@@ -40,8 +38,6 @@ const reCaptcha: CaptchaCallback = async (secret: string, response: string) => {
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
     if (!success) throw new Error();
-
-    Promise.resolve();
   } catch (err) {
     throw new Error('Invalid reCAPTCHA challenge.');
   }
@@ -54,10 +50,7 @@ const captchaProviders: Record<CaptchaProvider, CaptchaCallback> = {
 
 export default async (response: any, options: Captcha): Promise<void> => {
   const { provider, secret } = options;
-  if (!provider) {
-    Promise.resolve();
-    return;
-  }
+  if (!provider) return;
 
   if (typeof response !== 'string' || !response)
     throw new Error('Missing reCAPTCHA challenge response token.');

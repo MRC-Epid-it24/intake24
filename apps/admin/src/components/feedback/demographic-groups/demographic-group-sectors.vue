@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -141,7 +141,7 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (isEqual(val, this.sectors)) return;
+      if (deepEqual(val, this.sectors)) return;
 
       this.sectors = [...val];
     },

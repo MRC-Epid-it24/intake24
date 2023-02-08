@@ -133,7 +133,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -202,7 +202,7 @@ export default defineComponent({
 
   watch: {
     actions(val) {
-      if (isEqual(val, this.outputActions)) return;
+      if (deepEqual(val, this.outputActions)) return;
 
       this.currentActions = val ? { ...val, items: withIdList(val.items) } : undefined;
       this.toggle = !!val;

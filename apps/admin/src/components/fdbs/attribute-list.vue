@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Nullable } from '@intake24/common/types';
@@ -144,7 +144,7 @@ export default defineComponent({
     },
     attributes: {
       handler(val: Attributes, oldVal: Attributes) {
-        if (isEqual(oldVal, val)) return;
+        if (deepEqual(oldVal, val)) return;
 
         this.$emit('input', { ...val });
       },

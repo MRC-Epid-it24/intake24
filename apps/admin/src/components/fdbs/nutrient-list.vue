@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
@@ -91,12 +91,12 @@ export default defineComponent({
 
   watch: {
     value(val: NutrientTableRecordAttributes[]) {
-      if (isEqual(val, this.items)) return;
+      if (deepEqual(val, this.items)) return;
 
       this.items = [...val];
     },
     items(val: NutrientTableRecordAttributes[]) {
-      if (isEqual(val, this.value)) return;
+      if (deepEqual(val, this.value)) return;
 
       this.$emit('input', [...val]);
     },

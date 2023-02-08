@@ -1,5 +1,5 @@
 import type { Ref, SetupContext, UnwrapRef } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { ref, toRefs, watch } from 'vue';
 
 import { copy } from '@intake24/common/util';
@@ -34,7 +34,7 @@ export const useListWithDialog = <T>(
   });
 
   watch(value, (val) => {
-    if (isEqual(val, items.value)) return;
+    if (deepEqual(val, items.value)) return;
     items.value = [...(val as any)];
   });
 

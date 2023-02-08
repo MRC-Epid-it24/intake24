@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { CustomCard } from '@intake24/common/feedback';
@@ -74,7 +74,7 @@ export default defineComponent({
   watch: {
     thresholds(val: Pick<CustomCard, 'high' | 'low'>) {
       const { high, low } = this;
-      if (isEqual(val, { high, low })) return;
+      if (deepEqual(val, { high, low })) return;
 
       this.high = val.high === null ? null : { ...val.high };
       this.low = val.low === null ? null : { ...val.low };

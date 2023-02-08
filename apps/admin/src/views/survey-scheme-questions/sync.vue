@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
@@ -111,7 +111,7 @@ export default defineComponent({
             id: scheme.id,
             name: scheme.name,
             section,
-            synced: isEqual(this.entry.question, question),
+            synced: deepEqual(this.entry.question, question),
           });
         }
 

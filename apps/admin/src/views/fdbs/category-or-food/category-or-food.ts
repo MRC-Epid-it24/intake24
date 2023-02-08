@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import pick from 'lodash/pick';
 import { defineComponent } from 'vue';
 
@@ -73,7 +73,7 @@ export default defineComponent({
       const original = pick(this.originalEntry, commonKeys);
       const updated = pick(this.form.getData(true), commonKeys);
 
-      return !isEqual(original, updated);
+      return !deepEqual(original, updated);
     },
   },
 

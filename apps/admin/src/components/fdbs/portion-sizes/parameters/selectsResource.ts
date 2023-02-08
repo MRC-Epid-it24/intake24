@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import { SelectResource } from '@intake24/admin/components/dialogs';
@@ -26,7 +26,7 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (isEqual(val, this.items)) return;
+      if (deepEqual(val, this.items)) return;
 
       this.items = [...val];
     },

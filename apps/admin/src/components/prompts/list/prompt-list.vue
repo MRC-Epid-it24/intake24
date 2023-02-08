@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -137,7 +137,7 @@ export default defineComponent({
 
   watch: {
     items(val) {
-      if (isEqual(val, this.questions)) return;
+      if (deepEqual(val, this.questions)) return;
 
       this.questions = [...val];
     },

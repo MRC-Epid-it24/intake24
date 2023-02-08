@@ -46,7 +46,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { DataOptions } from 'vuetify';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
@@ -106,7 +106,7 @@ export default defineComponent({
   watch: {
     options: {
       async handler(val, oldVal) {
-        if (!isEqual(val, oldVal)) await this.fetch();
+        if (!deepEqual(val, oldVal)) await this.fetch();
       },
       deep: true,
     },

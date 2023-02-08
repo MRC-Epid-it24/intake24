@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Character, CharacterSentiment } from '@intake24/common/feedback';
@@ -115,7 +115,7 @@ export default defineComponent({
 
   watch: {
     value(val) {
-      if (isEqual(val, this.sentiments)) return;
+      if (deepEqual(val, this.sentiments)) return;
 
       this.sentiments = [...val];
     },

@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Errors } from '@intake24/common/util';
@@ -84,7 +84,7 @@ export default defineComponent({
 
   watch: {
     value(val: CategoryListItem[]) {
-      if (isEqual(val, this.items)) return;
+      if (deepEqual(val, this.items)) return;
 
       this.items = [...val];
     },

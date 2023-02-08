@@ -88,7 +88,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -193,7 +193,7 @@ export default defineComponent({
 
   watch: {
     conditions(val) {
-      if (isEqual(val, this.outputConditions)) return;
+      if (deepEqual(val, this.outputConditions)) return;
 
       this.currentConditions = withIdList(val);
     },

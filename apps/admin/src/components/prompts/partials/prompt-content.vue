@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isEqual from 'lodash/isEqual';
+import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { BasePrompt } from '@intake24/common/prompts';
@@ -89,7 +89,7 @@ export default defineComponent({
 
   watch: {
     i18n(val) {
-      if (isEqual(val, this.items)) return;
+      if (deepEqual(val, this.items)) return;
 
       this.items = copy(val);
     },
