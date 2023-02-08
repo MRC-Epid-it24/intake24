@@ -3,10 +3,15 @@
     <v-btn block class="button-bottom" large @click.stop="open">
       {{ $t('feedback.intake.tellMeMore') }}
     </v-btn>
-    <v-dialog v-model="dialog" :fullscreen="isMobile" max-width="600px" scrollable>
-      <v-card :tile="isMobile">
+    <v-dialog
+      v-model="dialog"
+      :fullscreen="$vuetify.breakpoint.smAndDown"
+      max-width="600px"
+      scrollable
+    >
+      <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar
-          class="font-weight-medium text-h3 tell-me-more-title"
+          class="font-weight-medium text-h3 tell-me-more-title flex-grow-0"
           color="primary lighten-1"
           dark
           flat
@@ -16,7 +21,7 @@
           </v-btn>
           <v-toolbar-title class="pl-2">{{ detail.name }}</v-toolbar-title>
         </v-toolbar>
-        <v-card-text class="flex-grow-1 flex-shrink-0 pt-2 pb-1">
+        <v-card-text class="flex-grow-0 flex-shrink-0 pt-2 pb-1">
           <div class="text-subtitle-1">
             <span class="font-weight-medium">{{ $t('feedback.intake.estimated') }}: </span>
             <span :class="detail.textClass">{{ detail.intake }} {{ detail.unit }}</span>
@@ -27,16 +32,16 @@
             {{ detail.unit }}
           </div>
         </v-card-text>
-        <v-card-text class="flex-grow-1 flex-shrink-0 pt-1 pb-2">
+        <v-card-text class="flex-grow-0 flex-shrink-0 pt-1 pb-2">
           <div v-html="detail.unitDescription"></div>
         </v-card-text>
         <v-divider class="mx-4 mb-4"></v-divider>
-        <v-card-text class="flex-grow-0 flex-shrink-1">
+        <v-card-text class="overflow-y-auto">
           <div v-html="detail.description"></div>
         </v-card-text>
         <v-btn
           block
-          class="button-bottom font-weight-bold"
+          class="button-bottom font-weight-bold flex-grow-0 flex-shrink-0"
           color="primary lighten-2"
           large
           :title="$t('common.action.ok')"
@@ -86,6 +91,7 @@ export default defineComponent({
 .tell-me-more-title {
   letter-spacing: 0.1rem;
 }
+
 .button-bottom {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

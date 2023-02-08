@@ -18,7 +18,7 @@
     <v-dialog
       v-if="outputs.includes('email')"
       v-model="email.dialog"
-      :fullscreen="isMobile"
+      :fullscreen="$vuetify.breakpoint.smAndDown"
       max-width="500px"
     >
       <template #activator="{ on, attrs }">
@@ -35,8 +35,8 @@
           {{ $t('feedback.outputs.email._') }}
         </v-btn>
       </template>
-      <v-card>
-        <v-toolbar color="primary" dark flat>
+      <v-card :tile="$vuetify.breakpoint.smAndDown">
+        <v-toolbar color="primary" dark>
           <v-btn dark icon :title="$t('common.action.close')" @click.stop="email.dialog = false">
             <v-icon>$close</v-icon>
           </v-btn>
@@ -97,7 +97,7 @@
     <v-dialog
       v-if="outputs.includes('download')"
       v-model="download.dialog"
-      :fullscreen="isMobile"
+      :fullscreen="$vuetify.breakpoint.smAndDown"
       max-width="500px"
     >
       <template #activator="{ on, attrs }">
@@ -114,8 +114,8 @@
           {{ $t('feedback.outputs.download._') }}
         </v-btn>
       </template>
-      <v-card>
-        <v-toolbar color="primary" dark flat>
+      <v-card :tile="$vuetify.breakpoint.smAndDown">
+        <v-toolbar color="primary" dark>
           <v-btn dark icon :title="$t('common.action.close')" @click.stop="download.dialog = false">
             <v-icon>$close</v-icon>
           </v-btn>
