@@ -21,8 +21,10 @@ import type {
   AuthenticationController,
   CategoriesController,
   DrinkwareSetController,
+  DuoDeviceController,
   FeedbackController,
   FeedbackSchemeController,
+  FIDODeviceController,
   FoodController,
   FoodSearchController,
   GuideImageController,
@@ -34,9 +36,11 @@ import type {
   LocaleSplitListController,
   LocaleSplitWordController,
   LocaleSynonymSetController,
+  MFADeviceController,
   NutrientTableController,
   NutrientTypeController,
   NutrientUnitController,
+  OTPDeviceController,
   PasswordController,
   PermissionController,
   PortionSizeController,
@@ -73,7 +77,9 @@ import type {
   DataExportFields,
   DataExportMapper,
   DataExportService,
+  DuoProvider,
   FeedbackService,
+  FIDOProvider,
   Filesystem,
   FoodDataService,
   GuideImageService,
@@ -84,10 +90,10 @@ import type {
   JwtService,
   LanguageService,
   LocaleService,
-  MFAProvider,
   NutrientTableService,
   NutrientTypeService,
   NutrientUnitService,
+  OTPProvider,
   PairwiseSearchService,
   PopularityCountersService,
   PortionSizeService,
@@ -168,6 +174,11 @@ export interface IoC extends Jobs {
   adminUserProfileController: AdminUserProfileController;
   adminUserJobController: AdminUserJobController;
 
+  mfaDeviceController: MFADeviceController;
+  duoDeviceController: DuoDeviceController;
+  fidoDeviceController: FIDODeviceController;
+  otpDeviceController: OTPDeviceController;
+
   adminFoodDatabaseController: AdminFoodDatabaseController;
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
@@ -238,7 +249,9 @@ export interface IoC extends Jobs {
   signInService: SignInService;
 
   // MFA Providers
-  mfaProvider: MFAProvider;
+  otpProvider: OTPProvider;
+  fidoProvider: FIDOProvider;
+  duoProvider: DuoProvider;
 
   // Data export
   dataExportFields: DataExportFields;

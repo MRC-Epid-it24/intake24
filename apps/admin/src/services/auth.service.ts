@@ -1,13 +1,11 @@
 import type {
+  AuthResponse,
   EmailLoginRequest,
   LoginResponse,
-  MFAResponse,
-  MFAVerifyRequest,
+  MFAAuthenticationVerificationRequest,
 } from '@intake24/common/types/http';
 
 import http from './http.service';
-
-export type AuthResponse = LoginResponse | MFAResponse;
 
 export default {
   /**
@@ -18,7 +16,6 @@ export default {
    */
   async login(request: EmailLoginRequest): Promise<AuthResponse> {
     const { data } = await http.post<AuthResponse>('admin/auth/login', request, {
-      withCredentials: true,
       withLoading: true,
     });
 
@@ -28,17 +25,15 @@ export default {
   /**
    * Verify multi-factor challenge response
    *
-   * @param {MFAVerifyRequest} request
+   * @param {MFAAuthenticationVerificationRequest} request
    * @returns {Promise<string>}
    */
-  async verify({ code, state }: MFAVerifyRequest): Promise<string> {
+  async verify(payload: MFAAuthenticationVerificationRequest): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<LoginResponse>(
-      'admin/auth/verify',
-      { code, state },
-      { withCredentials: true, withLoading: true }
-    );
+    } = await http.post<LoginResponse>(`admin/auth/${payload.provider}`, payload, {
+      withLoading: true,
+    });
 
     return accessToken;
   },
@@ -51,7 +46,7 @@ export default {
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<LoginResponse>('admin/auth/refresh', null, { withCredentials: true });
+    } = await http.post<LoginResponse>('admin/auth/refresh');
 
     return accessToken;
   },
@@ -62,6 +57,6 @@ export default {
    * @returns {Promise<void>}
    */
   async logout(): Promise<void> {
-    await http.post('admin/auth/logout', null, { withCredentials: true });
+    await http.post('admin/auth/logout');
   },
 };

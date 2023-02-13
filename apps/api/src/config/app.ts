@@ -8,6 +8,7 @@ export type AppConfig = {
   name: string;
   host: string;
   port: number;
+  https: boolean;
 
   secret: string;
 
@@ -18,7 +19,8 @@ export type AppConfig = {
 
 const host = 'localhost';
 const port = 3100;
-const domain = `http://${host}:${port}`;
+const https = !!(process.env.APP_HTTPS === 'true');
+const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
 
 // null stands for "all locales"
 function parseLocaleList(list: string | undefined): string[] | null {
@@ -33,6 +35,7 @@ const appConfig: AppConfig = {
   name: process.env.APP_NAME || 'Intake24',
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,
+  https,
 
   secret: process.env.APP_SECRET || '',
 

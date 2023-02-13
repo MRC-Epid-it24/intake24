@@ -18,7 +18,7 @@ const sessionConfig: SessionConfig = {
     name: process.env.SESSION_COOKIE_NAME || 'it24_session',
     maxAge: ms(process.env.SESSION_COOKIE_LIFETIME || '15m'),
     httpOnly: true,
-    path: process.env.SESSION_COOKIE_PATH || '/api/admin/auth',
+    path: process.env.SESSION_COOKIE_PATH || '/api/admin',
     sameSite: (process.env.SESSION_COOKIE_SAME_SITE || 'lax') as SameSiteCookieOptions,
     secure: process.env.SESSION_COOKIE_SECURE === 'true',
   },

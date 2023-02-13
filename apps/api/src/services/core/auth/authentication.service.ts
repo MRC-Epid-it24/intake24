@@ -1,3 +1,4 @@
+import type { AuthenticationResponseJSON } from '@simplewebauthn/typescript-types';
 import type { Request } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -6,22 +7,22 @@ import type { FrontEnd } from '@intake24/common/types';
 import type {
   AliasLoginRequest,
   EmailLoginRequest,
+  MFAAuthResponse,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
 import type { UserPassword } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { surveyRespondent } from '@intake24/common/security';
-import { supportedAlgorithms } from '@intake24/common-backend/util/passwords';
-import { Op, Survey, User } from '@intake24/db';
+import { supportedAlgorithms } from '@intake24/common-backend/util';
+import { MFADevice, Op, Survey, User } from '@intake24/db';
 
 import type { Tokens } from '.';
-import type { MFARequest } from './mfa';
 
-export type LoginCredentials = {
+export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
   user: User | null;
   password: string;
   subject: Subject;
-  frontEnd: FrontEnd;
+  frontEnd: T;
 };
 
 export type LoginMeta = {
@@ -36,21 +37,33 @@ export interface SignInAttempt extends Subject {
   message?: string;
 }
 
+export type MFALoginCredentials = {
+  userId: string;
+  device: MFADevice;
+};
+
+export type MFVerification = {
+  response: AuthenticationResponseJSON;
+  token: string;
+};
+
 const authenticationService = ({
   jwtRotationService,
   jwtService,
   logger: globalLogger,
-  mfaProvider,
-  securityConfig,
   signInService,
+  duoProvider,
+  otpProvider,
+  fidoProvider,
 }: Pick<
   IoC,
   | 'jwtRotationService'
   | 'jwtService'
   | 'logger'
-  | 'mfaProvider'
-  | 'securityConfig'
   | 'signInService'
+  | 'duoProvider'
+  | 'otpProvider'
+  | 'fidoProvider'
 >) => {
   const logger = globalLogger.child({ service: 'AuthenticationService' });
 
@@ -80,23 +93,77 @@ const authenticationService = ({
   };
 
   /**
+   * Process MFA authentication challenge
+   *
+   * @param {{ userId: string; email: string }} credentials
+   * @param {LoginMeta} meta
+   * @returns {Promise<MFAAuthResponse>}
+   */
+  const processMFA = async (
+    credentials: { userId: string; email: string },
+    meta: LoginMeta
+  ): Promise<MFAAuthResponse> => {
+    const { userId, email } = credentials;
+    const {
+      ip: remoteAddress,
+      headers: { 'user-agent': userAgent },
+    } = meta.req;
+
+    const signInAttempt: SignInAttempt = {
+      provider: 'email',
+      providerKey: email,
+      userId,
+      remoteAddress,
+      userAgent,
+      successful: false,
+    };
+
+    const devices = await MFADevice.findAll({
+      where: { userId },
+      include: [{ association: 'authenticator' }, { association: 'user' }],
+      order: [
+        ['preferred', 'DESC'],
+        ['id', 'ASC'],
+      ],
+    });
+
+    if (!devices.length) {
+      await signInService.log({ ...signInAttempt, message: 'No MFA devices found for this user.' });
+      throw new UnauthorizedError('No MFA devices found.');
+    }
+
+    const [device] = devices;
+    const { id: deviceId, provider } = device;
+    const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
+
+    const challenge = await providers[provider].authenticationChallenge(device);
+
+    const { challengeId } = challenge;
+    meta.req.session.mfaAuthChallenge = { challengeId, deviceId, provider, userId };
+
+    await signInService.log({ ...signInAttempt, successful: true });
+
+    return { challenge, devices };
+  };
+
+  /**
    * Login helper with common login logic
    *
    * @param {LoginCredentials} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<Tokens>}
+   * @returns {Promise<Tokens | MFAAuthResponse>}
    */
-  const processLogin = async (
-    credentials: LoginCredentials,
-    { req }: LoginMeta
-  ): Promise<Tokens> => {
+  const processLogin = async <T extends FrontEnd>(
+    credentials: LoginCredentials<T>,
+    meta: LoginMeta
+  ): Promise<T extends 'survey' ? Tokens : MFAAuthResponse | Tokens> => {
     const { user, password, subject, frontEnd } = credentials;
     const {
       ip: remoteAddress,
       headers: { 'user-agent': userAgent },
-    } = req;
+    } = meta.req;
 
-    const signInLog: SignInAttempt = {
+    const signInAttempt: SignInAttempt = {
       ...subject,
       userId: user?.id,
       remoteAddress,
@@ -105,30 +172,25 @@ const authenticationService = ({
     };
 
     if (!user) {
-      await signInService.log({
-        ...signInLog,
-        message: 'Credentials not found in database.',
-      });
-
+      await signInService.log({ ...signInAttempt, message: 'Credentials not found in database.' });
       throw new UnauthorizedError('Provided credentials do not match our records.');
     }
 
     if (user.isDisabled()) {
-      await signInService.log({
-        ...signInLog,
-        message: 'Account is disabled.',
-      });
-
+      await signInService.log({ ...signInAttempt, message: 'Account is disabled.' });
       throw new UnauthorizedError('Account is disabled.');
     }
 
     if (subject.provider !== 'URLToken' && !(await verifyPassword(password, user.password))) {
-      await signInService.log({ ...signInLog, message: 'Credentials do not match.' });
-
-      throw new UnauthorizedError(`Provided credentials do not match our records.`);
+      await signInService.log({ ...signInAttempt, message: 'Credentials do not match.' });
+      throw new UnauthorizedError('Provided credentials do not match our records.');
     }
 
-    await signInService.log({ ...signInLog, successful: true });
+    if (frontEnd === 'admin' && user.multiFactorAuthentication && user.email)
+      //@ts-expect-error fix type
+      return processMFA({ email: user.email, userId: user.id }, meta);
+
+    await signInService.log({ ...signInAttempt, successful: true });
 
     return jwtService.issueTokens(user.id, subject, frontEnd);
   };
@@ -138,12 +200,12 @@ const authenticationService = ({
    *
    * @param {EmailLoginRequest} credentials
    * @param {LoginMeta} meta
-   * @returns {(Promise<Tokens | MFARequest>)}
+   * @returns {(Promise<Tokens | MFAAuthResponse>)}
    */
   const adminLogin = async (
     credentials: EmailLoginRequest,
     meta: LoginMeta
-  ): Promise<Tokens | MFARequest> => {
+  ): Promise<Tokens | MFAAuthResponse> => {
     const { email, password } = credentials;
 
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
@@ -151,9 +213,6 @@ const authenticationService = ({
       where: { email: { [op]: email } },
       include: [{ association: 'password', required: true }],
     });
-
-    if (securityConfig.mfa.enabled && user?.multiFactorAuthentication)
-      return mfaProvider.request({ email, userId: user.id }, meta);
 
     const subject: Subject = { provider: 'email', providerKey: email };
 
@@ -255,6 +314,92 @@ const authenticationService = ({
     }
   };
 
+  const verify = async ({ response, token }: MFVerification, meta: LoginMeta): Promise<Tokens> => {
+    const {
+      ip: remoteAddress,
+      headers: { 'user-agent': userAgent },
+      session: { mfaAuthChallenge },
+      body,
+    } = meta.req;
+
+    const signInAttempt: SignInAttempt = {
+      provider: mfaAuthChallenge?.provider ?? body.provider,
+      providerKey: token ?? response?.id,
+      userId: mfaAuthChallenge?.userId,
+      remoteAddress,
+      userAgent,
+      successful: false,
+    };
+
+    try {
+      if (!mfaAuthChallenge?.challengeId) {
+        await signInService.log({
+          ...signInAttempt,
+          message: 'MFA: missing/invalid session data.',
+        });
+        throw new UnauthorizedError();
+      }
+
+      const { challengeId, deviceId, provider, userId } = mfaAuthChallenge;
+      signInAttempt.userId = userId;
+
+      const device = await MFADevice.findOne({
+        where: { id: deviceId, provider, userId },
+        include: [{ association: 'user', required: true }, { association: 'authenticator' }],
+      });
+
+      if (!device || !device.user?.email || (provider === 'fido' && !device.authenticator)) {
+        await signInService.log({
+          ...signInAttempt,
+          message: 'MFA: No device with corresponding credentials found.',
+        });
+        throw new UnauthorizedError();
+      }
+
+      const {
+        authenticator,
+        user: { email },
+      } = device;
+
+      const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
+
+      const result = await providers[provider].authenticationVerification({
+        // @ts-expect-error - TS does not narrow down authenticator based on above condition
+        authenticator,
+        email,
+        token,
+        challengeId,
+        response,
+      });
+
+      if (!result) {
+        await signInService.log({
+          ...signInAttempt,
+          message: 'MFA: No device & credentials found.',
+        });
+        throw new UnauthorizedError();
+      }
+
+      const [tokens] = await Promise.all([
+        jwtService.issueTokens(userId, { provider: 'email', providerKey: email }, 'admin'),
+        signInService.log({ ...signInAttempt, successful: true }),
+      ]);
+
+      return tokens;
+    } catch (err) {
+      if (err instanceof Error) {
+        const { message, name, stack } = err;
+        logger.debug(`${name}: ${message}`, { stack });
+
+        await signInService.log({ ...signInAttempt, message });
+      }
+
+      throw new UnauthorizedError();
+    } finally {
+      delete meta.req.session.mfaAuthChallenge;
+    }
+  };
+
   return {
     verifyPassword,
     adminLogin,
@@ -262,6 +407,7 @@ const authenticationService = ({
     aliasLogin,
     tokenLogin,
     refresh,
+    verify,
   };
 };
 

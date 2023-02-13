@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { LoginResponse, MFAResponse } from '@intake24/common/types/http';
+import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
 
 const adminSignupController = ({
   adminAuthenticationController,
@@ -10,7 +10,7 @@ const adminSignupController = ({
 }: Pick<IoC, 'adminAuthenticationController' | 'authenticationService' | 'adminSignupService'>) => {
   const signUp = async (
     req: Request,
-    res: Response<LoginResponse | MFAResponse>
+    res: Response<LoginResponse | MFAAuthResponse>
   ): Promise<void> => {
     const {
       body: { name, email, phone, password },
@@ -20,7 +20,7 @@ const adminSignupController = ({
     await adminSignupService.signUp({ name, email, phone, password }, { notify: true, userAgent });
 
     const result = await authenticationService.adminLogin({ email, password }, { req });
-    if ('mfaRequestUrl' in result) {
+    if ('devices' in result) {
       res.json(result);
       return;
     }

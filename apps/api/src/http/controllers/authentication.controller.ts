@@ -9,10 +9,7 @@ const authenticationController = ({
   authenticationService,
   jwtRotationService,
   securityConfig,
-}: Pick<
-  IoC,
-  'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
->) => {
+}: Pick<IoC, 'authenticationService' | 'jwtRotationService' | 'securityConfig'>) => {
   /**
    * Successful login response helper
    * - attach refresh token as secure cookie

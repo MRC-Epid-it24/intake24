@@ -79,6 +79,7 @@
 
 <script lang="ts">
 import type { AxiosError } from 'axios';
+import { startAuthentication } from '@simplewebauthn/browser';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
@@ -109,11 +110,11 @@ export default defineComponent({
 
   async mounted() {
     // Check for MFA response
-    const { state, code } = this.$route.query;
-    if (typeof state !== 'string' || typeof code !== 'string') return;
+    const { state: challengeId, code: token } = this.$route.query;
+    if (typeof challengeId !== 'string' || typeof token !== 'string') return;
 
     try {
-      await this.auth.verify({ state, code });
+      await this.auth.verify({ challengeId, token, provider: 'duo' });
 
       if (this.auth.loggedIn) await this.$router.push({ name: 'dashboard' });
     } catch (err) {
@@ -131,9 +132,20 @@ export default defineComponent({
         this.email = '';
         this.password = '';
 
-        if (this.auth.mfaRequestUrl) {
-          window.location.href = this.auth.mfaRequestUrl;
+        // TODO: Extract this to a separate component / view to handle all MFA providers
+        if (this.auth.mfa?.challenge?.provider === 'duo') {
+          window.location.href = this.auth.mfa?.challenge.challengeUrl;
           return;
+        }
+
+        if (this.auth.mfa?.challenge?.provider === 'fido') {
+          const { challengeId, provider } = this.auth.mfa.challenge;
+          try {
+            const response = await startAuthentication(this.auth.mfa?.challenge.options);
+            await this.auth.verify({ challengeId, provider, response });
+          } catch (err) {
+            useMessages().error('Invalid second step authentication credentials provided.');
+          }
         }
 
         if (this.auth.loggedIn)

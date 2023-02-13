@@ -119,6 +119,8 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
+      <user-mfa></user-mfa>
+      <v-divider></v-divider>
       <app-info></app-info>
     </v-card>
   </div>
@@ -128,15 +130,14 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
+import { UserMfa, UserPassword } from '@intake24/admin/components/user';
 import { useUser } from '@intake24/admin/stores';
 import { AppInfo, setsLanguage } from '@intake24/ui';
-
-import UserPassword from './password.vue';
 
 export default defineComponent({
   name: 'UserProfile',
 
-  components: { AppInfo, UserPassword },
+  components: { AppInfo, UserMfa, UserPassword },
 
   mixins: [setsLanguage],
 

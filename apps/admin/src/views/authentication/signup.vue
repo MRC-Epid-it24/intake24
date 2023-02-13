@@ -205,7 +205,6 @@ export default defineComponent({
     async sendRequest() {
       try {
         const { accessToken } = await this.form.post<LoginResponse>('admin/signup', {
-          withCredentials: true,
           withLoading: true,
         });
         await useAuth().successfulLogin(accessToken);

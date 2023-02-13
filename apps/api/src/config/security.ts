@@ -1,7 +1,5 @@
 import ms from 'ms';
 
-import type { MFAProvider } from '@intake24/common/security';
-
 import type { CookieSettings, SameSiteCookieOptions } from './common';
 
 export type JwtTokenSettings = {
@@ -30,11 +28,19 @@ export type DuoProvider = {
   redirectUrl: string;
 };
 
+export type FIDOProvider = {
+  issuer: string;
+};
+
+export type OTPProvider = {
+  issuer: string;
+};
+
 export type MultiFactorAuthentication = {
-  enabled: boolean;
-  provider: MFAProvider;
   providers: {
     duo: DuoProvider;
+    fido: FIDOProvider;
+    otp: OTPProvider;
   };
 };
 
@@ -111,14 +117,18 @@ const securityConfig: SecurityConfig = {
     },
   },
   mfa: {
-    enabled: process.env.MFA_ENABLED === 'true',
-    provider: process.env.MFA_PROVIDER as MFAProvider,
     providers: {
       duo: {
         clientId: process.env.DUO_CLIENT_ID || '',
         clientSecret: process.env.DUO_CLIENT_SECRET || '',
         apiHost: process.env.DUO_API_HOST || '',
         redirectUrl: process.env.DUO_REDIRECT_URL || '',
+      },
+      fido: {
+        issuer: process.env.FIDO_ISSUER ?? 'intake24',
+      },
+      otp: {
+        issuer: process.env.OTP_ISSUER ?? 'intake24',
       },
     },
   },

@@ -1,6 +1,7 @@
 import type { AwilixContainer } from 'awilix';
 
 import type { RequestIoC } from '@intake24/api/ioc';
+import type { MFAProvider } from '@intake24/common/security';
 
 declare global {
   namespace Express {
@@ -12,9 +13,18 @@ declare global {
 
 declare module 'express-session' {
   interface SessionData {
-    duo: {
-      state: string;
-      email: string;
+    mfaAuthChallenge: {
+      challengeId: string;
+      deviceId: string;
+      provider: MFAProvider;
+      userId: string;
+    };
+    fidoRegChallenge: {
+      challengeId: string;
+    };
+    otpRegChallenge: {
+      challengeId: string;
+      secret: string;
     };
   }
 }

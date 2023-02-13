@@ -233,27 +233,11 @@ System supports multi-factor authentication (`MFA`) for admin login.
 
 Supported providers:
 
+- OTP (one-time password)
+- WebAuthn (FIDO2)
 - [Duo Security](https://duo.com)
 
-MFA has to be enabled on system-level (configuration) and user-level (database user record).
-
-### Enabled
-
-Determines whether the MFA is system-enabled or not
-
-- object-path: `mfa.enabled`
-- dotenv var: `MFA_ENABLED`
-- type: `boolean`
-- default: `false`
-
-### Provider
-
-Selected provider for MFA
-
-- object-path: `mfa.provider`
-- dotenv var: `MFA_PROVIDER`
-- type: `'duo'`
-- default: `'duo'`
+User can add multiple MFA providers to their account.
 
 ### Duo provider settings
 

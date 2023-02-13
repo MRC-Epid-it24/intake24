@@ -1,4 +1,6 @@
+import duo from './duo';
+import fido from './fido';
 import login from './login';
-import verify from './verify';
+import otp from './otp';
 
-export default { login, verify };
+export default { login, duo, fido, otp };

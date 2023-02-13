@@ -20,7 +20,9 @@ export default () => {
     validation.login,
     wrapAsync(adminAuthenticationController.login)
   );
-  router.post('/verify', validation.verify, wrapAsync(adminAuthenticationController.verify));
+  router.post('/duo', validation.duo, wrapAsync(adminAuthenticationController.verify));
+  router.post('/fido', validation.fido, wrapAsync(adminAuthenticationController.verify));
+  router.post('/otp', validation.otp, wrapAsync(adminAuthenticationController.verify));
   router.post('/refresh', wrapAsync(adminAuthenticationController.refresh));
   router.post('/logout', wrapAsync(adminAuthenticationController.logout));
 

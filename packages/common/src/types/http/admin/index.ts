@@ -9,6 +9,7 @@ export * from './image-maps';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
+export * from './mfa-devices';
 export * from './nutrient-tables';
 export * from './nutrient-types';
 export * from './nutrient-units';

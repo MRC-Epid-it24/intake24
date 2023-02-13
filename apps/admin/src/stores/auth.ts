@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia';
 
-import type { EmailLoginRequest, MFAVerifyRequest } from '@intake24/common/types/http';
+import type {
+  EmailLoginRequest,
+  MFAAuthenticationVerificationRequest,
+  MFAAuthResponse,
+} from '@intake24/common/types/http';
 import { authService } from '@intake24/admin/services';
 import { useLoading } from '@intake24/ui/stores';
 
@@ -8,13 +12,13 @@ import { useUser } from './user';
 
 export type AuthState = {
   accessToken: string | null;
-  mfaRequestUrl: string | null;
+  mfa: MFAAuthResponse | null;
 };
 
 export const useAuth = defineStore('auth', {
   state: (): AuthState => ({
     accessToken: null,
-    mfaRequestUrl: null,
+    mfa: null,
   }),
   getters: {
     loggedIn: (state) => !!state.accessToken,
@@ -27,25 +31,25 @@ export const useAuth = defineStore('auth', {
 
     async successfulLogin(accessToken: string) {
       this.setAccessToken(accessToken);
-      this.mfaRequestUrl = null;
+      this.mfa = null;
 
       const userState = useUser();
       if (!userState.loaded) await userState.request();
     },
 
-    mfaRequest(url: string) {
+    mfaRequest(challenge: MFAAuthResponse) {
       this.accessToken = null;
-      this.mfaRequestUrl = url;
+      this.mfa = challenge;
     },
 
     async login(payload: EmailLoginRequest) {
       const data = await authService.login(payload);
 
       if ('accessToken' in data) await this.successfulLogin(data.accessToken);
-      else this.mfaRequest(data.mfaRequestUrl);
+      else this.mfaRequest(data);
     },
 
-    async verify(request: MFAVerifyRequest) {
+    async verify(request: MFAAuthenticationVerificationRequest) {
       const accessToken = await authService.verify(request);
       await this.successfulLogin(accessToken);
     },

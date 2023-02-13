@@ -35,6 +35,10 @@ export default new Vuetify({
       'nutrient-types': 'fas fa-seedling',
       'nutrient-units': 'fas fa-calculator',
       'standard-units': 'fa-cubes-stacked',
+      // MFA Provider icons
+      duo: 'fas fa-mobile-screen-button',
+      fido: 'fas fa-microchip',
+      otp: 'fas fa-stopwatch',
     },
   },
   theme: {

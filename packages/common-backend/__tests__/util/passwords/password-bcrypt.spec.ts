@@ -1,4 +1,4 @@
-import { PasswordBcrypt } from '@intake24/common-backend/util/passwords';
+import { PasswordBcrypt } from '@intake24/common-backend';
 
 describe('PasswordBcrypt', () => {
   it('should pass on correct password', async () => {

@@ -8,7 +8,7 @@ import type { Transaction } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY, globalSupport } from '@intake24/common/security';
-import { defaultAlgorithm } from '@intake24/common-backend/util/passwords';
+import { defaultAlgorithm } from '@intake24/common-backend/util';
 import { Op, Permission, RoleUser, User, UserCustomField, UserPassword } from '@intake24/db';
 
 export type UserPasswordInput = {

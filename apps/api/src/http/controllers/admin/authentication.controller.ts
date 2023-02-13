@@ -2,18 +2,14 @@ import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
-import type { LoginResponse, MFAResponse, RefreshResponse } from '@intake24/common/types/http';
+import type { LoginResponse, MFAAuthResponse, RefreshResponse } from '@intake24/common/types/http';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 
 const adminAuthenticationController = ({
   authenticationService,
   jwtRotationService,
-  mfaProvider,
   securityConfig,
-}: Pick<
-  IoC,
-  'authenticationService' | 'jwtRotationService' | 'mfaProvider' | 'securityConfig'
->) => {
+}: Pick<IoC, 'authenticationService' | 'jwtRotationService' | 'securityConfig'>) => {
   /**
    * Successful login response helper
    * - attach refresh token as secure cookie
@@ -31,11 +27,14 @@ const adminAuthenticationController = ({
       .json({ accessToken });
   };
 
-  const login = async (req: Request, res: Response<LoginResponse | MFAResponse>): Promise<void> => {
+  const login = async (
+    req: Request,
+    res: Response<LoginResponse | MFAAuthResponse>
+  ): Promise<void> => {
     const { email, password } = req.body;
 
     const result = await authenticationService.adminLogin({ email, password }, { req });
-    if ('mfaRequestUrl' in result) {
+    if ('devices' in result) {
       res.json(result);
       return;
     }
@@ -43,15 +42,15 @@ const adminAuthenticationController = ({
     sendTokenResponse(result, res);
   };
 
-  const verify = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { code, state } = req.body;
+  const verify = async (
+    req: Request /*<any, any, MFAAuthenticationVerificationRequest>*/,
+    res: Response<LoginResponse>
+  ): Promise<void> => {
+    const { token, response } = req.body;
 
-    try {
-      const tokens = await mfaProvider.verify({ code, state }, { req });
-      sendTokenResponse(tokens, res);
-    } finally {
-      delete req.session.duo;
-    }
+    const tokens = await authenticationService.verify({ token, response }, { req });
+
+    sendTokenResponse(tokens, res);
   };
 
   const refresh = async (req: Request, res: Response<RefreshResponse>): Promise<void> => {

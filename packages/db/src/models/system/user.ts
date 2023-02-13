@@ -18,6 +18,7 @@ import {
   ClientErrorReport,
   FeedbackScheme,
   Job,
+  MFADevice,
   Permission,
   PermissionUser,
   RefreshToken,
@@ -152,6 +153,9 @@ export default class User
 
   @HasMany(() => Job, 'userId')
   public jobs?: Job[];
+
+  @HasMany(() => MFADevice, 'userId')
+  public mfaDevices?: MFADevice[];
 
   @HasOne(() => UserPassword, 'userId')
   public password?: UserPassword;

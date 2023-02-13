@@ -14,8 +14,9 @@ import {
   dataExportFields,
   dataExportMapper,
   dataExportService,
-  duoSecurityProvider,
+  duoProvider,
   feedbackService,
+  fidoProvider,
   Filesystem,
   foodDataService,
   guideImageService,
@@ -29,6 +30,7 @@ import {
   nutrientTableService,
   nutrientTypeService,
   nutrientUnitService,
+  otpProvider,
   pairwiseSearchService,
   PopularityCountersService,
   portionSizeService,
@@ -53,7 +55,11 @@ export default (container: AwilixContainer): void => {
   container.register({
     authenticationService: asFunction(authenticationService),
     aclService: asFunction(aclService).scoped(),
-    mfaProvider: asFunction(duoSecurityProvider),
+
+    duoProvider: asFunction(duoProvider),
+    fidoProvider: asFunction(fidoProvider),
+    otpProvider: asFunction(otpProvider),
+
     jwtService: asFunction(jwtService),
     jwtRotationService: asFunction(jwtRotationService),
     signInService: asFunction(signInService),

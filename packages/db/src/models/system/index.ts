@@ -7,6 +7,8 @@ export { default as Job } from './job';
 export { default as Language } from './language';
 export { default as LanguageTranslation } from './language-translation';
 export { default as SystemLocale } from './locale';
+export { default as MFAAuthenticator } from './mfa-authenticator';
+export { default as MFADevice } from './mfa-device';
 export { default as SystemNutrientType } from './nutrient-type';
 export { default as SystemNutrientUnit } from './nutrient-unit';
 export { default as PACoOccurrence } from './pairwise-associations-co-occurrence';

@@ -22,6 +22,7 @@ const httpClient: HttpClient = {
       .map((item) => trim(item, '/'))
       .join('/'),
     headers: { common: { 'X-Requested-With': 'XMLHttpRequest' } },
+    withCredentials: true,
   }),
 
   init(router, useAuth: AuthStoreDef) {

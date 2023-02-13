@@ -6,6 +6,7 @@ export * from './gen-user-counters';
 export * from './jobs';
 export * from './languages';
 export * from './locales';
+export * from './mfa-devices';
 export * from './nutrient-types';
 export * from './nutrient-units';
 export * from './pairwise-associations';
