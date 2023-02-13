@@ -27,7 +27,7 @@
     "test:integration:watch": "pnpm test:integration --watch"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.2.1",
+    "@fortawesome/fontawesome-free": "^6.3.0",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "dotenv": "^16.0.3",
@@ -40,14 +40,14 @@
     "sitemap": "^7.1.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.16",
+    "@types/express": "^4.17.17",
     "@types/fs-extra": "^11.0.1",
     "@types/morgan": "^1.9.4",
     "@types/nunjucks": "^3.2.1",
     "@types/supertest": "^2.0.12",
     "@types/webpack-env": "^1.18.0",
     "fork-ts-checker-webpack-plugin": "^7.3.0",
-    "laravel-vite-plugin": "^0.7.3",
+    "laravel-vite-plugin": "^0.7.4",
     "nodemon": "^2.0.20",
     "nodemon-webpack-plugin": "^4.8.1",
     "npm-run-all": "^4.1.5",

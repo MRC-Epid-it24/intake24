@@ -16,6 +16,7 @@
         'vue-i18n',
         'vue-router',
         'vue-recaptcha',
+        'vuetify',
       ],
       matchUpdateTypes: ['major'],
       enabled: false,
