@@ -700,7 +700,7 @@ importers:
 
   packages/ui:
     specifiers:
-      '@hcaptcha/vue-hcaptcha': ^0.4.0
+      '@hcaptcha/vue-hcaptcha': ^1.2.1
       '@pinia/plugin-debounce': ^0.1.0
       '@types/lodash': ^4.14.191
       '@types/node': ^18.11.18
@@ -723,7 +723,7 @@ importers:
       vuetify: ^2.6.14
       workbox-window: ^6.5.4
     dependencies:
-      '@hcaptcha/vue-hcaptcha': 0.4.0_vue@2.7.14
+      '@hcaptcha/vue-hcaptcha': 1.2.1_vue@2.7.14
       '@pinia/plugin-debounce': 0.1.0
       axios: 1.3.1
       echarts: 5.4.1
@@ -2611,8 +2611,8 @@ packages:
     requiresBuild: true
     dev: false
 
-  /@hcaptcha/vue-hcaptcha/0.4.0_vue@2.7.14:
-    resolution: {integrity: sha512-76odg1Sx35Ku8ivaFx6SAhnKs2vgWGeCskGJzNrPDKGJQyGiiXfDiVA/GDPl9JHsi74qMVtVkq9Q+TxZS0TXfQ==}
+  /@hcaptcha/vue-hcaptcha/1.2.1_vue@2.7.14:
+    resolution: {integrity: sha512-KZxug1aHCCOuJNhDTgZioo5J7hs2dkHUlM0+BGnqWkh6qfPHmu2CaegGMDdiqLmG1/XckvdESBbX99mKzCxDKw==}
     peerDependencies:
       vue: ^2.0.0
     dependencies:
