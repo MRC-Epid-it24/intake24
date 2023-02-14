@@ -77,7 +77,6 @@ export type BasePrompt = {
   id: string;
   name: string;
   type: PromptType;
-  component: ComponentType;
   i18n: {
     name: LocaleTranslation;
     text: LocaleTranslation;
@@ -101,75 +100,89 @@ export type ImageMap = {
 export type Prompts = {
   // Custom
   'checkbox-list-prompt': ValidatedPrompt & {
+    component: 'checkbox-list-prompt';
     options: LocaleOptionList;
     other: boolean;
   };
-  'date-picker-prompt': ValidatedPrompt;
-  'info-prompt': BasePrompt;
-  'no-more-information-prompt': BasePrompt;
+  'date-picker-prompt': ValidatedPrompt & { component: 'date-picker-prompt' };
+  'info-prompt': BasePrompt & { component: 'info-prompt' };
+  'no-more-information-prompt': BasePrompt & { component: 'no-more-information-prompt' };
   'radio-list-prompt': ValidatedPrompt & {
+    component: 'radio-list-prompt';
     options: LocaleOptionList;
     orientation: RadioOrientation;
     other: boolean;
   };
-  'textarea-prompt': ValidatedPrompt;
+  'textarea-prompt': ValidatedPrompt & { component: 'textarea-prompt' };
   'time-picker-prompt': ValidatedPrompt & {
+    component: 'time-picker-prompt';
     format: 'ampm' | '24hr';
   };
-  'yes-no-prompt': BasePrompt;
+  'yes-no-prompt': BasePrompt & { component: 'yes-no-prompt' };
   // Portion size
   'as-served-prompt': BasePrompt & {
+    component: 'as-served-prompt';
     leftovers: boolean;
-    linkedQuantityCategories: string[];
+    linkedQuantityCategories: { code: string; unit?: string }[];
   };
   'cereal-prompt': BasePrompt & {
+    component: 'cereal-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
   };
-  'direct-weight-prompt': BasePrompt;
+  'direct-weight-prompt': BasePrompt & { component: 'direct-weight-prompt' };
   'drink-scale-prompt': BasePrompt & {
+    component: 'drink-scale-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
   };
   'guide-image-prompt': BasePrompt & {
+    component: 'guide-image-prompt';
     imageMap: ImageMap;
   };
   'milk-in-a-hot-drink-prompt': BasePrompt & {
+    component: 'milk-in-a-hot-drink-prompt';
     options: LocaleOptionList<number>;
     orientation: RadioOrientation;
   };
   'milk-on-cereal-prompt': BasePrompt & {
+    component: 'milk-on-cereal-prompt';
     imageMap: ImageMap;
   };
   'pizza-prompt': BasePrompt & {
+    component: 'pizza-prompt';
     imageMap: ImageMap;
   };
-  'portion-size-option-prompt': BasePrompt;
-  'standard-portion-prompt': BasePrompt;
+  'portion-size-option-prompt': BasePrompt & { component: 'portion-size-option-prompt' };
+  'standard-portion-prompt': BasePrompt & { component: 'standard-portion-prompt' };
   // Standard
-  'associated-foods-prompt': BasePrompt;
-  'edit-meal-prompt': BasePrompt;
-  'final-prompt': BasePrompt;
+  'associated-foods-prompt': BasePrompt & { component: 'associated-foods-prompt' };
+  'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt' };
+  'final-prompt': BasePrompt & { component: 'final-prompt' };
   'food-search-prompt': BasePrompt & {
+    component: 'food-search-prompt';
     allowBrowsing: boolean;
     dualLanguage: boolean;
   };
   'meal-add-prompt': BasePrompt & {
+    component: 'meal-add-prompt';
     custom: boolean;
   };
   'meal-time-prompt': ValidatedPrompt & {
+    component: 'meal-time-prompt';
     format: 'ampm' | '24hr';
   };
-  'ready-meal-prompt': BasePrompt;
+  'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BasePrompt & {
+    component: 'redirect-prompt';
     url: string | null;
     identifier: 'userId' | 'username' | 'token' | 'custom';
     timer: number;
   };
-  'review-confirm-prompt': BasePrompt;
-  'same-as-before-prompt': BasePrompt;
-  'split-food-prompt': BasePrompt;
-  'submit-prompt': BasePrompt;
+  'review-confirm-prompt': BasePrompt & { component: 'review-confirm-prompt' };
+  'same-as-before-prompt': BasePrompt & { component: 'same-as-before-prompt' };
+  'split-food-prompt': BasePrompt & { component: 'split-food-prompt' };
+  'submit-prompt': BasePrompt & { component: 'submit-prompt' };
 };
 
 export type Prompt = Prompts[keyof Prompts];

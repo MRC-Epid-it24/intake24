@@ -24,6 +24,7 @@ import {
   ImageMap,
   Language,
   NutrientTable,
+  StandardUnit,
   SurveyScheme,
 } from '@intake24/db';
 
@@ -141,6 +142,18 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(feedbackSchemes);
   };
 
+  const standardUnits = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SurveySchemesResponse>
+  ): Promise<void> => {
+    const standardUnits = await StandardUnit.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['id'],
+      order: [['id', 'ASC']],
+    });
+    res.json(standardUnits);
+  };
+
   const surveySchemes = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -162,6 +175,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     locales,
     nutrientTables,
     feedbackSchemes,
+    standardUnits,
     surveySchemes,
   };
 };

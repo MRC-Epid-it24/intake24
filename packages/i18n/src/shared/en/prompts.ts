@@ -212,7 +212,8 @@ const prompts: LocaleMessageObject = {
     },
   },
   linkedAmount: {
-    label: `How many slices (out of {quantity}) did you have {food} on?`,
+    label: `{unit} (out of {quantity}) did you have {food} on?`,
+    unit: 'How many slices',
     all: 'On all of them',
   },
   asServed: {

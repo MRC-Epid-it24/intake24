@@ -95,7 +95,9 @@ import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';
 
-export type CategoryListItem = Pick<CategoryAttributes, 'code' | 'name'>;
+export interface CategoryListItem extends Pick<CategoryAttributes, 'code' | 'name'> {
+  [key: string]: any;
+}
 
 export default defineComponent({
   name: 'AddCategoryDialog',

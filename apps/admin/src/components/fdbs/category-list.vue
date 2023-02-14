@@ -20,9 +20,12 @@
           <v-list-item-avatar>
             <v-icon>fa-list</v-icon>
           </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
-          </v-list-item-content>
+          <slot name="item.content" v-bind="{ item }">
+            <v-list-item-content>
+              <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+            </v-list-item-content>
+          </slot>
+          <slot name="item.action" v-bind="{ item }"></slot>
           <v-list-item-action v-if="!disabled">
             <confirm-dialog
               color="error"

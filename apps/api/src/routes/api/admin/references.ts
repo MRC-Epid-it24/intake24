@@ -62,6 +62,13 @@ export default () => {
   );
 
   router.get(
+    '/standard-units',
+    anyPermission(['survey-schemes']),
+    browse,
+    wrapAsync(referenceController.standardUnits)
+  );
+
+  router.get(
     '/survey-schemes',
     anyPermission(['survey-schemes', 'surveys']),
     browse,

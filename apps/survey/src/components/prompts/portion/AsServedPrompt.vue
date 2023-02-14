@@ -65,9 +65,10 @@
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="promptForLinkedQuantity">
+      <v-expansion-panel v-if="linkedQuantityCategories.length">
         <v-expansion-panel-header disable-icon-rotate>
           <i18n path="prompts.linkedAmount.label">
+            <template #unit>{{ linkedQuantityUnit }}</template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
@@ -84,7 +85,7 @@
             v-model="linkedQuantity"
             :confirm.sync="linkedQuantityConfirmed"
             :max="parentQuantity"
-            :show-all="promptForLinkedQuantity"
+            :show-all="!!linkedQuantityCategories.length"
             @input="selectLinkedQuantity"
             @update:confirm="confirmLinkedQuantity"
           ></quantity-card>
@@ -115,6 +116,7 @@ import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
+import { useStandardUnits } from './useStandardUnits';
 
 export interface AsServedPromptState {
   portionSize: AsServedState;
@@ -142,6 +144,12 @@ export default defineComponent({
 
   emits: ['update'],
 
+  setup() {
+    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+
+    return { standardUnitRefs, fetchStandardUnits };
+  },
+
   data() {
     return {
       ...copy(this.initialState),
@@ -165,6 +173,15 @@ export default defineComponent({
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
 
+    linkedQuantityUnit() {
+      const unit = this.linkedQuantityCategories[0]?.unit;
+      if (!unit || !this.standardUnitRefs[unit]) return this.$t('prompts.linkedAmount.unit');
+
+      return this.getLocaleContent(this.standardUnitRefs[unit].howMany, {
+        path: 'prompts.linkedAmount.unit',
+      });
+    },
+
     linkedQuantityValid(): boolean {
       return this.linkedQuantityConfirmed;
     },
@@ -177,7 +194,7 @@ export default defineComponent({
           !this.hasLeftovers || this.leftoversPrompt === false || this.leftoversValid
         );
 
-      if (this.promptForLinkedQuantity) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },
@@ -192,9 +209,13 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    if (this.promptForLinkedQuantity && !this.linkedQuantityConfirmed)
-      this.linkedQuantity = this.parentQuantity;
+  async mounted() {
+    if (!this.linkedQuantityCategories.length) return;
+
+    const names = this.linkedQuantityCategories.map(({ unit }) => unit).filter(Boolean);
+    if (names.length) await this.fetchStandardUnits(names as string[]);
+
+    if (!this.linkedQuantityConfirmed) this.linkedQuantity = this.parentQuantity;
   },
 
   methods: {

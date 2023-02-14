@@ -72,11 +72,11 @@ import type {
   StandardPortionState,
   StandardPortionUnit,
 } from '@intake24/common/types';
-import type { StandardUnitResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { QuantityCard } from './selectors';
+import { useStandardUnits } from './useStandardUnits';
 
 export type StandardUnitRefs = Record<
   string,
@@ -109,9 +109,14 @@ export default defineComponent({
 
   emits: ['update'],
 
+  setup() {
+    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+
+    return { standardUnitRefs, fetchStandardUnits };
+  },
+
   data() {
     return {
-      standardUnitRefs: {} as StandardUnitRefs,
       ...copy(this.initialState),
     };
   },
@@ -149,7 +154,8 @@ export default defineComponent({
   },
 
   async mounted() {
-    await this.fetchStandardUnits();
+    const names = this.standardUnits.map(({ name }) => name);
+    await this.fetchStandardUnits(names);
 
     if (!this.portionSize.unit && this.standardUnits.length === 1) {
       this.portionSize.unit = this.standardUnits[0];
@@ -158,22 +164,6 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchStandardUnits() {
-      const names = this.standardUnits.map(({ name }) => name);
-      const { data } = await this.$http.get<StandardUnitResponse[]>(
-        'portion-sizes/standard-units',
-        { params: { id: names } }
-      );
-
-      this.standardUnitRefs = data.reduce<StandardUnitRefs>((acc, unit) => {
-        const { id, estimateIn, howMany } = unit;
-
-        acc[id] = { estimateIn, howMany };
-
-        return acc;
-      }, {});
-    },
-
     estimateInLabel(unit: string) {
       return this.$t(`prompts.${this.type}.estimateIn`, {
         unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),

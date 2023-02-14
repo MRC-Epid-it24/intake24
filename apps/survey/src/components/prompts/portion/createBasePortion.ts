@@ -68,23 +68,16 @@ export default <P extends keyof Prompts, S extends object>() =>
           : 0;
       },
 
-      promptForLinkedQuantity(): boolean {
-        const { parentFood } = this;
-        if (
-          !parentFood ||
-          !parentFood.portionSize ||
-          (this.prompt as Prompt).component !== 'as-served-prompt' ||
-          !(this.prompt as Prompts['as-served-prompt']).linkedQuantityCategories.length
-        )
-          return false;
+      linkedQuantityCategories(): Prompts['as-served-prompt']['linkedQuantityCategories'] {
+        const prompt = this.prompt as Prompt;
+        if (prompt.component !== 'as-served-prompt' || !prompt.linkedQuantityCategories.length)
+          return [];
 
-        return (
-          parentFood.data.categories.some((cat) =>
-            (this.prompt as Prompts['as-served-prompt']).linkedQuantityCategories.includes(cat)
-          ) &&
-          parentFood.portionSize.method === 'guide-image' &&
-          parentFood.portionSize.quantity > 1
-        );
+        const { parentFood: { data, portionSize } = {} } = this;
+        if (!portionSize || portionSize.method !== 'guide-image' || portionSize.quantity <= 1)
+          return [];
+
+        return prompt.linkedQuantityCategories.filter((cat) => data?.categories.includes(cat.code));
       },
 
       type() {

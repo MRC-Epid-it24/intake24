@@ -176,6 +176,7 @@ const common: LocaleMessageObject = {
   selected: '{count} items selected',
 
   not: {
+    assigned: 'Not assigned',
     found: 'Not found',
     provided: 'Not provided',
     selected: 'Not selected',

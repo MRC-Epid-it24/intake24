@@ -47,13 +47,17 @@ Allows user to be redirected to external URL with user identifier embedded into 
 #### Options
 
 - `url` - URL to redirect to
+
   - use `{identifier}` to indicate the place where the user identifier should be to inserted.
   - example: `https://example.com/?arg={identifier}`
+
 - `identifier` - identifier that should be embedded into the url.
+
   - `userId` - internal intake24 user id
   - `username` - survey-unique respondent username
   - `token` - authentication token
   - `custom` - custom identifier that can be set through `userCustomField`, name should be `redirect url`
+
 - `timer` - optional timer in seconds when automatic redirect should happen
 
 ### Review confirm prompt
@@ -73,14 +77,19 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `leftovers` - true/false whether to show leftovers option
-- `linked quantity categories` - Category list of parent food that should trigger quantity selection based on parent food quantity
+
+- `linked quantity categories`
+  - Category list of that parent food should have (at least one) to trigger quantity selection based on parent food quantity
+  - Optional, standard unit can be assigned to set the `how-many` label
 
 ### Cereal prompt
 
 #### Options
 
 - `leftovers` - true/false whether to show leftovers option
+
 - `image map labels` - true/false whether to show image map labels
+
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Direct weight prompt
@@ -90,7 +99,9 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `leftovers` - true/false whether to show leftovers option
+
 - `image map labels` - true/false whether to show image map labels
+
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Guide image prompt
@@ -98,6 +109,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `image map labels` - true/false whether to show image map labels
+
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Milk in a hot drink prompt
@@ -105,6 +117,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `options` - locale-specific list of options for milk portion in hot drink (`0-1 range`)
+
 - `orientation` - orientation of radio buttons (column/row)
 
 ### Milk on cereal prompt
@@ -112,6 +125,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `image map labels` - true/false whether to show image map labels
+
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Pizza prompt
@@ -119,6 +133,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 #### Options
 
 - `image map labels` - true/false whether to show image map labels
+
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Portion size option prompt
@@ -136,6 +151,7 @@ Multi-select list of options.
 #### Options
 
 - `options` - locale-specific list of options, `label` (displayed value) and `value` (stored value) can be specified
+
 - `other` - true/false whether to show 'other' option
 
 ### Date picker prompt
@@ -155,7 +171,9 @@ Terminal prompt for `food` or `meal` when no more information is required. It sh
 Single-select list of options.
 
 - `options` - locale-specific list of options, `label` (displayed value) and `value` (stored value) can be specified
+
 - `other` - true/false whether to show 'other' option
+
 - `orientation` - orientation of radio buttons (column/row)
 
 ### Textarea prompt
