@@ -83,11 +83,18 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-chip v-if="device.preferred" color="primary" outlined>
-                {{ $t('user.mfa.devices.preferred') }}
+                {{ $t('user.mfa.devices.preferred._') }}
               </v-chip>
-              <v-btn v-else icon @click="promote(device.id, idx)">
-                <v-icon>far fa-circle-up</v-icon>
-              </v-btn>
+              <confirm-dialog
+                v-else
+                color="primary"
+                icon
+                icon-left="far fa-circle-up"
+                :label="$t('user.mfa.devices.preferred.promote').toString()"
+                @confirm="promote(device.id, idx)"
+              >
+                {{ $t('user.mfa.devices.preferred.promoteConfirm', { name: device.name }) }}
+              </confirm-dialog>
             </v-list-item-action>
             <v-list-item-action>
               <confirm-dialog
@@ -191,6 +198,15 @@ export default defineComponent({
     async remove(deviceId: string) {
       await this.$http.delete(`admin/user/mfa/${deviceId}`);
       this.devices = this.devices.filter((device) => device.id !== deviceId);
+
+      const preferred = this.devices.length && this.devices.find((device) => device.preferred);
+      if (!preferred) {
+        const { data } = await this.$http.patch<MFADeviceEntry>(
+          `admin/user/mfa/${this.devices[0].id}`,
+          { preferred: true }
+        );
+        this.devices.splice(0, 1, data);
+      }
     },
 
     clear() {

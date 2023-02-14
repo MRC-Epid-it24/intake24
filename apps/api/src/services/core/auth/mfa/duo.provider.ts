@@ -49,9 +49,10 @@ const duoProvider = ({
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
+        throw new Error(message);
       }
 
-      throw new UnauthorizedError();
+      throw new Error();
     }
   };
 
@@ -59,11 +60,9 @@ const duoProvider = ({
    * Verify Duo Security authentication response
    *
    * @param {DuoAuthenticationVerificationOps} ops
-   * @returns {Promise<boolean>}
+   * @returns
    */
-  const authenticationVerification = async (
-    ops: DuoAuthenticationVerificationOps
-  ): Promise<boolean> => {
+  const authenticationVerification = async (ops: DuoAuthenticationVerificationOps) => {
     const { email, token } = ops;
     const { clientId, clientSecret, apiHost, redirectUrl } = config;
 
@@ -79,15 +78,15 @@ const duoProvider = ({
       const { stat } = await duoClient.healthCheck();
       if (stat !== 'OK') throw new Error('Duo service not available.');
 
-      await duoClient.exchangeAuthorizationCodeFor2FAResult(token, email);
-      return true;
+      return await duoClient.exchangeAuthorizationCodeFor2FAResult(token, email);
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
         logger.debug(`${name}: ${message}`, { stack });
+        throw new Error(message);
       }
 
-      throw new UnauthorizedError();
+      throw new Error();
     }
   };
 

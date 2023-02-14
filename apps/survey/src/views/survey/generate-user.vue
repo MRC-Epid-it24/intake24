@@ -2,7 +2,6 @@
   <v-container :class="{ 'pa-0': isMobile }">
     <app-entry-screen :logo="logo" :title="$t('common._').toString()" width="30rem">
       <v-card-text class="pa-6">
-        <p>Thank you for choosing to take part in this study!</p>
         <p>Click on the 'Generate access' button generate new credentials for you.</p>
         <p>
           This survey will take approximately 30 minutes to complete. If you would like to be able

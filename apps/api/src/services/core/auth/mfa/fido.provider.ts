@@ -76,7 +76,7 @@ const fidoProvider = ({
     });
 
     if (!verified || !registrationInfo)
-      throw new ValidationError('Invalid FIDO challenge, try again.', { param: 'response' });
+      throw new ValidationError('Invalid FIDO challenge.', { param: 'response' });
 
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(
@@ -116,7 +116,7 @@ const fidoProvider = ({
    * @returns {Promise<FIDOAuthChallenge>}
    */
   const authenticationChallenge = async (device: MFADevice): Promise<FIDOAuthChallenge> => {
-    if (!device.authenticator) throw new Error('No FIDO device found');
+    if (!device.authenticator) throw new Error('No FIDO authenticator found.');
 
     const options = generateAuthenticationOptions({
       allowCredentials: [device.authenticator].map((authenticator) => ({
@@ -134,14 +134,12 @@ const fidoProvider = ({
    * Verify FIDO authentication response
    *
    * @param {FIDOAuthenticationVerificationOps} ops
-   * @returns {Promise<boolean>}
+   * @returns
    */
-  const authenticationVerification = async (
-    ops: FIDOAuthenticationVerificationOps
-  ): Promise<boolean> => {
+  const authenticationVerification = async (ops: FIDOAuthenticationVerificationOps) => {
     const { authenticator, challengeId, response } = ops;
 
-    const { verified } = await verifyAuthenticationResponse({
+    const { verified, authenticationInfo } = await verifyAuthenticationResponse({
       response,
       expectedChallenge: challengeId,
       expectedOrigin: origin,
@@ -154,9 +152,9 @@ const fidoProvider = ({
       },
     });
 
-    if (verified) await authenticator.increment('counter');
+    if (!verified || !authenticationInfo) throw new Error('Invalid FIDO challenge.');
 
-    return verified;
+    return { verified, authenticationInfo };
   };
 
   return {

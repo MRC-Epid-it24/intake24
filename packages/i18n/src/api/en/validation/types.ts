@@ -72,6 +72,7 @@ const attributes: LocaleMessageObject = {
   },
   string: {
     _: '{attribute} must be a string.',
+    minMax: '{attribute} must be a string (min: {min}, max: {max}).',
     or: {
       array: '{attribute} must be a string or an array.',
     },

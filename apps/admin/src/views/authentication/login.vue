@@ -74,31 +74,37 @@
         </v-container>
       </v-card-text>
     </template>
+    <mfa-dialog
+      v-if="auth.mfa"
+      :auth-data="auth.mfa"
+      :value="!!auth.mfa"
+      @close="clearMFAChallenge"
+    ></mfa-dialog>
   </app-entry-screen>
 </template>
 
 <script lang="ts">
 import type { AxiosError } from 'axios';
-import { startAuthentication } from '@simplewebauthn/browser';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
 import { logo } from '@intake24/admin/assets';
-import { useAuth, useMessages, useUser } from '@intake24/admin/stores';
+import { useAuth, useMessages } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppEntryScreen } from '@intake24/ui';
+
+import MfaDialog from './mfa-dialog.vue';
 
 export default defineComponent({
   name: 'SignIn',
 
-  components: { AppEntryScreen },
+  components: { AppEntryScreen, MfaDialog },
 
   data() {
     const auth = useAuth();
-    const user = useUser();
+
     return {
       auth,
-      user,
       email: '',
       password: '',
       showPassword: false,
@@ -108,23 +114,41 @@ export default defineComponent({
     };
   },
 
+  computed: {
+    hasMFAChallenge(): boolean {
+      return !!this.auth.mfa;
+    },
+  },
+
   async mounted() {
-    // Check for MFA response
+    // Check for Duo MFA response
     const { state: challengeId, code: token } = this.$route.query;
     if (typeof challengeId !== 'string' || typeof token !== 'string') return;
 
     try {
       await this.auth.verify({ challengeId, token, provider: 'duo' });
-
-      if (this.auth.loggedIn) await this.$router.push({ name: 'dashboard' });
+      await this.finalizeLogin();
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401)
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
         useMessages().error('Invalid MFA authentication.');
-      else throw err;
+        return;
+      }
+
+      throw err;
     }
   },
 
   methods: {
+    clearMFAChallenge() {
+      this.auth.mfa = null;
+    },
+
+    async finalizeLogin() {
+      if (!this.auth.loggedIn) return;
+
+      await this.$router.push({ name: 'dashboard' });
+    },
+
     async login() {
       const { email, password } = this;
       try {
@@ -132,24 +156,7 @@ export default defineComponent({
         this.email = '';
         this.password = '';
 
-        // TODO: Extract this to a separate component / view to handle all MFA providers
-        if (this.auth.mfa?.challenge?.provider === 'duo') {
-          window.location.href = this.auth.mfa?.challenge.challengeUrl;
-          return;
-        }
-
-        if (this.auth.mfa?.challenge?.provider === 'fido') {
-          const { challengeId, provider } = this.auth.mfa.challenge;
-          try {
-            const response = await startAuthentication(this.auth.mfa?.challenge.options);
-            await this.auth.verify({ challengeId, provider, response });
-          } catch (err) {
-            useMessages().error('Invalid second step authentication credentials provided.');
-          }
-        }
-
-        if (this.auth.loggedIn)
-          await this.$router.push({ name: this.user.isVerified ? 'dashboard' : 'verify' });
+        await this.finalizeLogin();
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err as AxiosError<any>;

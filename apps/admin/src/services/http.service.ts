@@ -91,7 +91,7 @@ const httpClient: HttpClient = {
         const origRequest = config;
 
         // Exclude non-401s and sign-in 401s (/login)
-        if (!origRequest || status !== 401 || config.url?.includes('auth/login'))
+        if (!origRequest || status !== 401 || config.url?.match(/auth\/(login|fido|duo|otp)$/))
           return Promise.reject(err);
 
         // Refresh token has failed. Logout the user

@@ -39,9 +39,8 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
 
     const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
 
-    const result = totp.validate({ token });
-    if (result === null)
-      throw new ValidationError('Invalid OTP challenge, try again.', { param: 'token' });
+    const delta = totp.validate({ token });
+    if (delta === null) throw new ValidationError('Invalid OTP token.', { param: 'token' });
 
     return MFADevice.create({ userId, provider: 'otp', name, secret });
   };
@@ -62,17 +61,17 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
    * Verify OTP authentication response
    *
    * @param {OTPAuthenticationVerificationOps} ops
-   * @returns {Promise<boolean>}
+   * @returns
    */
-  const authenticationVerification = async (
-    ops: OTPAuthenticationVerificationOps
-  ): Promise<boolean> => {
+  const authenticationVerification = async (ops: OTPAuthenticationVerificationOps) => {
     const { secret, token } = ops;
 
     const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
 
     const delta = totp.validate({ token });
-    return delta !== null;
+    if (delta === null) throw new Error('Invalid OTP token');
+
+    return delta;
   };
 
   return {

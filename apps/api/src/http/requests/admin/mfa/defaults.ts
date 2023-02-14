@@ -35,3 +35,11 @@ export const token: ParamSchema = {
   isString: true,
   isEmpty: { negated: true },
 };
+
+export const otpToken: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('string.minMax', { min: 6, max: 6 }),
+  isString: true,
+  isEmpty: { negated: true },
+  isLength: { options: { min: 6, max: 6 } },
+};

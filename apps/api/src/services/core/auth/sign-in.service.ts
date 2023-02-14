@@ -10,18 +10,14 @@ const signInService = ({
   const logger = globalLogger.child({ service: 'SignInService' });
 
   const log = async (input: SignInAttempt): Promise<void> => {
-    logger.debug(
-      `SignInService: Login attempt, Provider: ${input.provider}, ProviderKey: ${input.providerKey}`
-    );
+    logger.debug(`Login attempt, Provider: ${input.provider}, ProviderKey: ${input.providerKey}`);
 
     if (!securityConfig.signInLog.enabled) return;
 
     await SignInLog.create(input);
   };
 
-  return {
-    log,
-  };
+  return { log };
 };
 
 export default signInService;

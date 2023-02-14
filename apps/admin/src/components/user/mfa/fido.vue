@@ -62,6 +62,10 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { form } from '@intake24/admin/helpers';
 
+export interface FIDOForm extends Omit<FIDORegistrationVerificationRequest, 'response'> {
+  response: FIDORegistrationVerificationRequest['response'] | null;
+}
+
 export default defineComponent({
   name: 'FidoDevice',
 
@@ -69,7 +73,7 @@ export default defineComponent({
     return {
       url: 'admin/user/mfa/fido',
       progress: 1,
-      form: form<FIDORegistrationVerificationRequest>({
+      form: form<FIDOForm>({
         challengeId: '',
         name: 'My FIDO device',
         response: null,

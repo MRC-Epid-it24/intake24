@@ -31,7 +31,11 @@ const user: LocaleMessageObject = {
       remove: 'Remove device',
       none: 'No multi-factor authentication device registered.',
       name: 'Device name',
-      preferred: 'Preferred',
+      preferred: {
+        _: 'Preferred',
+        promote: `Promote as preferred?`,
+        promoteConfirm: `Promote {name} as preferred?`,
+      },
       init: {
         _: 'Initialize',
         title: 'Initialize device',

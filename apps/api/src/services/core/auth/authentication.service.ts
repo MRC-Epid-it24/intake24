@@ -333,10 +333,7 @@ const authenticationService = ({
 
     try {
       if (!mfaAuthChallenge?.challengeId) {
-        await signInService.log({
-          ...signInAttempt,
-          message: 'MFA: missing/invalid session data.',
-        });
+        await signInService.log({ ...signInAttempt, message: 'MFA: missing / invalid session.' });
         throw new UnauthorizedError();
       }
 
@@ -344,6 +341,7 @@ const authenticationService = ({
       signInAttempt.userId = userId;
 
       const device = await MFADevice.findOne({
+        attributes: ['id', 'secret'],
         where: { id: deviceId, provider, userId },
         include: [{ association: 'user', required: true }, { association: 'authenticator' }],
       });
@@ -359,26 +357,20 @@ const authenticationService = ({
       const {
         authenticator,
         user: { email },
+        secret,
       } = device;
 
       const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
 
-      const result = await providers[provider].authenticationVerification({
+      await providers[provider].authenticationVerification({
         // @ts-expect-error - TS does not narrow down authenticator based on above condition
         authenticator,
         email,
         token,
         challengeId,
         response,
+        secret,
       });
-
-      if (!result) {
-        await signInService.log({
-          ...signInAttempt,
-          message: 'MFA: No device & credentials found.',
-        });
-        throw new UnauthorizedError();
-      }
 
       const [tokens] = await Promise.all([
         jwtService.issueTokens(userId, { provider: 'email', providerKey: email }, 'admin'),
