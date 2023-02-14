@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { Prompt } from '@intake24/common/prompts';
 import type { SurveyState } from '@intake24/common/types';
 import type {
   SurveyEntryResponse,
@@ -89,10 +90,11 @@ const surveyRespondentController = ({
 
         if (isMealSection(section)) {
           const index = questions.meals[section].findIndex((item) => item.id === question.id);
-          if (index !== -1) questions.meals[section].splice(index, 1, merge(match, question));
+          if (index !== -1)
+            questions.meals[section].splice(index, 1, merge<Prompt>(match, question));
         } else {
           const index = questions[section].findIndex((item) => item.id === question.id);
-          if (index !== -1) questions[section].splice(index, 1, merge(match, question));
+          if (index !== -1) questions[section].splice(index, 1, merge<Prompt>(match, question));
         }
       }
     }

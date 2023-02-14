@@ -15,18 +15,28 @@ export default () => {
     browse,
     wrapAsync(referenceController.asServedSets)
   );
+
   router.get(
     '/drinkware-sets',
     anyPermission(['fdbs']),
     browse,
     wrapAsync(referenceController.drinkwareSets)
   );
+
+  router.get(
+    '/feedback-schemes',
+    anyPermission(['feedback-schemes', 'surveys']),
+    browse,
+    wrapAsync(referenceController.feedbackSchemes)
+  );
+
   router.get(
     '/guide-images',
     anyPermission(['fdbs']),
     browse,
     wrapAsync(referenceController.guideImages)
   );
+
   router.get(
     '/image-maps',
     anyPermission(['fdbs', 'guide-images']),
@@ -52,13 +62,6 @@ export default () => {
     anyPermission(['fdbs']),
     browse,
     wrapAsync(referenceController.nutrientTables)
-  );
-
-  router.get(
-    '/feedback-schemes',
-    anyPermission(['feedback-schemes', 'surveys']),
-    browse,
-    wrapAsync(referenceController.feedbackSchemes)
   );
 
   router.get(

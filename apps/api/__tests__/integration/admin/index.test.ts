@@ -11,6 +11,7 @@ import nutrientTables from './nutrient-tables/index.test';
 import nutrientTypes from './nutrient-types/index.test';
 import nutrientUnits from './nutrient-units/index.test';
 import permissions from './permissions/index.test';
+import references from './references/index.test';
 import roles from './roles/index.test';
 import signInLogs from './sign-in-logs/index.test';
 import signup from './signup/index.test';
@@ -37,6 +38,7 @@ export default () => {
   describe('/api/admin/nutrient-types', nutrientTypes);
   describe('/api/admin/nutrient-units', nutrientUnits);
   describe('/api/admin/permissions', permissions);
+  describe('/api/admin/references', references);
   describe('/api/admin/roles', roles);
   describe('/api/admin/sign-in-logs', signInLogs);
   describe('/api/admin/standard-units', standardUnits);
