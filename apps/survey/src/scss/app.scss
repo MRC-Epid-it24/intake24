@@ -1,22 +1,40 @@
-@import 'vuetify/src/styles/styles.sass';
+@import "vuetify/src/styles/styles.sass";
 @import "fontawesome";
 
 .border-primary-1 {
-    border: 1px solid map-get($blue-grey, 'darken-4') !important;
+    border: 1px solid map-get($blue-grey, "darken-4") !important;
 }
 
 .border-secondary-2 {
-    border: 2px solid map-get($orange, 'darken-3') !important;
+    border: 2px solid map-get($orange, "darken-3") !important;
 }
 
 .border-info-2 {
-    border: 2px solid map-get($blue, 'darken-3') !important;
+    border: 2px solid map-get($blue, "darken-3") !important;
 }
 
 // ConfirmDialog wrapped actions buttons
 .v-card__actions {
     > .v-btn + .v-dialog__container + .v-btn {
         margin-left: 8px;
+    }
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+    .iframe-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 

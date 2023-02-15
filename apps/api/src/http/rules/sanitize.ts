@@ -14,7 +14,11 @@ const createSanitizer = ({ emptyStringToNull }: SanitizeInputOptions = {}) => {
     let output = input;
 
     if (typeof input === 'string') {
-      output = DOMPurify.sanitize(input, { USE_PROFILES: { html: true } });
+      output = DOMPurify.sanitize(input, {
+        USE_PROFILES: { html: true },
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allowfullscreen', 'frameborder'],
+      });
       output = output.trim();
       if (emptyStringToNull && !output.length) output = null;
     }

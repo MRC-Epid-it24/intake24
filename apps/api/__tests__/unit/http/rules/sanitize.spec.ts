@@ -12,14 +12,17 @@ describe('Input sanitation middleware', () => {
           en: 'Are you following any kind of special diet?<svg><g/onload=alert(2)//',
         },
         description: {
-          en: '<p>If yes, please tick<math><mi//xlink:href="data:x,<script>alert(4)</script>"> the options below that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>',
+          en: `<p>If yes, please tick<math><mi//xlink:href="data:x,<script>alert(4)</script>"> the options below
+            that best describes your diet (you can tick more than one e.g. vegetarian and gluten free).</p>`,
         },
         conditions: [],
         validation: {
           required: true,
           message: { en: 'Invalid answer<iframe//src=jAva&Tab;script:alert(3)>' },
         },
-        label: { en: '<iframe//src=jAva&Tab;script:alert(3)>Tick some' },
+        label: {
+          en: '<iframe src="https://www.youtube.com/embed/gdsgdf" width="640" height="360" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
+        },
         options: {
           en: [
             { label: 'Glu<iframe//src=jAva&Tab;script:alert(3)>ten free', value: 'Gluten free' },
@@ -42,12 +45,14 @@ describe('Input sanitation middleware', () => {
           en: '<p>If yes, please tick</p>',
         },
         conditions: [],
-        validation: { required: true, message: { en: 'Invalid answer' } },
-        label: { en: '' },
+        validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
+        label: {
+          en: '<iframe allowfullscreen="allowfullscreen" frameborder="0" height="360" width="640" src="https://www.youtube.com/embed/gdsgdf"></iframe>',
+        },
         options: {
           en: [
-            { label: 'Glu', value: 'Gluten free' },
-            { label: 'Dairy free', value: 'Dairy fr' },
+            { label: 'Glu<iframe>ten free</iframe>', value: 'Gluten free' },
+            { label: 'Dairy free', value: 'Dairy fr<iframe>ee</iframe>' },
           ],
         },
         other: false,
@@ -100,12 +105,12 @@ describe('Input sanitation middleware', () => {
           en: '<p>If yes, please tick</p>',
         },
         conditions: [],
-        validation: { required: true, message: { en: 'Invalid answer' } },
-        label: { en: null },
+        validation: { required: true, message: { en: 'Invalid answer<iframe></iframe>' } },
+        label: { en: '<iframe>Tick some</iframe>' },
         options: {
           en: [
-            { label: 'Glu', value: 'Gluten free' },
-            { label: null, value: 'Dairy fr' },
+            { label: 'Glu<iframe>ten free</iframe>', value: 'Gluten free' },
+            { label: null, value: 'Dairy fr<iframe>ee</iframe>' },
           ],
         },
         other: false,
