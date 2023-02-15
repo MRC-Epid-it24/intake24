@@ -60,6 +60,7 @@ export default defineComponent({
       'hasFinished',
       'hasMeals',
       'meals',
+      'selection',
       'selectedFoodIndex',
       'selectedMealIndex',
     ]),

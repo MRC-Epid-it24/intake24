@@ -2,8 +2,7 @@
   <v-row class="pt-2" justify="center" :no-gutters="isMobile">
     <v-col v-if="showMealList && surveyName" cols="3">
       <meal-list
-        :meals="meals"
-        :survey-name="surveyName"
+        v-bind="{ meals, surveyName }"
         @action="recallAction"
         @food-selected="foodSelected"
         @meal-action="mealAction"
@@ -14,8 +13,7 @@
     <v-col cols="12" lg="9">
       <recall-bread-crumbs
         v-if="promptName"
-        :prompt-name="promptName"
-        @restart="restart"
+        v-bind="{ meals, promptName, selection }"
       ></recall-bread-crumbs>
       <transition mode="out-in" name="component-fade">
         <component

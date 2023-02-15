@@ -2,8 +2,7 @@
   <v-row class="pt-0" justify="center" :no-gutters="isMobile">
     <recall-bread-crumbs-mobile
       v-if="promptName"
-      :prompt-name="promptName"
-      @restart="restart"
+      v-bind="{ meals, promptName, selection }"
     ></recall-bread-crumbs-mobile>
     <transition mode="out-in" type="fade">
       <v-alert

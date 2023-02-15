@@ -6,14 +6,6 @@
       </template>
     </v-breadcrumbs>
     <v-spacer></v-spacer>
-    <confirm-dialog label="Reset survey state" @confirm="$emit('restart')">
-      <template #activator="{ attrs, on }">
-        <v-btn v-bind="attrs" class="mr-2" color="error" icon small v-on="on">
-          <v-icon>fas fa-times</v-icon>
-        </v-btn>
-      </template>
-      Reset survey state
-    </confirm-dialog>
     <request-help :survey-id="$route.params.surveyId">
       <template #activator="{ attrs, on }">
         <v-btn
@@ -27,7 +19,6 @@
         >
           <v-icon>$info</v-icon>
         </v-btn>
-
         <!-- <v-btn v-bind="attrs" class="mr-2" color="error" icon v-on="on">
           <v-icon>fas fa-times</v-icon>
         </v-btn> -->
@@ -46,11 +37,9 @@ export default defineComponent({
 
   mixins: [breadcrumbsMixin],
 
-  emits: ['restart'],
-
   computed: {
     items() {
-      return this.getBreadCrumbs().filter((el) => !el.disabled);
+      return this.getBreadCrumbs.filter((el) => !el.disabled);
     },
   },
 });
