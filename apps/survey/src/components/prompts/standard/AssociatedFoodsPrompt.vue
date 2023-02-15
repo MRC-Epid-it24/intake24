@@ -210,10 +210,15 @@ export default defineComponent({
           this.usedExistingFoodIds = this.usedExistingFoodIds.filter((id) => id !== existingFoodId);
         }
 
-        Vue.set(this.prompts, index, {
-          confirmed: this.prompts[index].confirmed,
-          selectedFood: this.prompts[index].selectedFood,
-        });
+        const selectedFood =
+          this.prompts[index].confirmed === 'yes' && this.associatedFoodPrompts[index].foodCode
+            ? {
+                code: this.associatedFoodPrompts[index].foodCode,
+                de: this.associatedFoodPrompts[index].genericName,
+              }
+            : this.prompts[index].selectedFood;
+
+        Vue.set(this.prompts, index, { confirmed: this.prompts[index].confirmed, selectedFood });
       }
 
       this.goToNextIfCan(index);
