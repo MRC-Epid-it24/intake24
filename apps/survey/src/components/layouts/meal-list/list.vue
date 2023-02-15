@@ -6,7 +6,7 @@
           <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
           <v-list-item-subtitle>{{ surveyName }}</v-list-item-subtitle>
         </v-list-item-content>
-        <context-menu :icon="menuRecallIcon" :menu="menuRecall" @action="action"></context-menu>
+        <context-menu icon="fas fa-angle-double-right" :menu="menu" @action="action"></context-menu>
       </v-list-item>
     </v-list>
     <v-list class="meal-list" dense flat tile>
@@ -41,6 +41,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
@@ -71,10 +72,11 @@ export default defineComponent({
   emits: ['action', 'food-selected', 'meal-selected', 'meal-action'],
 
   data() {
-    return {
-      menuRecallIcon: 'fas fa-angle-double-right',
-      menuRecall: [{ name: 'Add Meal', action: 'addMeal' }],
-    };
+    const menu: MenuItem[] = [
+      { name: this.$t('recall.menu.recall.addMeal').toString(), action: 'addMeal', icon: '$meal' },
+    ];
+
+    return { menu };
   },
 
   computed: {

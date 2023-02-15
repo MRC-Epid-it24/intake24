@@ -1,4 +1,5 @@
 export { default as CategoryContentsView } from './CategoryContentsView.vue';
+export * from './ContextMenu.vue';
 export { default as ContextMenu } from './ContextMenu.vue';
 export { default as ErrorAlert } from './ErrorAlert.vue';
 export { default as FoodBrowser } from './FoodBrowser.vue';

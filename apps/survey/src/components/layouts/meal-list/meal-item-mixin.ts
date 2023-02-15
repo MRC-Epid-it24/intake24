@@ -2,6 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { localeContent } from '@intake24/survey/components/mixins';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
@@ -37,29 +38,34 @@ export default defineComponent({
   emits: ['food-selected', 'meal-selected', 'meal-action'],
 
   data() {
-    return {
-      menuMealIcon: 'fas fa-edit',
-      menuMeal: [
-        {
-          name: this.$t('recall.menu.meal.editFoodInMeal'),
-          action: 'editMeal',
-          dialog: false,
-        },
-        {
-          name: this.$t('recall.menu.meal.editMealTime'),
-          action: 'mealTime',
-          dialog: false,
-        },
-        {
-          name: this.$t('recall.menu.meal.deleteMeal'),
-          action: 'deleteMeal',
-          dialog: true,
-        },
-      ],
-    };
+    return { icon: '$edit' };
   },
 
   computed: {
+    localeMealName() {
+      return this.getLocaleContent(this.meal.name);
+    },
+
+    menu(): MenuItem[] {
+      return [
+        {
+          name: this.$t('recall.menu.meal.editFoodInMeal').toString(),
+          action: 'editMeal',
+          icon: '$food',
+        },
+        {
+          name: this.$t('recall.menu.meal.editMealTime').toString(),
+          action: 'mealTime',
+          icon: '$mealTime',
+        },
+        {
+          name: this.$t('prompts.editMeal.delete._', { item: this.localeMealName }).toString(),
+          action: 'deleteMeal',
+          dialog: true,
+          icon: '$delete',
+        },
+      ];
+    },
     mealTimeString(): string {
       return this.meal.time ? fromMealTime(this.meal.time, true) : '';
     },

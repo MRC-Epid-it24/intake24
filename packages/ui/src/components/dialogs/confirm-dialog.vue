@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :max-width="maxWidth" :persistent="persistent">
-    <template #activator="{ on, attrs }">
+    <template v-if="!external" #activator="{ on, attrs }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-if="show"
@@ -68,6 +68,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    external: {
+      type: Boolean,
+      default: false,
+    },
     fab: {
       type: Boolean,
       default: false,
@@ -113,13 +117,17 @@ export default defineComponent({
     titleText: {
       type: String,
     },
+    value: {
+      type: Boolean,
+      default: false,
+    },
   },
 
-  emits: ['cancel', 'close', 'confirm'],
+  emits: ['cancel', 'close', 'confirm', 'input'],
 
   data() {
     return {
-      dialog: false,
+      dialog: this.value,
     };
   },
 
@@ -136,8 +144,15 @@ export default defineComponent({
   },
 
   watch: {
+    value(val) {
+      if (val === this.dialog) return;
+
+      this.dialog = val;
+    },
     dialog(val) {
       if (val === false) this.$emit('close');
+
+      this.$emit('input', val);
     },
   },
 
@@ -154,6 +169,10 @@ export default defineComponent({
     confirm() {
       this.close();
       this.$emit('confirm');
+    },
+
+    open() {
+      this.dialog = true;
     },
   },
 });

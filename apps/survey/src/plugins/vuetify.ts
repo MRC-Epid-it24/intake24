@@ -28,6 +28,7 @@ export default new Vuetify({
       login: 'fas fa-sign-in-alt',
       logout: 'fas fa-sign-out-alt',
       meal: 'fas fa-utensils',
+      mealTime: 'fas fa-stopwatch',
       next: 'fas fa-angles-right',
       no: 'far fa-circle-xmark',
       options: 'fas fa-ellipsis-vertical',

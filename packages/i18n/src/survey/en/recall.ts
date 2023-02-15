@@ -36,8 +36,8 @@ const recall: LocaleMessageObject = {
     portionSizeComplete: 'Portion size estimation for this food is complete.',
     portionSizeIncomplete: 'Portion size for this food is not yet known.',
     meal: {
-      editFoodInMeal: 'Edit/Change Foods',
-      editMealTime: 'Edit/Change Time',
+      editFoodInMeal: 'Change / Add foods',
+      editMealTime: 'Change Time',
       deleteMeal: 'Delete Meal',
     },
     recall: {
