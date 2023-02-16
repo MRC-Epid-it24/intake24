@@ -7,18 +7,24 @@ const DOMPurify = createDOMPurify(dom.window);
 
 export type SanitizeInputOptions = {
   emptyStringToNull?: boolean;
+  allowHtml?: boolean;
 };
 
-const createSanitizer = ({ emptyStringToNull }: SanitizeInputOptions = {}) => {
+const createSanitizer = ({ allowHtml, emptyStringToNull }: SanitizeInputOptions = {}) => {
   const sanitize = (input: any) => {
     let output = input;
 
     if (typeof input === 'string') {
-      output = DOMPurify.sanitize(input, {
-        USE_PROFILES: { html: true },
-        ADD_TAGS: ['iframe'],
-        ADD_ATTR: ['allowfullscreen', 'frameborder'],
-      });
+      output = DOMPurify.sanitize(
+        input,
+        allowHtml
+          ? {
+              USE_PROFILES: { html: true },
+              ADD_TAGS: ['iframe'],
+              ADD_ATTR: ['allowfullscreen', 'frameborder'],
+            }
+          : { USE_PROFILES: { html: false, mathMl: false, svg: false, svgFilters: false } }
+      );
       output = output.trim();
       if (emptyStringToNull && !output.length) output = null;
     }

@@ -10,7 +10,7 @@ import authentication from './authentication';
 
 export default async (app: Express, ops: Ops): Promise<void> => {
   // Request sanitizers
-  app.use(body('*').customSanitizer(createSanitizer({ emptyStringToNull: true })));
+  app.use(body('*').customSanitizer(createSanitizer({ allowHtml: true, emptyStringToNull: true })));
   app.use(query('*').customSanitizer(createSanitizer({ emptyStringToNull: true })));
 
   // Mount authentication middleware

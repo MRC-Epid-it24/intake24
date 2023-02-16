@@ -1,7 +1,25 @@
 import { createSanitizer } from '@intake24/api/http/rules';
 
 describe('Input sanitation middleware', () => {
-  it('should sanitize/trim HTML input', () => {
+  it('should sanitize/trim input, no HTML by default', () => {
+    const input = {
+      component: 'checkbox-list-prompt',
+      type: 'custom   ',
+      id: '   ask-about-diet<math>',
+      name: 'Ask About Diet<img src=x onerror=alert(1)//>',
+    };
+
+    const output = {
+      component: 'checkbox-list-prompt',
+      type: 'custom',
+      id: 'ask-about-diet',
+      name: 'Ask About Diet',
+    };
+
+    expect(createSanitizer()(input)).toEqual(output);
+  });
+
+  it('should sanitize/trim input, allow safe HTML', () => {
     const input = {
       component: 'checkbox-list-prompt',
       type: 'custom   ',
@@ -60,10 +78,10 @@ describe('Input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer()(input)).toEqual(output);
+    expect(createSanitizer({ allowHtml: true })(input)).toEqual(output);
   });
 
-  it('should sanitize/trim HTML input and convert empty strings to nulls', () => {
+  it('should sanitize/trim input, allow safe HTML, convert empty strings to nulls', () => {
     const input = {
       component: 'checkbox-list-prompt',
       type: 'custom   ',
@@ -118,6 +136,6 @@ describe('Input sanitation middleware', () => {
       },
     };
 
-    expect(createSanitizer({ emptyStringToNull: true })(input)).toEqual(output);
+    expect(createSanitizer({ allowHtml: true, emptyStringToNull: true })(input)).toEqual(output);
   });
 });
