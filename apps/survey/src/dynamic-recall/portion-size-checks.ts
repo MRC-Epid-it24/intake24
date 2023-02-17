@@ -1,4 +1,4 @@
-import type { FoodState, PortionSizeMethodId } from '@intake24/common/types';
+import type { FoodState, MissingFood, PortionSizeMethodId } from '@intake24/common/types';
 
 export function portionSizeMethodSelected(
   selectedFood: FoodState,
@@ -167,3 +167,9 @@ export function standardPortionComplete(selectedFood: FoodState): boolean {
 
   return false;
 }
+
+export const missingFoodComplete = (selectedFood: MissingFood): boolean => {
+  return !selectedFood.info || Object.values(selectedFood.info).some((value) => !value)
+    ? false
+    : true;
+};

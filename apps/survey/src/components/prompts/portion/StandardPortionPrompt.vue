@@ -73,6 +73,7 @@ import type {
   StandardPortionUnit,
 } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 
 import createBasePortion from './createBasePortion';
 import { QuantityCard } from './selectors';
@@ -109,10 +110,12 @@ export default defineComponent({
 
   emits: ['update'],
 
-  setup() {
+  setup(props) {
+    const { getLocaleContent } = useLocale();
+    const { foodName } = useFoodUtils(props.food);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    return { standardUnitRefs, fetchStandardUnits };
+    return { standardUnitRefs, fetchStandardUnits, getLocaleContent, foodName };
   },
 
   data() {

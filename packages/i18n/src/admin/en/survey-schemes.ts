@@ -400,6 +400,10 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Milk on cereal',
       subtitle: 'Use the "milk on cereal" method to estimate the portion size',
     },
+    'missing-food-prompt': {
+      title: 'Missing food',
+      subtitle: 'Collectin information about missing food',
+    },
     'pizza-prompt': {
       title: 'Pizza',
       subtitle: 'Use the "pizza" method to estimate the portion size',

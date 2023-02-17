@@ -1,16 +1,10 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { MealState, Selection } from '@intake24/common/types';
-import { capitalize } from '@intake24/common/util';
 import { RequestHelp } from '@intake24/survey/components';
-import { localeContent } from '@intake24/survey/components/mixins';
-import {
-  findFood,
-  findMeal,
-  fromMealTime,
-  getFoodIndexRequired,
-} from '@intake24/survey/stores/meal-food-utils';
+import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
+import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
 export type BreadcrumbsElement = {
   text: string;
@@ -21,8 +15,6 @@ export default defineComponent({
   name: 'BreadcrumbsMixin',
 
   components: { RequestHelp },
-
-  mixins: [localeContent],
 
   props: {
     meals: {
@@ -39,10 +31,14 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      forwardIcon: 'fas fa-caret-right',
-    };
+  setup() {
+    const { getLocaleContent } = useLocale();
+    const { getFoodName } = useFoodUtils();
+    const { getMealName, getMealNameWithTime } = useMealUtils();
+
+    const forwardIcon = ref('fas fa-caret-right');
+
+    return { forwardIcon, getFoodName, getLocaleContent, getMealName, getMealNameWithTime };
   },
 
   computed: {
@@ -53,15 +49,9 @@ export default defineComponent({
       const foodElement = this.getFoodElement();
       const promptElement = { text: this.promptName, disabled: false };
 
-      if (mealElement) {
-        elements.push(mealElement);
-      } else {
-        elements.push({
-          text: this.asPlainString(this.$t('breadcrumbs.general')),
-          disabled: false,
-        });
-      }
-
+      elements.push(
+        mealElement ?? { text: this.$t('breadcrumbs.general').toString(), disabled: false }
+      );
       if (foodElement) elements.push(foodElement);
 
       elements.push(promptElement);
@@ -72,23 +62,16 @@ export default defineComponent({
 
   methods: {
     getMealLabel(meal: MealState, mealTime = true) {
-      if (!mealTime) return this.getLocaleContent(meal.name);
-
-      return [
-        this.getLocaleContent(meal.name),
-        meal.time ? `(${fromMealTime(meal.time, true)})` : '',
-      ]
-        .filter(Boolean)
-        .join(' ');
+      return mealTime ? this.getMealNameWithTime(meal) : this.getMealName(meal);
     },
 
     getFoodElement(): BreadcrumbsElement | undefined {
       if (this.selection.element?.type != 'food') return undefined;
 
       const food = findFood(this.meals, this.selection.element.foodId);
-      if (food.type === 'free-text') return { text: capitalize(food.description), disabled: false };
+      const text = this.getFoodName(food);
 
-      return { text: food.data.localName ?? food.data.englishName, disabled: false };
+      return { text, disabled: false };
     },
 
     getMealElement(): BreadcrumbsElement | undefined {

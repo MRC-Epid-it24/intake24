@@ -28,16 +28,20 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { MealTime } from '@intake24/common/types';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { useLocale } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
 import { fromMealTime, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
 
 export default defineComponent({
   name: 'MealListMobile',
 
-  mixins: [localeContent],
-
   emits: ['meal-selected'],
+
+  setup() {
+    const { getLocaleContent } = useLocale();
+
+    return { getLocaleContent };
+  },
 
   computed: {
     ...mapState(useSurvey, ['meals', 'selectedMealOptional']),

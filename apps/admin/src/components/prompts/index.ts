@@ -147,6 +147,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
+  'missing-food-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['foods'],
+  },
   'pizza-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],

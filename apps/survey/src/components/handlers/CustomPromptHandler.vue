@@ -4,7 +4,7 @@
     :key="prompt.id"
     v-bind="{
       meal: mealOptional,
-      food: foodOptional(),
+      food: foodOptional,
       prompt,
     }"
     @action="action"
@@ -39,7 +39,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { encodedFoodOptional: foodOptional } = useFoodPromptUtils();
+    const { foodOptional } = useFoodPromptUtils();
     const { mealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
@@ -89,7 +89,7 @@ export default defineComponent({
         // eslint-disable-next-line default-case
         switch (this.selection.element.type) {
           case 'food': {
-            const food = this.foodOptional();
+            const food = this.foodOptional;
             if (!food) {
               console.warn('Expected meal to be defined');
               return;

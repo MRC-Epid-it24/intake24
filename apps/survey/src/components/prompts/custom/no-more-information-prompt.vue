@@ -3,7 +3,7 @@
     <template #actions>
       <confirm-dialog
         v-if="food"
-        :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
+        :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
         @confirm="action('deleteFood', food?.id)"
       >
         <template #activator="{ on, attrs }">
@@ -21,11 +21,11 @@
             {{ $t('recall.actions.deleteFood') }}
           </v-btn>
         </template>
-        {{ $t('prompts.editMeal.delete.confirm', { item: localeFoodName }) }}
+        {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
       </confirm-dialog>
       <template v-if="meal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
+          :label="$t('prompts.editMeal.delete._', { item: mealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -43,7 +43,7 @@
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: localeMealName }) }}
+          {{ $t('prompts.editMeal.delete.confirm', { item: mealName }) }}
         </confirm-dialog>
         <v-btn
           :block="isMobile"
@@ -63,7 +63,7 @@
     <template #nav-actions>
       <template v-if="food">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: localeFoodName }).toString()"
+          :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -74,13 +74,13 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: localeFoodName }) }}
+          {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
         </confirm-dialog>
         <v-divider vertical></v-divider>
       </template>
       <template v-if="meal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: localeMealName }).toString()"
+          :label="$t('prompts.editMeal.delete._', { item: mealName }).toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -91,7 +91,7 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: localeMealName }) }}
+          {{ $t('prompts.editMeal.delete.confirm', { item: mealName }) }}
         </confirm-dialog>
         <v-divider vertical></v-divider>
         <v-btn value="editMeal" @click.stop="action('editMeal', meal?.id)">

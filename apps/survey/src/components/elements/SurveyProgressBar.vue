@@ -21,14 +21,11 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
+import { useLocale } from '@intake24/survey/composables';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
-
-import { localeContent } from '../mixins';
 
 export default defineComponent({
   name: 'SurveyProgressBar',
-
-  mixins: [localeContent],
 
   props: {
     meals: {
@@ -38,17 +35,21 @@ export default defineComponent({
   },
 
   setup() {
+    const { getLocaleContent } = useLocale();
+
     const stringTime = (time: MealTime | undefined): string => {
       if (time === undefined) return '?';
       return fromMealTime(time, true);
     };
+
     const color = (item: MealState) => {
       if (!item.time) return 'primary';
       if (item.foods.length === 0) return 'secondary';
       //   const finishedRecall = item.foods.reduce();
       return 'success';
     };
-    return { color, stringTime };
+
+    return { color, stringTime, getLocaleContent };
   },
 });
 </script>

@@ -3,6 +3,7 @@
     v-bind="{ food: freeTextFood(), localeId, prompt }"
     v-model="searchTerm"
     @food-selected="foodSelected"
+    @missing-food="missingFood"
   ></food-search-prompt>
 </template>
 
@@ -12,7 +13,7 @@ import { mapActions } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
+import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -51,6 +52,25 @@ export default defineComponent({
       this.$emit('action', 'next');
     },
 
+    missingFood() {
+      const { searchTerm } = this;
+      const { id, customPromptAnswers, flags } = this.freeTextFood();
+
+      const newState: MissingFood = {
+        id,
+        type: 'missing-food',
+        info: null,
+        searchTerm,
+        customPromptAnswers,
+        flags,
+        linkedFoods: [],
+      };
+
+      this.replaceFood({ foodId: id, food: newState });
+
+      this.$emit('action', 'next');
+    },
+
     commitAnswer() {
       const { foodData, searchTerm } = this;
       if (foodData === undefined) {
@@ -64,7 +84,7 @@ export default defineComponent({
       // redundant portion size option prompt
       const portionSizeMethodIndex = foodData.portionSizeMethods.length === 1 ? 0 : null;
 
-      const newState: FoodState = {
+      const newState: EncodedFood = {
         id,
         type: 'encoded-food',
         data: foodData,

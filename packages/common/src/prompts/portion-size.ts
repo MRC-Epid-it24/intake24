@@ -72,6 +72,14 @@ export const milkOnCerealPrompt: Prompts['milk-on-cereal-prompt'] = copy({
   imageMap,
 });
 
+export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
+  ...basePrompt,
+  component: 'missing-food-prompt',
+  type: 'portion-size',
+  id: 'missing-food-prompt',
+  name: 'Missing food',
+});
+
 export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
   ...basePrompt,
   component: 'pizza-prompt',
@@ -113,6 +121,7 @@ export const portionSizePromptQuestions: Prompt[] = [
   guideImagePrompt,
   milkInAHotDrinkPrompt,
   milkOnCerealPrompt,
+  missingFoodPrompt,
   pizzaPrompt,
   portionSizeOptionPrompt,
   standardPortionPrompt,

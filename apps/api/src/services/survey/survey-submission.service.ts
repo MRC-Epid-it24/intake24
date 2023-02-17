@@ -4,7 +4,9 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   CustomPromptAnswer,
   Dictionary,
+  EncodedFood,
   FoodState,
+  MissingFood,
   SurveyState,
   WithKey,
 } from '@intake24/common/types';
@@ -12,6 +14,7 @@ import type { SurveyFollowUpResponse } from '@intake24/common/types/http';
 import type {
   SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
+  SurveySubmissionMissingFoodCreationAttributes,
   SurveySubmissionNutrientCreationAttributes,
   SurveySubmissionPortionSizeFieldCreationAttributes,
 } from '@intake24/common/types/models';
@@ -28,6 +31,7 @@ import {
   SurveySubmissionFoodCustomField,
   SurveySubmissionMeal,
   SurveySubmissionMealCustomField,
+  SurveySubmissionMissingFood,
   SurveySubmissionNutrient,
   SurveySubmissionPortionSizeField,
 } from '@intake24/db';
@@ -40,8 +44,10 @@ export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
 };
 
 export type CollectedFoods = {
-  states: FoodState[];
   inputs: SurveySubmissionFoodCreationAttributes[];
+  states: EncodedFood[];
+  missingInputs: SurveySubmissionMissingFoodCreationAttributes[];
+  missingStates: MissingFood[];
 };
 
 export type CollectedNutrientInfo = {
@@ -72,8 +78,11 @@ const surveySubmissionService = ({
   const collectFoodCodes = (foods: FoodState[]) =>
     foods.reduce<FoodCodes>(
       (acc, food) => {
-        if (food.type === 'free-text') {
-          logger.error(`Submission: Free-text food record present in submission, skipping...`);
+        if (food.type !== 'encoded-food') {
+          if (food.type === 'free-text')
+            logger.warn(
+              `Submission: ${food.type} food record present in 'collectFoodCodes, skipping...`
+            );
           return acc;
         }
 
@@ -108,7 +117,19 @@ const surveySubmissionService = ({
     (mealId: string, foods: FoodLocalMap, foodGroups: FoodGroupMap) =>
     (collectedFoods: CollectedFoods, foodState: FoodState) => {
       if (foodState.type === 'free-text') {
-        logger.error(`Submission: Free-text food record present in submission, skipping...`);
+        logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
+        return collectedFoods;
+      }
+
+      if (foodState.type === 'missing-food') {
+        const { info } = foodState;
+        if (!info) {
+          logger.warn(`Submission: ${foodState.type} without info, skipping...`);
+          return collectedFoods;
+        }
+
+        collectedFoods.missingInputs.push({ mealId, ...info });
+        collectedFoods.missingStates.push(foodState);
         return collectedFoods;
       }
 
@@ -124,12 +145,12 @@ const surveySubmissionService = ({
       const foodGroupRecord = foodGroups[groupCode];
 
       if (!foodRecord) {
-        logger.error(`Submission: food code not found (${code}), skipping...`);
+        logger.warn(`Submission: food '${code}' not found, skipping...`);
         return collectedFoods;
       }
 
       if (!foodGroupRecord) {
-        logger.error(`Submission: food group code not found (${groupCode}), skipping...`);
+        logger.warn(`Submission: food group '${groupCode}' not found, skipping...`);
         return collectedFoods;
       }
 
@@ -144,14 +165,14 @@ const surveySubmissionService = ({
       const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
 
       if (!nutrientRecords.length) {
-        logger.error(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
+        logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
         return collectedFoods;
       }
 
       const [nutrientTableRecord] = nutrientRecords;
 
       if (!portionSize) {
-        logger.error(`Submission: Missing portion size data for food code (${code}), skipping...`);
+        logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
         return collectedFoods;
       }
 
@@ -178,12 +199,14 @@ const surveySubmissionService = ({
       collectedFoods.states.push(foodState);
 
       if (linkedFoods.length) {
-        const { states, inputs } = linkedFoods.reduce(collectFoods(mealId, foods, foodGroups), {
-          inputs: [],
-          states: [],
-        });
+        const { states, inputs, missingInputs, missingStates } = linkedFoods.reduce(
+          collectFoods(mealId, foods, foodGroups),
+          { inputs: [], missingInputs: [], states: [], missingStates: [] }
+        );
         collectedFoods.inputs.push(...inputs);
+        collectedFoods.missingInputs.push(...missingInputs);
         collectedFoods.states.push(...states);
+        collectedFoods.missingStates.push(...missingStates);
       }
 
       return collectedFoods;
@@ -196,8 +219,10 @@ const surveySubmissionService = ({
   ) => {
     const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSizes: [] };
 
-    if (foodState.type === 'free-text') {
-      logger.error(`Submission: Free-text food record present in submission, skipping...`);
+    if (foodState.type !== 'encoded-food') {
+      logger.warn(
+        `Submission: ${foodState.type} food record present in 'collectFoodCompositionData', skipping...`
+      );
       return collectedData;
     }
 
@@ -209,7 +234,7 @@ const surveySubmissionService = ({
     const foodRecord = foods[code];
 
     if (!foodRecord) {
-      logger.error(`Submission: food code not found (${code}), skipping...`);
+      logger.warn(`Submission: food code not found (${code}), skipping...`);
       return collectedData;
     }
 
@@ -217,14 +242,14 @@ const surveySubmissionService = ({
       throw new Error('Submission: not loaded foodRecord relationships');
 
     if (!foodRecord.nutrientRecords.length) {
-      logger.error(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
+      logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
       return collectedData;
     }
 
     const [nutrientTableRecord] = foodRecord.nutrientRecords;
 
     if (!portionSize) {
-      logger.error(`Submission: Missing portion size data for food code (${code}), skipping...`);
+      logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
       return collectedData;
     }
 
@@ -498,15 +523,14 @@ const surveySubmissionService = ({
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
           collectFoods(mealId, foodRecordMap, foodGroupMap),
-          { inputs: [], states: [] }
+          { inputs: [], states: [], missingInputs: [], missingStates: [] }
         );
-
-        // TODO: missing foods
 
         // Store meal custom fields & foods
         await Promise.all([
           SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs, { transaction }),
           SurveySubmissionFood.bulkCreate(collectedFoods.inputs, { transaction }),
+          SurveySubmissionMissingFood.bulkCreate(collectedFoods.missingInputs, { transaction }),
         ]);
 
         // Fetch created food records

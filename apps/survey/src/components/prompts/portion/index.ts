@@ -12,6 +12,8 @@ export { default as MilkInAHotDrinkPrompt } from './MilkInAHotDrinkPrompt.vue';
 export * from './MilkInAHotDrinkPrompt.vue';
 export { default as MilkOnCerealPrompt } from './MilkOnCerealPrompt.vue';
 export * from './MilkOnCerealPrompt.vue';
+export { default as MissingFoodPrompt } from './MissingFoodPrompt.vue';
+export * from './MissingFoodPrompt.vue';
 export { default as PizzaPrompt } from './PizzaPrompt.vue';
 export * from './PizzaPrompt.vue';
 export { default as PortionSizeOptionPrompt } from './PortionSizeOptionPrompt.vue';

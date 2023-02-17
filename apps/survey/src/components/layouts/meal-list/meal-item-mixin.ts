@@ -1,10 +1,10 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { useLocale, useMealUtils } from '@intake24/survey/composables';
 import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
 
 import FoodItem from './food-item.vue';
@@ -13,8 +13,6 @@ export default defineComponent({
   name: 'MealItem',
 
   components: { ContextMenu, FoodItem },
-
-  mixins: [localeContent],
 
   props: {
     meal: {
@@ -37,15 +35,16 @@ export default defineComponent({
 
   emits: ['food-selected', 'meal-selected', 'meal-action'],
 
-  data() {
-    return { icon: '$edit' };
+  setup(props) {
+    const { getLocaleContent } = useLocale();
+    const { mealName } = useMealUtils(props.meal);
+
+    const icon = ref('$edit');
+
+    return { getLocaleContent, icon, mealName };
   },
 
   computed: {
-    localeMealName() {
-      return this.getLocaleContent(this.meal.name);
-    },
-
     menu(): MenuItem[] {
       return [
         {
@@ -59,7 +58,7 @@ export default defineComponent({
           icon: '$mealTime',
         },
         {
-          name: this.$t('prompts.editMeal.delete._', { item: this.localeMealName }).toString(),
+          name: this.$t('prompts.editMeal.delete._', { item: this.mealName }).toString(),
           action: 'deleteMeal',
           dialog: true,
           icon: '$delete',

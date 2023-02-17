@@ -57,6 +57,7 @@ export const portionSizeComponentTypes = [
   'guide-image-prompt',
   'milk-in-a-hot-drink-prompt',
   'milk-on-cereal-prompt',
+  'missing-food-prompt',
   'pizza-prompt',
   'portion-size-option-prompt',
   'standard-portion-prompt',
@@ -148,6 +149,9 @@ export type Prompts = {
   'milk-on-cereal-prompt': BasePrompt & {
     component: 'milk-on-cereal-prompt';
     imageMap: ImageMap;
+  };
+  'missing-food-prompt': BasePrompt & {
+    component: 'missing-food-prompt';
   };
   'pizza-prompt': BasePrompt & {
     component: 'pizza-prompt';

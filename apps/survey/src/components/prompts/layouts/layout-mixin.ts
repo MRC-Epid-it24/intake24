@@ -3,8 +3,7 @@ import { defineComponent } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
-import { localeContent } from '@intake24/survey/components/mixins';
-import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
+import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
@@ -13,8 +12,6 @@ export default defineComponent({
   name: 'LayoutMixin',
 
   components: { Next },
-
-  mixins: [localeContent],
 
   props: {
     prompt: {
@@ -39,6 +36,14 @@ export default defineComponent({
 
   emits: ['action', 'update:navTab'],
 
+  setup(props) {
+    const { getLocaleContent } = useLocale();
+    const { foodName } = useFoodUtils(props.food);
+    const { mealName, mealTime, mealNameWithTime } = useMealUtils(props.meal);
+
+    return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime };
+  },
+
   computed: {
     foodOrMealId() {
       return this.food?.id ?? this.meal?.id;
@@ -60,22 +65,6 @@ export default defineComponent({
       return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
     },
 
-    localeFoodName() {
-      if (!this.food) return undefined;
-
-      if (this.food.type === 'encoded-food') return this.getLocaleContent(this.food.data.localName);
-
-      return this.food.description;
-    },
-
-    localeMealName() {
-      return this.meal && this.getLocaleContent(this.meal.name);
-    },
-
-    mealTime() {
-      return this.meal?.time ? fromMealTime(this.meal.time, true) : undefined;
-    },
-
     localeText(): string {
       return this.getLocaleContent(this.prompt.i18n.text, {
         path: `prompts.${this.type}.text`,
@@ -88,11 +77,9 @@ export default defineComponent({
 
       if (this.prompt.type !== 'custom') return undefined;
 
-      if (this.localeFoodName) return this.localeFoodName;
+      if (this.foodName) return this.foodName;
 
-      return this.localeMealName && this.mealTime
-        ? `${this.localeMealName} (${this.mealTime})`
-        : this.localeMealName;
+      return this.mealNameWithTime;
     },
 
     localeDescription(): string | undefined {
@@ -104,25 +91,25 @@ export default defineComponent({
 
     params(): Dictionary<string> {
       const params: Dictionary<string> = {};
-      const { localeFoodName, localeMealName, mealTime } = this;
+      const { foodName, mealName, mealTime } = this;
 
-      if (localeFoodName) {
-        params.item = localeFoodName;
-        params.food = localeFoodName;
+      if (foodName) {
+        params.item = foodName;
+        params.food = foodName;
       }
 
-      if (localeMealName) {
-        params.mealName = localeMealName;
+      if (mealName) {
+        params.mealName = mealName;
 
         if (mealTime) {
           params.mealTime = mealTime;
 
-          const meal = `${localeMealName} (${mealTime})`;
+          const meal = `${mealName} (${mealTime})`;
           params.item = meal;
           params.meal = meal;
         } else {
-          params.item = localeMealName;
-          params.meal = localeMealName;
+          params.item = mealName;
+          params.meal = mealName;
         }
       }
 

@@ -7,22 +7,20 @@
         </v-btn>
       </template>
       <v-list dense>
-        <v-list-item-group color="primary">
-          <template v-for="(item, idx) in menu">
-            <v-list-item
-              :key="item.name"
-              @click="item.dialog ? openDialog(item.action) : action(item.action)"
-            >
-              <v-list-item-icon v-if="item.icon">
-                <v-icon small>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider v-if="idx + 1 < menu.length" :key="`div-${item.name}`"></v-divider>
-          </template>
-        </v-list-item-group>
+        <template v-for="(item, idx) in menu">
+          <v-list-item
+            :key="item.name"
+            @click="item.dialog ? openDialog(item.action) : action(item.action)"
+          >
+            <v-list-item-icon v-if="item.icon">
+              <v-icon small>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider v-if="idx + 1 < menu.length" :key="`div-${item.name}`"></v-divider>
+        </template>
       </v-list>
     </v-menu>
     <confirm-dialog

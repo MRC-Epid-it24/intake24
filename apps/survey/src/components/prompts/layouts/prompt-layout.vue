@@ -2,7 +2,7 @@
   <div>
     <v-card v-if="headerText" class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
       <h3>
-        <slot name="prompt-text">{{ capitalize(headerText) }}</slot>
+        <slot name="prompt-text">{{ headerText }}</slot>
       </h3>
     </v-card>
     <v-card :flat="isMobile" :tile="isMobile">
@@ -120,18 +120,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { capitalize } from '@intake24/common/util';
-
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
   name: 'PromptLayout',
 
   mixins: [layoutMixin],
-
-  methods: {
-    capitalize,
-  },
 });
 </script>
 

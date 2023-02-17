@@ -27,6 +27,29 @@
       :results="searchResults"
       @food-selected="onFoodSelected"
     ></food-search-results>
+    <v-card-text>
+      <v-btn
+        :block="isMobile"
+        :class="{ 'mb-2': isMobile }"
+        color="secondary"
+        large
+        outlined
+        :title="$t(`prompts.${type}.browse`)"
+      >
+        {{ $t(`prompts.${type}.browse`) }}
+      </v-btn>
+      <v-btn
+        :block="isMobile"
+        :class="{ 'ml-2': !isMobile }"
+        color="secondary"
+        large
+        outlined
+        :title="$t(`prompts.${type}.missing`)"
+        @click.stop="$emit('missing-food')"
+      >
+        {{ $t(`prompts.${type}.missing`) }}
+      </v-btn>
+    </v-card-text>
     <template #actions>
       <!-- Should not have actions -> only click & select -->
       <div></div>
@@ -64,7 +87,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'input'],
+  emits: ['food-selected', 'input', 'missing-food'],
 
   data() {
     return {

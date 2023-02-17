@@ -3,7 +3,7 @@ import type { LocaleTranslation } from '../types';
 export const promptLayouts = ['desktop', 'mobile'] as const;
 export type PromptLayout = (typeof promptLayouts)[number];
 
-export const genericActionTypes = ['next', 'review'] as const;
+export const genericActionTypes = ['addMeal', 'next', 'review', 'no-more-information'] as const;
 export const mealActionTypes = [
   'addMeal',
   'deleteFood',

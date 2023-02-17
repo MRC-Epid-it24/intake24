@@ -26,13 +26,14 @@ import {
   guideImageComplete,
   milkInAHotDrinkComplete,
   milkOnCerealComplete,
+  missingFoodComplete,
   pizzaComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
 } from './portion-size-checks';
 
 const foodEnergy = (energy: number, food: FoodState): number => {
-  if (food.type === 'free-text' || !food.portionSize) return energy;
+  if (food.type !== 'encoded-food' || !food.portionSize) return energy;
 
   const {
     portionSize: { leftoversWeight, servingWeight },
@@ -212,7 +213,8 @@ const checkFoodStandardConditions = (
   foodState: FoodState,
   prompt: Prompt
 ): boolean => {
-  switch (prompt.component) {
+  const { component } = prompt;
+  switch (component) {
     case 'info-prompt': {
       if (foodState.flags.includes(`${prompt.id}-acknowledged`)) {
         recallLog().promptCheck('info-prompt', false, `${prompt.id}-acknowledged flag set`);
@@ -225,9 +227,9 @@ const checkFoodStandardConditions = (
     case 'food-search-prompt': {
       const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 
-      if (foodState.type === 'encoded-food') {
+      if (['encoded-food', 'missing-food'].includes(foodState.type)) {
         recallLog().promptCheck(
-          prompt.component,
+          component,
           false,
           `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
         );
@@ -236,7 +238,7 @@ const checkFoodStandardConditions = (
 
       if (surveyState.data.selection.mode === 'manual') {
         recallLog().promptCheck(
-          prompt.component,
+          component,
           true,
           'Selected food entry type is free-text and selection mode is manual'
         );
@@ -245,7 +247,7 @@ const checkFoodStandardConditions = (
 
       if (freeEntryComplete) {
         recallLog().promptCheck(
-          prompt.component,
+          component,
           true,
           'Selected food entry type is free-text and all meals have free-entry-complete flag set'
         );
@@ -253,7 +255,7 @@ const checkFoodStandardConditions = (
       }
 
       recallLog().promptCheck(
-        prompt.component,
+        component,
         false,
         `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
       );
@@ -269,7 +271,7 @@ const checkFoodStandardConditions = (
         !foodState.flags.includes('split-food-complete')
       ) {
         recallLog().promptCheck(
-          prompt.component,
+          component,
           true,
           'Selected food entry type is free-text and all meals have free-entry-complete flag set'
         );
@@ -277,7 +279,7 @@ const checkFoodStandardConditions = (
       }
 
       recallLog().promptCheck(
-        prompt.component,
+        component,
         false,
         `Selected food entry type is ${foodState.type}, free entry complete: ${freeEntryComplete}`
       );
@@ -287,14 +289,14 @@ const checkFoodStandardConditions = (
     case 'portion-size-option-prompt': {
       if (foodState.type === 'encoded-food' && foodState.portionSizeMethodIndex === null) {
         recallLog().promptCheck(
-          'portion-size-option-prompt',
+          component,
           true,
           'Entry type is encoded-food and no portion size method is selected'
         );
         return true;
       }
       recallLog().promptCheck(
-        'portion-size-option-prompt',
+        component,
         false,
         foodState.type === 'encoded-food'
           ? 'Portion size method already selected'
@@ -306,14 +308,14 @@ const checkFoodStandardConditions = (
     case 'as-served-prompt': {
       if (portionSizeMethodSelected(foodState, 'as-served') && !asServedComplete(foodState)) {
         recallLog().promptCheck(
-          'as-served-prompt',
+          component,
           true,
           'As served portion size method selected but yet not complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'as-served-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'as-served')
           ? 'As served portion size estimation not selected'
@@ -325,14 +327,14 @@ const checkFoodStandardConditions = (
     case 'cereal-prompt': {
       if (portionSizeMethodSelected(foodState, 'cereal') && !cerealComplete(foodState)) {
         recallLog().promptCheck(
-          'cereal-prompt',
+          component,
           true,
           'Cereal portion size method selected but yet not complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'cereal-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'cereal')
           ? 'Cereal portion size estimation not selected'
@@ -344,14 +346,14 @@ const checkFoodStandardConditions = (
     case 'guide-image-prompt': {
       if (portionSizeMethodSelected(foodState, 'guide-image') && !guideImageComplete(foodState)) {
         recallLog().promptCheck(
-          'guide-image-prompt',
+          component,
           true,
           'Guide image selected but estimation not yet complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'guide-image-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'guide-image')
           ? 'Guide image estimation already complete'
@@ -363,14 +365,14 @@ const checkFoodStandardConditions = (
     case 'drink-scale-prompt': {
       if (portionSizeMethodSelected(foodState, 'drink-scale') && !drinkScaleComplete(foodState)) {
         recallLog().promptCheck(
-          'drink-scale-prompt',
+          component,
           true,
           'Drink Scale selected but estimation not yet complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'drink-scale-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'drink-scale')
           ? 'Drink Scale estimation already complete'
@@ -385,14 +387,14 @@ const checkFoodStandardConditions = (
         !milkInAHotDrinkComplete(foodState)
       ) {
         recallLog().promptCheck(
-          'milk-in-a-hot-drink-prompt',
+          component,
           true,
           'Milk in hot drink selected but estimation not yet complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'milk-in-a-hot-drink-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'milk-in-a-hot-drink')
           ? 'Milk in hot drink estimation already complete'
@@ -407,14 +409,14 @@ const checkFoodStandardConditions = (
         !milkOnCerealComplete(foodState)
       ) {
         recallLog().promptCheck(
-          'milk-on-cereal-prompt',
+          component,
           true,
           'Milk on cereal selected but estimation not yet complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'milk-on-cereal-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'milk-on-cereal')
           ? 'Milk on cereal estimation already complete'
@@ -425,15 +427,11 @@ const checkFoodStandardConditions = (
 
     case 'pizza-prompt': {
       if (portionSizeMethodSelected(foodState, 'pizza') && !pizzaComplete(foodState)) {
-        recallLog().promptCheck(
-          'pizza-prompt',
-          true,
-          'Pizza selected but estimation not yet complete'
-        );
+        recallLog().promptCheck(component, true, 'Pizza selected but estimation not yet complete');
         return true;
       }
       recallLog().promptCheck(
-        'pizza-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'pizza')
           ? 'Pizza estimation already complete'
@@ -448,14 +446,14 @@ const checkFoodStandardConditions = (
         !standardPortionComplete(foodState)
       ) {
         recallLog().promptCheck(
-          'standard-portion-prompt',
+          component,
           true,
           'Standard portion estimation selected but not yet complete'
         );
         return true;
       }
       recallLog().promptCheck(
-        'standard-portion-prompt',
+        component,
         false,
         portionSizeMethodSelected(foodState, 'standard-portion')
           ? 'Standard portion estimation already complete'
@@ -479,31 +477,40 @@ const checkFoodStandardConditions = (
       );
     }
 
-    case 'no-more-information-prompt':
+    case 'no-more-information-prompt': {
       if (surveyState.data.selection.mode === 'manual') {
         if (surveyState.data.selection.element?.type === 'meal') {
           recallLog().promptCheck(
-            'no-more-information-prompt',
+            component,
             true,
             `Manual: no more prompts left for ${foodState.id} in this Meal`
           );
           return false;
         } else {
           recallLog().promptCheck(
-            'no-more-information-prompt',
+            component,
             true,
             `Manual: no more prompts left for ${foodState.id}`
           );
           return true;
         }
       } else {
-        recallLog().promptCheck(
-          'no-more-information-prompt',
-          false,
-          `Auto: no more prompts left for ${foodState.id}`
-        );
+        recallLog().promptCheck(component, false, `Auto: no more prompts left for ${foodState.id}`);
         return false;
       }
+    }
+
+    case 'missing-food-prompt': {
+      if (foodState.type !== 'missing-food') return false;
+
+      if (missingFoodComplete(foodState)) {
+        recallLog().promptCheck(component, false, `Missing food info entered.`);
+        return false;
+      }
+
+      recallLog().promptCheck(component, true, `Missing food info not entered yet..`);
+      return true;
+    }
 
     default: {
       if (foodState.customPromptAnswers[prompt.id] === undefined) {

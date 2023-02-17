@@ -91,6 +91,8 @@ const prompts: LocaleMessageObject = {
       <p>Choose the item you had or the closest match.</p>`,
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
+    browse: 'Browse all foods',
+    missing: `I can't find my food`,
   },
   mealAdd: {
     _: 'Add meal',
@@ -296,6 +298,21 @@ const prompts: LocaleMessageObject = {
     // description: 'Placeholder',
     container: 'Select the bowl that looks most like the one you used for your {food}.',
     milk: 'Choose the level your milk came up to (without cereal).',
+  },
+  missingFood: {
+    name: 'Missing food',
+    text: '{food}',
+    description: `You said you were unable to find a good match for "{food}" in our food database.
+      Please answer the following questions to help us identify this food and add it to our food list.`,
+    info: {
+      name: 'What is the name of the missing food, dish or drink?',
+      brand: 'What brand is the missing food, or what shop/store was it purchased from?',
+      description:
+        'Please provide a description of the missing food or dish. If it was a homemade dish, please specify ingredients and quantities, where possible.',
+      portionSize: 'How was the missing food or dish cooked?',
+      leftovers:
+        'How much of the missing food or dish did you eat, e.g. 2 teaspoons, 1 handful, 125 grams, ½ cup etc?',
+    },
   },
   pizza: {
     name: 'Pizza',

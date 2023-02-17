@@ -6,7 +6,7 @@
         link
         @click="emitFoodSelected(food.id)"
       >
-        <v-list-item-title class="text-wrap">{{ foodDisplayName(food) }}</v-list-item-title>
+        <v-list-item-title class="text-wrap">{{ getFoodName(food) }}</v-list-item-title>
         <v-list-item-action class="list-item">
           <v-tooltip v-if="food.type === 'encoded-food'" bottom>
             <template #activator="{ on, attrs }">
@@ -51,6 +51,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
+import { useFoodUtils } from '@intake24/survey/composables';
 
 export default defineComponent({
   name: 'FoodItem',
@@ -73,6 +74,12 @@ export default defineComponent({
 
   emits: ['food-selected'],
 
+  setup() {
+    const { getFoodName } = useFoodUtils();
+
+    return { getFoodName };
+  },
+
   methods: {
     onLinkedFoodSelected(foodId: number) {
       this.emitFoodSelected(foodId);
@@ -80,10 +87,6 @@ export default defineComponent({
 
     emitFoodSelected(foodId: number) {
       this.$emit('food-selected', foodId);
-    },
-
-    foodDisplayName(food: FoodState): string {
-      return food.type === 'free-text' ? food.description : food.data.localName;
     },
   },
 });

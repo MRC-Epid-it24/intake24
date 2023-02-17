@@ -13,6 +13,7 @@ import type {
   MealFlag,
   MealState,
   MealTime,
+  MissingFood,
   PromptAnswer,
   Selection,
   SurveyState as CurrentSurveyState,
@@ -512,7 +513,10 @@ export const useSurvey = defineStore('survey', {
 
     updateFood(data: {
       foodId: number;
-      update: Partial<Omit<FreeTextFood, 'type'>> | Partial<Omit<EncodedFood, 'type'>>;
+      update:
+        | Partial<Omit<FreeTextFood, 'type'>>
+        | Partial<Omit<EncodedFood, 'type'>>
+        | Partial<Omit<MissingFood, 'type'>>;
     }) {
       const foodState = findFood(this.meals, data.foodId);
       this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });

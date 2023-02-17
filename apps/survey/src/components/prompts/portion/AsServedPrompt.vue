@@ -113,6 +113,7 @@ import type {
 } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
+import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
@@ -144,10 +145,12 @@ export default defineComponent({
 
   emits: ['update'],
 
-  setup() {
+  setup(props) {
+    const { getLocaleContent } = useLocale();
+    const { foodName } = useFoodUtils(props.food);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    return { standardUnitRefs, fetchStandardUnits };
+    return { standardUnitRefs, fetchStandardUnits, foodName, getLocaleContent };
   },
 
   data() {

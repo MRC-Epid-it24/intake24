@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from './actions';
@@ -14,8 +14,6 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
     name: 'BasePrompt',
 
     components: { Next, PromptLayout },
-
-    mixins: [localeContent],
 
     props: {
       food: {
@@ -31,6 +29,14 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
     },
 
     emits: ['action'],
+
+    setup(props) {
+      const { getLocaleContent } = useLocale();
+      const { foodName } = useFoodUtils<FoodState | undefined>(props.food as FoodState | undefined);
+      const { mealName } = useMealUtils(props.meal);
+
+      return { foodName, getLocaleContent, mealName };
+    },
 
     data() {
       return {
@@ -51,23 +57,8 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         return !!this.meal;
       },
 
-      localeFoodName(): string | undefined {
-        if (!this.food) return undefined;
-
-        // temp ts-fix
-        const food = this.food as FoodState;
-
-        if (food.type === 'encoded-food') return this.getLocaleContent(food.data.localName);
-
-        return food.description;
-      },
-
-      localeMealName() {
-        return this.meal && this.getLocaleContent(this.meal.name);
-      },
-
       foodOrMealName() {
-        return this.localeMealName ?? this.localeFoodName ?? '';
+        return this.mealName ?? this.foodName ?? '';
       },
 
       isValid(): boolean {

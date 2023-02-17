@@ -111,7 +111,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood, MissingFood } from '@intake24/common/types';
 
 import layoutMixin from './layout-mixin';
 
@@ -122,7 +122,7 @@ export default defineComponent({
 
   props: {
     food: {
-      type: Object as PropType<EncodedFood>,
+      type: Object as PropType<EncodedFood | MissingFood>,
       required: true,
     },
   },

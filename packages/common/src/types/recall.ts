@@ -222,7 +222,7 @@ export interface AbstractFoodState {
   // eslint-disable-next-line no-use-before-define
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  type: 'free-text' | 'encoded-food';
+  type: 'free-text' | 'encoded-food' | 'missing-food';
 }
 
 export interface FreeTextFood extends AbstractFoodState {
@@ -237,9 +237,22 @@ export interface EncodedFood extends AbstractFoodState {
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
   associatedFoodsComplete: boolean;
+  // brand: string[]; TODO V3?
 }
 
-export type FoodState = FreeTextFood | EncodedFood;
+export interface MissingFood extends AbstractFoodState {
+  type: 'missing-food';
+  searchTerm: string;
+  info: {
+    name: string;
+    brand: string;
+    description: string;
+    leftovers: string;
+    portionSize: string;
+  } | null;
+}
+
+export type FoodState = FreeTextFood | EncodedFood | MissingFood;
 
 export interface FoodEntry {
   text: string;

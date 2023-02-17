@@ -2,9 +2,9 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import { ValidInvalidIcon } from '@intake24/survey/components/elements';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
@@ -16,11 +16,9 @@ export default <P extends keyof Prompts, S extends object>() =>
 
     components: { Next, PortionLayout, PromptLayout, ValidInvalidIcon },
 
-    mixins: [localeContent],
-
     props: {
       food: {
-        type: Object as PropType<EncodedFood>,
+        type: Object as PropType<EncodedFood | MissingFood>,
         required: true,
       },
       parentFood: {
@@ -38,6 +36,13 @@ export default <P extends keyof Prompts, S extends object>() =>
 
     emits: ['action'],
 
+    setup(props) {
+      const { getLocaleContent } = useLocale();
+      const { foodName } = useFoodUtils(props.food);
+
+      return { foodName, getLocaleContent };
+    },
+
     data() {
       return {
         errors: [] as string[],
@@ -46,10 +51,6 @@ export default <P extends keyof Prompts, S extends object>() =>
     },
 
     computed: {
-      foodName(): string {
-        return this.getLocaleContent({ en: this.food.data.localName });
-      },
-
       hasErrors(): boolean {
         return !!this.errors.length;
       },

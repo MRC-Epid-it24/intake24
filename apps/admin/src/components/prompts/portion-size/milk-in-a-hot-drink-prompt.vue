@@ -44,7 +44,7 @@ import { basePrompt } from '../partials';
 import PromptListOptions from '../partials/prompt-list-options.vue';
 
 export default defineComponent({
-  name: 'MilkInAHotDrink',
+  name: 'MilkInAHotDrinkPrompt',
 
   components: { PromptListOptions, LanguageSelector },
 

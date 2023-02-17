@@ -1,7 +1,7 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { ComponentType } from '@intake24/common/prompts';
+import type { ComponentType, GenericActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
 import type { FoodState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
@@ -13,7 +13,7 @@ import {
   portionSizeHandlers,
   standardHandlers,
 } from '@intake24/survey/components/handlers';
-import { localeContent } from '@intake24/survey/components/mixins';
+import { useLocale } from '@intake24/survey/composables';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
@@ -26,10 +26,6 @@ interface SavedState {
   selection: Selection;
 }
 
-export type RecallAction = 'addMeal' | 'review' | 'no-more-information';
-
-export type MealAction = 'editMeal' | 'mealTime' | 'deleteMeal';
-
 export default defineComponent({
   name: 'RecallMixin',
 
@@ -40,12 +36,12 @@ export default defineComponent({
     ...portionSizeHandlers,
   },
 
-  mixins: [localeContent],
-
   data() {
+    const { getLocaleContent } = useLocale();
     const survey = useSurvey();
 
     return {
+      getLocaleContent,
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
@@ -237,7 +233,7 @@ export default defineComponent({
       }
     },
 
-    async mealAction(payload: { type: MealAction; mealId: number }) {
+    async mealAction(payload: { type: MealActionType; mealId: number }) {
       switch (payload.type) {
         case 'editMeal':
           this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
@@ -252,7 +248,7 @@ export default defineComponent({
       }
     },
 
-    recallAction(action: RecallAction) {
+    recallAction(action: GenericActionType) {
       if (this.hasFinished) return;
 
       switch (action) {

@@ -9,8 +9,12 @@ Vue.use(VueI18n);
 
 const buildWithLocales = ['en'];
 
-export default new VueI18n({
+const i18n = new VueI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages: pick(merge(shared, survey), buildWithLocales),
 });
+
+export default i18n;
+
+export const useI18n = () => i18n;

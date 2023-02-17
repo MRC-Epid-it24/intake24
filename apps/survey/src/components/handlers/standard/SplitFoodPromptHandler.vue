@@ -8,12 +8,11 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type { GenericActionType, Prompts } from '@intake24/common/prompts';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
 
-import type { RecallAction } from '../../recall/recall-mixin';
 import { useFoodPromptUtils } from '../mixins';
 
 export default defineComponent({
@@ -83,7 +82,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setFoods']),
 
-    action(type: 'single' | 'separate' | RecallAction, id?: number) {
+    action(type: 'single' | 'separate' | GenericActionType, id?: number) {
       if (['single', 'separate'].includes(type)) {
         this[type as 'single' | 'separate']();
         return;

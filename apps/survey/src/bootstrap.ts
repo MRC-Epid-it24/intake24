@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import { Intersect, Resize, Ripple } from 'vuetify/lib/directives';
 
-import loading from './mixins/loading';
-import platform from './mixins/platform';
+import { loading, platform } from './mixins';
 
 //@ts-expect-error Vue2.7 types
 Vue.mixin(loading);

@@ -68,7 +68,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { MealAction } from './recall-mixin';
+import type { MealActionType } from '@intake24/common/prompts';
+
 import { MealListMobile, RecallBreadCrumbsMobile } from '../layouts';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
 import MealMobileContextMenu from './mobile/MealMobileContextMenu.vue';
@@ -101,7 +102,7 @@ export default defineComponent({
   },
 
   methods: {
-    onContextMenuMealAction(payload: { type: MealAction; mealId: number }) {
+    onContextMenuMealAction(payload: { type: MealActionType; mealId: number }) {
       this.mealAction(payload);
     },
 

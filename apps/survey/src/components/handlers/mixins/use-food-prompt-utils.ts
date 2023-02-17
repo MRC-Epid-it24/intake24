@@ -5,6 +5,7 @@ import type {
   FoodState,
   FreeTextFood,
   LocaleTranslation,
+  MissingFood,
   PortionSizeMethodId,
   PortionSizeParameters,
 } from '@intake24/common/types';
@@ -50,7 +51,8 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   };
 
   const encodedFoodOptional = (): EncodedFood | undefined => {
-    if (foodOptional.value === undefined) return undefined;
+    if (foodOptional.value === undefined || foodOptional.value.type !== 'encoded-food')
+      return undefined;
 
     return encodedFood();
   };
@@ -59,7 +61,16 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     const foodEntry = food();
 
     if (foodEntry.type !== 'free-text')
-      throw new Error('This selected food must be an encoded food');
+      throw new Error('This selected food must be an free-text food');
+
+    return foodEntry;
+  };
+
+  const missingFood = (): MissingFood => {
+    const foodEntry = food();
+
+    if (foodEntry.type !== 'missing-food')
+      throw new Error('This selected food must be an missing food');
 
     return foodEntry;
   };
@@ -93,6 +104,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     encodedFoodOptional,
     freeTextFood,
     foodName,
+    missingFood,
     portionSize,
     conversionFactor,
     parameters,

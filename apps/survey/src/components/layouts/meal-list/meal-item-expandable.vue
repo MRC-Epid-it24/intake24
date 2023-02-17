@@ -10,7 +10,7 @@
     </template>
     <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap">
-        {{ localeMealName }}
+        {{ mealName }}
       </v-list-item-title>
       <v-list-item-action>
         <v-list-item-action-text v-if="mealTimeString.length">
@@ -20,7 +20,7 @@
       </v-list-item-action>
       <v-list-item-action class="my-auto">
         <context-menu
-          :entity-name="localeMealName"
+          :entity-name="mealName"
           v-bind="{ icon, menu }"
           @action="action"
         ></context-menu>

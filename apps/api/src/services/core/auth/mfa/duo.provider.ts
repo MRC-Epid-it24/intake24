@@ -3,7 +3,6 @@ import { Client } from '@duosecurity/duo_universal';
 import type { IoC } from '@intake24/api/ioc';
 import type { DuoAuthChallenge } from '@intake24/common/security';
 import type { MFADevice } from '@intake24/db';
-import { UnauthorizedError } from '@intake24/api/http/errors';
 
 export type DuoAuthenticationVerificationOps = {
   email: string;
