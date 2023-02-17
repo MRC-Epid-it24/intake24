@@ -8,28 +8,15 @@ export const nav = [
     link: '/config/',
   },
   {
-    text: 'API',
-    link: '/api/',
-  },
-  {
-    text: 'Admin',
-    link: '/admin/',
-  },
-  {
-    text: 'Survey',
-    link: '/survey/',
-  },
-  {
-    text: 'Portal',
-    link: '/portal/',
-  },
-  {
-    text: 'CLI',
-    link: '/cli/',
-  },
-  {
-    text: 'Data Dictionary',
-    link: '/data-dictionary/',
+    text: 'Components',
+    items: [
+      { text: 'API', link: '/api/' },
+      { text: 'Admin', link: '/admin/' },
+      { text: 'Survey', link: '/survey/' },
+      { text: 'Portal', link: '/portal/' },
+      { text: 'CLI', link: '/cli/' },
+      { text: 'Data Dictionary', link: '/data-dictionary/' },
+    ],
   },
   {
     text: 'Developer resources',

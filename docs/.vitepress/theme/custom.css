@@ -10,3 +10,11 @@
 a {
   font-weight: 600;
 }
+
+.VPNavBarSearch {
+  background-color: var(--vp-sidebar-bg-color);
+  border-radius: 10px;
+  margin-left: 12px;
+  margin-right: auto;
+  padding: 0px 20px;
+}
