@@ -152,22 +152,42 @@ module.exports = {
         transaction,
       });
 
-      queryInterface.getForeignKeysForTables(['surveys']).then(function (fks) {
-        console.log(fks);
-      });
-
-      await queryInterface.addConstraint('surveys', {
-        fields: ['scheme_id'],
-        name: 'surveys_scheme_id_schemes_fk',
-        type: 'foreign key',
-        references: {
-          table: 'schemes',
-          field: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'restrict',
-        transaction,
-      });
+      await queryInterface
+        .getForeignKeysForTables(['surveys'], { transaction })
+        .then(async function (fks) {
+          console.log(fks);
+          if (fks.surveys.includes('surveys_scheme_id_schemes_fk')) {
+            console.log(`Removing foreign keys`);
+            return await queryInterface.removeConstraint(
+              'surveys',
+              'surveys_scheme_id_schemes_fk',
+              {
+                transaction,
+              }
+            );
+          } else {
+            console.log('No foreign keys to remove');
+          }
+        })
+        .then(async function () {
+          console.log('Adding foreign key to surveys');
+          await queryInterface.addConstraint(
+            'surveys',
+            {
+              fields: ['scheme_id'],
+              name: 'surveys_scheme_id_schemes_fk',
+              type: 'foreign key',
+              references: {
+                table: 'schemes',
+                field: 'id',
+              },
+              onUpdate: 'cascade',
+              onDelete: 'restrict',
+              transaction,
+            },
+            { transaction }
+          );
+        });
     });
   },
 

@@ -184,18 +184,67 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('surveys', {
-        fields: ['locale_id'],
-        type: 'foreign key',
-        references: {
-          table: 'locales',
-          field: 'id',
+      // Cleaning up old foreign keys
+      await queryInterface
+        .getForeignKeysForTables(['surveys'], { transaction })
+        .then(async (fks) => {
+          console.log(fks.surveys);
+          await queryInterface.removeIndex(
+            'surveys',
+            'surveys_survey_scheme_id_idx',
+            {
+              transaction,
+            },
+            { transaction }
+          );
+          if (fks.surveys.includes('surveys_user_id_fk')) {
+            console.log('Removing surveys_user_id_fk fk');
+            await queryInterface.removeConstraint('surveys', 'surveys_user_id_fk', { transaction });
+          } else {
+            console.log('No surveys_user_id_fk fk found');
+          }
+          if (fks.surveys.includes('surveys_survey_scheme_id_fk')) {
+            console.log('Removing surveys_survey_scheme_id_fk fk');
+            await queryInterface.removeConstraint('surveys', 'surveys_survey_scheme_id_fk', {
+              transaction,
+            });
+          } else {
+            console.log('No surveys_survey_scheme_id_fk fk found');
+          }
+          if (fks.surveys.includes('surveys_feedback_scheme_id_fk')) {
+            console.log('Removing surveys_feedback_scheme_id_fk fk');
+            await queryInterface.removeConstraint('surveys', 'surveys_feedback_scheme_id_fk', {
+              transaction,
+            });
+          } else {
+            console.log('No surveys_feedback_scheme_id_fk fk found');
+          }
+          if (fks.surveys.includes('surveys_owner_id_fk')) {
+            console.log('Removing surveys_owner_id_fk fk');
+            await queryInterface.removeConstraint('surveys', 'surveys_owner_id_fk', {
+              transaction,
+            });
+          } else {
+            console.log('No surveys_owner_id_fk fk found');
+          }
+        });
+
+      await queryInterface.addConstraint(
+        'surveys',
+        {
+          fields: ['locale_id'],
+          type: 'foreign key',
+          references: {
+            table: 'locales',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'restrict',
+          name: 'surveys_user_id_fk',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'restrict',
-        name: 'surveys_user_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
       await queryInterface.addIndex('surveys', ['locale_id'], {
         name: 'surveys_locale_id_idx',
@@ -203,62 +252,89 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('surveys', {
-        fields: ['survey_scheme_id'],
-        type: 'foreign key',
-        references: {
-          table: 'survey_schemes',
-          field: 'id',
+      await queryInterface.addConstraint(
+        'surveys',
+        {
+          fields: ['survey_scheme_id'],
+          type: 'foreign key',
+          references: {
+            table: 'survey_schemes',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'restrict',
+          name: 'surveys_survey_scheme_id_fk',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'restrict',
-        name: 'surveys_survey_scheme_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
-      await queryInterface.addIndex('surveys', ['survey_scheme_id'], {
-        name: 'surveys_survey_scheme_id_idx',
-        indexType: 'btree',
-        transaction,
-      });
-
-      await queryInterface.addConstraint('surveys', {
-        fields: ['feedback_scheme_id'],
-        type: 'foreign key',
-        references: {
-          table: 'feedback_schemes',
-          field: 'id',
+      await queryInterface.addIndex(
+        'surveys',
+        ['survey_scheme_id'],
+        {
+          name: 'surveys_survey_scheme_id_idx',
+          indexType: 'btree',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'restrict',
-        name: 'surveys_feedback_scheme_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
-      await queryInterface.addIndex('surveys', ['feedback_scheme_id'], {
-        name: 'surveys_feedback_scheme_id_idx',
-        indexType: 'btree',
-        transaction,
-      });
-
-      await queryInterface.addConstraint('surveys', {
-        fields: ['owner_id'],
-        type: 'foreign key',
-        references: {
-          table: 'users',
-          field: 'id',
+      await queryInterface.addConstraint(
+        'surveys',
+        {
+          fields: ['feedback_scheme_id'],
+          type: 'foreign key',
+          references: {
+            table: 'feedback_schemes',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'restrict',
+          name: 'surveys_feedback_scheme_id_fk',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'set null',
-        name: 'surveys_owner_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
-      await queryInterface.addIndex('surveys', ['owner_id'], {
-        name: 'surveys_owner_id_idx',
-        indexType: 'btree',
-        transaction,
-      });
+      await queryInterface.addIndex(
+        'surveys',
+        ['feedback_scheme_id'],
+        {
+          name: 'surveys_feedback_scheme_id_idx',
+          indexType: 'btree',
+          transaction,
+        },
+        { transaction }
+      );
+
+      await queryInterface.addConstraint(
+        'surveys',
+        {
+          fields: ['owner_id'],
+          type: 'foreign key',
+          references: {
+            table: 'users',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'set null',
+          name: 'surveys_owner_id_fk',
+          transaction,
+        },
+        { transaction }
+      );
+
+      await queryInterface.addIndex(
+        'surveys',
+        ['owner_id'],
+        {
+          name: 'surveys_owner_id_idx',
+          indexType: 'btree',
+          transaction,
+        },
+        { transaction }
+      );
 
       await queryInterface.sequelize.query(
         'INSERT INTO surveys (slug, name, state, start_date, end_date, locale_id, survey_scheme_id, feedback_scheme_id, allow_gen_users, gen_user_key, support_email, suspension_reason, survey_monkey_url, originating_url, submission_notification_url, store_user_session_on_server, number_of_submissions_for_feedback, maximum_daily_submissions, minimum_submission_interval, maximum_total_submissions, auth_url_domain_override, auth_url_token_charset, auth_url_token_length, survey_scheme_overrides, search_sorting_algorithm, search_match_score_weight, created_at, updated_at) SELECT id, "name", state, start_date, end_date, locale_id, survey_scheme_id, feedback_scheme_id, allow_gen_users, gen_user_key, support_email, suspension_reason, survey_monkey_url, originating_url, submission_notification_url, store_user_session_on_server, number_of_submissions_for_feedback, maximum_daily_submissions, minimum_submission_interval, maximum_total_submissions, auth_url_domain_override, auth_url_token_charset, auth_url_token_length, overrides, search_sorting_algorithm, search_match_score_weight, current_timestamp, current_timestamp FROM v3_surveys',
@@ -320,9 +396,13 @@ module.exports = {
         }
       );
 
-      await queryInterface.sequelize.query(`DELETE FROM permissions WHERE "name" LIKE '%/staff';`, {
-        transaction,
-      });
+      await queryInterface.sequelize.query(
+        `DELETE FROM permissions WHERE "name" LIKE '%/staff';`,
+        {
+          transaction,
+        },
+        { transaction }
+      );
 
       await queryInterface.sequelize.query(
         `DELETE FROM permissions WHERE "name" LIKE '%/support';`,
@@ -330,9 +410,14 @@ module.exports = {
       );
 
       // client_error_reports
-      await queryInterface.renameTable('client_error_reports', 'v4dep_client_error_reports', {
-        transaction,
-      });
+      await queryInterface.renameTable(
+        'client_error_reports',
+        'v4dep_client_error_reports',
+        {
+          transaction,
+        },
+        { transaction }
+      );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE v4dep_client_error_reports RENAME CONSTRAINT client_error_reports_pkey TO v4dep_client_error_reports_pkey;`,
@@ -385,43 +470,61 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('client_error_reports', {
-        fields: ['survey_id'],
-        type: 'foreign key',
-        references: {
-          table: 'surveys',
-          field: 'id',
+      await queryInterface.addConstraint(
+        'client_error_reports',
+        {
+          fields: ['survey_id'],
+          type: 'foreign key',
+          references: {
+            table: 'surveys',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'cascade',
+          name: 'client_error_reports_survey_id_fk',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-        name: 'client_error_reports_survey_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
-      await queryInterface.addIndex('client_error_reports', ['survey_id'], {
-        name: 'client_error_reports_survey_id_idx',
-        indexType: 'btree',
-        transaction,
-      });
-
-      await queryInterface.addConstraint('client_error_reports', {
-        fields: ['user_id'],
-        type: 'foreign key',
-        references: {
-          table: 'users',
-          field: 'id',
+      await queryInterface.addIndex(
+        'client_error_reports',
+        ['survey_id'],
+        {
+          name: 'client_error_reports_survey_id_idx',
+          indexType: 'btree',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-        name: 'client_error_reports_user_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
-      await queryInterface.addIndex('client_error_reports', ['user_id'], {
-        name: 'client_error_reports_user_id_idx',
-        indexType: 'btree',
-        transaction,
-      });
+      await queryInterface.addConstraint(
+        'client_error_reports',
+        {
+          fields: ['user_id'],
+          type: 'foreign key',
+          references: {
+            table: 'users',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'cascade',
+          name: 'client_error_reports_user_id_fk',
+          transaction,
+        },
+        { transaction }
+      );
+
+      await queryInterface.addIndex(
+        'client_error_reports',
+        ['user_id'],
+        {
+          name: 'client_error_reports_user_id_idx',
+          indexType: 'btree',
+          transaction,
+        },
+        { transaction }
+      );
 
       await queryInterface.sequelize.query(
         `INSERT INTO client_error_reports (id, user_id, survey_id, stack_trace, survey_state_json, "new", created_at, updated_at) SELECT v4depcer.id, CAST(v4depcer.user_id as BIGINT), s.id, v4depcer.stack_trace, v4depcer.survey_state_json, v4depcer."new", v4depcer.reported_at, v4depcer.reported_at FROM v4dep_client_error_reports v4depcer LEFT JOIN surveys s ON v4depcer.survey_id = s.slug`,
@@ -469,18 +572,22 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.addConstraint('gen_user_counters', {
-        fields: ['survey_id'],
-        type: 'foreign key',
-        references: {
-          table: 'surveys',
-          field: 'id',
+      await queryInterface.addConstraint(
+        'gen_user_counters',
+        {
+          fields: ['survey_id'],
+          type: 'foreign key',
+          references: {
+            table: 'surveys',
+            field: 'id',
+          },
+          onUpdate: 'cascade',
+          onDelete: 'cascade',
+          name: 'gen_user_counters_survey_id_fk',
+          transaction,
         },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-        name: 'gen_user_counters_survey_id_fk',
-        transaction,
-      });
+        { transaction }
+      );
 
       // missing_foods
       await queryInterface.renameTable('missing_foods', 'v4dep_missing_foods', { transaction });
@@ -495,13 +602,23 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.removeIndex('v4dep_survey_submissions', 'missing_foods_survey_id_idx', {
-        transaction,
-      });
+      await queryInterface.removeIndex(
+        'v4dep_survey_submissions',
+        'missing_foods_survey_id_idx',
+        {
+          transaction,
+        },
+        { transaction }
+      );
 
-      await queryInterface.removeIndex('v4dep_survey_submissions', 'missing_foods_user_id_idx', {
-        transaction,
-      });
+      await queryInterface.removeIndex(
+        'v4dep_survey_submissions',
+        'missing_foods_user_id_idx',
+        {
+          transaction,
+        },
+        { transaction }
+      );
 
       await queryInterface.createTable(
         'missing_foods',
