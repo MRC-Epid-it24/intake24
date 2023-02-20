@@ -579,15 +579,19 @@ module.exports = {
       const env = process.env.NODE_ENV;
       const foods = new Sequelize(foodDbConfig[env]);
 
-      const dbDemographicGroups = await foods.query(
-        `SELECT * FROM demographic_group ORDER BY id;`,
-        { type: QueryTypes.SELECT }
-      );
+      const dgExists = await queryInterface.tableExists('demographic_groups');
+      const dgTable = dgExists ? 'demographic_groups' : 'demographic_group';
 
-      const dbDemographicGroupScaleSectors = await foods.query(
-        `SELECT * FROM demographic_group_scale_sector;`,
-        { type: QueryTypes.SELECT }
-      );
+      const dgssExists = await queryInterface.tableExists('demographic_group_scale_sectors', {});
+      const dgssTable = dgssExists ? 'demographic_groups' : 'demographic_group';
+
+      const dbDemographicGroups = await foods.query(`SELECT * FROM ${dgTable} ORDER BY id;`, {
+        type: QueryTypes.SELECT,
+      });
+
+      const dbDemographicGroupScaleSectors = await foods.query(`SELECT * FROM ${dgssTable};`, {
+        type: QueryTypes.SELECT,
+      });
 
       const dbFoodGroupsFeedbacks = await foods.query(
         `SELECT * FROM food_groups_feedback ORDER BY id;`,

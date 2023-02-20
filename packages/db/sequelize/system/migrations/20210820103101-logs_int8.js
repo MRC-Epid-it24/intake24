@@ -141,6 +141,11 @@ module.exports = {
 
       await updateSequence('jobs', 'id', { queryInterface, transaction });
 
+      await queryInterface.sequelize.query(
+        `DELETE FROM signin_log WHERE user_id not in (SELECT id FROM users);`,
+        { transaction }
+      );
+
       await queryInterface.renameTable('signin_log', 'v3_signin_log', {
         transaction,
       });

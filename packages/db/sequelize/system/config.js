@@ -34,8 +34,4 @@ module.exports = {
     migrationStorage: 'sequelize',
     migrationStorageTableName: 'sequelize_meta',
   },
-  define: {
-    underscored: true,
-    underscoreAll: true,
-  },
 };
