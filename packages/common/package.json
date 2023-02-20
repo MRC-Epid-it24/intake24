@@ -21,7 +21,7 @@
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
     "deepmerge": "^4.3.0",
-    "fast-copy": "^3.0.0",
+    "fast-copy": "^3.0.1",
     "lodash": "^4.17.21",
     "nanoid": "^3.3.4",
     "pluralize": "^8.0.0"
