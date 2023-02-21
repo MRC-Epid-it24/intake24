@@ -12,9 +12,13 @@ a {
 }
 
 .VPNavBarSearch {
-  background-color: var(--vp-sidebar-bg-color);
-  border-radius: 10px;
-  margin-left: 12px;
   margin-right: auto;
-  padding: 0px 20px;
+}
+
+.VPNavBarSearch .DocSearch-Button {
+    height: unset;
+    width: unset;
+    background-color: var(--vp-sidebar-bg-color);
+    padding: 10px 10px;
+    border-radius: 20px;
 }
