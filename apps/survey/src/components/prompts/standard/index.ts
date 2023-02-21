@@ -8,5 +8,6 @@ export { default as MealTimePrompt } from './MealTimePrompt.vue';
 export * from './ReadyMealPrompt.vue';
 export { default as ReadyMealPrompt } from './ReadyMealPrompt.vue';
 export { default as ReviewConfirmPrompt } from './ReviewConfirmPrompt.vue';
+export { default as SameAsBeforePrompt } from './SameAsBeforePrompt.vue';
 export { default as SplitFoodPrompt } from './SplitFoodPrompt.vue';
 export { default as SubmitPrompt } from './SubmitPrompt.vue';

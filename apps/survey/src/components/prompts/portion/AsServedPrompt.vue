@@ -107,8 +107,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type {
-  AsServedParameters,
   AsServedState,
+  PortionSizeParameters,
   SelectedAsServedImage,
 } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
@@ -138,7 +138,7 @@ export default defineComponent({
 
   props: {
     parameters: {
-      type: Object as PropType<AsServedParameters>,
+      type: Object as PropType<PortionSizeParameters['as-served']>,
       required: true,
     },
   },

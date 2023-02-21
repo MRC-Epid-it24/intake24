@@ -47,7 +47,7 @@
       <v-divider vertical></v-divider>
       <v-btn value="single" @click.stop="action('single')">
         <span class="text-overline font-weight-medium">
-          {{ $t('prompts.splitFood.single') }}
+          {{ $t(`prompts.${type}.single`) }}
         </span>
         <v-icon class="pb-1">fas fa-arrow-up-long</v-icon>
       </v-btn>

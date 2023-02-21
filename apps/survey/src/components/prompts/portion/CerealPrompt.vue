@@ -106,7 +106,11 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CerealParameters, CerealState, SelectedAsServedImage } from '@intake24/common/types';
+import type {
+  CerealState,
+  PortionSizeParameters,
+  SelectedAsServedImage,
+} from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
@@ -132,7 +136,7 @@ export default defineComponent({
 
   props: {
     parameters: {
-      type: Object as PropType<CerealParameters>,
+      type: Object as PropType<PortionSizeParameters['cereal']>,
       required: true,
     },
     bowlImageMapId: {

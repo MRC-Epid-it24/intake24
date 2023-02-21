@@ -103,7 +103,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { DrinkScaleParameters, DrinkScaleState } from '@intake24/common/types';
+import type { DrinkScaleState, PortionSizeParameters } from '@intake24/common/types';
 import type {
   DrinkwareSetResponse,
   DrinkwareVolumeSampleResponse,
@@ -133,7 +133,7 @@ export default defineComponent({
 
   props: {
     parameters: {
-      type: Object as PropType<DrinkScaleParameters>,
+      type: Object as PropType<PortionSizeParameters['drink-scale']>,
       required: true,
     },
   },

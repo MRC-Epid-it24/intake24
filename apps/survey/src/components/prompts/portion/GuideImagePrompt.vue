@@ -52,7 +52,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { GuideImageParameters, GuideImageState } from '@intake24/common/types';
+import type { GuideImageState, PortionSizeParameters } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
@@ -79,7 +79,7 @@ export default defineComponent({
       required: true,
     },
     parameters: {
-      type: Object as PropType<GuideImageParameters>,
+      type: Object as PropType<PortionSizeParameters['guide-image']>,
       required: true,
     },
   },

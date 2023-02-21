@@ -135,6 +135,9 @@ const prompts: LocaleMessageObject = {
   sameAsBefore: {
     name: 'Same as before',
     text: '{food}',
+    description: '<p>Was this <strong>{food}</strong> the same as the one you had before?</p>',
+    same: 'Yes, I had the same',
+    notSame: 'No, I had a different one',
   },
   splitFood: {
     name: 'Split food',

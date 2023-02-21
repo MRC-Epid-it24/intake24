@@ -14,7 +14,11 @@ private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-c
 
 export type MealFlag = 'free-entry-complete' | 'ready-meal-complete' | `${string}-acknowledged`;
 
-export type FoodFlag = 'ready-meal' | 'split-food-complete' | `${string}-acknowledged`;
+export type FoodFlag =
+  | 'ready-meal'
+  | 'same-as-before-complete'
+  | 'split-food-complete'
+  | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
@@ -62,16 +66,6 @@ export type PortionSizeParameters = {
     };
   weight: never;
 };
-
-export type AsServedParameters = PortionSizeParameters['as-served'];
-
-export type CerealParameters = PortionSizeParameters['cereal'];
-
-export type DrinkScaleParameters = PortionSizeParameters['drink-scale'];
-
-export type GuideImageParameters = PortionSizeParameters['guide-image'];
-
-export type StandardPortionParams = PortionSizeParameters['standard-portion'];
 
 // Portion size states
 

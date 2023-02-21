@@ -67,8 +67,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type {
+  PortionSizeParameters,
   RequiredLocaleTranslation,
-  StandardPortionParams,
   StandardPortionState,
   StandardPortionUnit,
 } from '@intake24/common/types';
@@ -103,7 +103,7 @@ export default defineComponent({
       required: true,
     },
     parameters: {
-      type: Object as PropType<StandardPortionParams>,
+      type: Object as PropType<PortionSizeParameters['standard-portion']>,
       required: true,
     },
   },
