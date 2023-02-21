@@ -378,14 +378,19 @@ export const useSurvey = defineStore('survey', {
       this.data.flags.push(data);
     },
 
-    setMealTime(data: { mealId: number; time: MealTime }) {
-      const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
+    sortMeals() {
+      this.data.meals.sort((a, b) => {
+        if (!a.time || !b.time) return 0;
 
-      // Roundabout way of changing a property of object in an array so Vue can track
-      // changes
-      const item = this.data.meals.splice(mealIndex, 1);
-      item[0].time = data.time;
-      this.data.meals.splice(mealIndex, 0, item[0]);
+        return a.time.hours * 60 + a.time.minutes - (b.time.hours * 60 + b.time.minutes);
+      });
+    },
+
+    setMealTime(mealId: number, time: MealTime) {
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+
+      this.data.meals[mealIndex].time = time;
+      this.sortMeals();
     },
 
     deleteMeal(mealId: number) {
@@ -436,6 +441,7 @@ export const useSurvey = defineStore('survey', {
       }
 
       Vue.delete(this.data.meals, mealIndex);
+      this.sortMeals();
     },
 
     undoDeleteMeal(data: { mealIndex: number; meal: MealState }) {
@@ -457,6 +463,8 @@ export const useSurvey = defineStore('survey', {
         foods: [],
         customPromptAnswers: {},
       });
+
+      this.sortMeals();
 
       return id;
     },

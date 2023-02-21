@@ -55,7 +55,7 @@ export default defineComponent({
     },
 
     commitAnswer() {
-      this.setMealTime({ mealId: this.meal.id, time: this.state });
+      this.setMealTime(this.meal.id, this.state);
     },
   },
 });
