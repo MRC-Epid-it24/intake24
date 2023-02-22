@@ -2,14 +2,15 @@
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <valid-invalid-icon :valid="!!portionSize.milkVolumePercentage"></valid-invalid-icon>
+            <expansion-panel-actions :valid="!!portionSize.milkVolumePercentage">
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>

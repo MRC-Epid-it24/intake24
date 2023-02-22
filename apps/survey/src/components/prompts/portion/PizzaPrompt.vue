@@ -2,10 +2,10 @@
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           {{ $t(`prompts.${type}.typeLabel`) }}
           <template #actions>
-            <valid-invalid-icon :valid="confirmed.type"></valid-invalid-icon>
+            <expansion-panel-actions :valid="confirmed.type"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -23,10 +23,10 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           {{ $t(`prompts.${type}.thicknessLabel`) }}
           <template #actions>
-            <valid-invalid-icon :valid="confirmed.thickness"></valid-invalid-icon>
+            <expansion-panel-actions :valid="confirmed.thickness"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -44,10 +44,10 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.type">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           {{ $t(`prompts.${type}.sizeLabel`) }}
           <template #actions>
-            <valid-invalid-icon :valid="confirmed.slice"></valid-invalid-icon>
+            <expansion-panel-actions :valid="confirmed.slice"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -80,10 +80,10 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!confirmed.slice">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           {{ $t(`prompts.${type}.${isWholeSelected ? 'whole' : 'slices'}.label`) }}
           <template #actions>
-            <valid-invalid-icon :valid="confirmed.quantity"></valid-invalid-icon>
+            <expansion-panel-actions :valid="confirmed.quantity"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>

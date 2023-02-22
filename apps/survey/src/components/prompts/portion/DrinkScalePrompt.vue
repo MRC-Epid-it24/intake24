@@ -2,14 +2,14 @@
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.container`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <valid-invalid-icon :valid="objectValid"></valid-invalid-icon>
+            <expansion-panel-actions :valid="objectValid"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -28,19 +28,20 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.serving.header`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <quantity-badge
-              :amount="portionSize.servingWeight ?? undefined"
-              unit="ml"
-              :valid="quantityConfirmed"
-            ></quantity-badge>
-            <valid-invalid-icon :valid="quantityConfirmed"></valid-invalid-icon>
+            <expansion-panel-actions :valid="quantityConfirmed">
+              <quantity-badge
+                :amount="portionSize.servingWeight ?? undefined"
+                unit="ml"
+                :valid="quantityConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -56,21 +57,20 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.leftovers.header`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <quantity-badge
-              :amount="portionSize.leftoversWeight ?? undefined"
-              unit="ml"
-              :valid="leftoversConfirmed"
-            ></quantity-badge>
-            <valid-invalid-icon
-              :valid="leftoversPrompt === false || leftoversConfirmed"
-            ></valid-invalid-icon>
+            <expansion-panel-actions :valid="leftoversPrompt === false || leftoversConfirmed">
+              <quantity-badge
+                :amount="portionSize.leftoversWeight ?? undefined"
+                unit="ml"
+                :valid="leftoversConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>

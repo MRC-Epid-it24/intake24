@@ -524,7 +524,15 @@ export const useSurvey = defineStore('survey', {
       // Save to `same-as-before` for encoded foods with finished portion size estimation
       // TODO: check associated foods ?
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
-      if (mainFood.type !== 'encoded-food' || !isPortionSizeComplete(mainFood)) return;
+      if (
+        mainFood.type !== 'encoded-food' ||
+        !isPortionSizeComplete(mainFood) ||
+        (linkedFoodIndex !== undefined &&
+          !isPortionSizeComplete(
+            this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex]
+          ))
+      )
+        return;
 
       useSameAsBefore().saveItem(this.localeId, mainFood);
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-icon :color="color">{{ icon }}</v-icon>
+  <v-icon class="no-rotate" :color="color">{{ icon }}</v-icon>
 </template>
 
 <script lang="ts">
@@ -26,4 +26,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.no-rotate {
+  transform: none !important;
+}
+</style>

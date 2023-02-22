@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/types';
-import { ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 import { promptType } from '@intake24/survey/util';
 
@@ -14,7 +14,7 @@ export default <P extends keyof Prompts, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
 
-    components: { Next, PortionLayout, PromptLayout, ValidInvalidIcon },
+    components: { ExpansionPanelActions, Next, PortionLayout, PromptLayout, ValidInvalidIcon },
 
     props: {
       food: {

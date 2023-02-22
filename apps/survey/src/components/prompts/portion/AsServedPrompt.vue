@@ -2,18 +2,19 @@
   <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.serving.header`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <quantity-badge
-              :amount="portionSize.serving?.weight"
-              :valid="servingImageConfirmed"
-            ></quantity-badge>
-            <valid-invalid-icon class="ml-1" :valid="servingImageConfirmed"></valid-invalid-icon>
+            <expansion-panel-actions :valid="servingImageConfirmed">
+              <quantity-badge
+                :amount="portionSize.serving?.weight"
+                :valid="servingImageConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -29,21 +30,19 @@
         v-if="!disabledLeftovers && parameters['leftovers-image-set']"
         :disabled="!servingImageConfirmed"
       >
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.leftovers.header`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <quantity-badge
-              :amount="portionSize.leftovers?.weight"
-              :valid="leftoversImageConfirmed"
-            ></quantity-badge>
-            <valid-invalid-icon
-              class="ml-1"
-              :valid="leftoversPrompt === false || leftoversImageConfirmed"
-            ></valid-invalid-icon>
+            <expansion-panel-actions :valid="leftoversPrompt === false || leftoversImageConfirmed">
+              <quantity-badge
+                :amount="portionSize.leftovers?.weight"
+                :valid="leftoversImageConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -66,7 +65,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="linkedQuantityCategories.length">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n path="prompts.linkedAmount.label">
             <template #unit>{{ linkedQuantityUnit }}</template>
             <template #food>
@@ -77,7 +76,7 @@
             </template>
           </i18n>
           <template #actions>
-            <valid-invalid-icon :valid="linkedQuantityConfirmed"></valid-invalid-icon>
+            <expansion-panel-actions :valid="linkedQuantityConfirmed"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>

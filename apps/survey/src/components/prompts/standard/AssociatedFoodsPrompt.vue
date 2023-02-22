@@ -7,16 +7,16 @@
       @change="updatePrompts"
     >
       <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           {{ associatedFoodPrompts[index].promptText }}
           <template #actions>
-            <valid-invalid-icon
+            <expansion-panel-actions
               :valid="
                 prompt.confirmed === 'no' ||
                 prompt.confirmed === 'existing' ||
                 (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
               "
-            ></valid-invalid-icon>
+            ></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -89,7 +89,7 @@ import type {
   EncodedFood,
 } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
-import { FoodBrowser, ValidInvalidIcon } from '@intake24/survey/components/elements';
+import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
@@ -107,7 +107,7 @@ const getNextPrompt = (prompts: AssociatedFoodPromptState[]) =>
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
-  components: { FoodBrowser, PortionLayout, ValidInvalidIcon },
+  components: { ExpansionPanelActions, FoodBrowser, PortionLayout },
 
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 

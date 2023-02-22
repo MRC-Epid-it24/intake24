@@ -7,14 +7,14 @@
       :tile="isMobile"
     >
       <v-expansion-panel>
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
           </i18n>
           <template #actions>
-            <valid-invalid-icon :valid="unitValid"></valid-invalid-icon>
+            <expansion-panel-actions :valid="unitValid"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -28,7 +28,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel :disabled="!unitValid">
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header>
           <i18n
             v-if="portionSize.unit"
             :path="`prompts.${type}.howMany.${
@@ -46,7 +46,7 @@
           </i18n>
           <template v-else>{{ $t(`prompts.${type}.howMany.placeholder`) }}</template>
           <template #actions>
-            <valid-invalid-icon :valid="quantityValid"></valid-invalid-icon>
+            <expansion-panel-actions :valid="quantityValid"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
