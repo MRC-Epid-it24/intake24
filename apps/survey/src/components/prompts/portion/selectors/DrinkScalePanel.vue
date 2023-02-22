@@ -42,7 +42,7 @@
           color="secondary"
           :disabled="sliderValue <= sliderMin"
           text
-          @click="updateSlider(-10)"
+          @click="updateSlider(-sliderStep)"
         >
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
@@ -53,7 +53,7 @@
           color="secondary"
           :disabled="sliderValue >= sliderMax"
           text
-          @click="updateSlider(10)"
+          @click="updateSlider(sliderStep)"
         >
           {{ $t(`prompts.drinkScale.${type}.more`) }}
         </v-btn>
@@ -112,6 +112,7 @@ export default defineComponent({
     const imgDrink = ref<InstanceType<typeof VImg>>();
     const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
     const sliderMin = ref(0);
+    const sliderStep = ref(Math.round(sliderMax.value / 6));
     const sliderValue = ref(sliderMax.value * props.value);
     const height = ref(0);
     const width = ref(0);
@@ -128,6 +129,7 @@ export default defineComponent({
       width,
       sliderMax,
       sliderMin,
+      sliderStep,
       sliderValue,
       isInScale,
       cursorInScale,

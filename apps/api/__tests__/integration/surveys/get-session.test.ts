@@ -63,8 +63,6 @@ export default () => {
           uxSessionId: randomUUID(),
           flags: [],
           meals: [],
-          nextFoodId: 0,
-          nextMealId: 0,
           customPromptAnswers: {},
           selection: { element: null, mode: 'auto' },
         },
