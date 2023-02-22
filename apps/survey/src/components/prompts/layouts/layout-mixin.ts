@@ -126,7 +126,7 @@ export default defineComponent({
       this.$emit('update:navTab', type);
     },
 
-    action(type: string, id?: number) {
+    action(type: string, id?: string) {
       this.update(type);
       this.$emit('action', type, id);
     },

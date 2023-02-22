@@ -27,7 +27,7 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex } from '@intake24/survey/stores/meal-food-utils';
+import { getFoodIndex } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
       required: true,
     },
     foodId: {
-      type: Number,
+      type: String,
       required: true,
     },
   },

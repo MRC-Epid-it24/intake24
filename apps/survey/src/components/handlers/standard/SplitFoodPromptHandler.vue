@@ -11,7 +11,7 @@ import { computed, defineComponent, onMounted } from 'vue';
 import type { GenericActionType, Prompts } from '@intake24/common/prompts';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils } from '../mixins';
 
@@ -56,7 +56,7 @@ export default defineComponent({
         survey.addFood({
           mealId,
           food: {
-            id: survey.getNextFoodId(),
+            id: getEntityId(),
             type: 'free-text',
             description: suggestion,
             flags: ['split-food-complete'],
@@ -82,7 +82,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setFoods']),
 
-    action(type: 'single' | 'separate' | GenericActionType, id?: number) {
+    action(type: 'single' | 'separate' | GenericActionType, id?: string) {
       if (['single', 'separate'].includes(type)) {
         this[type as 'single' | 'separate']();
         return;

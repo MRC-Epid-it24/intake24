@@ -91,7 +91,7 @@ import type {
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { FoodBrowser, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
 import { PortionLayout } from '../layouts';
@@ -132,14 +132,14 @@ export default defineComponent({
     return {
       activePrompt: this.initialState.activePrompt,
       prompts: this.initialState.prompts,
-      usedExistingFoodIds: [] as number[],
+      usedExistingFoodIds: [] as string[],
     };
   },
 
   computed: {
     ...mapState(useSurvey, ['meals']),
 
-    foodsAlreadyEntered(): (number | undefined)[] {
+    foodsAlreadyEntered(): (string | undefined)[] {
       const foodIndex = getFoodIndexRequired(this.meals, this.food.id);
       const foodsInThisMeal = this.meals[foodIndex.mealIndex].foods;
 

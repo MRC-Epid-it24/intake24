@@ -2,8 +2,8 @@
   <v-card class="meal-list-mobile" flat tile>
     <v-toolbar bottom class="sticky_toolbar" flat>
       <v-tabs center-active height="56px" icons-and-text slider-size="4" touch :value="activeTab">
-        <v-tabs-slider color="success"></v-tabs-slider>
-        <v-tab v-for="(meal, index) in meals" :key="index" @click="mealSelected(meal.id)">
+        <v-tabs-slider color="secondary"></v-tabs-slider>
+        <v-tab v-for="meal in meals" :key="meal.id" @click="mealSelected(meal.id)">
           <v-badge
             bordered
             color="grey"
@@ -30,7 +30,7 @@ import { defineComponent } from 'vue';
 import type { MealTime } from '@intake24/common/types';
 import { useLocale } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
-import { fromMealTime, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
+import { fromMealTime, getMealIndex } from '@intake24/survey/util';
 
 export default defineComponent({
   name: 'MealListMobile',
@@ -55,7 +55,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setSelection']),
 
-    mealSelected(mealId: number) {
+    mealSelected(mealId: string) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
       this.$emit('meal-selected', mealId);
     },

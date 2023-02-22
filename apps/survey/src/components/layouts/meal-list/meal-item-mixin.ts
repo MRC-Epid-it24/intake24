@@ -5,7 +5,7 @@ import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useLocale, useMealUtils } from '@intake24/survey/composables';
-import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
+import { fromMealTime } from '@intake24/survey/util';
 
 import FoodItem from './food-item.vue';
 
@@ -28,7 +28,7 @@ export default defineComponent({
       required: true,
     },
     selectedFoodId: {
-      type: Number,
+      type: String,
       required: false,
     },
   },

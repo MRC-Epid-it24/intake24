@@ -159,10 +159,6 @@ export default defineComponent({
       this.update();
     },
 
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
     update() {
       if (this.guideImageData && this.portionSize.objectIndex !== undefined) {
         const idx = this.portionSize.objectIndex;

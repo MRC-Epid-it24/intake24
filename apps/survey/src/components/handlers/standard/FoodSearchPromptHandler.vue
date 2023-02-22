@@ -44,7 +44,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['replaceFood', 'getNextFoodId']),
+    ...mapActions(useSurvey, ['replaceFood']),
 
     foodSelected(foodData: UserFoodData) {
       this.foodData = foodData;

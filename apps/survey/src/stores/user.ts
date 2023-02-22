@@ -15,6 +15,7 @@ export const useUser = defineStore('user', {
     profile: null,
   }),
   getters: {
+    userId: (state) => state.profile?.userId,
     loaded: (state) => !!state.profile,
   },
   actions: {

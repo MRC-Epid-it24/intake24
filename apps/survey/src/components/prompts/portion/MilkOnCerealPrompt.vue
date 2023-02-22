@@ -229,10 +229,6 @@ export default defineComponent({
       this.update();
     },
 
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
     update() {
       const {
         portionSize: { bowl, milkLevelIndex },

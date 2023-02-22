@@ -8,7 +8,7 @@ import {
   getFoodIndexRequired,
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
-} from '@intake24/survey/stores/meal-food-utils';
+} from '@intake24/survey/util';
 
 import type { SurveyState, SurveyStore } from '../stores';
 
@@ -105,7 +105,7 @@ export default class DynamicRecall {
     });
   }
 
-  foodPromptsComplete(surveyState: SurveyState, mealId: number): boolean {
+  foodPromptsComplete(surveyState: SurveyState, mealId: string): boolean {
     const foods = findMeal(surveyState.data.meals, mealId).foods;
 
     return foods.every((food) => this.promptManager.nextFoodsPrompt(food.id) === undefined);

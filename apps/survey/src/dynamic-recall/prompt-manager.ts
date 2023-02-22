@@ -15,7 +15,7 @@ import {
   mealAssociatedFoodsComplete,
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
-} from '@intake24/survey/stores/meal-food-utils';
+} from '@intake24/survey/util';
 
 import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';
@@ -290,7 +290,6 @@ const checkFoodStandardConditions = (
       if (
         foodState.type === 'encoded-food' &&
         !foodState.flags.includes('same-as-before-complete') &&
-        foodState.portionSizeMethodIndex === null &&
         !foodState.portionSize
       ) {
         recallLog().promptCheck(
@@ -640,7 +639,7 @@ export default class PromptManager {
     );
   }
 
-  nextMealSectionPrompt(section: MealQuestionSection, mealId: number): Prompt | undefined {
+  nextMealSectionPrompt(section: MealQuestionSection, mealId: string): Prompt | undefined {
     const state = this.store.$state;
     const mealState = findMeal(state.data.meals, mealId);
 
@@ -666,7 +665,7 @@ export default class PromptManager {
     );
   }
 
-  nextFoodsPrompt(foodId: number): Prompt | undefined {
+  nextFoodsPrompt(foodId: string): Prompt | undefined {
     const state = this.store.$state;
 
     const foodIndex = getFoodIndexRequired(state.data.meals, foodId);

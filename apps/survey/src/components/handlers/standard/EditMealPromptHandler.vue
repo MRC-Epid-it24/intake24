@@ -55,7 +55,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setFoods', 'setMealFlag']),
 
-    action(type: string, id?: number) {
+    action(type: string, id?: string) {
       if (type === 'next') this.commitAnswer();
 
       this.$emit('action', type, id);

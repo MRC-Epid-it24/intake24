@@ -4,7 +4,7 @@ import { defineComponent, ref } from 'vue';
 import type { MealState, Selection } from '@intake24/common/types';
 import { RequestHelp } from '@intake24/survey/components';
 import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
-import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { findFood, findMeal, getFoodIndexRequired } from '@intake24/survey/util';
 
 export type BreadcrumbsElement = {
   text: string;

@@ -67,7 +67,7 @@ export default defineComponent({
       this.state = data.state;
     },
 
-    action(type: string, id?: number) {
+    action(type: string, id?: string) {
       if (type === 'next') this.commitAnswer();
 
       this.$emit('action', type, id);

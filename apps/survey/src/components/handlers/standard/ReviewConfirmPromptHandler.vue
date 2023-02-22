@@ -37,7 +37,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
-    action(type: string, id?: number) {
+    action(type: string, id?: string) {
       this.$emit('action', type, id);
     },
 

@@ -67,7 +67,7 @@ export default defineComponent({
       default: false,
     },
     selectedFoodId: {
-      type: Number,
+      type: String,
       required: false,
     },
   },
@@ -81,11 +81,11 @@ export default defineComponent({
   },
 
   methods: {
-    onLinkedFoodSelected(foodId: number) {
+    onLinkedFoodSelected(foodId: string) {
       this.emitFoodSelected(foodId);
     },
 
-    emitFoodSelected(foodId: number) {
+    emitFoodSelected(foodId: string) {
       this.$emit('food-selected', foodId);
     },
   },

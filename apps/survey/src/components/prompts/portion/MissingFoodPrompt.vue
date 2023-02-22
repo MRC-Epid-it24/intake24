@@ -39,7 +39,7 @@ import { copy } from '@intake24/common/util';
 import createBasePortion from './createBasePortion';
 
 export interface MissingFoodPromptState {
-  info: MissingFood['info'];
+  info: NonNullable<MissingFood['info']>;
   panel: number;
 }
 

@@ -25,7 +25,7 @@ import { copy } from '@intake24/common/util';
 import createBasePrompt from '../createBasePrompt';
 
 export interface ReadyMealPromptState {
-  foods: { id: number; name: string; value: boolean }[];
+  foods: { id: string; name: string; value: boolean }[];
 }
 
 export default defineComponent({

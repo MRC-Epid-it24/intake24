@@ -80,7 +80,7 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         return true;
       },
 
-      action(type: string, id?: number) {
+      action(type: string, id?: string) {
         if (type !== 'next') {
           this.$emit('action', type, id);
           return;

@@ -56,12 +56,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
-import { useSurvey } from '@intake24/survey/stores';
+import { getEntityId } from '@intake24/survey/util';
 
 export default defineComponent({
   name: 'EditableFoodList',
@@ -88,8 +87,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['getNextFoodId']),
-
     addFood() {
       if (this.editIndex != null) {
         const editEntry = this.foods[this.editIndex];
@@ -99,7 +96,7 @@ export default defineComponent({
       if (this.newFoodDescription.length === 0) return;
 
       const newFood: FreeTextFood = {
-        id: this.getNextFoodId(),
+        id: getEntityId(),
         type: 'free-text',
         description: this.newFoodDescription,
         flags: this.drinks ? ['is-drink'] : [],

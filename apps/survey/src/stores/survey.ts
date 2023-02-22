@@ -27,17 +27,20 @@ import { recallLog } from '@intake24/survey/stores';
 import {
   findFood,
   findMeal,
+  getEntityId,
   getFoodIndex,
   getFoodIndexRequired,
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
   toMealTime,
-} from '@intake24/survey/stores/meal-food-utils';
+} from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
+import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
 import { promptStores } from './prompt';
+import { useSameAsBefore } from './same-as-before';
 
 export type MealUndo = {
   type: 'meal';
@@ -93,8 +96,6 @@ export const surveyInitialState = (): CurrentSurveyState => ({
     mode: 'auto',
   },
   meals: [],
-  nextFoodId: 0,
-  nextMealId: 0,
 });
 
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
@@ -239,8 +240,8 @@ export const useSurvey = defineStore('survey', {
         ...surveyInitialState(),
         schemeId: this.parameters.surveyScheme.id,
         startTime: new Date(),
-        meals: this.parameters.surveyScheme.meals.map((meal, index) => ({
-          id: index,
+        meals: this.parameters.surveyScheme.meals.map((meal) => ({
+          id: getEntityId(),
           name: meal.name,
           defaultTime: toMealTime(meal.time),
           time: undefined,
@@ -248,7 +249,6 @@ export const useSurvey = defineStore('survey', {
           customPromptAnswers: {},
           foods: [],
         })),
-        nextMealId: this.parameters.surveyScheme.meals.length + 1,
       };
 
       this.setState(initialState);
@@ -386,14 +386,14 @@ export const useSurvey = defineStore('survey', {
       });
     },
 
-    setMealTime(mealId: number, time: MealTime) {
+    setMealTime(mealId: string, time: MealTime) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
       this.data.meals[mealIndex].time = time;
       this.sortMeals();
     },
 
-    deleteMeal(mealId: number) {
+    deleteMeal(mealId: string) {
       /*
       Undo system needs review & a more general solution
 
@@ -449,7 +449,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     addMeal(name: string, locale: string) {
-      const id = this.getNextMealId();
+      const id = getEntityId();
       const defaultTime = toMealTime(
         this.defaultSchemeMeals?.find((meal) => meal.name[locale] === name)?.time ?? '8:00'
       );
@@ -469,7 +469,7 @@ export const useSurvey = defineStore('survey', {
       return id;
     },
 
-    setMealFlag(data: { mealId: number; flag: MealFlag }) {
+    setMealFlag(data: { mealId: string; flag: MealFlag }) {
       const meal = findMeal(this.data.meals, data.mealId);
 
       if (meal.flags.includes(data.flag)) return;
@@ -478,7 +478,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     setMealCustomPromptAnswer(data: {
-      mealId: number;
+      mealId: string;
       promptId: string;
       answer: CustomPromptAnswer;
     }) {
@@ -488,7 +488,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     setFoodCustomPromptAnswer(data: {
-      foodId: number;
+      foodId: string;
       promptId: string;
       answer: CustomPromptAnswer;
     }) {
@@ -497,7 +497,7 @@ export const useSurvey = defineStore('survey', {
       food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    setFoodFlag(data: { foodId: number; flag: FoodFlag }) {
+    setFoodFlag(data: { foodId: string; flag: FoodFlag }) {
       const food = findFood(this.data.meals, data.foodId);
 
       if (food.flags.includes(data.flag)) return;
@@ -505,22 +505,32 @@ export const useSurvey = defineStore('survey', {
       food.flags.push(data.flag);
     },
 
-    replaceFood(data: { foodId: number; food: FoodState }) {
-      const foodIndex = getFoodIndexRequired(this.data.meals, data.foodId);
+    replaceFood(data: { foodId: string; food: FoodState }) {
+      const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
+        this.data.meals,
+        data.foodId
+      );
 
-      if (foodIndex.linkedFoodIndex === undefined) {
-        this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1, data.food);
+      if (linkedFoodIndex === undefined) {
+        this.data.meals[mealIndex].foods.splice(foodIndex, 1, data.food);
       } else {
-        this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods.splice(
-          foodIndex.linkedFoodIndex,
+        this.data.meals[mealIndex].foods[foodIndex].linkedFoods.splice(
+          linkedFoodIndex,
           1,
           data.food
         );
       }
+
+      // Save to `same-as-before` for encoded foods with finished portion size estimation
+      // TODO: check associated foods ?
+      const mainFood = this.data.meals[mealIndex].foods[foodIndex];
+      if (mainFood.type !== 'encoded-food' || !isPortionSizeComplete(mainFood)) return;
+
+      useSameAsBefore().saveItem(this.localeId, mainFood);
     },
 
     updateFood(data: {
-      foodId: number;
+      foodId: string;
       update:
         | Partial<Omit<FreeTextFood, 'type'>>
         | Partial<Omit<EncodedFood, 'type'>>
@@ -530,7 +540,7 @@ export const useSurvey = defineStore('survey', {
       this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });
     },
 
-    deleteFood(foodId: number) {
+    deleteFood(foodId: string) {
       /*
       Undo system needs review & a more general solution
 
@@ -559,24 +569,16 @@ export const useSurvey = defineStore('survey', {
       this.data.selection = { mode: 'auto', element: null };
     },
 
-    addFood({ mealId, food, at }: { mealId: number; food: FoodState; at?: number }) {
+    addFood({ mealId, food, at }: { mealId: string; food: FoodState; at?: number }) {
       const mealIndex = getMealIndexRequired(this.data.meals, mealId);
 
       if (at !== undefined) this.data.meals[mealIndex].foods.splice(at, 0, food);
       else this.data.meals[mealIndex].foods.push(food);
     },
 
-    setFoods(data: { mealId: number; foods: FoodState[] }) {
+    setFoods(data: { mealId: string; foods: FoodState[] }) {
       const mealIndex = getMealIndexRequired(this.data.meals, data.mealId);
       this.data.meals[mealIndex].foods = data.foods;
-    },
-
-    getNextFoodId(): number {
-      return this.data.nextFoodId++;
-    },
-
-    getNextMealId(): number {
-      return this.data.nextMealId++;
     },
   },
 });

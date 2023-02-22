@@ -202,7 +202,7 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
 export interface AssociatedFoodPromptState {
   confirmed: 'yes' | 'no' | 'existing' | undefined;
   selectedFood: FoodHeader | undefined;
-  existingFoodId: number | undefined;
+  existingFoodId: string | undefined;
 }
 
 export interface AssociatedFoodsState {
@@ -211,7 +211,7 @@ export interface AssociatedFoodsState {
 }
 
 export interface AbstractFoodState {
-  id: number;
+  id: string;
   flags: string[];
   // eslint-disable-next-line no-use-before-define
   linkedFoods: FoodState[];
@@ -259,7 +259,7 @@ export interface MealTime {
 }
 
 export interface MealState {
-  id: number;
+  id: string;
   name: RequiredLocaleTranslation;
   defaultTime: MealTime;
   time: MealTime | undefined;
@@ -271,12 +271,12 @@ export interface MealState {
 
 export interface SelectedMeal {
   type: 'meal';
-  mealId: number;
+  mealId: string;
 }
 
 export interface SelectedFood {
   type: 'food';
-  foodId: number;
+  foodId: string;
 }
 
 export type SelectionMode = 'manual' | 'auto';
@@ -316,8 +316,6 @@ export type SurveyState = {
   tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
-  nextFoodId: number;
-  nextMealId: number;
 };
 
 export function isSelectionEqual(s1: Selection, s2: Selection): boolean {

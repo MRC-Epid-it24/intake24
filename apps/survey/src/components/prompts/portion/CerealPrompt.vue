@@ -92,13 +92,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <v-row v-show="errors.length">
-      <v-col>
-        <v-alert v-if="hasErrors" color="error">
-          <span v-for="(e, index) in errors" :key="index">{{ e }}</span>
-        </v-alert>
-      </v-col>
-    </v-row>
   </portion-layout>
 </template>
 
@@ -278,10 +271,6 @@ export default defineComponent({
       this.leftoversImageConfirmed = true;
       this.updatePanel();
       this.update();
-    },
-
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
     },
 
     update() {

@@ -42,7 +42,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { SameAsBeforeItem } from '@intake24/survey/stores';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -50,6 +53,13 @@ export default defineComponent({
   name: 'SameAsBeforePrompt',
 
   mixins: [createBasePrompt<'same-as-before-prompt'>()],
+
+  props: {
+    sabFood: {
+      type: Object as PropType<SameAsBeforeItem>,
+      required: true,
+    },
+  },
 
   computed: {
     isValid(): boolean {

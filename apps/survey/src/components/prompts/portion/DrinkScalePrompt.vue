@@ -327,10 +327,6 @@ export default defineComponent({
 
       this.$emit('update', { state });
     },
-
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
   },
 });
 </script>

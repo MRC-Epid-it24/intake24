@@ -300,10 +300,6 @@ export default defineComponent({
       this.update();
     },
 
-    setErrors() {
-      this.errors = [this.$t('common.errors.expansionIncomplete').toString()];
-    },
-
     sliceWeight(type?: number, slice?: number, thickness?: number) {
       if (type === undefined || slice === undefined || thickness === undefined) return 0;
 

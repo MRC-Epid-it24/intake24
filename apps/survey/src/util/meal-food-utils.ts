@@ -6,6 +6,10 @@ import type {
   SurveyState,
 } from '@intake24/common/types';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
+import { randomString } from '@intake24/common/util';
+
+// Helper to generate unique id for each meal/food with same length
+export const getEntityId = () => randomString(12);
 
 export const fromMealTime = (time: MealTime, doubleDigit?: boolean): string => {
   const { hours, minutes } = time;
@@ -23,7 +27,7 @@ export const toMealTime = (time: string): MealTime => {
   return { hours, minutes };
 };
 
-export function getFoodIndexInMeal(meal: MealState, id: number): FoodIndex | undefined {
+export function getFoodIndexInMeal(meal: MealState, id: string): FoodIndex | undefined {
   for (let i = 0; i < meal.foods.length; ++i) {
     if (meal.foods[i].id === id) return { foodIndex: i, linkedFoodIndex: undefined };
 
@@ -35,7 +39,7 @@ export function getFoodIndexInMeal(meal: MealState, id: number): FoodIndex | und
   return undefined;
 }
 
-export function getFoodIndex(meals: MealState[], id: number): MealFoodIndex | undefined {
+export function getFoodIndex(meals: MealState[], id: string): MealFoodIndex | undefined {
   for (let mi = 0; mi < meals.length; ++mi) {
     const foodIndex = getFoodIndexInMeal(meals[mi], id);
 
@@ -45,7 +49,7 @@ export function getFoodIndex(meals: MealState[], id: number): MealFoodIndex | un
   return undefined;
 }
 
-export function getMealIndex(meals: MealState[], id: number): number | undefined {
+export function getMealIndex(meals: MealState[], id: string): number | undefined {
   for (let mi = 0; mi < meals.length; ++mi) {
     if (meals[mi].id === id) return mi;
   }
@@ -53,7 +57,7 @@ export function getMealIndex(meals: MealState[], id: number): number | undefined
   return undefined;
 }
 
-export function getMealIndexRequired(meals: MealState[], id: number): number {
+export function getMealIndexRequired(meals: MealState[], id: string): number {
   const mealIndex = getMealIndex(meals, id);
 
   if (mealIndex === undefined) throw new Error(`Meal with id ${id} not found`);
@@ -61,7 +65,7 @@ export function getMealIndexRequired(meals: MealState[], id: number): number {
   return mealIndex;
 }
 
-export function getFoodIndexRequired(meals: MealState[], id: number): MealFoodIndex {
+export function getFoodIndexRequired(meals: MealState[], id: string): MealFoodIndex {
   const foodIndex = getFoodIndex(meals, id);
 
   if (foodIndex === undefined) throw new Error(`Food with id ${id} not found`);
@@ -75,12 +79,12 @@ export function getFoodByIndex(meals: MealState[], foodIndex: MealFoodIndex): Fo
     : meals[foodIndex.mealIndex].foods[foodIndex.foodIndex].linkedFoods[foodIndex.linkedFoodIndex];
 }
 
-export function findFood(meals: MealState[], id: number): FoodState {
+export function findFood(meals: MealState[], id: string): FoodState {
   const foodIndex = getFoodIndexRequired(meals, id);
   return getFoodByIndex(meals, foodIndex);
 }
 
-export function findMeal(meals: MealState[], id: number): MealState {
+export function findMeal(meals: MealState[], id: string): MealState {
   const mealIndex = getMealIndexRequired(meals, id);
 
   return meals[mealIndex];
@@ -118,7 +122,7 @@ export function getMealIndexForSelection(
 ): number | undefined {
   const { element } = selection;
 
-  if (element === null) return meals.length ? meals[0].id : undefined;
+  if (element === null) return meals.length ? 0 : undefined;
 
   return element.type === 'meal'
     ? getMealIndexRequired(meals, element.mealId)

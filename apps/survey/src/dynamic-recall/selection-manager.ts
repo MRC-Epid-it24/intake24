@@ -1,18 +1,15 @@
 import type { Selection } from '@intake24/common/types';
 import type PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
-import {
-  getFoodIndexRequired,
-  getMealIndexRequired,
-} from '@intake24/survey/stores/meal-food-utils';
+import { getFoodIndexRequired, getMealIndexRequired } from '@intake24/survey/util';
 
 import type { SurveyStore } from '../stores';
 
-const makeMealSelection = (mealId: number): Selection => ({
+const makeMealSelection = (mealId: string): Selection => ({
   element: { type: 'meal', mealId },
   mode: 'auto',
 });
 
-const makeFoodSelection = (foodId: number): Selection => ({
+const makeFoodSelection = (foodId: string): Selection => ({
   element: { type: 'food', foodId },
   mode: 'auto',
 });
@@ -27,26 +24,26 @@ export default class SelectionManager {
     this.promptManager = promptManager;
   }
 
-  private mealPromptsAvailable(mealId: number): boolean {
+  private mealPromptsAvailable(mealId: string): boolean {
     return !!(
       this.promptManager.nextMealSectionPrompt('preFoods', mealId) ||
       this.promptManager.nextMealSectionPrompt('postFoods', mealId)
     );
   }
 
-  private selectMealIfPromptsAvailable(mealId: number): Selection | undefined {
+  private selectMealIfPromptsAvailable(mealId: string): Selection | undefined {
     return this.mealPromptsAvailable(mealId) ? makeMealSelection(mealId) : undefined;
   }
 
-  private foodPromptsAvailable(foodId: number): boolean {
+  private foodPromptsAvailable(foodId: string): boolean {
     return this.promptManager.nextFoodsPrompt(foodId) !== undefined;
   }
 
-  private selectFoodIfPromptsAvailable(foodId: number): Selection | undefined {
+  private selectFoodIfPromptsAvailable(foodId: string): Selection | undefined {
     return this.foodPromptsAvailable(foodId) ? makeFoodSelection(foodId) : undefined;
   }
 
-  public tryAnyFoodInMeal(mealId: number): Selection | undefined {
+  public tryAnyFoodInMeal(mealId: string): Selection | undefined {
     const meals = this.store.meals;
     const mealIndex = getMealIndexRequired(meals, mealId);
 
@@ -68,7 +65,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  private tryAnyFoodInSubsequentMeals(mealId: number): Selection | undefined {
+  private tryAnyFoodInSubsequentMeals(mealId: string): Selection | undefined {
     const meals = this.store.meals;
     const mealIndex = getMealIndexRequired(meals, mealId);
 
@@ -104,7 +101,7 @@ export default class SelectionManager {
     return this.tryAnyFoodInAnyMeal() ?? this.tryAnyMeal() ?? { mode: 'auto', element: null };
   }
 
-  trySubsequentLinkedFood(foodId: number): Selection | undefined {
+  trySubsequentLinkedFood(foodId: string): Selection | undefined {
     const meals = this.store.meals;
     const foodIndex = getFoodIndexRequired(meals, foodId);
     const meal = meals[foodIndex.mealIndex];
@@ -121,7 +118,7 @@ export default class SelectionManager {
     return undefined;
   }
 
-  trySubsequentFoodInMeal(foodId: number): Selection | undefined {
+  trySubsequentFoodInMeal(foodId: string): Selection | undefined {
     const meals = this.store.meals;
     const foodIndex = getFoodIndexRequired(meals, foodId);
     const meal = meals[foodIndex.mealIndex];
@@ -144,7 +141,7 @@ export default class SelectionManager {
     }
   }
 
-  tryParentFood(foodId: number): Selection | undefined {
+  tryParentFood(foodId: string): Selection | undefined {
     const meals = this.store.meals;
     const foodIndex = getFoodIndexRequired(meals, foodId);
     const meal = meals[foodIndex.mealIndex];

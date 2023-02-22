@@ -1,16 +1,19 @@
 <template>
-  <same-as-before-prompt v-bind="{ food: encodedFood(), prompt }" @action="action">
+  <same-as-before-prompt
+    v-if="sabFood"
+    v-bind="{ food: encodedFood(), prompt, sabFood }"
+    @action="action"
+  >
   </same-as-before-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent, onMounted } from 'vue';
 
 import type { GenericActionType, Prompts } from '@intake24/common/prompts';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
-import { useSurvey } from '@intake24/survey/stores';
+import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils } from '../mixins';
 
@@ -30,39 +33,39 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { encodedFood } = useFoodPromptUtils();
+    const {
+      id: foodId,
+      data: { code },
+    } = encodedFood();
+
     const survey = useSurvey();
 
-    const complete = () => {
-      survey.setFoodFlag({ foodId: encodedFood().id, flag: 'same-as-before-complete' });
+    const sabFood = useSameAsBefore().getItem(survey.localeId, code);
+
+    const sabAction = (type: 'notSame' | 'same') => {
+      if (type === 'same' && sabFood) {
+        const { id, ...update } = sabFood.food;
+        survey.updateFood({ foodId, update });
+      }
+
+      survey.setFoodFlag({ foodId, flag: 'same-as-before-complete' });
       emit('action', 'next');
     };
 
-    const notSame = () => {
-      complete();
-    };
-
-    const same = () => {
-      complete();
-    };
-
-    onMounted(() => {
-      //
-    });
-
-    return { encodedFood, notSame, same };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setFoods']),
-
-    action(type: 'notSame' | 'same' | GenericActionType, id?: number) {
+    const action = (type: 'notSame' | 'same' | GenericActionType, id?: string) => {
       if (['notSame', 'same'].includes(type)) {
-        this[type as 'notSame' | 'same']();
+        sabAction(type as 'notSame' | 'same');
         return;
       }
 
-      this.$emit('action', type, id);
-    },
+      emit('action', type, id);
+    };
+
+    onMounted(() => {
+      if (!sabFood) sabAction('notSame');
+    });
+
+    return { action, encodedFood, sabFood };
   },
 });
 </script>

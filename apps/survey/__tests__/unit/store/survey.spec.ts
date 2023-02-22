@@ -34,8 +34,6 @@ function initialState(): SurveyState {
     customPromptAnswers: {},
     selection: { element: null, mode: 'auto' },
     meals: dummyMeals(3),
-    nextFoodId: 0,
-    nextMealId: 0,
   };
 }
 

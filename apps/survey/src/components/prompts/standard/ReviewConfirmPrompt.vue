@@ -60,7 +60,7 @@ import { defineComponent } from 'vue';
 
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
-import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
+import { fromMealTime } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -87,10 +87,10 @@ export default defineComponent({
   },
 
   methods: {
-    chooseMeal(mealId: number, name: string, foods: FoodState[], entity: string) {
+    chooseMeal(mealId: string, name: string, foods: FoodState[], entity: string) {
       this.$emit('meal-selected', { mealId, name, foods, entity });
     },
-    chooseFood(foodId: number, name: string, entity: string) {
+    chooseFood(foodId: string, name: string, entity: string) {
       this.$emit('food-selected', { foodId, name, entity });
     },
     foodDisplayName(food: FoodState) {

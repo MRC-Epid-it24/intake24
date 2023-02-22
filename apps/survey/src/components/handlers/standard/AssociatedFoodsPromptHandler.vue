@@ -28,7 +28,7 @@ import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
@@ -79,7 +79,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setFoods', 'getNextFoodId']),
+    ...mapActions(useSurvey, ['updateFood', 'setFoods']),
 
     async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
@@ -89,7 +89,7 @@ export default defineComponent({
       );
     },
 
-    async action(type: string, id?: number) {
+    async action(type: string, id?: string) {
       if (type === 'next') await this.commitAnswer();
 
       this.$emit('action', type, id);
@@ -129,7 +129,7 @@ export default defineComponent({
 
       const linkedFoods: EncodedFood[] = foodData.map((data) => ({
         type: 'encoded-food',
-        id: this.getNextFoodId(),
+        id: getEntityId(),
         flags: [],
         linkedFoods: [],
         customPromptAnswers: {},
@@ -145,7 +145,7 @@ export default defineComponent({
       this.setFoods({ mealId, foods: keepFoods });
 
       this.updateFood({
-        foodId: this.food().id,
+        foodId,
         update: { associatedFoodsComplete: true, linkedFoods },
       });
 

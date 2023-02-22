@@ -37,8 +37,7 @@
       class="meal-list-mobile__wrap"
       cols="12"
     >
-      <meal-list-mobile @meal-selected="onBottomListMealSelected" @recall-action="recallAction">
-      </meal-list-mobile>
+      <meal-list-mobile @meal-selected="mealSelected"></meal-list-mobile>
     </v-col>
 
     <!-- Context menu for Meal or Food with actions options -->
@@ -91,18 +90,18 @@ export default defineComponent({
     return {
       foodContextMenu: {
         show: false,
-        foodId: 0,
+        foodId: '0',
       },
       mealContextMenu: {
         show: false,
-        mealId: 0,
+        mealId: '0',
       },
       alert: false,
     };
   },
 
   methods: {
-    onContextMenuMealAction(payload: { type: MealActionType; mealId: number }) {
+    onContextMenuMealAction(payload: { type: MealActionType; mealId: string }) {
       this.mealAction(payload);
     },
 
@@ -110,12 +109,12 @@ export default defineComponent({
       await this.nextPrompt();
     },
 
-    onMealContextMenu(ev: { mealId: number }) {
+    onMealContextMenu(ev: { mealId: string }) {
       this.mealContextMenu.mealId = ev.mealId;
       this.mealContextMenu.show = true;
     },
 
-    onFoodContextMenu(ev: { foodId: number }) {
+    onFoodContextMenu(ev: { foodId: string }) {
       this.foodContextMenu.foodId = ev.foodId;
       this.foodContextMenu.show = true;
     },

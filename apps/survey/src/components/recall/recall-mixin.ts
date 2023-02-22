@@ -16,8 +16,7 @@ import {
 import { useLocale } from '@intake24/survey/composables';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex } from '@intake24/survey/stores/meal-food-utils';
-import { promptType } from '@intake24/survey/util';
+import { getFoodIndex, getMealIndex, promptType } from '@intake24/survey/util';
 
 import { InfoAlert } from '../elements';
 
@@ -158,7 +157,7 @@ export default defineComponent({
       this.survey.clearUndo();
     },
 
-    showMealPrompt(mealId: number, promptSection: MealSection, promptType: ComponentType) {
+    showMealPrompt(mealId: string, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
       const prompt = this.recallController
@@ -199,7 +198,7 @@ export default defineComponent({
       this.currentPrompt = { section: promptSection, prompt };
     },
 
-    async action(type: string, id?: number) {
+    async action(type: string, id?: string) {
       switch (type) {
         case 'next':
         case 'restart':
@@ -233,7 +232,7 @@ export default defineComponent({
       }
     },
 
-    async mealAction(payload: { type: MealActionType; mealId: number }) {
+    async mealAction(payload: { type: MealActionType; mealId: string }) {
       switch (payload.type) {
         case 'editMeal':
           this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
@@ -259,20 +258,21 @@ export default defineComponent({
           this.saveCurrentState();
           this.showSurveyPrompt('submission', 'review-confirm-prompt');
           break;
+        // TODO: is this needed?
         case 'no-more-information':
           this.saveCurrentState();
-          this.showMealPrompt(0, 'postFoods', 'no-more-information-prompt');
+          this.showMealPrompt('0', 'postFoods', 'no-more-information-prompt');
           break;
       }
     },
 
-    async mealSelected(mealId: number) {
+    async mealSelected(mealId: string) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
       await this.nextPrompt();
     },
 
-    async foodSelected(foodId: number) {
+    async foodSelected(foodId: string) {
       this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
 
       await this.nextPrompt();

@@ -44,7 +44,7 @@ import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/stores/meal-food-utils';
+import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import MealItem from './meal-item.vue';
 import MealItemExpandable from './meal-item-expandable.vue';
@@ -93,7 +93,7 @@ export default defineComponent({
   },
 
   methods: {
-    isSelectedFoodInMeal(mealId: number): boolean {
+    isSelectedFoodInMeal(mealId: string): boolean {
       if (this.selection.element?.type !== 'food') return false;
 
       const foodIndex = getFoodIndexRequired(this.meals, this.selection.element.foodId);
@@ -103,13 +103,13 @@ export default defineComponent({
     action(type: string) {
       this.$emit('action', type);
     },
-    foodSelected(foodId: number) {
+    foodSelected(foodId: string) {
       this.$emit('food-selected', foodId);
     },
-    mealSelected(mealId: number) {
+    mealSelected(mealId: string) {
       this.$emit('meal-selected', mealId);
     },
-    mealAction(payload: { mealId: number; type: string }) {
+    mealAction(payload: { mealId: string; type: string }) {
       this.$emit('meal-action', payload);
     },
   },

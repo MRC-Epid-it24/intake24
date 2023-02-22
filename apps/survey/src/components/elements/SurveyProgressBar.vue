@@ -22,7 +22,7 @@ import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
 import { useLocale } from '@intake24/survey/composables';
-import { fromMealTime } from '@intake24/survey/stores/meal-food-utils';
+import { fromMealTime } from '@intake24/survey/util';
 
 export default defineComponent({
   name: 'SurveyProgressBar',

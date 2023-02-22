@@ -110,7 +110,7 @@ export default <P extends keyof Prompts, S extends object>() =>
         this.closePanels();
       },
 
-      action(type: string, id?: number) {
+      action(type: string, id?: string) {
         this.$emit('action', type, id);
       },
     },

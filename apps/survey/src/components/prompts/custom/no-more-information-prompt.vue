@@ -67,7 +67,7 @@
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
-            <v-btn color="error" value="deleteFood" v-bind="attrs" v-on="on">
+            <v-btn value="deleteFood" v-bind="attrs" v-on="on">
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteFood') }}
               </span>
@@ -84,7 +84,7 @@
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
-            <v-btn color="error" value="deleteMeal" v-bind="attrs" v-on="on">
+            <v-btn value="deleteMeal" v-bind="attrs" v-on="on">
               <span class="text-overline font-weight-medium">
                 {{ $t('recall.actions.nav.deleteMeal') }}
               </span>
@@ -102,7 +102,7 @@
         </v-btn>
         <v-divider vertical></v-divider>
       </template>
-      <v-btn color="success" :disabled="!isValid" value="next" @click.stop="action('next')">
+      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.next') }}
         </span>
