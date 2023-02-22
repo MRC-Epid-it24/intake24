@@ -258,7 +258,14 @@ export default defineComponent({
       cursor: pointer;
       fill: transparent;
 
-      &.active,
+      &.active {
+        stroke-width: 8;
+        stroke: map-get($blue-grey, 'darken-3');
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: url(#polygon-blur);
+      }
+
       &:hover {
         stroke-width: 8;
         stroke: map-get($orange, 'darken-3');
