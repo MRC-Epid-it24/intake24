@@ -14,6 +14,12 @@ Prompts with standardized behavior tied to specific functionality. Usually only 
 
 ### Edit meal prompt
 
+Edit meal prompt allows initial entry of food and drink before portion-size estimation.
+
+#### Options
+
+- `separateDrinks` - true/false whether to show drinks separately
+
 ### Final prompt
 
 Terminal prompt that is shown at the end of the survey and can offer feedback is applicable.
