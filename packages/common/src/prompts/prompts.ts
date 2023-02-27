@@ -161,7 +161,7 @@ export type Prompts = {
   'standard-portion-prompt': BasePrompt & { component: 'standard-portion-prompt' };
   // Standard
   'associated-foods-prompt': BasePrompt & { component: 'associated-foods-prompt' };
-  'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt' };
+  'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt'; separateDrinks: boolean };
   'final-prompt': BasePrompt & { component: 'final-prompt' };
   'food-search-prompt': BasePrompt & {
     component: 'food-search-prompt';

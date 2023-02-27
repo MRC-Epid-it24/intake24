@@ -69,10 +69,10 @@ const prompts: LocaleMessageObject = {
       For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
       <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.`,
-    food: 'Your food and drinks',
-    drinks: 'Drinks',
-    addFood: 'Add',
-    addDrink: 'Add a drink',
+    add: 'Add',
+    drinksOnly: 'Drinks',
+    foods: 'Foods and drinks',
+    foodsOnly: 'Foods',
     delete: {
       _: 'Delete {item}',
       confirm: 'Do you want to delete {item}?',

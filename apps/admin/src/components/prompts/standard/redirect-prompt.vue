@@ -52,10 +52,12 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import isInteger from 'lodash/isInteger';
 import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
+import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt } from '../partials';
 
@@ -66,15 +68,15 @@ export default defineComponent({
 
   props: {
     url: {
-      type: String,
+      type: String as PropType<Prompts['redirect-prompt']['url']>,
       default: null,
     },
     identifier: {
-      type: String,
+      type: String as PropType<Prompts['redirect-prompt']['identifier']>,
       default: 'username',
     },
     timer: {
-      type: Number,
+      type: Number as PropType<Prompts['redirect-prompt']['timer']>,
       default: null,
     },
   },

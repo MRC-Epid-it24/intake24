@@ -1,7 +1,20 @@
 <template>
   <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
-      <editable-food-list v-model="foods" @input="update"></editable-food-list>
+      <template v-if="prompt.separateDrinks">
+        <editable-food-list
+          v-model="foodsOnly"
+          class="mb-4"
+          mode="foodsOnly"
+          @input="update"
+        ></editable-food-list>
+        <editable-food-list
+          v-model="drinksOnly"
+          mode="drinksOnly"
+          @input="update"
+        ></editable-food-list>
+      </template>
+      <editable-food-list v-else v-model="foods" @input="update"></editable-food-list>
     </v-col>
     <template #actions>
       <v-btn
@@ -18,7 +31,7 @@
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`, { meal: localMealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`, { meal: mealName }).toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
@@ -37,7 +50,7 @@
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
-        {{ $t(`prompts.${type}.delete.confirm`, { item: localMealName }) }}
+        {{ $t(`prompts.${type}.delete.confirm`, { item: mealName }) }}
       </confirm-dialog>
       <next
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
@@ -57,7 +70,7 @@
         <v-icon class="pb-1">fas fa-clock</v-icon>
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`, { item: localMealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`, { item: mealName }).toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
@@ -68,7 +81,7 @@
             <v-icon class="pb-1">$delete</v-icon>
           </v-btn>
         </template>
-        {{ $t(`prompts.${type}.delete.confirm`, { item: localMealName }) }}
+        {{ $t(`prompts.${type}.delete.confirm`, { item: mealName }) }}
       </confirm-dialog>
       <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
@@ -120,8 +133,22 @@ export default defineComponent({
   },
 
   computed: {
-    localMealName(): string {
-      return this.getLocaleContent(this.meal.name);
+    drinksOnly: {
+      get() {
+        return this.foods.filter((food) => food.flags.includes('is-drink'));
+      },
+      set(val: FoodState[]) {
+        this.foods = [...this.foodsOnly, ...val];
+      },
+    },
+
+    foodsOnly: {
+      get() {
+        return this.foods.filter((food) => !food.flags.includes('is-drink'));
+      },
+      set(val: FoodState[]) {
+        this.foods = [...this.drinksOnly, ...val];
+      },
     },
 
     isValid() {

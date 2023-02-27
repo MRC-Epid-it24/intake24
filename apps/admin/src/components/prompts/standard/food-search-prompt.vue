@@ -24,7 +24,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
 
 import { basePrompt } from '../partials';
 
@@ -35,11 +38,11 @@ export default defineComponent({
 
   props: {
     allowBrowsing: {
-      type: Boolean,
+      type: Boolean as PropType<Prompts['food-search-prompt']['allowBrowsing']>,
       default: true,
     },
     dualLanguage: {
-      type: Boolean,
+      type: Boolean as PropType<Prompts['food-search-prompt']['dualLanguage']>,
       default: false,
     },
   },

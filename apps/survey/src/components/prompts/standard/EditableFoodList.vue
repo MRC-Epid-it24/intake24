@@ -1,16 +1,14 @@
 <template>
   <div>
-    <h3 class="mb-4">
-      {{ drinks ? $t('prompts.editMeal.drinks') : $t('prompts.editMeal.food') }}
-    </h3>
+    <h3 class="mb-4">{{ $t(`prompts.editMeal.${mode}`) }}</h3>
     <v-row>
-      <v-col cols="12" sm="8">
+      <v-col cols="12" sm="9">
         <v-text-field
           ref="foodsDrinksInput"
           v-model="newFoodDescription"
           hide-details
           outlined
-          :placeholder="$t('prompts.editMeal.food')"
+          :placeholder="$t(`prompts.editMeal.${mode}`)"
           @focusout="onEditFocusLost"
           @keypress.enter.stop="addFood"
         >
@@ -21,8 +19,9 @@
           </template>
         </v-text-field>
       </v-col>
-      <v-col v-if="$vuetify.breakpoint.smAndUp" cols="4">
+      <v-col v-if="$vuetify.breakpoint.smAndUp" cols="3">
         <v-btn
+          block
           color="secondary"
           :disabled="!newFoodDescription.length"
           elevation="2"
@@ -30,11 +29,10 @@
           @click="addFood"
         >
           <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
-          {{ drinks ? $t('prompts.editMeal.addDrink') : $t('prompts.editMeal.addFood') }}
+          {{ $t(`prompts.editMeal.add`) }}
         </v-btn>
       </v-col>
     </v-row>
-
     <v-list v-if="foods.length">
       <v-list-item v-for="(food, idx) in foods" :key="idx" :ripple="false" @click="edit(idx)">
         <v-text-field
@@ -71,9 +69,9 @@ export default defineComponent({
       type: Array as PropType<FoodState[]>,
       required: true,
     },
-    drinks: {
-      type: Boolean,
-      default: false,
+    mode: {
+      type: String as PropType<'foods' | 'foodsOnly' | 'drinksOnly'>,
+      default: 'foods',
     },
   },
 
@@ -106,7 +104,7 @@ export default defineComponent({
         id: getEntityId(),
         type: 'free-text',
         description: this.newFoodDescription,
-        flags: this.drinks ? ['is-drink'] : [],
+        flags: this.mode === 'drinksOnly' ? ['is-drink'] : [],
         customPromptAnswers: {},
         linkedFoods: [],
       };

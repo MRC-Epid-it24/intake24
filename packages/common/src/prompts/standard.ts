@@ -17,6 +17,7 @@ export const editMealPrompt: Prompts['edit-meal-prompt'] = copy({
   type: 'standard',
   id: 'edit-meal-prompt',
   name: 'Meal Edit prompt',
+  separateDrinks: false,
 });
 
 export const finalPrompt: Prompts['final-prompt'] = copy({

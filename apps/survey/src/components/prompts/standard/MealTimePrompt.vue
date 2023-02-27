@@ -19,7 +19,7 @@
         text
         @click.stop="action('cancel')"
       >
-        {{ $t(`prompts.${type}.no`, { meal: localMealName }) }}
+        {{ $t(`prompts.${type}.no`, { meal: mealName }) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -29,7 +29,7 @@
         large
         @click.stop="action('next')"
       >
-        {{ $t(`prompts.${type}.yes`, { meal: localMealName }) }}
+        {{ $t(`prompts.${type}.yes`, { meal: mealName }) }}
       </v-btn>
     </template>
     <template #nav-actions>
@@ -80,10 +80,6 @@ export default defineComponent({
   computed: {
     currentTime(): string {
       return fromMealTime(this.initialState);
-    },
-
-    localMealName(): string {
-      return this.getLocaleContent(this.meal.name);
     },
 
     isValid(): boolean {

@@ -273,6 +273,7 @@ const surveySchemes: LocaleMessageObject = {
     'edit-meal-prompt': {
       title: 'Food list',
       subtitle: 'List or edit foods in this meal as free text descriptions',
+      separateDrinks: 'Separate drinks list',
     },
     'final-prompt': {
       title: 'Final',
