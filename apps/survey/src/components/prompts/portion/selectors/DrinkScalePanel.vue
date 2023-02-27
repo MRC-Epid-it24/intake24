@@ -17,7 +17,7 @@
         :style="overlayBackground"
       >
       </v-img>
-      <div class="drink-scale-image-slider mr-10" :style="{ bottom: sliderBottom }">
+      <div class="drink-scale-image-slider mr-6" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
           :height="sliderHeight"
@@ -247,6 +247,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'vuetify/src/styles/styles.sass';
+
 .drink-scale-drawer {
   position: relative;
 
@@ -280,6 +282,33 @@ export default defineComponent({
         cursor: pointer;
 
         .v-slider__thumb {
+          width: 30px;
+          height: 24px;
+          position: absolute;
+          left: -52px;
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 36px;
+            width: 0;
+            height: 0;
+            border-left: 12px solid map-get($blue-grey, 'darken-4');
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+          }
+
+          &::before {
+            content: unset;
+          }
+        }
+
+        /* .v-slider__thumb {
           height: 36px;
           width: 36px;
           left: -18px;
@@ -301,7 +330,7 @@ export default defineComponent({
             top: -12px;
             left: -12px;
           }
-        }
+        } */
       }
     }
 
