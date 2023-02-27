@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-bind="{ value }" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <v-card>
+    <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ on, attrs }">
       <v-btn large v-bind="attrs" v-on="on">
         <v-list-item-title>
@@ -8,7 +8,7 @@
         </v-list-item-title>
       </v-btn>
     </template>
-    <v-card>
+    <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
         <v-icon dark left>fa-upload</v-icon>
         <v-toolbar-title>

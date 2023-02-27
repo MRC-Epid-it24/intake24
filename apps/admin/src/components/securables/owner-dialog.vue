@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ on, attrs }">
       <v-btn class="ml-3" link text v-bind="attrs" v-on="on">
         <v-icon class="mr-2">fas fa-user-shield</v-icon>
         {{ owner ? owner.name : $t('common.none') }}
       </v-btn>
     </template>
-    <v-card :loading="isLoading">
+    <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>

@@ -84,8 +84,13 @@
         </transition-group>
       </draggable>
     </v-list>
-    <v-dialog v-model="dialog.show" max-width="600px" persistent>
-      <v-card>
+    <v-dialog
+      v-model="dialog.show"
+      :fullscreen="$vuetify.breakpoint.smAndDown"
+      max-width="600px"
+      persistent
+    >
+      <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="primary" dark flat>
           <v-icon dark left>fa-hamburger</v-icon>
           <v-toolbar-title>

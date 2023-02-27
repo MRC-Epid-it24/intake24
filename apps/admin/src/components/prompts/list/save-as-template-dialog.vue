@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ on, attrs }">
       <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
@@ -8,8 +8,15 @@
         </v-list-item-title>
       </v-list-item>
     </template>
-    <v-card>
-      <v-card-title>{{ $t('survey-schemes.questions.templates.saveAs.title') }}</v-card-title>
+    <v-card :tile="$vuetify.breakpoint.smAndDown">
+      <v-toolbar color="primary" dark flat>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
+          <v-icon>$cancel</v-icon>
+        </v-btn>
+        <v-toolbar-title>
+          {{ $t('survey-schemes.questions.templates.saveAs.title') }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-card-text class="pa-6">
         <v-row>
           <v-col cols="12">

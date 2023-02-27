@@ -34,7 +34,7 @@
             {{ $t('user.mfa.devices.add') }}
           </v-btn>
         </template>
-        <v-card>
+        <v-card :tile="isMobile">
           <v-toolbar color="primary" dark flat>
             <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
               <v-icon>$cancel</v-icon>
