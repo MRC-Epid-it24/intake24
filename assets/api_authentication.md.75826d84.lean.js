@@ -1,1 +1,0 @@
-import{_ as e,c as n,o as a,a as t}from"./app.0ca1352a.js";const y=JSON.parse('{"title":"Authentication","description":"","frontmatter":{},"headers":[],"relativePath":"api/authentication.md"}'),s={name:"api/authentication.md"},o=t("",7),i=[o];function c(p,r,d,l,h,u){return a(),n("div",null,i)}const f=e(s,[["render",c]]);export{y as __pageData,f as default};
