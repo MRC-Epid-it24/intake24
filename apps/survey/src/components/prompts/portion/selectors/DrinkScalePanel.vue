@@ -285,9 +285,9 @@ export default defineComponent({
           width: 30px;
           height: 24px;
           position: absolute;
-          left: -52px;
-          border-top-left-radius: 6px;
-          border-bottom-left-radius: 6px;
+          left: -15px;
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px;
           border-top-right-radius: 0px;
           border-bottom-right-radius: 0px;
 
@@ -295,10 +295,10 @@ export default defineComponent({
             content: '';
             position: absolute;
             top: 50%;
-            left: 36px;
+            left: -6px;
             width: 0;
             height: 0;
-            border-left: 12px solid map-get($blue-grey, 'darken-4');
+            border-right: 12px solid map-get($blue-grey, 'darken-4');
             border-top: 12px solid transparent;
             border-bottom: 12px solid transparent;
           }
