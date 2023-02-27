@@ -1,0 +1,36 @@
+version: '3.8'
+
+name: intake24-dev
+
+services:
+  db:
+    image: 'postgres:15-alpine'
+    container_name: db
+    restart: always
+    env_file:
+      - ../apps/api/__tests__/.env-test
+      - ../apps/api/.env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d/
+      - data-db:/var/lib/postgresql/data
+
+  redis:
+    image: 'redis:7-alpine'
+    container_name: 'redis'
+    restart: always
+    env_file:
+      - ../apps/api/.env
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - data-redis:/data
+
+volumes:
+  data-db:
+  data-redis:
