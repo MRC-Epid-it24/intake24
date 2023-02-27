@@ -260,7 +260,7 @@ export default defineComponent({
 
       &.active {
         stroke-width: 8;
-        stroke: map-get($blue-grey, 'darken-3');
+        stroke: map-get($blue-grey, 'darken-4');
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);

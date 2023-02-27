@@ -39,7 +39,7 @@
       <v-list-item v-for="(food, idx) in foods" :key="idx" :ripple="false" @click="edit(idx)">
         <v-text-field
           v-if="editIndex === idx"
-          :value="foodDisplayName(foods[idx])"
+          :value="getFoodName(foods[idx])"
           @focusout="onEditFocusLost"
           @keypress.enter.stop="addFood"
         ></v-text-field>
@@ -48,7 +48,7 @@
             <v-icon>fa-trash</v-icon>
           </v-btn>
         </v-list-item-icon>
-        <v-list-item-title v-else>{{ foodDisplayName(food) }}</v-list-item-title>
+        <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </div>
@@ -60,6 +60,7 @@ import { defineComponent } from 'vue';
 
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useFoodUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
 
 export default defineComponent({
@@ -77,6 +78,12 @@ export default defineComponent({
   },
 
   emits: ['input'],
+
+  setup() {
+    const { getFoodName } = useFoodUtils();
+
+    return { getFoodName };
+  },
 
   data() {
     return {
@@ -136,19 +143,6 @@ export default defineComponent({
         if (textField === undefined) return;
         textField[0].focus();
       });
-    },
-
-    foodDisplayName(food: FoodState): string {
-      switch (food.type) {
-        case 'free-text':
-          return food.description;
-        case 'encoded-food':
-          return food.data.localName;
-        default: {
-          console.warn(`Unexpected food type`);
-          return '???';
-        }
-      }
     },
   },
 });

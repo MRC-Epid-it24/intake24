@@ -41,7 +41,7 @@ export default defineComponent({
 
     const getInitialState = (): MissingFoodPromptState => ({
       info: {
-        name: '',
+        name: food().searchTerm,
         brand: '',
         description: '',
         leftovers: '',
