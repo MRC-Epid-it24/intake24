@@ -33,7 +33,7 @@ const startApp = async () => {
             'https://youtube.com',
             'https://www.youtube.com',
           ],
-          imgSrc: ["'self'", 'blob:', 'data:', config.api.host],
+          imgSrc: ["'self'", 'blob:', 'data:', config.api.host, config.api.cdn],
           scriptSrc: [
             "'self'",
             'https://hcaptcha.com',

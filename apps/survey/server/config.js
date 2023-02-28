@@ -6,5 +6,6 @@ module.exports = {
   static: process.env.SERVER_STATIC || 'dist',
   api: {
     host: process.env.SERVER_API_HOST || '',
+    cdn: process.env.SERVER_IMG_CDN || '',
   },
 };

@@ -48,6 +48,10 @@ Directory, which should be served as public by the http server. Defaults to `$BA
 
 API Server base URL. Defaults to `$API_HOST`.
 
+### SERVER_IMG_CDN
+
+CDN Base URL (if deployment is using CDN to Images delivery). Defaults to `$API_HOST`.
+
 ## Vite build vars
 
 ### OUTPUT_DIR
