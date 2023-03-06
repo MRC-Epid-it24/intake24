@@ -239,7 +239,7 @@ importers:
       express-session: ^1.17.3
       express-validator: ^6.15.0
       fast-csv: ^4.3.6
-      fork-ts-checker-webpack-plugin: ^7.3.0
+      fork-ts-checker-webpack-plugin: ^8.0.0
       fs-extra: ^11.1.0
       helmet: ^6.0.1
       ioredis: ^5.3.1
@@ -370,7 +370,7 @@ importers:
       '@types/ua-parser-js': 0.7.36
       '@types/validator': 13.7.12
       '@types/web-push': 3.3.2
-      fork-ts-checker-webpack-plugin: 7.3.0_hhrrucqyg4eysmfpujvov2ym5u
+      fork-ts-checker-webpack-plugin: 8.0.0_hhrrucqyg4eysmfpujvov2ym5u
       nodemon: 2.0.20
       nodemon-webpack-plugin: 4.8.1_webpack@5.75.0
       rimraf: 4.1.2
@@ -397,7 +397,7 @@ importers:
       csv-writer: ^1.6.0
       dotenv: ^16.0.3
       dotenv-expand: ^10.0.0
-      fork-ts-checker-webpack-plugin: ^7.3.0
+      fork-ts-checker-webpack-plugin: ^8.0.0
       fs-extra: ^11.1.0
       lodash: ^4.17.21
       nanoid: ^3.3.4
@@ -439,7 +439,7 @@ importers:
       '@types/validator': 13.7.12
       '@types/web-push': 3.3.2
       '@types/webpack-env': 1.18.0
-      fork-ts-checker-webpack-plugin: 7.3.0_hhrrucqyg4eysmfpujvov2ym5u
+      fork-ts-checker-webpack-plugin: 8.0.0_hhrrucqyg4eysmfpujvov2ym5u
       ts-loader: 9.4.2_hhrrucqyg4eysmfpujvov2ym5u
       ts-node: 10.9.1_tncu2ai53lzgmizdedur7lbibe
       tsconfig-paths: 4.1.2
@@ -465,7 +465,7 @@ importers:
       dotenv: ^16.0.3
       dotenv-expand: ^10.0.0
       express: ^4.18.2
-      fork-ts-checker-webpack-plugin: ^7.3.0
+      fork-ts-checker-webpack-plugin: ^8.0.0
       fs-extra: ^11.1.0
       helmet: ^6.0.1
       laravel-vite-plugin: ^0.7.4
@@ -506,7 +506,7 @@ importers:
       '@types/nunjucks': 3.2.2
       '@types/supertest': 2.0.12
       '@types/webpack-env': 1.18.0
-      fork-ts-checker-webpack-plugin: 7.3.0_hhrrucqyg4eysmfpujvov2ym5u
+      fork-ts-checker-webpack-plugin: 8.0.0_hhrrucqyg4eysmfpujvov2ym5u
       laravel-vite-plugin: 0.7.4_vite@4.1.3
       nodemon: 2.0.20
       nodemon-webpack-plugin: 4.8.1_webpack@5.75.0
@@ -7642,16 +7642,12 @@ packages:
     dependencies:
       is-callable: 1.2.7
 
-  /fork-ts-checker-webpack-plugin/7.3.0_hhrrucqyg4eysmfpujvov2ym5u:
-    resolution: {integrity: sha512-IN+XTzusCjR5VgntYFgxbxVx3WraPRnKehBFrf00cMSrtUuW9MsG9dhL6MWpY6MkjC3wVwoujfCDgZZCQwbswA==}
+  /fork-ts-checker-webpack-plugin/8.0.0_hhrrucqyg4eysmfpujvov2ym5u:
+    resolution: {integrity: sha512-mX3qW3idpueT2klaQXBzrIM/pHw+T0B/V9KHEvNrqijTq9NFnMZU6oreVxDYcf33P8a5cW+67PjodNHthGnNVg==}
     engines: {node: '>=12.13.0', yarn: '>=1.0.0'}
     peerDependencies:
       typescript: '>3.6.0'
-      vue-template-compiler: '*'
       webpack: ^5.11.0
-    peerDependenciesMeta:
-      vue-template-compiler:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       chalk: 4.1.2

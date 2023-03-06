@@ -46,7 +46,7 @@
     "@types/nunjucks": "^3.2.2",
     "@types/supertest": "^2.0.12",
     "@types/webpack-env": "^1.18.0",
-    "fork-ts-checker-webpack-plugin": "^7.3.0",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "laravel-vite-plugin": "^0.7.4",
     "nodemon": "^2.0.20",
     "nodemon-webpack-plugin": "^4.8.1",

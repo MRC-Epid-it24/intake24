@@ -112,7 +112,7 @@
     "@types/ua-parser-js": "^0.7.36",
     "@types/validator": "^13.7.12",
     "@types/web-push": "^3.3.2",
-    "fork-ts-checker-webpack-plugin": "^7.3.0",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
     "nodemon": "^2.0.20",
     "nodemon-webpack-plugin": "^4.8.1",
     "rimraf": "^4.1.2",
