@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import type { Express } from 'express';
 import { json, urlencoded } from 'body-parser';
-import redisStore from 'connect-redis';
+import RedisStore from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import morgan from 'morgan';
@@ -34,7 +34,6 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
 
   // Session store + middleware
   const client = ioc.cradle.session.init();
-  const RedisStore = redisStore(expressSession);
 
   app.use(
     expressSession({
