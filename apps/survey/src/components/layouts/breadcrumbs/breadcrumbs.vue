@@ -3,7 +3,7 @@
     <v-toolbar flat>
       <v-breadcrumbs v-if="!isMobile" class="pl-0" :items="items">
         <template #divider>
-          <v-icon x-small>fa-chevron-right</v-icon>
+          <v-icon>{{ forwardIcon }}</v-icon>
         </template>
       </v-breadcrumbs>
       <v-spacer v-if="!isMobile"></v-spacer>
@@ -29,3 +29,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+.v-breadcrumbs {
+  li:last-of-type .v-breadcrumbs__item {
+    font-weight: 600 !important;
+  }
+}
+</style>

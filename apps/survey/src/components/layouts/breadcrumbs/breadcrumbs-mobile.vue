@@ -46,6 +46,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.v-breadcrumbs {
+  li:last-of-type .v-breadcrumbs__item {
+    font-weight: 600 !important;
+  }
+}
+
 /* Style the food bar */
 .breadcrumbs {
   position: sticky;
