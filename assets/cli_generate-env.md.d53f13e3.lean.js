@@ -1,1 +1,0 @@
-import{_ as e,c as s,o as a,a as n}from"./app.9c6710a1.js";const m=JSON.parse('{"title":"Generate .env files","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-env.md"}'),o={name:"cli/generate-env.md"},t=n("",6),c=[t];function l(p,i,r,d,h,_){return a(),s("div",null,c)}const C=e(o,[["render",l]]);export{m as __pageData,C as default};
