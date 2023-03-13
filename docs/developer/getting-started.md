@@ -15,7 +15,7 @@ Steps to getting a local instance running
 - Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
 
 ::: tip
-Intake24 requires node.js version 14 or newer, please make sure to check your node.js version before continuing.
+Intake24 requires node.js version 16 or newer, please make sure to check your node.js version before continuing.
 :::
 
 Clone the [Intake24 version 4 repository on GitHub](https://github.com/MRC-Epid-it24/intake24).
