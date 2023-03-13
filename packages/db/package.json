@@ -29,12 +29,12 @@
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.29.1",
+    "sequelize": "^6.29.3",
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.14.6",
+    "@types/node": "^18.15.1",
     "@types/pg": "^8.6.6",
     "@types/validator": "^13.7.13",
     "sequelize-cli": "^6.6.0",
