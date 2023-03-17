@@ -31,7 +31,7 @@
               class="my-2"
               :error-messages="form.errors.get('name')"
               hide-details="auto"
-              :label="$t('user.mfa.devices.name')"
+              :label="$t('user.mfa.devices.name._')"
               name="name"
               outlined
               @input="form.errors.clear('name')"

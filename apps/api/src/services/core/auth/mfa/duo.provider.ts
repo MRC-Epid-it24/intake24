@@ -1,8 +1,18 @@
+import { URL } from 'node:url';
+
 import { Client } from '@duosecurity/duo_universal';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { DuoAuthChallenge } from '@intake24/common/security';
-import type { MFADevice } from '@intake24/db';
+import { randomString } from '@intake24/common/util';
+import { MFADevice } from '@intake24/db';
+
+export type DuoRegistrationVerificationOps = {
+  userId: string;
+  name: string;
+  email: string;
+  token: string;
+};
 
 export type DuoAuthenticationVerificationOps = {
   email: string;
@@ -17,18 +27,14 @@ const duoProvider = ({
   const provider = 'duo';
   const config = securityConfig.mfa.providers[provider];
 
-  /**
-   * Create Duo Security authentication request
-   *
-   * @param {MFADevice} device
-   * @returns {Promise<DuoAuthChallenge>}
-   */
-  const authenticationChallenge = async (device: MFADevice): Promise<DuoAuthChallenge> => {
-    const { clientId, clientSecret, apiHost, redirectUrl } = config;
+  const challenge = async (
+    email: string,
+    redirectUrlContext = ''
+  ): Promise<Omit<DuoAuthChallenge, 'deviceId'>> => {
+    const { clientId, clientSecret, apiHost } = config;
+    const redirectUrl = new URL(redirectUrlContext, config.redirectUrl).href;
 
     try {
-      if (!device.user?.email) throw new Error('Duo device with credentials not found.');
-
       const duoClient = new Client({
         clientId,
         clientSecret,
@@ -41,9 +47,9 @@ const duoProvider = ({
       if (stat !== 'OK') throw new Error('Duo service not available.');
 
       const challengeId = duoClient.generateState();
-      const challengeUrl = duoClient.createAuthUrl(device.user?.email, challengeId);
+      const challengeUrl = duoClient.createAuthUrl(email, challengeId);
 
-      return { challengeId, deviceId: device.id, provider, challengeUrl };
+      return { challengeId, provider, challengeUrl };
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
@@ -55,15 +61,20 @@ const duoProvider = ({
     }
   };
 
-  /**
-   * Verify Duo Security authentication response
-   *
-   * @param {DuoAuthenticationVerificationOps} ops
-   * @returns
-   */
-  const authenticationVerification = async (ops: DuoAuthenticationVerificationOps) => {
+  const registrationChallenge = async (email: string) => challenge(email, 'user');
+
+  const authenticationChallenge = async (device: MFADevice): Promise<DuoAuthChallenge> => {
+    if (!device.user?.email) throw new Error('Duo device with credentials not found.');
+
+    const challengePayload = await challenge(device.user?.email);
+
+    return { ...challengePayload, deviceId: device.id };
+  };
+
+  const verification = async (ops: DuoAuthenticationVerificationOps, redirectUrlContext = '') => {
     const { email, token } = ops;
-    const { clientId, clientSecret, apiHost, redirectUrl } = config;
+    const { clientId, clientSecret, apiHost } = config;
+    const redirectUrl = new URL(redirectUrlContext, config.redirectUrl).href;
 
     try {
       const duoClient = new Client({
@@ -89,7 +100,27 @@ const duoProvider = ({
     }
   };
 
-  return { authenticationChallenge, authenticationVerification };
+  const registrationVerification = async (ops: DuoRegistrationVerificationOps) => {
+    const { userId, name, email, token } = ops;
+    await verification({ email, token }, 'user');
+
+    return MFADevice.create({
+      userId,
+      provider: 'duo',
+      name,
+      secret: randomString(32),
+    });
+  };
+
+  const authenticationVerification = async (ops: DuoAuthenticationVerificationOps) =>
+    verification(ops);
+
+  return {
+    registrationChallenge,
+    registrationVerification,
+    authenticationChallenge,
+    authenticationVerification,
+  };
 };
 
 export default duoProvider;

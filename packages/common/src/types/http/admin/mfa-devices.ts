@@ -19,8 +19,15 @@ export type OTPRegistrationVerificationRequest = {
   token: string;
 };
 
+export type DuoRegistrationChallenge = {
+  challengeId: string;
+  challengeUrl: string;
+};
+
 export type DuoRegistrationVerificationRequest = {
+  challengeId: string;
   name: string;
+  token: string;
 };
 
 export type FIDORegistrationChallenge = PublicKeyCredentialCreationOptionsJSON;

@@ -19,6 +19,9 @@ declare module 'express-session' {
       provider: MFAProvider;
       userId: string;
     };
+    duoRegChallenge: {
+      challengeId: string;
+    };
     fidoRegChallenge: {
       challengeId: string;
     };

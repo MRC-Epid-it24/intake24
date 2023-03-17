@@ -147,7 +147,7 @@ export default defineComponent({
   data() {
     return {
       dialog: false,
-      tab: 0,
+      tab: mfaProviders[0],
       status: false,
       devices: [] as MFADeviceEntry[],
       providers: mfaProviders,
@@ -161,9 +161,19 @@ export default defineComponent({
 
     this.status = status;
     this.devices = devices;
+
+    await this.checkDuoRegistrationResponse();
   },
 
   methods: {
+    async checkDuoRegistrationResponse() {
+      const { state: challengeId, code: token } = this.$route.query;
+      if (typeof challengeId !== 'string' || typeof token !== 'string') return;
+
+      this.tab = 'duo';
+      this.dialog = true;
+    },
+
     async toggle() {
       if (!this.devices.length) {
         useMessages().info(this.$t('user.mfa.devices.none').toString());

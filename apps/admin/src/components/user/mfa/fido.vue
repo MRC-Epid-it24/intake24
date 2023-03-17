@@ -20,7 +20,7 @@
       </v-row>
     </v-stepper-content>
     <v-stepper-step :complete="progress > 2" step="2">
-      {{ $t('user.mfa.devices.qr.title') }}
+      {{ $t('user.mfa.devices.name.title') }}
     </v-stepper-step>
     <v-stepper-content step="2">
       <v-container>
@@ -32,7 +32,7 @@
                 class="my-2"
                 :error-messages="form.errors.get('name')"
                 hide-details="auto"
-                :label="$t('user.mfa.devices.name')"
+                :label="$t('user.mfa.devices.name._')"
                 name="name"
                 outlined
                 @input="form.errors.clear('name')"

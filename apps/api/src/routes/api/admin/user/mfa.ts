@@ -13,7 +13,10 @@ export default () => {
 
   router.post('/toggle', validation.toggle, wrapAsync(mfaDeviceController.toggle));
 
-  router.route('/duo').post(validation.duo.verify, wrapAsync(duoDeviceController.verify));
+  router
+    .route('/duo')
+    .get(wrapAsync(duoDeviceController.challenge))
+    .post(validation.duo.verify, wrapAsync(duoDeviceController.verify));
 
   router
     .route('/otp')
