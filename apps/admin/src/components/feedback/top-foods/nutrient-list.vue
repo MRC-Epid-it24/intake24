@@ -35,7 +35,7 @@
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
             v-for="(nutrientType, idx) in items"
-            :key="nutrientType.id"
+            :key="nutrientType.id.join(':')"
             class="drag-and-drop__item"
             draggable
             link
@@ -89,6 +89,7 @@
               item-value="id"
               :items="availableNutrientTypes"
               :label="$t('nutrient-types._')"
+              multiple
               name="nutrientTypeId"
               outlined
               prepend-inner-icon="fas fa-seedling"
@@ -134,7 +135,6 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { RuleCallback } from '@intake24/admin/types';
 import type { TopFoodNutrientType } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
@@ -164,7 +164,7 @@ export default defineComponent({
 
   setup(props, context) {
     const defaultItem = () => ({
-      id: props.availableNutrientTypes[0].id,
+      id: [props.availableNutrientTypes[0].id],
       name: { en: props.availableNutrientTypes[0].description },
     });
 
@@ -188,17 +188,18 @@ export default defineComponent({
   },
 
   computed: {
-    rules(): RuleCallback[] {
+    rules() {
       return [
-        (value: string | null): boolean | string => {
-          if (!value)
+        (value: string[]): boolean | string => {
+          if (!value.length)
             return this.$t(
               'feedback-schemes.top-foods.nutrientTypes.validation.required'
             ).toString();
 
           const { index } = this.dialog;
           const match = this.items.find(
-            (nutrientType, idx) => value === nutrientType.id && index !== idx
+            (nutrientType, idx) =>
+              [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx
           );
 
           return match

@@ -56,7 +56,8 @@ export default defineComponent({
       const { colors, nutrients } = this.topFoods;
 
       const chartOptions: EChartsOption[] = nutrients.map((nutrient) => {
-        const { id, name, unit, data } = nutrient;
+        const { name, unit, data } = nutrient;
+        const id = nutrient.id.join(':');
 
         return {
           textStyle: {

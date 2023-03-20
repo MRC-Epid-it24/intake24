@@ -10,7 +10,7 @@ export type ChartData = {
 };
 
 export type TopFoodNutrient = {
-  id: string;
+  id: string[];
   name: string;
   unit: string;
   data: ChartData[];
@@ -22,22 +22,31 @@ export interface TopFoodData extends TopFoods {
 }
 
 export const filterAndSortFoodByNutrientTypeId = (
-  nutrientTypeId: string,
+  nutrientTypeId: string[],
   foods: AggregateFoodStats[]
 ): AggregateFoodStats[] =>
   foods
     .map((food) => food.clone())
-    .filter((f) => f.getAverageIntake(nutrientTypeId) > 0)
-    .sort((a, b) => b.getAverageIntake(nutrientTypeId) - a.getAverageIntake(nutrientTypeId));
+    .filter((f) => f.getGroupAverageIntake(nutrientTypeId) > 0)
+    .sort(
+      (a, b) => b.getGroupAverageIntake(nutrientTypeId) - a.getGroupAverageIntake(nutrientTypeId)
+    );
 
 export const summarizeOtherFood = (
-  nutrientTypeId: string,
+  nutrientTypeId: string[],
   foods: AggregateFoodStats[]
 ): AggregateFoodStats[] => {
   if (!foods.length) return [];
 
-  const total = foods.map((f) => f.getAverageIntake(nutrientTypeId)).reduce((a, b) => a + b);
-  return [new AggregateFoodStats('Other food', new Map([[nutrientTypeId, total]]))];
+  const nutrients = new Map<string, number>();
+  nutrientTypeId.forEach((id) => {
+    nutrients.set(
+      id,
+      foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b)
+    );
+  });
+
+  return [new AggregateFoodStats('Other food', nutrients)];
 };
 
 export const buildTopFoods = (
@@ -50,29 +59,31 @@ export const buildTopFoods = (
   if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, nutrients: [] };
 
   const nutrients = topFoods.nutrientTypes.map((nutrientType) => {
-    const nt = nutrientTypes.find((item) => item.id === nutrientType.id);
-    if (!nt)
-      throw new Error(`Invalid nutrient type (${nutrientType.id}) defined in feedback top foods.`);
-
-    const { id, unit } = nt;
+    const { id } = nutrientType;
     const name = nutrientType.name[locale] ?? nutrientType.name.en;
+
+    const nt = nutrientTypes.filter((item) => id.includes(item.id));
+    if (nt.length !== nutrientType.id.length)
+      throw new Error(`Invalid nutrient types (${nutrientType.id}) defined in feedback top foods.`);
+
+    if (nt.some((item) => item.unit !== nt[0].unit))
+      throw new Error('All nutrient types must have the same unit.');
+
+    const { unit } = nt[0];
 
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
     const other = foodHighInNutrient.slice(max);
 
     const list = foodHighInNutrient.slice(0, max).concat(summarizeOtherFood(id, other));
 
-    const data = list.map((food) => ({ name: food.name, value: food.getAverageIntake(id) }));
+    const data = list.map((food) => ({
+      name: food.name,
+      value: food.getGroupAverageIntake(id),
+    }));
 
-    const total = foods.map((f) => f.getAverageIntake(id)).reduce((a, b) => a + b, 0);
+    const total = foods.map((f) => f.getGroupAverageIntake(id)).reduce((a, b) => a + b, 0);
 
-    return {
-      id,
-      name,
-      unit,
-      data,
-      total: round(total),
-    };
+    return { id, name, unit, data, total: round(total) };
   });
 
   return { ...topFoods, nutrients };

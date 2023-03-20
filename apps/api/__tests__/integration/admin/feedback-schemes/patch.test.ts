@@ -49,7 +49,7 @@ export default () => {
         topFoods: {
           max: false,
           colors: 10,
-          nutrientTypes: {},
+          nutrientTypes: [{ id: '49', name: { en: 'Fat' } }],
         },
         // cards: 'notAnArray',
         demographicGroups: [

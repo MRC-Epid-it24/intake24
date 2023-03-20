@@ -156,7 +156,7 @@ const feedbackSchemes: LocaleMessageObject = {
       },
       validation: {
         required: 'Nutrient type must be filled in.',
-        unique: 'Nutrient type already exists in current list.',
+        unique: 'Nutrient types combination already exists in current list.',
       },
     },
   },

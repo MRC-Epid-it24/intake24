@@ -19,6 +19,12 @@ export default class AggregateFoodStats {
     return round(this.averageIntake.get(nutrientTypeId) || 0);
   }
 
+  getGroupAverageIntake(nutrientTypeId: string[]): number {
+    const intake = nutrientTypeId.reduce((acc, cur) => acc + (this.averageIntake.get(cur) ?? 0), 0);
+
+    return round(intake);
+  }
+
   getAverageEnergyIntake(): number {
     return this.getAverageIntake(NutrientTypeIdEnum.Energy);
   }

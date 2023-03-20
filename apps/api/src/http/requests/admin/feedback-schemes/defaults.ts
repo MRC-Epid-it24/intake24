@@ -99,13 +99,16 @@ export const defaults: Schema = {
       options: async (value: any[], meta): Promise<void> => {
         if (
           value.some(
-            (item) => !has(item, 'id') || !has(item, 'name.en') || typeof item.id !== 'string'
+            (item) =>
+              !has(item, 'id') ||
+              !has(item, 'name.en') ||
+              !Array.isArray(item.id) ||
+              item.id.some((nid: any) => typeof nid !== 'string')
           )
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
 
-        const nutrientTypeIds = value.map(({ id }) => id);
-        if (nutrientTypeIds.length !== [...new Set(nutrientTypeIds)].length)
+        if (value.some((item) => item.id.length !== [...new Set(item.id)].length))
           throw new Error(customTypeErrorMessage('duplicate._', meta));
       },
     },

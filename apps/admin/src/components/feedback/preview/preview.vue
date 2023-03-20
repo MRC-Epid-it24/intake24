@@ -79,15 +79,15 @@ export default defineComponent({
 
   watch: {
     feedbackScheme: {
-      handler() {
-        this.buildFeedback();
+      async handler() {
+        await this.buildFeedback();
       },
       deep: true,
     },
   },
 
   async mounted() {
-    this.buildFeedback();
+    await this.buildFeedback();
   },
 
   methods: {
