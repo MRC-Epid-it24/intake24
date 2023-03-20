@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "importsNotUsedAsValues": "remove",
     "baseUrl": ".",
     "paths": {
       "@intake24/cli/*": ["src/*"],

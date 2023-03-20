@@ -23,7 +23,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
-    "mariadb": "^3.1.0",
+    "mariadb": "^3.1.1",
     "mssql": "^9.1.1",
     "nanoid": "^3.3.4",
     "pg": "^8.10.0",
@@ -34,11 +34,11 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.15.1",
+    "@types/node": "^18.15.3",
     "@types/pg": "^8.6.6",
-    "@types/validator": "^13.7.13",
+    "@types/validator": "^13.7.14",
     "sequelize-cli": "^6.6.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   },
   "bundledDependencies": [
     "@intake24/api",
