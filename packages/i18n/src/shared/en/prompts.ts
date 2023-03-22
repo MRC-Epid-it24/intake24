@@ -167,7 +167,7 @@ const prompts: LocaleMessageObject = {
   portionSizeOption: {
     name: 'Portion method',
     text: '{food}',
-    description: 'How would you like to estimate the portion size of your <strong>{food}</strong>?',
+    description: 'How do you want to estimate your portion?',
     selections: {
       grated: 'Grated',
       in_a_bag: 'In a bag',
