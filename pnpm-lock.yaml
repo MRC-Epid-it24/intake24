@@ -118,10 +118,10 @@ importers:
       sass: ~1.32.13
       tinymce: ^6.4.0
       typescript: ^5.0.2
+      unplugin-fonts: ^1.0.0
       unplugin-vue-components: ^0.24.1
       vanilla-jsoneditor: ^0.16.0
       vite: ^4.2.0
-      vite-plugin-fonts: ^0.7.0
       vite-plugin-html: ^3.2.0
       vite-plugin-mkcert: ^1.13.3
       vite-plugin-pwa: ^0.14.4
@@ -179,9 +179,9 @@ importers:
       prettier: 2.8.5
       sass: 1.32.13
       typescript: 5.0.2
+      unplugin-fonts: 1.0.0_vite@4.2.0
       unplugin-vue-components: 0.24.1_vue@2.7.14
       vite: 4.2.0_nuipelp4t2b2hztwz2ccwb7jua
-      vite-plugin-fonts: 0.7.0_vite@4.2.0
       vite-plugin-html: 3.2.0_vite@4.2.0
       vite-plugin-mkcert: 1.13.3_vite@4.2.0
       vite-plugin-pwa: 0.14.4_qiyilc3fs7u6eza5zyshkxwo24
@@ -550,10 +550,10 @@ importers:
       prettier: ^2.8.5
       sass: ~1.32.13
       typescript: ^5.0.2
+      unplugin-fonts: ^1.0.0
       unplugin-vue-components: ^0.24.1
       uuid: ^9.0.0
       vite: ^4.2.0
-      vite-plugin-fonts: ^0.7.0
       vite-plugin-html: ^3.2.0
       vite-plugin-mkcert: ^1.13.3
       vite-plugin-pwa: ^0.14.4
@@ -597,9 +597,9 @@ importers:
       prettier: 2.8.5
       sass: 1.32.13
       typescript: 5.0.2
+      unplugin-fonts: 1.0.0_vite@4.2.0
       unplugin-vue-components: 0.24.1_vue@2.7.14
       vite: 4.2.0_nuipelp4t2b2hztwz2ccwb7jua
-      vite-plugin-fonts: 0.7.0_vite@4.2.0
       vite-plugin-html: 3.2.0_vite@4.2.0
       vite-plugin-mkcert: 1.13.3_vite@4.2.0
       vite-plugin-pwa: 0.14.4_qiyilc3fs7u6eza5zyshkxwo24
@@ -12179,6 +12179,20 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
+  /unplugin-fonts/1.0.0_vite@4.2.0:
+    resolution: {integrity: sha512-fguFV70CWOAd8tTeuQ0pjTze1dHTiGgWYjkSnyIn52k4kBVwtMveGVYNJS58tvmxSwMLL0TjXJU7zqWRPkbrQQ==}
+    peerDependencies:
+      '@nuxt/kit': ^3.0.0
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+    dependencies:
+      fast-glob: 3.2.12
+      unplugin: 1.3.1
+      vite: 4.2.0_nuipelp4t2b2hztwz2ccwb7jua
+    dev: true
+
   /unplugin-vue-components/0.24.1_vue@2.7.14:
     resolution: {integrity: sha512-T3A8HkZoIE1Cja95xNqolwza0yD5IVlgZZ1PVAGvVCx8xthmjsv38xWRCtHtwl+rvZyL9uif42SRkDGw9aCfMA==}
     engines: {node: '>=14'}
@@ -12337,15 +12351,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-    dev: true
-
-  /vite-plugin-fonts/0.7.0_vite@4.2.0:
-    resolution: {integrity: sha512-fisKirkQrA2RFwcyI96SENLu1FyRYNIiC/l5DGdD8oV3OsAWGrYKs0e7/VZF6l0rm0QiYA2sOVTzYfrLAzP9cw==}
-    peerDependencies:
-      vite: ^2.0.0 || ^3.0.0 || ^4.0.0
-    dependencies:
-      fast-glob: 3.2.12
-      vite: 4.2.0_nuipelp4t2b2hztwz2ccwb7jua
     dev: true
 
   /vite-plugin-full-reload/1.0.5_vite@4.2.0:
