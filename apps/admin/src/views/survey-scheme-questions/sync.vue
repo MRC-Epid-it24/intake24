@@ -123,10 +123,10 @@ export default defineComponent({
   methods: {
     async sync(scheme: SchemeStatus) {
       const { question } = this.entry;
-      const { id: schemeId, section } = scheme;
+      const { id: surveySchemeId, section } = scheme;
 
       await this.$http.post(`admin/${this.module}/${this.id}/sync`, {
-        schemeId,
+        surveySchemeId,
         section,
         question,
       });

@@ -16,7 +16,7 @@ export default defineComponent({
 
   data() {
     return {
-      originalEntry: null as any,
+      originalEntry: {} as object,
       routeLeave: {
         dialog: false,
         to: null as Route | null,
@@ -35,7 +35,7 @@ export default defineComponent({
   },
 
   methods: {
-    setOriginalEntry(data: any) {
+    setOriginalEntry(data: object) {
       this.originalEntry = copy(data);
     },
 

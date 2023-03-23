@@ -54,9 +54,12 @@ import type {
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
 import { form } from '@intake24/admin/helpers';
-import { customPromptQuestions } from '@intake24/common/prompts';
+import { infoPrompt } from '@intake24/common/prompts';
 
 export type SchemeQuestionForm = {
+  id: string | null;
+  name: string | null;
+  questionId: string | null;
   question: Prompt;
 };
 
@@ -79,9 +82,14 @@ export default defineComponent({
   },
 
   data() {
+    const { actions, ...question } = infoPrompt;
+
     return {
       form: form<SchemeQuestionForm>({
-        question: customPromptQuestions[0],
+        id: null,
+        name: null,
+        questionId: null,
+        question,
       }),
       nonInputErrorKeys: ['question'],
     };

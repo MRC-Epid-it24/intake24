@@ -11,8 +11,10 @@ const defaults: Schema = {
     in: ['body'],
     custom: {
       options: async (value, meta): Promise<void> => {
-        const { schemeQuestionId } = (meta.req as Request).params;
-        const except: WhereOptions = schemeQuestionId ? { id: { [Op.ne]: schemeQuestionId } } : {};
+        const { surveySchemeQuestionId } = (meta.req as Request).params;
+        const except: WhereOptions = surveySchemeQuestionId
+          ? { id: { [Op.ne]: surveySchemeQuestionId } }
+          : {};
 
         if (
           !isPlainObject(value) ||
