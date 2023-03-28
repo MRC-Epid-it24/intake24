@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-expansion-panels
       v-model="activePrompt"
       :flat="isMobile"
@@ -75,7 +75,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-  </portion-layout>
+  </base-layout>
 </template>
 
 <script lang="ts">
@@ -94,7 +94,6 @@ import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
-import { PortionLayout } from '../layouts';
 
 const isPromptValid = (prompt: AssociatedFoodPromptState): boolean =>
   prompt.confirmed === 'no' ||
@@ -107,7 +106,7 @@ const getNextPrompt = (prompts: AssociatedFoodPromptState[]) =>
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser, PortionLayout },
+  components: { ExpansionPanelActions, FoodBrowser },
 
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 

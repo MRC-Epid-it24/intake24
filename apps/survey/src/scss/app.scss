@@ -13,6 +13,10 @@
     border: 2px solid map-get($blue, "darken-3") !important;
 }
 
+.list-item-border {
+    border-bottom: 1px solid map-get($grey, 'lighten-3');
+}
+
 // ConfirmDialog wrapped actions buttons
 .v-card__actions {
     > .v-btn + .v-dialog__container + .v-btn {

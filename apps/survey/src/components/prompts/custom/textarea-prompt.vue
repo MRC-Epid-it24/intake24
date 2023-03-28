@@ -1,17 +1,19 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-form ref="form" @submit.prevent="action('next')">
-      <v-textarea
-        v-model.trim="currentValue"
-        hide-details="auto"
-        :hint="getLocaleContent(prompt.i18n.hint)"
-        :label="getLocaleContent(prompt.i18n.label)"
-        outlined
-        :rules="rules"
-        @input="update"
-      ></v-textarea>
-    </v-form>
-  </prompt-layout>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <v-form ref="form" @submit.prevent="action('next')">
+        <v-textarea
+          v-model.trim="currentValue"
+          hide-details="auto"
+          :hint="getLocaleContent(prompt.i18n.hint)"
+          :label="getLocaleContent(prompt.i18n.label)"
+          outlined
+          :rules="rules"
+          @input="update"
+        ></v-textarea>
+      </v-form>
+    </v-card-text>
+  </card-layout>
 </template>
 
 <script lang="ts">

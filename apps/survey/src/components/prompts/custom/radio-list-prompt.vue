@@ -1,37 +1,39 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-form ref="form" @submit.prevent="action('next')">
-      <v-radio-group
-        v-model="selected"
-        :column="prompt.orientation === 'column'"
-        :error="hasErrors"
-        hide-details="auto"
-        :label="getLocaleContent(prompt.i18n.label)"
-        :row="prompt.orientation === 'row'"
-        @change="update"
-      >
-        <v-radio
-          v-for="option in localeOptions"
-          :key="option.value"
-          :label="option.label"
-          :value="option.value"
-        ></v-radio>
-        <v-row v-if="prompt.other" align="center" no-gutters>
-          <v-radio hide-details value="other"></v-radio>
-          <v-text-field
-            v-model.trim="otherValue"
-            :error="hasErrors"
-            hide-details="auto"
-            :label="$t('prompts.radio.other')"
-            outlined
-            @focus="selected = 'other'"
-            @input="update"
-          ></v-text-field>
-        </v-row>
-      </v-radio-group>
-      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
-    </v-form>
-  </prompt-layout>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <v-form ref="form" @submit.prevent="action('next')">
+        <v-radio-group
+          v-model="selected"
+          :column="prompt.orientation === 'column'"
+          :error="hasErrors"
+          hide-details="auto"
+          :label="getLocaleContent(prompt.i18n.label)"
+          :row="prompt.orientation === 'row'"
+          @change="update"
+        >
+          <v-radio
+            v-for="option in localeOptions"
+            :key="option.value"
+            :label="option.label"
+            :value="option.value"
+          ></v-radio>
+          <v-row v-if="prompt.other" align="center" no-gutters>
+            <v-radio hide-details value="other"></v-radio>
+            <v-text-field
+              v-model.trim="otherValue"
+              :error="hasErrors"
+              hide-details="auto"
+              :label="$t('prompts.radio.other')"
+              outlined
+              @focus="selected = 'other'"
+              @input="update"
+            ></v-text-field>
+          </v-row>
+        </v-radio-group>
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+      </v-form>
+    </v-card-text>
+  </card-layout>
 </template>
 
 <script lang="ts">

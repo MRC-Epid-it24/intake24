@@ -1,15 +1,17 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-form ref="form" @submit.prevent="action('next')">
-      <v-date-picker
-        v-model="currentValue"
-        full-width
-        :landscape="!isMobile"
-        @input="update"
-      ></v-date-picker>
-      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
-    </v-form>
-  </prompt-layout>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <v-form ref="form" @submit.prevent="action('next')">
+        <v-date-picker
+          v-model="currentValue"
+          full-width
+          :landscape="!isMobile"
+          @input="update"
+        ></v-date-picker>
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+      </v-form>
+    </v-card-text>
+  </card-layout>
 </template>
 
 <script lang="ts">

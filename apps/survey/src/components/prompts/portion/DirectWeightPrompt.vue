@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ food, prompt, isValid }">
+  <base-layout v-bind="{ food, prompt, isValid }">
     <template #header>{{ $t('prompts.directWeight.label') }} - {{ localeDescription }}</template>
     <v-row>
       <v-col>
@@ -12,7 +12,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </portion-layout>
+  </base-layout>
 </template>
 
 <script lang="ts">

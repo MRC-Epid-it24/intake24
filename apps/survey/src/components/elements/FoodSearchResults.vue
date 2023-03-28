@@ -3,6 +3,7 @@
     <v-list-item
       v-for="food in results.foods"
       :key="food.code"
+      class="list-item-border"
       @click="emitFoodSelected(food.code)"
     >
       <v-list-item-content>

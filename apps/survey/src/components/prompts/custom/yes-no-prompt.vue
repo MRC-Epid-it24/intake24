@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, isValid }">
     <template #actions>
       <yes-no-toggle v-model="currentValue" @change="update"></yes-no-toggle>
     </template>
@@ -18,7 +18,7 @@
         <v-icon class="pb-1">$yes</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

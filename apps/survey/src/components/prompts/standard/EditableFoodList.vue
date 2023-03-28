@@ -1,55 +1,76 @@
 <template>
-  <div>
-    <h3 class="mb-4">{{ $t(`prompts.editMeal.${mode}`) }}</h3>
-    <v-row>
-      <v-col cols="12" sm="9">
-        <v-text-field
-          ref="foodsDrinksInput"
-          v-model="newFoodDescription"
-          hide-details
-          outlined
-          :placeholder="$t(`prompts.editMeal.${mode}`)"
-          @focusout="onEditFocusLost"
-          @keypress.enter.stop="addFood"
-        >
-          <template v-if="$vuetify.breakpoint.xs" #append>
-            <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
-              fa-arrow-turn-down
-            </v-icon>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col v-if="$vuetify.breakpoint.smAndUp" cols="3">
-        <v-btn
-          block
-          color="secondary"
-          :disabled="!newFoodDescription.length"
-          elevation="2"
-          x-large
-          @click="addFood"
-        >
-          <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
-          {{ $t(`prompts.editMeal.add`) }}
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-list v-if="foods.length">
-      <v-list-item v-for="(food, idx) in foods" :key="idx" :ripple="false" @click="edit(idx)">
-        <v-text-field
-          v-if="editIndex === idx"
-          :value="getFoodName(foods[idx])"
-          @focusout="onEditFocusLost"
-          @keypress.enter.stop="addFood"
-        ></v-text-field>
-        <v-list-item-icon v-if="editIndex === idx">
-          <v-btn icon @click="deleteFood">
-            <v-icon>fa-trash</v-icon>
-          </v-btn>
-        </v-list-item-icon>
-        <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </div>
+  <v-card class="pb-4" flat tile>
+    <v-toolbar color="grey lighten-4" flat>
+      <v-toolbar-title>
+        <v-icon left>{{ mode === 'drinksOnly' ? '$drink' : '$food' }}</v-icon>
+        {{ $t(`prompts.editMeal.${mode}`) }}
+      </v-toolbar-title>
+    </v-toolbar>
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="8" sm="10">
+          <div class="d-flex">
+            <v-text-field
+              ref="foodsDrinksInput"
+              v-model="newFoodDescription"
+              hide-details
+              outlined
+              :placeholder="$t(`prompts.editMeal.${mode}`)"
+              @focusout="onEditFocusLost"
+              @keypress.enter.stop="addFood"
+            >
+              <template v-if="$vuetify.breakpoint.xs" #append>
+                <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
+                  fa-arrow-turn-down
+                </v-icon>
+              </template>
+            </v-text-field>
+            <v-btn
+              v-if="$vuetify.breakpoint.smAndUp"
+              class="ml-2"
+              color="secondary"
+              :disabled="!newFoodDescription.length"
+              height="initial"
+              x-large
+              @click="addFood"
+            >
+              <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
+              {{ $t('prompts.editMeal.add') }}
+            </v-btn>
+          </div>
+          <v-list v-if="foods.length">
+            <v-list-item
+              v-for="(food, idx) in foods"
+              :key="idx"
+              class="list-item-border pl-0"
+              :ripple="false"
+              @click="edit(idx)"
+            >
+              <v-list-item-avatar class="my-auto mr-2">
+                <v-icon>fas fa-caret-right</v-icon>
+              </v-list-item-avatar>
+              <v-text-field
+                v-if="editIndex === idx"
+                :value="getFoodName(foods[idx])"
+                @focusout="onEditFocusLost"
+                @keypress.enter.stop="addFood"
+              ></v-text-field>
+              <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
+              <v-list-item-icon class="my-auto">
+                <v-btn
+                  icon
+                  :title="$t('prompts.editMeal.delete._', { item: getFoodName(food) })"
+                  @click="deleteFood(idx)"
+                >
+                  <v-icon>$delete</v-icon>
+                </v-btn>
+              </v-list-item-icon>
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -93,12 +114,13 @@ export default defineComponent({
 
   methods: {
     addFood() {
-      if (this.editIndex != null) {
+      if (this.editIndex !== null) {
         const editEntry = this.foods[this.editIndex];
 
         if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
       }
-      if (this.newFoodDescription.length === 0) return;
+
+      if (!this.newFoodDescription.length) return;
 
       const newFood: FreeTextFood = {
         id: getEntityId(),
@@ -116,20 +138,20 @@ export default defineComponent({
       this.$emit('input', this.foods);
     },
 
-    deleteFood() {
-      if (this.editIndex != null) {
-        this.foods.splice(this.editIndex, 1);
-        this.editIndex = null;
-        this.$emit('input', this.foods);
-      }
+    deleteFood(index: number) {
+      if (this.editIndex === index) this.editIndex = null;
+
+      this.foods.splice(index, 1);
+      this.$emit('input', this.foods);
     },
 
     onEditFocusLost() {
-      if (this.editIndex != null) {
-        const editEntry = this.foods[this.editIndex];
-        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0)
-          this.deleteFood();
-      }
+      if (this.editIndex === null) return;
+
+      const editEntry = this.foods[this.editIndex];
+
+      if (editEntry.type === 'free-text' && !editEntry.description.trim().length)
+        this.deleteFood(this.editIndex);
     },
 
     edit(index: number) {

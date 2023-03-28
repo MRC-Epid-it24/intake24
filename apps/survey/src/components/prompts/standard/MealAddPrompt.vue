@@ -1,24 +1,26 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #prompt-description>
       <div class="px-4 pt-4" v-html="localeDescription"></div>
     </template>
-    <v-row>
-      <v-col md="6" sm="12">
-        <component
-          :is="prompt.custom ? 'v-combobox' : 'v-select'"
-          v-model="currentValue"
-          autofocus
-          class="meal-add-prompt__combobox"
-          clearable
-          :items="meals"
-          :label="$t(`${i18nPrefix}.label`)"
-          outlined
-          @change="update"
-        >
-        </component>
-      </v-col>
-    </v-row>
+    <v-card-text class="pt-2">
+      <v-row>
+        <v-col cols="12" md="6">
+          <component
+            :is="prompt.custom ? 'v-combobox' : 'v-select'"
+            v-model="currentValue"
+            autofocus
+            class="meal-add-prompt__combobox"
+            clearable
+            :items="meals"
+            :label="$t(`${i18nPrefix}.label`)"
+            outlined
+            @change="update"
+          >
+          </component>
+        </v-col>
+      </v-row>
+    </v-card-text>
     <template #actions>
       <v-btn
         :block="isMobile"
@@ -65,7 +67,7 @@
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

@@ -32,7 +32,7 @@ export default defineComponent({
     },
     icon: {
       type: String,
-      // default: '$next',
+      default: '$next',
     },
     label: {
       type: String,

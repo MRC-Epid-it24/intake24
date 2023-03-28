@@ -1,39 +1,52 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <i18n class="text-subtitle-1" :path="`prompts.${type}.searchTerm`" tag="p">
-      <template #food>
-        <span class="font-weight-medium">{{ food.description }}</span>
-      </template>
-    </i18n>
-    <v-card class="mb-4" flat outlined tile>
-      <v-list color="grey lighten-5 py-0" subheader>
-        <v-subheader>{{ $t(`prompts.${type}.split`) }}</v-subheader>
-        <template v-for="(suggestion, idx) in suggestions">
-          <v-list-item :key="suggestion" link>
-            <v-list-item-icon>
-              <v-icon>fas fa-bowl-food</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ suggestion }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider v-if="idx + 1 < suggestions.length" :key="`div-${suggestion}`"></v-divider>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <i18n class="text-subtitle-1" :path="`prompts.${type}.searchTerm`" tag="p">
+        <template #food>
+          <span class="font-weight-medium">{{ food.description }}</span>
         </template>
-      </v-list>
-    </v-card>
-    <p class="font-italic">{{ $t(`prompts.${type}.separateSuggestion`) }}</p>
-    <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
+      </i18n>
+      <v-card class="mb-4" flat outlined tile>
+        <v-list color="grey lighten-5 py-0" subheader>
+          <v-subheader>{{ $t(`prompts.${type}.split`) }}</v-subheader>
+          <template v-for="(suggestion, idx) in suggestions">
+            <v-list-item :key="suggestion" link>
+              <v-list-item-icon>
+                <v-icon>$food</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ suggestion }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider v-if="idx + 1 < suggestions.length" :key="`div-${suggestion}`"></v-divider>
+          </template>
+        </v-list>
+      </v-card>
+      <p class="font-italic">{{ $t(`prompts.${type}.separateSuggestion`) }}</p>
+      <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
+    </v-card-text>
     <template #actions>
-      <v-btn :block="isMobile" class="px-4" large @click.stop="action('separate')">
+      <v-btn
+        :block="isMobile"
+        class="px-4"
+        color="secondary"
+        large
+        text
+        @click.stop="action('separate')"
+      >
+        <v-icon left>fas fa-arrows-left-right-to-line</v-icon>
         {{ $t(`prompts.${type}.separate`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
         class="px-4"
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
+        color="secondary"
         large
+        text
         @click.stop="action('single')"
       >
+        <v-icon left>fas fa-arrow-up-long</v-icon>
         {{ $t(`prompts.${type}.single`) }}
       </v-btn>
     </template>
@@ -52,7 +65,7 @@
         <v-icon class="pb-1">fas fa-arrow-up-long</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

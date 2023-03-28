@@ -1,21 +1,14 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-col class="px-0 px-sm-3" cols="12" md="8" sm="10">
-      <template v-if="prompt.separateDrinks">
-        <editable-food-list
-          v-model="foodsOnly"
-          class="mb-4"
-          mode="foodsOnly"
-          @input="update"
-        ></editable-food-list>
-        <editable-food-list
-          v-model="drinksOnly"
-          mode="drinksOnly"
-          @input="update"
-        ></editable-food-list>
-      </template>
-      <editable-food-list v-else v-model="foods" @input="update"></editable-food-list>
-    </v-col>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <template v-if="prompt.separateDrinks">
+      <editable-food-list v-model="foodsOnly" mode="foodsOnly" @input="update"></editable-food-list>
+      <editable-food-list
+        v-model="drinksOnly"
+        mode="drinksOnly"
+        @input="update"
+      ></editable-food-list>
+    </template>
+    <editable-food-list v-else v-model="foods" @input="update"></editable-food-list>
     <template #actions>
       <v-btn
         :block="isMobile"
@@ -90,7 +83,7 @@
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

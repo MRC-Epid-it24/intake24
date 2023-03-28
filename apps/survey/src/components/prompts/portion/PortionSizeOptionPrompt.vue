@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-item-group v-if="availableMethods.length" v-model="option">
       <v-container>
         <v-row>
@@ -35,7 +35,7 @@
       <!-- Should not have actions -> only click & select -->
       <div></div>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

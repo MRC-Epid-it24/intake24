@@ -7,13 +7,13 @@ import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composab
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from './actions';
-import { PromptLayout } from './layouts';
+import { BaseLayout, CardLayout } from './layouts';
 
 export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
-    components: { Next, PromptLayout },
+    components: { Next, BaseLayout, CardLayout },
 
     props: {
       food: {

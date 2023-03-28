@@ -1,15 +1,17 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }">
-    <v-form ref="form" @submit.prevent="action('next')">
-      <v-time-picker
-        :format="prompt.format"
-        full-width
-        :landscape="$vuetify.breakpoint.smAndUp"
-        :value="currentTime"
-        @input="update"
-      ></v-time-picker>
-      <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
-    </v-form>
+  <card-layout v-bind="{ food, meal, prompt, isValid }">
+    <v-card-text class="pt-2">
+      <v-form ref="form" @submit.prevent="action('next')">
+        <v-time-picker
+          :format="prompt.format"
+          full-width
+          :landscape="$vuetify.breakpoint.smAndUp"
+          :value="currentTime"
+          @input="update"
+        ></v-time-picker>
+        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
+      </v-form>
+    </v-card-text>
     <template #actions>
       <v-btn
         :block="isMobile"
@@ -47,7 +49,7 @@
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

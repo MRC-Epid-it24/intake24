@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels
       v-if="Object.keys(standardUnitRefs).length"
       v-model="panel"
@@ -59,7 +59,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-  </portion-layout>
+  </base-layout>
 </template>
 
 <script lang="ts">

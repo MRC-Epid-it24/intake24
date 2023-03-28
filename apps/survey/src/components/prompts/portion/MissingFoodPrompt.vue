@@ -1,5 +1,5 @@
 <template>
-  <portion-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
       <v-expansion-panel v-for="field in fields" :key="field">
         <v-expansion-panel-header>
@@ -25,7 +25,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-  </portion-layout>
+  </base-layout>
 </template>
 
 <script lang="ts">

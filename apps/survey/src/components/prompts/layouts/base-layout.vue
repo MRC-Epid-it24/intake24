@@ -116,7 +116,7 @@ import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
-  name: 'PortionLayout',
+  name: 'BaseLayout',
 
   mixins: [layoutMixin],
 

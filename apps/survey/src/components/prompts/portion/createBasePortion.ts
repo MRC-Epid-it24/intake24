@@ -8,13 +8,13 @@ import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 import { promptType } from '@intake24/survey/util';
 
 import { Next } from '../actions';
-import { PortionLayout, PromptLayout } from '../layouts';
+import { BaseLayout, CardLayout } from '../layouts';
 
 export default <P extends keyof Prompts, S extends object>() =>
   defineComponent({
     name: 'BasePortion',
 
-    components: { ExpansionPanelActions, Next, PortionLayout, PromptLayout, ValidInvalidIcon },
+    components: { ExpansionPanelActions, Next, BaseLayout, CardLayout, ValidInvalidIcon },
 
     props: {
       food: {

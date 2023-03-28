@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
       <next :disabled="!isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
@@ -32,7 +32,7 @@
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

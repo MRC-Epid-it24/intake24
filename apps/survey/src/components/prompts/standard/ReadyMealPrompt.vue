@@ -1,18 +1,20 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-form ref="form" @submit.prevent="action('next')">
-      <v-checkbox
-        v-for="food in foods"
-        :key="food.id"
-        v-model="food.value"
-        class="mt-2"
-        :error="hasErrors"
-        hide-details="auto"
-        :label="food.name"
-        @change="update"
-      ></v-checkbox>
-    </v-form>
-  </prompt-layout>
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <v-form ref="form" @submit.prevent="action('next')">
+        <v-checkbox
+          v-for="food in foods"
+          :key="food.id"
+          v-model="food.value"
+          class="mt-2"
+          :error="hasErrors"
+          hide-details="auto"
+          :label="food.name"
+          @change="update"
+        ></v-checkbox>
+      </v-form>
+    </v-card-text>
+  </card-layout>
 </template>
 
 <script lang="ts">

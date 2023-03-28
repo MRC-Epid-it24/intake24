@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-col class="px-0 px-sm-3 align-center text-center justify-center" md="8" sm="12">
       <survey-progress-bar :meals="meals"></survey-progress-bar>
       <v-divider></v-divider>
@@ -51,7 +51,7 @@
         </v-list>
       </v-card>
     </v-col>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

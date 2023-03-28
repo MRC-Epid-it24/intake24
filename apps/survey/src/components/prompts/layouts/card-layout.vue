@@ -14,9 +14,7 @@
           v-html="localeDescription"
         ></div>
       </slot>
-      <v-card-text v-if="hasDefaultSlot" :class="{ 'pt-2': localeDescription }">
-        <slot></slot>
-      </v-card-text>
+      <slot></slot>
       <v-card-actions
         v-if="!isMobile || prompt.actions?.both"
         class="pa-4 d-flex"
@@ -123,7 +121,7 @@ import { defineComponent } from 'vue';
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
-  name: 'PromptLayout',
+  name: 'CardLayout',
 
   mixins: [layoutMixin],
 });

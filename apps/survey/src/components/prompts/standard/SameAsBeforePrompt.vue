@@ -1,5 +1,5 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <!-- <v-card class="mb-4" flat outlined tile>
     </v-card> -->
     <template #actions>
@@ -38,7 +38,7 @@
         </span>
       </v-btn>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

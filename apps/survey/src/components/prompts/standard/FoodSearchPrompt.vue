@@ -1,60 +1,62 @@
 <template>
-  <prompt-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-text-field
-      v-model="searchTerm"
-      class="mb-4"
-      clearable
-      hide-details="auto"
-      label="Search food"
-      outlined
-      prepend-inner-icon="$search"
-      @change="search"
-    ></v-text-field>
-    <image-placeholder v-if="requestInProgress"></image-placeholder>
-    <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
-    <v-alert
-      v-if="searchResults && !searchResults.foods.length"
-      border="left"
-      outlined
-      prominent
-      type="warning"
-    >
-      <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
-      <p>{{ $t(`prompts.${type}.reword`) }}</p>
-    </v-alert>
-    <food-search-results
-      v-if="searchResults"
-      :results="searchResults"
-      @food-selected="onFoodSelected"
-    ></food-search-results>
-    <v-card-text>
-      <v-btn
-        :block="isMobile"
-        :class="{ 'mb-2': isMobile }"
-        color="secondary"
-        large
+  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+    <v-card-text class="pt-2">
+      <v-text-field
+        v-model="searchTerm"
+        class="mb-4"
+        clearable
+        hide-details="auto"
+        label="Search food"
         outlined
-        :title="$t(`prompts.${type}.browse`)"
-      >
-        {{ $t(`prompts.${type}.browse`) }}
-      </v-btn>
-      <v-btn
-        :block="isMobile"
-        :class="{ 'ml-2': !isMobile }"
-        color="secondary"
-        large
+        prepend-inner-icon="$search"
+        @change="search"
+      ></v-text-field>
+      <image-placeholder v-if="requestInProgress"></image-placeholder>
+      <v-alert v-if="requestFailed" prominent type="error">Something went wrong :(</v-alert>
+      <v-alert
+        v-if="searchResults && !searchResults.foods.length"
+        border="left"
         outlined
-        :title="$t(`prompts.${type}.missing`)"
-        @click.stop="$emit('missing-food')"
+        prominent
+        type="warning"
       >
-        {{ $t(`prompts.${type}.missing`) }}
-      </v-btn>
+        <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
+        <p>{{ $t(`prompts.${type}.reword`) }}</p>
+      </v-alert>
+      <food-search-results
+        v-if="searchResults"
+        :results="searchResults"
+        @food-selected="onFoodSelected"
+      ></food-search-results>
+      <v-card-text>
+        <v-btn
+          :block="isMobile"
+          :class="{ 'mb-2': isMobile }"
+          color="secondary"
+          large
+          outlined
+          :title="$t(`prompts.${type}.browse`)"
+        >
+          {{ $t(`prompts.${type}.browse`) }}
+        </v-btn>
+        <v-btn
+          :block="isMobile"
+          :class="{ 'ml-2': !isMobile }"
+          color="secondary"
+          large
+          outlined
+          :title="$t(`prompts.${type}.missing`)"
+          @click.stop="$emit('missing-food')"
+        >
+          {{ $t(`prompts.${type}.missing`) }}
+        </v-btn>
+      </v-card-text>
     </v-card-text>
     <template #actions>
       <!-- Should not have actions -> only click & select -->
       <div></div>
     </template>
-  </prompt-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">
