@@ -9,35 +9,36 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="8" sm="10">
-          <div class="d-flex">
-            <v-text-field
-              ref="foodsDrinksInput"
-              v-model="newFoodDescription"
-              hide-details
-              outlined
-              :placeholder="$t(`prompts.editMeal.${mode}`)"
-              @focusout="onEditFocusLost"
-              @keypress.enter.stop="addFood"
-            >
-              <template v-if="$vuetify.breakpoint.xs" #append>
-                <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
-                  fa-arrow-turn-down
-                </v-icon>
-              </template>
-            </v-text-field>
-            <v-btn
-              v-if="$vuetify.breakpoint.smAndUp"
-              class="ml-2"
-              color="secondary"
-              :disabled="!newFoodDescription.length"
-              height="initial"
-              x-large
-              @click="addFood"
-            >
-              <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
-              {{ $t('prompts.editMeal.add') }}
-            </v-btn>
-          </div>
+          <v-form @submit.prevent="addFood">
+            <div class="d-flex">
+              <v-text-field
+                v-model="newFoodDescription"
+                hide-details
+                :name="`${mode}-food`"
+                outlined
+                :placeholder="$t(`prompts.editMeal.${mode}`)"
+                @keydown.prevent.stop.enter="addFood"
+              >
+                <template v-if="$vuetify.breakpoint.xs" #append>
+                  <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
+                    fa-arrow-turn-down
+                  </v-icon>
+                </template>
+              </v-text-field>
+              <v-btn
+                v-if="$vuetify.breakpoint.smAndUp"
+                class="ml-2"
+                color="secondary"
+                :disabled="!newFoodDescription.length"
+                height="initial"
+                x-large
+                @click="addFood"
+              >
+                <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
+                {{ $t('prompts.editMeal.add') }}
+              </v-btn>
+            </div>
+          </v-form>
           <v-list v-if="foods.length">
             <v-list-item
               v-for="(food, idx) in foods"
@@ -51,8 +52,9 @@
               </v-list-item-avatar>
               <v-text-field
                 v-if="editIndex === idx"
+                class="v-input-basis-stretch"
                 :value="getFoodName(foods[idx])"
-                @focusout="onEditFocusLost"
+                @focusout.stop="onEditFocusLost(idx)"
                 @keypress.enter.stop="addFood"
               ></v-text-field>
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
@@ -138,6 +140,10 @@ export default defineComponent({
       this.$emit('input', this.foods);
     },
 
+    edit(index: number) {
+      this.editIndex = index;
+    },
+
     deleteFood(index: number) {
       if (this.editIndex === index) this.editIndex = null;
 
@@ -145,24 +151,11 @@ export default defineComponent({
       this.$emit('input', this.foods);
     },
 
-    onEditFocusLost() {
-      if (this.editIndex === null) return;
-
-      const editEntry = this.foods[this.editIndex];
+    onEditFocusLost(index: number) {
+      const editEntry = this.foods[index];
 
       if (editEntry.type === 'free-text' && !editEntry.description.trim().length)
-        this.deleteFood(this.editIndex);
-    },
-
-    edit(index: number) {
-      this.editIndex = index;
-
-      this.$nextTick(() => {
-        // FIXME: must be a better way to avoid type errors
-        const textField = this.$refs.textField as HTMLInputElement[];
-        if (textField === undefined) return;
-        textField[0].focus();
-      });
+        this.deleteFood(index);
     },
   },
 });
@@ -171,5 +164,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .flip {
   transform: scaleX(-1);
+}
+.v-input-basis-stretch {
+  flex: 1 1 100%;
 }
 </style>
