@@ -80,7 +80,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
@@ -108,7 +108,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<LanguageTranslationsForm>({ translations: [] }),
+      form: createForm<LanguageTranslationsForm>({ translations: [] }),
       nonInputErrorKeys: ['translations'],
       selected: null as LanguageTranslationAttributes | null,
       messages: useMessages(),

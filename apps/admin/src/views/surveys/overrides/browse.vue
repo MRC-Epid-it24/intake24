@@ -36,7 +36,7 @@ import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin'
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
@@ -59,7 +59,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<SurveyOverridesForm>({ surveySchemeOverrides: defaultOverrides }),
+      form: createForm<SurveyOverridesForm>({ surveySchemeOverrides: defaultOverrides }),
     };
   },
 

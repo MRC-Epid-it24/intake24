@@ -186,7 +186,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -261,7 +261,7 @@ export default defineComponent({
       ],
       dialog: false,
       loading: false,
-      form: form<SurveyRespondentsForm>({
+      form: createForm<SurveyRespondentsForm>({
         userId: null,
         username: null,
         password: null,

@@ -47,7 +47,7 @@
 import { defineComponent } from 'vue';
 
 import type { DuoRegistrationChallenge, MFADeviceEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 export default defineComponent({
   name: 'DuoDevice',
@@ -56,7 +56,7 @@ export default defineComponent({
     return {
       url: 'admin/user/mfa/duo',
       progress: 1,
-      form: form({ challengeId: '', name: 'My Duo Device', token: '' }),
+      form: createForm({ challengeId: '', name: 'My Duo Device', token: '' }),
     };
   },
 

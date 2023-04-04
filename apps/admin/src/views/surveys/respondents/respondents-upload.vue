@@ -57,7 +57,7 @@
 import { defineComponent } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 import respondentsJob from './respondents-job';
 
@@ -72,7 +72,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<RespondentsUploadForm>({ file: null }, { multipart: true }),
+      form: createForm<RespondentsUploadForm>({ file: null }, { multipart: true }),
       jobType: 'SurveyRespondentsImport',
     };
   },

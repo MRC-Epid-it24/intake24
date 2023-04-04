@@ -136,7 +136,7 @@ import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
@@ -176,7 +176,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<PatchFeedbackSchemeForm>({
+      form: createForm<PatchFeedbackSchemeForm>({
         name: null,
         type: 'default',
         outputs: [...feedbackOutputs],

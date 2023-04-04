@@ -56,7 +56,7 @@ import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type SurveyDataExportForm = {
   startDate: string | null;
@@ -78,7 +78,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<SurveyDataExportForm>(
+      form: createForm<SurveyDataExportForm>(
         {
           startDate: null,
           endDate: null,

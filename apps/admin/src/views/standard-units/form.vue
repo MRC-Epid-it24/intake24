@@ -74,7 +74,7 @@ import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type StandardUnitForm = {
   id: string | null;
@@ -97,7 +97,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<StandardUnitForm>({
+      form: createForm<StandardUnitForm>({
         id: null,
         estimateIn: { en: '' },
         howMany: { en: '' },

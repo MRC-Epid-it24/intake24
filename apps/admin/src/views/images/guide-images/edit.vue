@@ -56,7 +56,7 @@ import { defineComponent } from 'vue';
 
 import type { GuideImageEntry, GuideImageEntryObject } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 import GuideDrawer from '../guide-drawer.vue';
 
@@ -82,7 +82,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<EditGuideImageForm>({
+      form: createForm<EditGuideImageForm>({
         id: null,
         imageMapId: null,
         description: null,

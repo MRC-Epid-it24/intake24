@@ -54,7 +54,7 @@
 import { defineComponent } from 'vue';
 
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 export type CopySchemeForm = {
   name: string | null;
@@ -76,7 +76,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<CopySchemeForm>({ name: null }),
+      form: createForm<CopySchemeForm>({ name: null }),
       dialog: false,
       redirect: true,
     };

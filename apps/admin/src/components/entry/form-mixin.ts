@@ -5,8 +5,8 @@ import { defineComponent } from 'vue';
 
 import type { Dictionary, ValidationError } from '@intake24/common/types';
 import { ErrorList, SubmitFooter } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
 import { useEntry, useMessages } from '@intake24/admin/stores';
+import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 
 import fetchEntry from './fetch-entry';
@@ -29,7 +29,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'put' as Method,
-      form: form<Dictionary>({}),
+      form: createForm<Dictionary>({}),
       nonInputErrorKeys: [] as string[],
     };
   },

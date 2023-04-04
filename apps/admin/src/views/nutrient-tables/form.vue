@@ -228,7 +228,7 @@ import { defineComponent } from 'vue';
 
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
 
 export type CsvMappingField = { fieldName: string; columnOffset: string };
@@ -315,7 +315,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<NutrientTableForm>(
+      form: createForm<NutrientTableForm>(
         {
           id: null,
           description: null,

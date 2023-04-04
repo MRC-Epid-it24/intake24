@@ -63,7 +63,7 @@ import type { JobType } from '@intake24/common/types';
 import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type UploadForm = {
   file: File | null;
@@ -86,7 +86,7 @@ export default defineComponent({
     const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
 
     return {
-      form: form<UploadForm>(
+      form: createForm<UploadForm>(
         {
           file: null,
           type: jobTypeList[0].value,

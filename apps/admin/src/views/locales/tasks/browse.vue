@@ -58,7 +58,7 @@ import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type LocaleJobType = Extract<
   JobType,
@@ -108,7 +108,7 @@ export default defineComponent({
     return {
       defaultJobsParams,
       disabledJobParams,
-      form: form<LocaleTasksForm>(
+      form: createForm<LocaleTasksForm>(
         {
           job: jobType[0],
           params: defaultJobsParams.LocaleFoodNutrientMapping,

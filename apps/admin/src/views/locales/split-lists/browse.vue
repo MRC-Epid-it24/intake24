@@ -62,7 +62,7 @@ import type {
   LocaleSplitListInput,
 } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 export type LocaleSplitListsForm = { items: LocaleSplitListInput[] };
 
@@ -79,7 +79,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<LocaleSplitListsForm>({ items: [] }, { transform: ({ items }) => items }),
+      form: createForm<LocaleSplitListsForm>({ items: [] }, { transform: ({ items }) => items }),
     };
   },
 

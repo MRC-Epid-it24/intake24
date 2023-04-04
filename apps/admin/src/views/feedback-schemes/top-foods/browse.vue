@@ -83,7 +83,7 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { defaultTopFoods } from '@intake24/common/feedback';
 
 import type { FeedbackSchemeForm } from '../form.vue';
@@ -117,7 +117,7 @@ export default defineComponent({
     return {
       menu: false,
       editMethod: 'patch',
-      form: form<FeedbackSchemeTopFoodsForm>({ topFoods: defaultTopFoods }),
+      form: createForm<FeedbackSchemeTopFoodsForm>({ topFoods: defaultTopFoods }),
       nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
     };
   },

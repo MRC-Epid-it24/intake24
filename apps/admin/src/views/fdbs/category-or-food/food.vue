@@ -116,7 +116,7 @@ import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import { NutrientList } from '@intake24/admin/components/fdbs';
 import { AutoComplete } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 import categoryOrFood from './category-or-food';
 
@@ -131,7 +131,7 @@ export default defineComponent({
     return {
       type: 'foods',
       entry: null as FoodLocalEntry | null,
-      form: form(
+      form: createForm(
         {
           name: null,
           main: {

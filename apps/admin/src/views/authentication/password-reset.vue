@@ -77,7 +77,7 @@ import { defineComponent } from 'vue';
 import type { ValidationError } from '@intake24/common/types';
 import { logo } from '@intake24/admin/assets';
 import { ErrorList } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -95,7 +95,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<PasswordResetForm>({
+      form: createForm<PasswordResetForm>({
         token: this.$route.params.token,
         email: null,
         password: null,

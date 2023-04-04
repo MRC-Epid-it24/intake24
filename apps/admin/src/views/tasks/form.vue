@@ -105,8 +105,8 @@ import type { JobType, JobTypeParams } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
-import { form } from '@intake24/admin/helpers';
 import { formatsDateTime } from '@intake24/admin/mixins';
+import { createForm } from '@intake24/admin/util';
 import { defaultJobsParams } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -135,7 +135,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<TaskForm>({
+      form: createForm<TaskForm>({
         id: null,
         name: null,
         job: null,

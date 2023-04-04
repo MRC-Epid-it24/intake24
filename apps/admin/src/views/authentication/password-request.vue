@@ -50,7 +50,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 
 import { logo } from '@intake24/admin/assets';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -68,7 +68,7 @@ export default defineComponent({
     const captcha = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
-      form: form<PasswordRequestForm>({
+      form: createForm<PasswordRequestForm>({
         email: null,
         captcha: null,
       }),

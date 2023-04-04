@@ -67,7 +67,7 @@ import { defineComponent } from 'vue';
 
 import type { NutrientTypeEntry, NutrientTypeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type NutrientTypeForm = {
   id: string | null;
@@ -92,7 +92,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<NutrientTypeForm>({
+      form: createForm<NutrientTypeForm>({
         id: null,
         description: null,
         unitId: null,

@@ -26,6 +26,11 @@ export type JobParams = {
   LocaleFoodNutrientMapping: {
     localeId: string;
   };
+  FoodRankingCsvUpload: {
+    localeId: number;
+    localeCode: string;
+    file: string;
+  };
   NutrientTableDataImport: {
     nutrientTableId: string;
     file: string;
@@ -80,18 +85,13 @@ export type JobParams = {
     surveyId: string;
     submissionId: string;
   };
-  UserPasswordResetNotification: {
-    email: string;
-    userAgent?: string;
-  };
   UserEmailVerificationNotification: {
     email: string;
     userAgent?: string;
   };
-  FoodRankingCsvUpload: {
-    localeId: number;
-    localeCode: string;
-    file: string;
+  UserPasswordResetNotification: {
+    email: string;
+    userAgent?: string;
   };
 };
 
@@ -107,6 +107,11 @@ export const defaultJobsParams: JobParams = {
   LanguageTranslationsSync: {},
   LocaleFoodNutrientMapping: {
     localeId: '',
+  },
+  FoodRankingCsvUpload: {
+    localeId: 0,
+    localeCode: '',
+    file: '',
   },
   NutrientTableDataImport: {
     nutrientTableId: '',
@@ -155,16 +160,11 @@ export const defaultJobsParams: JobParams = {
     surveyId: '',
     submissionId: '',
   },
-  UserPasswordResetNotification: {
-    email: '',
-  },
   UserEmailVerificationNotification: {
     email: '',
   },
-  FoodRankingCsvUpload: {
-    localeId: 0,
-    localeCode: '',
-    file: '',
+  UserPasswordResetNotification: {
+    email: '',
   },
 };
 

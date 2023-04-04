@@ -160,7 +160,7 @@ import { defineComponent } from 'vue';
 import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 export type UserDialogForm = {
   userId: string | null;
@@ -197,7 +197,7 @@ export default defineComponent({
       dialog: false,
       tab: 0,
       selected: null as UserSecurableListEntry | null,
-      form: form<UserDialogForm>({
+      form: createForm<UserDialogForm>({
         userId: null,
         email: null,
         name: null,

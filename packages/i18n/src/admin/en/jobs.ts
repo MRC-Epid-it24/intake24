@@ -41,6 +41,9 @@ const jobs: LocaleMessageObject = {
       _: 'Locale - Export food nutrient mapping',
       localeId: 'Locale ID',
     },
+    FoodRankingCsvUpload: {
+      _: 'Locale - food ranking CSV upload',
+    },
     NutrientTableIMappingImport: {
       _: 'Nutrient table - import NDB mapping',
     },
@@ -56,9 +59,6 @@ const jobs: LocaleMessageObject = {
       _: 'Search - Update popularity counters',
       foodCodes: 'Food codes',
     },
-    UserPasswordResetNotification: {
-      _: 'Send password reset',
-    },
     SurveyFeedbackNotification: {
       _: 'Survey - send respondent feedback',
     },
@@ -66,7 +66,10 @@ const jobs: LocaleMessageObject = {
       _: 'Survey - data export',
     },
     SurveyAuthUrlsExport: {
-      _: 'Survey - export respondent authentication URLs ',
+      _: 'Survey - export respondent authentication URLs',
+    },
+    SurveyHelpRequestNotification: {
+      _: 'Survey - Help Request Notification ',
     },
     SurveyRespondentsImport: {
       _: 'Survey - import respondents',
@@ -77,8 +80,11 @@ const jobs: LocaleMessageObject = {
     SurveySubmissionNotification: {
       _: 'Survey - submission notification',
     },
-    FoodRankingCsvUpload: {
-      _: 'Locales — food ranking CSV upload',
+    UserEmailVerificationNotification: {
+      _: 'User - EmailVerificationNotification',
+    },
+    UserPasswordResetNotification: {
+      _: 'User - Send password reset',
     },
   },
 };

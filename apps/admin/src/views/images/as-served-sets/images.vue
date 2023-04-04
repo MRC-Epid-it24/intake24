@@ -76,7 +76,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { AsServedImageEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -116,7 +116,7 @@ export default defineComponent({
   data() {
     return {
       images: copy(this.items),
-      form: form<AsServedImageForm>(
+      form: createForm<AsServedImageForm>(
         {
           image: null as File | null,
           weight: 0,

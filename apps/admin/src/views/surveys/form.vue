@@ -321,7 +321,7 @@ import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin'
 import type { SearchSortingAlgorithm, SurveyState } from '@intake24/common/types/models';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { defaultOverrides } from '@intake24/common/schemes';
 import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
 
@@ -411,7 +411,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<SurveyForm>(surveyForm),
+      form: createForm<SurveyForm>(surveyForm),
       showGenUserKey: false,
       surveyStates: surveyStates.map((value) => ({
         value,

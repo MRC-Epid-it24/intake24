@@ -78,7 +78,7 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import {
   defaultQuestions,
   flattenScheme,
@@ -110,7 +110,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
+      form: createForm<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
       sections: {
         survey: surveySections,
         meal: mealSections,

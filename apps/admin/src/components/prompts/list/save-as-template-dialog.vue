@@ -71,8 +71,8 @@ import type { Prompt } from '@intake24/common/prompts';
 import type { ValidationError } from '@intake24/common/types';
 import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
 import { ErrorList } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
 import { useEntry } from '@intake24/admin/stores';
+import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 
 export type SchemeQuestionForm = {
@@ -97,7 +97,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<SchemeQuestionForm>({
+      form: createForm<SchemeQuestionForm>({
         question: this.question,
       }),
       nonInputErrorKeys: ['question'],

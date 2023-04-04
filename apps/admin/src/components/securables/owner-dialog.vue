@@ -71,8 +71,8 @@ import { defineComponent } from 'vue';
 
 import type { UserAttributes } from '@intake24/common/types/models';
 import { AutoComplete } from '@intake24/admin/components/forms';
-import { form } from '@intake24/admin/helpers';
 import { useEntry } from '@intake24/admin/stores';
+import { createForm } from '@intake24/admin/util';
 
 type OwnerDialogForm = {
   userId: string | null;
@@ -102,7 +102,7 @@ export default defineComponent({
   data() {
     return {
       dialog: false,
-      form: form<OwnerDialogForm>({ userId: null }),
+      form: createForm<OwnerDialogForm>({ userId: null }),
       internalOwner: this.owner ? { ...this.owner } : undefined,
       isLoading: false,
     };

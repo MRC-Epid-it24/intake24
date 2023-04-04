@@ -171,7 +171,7 @@ import { defineComponent } from 'vue';
 import type { CustomField } from '@intake24/common/types';
 import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type UserForm = {
   id: string | null;
@@ -207,7 +207,7 @@ export default defineComponent({
         disabledAt: false,
         verifiedAt: false,
       },
-      form: form<UserForm>({
+      form: createForm<UserForm>({
         id: null,
         name: null,
         email: null,

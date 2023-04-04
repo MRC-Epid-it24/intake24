@@ -65,7 +65,7 @@
 import { defineComponent } from 'vue';
 
 import type { MFADeviceEntry, OTPRegistrationChallenge } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 export default defineComponent({
   name: 'OtpDevice',
@@ -76,7 +76,7 @@ export default defineComponent({
     return {
       url: 'admin/user/mfa/otp',
       progress: 1,
-      form: form({ challengeId: '', name: 'My OTP device', token: '' }),
+      form: createForm({ challengeId: '', name: 'My OTP device', token: '' }),
       regChallenge: null as OTPRegistrationChallenge | null,
     };
   },

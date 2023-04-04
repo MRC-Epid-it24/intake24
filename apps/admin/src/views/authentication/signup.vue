@@ -144,8 +144,8 @@ import { defineComponent, reactive, ref } from 'vue';
 
 import type { LoginResponse } from '@intake24/common/types/http';
 import { logo } from '@intake24/admin/assets';
-import { form } from '@intake24/admin/helpers';
 import { useAuth, useMessages } from '@intake24/admin/stores';
+import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 
 type SignUpForm = {
@@ -168,7 +168,7 @@ export default defineComponent({
     const captcha = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
-      form: form<SignUpForm>({
+      form: createForm<SignUpForm>({
         name: null,
         phone: null,
         email: null,

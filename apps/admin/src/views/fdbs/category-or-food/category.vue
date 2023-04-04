@@ -106,7 +106,7 @@ import { defineComponent } from 'vue';
 
 import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 import categoryOrFood from './category-or-food';
 
@@ -121,7 +121,7 @@ export default defineComponent({
     return {
       type: 'categories',
       entry: null as CategoryLocalEntry | null,
-      form: form(
+      form: createForm(
         {
           name: null,
           main: {

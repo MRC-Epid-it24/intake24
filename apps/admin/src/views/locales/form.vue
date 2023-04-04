@@ -184,7 +184,7 @@ import { defineComponent } from 'vue';
 
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { textDirections } from '@intake24/common/types';
 
 type LocaleForm = {
@@ -215,7 +215,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<LocaleForm>({
+      form: createForm<LocaleForm>({
         id: null,
         code: null,
         prototypeLocaleId: null,

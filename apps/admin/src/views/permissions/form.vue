@@ -49,7 +49,7 @@ import { defineComponent } from 'vue';
 
 import type { PermissionEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 type PermissionForm = {
   id: string | null;
@@ -71,7 +71,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<PermissionForm>({
+      form: createForm<PermissionForm>({
         id: null,
         name: null,
         displayName: null,

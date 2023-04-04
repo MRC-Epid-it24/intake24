@@ -98,8 +98,8 @@ import { isAxiosError } from 'axios';
 import { defineComponent } from 'vue';
 
 import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
-import { form } from '@intake24/admin/helpers';
 import { useAuth, useMessages } from '@intake24/admin/stores';
+import { createForm } from '@intake24/admin/util';
 
 export default defineComponent({
   name: 'MFADialog',
@@ -120,7 +120,7 @@ export default defineComponent({
   data() {
     return {
       auth: useAuth(),
-      otp: form({ challengeId: '', provider: 'otp', token: '' }),
+      otp: createForm({ challengeId: '', provider: 'otp', token: '' }),
       duo: {
         interval: undefined as undefined | number,
         value: 100,

@@ -95,8 +95,8 @@ import { defineComponent } from 'vue';
 
 import type { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
 import resources from '@intake24/admin/router/resources';
+import { createForm } from '@intake24/admin/util';
 
 type RoleForm = {
   id: string | null;
@@ -128,7 +128,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<RoleForm>({
+      form: createForm<RoleForm>({
         id: null,
         name: null,
         displayName: null,

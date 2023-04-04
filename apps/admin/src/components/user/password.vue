@@ -87,7 +87,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -104,7 +104,7 @@ export default defineComponent({
     return {
       dialog: false,
       loading: false,
-      form: form({
+      form: createForm({
         passwordCurrent: null,
         password: null,
         passwordConfirm: null,

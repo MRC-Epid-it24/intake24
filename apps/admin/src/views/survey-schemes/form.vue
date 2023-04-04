@@ -54,7 +54,7 @@ import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
 
 export type SurveySchemeForm = {
@@ -87,7 +87,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<PatchSurveySchemeForm>({
+      form: createForm<PatchSurveySchemeForm>({
         name: null,
         type: 'default',
         meals: defaultMeals,

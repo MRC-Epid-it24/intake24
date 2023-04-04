@@ -16,7 +16,7 @@ import { defineComponent } from 'vue';
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { DemographicGroupList, Preview } from '@intake24/admin/components/feedback';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 
 import type { FeedbackSchemeForm } from '../form.vue';
 
@@ -38,7 +38,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<FeedbackSchemeDemographicGroupsForm>({ demographicGroups: [] }),
+      form: createForm<FeedbackSchemeDemographicGroupsForm>({ demographicGroups: [] }),
     };
   },
 

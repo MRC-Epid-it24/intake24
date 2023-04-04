@@ -14,7 +14,7 @@ import {
   CategoryList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { getObjectNestedKeys } from '@intake24/common/util';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -54,7 +54,7 @@ export default defineComponent({
       loading: false,
       type: 'categories' as 'categories' | 'foods',
       entry: null as Entry | null,
-      form: form({}, { extractNestedKeys: true }),
+      form: createForm({}, { extractNestedKeys: true }),
       disabled: !this.can({ action: 'edit' }),
     };
   },

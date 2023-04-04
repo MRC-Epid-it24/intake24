@@ -92,7 +92,7 @@ import { defineComponent } from 'vue';
 
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { textDirections } from '@intake24/common/types';
 
 type LanguageForm = {
@@ -117,7 +117,7 @@ export default defineComponent({
 
   data() {
     return {
-      form: form<LanguageForm>({
+      form: createForm<LanguageForm>({
         id: null,
         code: null,
         englishName: null,

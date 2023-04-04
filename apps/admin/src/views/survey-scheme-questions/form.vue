@@ -53,7 +53,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { infoPrompt } from '@intake24/common/prompts';
 
 export type SchemeQuestionForm = {
@@ -85,7 +85,7 @@ export default defineComponent({
     const { actions, ...question } = infoPrompt;
 
     return {
-      form: form<SchemeQuestionForm>({
+      form: createForm<SchemeQuestionForm>({
         id: null,
         name: null,
         questionId: null,

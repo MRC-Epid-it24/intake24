@@ -79,7 +79,7 @@ import type {
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { defaultExport } from '@intake24/common/schemes';
 
 import type { SurveySchemeForm } from '../form.vue';
@@ -103,7 +103,7 @@ export default defineComponent({
   data() {
     return {
       editMethod: 'patch',
-      form: form<SurveySchemeDataExportForm>({ dataExport: defaultExport }),
+      form: createForm<SurveySchemeDataExportForm>({ dataExport: defaultExport }),
       selected: null as ExportSection | null,
       exportRefs: {} as SurveySchemeExportRefsResponse,
     };

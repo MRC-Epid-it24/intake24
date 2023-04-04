@@ -25,7 +25,7 @@ export default {
   /**
    * Verify multi-factor challenge response
    *
-   * @param {MFAAuthenticationVerificationRequest} request
+   * @param {MFAAuthenticationVerificationRequest} payload
    * @returns {Promise<string>}
    */
   async verify(payload: MFAAuthenticationVerificationRequest): Promise<string> {

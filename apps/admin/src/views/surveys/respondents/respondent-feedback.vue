@@ -107,7 +107,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { SurveyRespondentEntry } from '@intake24/common/types/http/admin';
-import { form } from '@intake24/admin/helpers';
+import { createForm } from '@intake24/admin/util';
 import { useLoading } from '@intake24/ui/stores';
 import { downloadFile } from '@intake24/ui/util';
 
@@ -134,7 +134,7 @@ export default defineComponent({
     return {
       apiUrl: `admin/surveys/${this.surveyId}/respondents/${this.user.userId}/feedback`,
       dialog: false,
-      form: form<RespondentFeedback>({ email: null, copy: 'none' }),
+      form: createForm<RespondentFeedback>({ email: null, copy: 'none' }),
     };
   },
 
