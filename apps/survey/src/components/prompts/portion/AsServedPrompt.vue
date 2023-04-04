@@ -107,9 +107,9 @@ import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 
+import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
-import { useStandardUnits } from './useStandardUnits';
 
 export interface AsServedPromptState {
   portionSize: AsServedState;

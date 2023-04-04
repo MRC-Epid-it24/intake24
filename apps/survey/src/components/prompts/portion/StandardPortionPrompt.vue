@@ -75,9 +75,9 @@ import type {
 import { copy } from '@intake24/common/util';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 
+import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
 import { QuantityCard } from './selectors';
-import { useStandardUnits } from './useStandardUnits';
 
 export type StandardUnitRefs = Record<
   string,

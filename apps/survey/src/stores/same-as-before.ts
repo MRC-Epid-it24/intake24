@@ -7,13 +7,16 @@ import { useUser } from './user';
 export type SameAsBeforeItem = {
   food: EncodedFood;
   localeId: string;
+  createdAt: number;
 };
 
 export interface SameAsBeforeState {
   items: {
-    [userId: string]: {
-      [foodCode: string]: SameAsBeforeItem;
-    };
+    [userId: string]:
+      | {
+          [foodCode: string]: SameAsBeforeItem | undefined;
+        }
+      | undefined;
   };
 }
 
@@ -28,7 +31,7 @@ export const useSameAsBefore = defineStore('same-as-before', {
       if (!userId) return undefined;
 
       const item = this.items[userId]?.[foodCode];
-      if (!item || item.localeId !== localeId) return undefined;
+      if (item?.localeId !== localeId) return undefined;
 
       return item;
     },
@@ -41,7 +44,7 @@ export const useSameAsBefore = defineStore('same-as-before', {
 
       console.log('Saving same as before item', food.data.code);
 
-      this.items[userId][food.data.code] = { food, localeId };
+      this.items[userId]![food.data.code] = { food, localeId, createdAt: Date.now() };
     },
   },
 });
