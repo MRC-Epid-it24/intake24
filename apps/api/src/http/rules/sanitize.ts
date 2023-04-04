@@ -1,9 +1,7 @@
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 
-const dom = new JSDOM('');
-// @ts-expect-error type issue
-const DOMPurify = createDOMPurify(dom.window);
+const DOMPurify = createDOMPurify(new JSDOM('').window);
 
 export type SanitizeInputOptions = {
   emptyStringToNull?: boolean;

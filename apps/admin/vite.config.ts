@@ -156,6 +156,7 @@ export default defineConfig(({ mode }) => {
         workbox: {
           cleanupOutdatedCaches: true,
           importScripts: ['js/web-push.js'],
+          maximumFileSizeToCacheInBytes: 3000000,
           /* globIgnores: ['index.html'],
           runtimeCaching: [
             {

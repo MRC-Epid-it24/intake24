@@ -150,6 +150,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
+          maximumFileSizeToCacheInBytes: 3000000,
           /* globIgnores: ['index.html'],
           runtimeCaching: [
             {

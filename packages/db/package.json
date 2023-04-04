@@ -33,12 +33,12 @@
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
-    "@types/node": "^18.15.10",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "^18.15.11",
     "@types/pg": "^8.6.6",
     "@types/validator": "^13.7.14",
     "sequelize-cli": "^6.6.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.3"
   },
   "bundledDependencies": [
     "@intake24/api",

@@ -21,8 +21,8 @@
     "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
-    "typescript": "^5.0.2"
+    "@types/lodash": "^4.14.192",
+    "typescript": "^5.0.3"
   },
   "bundledDependencies": [
     "@intake24/common"
