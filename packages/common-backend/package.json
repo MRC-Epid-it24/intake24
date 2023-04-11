@@ -19,6 +19,6 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   }
 }

@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.192",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "bundledDependencies": [
     "@intake24/common"
