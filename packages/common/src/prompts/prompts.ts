@@ -38,6 +38,7 @@ export const standardComponentTypes = [
   'final-prompt',
   'food-search-prompt',
   'meal-add-prompt',
+  'meal-gap-prompt',
   'meal-time-prompt',
   'ready-meal-prompt',
   'redirect-prompt',
@@ -175,6 +176,12 @@ export type Prompts = {
   'meal-time-prompt': ValidatedPrompt & {
     component: 'meal-time-prompt';
     format: 'ampm' | '24hr';
+  };
+  'meal-gap-prompt': BasePrompt & {
+    component: 'meal-gap-prompt';
+    gap: number;
+    startTime: string;
+    endTime: string;
   };
   'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BasePrompt & {

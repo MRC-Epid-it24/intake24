@@ -2,7 +2,7 @@ import { computed } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 
-import { fromMealTime } from '../util/meal-food-utils';
+import { fromMealTime } from '../util';
 import { useLocale } from './use-locale';
 
 export const useMealUtils = <T extends MealState | undefined>(meal?: T) => {

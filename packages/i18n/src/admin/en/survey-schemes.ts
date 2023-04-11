@@ -290,6 +290,13 @@ const surveySchemes: LocaleMessageObject = {
       subtitle: 'Add a new meal to the meal list',
       custom: 'Allow custom meal names',
     },
+    'meal-gap-prompt': {
+      title: 'Meal time gap',
+      subtitle: 'Check time gap between meals',
+      gap: 'Time gap between meals (minutes)',
+      startTime: 'Day start time',
+      endTime: 'Day end time',
+    },
     'meal-time-prompt': {
       title: 'Meal time',
       subtitle: 'Confirm the time of the meal or remove the meal',

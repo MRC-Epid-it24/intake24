@@ -94,6 +94,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab],
     sections: ['preFoods'],
   },
+  'meal-gap-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['postMeals'],
+  },
   'ready-meal-prompt': {
     tabs: [...baseTab],
     sections: ['postFoods'],

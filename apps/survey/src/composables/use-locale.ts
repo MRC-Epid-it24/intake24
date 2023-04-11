@@ -15,7 +15,7 @@ export type LocaleContentOptions = {
 
 export const useLocale = () => {
   const getLocaleContent = (
-    content: LocaleTranslation | RequiredLocaleTranslation | string,
+    content?: LocaleTranslation | RequiredLocaleTranslation | string,
     options: LocaleContentOptions = {}
   ): string => {
     const { path, params = {} } = options;
@@ -23,12 +23,17 @@ export const useLocale = () => {
 
     if (typeof content === 'string') return replaceParams(content, params);
 
-    const localeContent = content[i18n.locale];
+    const localeContent = content ? content[i18n.locale] : undefined;
     if (localeContent) return replaceParams(localeContent, params);
 
     if (path && has(i18n.messages[i18n.locale], path)) return i18n.t(path, params).toString();
 
-    return content.en ? replaceParams(content.en, params) : '';
+    const enContent = content?.en;
+    if (enContent) return replaceParams(enContent, params);
+
+    if (path && has(i18n.messages.en, path)) return i18n.t(path, params).toString();
+
+    return '';
   };
 
   return { getLocaleContent };

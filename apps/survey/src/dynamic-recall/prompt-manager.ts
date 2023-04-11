@@ -19,6 +19,7 @@ import {
 
 import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';
+import { resolveMealGaps } from '../util';
 import {
   asServedComplete,
   cerealComplete,
@@ -62,7 +63,7 @@ const mealDrinks = (count: number, meal: MealState): number => meal.foods.reduce
 const surveyDrinks = (count: number, meals: MealState[]): number => meals.reduce(mealDrinks, count);
 
 const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
-  if (store.user === null) {
+  if (!store.user) {
     console.error('User information should not be null at this point');
     return false;
   }
@@ -73,13 +74,36 @@ const showPrompt = (state: SurveyState, prompt: Prompt, component: ComponentType
   prompt.component === component;
 
 const checkSurveyStandardConditions = (state: SurveyState, prompt: Prompt): boolean => {
-  switch (prompt.component) {
+  const { component } = prompt;
+
+  switch (component) {
     case 'info-prompt':
       return !state.data.flags.includes(`${prompt.id}-acknowledged`);
     case 'submit-prompt':
       return !state.data.endTime;
     case 'meal-add-prompt':
       return false;
+    case 'meal-gap-prompt': {
+      const [firstMeal, lastMeal] = resolveMealGaps(state.data.meals, prompt);
+
+      if (firstMeal && lastMeal) {
+        recallLog().promptCheck(component, true, 'Meal with between gap');
+        return true;
+      }
+
+      if (firstMeal) {
+        recallLog().promptCheck(component, true, 'Meal with start gap');
+        return true;
+      }
+
+      if (lastMeal) {
+        recallLog().promptCheck(component, true, 'Meal with end gap');
+        return true;
+      }
+
+      recallLog().promptCheck(component, false, 'No meal gap');
+      return false;
+    }
     case 'review-confirm-prompt':
       return false;
     default:
@@ -132,13 +156,13 @@ const checkMealStandardConditions = (
     case 'info-prompt':
       return !mealState.flags.includes(`${prompt.id}-acknowledged`);
     case 'meal-time-prompt':
-      if (mealState.time === undefined) {
+      if (!mealState.time) {
         recallLog().promptCheck('meal-time-prompt', true, 'time is undefined');
         return true;
-      } else {
-        recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
-        return false;
       }
+
+      recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
+      return false;
     case 'no-more-information-prompt':
       if (surveyState.data.selection.mode === 'manual') {
         recallLog().promptCheck(
@@ -147,14 +171,14 @@ const checkMealStandardConditions = (
           `Manual: no more prompts left for ${mealState.name.en}`
         );
         return true;
-      } else {
-        recallLog().promptCheck(
-          'no-more-information-prompt',
-          false,
-          `Auto: no more prompts left for ${mealState.name.en}`
-        );
-        return false;
       }
+
+      recallLog().promptCheck(
+        'no-more-information-prompt',
+        false,
+        `Auto: no more prompts left for ${mealState.name.en}`
+      );
+      return false;
     case 'ready-meal-prompt':
       return !mealState.flags.includes('ready-meal-complete');
     default:

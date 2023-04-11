@@ -1,31 +1,9 @@
-import type {
-  FoodState,
-  MealState,
-  MealTime,
-  Selection,
-  SurveyState,
-} from '@intake24/common/types';
+import type { FoodState, MealState, Selection, SurveyState } from '@intake24/common/types';
 import type { FoodIndex, MealFoodIndex } from '@intake24/survey/stores/survey';
 import { randomString } from '@intake24/common/util';
 
 // Helper to generate unique id for each meal/food with same length
 export const getEntityId = () => randomString(12);
-
-export const fromMealTime = (time: MealTime, doubleDigit?: boolean): string => {
-  const { hours, minutes } = time;
-
-  if (!doubleDigit) return `${hours}:${minutes}`;
-
-  return [hours, minutes]
-    .map((item) => (item.toString().length === 1 ? `0${item}` : item.toString()))
-    .join(':');
-};
-
-export const toMealTime = (time: string): MealTime => {
-  const [hours, minutes] = time.split(':').map((item) => parseInt(item, 10));
-
-  return { hours, minutes };
-};
 
 export function getFoodIndexInMeal(meal: MealState, id: string): FoodIndex | undefined {
   for (let i = 0; i < meal.foods.length; ++i) {

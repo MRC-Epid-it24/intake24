@@ -110,6 +110,19 @@ const prompts: LocaleMessageObject = {
     no: 'Cancel',
     noMeal: 'No Meals remaining, add at least one',
   },
+  mealGap: {
+    name: 'Meal gap',
+    // text: 'Placeholder',
+    // description: 'Placeholder',
+    before:
+      '<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>',
+    after:
+      '<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> at {mealTime}?</p>',
+    between:
+      '<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>',
+    yes: 'Yes, add a meal',
+    no: 'No, I did not',
+  },
   mealTime: {
     name: 'Edit Time',
     text: '{meal}',

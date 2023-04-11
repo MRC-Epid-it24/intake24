@@ -16,6 +16,7 @@ import type {
   MissingFood,
   PromptAnswer,
   Selection,
+  SurveyFlag,
   SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
 import type {
@@ -34,6 +35,7 @@ import {
   getMealIndexForSelection,
   getMealIndexRequired,
   toMealTime,
+  toMinutes,
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
@@ -372,17 +374,21 @@ export const useSurvey = defineStore('survey', {
       };
     },
 
-    setSurveyFlag(data: string) {
-      if (this.data.flags.includes(data)) return;
+    hasSurveyFlag(flag: SurveyFlag) {
+      return this.data.flags.includes(flag);
+    },
 
-      this.data.flags.push(data);
+    setSurveyFlag(flag: SurveyFlag) {
+      if (this.data.flags.includes(flag)) return;
+
+      this.data.flags.push(flag);
     },
 
     sortMeals() {
       this.data.meals.sort((a, b) => {
         if (!a.time || !b.time) return 0;
 
-        return a.time.hours * 60 + a.time.minutes - (b.time.hours * 60 + b.time.minutes);
+        return toMinutes(a.time) - toMinutes(b.time);
       });
     },
 

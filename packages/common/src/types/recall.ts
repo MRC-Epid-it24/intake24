@@ -5,14 +5,19 @@ import type { FoodHeader, UserFoodData } from './http';
 
 /*
 Not currently used:
-
-private static final String FLAG_NO_MEALS_AFTER = "no-meals-after";
-private static final String FLAG_NO_MEALS_BEFORE = "no-meals-before";
 private static final String FLAG_CONFIRMED_NO_DRINKS = "confirmed-no-drinks";
 private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-complete";
 */
 
-export type MealFlag = 'free-entry-complete' | 'ready-meal-complete' | `${string}-acknowledged`;
+export type SurveyFlag = `${string}-acknowledged`;
+
+export type MealFlag =
+  | 'free-entry-complete'
+  | 'no-meals-after'
+  | 'no-meals-between'
+  | 'no-meals-before'
+  | 'ready-meal-complete'
+  | `${string}-acknowledged`;
 
 export type FoodFlag =
   | 'ready-meal'

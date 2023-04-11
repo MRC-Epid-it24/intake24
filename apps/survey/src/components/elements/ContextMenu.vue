@@ -2,7 +2,7 @@
   <div>
     <v-menu :close-delay="250" close-on-click close-on-content-click offset-y open-on-hover>
       <template #activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on">
+        <v-btn icon v-bind="attrs" v-on="on" @click.stop>
           <v-icon small>{{ icon }}</v-icon>
         </v-btn>
       </template>
