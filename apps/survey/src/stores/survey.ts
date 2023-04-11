@@ -157,6 +157,10 @@ export const useSurvey = defineStore('survey', {
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
+    registeredPortionSizeMethods: (state) =>
+      state.parameters?.surveyScheme.questions.meals.foods
+        .filter((item) => item.type === 'portion-size')
+        .map((item) => item.component.replace('-prompt', '')) ?? [],
     selection: (state) => state.data.selection,
     freeEntryComplete: (state) =>
       !!state.data.meals.length &&

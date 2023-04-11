@@ -15,11 +15,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import type { PortionSizeOptionState } from '@intake24/survey/components/prompts';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -40,7 +38,7 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const { encodedFood: food, parentFoodOptional: parentFood } = useFoodPromptUtils();
 
     const getInitialState = (): PortionSizeOptionState => ({
@@ -53,38 +51,38 @@ export default defineComponent({
       getInitialState
     );
 
+    const survey = useSurvey();
+
+    const availableMethods = computed(() =>
+      food().data.portionSizeMethods.filter((item) =>
+        survey.registeredPortionSizeMethods.includes(item.method)
+      )
+    );
+
+    const commitAnswer = () => {
+      survey.updateFood({
+        foodId: food().id,
+        update: { portionSizeMethodIndex: state.value.option },
+      });
+
+      clearStoredState();
+    };
+
+    const action = (type: string, id?: string) => {
+      if (type === 'next') commitAnswer();
+
+      emit('action', type, id);
+    };
+
     return {
       food,
       parentFood,
       state,
       update,
+      action,
       clearStoredState,
+      availableMethods,
     };
-  },
-
-  computed: {
-    availableMethods(): UserPortionSizeMethod[] {
-      return this.food().data.portionSizeMethods;
-    },
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['updateFood']),
-
-    action(type: string, id?: string) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, id);
-    },
-
-    commitAnswer() {
-      this.updateFood({
-        foodId: this.food().id,
-        update: { portionSizeMethodIndex: this.state.option },
-      });
-
-      this.clearStoredState();
-    },
   },
 });
 </script>
