@@ -83,11 +83,8 @@ import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import Vue, { defineComponent } from 'vue';
 
-import type {
-  AssociatedFoodPromptState,
-  AssociatedFoodsState,
-  EncodedFood,
-} from '@intake24/common/types';
+import type { AssociatedFoodPromptItemState, PromptStates } from '@intake24/common/prompts';
+import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
@@ -95,12 +92,12 @@ import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
 
-const isPromptValid = (prompt: AssociatedFoodPromptState): boolean =>
+const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
   prompt.confirmed === 'no' ||
   prompt.confirmed === 'existing' ||
   (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined);
 
-const getNextPrompt = (prompts: AssociatedFoodPromptState[]) =>
+const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
   prompts.findIndex((prompt) => !isPromptValid(prompt));
 
 export default defineComponent({
@@ -112,7 +109,7 @@ export default defineComponent({
 
   props: {
     initialState: {
-      type: Object as PropType<AssociatedFoodsState>,
+      type: Object as PropType<PromptStates['associated-foods-prompt']>,
       required: true,
     },
     food: {
@@ -224,7 +221,7 @@ export default defineComponent({
       this.updatePrompts();
     },
 
-    onSelectDifferentFood(prompt: AssociatedFoodPromptState) {
+    onSelectDifferentFood(prompt: AssociatedFoodPromptItemState) {
       prompt.selectedFood = undefined;
 
       this.updatePrompts();

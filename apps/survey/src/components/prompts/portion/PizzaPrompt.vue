@@ -102,7 +102,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { PizzaState } from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
@@ -110,17 +110,6 @@ import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
 
 export type PizzaImageMap = 'type' | 'thickness' | 'slice';
-
-export type PizzaPromptState = {
-  portionSize: PizzaState;
-  panel: number;
-  confirmed: {
-    type: boolean;
-    thickness: boolean;
-    slice: boolean;
-    quantity: boolean;
-  };
-};
 
 const thicknessFactors = [
   [0.9, 1.0, 1.1, 1.4, 1.6],
@@ -151,7 +140,7 @@ export default defineComponent({
 
   components: { QuantityCard, ImageMapSelector },
 
-  mixins: [createBasePortion<'pizza-prompt', PizzaPromptState>()],
+  mixins: [createBasePortion<'pizza-prompt'>()],
 
   emits: ['update'],
 
@@ -316,7 +305,7 @@ export default defineComponent({
           portionSize.thickness.index
         ) * portionSize.slice.quantity;
 
-      const state: PizzaPromptState = {
+      const state: PromptStates['pizza-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         confirmed: this.confirmed,

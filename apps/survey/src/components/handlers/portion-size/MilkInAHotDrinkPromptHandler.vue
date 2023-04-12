@@ -13,11 +13,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
-import type { MilkInAHotDrinkPromptState } from '@intake24/survey/components/prompts/portion';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -37,11 +35,16 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
-    const { encodedFood: food, parentFood, portionSize } = useFoodPromptUtils();
+  setup(props, { emit }) {
+    const {
+      encodedFood: food,
+      encodedFoodPortionSizeData,
+      parentFood,
+      portionSize,
+    } = useFoodPromptUtils<'milk-in-a-hot-drink'>();
 
-    const getInitialState = (): MilkInAHotDrinkPromptState => ({
-      portionSize: {
+    const getInitialState = (): PromptStates['milk-in-a-hot-drink-prompt'] => ({
+      portionSize: encodedFoodPortionSizeData() ?? {
         method: 'milk-in-a-hot-drink',
         milkPartIndex: null,
         milkVolumePercentage: null,
@@ -57,68 +60,65 @@ export default defineComponent({
       getInitialState
     );
 
-    return {
-      food,
-      parentFood,
-      portionSize,
-      state,
-      update,
-      clearStoredState,
-    };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['updateFood']),
-
-    action(type: string, id?: string) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, id);
-    },
-
-    commitAnswer() {
+    const commitAnswer = () => {
       const {
-        state: {
-          portionSize: { milkVolumePercentage },
-        },
-        parentFood,
-      } = this;
+        portionSize: { milkVolumePercentage },
+      } = state.value;
 
       if (!milkVolumePercentage) {
         console.warn(`Milk volume percentage is not set yet.`);
         return;
       }
 
-      if (!parentFood) throw new Error('Milk in a hot drink prompt: parent food not found.');
+      if (!parentFood.value) throw new Error('Milk in a hot drink prompt: parent food not found.');
 
       if (
-        !parentFood.portionSize ||
-        parentFood.portionSize.servingWeight === null ||
-        parentFood.portionSize.leftoversWeight === null
+        !parentFood.value.portionSize ||
+        parentFood.value.portionSize.servingWeight === null ||
+        parentFood.value.portionSize.leftoversWeight === null
       )
         throw new Error('Milk in a hot drink prompt: Parent food missing portion size data');
 
-      const { servingWeight, leftoversWeight } = parentFood.portionSize;
+      const { servingWeight, leftoversWeight } = parentFood.value.portionSize;
 
       const drinkPortionSize = {
-        ...parentFood.portionSize,
+        ...parentFood.value.portionSize,
         servingWeight: servingWeight * (1 - milkVolumePercentage),
         leftoversWeight: leftoversWeight * (1 - milkVolumePercentage),
       };
 
       const milkPortionSize = {
-        ...this.state.portionSize,
+        ...state.value.portionSize,
         servingWeight: servingWeight * milkVolumePercentage,
         leftoversWeight: leftoversWeight * milkVolumePercentage,
       };
 
-      this.updateFood({ foodId: this.food().id, update: { portionSize: milkPortionSize } });
-      this.updateFood({
-        foodId: this.parentFood.id,
+      const survey = useSurvey();
+
+      survey.updateFood({ foodId: food().id, update: { portionSize: milkPortionSize } });
+      survey.updateFood({
+        foodId: parentFood.value.id,
         update: { portionSize: drinkPortionSize },
       });
-      this.clearStoredState();
-    },
+      survey.addFoodFlag({ foodId: food().id, flag: 'portion-size-method-complete' });
+
+      clearStoredState();
+    };
+
+    const action = (type: string, id?: string) => {
+      if (type === 'next') commitAnswer();
+
+      emit('action', type, id);
+    };
+
+    return {
+      food,
+      parentFood,
+      portionSize,
+      state,
+      action,
+      update,
+    };
   },
 });
 </script>

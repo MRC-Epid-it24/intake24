@@ -218,6 +218,15 @@ export default defineComponent({
 
           this.mealAction({ type, mealId: id });
           break;
+        case 'editFood':
+          if (id === undefined) {
+            console.warn('Recall: Food id must be defined for food action.', type, id);
+            return;
+          }
+
+          this.survey.editFood(id);
+          await this.nextPrompt();
+          break;
         case 'deleteFood':
           if (id === undefined) {
             console.warn('Recall: Food id must be defined for food action.', type, id);

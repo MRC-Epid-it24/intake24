@@ -96,7 +96,7 @@ export default defineComponent({
             }
 
             if (infoPrompts.includes(this.prompt.component))
-              this.survey.setFoodFlag({ foodId: food.id, flag: `${this.prompt.id}-acknowledged` });
+              this.survey.addFoodFlag({ foodId: food.id, flag: `${this.prompt.id}-acknowledged` });
             else
               this.survey.setFoodCustomPromptAnswer({
                 foodId: food.id,

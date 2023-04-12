@@ -82,14 +82,15 @@ export default defineComponent({
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt
-      const portionSizeMethodIndex = foodData.portionSizeMethods.length === 1 ? 0 : null;
+      const hasOnePortionSizeMethod = foodData.portionSizeMethods.length === 1;
+      if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
 
       const newState: EncodedFood = {
         id,
         type: 'encoded-food',
         data: foodData,
         searchTerm,
-        portionSizeMethodIndex,
+        portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
         portionSize: null,
         customPromptAnswers,
         flags,

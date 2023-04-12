@@ -507,12 +507,18 @@ export const useSurvey = defineStore('survey', {
       food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    setFoodFlag(data: { foodId: string; flag: FoodFlag }) {
+    addFoodFlag(data: { foodId: string; flag: FoodFlag }) {
       const food = findFood(this.data.meals, data.foodId);
-
       if (food.flags.includes(data.flag)) return;
 
       food.flags.push(data.flag);
+    },
+
+    removeFoodFlag(foodId: string | FoodState, flag: FoodFlag | FoodFlag[]) {
+      const food = typeof foodId === 'string' ? findFood(this.data.meals, foodId) : foodId;
+      const flags = Array.isArray(flag) ? flag : [flag];
+
+      food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
     },
 
     replaceFood(data: { foodId: string; food: FoodState }) {
@@ -545,6 +551,13 @@ export const useSurvey = defineStore('survey', {
         return;
 
       useSameAsBefore().saveItem(this.localeId, mainFood);
+    },
+
+    editFood(foodId: string) {
+      const food = findFood(this.data.meals, foodId);
+      if (food.type === 'free-text') return;
+
+      this.removeFoodFlag(food, ['portion-size-option-complete', 'portion-size-method-complete']);
     },
 
     updateFood(data: {

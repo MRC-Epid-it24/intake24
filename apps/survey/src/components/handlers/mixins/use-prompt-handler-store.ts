@@ -1,16 +1,16 @@
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-import type { ComponentType } from '@intake24/common/prompts';
+import type { PromptStates } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
 
-export const usePromptHandlerStore = <T extends object>(
+export const usePromptHandlerStore = <P extends keyof PromptStates, S extends PromptStates[P]>(
   promptId: string,
-  promptType: ComponentType,
-  getInitialState: () => T
+  promptType: P,
+  getInitialState: () => S
 ) => {
-  const promptStore = getOrCreatePromptStateStore<T>(promptType)();
+  const promptStore = getOrCreatePromptStateStore<S>(promptType)();
   const survey = useSurvey();
 
   const getFoodId = () => {
@@ -29,13 +29,13 @@ export const usePromptHandlerStore = <T extends object>(
 
   const getFoodOrMealId = promptType === 'edit-meal-prompt' ? getMealId : getFoodId;
 
-  const storedState: T | undefined = promptStore.prompts[getFoodOrMealId()]?.[promptId];
+  const storedState: S | undefined = promptStore.prompts[getFoodOrMealId()]?.[promptId];
 
   const state = ref(
-    storedState ? merge<T>(getInitialState(), storedState) : getInitialState()
-  ) as Ref<T>;
+    storedState ? merge<S>(getInitialState(), storedState) : getInitialState()
+  ) as Ref<S>;
 
-  const update = (data: { state?: T }) => {
+  const update = (data: { state?: S }) => {
     const { state: newState } = data;
     if (newState) {
       promptStore.updateState(getFoodOrMealId(), promptId, newState);
@@ -47,6 +47,18 @@ export const usePromptHandlerStore = <T extends object>(
     promptStore.clearState(getFoodOrMealId(), promptId);
   };
 
+  const commitPortionSize = () => {
+    if (!('portionSize' in state.value))
+      throw new Error('This prompt does not support portion size method');
+
+    const { portionSize } = state.value;
+    const foodId = getFoodId();
+
+    survey.updateFood({ foodId, update: { portionSize } });
+    survey.addFoodFlag({ foodId, flag: 'portion-size-method-complete' });
+    clearStoredState();
+  };
+
   return {
     state,
     promptStore,
@@ -55,5 +67,6 @@ export const usePromptHandlerStore = <T extends object>(
     getFoodOrMealId,
     update,
     clearStoredState,
+    commitPortionSize,
   };
 };

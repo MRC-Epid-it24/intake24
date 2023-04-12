@@ -12,8 +12,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
-import type { EditMealPromptState } from '@intake24/survey/components/prompts/standard/EditMealPrompt.vue';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { EditMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -36,7 +35,7 @@ export default defineComponent({
   setup(props) {
     const { meal } = useMealPromptUtils();
 
-    const getInitialState = (): EditMealPromptState => ({ foods: meal.value.foods });
+    const getInitialState = (): PromptStates['edit-meal-prompt'] => ({ foods: meal.value.foods });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.prompt.id,

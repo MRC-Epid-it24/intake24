@@ -47,7 +47,7 @@ export default defineComponent({
       for (const food of state.value.foods) {
         if (!food.value) continue;
 
-        survey.setFoodFlag({ foodId: food.id, flag: 'ready-meal' });
+        survey.addFoodFlag({ foodId: food.id, flag: 'ready-meal' });
       }
 
       survey.setMealFlag({ mealId: meal.value.id, flag: 'ready-meal-complete' });

@@ -14,13 +14,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
-import type { CerealPromptState } from '@intake24/survey/components/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { CerealPrompt } from '@intake24/survey/components/prompts';
-import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
@@ -38,15 +35,16 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const {
       encodedFood: food,
+      encodedFoodPortionSizeData,
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'cereal'>();
 
-    const getInitialState = (): CerealPromptState => ({
-      portionSize: {
+    const getInitialState = (): PromptStates['cereal-prompt'] => ({
+      portionSize: encodedFoodPortionSizeData() ?? {
         method: 'cereal',
         imageUrl: null,
         type: parameters.value.type,
@@ -65,37 +63,26 @@ export default defineComponent({
       leftoversImageConfirmed: false,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
+    const { state, update, commitPortionSize } = usePromptHandlerStore(
       props.prompt.id,
       props.prompt.component,
       getInitialState
     );
+
+    const action = (type: string, id?: string) => {
+      if (type === 'next') commitPortionSize();
+
+      emit('action', type, id);
+    };
 
     return {
       food,
       parameters,
       parentFood,
       state,
+      action,
       update,
-      clearStoredState,
     };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['updateFood']),
-
-    action(type: string, id?: string) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, id);
-    },
-
-    commitAnswer() {
-      const { portionSize } = this.state;
-
-      this.updateFood({ foodId: this.food().id, update: { portionSize } });
-      this.clearStoredState();
-    },
   },
 });
 </script>

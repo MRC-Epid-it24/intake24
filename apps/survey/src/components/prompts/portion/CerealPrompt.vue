@@ -99,11 +99,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type {
-  CerealState,
-  PortionSizeParameters,
-  SelectedAsServedImage,
-} from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
@@ -111,21 +108,12 @@ import { YesNoToggle } from '@intake24/survey/components/elements';
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, ImageMapSelector, QuantityBadge } from './selectors';
 
-export interface CerealPromptState {
-  portionSize: CerealState;
-  panel: number;
-  bowlConfirmed: boolean;
-  servingImageConfirmed: boolean;
-  leftoversImageConfirmed: boolean;
-  leftoversPrompt?: boolean;
-}
-
 export default defineComponent({
   name: 'CerealPrompt',
 
   components: { AsServedSelector, ImageMapSelector, QuantityBadge, YesNoToggle },
 
-  mixins: [createBasePortion<'cereal-prompt', CerealPromptState>()],
+  mixins: [createBasePortion<'cereal-prompt'>()],
 
   props: {
     parameters: {
@@ -277,7 +265,7 @@ export default defineComponent({
       this.portionSize.servingWeight = this.portionSize.serving?.weight ?? 0;
       this.portionSize.leftoversWeight = this.portionSize.leftovers?.weight ?? 0;
 
-      const state: CerealPromptState = {
+      const state: PromptStates['cereal-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         bowlConfirmed: this.bowlConfirmed,

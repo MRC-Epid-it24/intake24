@@ -90,16 +90,13 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 import EditableFoodList from './EditableFoodList.vue';
-
-export type EditMealPromptState = {
-  foods: FoodState[];
-};
 
 export default defineComponent({
   name: 'EditMealPrompt',
@@ -110,7 +107,7 @@ export default defineComponent({
 
   props: {
     initialState: {
-      type: Object as PropType<EditMealPromptState>,
+      type: Object as PropType<PromptStates['edit-meal-prompt']>,
       required: true,
     },
     meal: {
@@ -152,7 +149,7 @@ export default defineComponent({
   methods: {
     update() {
       const { foods } = this;
-      const state: EditMealPromptState = { foods };
+      const state: PromptStates['edit-meal-prompt'] = { foods };
 
       this.$emit('update', { state });
     },

@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
@@ -31,9 +31,11 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
     emits: ['action'],
 
     setup(props) {
+      const { food, meal } = toRefs(props);
+
       const { getLocaleContent } = useLocale();
-      const { foodName } = useFoodUtils<FoodState | undefined>(props.food as FoodState | undefined);
-      const { mealName } = useMealUtils(props.meal);
+      const { foodName } = useFoodUtils(food);
+      const { mealName } = useMealUtils(meal);
 
       return { foodName, getLocaleContent, mealName };
     },

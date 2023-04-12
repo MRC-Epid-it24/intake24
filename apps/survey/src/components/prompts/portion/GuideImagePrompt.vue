@@ -52,26 +52,20 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { GuideImageState, PortionSizeParameters } from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
 
-export interface GuideImagePromptState {
-  portionSize: GuideImageState;
-  panel: number;
-  objectConfirmed: boolean;
-  quantityConfirmed: boolean;
-}
-
 export default defineComponent({
   name: 'GuideImagePrompt',
 
   components: { ImageMapSelector, QuantityCard },
 
-  mixins: [createBasePortion<'guide-image-prompt', GuideImagePromptState>()],
+  mixins: [createBasePortion<'guide-image-prompt'>()],
 
   props: {
     conversionFactor: {
@@ -168,7 +162,7 @@ export default defineComponent({
           this.guideImageData.weights[idx] * this.portionSize.quantity * this.conversionFactor;
       }
 
-      const state: GuideImagePromptState = {
+      const state: PromptStates['guide-image-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         objectConfirmed: this.objectConfirmed,

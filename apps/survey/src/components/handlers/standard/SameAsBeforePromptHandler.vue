@@ -14,6 +14,7 @@ import { defineComponent, onMounted } from 'vue';
 import type { GenericActionType, Prompts } from '@intake24/common/prompts';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
+import { getEntityId } from '@intake24/survey/util';
 
 import { useFoodPromptUtils } from '../mixins';
 
@@ -45,10 +46,19 @@ export default defineComponent({
     const sabAction = (type: 'notSame' | 'same') => {
       if (type === 'same' && sabFood) {
         const { id, ...update } = sabFood.food;
-        survey.updateFood({ foodId, update });
+        survey.updateFood({
+          foodId,
+          update: {
+            ...update,
+            linkedFoods: update.linkedFoods.map((linkedFood) => ({
+              ...linkedFood,
+              id: getEntityId(),
+            })),
+          },
+        });
       }
 
-      survey.setFoodFlag({ foodId, flag: 'same-as-before-complete' });
+      survey.addFoodFlag({ foodId, flag: 'same-as-before-complete' });
       emit('action', 'next');
     };
 

@@ -8,6 +8,7 @@ import type {
   MissingFood,
   PortionSizeMethodId,
   PortionSizeParameters,
+  PortionSizeStates,
 } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
@@ -48,6 +49,13 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
       throw new Error('This selected food must be an encoded food');
 
     return foodEntry;
+  };
+
+  // TODO: should improve EncodedFood type to avoid this type assertion
+  const encodedFoodPortionSizeData = (): PortionSizeStates[T] | null => {
+    const foodEntry = encodedFood();
+
+    return foodEntry.portionSize as PortionSizeStates[T] | null;
   };
 
   const encodedFoodOptional = (): EncodedFood | undefined => {
@@ -101,6 +109,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     parentFood,
     parentFoodOptional,
     encodedFood,
+    encodedFoodPortionSizeData,
     encodedFoodOptional,
     freeTextFood,
     foodName,

@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 
@@ -53,10 +53,10 @@ export default defineComponent({
   },
 
   setup(props) {
-    const detail = computed(() => getDetails[props.parameters.type](props.parameters));
-    const backgroundImage = computed(() =>
-      getBackgroundImage[props.parameters.type](props.parameters)
-    );
+    const { parameters } = toRefs(props);
+
+    const detail = computed(() => getDetails[props.parameters.type](parameters));
+    const backgroundImage = computed(() => getBackgroundImage[props.parameters.type](parameters));
 
     return {
       detail,

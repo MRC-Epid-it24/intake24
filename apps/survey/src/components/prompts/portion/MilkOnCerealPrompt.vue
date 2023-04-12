@@ -54,19 +54,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { MilkOnCerealState } from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector } from './selectors';
-
-export interface MilkOnCerealPromptState {
-  portionSize: MilkOnCerealState;
-  panel: number;
-  bowlConfirmed: boolean;
-  milkLevelConfirmed: boolean;
-}
 
 const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 
@@ -88,7 +81,7 @@ export default defineComponent({
 
   components: { ImageMapSelector },
 
-  mixins: [createBasePortion<'milk-on-cereal-prompt', MilkOnCerealPromptState>()],
+  mixins: [createBasePortion<'milk-on-cereal-prompt'>()],
 
   props: {
     bowlImageMapId: {
@@ -237,7 +230,7 @@ export default defineComponent({
       if (bowl && milkLevelIndex !== undefined)
         this.portionSize.servingWeight = this.calculateMilkWeight(bowl as Bowl, milkLevelIndex);
 
-      const state: MilkOnCerealPromptState = {
+      const state: PromptStates['milk-on-cereal-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         bowlConfirmed: this.bowlConfirmed,

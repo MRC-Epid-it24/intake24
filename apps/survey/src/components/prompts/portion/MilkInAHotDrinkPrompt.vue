@@ -45,24 +45,19 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption } from '@intake24/common/prompts';
-import type { EncodedFood, MilkInAHotDrinkState } from '@intake24/common/types';
+import type { ListOption, PromptStates } from '@intake24/common/prompts';
+import type { EncodedFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
 import { QuantityBadge } from './selectors';
-
-export interface MilkInAHotDrinkPromptState {
-  portionSize: MilkInAHotDrinkState;
-  panel: number;
-}
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',
 
   components: { QuantityBadge },
 
-  mixins: [createBasePortion<'milk-in-a-hot-drink-prompt', MilkInAHotDrinkPromptState>()],
+  mixins: [createBasePortion<'milk-in-a-hot-drink-prompt'>()],
 
   props: {
     parentFood: {
@@ -122,7 +117,7 @@ export default defineComponent({
     update() {
       const { portionSize, panel } = this;
 
-      const state: MilkInAHotDrinkPromptState = { portionSize, panel };
+      const state: PromptStates['milk-in-a-hot-drink-prompt'] = { portionSize, panel };
 
       this.$emit('update', { state });
     },

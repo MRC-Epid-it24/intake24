@@ -2,7 +2,7 @@
   <portion-size-option-prompt
     v-bind="{
       availableMethods,
-      food: food(),
+      food,
       initialState: state,
       parentFood,
       prompt,
@@ -17,8 +17,8 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
-import type { PortionSizeOptionState } from '@intake24/survey/components/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { EncodedFood } from '@intake24/common/types';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -39,10 +39,11 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, { emit }) {
-    const { encodedFood: food, parentFoodOptional: parentFood } = useFoodPromptUtils();
+    const { encodedFood, parentFoodOptional: parentFood } = useFoodPromptUtils();
+    const food = encodedFood();
 
-    const getInitialState = (): PortionSizeOptionState => ({
-      option: food().portionSizeMethodIndex,
+    const getInitialState = (): PromptStates['portion-size-option-prompt'] => ({
+      option: food.portionSizeMethodIndex,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -54,16 +55,25 @@ export default defineComponent({
     const survey = useSurvey();
 
     const availableMethods = computed(() =>
-      food().data.portionSizeMethods.filter((item) =>
+      food.data.portionSizeMethods.filter((item) =>
         survey.registeredPortionSizeMethods.includes(item.method)
       )
     );
 
     const commitAnswer = () => {
-      survey.updateFood({
-        foodId: food().id,
-        update: { portionSizeMethodIndex: state.value.option },
-      });
+      const update: Partial<Omit<EncodedFood, 'type'>> = {
+        portionSizeMethodIndex: state.value.option,
+      };
+
+      if (
+        food.portionSizeMethodIndex !== null &&
+        food.portionSizeMethodIndex !== state.value.option
+      ) {
+        update.portionSize = null;
+      }
+
+      survey.updateFood({ foodId: food.id, update });
+      survey.addFoodFlag({ foodId: food.id, flag: 'portion-size-option-complete' });
 
       clearStoredState();
     };
@@ -80,7 +90,6 @@ export default defineComponent({
       state,
       update,
       action,
-      clearStoredState,
       availableMethods,
     };
   },

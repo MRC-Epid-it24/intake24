@@ -1,3 +1,4 @@
+import type { Ref } from 'vue';
 import { computed } from 'vue';
 
 import type { FoodState } from '@intake24/common/types';
@@ -5,17 +6,18 @@ import { capitalize } from '@intake24/common/util';
 
 import { useLocale } from './use-locale';
 
-export const useFoodUtils = <T extends FoodState | undefined>(food?: T) => {
+export const useFoodUtils = <T extends FoodState | undefined>(food?: Ref<T>) => {
   const { getLocaleContent } = useLocale();
 
-  const getFoodName = (food: FoodState) => {
-    if (food.type === 'encoded-food') return getLocaleContent(food.data.localName);
-    if (food.type === 'missing-food') return capitalize(food.info?.name ?? food.searchTerm);
+  const getFoodName = (foodState: FoodState) => {
+    if (foodState.type === 'encoded-food') return getLocaleContent(foodState.data.localName);
+    if (foodState.type === 'missing-food')
+      return capitalize(foodState.info?.name ?? foodState.searchTerm);
 
-    return capitalize(food.description);
+    return capitalize(foodState.description);
   };
 
-  const foodName = computed(() => (food ? getFoodName(food) : undefined));
+  const foodName = computed(() => (food?.value ? getFoodName(food.value) : undefined));
 
   return {
     foodName,

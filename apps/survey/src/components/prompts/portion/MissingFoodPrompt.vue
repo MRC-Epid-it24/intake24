@@ -33,22 +33,18 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { VTextarea, VTextField } from 'vuetify/lib';
 
+import type { PromptStates } from '@intake24/common/prompts';
 import type { MissingFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-
-export interface MissingFoodPromptState {
-  info: NonNullable<MissingFood['info']>;
-  panel: number;
-}
 
 export default defineComponent({
   name: 'MissingFoodPrompt',
 
   components: { VTextField, VTextarea },
 
-  mixins: [createBasePortion<'missing-food-prompt', MissingFoodPromptState>()],
+  mixins: [createBasePortion<'missing-food-prompt'>()],
 
   props: {
     food: {
@@ -68,7 +64,7 @@ export default defineComponent({
         'description',
         'portionSize',
         'leftovers',
-      ] as (keyof MissingFoodPromptState['info'])[],
+      ] as (keyof MissingFood['info'])[],
     };
   },
 
@@ -84,7 +80,7 @@ export default defineComponent({
     },
 
     update() {
-      const state: MissingFoodPromptState = { info: this.info, panel: this.panel };
+      const state: PromptStates['missing-food-prompt'] = { info: this.info, panel: this.panel };
 
       this.$emit('update', { state });
     },

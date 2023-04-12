@@ -1,7 +1,7 @@
 import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
 
 import type { ComponentType } from '../prompts';
-import type { FoodHeader, UserFoodData } from './http';
+import type { UserFoodData } from './http';
 
 /*
 Not currently used:
@@ -23,6 +23,8 @@ export type FoodFlag =
   | 'ready-meal'
   | 'same-as-before-complete'
   | 'split-food-complete'
+  | 'portion-size-option-complete'
+  | 'portion-size-method-complete'
   | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
@@ -203,17 +205,6 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
   'milk-in-a-hot-drink',
   'weight',
 ];
-
-export interface AssociatedFoodPromptState {
-  confirmed: 'yes' | 'no' | 'existing' | undefined;
-  selectedFood: FoodHeader | undefined;
-  existingFoodId: string | undefined;
-}
-
-export interface AssociatedFoodsState {
-  activePrompt: number;
-  prompts: AssociatedFoodPromptState[];
-}
 
 export interface AbstractFoodState {
   id: string;

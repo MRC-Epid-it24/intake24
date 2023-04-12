@@ -1,28 +1,41 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
-      <confirm-dialog
-        v-if="food"
-        :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
-        @confirm="action('deleteFood', food?.id)"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn
-            :block="isMobile"
-            class="px-4"
-            color="secondary"
-            large
-            text
-            :title="$t('recall.actions.deleteFood')"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon left>$delete</v-icon>
-            {{ $t('recall.actions.deleteFood') }}
-          </v-btn>
-        </template>
-        {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
-      </confirm-dialog>
+      <template v-if="food">
+        <confirm-dialog
+          :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
+          @confirm="action('deleteFood', food?.id)"
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn
+              :block="isMobile"
+              class="px-4"
+              color="secondary"
+              large
+              text
+              :title="$t('recall.actions.deleteFood')"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon left>$delete</v-icon>
+              {{ $t('recall.actions.deleteFood') }}
+            </v-btn>
+          </template>
+          {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
+        </confirm-dialog>
+        <v-btn
+          :block="isMobile"
+          class="px-4"
+          color="secondary"
+          large
+          text
+          :title="$t('recall.actions.editFood')"
+          @click.stop="action('editFood', food?.id)"
+        >
+          <v-icon left>$edit</v-icon>
+          {{ $t('recall.actions.editFood') }}
+        </v-btn>
+      </template>
       <template v-if="meal">
         <confirm-dialog
           :label="$t('prompts.editMeal.delete._', { item: mealName }).toString()"
@@ -76,6 +89,13 @@
           </template>
           {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
         </confirm-dialog>
+        <v-divider vertical></v-divider>
+        <v-btn value="editFood" @click.stop="action('editFood', food?.id)">
+          <span class="text-overline font-weight-medium">
+            {{ $t('recall.actions.nav.editFood') }}
+          </span>
+          <v-icon class="pb-1">$edit</v-icon>
+        </v-btn>
         <v-divider vertical></v-divider>
       </template>
       <template v-if="meal">

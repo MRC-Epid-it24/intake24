@@ -332,7 +332,11 @@ const checkFoodStandardConditions = (
     }
 
     case 'portion-size-option-prompt': {
-      if (foodState.type === 'encoded-food' && foodState.portionSizeMethodIndex === null) {
+      if (
+        foodState.type === 'encoded-food' &&
+        (foodState.portionSizeMethodIndex === null ||
+          !foodState.flags.includes('portion-size-option-complete'))
+      ) {
         recallLog().promptCheck(
           component,
           true,
@@ -340,6 +344,7 @@ const checkFoodStandardConditions = (
         );
         return true;
       }
+
       recallLog().promptCheck(
         component,
         false,

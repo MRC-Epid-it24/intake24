@@ -1,7 +1,7 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
-import type { Prompt, Prompts } from '@intake24/common/prompts';
+import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
@@ -10,7 +10,7 @@ import { promptType } from '@intake24/survey/util';
 import { Next } from '../actions';
 import { BaseLayout, CardLayout } from '../layouts';
 
-export default <P extends keyof Prompts, S extends object>() =>
+export default <P extends keyof Prompts & keyof PromptStates>() =>
   defineComponent({
     name: 'BasePortion',
 
@@ -25,7 +25,7 @@ export default <P extends keyof Prompts, S extends object>() =>
         type: Object as PropType<EncodedFood>,
       },
       initialState: {
-        type: Object as PropType<S>,
+        type: Object as PropType<PromptStates[P]>,
         required: true,
       },
       prompt: {
@@ -37,8 +37,10 @@ export default <P extends keyof Prompts, S extends object>() =>
     emits: ['action'],
 
     setup(props) {
+      const { food } = toRefs(props);
+
       const { getLocaleContent } = useLocale();
-      const { foodName } = useFoodUtils(props.food);
+      const { foodName } = useFoodUtils(food);
 
       return { foodName, getLocaleContent };
     },

@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
@@ -36,8 +36,10 @@ export default defineComponent({
   emits: ['food-selected', 'meal-selected', 'meal-action'],
 
   setup(props) {
+    const { meal } = toRefs(props);
+
     const { getLocaleContent } = useLocale();
-    const { mealName } = useMealUtils(props.meal);
+    const { mealName } = useMealUtils(meal);
 
     const icon = ref('$edit');
 

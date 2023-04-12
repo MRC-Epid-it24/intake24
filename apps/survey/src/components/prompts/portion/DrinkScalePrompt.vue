@@ -103,7 +103,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { DrinkScaleState, PortionSizeParameters } from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import type {
   DrinkwareSetResponse,
   DrinkwareVolumeSampleResponse,
@@ -115,21 +116,12 @@ import { YesNoToggle } from '@intake24/survey/components/elements';
 import createBasePortion from './createBasePortion';
 import { calculateVolume, DrinkScalePanel, ImageMapSelector, QuantityBadge } from './selectors';
 
-export interface DrinkScalePromptState {
-  portionSize: DrinkScaleState;
-  panel: number;
-  objectConfirmed: boolean;
-  quantityConfirmed: boolean;
-  leftoversConfirmed: boolean;
-  leftoversPrompt?: boolean;
-}
-
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
   components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, YesNoToggle },
 
-  mixins: [createBasePortion<'drink-scale-prompt', DrinkScalePromptState>()],
+  mixins: [createBasePortion<'drink-scale-prompt'>()],
 
   props: {
     parameters: {
@@ -316,7 +308,7 @@ export default defineComponent({
         );
       }
 
-      const state: DrinkScalePromptState = {
+      const state: PromptStates['drink-scale-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         objectConfirmed: this.objectConfirmed,

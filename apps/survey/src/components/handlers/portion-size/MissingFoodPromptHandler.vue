@@ -12,11 +12,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
-import type { MissingFoodPromptState } from '@intake24/survey/components/prompts/portion';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { MissingFoodPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -36,11 +34,11 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const { missingFood: food } = useFoodPromptUtils();
 
-    const getInitialState = (): MissingFoodPromptState => ({
-      info: {
+    const getInitialState = (): PromptStates['missing-food-prompt'] => ({
+      info: food().info ?? {
         name: food().searchTerm,
         brand: '',
         description: '',
@@ -56,35 +54,24 @@ export default defineComponent({
       getInitialState
     );
 
-    return {
-      food,
-      state,
-      update,
-      clearStoredState,
-    };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['updateFood']),
-
-    action(type: string, id?: string) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, id);
-    },
-
-    commitAnswer() {
-      const {
-        state: { info },
-      } = this;
+    const commitAnswer = () => {
+      const { info } = state.value;
 
       if (Object.values(info).some((value) => !value))
         throw new Error('Missing food prompt: missing data');
 
-      this.updateFood({ foodId: this.food().id, update: { info } });
+      useSurvey().updateFood({ foodId: food().id, update: { info } });
 
-      this.clearStoredState();
-    },
+      clearStoredState();
+    };
+
+    const action = (type: string, id?: string) => {
+      if (type === 'next') commitAnswer();
+
+      emit('action', type, id);
+    };
+
+    return { food, state, update, action };
   },
 });
 </script>

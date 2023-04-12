@@ -1,3 +1,4 @@
+import type { Ref } from 'vue';
 import { computed } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
@@ -5,21 +6,21 @@ import type { MealState } from '@intake24/common/types';
 import { fromMealTime } from '../util';
 import { useLocale } from './use-locale';
 
-export const useMealUtils = <T extends MealState | undefined>(meal?: T) => {
+export const useMealUtils = <T extends MealState | undefined>(meal?: Ref<T>) => {
   const { getLocaleContent } = useLocale();
 
-  const getMealName = (meal: MealState) => getLocaleContent(meal.name);
+  const getMealName = (mealState: MealState) => getLocaleContent(mealState.name);
 
-  const mealName = computed(() => (meal ? getMealName(meal) : undefined));
+  const mealName = computed(() => (meal?.value ? getMealName(meal.value) : undefined));
 
-  const getMealTime = (meal?: MealState) =>
-    meal?.time ? fromMealTime(meal.time, true) : undefined;
+  const getMealTime = (mealState?: MealState) =>
+    mealState?.time ? fromMealTime(mealState.time, true) : undefined;
 
-  const mealTime = computed(() => getMealTime(meal));
+  const mealTime = computed(() => getMealTime(meal?.value));
 
-  const getMealNameWithTime = (meal: MealState) => {
-    const mealName = getMealName(meal);
-    const mealTime = getMealTime(meal);
+  const getMealNameWithTime = (mealState: MealState) => {
+    const mealName = getMealName(mealState);
+    const mealTime = getMealTime(mealState);
 
     return mealName && mealTime ? `${mealName} (${mealTime})` : mealName;
   };

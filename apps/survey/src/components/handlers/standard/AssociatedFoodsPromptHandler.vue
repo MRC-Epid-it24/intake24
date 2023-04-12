@@ -17,13 +17,12 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
 import type {
-  AssociatedFoodPromptState,
-  AssociatedFoodsState,
-  EncodedFood,
-  FoodState,
-} from '@intake24/common/types';
+  AssociatedFoodPromptItemState,
+  Prompts,
+  PromptStates,
+} from '@intake24/common/prompts';
+import type { EncodedFood, FoodState } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
@@ -32,7 +31,7 @@ import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (): AssociatedFoodPromptState => ({
+const initialPromptState = (): AssociatedFoodPromptItemState => ({
   confirmed: undefined,
   selectedFood: undefined,
   existingFoodId: undefined,
@@ -55,7 +54,7 @@ export default defineComponent({
   setup(props) {
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
 
-    const getInitialState = (): AssociatedFoodsState => {
+    const getInitialState = (): PromptStates['associated-foods-prompt'] => {
       return {
         activePrompt: 0,
         prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
@@ -127,18 +126,22 @@ export default defineComponent({
 
       const foodData = await this.fetchFoodData(newFoods);
 
-      const linkedFoods: EncodedFood[] = foodData.map((data) => ({
-        type: 'encoded-food',
-        id: getEntityId(),
-        flags: [],
-        linkedFoods: [],
-        customPromptAnswers: {},
-        data,
-        searchTerm: 'associated food prompt',
-        portionSizeMethodIndex: null,
-        portionSize: null,
-        associatedFoodsComplete: false,
-      }));
+      const linkedFoods: EncodedFood[] = foodData.map((data) => {
+        const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
+
+        return {
+          type: 'encoded-food',
+          id: getEntityId(),
+          flags: hasOnePortionSizeMethod ? ['portion-size-option-complete'] : [],
+          linkedFoods: [],
+          customPromptAnswers: {},
+          data,
+          searchTerm: 'associated food prompt',
+          portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+          portionSize: null,
+          associatedFoodsComplete: false,
+        };
+      });
 
       linkedFoods.push(...moveFoods);
 

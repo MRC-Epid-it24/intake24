@@ -1,6 +1,11 @@
 <template>
   <card-layout v-bind="{ food, prompt, isValid }" @action="action">
-    <v-item-group v-if="availableMethods.length" v-model="option">
+    <v-item-group
+      v-if="availableMethods.length"
+      v-model="option"
+      :mandatory="optionValid"
+      @change="change"
+    >
       <v-container>
         <v-row>
           <v-col
@@ -10,15 +15,24 @@
             md="4"
             sm="6"
           >
-            <v-item v-slot="{ toggle }">
-              <v-card border-color="primary" hover outlined @click="toggle">
+            <v-item v-slot="{ active, toggle }">
+              <v-card
+                border-color="primary"
+                :color="active ? 'orange lighten-5' : ''"
+                hover
+                outlined
+                @click="click(toggle)"
+              >
                 <v-img :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
                   <template #placeholder>
                     <image-placeholder></image-placeholder>
                   </template>
                 </v-img>
                 <v-card-actions class="d-flex justify-end">
-                  <v-chip class="font-weight-medium px-4" color="orange lighten-5">
+                  <v-chip
+                    class="font-weight-medium px-4"
+                    :color="option === index ? 'secondary' : 'orange lighten-5'"
+                  >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
                 </v-card-actions>
@@ -31,8 +45,7 @@
     <v-alert v-else border="left" outlined type="warning">
       {{ $t('prompts.unknown.text', { food: foodName }) }}
     </v-alert>
-    <template #actions>
-      <!-- Should not have actions -> only click & select -->
+    <template v-if="!optionValid" #actions>
       <div></div>
     </template>
   </card-layout>
@@ -42,21 +55,18 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 
 import { ImagePlaceholder } from '../../elements';
 import createBasePortion from './createBasePortion';
-
-export interface PortionSizeOptionState {
-  option: number | null;
-}
 
 export default defineComponent({
   name: 'PortionSizeOptionPrompt',
 
   components: { ImagePlaceholder },
 
-  mixins: [createBasePortion<'portion-size-option-prompt', PortionSizeOptionState>()],
+  mixins: [createBasePortion<'portion-size-option-prompt'>()],
 
   props: {
     availableMethods: {
@@ -69,34 +79,47 @@ export default defineComponent({
 
   data() {
     return {
-      option: this.initialState?.option ?? undefined,
+      option: this.initialState.option ?? undefined,
     };
   },
 
   computed: {
-    validConditions(): boolean[] {
-      return [false];
+    optionValid() {
+      return this.option !== undefined;
     },
-  },
 
-  watch: {
-    option(val) {
-      this.clearErrors();
-
-      if (val === undefined) return;
-
-      this.update();
-      this.action('next');
+    validConditions(): boolean[] {
+      return [this.optionValid];
     },
   },
 
   mounted() {
-    if (this.option === undefined && this.availableMethods.length === 1) this.option = 0;
+    if (!this.optionValid && this.availableMethods.length === 1) {
+      this.option = 0;
+      this.change();
+      this.action('next');
+    }
   },
 
   methods: {
+    click(toggle: () => void) {
+      toggle();
+
+      if (!this.optionValid) return;
+
+      this.action('next');
+    },
+
+    change() {
+      this.clearErrors();
+
+      if (!this.optionValid) return;
+
+      this.update();
+    },
+
     update() {
-      const state: PortionSizeOptionState = { option: this.option ?? null };
+      const state: PromptStates['portion-size-option-prompt'] = { option: this.option ?? null };
 
       this.$emit('update', { state });
     },

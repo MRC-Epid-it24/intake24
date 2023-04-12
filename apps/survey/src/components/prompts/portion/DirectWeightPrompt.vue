@@ -23,7 +23,7 @@ import createBasePortion from './createBasePortion';
 export default defineComponent({
   name: 'DirectWeightPrompt',
 
-  mixins: [createBasePortion<'direct-weight-prompt', any>()],
+  mixins: [createBasePortion<'direct-weight-prompt'>()],
 
   data() {
     return {

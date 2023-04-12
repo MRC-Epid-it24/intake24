@@ -64,12 +64,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
+import type { PromptStates } from '@intake24/common/prompts';
 import type {
   PortionSizeParameters,
   RequiredLocaleTranslation,
-  StandardPortionState,
   StandardPortionUnit,
 } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
@@ -84,18 +84,12 @@ export type StandardUnitRefs = Record<
   { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
 >;
 
-export type StandardPortionPromptState = {
-  portionSize: StandardPortionState;
-  panel: number;
-  quantityConfirmed: boolean;
-};
-
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
   components: { QuantityCard },
 
-  mixins: [createBasePortion<'standard-portion-prompt', StandardPortionPromptState>()],
+  mixins: [createBasePortion<'standard-portion-prompt'>()],
 
   props: {
     conversionFactor: {
@@ -111,8 +105,10 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
+    const { food } = toRefs(props);
+
     const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(props.food);
+    const { foodName } = useFoodUtils(food);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     return { standardUnitRefs, fetchStandardUnits, getLocaleContent, foodName };
@@ -194,7 +190,7 @@ export default defineComponent({
       this.portionSize.servingWeight =
         (portionSize.unit?.weight ?? 0) * portionSize.quantity * this.conversionFactor;
 
-      const state: StandardPortionPromptState = {
+      const state: PromptStates['standard-portion-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         quantityConfirmed: this.quantityConfirmed,

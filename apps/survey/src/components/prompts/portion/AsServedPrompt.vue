@@ -96,13 +96,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
-import type {
-  AsServedState,
-  PortionSizeParameters,
-  SelectedAsServedImage,
-} from '@intake24/common/types';
+import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
@@ -111,22 +108,12 @@ import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
 import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
 
-export interface AsServedPromptState {
-  portionSize: AsServedState;
-  panel: number;
-  servingImageConfirmed: boolean;
-  leftoversImageConfirmed: boolean;
-  leftoversPrompt?: boolean;
-  linkedQuantity: number;
-  linkedQuantityConfirmed: boolean;
-}
-
 export default defineComponent({
   name: 'AsServedPrompt',
 
   components: { AsServedSelector, QuantityBadge, QuantityCard, YesNoToggle },
 
-  mixins: [createBasePortion<'as-served-prompt', AsServedPromptState>()],
+  mixins: [createBasePortion<'as-served-prompt'>()],
 
   props: {
     parameters: {
@@ -138,8 +125,10 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
+    const { food } = toRefs(props);
+
     const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(props.food);
+    const { foodName } = useFoodUtils(food);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     return { standardUnitRefs, fetchStandardUnits, foodName, getLocaleContent };
@@ -266,7 +255,7 @@ export default defineComponent({
       this.portionSize.leftoversWeight =
         (this.portionSize.leftovers?.weight ?? 0) * this.linkedQuantity;
 
-      const state: AsServedPromptState = {
+      const state: PromptStates['as-served-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         servingImageConfirmed: this.servingImageConfirmed,

@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
@@ -37,9 +37,11 @@ export default defineComponent({
   emits: ['action', 'update:navTab'],
 
   setup(props) {
+    const { food, meal } = toRefs(props);
+
     const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(props.food);
-    const { mealName, mealTime, mealNameWithTime } = useMealUtils(props.meal);
+    const { foodName } = useFoodUtils(food);
+    const { mealName, mealTime, mealNameWithTime } = useMealUtils(meal);
 
     return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime };
   },
