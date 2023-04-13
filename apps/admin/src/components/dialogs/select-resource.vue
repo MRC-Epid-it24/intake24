@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 import { getResource } from '@intake24/admin/router/resources';
@@ -112,10 +112,11 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props) {
+    const { resource } = toRefs(props);
     const selectedItemId = ref<string | null>(null);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
-      `/admin/references/${props.resource}`
+      `/admin/references/${resource.value}`
     );
 
     return {

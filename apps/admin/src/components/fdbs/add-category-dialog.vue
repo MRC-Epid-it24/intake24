@@ -87,7 +87,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 
 import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
 import type { CategoryAttributes } from '@intake24/common/types/models';
@@ -115,11 +115,12 @@ export default defineComponent({
   emits: ['add'],
 
   setup(props) {
+    const { localeId } = toRefs(props);
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
       (CategoriesResponse | MainCategoriesResponse)['data'][number]
-    >(props.localeId ? 'admin/fdbs/:id/categories' : 'admin/categories', props.localeId);
+    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },
