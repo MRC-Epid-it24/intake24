@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  FoodGroupLocalAttributes,
-  FoodGroupLocalCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { FoodGroup, FoodsLocale } from '.';
@@ -15,38 +18,41 @@ import { FoodGroup, FoodsLocale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class FoodGroupLocal
-  extends BaseModel<FoodGroupLocalAttributes, FoodGroupLocalCreationAttributes>
-  implements FoodGroupLocalAttributes
-{
+export default class FoodGroupLocal extends BaseModel<
+  InferAttributes<FoodGroupLocal>,
+  InferCreationAttributes<FoodGroupLocal>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodGroupId!: string;
+  declare foodGroupId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public name!: string;
+  declare name: string;
 
   @BelongsTo(() => FoodGroup, 'foodGroupId')
-  public group?: FoodGroup;
+  declare group?: NonAttribute<FoodGroup>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 }
+
+export type FoodGroupLocalAttributes = Attributes<FoodGroupLocal>;
+export type FoodGroupLocalCreationAttributes = CreationAttributes<FoodGroupLocal>;

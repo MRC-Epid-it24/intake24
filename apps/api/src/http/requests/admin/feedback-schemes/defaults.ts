@@ -3,8 +3,7 @@ import type { ParamSchema, Schema } from 'express-validator';
 import has from 'lodash/has';
 import validator from 'validator';
 
-import type { FeedbackSchemeAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { FeedbackSchemeAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import {

@@ -3,8 +3,7 @@ import type {
   CreateRespondentInput,
   UpdateRespondentInput,
 } from '@intake24/common/types/http/admin';
-import type { UserCustomFieldAttributes } from '@intake24/common/types/models';
-import type { Job } from '@intake24/db';
+import type { Job, UserCustomFieldCreationAttributes } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import { surveyRespondent } from '@intake24/common/security';
@@ -143,7 +142,7 @@ const adminSurveyService = ({
 
     return db.system.transaction(async (transaction) => {
       const aliasRecords = [];
-      const customFieldsRecords: Omit<UserCustomFieldAttributes, 'id'>[] = [];
+      const customFieldsRecords: UserCustomFieldCreationAttributes[] = [];
       const passwordRecords = [];
       const permissionRecords = [];
 

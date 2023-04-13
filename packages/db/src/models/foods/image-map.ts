@@ -1,6 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
-import type { ImageMapAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { GuideImage, ImageMapObject, ProcessedImage } from '.';
@@ -17,32 +22,38 @@ import { GuideImage, ImageMapObject, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMap extends BaseModel<ImageMapAttributes> implements ImageMapAttributes {
+export default class ImageMap extends BaseModel<
+  InferAttributes<ImageMap>,
+  InferCreationAttributes<ImageMap>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public baseImageId!: string;
+  declare baseImageId: string;
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')
-  public baseImage?: ProcessedImage;
+  declare baseImage?: NonAttribute<ProcessedImage>;
 
   @HasMany(() => GuideImage, 'imageMapId')
-  public guideImages?: GuideImage[];
+  declare guideImages?: NonAttribute<GuideImage[]>;
 
   @HasMany(() => ImageMapObject, 'imageMapId')
-  public objects?: ImageMapObject[];
+  declare objects?: NonAttribute<ImageMapObject[]>;
 }
+
+export type ImageMapAttributes = Attributes<ImageMap>;
+export type ImageMapCreationAttributes = CreationAttributes<ImageMap>;

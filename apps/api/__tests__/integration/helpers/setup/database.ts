@@ -7,7 +7,7 @@ import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
 } from '@intake24/common/feedback';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/surveys';
 import {
   FeedbackScheme,
   FoodIndexBackend,

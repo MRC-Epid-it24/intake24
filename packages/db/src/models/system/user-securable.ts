@@ -1,10 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { SecurableType } from '@intake24/common/security';
-import type {
-  UserSecurableAttributes,
-  UserSecurableCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -15,44 +18,44 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSecurable
-  extends BaseModel<UserSecurableAttributes, UserSecurableCreationAttributes>
-  implements UserSecurableAttributes
-{
+export default class UserSecurable extends BaseModel<
+  InferAttributes<UserSecurable>,
+  InferCreationAttributes<UserSecurable>
+> {
   @ForeignKey(() => User)
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public securableId!: string;
+  declare securableId: string;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(64),
   })
-  public securableType!: SecurableType;
+  declare securableType: SecurableType;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(64),
   })
-  public action!: string;
+  declare action: string;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  get fields(): string[] | null {
+  get fields(): CreationOptional<string[] | null> {
     const val = this.getDataValue('fields') as unknown;
     return val ? JSON.parse(val as string) : null;
   }
@@ -63,10 +66,11 @@ export default class UserSecurable
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
+
+export type UserSecurableAttributes = Attributes<UserSecurable>;
+export type UserSecurableCreationAttributes = CreationAttributes<UserSecurable>;

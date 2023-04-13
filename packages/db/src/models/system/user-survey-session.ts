@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { SurveyState } from '@intake24/common/types';
-import type {
-  UserSurveySessionAttributes,
-  UserSurveySessionCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Survey, User } from '.';
@@ -15,23 +19,23 @@ import { Survey, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSurveySession
-  extends BaseModel<UserSurveySessionAttributes, UserSurveySessionCreationAttributes>
-  implements UserSurveySessionAttributes
-{
+export default class UserSurveySession extends BaseModel<
+  InferAttributes<UserSurveySession>,
+  InferCreationAttributes<UserSurveySession>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public surveyId!: string;
+  declare surveyId: string;
 
   @Column({
     allowNull: false,
@@ -48,16 +52,17 @@ export default class UserSurveySession
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey;
+  declare survey?: NonAttribute<Survey>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type UserSurveySessionAttributes = Attributes<UserSurveySession>;
+export type UserSurveySessionCreationAttributes = CreationAttributes<UserSurveySession>;

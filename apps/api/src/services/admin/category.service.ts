@@ -5,10 +5,11 @@ import type { CategoryInput, CategoryListEntry } from '@intake24/common/types/ht
 import type {
   CategoryAttributes,
   CategoryLocalAttributes,
-  CategoryPortionSizeMethodUpdateAttributes,
-  PortionSizeMethodParameterUpdateAttributes,
-} from '@intake24/common/types/models';
-import type { FindOptions, PaginateQuery, Transaction } from '@intake24/db';
+  CategoryPortionSizeMethodParameterCreationAttributes,
+  FindOptions,
+  PaginateQuery,
+  Transaction,
+} from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
 import {
@@ -222,7 +223,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const updateParameters = async (
     portionSizeMethodId: string,
     parameters: CategoryPortionSizeMethodParameter[],
-    inputs: PortionSizeMethodParameterUpdateAttributes[],
+    inputs: CategoryPortionSizeMethodParameterCreationAttributes[],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
@@ -260,7 +261,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const updatePortionSizeMethods = async (
     categoryLocalId: string,
     methods: CategoryPortionSizeMethod[],
-    inputs: CategoryPortionSizeMethodUpdateAttributes[],
+    inputs: CategoryInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];

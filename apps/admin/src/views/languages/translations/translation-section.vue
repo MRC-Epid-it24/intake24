@@ -20,7 +20,7 @@ import {
   VToolbarTitle,
 } from 'vuetify/lib';
 
-import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
+import type { LanguageTranslationAttributes } from '@intake24/db';
 import { copy } from '@intake24/common/util';
 
 import IntersectableSkeleton from './intersectable-skeleton.vue';

@@ -1,5 +1,5 @@
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
-import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 
 import http from './http.service';
 

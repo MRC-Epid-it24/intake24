@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
-import type {
-  FoodAttributeAttributes,
-  FoodAttributeCreationAttributes,
-  UseInRecipeType,
-} from '@intake24/common/types/models';
+import type { UseInRecipeType } from '@intake24/common/types';
 
 import BaseModel from '../model';
 import Food from './food';
@@ -19,47 +23,50 @@ import Food from './food';
   timestamps: false,
   underscored: true,
 })
-export default class FoodAttribute
-  extends BaseModel<FoodAttributeAttributes, FoodAttributeCreationAttributes>
-  implements FoodAttributeAttributes
-{
+export default class FoodAttribute extends BaseModel<
+  InferAttributes<FoodAttribute>,
+  InferCreationAttributes<FoodAttribute>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @Column({
     allowNull: true,
     type: DataType.BOOLEAN,
   })
-  public sameAsBeforeOption!: boolean | null;
+  declare sameAsBeforeOption: CreationOptional<boolean | null>;
 
   @Column({
     allowNull: true,
     type: DataType.BOOLEAN,
   })
-  public readyMealOption!: boolean | null;
+  declare readyMealOption: CreationOptional<boolean | null>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public reasonableAmount!: number | null;
+  declare reasonableAmount: CreationOptional<number | null>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: UseInRecipeType | null;
+  declare useInRecipes: CreationOptional<UseInRecipeType | null>;
 
   @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  declare food?: NonAttribute<Food>;
 }
+
+export type FoodAttributeAttributes = Attributes<FoodAttribute>;
+export type FoodAttributeCreationAttributes = CreationAttributes<FoodAttribute>;

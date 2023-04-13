@@ -1,4 +1,4 @@
-import type { JobAttributes, Pagination, UserAttributes } from '../../models';
+import type { JobAttributes, Pagination, UserAttributes } from '@intake24/db';
 
 export type JobsResponse = Pagination<JobAttributes>;
 

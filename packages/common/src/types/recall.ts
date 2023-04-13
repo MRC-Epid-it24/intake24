@@ -209,7 +209,6 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
 export interface AbstractFoodState {
   id: string;
   flags: string[];
-  // eslint-disable-next-line no-use-before-define
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   type: 'free-text' | 'encoded-food' | 'missing-food';

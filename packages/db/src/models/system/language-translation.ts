@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { Application } from '@intake24/common/types';
-import type {
-  LanguageTranslationAttributes,
-  LanguageTranslationCreationAttributes,
-} from '@intake24/common/types/models';
 import type { LocaleMessageObject } from '@intake24/i18n';
 
 import BaseModel from '../model';
@@ -16,37 +20,37 @@ import { Language } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class LanguageTranslation
-  extends BaseModel<LanguageTranslationAttributes, LanguageTranslationCreationAttributes>
-  implements LanguageTranslationAttributes
-{
+export default class LanguageTranslation extends BaseModel<
+  InferAttributes<LanguageTranslation>,
+  InferCreationAttributes<LanguageTranslation>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
     unique: 'language_translations_unique',
   })
-  public languageId!: string;
+  declare languageId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
     unique: 'language_translations_unique',
   })
-  public application!: Application;
+  declare application: Application;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
     unique: 'language_translations_unique',
   })
-  public section!: string;
+  declare section: string;
 
   @Column({
     allowNull: false,
@@ -63,13 +67,14 @@ export default class LanguageTranslation
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => Language, 'languageId')
-  public language?: Language[];
+  declare language?: NonAttribute<Language[]>;
 }
+
+export type LanguageTranslationAttributes = Attributes<LanguageTranslation>;
+export type LanguageTranslationCreationAttributes = CreationAttributes<LanguageTranslation>;

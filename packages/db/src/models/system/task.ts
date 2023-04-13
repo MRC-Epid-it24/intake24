@@ -1,7 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
-import type { TaskAttributes, TaskCreationAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -11,48 +17,45 @@ import BaseModel from '../model';
   freezeTableName: true,
   underscored: true,
 })
-export default class Task
-  extends BaseModel<TaskAttributes, TaskCreationAttributes>
-  implements TaskAttributes
-{
+export default class Task extends BaseModel<InferAttributes<Task>, InferCreationAttributes<Task>> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public job!: JobType;
+  declare job: JobType;
 
   @Column({
     allowNull: false,
     defaultValue: '0 * * * *',
     type: DataType.STRING(16),
   })
-  public cron!: string;
+  declare cron: string;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
     defaultValue: false,
   })
-  public active!: boolean;
+  declare active: CreationOptional<boolean>;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  public description!: string | null;
+  declare description: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
@@ -69,10 +72,11 @@ export default class Task
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
+
+export type TaskAttributes = Attributes<Task>;
+export type TaskCreationAttributes = CreationAttributes<Task>;

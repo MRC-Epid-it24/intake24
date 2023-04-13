@@ -1,7 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 
 import type { Sex, WeightTarget } from '@intake24/common/feedback';
-import type { UserPhysicalDataAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -13,41 +19,41 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserPhysicalData
-  extends BaseModel<UserPhysicalDataAttributes>
-  implements UserPhysicalDataAttributes
-{
+export default class UserPhysicalData extends BaseModel<
+  InferAttributes<UserPhysicalData>,
+  InferCreationAttributes<UserPhysicalData>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public sex!: Sex | null;
+  declare sex: Sex | null;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public weightKg!: number | null;
+  declare weightKg: number | null;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public heightCm!: number | null;
+  declare heightCm: number | null;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public physicalActivityLevelId!: string | null;
+  declare physicalActivityLevelId: string | null;
 
   @Column({
     allowNull: true,
@@ -74,8 +80,11 @@ export default class UserPhysicalData
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public weightTarget!: WeightTarget | null;
+  declare weightTarget: WeightTarget | null;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User[];
+  declare user?: NonAttribute<User[]>;
 }
+
+export type UserPhysicalDataAttributes = Attributes<UserPhysicalData>;
+export type UserPhysicalDataCreationAttributes = CreationAttributes<UserPhysicalData>;

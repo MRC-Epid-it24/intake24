@@ -1,35 +1,45 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type { CategoryCategoryAttributes } from '@intake24/common/types/models';
 import { Category } from '@intake24/db';
 
 import BaseModel from '../model';
 
 @Table({
+  modelName: 'CategoryCategory',
+  tableName: 'categories_categories',
   timestamps: false,
   underscored: true,
   freezeTableName: true,
-  tableName: 'categories_categories',
 })
-export default class CategoryCategory
-  extends BaseModel<CategoryCategoryAttributes>
-  implements CategoryCategoryAttributes
-{
+export default class CategoryCategory extends BaseModel<
+  InferAttributes<CategoryCategory>,
+  InferCreationAttributes<CategoryCategory>
+> {
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public subcategoryCode!: string;
+  declare subcategoryCode: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public categoryCode!: string;
+  declare categoryCode: string;
 
   @BelongsTo(() => Category, 'subcategoryCode')
-  public subcategory?: Category;
+  declare subcategory?: NonAttribute<Category>;
 
   @BelongsTo(() => Category, 'categoryCode')
-  public category?: Category;
+  declare category?: NonAttribute<Category>;
 }
+
+export type CategoryCategoryAttributes = Attributes<CategoryCategory>;
+export type CategoryCategoryCreationAttributes = CreationAttributes<CategoryCategory>;

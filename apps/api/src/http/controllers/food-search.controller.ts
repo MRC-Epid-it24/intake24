@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
 import { NotFoundError } from '@intake24/api/http/errors';
 

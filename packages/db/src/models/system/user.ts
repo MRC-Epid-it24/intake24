@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { uniqBy } from 'lodash';
 import {
   BelongsToMany,
@@ -10,8 +18,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type { UserAttributes, UserCreationAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import {
@@ -66,126 +72,121 @@ import {
   freezeTableName: true,
   underscored: true,
 })
-export default class User
-  extends BaseModel<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
-{
+export default class User extends BaseModel<InferAttributes<User>, InferCreationAttributes<User>> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public name!: string | null;
+  declare name: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public email!: string | null;
+  declare email: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(32),
   })
-  public phone!: string | null;
+  declare phone: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public simpleName!: string | null;
+  declare simpleName: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
     defaultValue: false,
   })
-  public multiFactorAuthentication!: boolean;
+  declare multiFactorAuthentication: CreationOptional<boolean>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
     defaultValue: true,
   })
-  public emailNotifications!: boolean;
+  declare emailNotifications: CreationOptional<boolean>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
     defaultValue: true,
   })
-  public smsNotifications!: boolean;
+  declare smsNotifications: CreationOptional<boolean>;
 
   @Column({
     allowNull: true,
     type: DataType.DATE,
   })
-  public verifiedAt!: Date | null;
+  declare verifiedAt: CreationOptional<Date | null>;
 
   @Column({
     allowNull: true,
     type: DataType.DATE,
   })
-  public disabledAt!: Date | null;
+  declare disabledAt: CreationOptional<Date | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @HasMany(() => UserSurveyAlias, 'userId')
-  public aliases?: UserSurveyAlias[];
+  declare aliases?: NonAttribute<UserSurveyAlias[]>;
 
   @HasMany(() => ClientErrorReport, 'userId')
-  public clientErrors?: ClientErrorReport[];
+  declare clientErrors?: NonAttribute<ClientErrorReport[]>;
 
   @HasMany(() => UserCustomField, 'userId')
-  public customFields?: UserCustomField[];
+  declare customFields?: NonAttribute<UserCustomField[]>;
 
   @HasMany(() => Job, 'userId')
-  public jobs?: Job[];
+  declare jobs?: NonAttribute<Job[]>;
 
   @HasMany(() => MFADevice, 'userId')
-  public mfaDevices?: MFADevice[];
+  declare mfaDevices?: NonAttribute<MFADevice[]>;
 
   @HasOne(() => UserPassword, 'userId')
-  public password?: UserPassword;
+  declare password?: NonAttribute<UserPassword>;
 
   @HasMany(() => UserPasswordReset, 'userId')
-  public passwordResets?: UserPasswordReset[];
+  declare passwordResets?: NonAttribute<UserPasswordReset[]>;
 
   @BelongsToMany(() => Permission, () => PermissionUser)
-  public permissions?: Permission[];
+  declare permissions?: NonAttribute<Permission[]>;
 
   @HasOne(() => UserPhysicalData)
-  public physicalData?: UserPhysicalData;
+  declare physicalData?: NonAttribute<UserPhysicalData>;
 
   @BelongsToMany(() => Role, () => RoleUser)
-  public roles?: Role[];
+  declare roles?: NonAttribute<Role[]>;
 
   @HasMany(() => UserSurveySession, 'userId')
-  public sessions?: UserSurveySession[];
+  declare sessions?: NonAttribute<UserSurveySession[]>;
 
   @HasMany(() => SignInLog, 'userId')
-  public signInLog?: SignInLog[];
+  declare signInLog?: NonAttribute<SignInLog[]>;
 
   @HasMany(() => SurveySubmission, 'userId')
-  public submissions?: SurveySubmission[];
+  declare submissions?: NonAttribute<SurveySubmission[]>;
 
   @HasMany(() => UserSubscription, 'userId')
-  public subscription?: UserSubscription[];
+  declare subscription?: NonAttribute<UserSubscription[]>;
 
   @HasMany(() => RefreshToken, 'userId')
-  public tokens?: RefreshToken[];
+  declare tokens?: NonAttribute<RefreshToken[]>;
 
   @BelongsToMany(() => FeedbackScheme, {
     through: {
@@ -196,13 +197,13 @@ export default class User
     otherKey: 'securableId',
     constraints: false,
   })
-  public feedbackSchemes?: FeedbackScheme[];
+  declare feedbackSchemes?: NonAttribute<FeedbackScheme[]>;
 
   @HasMany(() => UserSecurable, {
     foreignKey: 'userId',
     constraints: false,
   })
-  public securables?: UserSecurable[];
+  declare securables?: NonAttribute<UserSecurable[]>;
 
   @BelongsToMany(() => SurveyScheme, {
     through: {
@@ -213,7 +214,7 @@ export default class User
     otherKey: 'securableId',
     constraints: false,
   })
-  public surveySchemes?: SurveyScheme[];
+  declare surveySchemes?: NonAttribute<SurveyScheme[]>;
 
   @BelongsToMany(() => Survey, {
     through: {
@@ -224,13 +225,13 @@ export default class User
     otherKey: 'securableId',
     constraints: false,
   })
-  public surveys?: Survey[];
+  declare surveys?: NonAttribute<Survey[]>;
 
-  public allRoles(): Role[] {
+  allRoles(): Role[] {
     return uniqBy(this.roles, 'name');
   }
 
-  public hasRole(role: string | string[], key: 'id' | 'name' = 'name'): boolean {
+  hasRole(role: string | string[], key: 'id' | 'name' = 'name'): boolean {
     if (!this.roles || !this.roles.length) return false;
 
     if (Array.isArray(role)) {
@@ -241,13 +242,13 @@ export default class User
     return !!this.roles.find((item) => item[key] === role);
   }
 
-  public hasAnyRole(roles: string[], key: 'id' | 'name' = 'name'): boolean {
+  hasAnyRole(roles: string[], key: 'id' | 'name' = 'name'): boolean {
     if (!this.roles || !this.roles.length) return false;
 
     return this.roles.some((item) => roles.includes(item[key]));
   }
 
-  public allPermissions(): Permission[] {
+  allPermissions(): Permission[] {
     const { permissions = [], roles = [] } = this;
 
     roles.forEach((item) => {
@@ -257,7 +258,7 @@ export default class User
     return uniqBy(permissions, 'name');
   }
 
-  public hasPermission(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
+  hasPermission(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
     if (!permissions.length) return false;
 
@@ -269,22 +270,25 @@ export default class User
     return !!permissions.find((item) => item[key] === permission);
   }
 
-  public can(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
+  can(permission: string | string[], key: 'id' | 'name' = 'name'): boolean {
     return this.hasPermission(permission, key);
   }
 
-  public hasAnyPermission(permission: string[], key: 'id' | 'name' = 'name'): boolean {
+  hasAnyPermission(permission: string[], key: 'id' | 'name' = 'name'): boolean {
     const permissions = this.allPermissions();
     if (!permissions.length) return false;
 
     return permissions.some((item) => permission.includes(item[key]));
   }
 
-  public isVerified(): boolean {
+  isVerified(): boolean {
     return !!this.verifiedAt;
   }
 
-  public isDisabled(): boolean {
+  isDisabled(): boolean {
     return !!this.disabledAt;
   }
 }
+
+export type UserAttributes = Attributes<User>;
+export type UserCreationAttributes = CreationAttributes<User>;

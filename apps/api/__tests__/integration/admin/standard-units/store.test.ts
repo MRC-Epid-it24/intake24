@@ -1,4 +1,4 @@
-import type { StandardUnitCreationAttributes } from '@intake24/common/types/models';
+import type { StandardUnitCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {

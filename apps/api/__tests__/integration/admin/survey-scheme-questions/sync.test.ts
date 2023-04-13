@@ -1,7 +1,7 @@
 import type {
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
-} from '@intake24/common/types/models';
+} from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 

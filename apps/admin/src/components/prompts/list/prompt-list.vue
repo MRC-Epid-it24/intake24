@@ -53,7 +53,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';

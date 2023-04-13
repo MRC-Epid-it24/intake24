@@ -7,23 +7,24 @@ import type {
   FeedbackSchemeRefs,
   FeedbackSchemesResponse,
 } from '@intake24/common/types/http/admin';
-import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
-import type { PaginateOptions, PaginateQuery } from '@intake24/db';
+import type {
+  FeedbackSchemeCreationAttributes,
+  PaginateOptions,
+  PaginateQuery,
+} from '@intake24/db';
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { feedbackSchemeResponse } from '@intake24/api/http/responses/admin';
-import {
-  createFeedbackSchemeFields,
-  perCardFeedbackSchemeFields,
-  updateFeedbackSchemeFields,
-} from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
 import {
+  createFeedbackSchemeFields,
   FeedbackScheme,
   Language,
   Op,
+  perCardFeedbackSchemeFields,
   PhysicalActivityLevel,
   securableScope,
   SystemNutrientType,
+  updateFeedbackSchemeFields,
   UserSecurable,
 } from '@intake24/db';
 

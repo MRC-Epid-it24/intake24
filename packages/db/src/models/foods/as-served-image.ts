@@ -1,9 +1,13 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  AsServedImageAttributes,
-  AsServedImageCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { AsServedSet, ProcessedImage } from '.';
@@ -20,47 +24,50 @@ import { AsServedSet, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class AsServedImage
-  extends BaseModel<AsServedImageAttributes, AsServedImageCreationAttributes>
-  implements AsServedImageAttributes
-{
+export default class AsServedImage extends BaseModel<
+  InferAttributes<AsServedImage>,
+  InferCreationAttributes<AsServedImage>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.FLOAT,
   })
-  public weight!: number;
+  declare weight: number;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public asServedSetId!: string;
+  declare asServedSetId: ForeignKey<AsServedSet['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public imageId!: string;
+  declare imageId: ForeignKey<ProcessedImage['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public thumbnailImageId!: string;
+  declare thumbnailImageId: ForeignKey<ProcessedImage['id']>;
 
   @BelongsTo(() => AsServedSet, 'asServedSetId')
-  public asServedSet?: AsServedSet;
+  declare asServedSet?: NonAttribute<AsServedSet>;
 
   @BelongsTo(() => ProcessedImage, 'imageId')
-  public image?: ProcessedImage;
+  declare image?: NonAttribute<ProcessedImage>;
 
   @BelongsTo(() => ProcessedImage, 'thumbnailImageId')
-  public thumbnailImage?: ProcessedImage;
+  declare thumbnailImage?: NonAttribute<ProcessedImage>;
 }
+
+export type AsServedImageAttributes = Attributes<AsServedImage>;
+export type AsServedImageCreationAttributes = CreationAttributes<AsServedImage>;

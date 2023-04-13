@@ -1,6 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
-import type { BrandAttributes, BrandCreationAttributes } from '@intake24/common/types/models';
 import { Food, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -16,40 +23,43 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class Brand
-  extends BaseModel<BrandAttributes, BrandCreationAttributes>
-  implements BrandAttributes
-{
+export default class Brand extends BaseModel<
+  InferAttributes<Brand>,
+  InferCreationAttributes<Brand>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @ForeignKey(() => FoodsLocale)
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  declare food?: NonAttribute<Food>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 }
+
+export type BrandAttributes = Attributes<Brand>;
+export type BrandCreationAttributes = CreationAttributes<Brand>;

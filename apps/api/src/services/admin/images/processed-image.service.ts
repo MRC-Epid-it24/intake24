@@ -6,8 +6,7 @@ import sharp from 'sharp';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { ProcessedImagePurposes } from '@intake24/common/types/models';
-import { ProcessedImage, SourceImage } from '@intake24/db';
+import { ProcessedImage, ProcessedImagePurposes, SourceImage } from '@intake24/db';
 
 export type SelectionImageType = 'guide' | 'as_served';
 

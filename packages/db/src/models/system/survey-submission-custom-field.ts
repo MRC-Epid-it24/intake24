@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SurveySubmissionCustomFieldAttributes,
-  SurveySubmissionCustomFieldCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { SurveySubmission } from '.';
@@ -18,38 +21,39 @@ import { SurveySubmission } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionCustomField
-  extends BaseModel<
-    SurveySubmissionCustomFieldAttributes,
-    SurveySubmissionCustomFieldCreationAttributes
-  >
-  implements SurveySubmissionCustomFieldAttributes
-{
+export default class SurveySubmissionCustomField extends BaseModel<
+  InferAttributes<SurveySubmissionCustomField>,
+  InferCreationAttributes<SurveySubmissionCustomField>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public surveySubmissionId!: string;
+  declare surveySubmissionId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')
-  public submission?: SurveySubmission;
+  declare submission?: NonAttribute<SurveySubmission>;
 }
+
+export type SurveySubmissionCustomFieldAttributes = Attributes<SurveySubmissionCustomField>;
+export type SurveySubmissionCustomFieldCreationAttributes =
+  CreationAttributes<SurveySubmissionCustomField>;

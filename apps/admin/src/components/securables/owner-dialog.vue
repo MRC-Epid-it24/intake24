@@ -69,7 +69,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { UserAttributes } from '@intake24/common/types/models';
+import type { UserAttributes } from '@intake24/db';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { useEntry } from '@intake24/admin/stores';
 import { createForm } from '@intake24/admin/util';

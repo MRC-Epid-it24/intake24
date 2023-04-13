@@ -1,6 +1,10 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, Table } from 'sequelize-typescript';
-
-import type { PopularityCounterAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -11,20 +15,23 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class PopularityCounter
-  extends BaseModel<PopularityCounterAttributes>
-  implements PopularityCounterAttributes
-{
+export default class PopularityCounter extends BaseModel<
+  InferAttributes<PopularityCounter>,
+  InferCreationAttributes<PopularityCounter>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public counter!: number;
+  declare counter: number;
 }
+
+export type PopularityCounterAttributes = Attributes<PopularityCounter>;
+export type PopularityCounterCreationAttributes = CreationAttributes<PopularityCounter>;

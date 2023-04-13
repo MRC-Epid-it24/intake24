@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   BelongsToMany,
@@ -11,12 +19,11 @@ import {
 } from 'sequelize-typescript';
 
 import type { TextDirection } from '@intake24/common/types';
-import type { LanguageAttributes, LanguageCreationAttributes } from '@intake24/common/types/models';
 
 import type { Securable } from '..';
 import BaseModel from '../model';
 import { LanguageTranslation, User, UserSecurable } from '.';
-import Locale from './locale';
+import SystemLocale from './locale';
 
 @Scopes(() => ({
   public: {
@@ -37,79 +44,77 @@ import Locale from './locale';
   underscored: true,
 })
 export default class Language
-  extends BaseModel<LanguageAttributes, LanguageCreationAttributes>
-  implements LanguageAttributes, Securable
+  extends BaseModel<InferAttributes<Language>, InferCreationAttributes<Language>>
+  implements Securable
 {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
     unique: true,
   })
-  public code!: string;
+  declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public englishName!: string;
+  declare englishName: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public localName!: string;
+  declare localName: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public countryFlagCode!: string;
+  declare countryFlagCode: string;
 
   @Column({
     allowNull: false,
     defaultValue: 'ltr',
     type: DataType.STRING(16),
   })
-  public textDirection!: TextDirection;
+  declare textDirection: TextDirection;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public ownerId!: string | null;
+  declare ownerId: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @HasMany(() => LanguageTranslation, 'languageId')
-  public translations?: LanguageTranslation[];
+  declare translations?: NonAttribute<LanguageTranslation[]>;
 
-  @HasMany(() => Locale, {
+  @HasMany(() => SystemLocale, {
     foreignKey: 'adminLanguageId',
     sourceKey: 'code',
   })
-  public adminLocales?: Locale[];
+  declare adminLocales?: NonAttribute<SystemLocale[]>;
 
-  @HasMany(() => Locale, {
+  @HasMany(() => SystemLocale, {
     foreignKey: 'respondentLanguageId',
     sourceKey: 'code',
   })
-  public surveyLocales?: Locale[];
+  declare surveyLocales?: NonAttribute<SystemLocale[]>;
 
   @BelongsTo(() => User, 'ownerId')
-  public owner?: User | null;
+  declare owner?: User | null;
 
   @BelongsToMany(() => User, {
     through: {
@@ -123,12 +128,15 @@ export default class Language
     otherKey: 'userId',
     constraints: false,
   })
-  public securableUsers?: User[];
+  declare securableUsers?: NonAttribute<User[]>;
 
   @HasMany(() => UserSecurable, {
     foreignKey: 'securableId',
     constraints: false,
     scope: { securable_type: 'Language' },
   })
-  public securables?: UserSecurable[];
+  declare securables?: NonAttribute<UserSecurable[]>;
 }
+
+export type LanguageAttributes = Attributes<Language>;
+export type LanguageCreationAttributes = CreationAttributes<Language>;

@@ -1,5 +1,13 @@
+import type {
+  Pagination,
+  PermissionAttributes,
+  RoleAttributes,
+  UserAttributes,
+  UserCustomFieldAttributes,
+  UserSurveyAliasAttributes,
+} from '@intake24/db';
+
 import type { CustomField } from '../..';
-import type { Pagination, UserAssociations, UserAttributes } from '../../models';
 import type { PermissionListEntry } from './permissions';
 import type { RoleListEntry } from './roles';
 
@@ -40,8 +48,12 @@ export interface UpdateUserRequest extends UpdateUserInput {
 
 export type UsersResponse = Pagination<UserAttributes>;
 
-export type UserEntry = UserAttributes &
-  Required<Pick<UserAssociations, 'aliases' | 'customFields' | 'permissions' | 'roles'>>;
+export type UserEntry = UserAttributes & {
+  aliases: UserSurveyAliasAttributes[];
+  customFields: UserCustomFieldAttributes[];
+  permissions: PermissionAttributes[];
+  roles: RoleAttributes[];
+};
 
 export type UserListEntry = Pick<UserAttributes, 'id' | 'name' | 'email'>;
 

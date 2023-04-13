@@ -1,14 +1,15 @@
 import type {
   FoodIndexBackendAttributes,
-  LocaleAttributes,
   Pagination,
   SplitListAttributes,
   SplitListCreationAttributes,
   SplitWordAttributes,
   SplitWordCreationAttributes,
-  SynonymSetsAttributes,
-  SynonymSetsCreationAttributes,
-} from '../../models';
+  SynonymSetAttributes,
+  SynonymSetCreationAttributes,
+  SystemLocaleAttributes,
+} from '@intake24/db';
+
 import type { LanguageListEntry } from './languages';
 import type { Owner } from './users';
 
@@ -28,14 +29,14 @@ export type CreateLocaleRequest = LocaleRequest;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'code'>;
 
-export type LocalesResponse = Pagination<LocaleAttributes>;
+export type LocalesResponse = Pagination<SystemLocaleAttributes>;
 
-export interface LocaleEntry extends LocaleAttributes {
+export interface LocaleEntry extends SystemLocaleAttributes {
   owner?: Owner;
 }
 
 export type LocaleListEntry = Pick<
-  LocaleAttributes,
+  SystemLocaleAttributes,
   'id' | 'code' | 'englishName' | 'localName' | 'countryFlagCode'
 >;
 
@@ -55,7 +56,7 @@ export interface LocaleSplitWordInput extends SplitWordCreationAttributes {
 }
 export type LocaleSplitWord = SplitWordAttributes;
 
-export interface LocaleSynonymSetInput extends SynonymSetsCreationAttributes {
+export interface LocaleSynonymSetInput extends SynonymSetCreationAttributes {
   id?: string;
 }
-export type LocaleSynonymSet = SynonymSetsAttributes;
+export type LocaleSynonymSet = SynonymSetAttributes;

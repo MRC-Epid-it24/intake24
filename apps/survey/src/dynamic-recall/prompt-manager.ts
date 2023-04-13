@@ -3,7 +3,7 @@ import type {
   MealQuestionSection,
   MealSection,
   SurveyQuestionSection,
-} from '@intake24/common/schemes';
+} from '@intake24/common/surveys';
 import type { FoodState, MealState } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import { conditionOps } from '@intake24/common/prompts';

@@ -1,9 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type {
-  NutrientTableRecordNutrientAttributes,
-  NutrientTableRecordNutrientCreationAttributes,
-} from '@intake24/common/types/models';
 import { FoodsNutrientType, NutrientTableRecord } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -16,38 +21,42 @@ import BaseModel from '../model';
   underscored: true,
 })
 export default class NutrientTableRecordNutrient extends BaseModel<
-  NutrientTableRecordNutrientAttributes,
-  NutrientTableRecordNutrientCreationAttributes
+  InferAttributes<NutrientTableRecordNutrient>,
+  InferCreationAttributes<NutrientTableRecordNutrient>
 > {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTableRecordId!: string;
+  declare nutrientTableRecordId: ForeignKey<NutrientTableRecord['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTypeId!: string;
+  declare nutrientTypeId: ForeignKey<FoodsNutrientType['id']>;
 
   @Column({
     allowNull: false,
     field: 'units_per_100g',
     type: DataType.DOUBLE,
   })
-  public unitsPer100g!: number;
+  declare unitsPer100g: number;
 
   @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
-  public nutrientType?: FoodsNutrientType;
+  declare nutrientType?: NonAttribute<FoodsNutrientType>;
 
   @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
-  public record?: NutrientTableRecord;
+  declare record?: NonAttribute<NutrientTableRecord>;
 }
+
+export type NutrientTableRecordNutrientAttributes = Attributes<NutrientTableRecordNutrient>;
+export type NutrientTableRecordNutrientCreationAttributes =
+  CreationAttributes<NutrientTableRecordNutrient>;

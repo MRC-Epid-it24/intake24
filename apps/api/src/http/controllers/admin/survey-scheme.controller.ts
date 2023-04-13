@@ -3,29 +3,31 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompt } from '@intake24/common/prompts';
-import type { ExportField, ExportSectionId } from '@intake24/common/schemes';
+import type { ExportField, ExportSectionId } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefsResponse,
   SurveySchemeRefs,
   SurveySchemesResponse,
 } from '@intake24/common/types/http/admin';
-import type { SurveySchemeCreationAttributes } from '@intake24/common/types/models';
-import type { FindOptions, PaginateOptions, PaginateQuery } from '@intake24/db';
+import type {
+  FindOptions,
+  PaginateOptions,
+  PaginateQuery,
+  SurveySchemeCreationAttributes,
+} from '@intake24/db';
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
-import {
-  createSurveySchemeFields,
-  perCardSurveySchemeFields,
-  updateSurveySchemeFields,
-} from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
 import {
+  createSurveySchemeFields,
   Language,
   Op,
+  perCardSurveySchemeFields,
   securableScope,
   SurveyScheme,
   SurveySchemeQuestion,
+  updateSurveySchemeFields,
   UserSecurable,
 } from '@intake24/db';
 

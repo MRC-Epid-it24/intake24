@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BeforeCreate,
   BelongsTo,
@@ -11,10 +19,6 @@ import {
 } from 'sequelize-typescript';
 
 import type { MFAProvider } from '@intake24/common/security';
-import type {
-  MFADeviceAttributes,
-  MFADeviceCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { MFAAuthenticator, User } from '.';
@@ -28,61 +32,59 @@ import { MFAAuthenticator, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class MFADevice
-  extends BaseModel<MFADeviceAttributes, MFADeviceCreationAttributes>
-  implements MFADeviceAttributes
-{
+export default class MFADevice extends BaseModel<
+  InferAttributes<MFADevice>,
+  InferCreationAttributes<MFADevice>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public provider!: MFAProvider;
+  declare provider: MFAProvider;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public secret!: string;
+  declare secret: string;
 
   @Column({
     allowNull: false,
     defaultValue: false,
     type: DataType.BOOLEAN,
   })
-  public preferred!: boolean;
+  declare preferred: CreationOptional<boolean>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 
   @HasOne(() => MFAAuthenticator, 'deviceId')
-  public authenticator?: MFAAuthenticator;
+  declare authenticator?: NonAttribute<MFAAuthenticator>;
 
   @BeforeCreate
   static async handleAdminPermission(device: MFADevice): Promise<void> {
@@ -90,3 +92,6 @@ export default class MFADevice
     if (count === 0) device.preferred = true;
   }
 }
+
+export type MFADeviceAttributes = Attributes<MFADevice>;
+export type MFADeviceCreationAttributes = CreationAttributes<MFADevice>;

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
-import type { UserSecurableAttributes } from '@intake24/common/types/models';
+import type { UserSecurableAttributes } from '@intake24/db';
 
 import { httpService } from '../services';
 import { useResource } from './resource';

@@ -3,7 +3,7 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { inspect } from 'util';
 
-import type { PushSubscription } from '../types/models/system/user-subscriptions';
+import type { PushSubscription } from '@intake24/db';
 
 export const ajv = new Ajv({
   allErrors: true,

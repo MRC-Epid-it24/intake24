@@ -2,11 +2,10 @@ import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
-import type { SurveyAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { SurveyAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
+import { searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
 import { validateMeals } from '@intake24/common/validators';
 import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 

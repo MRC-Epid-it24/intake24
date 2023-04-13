@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsToMany,
   Column,
@@ -7,8 +15,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type { RoleAttributes, RoleCreationAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Permission, PermissionRole, RoleUser, User } from '.';
@@ -24,47 +30,45 @@ import { Permission, PermissionRole, RoleUser, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Role
-  extends BaseModel<RoleAttributes, RoleCreationAttributes>
-  implements RoleAttributes
-{
+export default class Role extends BaseModel<InferAttributes<Role>, InferCreationAttributes<Role>> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public displayName!: string;
+  declare displayName: string;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  public description!: string | null;
+  declare description: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsToMany(() => User, () => RoleUser)
-  public users?: User[];
+  declare users?: NonAttribute<User[]>;
 
   @BelongsToMany(() => Permission, () => PermissionRole)
-  public permissions?: Permission[];
+  declare permissions?: NonAttribute<Permission[]>;
 }
+
+export type RoleAttributes = Attributes<Role>;
+export type RoleCreationAttributes = CreationAttributes<Role>;

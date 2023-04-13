@@ -1,12 +1,12 @@
-import type { LocaleCreationAttributes } from '@intake24/common/types/models';
+import type { SystemLocaleCreationAttributes } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/locales';
   const permissions = ['locales', 'locales|create'];
 
-  let input: LocaleCreationAttributes;
-  let output: LocaleCreationAttributes;
+  let input: SystemLocaleCreationAttributes;
+  let output: SystemLocaleCreationAttributes;
 
   beforeAll(async () => {
     const { code } = suite.data.system.language;

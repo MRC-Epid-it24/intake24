@@ -1,4 +1,5 @@
-import type { Pagination, RoleAssociations, RoleAttributes } from '../../models';
+import type { Pagination, PermissionAttributes, RoleAttributes } from '@intake24/db';
+
 import type { PermissionListEntry } from './permissions';
 
 export type RoleRequest = {
@@ -10,7 +11,7 @@ export type RoleRequest = {
 
 export type RolesResponse = Pagination<RoleAttributes>;
 
-export type RoleEntry = RoleAttributes & Required<Pick<RoleAssociations, 'permissions'>>;
+export type RoleEntry = RoleAttributes & { permissions: PermissionAttributes[] };
 
 export type RoleListEntry = Pick<RoleAttributes, 'id' | 'name' | 'displayName'>;
 

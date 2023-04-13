@@ -1,10 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, Table } from 'sequelize-typescript';
 
-import type {
-  AttributeDefaultsAttributes,
-  AttributeDefaultsCreationAttributes,
-  UseInRecipeType,
-} from '@intake24/common/types/models';
+import type { UseInRecipeType } from '@intake24/common/types';
 
 import BaseModel from '../model';
 
@@ -15,38 +18,41 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class AttributeDefaults
-  extends BaseModel<AttributeDefaultsAttributes, AttributeDefaultsCreationAttributes>
-  implements AttributeDefaultsAttributes
-{
+export default class AttributeDefaults extends BaseModel<
+  InferAttributes<AttributeDefaults>,
+  InferCreationAttributes<AttributeDefaults>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public sameAsBeforeOption!: boolean;
+  declare sameAsBeforeOption: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public readyMealOption!: boolean;
+  declare readyMealOption: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public reasonableAmount!: number;
+  declare reasonableAmount: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: UseInRecipeType;
+  declare useInRecipes: UseInRecipeType;
 }
+
+export type AttributeDefaultsAttributes = Attributes<AttributeDefaults>;
+export type AttributeDefaultsCreationAttributes = CreationAttributes<AttributeDefaults>;

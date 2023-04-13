@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  SynonymSetsAttributes,
-  SynonymSetsCreationAttributes,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
@@ -15,29 +18,32 @@ import { FoodsLocale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SynonymSet
-  extends BaseModel<SynonymSetsAttributes, SynonymSetsCreationAttributes>
-  implements SynonymSetsAttributes
-{
+export default class SynonymSet extends BaseModel<
+  InferAttributes<SynonymSet>,
+  InferCreationAttributes<SynonymSet>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  public synonyms!: string;
+  declare synonyms: string;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 }
+
+export type SynonymSetAttributes = Attributes<SynonymSet>;
+export type SynonymSetCreationAttributes = CreationAttributes<SynonymSet>;

@@ -1,6 +1,10 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, Table } from 'sequelize-typescript';
-
-import type { PAOccurrenceTransactionCountAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -11,19 +15,23 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class PAOccurrenceTransactionCount
-  extends BaseModel<PAOccurrenceTransactionCountAttributes>
-  implements PAOccurrenceTransactionCountAttributes
-{
+export default class PAOccurrenceTransactionCount extends BaseModel<
+  InferAttributes<PAOccurrenceTransactionCount>,
+  InferCreationAttributes<PAOccurrenceTransactionCount>
+> {
   @Column({
     primaryKey: true,
     type: DataType.STRING(64),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public transactionsCount!: number;
+  declare transactionsCount: number;
 }
+
+export type PAOccurrenceTransactionCountAttributes = Attributes<PAOccurrenceTransactionCount>;
+export type PAOccurrenceTransactionCountCreationAttributes =
+  CreationAttributes<PAOccurrenceTransactionCount>;

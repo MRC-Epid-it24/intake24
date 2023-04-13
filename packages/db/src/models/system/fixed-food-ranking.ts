@@ -1,6 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, Table } from 'sequelize-typescript';
-
-import type { FixedFoodRankingAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -11,32 +16,35 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class FixedFoodRanking
-  extends BaseModel<FixedFoodRankingAttributes>
-  implements FixedFoodRankingAttributes
-{
+export default class FixedFoodRanking extends BaseModel<
+  InferAttributes<FixedFoodRanking>,
+  InferCreationAttributes<FixedFoodRanking>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.INTEGER,
   })
-  public id!: number;
+  declare id: CreationOptional<number>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public rank!: number;
+  declare rank: number;
 }
+
+export type FixedFoodRankingAttributes = Attributes<FixedFoodRanking>;
+export type FixedFoodRankingCreationAttributes = CreationAttributes<FixedFoodRanking>;

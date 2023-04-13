@@ -3,7 +3,8 @@ import type {
   LanguageCreationAttributes,
   LanguageTranslationAttributes,
   Pagination,
-} from '../../models';
+} from '@intake24/db';
+
 import type { Owner } from './users';
 
 export type LanguageRequest = LanguageCreationAttributes;
@@ -14,7 +15,7 @@ export type UpdateLanguageRequest = Omit<LanguageRequest, 'code'>;
 
 export type LanguagesResponse = Pagination<LanguageAttributes>;
 
-export interface LanguageEntry extends LanguageAttributes {
+export interface LanguageEntry extends Omit<LanguageAttributes, 'owner'> {
   owner?: Owner;
 }
 

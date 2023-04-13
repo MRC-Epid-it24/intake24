@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SurveySubmissionNutrientAttributes,
-  SurveySubmissionNutrientCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { SurveySubmissionFood, SystemNutrientType } from '.';
@@ -19,38 +22,42 @@ import { SurveySubmissionFood, SystemNutrientType } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionNutrient
-  extends BaseModel<SurveySubmissionNutrientAttributes, SurveySubmissionNutrientCreationAttributes>
-  implements SurveySubmissionNutrientAttributes
-{
+export default class SurveySubmissionNutrient extends BaseModel<
+  InferAttributes<SurveySubmissionNutrient>,
+  InferCreationAttributes<SurveySubmissionNutrient>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodId!: string;
+  declare foodId: string;
 
   @Column({
     allowNull: false,
     type: DataType.DOUBLE,
   })
-  public amount!: number;
+  declare amount: number;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTypeId!: string;
+  declare nutrientTypeId: string;
 
   @BelongsTo(() => SurveySubmissionFood, 'foodId')
-  public food?: SurveySubmissionFood;
+  declare food?: NonAttribute<SurveySubmissionFood>;
 
   @BelongsTo(() => SystemNutrientType, 'nutrientTypeId')
-  public nutrientType?: SystemNutrientType;
+  declare nutrientType?: NonAttribute<SystemNutrientType>;
 }
+
+export type SurveySubmissionNutrientAttributes = Attributes<SurveySubmissionNutrient>;
+export type SurveySubmissionNutrientCreationAttributes =
+  CreationAttributes<SurveySubmissionNutrient>;

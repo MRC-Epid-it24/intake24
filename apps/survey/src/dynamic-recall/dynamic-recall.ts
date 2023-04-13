@@ -1,5 +1,5 @@
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';

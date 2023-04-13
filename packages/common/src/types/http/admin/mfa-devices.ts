@@ -3,7 +3,7 @@ import type {
   RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
 
-import type { MFADeviceAttributes } from '../../models';
+import type { MFADeviceAttributes } from '@intake24/db';
 
 export type MFADeviceEntry = Omit<MFADeviceAttributes, 'secret'>;
 

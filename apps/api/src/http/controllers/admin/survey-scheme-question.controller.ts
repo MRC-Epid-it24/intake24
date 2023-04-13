@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
@@ -9,7 +9,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { isMealSection } from '@intake24/common/schemes';
+import { isMealSection } from '@intake24/common/surveys';
 import { Language, SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 
 const surveySchemeQuestionController = () => {

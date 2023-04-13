@@ -1,11 +1,12 @@
 import type {
-  Attributes,
-  CategoryAssociations,
+  CategoryAttributeAttributes,
   CategoryAttributes,
   CategoryLocalAttributes,
-  CategoryPortionSizeMethodUpdateAttributes,
+  CategoryPortionSizeMethodCreationAttributes,
+  CategoryPortionSizeMethodParameterCreationAttributes,
   Pagination,
-} from '../../models';
+} from '@intake24/db';
+
 import type { FoodListEntry } from './foods';
 
 export type CategoryInput = {
@@ -14,10 +15,12 @@ export type CategoryInput = {
     code: string;
     name: string;
     isHidden: boolean;
-    attributes: Attributes;
+    attributes: CategoryAttributeAttributes;
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
-  portionSizeMethods: CategoryPortionSizeMethodUpdateAttributes[];
+  portionSizeMethods: (CategoryPortionSizeMethodCreationAttributes & {
+    parameters: CategoryPortionSizeMethodParameterCreationAttributes[];
+  })[];
 };
 
 export type CategoryListEntry = {
@@ -40,8 +43,10 @@ export type CategoryContentsResponse = {
   foods: FoodListEntry[];
 };
 
-export type CategoryEntry = CategoryAttributes &
-  Pick<CategoryAssociations, 'attributes' | 'parentCategories'>;
+export type CategoryEntry = CategoryAttributes & {
+  attributes?: CategoryAttributeAttributes;
+  parentCategories?: CategoryAttributes[];
+};
 
 export interface CategoryLocalEntry extends CategoryLocalAttributes {
   main?: CategoryEntry;

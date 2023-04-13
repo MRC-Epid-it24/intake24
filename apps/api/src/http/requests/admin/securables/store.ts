@@ -3,8 +3,7 @@ import { checkSchema } from 'express-validator';
 
 import type { ValidationMiddleware } from '@intake24/api/http/requests/util';
 import type { SecurableType } from '@intake24/common/security';
-import type { UserAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { UserAttributes, WhereOptions } from '@intake24/db';
 import {
   customTypeErrorMessage,
   typeErrorMessage,

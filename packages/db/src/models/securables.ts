@@ -1,7 +1,6 @@
 import type { Model as BaseModel } from 'sequelize-typescript';
 
-import type { UserSecurableAttributes } from '@intake24/common/types/models';
-import type { FindOptions, Includeable } from '@intake24/db';
+import type { FindOptions, Includeable, UserSecurableAttributes } from '@intake24/db';
 
 export interface Securable extends BaseModel {
   ownerId: string | null;

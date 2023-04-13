@@ -1,9 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
-import type {
-  AssociatedFoodAttributes,
-  AssociatedFoodCreationAttributes,
-} from '@intake24/common/types/models';
 import { Category, Food, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -19,78 +23,81 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class AssociatedFood
-  extends BaseModel<AssociatedFoodAttributes, AssociatedFoodCreationAttributes>
-  implements AssociatedFoodAttributes
-{
+export default class AssociatedFood extends BaseModel<
+  InferAttributes<AssociatedFood>,
+  InferCreationAttributes<AssociatedFood>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @ForeignKey(() => FoodsLocale)
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @ForeignKey(() => Food)
   @Column({
     allowNull: true,
     type: DataType.STRING(8),
   })
-  public associatedFoodCode!: string | null;
+  declare associatedFoodCode: CreationOptional<string | null>;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: true,
     type: DataType.STRING(8),
   })
-  public associatedCategoryCode!: string | null;
+  declare associatedCategoryCode: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(1024),
   })
-  public text!: string;
+  declare text: string;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public linkAsMain!: boolean;
+  declare linkAsMain: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public genericName!: string;
+  declare genericName: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public orderBy!: string;
+  declare orderBy: string;
 
   @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  declare food?: Food;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 
   @BelongsTo(() => Category, 'associatedCategoryCode')
-  public associatedCategory?: Category;
+  declare associatedCategory?: NonAttribute<Category>;
 
   @BelongsTo(() => Food, 'associatedFoodCode')
-  public associatedFood?: Food;
+  declare associatedFood?: NonAttribute<Food>;
 }
+
+export type AssociatedFoodAttributes = Attributes<AssociatedFood>;
+export type AssociatedFoodCreationAttributes = CreationAttributes<AssociatedFood>;

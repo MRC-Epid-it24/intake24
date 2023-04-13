@@ -1,6 +1,5 @@
-import type { SurveySubmissionAttributes, UserAttributes } from '@intake24/common/types/models';
-
 import type {
+  SurveySubmissionAttributes,
   SurveySubmissionCustomFieldAttributes,
   SurveySubmissionFoodAttributes,
   SurveySubmissionFoodCustomFieldAttributes,
@@ -8,8 +7,9 @@ import type {
   SurveySubmissionMealCustomFieldAttributes,
   SurveySubmissionNutrientAttributes,
   SurveySubmissionPortionSizeFieldAttributes,
+  UserAttributes,
   UserPhysicalDataAttributes,
-} from '../models/system';
+} from '@intake24/db';
 
 export interface SurveySubmissionFoodEntry extends SurveySubmissionFoodAttributes {
   meal: SurveySubmissionMealAttributes;

@@ -106,7 +106,7 @@ import type {
   FoodDatabaseRefs,
   NutrientTableRecordsResponse,
 } from '@intake24/common/types/http/admin';
-import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
+import type { NutrientTableRecordAttributes } from '@intake24/db';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';

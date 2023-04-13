@@ -1,8 +1,7 @@
 import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 
-import type { LocaleAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { SystemLocaleAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { textDirections } from '@intake24/common/types';
@@ -30,7 +29,9 @@ export const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId } = (meta.req as Request).params;
-        const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
+        const where: WhereOptions<SystemLocaleAttributes> = localeId
+          ? { id: { [Op.ne]: localeId } }
+          : {};
 
         if (
           !(await unique({
@@ -51,7 +52,9 @@ export const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId } = (meta.req as Request).params;
-        const where: WhereOptions<LocaleAttributes> = localeId ? { id: { [Op.ne]: localeId } } : {};
+        const where: WhereOptions<SystemLocaleAttributes> = localeId
+          ? { id: { [Op.ne]: localeId } }
+          : {};
 
         if (
           !(await unique({

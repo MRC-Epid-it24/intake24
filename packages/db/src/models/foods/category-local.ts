@@ -1,9 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import type {
-  CategoryLocalAttributes,
-  CategoryLocalCreationAttributes,
-} from '@intake24/common/types/models';
 import { Category, CategoryPortionSizeMethod, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -15,54 +19,57 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryLocal
-  extends BaseModel<CategoryLocalAttributes, CategoryLocalCreationAttributes>
-  implements CategoryLocalAttributes
-{
+export default class CategoryLocal extends BaseModel<
+  InferAttributes<CategoryLocal>,
+  InferCreationAttributes<CategoryLocal>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(8),
   })
-  public categoryCode!: string;
+  declare categoryCode: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public simpleName!: string;
+  declare simpleName: string;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public version!: string;
+  declare version: string;
 
   @BelongsTo(() => Category, 'categoryCode')
-  public main?: Category;
+  declare main?: NonAttribute<Category>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 
   @HasMany(() => CategoryPortionSizeMethod, 'categoryLocalId')
-  public portionSizeMethods?: CategoryPortionSizeMethod[];
+  declare portionSizeMethods?: NonAttribute<CategoryPortionSizeMethod[]>;
 }
+
+export type CategoryLocalAttributes = Attributes<CategoryLocal>;
+export type CategoryLocalCreationAttributes = CreationAttributes<CategoryLocal>;

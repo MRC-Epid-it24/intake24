@@ -6,22 +6,20 @@ import type { SurveyEntry, SurveyRefs, SurveysResponse } from '@intake24/common/
 import type { PaginateOptions, PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
-import {
-  createSurveyFields,
-  guardedSurveyFields,
-  overridesFields,
-  updateSurveyFields,
-} from '@intake24/common/types/models';
 import { kebabCase } from '@intake24/common/util';
 import {
+  createSurveyFields,
   FeedbackScheme,
+  guardedSurveyFields,
   Language,
   Op,
+  overridesFields,
   securableIncludes,
   securableScope,
   Survey,
   SurveyScheme,
   SystemLocale,
+  updateSurveyFields,
   UserSecurable,
 } from '@intake24/db';
 

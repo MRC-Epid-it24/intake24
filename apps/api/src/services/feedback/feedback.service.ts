@@ -4,7 +4,7 @@ import { URLSearchParams } from 'node:url';
 import type { IoC } from '@intake24/api/ioc';
 import type { WeightTargetCoefficient } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http/feedback';
-import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { getFrontEndUrl } from '@intake24/api/util';
 import { weightTargetsData } from '@intake24/common/feedback';

@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator';
 
 import { localeIdValidator, validate } from '@intake24/api/http/requests/util';
-import { searchSortingAlgorithms } from '@intake24/common/types/models';
+import { searchSortingAlgorithms } from '@intake24/common/surveys';
 
 export default validate(
   checkSchema({

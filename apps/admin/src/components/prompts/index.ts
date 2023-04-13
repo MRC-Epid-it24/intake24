@@ -1,5 +1,5 @@
 import type { ComponentType } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 
 export { default as customPrompts } from './custom';
 export { default as portionSizePrompts } from './portion-size';

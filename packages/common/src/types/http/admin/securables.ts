@@ -1,4 +1,5 @@
-import type { Pagination, UserSecurableAttributes } from '../../models';
+import type { Pagination, UserSecurableAttributes } from '@intake24/db';
+
 import type { UserListEntry } from '.';
 import type { CreateUserInput } from './users';
 

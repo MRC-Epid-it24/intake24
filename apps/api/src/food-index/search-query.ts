@@ -1,4 +1,4 @@
-import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 
 export interface SearchQuery {
   queryId: number;

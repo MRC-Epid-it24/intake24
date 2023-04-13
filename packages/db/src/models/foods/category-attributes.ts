@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
-import type {
-  CategoryAttributeAttributes,
-  CategoryAttributeCreationAttributes,
-  UseInRecipeType,
-} from '@intake24/common/types/models';
+import type { UseInRecipeType } from '@intake24/common/types';
 import { Category } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -19,48 +23,51 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryAttribute
-  extends BaseModel<CategoryAttributeAttributes, CategoryAttributeCreationAttributes>
-  implements CategoryAttributeAttributes
-{
+export default class CategoryAttribute extends BaseModel<
+  InferAttributes<CategoryAttribute>,
+  InferCreationAttributes<CategoryAttribute>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public categoryCode!: string;
+  declare categoryCode: string;
 
   @Column({
     allowNull: true,
     type: DataType.BOOLEAN,
   })
-  public sameAsBeforeOption!: boolean | null;
+  declare sameAsBeforeOption: CreationOptional<boolean | null>;
 
   @Column({
     allowNull: true,
     type: DataType.BOOLEAN,
   })
-  public readyMealOption!: boolean | null;
+  declare readyMealOption: CreationOptional<boolean | null>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public reasonableAmount!: number | null;
+  declare reasonableAmount: CreationOptional<number | null>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public useInRecipes!: UseInRecipeType | null;
+  declare useInRecipes: CreationOptional<UseInRecipeType | null>;
 
   @BelongsTo(() => Category, 'categoryCode')
-  public category?: Category;
+  declare category?: NonAttribute<Category>;
 }
+
+export type CategoryAttributeAttributes = Attributes<CategoryAttribute>;
+export type CategoryAttributeCreationAttributes = CreationAttributes<CategoryAttribute>;

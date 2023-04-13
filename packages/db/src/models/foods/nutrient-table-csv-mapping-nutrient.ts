@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  NutrientTableCsvMappingNutrientAttributes,
-  NutrientTableCsvMappingNutrientCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { FoodsNutrientType, NutrientTable } from '.';
@@ -16,41 +19,45 @@ import { FoodsNutrientType, NutrientTable } from '.';
   underscored: true,
 })
 export default class NutrientTableCsvMappingNutrient extends BaseModel<
-  NutrientTableCsvMappingNutrientAttributes,
-  NutrientTableCsvMappingNutrientCreationAttributes
+  InferAttributes<NutrientTableCsvMappingNutrient>,
+  InferCreationAttributes<NutrientTableCsvMappingNutrient>
 > {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public nutrientTableId!: string;
+  declare nutrientTableId: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTypeId!: string;
+  declare nutrientTypeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public columnOffset!: number;
+  declare columnOffset: number;
 
   @BelongsTo(() => NutrientTable, {
     foreignKey: 'nutrientTableId',
     onUpdate: 'cascade',
     onDelete: 'cascade',
   })
-  public nutrientTable?: NutrientTable;
+  declare nutrientTable?: NonAttribute<NutrientTable>;
 
   @BelongsTo(() => FoodsNutrientType, 'nutrientTypeId')
-  public nutrientType?: FoodsNutrientType;
+  declare nutrientType?: NonAttribute<FoodsNutrientType>;
 }
+
+export type NutrientTableCsvMappingNutrientAttributes = Attributes<NutrientTableCsvMappingNutrient>;
+export type NutrientTableCsvMappingNutrientCreationAttributes =
+  CreationAttributes<NutrientTableCsvMappingNutrient>;

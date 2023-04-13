@@ -1,4 +1,4 @@
-import type { Pagination, StandardUnitAttributes } from '../../models';
+import type { Pagination, StandardUnitAttributes } from '@intake24/db';
 
 export type StandardUnitsResponse = Pagination<StandardUnitAttributes>;
 

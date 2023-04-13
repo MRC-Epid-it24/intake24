@@ -1,12 +1,13 @@
 import type {
-  LocaleAttributes,
+  FeedbackSchemeAttributes,
   Pagination,
   SurveyAttributes,
   SurveyCreationAttributes,
+  SurveySchemeAttributes,
+  SystemLocaleAttributes,
   UserSecurableAttributes,
-} from '../../models';
-import type { FeedbackSchemeAttributes } from './../../models/system/feedback-schemes';
-import type { SurveySchemeAttributes } from './../../models/system/survey-schemes';
+} from '@intake24/db';
+
 import type { FeedbackSchemeRefEntry } from './feedback-schemes';
 import type { LanguageListEntry } from './languages';
 import type { LocaleListEntry } from './locales';
@@ -24,7 +25,7 @@ export type UpdateSurveyRequest = SurveyRequest;
 
 export interface SurveyListEntry
   extends Pick<SurveyAttributes, 'id' | 'slug' | 'name' | 'localeId' | 'surveySchemeId' | 'state'> {
-  locale: Pick<LocaleAttributes, 'code'>;
+  locale: Pick<SystemLocaleAttributes, 'code'>;
   surveyScheme: Pick<SurveySchemeAttributes, 'name'>;
   securables: UserSecurableAttributes[];
 }
@@ -34,7 +35,7 @@ export type SurveysResponse = Pagination<SurveyListEntry>;
 export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDate'> {
   startDate: string;
   endDate: string;
-  locale: LocaleAttributes;
+  locale: SystemLocaleAttributes;
   feedbackScheme?: FeedbackSchemeAttributes;
   surveyScheme: SurveySchemeAttributes;
   owner?: Owner;

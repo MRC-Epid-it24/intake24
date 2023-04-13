@@ -2,7 +2,8 @@ import type {
   Pagination,
   SurveySchemeQuestionAttributes,
   SurveySchemeQuestionCreationAttributes,
-} from '../../models';
+} from '@intake24/db';
+
 import type { LanguageListEntry } from './languages';
 import type { SurveySchemeRefEntry } from './survey-schemes';
 

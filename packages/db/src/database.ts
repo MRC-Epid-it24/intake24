@@ -4,8 +4,7 @@ import type { Environment } from '@intake24/common/types';
 import type { Logger } from '@intake24/services';
 
 import type { DatabaseConfig, DatabaseType } from './config';
-import * as foods from './models/foods';
-import * as system from './models/system';
+import { foods, system } from './models';
 
 export const models = { foods, system };
 

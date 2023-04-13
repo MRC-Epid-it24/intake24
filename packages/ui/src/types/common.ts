@@ -1,4 +1,4 @@
-import type { UserSecurableAttributes } from '@intake24/common/types/models';
+import type { UserSecurableAttributes } from '@intake24/db';
 
 export interface Permission {
   resource?: string;

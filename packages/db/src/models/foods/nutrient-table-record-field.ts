@@ -1,9 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type {
-  NutrientTableRecordFieldAttributes,
-  NutrientTableRecordFieldCreationAttributes,
-} from '@intake24/common/types/models';
 import { NutrientTableRecord } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -16,34 +20,38 @@ import BaseModel from '../model';
   underscored: true,
 })
 export default class NutrientTableRecordField extends BaseModel<
-  NutrientTableRecordFieldAttributes,
-  NutrientTableRecordFieldCreationAttributes
+  InferAttributes<NutrientTableRecordField>,
+  InferCreationAttributes<NutrientTableRecordField>
 > {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public nutrientTableRecordId!: string;
+  declare nutrientTableRecordId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => NutrientTableRecord, 'nutrientTableRecordId')
-  public record?: NutrientTableRecord;
+  declare record?: NonAttribute<NutrientTableRecord>;
 }
+
+export type NutrientTableRecordFieldAttributes = Attributes<NutrientTableRecordField>;
+export type NutrientTableRecordFieldCreationAttributes =
+  CreationAttributes<NutrientTableRecordField>;

@@ -1,4 +1,4 @@
-import type { Pagination, PermissionAttributes } from '../../models';
+import type { Pagination, PermissionAttributes } from '@intake24/db';
 
 export type PermissionRequest = {
   name: string;

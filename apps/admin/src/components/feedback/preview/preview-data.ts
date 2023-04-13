@@ -1,5 +1,5 @@
 import type { SurveySubmissionEntry } from '@intake24/common/types/http/user';
-import type { UserPhysicalDataAttributes } from '@intake24/common/types/models';
+import type { UserPhysicalDataAttributes } from '@intake24/db';
 
 import submissionsJson from './submissions.json';
 

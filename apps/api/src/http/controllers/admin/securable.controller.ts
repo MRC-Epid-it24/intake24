@@ -9,10 +9,12 @@ import type {
   UsersWithSecurablesResponse,
 } from '@intake24/common/types/http/admin';
 import type {
+  ModelStatic,
+  PaginateQuery,
+  Securable,
   UserSecurableAttributes,
   UserSecurableCreationAttributes,
-} from '@intake24/common/types/models';
-import type { ModelStatic, PaginateQuery, Securable } from '@intake24/db';
+} from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { userSecurablesResponse } from '@intake24/api/http/responses/admin';
 import { isSecurableType } from '@intake24/common/security';

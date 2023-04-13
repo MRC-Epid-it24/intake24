@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -8,8 +16,6 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { RoleUserAttributes, RoleUserCreationAttributes } from '@intake24/common/types/models';
-
 import BaseModel from '../model';
 import { Role, User } from '.';
 
@@ -19,35 +25,36 @@ import { Role, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class RoleUser
-  extends BaseModel<RoleUserAttributes, RoleUserCreationAttributes>
-  implements RoleUserAttributes
-{
+export default class RoleUser extends BaseModel<
+  InferAttributes<RoleUser>,
+  InferCreationAttributes<RoleUser>
+> {
   @ForeignKey(() => Role)
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public roleId!: string;
+  declare roleId: string;
 
   @ForeignKey(() => User)
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @BelongsTo(() => Role, 'roleId')
-  public role?: Role;
+  declare role?: NonAttribute<Role>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
+
+export type RoleUserAttributes = Attributes<RoleUser>;
+export type RoleUserCreationAttributes = CreationAttributes<RoleUser>;

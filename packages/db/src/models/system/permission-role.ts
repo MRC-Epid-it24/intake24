@@ -1,9 +1,11 @@
-import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
-
 import type {
-  PermissionRoleAttributes,
-  PermissionRoleCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import { Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { Permission, Role } from '.';
@@ -14,29 +16,30 @@ import { Permission, Role } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class PermissionUser
-  extends BaseModel<PermissionRoleAttributes, PermissionRoleCreationAttributes>
-  implements PermissionRoleAttributes
-{
+export default class PermissionRole extends BaseModel<
+  InferAttributes<PermissionRole>,
+  InferCreationAttributes<PermissionRole>
+> {
   @ForeignKey(() => Permission)
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public permissionId!: string;
+  declare permissionId: string;
 
   @ForeignKey(() => Role)
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public roleId!: string;
+  declare roleId: string;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
+
+export type PermissionRoleAttributes = Attributes<PermissionRole>;
+export type PermissionRoleCreationAttributes = CreationAttributes<PermissionRole>;

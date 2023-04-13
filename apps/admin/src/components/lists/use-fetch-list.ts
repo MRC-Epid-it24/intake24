@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { ref, unref, watch } from 'vue';
 
-import type { Pagination } from '@intake24/common/types/models';
+import type { Pagination } from '@intake24/db';
 import { httpService } from '@intake24/admin/services';
 
 export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) => {

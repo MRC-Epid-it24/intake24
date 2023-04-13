@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -8,11 +16,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type {
-  UserSurveyAliasAttributes,
-  UserSurveyAliasCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Survey, User } from '.';
@@ -26,23 +29,23 @@ import { Survey, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSurveyAlias
-  extends BaseModel<UserSurveyAliasAttributes, UserSurveyAliasCreationAttributes>
-  implements UserSurveyAliasAttributes
-{
+export default class UserSurveyAlias extends BaseModel<
+  InferAttributes<UserSurveyAlias>,
+  InferCreationAttributes<UserSurveyAlias>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
@@ -50,7 +53,7 @@ export default class UserSurveyAlias
     unique: 'survey_id_username_unique',
   })
   @ForeignKey(() => Survey)
-  public surveyId!: string;
+  declare surveyId: string;
 
   @Column({
     allowNull: false,
@@ -58,26 +61,27 @@ export default class UserSurveyAlias
     type: DataType.STRING(256),
     unique: 'survey_id_username_unique',
   })
-  public username!: string;
+  declare username: string;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(128),
   })
-  public urlAuthToken!: string;
+  declare urlAuthToken: string;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey;
+  declare survey?: NonAttribute<Survey>;
 }
+
+export type UserSurveyAliasAttributes = Attributes<UserSurveyAlias>;
+export type UserSurveyAliasCreationAttributes = CreationAttributes<UserSurveyAlias>;

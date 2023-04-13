@@ -1,6 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
-import type { NutrientUnitAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { FoodsNutrientType } from '.';
@@ -15,28 +20,31 @@ import { FoodsNutrientType } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientUnit
-  extends BaseModel<NutrientUnitAttributes>
-  implements NutrientUnitAttributes
-{
+export default class NutrientUnit extends BaseModel<
+  InferAttributes<NutrientUnit>,
+  InferCreationAttributes<NutrientUnit>
+> {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public symbol!: string;
+  declare symbol: string;
 
   @HasMany(() => FoodsNutrientType, 'unitId')
-  public nutrientTypes?: FoodsNutrientType[];
+  declare nutrientTypes?: NonAttribute<FoodsNutrientType[]>;
 }
+
+export type FoodsNutrientUnitAttributes = Attributes<NutrientUnit>;
+export type FoodsNutrientUnitCreationAttributes = CreationAttributes<NutrientUnit>;

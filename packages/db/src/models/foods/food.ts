@@ -1,3 +1,10 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   BelongsToMany,
@@ -8,8 +15,6 @@ import {
   Scopes,
   Table,
 } from 'sequelize-typescript';
-
-import type { FoodAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import {
@@ -22,7 +27,7 @@ import {
   FoodLocal,
   FoodLocalList,
 } from '.';
-import Locale from './locale';
+import FoodsLocale from './locale';
 
 @Scopes(() => ({
   attributes: { include: [{ model: FoodAttribute }] },
@@ -36,59 +41,62 @@ import Locale from './locale';
   timestamps: false,
   underscored: true,
 })
-export default class Food extends BaseModel<FoodAttributes> implements FoodAttributes {
+export default class Food extends BaseModel<InferAttributes<Food>, InferCreationAttributes<Food>> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(8),
   })
-  public code!: string;
+  declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodGroupId!: string;
+  declare foodGroupId: string;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public version!: string;
+  declare version: string;
 
   @HasOne(() => FoodAttribute, 'foodCode')
-  public attributes?: FoodAttribute;
+  declare attributes?: NonAttribute<FoodAttribute>;
 
   @HasMany(() => AssociatedFood, 'foodCode')
-  public associatedFoods?: AssociatedFood[];
+  declare associatedFoods?: NonAttribute<AssociatedFood[]>;
 
   @HasMany(() => Brand, 'foodCode')
-  public brands?: Brand[];
+  declare brands?: NonAttribute<Brand[]>;
 
   @BelongsToMany(() => Category, () => FoodCategory)
-  public parentCategories?: Category[];
+  declare parentCategories?: NonAttribute<Category[]>;
 
-  @BelongsToMany(() => Locale, () => FoodLocalList, 'foodCode', 'localeId')
-  public locales?: Locale[];
+  @BelongsToMany(() => FoodsLocale, () => FoodLocalList, 'foodCode', 'localeId')
+  declare locales?: NonAttribute<FoodsLocale[]>;
 
   @HasMany(() => FoodCategory, 'foodCode')
-  public parentCategoryMappings?: FoodCategory[];
+  declare parentCategoryMappings?: NonAttribute<FoodCategory[]>;
 
   @HasMany(() => AssociatedFood, 'associatedFoodCode')
-  public foodAssociations?: AssociatedFood[];
+  declare foodAssociations?: NonAttribute<AssociatedFood[]>;
 
   @BelongsTo(() => FoodGroup, 'foodGroupId')
-  public foodGroup?: FoodGroup;
+  declare foodGroup?: NonAttribute<FoodGroup>;
 
   @HasMany(() => FoodLocal, 'foodCode')
-  public locals?: FoodLocal[];
+  declare locals?: NonAttribute<FoodLocal[]>;
 
   @HasMany(() => FoodLocal, 'foodCode')
-  public prototypeLocals?: FoodLocal[];
+  declare prototypeLocals?: NonAttribute<FoodLocal[]>;
 }
+
+export type FoodAttributes = Attributes<Food>;
+export type FoodCreationAttributes = CreationAttributes<Food>;

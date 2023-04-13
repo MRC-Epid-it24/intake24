@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SurveySubmissionMealCustomFieldAttributes,
-  SurveySubmissionMealCustomFieldCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { SurveySubmissionMeal } from '.';
@@ -18,38 +21,39 @@ import { SurveySubmissionMeal } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionMealCustomField
-  extends BaseModel<
-    SurveySubmissionMealCustomFieldAttributes,
-    SurveySubmissionMealCustomFieldCreationAttributes
-  >
-  implements SurveySubmissionMealCustomFieldAttributes
-{
+export default class SurveySubmissionMealCustomField extends BaseModel<
+  InferAttributes<SurveySubmissionMealCustomField>,
+  InferCreationAttributes<SurveySubmissionMealCustomField>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public mealId!: string;
+  declare mealId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
-  public meal?: SurveySubmissionMeal;
+  declare meal?: NonAttribute<SurveySubmissionMeal>;
 }
+
+export type SurveySubmissionMealCustomFieldAttributes = Attributes<SurveySubmissionMealCustomField>;
+export type SurveySubmissionMealCustomFieldCreationAttributes =
+  CreationAttributes<SurveySubmissionMealCustomField>;

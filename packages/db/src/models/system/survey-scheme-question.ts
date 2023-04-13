@@ -1,10 +1,13 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type {
-  SurveySchemeQuestionAttributes,
-  SurveySchemeQuestionCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -14,28 +17,28 @@ import BaseModel from '../model';
   freezeTableName: true,
   underscored: true,
 })
-export default class SurveySchemeQuestion
-  extends BaseModel<SurveySchemeQuestionAttributes, SurveySchemeQuestionCreationAttributes>
-  implements SurveySchemeQuestionAttributes
-{
+export default class SurveySchemeQuestion extends BaseModel<
+  InferAttributes<SurveySchemeQuestion>,
+  InferCreationAttributes<SurveySchemeQuestion>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public questionId!: string;
+  declare questionId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: true,
@@ -52,10 +55,11 @@ export default class SurveySchemeQuestion
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 }
+
+export type SurveySchemeQuestionAttributes = Attributes<SurveySchemeQuestion>;
+export type SurveySchemeQuestionCreationAttributes = CreationAttributes<SurveySchemeQuestion>;

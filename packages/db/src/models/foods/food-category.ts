@@ -1,6 +1,12 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
-import type { FoodCategoryAttributes } from '@intake24/common/types/models';
 import { Category, Food } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -15,27 +21,30 @@ import BaseModel from '../model';
   freezeTableName: true,
   tableName: 'foods_categories',
 })
-export default class FoodCategory
-  extends BaseModel<FoodCategoryAttributes>
-  implements FoodCategoryAttributes
-{
+export default class FoodCategory extends BaseModel<
+  InferAttributes<FoodCategory>,
+  InferCreationAttributes<FoodCategory>
+> {
   @ForeignKey(() => Food)
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public foodCode!: string;
+  declare foodCode: string;
 
   @ForeignKey(() => Category)
   @Column({
     allowNull: false,
     type: DataType.STRING(8),
   })
-  public categoryCode!: string;
+  declare categoryCode: string;
 
   @BelongsTo(() => Food, 'foodCode')
-  public food?: Food;
+  declare food?: NonAttribute<Food>;
 
   @BelongsTo(() => Category, 'categoryCode')
-  public category?: Category;
+  declare category?: NonAttribute<Category>;
 }
+
+export type FoodCategoryAttributes = Attributes<FoodCategory>;
+export type FoodCategoryCreationAttributes = CreationAttributes<FoodCategory>;

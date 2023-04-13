@@ -7,8 +7,8 @@ import type {
 import type {
   LanguageTranslationAttributes,
   LanguageTranslationCreationAttributes,
-} from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+  WhereOptions,
+} from '@intake24/db';
 import type { LocaleMessages } from '@intake24/i18n';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Language, LanguageTranslation } from '@intake24/db';

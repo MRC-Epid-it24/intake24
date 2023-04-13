@@ -51,8 +51,8 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
-import type { NutrientTableRecordAttributes } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
+import type { NutrientTableRecordAttributes } from '@intake24/db';
 import { ConfirmDialog } from '@intake24/ui';
 
 import { AddNutrientDialog } from '.';

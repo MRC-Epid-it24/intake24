@@ -1,9 +1,12 @@
-import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
-
 import type {
-  FoodGroupAttributes,
-  FoodGroupCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { Food, FoodGroupLocal } from '.';
@@ -15,26 +18,29 @@ import { Food, FoodGroupLocal } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class FoodGroup
-  extends BaseModel<FoodGroupAttributes, FoodGroupCreationAttributes>
-  implements FoodGroupAttributes
-{
+export default class FoodGroup extends BaseModel<
+  InferAttributes<FoodGroup>,
+  InferCreationAttributes<FoodGroup>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public name!: string;
+  declare name: string;
 
   @HasMany(() => FoodGroupLocal, 'foodGroupId')
-  public localGroups?: FoodGroupLocal[];
+  declare localGroups?: NonAttribute<FoodGroupLocal[]>;
 
   @HasMany(() => Food, 'foodGroupId')
-  public foods?: Food[];
+  declare foods?: NonAttribute<Food[]>;
 }
+
+export type FoodGroupAttributes = Attributes<FoodGroup>;
+export type FoodGroupCreationAttributes = CreationAttributes<FoodGroup>;

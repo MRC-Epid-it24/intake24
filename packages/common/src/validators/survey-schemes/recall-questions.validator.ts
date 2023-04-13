@@ -2,7 +2,7 @@ import type { ValidateFunction as AjvValidateFunction } from 'ajv';
 import Ajv from 'ajv';
 import { inspect } from 'util';
 
-import type { RecallQuestions } from '../../schemes';
+import type { RecallQuestions } from '../../surveys';
 
 export const ajv = new Ajv({
   allErrors: true,

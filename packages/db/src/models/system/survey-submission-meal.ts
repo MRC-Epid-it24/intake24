@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SurveySubmissionMealAttributes,
-  SurveySubmissionMealCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import {
@@ -26,50 +29,53 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionMeal
-  extends BaseModel<SurveySubmissionMealAttributes, SurveySubmissionMealCreationAttributes>
-  implements SurveySubmissionMealAttributes
-{
+export default class SurveySubmissionMeal extends BaseModel<
+  InferAttributes<SurveySubmissionMeal>,
+  InferCreationAttributes<SurveySubmissionMeal>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public surveySubmissionId!: string;
+  declare surveySubmissionId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public hours!: number;
+  declare hours: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public minutes!: number;
+  declare minutes: number;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public name!: string | null;
+  declare name: string | null;
 
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')
-  public submission?: SurveySubmission;
+  declare submission?: NonAttribute<SurveySubmission>;
 
   @HasMany(() => SurveySubmissionMealCustomField, 'mealId')
-  public customFields?: SurveySubmissionMealCustomField[];
+  declare customFields?: NonAttribute<SurveySubmissionMealCustomField[]>;
 
   @HasMany(() => SurveySubmissionFood, 'mealId')
-  public foods?: SurveySubmissionFood[];
+  declare foods?: NonAttribute<SurveySubmissionFood[]>;
 
   @HasMany(() => SurveySubmissionMissingFood, 'mealId')
-  public missingFoods?: SurveySubmissionMissingFood[];
+  declare missingFoods?: NonAttribute<SurveySubmissionMissingFood[]>;
 }
+
+export type SurveySubmissionMealAttributes = Attributes<SurveySubmissionMeal>;
+export type SurveySubmissionMealCreationAttributes = CreationAttributes<SurveySubmissionMeal>;

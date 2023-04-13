@@ -1,4 +1,4 @@
-import type { Pagination, SurveySubmissionAttributes } from '@intake24/common/types/models';
+import type { Pagination, SurveySubmissionAttributes } from '@intake24/db';
 
 export type SurveySubmissionEntry = SurveySubmissionAttributes;
 

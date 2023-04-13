@@ -17,16 +17,20 @@ import type {
   FeedbackSchemeCreationAttributes,
   SurveySchemeCreationAttributes,
   SurveySchemeQuestionCreationAttributes,
-} from '@intake24/common/types/models';
+} from '@intake24/db';
 import {
   defaultTopFoods,
   feedbackOutputs,
   feedbackPhysicalDataFields,
 } from '@intake24/common/feedback';
 import { customPromptQuestions } from '@intake24/common/prompts';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import {
+  defaultExport,
+  defaultMeals,
+  defaultQuestions,
+  searchSortingAlgorithms,
+} from '@intake24/common/surveys';
 import { jobTypes } from '@intake24/common/types';
-import { searchSortingAlgorithms } from '@intake24/common/types/models';
 import { randomString } from '@intake24/common/util';
 
 const permission = (): PermissionRequest => {

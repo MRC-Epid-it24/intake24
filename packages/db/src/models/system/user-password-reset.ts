@@ -1,9 +1,12 @@
-import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
-
 import type {
-  UserPasswordResetAttributes,
-  UserPasswordResetCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -15,7 +18,7 @@ import { User } from '.';
   underscored: true,
 })
 export default class UserPasswordReset
-  extends BaseModel<UserPasswordResetAttributes, UserPasswordResetCreationAttributes>
+  extends BaseModel<InferAttributes<UserPasswordReset>, InferCreationAttributes<UserPasswordReset>>
   implements UserPasswordResetAttributes
 {
   @Column({
@@ -23,28 +26,29 @@ export default class UserPasswordReset
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public token!: string;
+  declare token: string;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type UserPasswordResetAttributes = Attributes<UserPasswordReset>;
+export type UserPasswordResetCreationAttributes = CreationAttributes<UserPasswordReset>;

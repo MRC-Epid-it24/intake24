@@ -212,7 +212,7 @@ import draggable from 'vuedraggable';
 
 import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import type { PhysicalActivityLevelAttributes } from '@intake24/common/types/models';
+import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';

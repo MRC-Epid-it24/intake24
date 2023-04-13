@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  GuideImageObjectAttributes,
-  GuideImageObjectCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { GuideImage } from '.';
@@ -15,35 +18,38 @@ import { GuideImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class GuideImageObject
-  extends BaseModel<GuideImageObjectAttributes, GuideImageObjectCreationAttributes>
-  implements GuideImageObjectAttributes
-{
+export default class GuideImageObject extends BaseModel<
+  InferAttributes<GuideImageObject>,
+  InferCreationAttributes<GuideImageObject>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public guideImageId!: string;
+  declare guideImageId: string;
 
   @Column({
     allowNull: false,
     type: DataType.DOUBLE,
   })
-  public weight!: number;
+  declare weight: number;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public imageMapObjectId!: string;
+  declare imageMapObjectId: string;
 
   @BelongsTo(() => GuideImage, 'guideImageId')
-  public guideImage?: GuideImage;
+  declare guideImage?: NonAttribute<GuideImage>;
 }
+
+export type GuideImageObjectAttributes = Attributes<GuideImageObject>;
+export type GuideImageObjectCreationAttributes = CreationAttributes<GuideImageObject>;

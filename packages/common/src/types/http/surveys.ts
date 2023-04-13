@@ -1,11 +1,11 @@
 import type {
   FeedbackSchemeAttributes,
-  LocaleAttributes,
-  SearchSortingAlgorithm,
   SurveySchemeAttributes,
-  SurveyState,
+  SystemLocaleAttributes,
   UserSurveySessionAttributes,
-} from '../models';
+} from '@intake24/db';
+
+import type { SearchSortingAlgorithm, SurveyState } from '../../surveys';
 
 export type GenerateUserResponse = {
   username: string;
@@ -34,7 +34,7 @@ export type SchemeEntryResponse = Pick<
 >;
 export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
-export type LocaleEntryResponse = Pick<LocaleAttributes, 'id' | 'code'>;
+export type LocaleEntryResponse = Pick<SystemLocaleAttributes, 'id' | 'code'>;
 
 export type SurveyEntryResponse = {
   id: string;

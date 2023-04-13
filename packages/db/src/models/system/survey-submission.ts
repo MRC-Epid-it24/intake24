@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -8,11 +16,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type {
-  SurveySubmissionAttributes,
-  SurveySubmissionCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from '.';
@@ -29,81 +32,82 @@ import { Survey, SurveySubmissionCustomField, SurveySubmissionMeal, User } from 
   freezeTableName: true,
   underscored: true,
 })
-export default class SurveySubmission
-  extends BaseModel<SurveySubmissionAttributes, SurveySubmissionCreationAttributes>
-  implements SurveySubmissionAttributes
-{
+export default class SurveySubmission extends BaseModel<
+  InferAttributes<SurveySubmission>,
+  InferCreationAttributes<SurveySubmission>
+> {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public surveyId!: string;
+  declare surveyId: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
   })
-  public startTime!: Date;
+  declare startTime: Date;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
   })
-  public endTime!: Date;
+  declare endTime: Date;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
   })
-  public submissionTime!: Date;
+  declare submissionTime: Date;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  public log!: string | null;
+  declare log: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public uxSessionId!: string;
+  declare uxSessionId: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public userAgent!: string | null;
+  declare userAgent: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey;
+  declare survey?: NonAttribute<Survey>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 
   @HasMany(() => SurveySubmissionCustomField, 'surveySubmissionId')
-  public customFields?: SurveySubmissionCustomField[];
+  declare customFields?: NonAttribute<SurveySubmissionCustomField[]>;
 
   @HasMany(() => SurveySubmissionMeal, 'surveySubmissionId')
-  public meals?: SurveySubmissionMeal[];
+  declare meals?: NonAttribute<SurveySubmissionMeal[]>;
 }
+
+export type SurveySubmissionAttributes = Attributes<SurveySubmission>;
+export type SurveySubmissionCreationAttributes = CreationAttributes<SurveySubmission>;

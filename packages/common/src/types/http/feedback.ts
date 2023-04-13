@@ -1,5 +1,6 @@
+import type { PhysicalActivityLevelAttributes } from '@intake24/db';
+
 import type { WeightTargetCoefficient } from '../../feedback';
-import type { PhysicalActivityLevelAttributes } from '../models/foods';
 
 export type NutrientType = {
   id: string;

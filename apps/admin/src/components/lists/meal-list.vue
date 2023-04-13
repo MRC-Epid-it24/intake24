@@ -147,7 +147,7 @@ import draggable from 'vuedraggable';
 import type { Meal, Meals } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { defaultMeals } from '@intake24/common/schemes';
+import { defaultMeals } from '@intake24/common/surveys';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 

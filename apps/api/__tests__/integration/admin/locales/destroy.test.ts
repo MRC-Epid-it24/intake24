@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { LocaleCreationAttributes } from '@intake24/common/types/models';
+import type { SystemLocaleCreationAttributes } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
@@ -11,7 +11,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: LocaleCreationAttributes;
+  let input: SystemLocaleCreationAttributes;
   let systemLocale: SystemLocale;
 
   beforeAll(async () => {

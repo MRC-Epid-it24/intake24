@@ -1,5 +1,6 @@
+import type { Pagination, TaskAttributes, TaskCreationAttributes } from '@intake24/db';
+
 import type { RepeatableBullJob } from '../../jobs';
-import type { Pagination, TaskAttributes, TaskCreationAttributes } from '../../models';
 
 export type TaskRequest = TaskCreationAttributes;
 

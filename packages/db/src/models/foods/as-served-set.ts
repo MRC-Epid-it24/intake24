@@ -1,6 +1,12 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
-import type { AsServedSetAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import {
@@ -21,44 +27,47 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class AsServedSet
-  extends BaseModel<AsServedSetAttributes>
-  implements AsServedSetAttributes
-{
+export default class AsServedSet extends BaseModel<
+  InferAttributes<AsServedSet>,
+  InferCreationAttributes<AsServedSet>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public selectionImageId!: string;
+  declare selectionImageId: ForeignKey<ProcessedImage['id']>;
 
   @BelongsTo(() => ProcessedImage, 'selectionImageId')
-  public selectionImage?: ProcessedImage;
+  declare selectionImage?: NonAttribute<ProcessedImage>;
 
   @HasMany(() => AsServedImage, 'asServedSetId')
-  public asServedImages?: AsServedImage[];
+  declare asServedImages?: NonAttribute<AsServedImage[]>;
 
   @HasMany(() => CategoryPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })
-  public categoryPsmParameters?: CategoryPortionSizeMethodParameter[];
+  declare categoryPsmParameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
 
   @HasMany(() => FoodPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })
-  public foodPsmParameters?: FoodPortionSizeMethodParameter[];
+  declare foodPsmParameters?: NonAttribute<FoodPortionSizeMethodParameter[]>;
 }
+
+export type AsServedSetAttributes = Attributes<AsServedSet>;
+export type AsServedSetCreationAttributes = CreationAttributes<AsServedSet>;

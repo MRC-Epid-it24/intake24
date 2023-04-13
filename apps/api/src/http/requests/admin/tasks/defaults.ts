@@ -2,8 +2,7 @@ import type { Request } from 'express';
 import type { Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
-import type { TaskAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { TaskAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { cron, unique } from '@intake24/api/http/rules';
 import { jobTypes } from '@intake24/common/types';

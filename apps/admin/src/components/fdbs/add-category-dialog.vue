@@ -90,7 +90,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref, toRefs } from 'vue';
 
 import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
-import type { CategoryAttributes } from '@intake24/common/types/models';
+import type { CategoryAttributes } from '@intake24/db';
 import { copy } from '@intake24/common/util';
 
 import { useFetchList } from '../lists';

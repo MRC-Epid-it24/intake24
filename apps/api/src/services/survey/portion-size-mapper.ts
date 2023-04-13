@@ -1,5 +1,5 @@
 import type { PortionSizeStates } from '@intake24/common/types';
-import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/common/types/models';
+import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/db';
 
 export const genericMapper = <T extends keyof PortionSizeStates>(
   foodId: string,

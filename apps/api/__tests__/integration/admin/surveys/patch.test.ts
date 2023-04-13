@@ -3,8 +3,7 @@ import { pick } from 'lodash';
 import type { SetSecurableOptions } from '@intake24/api-tests/integration/helpers';
 import type { SurveyRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { guardedSurveyFields } from '@intake24/common/types/models';
-import { Survey } from '@intake24/db';
+import { guardedSurveyFields, Survey } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/surveys';

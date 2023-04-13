@@ -1,24 +1,24 @@
 import type {
-  NutrientTypeAttributes,
   NutrientTypeInKcalAttributes,
-  NutrientUnitAttributes,
   Pagination,
-} from '../../models';
+  SystemNutrientTypeAttributes,
+  SystemNutrientUnitAttributes,
+} from '@intake24/db';
 
-export interface NutrientTypeRequest extends NutrientTypeAttributes {
+export interface NutrientTypeRequest extends SystemNutrientTypeAttributes {
   kcalPerUnit?: number | null;
 }
 
 export type UpdateNutrientTypeRequest = Partial<Omit<NutrientTypeRequest, 'id'>>;
 
-export type NutrientTypesResponse = Pagination<NutrientTypeAttributes>;
+export type NutrientTypesResponse = Pagination<SystemNutrientTypeAttributes>;
 
 export interface NutrientTypeEntry
-  extends NutrientTypeAttributes,
+  extends SystemNutrientTypeAttributes,
     Partial<Pick<NutrientTypeInKcalAttributes, 'kcalPerUnit'>> {
-  unit?: NutrientUnitAttributes;
+  unit?: SystemNutrientUnitAttributes;
 }
 
 export type NutrientTypeRefs = {
-  units: NutrientUnitAttributes[];
+  units: SystemNutrientUnitAttributes[];
 };

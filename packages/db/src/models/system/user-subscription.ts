@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -8,15 +16,19 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type {
-  PushSubscription,
-  SubscriptionType,
-  UserSubscriptionAttributes,
-  UserSubscriptionCreationAttributes,
-} from '@intake24/common/types/models';
-
 import BaseModel from '../model';
 import { User } from '.';
+
+export type SubscriptionType = 'web-push';
+
+export type PushSubscription = {
+  endpoint: string;
+  expirationTime?: number | Date | null; // TODO: Verify this
+  keys: {
+    p256dh: string;
+    auth: string;
+  };
+};
 
 @Scopes(() => ({
   user: { include: [{ model: User }] },
@@ -27,28 +39,28 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSubscription
-  extends BaseModel<UserSubscriptionAttributes, UserSubscriptionCreationAttributes>
-  implements UserSubscriptionAttributes
-{
+export default class UserSubscription extends BaseModel<
+  InferAttributes<UserSubscription>,
+  InferCreationAttributes<UserSubscription>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public type!: SubscriptionType;
+  declare type: SubscriptionType;
 
   @Column({
     allowNull: false,
@@ -65,13 +77,14 @@ export default class UserSubscription
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type UserSubscriptionAttributes = Attributes<UserSubscription>;
+export type UserSubscriptionCreationAttributes = CreationAttributes<UserSubscription>;

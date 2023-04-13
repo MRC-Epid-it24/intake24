@@ -2,7 +2,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { ComponentType, GenericActionType, MealActionType } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import type { FoodState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';

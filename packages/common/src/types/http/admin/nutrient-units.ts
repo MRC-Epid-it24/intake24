@@ -1,8 +1,8 @@
-import type { NutrientUnitAttributes, Pagination } from '../../models';
+import type { Pagination, SystemNutrientUnitAttributes } from '@intake24/db';
 
-export type NutrientUnitRequest = NutrientUnitAttributes;
-export type UpdateNutrientUnitRequest = Partial<Omit<NutrientUnitAttributes, 'id'>>;
+export type NutrientUnitRequest = SystemNutrientUnitAttributes;
+export type UpdateNutrientUnitRequest = Partial<Omit<SystemNutrientUnitAttributes, 'id'>>;
 
-export type NutrientUnitsResponse = Pagination<NutrientUnitAttributes>;
+export type NutrientUnitsResponse = Pagination<SystemNutrientUnitAttributes>;
 
-export type NutrientUnitEntry = NutrientUnitAttributes;
+export type NutrientUnitEntry = SystemNutrientUnitAttributes;

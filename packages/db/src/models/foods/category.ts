@@ -1,7 +1,12 @@
-/* eslint-disable no-use-before-define */
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsToMany, Column, DataType, HasMany, HasOne, Table } from 'sequelize-typescript';
-
-import type { CategoryAttributes, CategoryCreationAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import {
@@ -20,63 +25,66 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class Category
-  extends BaseModel<CategoryAttributes, CategoryCreationAttributes>
-  implements CategoryAttributes
-{
+export default class Category extends BaseModel<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(8),
   })
-  public code!: string;
+  declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     defaultValue: false,
     type: DataType.BOOLEAN,
   })
-  public isHidden!: boolean;
+  declare isHidden: CreationOptional<boolean>;
 
   @Column({
     allowNull: false,
     type: DataType.UUID,
   })
-  public version!: string;
+  declare version: string;
 
   @HasOne(() => CategoryAttribute)
-  public attributes?: CategoryAttribute;
+  declare attributes?: NonAttribute<CategoryAttribute>;
 
   @HasMany(() => AssociatedFood, 'associatedCategoryCode')
-  public categoryAssociations?: AssociatedFood[];
+  declare categoryAssociations?: NonAttribute<AssociatedFood[]>;
 
   @BelongsToMany(() => Category, () => CategoryCategory, 'subcategoryCode', 'categoryCode')
-  public parentCategories?: Category[];
+  declare parentCategories?: NonAttribute<Category[]>;
 
   @HasMany(() => CategoryCategory, 'subcategoryCode')
-  public parentCategoryMappings?: CategoryCategory[];
+  declare parentCategoryMappings?: NonAttribute<CategoryCategory[]>;
 
   @BelongsToMany(() => Category, () => CategoryCategory, 'categoryCode', 'subcategoryCode')
-  public subCategories?: Category[];
+  declare subCategories?: NonAttribute<Category[]>;
 
   @HasMany(() => CategoryCategory, 'categoryCode')
-  public subcategoryMappings?: CategoryCategory[];
+  declare subcategoryMappings?: NonAttribute<CategoryCategory[]>;
 
   @BelongsToMany(() => Food, () => FoodCategory)
-  public foods?: Food[];
+  declare foods?: NonAttribute<Food[]>;
 
   @HasMany(() => FoodCategory, 'categoryCode')
-  public foodLinks?: CategoryCategory[];
+  declare foodLinks?: NonAttribute<CategoryCategory[]>;
 
   @HasMany(() => CategoryLocal, 'categoryCode')
-  public locals?: CategoryLocal[];
+  declare locals?: NonAttribute<CategoryLocal[]>;
 
   @HasMany(() => CategoryLocal, 'categoryCode')
-  public prototypeLocals?: CategoryLocal[];
+  declare prototypeLocals?: NonAttribute<CategoryLocal[]>;
 }
+
+export type CategoryAttributes = Attributes<Category>;
+export type CategoryCreationAttributes = CreationAttributes<Category>;

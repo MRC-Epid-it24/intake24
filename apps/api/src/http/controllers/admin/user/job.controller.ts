@@ -6,8 +6,7 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
-import type { JobAttributes } from '@intake24/common/types/models';
-import type { PaginateQuery, User, WhereOptions } from '@intake24/db';
+import type { JobAttributes, PaginateQuery, User, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Job, Op } from '@intake24/db';
 

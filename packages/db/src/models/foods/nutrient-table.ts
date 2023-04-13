@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { Column, DataType, HasMany, HasOne, Scopes, Table } from 'sequelize-typescript';
 
-import type {
-  NutrientTableAttributes,
-  NutrientTableCreationAttributes,
-} from '@intake24/common/types/models';
-
+import type { NutrientTableRecordCreationAttributes } from './nutrient-table-record';
 import BaseModel from '../model';
 import {
   NutrientTableCsvMapping,
@@ -24,31 +28,36 @@ import {
   underscored: true,
 })
 export default class NutrientTable extends BaseModel<
-  NutrientTableAttributes,
-  NutrientTableCreationAttributes
+  InferAttributes<NutrientTable>,
+  InferCreationAttributes<NutrientTable> & {
+    records?: NutrientTableRecordCreationAttributes[];
+  }
 > {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public description!: string;
+  declare description: string;
 
   @HasMany(() => NutrientTableRecord, 'nutrientTableId')
-  records?: NutrientTableRecord[];
+  records?: NonAttribute<NutrientTableRecord[]>;
 
   @HasOne(() => NutrientTableCsvMapping, 'nutrientTableId')
-  csvMapping?: NutrientTableCsvMapping;
+  csvMapping?: NonAttribute<NutrientTableCsvMapping>;
 
   @HasMany(() => NutrientTableCsvMappingField, 'nutrientTableId')
-  csvMappingFields?: NutrientTableCsvMappingField[];
+  csvMappingFields?: NonAttribute<NutrientTableCsvMappingField[]>;
 
   @HasMany(() => NutrientTableCsvMappingNutrient, 'nutrientTableId')
-  csvMappingNutrients?: NutrientTableCsvMappingNutrient[];
+  csvMappingNutrients?: NonAttribute<NutrientTableCsvMappingNutrient[]>;
 }
+
+export type NutrientTableAttributes = Attributes<NutrientTable>;
+export type NutrientTableCreationAttributes = CreationAttributes<NutrientTable>;

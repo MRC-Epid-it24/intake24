@@ -1,4 +1,5 @@
-import type { GuideImageAttributes, Pagination } from '../../models';
+import type { GuideImageAttributes, Pagination } from '@intake24/db';
+
 import type { ImageMapEntry, ImageMapEntryObject } from './image-maps';
 
 export interface GuideImageEntryObject extends ImageMapEntryObject {

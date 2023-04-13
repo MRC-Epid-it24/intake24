@@ -1,6 +1,12 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
-import type { NutrientTableCsvMappingAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { NutrientTable } from '.';
@@ -12,42 +18,48 @@ import { NutrientTable } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class NutrientTableCsvMapping extends BaseModel<NutrientTableCsvMappingAttributes> {
+export default class NutrientTableCsvMapping extends BaseModel<
+  InferAttributes<NutrientTableCsvMapping>,
+  InferCreationAttributes<NutrientTableCsvMapping>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public nutrientTableId!: string;
+  declare nutrientTableId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public rowOffset!: number;
+  declare rowOffset: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public idColumnOffset!: number;
+  declare idColumnOffset: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public descriptionColumnOffset!: number;
+  declare descriptionColumnOffset: number;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public localDescriptionColumnOffset!: number | null;
+  declare localDescriptionColumnOffset: CreationOptional<number | null>;
 
   @BelongsTo(() => NutrientTable, {
     foreignKey: 'nutrientTableId',
     onUpdate: 'cascade',
     onDelete: 'cascade',
   })
-  public nutrientTable?: NutrientTable;
+  declare nutrientTable?: NonAttribute<NutrientTable>;
 }
+
+export type NutrientTableCsvMappingAttributes = Attributes<NutrientTableCsvMapping>;
+export type NutrientTableCsvMappingCreationAttributes = CreationAttributes<NutrientTableCsvMapping>;

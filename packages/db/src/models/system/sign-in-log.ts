@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SignInLogAttributes,
-  SignInLogCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -18,66 +21,69 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SignInLog
-  extends BaseModel<SignInLogAttributes, SignInLogCreationAttributes>
-  implements SignInLogAttributes
-{
+export default class SignInLog extends BaseModel<
+  InferAttributes<SignInLog>,
+  InferCreationAttributes<SignInLog>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public userId!: string | null;
+  declare userId: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
     defaultValue: () => new Date(),
   })
-  public date!: Date;
+  declare date: CreationOptional<Date>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(64),
   })
-  public remoteAddress!: string | null;
+  declare remoteAddress: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public provider!: string;
+  declare provider: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public providerKey!: string;
+  declare providerKey: string;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public successful!: boolean;
+  declare successful: boolean;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  public message!: string | null;
+  declare message: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public userAgent!: string | null;
+  declare userAgent: CreationOptional<string | null>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type SignInLogAttributes = Attributes<SignInLog>;
+export type SignInLogCreationAttributes = CreationAttributes<SignInLog>;

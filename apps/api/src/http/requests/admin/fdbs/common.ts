@@ -1,8 +1,10 @@
 import type { Schema } from 'express-validator';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
-import { portionSizeMethods as portionSizeMethodIds } from '@intake24/common/types';
-import { useInRecipeTypes } from '@intake24/common/types/models';
+import {
+  portionSizeMethods as portionSizeMethodIds,
+  useInRecipeTypes,
+} from '@intake24/common/types';
 import { Category, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {

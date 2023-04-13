@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   AfterBulkCreate,
   AfterCreate,
@@ -10,16 +18,11 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type {
-  PermissionAttributes,
-  PermissionCreationAttributes,
-} from '@intake24/common/types/models';
 import { aclConfig } from '@intake24/common-backend';
 
 import BaseModel from '../model';
 import { PermissionRole, PermissionUser, Role, User } from '.';
 
-// eslint-disable-next-line no-use-before-define
 export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<void> => {
   const admin = await Role.findOne({ where: { name: aclConfig.roles.superuser } });
   if (admin) await admin.$add('permissions', permissions);
@@ -37,49 +40,47 @@ export const addPermissionsToAdmin = async (permissions: Permission[]): Promise<
   freezeTableName: true,
   underscored: true,
 })
-export default class Permission
-  extends BaseModel<PermissionAttributes, PermissionCreationAttributes>
-  implements PermissionAttributes
-{
+export default class Permission extends BaseModel<
+  InferAttributes<Permission>,
+  InferCreationAttributes<Permission>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public displayName!: string;
+  declare displayName: string;
 
   @Column({
     allowNull: true,
     type: DataType.TEXT,
   })
-  public description!: string | null;
+  declare description: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare updatedAt: CreationOptional<Date>;
 
   @BelongsToMany(() => Role, () => PermissionRole)
-  public roles?: Role[];
+  declare roles?: NonAttribute<Role[]>;
 
   @BelongsToMany(() => User, () => PermissionUser)
-  public users?: User[];
+  declare users?: NonAttribute<User[]>;
 
   // Always attach new permission(s) to main admin/superuser role
   @AfterCreate
@@ -92,3 +93,6 @@ export default class Permission
     await addPermissionsToAdmin(permissions);
   }
 }
+
+export type PermissionAttributes = Attributes<Permission>;
+export type PermissionCreationAttributes = CreationAttributes<Permission>;

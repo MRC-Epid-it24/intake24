@@ -1,4 +1,4 @@
-import type { LanguageCreationAttributes } from '@intake24/common/types/models';
+import type { LanguageCreationAttributes } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
 import { Language } from '@intake24/db';
 

@@ -2,7 +2,7 @@ import { orderBy } from 'lodash';
 import uaParser from 'ua-parser-js';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { ExportField as BaseExportField } from '@intake24/common/schemes';
+import type { ExportField as BaseExportField } from '@intake24/common/surveys';
 import type { SurveyScheme, SurveySubmissionFood } from '@intake24/db';
 import { NutrientTableCsvMappingField, SystemNutrientType, UserCustomField } from '@intake24/db';
 

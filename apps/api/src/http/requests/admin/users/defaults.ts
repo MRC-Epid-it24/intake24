@@ -2,8 +2,7 @@ import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 import { has, isPlainObject } from 'lodash';
 
-import type { UserAttributes } from '@intake24/common/types/models';
-import type { WhereOptions } from '@intake24/db';
+import type { UserAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { Op, User } from '@intake24/db';

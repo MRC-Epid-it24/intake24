@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompt } from '@intake24/common/prompts';
+import type { SurveyState as SurveyStatus } from '@intake24/common/surveys';
 import type { SurveyState } from '@intake24/common/types';
 import type {
   SurveyEntryResponse,
@@ -10,10 +11,9 @@ import type {
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
-import type { SurveyState as SurveyStatus } from '@intake24/common/types/models';
 import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { flattenSchemeWithSection, isMealSection } from '@intake24/common/schemes';
+import { flattenSchemeWithSection, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 

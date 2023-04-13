@@ -1,6 +1,6 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodHeader } from '@intake24/common/types/http';
-import type { SearchSortingAlgorithm } from '@intake24/common/types/models';
 import type { logger } from '@intake24/services/logger/logger';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';

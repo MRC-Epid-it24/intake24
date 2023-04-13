@@ -96,9 +96,16 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Nullable } from '@intake24/common/types';
-import type { Attributes, AttributeType } from '@intake24/common/types/models';
 import type { Errors } from '@intake24/common/util';
-import { useInRecipeTypes } from '@intake24/common/types/models';
+import type { AttributeDefaultsAttributes } from '@intake24/db';
+import { useInRecipeTypes } from '@intake24/common/types';
+
+type Attributes = Pick<
+  AttributeDefaultsAttributes,
+  'sameAsBeforeOption' | 'readyMealOption' | 'reasonableAmount' | 'useInRecipes'
+>;
+
+type AttributeType = keyof Attributes;
 
 const defaultAttributes: Attributes = {
   sameAsBeforeOption: false,

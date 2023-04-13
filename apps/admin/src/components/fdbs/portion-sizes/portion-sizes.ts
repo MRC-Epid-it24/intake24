@@ -1,16 +1,12 @@
-import type { Optional } from '@intake24/common/types';
 import type {
-  PortionSizeMethodAttributes,
-  PortionSizeMethodParameterAttributes,
-} from '@intake24/common/types/models';
+  FoodPortionSizeMethodCreationAttributes,
+  FoodPortionSizeMethodParameterCreationAttributes,
+} from '@intake24/db';
 import { randomString } from '@intake24/common/util';
 
-export type PortionSizeMethodParameterItem = Optional<
-  PortionSizeMethodParameterAttributes,
-  'id' | 'portionSizeMethodId'
->;
+export type PortionSizeMethodParameterItem = FoodPortionSizeMethodParameterCreationAttributes;
 
-export interface PortionSizeMethodItem extends Optional<PortionSizeMethodAttributes, 'id'> {
+export interface PortionSizeMethodItem extends FoodPortionSizeMethodCreationAttributes {
   parameters: PortionSizeMethodParameterItem[];
 }
 

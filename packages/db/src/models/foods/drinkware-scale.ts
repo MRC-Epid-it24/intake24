@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  DrinkwareScaleAttributes,
-  DrinkwareScaleCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { DrinkwareSet, DrinkwareVolumeSample } from '.';
@@ -19,68 +22,71 @@ import { DrinkwareSet, DrinkwareVolumeSample } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class DrinkwareScale
-  extends BaseModel<DrinkwareScaleAttributes, DrinkwareScaleCreationAttributes>
-  implements DrinkwareScaleAttributes
-{
+export default class DrinkwareScale extends BaseModel<
+  InferAttributes<DrinkwareScale>,
+  InferCreationAttributes<DrinkwareScale>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public drinkwareSetId!: string;
+  declare drinkwareSetId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public width!: number;
+  declare width: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public height!: number;
+  declare height: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public emptyLevel!: number;
+  declare emptyLevel: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public fullLevel!: number;
+  declare fullLevel: number;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public choiceId!: number;
+  declare choiceId: number;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public baseImageUrl!: string;
+  declare baseImageUrl: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public overlayImageUrl!: string;
+  declare overlayImageUrl: string;
 
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
-  public drinkwareSet?: DrinkwareSet;
+  declare drinkwareSet?: NonAttribute<DrinkwareSet>;
 
   @HasMany(() => DrinkwareVolumeSample, 'drinkwareScaleId')
-  public volumeSamples?: DrinkwareVolumeSample[];
+  declare volumeSamples?: NonAttribute<DrinkwareVolumeSample[]>;
 }
+
+export type DrinkwareScaleAttributes = Attributes<DrinkwareScale>;
+export type DrinkwareScaleCreationAttributes = CreationAttributes<DrinkwareScale>;

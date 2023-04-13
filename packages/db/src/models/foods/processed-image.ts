@@ -1,13 +1,25 @@
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  ProcessedImageAttributes,
-  ProcessedImageCreationAttributes,
-  ProcessedImagePurpose,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
+
+export enum ProcessedImagePurposes {
+  AsServedMainImage = 1,
+  AsServedThumbnail = 2,
+  SelectionImage = 3,
+  ImageMapBaseImage = 4,
+  ImageMapOverlay = 5,
+}
+
+export type ProcessedImagePurpose = ProcessedImagePurposes;
 
 @Scopes(() => ({
   asServedSets: { include: [{ model: AsServedSet }] },
@@ -22,54 +34,57 @@ import { AsServedImage, AsServedSet, ImageMap, SourceImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ProcessedImage
-  extends BaseModel<ProcessedImageAttributes, ProcessedImageCreationAttributes>
-  implements ProcessedImageAttributes
-{
+export default class ProcessedImage extends BaseModel<
+  InferAttributes<ProcessedImage>,
+  InferCreationAttributes<ProcessedImage>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(1024),
   })
-  public path!: string;
+  declare path: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public sourceId!: string;
+  declare sourceId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public purpose!: ProcessedImagePurpose;
+  declare purpose: ProcessedImagePurpose;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
     defaultValue: () => new Date(),
   })
-  public createdAt!: Date;
+  declare createdAt: CreationOptional<Date>;
 
   @BelongsTo(() => SourceImage, 'sourceId')
-  public sourceImage?: SourceImage;
+  declare sourceImage?: NonAttribute<SourceImage>;
 
   @HasMany(() => AsServedSet, 'selectionImageId')
-  public asServedSets?: AsServedSet[];
+  declare asServedSets?: NonAttribute<AsServedSet[]>;
 
   @HasMany(() => AsServedImage, 'imageId')
-  public asServedImages?: AsServedImage[];
+  declare asServedImages?: NonAttribute<AsServedImage[]>;
 
   @HasMany(() => AsServedImage, 'thumbnailImageId')
-  public asServedThumbnailImages?: AsServedImage[];
+  declare asServedThumbnailImages?: NonAttribute<AsServedImage[]>;
 
   @HasMany(() => ImageMap, 'baseImageId')
-  public imageMaps?: ImageMap[];
+  declare imageMaps?: NonAttribute<ImageMap[]>;
 }
+
+export type ProcessedImageAttributes = Attributes<ProcessedImage>;
+export type ProcessedImageCreationAttributes = CreationAttributes<ProcessedImage>;

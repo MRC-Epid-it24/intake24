@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  UserCustomFieldAttributes,
-  UserCustomFieldCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -18,35 +21,38 @@ import { User } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class UserCustomField
-  extends BaseModel<UserCustomFieldAttributes, UserCustomFieldCreationAttributes>
-  implements UserCustomFieldAttributes
-{
+export default class UserCustomField extends BaseModel<
+  InferAttributes<UserCustomField>,
+  InferCreationAttributes<UserCustomField>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public userId!: string;
+  declare userId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type UserCustomFieldAttributes = Attributes<UserCustomField>;
+export type UserCustomFieldCreationAttributes = CreationAttributes<UserCustomField>;

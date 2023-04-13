@@ -1,10 +1,11 @@
-import type { Dictionary } from '../..';
 import type {
   DrinkwareScaleAttributes,
   DrinkwareSetAttributes,
   DrinkwareVolumeSampleAttributes,
   StandardUnitAttributes,
-} from '../../models';
+} from '@intake24/db';
+
+import type { Dictionary } from '../..';
 
 export type AsServedImageResponse = {
   mainImageUrl: string;

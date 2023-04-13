@@ -78,7 +78,7 @@ import type {
   LanguageEntry,
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
-import type { LanguageTranslationAttributes } from '@intake24/common/types/models';
+import type { LanguageTranslationAttributes } from '@intake24/db';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';

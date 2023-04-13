@@ -1,9 +1,9 @@
-import type { Pagination } from '../../models';
-import type { PhysicalActivityLevelAttributes } from '../../models/foods/physical-activity-levels';
 import type {
   FeedbackSchemeAttributes,
-  // FeedbackSchemeCreationAttributes,
-} from '../../models/system/feedback-schemes';
+  Pagination,
+  PhysicalActivityLevelAttributes,
+} from '@intake24/db';
+
 import type { LanguageListEntry } from './languages';
 import type { NutrientTypeEntry } from './nutrient-types';
 import type { Owner } from './users';

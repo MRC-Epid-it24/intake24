@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { UserPhysicalDataAttributes } from '@intake24/common/types/models/system';
+import type { UserPhysicalDataAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { feedbackPhysicalDataFields } from '@intake24/common/feedback';
 import { FeedbackScheme, Survey, UserPhysicalData } from '@intake24/db';

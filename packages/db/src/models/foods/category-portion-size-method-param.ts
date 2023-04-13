@@ -1,9 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type {
-  PortionSizeMethodParameterAttributes,
-  PortionSizeMethodParameterCreationAttributes,
-} from '@intake24/common/types/models';
 import { AsServedSet, CategoryPortionSizeMethod, GuideImage, StandardUnit } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -15,56 +20,58 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryPortionSizeMethodParameter
-  extends BaseModel<
-    PortionSizeMethodParameterAttributes,
-    PortionSizeMethodParameterCreationAttributes
-  >
-  implements PortionSizeMethodParameterAttributes
-{
+export default class CategoryPortionSizeMethodParameter extends BaseModel<
+  InferAttributes<CategoryPortionSizeMethodParameter>,
+  InferCreationAttributes<CategoryPortionSizeMethodParameter>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public portionSizeMethodId!: string;
+  declare portionSizeMethodId: ForeignKey<CategoryPortionSizeMethod['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => CategoryPortionSizeMethod, 'portionSizeMethodId')
-  public portionSizeMethod?: CategoryPortionSizeMethod;
+  declare portionSizeMethod?: NonAttribute<CategoryPortionSizeMethod>;
 
   @BelongsTo(() => AsServedSet, {
     foreignKey: 'value',
     constraints: false,
   })
-  public asServedSet?: AsServedSet;
+  declare asServedSet?: NonAttribute<AsServedSet>;
 
   @BelongsTo(() => GuideImage, {
     foreignKey: 'value',
     constraints: false,
   })
-  public guideImage?: GuideImage;
+  declare guideImage?: NonAttribute<GuideImage>;
 
   @BelongsTo(() => StandardUnit, {
     foreignKey: 'value',
     constraints: false,
   })
-  public standardUnit?: StandardUnit;
+  declare standardUnit?: NonAttribute<StandardUnit>;
 }
+
+export type CategoryPortionSizeMethodParameterAttributes =
+  Attributes<CategoryPortionSizeMethodParameter>;
+export type CategoryPortionSizeMethodParameterCreationAttributes =
+  CreationAttributes<CategoryPortionSizeMethodParameter>;

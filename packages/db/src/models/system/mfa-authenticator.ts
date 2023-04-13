@@ -1,9 +1,16 @@
-import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
-
 import type {
-  MFAAuthenticatorAttributes,
-  MFAAuthenticatorCreationAttributes,
-} from '@intake24/common/types/models';
+  AuthenticatorTransportFuture,
+  CredentialDeviceType,
+} from '@simplewebauthn/typescript-types';
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { MFADevice } from '.';
@@ -14,22 +21,22 @@ import { MFADevice } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class MFAAuthenticator
-  extends BaseModel<MFAAuthenticatorAttributes, MFAAuthenticatorCreationAttributes>
-  implements MFAAuthenticatorAttributes
-{
+export default class MFAAuthenticator extends BaseModel<
+  InferAttributes<MFAAuthenticator>,
+  InferCreationAttributes<MFAAuthenticator>
+> {
   @Column({
     primaryKey: true,
     type: DataType.STRING(512),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
     unique: true,
   })
-  public deviceId!: string;
+  declare deviceId: string;
 
   @Column({
     allowNull: false,
@@ -47,46 +54,47 @@ export default class MFAAuthenticator
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public counter!: string;
+  declare counter: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public deviceType!: MFAAuthenticatorAttributes['deviceType'];
+  declare deviceType: CredentialDeviceType;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public backedUp!: boolean;
+  declare backedUp: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.TEXT,
   })
-  get transports(): MFAAuthenticatorAttributes['transports'] {
+  get transports(): AuthenticatorTransportFuture[] {
     const val = this.getDataValue('transports') as unknown;
     return val ? JSON.parse(val as string) : [];
   }
 
-  set transports(value: MFAAuthenticatorAttributes['transports']) {
+  set transports(value: AuthenticatorTransportFuture[]) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('transports', JSON.stringify(value ?? []));
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => MFADevice, 'deviceId')
-  public device?: MFADevice;
+  declare device?: NonAttribute<MFADevice>;
 
   getIdBuffer(): Buffer {
     return Buffer.from(this.id, 'base64url');
   }
 }
+
+export type MFAAuthenticatorAttributes = Attributes<MFAAuthenticator>;
+export type MFAAuthenticatorCreationAttributes = CreationAttributes<MFAAuthenticator>;

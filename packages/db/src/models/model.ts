@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 /* eslint-disable @typescript-eslint/ban-types */
 import { Readable } from 'node:stream';
 
@@ -6,7 +5,22 @@ import type { CountOptions, FindOptions } from 'sequelize';
 import { Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 
-import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
+import type { Dictionary } from '@intake24/common/types';
+
+export interface PaginationMeta {
+  from: number;
+  lastPage: number;
+  page: number;
+  path: string;
+  limit: number;
+  to: number;
+  total: number;
+}
+
+export interface Pagination<R = Dictionary> {
+  data: R[];
+  meta: PaginationMeta;
+}
 
 export type PaginateQuery = {
   page?: number;

@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { Column, CreatedAt, DataType, HasMany, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type {
-  StandardUnitAttributes,
-  StandardUnitCreationAttributes,
-} from '@intake24/common/types/models';
 
 import { CategoryPortionSizeMethodParameter, FoodPortionSizeMethodParameter } from '..';
 import BaseModel from '../model';
@@ -16,16 +20,16 @@ import BaseModel from '../model';
   timestamps: true,
   underscored: true,
 })
-export default class StandardUnit
-  extends BaseModel<StandardUnitAttributes, StandardUnitCreationAttributes>
-  implements StandardUnitAttributes
-{
+export default class StandardUnit extends BaseModel<
+  InferAttributes<StandardUnit>,
+  InferCreationAttributes<StandardUnit>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(64),
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
@@ -56,22 +60,23 @@ export default class StandardUnit
   }
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare updatedAt: CreationOptional<Date>;
 
   @HasMany(() => CategoryPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })
-  public categoryPsmParameters?: CategoryPortionSizeMethodParameter[];
+  declare categoryPsmParameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
 
   @HasMany(() => FoodPortionSizeMethodParameter, {
     foreignKey: 'value',
     constraints: false,
   })
-  public foodPsmParameters?: FoodPortionSizeMethodParameter[];
+  declare foodPsmParameters?: NonAttribute<FoodPortionSizeMethodParameter[]>;
 }
+
+export type StandardUnitAttributes = Attributes<StandardUnit>;
+export type StandardUnitCreationAttributes = CreationAttributes<StandardUnit>;

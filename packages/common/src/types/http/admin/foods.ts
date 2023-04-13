@@ -1,14 +1,14 @@
 import type {
-  Attributes,
   CategoryAttributes,
-  FoodAssociations,
+  FoodAttributeAttributes,
   FoodAttributes,
   FoodGroupAttributes,
   FoodLocalAttributes,
-  FoodPortionSizeMethodUpdateAttributes,
+  FoodPortionSizeMethodCreationAttributes,
+  FoodPortionSizeMethodParameterCreationAttributes,
   NutrientTableRecordAttributes,
   Pagination,
-} from '../../models';
+} from '@intake24/db';
 
 export type FoodInput = {
   name: string;
@@ -16,11 +16,13 @@ export type FoodInput = {
     code: string;
     name: string;
     foodGroupId: string;
-    attributes: Attributes;
+    attributes: FoodAttributeAttributes;
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
-  portionSizeMethods: FoodPortionSizeMethodUpdateAttributes[];
+  portionSizeMethods: (FoodPortionSizeMethodCreationAttributes & {
+    parameters: FoodPortionSizeMethodParameterCreationAttributes[];
+  })[];
 };
 
 export type FoodListEntry = {
@@ -33,8 +35,11 @@ export type FoodListEntry = {
 
 export type FoodsResponse = Pagination<FoodLocalAttributes>;
 
-export type FoodEntry = FoodAttributes &
-  Pick<FoodAssociations, 'attributes' | 'foodGroup' | 'parentCategories'>;
+export type FoodEntry = FoodAttributes & {
+  attributes?: FoodAttributeAttributes;
+  foodGroup?: FoodGroupAttributes;
+  parentCategories?: CategoryAttributes[];
+};
 
 export interface FoodLocalEntry extends FoodLocalAttributes {
   main?: FoodEntry;

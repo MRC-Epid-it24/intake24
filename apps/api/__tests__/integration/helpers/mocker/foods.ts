@@ -10,7 +10,7 @@ import type {
   NutrientTypeRequest,
   NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
-import type { StandardUnitCreationAttributes } from '@intake24/common/types/models';
+import type { StandardUnitCreationAttributes } from '@intake24/db';
 import { toStandardUnitId } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 

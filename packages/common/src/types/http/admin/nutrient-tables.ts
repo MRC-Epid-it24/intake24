@@ -1,12 +1,12 @@
 import type {
-  NutrientTableAssociations,
   NutrientTableAttributes,
   NutrientTableCsvMappingAttributes,
   NutrientTableCsvMappingFieldAttributes,
   NutrientTableCsvMappingNutrientAttributes,
   NutrientTableRecordAttributes,
   Pagination,
-} from '../../models';
+} from '@intake24/db';
+
 import type { NutrientTypeEntry } from './nutrient-types';
 
 export type NutrientTableCsvMappingInput = Omit<
@@ -36,10 +36,11 @@ export interface NutrientTableInput extends NutrientTableAttributes {
 
 export type NutrientTablesResponse = Pagination<NutrientTableAttributes>;
 
-export type NutrientTableEntry = NutrientTableAttributes &
-  Required<
-    Pick<NutrientTableAssociations, 'csvMapping' | 'csvMappingFields' | 'csvMappingNutrients'>
-  >;
+export type NutrientTableEntry = NutrientTableAttributes & {
+  csvMapping: NutrientTableCsvMappingAttributes;
+  csvMappingFields: NutrientTableCsvMappingFieldAttributes[];
+  csvMappingNutrients: NutrientTableCsvMappingNutrientAttributes[];
+};
 
 export type NutrientTableRefs = {
   nutrientTypes: NutrientTypeEntry[];

@@ -1,6 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
-import type { DrinkwareSetAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { DrinkwareScale, ImageMap } from '.';
@@ -15,32 +20,35 @@ import { DrinkwareScale, ImageMap } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class DrinkwareSet
-  extends BaseModel<DrinkwareSetAttributes>
-  implements DrinkwareSetAttributes
-{
+export default class DrinkwareSet extends BaseModel<
+  InferAttributes<DrinkwareSet>,
+  InferCreationAttributes<DrinkwareSet>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public guideImageId!: string;
+  declare guideImageId: string;
 
   @BelongsTo(() => ImageMap, 'guideImageId')
-  public imageMap?: ImageMap;
+  declare imageMap?: NonAttribute<ImageMap>;
 
   @HasMany(() => DrinkwareScale, 'drinkwareSetId')
-  public scales?: DrinkwareScale[];
+  declare scales?: NonAttribute<DrinkwareScale[]>;
 }
+
+export type DrinkwareSetAttributes = Attributes<DrinkwareSet>;
+export type DrinkwareSetCreationAttributes = CreationAttributes<DrinkwareSet>;

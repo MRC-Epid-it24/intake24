@@ -1,9 +1,13 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  PortionSizeMethodParameterAttributes,
-  PortionSizeMethodParameterCreationAttributes,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { AsServedSet, FoodPortionSizeMethod, GuideImage, StandardUnit } from '.';
@@ -15,56 +19,57 @@ import { AsServedSet, FoodPortionSizeMethod, GuideImage, StandardUnit } from '.'
   timestamps: false,
   underscored: true,
 })
-export default class FoodPortionSizeMethodParameter
-  extends BaseModel<
-    PortionSizeMethodParameterAttributes,
-    PortionSizeMethodParameterCreationAttributes
-  >
-  implements PortionSizeMethodParameterAttributes
-{
+export default class FoodPortionSizeMethodParameter extends BaseModel<
+  InferAttributes<FoodPortionSizeMethodParameter>,
+  InferCreationAttributes<FoodPortionSizeMethodParameter>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public portionSizeMethodId!: string;
+  declare portionSizeMethodId: ForeignKey<FoodPortionSizeMethod['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public value!: string;
+  declare value: string;
 
   @BelongsTo(() => FoodPortionSizeMethod, 'portionSizeMethodId')
-  public portionSizeMethod?: FoodPortionSizeMethod;
+  declare portionSizeMethod?: NonAttribute<FoodPortionSizeMethod>;
 
   @BelongsTo(() => AsServedSet, {
     foreignKey: 'value',
     constraints: false,
   })
-  public asServedSet?: AsServedSet;
+  declare asServedSet?: NonAttribute<AsServedSet>;
 
   @BelongsTo(() => GuideImage, {
     foreignKey: 'value',
     constraints: false,
   })
-  public guideImage?: GuideImage;
+  declare guideImage?: NonAttribute<GuideImage>;
 
   @BelongsTo(() => StandardUnit, {
     foreignKey: 'value',
     constraints: false,
   })
-  public standardUnit?: StandardUnit;
+  declare standardUnit?: NonAttribute<StandardUnit>;
 }
+
+export type FoodPortionSizeMethodParameterAttributes = Attributes<FoodPortionSizeMethodParameter>;
+export type FoodPortionSizeMethodParameterCreationAttributes =
+  CreationAttributes<FoodPortionSizeMethodParameter>;

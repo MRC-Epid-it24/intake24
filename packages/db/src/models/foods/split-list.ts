@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  SplitListAttributes,
-  SplitListCreationAttributes,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
@@ -15,35 +18,38 @@ import { FoodsLocale } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SplitList
-  extends BaseModel<SplitListAttributes, SplitListCreationAttributes>
-  implements SplitListAttributes
-{
+export default class SplitList extends BaseModel<
+  InferAttributes<SplitList>,
+  InferCreationAttributes<SplitList>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public firstWord!: string;
+  declare firstWord: string;
 
   @Column({
     allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
-  public words!: string;
+  declare words: string;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
-  public locale?: FoodsLocale;
+  declare locale?: NonAttribute<FoodsLocale>;
 }
+
+export type SplitListAttributes = Attributes<SplitList>;
+export type SplitListCreationAttributes = CreationAttributes<SplitList>;

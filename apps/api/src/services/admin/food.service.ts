@@ -3,11 +3,12 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { FoodInput } from '@intake24/common/types/http/admin';
 import type {
+  FindOptions,
   FoodLocalAttributes,
-  FoodPortionSizeMethodUpdateAttributes,
-  PortionSizeMethodParameterUpdateAttributes,
-} from '@intake24/common/types/models';
-import type { FindOptions, PaginateQuery, Transaction } from '@intake24/db';
+  FoodPortionSizeMethodParameterCreationAttributes,
+  PaginateQuery,
+  Transaction,
+} from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Food,
@@ -107,7 +108,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const updateParameters = async (
     portionSizeMethodId: string,
     parameters: FoodPortionSizeMethodParameter[],
-    inputs: PortionSizeMethodParameterUpdateAttributes[],
+    inputs: FoodPortionSizeMethodParameterCreationAttributes[],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
@@ -145,7 +146,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const updatePortionSizeMethods = async (
     foodLocalId: string,
     methods: FoodPortionSizeMethod[],
-    inputs: FoodPortionSizeMethodUpdateAttributes[],
+    inputs: FoodInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];

@@ -7,8 +7,7 @@ import type {
   SurveySubmissionEntry,
   SurveySubmissionsResponse,
 } from '@intake24/common/types/http/admin';
-import type { SurveySubmissionAttributes } from '@intake24/common/types/models';
-import type { PaginateQuery, WhereOptions } from '@intake24/db';
+import type { PaginateQuery, SurveySubmissionAttributes, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
 

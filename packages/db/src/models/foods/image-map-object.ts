@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
-
 import type {
-  ImageMapObjectAttributes,
-  ImageMapObjectCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
@@ -15,35 +18,35 @@ import { ImageMap, ProcessedImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class ImageMapObject
-  extends BaseModel<ImageMapObjectAttributes, ImageMapObjectCreationAttributes>
-  implements ImageMapObjectAttributes
-{
+export default class ImageMapObject extends BaseModel<
+  InferAttributes<ImageMapObject>,
+  InferCreationAttributes<ImageMapObject>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.STRING(32),
   })
-  public imageMapId!: string;
+  declare imageMapId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  public navigationIndex!: number;
+  declare navigationIndex: number;
 
   @Column({
     allowNull: false,
@@ -63,11 +66,14 @@ export default class ImageMapObject
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public overlayImageId!: string | null;
+  declare overlayImageId: CreationOptional<string | null>;
 
   @BelongsTo(() => ImageMap, 'imageMapId')
-  public imageMap?: ImageMap;
+  declare imageMap?: NonAttribute<ImageMap>;
 
   @BelongsTo(() => ProcessedImage, 'overlayImageId')
-  public overlayImage?: ProcessedImage;
+  declare overlayImage?: NonAttribute<ProcessedImage | null>;
 }
+
+export type ImageMapObjectAttributes = Attributes<ImageMapObject>;
+export type ImageMapObjectCreationAttributes = CreationAttributes<ImageMapObject>;

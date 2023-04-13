@@ -140,7 +140,7 @@ import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { BasePrompt, PromptType } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import {
   customPrompts,
   portionSizePrompts,

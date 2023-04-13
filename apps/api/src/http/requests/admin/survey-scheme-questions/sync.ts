@@ -6,7 +6,7 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { isMealSection, isSurveySection } from '@intake24/common/schemes';
+import { isMealSection, isSurveySection } from '@intake24/common/surveys';
 
 export default validate(
   checkSchema({

@@ -75,7 +75,7 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
-import type { Pagination, PaginationMeta } from '@intake24/common/types/models';
+import type { Pagination, PaginationMeta } from '@intake24/db';
 import { DataTableFilter } from '@intake24/admin/components/data-tables';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { resource } from '@intake24/admin/mixins';

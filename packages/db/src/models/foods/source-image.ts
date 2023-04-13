@@ -1,9 +1,12 @@
-import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SourceImageAttributes,
-  SourceImageCreationAttributes,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { ProcessedImage, SourceImageKeyword } from '.';
@@ -19,45 +22,48 @@ import { ProcessedImage, SourceImageKeyword } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SourceImage
-  extends BaseModel<SourceImageAttributes, SourceImageCreationAttributes>
-  implements SourceImageAttributes
-{
+export default class SourceImage extends BaseModel<
+  InferAttributes<SourceImage>,
+  InferCreationAttributes<SourceImage>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(1024),
   })
-  public path!: string;
+  declare path: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(1024),
   })
-  public thumbnailPath!: string;
+  declare thumbnailPath: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public uploader!: string;
+  declare uploader: string;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
     defaultValue: () => new Date(),
   })
-  public uploadedAt!: Date;
+  declare uploadedAt: CreationOptional<Date>;
 
   @HasMany(() => SourceImageKeyword, 'sourceImageId')
-  public keywords?: SourceImageKeyword[];
+  declare keywords?: NonAttribute<SourceImageKeyword[]>;
 
   @HasMany(() => ProcessedImage, 'sourceId')
-  public processedImages?: ProcessedImage[];
+  declare processedImages?: NonAttribute<ProcessedImage[]>;
 }
+
+export type SourceImageAttributes = Attributes<SourceImage>;
+export type SourceImageCreationAttributes = CreationAttributes<SourceImage>;

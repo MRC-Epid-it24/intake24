@@ -1,9 +1,11 @@
-import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  PhysicalActivityLevelAttributes,
-  PhysicalActivityLevelCreationAttributes,
-} from '@intake24/common/types/models/foods';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
+import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 
@@ -17,26 +19,29 @@ import BaseModel from '../model';
   timestamps: false,
   underscored: true,
 })
-export default class PhysicalActivityLevel
-  extends BaseModel<PhysicalActivityLevelAttributes, PhysicalActivityLevelCreationAttributes>
-  implements PhysicalActivityLevelAttributes
-{
+export default class PhysicalActivityLevel extends BaseModel<
+  InferAttributes<PhysicalActivityLevel>,
+  InferCreationAttributes<PhysicalActivityLevel>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.DOUBLE,
   })
-  public coefficient!: number;
+  declare coefficient: number;
 }
+
+export type PhysicalActivityLevelAttributes = Attributes<PhysicalActivityLevel>;
+export type PhysicalActivityLevelCreationAttributes = CreationAttributes<PhysicalActivityLevel>;

@@ -1,6 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
-import type { SourceImageKeywordAttributes } from '@intake24/common/types/models/foods';
 
 import BaseModel from '../model';
 import { SourceImage } from '.';
@@ -15,22 +20,25 @@ import { SourceImage } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SourceImageKeyword
-  extends BaseModel<SourceImageKeywordAttributes>
-  implements SourceImageKeywordAttributes
-{
+export default class SourceImageKeyword extends BaseModel<
+  InferAttributes<SourceImageKeyword>,
+  InferCreationAttributes<SourceImageKeyword>
+> {
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public sourceImageId!: string;
+  declare sourceImageId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public keyword!: string;
+  declare keyword: string;
 
   @BelongsTo(() => SourceImage, 'sourceImageId')
-  public sourceImage?: SourceImage;
+  declare sourceImage?: NonAttribute<SourceImage>;
 }
+
+export type SourceImageKeywordAttributes = Attributes<SourceImageKeyword>;
+export type SourceImageKeywordCreationAttributes = CreationAttributes<SourceImageKeyword>;

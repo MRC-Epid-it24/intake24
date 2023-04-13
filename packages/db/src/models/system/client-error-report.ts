@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -10,10 +18,6 @@ import {
 } from 'sequelize-typescript';
 
 import type { Dictionary } from '@intake24/common/types';
-import type {
-  ClientErrorReportAttributes,
-  ClientErrorReportCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Survey, User } from '.';
@@ -28,30 +32,30 @@ import { Survey, User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class ClientErrorReport
-  extends BaseModel<ClientErrorReportAttributes, ClientErrorReportCreationAttributes>
-  implements ClientErrorReportAttributes
-{
+export default class ClientErrorReport extends BaseModel<
+  InferAttributes<ClientErrorReport>,
+  InferCreationAttributes<ClientErrorReport>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: string | null;
+  declare userId: string | null;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => Survey)
-  public surveyId!: string | null;
+  declare surveyId: string | null;
 
   @Column({
     allowNull: false,
@@ -85,19 +89,20 @@ export default class ClientErrorReport
     type: DataType.BOOLEAN,
     defaultValue: true,
   })
-  public new!: boolean;
+  declare new: boolean;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey;
+  declare survey?: NonAttribute<Survey>;
 }
+
+export type ClientErrorReportAttributes = Attributes<ClientErrorReport>;
+export type ClientErrorReportCreationAttributes = CreationAttributes<ClientErrorReport>;

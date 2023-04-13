@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -9,7 +17,6 @@ import {
 } from 'sequelize-typescript';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
-import type { JobAttributes, JobCreationAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { User } from '.';
@@ -20,59 +27,56 @@ import { User } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class Job
-  extends BaseModel<JobAttributes, JobCreationAttributes>
-  implements JobAttributes
-{
+export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAttributes<Job>> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public type!: JobType;
+  declare type: JobType;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
   @ForeignKey(() => User)
-  public userId!: string | null;
+  declare userId: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(1024),
   })
-  public downloadUrl!: string | null;
+  declare downloadUrl: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.DATE,
   })
-  public downloadUrlExpiresAt!: Date | null;
+  declare downloadUrlExpiresAt: CreationOptional<Date | null>;
 
   @Column({
     allowNull: true,
     type: DataType.DOUBLE,
   })
-  public progress!: number | null;
+  declare progress: CreationOptional<number | null>;
 
   @Column({
     allowNull: true,
     type: DataType.BOOLEAN,
   })
-  public successful!: boolean | null;
+  declare successful: CreationOptional<boolean | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(1024),
   })
-  public message!: string | null;
+  declare message: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
@@ -92,7 +96,7 @@ export default class Job
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get stackTrace(): string[] | null {
+  get stackTrace(): CreationOptional<string[] | null> {
     const val = this.getDataValue('stackTrace') as unknown;
     return val ? (val as string).split('\n') : null;
   }
@@ -106,22 +110,23 @@ export default class Job
     allowNull: true,
     type: DataType.DATE,
   })
-  public startedAt!: Date | null;
+  declare startedAt: CreationOptional<Date | null>;
 
   @Column({
     allowNull: true,
     type: DataType.DATE,
   })
-  public completedAt!: Date | null;
+  declare completedAt: CreationOptional<Date | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'userId')
-  public user?: User;
+  declare user?: NonAttribute<User>;
 }
+
+export type JobAttributes = Attributes<Job>;
+export type JobCreationAttributes = CreationAttributes<Job>;

@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   AfterCreate,
   AfterDestroy,
@@ -13,15 +21,13 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { SchemeOverrides } from '@intake24/common/schemes';
 import type {
+  SchemeOverrides,
   SearchSortingAlgorithm,
-  SurveyAttributes,
-  SurveyCreationAttributes,
   SurveyState,
-} from '@intake24/common/types/models';
-import { defaultOverrides } from '@intake24/common/schemes';
+} from '@intake24/common/surveys';
 import { surveyPermissions } from '@intake24/common/security';
+import { defaultOverrides } from '@intake24/common/surveys';
 
 import BaseModel from '../model';
 import {
@@ -53,173 +59,173 @@ import {
   freezeTableName: true,
   underscored: true,
 })
-export default class Survey
-  extends BaseModel<SurveyAttributes, SurveyCreationAttributes>
-  implements SurveyAttributes
-{
+export default class Survey extends BaseModel<
+  InferAttributes<Survey>,
+  InferCreationAttributes<Survey>
+> {
   @Column({
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public slug!: string;
+  declare slug: string;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public state!: SurveyState;
+  declare state: SurveyState;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
   })
-  public startDate!: Date;
+  declare startDate: Date;
 
   @Column({
     allowNull: false,
     type: DataType.DATE,
   })
-  public endDate!: Date;
+  declare endDate: Date;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public surveySchemeId!: string;
+  declare surveySchemeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public localeId!: string;
+  declare localeId: string;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public allowGenUsers!: boolean;
+  declare allowGenUsers: boolean;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(256),
   })
-  public genUserKey!: string | null;
+  declare genUserKey: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public authUrlDomainOverride!: string | null;
+  declare authUrlDomainOverride: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(128),
   })
-  public authUrlTokenCharset!: string | null;
+  declare authUrlTokenCharset: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public authUrlTokenLength!: number | null;
+  declare authUrlTokenLength: CreationOptional<number | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public suspensionReason!: string | null;
+  declare suspensionReason: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public surveyMonkeyUrl!: string | null;
+  declare surveyMonkeyUrl: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public supportEmail!: string;
+  declare supportEmail: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public originatingUrl!: string | null;
+  declare originatingUrl: CreationOptional<string | null>;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public feedbackSchemeId!: string | null;
+  declare feedbackSchemeId: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
     defaultValue: 1,
   })
-  public numberOfSubmissionsForFeedback!: number;
+  declare numberOfSubmissionsForFeedback: CreationOptional<number>;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(2048),
   })
-  public submissionNotificationUrl!: string | null;
+  declare submissionNotificationUrl: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public storeUserSessionOnServer!: boolean;
+  declare storeUserSessionOnServer: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
     defaultValue: 3,
   })
-  public maximumDailySubmissions!: number;
+  declare maximumDailySubmissions: CreationOptional<number>;
 
   @Column({
     allowNull: true,
     type: DataType.INTEGER,
   })
-  public maximumTotalSubmissions!: number | null;
+  declare maximumTotalSubmissions: CreationOptional<number | null>;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
     defaultValue: 600,
   })
-  public minimumSubmissionInterval!: number;
+  declare minimumSubmissionInterval: CreationOptional<number>;
 
   @Column({
     allowNull: false,
     defaultValue: 'paRules',
     type: DataType.STRING(10),
   })
-  public searchSortingAlgorithm!: SearchSortingAlgorithm;
+  declare searchSortingAlgorithm: CreationOptional<SearchSortingAlgorithm>;
 
   @Column({
     allowNull: false,
     defaultValue: 20,
     type: DataType.INTEGER,
   })
-  public searchMatchScoreWeight!: number;
+  declare searchMatchScoreWeight: CreationOptional<number>;
 
   @Column({
     allowNull: true,
@@ -240,46 +246,44 @@ export default class Survey
     defaultValue: false,
     type: DataType.BOOLEAN,
   })
-  public userPersonalIdentifiers!: boolean;
+  declare userPersonalIdentifiers: CreationOptional<boolean>;
 
   @Column({
     allowNull: false,
     defaultValue: false,
     type: DataType.BOOLEAN,
   })
-  public userCustomFields!: boolean;
+  declare userCustomFields: CreationOptional<boolean>;
 
   @Column({
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public ownerId!: string | null;
+  declare ownerId: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'ownerId')
-  public owner?: User | null;
+  declare owner?: NonAttribute<User | null>;
 
   @HasMany(() => ClientErrorReport, 'surveyId')
-  public clientErrors?: ClientErrorReport[];
+  declare clientErrors?: NonAttribute<ClientErrorReport[]>;
 
   @HasOne(() => GenUserCounter, 'surveyId')
-  public counter?: GenUserCounter;
+  declare counter?: NonAttribute<GenUserCounter>;
 
   @BelongsTo(() => FeedbackScheme, 'feedbackSchemeId')
-  public feedbackScheme?: FeedbackScheme;
+  declare feedbackScheme?: NonAttribute<FeedbackScheme>;
 
   @BelongsTo(() => SystemLocale, 'localeId')
-  public locale?: SystemLocale;
+  declare locale?: NonAttribute<SystemLocale>;
 
   @BelongsTo(() => SurveyScheme, 'surveySchemeId')
-  public surveyScheme?: SurveyScheme;
+  declare surveyScheme?: NonAttribute<SurveyScheme>;
 
   @HasMany(() => UserSurveyAlias, {
     onUpdate: 'CASCADE',
@@ -287,13 +291,13 @@ export default class Survey
     hooks: true,
     foreignKey: 'surveyId',
   })
-  public respondents?: UserSurveyAlias[];
+  declare respondents?: NonAttribute<UserSurveyAlias[]>;
 
   @HasMany(() => UserSurveySession, 'surveyId')
-  public sessions?: UserSurveySession[];
+  declare sessions?: NonAttribute<UserSurveySession[]>;
 
   @HasMany(() => SurveySubmission, 'surveyId')
-  public submissions?: SurveySubmission[];
+  declare submissions?: NonAttribute<SurveySubmission[]>;
 
   @BelongsToMany(() => User, {
     through: {
@@ -307,14 +311,14 @@ export default class Survey
     otherKey: 'userId',
     constraints: false,
   })
-  public securableUsers?: User[];
+  declare securableUsers?: NonAttribute<User[]>;
 
   @HasMany(() => UserSecurable, {
     foreignKey: 'securableId',
     constraints: false,
     scope: { securable_type: 'Survey' },
   })
-  public securables?: UserSecurable[];
+  declare securables?: NonAttribute<UserSecurable[]>;
 
   @AfterCreate
   static async createSurveyPermissions(instance: Survey): Promise<void> {
@@ -334,3 +338,58 @@ export default class Survey
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
 }
+
+export type SurveyAttributes = Attributes<Survey>;
+export type SurveyCreationAttributes = CreationAttributes<Survey>;
+
+export const guardedSurveyFields = ['userPersonalIdentifiers', 'userCustomFields'] as const;
+
+export const updateSurveyFields = [
+  'name',
+  'state',
+  'startDate',
+  'endDate',
+  'localeId',
+  'surveySchemeId',
+  'feedbackSchemeId',
+  'allowGenUsers',
+  'genUserKey',
+  'suspensionReason',
+  'supportEmail',
+  'submissionNotificationUrl',
+  'storeUserSessionOnServer',
+  'numberOfSubmissionsForFeedback',
+  'authUrlDomainOverride',
+  'authUrlTokenCharset',
+  'authUrlTokenLength',
+  'maximumDailySubmissions',
+  'maximumTotalSubmissions',
+  'minimumSubmissionInterval',
+  'searchSortingAlgorithm',
+  'searchMatchScoreWeight',
+  'surveySchemeOverrides',
+] as const;
+
+export type UpdateSurveyField = (typeof updateSurveyFields)[number];
+
+export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
+
+export type CreateSurveyField = (typeof createSurveyFields)[number];
+
+/* export const staffUpdateSurveyFields = [
+  'name',
+  'state',
+  'startDate',
+  'endDate',
+  'localeId',
+  'surveySchemeId',
+  'feedbackSchemeId',
+  'supportEmail',
+  'suspensionReason',
+] as const;
+
+export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number]; */
+
+export const overridesFields = ['surveySchemeOverrides'] as const;
+
+export type OverridesField = (typeof overridesFields)[number];

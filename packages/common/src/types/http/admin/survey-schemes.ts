@@ -1,10 +1,11 @@
-import type { Prompt } from '../../../prompts';
-import type { ExportField, ExportSectionId } from '../../../schemes';
 import type {
   Pagination,
   SurveySchemeAttributes,
   SurveySchemeCreationAttributes,
-} from '../../models';
+} from '@intake24/db';
+
+import type { Prompt } from '../../../prompts';
+import type { ExportField, ExportSectionId } from '../../../surveys';
 import type { LanguageListEntry } from './languages';
 import type { Owner } from './users';
 

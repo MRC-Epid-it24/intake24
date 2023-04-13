@@ -314,16 +314,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
 import type { SchemeOverrides } from '@intake24/common/schemes';
+import type { SearchSortingAlgorithm, SurveyState } from '@intake24/common/surveys';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
-import type { SearchSortingAlgorithm, SurveyState } from '@intake24/common/types/models';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { createForm } from '@intake24/admin/util';
 import { defaultOverrides } from '@intake24/common/schemes';
-import { searchSortingAlgorithms, surveyStates } from '@intake24/common/types/models';
+import { searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
 
 export type SurveyForm = {
   id: string | null;
@@ -401,9 +401,9 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry, SurveyRefs>(
-      props.id
-    );
+    const { id } = toRefs(props);
+
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry, SurveyRefs>(id);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

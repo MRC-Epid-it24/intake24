@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 
-import type { FeedbackSchemeCreationAttributes } from '@intake24/common/types/models';
+import type { FeedbackSchemeCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {

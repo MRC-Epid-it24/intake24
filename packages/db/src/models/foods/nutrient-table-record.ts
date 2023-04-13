@@ -1,9 +1,15 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, BelongsToMany, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
-import type {
-  NutrientTableRecordAttributes,
-  NutrientTableRecordCreationAttributes,
-} from '@intake24/common/types/models';
+import type { NutrientTableRecordNutrientCreationAttributes } from '@intake24/db';
 import {
   FoodLocal,
   FoodNutrient,
@@ -22,56 +28,61 @@ import BaseModel from '../model';
   underscored: true,
 })
 export default class NutrientTableRecord extends BaseModel<
-  NutrientTableRecordAttributes,
-  NutrientTableRecordCreationAttributes
+  InferAttributes<NutrientTableRecord>,
+  InferCreationAttributes<NutrientTableRecord> & {
+    nutrients?: NutrientTableRecordNutrientCreationAttributes[];
+  }
 > {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public nutrientTableId!: string;
+  declare nutrientTableId: ForeignKey<NutrientTable['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public nutrientTableRecordId!: string;
+  declare nutrientTableRecordId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
-  public localName!: string | null;
+  declare localName: CreationOptional<string | null>;
 
   @BelongsToMany(() => FoodLocal, () => FoodNutrient)
-  public foods?: FoodLocal[];
+  declare foods?: FoodLocal[];
 
   @HasMany(() => FoodNutrient, 'nutrientTableRecordId')
-  public foodMappings?: FoodNutrient[];
+  declare foodMappings?: NonAttribute<FoodNutrient[]>;
 
   @BelongsTo(() => NutrientTable, 'nutrientTableId')
-  public nutrientTable?: NutrientTable;
+  declare nutrientTable?: NonAttribute<NutrientTable>;
 
   @HasMany(() => NutrientTableRecordNutrient, 'nutrientTableRecordId')
-  public nutrients?: NutrientTableRecordNutrient[];
+  declare nutrients?: NonAttribute<NutrientTableRecordNutrient[]>;
 
   @HasMany(() => NutrientTableRecordField, 'nutrientTableRecordId')
-  public fields?: NutrientTableRecordField[];
+  declare fields?: NonAttribute<NutrientTableRecordField[]>;
 
   getNutrientByType(nutrientTypeId: string): NutrientTableRecordNutrient | undefined {
     return this.nutrients?.find((nutrient) => nutrient.nutrientTypeId === nutrientTypeId);
   }
 }
+
+export type NutrientTableRecordAttributes = Attributes<NutrientTableRecord>;
+export type NutrientTableRecordCreationAttributes = CreationAttributes<NutrientTableRecord>;

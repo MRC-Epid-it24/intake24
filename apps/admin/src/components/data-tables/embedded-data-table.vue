@@ -48,7 +48,7 @@ import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
-import type { PaginationMeta } from '@intake24/common/types/models';
+import type { PaginationMeta } from '@intake24/db';
 
 export default defineComponent({
   name: 'SurveyDataTable',

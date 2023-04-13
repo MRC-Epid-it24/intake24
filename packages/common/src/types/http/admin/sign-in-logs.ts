@@ -1,4 +1,4 @@
-import type { Pagination, SignInLogAttributes } from '../../models';
+import type { Pagination, SignInLogAttributes } from '@intake24/db';
 
 export type SignInLogsResponse = Pagination<SignInLogAttributes>;
 

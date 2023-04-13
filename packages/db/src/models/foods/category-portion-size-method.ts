@@ -1,10 +1,16 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import type { PortionSizeMethodId } from '@intake24/common/types';
-import type {
-  CategoryPortionSizeMethodAttributes,
-  CategoryPortionSizeMethodCreationAttributes,
-} from '@intake24/common/types/models';
+import type { CategoryPortionSizeMethodParameterCreationAttributes } from '@intake24/db';
 import { CategoryPortionSizeMethodParameter } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -17,65 +23,68 @@ import CategoryLocal from './category-local';
   timestamps: false,
   underscored: true,
 })
-export default class CategoryPortionSizeMethod
-  extends BaseModel<
-    CategoryPortionSizeMethodAttributes,
-    CategoryPortionSizeMethodCreationAttributes
-  >
-  implements CategoryPortionSizeMethodAttributes
-{
+export default class CategoryPortionSizeMethod extends BaseModel<
+  InferAttributes<CategoryPortionSizeMethod>,
+  InferCreationAttributes<CategoryPortionSizeMethod> & {
+    parameters?: CategoryPortionSizeMethodParameterCreationAttributes[];
+  }
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public categoryLocalId!: string;
+  declare categoryLocalId: ForeignKey<CategoryLocal['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public method!: PortionSizeMethodId;
+  declare method: PortionSizeMethodId;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public imageUrl!: string;
+  declare imageUrl: string;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public useForRecipes!: boolean;
+  declare useForRecipes: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public orderBy!: string;
+  declare orderBy: string;
 
   @Column({
     allowNull: false,
     type: DataType.FLOAT(17),
   })
-  public conversionFactor!: number;
+  declare conversionFactor: number;
 
   @BelongsTo(() => CategoryLocal, 'categoryLocalId')
-  public categoryLocal?: CategoryLocal;
+  declare categoryLocal?: NonAttribute<CategoryLocal>;
 
   @HasMany(() => CategoryPortionSizeMethodParameter, 'portionSizeMethodId')
-  public parameters?: CategoryPortionSizeMethodParameter[];
+  declare parameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
 }
+
+export type CategoryPortionSizeMethodAttributes = Attributes<CategoryPortionSizeMethod>;
+export type CategoryPortionSizeMethodCreationAttributes =
+  CreationAttributes<CategoryPortionSizeMethod>;

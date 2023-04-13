@@ -1,10 +1,14 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import type { PortionSizeMethodId } from '@intake24/common/types';
-import type {
-  SurveySubmissionFoodAttributes,
-  SurveySubmissionFoodCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import {
@@ -29,113 +33,116 @@ import {
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionFood
-  extends BaseModel<SurveySubmissionFoodAttributes, SurveySubmissionFoodCreationAttributes>
-  implements SurveySubmissionFoodAttributes
-{
+export default class SurveySubmissionFood extends BaseModel<
+  InferAttributes<SurveySubmissionFood>,
+  InferCreationAttributes<SurveySubmissionFood>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public mealId!: string;
+  declare mealId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public code!: string;
+  declare code: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public englishName!: string;
+  declare englishName: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(256),
   })
-  public localName!: string | null;
+  declare localName: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public readyMeal!: boolean;
+  declare readyMeal: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public searchTerm!: string;
+  declare searchTerm: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
   })
-  public portionSizeMethodId!: PortionSizeMethodId;
+  declare portionSizeMethodId: PortionSizeMethodId;
 
   @Column({
     allowNull: false,
     type: DataType.BOOLEAN,
   })
-  public reasonableAmount!: boolean;
+  declare reasonableAmount: boolean;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public foodGroupId!: string;
+  declare foodGroupId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public foodGroupEnglishName!: string;
+  declare foodGroupEnglishName: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(256),
   })
-  public foodGroupLocalName!: string | null;
+  declare foodGroupLocalName: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(128),
   })
-  public brand!: string;
+  declare brand: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public nutrientTableId!: string;
+  declare nutrientTableId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public nutrientTableCode!: string;
+  declare nutrientTableCode: string;
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
-  public meal?: SurveySubmissionMeal;
+  declare meal?: NonAttribute<SurveySubmissionMeal>;
 
   @HasMany(() => SurveySubmissionFoodCustomField, 'foodId')
-  public customFields?: SurveySubmissionFoodCustomField[];
+  declare customFields?: NonAttribute<SurveySubmissionFoodCustomField[]>;
 
   @HasMany(() => SurveySubmissionField, 'foodId')
-  public fields?: SurveySubmissionField[];
+  declare fields?: NonAttribute<SurveySubmissionField[]>;
 
   @HasMany(() => SurveySubmissionNutrient, 'foodId')
-  public nutrients?: SurveySubmissionNutrient[];
+  declare nutrients?: NonAttribute<SurveySubmissionNutrient[]>;
 
   @HasMany(() => SurveySubmissionPortionSizeField, 'foodId')
-  public portionSizes?: SurveySubmissionPortionSizeField[];
+  declare portionSizes?: NonAttribute<SurveySubmissionPortionSizeField[]>;
 }
+
+export type SurveySubmissionFoodAttributes = Attributes<SurveySubmissionFood>;
+export type SurveySubmissionFoodCreationAttributes = CreationAttributes<SurveySubmissionFood>;

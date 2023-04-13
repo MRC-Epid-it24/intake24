@@ -1,9 +1,12 @@
-import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
 import type {
-  SurveySubmissionMissingFoodAttributes,
-  SurveySubmissionMissingFoodCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { SurveySubmissionMeal } from '.';
@@ -18,56 +21,57 @@ import { SurveySubmissionMeal } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class SurveySubmissionMissingFood
-  extends BaseModel<
-    SurveySubmissionMissingFoodAttributes,
-    SurveySubmissionMissingFoodCreationAttributes
-  >
-  implements SurveySubmissionMissingFoodAttributes
-{
+export default class SurveySubmissionMissingFood extends BaseModel<
+  InferAttributes<SurveySubmissionMissingFood>,
+  InferCreationAttributes<SurveySubmissionMissingFood>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
   })
-  public mealId!: string;
+  declare mealId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public brand!: string;
+  declare brand: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public description!: string;
+  declare description: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public portionSize!: string;
+  declare portionSize: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(512),
   })
-  public leftovers!: string;
+  declare leftovers: string;
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
-  public meal?: SurveySubmissionMeal;
+  declare meal?: NonAttribute<SurveySubmissionMeal>;
 }
+
+export type SurveySubmissionMissingFoodAttributes = Attributes<SurveySubmissionMissingFood>;
+export type SurveySubmissionMissingFoodCreationAttributes =
+  CreationAttributes<SurveySubmissionMissingFood>;

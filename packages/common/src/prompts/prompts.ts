@@ -1,4 +1,4 @@
-import type { MealSection, SurveyQuestionSection } from '../schemes';
+import type { MealSection, SurveyQuestionSection } from '../surveys';
 import type { LocaleTranslation } from '../types';
 import type { Actions } from './actions';
 import type { Condition } from './conditions';

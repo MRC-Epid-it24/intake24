@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -7,11 +15,6 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
-import type {
-  GenUserCounterAttributes,
-  GenUserCounterCreationAttributes,
-} from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 import { Survey } from '.';
@@ -25,32 +28,33 @@ import { Survey } from '.';
   freezeTableName: true,
   underscored: true,
 })
-export default class GenUserCounter
-  extends BaseModel<GenUserCounterAttributes, GenUserCounterCreationAttributes>
-  implements GenUserCounterAttributes
-{
+export default class GenUserCounter extends BaseModel<
+  InferAttributes<GenUserCounter>,
+  InferCreationAttributes<GenUserCounter>
+> {
   @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public surveyId!: string;
+  declare surveyId: string;
 
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
     defaultValue: 0,
   })
-  public count!: number;
+  declare count: number;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => Survey, 'surveyId')
-  public survey?: Survey;
+  declare survey?: NonAttribute<Survey>;
 }
+
+export type GenUserCounterAttributes = Attributes<GenUserCounter>;
+export type GenUserCounterCreationAttributes = CreationAttributes<GenUserCounter>;

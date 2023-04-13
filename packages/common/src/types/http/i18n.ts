@@ -1,4 +1,4 @@
-import type { LanguageAttributes, LanguageTranslationAttributes } from '../models/system/languages';
+import type { LanguageAttributes, LanguageTranslationAttributes } from '@intake24/db';
 
 export type I18nLanguageListEntry = Pick<
   LanguageAttributes,

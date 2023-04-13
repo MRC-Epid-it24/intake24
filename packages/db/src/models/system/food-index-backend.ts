@@ -1,6 +1,10 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize';
 import { Column, DataType, Scopes, Table } from 'sequelize-typescript';
-
-import type { FoodIndexBackendAttributes } from '@intake24/common/types/models';
 
 import BaseModel from '../model';
 
@@ -16,25 +20,28 @@ import BaseModel from '../model';
   freezeTableName: true,
   underscored: true,
 })
-export default class FoodIndexBackend
-  extends BaseModel<FoodIndexBackendAttributes>
-  implements FoodIndexBackendAttributes
-{
+export default class FoodIndexBackend extends BaseModel<
+  InferAttributes<FoodIndexBackend>,
+  InferCreationAttributes<FoodIndexBackend>
+> {
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public flag!: string;
+  declare flag: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(256),
   })
-  public description!: string;
+  declare description: string;
 }
+
+export type FoodIndexBackendAttributes = Attributes<FoodIndexBackend>;
+export type FoodIndexBackendCreationAttributes = CreationAttributes<FoodIndexBackend>;

@@ -1,5 +1,6 @@
+import type { Pagination, UserSurveyAliasAttributes } from '@intake24/db';
+
 import type { CustomField } from '../..';
-import type { Pagination, UserSurveyAliasAttributes } from '../../models';
 
 export interface SurveyRespondentEntry
   extends Omit<UserSurveyAliasAttributes, 'createdAt' | 'updatedAt'> {

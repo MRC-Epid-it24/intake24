@@ -1,10 +1,12 @@
-/* eslint-disable no-use-before-define */
-import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
-
 import type {
-  FoodsLocaleAttributes,
-  FoodsLocaleCreationAttributes,
-} from '@intake24/common/types/models';
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
+import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
 import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
@@ -16,81 +18,84 @@ import { AssociatedFood, SplitList, SplitWord, SynonymSet } from '.';
   timestamps: false,
   underscored: true,
 })
-export default class Locale
-  extends BaseModel<FoodsLocaleAttributes, FoodsLocaleCreationAttributes>
-  implements FoodsLocaleAttributes
-{
+export default class Locale extends BaseModel<
+  InferAttributes<Locale>,
+  InferCreationAttributes<Locale>
+> {
   @Column({
     primaryKey: true,
     type: DataType.STRING(16),
   })
-  public id!: string;
+  declare id: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public englishName!: string;
+  declare englishName: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(64),
   })
-  public localName!: string;
+  declare localName: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public respondentLanguageId!: string;
+  declare respondentLanguageId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public adminLanguageId!: string;
+  declare adminLanguageId: string;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
   })
-  public countryFlagCode!: string;
+  declare countryFlagCode: string;
 
   @Column({
     allowNull: true,
     type: DataType.STRING(16),
   })
-  public prototypeLocaleId!: string | null;
+  declare prototypeLocaleId: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
     defaultValue: 'ltr',
     type: DataType.STRING(8),
   })
-  public textDirection!: string;
+  declare textDirection: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     defaultValue: 'en',
     type: DataType.STRING(16),
   })
-  public foodIndexLanguageBackendId!: string;
+  declare foodIndexLanguageBackendId: CreationOptional<string>;
 
   @BelongsTo(() => Locale, 'prototypeLocaleId')
-  public parent?: Locale | null;
+  declare parent?: NonAttribute<Locale | null>;
 
   @HasMany(() => Locale, 'prototypeLocaleId')
-  public children?: Locale[];
+  declare children?: NonAttribute<Locale[]>;
 
   @HasMany(() => AssociatedFood, 'localeId')
-  public associatedFoods?: AssociatedFood[];
+  declare associatedFoods?: AssociatedFood[];
 
   @HasMany(() => SplitList, 'localeId')
-  public splitLists?: SplitList[];
+  declare splitLists?: NonAttribute<SplitList[]>;
 
   @HasMany(() => SplitWord, 'localeId')
-  public splitWords?: SplitWord[];
+  declare splitWords?: NonAttribute<SplitWord[]>;
 
   @HasMany(() => SynonymSet, 'localeId')
-  public synonymSets?: SynonymSet[];
+  declare synonymSets?: NonAttribute<SynonymSet[]>;
 }
+
+export type FoodsLocaleAttributes = Attributes<Locale>;
+export type FoodsLocaleCreationAttributes = CreationAttributes<Locale>;

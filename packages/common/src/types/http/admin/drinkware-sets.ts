@@ -1,4 +1,4 @@
-import type { DrinkwareScaleAttributes, DrinkwareSetAttributes, Pagination } from '../../models';
+import type { DrinkwareScaleAttributes, DrinkwareSetAttributes, Pagination } from '@intake24/db';
 
 export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id' | 'description'> {
   imageUrl: string;

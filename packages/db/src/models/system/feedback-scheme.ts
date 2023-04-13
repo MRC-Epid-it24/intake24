@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   BelongsToMany,
@@ -19,10 +27,6 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
-import type {
-  FeedbackSchemeAttributes,
-  FeedbackSchemeCreationAttributes,
-} from '@intake24/common/types/models';
 import { defaultTopFoods } from '@intake24/common/feedback';
 
 import type { Securable } from '..';
@@ -39,29 +43,29 @@ import { Survey, User, UserSecurable } from '.';
   underscored: true,
 })
 export default class FeedbackScheme
-  extends BaseModel<FeedbackSchemeAttributes, FeedbackSchemeCreationAttributes>
-  implements FeedbackSchemeAttributes, Securable
+  extends BaseModel<InferAttributes<FeedbackScheme>, InferCreationAttributes<FeedbackScheme>>
+  implements Securable
 {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(256),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     defaultValue: 'default',
     type: DataType.STRING(64),
   })
-  public type!: FeedbackType;
+  declare type: FeedbackType;
 
   @Column({
     allowNull: true,
@@ -157,21 +161,19 @@ export default class FeedbackScheme
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public ownerId!: string | null;
+  declare ownerId: string | null;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'ownerId')
-  public owner?: User | null;
+  declare owner?: NonAttribute<User | null>;
 
   @HasMany(() => Survey, 'feedbackSchemeId')
-  public surveys?: Survey[];
+  declare surveys?: NonAttribute<Survey[]>;
 
   @BelongsToMany(() => User, {
     through: {
@@ -185,12 +187,40 @@ export default class FeedbackScheme
     otherKey: 'userId',
     constraints: false,
   })
-  public securableUsers?: User[];
+  declare securableUsers?: NonAttribute<User[]>;
 
   @HasMany(() => UserSecurable, {
     foreignKey: 'securableId',
     constraints: false,
     scope: { securable_type: 'FeedbackScheme' },
   })
-  public securables?: UserSecurable[];
+  declare securables?: NonAttribute<UserSecurable[]>;
 }
+
+export type FeedbackSchemeAttributes = Attributes<FeedbackScheme>;
+export type FeedbackSchemeCreationAttributes = CreationAttributes<FeedbackScheme>;
+
+export const updateFeedbackSchemeFields = [
+  'name',
+  'type',
+  'outputs',
+  'physicalDataFields',
+] as const;
+
+export type UpdateFeedbackSchemeField = (typeof updateFeedbackSchemeFields)[number];
+
+export const perCardFeedbackSchemeFields = [
+  'topFoods',
+  'cards',
+  'demographicGroups',
+  'henryCoefficients',
+] as const;
+
+export type PerCardFeedbackSchemeField = (typeof perCardFeedbackSchemeFields)[number];
+
+export const createFeedbackSchemeFields = [
+  ...updateFeedbackSchemeFields,
+  ...perCardFeedbackSchemeFields,
+] as const;
+
+export type CreateFeedbackSchemeField = (typeof createFeedbackSchemeFields)[number];

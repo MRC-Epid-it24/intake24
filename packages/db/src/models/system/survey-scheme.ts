@@ -1,3 +1,11 @@
+import type {
+  Attributes,
+  CreationAttributes,
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+  NonAttribute,
+} from 'sequelize';
 import {
   BelongsTo,
   BelongsToMany,
@@ -10,13 +18,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
+import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
-import type {
-  SurveySchemeAttributes,
-  SurveySchemeCreationAttributes,
-} from '@intake24/common/types/models';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/schemes';
+import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/surveys';
 
 import type { Securable } from '..';
 import { BaseModel } from '..';
@@ -33,36 +37,36 @@ import { Survey, User, UserSecurable } from '.';
   underscored: true,
 })
 export default class SurveyScheme
-  extends BaseModel<SurveySchemeAttributes, SurveySchemeCreationAttributes>
-  implements SurveySchemeAttributes, Securable
+  extends BaseModel<InferAttributes<SurveyScheme>, InferCreationAttributes<SurveyScheme>>
+  implements Securable
 {
   @Column({
     autoIncrement: true,
     primaryKey: true,
     type: DataType.BIGINT,
   })
-  public id!: string;
+  declare id: CreationOptional<string>;
 
   @Column({
     allowNull: false,
     unique: true,
     type: DataType.STRING(256),
   })
-  public name!: string;
+  declare name: string;
 
   @Column({
     allowNull: false,
     defaultValue: 'default',
     type: DataType.STRING(64),
   })
-  public type!: SchemeType;
+  declare type: CreationOptional<SchemeType>;
 
   @Column({
     allowNull: true,
     defaultValue: () => JSON.stringify(defaultQuestions),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get questions(): RecallQuestions {
+  get questions(): CreationOptional<RecallQuestions> {
     const val = this.getDataValue('questions') as unknown;
     return val ? JSON.parse(val as string) : defaultQuestions;
   }
@@ -77,7 +81,7 @@ export default class SurveyScheme
     defaultValue: () => JSON.stringify(defaultMeals),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get meals(): Meal[] {
+  get meals(): CreationOptional<Meal[]> {
     const val = this.getDataValue('meals') as unknown;
     return val ? JSON.parse(val as string) : defaultMeals;
   }
@@ -92,7 +96,7 @@ export default class SurveyScheme
     defaultValue: () => JSON.stringify(defaultExport),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get dataExport(): ExportSection[] {
+  get dataExport(): CreationOptional<ExportSection[]> {
     const val = this.getDataValue('dataExport') as unknown;
     return val ? JSON.parse(val as string) : defaultExport;
   }
@@ -106,21 +110,19 @@ export default class SurveyScheme
     allowNull: true,
     type: DataType.BIGINT,
   })
-  public ownerId!: string | null;
+  declare ownerId: CreationOptional<string | null>;
 
   @CreatedAt
-  @Column
-  public readonly createdAt!: Date;
+  declare readonly createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  @Column
-  public readonly updatedAt!: Date;
+  declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => User, 'ownerId')
-  public owner?: User | null;
+  declare owner?: NonAttribute<User | null>;
 
   @HasMany(() => Survey, 'surveySchemeId')
-  public surveys?: Survey[];
+  declare surveys?: NonAttribute<Survey[]>;
 
   @BelongsToMany(() => User, {
     through: {
@@ -134,12 +136,30 @@ export default class SurveyScheme
     otherKey: 'userId',
     constraints: false,
   })
-  public securableUsers?: User[];
+  declare securableUsers?: NonAttribute<User[]>;
 
   @HasMany(() => UserSecurable, {
     foreignKey: 'securableId',
     constraints: false,
     scope: { securable_type: 'SurveyScheme' },
   })
-  public securables?: UserSecurable[];
+  declare securables?: NonAttribute<UserSecurable[]>;
 }
+
+export type SurveySchemeAttributes = Attributes<SurveyScheme>;
+export type SurveySchemeCreationAttributes = CreationAttributes<SurveyScheme>;
+
+export const updateSurveySchemeFields = ['name', 'type', 'meals'] as const;
+
+export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
+
+export const perCardSurveySchemeFields = ['questions', 'dataExport'] as const;
+
+export type PerCardSurveySchemeField = (typeof perCardSurveySchemeFields)[number];
+
+export const createSurveySchemeFields = [
+  ...updateSurveySchemeFields,
+  ...perCardSurveySchemeFields,
+] as const;
+
+export type CreateSurveySchemeField = (typeof createSurveySchemeFields)[number];

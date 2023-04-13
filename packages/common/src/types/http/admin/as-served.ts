@@ -1,4 +1,5 @@
-import type { AsServedImageAttributes, AsServedSetAttributes, Pagination } from '../../models';
+import type { AsServedImageAttributes, AsServedSetAttributes, Pagination } from '@intake24/db';
+
 import type { UploadSourceImageInput } from './source-images';
 
 export type AsServedImageInput = Pick<AsServedImageAttributes, 'id' | 'weight'>;
