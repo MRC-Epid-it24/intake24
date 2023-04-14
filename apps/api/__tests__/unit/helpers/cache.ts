@@ -1,4 +1,4 @@
-import '../../bootstrap';
+import '@intake24/api/bootstrap';
 
 import { default as cacheConfig } from '@intake24/api/config/cache';
 import { Cache } from '@intake24/api/services';

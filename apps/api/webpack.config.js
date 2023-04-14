@@ -8,6 +8,7 @@ const WebpackBar = require('webpackbar');
 module.exports = (env) => {
   const { NODE_ENV = 'development' } = env;
   const isDev = NODE_ENV === 'development';
+  const mode = NODE_ENV === 'test' ? 'none' : NODE_ENV;
 
   const plugins = [new ForkTsCheckerWebpackPlugin(), new WebpackBar({ name: 'Server' })];
 
@@ -30,7 +31,7 @@ module.exports = (env) => {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
     },
-    mode: NODE_ENV,
+    mode,
     target: 'node',
     watch: isDev,
     watchOptions: { ignored: ['node_modules/**', 'public/**'] },

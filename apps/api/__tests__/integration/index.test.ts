@@ -1,4 +1,4 @@
-import '../bootstrap';
+import '@intake24/api/bootstrap';
 
 import request from 'supertest';
 

@@ -32,6 +32,7 @@ export class Mailer {
     let options = {};
 
     const isDev = this.environment === 'development';
+    const isTest = this.environment === 'test';
 
     switch (mailer) {
       case 'smtp':
@@ -39,7 +40,7 @@ export class Mailer {
         break;
       case 'log':
       default:
-        options = { streamTransport: true };
+        if (!isTest) options = { streamTransport: true };
         break;
     }
 

@@ -20,6 +20,7 @@
     "dev": "webpack --env NODE_ENV=development",
     "start": "node dist/server.js",
     "lint": "eslint . --ext .js,.ts --fix",
+    "test:build": "pnpm build:clean && webpack --env NODE_ENV=test",
     "test:unit": "jest",
     "test:unit:coverage": "pnpm test:unit --coverage",
     "test:unit:watch": "pnpm test:unit --watch",
