@@ -15,7 +15,7 @@ module.exports = (env) => {
     plugins.push(
       new NodemonPlugin({
         script: './dist/server.js',
-        watch: path.resolve('./dist'),
+        watch: ['./dist', '.env'],
         nodeArgs: ['--trace-warnings', '--inspect=6060'],
       })
     );
