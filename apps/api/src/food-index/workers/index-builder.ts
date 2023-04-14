@@ -68,7 +68,7 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
     where: { id: localeId },
   });
 
-  if (row === null) throw new NotFoundError(`Locale "${localeId}" not found`);
+  if (!row) throw new NotFoundError(`Locale "${localeId}" not found`);
 
   return row.foodIndexLanguageBackendId;
 }
@@ -77,18 +77,20 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   const foodList = await FoodLocalList.findAll({ attributes: ['foodCode'], where: { localeId } });
 
   const foodCodes = foodList.map((row) => row.foodCode);
-  const localFoods = await FoodLocal.findAll({
-    where: { foodCode: foodCodes, localeId },
-    include: {
-      required: true,
-      association: 'main',
-      attributes: ['code'],
-      include: [{ association: 'parentCategories', where: { isHidden: false } }],
-    },
-  });
+  const [localFoods, synonymSets, languageBackendId] = await Promise.all([
+    FoodLocal.findAll({
+      where: { foodCode: foodCodes, localeId },
+      include: {
+        required: true,
+        association: 'main',
+        attributes: ['code'],
+        include: [{ association: 'parentCategories', where: { isHidden: false } }],
+      },
+    }),
+    getSynonymSets(localeId),
+    getLanguageBackendId(localeId),
+  ]);
 
-  const synonymSets = await getSynonymSets(localeId);
-  const languageBackendId = await getLanguageBackendId(localeId);
   const languageBackend = LanguageBackends[languageBackendId];
 
   if (!languageBackend)
