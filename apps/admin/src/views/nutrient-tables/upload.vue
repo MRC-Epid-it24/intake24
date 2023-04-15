@@ -76,7 +76,7 @@ export default defineComponent({
   mixins: [detailMixin, PollsForJobs],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<NutrientTableEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<NutrientTableEntry>(props);
 
     return { entry, entryLoaded };
   },

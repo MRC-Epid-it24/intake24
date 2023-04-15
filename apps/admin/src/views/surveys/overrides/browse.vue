@@ -31,13 +31,13 @@
 import { defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { SchemeOverrides } from '@intake24/common/schemes';
+import type { SchemeOverrides } from '@intake24/common/surveys';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { createForm } from '@intake24/admin/util';
-import { defaultOverrides, flattenScheme } from '@intake24/common/schemes';
+import { defaultOverrides, flattenScheme } from '@intake24/common/surveys';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
 

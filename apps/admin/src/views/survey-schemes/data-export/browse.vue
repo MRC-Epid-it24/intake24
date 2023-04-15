@@ -71,7 +71,7 @@
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { ExportField, ExportSection } from '@intake24/common/schemes';
+import type { ExportField, ExportSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefsResponse,
@@ -80,7 +80,7 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { createForm } from '@intake24/admin/util';
-import { defaultExport } from '@intake24/common/schemes';
+import { defaultExport } from '@intake24/common/surveys';
 
 import type { SurveySchemeForm } from '../form.vue';
 import DataExportSection from './data-export-section.vue';
@@ -95,7 +95,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props);
 
     return { entry, entryLoaded };
   },

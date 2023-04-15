@@ -121,7 +121,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry, RoleRefs>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry, RoleRefs>(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

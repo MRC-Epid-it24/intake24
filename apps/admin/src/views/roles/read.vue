@@ -31,7 +31,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry>(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

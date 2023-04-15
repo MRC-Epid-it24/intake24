@@ -66,7 +66,7 @@ export default defineComponent({
   mixins: [detailMixin, formatsDateTime],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<TaskEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<TaskEntry>(props);
 
     return { entry, entryLoaded };
   },

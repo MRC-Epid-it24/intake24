@@ -19,7 +19,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props);
 
     return { entry, entryLoaded };
   },

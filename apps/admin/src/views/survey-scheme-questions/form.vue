@@ -74,7 +74,7 @@ export default defineComponent({
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       SurveySchemeQuestionEntry,
       SurveySchemeQuestionRefs
-    >(props.id);
+    >(props);
 
     const selector = ref<InstanceType<typeof PromptSelector>>();
 

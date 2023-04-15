@@ -64,7 +64,7 @@ export default defineComponent({
   mixins: [detailMixin, formatsDateTime],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry>(props);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 

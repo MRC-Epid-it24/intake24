@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
@@ -28,8 +28,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { id } = toRefs(props);
-    const { entry, entryLoaded } = useStoreEntry(id);
+    const { entry, entryLoaded } = useStoreEntry(props);
 
     return { entry, entryLoaded };
   },

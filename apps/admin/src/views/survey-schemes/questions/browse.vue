@@ -71,7 +71,7 @@ import { defineComponent } from 'vue';
 
 import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/surveys';
 import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
@@ -85,7 +85,7 @@ import {
   isMealSection,
   mealSections,
   surveySections,
-} from '@intake24/common/schemes';
+} from '@intake24/common/surveys';
 
 import type { SurveySchemeForm } from '../form.vue';
 
@@ -102,7 +102,7 @@ export default defineComponent({
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       SurveySchemeEntry,
       SurveySchemeRefs
-    >(props.id);
+    >(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

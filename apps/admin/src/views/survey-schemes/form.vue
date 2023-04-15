@@ -48,14 +48,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/schemes';
+import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { createForm } from '@intake24/admin/util';
-import { defaultMeals, schemeTypes } from '@intake24/common/schemes';
+import { defaultMeals, schemeTypes } from '@intake24/common/surveys';
 
 export type SurveySchemeForm = {
   id: string | null;
@@ -79,7 +79,7 @@ export default defineComponent({
     const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       SurveySchemeEntry,
       SurveySchemeRefs
-    >(props.id);
+    >(props);
 
     return { canHandleEntry, entry, entryLoaded, refs, refsLoaded };
   },

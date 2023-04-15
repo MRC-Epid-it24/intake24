@@ -61,7 +61,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<ImageMapEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<ImageMapEntry>(props);
 
     return { entry, entryLoaded };
   },

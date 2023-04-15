@@ -167,7 +167,7 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, ref, toRefs, watch } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { ExportField, ExportSection } from '@intake24/common/schemes';
+import type { ExportField, ExportSection } from '@intake24/common/surveys';
 
 export default defineComponent({
   name: 'DataExportSection',

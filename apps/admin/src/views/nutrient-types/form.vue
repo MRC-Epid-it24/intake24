@@ -85,7 +85,7 @@ export default defineComponent({
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       NutrientTypeEntry,
       NutrientTypeRefs
-    >(props.id);
+    >(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

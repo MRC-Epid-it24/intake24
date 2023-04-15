@@ -81,7 +81,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props);
 
     return { entry, entryLoaded };
   },

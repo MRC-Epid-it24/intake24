@@ -64,13 +64,13 @@
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/schemes';
+import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
 import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { flattenSchemeWithSection } from '@intake24/common/schemes';
+import { flattenSchemeWithSection } from '@intake24/common/surveys';
 import { ConfirmDialog } from '@intake24/ui';
 
 export type SchemeStatus = {
@@ -91,7 +91,7 @@ export default defineComponent({
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       SurveySchemeQuestionEntry,
       SurveySchemeQuestionRefs
-    >(props.id);
+    >(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

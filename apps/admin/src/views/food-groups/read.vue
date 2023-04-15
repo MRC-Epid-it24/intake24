@@ -23,7 +23,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<FoodGroupEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<FoodGroupEntry>(props);
 
     return { entry, entryLoaded };
   },

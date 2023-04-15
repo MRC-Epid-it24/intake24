@@ -40,7 +40,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<FoodGroupEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<FoodGroupEntry>(props);
 
     return { entry, entryLoaded };
   },

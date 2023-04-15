@@ -44,7 +44,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { refs } = useStoreEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props.id);
+    const { refs } = useStoreEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
 
     return { refs };
   },

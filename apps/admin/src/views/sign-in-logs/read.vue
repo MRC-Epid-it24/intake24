@@ -51,7 +51,7 @@ export default defineComponent({
   mixins: [detailMixin, formatsDateTime],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SignInLogEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<SignInLogEntry>(props);
 
     return { entry, entryLoaded };
   },

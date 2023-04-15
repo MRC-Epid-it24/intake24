@@ -1,10 +1,14 @@
-import type { Ref } from 'vue';
-import { computed } from 'vue';
+import { computed, toRefs } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 import { useEntry, useUser } from '@intake24/admin/stores';
 
-export const useStoreEntry = <T = Dictionary, R = Dictionary>(id: Ref<string>) => {
+export type UseStoreEntryProps = {
+  id: string;
+};
+
+export const useStoreEntry = <T = Dictionary, R = Dictionary>(props: UseStoreEntryProps) => {
+  const { id } = toRefs(props);
   const entryStore = useEntry();
 
   const entry = computed(() => entryStore.data as T);
@@ -28,5 +32,14 @@ export const useStoreEntry = <T = Dictionary, R = Dictionary>(id: Ref<string>) =
     await entryStore.requestEntry({ id: entryId ?? id.value });
   };
 
-  return { canHandleEntry, entry, entryLoaded, fetchEntry, isCreate, isEdit, refs, refsLoaded };
+  return {
+    canHandleEntry,
+    entry,
+    entryLoaded,
+    fetchEntry,
+    isCreate,
+    isEdit,
+    refs,
+    refsLoaded,
+  };
 };

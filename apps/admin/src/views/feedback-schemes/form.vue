@@ -168,7 +168,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props);
 
     return { canHandleEntry, entry, entryLoaded };
   },

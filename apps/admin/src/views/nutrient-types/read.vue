@@ -35,7 +35,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<NutrientTypeEntry>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<NutrientTypeEntry>(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

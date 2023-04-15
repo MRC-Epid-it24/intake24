@@ -93,7 +93,7 @@ export default defineComponent({
   mixins: [formatsDateTime, detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<JobEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<JobEntry>(props);
 
     return { entry, entryLoaded };
   },

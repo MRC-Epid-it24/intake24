@@ -54,7 +54,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry>(props.id);
+    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry>(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

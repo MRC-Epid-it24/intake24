@@ -66,7 +66,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props.id);
+    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props);
 
     return { entry, entryLoaded };
   },

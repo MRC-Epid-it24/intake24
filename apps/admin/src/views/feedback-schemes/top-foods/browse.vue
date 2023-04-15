@@ -108,7 +108,7 @@ export default defineComponent({
     const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
       FeedbackSchemeEntry,
       FeedbackSchemeRefs
-    >(props.id);
+    >(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

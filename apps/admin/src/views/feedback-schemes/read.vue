@@ -55,7 +55,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props.id);
+    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props);
 
     return { canHandleEntry, entry, entryLoaded };
   },
