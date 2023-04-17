@@ -333,8 +333,8 @@ importers:
         specifier: ^1.17.3
         version: 1.17.3
       express-validator:
-        specifier: ^6.15.0
-        version: 6.15.0
+        specifier: ^7.0.1
+        version: 7.0.1
       fast-csv:
         specifier: ^4.3.6
         version: 4.3.6
@@ -4217,7 +4217,7 @@ packages:
   /@types/sax@1.2.4:
     resolution: {integrity: sha512-pSAff4IAxJjfAXUG6tFkO7dsSbTmf8CtUpfhhZ5VhkRpC4628tJhh3+V6H1E+/Gs9piSzYKT5yzHO5M4GG9jkw==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.15.11
     dev: false
 
   /@types/semver@7.3.13:
@@ -7229,8 +7229,8 @@ packages:
       - supports-color
     dev: false
 
-  /express-validator@6.15.0:
-    resolution: {integrity: sha512-r05VYoBL3i2pswuehoFSy+uM8NBuVaY7avp5qrYjQBDzagx2Z5A77FZqPT8/gNLF3HopWkIzaTFaC4JysWXLqg==}
+  /express-validator@7.0.1:
+    resolution: {integrity: sha512-oB+z9QOzQIE8FnlINqyIFA8eIckahC6qc8KtqLdLJcU3/phVyuhXH3bA4qzcrhme+1RYaCSwrq+TlZ/kAKIARA==}
     engines: {node: '>= 8.0.0'}
     dependencies:
       lodash: 4.17.21
