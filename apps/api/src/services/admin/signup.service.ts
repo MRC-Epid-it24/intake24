@@ -71,7 +71,7 @@ const adminSignupService = ({
         logger.debug(`${name}: ${message}`, { stack });
       }
 
-      throw new ValidationError('Invalid token', { param: 'token' });
+      throw new ValidationError('Invalid token', { path: 'token' });
     }
   };
 

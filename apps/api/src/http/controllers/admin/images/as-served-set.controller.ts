@@ -49,7 +49,7 @@ const asServedSetController = ({
     } = req;
     const user = req.user as User;
 
-    if (!file) throw new ValidationError('File not found.', { param: 'image' });
+    if (!file) throw new ValidationError('File not found.', { path: 'image' });
 
     let asServedSet = await asServedService.createSet({ id, description, file, uploader: user.id });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);

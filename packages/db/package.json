@@ -34,10 +34,10 @@
   },
   "devDependencies": {
     "@simplewebauthn/typescript-types": "^7.0.0",
-    "@types/lodash": "^4.14.192",
+    "@types/lodash": "^4.14.194",
     "@types/node": "^18.15.11",
     "@types/pg": "^8.6.6",
-    "@types/validator": "^13.7.14",
+    "@types/validator": "^13.7.15",
     "sequelize-cli": "^6.6.0",
     "typescript": "^5.0.4"
   },

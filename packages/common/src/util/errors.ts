@@ -3,7 +3,8 @@ import pick from 'lodash/pick';
 export type ValidationError = {
   location: string;
   msg: string;
-  param: string;
+  path: string;
+  type: string;
   value: string;
 };
 

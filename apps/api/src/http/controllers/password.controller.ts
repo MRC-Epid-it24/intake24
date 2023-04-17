@@ -38,7 +38,7 @@ const passwordController = ({
     if (!passwordReset)
       throw new ValidationError(
         `It looks like this link is invalid / expired. Please check your email or request another link.`,
-        { param: 'token' }
+        { path: 'token' }
       );
 
     const { userId } = passwordReset;

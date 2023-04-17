@@ -97,7 +97,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('Missing file.', { param: 'file' });
+    if (!file) throw new ValidationError('Missing file.', { path: 'file' });
 
     const job = await nutrientTableService.uploadCsvFile(nutrientTableId, {
       type,

@@ -168,7 +168,7 @@ const localeController = (ioc: IoC) => {
     const { file } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('File not found.', { param: 'file' });
+    if (!file) throw new ValidationError('File not found.', { path: 'file' });
 
     // FIXME: change id field type to number in Locale model rather than parsing
     const job = await localeService.uploadFoodRanking(parseInt(id), code, userId, file);

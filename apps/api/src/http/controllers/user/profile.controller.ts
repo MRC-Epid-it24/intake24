@@ -20,7 +20,7 @@ const userProfileController = ({
       !userPassword ||
       !(await authenticationService.verifyPassword(passwordCurrent, userPassword))
     )
-      throw new ValidationError('Enter your current valid password.', { param: 'passwordCurrent' });
+      throw new ValidationError('Enter your current valid password.', { path: 'passwordCurrent' });
 
     await adminUserService.updatePassword(id, password);
 

@@ -1,22 +1,23 @@
-import type { ValidationError as ExpressValidationError } from 'express-validator';
+import type { FieldValidationError } from 'express-validator';
 
 export default class ValidationError extends Error {
-  public errors: { [name: string]: ExpressValidationError } = {};
+  public errors: { [name: string]: FieldValidationError } = {};
 
   constructor(
     msg: string,
-    error?: Partial<ExpressValidationError> | Partial<ExpressValidationError>[]
+    error?: Partial<FieldValidationError> | Partial<FieldValidationError>[]
   ) {
     super(msg);
 
     if (!error) return;
 
     (Array.isArray(error) ? error : [error]).forEach((item) => {
-      const { param } = item;
-      if (!param) return;
+      const { path } = item;
+      if (!path) return;
 
-      this.errors[param] = {
-        param,
+      this.errors[path] = {
+        type: 'field',
+        path,
         msg,
         location: 'body',
         value: null,

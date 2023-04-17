@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import type { ValidationError as ExpressValidationError } from 'express-validator';
+import type { FieldValidationError } from 'express-validator';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -48,11 +48,11 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
       if (!survey.feedbackScheme) throw new ForbiddenError();
 
       const errors = survey.feedbackScheme.physicalDataFields.reduce<
-        Partial<ExpressValidationError>[]
+        Partial<FieldValidationError>[]
       >((acc, item) => {
         if (req.body[item] === undefined || req.body[item] === null)
           acc.push({
-            param: item,
+            path: item,
             msg: 'Physical parameter is required for feedback calculation',
           });
 

@@ -76,7 +76,7 @@ const fidoProvider = ({
     });
 
     if (!verified || !registrationInfo)
-      throw new ValidationError('Invalid FIDO challenge.', { param: 'response' });
+      throw new ValidationError('Invalid FIDO challenge.', { path: 'response' });
 
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(

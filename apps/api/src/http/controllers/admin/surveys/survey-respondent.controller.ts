@@ -146,7 +146,7 @@ const adminSurveyRespondentController = ({
     const { file } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('File not found.', { param: 'file' });
+    if (!file) throw new ValidationError('File not found.', { path: 'file' });
 
     const job = await adminSurveyService.importRespondents(surveyId, userId, file);
 

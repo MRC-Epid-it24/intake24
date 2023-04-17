@@ -59,7 +59,7 @@ const asServedImageController = ({
     } = req;
     const user = req.user as User;
 
-    if (!file) throw new ValidationError('File not found.', { param: 'image' });
+    if (!file) throw new ValidationError('File not found.', { path: 'image' });
 
     const asServedSet = await AsServedSet.findByPk(asServedSetId);
     if (!asServedSet) throw new NotFoundError();

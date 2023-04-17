@@ -49,7 +49,7 @@ const imageMapController = ({
     } = req;
     const user = req.user as User;
 
-    if (!file) throw new ValidationError('File not found.', { param: 'baseImage' });
+    if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
 
     let imageMap = await imageMapService.create({ id, description, file, uploader: user.id });
     imageMap = await portionSizeService.getImageMap(imageMap.id);
