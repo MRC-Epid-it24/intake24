@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tool-bar :actions="actions" :api="api" :selected="tracked" @refresh="onRefresh"></tool-bar>
+    <tool-bar v-bind="{ actions, api, selected: tracked }" @refresh="onRefresh"></tool-bar>
     <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-card-text>
         <data-table-filter
@@ -56,7 +56,7 @@ import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { resource } from '@intake24/admin/mixins';
 import { useResource } from '@intake24/admin/stores';
 
-import ActionBar from './action-bar/action-bar.vue';
+import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
 
 export default defineComponent({

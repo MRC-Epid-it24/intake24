@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
+import { watchDebounced } from '@vueuse/core';
 import isEmpty from 'lodash/isEmpty';
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 import { useResource } from '@intake24/admin/stores';
@@ -51,39 +51,51 @@ export default defineComponent({
 
   emits: ['filter-set', 'filter-reset'],
 
-  data() {
-    return {
-      items: [] as string[],
-      defaults: { search: '' },
-      filter: {} as Dictionary,
+  setup(props, { emit }) {
+    const { getFilter } = useResource();
+
+    const items = ref<string[]>([]);
+    const defaults = ref({ search: '' });
+    const filter = ref<Dictionary>({});
+
+    const currentSearch = computed(() => filter.value.search);
+
+    const refreshItems = () => {
+      items.value = [...Object.values(filter.value)].filter((item) => item);
     };
-  },
 
-  computed: {
-    ...mapState(useResource, { activeFilter: 'getFilter' }),
-  },
+    const setFilter = () => {
+      refreshItems();
+      emit('filter-set', filter.value);
+    };
+    const resetFilter = () => {
+      emit('filter-reset');
+    };
 
-  watch: {
-    activeFilter: {
-      handler(val) {
-        this.filter = { ...(isEmpty(val) ? this.defaults : val) };
-        this.refreshItems();
+    watch(
+      () => getFilter.value,
+      (val) => {
+        filter.value = { ...(isEmpty(val) ? defaults.value : val) };
+        refreshItems();
       },
-      immediate: true,
-    },
-  },
+      { immediate: true }
+    );
 
-  methods: {
-    setFilter() {
-      this.refreshItems();
-      this.$emit('filter-set', this.filter);
-    },
-    resetFilter() {
-      this.$emit('filter-reset');
-    },
-    refreshItems() {
-      this.items = [...Object.values(this.filter)].filter((item) => item);
-    },
+    watchDebounced(
+      currentSearch,
+      () => {
+        setFilter();
+      },
+      { debounce: 500, maxWait: 2000 }
+    );
+
+    return {
+      items,
+      defaults,
+      filter,
+      setFilter,
+      resetFilter,
+    };
   },
 });
 </script>
