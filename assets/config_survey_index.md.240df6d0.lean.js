@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as t,V as r}from"./chunks/framework.223e0ded.js";const b=JSON.parse('{"title":"Survey client","description":"","frontmatter":{},"headers":[],"relativePath":"config/survey/index.md"}'),o={name:"config/survey/index.md"},i=r("",62),l=[i];function s(d,c,n,h,p,u){return t(),a("div",null,l)}const _=e(o,[["render",s]]);export{b as __pageData,_ as default};

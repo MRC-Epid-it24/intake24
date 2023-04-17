@@ -1,0 +1,1 @@
+import{_ as e,c as o,o as i,V as a}from"./chunks/framework.223e0ded.js";const m=JSON.parse('{"title":"Security","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/security.md"}'),t={name:"config/api/security.md"},r=a("",119),c=[r];function l(d,n,s,h,u,p){return i(),o("div",null,c)}const k=e(t,[["render",l]]);export{m as __pageData,k as default};

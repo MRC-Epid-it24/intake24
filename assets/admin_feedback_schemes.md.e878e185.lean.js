@@ -1,0 +1,1 @@
+import{_ as e,c as a,o,V as t}from"./chunks/framework.223e0ded.js";const m=JSON.parse('{"title":"Feedback schemes","description":"","frontmatter":{},"headers":[],"relativePath":"admin/feedback/schemes.md"}'),i={name:"admin/feedback/schemes.md"},s=t("",21),d=[s];function c(r,l,n,h,p,f){return o(),a("div",null,d)}const b=e(i,[["render",c]]);export{m as __pageData,b as default};

@@ -1,0 +1,1 @@
+import{_ as e,c as o,o as a,V as t}from"./chunks/framework.223e0ded.js";const f=JSON.parse('{"title":"Queue","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/queue.md"}'),r={name:"config/api/queue.md"},i=t("",11),l=[i];function c(d,s,n,u,h,p){return a(),o("div",null,l)}const b=e(r,[["render",c]]);export{f as __pageData,b as default};

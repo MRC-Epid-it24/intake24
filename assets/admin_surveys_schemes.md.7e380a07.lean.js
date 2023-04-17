@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as d,V as a}from"./chunks/framework.223e0ded.js";const p=JSON.parse('{"title":"Survey schemes","description":"","frontmatter":{},"headers":[],"relativePath":"admin/surveys/schemes.md"}'),o={name:"admin/surveys/schemes.md"},s=a("",22),i=[s];function r(l,n,c,u,h,f){return d(),t("div",null,i)}const b=e(o,[["render",r]]);export{p as __pageData,b as default};

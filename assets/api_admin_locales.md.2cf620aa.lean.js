@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,V as l}from"./chunks/framework.223e0ded.js";const A=JSON.parse('{"title":"Locales","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/locales.md"}'),p={name:"api/admin/locales.md"},o=l("",73),e=[o];function t(c,r,D,i,y,F){return n(),a("div",null,e)}const u=s(p,[["render",t]]);export{A as __pageData,u as default};
