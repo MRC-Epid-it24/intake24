@@ -10,7 +10,7 @@
       >
       </meal-list>
     </v-col>
-    <v-col cols="12" lg="9">
+    <v-col :cols="showMealList ? 8 : 9">
       <recall-bread-crumbs
         v-if="promptName"
         v-bind="{ meals, promptName, selection }"

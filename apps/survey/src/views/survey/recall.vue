@@ -1,5 +1,5 @@
 <template>
-  <v-container :class="{ 'pa-0': isMobile }" :fluid="isMobile">
+  <v-container class="container-max" :class="{ 'pa-0': isMobile }" fluid>
     <component :is="layout"></component>
   </v-container>
 </template>
@@ -27,4 +27,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container-max {
+  max-width: 1280px !important;
+}
+</style>
