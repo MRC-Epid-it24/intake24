@@ -20,6 +20,9 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.png' ,
     nav,
+    search: {
+      provider: 'local'
+    },
     sidebar,
     socialLinks: [
       { icon: 'github', link: 'https://github.com/MRC-Epid-it24/intake24' },

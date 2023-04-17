@@ -10,15 +10,3 @@
 a {
   font-weight: 600;
 }
-
-.VPNavBarSearch {
-  margin-right: auto;
-}
-
-.VPNavBarSearch .DocSearch-Button {
-    height: unset;
-    width: unset;
-    background-color: var(--vp-sidebar-bg-color);
-    padding: 10px 10px;
-    border-radius: 20px;
-}

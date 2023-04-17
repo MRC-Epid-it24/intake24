@@ -79,7 +79,6 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-vue": "^9.11.0",
     "execa": "^5.1.1",
-    "flexsearch": "^0.7.31",
     "jest": "^29.5.0",
     "jest-extended": "^3.2.4",
     "lint-staged": "^13.2.1",
@@ -94,8 +93,7 @@
     "tsx": "^3.12.6",
     "typescript": "^5.0.4",
     "vite": "^4.2.1",
-    "vitepress": "1.0.0-alpha.65",
-    "vitepress-plugin-search": "1.0.4-alpha.20",
+    "vitepress": "1.0.0-alpha.71",
     "vue": "^3.2.47"
   },
   "pnpm": {
