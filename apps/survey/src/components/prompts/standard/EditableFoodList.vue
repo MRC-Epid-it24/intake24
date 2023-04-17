@@ -12,6 +12,7 @@
           <v-form @submit.prevent="addFood">
             <div class="d-flex">
               <v-text-field
+                ref="search"
                 v-model="newFoodDescription"
                 hide-details
                 :name="`${mode}-food`"
@@ -45,23 +46,28 @@
               :key="idx"
               class="list-item-border pl-0"
               :ripple="false"
-              @click="edit(idx)"
+              @click="editFood(idx)"
             >
               <v-list-item-avatar class="my-auto mr-2">
                 <v-icon>fas fa-caret-right</v-icon>
               </v-list-item-avatar>
               <v-text-field
-                v-if="editIndex === idx"
+                v-if="food.type === 'free-text' && editIndex === idx"
                 class="v-input-basis-stretch"
-                :value="getFoodName(foods[idx])"
+                :value="food.description"
                 @focusout.stop="onEditFocusLost(idx)"
+                @input="updateFood(idx, $event)"
                 @keypress.enter.stop="addFood"
               ></v-text-field>
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
               <v-list-item-icon class="my-auto">
                 <v-btn
                   icon
-                  :title="$t('prompts.editMeal.delete._', { item: getFoodName(food) })"
+                  :title="
+                    $t('prompts.editMeal.delete._', {
+                      item: food.type === 'free-text' ? food.description : getFoodName(food),
+                    })
+                  "
                   @click="deleteFood(idx)"
                 >
                   <v-icon>$delete</v-icon>
@@ -77,7 +83,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import type { VTextField } from 'vuetify/lib';
+import { useDebounceFn } from '@vueuse/core';
+import { defineComponent, nextTick, onMounted, ref } from 'vue';
 
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
@@ -88,6 +96,10 @@ export default defineComponent({
   name: 'EditableFoodList',
 
   props: {
+    focus: {
+      type: Boolean,
+      default: false,
+    },
     value: {
       type: Array as PropType<FoodState[]>,
       required: true,
@@ -100,63 +112,101 @@ export default defineComponent({
 
   emits: ['input'],
 
-  setup() {
+  setup(props, { emit }) {
     const { getFoodName } = useFoodUtils();
 
-    return { getFoodName };
-  },
+    const search = ref<InstanceType<typeof VTextField>>();
 
-  data() {
-    return {
-      foods: copy(this.value),
-      newFoodDescription: '',
-      editIndex: null as number | null,
+    const foods = ref(copy(props.value));
+    const newFoodDescription = ref('');
+    const editIndex = ref<number | null>(null);
+
+    onMounted(async () => {
+      if (!props.focus || !search.value) return;
+
+      await nextTick();
+      //@ts-expect-error - vuetify types
+      search.value.focus();
+    });
+
+    const updateFoods = () => {
+      emit('input', foods.value);
     };
-  },
 
-  methods: {
-    addFood() {
-      if (this.editIndex !== null) {
-        const editEntry = this.foods[this.editIndex];
+    const debouncedUpdateFoods = useDebounceFn(
+      () => {
+        updateFoods();
+        console.log(`debounced foods`);
+      },
+      500,
+      { maxWait: 1000 }
+    );
 
-        if (editEntry.type === 'free-text' && editEntry.description.trim().length === 0) return;
+    const editFood = (index: number) => {
+      editIndex.value = index;
+    };
+
+    const updateFood = (index: number, description: string) => {
+      const food = foods.value[index];
+      if (food.type !== 'free-text') return;
+
+      food.description = description;
+
+      if (description) debouncedUpdateFoods();
+    };
+
+    const addFood = () => {
+      if (editIndex.value !== null) {
+        const editEntry = foods.value[editIndex.value];
+
+        if (editEntry.type === 'free-text' && !editEntry.description.trim().length) return;
       }
 
-      if (!this.newFoodDescription.length) return;
+      if (!newFoodDescription.value.length) return;
 
       const newFood: FreeTextFood = {
         id: getEntityId(),
         type: 'free-text',
-        description: this.newFoodDescription,
-        flags: this.mode === 'drinksOnly' ? ['is-drink'] : [],
+        description: newFoodDescription.value,
+        flags: props.mode === 'drinksOnly' ? ['is-drink'] : [],
         customPromptAnswers: {},
         linkedFoods: [],
       };
 
-      this.foods.push(newFood);
+      foods.value.push(newFood);
 
-      this.edit(this.foods.length - 1);
-      this.newFoodDescription = '';
-      this.$emit('input', this.foods);
-    },
+      editFood(foods.value.length - 1);
+      newFoodDescription.value = '';
+      updateFoods();
+    };
 
-    edit(index: number) {
-      this.editIndex = index;
-    },
+    const deleteFood = (index: number) => {
+      if (editIndex.value === index) editIndex.value = null;
 
-    deleteFood(index: number) {
-      if (this.editIndex === index) this.editIndex = null;
+      foods.value.splice(index, 1);
+      updateFoods();
+    };
 
-      this.foods.splice(index, 1);
-      this.$emit('input', this.foods);
-    },
+    const onEditFocusLost = (index: number) => {
+      const editEntry = foods.value[index];
 
-    onEditFocusLost(index: number) {
-      const editEntry = this.foods[index];
+      if (editEntry.type === 'free-text' && !editEntry.description.trim().length) {
+        deleteFood(index);
+      }
+    };
 
-      if (editEntry.type === 'free-text' && !editEntry.description.trim().length)
-        this.deleteFood(index);
-    },
+    return {
+      editIndex,
+      foods,
+      newFoodDescription,
+      addFood,
+      deleteFood,
+      editFood,
+      updateFood,
+      getFoodName,
+      onEditFocusLost,
+      search,
+    };
   },
 });
 </script>

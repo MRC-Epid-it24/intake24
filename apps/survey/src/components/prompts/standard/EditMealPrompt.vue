@@ -1,14 +1,19 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template v-if="prompt.separateDrinks">
-      <editable-food-list v-model="foodsOnly" mode="foodsOnly" @input="update"></editable-food-list>
+      <editable-food-list
+        v-model="foodsOnly"
+        focus
+        mode="foodsOnly"
+        @input="update"
+      ></editable-food-list>
       <editable-food-list
         v-model="drinksOnly"
         mode="drinksOnly"
         @input="update"
       ></editable-food-list>
     </template>
-    <editable-food-list v-else v-model="foods" @input="update"></editable-food-list>
+    <editable-food-list v-else v-model="foods" focus @input="update"></editable-food-list>
     <template #actions>
       <v-btn
         :block="isMobile"
