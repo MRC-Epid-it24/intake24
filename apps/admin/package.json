@@ -41,7 +41,7 @@
     "pinia-plugin-persistedstate": "^3.1.0",
     "pluralize": "^8.0.0",
     "tinymce": "^6.4.1",
-    "vanilla-jsoneditor": "^0.16.1",
+    "vanilla-jsoneditor": "^0.17.1",
     "vue": "^2.7.14",
     "vue-i18n": "^8.28.2",
     "vue-router": "^3.6.5",
