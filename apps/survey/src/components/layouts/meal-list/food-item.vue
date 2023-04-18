@@ -8,31 +8,57 @@
       >
         <v-list-item-title class="text-wrap">{{ getFoodName(food) }}</v-list-item-title>
         <v-list-item-action class="list-item">
+          <v-tooltip v-if="food.type === 'free-text'" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
+            </template>
+            <span>{{ $t('recall.menu.food.notMatched') }}</span>
+          </v-tooltip>
           <v-tooltip v-if="food.type === 'encoded-food'" bottom>
             <template #activator="{ on, attrs }">
               <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
             </template>
-            <span>{{ $t('recall.menu.foodMatched') }}</span>
+            <span>{{ $t('recall.menu.food.encoded') }}</span>
           </v-tooltip>
-          <v-tooltip v-else bottom>
-            <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
-            </template>
-            <span>{{ $t('recall.menu.foodNotMatched') }}</span>
-          </v-tooltip>
-        </v-list-item-action>
-        <v-list-item-action class="list-item">
-          <v-tooltip v-if="food.type === 'encoded-food' && food.portionSize" bottom>
+          <v-tooltip v-if="food.type === 'missing-food'" bottom>
             <template #activator="{ on, attrs }">
               <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
             </template>
-            <span>{{ $t('recall.menu.portionSizeComplete') }}</span>
+            <span>{{ $t('recall.menu.food.missing') }}</span>
+          </v-tooltip>
+        </v-list-item-action>
+        <v-list-item-action class="list-item">
+          <v-tooltip v-if="food.type === 'encoded-food'" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+            </template>
+            <span>
+              {{
+                $t(
+                  `recall.menu.food.${
+                    food.portionSize ? 'portionSizeComplete' : 'portionSizeIncomplete'
+                  }`
+                )
+              }}
+            </span>
+          </v-tooltip>
+          <v-tooltip v-else-if="food.type === 'missing-food'" bottom>
+            <template #activator="{ on, attrs }">
+              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+            </template>
+            <span>
+              {{
+                $t(
+                  `recall.menu.food.${food.info ? 'missingInfoComplete' : 'missingInfoIncomplete'}`
+                )
+              }}
+            </span>
           </v-tooltip>
           <v-tooltip v-else bottom>
             <template #activator="{ on, attrs }">
               <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
             </template>
-            <span>{{ $t('recall.menu.portionSizeIncomplete') }}</span>
+            <span>{{ $t('recall.menu.food.portionSizeIncomplete') }}</span>
           </v-tooltip>
         </v-list-item-action>
       </v-list-item>

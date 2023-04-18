@@ -3,7 +3,8 @@ import { plural } from 'pluralize';
 
 import { isSecurableType } from '../security';
 
-export const capitalize = (string: string): string => string[0].toUpperCase() + string.substring(1);
+export const capitalize = (string: string): string =>
+  string ? string[0].toUpperCase() + string.substring(1) : '';
 
 /**
  * Convert string to kebab case

@@ -36,6 +36,7 @@
                 :label="$t('tasks.job')"
                 name="job"
                 outlined
+                prepend-inner-icon="$jobs"
                 @change="jobChanged"
               ></v-select>
             </v-col>
@@ -47,6 +48,7 @@
                 :label="$t('tasks.cron')"
                 name="cron"
                 outlined
+                prepend-inner-icon="far fa-clock"
               >
                 <template #append>
                   <pre>{{ readableCron }}</pre>

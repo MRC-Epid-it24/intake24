@@ -13,7 +13,7 @@
             <div class="d-flex">
               <v-text-field
                 ref="search"
-                v-model="newFoodDescription"
+                v-model.trim="newFoodDescription"
                 hide-details
                 :name="`${mode}-food`"
                 outlined
@@ -61,17 +61,22 @@
               ></v-text-field>
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
               <v-list-item-icon class="my-auto">
-                <v-btn
-                  icon
-                  :title="
-                    $t('prompts.editMeal.delete._', {
-                      item: food.type === 'free-text' ? food.description : getFoodName(food),
-                    })
-                  "
-                  @click="deleteFood(idx)"
+                <confirm-dialog
+                  :label="$t('prompts.editMeal.delete._', { item: getFoodName(food) }).toString()"
+                  @confirm="deleteFood(idx)"
                 >
-                  <v-icon>$delete</v-icon>
-                </v-btn>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      :title="$t('prompts.editMeal.delete._', { item: getFoodName(food) })"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>$delete</v-icon>
+                    </v-btn>
+                  </template>
+                  {{ $t(`prompts.editMeal.delete.confirm`, { item: getFoodName(food) }) }}
+                </confirm-dialog>
               </v-list-item-icon>
             </v-list-item>
           </v-list>
@@ -91,9 +96,12 @@ import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useFoodUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
+import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
   name: 'EditableFoodList',
+
+  components: { ConfirmDialog },
 
   props: {
     focus: {
@@ -190,9 +198,7 @@ export default defineComponent({
     const onEditFocusLost = (index: number) => {
       const editEntry = foods.value[index];
 
-      if (editEntry.type === 'free-text' && !editEntry.description.trim().length) {
-        deleteFood(index);
-      }
+      if (editEntry.type === 'free-text' && !editEntry.description.trim().length) deleteFood(index);
     };
 
     return {

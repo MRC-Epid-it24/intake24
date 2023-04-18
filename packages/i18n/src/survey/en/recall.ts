@@ -31,10 +31,15 @@ const recall: LocaleMessageObject = {
   menu: {
     mealSuggested:
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
-    foodMatched: 'This food has been matched with a food from our database.',
-    foodNotMatched: 'This food has not yet been matched with a food from our database.',
-    portionSizeComplete: 'Portion size estimation for this food is complete.',
-    portionSizeIncomplete: 'Portion size for this food is not yet known.',
+    food: {
+      encoded: 'This food has been matched with a food from our database.',
+      missing: 'This food has been marked as missing in our database.',
+      notMatched: 'This food has not yet been matched with a food from our database.',
+      portionSizeComplete: 'Portion size estimation for this food is complete.',
+      portionSizeIncomplete: 'Portion size for this food is not yet known.',
+      missingInfoComplete: 'Missing information for this food is complete.',
+      missingInfoIncomplete: 'Missing information for this food is not yet known.',
+    },
     meal: {
       editFoodInMeal: 'Change / Add foods',
       editMealTime: 'Change Time',

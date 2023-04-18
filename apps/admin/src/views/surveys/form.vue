@@ -59,6 +59,7 @@
                 :label="$t('survey-schemes._')"
                 name="surveySchemeId"
                 outlined
+                prepend-inner-icon="$survey-schemes"
                 @change="form.errors.clear('surveySchemeId')"
               ></v-select>
             </v-col>
@@ -86,6 +87,7 @@
                 :label="$t('surveys.supportEmail')"
                 name="supportEmail"
                 outlined
+                prepend-inner-icon="fas fa-envelope"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
