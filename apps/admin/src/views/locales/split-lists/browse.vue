@@ -61,8 +61,9 @@ import type {
   LocaleSplitList,
   LocaleSplitListInput,
 } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 
 export type LocaleSplitListsForm = { items: LocaleSplitListInput[] };
 
@@ -72,15 +73,17 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<LocaleEntry>(props);
+    const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
+      LocaleSplitListsForm,
+      LocaleEntry
+    >(props, {
+      data: { items: [] },
+      config: { transform: ({ items }) => items },
+    });
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<LocaleSplitListsForm>({ items: [] }, { transform: ({ items }) => items }),
-    };
+    return { entry, entryLoaded, clearError, form, routeLeave, submit, toForm };
   },
 
   async mounted() {
@@ -105,7 +108,7 @@ export default defineComponent({
 
       const items = await this.form.post<LocaleSplitList[]>(`admin/locales/${this.id}/split-lists`);
 
-      this.setEntry({ items });
+      useStoreEntry().setEntry({ items });
     },
   },
 });

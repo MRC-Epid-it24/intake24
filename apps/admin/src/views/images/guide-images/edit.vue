@@ -55,8 +55,8 @@
 import { defineComponent } from 'vue';
 
 import type { GuideImageEntry, GuideImageEntryObject } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 import GuideDrawer from '../guide-drawer.vue';
 
@@ -75,21 +75,17 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props);
-
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<EditGuideImageForm>({
-        id: null,
-        imageMapId: null,
-        description: null,
-        objects: [],
-      }),
+    const { entry, entryLoaded } = useEntry<GuideImageEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+      EditGuideImageForm,
+      GuideImageEntry
+    >(props, {
+      data: { id: null, imageMapId: null, description: null, objects: [] },
       nonInputErrorKeys: ['objects'],
-    };
+    });
+
+    return { entry, entryLoaded, clearError, form, nonInputErrors, routeLeave, submit };
   },
 
   methods: {

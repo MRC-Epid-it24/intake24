@@ -51,8 +51,8 @@
 import { defineComponent } from 'vue';
 
 import type { AsServedSetEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type CreateAsServedSetForm = {
   id: string | null;
@@ -66,22 +66,17 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props);
+    const { entry, entryLoaded } = useEntry<AsServedSetEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      CreateAsServedSetForm,
+      AsServedSetEntry
+    >(props, {
+      data: { id: null, description: null, selectionImage: null },
+      config: { multipart: true },
+    });
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<CreateAsServedSetForm>(
-        {
-          id: null,
-          description: null,
-          selectionImage: null,
-        },
-        { multipart: true }
-      ),
-    };
+    return { entry, entryLoaded, clearError, form, routeLeave, submit };
   },
 });
 </script>

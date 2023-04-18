@@ -42,18 +42,20 @@
 import { defineComponent } from 'vue';
 
 import type { SignInLogEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { formatsDateTime } from '@intake24/admin/mixins';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SignInLogDetail',
 
-  mixins: [detailMixin, formatsDateTime],
+  mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SignInLogEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<SignInLogEntry>(props);
+    const { formatDate } = useDateTime();
 
-    return { entry, entryLoaded };
+    return { entry, entryLoaded, formatDate };
   },
 });
 </script>

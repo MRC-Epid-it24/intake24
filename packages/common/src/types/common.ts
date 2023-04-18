@@ -46,14 +46,5 @@ export type RequiredLocaleTranslation = {
   [locale: string]: string | null;
 };
 
-export type ValidationError = {
-  location: string;
-  msg: string;
-  param: string;
-  value: string;
-};
-
-export type ValidationErrorResult = Record<string, ValidationError>;
-
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];

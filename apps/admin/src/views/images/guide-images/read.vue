@@ -28,7 +28,8 @@
 import { defineComponent } from 'vue';
 
 import type { GuideImageEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 import GuideDrawer from '../guide-drawer.vue';
 
@@ -40,7 +41,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<GuideImageEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<GuideImageEntry>(props);
 
     return { entry, entryLoaded };
   },

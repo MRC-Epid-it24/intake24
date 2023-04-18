@@ -17,8 +17,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { FoodExplorer } from '@intake24/admin/components/fdbs';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'FoodDBDetail',
@@ -28,7 +29,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry(props);
 
     return { entry, entryLoaded };
   },

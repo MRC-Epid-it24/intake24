@@ -72,9 +72,9 @@ import { defineComponent } from 'vue';
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
 import { HtmlEditor } from '@intake24/admin/components/editors';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type StandardUnitForm = {
   id: string | null;
@@ -90,19 +90,16 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<StandardUnitEntry>(props);
+    const { entry, entryLoaded, isEdit } = useEntry<StandardUnitEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      StandardUnitForm,
+      StandardUnitEntry
+    >(props, {
+      data: { id: null, estimateIn: { en: '' }, howMany: { en: '' } },
+    });
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<StandardUnitForm>({
-        id: null,
-        estimateIn: { en: '' },
-        howMany: { en: '' },
-      }),
-    };
+    return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
   },
 });
 </script>

@@ -14,9 +14,9 @@
 import { defineComponent } from 'vue';
 
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { HenryCoefficientList, Preview } from '@intake24/admin/components/feedback';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 import type { FeedbackSchemeForm } from '../form.vue';
 
@@ -30,16 +30,17 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props);
-
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
+    const { entry, entryLoaded } = useEntry<FeedbackSchemeEntry>(props);
+    useEntryFetch(props);
+    const { form, routeLeave, submit } = useEntryForm<
+      FeedbackSchemeHenryCoefficientsForm,
+      FeedbackSchemeEntry
+    >(props, {
+      data: { henryCoefficients: [] },
       editMethod: 'patch',
-      form: createForm<FeedbackSchemeHenryCoefficientsForm>({ henryCoefficients: [] }),
-    };
+    });
+
+    return { entry, entryLoaded, form, routeLeave, submit };
   },
 
   computed: {

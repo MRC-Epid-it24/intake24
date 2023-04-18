@@ -74,16 +74,16 @@
 
 <script lang="ts">
 import debounce from 'lodash/debounce';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { TopFoods } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { ColorList, NutrientList, Preview } from '@intake24/admin/components/feedback';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultTopFoods } from '@intake24/common/feedback';
 
 import type { FeedbackSchemeForm } from '../form.vue';
@@ -105,20 +105,33 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+    const menu = ref(false);
+
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       FeedbackSchemeEntry,
       FeedbackSchemeRefs
     >(props);
-
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
-
-  data() {
-    return {
-      menu: false,
+    useEntryFetch(props);
+    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+      FeedbackSchemeTopFoodsForm,
+      FeedbackSchemeEntry
+    >(props, {
+      data: { topFoods: defaultTopFoods },
       editMethod: 'patch',
-      form: createForm<FeedbackSchemeTopFoodsForm>({ topFoods: defaultTopFoods }),
       nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
+    });
+
+    return {
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      menu,
+      nonInputErrors,
+      routeLeave,
+      submit,
     };
   },
 

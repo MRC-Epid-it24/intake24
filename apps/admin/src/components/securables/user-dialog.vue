@@ -157,8 +157,8 @@ import type { PropType } from 'vue';
 import pick from 'lodash/pick';
 import { defineComponent } from 'vue';
 
-import type { ValidationError } from '@intake24/common/types';
 import type { UserSecurableListEntry } from '@intake24/common/types/http/admin';
+import type { ValidationError } from '@intake24/common/util';
 import { AutoComplete, ErrorList } from '@intake24/admin/components/forms';
 import { createForm } from '@intake24/admin/util';
 

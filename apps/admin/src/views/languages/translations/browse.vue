@@ -79,8 +79,8 @@ import type {
   LanguageTranslationsResponse,
 } from '@intake24/common/types/http/admin';
 import type { LanguageTranslationAttributes } from '@intake24/db';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
@@ -96,22 +96,24 @@ export default defineComponent({
 
   mixins: [formMixin],
 
-  provide: () => ({
-    editsResource: true,
-  }),
-
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props);
+    const messages = useMessages();
+    const { entry, entryLoaded } = useEntry<LanguageEntry>(props);
+    useEntryFetch(props);
+    const { form, nonInputErrors, routeLeave, toForm } = useEntryForm<
+      LanguageTranslationsForm,
+      LanguageEntry
+    >(props, {
+      data: { translations: [] },
+      nonInputErrorKeys: ['translations'],
+    });
 
-    return { entry, entryLoaded };
+    return { entry, entryLoaded, form, nonInputErrors, routeLeave, toForm, messages };
   },
 
   data() {
     return {
-      form: createForm<LanguageTranslationsForm>({ translations: [] }),
-      nonInputErrorKeys: ['translations'],
       selected: null as LanguageTranslationAttributes | null,
-      messages: useMessages(),
     };
   },
 

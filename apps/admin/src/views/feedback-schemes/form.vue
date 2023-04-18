@@ -133,10 +133,10 @@ import type {
   TopFoods,
 } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
@@ -168,20 +168,25 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props);
-
-    return { canHandleEntry, entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      editMethod: 'patch',
-      form: createForm<PatchFeedbackSchemeForm>({
+    const { canHandleEntry, entry, entryLoaded, isCreate } = useEntry<FeedbackSchemeEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      PatchFeedbackSchemeForm,
+      FeedbackSchemeEntry
+    >(props, {
+      data: {
         name: null,
         type: 'default',
         outputs: [...feedbackOutputs],
         physicalDataFields: [...feedbackPhysicalDataFields],
-      }),
+      },
+    });
+
+    return { canHandleEntry, entry, entryLoaded, isCreate, clearError, form, routeLeave, submit };
+  },
+
+  data() {
+    return {
       feedbackTypes: feedbackTypes.map((value) => ({
         value,
         text: this.$t(`feedback-schemes.types.${value}`),

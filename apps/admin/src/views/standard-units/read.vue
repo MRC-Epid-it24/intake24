@@ -23,7 +23,8 @@
 import { defineComponent } from 'vue';
 
 import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'StandardUnitDetail',
@@ -31,7 +32,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<StandardUnitEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<StandardUnitEntry>(props);
 
     return { entry, entryLoaded };
   },

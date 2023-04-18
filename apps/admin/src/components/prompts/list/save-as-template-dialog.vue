@@ -68,8 +68,8 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { ValidationError } from '@intake24/common/types';
 import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
+import type { ValidationError } from '@intake24/common/util';
 import { ErrorList } from '@intake24/admin/components/forms';
 import { useEntry } from '@intake24/admin/stores';
 import { createForm } from '@intake24/admin/util';

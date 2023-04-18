@@ -74,7 +74,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { ValidationError } from '@intake24/common/types';
+import type { ValidationError } from '@intake24/common/util';
 import { logo } from '@intake24/admin/assets';
 import { ErrorList } from '@intake24/admin/components/forms';
 import { createForm } from '@intake24/admin/util';

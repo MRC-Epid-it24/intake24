@@ -51,9 +51,9 @@ import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { infoPrompt } from '@intake24/common/prompts';
 
 export type SchemeQuestionForm = {
@@ -71,27 +71,39 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+    const { actions, ...question } = infoPrompt;
+
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       SurveySchemeQuestionEntry,
       SurveySchemeQuestionRefs
     >(props);
-
-    const selector = ref<InstanceType<typeof PromptSelector>>();
-
-    return { entry, entryLoaded, refs, refsLoaded, selector };
-  },
-
-  data() {
-    const { actions, ...question } = infoPrompt;
-
-    return {
-      form: createForm<SchemeQuestionForm>({
+    useEntryFetch(props);
+    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+      SchemeQuestionForm,
+      SurveySchemeQuestionEntry
+    >(props, {
+      data: {
         id: null,
         name: null,
         questionId: null,
         question,
-      }),
+      },
       nonInputErrorKeys: ['question'],
+    });
+
+    const selector = ref<InstanceType<typeof PromptSelector>>();
+
+    return {
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      selector,
+      clearError,
+      form,
+      nonInputErrors,
+      routeLeave,
+      submit,
     };
   },
 

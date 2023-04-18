@@ -104,43 +104,123 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { CategoryLocalEntry } from '@intake24/common/types/http/admin';
+import type {
+  CategoryLocalEntry,
+  FoodDatabaseEntry,
+  FoodDatabaseRefs,
+} from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
-
-import categoryOrFood from './category-or-food';
+import {
+  AttributeList,
+  CategoryList,
+  PortionSizeMethodList,
+} from '@intake24/admin/components/fdbs';
+import { useEntry, useEntryForm } from '@intake24/admin/composables';
+import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'CategoryEntry',
 
-  components: { ConfirmLeaveDialog },
+  components: { AttributeList, CategoryList, ConfirmLeaveDialog, PortionSizeMethodList },
 
-  mixins: [categoryOrFood],
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    entryId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
+    const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
+      any,
+      FoodDatabaseEntry
+    >(props, {
+      data: {
+        name: null,
+        main: {
+          name: null,
+          code: null,
+          isHidden: false,
+          attributes: {
+            readyMealOption: null,
+            reasonableAmount: null,
+            sameAsBeforeOption: null,
+            useInRecipes: null,
+          },
+          parentCategories: [],
+        },
+        portionSizeMethods: [],
+      },
+      config: { extractNestedKeys: true },
+    });
+
+    return {
+      clearError,
+      form,
+      nonInputErrors,
+      originalEntry,
+      routeLeave,
+      toForm,
+    };
+  },
 
   data() {
     return {
+      loading: false,
       type: 'categories',
       entry: null as CategoryLocalEntry | null,
-      form: createForm(
-        {
-          name: null,
-          main: {
-            name: null,
-            code: null,
-            isHidden: false,
-            attributes: {
-              readyMealOption: null,
-              reasonableAmount: null,
-              sameAsBeforeOption: null,
-              useInRecipes: null,
-            },
-            parentCategories: [],
-          },
-          portionSizeMethods: [],
-        },
-        { extractNestedKeys: true }
-      ),
+      disabled: !this.can({ action: 'edit' }),
     };
+  },
+
+  computed: {
+    isEntryLoaded(): boolean {
+      return !!this.entry;
+    },
+  },
+
+  async mounted() {
+    await this.fetchCategoryOrFood(this.entryId);
+  },
+
+  methods: {
+    async fetchCategoryOrFood(entryId: string) {
+      const { id, type } = this;
+
+      if (entryId === 'no-category') return;
+
+      this.loading = true;
+      this.entry = null;
+
+      try {
+        const { data } = await this.$http.get<CategoryLocalEntry>(
+          `admin/fdbs/${id}/${type}/${entryId}`
+        );
+
+        this.toForm(data);
+        this.entry = data;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async submit() {
+      const { id, entryId, type } = this;
+
+      const data = await this.form.put<CategoryLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
+      this.toForm(data);
+
+      const { name, main: { name: englishName = 'record' } = {} } = data;
+
+      useMessages().success(
+        this.$t('common.msg.updated', { name: name ?? englishName }).toString()
+      );
+    },
   },
 });
 </script>

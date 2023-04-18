@@ -54,8 +54,8 @@ import cronstrue from 'cronstrue';
 import { defineComponent } from 'vue';
 
 import type { TaskEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { formatsDateTime } from '@intake24/admin/mixins';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
@@ -63,12 +63,14 @@ export default defineComponent({
 
   components: { ConfirmDialog },
 
-  mixins: [detailMixin, formatsDateTime],
+  mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<TaskEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<TaskEntry>(props);
+    const { formatDate } = useDateTime();
 
-    return { entry, entryLoaded };
+    return { entry, entryLoaded, formatDate };
   },
 
   computed: {

@@ -8,7 +8,7 @@ import type { HttpRequestConfig } from '@intake24/ui/types/http';
 import { httpService } from '@intake24/admin/services';
 import { copy, Errors, getObjectNestedKeys, merge } from '@intake24/common/util';
 
-export interface FormConfig<T> {
+export interface FormConfig<T = any> {
   status?: string;
   multipart?: boolean;
   resetOnSubmit?: boolean;

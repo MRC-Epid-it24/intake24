@@ -69,7 +69,8 @@ import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
 } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { flattenSchemeWithSection } from '@intake24/common/surveys';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -88,12 +89,13 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       SurveySchemeQuestionEntry,
       SurveySchemeQuestionRefs
     >(props);
+    const { fetch } = useEntryFetch(props);
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return { entry, entryLoaded, fetch, refs, refsLoaded };
   },
 
   computed: {

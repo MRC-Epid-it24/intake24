@@ -47,8 +47,8 @@
 import { defineComponent } from 'vue';
 
 import type { AsServedImageInput, AsServedSetEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 import AsServedImages from './images.vue';
 
@@ -66,31 +66,26 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<AsServedSetEntry>(props);
-
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<EditAsServedSetForm>({
-        id: null,
-        description: null,
-        images: [],
-      }),
-      nonInputErrorKeys: ['images'],
+    const loadCallback = (data: AsServedSetEntry) => {
+      const { images, ...rest } = data;
+      return { ...rest, images: images.map(({ id, weight }) => ({ id, weight })) };
     };
+
+    const { entry, entryLoaded } = useEntry<AsServedSetEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
+      EditAsServedSetForm,
+      AsServedSetEntry
+    >(props, {
+      data: { id: null, description: null, images: [] },
+      loadCallback,
+      nonInputErrorKeys: ['images'],
+    });
+
+    return { entry, entryLoaded, clearError, form, nonInputErrors, routeLeave, submit };
   },
 
   methods: {
-    toForm(data: AsServedSetEntry) {
-      const { images, ...rest } = data;
-      const input = { ...rest, images: images.map(({ id, weight }) => ({ id, weight })) };
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
-    },
-
     updateImages(images: AsServedImageInput[]) {
       this.form.errors.clear('images');
 

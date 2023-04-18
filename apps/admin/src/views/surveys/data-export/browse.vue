@@ -53,10 +53,10 @@
 import { defineComponent } from 'vue';
 
 import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type SurveyDataExportForm = {
   startDate: string | null;
@@ -71,28 +71,16 @@ export default defineComponent({
   mixins: [detailMixin, PollsForJobs],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveyEntry>(props);
+    const jobType = 'SurveyDataExport';
 
-    return { entry, entryLoaded };
-  },
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave } = useEntryForm<SurveyDataExportForm, SurveyEntry>(
+      props,
+      { data: { startDate: null, endDate: null }, config: { resetOnSubmit: false } }
+    );
 
-  data() {
-    return {
-      form: createForm<SurveyDataExportForm>(
-        {
-          startDate: null,
-          endDate: null,
-        },
-        { resetOnSubmit: false }
-      ),
-      jobType: 'SurveyDataExport',
-    };
-  },
-
-  watch: {
-    entry(val) {
-      if (Object.keys(val).length) this.form.load(val);
-    },
+    return { jobType, entry, entryLoaded, clearError, form, routeLeave };
   },
 
   async mounted() {
@@ -106,7 +94,7 @@ export default defineComponent({
       const job = await this.form.post<JobEntry>(`admin/surveys/${this.id}/data-export`);
 
       this.jobs.unshift(job);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

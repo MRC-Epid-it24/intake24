@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { ExportField, ExportSection } from '@intake24/common/surveys';
@@ -78,8 +78,8 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultExport } from '@intake24/common/surveys';
 
 import type { SurveySchemeForm } from '../form.vue';
@@ -95,23 +95,35 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props);
+    const selected = ref<ExportSection | null>(null);
+    const exportRefs = ref<SurveySchemeExportRefsResponse | null>(null);
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
+    const { entry, entryLoaded } = useEntry<SurveySchemeEntry>(props);
+    const { fetch } = useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      SurveySchemeDataExportForm,
+      SurveySchemeEntry
+    >(props, {
+      data: { dataExport: defaultExport },
       editMethod: 'patch',
-      form: createForm<SurveySchemeDataExportForm>({ dataExport: defaultExport }),
-      selected: null as ExportSection | null,
-      exportRefs: {} as SurveySchemeExportRefsResponse,
+    });
+
+    return {
+      selected,
+      exportRefs,
+      entry,
+      entryLoaded,
+      fetch,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 
   computed: {
     sectionRefFields(): ExportField[] {
-      if (!this.selected) return [];
+      if (!this.selected || !this.exportRefs) return [];
 
       return this.exportRefs[this.selected.id];
     },

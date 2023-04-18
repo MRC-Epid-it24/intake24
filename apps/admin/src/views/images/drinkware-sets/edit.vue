@@ -53,8 +53,8 @@
 import { defineComponent } from 'vue';
 
 import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type EditDrinkwareSetForm = {
   id: string | null;
@@ -68,19 +68,16 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<DrinkwareSetEntry>(props);
+    const { entry, entryLoaded } = useEntry<DrinkwareSetEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      EditDrinkwareSetForm,
+      DrinkwareSetEntry
+    >(props, {
+      data: { id: null, guideImageId: null, description: null },
+    });
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<EditDrinkwareSetForm>({
-        id: null,
-        guideImageId: null,
-        description: null,
-      }),
-    };
+    return { entry, entryLoaded, clearError, form, routeLeave, submit };
   },
 });
 </script>

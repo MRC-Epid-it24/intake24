@@ -67,18 +67,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/surveys';
-import type { Dictionary } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import {
   defaultQuestions,
   flattenScheme,
@@ -99,23 +98,40 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
-      SurveySchemeEntry,
-      SurveySchemeRefs
-    >(props);
+    const sections = ref({
+      survey: surveySections,
+      meal: mealSections,
+    });
+    const section = ref<MealSection | SurveyQuestionSection>('preMeals');
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
+    const loadCallback = (data: SurveySchemeEntry) => {
+      const { questions, ...rest } = data;
+      return { ...rest, questions: { ...defaultQuestions, ...questions } };
+    };
 
-  data() {
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveySchemeEntry, SurveySchemeRefs>(
+      props
+    );
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      SurveySchemeQuestionsForm,
+      SurveySchemeEntry
+    >(props, {
+      data: { questions: defaultQuestions },
+      loadCallback,
+    });
+
     return {
-      editMethod: 'patch',
-      form: createForm<SurveySchemeQuestionsForm>({ questions: defaultQuestions }),
-      sections: {
-        survey: surveySections,
-        meal: mealSections,
-      },
-      section: 'preMeals' as MealSection | SurveyQuestionSection,
+      section,
+      sections,
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 
@@ -152,17 +168,6 @@ export default defineComponent({
   },
 
   methods: {
-    /*
-     * formMixin override
-     */
-    toForm(data: Dictionary) {
-      const { questions, ...rest } = data;
-      const input = { ...rest, questions: { ...defaultQuestions, ...questions } };
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
-    },
-
     move(event: PromptQuestionMoveEvent) {
       const { section, question } = event;
 

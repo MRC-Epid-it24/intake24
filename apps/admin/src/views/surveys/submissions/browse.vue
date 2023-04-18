@@ -45,30 +45,34 @@ import { defineComponent, ref } from 'vue';
 
 import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { formatsDateTime } from '@intake24/admin/mixins';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
-
-export type SurveySubmissionsRefs = {
-  $refs: {
-    table: InstanceType<typeof EmbeddedDataTable>;
-  };
-};
 
 export default defineComponent({
   name: 'SurveySubmissions',
 
   components: { ConfirmDialog, EmbeddedDataTable },
 
-  mixins: [detailMixin, formatsDateTime],
+  mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry>(props);
+    const { formatDate } = useDateTime();
+
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry>(props);
+    useEntryFetch(props);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { entry, entryLoaded, refs, refsLoaded, table };
+    return {
+      formatDate,
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      table,
+    };
   },
 
   data() {

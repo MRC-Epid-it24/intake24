@@ -1,6 +1,15 @@
+// import type { Icons } from 'vuetify';
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import colors from 'vuetify/lib/util/colors';
+
+import type { Dictionary } from '@intake24/common/types';
+
+import resources from '../router/resources';
+
+const resourceIcons = resources.reduce<Dictionary>((acc, resource) => {
+  return (acc[resource.name] = resource.icon), acc;
+}, {});
 
 Vue.use(Vuetify);
 
@@ -24,21 +33,12 @@ export default new Vuetify({
       search: 'fas fa-magnifying-glass',
       save: 'fas fa-save',
       user: 'fas fa-user-circle',
-      // Resource icons
-      languages: 'fas fa-language',
-      locales: 'fas fa-map-marked-alt',
-      'as-served-sets': 'fas fa-utensils',
-      'guide-images': 'fas fa-crosshairs',
-      'image-maps': 'fas fa-draw-polygon',
-      'drinkware-sets': 'fas fa-mug-saucer',
-      'nutrient-tables': 'fas fa-table-cells',
-      'nutrient-types': 'fas fa-seedling',
-      'nutrient-units': 'fas fa-calculator',
-      'standard-units': 'fa-cubes-stacked',
       // MFA Provider icons
       duo: 'fas fa-mobile-screen-button',
       fido: 'fas fa-microchip',
       otp: 'fas fa-stopwatch',
+      // Resource icons
+      ...resourceIcons,
     },
   },
   theme: {

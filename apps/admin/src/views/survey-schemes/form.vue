@@ -26,7 +26,7 @@
                 v-model="form.type"
                 :error-messages="form.errors.get('type')"
                 hide-details="auto"
-                :items="schemeTypes"
+                :items="schemeTypeItems"
                 :label="$t('survey-schemes.types._')"
                 name="type"
                 outlined
@@ -46,15 +46,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/admin/i18n';
 import { defaultMeals, schemeTypes } from '@intake24/common/surveys';
 
 export type SurveySchemeForm = {
@@ -76,26 +77,39 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+    const i18n = useI18n();
+
+    const schemeTypeItems = ref(
+      schemeTypes.map((value) => ({
+        value,
+        text: i18n.t(`survey-schemes.types.${value}`),
+      }))
+    );
+
+    const { canHandleEntry, entry, entryLoaded, refs, refsLoaded } = useEntry<
       SurveySchemeEntry,
       SurveySchemeRefs
     >(props);
-
-    return { canHandleEntry, entry, entryLoaded, refs, refsLoaded };
-  },
-
-  data() {
-    return {
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      PatchSurveySchemeForm,
+      SurveySchemeEntry
+    >(props, {
+      data: { name: null, type: 'default', meals: defaultMeals },
       editMethod: 'patch',
-      form: createForm<PatchSurveySchemeForm>({
-        name: null,
-        type: 'default',
-        meals: defaultMeals,
-      }),
-      schemeTypes: schemeTypes.map((value) => ({
-        value,
-        text: this.$t(`survey-schemes.types.${value}`),
-      })),
+    });
+
+    return {
+      schemeTypeItems,
+      canHandleEntry,
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 });

@@ -8,8 +8,9 @@
 import { defineComponent } from 'vue';
 
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { Securables } from '@intake24/admin/components/securables';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'LanguageSecurables',
@@ -19,7 +20,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props);
+    const { entry, entryLoaded } = useEntry<LanguageEntry>(props);
+    useEntryFetch(props);
 
     return { entry, entryLoaded };
   },

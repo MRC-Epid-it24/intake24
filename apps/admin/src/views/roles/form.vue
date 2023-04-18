@@ -94,9 +94,9 @@ import orderBy from 'lodash/orderBy';
 import { defineComponent } from 'vue';
 
 import type { PermissionListEntry, RoleEntry, RoleRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import resources from '@intake24/admin/router/resources';
-import { createForm } from '@intake24/admin/util';
 
 type RoleForm = {
   id: string | null;
@@ -121,20 +121,28 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<RoleEntry, RoleRefs>(props);
+    const loadCallback = (data: Partial<RoleEntry>) => {
+      const { permissions = [], ...rest } = data;
+      return { ...rest, permissions: permissions.map((item) => item.id) };
+    };
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
+    const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<RoleEntry, RoleRefs>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<RoleForm, RoleEntry>(props, {
+      data: { id: null, name: null, displayName: null, description: null, permissions: [] },
+      loadCallback,
+    });
 
-  data() {
     return {
-      form: createForm<RoleForm>({
-        id: null,
-        name: null,
-        displayName: null,
-        description: null,
-        permissions: [],
-      }),
+      entry,
+      entryLoaded,
+      isEdit,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 
@@ -183,19 +191,6 @@ export default defineComponent({
         acc.global.push(permission);
         return acc;
       }, groups);
-    },
-  },
-
-  methods: {
-    toForm(data: Partial<RoleEntry>) {
-      const { permissions = [], ...rest } = data;
-      const input = {
-        ...rest,
-        permissions: permissions.map((item) => item.id),
-      };
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
     },
   },
 });

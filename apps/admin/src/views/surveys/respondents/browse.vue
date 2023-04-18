@@ -185,8 +185,8 @@ import type {
   SurveyRespondentListEntry,
 } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -218,11 +218,23 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveyEntry>(props);
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form } = useEntryForm<SurveyRespondentsForm, SurveyEntry>(props, {
+      data: {
+        userId: null,
+        username: null,
+        password: null,
+        passwordConfirm: null,
+        name: null,
+        email: null,
+        phone: null,
+      },
+    });
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { entry, entryLoaded, table };
+    return { entry, entryLoaded, table, clearError, form };
   },
 
   data() {
@@ -261,15 +273,6 @@ export default defineComponent({
       ],
       dialog: false,
       loading: false,
-      form: createForm<SurveyRespondentsForm>({
-        userId: null,
-        username: null,
-        password: null,
-        passwordConfirm: null,
-        name: null,
-        email: null,
-        phone: null,
-      }),
     };
   },
 
@@ -308,12 +311,6 @@ export default defineComponent({
     reset() {
       this.form.reset();
       this.dialog = false;
-    },
-
-    clearError(event: KeyboardEvent) {
-      const { name } = event.target as HTMLInputElement;
-
-      if (name) this.form.errors.clear(name);
     },
 
     async updateTable() {

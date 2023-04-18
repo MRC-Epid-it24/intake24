@@ -48,8 +48,8 @@
 import { defineComponent } from 'vue';
 
 import type { PermissionEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type PermissionForm = {
   id: string | null;
@@ -64,20 +64,16 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<PermissionEntry>(props);
+    const { entry, entryLoaded, isEdit } = useEntry<PermissionEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<PermissionForm, PermissionEntry>(
+      props,
+      {
+        data: { id: null, name: null, displayName: null, description: null },
+      }
+    );
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<PermissionForm>({
-        id: null,
-        name: null,
-        displayName: null,
-        description: null,
-      }),
-    };
+    return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
   },
 });
 </script>

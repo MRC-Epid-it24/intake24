@@ -322,9 +322,9 @@ import type {
   SurveyState,
 } from '@intake24/common/surveys';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultOverrides, searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
 
 export type SurveyForm = {
@@ -403,17 +403,30 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded, newId } = useStoreEntry<SurveyEntry, SurveyRefs>(
+    const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(
       props
     );
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
+      data: surveyForm,
+      editMethod: 'patch',
+    });
 
-    return { entry, entryLoaded, refs, refsLoaded, newId };
+    return {
+      entry,
+      entryLoaded,
+      isEdit,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
+    };
   },
 
   data() {
     return {
-      editMethod: 'patch',
-      form: createForm<SurveyForm>(surveyForm),
       showGenUserKey: false,
       surveyStates: surveyStates.map((value) => ({
         value,

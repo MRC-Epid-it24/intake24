@@ -26,8 +26,9 @@
 import { defineComponent } from 'vue';
 
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SurveySchemeDetail',
@@ -37,7 +38,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<SurveySchemeEntry>(props);
+    useEntryFetch(props);
+    const { canHandleEntry, entry, entryLoaded } = useEntry<SurveySchemeEntry>(props);
 
     return { canHandleEntry, entry, entryLoaded };
   },

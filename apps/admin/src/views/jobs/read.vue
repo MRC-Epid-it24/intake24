@@ -81,7 +81,8 @@
 import { defineComponent } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { formatsDateTime } from '@intake24/admin/mixins';
 import { ConfirmDialog } from '@intake24/ui/components';
 
@@ -93,9 +94,12 @@ export default defineComponent({
   mixins: [formatsDateTime, detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<JobEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<JobEntry>(props);
 
-    return { entry, entryLoaded };
+    const { formatDate } = useDateTime();
+
+    return { entry, entryLoaded, formatDate };
   },
 
   methods: {

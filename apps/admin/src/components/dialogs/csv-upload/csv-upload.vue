@@ -107,7 +107,7 @@ export default defineComponent({
       const job = await this.form.post<JobEntry>(this.endpoint);
 
       this.jobs.unshift(job);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

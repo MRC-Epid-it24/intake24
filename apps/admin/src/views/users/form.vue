@@ -12,16 +12,19 @@
                 :label="$t('users.name')"
                 name="name"
                 outlined
+                prepend-inner-icon="fas fa-signature"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.email"
+                autocomplete="email"
                 :error-messages="form.errors.get('email')"
                 hide-details="auto"
                 :label="$t('common.email')"
                 name="email"
                 outlined
+                prepend-inner-icon="fas fa-envelope"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
@@ -32,28 +35,33 @@
                 :label="$t('common.phone')"
                 name="phone"
                 outlined
+                prepend-inner-icon="fas fa-phone"
               ></v-text-field>
             </v-col>
             <template v-if="isCreate">
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="form.password"
+                  autocomplete="new-password"
                   :error-messages="form.errors.get('password')"
                   hide-details="auto"
                   :label="$t('common.password._')"
                   name="password"
                   outlined
+                  prepend-inner-icon="fas fa-key"
                   type="password"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
                   v-model="form.passwordConfirm"
+                  autocomplete="new-password"
                   :error-messages="form.errors.get('passwordConfirm')"
                   hide-details="auto"
                   :label="$t('common.password.confirm')"
                   name="passwordConfirm"
                   outlined
+                  prepend-inner-icon="fas fa-key"
                   type="password"
                 ></v-text-field>
               </v-col>
@@ -70,6 +78,7 @@
                 multiple
                 name="roles"
                 outlined
+                prepend-inner-icon="$roles"
                 @change="form.errors.clear('roles')"
               >
                 <template #selection="{ item, index }">
@@ -93,6 +102,7 @@
                 multiple
                 name="permissions"
                 outlined
+                prepend-inner-icon="$permissions"
                 @change="form.errors.clear('permissions')"
               >
                 <template #selection="{ item, index }">
@@ -166,12 +176,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { CustomField } from '@intake24/common/types';
 import type { UserEntry, UserRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type UserForm = {
   id: string | null;
@@ -196,18 +206,25 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<UserEntry, UserRefs>(props);
+    const toggles = ref({ disabledAt: false, verifiedAt: false });
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
+    const loadCallback = (data: Partial<UserEntry>) => {
+      toggles.value.disabledAt = !!data.disabledAt;
+      toggles.value.verifiedAt = !!data.verifiedAt;
 
-  data() {
-    return {
-      toggles: {
-        disabledAt: false,
-        verifiedAt: false,
-      },
-      form: createForm<UserForm>({
+      const { customFields = [], permissions = [], roles = [], ...rest } = data;
+      return {
+        ...rest,
+        permissions: permissions.map((item) => item.id),
+        roles: roles.map((item) => item.id),
+        customFields: customFields.map(({ name, value }) => ({ name, value })),
+      };
+    };
+
+    const { entry, entryLoaded, isCreate, refs, refsLoaded } = useEntry<UserEntry, UserRefs>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<UserForm, UserEntry>(props, {
+      data: {
         id: null,
         name: null,
         email: null,
@@ -222,32 +239,31 @@ export default defineComponent({
         customFields: [],
         permissions: [],
         roles: [],
-      }),
+      },
+      loadCallback,
+    });
+
+    const toggle = (field: 'verifiedAt' | 'disabledAt') => {
+      form[field] = toggles.value[field] ? new Date() : null;
+      form.errors.clear(field);
+    };
+
+    return {
+      toggles,
+      toggle,
+      entry,
+      entryLoaded,
+      isCreate,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 
-  methods: {
-    toForm(data: Partial<UserEntry>) {
-      const { customFields = [], permissions = [], roles = [], ...rest } = data;
-      const input = {
-        ...rest,
-        permissions: permissions.map((item) => item.id),
-        roles: roles.map((item) => item.id),
-        customFields: customFields.map(({ name, value }) => ({ name, value })),
-      };
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
-
-      this.toggles.disabledAt = !!data.disabledAt;
-      this.toggles.verifiedAt = !!data.verifiedAt;
-    },
-
-    toggle(field: 'verifiedAt' | 'disabledAt') {
-      this.form[field] = this.toggles[field] ? new Date() : null;
-      this.form.errors.clear(field);
-    },
-  },
+  methods: {},
 });
 </script>
 

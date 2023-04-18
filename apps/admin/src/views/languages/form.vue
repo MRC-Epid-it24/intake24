@@ -91,8 +91,8 @@ import orderBy from 'lodash/orderBy';
 import { defineComponent } from 'vue';
 
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { textDirections } from '@intake24/common/types';
 
 type LanguageForm = {
@@ -110,21 +110,27 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<LanguageEntry>(props);
+    const { entry, entryLoaded, isEdit } = useEntry<LanguageEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<LanguageForm, LanguageEntry>(
+      props,
+      {
+        data: {
+          id: null,
+          code: null,
+          englishName: null,
+          localName: null,
+          countryFlagCode: 'gb',
+          textDirection: 'ltr',
+        },
+      }
+    );
 
-    return { entry, entryLoaded };
+    return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
   },
 
   data() {
     return {
-      form: createForm<LanguageForm>({
-        id: null,
-        code: null,
-        englishName: null,
-        localName: null,
-        countryFlagCode: 'gb',
-        textDirection: 'ltr',
-      }),
       flags: orderBy(
         Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
           value: key,

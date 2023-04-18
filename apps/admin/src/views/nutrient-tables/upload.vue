@@ -61,9 +61,10 @@ import { defineComponent } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
 import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { PollsForJobs } from '@intake24/admin/components/jobs';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/admin/i18n';
 
 type UploadForm = {
   file: File | null;
@@ -76,25 +77,25 @@ export default defineComponent({
   mixins: [detailMixin, PollsForJobs],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<NutrientTableEntry>(props);
+    const i18n = useI18n();
 
-    return { entry, entryLoaded };
-  },
-
-  data() {
     const jobType: JobType[] = ['NutrientTableIMappingImport', 'NutrientTableDataImport'];
-    const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
+    const jobTypeList = jobType.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }));
+
+    const { entry, entryLoaded } = useEntry<NutrientTableEntry>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave } = useEntryForm<UploadForm, NutrientTableEntry>(props, {
+      data: { file: null, type: jobTypeList[0].value },
+      config: { multipart: true },
+    });
 
     return {
-      form: createForm<UploadForm>(
-        {
-          file: null,
-          type: jobTypeList[0].value,
-        },
-        { multipart: true }
-      ),
-      jobType,
       jobTypeList,
+      entry,
+      entryLoaded,
+      clearError,
+      form,
+      routeLeave,
     };
   },
 
@@ -109,7 +110,7 @@ export default defineComponent({
       const job = await this.form.post<JobEntry>(`admin/nutrient-tables/${this.id}/upload`);
 
       this.jobs.unshift(job);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

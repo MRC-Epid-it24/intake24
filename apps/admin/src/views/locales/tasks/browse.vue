@@ -52,13 +52,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/admin/i18n';
 
 type LocaleJobType = Extract<
   JobType,
@@ -78,45 +79,47 @@ export default defineComponent({
   mixins: [formMixin, PollsForJobs],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry, LocaleRefs>(
-      props.id
-    );
+    const i18n = useI18n();
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
-
-  data() {
-    const jobType: LocaleJobType[] = [
+    const jobType = ref<LocaleJobType[]>([
       'LocaleFoodNutrientMapping',
       'PairwiseSearchCopyAssociations',
-    ];
-    const jobTypeList = jobType.map((value) => ({ value, text: this.$t(`jobs.types.${value}._`) }));
+    ]);
+    const jobTypeList = ref(
+      jobType.value.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+    );
 
-    const defaultJobsParams: Pick<
-      JobParams,
-      'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
-    > = {
-      LocaleFoodNutrientMapping: { localeId: this.id },
-      PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: this.id },
-    };
+    const defaultJobsParams = ref<
+      Pick<JobParams, 'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'>
+    >({
+      LocaleFoodNutrientMapping: { localeId: props.id },
+      PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: props.id },
+    });
 
     const disabledJobParams = {
       LocaleFoodNutrientMapping: { localeId: true },
       PairwiseSearchCopyAssociations: { targetLocaleId: true },
     };
 
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave } = useEntryForm<LocaleTasksForm, LocaleEntry>(props, {
+      data: { job: jobType.value[0], params: defaultJobsParams.value.LocaleFoodNutrientMapping },
+      config: { resetOnSubmit: false },
+    });
+
     return {
       defaultJobsParams,
       disabledJobParams,
-      form: createForm<LocaleTasksForm>(
-        {
-          job: jobType[0],
-          params: defaultJobsParams.LocaleFoodNutrientMapping,
-        },
-        { resetOnSubmit: false }
-      ),
       jobType,
       jobTypeList,
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
     };
   },
 
@@ -136,7 +139,7 @@ export default defineComponent({
       const job = await this.form.post<JobEntry>(`admin/locales/${this.id}/tasks`);
 
       this.jobs.unshift(job);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

@@ -183,8 +183,8 @@ import orderBy from 'lodash/orderBy';
 import { defineComponent } from 'vue';
 
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { textDirections } from '@intake24/common/types';
 
 type LocaleForm = {
@@ -206,16 +206,12 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<LocaleEntry, LocaleRefs>(
-      props.id
+    const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(
+      props
     );
-
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
-
-  data() {
-    return {
-      form: createForm<LocaleForm>({
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<LocaleForm, LocaleEntry>(props, {
+      data: {
         id: null,
         code: null,
         prototypeLocaleId: null,
@@ -226,7 +222,24 @@ export default defineComponent({
         countryFlagCode: null,
         textDirection: 'ltr',
         foodIndexLanguageBackendId: 'en',
-      }),
+      },
+    });
+
+    return {
+      entry,
+      entryLoaded,
+      isEdit,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
+    };
+  },
+
+  data() {
+    return {
       flags: orderBy(
         Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
           value: key,
@@ -257,13 +270,11 @@ export default defineComponent({
       if (!this.refs.foodIndexLanguageBackends)
         return [{ value: 'en', icon: 'gb', text: this.$t('common.none').toString() }];
 
-      return this.refs.foodIndexLanguageBackends.map((backend) => {
-        return {
-          value: backend.id,
-          text: backend.description,
-          icon: backend.flag,
-        };
-      });
+      return this.refs.foodIndexLanguageBackends.map((backend) => ({
+        value: backend.id,
+        text: backend.description,
+        icon: backend.flag,
+      }));
     },
   },
 });

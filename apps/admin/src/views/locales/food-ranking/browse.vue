@@ -1,5 +1,5 @@
 <template>
-  <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave">
+  <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-toolbar bottom color="grey lighten-5" flat tile>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('locales.food-ranking.title') }}
@@ -25,17 +25,19 @@ import { defineComponent } from 'vue';
 
 import type { LocaleEntry } from '@intake24/common/types/http/admin';
 import CsvUpload from '@intake24/admin/components/dialogs/csv-upload/csv-upload.vue';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'LocaleFoodRanking',
 
   components: { CsvUpload },
 
-  mixins: [formMixin],
+  mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<LocaleEntry>(props);
+    const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
+    useEntryFetch(props);
 
     return { entry, entryLoaded };
   },

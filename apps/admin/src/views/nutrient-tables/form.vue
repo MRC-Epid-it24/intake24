@@ -227,8 +227,8 @@
 import { defineComponent } from 'vue';
 
 import type { NutrientTableEntry, NutrientTableRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
-import { createForm } from '@intake24/admin/util';
+import { formMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { excelColumnToOffset, offsetToExcelColumn } from '@intake24/common/util';
 
 export type CsvMappingField = { fieldName: string; columnOffset: string };
@@ -305,31 +305,46 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<
+    const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<
       NutrientTableEntry,
       NutrientTableRefs
     >(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<
+      NutrientTableForm,
+      NutrientTableEntry
+    >(props, {
+      data: {
+        id: null,
+        description: null,
+        csvMapping: {
+          idColumnOffset: 'A',
+          descriptionColumnOffset: 'B',
+          localDescriptionColumnOffset: null,
+          rowOffset: 1,
+        },
+        csvMappingFields: [],
+        csvMappingNutrients: [],
+      },
+      loadCallback: transformIn,
+      config: { transform: transformOut },
+    });
 
-    return { entry, entryLoaded, refs, refsLoaded };
+    return {
+      entry,
+      entryLoaded,
+      isEdit,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
+    };
   },
 
   data() {
     return {
-      form: createForm<NutrientTableForm>(
-        {
-          id: null,
-          description: null,
-          csvMapping: {
-            idColumnOffset: 'A',
-            descriptionColumnOffset: 'B',
-            localDescriptionColumnOffset: null,
-            rowOffset: 1,
-          },
-          csvMappingFields: [],
-          csvMappingNutrients: [],
-        },
-        { transform: transformOut }
-      ),
       nutrients: {
         chunk: 10,
         items: [] as CsvMappingNutrient[],
@@ -370,13 +385,6 @@ export default defineComponent({
         const items = this.form.csvMappingNutrients.slice(startIndex, endIndex);
         this.nutrients.items.push(...items);
       }
-    },
-
-    toForm(data: NutrientTableEntry) {
-      const input = transformIn(data);
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
     },
 
     addField() {

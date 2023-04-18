@@ -91,7 +91,7 @@ export default defineComponent({
       );
 
       this.jobs.unshift(job);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

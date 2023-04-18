@@ -112,46 +112,134 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FoodLocalEntry } from '@intake24/common/types/http/admin';
+import type {
+  FoodDatabaseEntry,
+  FoodDatabaseRefs,
+  FoodLocalEntry,
+} from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
-import { NutrientList } from '@intake24/admin/components/fdbs';
+import {
+  AttributeList,
+  CategoryList,
+  NutrientList,
+  PortionSizeMethodList,
+} from '@intake24/admin/components/fdbs';
 import { AutoComplete } from '@intake24/admin/components/forms';
-import { createForm } from '@intake24/admin/util';
-
-import categoryOrFood from './category-or-food';
+import { useEntry, useEntryForm } from '@intake24/admin/composables';
+import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
   name: 'FoodEntry',
 
-  components: { AutoComplete, ConfirmLeaveDialog, NutrientList },
+  components: {
+    AutoComplete,
+    AttributeList,
+    CategoryList,
+    ConfirmLeaveDialog,
+    NutrientList,
+    PortionSizeMethodList,
+  },
 
-  mixins: [categoryOrFood],
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+    entryId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
+    const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
+      any,
+      FoodDatabaseEntry
+    >(props, {
+      data: {
+        name: null,
+        main: {
+          name: null,
+          code: null,
+          foodGroupId: null,
+          attributes: {
+            readyMealOption: null,
+            reasonableAmount: null,
+            sameAsBeforeOption: null,
+            useInRecipes: null,
+          },
+          parentCategories: [],
+        },
+        nutrientRecords: [],
+        portionSizeMethods: [],
+      },
+      config: { extractNestedKeys: true },
+    });
+
+    return {
+      refs,
+      clearError,
+      form,
+      nonInputErrors,
+      originalEntry,
+      routeLeave,
+      toForm,
+    };
+  },
 
   data() {
     return {
+      loading: false,
       type: 'foods',
       entry: null as FoodLocalEntry | null,
-      form: createForm(
-        {
-          name: null,
-          main: {
-            name: null,
-            code: null,
-            foodGroupId: null,
-            attributes: {
-              readyMealOption: null,
-              reasonableAmount: null,
-              sameAsBeforeOption: null,
-              useInRecipes: null,
-            },
-            parentCategories: [],
-          },
-          nutrientRecords: [],
-          portionSizeMethods: [],
-        },
-        { extractNestedKeys: true }
-      ),
+      disabled: !this.can({ action: 'edit' }),
     };
+  },
+
+  computed: {
+    isEntryLoaded(): boolean {
+      return !!this.entry;
+    },
+  },
+
+  async mounted() {
+    await this.fetchCategoryOrFood(this.entryId);
+  },
+
+  methods: {
+    async fetchCategoryOrFood(entryId: string) {
+      const { id, type } = this;
+
+      if (entryId === 'no-category') return;
+
+      this.loading = true;
+      this.entry = null;
+
+      try {
+        const { data } = await this.$http.get<FoodLocalEntry>(
+          `admin/fdbs/${id}/${type}/${entryId}`
+        );
+
+        this.toForm(data);
+        this.entry = data;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async submit() {
+      const { id, entryId, type } = this;
+
+      const data = await this.form.put<FoodLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
+      this.toForm(data);
+
+      const { name, main: { name: englishName = 'record' } = {} } = data;
+
+      useMessages().success(
+        this.$t('common.msg.updated', { name: name ?? englishName }).toString()
+      );
+    },
   },
 });
 </script>

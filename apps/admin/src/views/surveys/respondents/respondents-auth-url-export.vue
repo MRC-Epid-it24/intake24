@@ -63,7 +63,7 @@ export default defineComponent({
       );
 
       this.jobs.unshift(data);
-      this.startPolling();
+      await this.startPolling();
     },
   },
 });

@@ -23,7 +23,8 @@ import { defineComponent, ref } from 'vue';
 import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { Read } from '@intake24/admin/components/data-tables/action-bar';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'StandardUnitCategories',
@@ -33,11 +34,16 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<StandardUnitEntry>(props);
+    const { entry, entryLoaded } = useEntry<StandardUnitEntry>(props);
+    useEntryFetch(props);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { entry, entryLoaded, table };
+    const updateTable = async () => {
+      await table.value?.fetch();
+    };
+
+    return { entry, entryLoaded, table, updateTable };
   },
 
   data() {
@@ -71,12 +77,6 @@ export default defineComponent({
         },
       ],
     };
-  },
-
-  methods: {
-    async updateTable() {
-      await this.table?.fetch();
-    },
   },
 });
 </script>

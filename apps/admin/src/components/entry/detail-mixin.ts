@@ -1,6 +1,5 @@
 import { defineComponent } from 'vue';
 
-import fetchEntry from './fetch-entry';
 import Layout from './layout.vue';
 
 export default defineComponent({
@@ -8,5 +7,10 @@ export default defineComponent({
 
   components: { Layout },
 
-  mixins: [fetchEntry],
+  props: {
+    id: {
+      type: String,
+      default: 'create',
+    },
+  },
 });

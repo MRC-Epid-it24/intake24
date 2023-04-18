@@ -43,9 +43,10 @@
 import { defineComponent } from 'vue';
 
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'FeedbackSchemeDetail',
@@ -55,7 +56,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { canHandleEntry, entry, entryLoaded } = useStoreEntry<FeedbackSchemeEntry>(props);
+    const { canHandleEntry, entry, entryLoaded } = useEntry<FeedbackSchemeEntry>(props);
+    useEntryFetch(props);
 
     return { canHandleEntry, entry, entryLoaded };
   },

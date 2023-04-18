@@ -1,6 +1,6 @@
 <template>
   <component :is="tag" v-if="errors.length">
-    <v-alert v-for="error in errors" :key="error.param" class="my-2" dense text type="error">
+    <v-alert v-for="error in errors" :key="error.path" class="my-2" dense text type="error">
       {{ error.msg }}
     </v-alert>
   </component>
@@ -11,7 +11,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { VCardText } from 'vuetify/lib';
 
-import type { ValidationError } from '@intake24/common/types';
+import type { ValidationError } from '@intake24/common/util';
 
 export default defineComponent({
   name: 'ErrorList',

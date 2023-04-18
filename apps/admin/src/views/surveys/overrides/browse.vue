@@ -33,10 +33,10 @@ import { defineComponent } from 'vue';
 import type { Prompt } from '@intake24/common/prompts';
 import type { SchemeOverrides } from '@intake24/common/surveys';
 import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
-import { createForm } from '@intake24/admin/util';
+import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultOverrides, flattenScheme } from '@intake24/common/surveys';
 
 export type SurveyOverridesForm = { surveySchemeOverrides: SchemeOverrides };
@@ -49,17 +49,22 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<SurveyEntry, SurveyRefs>(
-      props.id
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
+      props,
+      { data: { surveySchemeOverrides: defaultOverrides }, editMethod: 'patch' }
     );
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
-
-  data() {
     return {
-      editMethod: 'patch',
-      form: createForm<SurveyOverridesForm>({ surveySchemeOverrides: defaultOverrides }),
+      entry,
+      entryLoaded,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 

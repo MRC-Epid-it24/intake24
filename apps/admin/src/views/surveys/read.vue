@@ -85,7 +85,8 @@
 import { defineComponent } from 'vue';
 
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
-import { detailMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { detailMixin } from '@intake24/admin/components/entry';
+import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SurveyDetail',
@@ -93,7 +94,8 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useStoreEntry<SurveyEntry>(props);
+    useEntryFetch(props);
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
 
     return { entry, entryLoaded };
   },

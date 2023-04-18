@@ -103,10 +103,9 @@ import { defineComponent } from 'vue';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
-import { formMixin, useStoreEntry } from '@intake24/admin/components/entry';
+import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
-import { formatsDateTime } from '@intake24/admin/mixins';
-import { createForm } from '@intake24/admin/util';
+import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultJobsParams } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -125,26 +124,47 @@ export default defineComponent({
 
   components: { ConfirmDialog, ...jobParams },
 
-  mixins: [formatsDateTime, formMixin],
+  mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useStoreEntry<TaskEntry, TaskRefs>(props);
+    const loadCallback = (data: TaskEntry) => {
+      const { params, ...rest } = data;
+      return { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
+    };
 
-    return { entry, entryLoaded, refs, refsLoaded };
-  },
+    const { formatDate } = useDateTime();
 
-  data() {
-    return {
-      form: createForm<TaskForm>({
+    const { entry, entryLoaded, isCreate, isEdit, refs, refsLoaded } = useEntry<
+      TaskEntry,
+      TaskRefs
+    >(props);
+    useEntryFetch(props);
+    const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskEntry>(props, {
+      data: {
         id: null,
         name: null,
         job: null,
-        cron: '0 * * * *',
+        cron: null,
         active: false,
         description: null,
         params: {},
-      }),
+      },
+      loadCallback,
+    });
+
+    return {
       defaultJobsParams,
+      entry,
+      entryLoaded,
+      formatDate,
+      isCreate,
+      isEdit,
+      refs,
+      refsLoaded,
+      clearError,
+      form,
+      routeLeave,
+      submit,
     };
   },
 
@@ -170,14 +190,6 @@ export default defineComponent({
   },
 
   methods: {
-    toForm(data: TaskEntry) {
-      const { params, ...rest } = data;
-      const input = { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
-
-      this.setOriginalEntry(input);
-      this.form.load(input);
-    },
-
     jobChanged() {
       this.form.errors.clear('job');
       this.updateParams();
