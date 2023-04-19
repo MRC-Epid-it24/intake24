@@ -26,18 +26,13 @@
         </v-btn>
         <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
       </v-toolbar>
-      <v-card-subtitle class="mt-4">
-        Make sure that you've watched the Intake24 walkthrough video: Watch the tutorial
-      </v-card-subtitle>
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="requestHelp">
         <v-card-text>
           <p class="mx-2">
-            If you would like someone from our team to help, enter your name and the phone number
-            that we can use to reach you.
+            If you would like someone from our team to help, enter your contact details that we can
+            use to reach you.
           </p>
-          <p class="mx-2">
-            One of our support staff will call you on that number as soon as they can.
-          </p>
+          <p class="mx-2">One of our support staff will get in touch as soon as they can.</p>
           <v-container>
             <v-row>
               <v-col cols="12">
@@ -49,6 +44,17 @@
                   name="name"
                   outlined
                   prepend-inner-icon="fas fa-user"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.email"
+                  :error-messages="errors.get('email')"
+                  hide-details="auto"
+                  :label="$t('common.email')"
+                  name="email"
+                  outlined
+                  prepend-inner-icon="fas fa-envelope"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -115,7 +121,7 @@ export default defineComponent({
   emits: ['cancel'],
 
   data() {
-    const createForm = (): SurveyRequestHelpInput => ({ name: '', phone: '' });
+    const createForm = (): SurveyRequestHelpInput => ({ name: '', email: '', phone: '' });
 
     return {
       dialog: false,

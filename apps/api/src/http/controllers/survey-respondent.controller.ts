@@ -173,9 +173,9 @@ const surveyRespondentController = ({
   ): Promise<void> => {
     const { id: userId } = req.user as User;
     const { slug: surveySlug } = req.params;
-    const { name, phone } = req.body;
+    const { name, email, phone } = req.body;
 
-    await surveyService.requestHelp({ surveySlug, userId, name, phone });
+    await surveyService.requestHelp({ surveySlug, userId, name, email, phone });
 
     res.json();
   };

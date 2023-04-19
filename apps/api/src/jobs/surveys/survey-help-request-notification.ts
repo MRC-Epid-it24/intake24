@@ -79,12 +79,13 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
   }
 
   private async sendEmail(surveyName: string, username: string, to: string[]) {
-    const { name, phone } = this.params;
+    const { name, email, phone } = this.params;
 
     const html = nunjucks.render('mail/surveys/help-request.njk', {
       surveyName,
       username,
       name,
+      email,
       phone,
     });
 

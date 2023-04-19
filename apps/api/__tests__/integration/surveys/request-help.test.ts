@@ -11,7 +11,7 @@ export default () => {
     url = `/api/surveys/${suite.data.system.survey.slug}/request-help`;
     invalidUrl = `/api/surveys/invalid-survey/request-help`;
 
-    input = { name: 'John', phone: '01234 567 890' };
+    input = { name: 'John', email: 'test@example.com', phone: '01234 567 890' };
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -25,15 +25,15 @@ export default () => {
   });
 
   it('should return 422 for missing input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'phone'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
       bearer: 'respondent',
     });
   });
 
   it('should return 422 for invalid input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'phone'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
       bearer: 'respondent',
-      input: { name: [], phone: null },
+      input: { name: [], email: 'notAnEmailAddress', phone: null },
     });
   });
 

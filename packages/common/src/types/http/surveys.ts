@@ -68,5 +68,6 @@ export interface SurveyFollowUpResponse extends SurveyUserInfoResponse {
 
 export type SurveyRequestHelpInput = {
   name: string;
+  email: string;
   phone: string;
 };

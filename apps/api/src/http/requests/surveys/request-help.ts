@@ -10,6 +10,13 @@ export default validate(
       isString: true,
       isEmpty: { negated: true },
     },
+    email: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('email._'),
+      isEmail: true,
+      isEmpty: { negated: true },
+      toLowerCase: true,
+    },
     phone: {
       in: ['body'],
       errorMessage: typeErrorMessage('string._'),
