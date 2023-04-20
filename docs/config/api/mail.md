@@ -73,11 +73,20 @@ Selected mailer transport
 - object-path: `from.address`
 - dotenv var: `MAIL_FROM_ADDRESS`
 - type: `string`
-- default: `'example@domain.com'`
+- default: `'no-reply@domain.com'`
 
 ### Name
 
 - object-path: `from.name`
 - dotenv var: `MAIL_FROM_NAME`
 - type: `string`
-- default: `'Intake24'`
+- default: `$APP_NAME`
+
+## Reply-To
+
+Email address displayed in email footer as a reply-to address. If reply-to address is not set, reply-to footer will not be included in the email.
+
+- object-path: `replyTo`
+- dotenv var: `MAIL_REPLY_TO_ADDRESS`
+- type: `string`
+- default: `undefined`

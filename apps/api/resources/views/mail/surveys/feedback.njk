@@ -1,11 +1,13 @@
+{% import "mail/layouts/elements.njk" as elements %}
+
 {% extends "mail/layouts/layout.njk" %}
 {% block body %}
-<p>Dear Participant,</p>
+<p>Hello,</p>
 <p>Please find attached your feedback based on the recalls you have completed using Intake24.</p>
 <p>You can revisit your feedback here.</p>
-{% include "mail/partials/action-button.njk" %}
+{{ elements.button(action.url, action.text) }}
 <p>
 Kind regards,<br />
-Intake24 Team
+{{ app.name }} Team
 </p>
 {% endblock %}

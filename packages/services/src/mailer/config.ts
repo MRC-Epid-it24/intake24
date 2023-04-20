@@ -27,6 +27,7 @@ export type MailConfig = {
     address: string;
     name: string;
   };
+  replyTo?: string;
 };
 
 const user = process.env.MAIL_USERNAME || null;
@@ -51,9 +52,11 @@ export const mailConfig: MailConfig = {
   },
 
   from: {
-    address: process.env.MAIL_FROM_ADDRESS || 'example@domain.com',
+    address: process.env.MAIL_FROM_ADDRESS || 'no-reply@domain.com',
     name: process.env.MAIL_FROM_NAME || 'Intake24',
   },
+
+  replyTo: process.env.MAIL_REPLY_TO_ADDRESS,
 };
 
 export default mailConfig;

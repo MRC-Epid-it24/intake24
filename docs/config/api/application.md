@@ -75,7 +75,7 @@ List of sites URLs. These can either be relative or absolute URLs.
 
 Domain / base url to resolve fully qualified sites URLs (if relative)
 
-- object-path: `url.base`
+- object-path: `urls.base`
 - dotenv var: `APP_URL_BASE`
 - type: `string`
 - default: `'localhost:3100'`
@@ -84,7 +84,7 @@ Domain / base url to resolve fully qualified sites URLs (if relative)
 
 URL of admin site.
 
-- object-path: `url.admin`
+- object-path: `urls.admin`
 - dotenv var: `APP_URL_ADMIN`
 - type: `string`
 - default: `'/admin'`
@@ -93,7 +93,7 @@ URL of admin site.
 
 URL of documentation site.
 
-- object-path: `url.docs`
+- object-path: `urls.docs`
 - dotenv var: `APP_URL_DOCS`
 - type: `string`
 - default: `'/docs'`
@@ -102,7 +102,7 @@ URL of documentation site.
 
 URL of survey site.
 
-- object-path: `url.survey`
+- object-path: `urls.survey`
 - dotenv var: `APP_URL_SURVEY`
 - type: `string`
 - default: `'/survey'`
@@ -111,7 +111,7 @@ URL of survey site.
 
 URL of images.
 
-- object-path: `url.images`
+- object-path: `urls.images`
 - dotenv var: `APP_URL_IMAGES`
 - type: `string`
 - default: `'localhost:3100/images'`

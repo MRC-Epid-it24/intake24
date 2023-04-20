@@ -2,6 +2,7 @@ import path from 'node:path';
 
 import type { Express } from 'express';
 import { json, urlencoded } from 'body-parser';
+import CleanCSS from 'clean-css';
 import RedisStore from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
@@ -12,47 +13,51 @@ import type { Ops } from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
 import { httpLogger as stream } from '@intake24/services';
 
-export default async (app: Express, { config }: Ops): Promise<void> => {
+export default async (express: Express, { config }: Ops): Promise<void> => {
   const {
-    app: { env, secret },
+    app,
+    mail,
     session: { cookie },
   } = config;
 
-  const isDev = env === 'development';
+  const isDev = app.env === 'development';
 
-  if (!secret) throw new Error('Application secret not set.');
+  if (!app.secret) throw new Error('Application secret not set.');
 
   // Body parser
-  app.use(json());
-  app.use(urlencoded({ extended: false }));
+  express.use(json());
+  express.use(urlencoded({ extended: false }));
 
   // Cookie parser
-  app.use(cookieParser(secret));
+  express.use(cookieParser(app.secret));
 
   // Http logger
-  app.use(morgan(isDev ? 'dev' : 'combined', { stream }));
+  express.use(morgan(isDev ? 'dev' : 'combined', { stream }));
 
   // Session store + middleware
   const client = ioc.cradle.session.init();
 
-  app.use(
+  express.use(
     expressSession({
       store: new RedisStore({ client, prefix: '', ttl: cookie.maxAge / 1000 }),
       name: cookie.name,
       cookie,
       saveUninitialized: true,
-      secret,
+      secret: app.secret,
       resave: false,
     })
   );
 
   // Templates
-  app.engine('njk', nunjucks.render);
-  app.set('view engine', 'njk');
+  express.engine('njk', nunjucks.render);
+  express.set('view engine', 'njk');
 
-  nunjucks.configure([path.resolve('public'), path.resolve('resources/views')], {
-    autoescape: true,
-    express: app,
-    noCache: isDev,
-  });
+  nunjucks
+    .configure([path.resolve('public'), path.resolve('resources/views')], {
+      autoescape: true,
+      express,
+      noCache: isDev,
+    })
+    .addGlobal('app', { name: app.name, year: new Date().getFullYear(), replyTo: mail.replyTo })
+    .addFilter('inlineCSS', (content: string) => new CleanCSS().minify(content).styles);
 };

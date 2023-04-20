@@ -293,6 +293,9 @@ importers:
       bullmq:
         specifier: ^3.11.0
         version: 3.11.0
+      clean-css:
+        specifier: ^5.3.2
+        version: 5.3.2
       connect-redis:
         specifier: ^7.0.1
         version: 7.0.1(express-session@1.17.3)
@@ -444,6 +447,9 @@ importers:
       '@types/body-parser':
         specifier: ^1.19.2
         version: 1.19.2
+      '@types/clean-css':
+        specifier: ^4.2.6
+        version: 4.2.6
       '@types/cookie-parser':
         specifier: ^1.4.3
         version: 1.4.3
@@ -940,10 +946,16 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      jsdom:
+        specifier: ^21.1.1
+        version: 21.1.1
     devDependencies:
       '@types/bcryptjs':
         specifier: ^2.4.2
         version: 2.4.2
+      '@types/jsdom':
+        specifier: ^21.1.1
+        version: 21.1.1
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -3889,6 +3901,13 @@ packages:
     resolution: {integrity: sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==}
     dev: true
 
+  /@types/clean-css@4.2.6:
+    resolution: {integrity: sha512-Ze1tf+LnGPmG6hBFMi0B4TEB0mhF7EiMM5oyjLDNPE9hxrPU0W+5+bHvO+eFPA+bt0iC1zkQMoU/iGdRVjcRbw==}
+    dependencies:
+      '@types/node': 18.15.11
+      source-map: 0.6.1
+    dev: true
+
   /@types/connect@3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
@@ -4191,7 +4210,7 @@ packages:
   /@types/sax@1.2.4:
     resolution: {integrity: sha512-pSAff4IAxJjfAXUG6tFkO7dsSbTmf8CtUpfhhZ5VhkRpC4628tJhh3+V6H1E+/Gs9piSzYKT5yzHO5M4GG9jkw==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.15.11
     dev: false
 
   /@types/semver@7.3.13:
@@ -5826,7 +5845,6 @@ packages:
     engines: {node: '>= 10.0'}
     dependencies:
       source-map: 0.6.1
-    dev: true
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}

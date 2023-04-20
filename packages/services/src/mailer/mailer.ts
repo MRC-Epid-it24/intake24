@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 
 import type { Environment } from '@intake24/common/types';
 import type { Logger } from '@intake24/services';
+import { replaceCssAsInlineStyle } from '@intake24/common-backend/util';
 
 import type { MailConfig } from './config';
 
@@ -52,7 +53,10 @@ export class Mailer {
       const { from } = this.mailConfig;
       const defaults: SendMailOptions = { from };
 
-      const info = await this.transporter.sendMail({ ...defaults, ...options });
+      let { html } = options;
+      if (html && typeof html === 'string') html = replaceCssAsInlineStyle(html);
+
+      const info = await this.transporter.sendMail({ ...defaults, ...options, html });
 
       this.logger.info(info.messageId);
 

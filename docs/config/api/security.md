@@ -289,8 +289,8 @@ Password reset link expiration in **minutes**.
 
 - object-path: `passwords.expire`
 - dotenv var: `PASSWORDS_EXPIRES_IN`
-- type: `number`
-- default: `60`
+- type: `string`
+- default: `'1h'`
 
 ## Authentication tokens
 

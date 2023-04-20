@@ -76,10 +76,12 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
 
     const url = `${domain}/password/reset/${token}`;
     const { expiresIn } = this.securityConfig.passwords;
+    const subject = '🍔 Intake24: Password reset';
 
     await UserPasswordReset.create({ userId, token });
 
     const html = nunjucks.render('mail/user/password-reset.njk', {
+      title: subject,
       email,
       name: name ?? '',
       uaInfo,
@@ -87,6 +89,6 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
       action: { url, text: 'Reset password' },
     });
 
-    await this.mailer.sendMail({ to: email, subject: '🍔 Intake24: Password reset', html });
+    await this.mailer.sendMail({ to: email, subject, html });
   }
 }

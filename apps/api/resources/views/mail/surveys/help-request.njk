@@ -1,18 +1,20 @@
+{% import "mail/layouts/elements.njk" as elements %}
+
 {% extends "mail/layouts/layout.njk" %}
 {% block body %}
 <p>Hello,</p>
 <p>Someone has requested your help with recall, please see details below.</p>
 <p>
-  Study: {{ surveyName }}<br>
-  Username: {{ username }}
+  <strong>Study:</strong> {{ surveyName }}<br>
+  <strong>Username:</strong> {{ username }}
 </p>
 <p>
-  Name: {{ name }}<br>
-  Email: {{ email }}<br>
-  Phone: {{ phone }}
+  <strong>Name:</strong> {{ name }}<br>
+  <strong>Email:</strong> {{ email }}<br>
+  <strong>Phone:</strong> {{ phone }}
 </p>
 <p>
 Kind regards,<br />
-Intake24 Team
+{{ app.name }} Team
 </p>
 {% endblock %}
