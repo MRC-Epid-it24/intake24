@@ -582,6 +582,9 @@ importers:
       fs-extra:
         specifier: ^11.1.1
         version: 11.1.1
+      jsdom:
+        specifier: ^21.1.1
+        version: 21.1.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -685,6 +688,9 @@ importers:
       helmet:
         specifier: ^6.1.5
         version: 6.1.5
+      jsdom:
+        specifier: ^21.1.1
+        version: 21.1.1
       morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -949,6 +955,15 @@ importers:
       jsdom:
         specifier: ^21.1.1
         version: 21.1.1
+      nodemailer:
+        specifier: ^6.9.1
+        version: 6.9.1
+      winston:
+        specifier: ^3.8.2
+        version: 3.8.2
+      winston-daily-rotate-file:
+        specifier: ^4.7.1
+        version: 4.7.1(winston@3.8.2)
     devDependencies:
       '@types/bcryptjs':
         specifier: ^2.4.2
@@ -956,6 +971,9 @@ importers:
       '@types/jsdom':
         specifier: ^21.1.1
         version: 21.1.1
+      '@types/nodemailer':
+        specifier: ^6.4.7
+        version: 6.4.7
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -1030,25 +1048,6 @@ importers:
       '@types/lodash':
         specifier: ^4.14.194
         version: 4.14.194
-      typescript:
-        specifier: ^5.0.4
-        version: 5.0.4
-
-  packages/services:
-    dependencies:
-      nodemailer:
-        specifier: ^6.9.1
-        version: 6.9.1
-      winston:
-        specifier: ^3.8.2
-        version: 3.8.2
-      winston-daily-rotate-file:
-        specifier: ^4.7.1
-        version: 4.7.1(winston@3.8.2)
-    devDependencies:
-      '@types/nodemailer':
-        specifier: ^6.4.7
-        version: 6.4.7
       typescript:
         specifier: ^5.0.4
         version: 5.0.4

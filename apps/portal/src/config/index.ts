@@ -1,5 +1,5 @@
-import type { LogConfig, MailConfig } from '@intake24/services';
-import { logConfig as log, mailConfig as mail } from '@intake24/services';
+import type { LogConfig, MailConfig } from '@intake24/common-backend';
+import { logConfig as log, mailConfig as mail } from '@intake24/common-backend';
 
 import type { AppConfig } from './app';
 import type { FileSystemConfig } from './filesystem';

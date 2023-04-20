@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import { logger } from '@intake24/services';
+import { logger } from '@intake24/common-backend';
 
 import type { Ops } from './app';
 import app from './app';

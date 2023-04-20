@@ -4,7 +4,7 @@ import type { Express } from 'express';
 import morgan from 'morgan';
 import { Environment, FileSystemLoader } from 'nunjucks';
 
-import { httpLogger as stream } from '@intake24/services';
+import { httpLogger as stream } from '@intake24/common-backend';
 
 import type { Ops } from '../app';
 import { vite } from '../util';

@@ -49,7 +49,7 @@ import { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core
 import cachedInheritableAttributesService from '@intake24/api/services/foods/cached-inheritable-attributes-service';
 import categoryContentsService from '@intake24/api/services/foods/category-contents.service';
 import inheritableAttributesService from '@intake24/api/services/foods/inheritable-attributes-service';
-import { logger, Mailer } from '@intake24/services';
+import { logger, Mailer } from '@intake24/common-backend';
 
 export default (container: AwilixContainer): void => {
   container.register({

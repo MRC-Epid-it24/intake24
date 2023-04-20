@@ -1,6 +1,6 @@
 # Mail
 
-Path: `apps/api/src/config/mail.ts`
+Path: `packages/common-backend/src/services/mailer/config.ts`
 
 Mail implementation supports following transports:
 

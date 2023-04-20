@@ -1,9 +1,7 @@
-import type { ACLConfig } from '@intake24/common-backend';
+import type { ACLConfig, LogConfig, MailConfig } from '@intake24/common-backend';
 import type { DatabaseConfig } from '@intake24/db';
-import type { LogConfig, MailConfig } from '@intake24/services';
-import { aclConfig as acl } from '@intake24/common-backend';
+import { aclConfig as acl, logConfig as log, mailConfig as mail } from '@intake24/common-backend';
 import { databaseConfig as database } from '@intake24/db';
-import { logConfig as log, mailConfig as mail } from '@intake24/services';
 
 import type { AppConfig } from './app';
 import type { CacheConfig } from './cache';

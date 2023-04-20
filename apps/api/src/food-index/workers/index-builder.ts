@@ -10,6 +10,7 @@ import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankSearchResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { logger as servicesLogger } from '@intake24/common-backend';
 import {
   databaseLogQuery,
   FoodLocal,
@@ -19,7 +20,6 @@ import {
   SequelizeTS,
   SynonymSet,
 } from '@intake24/db';
-import { logger as servicesLogger } from '@intake24/services';
 
 if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
 

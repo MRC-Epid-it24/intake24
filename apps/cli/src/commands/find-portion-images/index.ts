@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { createArrayCsvWriter } from 'csv-writer';
 
 import type { Environment } from '@intake24/common/types';
+import { logger } from '@intake24/common-backend';
 import {
   AsServedImage,
   AsServedSet,
@@ -23,7 +24,6 @@ import {
   NutrientTableRecordNutrient,
   ProcessedImage,
 } from '@intake24/db';
-import { logger } from '@intake24/services';
 
 import type Config from './config';
 import validate from './config.validator';

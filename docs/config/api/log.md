@@ -1,6 +1,6 @@
 # Logging
 
-Path: `packages/services/src/logger/config.ts`
+Path: `packages/common-backend/src/services/logger/config.ts`
 
 ## Log level
 

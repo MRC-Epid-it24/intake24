@@ -1,4 +1,4 @@
-import { PasswordBcrypt } from '@intake24/common-backend/util/passwords';
+import { PasswordBcrypt } from '@intake24/common-backend';
 
 export default async (password: string): Promise<void> => {
   const hasher = new PasswordBcrypt();

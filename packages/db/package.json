@@ -44,7 +44,6 @@
   "bundledDependencies": [
     "@intake24/api",
     "@intake24/common",
-    "@intake24/i18n",
-    "@intake24/services"
+    "@intake24/i18n"
   ]
 }

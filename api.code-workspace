@@ -6,7 +6,6 @@
     { "path": "packages/common-backend" },
     { "path": "packages/db" },
     { "path": "packages/i18n" },
-    { "path": "packages/services" },
     { "path": "packages/ui" }
   ],
   "settings": {
@@ -20,7 +19,6 @@
       { "directory": "packages/common-backend" },
       { "directory": "packages/db" },
       { "directory": "packages/i18n" },
-      { "directory": "packages/services" },
       { "directory": "packages/ui" }
     ],
     "files.eol": "\n",

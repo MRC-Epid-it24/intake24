@@ -27,11 +27,10 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 ├─ docs -> Documentation
 └─ packages
    └─ common (shared code)
-   └─ common-backend (backend shared code)
+   └─ common-backend (backend shared code, e.g. services)
    └─ db (database layer)
    └─ i18n (translations)
-   └─ services (shared services for apps)
-   └─ ui (shared UI components for frontend apps)
+   └─ ui (frontend shared code, e.g. UI components etc)
 ```
 
 ## Dependencies

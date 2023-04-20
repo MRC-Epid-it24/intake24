@@ -111,8 +111,8 @@ import type {
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
 import type { Environment } from '@intake24/common/types';
+import type { Logger, Mailer } from '@intake24/common-backend';
 import type { DatabasesInterface, User } from '@intake24/db';
-import type { Logger, Mailer } from '@intake24/services';
 import config from '@intake24/api/config';
 import { Database, models } from '@intake24/db';
 

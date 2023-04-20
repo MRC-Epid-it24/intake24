@@ -11,7 +11,7 @@ import nunjucks from 'nunjucks';
 
 import type { Ops } from '@intake24/api/app';
 import ioc from '@intake24/api/ioc';
-import { httpLogger as stream } from '@intake24/services';
+import { httpLogger as stream } from '@intake24/common-backend';
 
 export default async (express: Express, { config }: Ops): Promise<void> => {
   const {

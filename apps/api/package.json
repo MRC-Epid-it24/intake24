@@ -133,7 +133,6 @@
     "@intake24/common",
     "@intake24/common-backend",
     "@intake24/db",
-    "@intake24/i18n",
-    "@intake24/services"
+    "@intake24/i18n"
   ]
 }

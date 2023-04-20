@@ -3,8 +3,8 @@
 
 import type { DatabasesInterface } from '@intake24/db';
 import appConfig from '@intake24/api/config/app';
+import { logger } from '@intake24/common-backend';
 import { Database, databaseConfig } from '@intake24/db';
-import { logger } from '@intake24/services';
 
 let databases: DatabasesInterface;
 
