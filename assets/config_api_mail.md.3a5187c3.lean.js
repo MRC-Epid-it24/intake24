@@ -1,1 +1,0 @@
-import{_ as e,c as a,o,V as l}from"./chunks/framework.223e0ded.js";const f=JSON.parse('{"title":"Mail","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/mail.md"}'),t={name:"config/api/mail.md"},i=l("",28),r=[i];function d(c,s,n,h,u,m){return o(),a("div",null,r)}const b=e(t,[["render",d]]);export{f as __pageData,b as default};

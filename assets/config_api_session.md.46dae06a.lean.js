@@ -1,0 +1,1 @@
+import{_ as e,c as o,o as i,V as a}from"./chunks/framework.634eae90.js";const k=JSON.parse('{"title":"Session","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/session.md"}'),t={name:"config/api/session.md"},l=a("",26),c=[l];function d(r,s,n,h,u,p){return i(),o("div",null,c)}const m=e(t,[["render",d]]);export{k as __pageData,m as default};

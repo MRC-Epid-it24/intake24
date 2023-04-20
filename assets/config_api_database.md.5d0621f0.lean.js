@@ -1,1 +1,0 @@
-import{_ as e,c as o,o as d,V as a}from"./chunks/framework.223e0ded.js";const u=JSON.parse('{"title":"Database","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/database.md"}'),c={name:"config/api/database.md"},t=a("",19),l=[t];function i(n,s,_,r,S,D){return d(),o("div",null,l)}const T=e(c,[["render",i]]);export{u as __pageData,T as default};

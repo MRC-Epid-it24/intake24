@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as s,V as n}from"./chunks/framework.634eae90.js";const m=JSON.parse('{"title":"Generate .env files","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-env.md"}'),o={name:"cli/generate-env.md"},t=n("",6),c=[t];function l(p,r,i,d,h,_){return s(),a("div",null,c)}const C=e(o,[["render",l]]);export{m as __pageData,C as default};

@@ -1,1 +1,0 @@
-import{_ as e,c as o,o as i,V as a}from"./chunks/framework.223e0ded.js";const m=JSON.parse('{"title":"Filesystem","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/filesystem.md"}'),l={name:"config/api/filesystem.md"},d=a("",17),t=[d];function r(c,s,n,p,u,h){return i(),o("div",null,t)}const _=e(l,[["render",r]]);export{m as __pageData,_ as default};

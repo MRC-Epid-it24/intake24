@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,V as e}from"./chunks/framework.223e0ded.js";const F=JSON.parse('{"title":"Permissions","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/permissions.md"}'),p={name:"api/admin/permissions.md"},o=e("",31),l=[o];function t(r,i,c,D,y,C){return n(),a("div",null,l)}const h=s(p,[["render",t]]);export{F as __pageData,h as default};

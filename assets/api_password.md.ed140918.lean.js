@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as e,V as n}from"./chunks/framework.634eae90.js";const h=JSON.parse('{"title":"Password recovery","description":"","frontmatter":{},"headers":[],"relativePath":"api/password.md"}'),o={name:"api/password.md"},l=n("",17),p=[l];function t(r,c,i,d,y,D){return e(),a("div",null,p)}const C=s(o,[["render",t]]);export{h as __pageData,C as default};

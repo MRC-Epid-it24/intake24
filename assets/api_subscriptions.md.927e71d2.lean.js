@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,V as e}from"./chunks/framework.223e0ded.js";const C=JSON.parse('{"title":"Web Push notifications","description":"","frontmatter":{},"headers":[],"relativePath":"api/subscriptions.md"}'),o={name:"api/subscriptions.md"},l=e("",20),p=[l];function t(c,i,r,u,h,d){return n(),a("div",null,p)}const D=s(o,[["render",t]]);export{C as __pageData,D as default};

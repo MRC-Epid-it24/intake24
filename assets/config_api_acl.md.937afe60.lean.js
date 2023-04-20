@@ -1,1 +1,0 @@
-import{_ as e,c as a,o,V as i}from"./chunks/framework.223e0ded.js";const m=JSON.parse('{"title":"Access control list (ACL)","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/acl.md"}'),l={name:"config/api/acl.md"},c=i("",29),s=[c];function t(r,d,n,h,p,u){return o(),a("div",null,s)}const _=e(l,[["render",t]]);export{m as __pageData,_ as default};

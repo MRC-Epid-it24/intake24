@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as t,V as o}from"./chunks/framework.223e0ded.js";const m=JSON.parse('{"title":"Job types","description":"","frontmatter":{},"headers":[],"relativePath":"admin/system/job-types.md"}'),i={name:"admin/system/job-types.md"},s=o("",47),r=[s];function n(l,c,d,p,u,h){return t(),a("div",null,r)}const b=e(i,[["render",n]]);export{m as __pageData,b as default};

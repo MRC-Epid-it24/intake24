@@ -1,0 +1,1 @@
+import{_ as a,c as t,o as e,V as i}from"./chunks/framework.634eae90.js";const p=JSON.parse('{"title":"Data Dictionary","description":"","frontmatter":{},"headers":[],"relativePath":"data-dictionary/index.md"}'),r={name:"data-dictionary/index.md"},o=i("",5),n=[o];function s(c,d,l,h,m,_){return e(),t("div",null,n)}const f=a(r,[["render",s]]);export{p as __pageData,f as default};

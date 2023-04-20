@@ -1,0 +1,1 @@
+import{_ as a,c as e,o as s,V as t}from"./chunks/framework.634eae90.js";const g=JSON.parse('{"title":"Upgrade guide","description":"","frontmatter":{},"headers":[],"relativePath":"overview/upgrade.md"}'),o={name:"overview/upgrade.md"},n=t("",15),i=[n];function d(l,r,p,c,h,u){return s(),e("div",null,i)}const b=a(o,[["render",d]]);export{g as __pageData,b as default};
