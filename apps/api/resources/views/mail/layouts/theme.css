@@ -190,6 +190,10 @@ img {
 
 /* Tables */
 
+table {
+    border-spacing: unset;
+}
+
 .table table {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;

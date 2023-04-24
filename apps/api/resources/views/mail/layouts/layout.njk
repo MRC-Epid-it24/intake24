@@ -6,8 +6,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
+{% set themeCSS %}
+    {% include "mail/layouts/theme.css" %}
+{% endset %}
+<style type="text/css">
+    {{ themeCSS | inlineCSS | safe }}
+</style>
+</head>
+<body>
 <style>
 @media only screen and (max-width: 600px) {
+.header {
+width: 100% !important;
+}
+
+.inner-header {
+width: 100% !important;
+}
+
 .inner-body {
 width: 100% !important;
 }
@@ -23,79 +39,68 @@ width: 100% !important;
 }
 }
 </style>
-{% set themeCSS %}
-    {% include "mail/layouts/theme.css" %}
-{% endset %}
-<style type="text/css">
-    {{ themeCSS | inlineCSS | safe }}
-</style>
-</head>
-<body>
-
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td align="center">
-<table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<!-- Email Header -->
-<tr>
-<td class="header">
-<table class="inner-header" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td class="content-cell">
-    <a href="{{ app.url }}" style="display: inline-block;">{{ app.name }}</a>
-</td>
-</tr>
-</table>
-</td>
-</tr>
+    <tr>
+        <td align="center">
+            <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <!-- Email Header -->
+                <tr>
+                    <td class="header">
+                        <table class="inner-header" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                                <td class="content-cell">
+                                    <a href="{{ app.url }}" style="display: inline-block;">{{ app.name }}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-<!-- Email body -->
-<tr>
-<td class="body" width="100%" cellpadding="0" cellspacing="0" style="border: hidden !important;">
-<table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                <!-- Email body -->
+                <tr>
+                    <td class="body" width="100%" cellpadding="0" cellspacing="0" style="border: hidden !important;">
+                        <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                        <!-- Body content -->
+                            <tr>
+                                <td class="content-cell">
+                                {% block body %}
+                                {% endblock %}
 
-<!-- Body content -->
-<tr>
-<td class="content-cell">
-{% block body %}
-{% endblock %}
+                                    <!-- Subcopy content -->
+                                    <table class="subcopy" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                        <tr>
+                                            <td>
+                                            {% block subcopy %}
+                                            <p>This is an automatically generated email - please do not reply to it.
+                                            {% if app.replyTo %}
+                                            If you have any queries please email <a href="mailto:{{ app.replyTo }}" target="_blank" rel="noreferrer">{{ app.replyTo }}</a>.
+                                            {% endif %}
+                                            </p>
+                                            {% endblock %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-<!-- Subcopy content -->
-<table class="subcopy" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td>
-{% block subcopy %}
-    <p>This is an automatically generated email - please do not reply to it.
-    {% if app.replyTo %}
-    If you have any queries please email <a href="mailto:{{ app.replyTo }}" target="_blank" rel="noreferrer">{{ app.replyTo }}</a>.
-    {% endif %}
-    </p>
-{% endblock %}
-</td>
-</tr>
-</table>
-
-</td>
-</tr>
-</table>
-</td>
-</tr>
-
-<!-- Footer content -->
-<tr>
-<td>
-<table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-<tr>
-<td class="content-cell" align="center">
-© {{ app.year }} {{ app.name }}. All rights reserved. 🍔
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
+                <!-- Footer content -->
+                <tr>
+                    <td>
+                        <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                                <td class="content-cell" align="center">
+                                © {{ app.year }} {{ app.name }}. All rights reserved. 🍔
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
