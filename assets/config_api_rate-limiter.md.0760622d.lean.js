@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as i,R as o}from"./chunks/framework.5dd80646.js";const f=JSON.parse('{"title":"Rate limiter","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/rate-limiter.md"}'),t={name:"config/api/rate-limiter.md"},d=o("",45),r=[d];function l(c,n,s,h,u,p){return i(),a("div",null,r)}const b=e(t,[["render",l]]);export{f as __pageData,b as default};

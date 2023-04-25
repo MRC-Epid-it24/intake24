@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,R as l}from"./chunks/framework.5dd80646.js";const i=JSON.parse('{"title":"Surveys","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/surveys/surveys.md"}'),o={name:"api/admin/surveys/surveys.md"},p=l("",43),e=[p];function t(r,c,D,y,F,C){return a(),n("div",null,e)}const u=s(o,[["render",t]]);export{i as __pageData,u as default};

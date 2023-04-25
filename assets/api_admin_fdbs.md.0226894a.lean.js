@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,V as e}from"./chunks/framework.634eae90.js";const F=JSON.parse('{"title":"Food databases","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/fdbs.md"}'),o={name:"api/admin/fdbs.md"},l=e("",25),p=[l];function t(c,r,i,D,y,d){return n(),a("div",null,p)}const A=s(o,[["render",t]]);export{F as __pageData,A as default};

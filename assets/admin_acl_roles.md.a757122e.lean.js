@@ -1,1 +1,0 @@
-import{_ as e,c as o,o as a,V as t}from"./chunks/framework.634eae90.js";const f=JSON.parse('{"title":"Roles","description":"","frontmatter":{},"headers":[],"relativePath":"admin/acl/roles.md"}'),s={name:"admin/acl/roles.md"},i=t("",11),l=[i];function r(c,d,n,p,h,m){return a(),o("div",null,l)}const _=e(s,[["render",r]]);export{f as __pageData,_ as default};

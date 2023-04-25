@@ -1,1 +1,0 @@
-import{_ as e,c as r,o as t,V as a}from"./chunks/framework.634eae90.js";const f=JSON.parse('{"title":"Requirements","description":"","frontmatter":{},"headers":[],"relativePath":"overview/requirements.md"}'),i={name:"overview/requirements.md"},s=a("",14),o=[s];function n(l,p,c,d,u,h){return t(),r("div",null,o)}const v=e(i,[["render",n]]);export{f as __pageData,v as default};

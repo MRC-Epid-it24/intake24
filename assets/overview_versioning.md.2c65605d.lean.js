@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as a,R as s}from"./chunks/framework.5dd80646.js";const c=JSON.parse('{"title":"Versioning system","description":"","frontmatter":{},"headers":[],"relativePath":"overview/versioning.md"}'),t={name:"overview/versioning.md"},n=s("",23),o=[n];function i(l,h,f,p,g,d){return a(),r("div",null,o)}const m=e(t,[["render",i]]);export{c as __pageData,m as default};

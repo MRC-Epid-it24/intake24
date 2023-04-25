@@ -1,0 +1,1 @@
+import{_ as e,c as s,o as i,R as a}from"./chunks/framework.5dd80646.js";const _=JSON.parse('{"title":"Permissions","description":"","frontmatter":{},"headers":[],"relativePath":"admin/acl/permissions.md"}'),t={name:"admin/acl/permissions.md"},o=a("",10),r=[o];function n(l,d,c,p,m,h){return i(),s("div",null,r)}const f=e(t,[["render",n]]);export{_ as __pageData,f as default};

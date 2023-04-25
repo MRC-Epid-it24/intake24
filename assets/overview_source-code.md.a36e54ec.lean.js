@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as n,V as s}from"./chunks/framework.634eae90.js";const g=JSON.parse('{"title":"Source code","description":"","frontmatter":{},"headers":[],"relativePath":"overview/source-code.md"}'),o={name:"overview/source-code.md"},t=s("",32),r=[t];function l(i,p,c,d,h,u){return n(),a("div",null,r)}const b=e(o,[["render",l]]);export{g as __pageData,b as default};

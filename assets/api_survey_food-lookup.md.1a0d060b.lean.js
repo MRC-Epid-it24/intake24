@@ -1,1 +1,0 @@
-import{_ as s,c as a,o,V as e}from"./chunks/framework.634eae90.js";const C=JSON.parse('{"title":"Food database lookup","description":"","frontmatter":{},"headers":[],"relativePath":"api/survey/food-lookup.md"}'),n={name:"api/survey/food-lookup.md"},l=e("",77),p=[l];function t(r,c,i,D,y,F){return o(),a("div",null,p)}const u=s(n,[["render",t]]);export{C as __pageData,u as default};

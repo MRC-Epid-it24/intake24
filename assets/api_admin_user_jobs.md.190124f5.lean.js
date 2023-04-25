@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,R as e}from"./chunks/framework.5dd80646.js";const y=JSON.parse(`{"title":"User's jobs","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/user/jobs.md"}`),o={name:"api/admin/user/jobs.md"},l=e("",20),p=[l];function t(r,c,i,d,D,C){return n(),a("div",null,p)}const u=s(o,[["render",t]]);export{y as __pageData,u as default};

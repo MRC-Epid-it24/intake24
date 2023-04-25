@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,R as e}from"./chunks/framework.5dd80646.js";const d=JSON.parse('{"title":"User profile","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/user/profile.md"}'),o={name:"api/admin/user/profile.md"},l=e("",13),p=[l];function t(r,c,i,D,y,C){return n(),a("div",null,p)}const u=s(o,[["render",t]]);export{d as __pageData,u as default};

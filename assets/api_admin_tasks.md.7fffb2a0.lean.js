@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,V as e}from"./chunks/framework.634eae90.js";const d=JSON.parse('{"title":"Tasks","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/tasks.md"}'),l={name:"api/admin/tasks.md"},o=e("",43),p=[o];function t(c,r,i,D,y,C){return n(),a("div",null,p)}const A=s(l,[["render",t]]);export{d as __pageData,A as default};
