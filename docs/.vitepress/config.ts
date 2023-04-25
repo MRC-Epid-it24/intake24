@@ -21,7 +21,12 @@ export default defineConfig({
     logo: '/logo.png' ,
     nav,
     search: {
-      provider: 'local'
+      provider: 'algolia',
+      options: {
+        appId: 'JUDZMF6GV1',
+        apiKey: 'b0cf60473c8b77d46acd0862161c7a15',
+        indexName: 'intake24'
+      }
     },
     sidebar,
     socialLinks: [
