@@ -118,6 +118,7 @@ export default defineComponent({
       SurveySchemeEntry
     >(props, {
       data: { questions: defaultQuestions },
+      editMethod: 'patch',
       loadCallback,
     });
 
