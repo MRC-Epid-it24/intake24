@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as n,R as a}from"./chunks/framework.5dd80646.js";const m=JSON.parse('{"title":"Authentication","description":"","frontmatter":{},"headers":[],"relativePath":"api/authentication.md"}'),o={name:"api/authentication.md"},s=a("",7),i=[s];function c(p,r,l,d,h,u){return n(),t("div",null,i)}const y=e(o,[["render",c]]);export{m as __pageData,y as default};

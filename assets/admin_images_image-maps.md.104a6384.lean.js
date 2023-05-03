@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as t,R as i}from"./chunks/framework.5dd80646.js";const b=JSON.parse('{"title":"Image maps","description":"","frontmatter":{},"headers":[],"relativePath":"admin/images/image-maps.md"}'),o={name:"admin/images/image-maps.md"},l=i("",12),d=[l];function c(s,r,n,m,p,h){return t(),a("div",null,d)}const g=e(o,[["render",c]]);export{b as __pageData,g as default};

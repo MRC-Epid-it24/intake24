@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,R as l}from"./chunks/framework.5dd80646.js";const C=JSON.parse('{"title":"Sign-up","description":"","frontmatter":{},"headers":[],"relativePath":"api/admin/signup.md"}'),o={name:"api/admin/signup.md"},p=l("",14),e=[p];function t(c,r,i,D,y,F){return n(),a("div",null,e)}const A=s(o,[["render",t]]);export{C as __pageData,A as default};

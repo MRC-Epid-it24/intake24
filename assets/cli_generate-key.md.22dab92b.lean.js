@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as s,R as t}from"./chunks/framework.5dd80646.js";const h=JSON.parse('{"title":"Generate key / secret","description":"","frontmatter":{},"headers":[],"relativePath":"cli/generate-key.md"}'),n={name:"cli/generate-key.md"},o=t("",5),l=[o];function p(c,r,i,y,d,C){return s(),a("div",null,l)}const g=e(n,[["render",p]]);export{h as __pageData,g as default};

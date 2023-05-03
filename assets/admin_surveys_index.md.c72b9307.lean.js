@@ -1,1 +1,0 @@
-import{_ as e,c as o,o as t,R as s}from"./chunks/framework.5dd80646.js";const b=JSON.parse('{"title":"Surveys","description":"","frontmatter":{},"headers":[],"relativePath":"admin/surveys/index.md"}'),i={name:"admin/surveys/index.md"},a=s("",41),r=[a];function l(n,d,c,u,h,p){return t(),o("div",null,r)}const f=e(i,[["render",l]]);export{b as __pageData,f as default};

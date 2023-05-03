@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as t,R as o}from"./chunks/framework.5dd80646.js";const u=JSON.parse('{"title":"Cache","description":"","frontmatter":{},"headers":[],"relativePath":"config/api/cache.md"}'),i={name:"config/api/cache.md"},c=o("",12),r=[c];function d(s,l,n,h,p,_){return t(),a("div",null,r)}const P=e(i,[["render",d]]);export{u as __pageData,P as default};

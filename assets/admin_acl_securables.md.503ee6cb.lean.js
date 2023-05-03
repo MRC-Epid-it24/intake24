@@ -1,1 +1,0 @@
-import{_ as e,c as r,o as t,R as o}from"./chunks/framework.5dd80646.js";const m=JSON.parse('{"title":"Securables","description":"","frontmatter":{},"headers":[],"relativePath":"admin/acl/securables.md"}'),c={name:"admin/acl/securables.md"},s=o("",11),a=[s];function d(i,l,n,p,h,u){return t(),r("div",null,a)}const _=e(c,[["render",d]]);export{m as __pageData,_ as default};
