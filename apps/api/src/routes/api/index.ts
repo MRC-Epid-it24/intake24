@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 
 import { registerI18nScope, registerIoC } from '@intake24/api/http/middleware';
+import ioc from '@intake24/api/ioc';
 
 import admin from './admin';
 import authentication from './authentication';
@@ -20,6 +21,8 @@ export default () => {
 
   router.use(registerIoC);
   router.use(registerI18nScope);
+
+  router.use(ioc.cradle.rateLimiter.createMiddleware('generic'));
 
   // Unauthenticated
   router.use('/auth', authentication());

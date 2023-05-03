@@ -10,6 +10,7 @@ export default () => {
   const router = Router();
 
   const loginRateLimiter = rateLimiter.createMiddleware('login', {
+    keyGenerator: (req) => `login:${req.body.email ?? req.ip}`,
     message: 'Too many failed login attempts, please try again later.',
     skipSuccessfulRequests: true,
   });

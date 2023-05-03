@@ -35,6 +35,28 @@ Prefix string which is pre-pended to each key to identify cache data.
 - type: `string`
 - default: `'it24:rate-limiter:'`
 
+## Generic
+
+Generic rate limit settings for `/api` routes.
+
+### Window
+
+Time window to track the requests.
+
+- object-path: `generic.windowMs`
+- dotenv var: `RATE_LIMITER_GENERIC_WINDOW`
+- type: `string`
+- default: `'5m'`
+
+### Max
+
+Maximum number of requests that can be made within the specified time window.
+
+- object-path: `generic.max`
+- dotenv var: `RATE_LIMITER_GENERIC_MAX`
+- type: `number`
+- default: `300`
+
 ## Login
 
 Rate limit settings for `/api/auth/login | /api/auth/login/alias | /api/auth/login/token` routes.
@@ -43,7 +65,7 @@ Rate limit settings for `/api/auth/login | /api/auth/login/alias | /api/auth/log
 
 Time window to track the requests.
 
-- object-path: `login.window`
+- object-path: `login.windowMs`
 - dotenv var: `RATE_LIMITER_LOGIN_WINDOW`
 - type: `string`
 - default: `'15m'`
@@ -65,7 +87,7 @@ Rate limit settings for `/api/password` routes.
 
 Time window to track the requests.
 
-- object-path: `password.window`
+- object-path: `password.windowMs`
 - dotenv var: `RATE_LIMITER_PASSWORD_WINDOW`
 - type: `string`
 - default: `'5m'`
@@ -87,7 +109,7 @@ Rate limit settings for `/api/surveys/:surveyId/generate-user` routes.
 
 Time window to track the requests.
 
-- object-path: `generateUser.window`
+- object-path: `generateUser.windowMs`
 - dotenv var: `RATE_LIMITER_GEN_USER_WINDOW`
 - type: `string`
 - default: `'5m'`
@@ -109,7 +131,7 @@ Rate limit settings for `/api/user/feedback` - `download` and `email` routes.
 
 Time window to track the requests.
 
-- object-path: `feedback.window`
+- object-path: `feedback.windowMs`
 - dotenv var: `RATE_LIMITER_FEEDBACK_WINDOW`
 - type: `string`
 - default: `'1m'`

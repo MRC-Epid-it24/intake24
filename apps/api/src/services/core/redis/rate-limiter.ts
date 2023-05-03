@@ -17,14 +17,15 @@ export default class RateLimiter extends HasRedisClient {
     this.rateLimiters = rest;
   }
 
-  createMiddleware(type: keyof typeof this.rateLimiters, options: Partial<Options>) {
+  createMiddleware(type: keyof typeof this.rateLimiters, options: Partial<Options> = {}) {
     return rateLimit({
-      windowMs: this.rateLimiters[type].window,
-      max: this.rateLimiters[type].max,
-      standardHeaders: true,
-      legacyHeaders: false,
+      handler: (req, res, next, { message, statusCode }) => {
+        res.status(statusCode).json({ message });
+      },
       keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
-
+      legacyHeaders: false,
+      standardHeaders: true,
+      ...this.rateLimiters[type],
       ...options,
 
       store: new RedisStore({
