@@ -62,7 +62,7 @@ import { defineComponent } from 'vue';
 import type { JobType } from '@intake24/common/types';
 import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
-import { PollsForJobs } from '@intake24/admin/components/jobs';
+import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/admin/i18n';
 
@@ -74,7 +74,9 @@ type UploadForm = {
 export default defineComponent({
   name: 'NutrientTableUpload',
 
-  mixins: [detailMixin, PollsForJobs],
+  components: { PollsJobList },
+
+  mixins: [detailMixin],
 
   setup(props) {
     const i18n = useI18n();
@@ -88,6 +90,7 @@ export default defineComponent({
       data: { file: null, type: jobTypeList[0].value },
       config: { multipart: true },
     });
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(jobType);
 
     return {
       jobTypeList,
@@ -96,6 +99,9 @@ export default defineComponent({
       clearError,
       form,
       routeLeave,
+      jobs,
+      jobInProgress,
+      startPolling,
     };
   },
 

@@ -15,7 +15,7 @@
           {{ dialogTitle }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-form ref="form" @submit.prevent="submit">
+      <v-form @submit.prevent="submit">
         <v-card-text>
           <v-container>
             <v-row>
@@ -54,12 +54,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
+import type { JobType } from '@intake24/common/types';
 import type { JobEntry } from '@intake24/common/types/http/admin';
+import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { createForm } from '@intake24/admin/util';
-
-import respondentsJob from './respondents-job';
 
 type CsvUploadForm = {
   file: File | null;
@@ -68,7 +69,7 @@ type CsvUploadForm = {
 export default defineComponent({
   name: 'CsvUpload',
 
-  mixins: [respondentsJob],
+  components: { PollsJobList },
 
   props: {
     label: {
@@ -80,7 +81,7 @@ export default defineComponent({
       required: true,
     },
     jobType: {
-      type: String,
+      type: String as PropType<JobType>,
       required: true,
     },
     endpoint: {
@@ -89,10 +90,11 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      form: createForm<CsvUploadForm>({ file: null }, { multipart: true }),
-    };
+  setup(props) {
+    const form = reactive(createForm<CsvUploadForm>({ file: null }, { multipart: true }));
+    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(props.jobType);
+
+    return { form, dialog, jobs, jobInProgress, startPolling };
   },
 
   methods: {

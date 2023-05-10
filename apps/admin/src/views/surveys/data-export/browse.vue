@@ -55,7 +55,7 @@ import { defineComponent } from 'vue';
 import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
-import { PollsForJobs } from '@intake24/admin/components/jobs';
+import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
 type SurveyDataExportForm = {
@@ -66,21 +66,20 @@ type SurveyDataExportForm = {
 export default defineComponent({
   name: 'SurveyDataExport',
 
-  components: { DatePicker },
+  components: { DatePicker, PollsJobList },
 
-  mixins: [detailMixin, PollsForJobs],
+  mixins: [detailMixin],
 
   setup(props) {
-    const jobType = 'SurveyDataExport';
-
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave } = useEntryForm<SurveyDataExportForm, SurveyEntry>(
       props,
       { data: { startDate: null, endDate: null }, config: { resetOnSubmit: false } }
     );
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs('SurveyDataExport');
 
-    return { jobType, entry, entryLoaded, clearError, form, routeLeave };
+    return { entry, entryLoaded, clearError, form, routeLeave, jobs, jobInProgress, startPolling };
   },
 
   async mounted() {

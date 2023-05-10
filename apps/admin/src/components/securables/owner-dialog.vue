@@ -20,7 +20,7 @@
           </div>
         </template>
       </v-toolbar>
-      <v-form ref="form" @submit.prevent="save">
+      <v-form @submit.prevent="save">
         <v-container>
           <v-card-text>
             <v-row>

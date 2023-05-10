@@ -57,7 +57,7 @@ import { defineComponent, ref } from 'vue';
 import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
-import { jobParams, PollsForJobs } from '@intake24/admin/components/jobs';
+import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/admin/i18n';
 
@@ -74,9 +74,9 @@ type LocaleTasksForm = {
 export default defineComponent({
   name: 'LocaleTasks',
 
-  components: { ...jobParams },
+  components: { ...jobParams, PollsJobList },
 
-  mixins: [formMixin, PollsForJobs],
+  mixins: [formMixin],
 
   setup(props) {
     const i18n = useI18n();
@@ -107,6 +107,7 @@ export default defineComponent({
       data: { job: jobType.value[0], params: defaultJobsParams.value.LocaleFoodNutrientMapping },
       config: { resetOnSubmit: false },
     });
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(jobType.value);
 
     return {
       defaultJobsParams,
@@ -120,6 +121,9 @@ export default defineComponent({
       clearError,
       form,
       routeLeave,
+      jobs,
+      jobInProgress,
+      startPolling,
     };
   },
 

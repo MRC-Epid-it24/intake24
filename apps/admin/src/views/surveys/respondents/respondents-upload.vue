@@ -15,7 +15,7 @@
           {{ $t(`surveys.respondents.upload.title`) }}
         </v-toolbar-title>
       </v-toolbar>
-      <v-form ref="form" @submit.prevent="submit">
+      <v-form @submit.prevent="submit">
         <v-card-text>
           <v-container>
             <v-row>
@@ -54,12 +54,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
+import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { createForm } from '@intake24/admin/util';
-
-import respondentsJob from './respondents-job';
 
 type RespondentsUploadForm = {
   file: File | null;
@@ -68,13 +67,22 @@ type RespondentsUploadForm = {
 export default defineComponent({
   name: 'RespondentsUpload',
 
-  mixins: [respondentsJob],
+  components: { PollsJobList },
 
-  data() {
-    return {
-      form: createForm<RespondentsUploadForm>({ file: null }, { multipart: true }),
-      jobType: 'SurveyRespondentsImport',
-    };
+  props: {
+    surveyId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup() {
+    const jobType = 'SurveyRespondentsImport';
+    const form = reactive(createForm<RespondentsUploadForm>({ file: null }, { multipart: true }));
+
+    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType);
+
+    return { form, dialog, jobs, jobInProgress, startPolling };
   },
 
   methods: {

@@ -41,20 +41,33 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import respondentsJob from './respondents-job';
+import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 
 export default defineComponent({
   name: 'RespondentsAuthUrlExport',
 
-  mixins: [respondentsJob],
+  components: { PollsJobList },
 
-  data() {
-    return {
-      jobType: 'SurveyAuthUrlsExport',
-    };
+  props: {
+    surveyId: {
+      type: String,
+      required: true,
+    },
+  },
+
+  setup() {
+    const jobType = 'SurveyAuthUrlsExport';
+
+    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType);
+
+    return { dialog, jobs, jobInProgress, startPolling };
   },
 
   methods: {
+    close() {
+      this.dialog = false;
+    },
+
     async submit() {
       if (this.jobInProgress) return;
 

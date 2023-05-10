@@ -45,7 +45,7 @@
         </v-card-text>
       </v-container>
       <v-divider></v-divider>
-      <v-form ref="form" @submit.prevent="email">
+      <v-form @submit.prevent="email">
         <v-card-title>
           {{ $t(`surveys.respondents.feedback.email.title`) }}
         </v-card-title>

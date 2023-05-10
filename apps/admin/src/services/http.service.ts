@@ -135,3 +135,7 @@ const httpClient: HttpClient = {
 };
 
 export default httpClient;
+
+export const useHttp = () => {
+  return { http: httpClient };
+};

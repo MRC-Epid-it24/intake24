@@ -33,7 +33,7 @@
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-form ref="form" @keydown.native="clearError" @submit.prevent="save">
+      <v-form @keydown.native="clearError" @submit.prevent="save">
         <v-tabs-items v-model="tab">
           <v-tab-item key="search">
             <v-card-text>
