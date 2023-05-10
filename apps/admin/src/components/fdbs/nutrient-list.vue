@@ -16,7 +16,7 @@
       <template v-for="(item, idx) in items">
         <v-list-item :key="item.id" link>
           <v-list-item-avatar>
-            <v-icon>fa-seedling</v-icon>
+            <v-icon>$nutrient-types</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>

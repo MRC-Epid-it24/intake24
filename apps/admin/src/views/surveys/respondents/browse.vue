@@ -22,12 +22,7 @@
                 {{ $t(`surveys.respondents.${isCreate ? 'add' : 'edit'}`) }}
               </v-toolbar-title>
             </v-toolbar>
-            <v-form
-              ref="form"
-              autocomplete="off"
-              @keydown.native="clearError"
-              @submit.prevent="save"
-            >
+            <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="save">
               <v-card-text>
                 <v-container>
                   <v-row>

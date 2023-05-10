@@ -125,7 +125,7 @@
                         :label="$t('nutrient-types._')"
                         name="nutrientTypeId"
                         outlined
-                        prepend-inner-icon="fas fa-seedling"
+                        prepend-inner-icon="$nutrient-types"
                       ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" md="6">

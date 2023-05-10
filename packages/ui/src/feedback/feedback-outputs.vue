@@ -54,7 +54,7 @@
               <v-toolbar-title>{{ $t('feedback.outputs.email.title') }}</v-toolbar-title>
             </v-toolbar>
             <v-card-text class="pa-4">
-              <v-form ref="form" autocomplete="off" @submit.prevent="emailFeedback">
+              <v-form autocomplete="off" @submit.prevent="emailFeedback">
                 <v-container>
                   <v-row>
                     <v-col cols="12">

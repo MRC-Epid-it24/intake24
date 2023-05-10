@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="primary" left>fa-seedling</v-icon>
+      <v-icon color="primary" left>$nutrient-types</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('nutrient-types.title') }}
       </v-toolbar-title>
@@ -74,7 +74,7 @@
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="primary" dark flat>
-          <v-icon dark left>fa-seedling</v-icon>
+          <v-icon dark left>$nutrient-types</v-icon>
           <v-toolbar-title>
             {{ $t(`nutrient-types.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>
@@ -92,7 +92,7 @@
               multiple
               name="nutrientTypeId"
               outlined
-              prepend-inner-icon="fas fa-seedling"
+              prepend-inner-icon="$nutrient-types"
               :rules="rules"
               @change="updateNutrientLabel"
             >

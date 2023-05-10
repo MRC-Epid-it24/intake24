@@ -25,7 +25,7 @@
                   link
                 >
                   <v-list-item-avatar>
-                    <v-icon>fas fa-seedling</v-icon>
+                    <v-icon>$nutrient-types</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     {{ nutrientType.description }}
@@ -59,7 +59,7 @@
                   link
                 >
                   <v-list-item-avatar>
-                    <v-icon>fas fa-seedling</v-icon>
+                    <v-icon>$nutrient-types</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     {{ nutrientType.description }}
