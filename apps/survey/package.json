@@ -31,7 +31,7 @@
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
     "uuid": "^9.0.0",
-    "vue": "^2.7.14",
+    "vue": "^3.2.47",
     "vue-i18n": "^8.28.2",
     "vue-router": "^3.6.5",
     "vuetify": "^2.6.15"
@@ -51,7 +51,7 @@
     "jsdom": "^22.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.8",
-    "sass": "~1.32.13",
+    "sass": "~1.62.1",
     "typescript": "^5.0.4",
     "unplugin-fonts": "^1.0.3",
     "unplugin-vue-components": "^0.24.1",
