@@ -1,5 +1,5 @@
 import type { ComponentType } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { MealSection, PromptSection } from '@intake24/common/surveys';
 
 export { default as customPrompts } from './custom';
 export { default as portionSizePrompts } from './portion-size';
@@ -9,28 +9,28 @@ const baseTab = ['general', 'content', 'actions', 'conditions'];
 const validatedTab = [...baseTab, 'validation'];
 const listTab = [...validatedTab, 'options'];
 
-/* const allSection: (SurveyQuestionSection | MealSection)[] = [
+export const promptSections: PromptSection[] = [
   'preMeals',
+  'preFoods',
+  'foods',
+  'postFoods',
   'postMeals',
   'submission',
-  'preFoods',
-  'foods',
-  'postFoods',
-]; */
-
-const allExceptSubmission: (SurveyQuestionSection | MealSection)[] = [
-  'preMeals',
-  'postMeals',
-  'preFoods',
-  'foods',
-  'postFoods',
 ];
 
-const foodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
+export const promptSectionsExceptSubmission: PromptSection[] = [
+  'preMeals',
+  'preFoods',
+  'foods',
+  'postFoods',
+  'postMeals',
+];
+
+export const foodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
 
 export type PromptSettingsRecord = {
   tabs: string[];
-  sections: (SurveyQuestionSection | MealSection)[];
+  sections: PromptSection[];
 };
 
 export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
@@ -39,15 +39,15 @@ export const promptSettings: PromptSettings = {
   // Custom
   'checkbox-list-prompt': {
     tabs: [...listTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'date-picker-prompt': {
     tabs: [...validatedTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'info-prompt': {
     tabs: [...baseTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'no-more-information-prompt': {
     tabs: [...baseTab],
@@ -55,19 +55,19 @@ export const promptSettings: PromptSettings = {
   },
   'radio-list-prompt': {
     tabs: [...listTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'textarea-prompt': {
     tabs: [...validatedTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'time-picker-prompt': {
     tabs: [...validatedTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   'yes-no-prompt': {
     tabs: [...baseTab],
-    sections: [...allExceptSubmission],
+    sections: [...promptSectionsExceptSubmission],
   },
   // Standard
   'associated-foods-prompt': {

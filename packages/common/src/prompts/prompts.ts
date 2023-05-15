@@ -1,4 +1,4 @@
-import type { MealSection, SurveyQuestionSection } from '../surveys';
+import type { PromptSection } from '../surveys';
 import type { LocaleTranslation } from '../types';
 import type { Actions } from './actions';
 import type { Condition } from './conditions';
@@ -91,7 +91,7 @@ export type BasePrompt = {
 export type ValidatedPrompt = BasePrompt & PromptValidationProps;
 
 export interface PromptWithSection extends BasePrompt {
-  section: SurveyQuestionSection | MealSection;
+  section: PromptSection;
 }
 
 export type ImageMap = {

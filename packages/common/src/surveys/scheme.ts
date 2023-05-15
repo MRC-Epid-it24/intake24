@@ -10,9 +10,6 @@ export type SurveyQuestionSection = (typeof surveySections)[number];
 export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
 export type MealSection = (typeof mealSections)[number];
 
-export const mealQuestionSections = ['preFoods', 'postFoods'] as const;
-export type MealQuestionSection = (typeof mealQuestionSections)[number];
-
 export const isMealSection = (section: any): section is MealSection => {
   return mealSections.includes(section);
 };
@@ -22,6 +19,8 @@ export const isSurveySection = (section: any): section is SurveyQuestionSection 
 };
 
 export type SurveySection = SurveyQuestionSection | 'meals';
+
+export type PromptSection = SurveyQuestionSection | MealSection;
 
 export type GenericQuestions = Record<SurveyQuestionSection, Prompt[]>;
 

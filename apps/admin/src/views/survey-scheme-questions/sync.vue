@@ -64,7 +64,7 @@
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { PromptSection } from '@intake24/common/surveys';
 import type {
   SurveySchemeQuestionEntry,
   SurveySchemeQuestionRefs,
@@ -77,7 +77,7 @@ import { ConfirmDialog } from '@intake24/ui';
 export type SchemeStatus = {
   id: string;
   name: string;
-  section: SurveyQuestionSection | MealSection;
+  section: PromptSection;
   synced: boolean;
 };
 

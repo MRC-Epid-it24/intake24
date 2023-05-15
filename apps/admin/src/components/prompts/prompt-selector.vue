@@ -140,7 +140,7 @@ import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { BasePrompt, PromptType } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { PromptSection } from '@intake24/common/surveys';
 import {
   customPrompts,
   portionSizePrompts,
@@ -186,7 +186,7 @@ export default defineComponent({
       default: 'full',
     },
     section: {
-      type: String as PropType<SurveyQuestionSection | MealSection>,
+      type: String as PropType<PromptSection>,
     },
     questionIds: {
       type: Array as PropType<string[]>,

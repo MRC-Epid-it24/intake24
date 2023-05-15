@@ -19,72 +19,36 @@
         <json-editor v-model="form.questions"></json-editor>
       </options-menu>
     </v-toolbar>
-    <v-container>
-      <v-item-group v-model="section" active-class="secondary" mandatory>
-        <v-row>
-          <v-col v-for="item in sections.survey" :key="item" cols="12" md="4">
-            <v-item v-slot="{ active, toggle }" :value="item">
-              <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
-                <v-card-title class="justify-center">
-                  {{ $t(`survey-schemes.questions.${item}.title`) }}
-                </v-card-title>
-                <v-card-subtitle class="text-center">
-                  {{ $t(`survey-schemes.questions.${item}.subtitle`) }}
-                </v-card-subtitle>
-                <v-card-text v-show="active" class="text-center">
-                  <v-icon x-large>fa-check-circle</v-icon>
-                </v-card-text>
-              </v-card>
-            </v-item>
-          </v-col>
-        </v-row>
-        <v-divider class="my-3"></v-divider>
-        <v-row>
-          <v-col v-for="item in sections.meal" :key="item" cols="12" md="4">
-            <v-item v-slot="{ active, toggle }" :value="item">
-              <v-card :color="active ? 'primary' : ''" dark height="180" @click.stop="toggle">
-                <v-card-title class="justify-center">
-                  {{ $t(`survey-schemes.questions.${item}.title`) }}
-                </v-card-title>
-                <v-card-subtitle class="text-center">
-                  {{ $t(`survey-schemes.questions.${item}.subtitle`) }}
-                </v-card-subtitle>
-                <v-card-text v-show="active" class="text-center">
-                  <v-icon x-large>fa-check-circle</v-icon>
-                </v-card-text>
-              </v-card>
-            </v-item>
-          </v-col>
-        </v-row>
-      </v-item-group>
-    </v-container>
     <prompt-list
-      v-bind="{ section, questionIds, templates }"
-      :items.sync="selected"
+      v-for="(section, index) in promptSections"
+      :key="section"
+      v-bind="{
+        section,
+        step: index + 1,
+        questionIds,
+        templates,
+        items: isMealSection(section) ? form.questions.meals[section] : form.questions[section],
+      }"
       @move="move"
+      @update:items="updateItems(section, $event)"
     ></prompt-list>
   </layout>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, RecallQuestions, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { PromptSection, RecallQuestions } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
+import { promptSections } from '@intake24/admin/components/prompts';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import {
-  defaultQuestions,
-  flattenScheme,
-  isMealSection,
-  mealSections,
-  surveySections,
-} from '@intake24/common/surveys';
+import { defaultQuestions, flattenScheme, isMealSection } from '@intake24/common/surveys';
 
 import type { SurveySchemeForm } from '../form.vue';
 
@@ -98,12 +62,6 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const sections = ref({
-      survey: surveySections,
-      meal: mealSections,
-    });
-    const section = ref<MealSection | SurveyQuestionSection>('preMeals');
-
     const loadCallback = (data: SurveySchemeEntry) => {
       const { questions, ...rest } = data;
       return { ...rest, questions: { ...defaultQuestions, ...questions } };
@@ -123,8 +81,7 @@ export default defineComponent({
     });
 
     return {
-      section,
-      sections,
+      promptSections,
       entry,
       entryLoaded,
       refs,
@@ -137,29 +94,8 @@ export default defineComponent({
   },
 
   computed: {
-    selected: {
-      get(): Prompt[] {
-        const { section } = this;
-
-        return isMealSection(section)
-          ? this.form.questions.meals[section]
-          : this.form.questions[section];
-      },
-      set(value: Prompt[]): void {
-        const { section } = this;
-
-        if (isMealSection(section)) {
-          this.form.questions.meals[section] = value;
-          return;
-        }
-
-        this.form.questions[section] = value;
-      },
-    },
     questionIds(): string[] {
-      const scheme = flattenScheme(this.form.questions);
-
-      return scheme.map((question) => question.id);
+      return flattenScheme(this.form.questions).map((question) => question.id);
     },
     templates(): Prompt[] {
       if (!this.refsLoaded) return [];
@@ -169,6 +105,12 @@ export default defineComponent({
   },
 
   methods: {
+    isMealSection,
+
+    load(questions: RecallQuestions) {
+      this.form.questions = { ...questions };
+    },
+
     move(event: PromptQuestionMoveEvent) {
       const { section, question } = event;
 
@@ -180,8 +122,13 @@ export default defineComponent({
       this.form.questions[section].push(question);
     },
 
-    load(questions: RecallQuestions) {
-      this.form.questions = { ...questions };
+    updateItems(section: PromptSection, prompts: Prompt[]) {
+      if (isMealSection(section)) {
+        this.form.questions.meals[section] = prompts;
+        return;
+      }
+
+      this.form.questions[section] = prompts;
     },
   },
 });

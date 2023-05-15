@@ -1,49 +1,58 @@
 <template>
-  <v-card flat tile>
-    <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="primary" left>far fa-question-circle</v-icon>
-      <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        v-if="!isOverrideMode"
-        color="secondary"
-        fab
-        small
-        :title="$t('survey-schemes.questions.create')"
-        @click.stop="create"
-      >
-        <v-icon small>$add</v-icon>
-      </v-btn>
-      <options-menu>
-        <load-prompt-dialog
-          :items="isOverrideMode ? templates : undefined"
-          :question-ids="questionIds"
-          :scheme-id="$route.params.id"
-          @load="load"
-        ></load-prompt-dialog>
-        <json-editor v-model="questions"></json-editor>
-      </options-menu>
-    </v-toolbar>
-    <v-list two-line>
-      <draggable v-model="questions" handle=".drag-and-drop__handle" @end="update">
-        <transition-group name="drag-and-drop" type="transition">
-          <prompt-list-item
-            v-for="(question, index) in questions"
-            :key="question.id"
-            v-bind="{ mode, question, index, templates }"
-            :move-sections="moveSections(question)"
-            @question:edit="edit"
-            @question:move="move"
-            @question:remove="remove"
-            @question:sync="sync"
+  <v-stepper v-model="open" class="pb-6" flat non-linear tile vertical>
+    <v-stepper-step v-bind="{ step }" class="py-2 pointer" @click.stop="toggle">
+      <v-toolbar flat tile>
+        <v-toolbar-title class="font-weight-medium">
+          {{ title }}
+          <div class="text-subtitle-2">{{ subtitle }}</div>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <template v-if="isOpened">
+          <v-btn
+            v-if="!isOverrideMode"
+            color="secondary"
+            fab
+            small
+            :title="$t('survey-schemes.questions.create')"
+            @click.stop="create"
           >
-          </prompt-list-item>
-        </transition-group>
-      </draggable>
-    </v-list>
+            <v-icon small>$add</v-icon>
+          </v-btn>
+          <options-menu>
+            <load-prompt-dialog
+              :items="isOverrideMode ? templates : undefined"
+              :question-ids="questionIds"
+              :scheme-id="$route.params.id"
+              @load="load"
+            ></load-prompt-dialog>
+            <json-editor v-model="questions"></json-editor>
+          </options-menu>
+        </template>
+        <v-icon :class="{ 'fa-rotate-180': isOpened, 'ml-4': isOpened }">$expand</v-icon>
+      </v-toolbar>
+    </v-stepper-step>
+    <v-stepper-content v-bind="{ step }">
+      <v-list two-line>
+        <draggable v-model="questions" handle=".drag-and-drop__handle">
+          <transition-group name="drag-and-drop" type="transition">
+            <prompt-list-item
+              v-for="(question, index) in questions"
+              :key="question.id"
+              v-bind="{ mode, question, index, templates }"
+              :move-sections="moveSections(question)"
+              @question:edit="edit"
+              @question:move="move"
+              @question:remove="remove"
+              @question:sync="sync"
+            >
+            </prompt-list-item>
+          </transition-group>
+        </draggable>
+      </v-list>
+    </v-stepper-content>
     <prompt-selector ref="selector" v-bind="{ mode, section, questionIds }" @save="save">
     </prompt-selector>
-  </v-card>
+  </v-stepper>
 </template>
 
 <script lang="ts">
@@ -53,7 +62,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { MealSection, PromptSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
@@ -91,7 +100,11 @@ export default defineComponent({
       default: 'full',
     },
     section: {
-      type: String as PropType<SurveyQuestionSection | MealSection>,
+      type: String as PropType<PromptSection>,
+    },
+    step: {
+      type: Number,
+      default: 1,
     },
     questionIds: {
       type: Array as PropType<string[]>,
@@ -119,6 +132,7 @@ export default defineComponent({
     return {
       questions: this.items,
       promptSettings,
+      open: this.step,
     };
   },
 
@@ -126,11 +140,21 @@ export default defineComponent({
     isOverrideMode(): boolean {
       return this.mode === 'override';
     },
+    isOpened(): boolean {
+      return this.open === this.step;
+    },
     title(): string {
       return this.$t(
         this.isOverrideMode
           ? `survey-schemes.overrides.questions.title`
           : `survey-schemes.questions.${this.section}.title`
+      ).toString();
+    },
+    subtitle(): string {
+      return this.$t(
+        this.isOverrideMode
+          ? `survey-schemes.overrides.questions.subtitle`
+          : `survey-schemes.questions.${this.section}.subtitle`
       ).toString();
     },
   },
@@ -141,12 +165,18 @@ export default defineComponent({
 
       this.questions = [...val];
     },
-    questions() {
+    questions(val) {
+      if (deepEqual(val, this.items)) return;
+
       this.update();
     },
   },
 
   methods: {
+    toggle() {
+      this.open = this.open === this.step ? 0 : this.step;
+    },
+
     create() {
       if (this.isOverrideMode) return;
 
@@ -198,3 +228,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+.pointer {
+  cursor: pointer;
+}
+</style>

@@ -62,6 +62,7 @@ const surveySchemes: LocaleMessageObject = {
       _: 'Action type',
       title: 'Action types',
       next: 'Next',
+      'no-more-information': 'No More Information',
       review: 'Review',
       addMeal: 'Add meal',
       deleteFood: 'Delete food',
