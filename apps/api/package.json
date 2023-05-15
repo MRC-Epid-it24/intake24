@@ -86,7 +86,7 @@
     "web-push": "^3.6.1"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.0.1",
     "@simplewebauthn/typescript-types": "^7.0.0",
     "@types/body-parser": "^1.19.2",
     "@types/clean-css": "^4.2.6",
