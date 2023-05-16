@@ -34,11 +34,10 @@ export default class SurveySubmissionMeal extends BaseModel<
   InferCreationAttributes<SurveySubmissionMeal>
 > {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
-    type: DataType.BIGINT,
+    type: DataType.UUID,
   })
-  declare id: CreationOptional<string>;
+  declare id: string;
 
   @Column({
     allowNull: false,

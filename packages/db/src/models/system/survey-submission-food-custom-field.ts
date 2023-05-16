@@ -26,15 +26,14 @@ export default class SurveySubmissionFoodCustomField extends BaseModel<
   InferCreationAttributes<SurveySubmissionFoodCustomField>
 > {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
-    type: DataType.BIGINT,
+    type: DataType.UUID,
   })
-  declare id: CreationOptional<string>;
+  declare id: string;
 
   @Column({
     allowNull: false,
-    type: DataType.BIGINT,
+    type: DataType.UUID,
   })
   declare foodId: string;
 

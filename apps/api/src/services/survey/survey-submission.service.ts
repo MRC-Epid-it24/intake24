@@ -39,8 +39,16 @@ import {
 import { portionSizeMappers } from './portion-size-mapper';
 
 export type CustomAnswers<K extends string | number | symbol> = WithKey<K> & {
+  id: string;
   name: string;
   value: string;
+};
+
+export type CollectFoodsOps = {
+  foodGroups: FoodGroupMap;
+  foods: FoodLocalMap;
+  mealId: string;
+  parentId?: string;
 };
 
 export type CollectedFoods = {
@@ -114,8 +122,9 @@ const surveySubmissionService = ({
    * @returns
    */
   const collectFoods =
-    (mealId: string, foods: FoodLocalMap, foodGroups: FoodGroupMap) =>
-    (collectedFoods: CollectedFoods, foodState: FoodState) => {
+    (ops: CollectFoodsOps) => (collectedFoods: CollectedFoods, foodState: FoodState) => {
+      const { foodGroups, foods, mealId, parentId } = ops;
+
       if (foodState.type === 'free-text') {
         logger.warn(`Submission: ${foodState.type} food record present in submission, skipping...`);
         return collectedFoods;
@@ -128,7 +137,7 @@ const surveySubmissionService = ({
           return collectedFoods;
         }
 
-        collectedFoods.missingInputs.push({ mealId, ...info });
+        collectedFoods.missingInputs.push({ id: randomUUID(), parentId, mealId, ...info });
         collectedFoods.missingStates.push(foodState);
         return collectedFoods;
       }
@@ -179,8 +188,11 @@ const surveySubmissionService = ({
       // TODO: verify
       const portionSizeWeight =
         (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+      const id = randomUUID();
 
       collectedFoods.inputs.push({
+        id,
+        parentId,
         mealId,
         code,
         englishName,
@@ -200,7 +212,7 @@ const surveySubmissionService = ({
 
       if (linkedFoods.length) {
         const { states, inputs, missingInputs, missingStates } = linkedFoods.reduce(
-          collectFoods(mealId, foods, foodGroups),
+          collectFoods({ foodGroups, foods, mealId, parentId: id }),
           { inputs: [], missingInputs: [], states: [], missingStates: [] }
         );
         collectedFoods.inputs.push(...inputs);
@@ -261,6 +273,7 @@ const surveySubmissionService = ({
 
     // Collect food composition fields
     collectedData.fields = nutrientTableRecord.fields.map(({ name, value }) => ({
+      id: randomUUID(),
       foodId,
       fieldName: name,
       value,
@@ -269,6 +282,7 @@ const surveySubmissionService = ({
     // Collect food composition nutrients
     collectedData.nutrients = nutrientTableRecord.nutrients.map(
       ({ nutrientTypeId, unitsPer100g }) => ({
+        id: randomUUID(),
         foodId,
         nutrientTypeId,
         amount: (unitsPer100g * portionSizeWeight) / 100.0,
@@ -300,6 +314,7 @@ const surveySubmissionService = ({
     const customAnswers = Object.entries(promptAnswers)
       .filter(([name]) => promptQuestions.includes(name))
       .map(([name, answer]) => ({
+        id: randomUUID(),
         [propId]: id,
         name,
         value: Array.isArray(answer) ? answer.join(', ') : answer?.toString() ?? 'N/A',
@@ -440,6 +455,7 @@ const surveySubmissionService = ({
 
       // Collect meals
       const mealInputs = state.meals.map(({ name: { en: name }, time }) => ({
+        id: randomUUID(),
         surveySubmissionId,
         name,
         hours: time?.hours ?? 0,
@@ -498,7 +514,7 @@ const surveySubmissionService = ({
         }),
       ]);
 
-      const foodRecordMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
+      const foodMap = foodRecords.reduce<Record<string, FoodLocal>>((acc, item) => {
         acc[item.foodCode] = item;
         return acc;
       }, {});
@@ -522,7 +538,7 @@ const surveySubmissionService = ({
 
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
-          collectFoods(mealId, foodRecordMap, foodGroupMap),
+          collectFoods({ foods: foodMap, foodGroups: foodGroupMap, mealId }),
           { inputs: [], states: [], missingInputs: [], missingStates: [] }
         );
 
@@ -558,7 +574,7 @@ const surveySubmissionService = ({
           const { fields, nutrients, portionSizes } = collectFoodCompositionData(
             foodId,
             foodState,
-            foodRecordMap
+            foodMap
           );
 
           // Store food custom fields, food composition fields, food composition nutrients, PSMs

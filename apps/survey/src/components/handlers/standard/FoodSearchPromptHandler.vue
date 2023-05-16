@@ -2,8 +2,8 @@
   <food-search-prompt
     v-bind="{ food: freeTextFood(), localeId, prompt }"
     v-model="searchTerm"
+    @food-missing="foodMissing"
     @food-selected="foodSelected"
-    @missing-food="missingFood"
   ></food-search-prompt>
 </template>
 
@@ -52,7 +52,7 @@ export default defineComponent({
       this.$emit('action', 'next');
     },
 
-    missingFood() {
+    foodMissing() {
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.freeTextFood();
 

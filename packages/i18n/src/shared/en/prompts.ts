@@ -61,6 +61,7 @@ const prompts: LocaleMessageObject = {
       different: 'Select a different food',
       item: 'Select the food you had',
     },
+    missing: `I can't find my food`,
   },
   editMeal: {
     name: 'Edit Meal',

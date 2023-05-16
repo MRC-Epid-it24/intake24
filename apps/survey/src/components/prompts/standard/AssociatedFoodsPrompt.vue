@@ -10,13 +10,7 @@
         <v-expansion-panel-header>
           {{ associatedFoodPrompts[index].promptText }}
           <template #actions>
-            <expansion-panel-actions
-              :valid="
-                prompt.confirmed === 'no' ||
-                prompt.confirmed === 'existing' ||
-                (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined)
-              "
-            ></expansion-panel-actions>
+            <expansion-panel-actions :valid="isPromptValid(prompt)"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -67,8 +61,20 @@
                 <food-browser
                   :locale-id="localeId"
                   :root-category="associatedFoodPrompts[index].categoryCode"
-                  @food-selected="(food) => onFoodSelected(food, index)"
+                  @food-selected="(food) => foodSelected(food, index)"
                 ></food-browser>
+              </v-card-text>
+              <v-card-text>
+                <v-btn
+                  :block="isMobile"
+                  color="secondary"
+                  large
+                  outlined
+                  :title="$t(`prompts.${type}.missing`)"
+                  @click.stop="foodMissing(index)"
+                >
+                  {{ $t(`prompts.${type}.missing`) }}
+                </v-btn>
               </v-card-text>
             </v-card>
           </v-expand-transition>
@@ -93,8 +99,7 @@ import { getFoodIndexRequired } from '@intake24/survey/util';
 import createBasePrompt from '../createBasePrompt';
 
 const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
-  prompt.confirmed === 'no' ||
-  prompt.confirmed === 'existing' ||
+  (prompt.confirmed && ['no', 'existing', 'missing'].includes(prompt.confirmed)) ||
   (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined);
 
 const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
@@ -180,6 +185,8 @@ export default defineComponent({
   },
 
   methods: {
+    isPromptValid,
+
     goToNextIfCan(index: number) {
       if (!isPromptValid(this.prompts[index])) return;
 
@@ -210,7 +217,7 @@ export default defineComponent({
           this.prompts[index].confirmed === 'yes' && this.associatedFoodPrompts[index].foodCode
             ? {
                 code: this.associatedFoodPrompts[index].foodCode,
-                de: this.associatedFoodPrompts[index].genericName,
+                description: this.associatedFoodPrompts[index].genericName,
               }
             : this.prompts[index].selectedFood;
 
@@ -227,11 +234,18 @@ export default defineComponent({
       this.updatePrompts();
     },
 
-    onFoodSelected(food: FoodHeader, promptIndex: number): void {
+    foodSelected(food: FoodHeader, promptIndex: number): void {
       Vue.set(this.prompts, promptIndex, {
         confirmed: 'yes',
         selectedFood: food,
       });
+
+      this.goToNextIfCan(promptIndex);
+      this.updatePrompts();
+    },
+
+    foodMissing(promptIndex: number) {
+      Vue.set(this.prompts, promptIndex, { confirmed: 'missing' });
 
       this.goToNextIfCan(promptIndex);
       this.updatePrompts();

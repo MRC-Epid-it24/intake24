@@ -22,8 +22,9 @@ import type {
   Prompts,
   PromptStates,
 } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
+import { capitalize } from '@intake24/common/util';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
@@ -54,12 +55,10 @@ export default defineComponent({
   setup(props) {
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
 
-    const getInitialState = (): PromptStates['associated-foods-prompt'] => {
-      return {
-        activePrompt: 0,
-        prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
-      };
-    };
+    const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
+      activePrompt: 0,
+      prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
+    });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
       props.prompt.id,
@@ -96,10 +95,23 @@ export default defineComponent({
 
     async commitAnswer() {
       const newFoods: FoodHeader[] = [];
+      const missingFoods: MissingFood[] = [];
 
-      this.state.prompts.forEach((prompt) => {
+      this.state.prompts.forEach((prompt, idx) => {
         if (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined) {
           newFoods.push(prompt.selectedFood);
+        }
+
+        if (prompt.confirmed === 'missing') {
+          missingFoods.push({
+            id: getEntityId(),
+            type: 'missing-food',
+            info: null,
+            searchTerm: capitalize(this.food().data.associatedFoodPrompts[idx].genericName),
+            customPromptAnswers: {},
+            flags: [],
+            linkedFoods: [],
+          });
         }
       });
 
@@ -126,7 +138,7 @@ export default defineComponent({
 
       const foodData = await this.fetchFoodData(newFoods);
 
-      const linkedFoods: EncodedFood[] = foodData.map((data) => {
+      const linkedFoods: FoodState[] = foodData.map((data) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
 
         return {
@@ -143,7 +155,7 @@ export default defineComponent({
         };
       });
 
-      linkedFoods.push(...moveFoods);
+      linkedFoods.push(...moveFoods, ...missingFoods);
 
       this.setFoods({ mealId, foods: keepFoods });
 

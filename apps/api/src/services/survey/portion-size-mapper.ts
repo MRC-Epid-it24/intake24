@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import type { PortionSizeStates } from '@intake24/common/types';
 import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/db';
 
@@ -8,6 +10,7 @@ export const genericMapper = <T extends keyof PortionSizeStates>(
   const { method, ...rest } = state;
 
   return Object.entries(rest).map(([name, value]) => ({
+    id: randomUUID(),
     foodId,
     name,
     value: value?.toString() ?? '',
@@ -21,16 +24,16 @@ export const asServedMapper = (
   const { leftoversWeight, servingWeight, serving, leftovers } = state;
 
   return [
-    { foodId, name: 'leftovers', value: (!!leftovers).toString() },
-    { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
-    { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
-    { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
-  ];
+    { name: 'leftovers', value: (!!leftovers).toString() },
+    { name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
+    { name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const cerealMapper = (
@@ -50,21 +53,21 @@ export const cerealMapper = (
   } = state;
 
   return [
-    { foodId, name: 'bowl', value: bowl ?? '' },
-    { foodId, name: 'bowlId', value: bowlId?.toString() ?? '' },
-    { foodId, name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { foodId, name: 'imageUrl', value: imageUrl ?? '' },
-    { foodId, name: 'leftovers', value: (!!leftovers).toString() },
-    { foodId, name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
-    { foodId, name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { foodId, name: 'servingImage', value: serving?.imageUrl ?? '' },
-    { foodId, name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
-    { foodId, name: 'type', value: type },
-  ];
+    { name: 'bowl', value: bowl ?? '' },
+    { name: 'bowlId', value: bowlId?.toString() ?? '' },
+    { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
+    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'leftovers', value: (!!leftovers).toString() },
+    { name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
+    { name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
+    { name: 'type', value: type },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const drinkScaleMapper = (
@@ -86,18 +89,18 @@ export const drinkScaleMapper = (
   } = state;
 
   return [
-    { foodId, name: 'containerId', value: containerId ?? '' },
-    { foodId, name: 'containerIndex', value: containerIndex?.toString() ?? '' },
-    { foodId, name: 'drinkware-id', value: drinkwareId },
-    { foodId, name: 'fillLevel', value: fillLevel.toString() },
-    { foodId, name: 'imageUrl', value: imageUrl },
-    { foodId, name: 'initial-fill-level', value: initialFillLevel.toString() },
-    { foodId, name: 'leftovers', value: leftovers.toString() },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'leftoversLevel', value: leftoversLevel.toString() },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-    { foodId, name: 'skip-fill-level', value: skipFillLevel.toString() },
-  ];
+    { name: 'containerId', value: containerId ?? '' },
+    { name: 'containerIndex', value: containerIndex?.toString() ?? '' },
+    { name: 'drinkware-id', value: drinkwareId },
+    { name: 'fillLevel', value: fillLevel.toString() },
+    { name: 'imageUrl', value: imageUrl },
+    { name: 'initial-fill-level', value: initialFillLevel.toString() },
+    { name: 'leftovers', value: leftovers.toString() },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'leftoversLevel', value: leftoversLevel.toString() },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+    { name: 'skip-fill-level', value: skipFillLevel.toString() },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const guideImageMapper = (
@@ -116,15 +119,15 @@ export const guideImageMapper = (
   } = state;
 
   return [
-    { foodId, name: 'guide-image-id', value: guideImageId },
-    { foodId, name: 'imageUrl', value: imageUrl ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'objectId', value: objectId ?? '' },
-    { foodId, name: 'objectIndex', value: objectIndex?.toString() ?? '' },
-    { foodId, name: 'objectWeight', value: objectWeight.toString() },
-    { foodId, name: 'quantity', value: quantity.toString() },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ];
+    { name: 'guide-image-id', value: guideImageId },
+    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'objectId', value: objectId ?? '' },
+    { name: 'objectIndex', value: objectIndex?.toString() ?? '' },
+    { name: 'objectWeight', value: objectWeight.toString() },
+    { name: 'quantity', value: quantity.toString() },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const milkInAHotDrinkMapper = (
@@ -134,11 +137,11 @@ export const milkInAHotDrinkMapper = (
   const { leftoversWeight, servingWeight, milkPartIndex, milkVolumePercentage } = state;
 
   return [
-    { foodId, name: 'milkPartIndex', value: milkPartIndex?.toString() ?? '' },
-    { foodId, name: 'milkVolumePercentage', value: milkVolumePercentage?.toString() ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ];
+    { name: 'milkPartIndex', value: milkPartIndex?.toString() ?? '' },
+    { name: 'milkVolumePercentage', value: milkVolumePercentage?.toString() ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const milkOnCerealMapper = (
@@ -158,16 +161,16 @@ export const milkOnCerealMapper = (
   } = state;
 
   return [
-    { foodId, name: 'bowl', value: bowl ?? '' },
-    { foodId, name: 'bowlId', value: bowlId ?? '' },
-    { foodId, name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { foodId, name: 'imageUrl', value: imageUrl ?? '' },
-    { foodId, name: 'milkLevelId', value: milkLevelId ?? '' },
-    { foodId, name: 'milkLevelChoice', value: milkLevelIndex?.toString() ?? '' },
-    { foodId, name: 'milkLevelImage', value: milkLevelImage ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ];
+    { name: 'bowl', value: bowl ?? '' },
+    { name: 'bowlId', value: bowlId ?? '' },
+    { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
+    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'milkLevelId', value: milkLevelId ?? '' },
+    { name: 'milkLevelChoice', value: milkLevelIndex?.toString() ?? '' },
+    { name: 'milkLevelImage', value: milkLevelImage ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const pizzaPortionMapper = (
@@ -177,19 +180,19 @@ export const pizzaPortionMapper = (
   const { type, thickness, slice, leftoversWeight, servingWeight } = state;
 
   return [
-    { foodId, name: 'typeId', value: type.id ?? '' },
-    { foodId, name: 'typeIndex', value: type.index?.toString() ?? '' },
-    { foodId, name: 'typeImage', value: type.image ?? '' },
-    { foodId, name: 'thicknessId', value: thickness.id ?? '' },
-    { foodId, name: 'thicknessIndex', value: thickness.index?.toString() ?? '' },
-    { foodId, name: 'thicknessImage', value: type.image ?? '' },
-    { foodId, name: 'sliceId', value: slice.id ?? '' },
-    { foodId, name: 'sliceIndex', value: slice.index?.toString() ?? '' },
-    { foodId, name: 'sliceImage', value: slice.image ?? '' },
-    { foodId, name: 'sliceQuantity', value: slice.quantity?.toString() ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ];
+    { name: 'typeId', value: type.id ?? '' },
+    { name: 'typeIndex', value: type.index?.toString() ?? '' },
+    { name: 'typeImage', value: type.image ?? '' },
+    { name: 'thicknessId', value: thickness.id ?? '' },
+    { name: 'thicknessIndex', value: thickness.index?.toString() ?? '' },
+    { name: 'thicknessImage', value: type.image ?? '' },
+    { name: 'sliceId', value: slice.id ?? '' },
+    { name: 'sliceIndex', value: slice.index?.toString() ?? '' },
+    { name: 'sliceImage', value: slice.image ?? '' },
+    { name: 'sliceQuantity', value: slice.quantity?.toString() ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const standardPortionMapper = (
@@ -199,13 +202,13 @@ export const standardPortionMapper = (
   const { quantity, unit, leftoversWeight, servingWeight } = state;
 
   return [
-    { foodId, name: 'quantity', value: quantity.toString() },
-    { foodId, name: 'unitName', value: unit?.name ?? '' },
-    { foodId, name: 'unitWeight', value: unit?.weight.toString() ?? '' },
-    { foodId, name: 'unitOmitFoodDescription', value: unit?.omitFoodDescription.toString() ?? '' },
-    { foodId, name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
-    { foodId, name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
-  ];
+    { name: 'quantity', value: quantity.toString() },
+    { name: 'unitName', value: unit?.name ?? '' },
+    { name: 'unitWeight', value: unit?.weight.toString() ?? '' },
+    { name: 'unitOmitFoodDescription', value: unit?.omitFoodDescription.toString() ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
 export const portionSizeMappers: Record<

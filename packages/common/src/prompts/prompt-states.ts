@@ -13,7 +13,7 @@ import type {
 import type { FoodHeader } from '../types/http';
 
 export type AssociatedFoodPromptItemState = {
-  confirmed: 'yes' | 'no' | 'existing' | undefined;
+  confirmed: 'yes' | 'no' | 'existing' | 'missing' | undefined;
   selectedFood: FoodHeader | undefined;
   existingFoodId: string | undefined;
 };

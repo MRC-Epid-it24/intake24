@@ -218,6 +218,7 @@ const dataExportFields = () => {
    */
   const food = async (): Promise<ExportField[]> => [
     { id: 'foodId', label: 'Food ID', value: 'id' },
+    { id: 'parentId', label: 'Parent food ID', value: 'parentId' },
     { id: 'code', label: 'Food code', value: 'code' },
     { id: 'englishName', label: 'Name (en)', value: 'englishName' },
     { id: 'localName', label: 'Name (local)', value: 'localName' },
@@ -245,6 +246,7 @@ const dataExportFields = () => {
      * - TODO: overlapping fields will populate both, e.g. ID
      */
     { id: 'missingId', label: 'Missing ID', value: 'id' },
+    { id: 'missingParentId', label: 'Missing parent food ID', value: 'parentId' },
     { id: 'missingName', label: 'Missing name', value: 'name' },
     { id: 'missingDescription', label: 'Missing description', value: 'description' },
     { id: 'missingPortionSize', label: 'Missing portion size', value: 'portionSize' },

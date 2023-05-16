@@ -26,11 +26,10 @@ export default class SurveySubmissionCustomField extends BaseModel<
   InferCreationAttributes<SurveySubmissionCustomField>
 > {
   @Column({
-    autoIncrement: true,
     primaryKey: true,
-    type: DataType.BIGINT,
+    type: DataType.UUID,
   })
-  declare id: CreationOptional<string>;
+  declare id: string;
 
   @Column({
     allowNull: false,

@@ -40,7 +40,7 @@ export default class SurveySubmission extends BaseModel<
     primaryKey: true,
     type: DataType.UUID,
   })
-  declare id: CreationOptional<string>;
+  declare id: string;
 
   @Column({
     allowNull: false,

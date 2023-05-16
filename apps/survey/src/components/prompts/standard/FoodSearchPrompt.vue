@@ -46,7 +46,7 @@
           large
           outlined
           :title="$t(`prompts.${type}.missing`)"
-          @click.stop="$emit('missing-food')"
+          @click.stop="$emit('food-missing')"
         >
           {{ $t(`prompts.${type}.missing`) }}
         </v-btn>
@@ -89,7 +89,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'input', 'missing-food'],
+  emits: ['food-missing', 'food-selected', 'input'],
 
   data() {
     return {
