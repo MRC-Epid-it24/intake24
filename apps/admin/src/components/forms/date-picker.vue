@@ -1,6 +1,6 @@
 <template>
   <v-dialog ref="menu" v-model="dialog" persistent :return-value.sync="internalValue" width="290px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-text-field
         v-model="formattedInternalValue"
         :clearable="clearable"

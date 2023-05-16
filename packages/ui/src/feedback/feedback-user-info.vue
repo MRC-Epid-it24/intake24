@@ -7,7 +7,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-tooltip left>
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-btn
               v-bind="attrs"
               icon

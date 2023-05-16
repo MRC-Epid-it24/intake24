@@ -1,6 +1,6 @@
 <template>
   <v-menu v-model="menu" close-on-click left offset-y>
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <slot name="activator" v-bind="{ attrs, on }">
         <v-btn
           v-bind="attrs"

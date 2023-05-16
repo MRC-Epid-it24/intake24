@@ -30,7 +30,7 @@
         max-width="600px"
         offset-y
       >
-        <template #activator="{ on, attrs }">
+        <template #activator="{ attrs, on }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
           </v-btn>
@@ -43,7 +43,7 @@
             @close="clearMoveToSection"
             @confirm="move"
           >
-            <template #activator="{ on, attrs }">
+            <template #activator="{ attrs, on }">
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
                   <v-icon left>fa-exchange-alt</v-icon>
@@ -70,7 +70,7 @@
             max-width="450px"
             @confirm="sync"
           >
-            <template #activator="{ on, attrs }">
+            <template #activator="{ attrs, on }">
               <v-list-item
                 v-bind="attrs"
                 :disabled="!hasTemplate || isInSyncWithTemplate"

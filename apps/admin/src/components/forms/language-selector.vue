@@ -4,7 +4,7 @@
       <v-toolbar-title>{{ label }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
-        <template #activator="{ on, attrs }">
+        <template #activator="{ attrs, on }">
           <v-btn
             color="secondary"
             :disabled="!availableLanguages.length"

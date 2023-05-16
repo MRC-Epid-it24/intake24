@@ -15,7 +15,7 @@
       <v-spacer></v-spacer>
       <options-menu>
         <select-resource resource="survey-schemes" return-object="dataExport" @input="load">
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
                 <v-icon left>fas fa-download</v-icon>

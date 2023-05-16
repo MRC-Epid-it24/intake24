@@ -37,7 +37,7 @@
                 resource="standard-units"
                 @input="updateUnit(item.code, $event)"
               >
-                <template #activator="{ on, attrs }">
+                <template #activator="{ attrs, on }">
                   <v-btn icon v-bind="attrs" :title="$t('standard-units.add')" v-on="on">
                     <v-icon>$standard-units</v-icon>
                   </v-btn>

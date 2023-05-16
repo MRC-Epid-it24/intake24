@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <select-resource v-model="drinkwareSetId" item-name="id" resource="drinkware-sets">
-        <template #activator="{ on, attrs }">
+        <template #activator="{ attrs, on }">
           <v-text-field
             v-bind="attrs"
             hide-details="auto"

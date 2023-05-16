@@ -17,7 +17,7 @@
       </v-btn>
       <options-menu>
         <select-resource resource="feedback-schemes" return-object="cards" @input="load">
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
                 <v-icon left>fas fa-download</v-icon>

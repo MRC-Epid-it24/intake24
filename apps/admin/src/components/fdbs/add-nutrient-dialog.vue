@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-btn v-bind="attrs" color="secondary" fab small :title="$t('fdbs.nutrients.add')" v-on="on">
         <v-icon>$add</v-icon>
       </v-btn>

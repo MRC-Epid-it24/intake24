@@ -21,7 +21,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" :fullscreen="isMobile" max-width="600px">
-        <template #activator="{ on, attrs }">
+        <template #activator="{ attrs, on }">
           <v-btn
             v-bind="attrs"
             color="primary"

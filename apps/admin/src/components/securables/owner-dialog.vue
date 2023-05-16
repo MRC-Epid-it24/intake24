@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-btn class="ml-3" link text v-bind="attrs" v-on="on">
         <v-icon class="mr-2">fas fa-user-shield</v-icon>
         {{ owner ? owner.name : $t('common.none') }}

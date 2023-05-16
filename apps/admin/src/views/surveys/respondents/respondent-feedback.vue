@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-list-item key="respondentsUpload" v-bind="attrs" link v-on="on">
         <v-list-item-title>
           <v-icon left>fas fa-comments</v-icon>
@@ -10,7 +10,9 @@
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
-        <v-icon dark left>fas fa-comments</v-icon>
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
+          <v-icon>$cancel</v-icon>
+        </v-btn>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.feedback.title`) }}
         </v-toolbar-title>

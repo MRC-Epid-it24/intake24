@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">

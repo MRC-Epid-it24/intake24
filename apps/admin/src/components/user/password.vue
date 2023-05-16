@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="500px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-btn v-bind="attrs" outlined :title="$t('common.password.change')" v-on="on">
         {{ $t('common.password.change') }}
       </v-btn>

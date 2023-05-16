@@ -22,7 +22,7 @@
                 resource="image-maps"
                 @input="form.errors.clear('guideImageId')"
               >
-                <template #activator="{ on, attrs }">
+                <template #activator="{ attrs, on }">
                   <v-text-field
                     v-bind="attrs"
                     clearable

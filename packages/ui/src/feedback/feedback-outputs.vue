@@ -26,7 +26,7 @@
           :fullscreen="$vuetify.breakpoint.smAndDown"
           max-width="500px"
         >
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-btn
               v-bind="attrs"
               class="mb-3"
@@ -111,7 +111,7 @@
           :fullscreen="$vuetify.breakpoint.smAndDown"
           max-width="500px"
         >
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-btn
               v-bind="attrs"
               class="mb-3"

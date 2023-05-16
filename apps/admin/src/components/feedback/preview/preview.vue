@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <slot name="activator" v-bind="{ on, attrs }">
         <v-btn
           v-bind="attrs"

@@ -116,7 +116,7 @@
           </v-card>
         </v-dialog>
         <v-menu close-on-click close-on-content-click offset-y>
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
             </v-btn>
@@ -145,7 +145,7 @@
       </template>
       <template #[`item.action`]="{ item }">
         <v-menu close-on-click close-on-content-click offset-y>
-          <template #activator="{ on, attrs }">
+          <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
               <v-icon>fa-ellipsis-v</v-icon>
             </v-btn>
@@ -181,7 +181,8 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
+import { useI18n } from '@intake24/admin/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
@@ -213,9 +214,48 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
+    const dialog = ref(false);
+    const loading = ref(false);
+
+    const i18n = useI18n();
+
+    const headers = [
+      {
+        text: i18n.t('users.aliases.username'),
+        sortable: true,
+        value: 'username',
+        align: 'start',
+      },
+      {
+        text: i18n.t('users.aliases.urlAuthToken'),
+        sortable: false,
+        value: 'urlAuthToken',
+        align: 'start',
+      },
+      {
+        text: i18n.t('surveys.respondents.authUrls.surveyAuthUrl'),
+        sortable: false,
+        value: 'surveyAuthUrl',
+        align: 'start',
+      },
+      {
+        text: i18n.t('surveys.respondents.authUrls.feedbackAuthUrl'),
+        sortable: false,
+        value: 'feedbackAuthUrl',
+        align: 'start',
+      },
+      {
+        text: i18n.t('common.action._'),
+        sortable: false,
+        value: 'action',
+        align: 'right',
+      },
+    ];
+
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
-    const { clearError, form } = useEntryForm<SurveyRespondentsForm, SurveyEntry>(props, {
+
+    const { form, clearError } = useForm<SurveyRespondentsForm>({
       data: {
         userId: null,
         username: null,
@@ -226,49 +266,9 @@ export default defineComponent({
         phone: null,
       },
     });
-
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { entry, entryLoaded, table, clearError, form };
-  },
-
-  data() {
-    return {
-      headers: [
-        {
-          text: this.$t('users.aliases.username'),
-          sortable: true,
-          value: 'username',
-          align: 'start',
-        },
-        {
-          text: this.$t('users.aliases.urlAuthToken'),
-          sortable: false,
-          value: 'urlAuthToken',
-          align: 'start',
-        },
-        {
-          text: this.$t('surveys.respondents.authUrls.surveyAuthUrl'),
-          sortable: false,
-          value: 'surveyAuthUrl',
-          align: 'start',
-        },
-        {
-          text: this.$t('surveys.respondents.authUrls.feedbackAuthUrl'),
-          sortable: false,
-          value: 'feedbackAuthUrl',
-          align: 'start',
-        },
-        {
-          text: this.$t('common.action._'),
-          sortable: false,
-          value: 'action',
-          align: 'right',
-        },
-      ],
-      dialog: false,
-      loading: false,
-    };
+    return { dialog, headers, loading, entry, entryLoaded, table, form, clearError };
   },
 
   computed: {
@@ -297,6 +297,7 @@ export default defineComponent({
 
       try {
         const user = await this.fetchUser(item.userId);
+        console.log(user);
         this.form.load(user);
       } finally {
         this.loading = false;

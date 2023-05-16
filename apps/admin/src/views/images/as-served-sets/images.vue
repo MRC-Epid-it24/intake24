@@ -29,7 +29,7 @@
                   @confirm="removeImage(image.id)"
                 >
                   {{ $t('common.action.confirm.delete', { name: 'selected image' }) }}
-                  <template #activator="{ on, attrs }">
+                  <template #activator="{ attrs, on }">
                     <v-btn class="ml-auto" icon large v-bind="attrs" v-on="on">
                       <v-icon color="error">$delete</v-icon>
                     </v-btn>

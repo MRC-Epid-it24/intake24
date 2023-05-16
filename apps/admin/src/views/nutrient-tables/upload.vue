@@ -63,7 +63,7 @@ import type { JobType } from '@intake24/common/types';
 import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/admin/i18n';
 
 type UploadForm = {
@@ -86,7 +86,7 @@ export default defineComponent({
 
     const { entry, entryLoaded } = useEntry<NutrientTableEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave } = useEntryForm<UploadForm, NutrientTableEntry>(props, {
+    const { clearError, form } = useForm<UploadForm>({
       data: { file: null, type: jobTypeList[0].value },
       config: { multipart: true },
     });
@@ -98,7 +98,6 @@ export default defineComponent({
       entryLoaded,
       clearError,
       form,
-      routeLeave,
       jobs,
       jobInProgress,
       startPolling,

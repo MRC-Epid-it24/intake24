@@ -50,13 +50,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, watch } from 'vue';
 
 import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 
 type SurveyDataExportForm = {
   startDate: string | null;
@@ -73,28 +73,35 @@ export default defineComponent({
   setup(props) {
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
-    const { clearError, form, routeLeave } = useEntryForm<SurveyDataExportForm, SurveyEntry>(
-      props,
-      { data: { startDate: null, endDate: null }, config: { resetOnSubmit: false } }
-    );
     const { jobs, jobInProgress, startPolling } = usePollsForJobs('SurveyDataExport');
 
-    return { entry, entryLoaded, clearError, form, routeLeave, jobs, jobInProgress, startPolling };
-  },
+    const { form } = useForm<SurveyDataExportForm>({
+      data: { startDate: null, endDate: null },
+      config: { resetOnSubmit: false },
+    });
 
-  async mounted() {
-    await this.startPolling(true);
-  },
+    const submit = async () => {
+      if (jobInProgress.value) return;
 
-  methods: {
-    async submit() {
-      if (this.jobInProgress) return;
+      const job = await form.post<JobEntry>(`admin/surveys/${props.id}/data-export`);
 
-      const job = await this.form.post<JobEntry>(`admin/surveys/${this.id}/data-export`);
+      jobs.value.unshift(job);
+      await startPolling();
+    };
 
-      this.jobs.unshift(job);
-      await this.startPolling();
-    },
+    watch(entry, (val) => {
+      if (!Object.keys(val).length) return;
+
+      const { startDate, endDate } = val;
+
+      form.load({ startDate, endDate });
+    });
+
+    onMounted(async () => {
+      await startPolling(true);
+    });
+
+    return { entry, entryLoaded, form, jobs, jobInProgress, startPolling, submit };
   },
 });
 </script>

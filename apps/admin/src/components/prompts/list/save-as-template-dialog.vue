@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
-    <template #activator="{ on, attrs }">
+    <template #activator="{ attrs, on }">
       <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
           <v-icon :disabled="disabled" left>fa-save</v-icon>
