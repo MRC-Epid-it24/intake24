@@ -42,7 +42,7 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   'date-picker-prompt': {
-    tabs: [...validatedTab],
+    tabs: [...validatedTab, 'options'],
     sections: [...promptSectionsExceptSubmission],
   },
   'info-prompt': {

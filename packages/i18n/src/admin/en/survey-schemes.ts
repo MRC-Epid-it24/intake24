@@ -358,6 +358,7 @@ const surveySchemes: LocaleMessageObject = {
     'date-picker-prompt': {
       title: 'Date',
       subtitle: 'Ask to choose a date',
+      futureDates: 'Allow future dates',
     },
     'time-picker-prompt': {
       title: 'Time',

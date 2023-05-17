@@ -297,7 +297,6 @@ export default defineComponent({
 
       try {
         const user = await this.fetchUser(item.userId);
-        console.log(user);
         this.form.load(user);
       } finally {
         this.loading = false;

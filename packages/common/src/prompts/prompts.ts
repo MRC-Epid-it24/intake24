@@ -106,7 +106,7 @@ export type Prompts = {
     options: LocaleOptionList;
     other: boolean;
   };
-  'date-picker-prompt': ValidatedPrompt & { component: 'date-picker-prompt' };
+  'date-picker-prompt': ValidatedPrompt & { component: 'date-picker-prompt'; futureDates: boolean };
   'info-prompt': BasePrompt & { component: 'info-prompt' };
   'no-more-information-prompt': BasePrompt & { component: 'no-more-information-prompt' };
   'radio-list-prompt': ValidatedPrompt & {
