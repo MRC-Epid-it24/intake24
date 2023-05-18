@@ -61,7 +61,7 @@ export default defineComponent({
 
       this.errors = [
         this.getLocaleContent(this.prompt.validation.message, {
-          path: 'prompts.datepicker.validation.required',
+          path: `prompts.${this.type}.validation.required`,
         }),
       ];
 

@@ -50,7 +50,7 @@ export default defineComponent({
             (v: string | null) =>
               !!v ||
               (this.getLocaleContent(this.prompt.validation.message) ??
-                this.$t('prompts.textarea.validation.required')),
+                this.$t(`prompts.${this.type}}.validation.required`)),
           ]
         : [],
     };

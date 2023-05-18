@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-card-text class="pt-2 d-flex">
-      <v-card flat outlined :width="isMobile ? '100%' : 'auto'">
+      <v-card flat outlined width="100%">
         <v-list class="px-4" color="grey lighten-4">
           <v-subheader>{{ getLocaleContent(sabFood.food.data.localName) }}</v-subheader>
           <v-divider></v-divider>
@@ -130,16 +130,16 @@ export default defineComponent({
       const amount = this.foodAmount(this.sabFood.food);
       const unit = this.foodUnit(this.sabFood.food);
 
-      return this.$t(`prompts.sameAsBefore.serving`, { amount: `${amount} ${unit}` });
+      return this.$t(`prompts.${this.type}.serving`, { amount: `${amount} ${unit}` });
     },
     leftovers() {
       const { leftoversWeight, servingWeight } = this.sabFood.food.portionSize ?? {};
       if (!servingWeight || !leftoversWeight)
-        return this.$t(`prompts.sameAsBefore.noLeftovers.${this.isDrink ? 'drink' : 'food'}`);
+        return this.$t(`prompts.${this.type}.noLeftovers.${this.isDrink ? 'drink' : 'food'}`);
 
       const leftoversPercentage = Math.round(leftoversWeight / (servingWeight / 100));
 
-      return this.$t(`prompts.sameAsBefore.leftovers`, { amount: `${leftoversPercentage}%` });
+      return this.$t(`prompts.${this.type}.leftovers`, { amount: `${leftoversPercentage}%` });
     },
     isValid(): boolean {
       return true;

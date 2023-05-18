@@ -23,7 +23,7 @@
               v-model.trim="otherValue"
               :error="hasErrors"
               hide-details="auto"
-              :label="$t('prompts.radio.other')"
+              :label="$t(`prompts.${type}.other`)"
               outlined
               @focus="selected = 'other'"
               @input="update"
@@ -88,7 +88,7 @@ export default defineComponent({
 
       this.errors = [
         this.getLocaleContent(this.prompt.validation.message, {
-          path: 'prompts.radio.validation.required',
+          path: `prompts.${this.type}.validation.required`,
         }),
       ];
       return false;

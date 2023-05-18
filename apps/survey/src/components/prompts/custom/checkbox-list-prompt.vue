@@ -21,7 +21,7 @@
             :disabled="!otherEnabled"
             :error="hasErrors && otherEnabled"
             hide-details="auto"
-            :label="$t('prompts.checkbox.other')"
+            :label="$t(`prompts.${type}.other`)"
             outlined
             @input="update"
           ></v-text-field>
@@ -92,7 +92,7 @@ export default defineComponent({
 
       this.errors = [
         this.getLocaleContent(this.prompt.validation.message, {
-          path: 'prompts.checkbox.validation.required',
+          path: `prompts.${this.type}.validation.required`,
         }),
       ];
       return false;

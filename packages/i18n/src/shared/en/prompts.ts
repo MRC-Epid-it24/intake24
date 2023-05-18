@@ -1,7 +1,7 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
 const prompts: LocaleMessageObject = {
-  checkbox: {
+  checkboxList: {
     name: 'Multi-choice list',
     label: 'Select any of the options',
     other: 'Please specify',
@@ -9,7 +9,7 @@ const prompts: LocaleMessageObject = {
       required: 'At least one of the options requires to be selected.',
     },
   },
-  datepicker: {
+  datePicker: {
     name: 'Select date',
     validation: {
       required: 'This field is required to be filled in.',
@@ -25,7 +25,7 @@ const prompts: LocaleMessageObject = {
         <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
   },
-  radio: {
+  radioList: {
     name: 'Single-choice list',
     label: 'Select one of the options',
     other: 'Please specify',
@@ -40,7 +40,7 @@ const prompts: LocaleMessageObject = {
       required: 'This field is required to be filled in.',
     },
   },
-  timepicker: {
+  timePicker: {
     name: 'Select time',
     validation: {
       required: 'This field is required to be filled in.',

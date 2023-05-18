@@ -5,18 +5,14 @@
         <v-icon left>fas fa-location-arrow</v-icon>{{ key }}
       </v-tab>
       <v-tab-item v-for="(item, key) in items" :key="key" class="pl-3">
-        <language-selector
-          v-model="items[key]"
-          :label="$t('survey-schemes.questions.name._').toString()"
-          @input="update"
-        >
+        <language-selector v-model="items[key]" :label="getKeyTranslation(key)" @input="update">
           <template v-for="lang in Object.keys(items[key])" #[`lang.${lang}`]>
             <v-text-field
-              v-if="['name', 'text'].includes(key.toString())"
+              v-if="plainTextOnly.includes(key.toString())"
               :key="lang"
               v-model="items[key][lang]"
               hide-details="auto"
-              :label="$t('survey-schemes.questions.name._')"
+              :label="getKeyTranslation(key)"
               outlined
               @input="update"
             ></v-text-field>
@@ -36,12 +32,14 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import has from 'lodash/has';
+import { defineComponent, ref, watch } from 'vue';
 
 import type { BasePrompt } from '@intake24/common/prompts';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/admin/i18n';
+import { capitalize, copy } from '@intake24/common/util';
 
 /*
  * TODO
@@ -63,47 +61,39 @@ export default defineComponent({
 
   emits: ['update:i18n'],
 
-  data() {
-    return {
-      items: copy(this.i18n),
+  setup(props, { emit }) {
+    const i18n = useI18n();
+
+    const items = ref(copy(props.i18n));
+    const plainTextOnly = ['name', 'text', 'label'];
+
+    const getKeyTranslation = (key: string | number) => {
+      if (typeof key === 'number') return key.toString();
+
+      const check = has(i18n.messages[i18n.locale], `survey-schemes.questions.${key}._`);
+
+      return check ? i18n.t(`survey-schemes.questions.${key}._`).toString() : capitalize(key);
     };
-  },
 
-  /* computed: {
-    nameRules(): RuleCallback[] {
-      if (!this.nameRequired) return [];
+    const update = () => {
+      emit('update:i18n', items.value);
+    };
 
-      return [this.valueRequiredCallBack('name')];
-    },
-    textRules(): RuleCallback[] {
-      if (!this.textRequired) return [];
+    watch(
+      () => props.i18n,
+      (val) => {
+        if (deepEqual(val, items.value)) return;
 
-      return [this.valueRequiredCallBack('text')];
-    },
-    descriptionRules(): RuleCallback[] {
-      if (!this.descriptionRequired) return [];
+        items.value = copy(val);
+      }
+    );
 
-      return [this.valueRequiredCallBack('description')];
-    },
-  }, */
-
-  watch: {
-    i18n(val) {
-      if (deepEqual(val, this.items)) return;
-
-      this.items = copy(val);
-    },
-  },
-
-  methods: {
-    /* valueRequiredCallBack(field: 'name' | 'text' | 'description') {
-      return (value: string | null): boolean | string =>
-        !!value || this.$t(`survey-schemes.questions.${field}.required`).toString();
-    }, */
-
-    update() {
-      this.$emit('update:i18n', this.items);
-    },
+    return {
+      items,
+      plainTextOnly,
+      getKeyTranslation,
+      update,
+    };
   },
 });
 </script>
