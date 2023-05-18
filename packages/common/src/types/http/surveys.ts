@@ -58,13 +58,10 @@ export type SurveyUserInfoResponse = {
   showFeedback: boolean;
   maximumTotalSubmissionsReached: boolean;
   maximumDailySubmissionsReached: boolean;
+  followUpUrl?: string | null;
 };
 
 export type SurveyUserSessionResponse = UserSurveySessionAttributes;
-
-export interface SurveyFollowUpResponse extends SurveyUserInfoResponse {
-  followUpUrl: string | null;
-}
 
 export type SurveyRequestHelpInput = {
   name: string;

@@ -59,7 +59,7 @@ const recall: LocaleMessageObject = {
     changeTime: 'Change time',
   },
   actions: {
-    feedback: 'Go to feedback',
+    feedback: 'Feedback',
     next: 'Continue',
     submit: 'Submit the recall',
     addMeal: 'Add meal',
@@ -73,6 +73,7 @@ const recall: LocaleMessageObject = {
       confirm: 'Confirm',
       feedback: 'Feedback',
       next: 'Continue',
+      redirect: 'Continue',
       remove: 'Remove',
       review: 'Review',
       submit: 'Submit',

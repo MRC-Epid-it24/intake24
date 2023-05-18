@@ -318,11 +318,11 @@ const surveySchemes: LocaleMessageObject = {
       identifier: {
         _: 'User identifier to embed into the URL',
         subtitle: 'Specify which identifier to embed into the redirect URL',
+        hint: `Custom value will be looked up in 'user custom fields'`,
         options: {
           userId: 'User ID',
           username: 'Username',
-          token: 'Authentication token',
-          custom: 'Custom field',
+          urlAuthToken: 'Authentication token',
         },
       },
       timer: {

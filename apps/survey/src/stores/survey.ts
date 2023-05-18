@@ -19,11 +19,7 @@ import type {
   SurveyFlag,
   SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
-import type {
-  SurveyEntryResponse,
-  SurveyFollowUpResponse,
-  SurveyUserInfoResponse,
-} from '@intake24/common/types/http';
+import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
 import { recallLog } from '@intake24/survey/stores';
 import {
   findFood,
@@ -59,7 +55,7 @@ export type FoodUndo = {
 
 export interface SurveyState {
   parameters: SurveyEntryResponse | null;
-  user: SurveyUserInfoResponse | SurveyFollowUpResponse | null;
+  user: SurveyUserInfoResponse | null;
   data: CurrentSurveyState;
   isSubmitting: boolean;
   undo: MealUndo | FoodUndo | null;

@@ -142,6 +142,8 @@ const prompts: LocaleMessageObject = {
   },
   redirect: {
     name: 'Redirect',
+    missingUrl: 'Missing redirection URL',
+    goTo: 'Go to the questionnaire',
   },
   reviewConfirm: {
     name: 'Review and Confirm',

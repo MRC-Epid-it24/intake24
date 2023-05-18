@@ -36,6 +36,7 @@ export default new Vuetify({
       pause: 'fas fa-pause',
       profile: 'fas fa-user-circle',
       question: 'far fa-question-circle',
+      redirect: 'fas fa-up-right-from-square',
       save: 'fas fa-save',
       search: 'fas fa-magnifying-glass',
       show: 'far fa-file',

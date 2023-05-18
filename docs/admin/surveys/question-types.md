@@ -61,8 +61,8 @@ Allows user to be redirected to external URL with user identifier embedded into 
 
   - `userId` - internal intake24 user id
   - `username` - survey-unique respondent username
-  - `token` - authentication token
-  - `custom` - custom identifier that can be set through `userCustomField`, name should be `redirect url`
+  - `urlAuthToken` - URL authentication token
+  - `custom` - custom identifier that can be set through `userCustomField`. Set `name` of the custom field to be looked up the `value`.
 
 - `timer` - optional timer in seconds when automatic redirect should happen
 
@@ -163,6 +163,8 @@ Multi-select list of options.
 ### Date picker prompt
 
 Prompt to collect date information.
+
+- `futureDates` - allow future dates to be selected
 
 ### Info prompt
 

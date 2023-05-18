@@ -10,7 +10,7 @@ import type {
   SurveyState,
   WithKey,
 } from '@intake24/common/types';
-import type { SurveyFollowUpResponse } from '@intake24/common/types/http';
+import type { SurveyUserInfoResponse } from '@intake24/common/types/http';
 import type {
   SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
@@ -330,14 +330,14 @@ const surveySubmissionService = ({
    * @param {User} user
    * @param {SurveyState} state
    * @param {number} tzOffset
-   * @returns {Promise<SurveyFollowUpResponse>}
+   * @returns {Promise<SurveyUserInfoResponse>}
    */
   const submit = async (
     slug: string,
     user: User,
     state: SurveyState,
     tzOffset: number
-  ): Promise<SurveyFollowUpResponse> => {
+  ): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
       include: [{ association: 'surveyScheme', required: true }],

@@ -6,7 +6,6 @@ import type { SurveyState as SurveyStatus } from '@intake24/common/surveys';
 import type { SurveyState } from '@intake24/common/types';
 import type {
   SurveyEntryResponse,
-  SurveyFollowUpResponse,
   SurveyRequestHelpInput,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
@@ -182,7 +181,7 @@ const surveyRespondentController = ({
 
   const submission = async (
     req: Request<{ slug: string }, any, { submission: SurveyState }, { tzOffset: number }>,
-    res: Response<SurveyFollowUpResponse>
+    res: Response<SurveyUserInfoResponse>
   ): Promise<void> => {
     const {
       headers: { 'user-agent': userAgent },

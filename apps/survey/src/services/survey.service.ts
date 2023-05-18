@@ -4,7 +4,6 @@ import type {
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
-  SurveyFollowUpResponse,
   SurveyRequestHelpInput,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
@@ -88,10 +87,10 @@ export default {
   clearUserSession: async (surveyId: string): Promise<void> =>
     http.delete(`surveys/${surveyId}/session`),
 
-  submit: async (surveyId: string, submission: SurveyState): Promise<SurveyFollowUpResponse> => {
+  submit: async (surveyId: string, submission: SurveyState): Promise<SurveyUserInfoResponse> => {
     const tzOffset = new Date().getTimezoneOffset();
 
-    const { data } = await http.post<SurveyFollowUpResponse>(
+    const { data } = await http.post<SurveyUserInfoResponse>(
       `surveys/${surveyId}/submission`,
       { submission },
       { params: { tzOffset } }

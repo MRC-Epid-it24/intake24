@@ -20,14 +20,16 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-select
+            <v-combobox
               hide-details="auto"
+              :hint="$t('survey-schemes.prompts.redirect-prompt.identifier.hint')"
               :items="identifiers"
               :label="$t('survey-schemes.prompts.redirect-prompt.identifier._')"
               outlined
+              persistent-hint
               :value="identifier"
-              @change="update('identifier', $event)"
-            ></v-select>
+              @change="updateIdentifier"
+            ></v-combobox>
           </v-col>
         </v-row>
       </v-card-text>
@@ -83,7 +85,7 @@ export default defineComponent({
 
   data() {
     return {
-      identifiers: ['userId', 'username', 'token', 'custom'].map((value) => ({
+      identifiers: ['userId', 'username', 'urlAuthToken'].map((value) => ({
         text: this.$t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
         value,
       })),
@@ -103,6 +105,10 @@ export default defineComponent({
     updateTimerValue(value: any) {
       const timerValue = parseInt(value, 10);
       this.update('timer', Number.isNaN(timerValue) ? 0 : timerValue);
+    },
+
+    updateIdentifier(value: string | null | (typeof this.identifiers)[0]) {
+      this.update('identifier', !value || typeof value === 'string' ? value : value.value);
     },
   },
 });

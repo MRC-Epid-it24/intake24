@@ -1,15 +1,13 @@
+import { URL } from 'node:url';
+
 import { addDays, addMinutes, startOfDay } from 'date-fns';
 import ms from 'ms';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompts } from '@intake24/common/prompts';
 import type { JobParams, SurveyState } from '@intake24/common/types';
-import type {
-  CreateUserResponse,
-  SurveyFollowUpResponse,
-  SurveyUserInfoResponse,
-} from '@intake24/common/types/http';
-import type { FindOptions, SubmissionScope } from '@intake24/db';
+import type { CreateUserResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
 import { ApplicationError, ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
@@ -31,8 +29,11 @@ export type RespondentWithPassword = {
 
 const surveyService = ({
   adminSurveyService,
+  logger: globalLogger,
   scheduler,
-}: Pick<IoC, 'adminSurveyService' | 'scheduler'>) => {
+}: Pick<IoC, 'adminSurveyService' | 'logger' | 'scheduler'>) => {
+  const logger = globalLogger.child({ service: 'SurveyService' });
+
   /**
    * Generate random survey respondent
    *
@@ -87,9 +88,6 @@ const surveyService = ({
     }
 
     if (!decoded || Object.prototype.toString.call(decoded) !== '[object Object]')
-      throw new ApplicationError('Malformed token payload');
-
-    if (!decoded || typeof decoded === 'string')
       throw new ApplicationError('Malformed token payload');
 
     const { user: username, redirect } = decoded;
@@ -271,17 +269,18 @@ const surveyService = ({
     );
     if (!redirectPrompt) return null;
 
-    const user = await User.findByPk(userId, {
-      include: [
-        { association: 'aliases', where: { surveyId }, required: false },
-        { association: 'customFields', where: { name: 'redirect url' }, required: false },
-      ],
-    });
+    const { identifier, url } = redirectPrompt as Prompts['redirect-prompt'];
+
+    const include: Includeable[] = [
+      { association: 'aliases', where: { surveyId }, required: false },
+    ];
+    if (identifier)
+      include.push({ association: 'customFields', where: { name: identifier }, required: false });
+
+    const user = await User.findByPk(userId, { include });
 
     if (!user) throw new NotFoundError();
     const { aliases = [], customFields = [] } = user;
-
-    const { identifier, url } = redirectPrompt as Prompts['redirect-prompt'];
 
     let identifierValue: string | null;
 
@@ -290,29 +289,29 @@ const surveyService = ({
         identifierValue = user.id;
         break;
       case 'username':
-        identifierValue = aliases.length ? aliases[0].username : null;
-        break;
-      case 'token':
-        identifierValue = aliases.length ? aliases[0].urlAuthToken : null;
-        break;
-      case 'custom':
-        identifierValue = customFields.length ? customFields[0].value : null;
+      case 'urlAuthToken':
+        identifierValue = aliases.length ? aliases[0][identifier] : null;
         break;
       default:
-        identifierValue = null;
+        identifierValue = customFields.length ? customFields[0].value : null;
         break;
     }
 
-    if (!identifierValue) return null;
+    if (!identifierValue || !url) return null;
 
-    return url?.replace('{identifier}', identifierValue) ?? null;
+    try {
+      return new URL(url.replace('{identifier}', identifierValue)).href;
+    } catch (err) {
+      logger.error('Invalid follow-up URL', { err });
+      return null;
+    }
   };
 
   const followUp = async (
     slug: string,
     user: User,
     tzOffset: number
-  ): Promise<SurveyFollowUpResponse> => {
+  ): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findOne({
       where: { slug },
       include: [{ association: 'surveyScheme', required: true }],

@@ -3,6 +3,7 @@
     :is="prompt.component"
     :key="prompt.id"
     v-bind="{
+      followUpUrl,
       showFeedback,
       prompt,
       surveyId,
@@ -16,17 +17,17 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import { FinalPrompt } from '@intake24/survey/components/prompts/standard';
+import { RedirectPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
   name: 'FinalPromptHandler',
 
-  components: { FinalPrompt },
+  components: { RedirectPrompt },
 
   props: {
     prompt: {
-      type: Object as PropType<Prompts['final-prompt']>,
+      type: Object as PropType<Prompts['redirect-prompt']>,
       required: true,
     },
   },
@@ -37,12 +38,13 @@ export default defineComponent({
     const { user } = useSurvey();
 
     const showFeedback = ref(user?.showFeedback);
+    const followUpUrl = ref(user?.followUpUrl);
 
     const action = (type: string, id?: string) => {
       emit('action', type, id);
     };
 
-    return { action, showFeedback };
+    return { action, followUpUrl, showFeedback };
   },
 
   computed: {

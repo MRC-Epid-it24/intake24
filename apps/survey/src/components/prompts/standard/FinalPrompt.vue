@@ -5,16 +5,18 @@
         class="px-4"
         color="secondary"
         large
+        outlined
         :to="{ name: 'survey-home', params: { surveyId } }"
       >
         <v-icon left>$home</v-icon>
         {{ $t('common.home') }}
       </v-btn>
       <v-btn
-        v-if="canShowFeedback"
+        v-if="showFeedback"
         class="px-4"
         color="secondary"
         large
+        outlined
         :to="{ name: 'feedback-home', params: { surveyId } }"
       >
         <v-icon left>$feedback</v-icon>
@@ -23,13 +25,15 @@
     </template>
     <template #nav-actions>
       <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
-        <span>{{ $t('common.home') }}</span>
-        <v-icon>$home</v-icon>
+        <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
+        <v-icon class="pb-1">$home</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn v-if="canShowFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
-        <span>{{ $t('recall.actions.nav.feedback') }}</span>
-        <v-icon>$feedback</v-icon>
+      <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+        <span class="text-overline font-weight-medium">
+          {{ $t('recall.actions.nav.feedback') }}
+        </span>
+        <v-icon class="pb-1">$feedback</v-icon>
       </v-btn>
     </template>
   </card-layout>
@@ -46,11 +50,7 @@ export default defineComponent({
   mixins: [createBasePrompt<'final-prompt'>()],
 
   props: {
-    canRestart: {
-      type: Boolean,
-      default: false,
-    },
-    canShowFeedback: {
+    showFeedback: {
       type: Boolean,
       default: false,
     },

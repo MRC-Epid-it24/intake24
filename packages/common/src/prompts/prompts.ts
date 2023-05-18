@@ -187,7 +187,7 @@ export type Prompts = {
   'redirect-prompt': BasePrompt & {
     component: 'redirect-prompt';
     url: string | null;
-    identifier: 'userId' | 'username' | 'token' | 'custom';
+    identifier: 'userId' | 'username' | 'urlAuthToken' | string | null;
     timer: number;
   };
   'review-confirm-prompt': BasePrompt & { component: 'review-confirm-prompt' };
