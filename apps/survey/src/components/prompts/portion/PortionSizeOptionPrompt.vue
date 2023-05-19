@@ -18,20 +18,40 @@
             <v-item v-slot="{ active, toggle }">
               <v-card
                 border-color="primary"
-                :color="active ? 'orange lighten-5' : ''"
+                class="d-flex flex-column justify-space-between"
+                height="100%"
                 hover
                 outlined
                 @click="click(toggle)"
               >
-                <v-img :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
+                <div
+                  v-if="availableMethod.method === 'standard-portion'"
+                  class="d-flex justify-center flex-grow-1"
+                >
+                  <v-radio-group hide-details="auto" :value="standardUnitSelected">
+                    <v-radio
+                      v-for="[key, value] in Object.entries(standardUnitRefs).slice(0, 4)"
+                      :key="key"
+                      :value="key"
+                    >
+                      <template #label>
+                        <span class="font-weight-medium">{{ value.estimateIn.en }}</span>
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
+                </div>
+                <v-img v-else :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
                   <template #placeholder>
                     <image-placeholder></image-placeholder>
                   </template>
                 </v-img>
-                <v-card-actions class="d-flex justify-end">
+                <v-card-actions
+                  class="d-flex justify-end"
+                  :class="{ 'grey lighten-5': !active, 'orange lighten-5': active }"
+                >
                   <v-chip
                     class="font-weight-medium px-4"
-                    :color="option === index ? 'secondary' : 'orange lighten-5'"
+                    :color="option === index ? 'secondary' : 'orange lighten-4'"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
@@ -53,12 +73,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 
 import { ImagePlaceholder } from '../../elements';
+import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({
@@ -76,6 +97,65 @@ export default defineComponent({
   },
 
   emits: ['update'],
+
+  setup(props) {
+    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
+
+    const findStandardUnits = () => {
+      const standardPortionMethod = props.availableMethods.find(
+        ({ method }) => method === 'standard-portion'
+      );
+
+      if (!standardPortionMethod) return [];
+
+      return Object.entries(standardPortionMethod.parameters).reduce<string[]>(
+        (acc, [key, value]) => {
+          if (key.endsWith('-name')) acc.push(value);
+          return acc;
+        },
+        []
+      );
+    };
+
+    const selectNextStandardUnit = () => {
+      const keys = Object.keys(standardUnitRefs.value);
+      if (!keys.length) {
+        clearStandardUnitTimer();
+        return;
+      }
+
+      const index = keys.findIndex((key) => key === standardUnitSelected.value);
+
+      standardUnitSelected.value = index === keys.length - 1 ? keys[0] : keys[index + 1];
+    };
+
+    const standardUnitInterval = ref<undefined | number>(undefined);
+    const standardUnitSelected = ref('');
+    const startStandardUnitTimer = () => {
+      standardUnitInterval.value = setInterval(() => {
+        selectNextStandardUnit();
+      }, 1500);
+    };
+
+    const clearStandardUnitTimer = () => {
+      clearInterval(standardUnitInterval.value);
+    };
+
+    onMounted(async () => {
+      const names = findStandardUnits();
+      if (!names.length) return;
+
+      await fetchStandardUnits(names);
+      selectNextStandardUnit();
+      startStandardUnitTimer();
+    });
+
+    onBeforeUnmount(() => {
+      clearStandardUnitTimer();
+    });
+
+    return { standardUnitRefs, standardUnitSelected };
+  },
 
   data() {
     return {
