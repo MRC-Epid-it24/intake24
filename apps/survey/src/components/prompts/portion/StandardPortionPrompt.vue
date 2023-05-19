@@ -19,10 +19,12 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-radio-group v-model="portionSize.unit" @change="selectMethod">
-            <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
-              <template #label>
-                <span v-html="estimateInLabel(unit.name)"></span>
-              </template>
+            <v-radio
+              v-for="unit in standardUnits"
+              :key="unit.name"
+              :label="estimateInLabel(unit.name)"
+              :value="unit"
+            >
             </v-radio>
           </v-radio-group>
         </v-expansion-panel-content>
@@ -36,9 +38,7 @@
             }`"
           >
             <template #unit>
-              <span
-                v-html="getLocaleContent(standardUnitRefs[portionSize.unit.name].howMany)"
-              ></span>
+              {{ getLocaleContent(standardUnitRefs[portionSize.unit.name].howMany) }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>

@@ -23,17 +23,15 @@
                 required
               >
                 <template v-for="lang in Object.keys(form.estimateIn)" #[`lang.${lang}`]>
-                  <html-editor
+                  <v-text-field
                     :key="lang"
                     v-model="form.estimateIn[lang]"
                     :error-messages="form.errors.get(`estimateIn.${lang}`)"
-                    :init-props="{
-                      height: 150,
-                      toolbar: 'bold italic strikethrough',
-                    }"
+                    hide-details="auto"
                     :name="`estimateIn.${lang}`"
+                    outlined
                     @input="form.errors.clear(`estimateIn.${lang}`)"
-                  ></html-editor>
+                  ></v-text-field>
                 </template>
               </language-selector>
             </v-col>
@@ -44,17 +42,15 @@
                 required
               >
                 <template v-for="lang in Object.keys(form.howMany)" #[`lang.${lang}`]>
-                  <html-editor
+                  <v-text-field
                     :key="lang"
                     v-model="form.howMany[lang]"
                     :error-messages="form.errors.get(`howMany.${lang}`)"
-                    :init-props="{
-                      height: 150,
-                      toolbar: 'bold italic strikethrough',
-                    }"
+                    hide-details="auto"
                     :name="`howMany.${lang}`"
+                    outlined
                     @input="form.errors.clear(`howMany.${lang}`)"
-                  ></html-editor>
+                  ></v-text-field>
                 </template>
               </language-selector>
             </v-col>
@@ -71,7 +67,6 @@ import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
-import { HtmlEditor } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -85,7 +80,7 @@ type StandardUnitForm = {
 export default defineComponent({
   name: 'StandardUnitForm',
 
-  components: { HtmlEditor, LanguageSelector },
+  components: { LanguageSelector },
 
   mixins: [formMixin],
 

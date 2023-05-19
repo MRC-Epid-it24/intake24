@@ -7,8 +7,14 @@
       <v-tab-item v-for="(item, key) in items" :key="key" class="pl-3">
         <language-selector v-model="items[key]" :label="getKeyTranslation(key)" @input="update">
           <template v-for="lang in Object.keys(items[key])" #[`lang.${lang}`]>
+            <html-editor
+              v-if="richTextOnly.includes(key.toString())"
+              :key="lang"
+              v-model="items[key][lang]"
+              @input="update"
+            ></html-editor>
             <v-text-field
-              v-if="plainTextOnly.includes(key.toString())"
+              v-else
               :key="lang"
               v-model="items[key][lang]"
               hide-details="auto"
@@ -16,12 +22,6 @@
               outlined
               @input="update"
             ></v-text-field>
-            <html-editor
-              v-else
-              :key="lang"
-              v-model="items[key][lang]"
-              @input="update"
-            ></html-editor>
           </template>
         </language-selector>
       </v-tab-item>
@@ -65,7 +65,7 @@ export default defineComponent({
     const i18n = useI18n();
 
     const items = ref(copy(props.i18n));
-    const plainTextOnly = ['name', 'text', 'label'];
+    const richTextOnly = ['description'];
 
     const getKeyTranslation = (key: string | number) => {
       if (typeof key === 'number') return key.toString();
@@ -90,7 +90,7 @@ export default defineComponent({
 
     return {
       items,
-      plainTextOnly,
+      richTextOnly,
       getKeyTranslation,
       update,
     };
