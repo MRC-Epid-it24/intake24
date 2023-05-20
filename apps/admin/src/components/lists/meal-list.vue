@@ -2,7 +2,10 @@
   <v-card flat tile>
     <v-toolbar color="grey lighten-2" flat tile>
       <v-icon color="primary" left>fa-hamburger</v-icon>
-      <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
+      <div class="d-flex flex-column">
+        <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
+        <span v-if="subtitle" class="text-subtitle-2">{{ subtitle }}</span>
+      </div>
       <v-spacer></v-spacer>
       <v-btn
         color="secondary"
@@ -218,6 +221,11 @@ export default defineComponent({
       return this.$t(
         this.isOverrideMode ? 'survey-schemes.overrides.meals.title' : 'survey-schemes.meals.title'
       ).toString();
+    },
+    subtitle() {
+      if (!this.isOverrideMode) return undefined;
+
+      return this.$t('survey-schemes.overrides.meals.subtitle').toString();
     },
   },
 

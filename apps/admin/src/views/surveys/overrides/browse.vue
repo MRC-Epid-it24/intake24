@@ -8,12 +8,9 @@
       v-bind="{ mode: 'override', questionIds, templates: questions }"
       :items.sync="form.surveySchemeOverrides.questions"
     ></prompt-list>
-    <v-card-title>{{ $t('survey-schemes.overrides.meals.title') }}</v-card-title>
-    <v-card-subtitle>
-      {{ $t('survey-schemes.overrides.meals.subtitle') }}
-    </v-card-subtitle>
     <meal-list
       v-model="form.surveySchemeOverrides.meals"
+      class="mt-4"
       mode="override"
       :scheme-id="entry.surveySchemeId"
     ></meal-list>

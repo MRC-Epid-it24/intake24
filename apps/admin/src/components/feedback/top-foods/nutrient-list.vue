@@ -88,7 +88,7 @@
               item-text="description"
               item-value="id"
               :items="availableNutrientTypes"
-              :label="$t('nutrient-types._')"
+              :label="$t('nutrient-types.title')"
               multiple
               name="nutrientTypeId"
               outlined
@@ -110,7 +110,7 @@
                 :key="lang"
                 v-model="dialog.item.name[lang]"
                 hide-details="auto"
-                :label="$t('nutrient-types._')"
+                :label="$t('nutrient-types.label')"
                 outlined
               ></v-text-field>
             </template>
