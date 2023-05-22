@@ -104,6 +104,8 @@ const surveySchemes: LocaleMessageObject = {
       _: 'Operation',
       eq: 'equal',
       ne: 'not equal',
+      in: 'is in',
+      notIn: 'is not in',
       gte: 'greater than or equal to',
       gt: 'greater than',
       lte: 'less than or equal to',

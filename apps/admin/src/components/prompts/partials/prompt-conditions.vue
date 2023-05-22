@@ -27,7 +27,7 @@
                   ...condition.props,
                 })
               }}'
-              <span :class="`fas fa-${opToIconMap[condition.op]} mx-2`"></span>
+              <span :class="`${opToIconMap[condition.op]} mx-2`"></span>
               '{{ condition.value }}'
             </code>
           </v-card-text>
@@ -52,24 +52,27 @@
                   :items="operationSelectList"
                   :label="$t('survey-schemes.conditions.ops._')"
                   outlined
+                  @change="updateValueType(idx)"
                 >
                   <template #item="{ item }">
-                    <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
+                    <span :class="`${opToIconMap[item.op]} mr-3`"></span>
                     {{ item.text }}
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`fas fa-${opToIconMap[item.op]} mr-3`"></span>
+                    <span :class="`${opToIconMap[item.op]} mr-3`"></span>
                     {{ item.text }}
                   </template>
                 </v-select>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field
+                <component
+                  :is="comboOps.includes(condition.op) ? 'v-combobox' : 'v-text-field'"
                   v-model="condition.value"
                   hide-details="auto"
                   :label="$t('survey-schemes.conditions.value')"
+                  multiple
                   outlined
-                ></v-text-field>
+                ></component>
               </v-col>
             </v-row>
             <component :is="condition.type" v-bind.sync="condition.props"></component>
@@ -91,6 +94,7 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
+import { VCombobox, VTextField } from 'vuetify/lib';
 
 import type { Condition, ConditionOp, ConditionType } from '@intake24/common/prompts';
 import { withIdList } from '@intake24/admin/util';
@@ -100,12 +104,14 @@ import { copy, randomString } from '@intake24/common/util';
 import conditionProps from './conditions';
 
 const opToIconMap: Record<ConditionOp, string> = {
-  eq: 'equals',
-  ne: 'not-equal',
-  gte: 'greater-than-equal',
-  gt: 'greater-than',
-  lte: 'less-than-equal',
-  lt: 'less-than',
+  eq: 'fas fa-equals',
+  ne: 'fas fa-not-equal',
+  in: 'far fa-circle-dot',
+  notIn: 'far fa-circle',
+  gte: 'fas fa-greater-than-equal',
+  gt: 'fas fa-greater-than',
+  lte: 'fas fa-less-than-equal',
+  lt: 'fas fa-less-than',
 };
 
 const promptConditions: Condition[] = [
@@ -154,7 +160,7 @@ const promptConditions: Condition[] = [
 export default defineComponent({
   name: 'PromptConditions',
 
-  components: { draggable, ...conditionProps },
+  components: { VTextField, VCombobox, draggable, ...conditionProps },
 
   props: {
     conditions: {
@@ -167,6 +173,7 @@ export default defineComponent({
 
   data() {
     return {
+      comboOps: ['eq', 'ne', 'in', 'notIn'],
       currentConditions: withIdList(this.conditions),
       promptConditions,
       opToIconMap,
@@ -223,6 +230,20 @@ export default defineComponent({
 
     update() {
       this.$emit('update:conditions', this.outputConditions);
+    },
+
+    updateValueType(idx: number) {
+      const condition = this.currentConditions[idx];
+
+      if (this.comboOps.includes(condition.op) && !Array.isArray(condition.value)) {
+        this.currentConditions[idx].value = [condition.value];
+        return;
+      }
+
+      if (!this.comboOps.includes(condition.op) && typeof condition.value !== 'string') {
+        this.currentConditions[idx].value = condition.value.toString();
+        return;
+      }
     },
   },
 });
