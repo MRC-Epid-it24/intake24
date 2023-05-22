@@ -23,20 +23,43 @@ General tab defines administrative fields
 
 ## Content
 
-Content tab defines respondent facing content
+Content tab defines respondent facing content text fields and their localization.
 
-- `Name` - Short name for frontend UI top breadcrumb component
-- `Text` - Header/text to be asked
+- `Name` - Prompt short name top breadcrumb component
+- `Text` - Text displayed in the header component (usually defaults to meal name for meal-level questions and to food name for food-level questions)
 - `Description` - Further details, allows to embed `html` content through rich-text editor
 
-All three fields can be localized to various languages
+All fields can be localized to various languages.
+
+Following variable can be used in the fields:
+
+- `{meal}` - Meal name & time
+- `{mealName}` - Meal name
+- `{mealTime}` - Meal time
+- `{food}` - Food name
+- `{item}` - Food name or Meal name depending on question level type
 
 ## Conditions
 
-Conditions tab defines conditions that need to be met to display the question.
+Conditions tab defines list of conditions that needs to be met to display the question.
 
-- If no conditions are defined, question is always displayed.
-- If any conditions are defined, question is only displayed if all conditions are met.
+- If conditions is empty, question is always displayed.
+- If conditions is not empty, question is only displayed once all conditions are met.
+
+### Operations
+
+Each condition can be defined by following operations:
+
+| Operation | Value type         | Description                                                  |
+| --------- | ------------------ | ------------------------------------------------------------ |
+| eq        | string \| string[] | Prompt answer equals to defined value                        |
+| nt        | string \| string[] | Prompt answer does not equal to defined value                |
+| in        | string \| string[] | One of the prompt answers is included defined value-list     |
+| notIn     | string \| string[] | None of the prompt answers is included in defined value-list |
+| gte       | number             | Prompt answer is greater than or equals to defined value     |
+| gt        | number             | Prompt answer is greater than defined value                  |
+| lte       | number             | Prompt answer is lower than or equals to defined value       |
+| lt        | number             | Prompt answer is lower than defined value                    |
 
 ## Validation
 
