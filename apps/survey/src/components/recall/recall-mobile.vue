@@ -51,9 +51,9 @@
     <meal-mobile-context-menu
       :meal-id="mealContextMenu.mealId"
       :show="mealContextMenu.show"
+      @action="action"
       @close="closeMealContextMenu(false)"
       @continue="closeMealContextMenu(true)"
-      @meal-action="onContextMenuMealAction"
     ></meal-mobile-context-menu>
 
     <info-alert
@@ -66,8 +66,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
-import type { MealActionType } from '@intake24/common/prompts';
 
 import { MealListMobile, RecallBreadCrumbsMobile } from '../layouts';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
@@ -101,10 +99,6 @@ export default defineComponent({
   },
 
   methods: {
-    onContextMenuMealAction(payload: { type: MealActionType; mealId: string }) {
-      this.mealAction(payload);
-    },
-
     async onBottomListMealSelected() {
       await this.nextPrompt();
     },

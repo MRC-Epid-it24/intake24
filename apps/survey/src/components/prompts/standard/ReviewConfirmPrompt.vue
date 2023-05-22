@@ -36,12 +36,10 @@
                       {{ foodDisplayName(food) }}
                     </v-list-item-title>
                     <v-list-item-action>
-                      <v-icon v-if="food.data" color="success" x-small>fa-check</v-icon>
+                      <v-icon v-if="food.data" color="success" x-small>$ok</v-icon>
                     </v-list-item-action>
                     <v-list-item-action>
-                      <v-icon v-if="food.portionSizeMethod" color="success" x-small>
-                        fa-check
-                      </v-icon>
+                      <v-icon v-if="food.portionSizeMethod" color="success" x-small>$ok</v-icon>
                     </v-list-item-action>
                   </v-list-item>
                 </v-list>

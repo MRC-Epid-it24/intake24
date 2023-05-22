@@ -144,7 +144,6 @@ export default defineComponent({
     const debouncedUpdateFoods = useDebounceFn(
       () => {
         updateFoods();
-        console.log(`debounced foods`);
       },
       500,
       { maxWait: 1000 }

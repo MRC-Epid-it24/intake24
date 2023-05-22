@@ -32,6 +32,7 @@ const recall: LocaleMessageObject = {
     mealSuggested:
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
     food: {
+      edit: 'Edit portion size',
       encoded: 'This food has been matched with a food from our database.',
       missing: 'This food has been marked as missing in our database.',
       notMatched: 'This food has not yet been matched with a food from our database.',
@@ -41,9 +42,12 @@ const recall: LocaleMessageObject = {
       missingInfoIncomplete: 'Missing information for this food is not yet known.',
     },
     meal: {
-      editFoodInMeal: 'Change / Add foods',
-      editMealTime: 'Change Time',
-      deleteMeal: 'Delete Meal',
+      editFoods: 'Change / Add foods',
+      editTime: 'Change Time',
+    },
+    delete: {
+      _: 'Delete {item}',
+      confirm: 'Do you want to delete {item}?',
     },
     recall: {
       addMeal: 'Add Meal',

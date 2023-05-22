@@ -18,8 +18,8 @@
           :selected="selectedMealId === meal.id"
           :selected-food-id="selectedFoodId"
           :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
+          @action="action"
           @food-selected="foodSelected"
-          @meal-action="mealAction"
           @meal-selected="mealSelected"
         ></component>
       </template>
@@ -40,6 +40,7 @@ import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
+import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
@@ -69,7 +70,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['action', 'food-selected', 'meal-selected', 'meal-action'],
+  emits: ['action', 'food-selected', 'meal-selected', 'action'],
 
   data() {
     const menu: MenuItem[] = [
@@ -100,17 +101,14 @@ export default defineComponent({
 
       return this.meals[foodIndex.mealIndex].id === mealId;
     },
-    action(type: string) {
-      this.$emit('action', type);
+    action(type: FoodActionType | MealActionType, id?: string) {
+      this.$emit('action', type, id);
     },
     foodSelected(foodId: string) {
       this.$emit('food-selected', foodId);
     },
     mealSelected(mealId: string) {
       this.$emit('meal-selected', mealId);
-    },
-    mealAction(payload: { mealId: string; type: string }) {
-      this.$emit('meal-action', payload);
     },
   },
 });

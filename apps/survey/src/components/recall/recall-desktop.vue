@@ -3,9 +3,8 @@
     <v-col v-if="showMealList && surveyName" cols="3">
       <meal-list
         v-bind="{ meals, surveyName }"
-        @action="recallAction"
+        @action="action"
         @food-selected="foodSelected"
-        @meal-action="mealAction"
         @meal-selected="mealSelected"
       >
       </meal-list>

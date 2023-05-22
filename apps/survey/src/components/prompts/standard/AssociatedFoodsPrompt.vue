@@ -43,7 +43,7 @@
           </v-container>
           <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
             <v-card-title>
-              <span class="fa fa-check mr-2"></span>
+              <v-icon left>$ok</v-icon>
               {{ prompt.selectedFood.description }}
             </v-card-title>
             <v-card-actions>

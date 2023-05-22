@@ -4,33 +4,42 @@
       <v-list-item
         :class="{ selected: food.id === selectedFoodId, 'pl-4': !linked, 'pl-8': linked }"
         link
-        @click="emitFoodSelected(food.id)"
+        @click="foodSelected(food.id)"
       >
         <v-list-item-title class="text-wrap">{{ getFoodName(food) }}</v-list-item-title>
-        <v-list-item-action class="list-item">
+        <v-list-item-action class="d-flex flex-row">
           <v-tooltip v-if="food.type === 'free-text'" bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
+              <v-icon v-bind="attrs" class="mr-1" color="grey" small v-on="on">$question</v-icon>
             </template>
             <span>{{ $t('recall.menu.food.notMatched') }}</span>
           </v-tooltip>
           <v-tooltip v-if="food.type === 'encoded-food'" bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+              <v-icon v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
+                $ok
+              </v-icon>
             </template>
             <span>{{ $t('recall.menu.food.encoded') }}</span>
           </v-tooltip>
           <v-tooltip v-if="food.type === 'missing-food'" bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+              <v-icon v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
+                $ok
+              </v-icon>
             </template>
             <span>{{ $t('recall.menu.food.missing') }}</span>
           </v-tooltip>
-        </v-list-item-action>
-        <v-list-item-action class="list-item">
           <v-tooltip v-if="food.type === 'encoded-food'" bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+              <v-icon
+                v-bind="attrs"
+                :color="food.portionSize ? 'green darken-2' : undefined"
+                small
+                v-on="on"
+              >
+                {{ food.portionSize ? '$ok' : '$question' }}
+              </v-icon>
             </template>
             <span>
               {{
@@ -44,7 +53,14 @@
           </v-tooltip>
           <v-tooltip v-else-if="food.type === 'missing-food'" bottom>
             <template #activator="{ on, attrs }">
-              <v-icon v-bind="attrs" color="green darken-2" small v-on="on">fa-check</v-icon>
+              <v-icon
+                v-bind="attrs"
+                :color="food.info ? 'green darken-2' : undefined"
+                small
+                v-on="on"
+              >
+                {{ food.info ? '$ok' : '$question' }}
+              </v-icon>
             </template>
             <span>
               {{
@@ -61,12 +77,20 @@
             <span>{{ $t('recall.menu.food.portionSizeIncomplete') }}</span>
           </v-tooltip>
         </v-list-item-action>
+        <v-list-item-action class="my-auto">
+          <context-menu
+            :entity="food"
+            :entity-name="getFoodName(food)"
+            v-bind="{ menu: getMenu(food) }"
+            @action="action"
+          ></context-menu>
+        </v-list-item-action>
       </v-list-item>
       <food-item
         :foods="food.linkedFoods"
         linked
         :selected-food-id="selectedFoodId"
-        @food-selected="onLinkedFoodSelected"
+        @food-selected="foodSelected"
       ></food-item>
     </div>
   </v-list>
@@ -76,11 +100,17 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { FoodActionType } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
+import type { MenuItem } from '@intake24/survey/components/elements';
+import { ContextMenu } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/survey/i18n';
 
 export default defineComponent({
   name: 'FoodItem',
+
+  components: { ContextMenu },
 
   props: {
     // FIXME: Should be an array of objects of type UserFoodData or EncodedUserFoodData ???
@@ -98,28 +128,38 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected'],
+  emits: ['food-selected', 'action'],
 
-  setup() {
+  setup(props, { emit }) {
+    const i18n = useI18n();
+
     const { getFoodName } = useFoodUtils();
 
-    return { getFoodName };
-  },
+    const getMenu = (food: FoodState): MenuItem[] => [
+      {
+        name: i18n.t('recall.menu.food.edit').toString(),
+        action: 'editFood',
+        icon: '$food',
+      },
+      {
+        name: i18n.t('recall.menu.delete._', { item: getFoodName(food) }).toString(),
+        action: 'deleteFood',
+        dialog: true,
+        icon: '$delete',
+      },
+    ];
 
-  methods: {
-    onLinkedFoodSelected(foodId: string) {
-      this.emitFoodSelected(foodId);
-    },
+    const action = (type: FoodActionType, id?: string) => {
+      emit('action', type, id);
+    };
 
-    emitFoodSelected(foodId: string) {
-      this.$emit('food-selected', foodId);
-    },
+    const foodSelected = (foodId: string) => {
+      emit('food-selected', foodId);
+    };
+
+    return { action, foodSelected, getFoodName, getMenu };
   },
 });
 </script>
 
-<style scoped>
-.list-item {
-  min-width: 0;
-}
-</style>
+<style scoped></style>

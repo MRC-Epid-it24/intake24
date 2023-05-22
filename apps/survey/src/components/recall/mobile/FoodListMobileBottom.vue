@@ -12,7 +12,7 @@
           @click="selectedFood(i, mealIndex, foodDisplayName(food), entity)"
         >
           {{ foodDisplayName(food) }}
-          <v-icon v-if="food.code" color="green darken-2" x-small>fa-check</v-icon>
+          <v-icon v-if="food.code" color="green darken-2" x-small>$ok</v-icon>
         </v-tab>
       </v-tabs>
     </v-toolbar>
@@ -24,6 +24,7 @@ import type { PropType } from 'vue';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
+import type { MealActionType } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -40,7 +41,7 @@ export default defineComponent({
     mealIndex: Number || undefined,
   },
 
-  emits: ['displayFoodContext', 'meal-action'],
+  emits: ['displayFoodContext', 'action'],
 
   data() {
     return {
@@ -79,8 +80,8 @@ export default defineComponent({
       if (dispalyName.length > 16) dispalyName = dispalyName.slice(0, 16).concat('...');
       return dispalyName;
     },
-    action(type: string) {
-      this.$emit('meal-action', { mealIndex: this.$props.mealIndex, type });
+    action(type: MealActionType) {
+      this.$emit('action', type, this.$props.mealIndex);
     },
   },
 });

@@ -24,10 +24,10 @@
       </v-list>
     </v-menu>
     <confirm-dialog
+      v-model="dialog"
       external
       :label="$t('prompts.editMeal.delete._', { item: entityName }).toString()"
-      :value="dialogs.deleteMeal"
-      @confirm="action('deleteMeal')"
+      @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
     >
       {{ $t('prompts.editMeal.delete.confirm', { item: entityName }) }}
     </confirm-dialog>
@@ -36,14 +36,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
-import type { MealActionType } from '@intake24/common/prompts';
+import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
+import type { FoodState, MealState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 
 export type MenuItem = {
   name: string;
-  action: MealActionType;
+  action: FoodActionType | MealActionType;
   dialog?: boolean;
   icon?: string;
 };
@@ -54,40 +55,46 @@ export default defineComponent({
   components: { ConfirmDialog },
 
   props: {
-    icon: {
-      type: String,
-      required: true,
-    },
-    menu: {
-      type: Array as PropType<MenuItem[]>,
-      required: true,
+    entity: {
+      type: Object as PropType<FoodState | MealState>,
     },
     entityName: {
       type: String,
       default: '',
     },
+    icon: {
+      type: String,
+      default: '$edit',
+    },
+    menu: {
+      type: Array as PropType<MenuItem[]>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  data() {
-    return {
-      dialogs: {
-        deleteMeal: false,
-      },
+  setup(props, { emit }) {
+    const dialog = ref(false);
+
+    const isMeal = computed(() => props.entity && 'food' in props.entity);
+
+    const action = (type: FoodActionType | MealActionType) => {
+      emit('action', type, props.entity?.id);
     };
-  },
 
-  methods: {
-    action(type: MealActionType) {
-      this.$emit('action', type);
-    },
+    const openDialog = (type: FoodActionType | MealActionType) => {
+      if (!['deleteFood', 'deleteMeal'].includes(type)) return;
 
-    openDialog(type: MealActionType) {
-      if (type !== 'deleteMeal') return;
+      dialog.value = true;
+    };
 
-      this.dialogs[type] = true;
-    },
+    return {
+      action,
+      dialog,
+      isMeal,
+      openDialog,
+    };
   },
 });
 </script>

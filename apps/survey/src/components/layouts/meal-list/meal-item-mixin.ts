@@ -1,11 +1,12 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref, toRefs } from 'vue';
 
+import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useLocale, useMealUtils } from '@intake24/survey/composables';
-import { fromMealTime } from '@intake24/survey/util';
+import { useI18n } from '@intake24/survey/i18n';
 
 import FoodItem from './food-item.vue';
 
@@ -33,54 +34,46 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'meal-selected', 'meal-action'],
+  emits: ['food-selected', 'meal-selected', 'action'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const { meal } = toRefs(props);
 
+    const i18n = useI18n();
     const { getLocaleContent } = useLocale();
-    const { mealName } = useMealUtils(meal);
+    const { mealName, mealTime } = useMealUtils(meal);
 
-    const icon = ref('$edit');
+    const menu = ref<MenuItem[]>([
+      {
+        name: i18n.t('recall.menu.meal.editFoods').toString(),
+        action: 'editMeal',
+        icon: '$food',
+      },
+      {
+        name: i18n.t('recall.menu.meal.editTime').toString(),
+        action: 'mealTime',
+        icon: '$mealTime',
+      },
+      {
+        name: i18n.t('recall.menu.delete._', { item: mealName.value }).toString(),
+        action: 'deleteMeal',
+        dialog: true,
+        icon: '$delete',
+      },
+    ]);
 
-    return { getLocaleContent, icon, mealName };
-  },
+    const foodSelected = (foodId: number) => {
+      emit('food-selected', foodId);
+    };
 
-  computed: {
-    menu(): MenuItem[] {
-      return [
-        {
-          name: this.$t('recall.menu.meal.editFoodInMeal').toString(),
-          action: 'editMeal',
-          icon: '$food',
-        },
-        {
-          name: this.$t('recall.menu.meal.editMealTime').toString(),
-          action: 'mealTime',
-          icon: '$mealTime',
-        },
-        {
-          name: this.$t('prompts.editMeal.delete._', { item: this.mealName }).toString(),
-          action: 'deleteMeal',
-          dialog: true,
-          icon: '$delete',
-        },
-      ];
-    },
-    mealTimeString(): string {
-      return this.meal.time ? fromMealTime(this.meal.time, true) : '';
-    },
-  },
+    const mealSelected = () => {
+      emit('meal-selected', props.meal.id);
+    };
 
-  methods: {
-    foodSelected(foodId: number) {
-      this.$emit('food-selected', foodId);
-    },
-    mealSelected() {
-      this.$emit('meal-selected', this.meal.id);
-    },
-    action(type: string) {
-      this.$emit('meal-action', { mealId: this.meal.id, type });
-    },
+    const action = (type: FoodActionType | MealActionType, id?: string) => {
+      emit('action', type, id);
+    };
+
+    return { action, getLocaleContent, menu, mealName, mealTime, foodSelected, mealSelected };
   },
 });

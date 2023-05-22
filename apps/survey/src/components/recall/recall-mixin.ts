@@ -1,7 +1,12 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { ComponentType, GenericActionType, MealActionType } from '@intake24/common/prompts';
+import type {
+  ComponentType,
+  FoodActionType,
+  GenericActionType,
+  MealActionType,
+} from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import type { FoodState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
@@ -216,24 +221,32 @@ export default defineComponent({
             return;
           }
 
-          this.mealAction({ type, mealId: id });
+          this.mealAction(type, id);
           break;
+        case 'deleteFood':
         case 'editFood':
           if (id === undefined) {
             console.warn('Recall: Food id must be defined for food action.', type, id);
             return;
           }
 
-          this.survey.editFood(id);
-          await this.nextPrompt();
+          this.foodAction(type, id);
           break;
-        case 'deleteFood':
-          if (id === undefined) {
-            console.warn('Recall: Food id must be defined for food action.', type, id);
-            return;
-          }
+        default:
+          console.warn(`Recall: Unknown action type: ${type}`);
+      }
+    },
 
-          this.survey.deleteFood(id);
+    async mealAction(type: MealActionType, id: string) {
+      switch (type) {
+        case 'editMeal':
+          this.showMealPrompt(id, 'preFoods', 'edit-meal-prompt');
+          break;
+        case 'mealTime':
+          this.showMealPrompt(id, 'preFoods', 'meal-time-prompt');
+          break;
+        case 'deleteMeal':
+          this.survey.deleteMeal(id);
           await this.nextPrompt();
           break;
         default:
@@ -241,18 +254,18 @@ export default defineComponent({
       }
     },
 
-    async mealAction(payload: { type: MealActionType; mealId: string }) {
-      switch (payload.type) {
-        case 'editMeal':
-          this.showMealPrompt(payload.mealId, 'preFoods', 'edit-meal-prompt');
-          break;
-        case 'mealTime':
-          this.showMealPrompt(payload.mealId, 'preFoods', 'meal-time-prompt');
-          break;
-        case 'deleteMeal':
-          this.survey.deleteMeal(payload.mealId);
+    async foodAction(type: FoodActionType, id: string) {
+      switch (type) {
+        case 'editFood':
+          this.survey.editFood(id);
           await this.nextPrompt();
           break;
+        case 'deleteFood':
+          this.survey.deleteFood(id);
+          await this.nextPrompt();
+          break;
+        default:
+          console.warn(`Recall: Unknown action type: ${type}`);
       }
     },
 

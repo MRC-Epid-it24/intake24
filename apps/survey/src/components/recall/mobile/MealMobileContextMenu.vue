@@ -36,6 +36,7 @@
 import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
+import type { MealActionType } from '@intake24/common/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 import { getMealIndex } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
@@ -56,7 +57,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['close', 'continue', 'meal-action'],
+  emits: ['close', 'continue', 'action'],
 
   data() {
     return {
@@ -110,8 +111,8 @@ export default defineComponent({
       this.$emit('close');
     },
 
-    action(type: string) {
-      this.$emit('meal-action', { mealId: this.mealId, type });
+    action(type: MealActionType) {
+      this.$emit('action', type, this.mealId);
       this.$emit('close');
     },
 

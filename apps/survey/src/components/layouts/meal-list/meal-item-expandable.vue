@@ -13,15 +13,16 @@
         {{ mealName }}
       </v-list-item-title>
       <v-list-item-action>
-        <v-list-item-action-text v-if="mealTimeString.length">
-          {{ mealTimeString }}
+        <v-list-item-action-text v-if="mealTime?.length">
+          {{ mealTime }}
         </v-list-item-action-text>
         <v-icon v-else small>$question</v-icon>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
         <context-menu
+          :entity="meal"
           :entity-name="mealName"
-          v-bind="{ icon, menu }"
+          v-bind="{ menu }"
           @action="action"
         ></context-menu>
       </v-list-item-action>
@@ -30,6 +31,7 @@
     <food-item
       :foods="meal.foods"
       :selected-food-id="selectedFoodId"
+      @action="action"
       @food-selected="foodSelected"
     ></food-item>
     <v-divider v-if="meal.foods.length"></v-divider>

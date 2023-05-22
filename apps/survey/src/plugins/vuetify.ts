@@ -32,6 +32,7 @@ export default new Vuetify({
       mealTime: 'fas fa-stopwatch',
       next: 'fas fa-angles-right',
       no: 'far fa-circle-xmark',
+      ok: 'fas fa-check',
       options: 'fas fa-ellipsis-vertical',
       pause: 'fas fa-pause',
       profile: 'fas fa-user-circle',
