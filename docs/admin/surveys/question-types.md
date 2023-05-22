@@ -22,13 +22,13 @@ Edit meal prompt allows initial entry of food and drink before portion-size esti
 
 ### Final prompt
 
-Terminal prompt that is shown at the end of the survey and can offer feedback is applicable.
+Terminal prompt that is shown at the end of the recall. It offers home button It can offer feedback is applicable (feedback enabled and submission threshold reached).
 
 ### Food search prompt
 
 ### Meal add prompt
 
-Allows user to add new meal.
+Prompt to add new meals. Multi-select list of options predefined in the scheme meal list.
 
 #### Options
 
@@ -36,7 +36,7 @@ Allows user to add new meal.
 
 ### Meal time prompt
 
-Allows user to specify meal time.
+Prompt to collect meal time information using standard time picker.
 
 #### Options
 
@@ -48,31 +48,39 @@ Prompt to collect ready meal information. Multi-select list of options, for each
 
 ### Redirect prompt
 
-Allows user to be redirected to external URL with user identifier embedded into it.
+Prompt to redirect user to external site with optional user identifier embedded into URL.
 
 #### Options
 
 - `url` - URL to redirect to
 
-  - use `{identifier}` to indicate the place where the user identifier should be to inserted.
+  - use `{identifier}` variable as a placeholder where the user identifier should be to inserted.
   - example: `https://example.com/?arg={identifier}`
 
-- `identifier` - identifier that should be embedded into the url.
+- `identifier` - identifier that should be embedded into the URL.
 
   - `userId` - internal intake24 user id
   - `username` - survey-unique respondent username
   - `urlAuthToken` - URL authentication token
-  - `custom` - custom identifier that can be set through `userCustomField`. Set `name` of the custom field to be looked up the `value`.
+  - `custom` - custom identifier that can be set through `userCustomField`.
+    - Enter a `name` of the custom field to be looked up the `value`.
 
-- `timer` - optional timer in seconds when automatic redirect should happen
+- `timer` - optional timer in seconds when automatic redirection should occur
+  - disabled if set to `0`
 
 ### Review confirm prompt
 
 ### Same as before prompt
 
+Prompt to detect foods that are the same as in the previous recalls / meals and offer to use the same portion-size estimation.
+
 ### Split food prompt
 
+Prompt to identify foods that can potentially be split into separate foods.
+
 ### Submit prompt
+
+Prompt with recap of the recall and submit button.
 
 ## Portion-size prompts
 
@@ -148,7 +156,7 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 ## Custom prompts
 
-Prompts with generic behavior to be customized. Can be used multiple times per scheme with specific scheme-unique `QuestionID`.
+Prompts with customizable generic behavior. Custom prompts can be used multiple times per scheme as long as they are identified with scheme-unique [`Question ID`](/admin/surveys/question-editor#general).
 
 ### Checkbox list prompt
 
@@ -156,9 +164,12 @@ Multi-select list of options.
 
 #### Options
 
-- `options` - locale-specific list of options, `label` (displayed value) and `value` (stored value) can be specified
+- `options` - locale-specific list of options with properties:
 
-- `other` - true/false whether to show 'other' option
+  - `label` (user-facing displayed value)
+  - `value` (value stored in database) can be specified
+
+- `other` - `true` or `false` whether to show 'other' option, free-form text input
 
 ### Date picker prompt
 
@@ -178,15 +189,18 @@ Terminal prompt for `food` or `meal` when no more information is required. It sh
 
 Single-select list of options.
 
-- `options` - locale-specific list of options, `label` (displayed value) and `value` (stored value) can be specified
+- `options` - locale-specific list of options with properties:
 
-- `other` - true/false whether to show 'other' option
+  - `label` (user-facing displayed value)
+  - `value` (value stored in database) can be specified
 
-- `orientation` - orientation of radio buttons (column/row)
+- `other` - `true` or `false` whether to show 'other' option, free-form text input
+
+- `orientation` - orientation of radio buttons (`column` or `row`)
 
 ### Textarea prompt
 
-Free-form text input.
+Prompt to offer free-form text input.
 
 ### Time picker prompt
 
@@ -196,4 +210,4 @@ Prompt to collect time information.
 
 ### Yes/no prompt
 
-Prompt to collect yes/no (true/false) information presented as distinct buttons.
+Prompt to collect `yes` / `no` (`true` / `false`) information presented as distinct buttons.

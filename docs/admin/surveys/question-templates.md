@@ -12,8 +12,8 @@ Edit tab allows to modify selected scheme question. It uses same editor UI as sc
 
 ## Synchronization
 
-Synchronization allows to push template changes to scheme, where the question with same `Question ID` is defined.
+Synchronization allows to push template changes to scheme question. Question is matched by the unique `Question ID`.
 
 :::tip
-Scheme question templates and question defined in schemes are linked by `QuestionID`. Hence it always needs to be unique.
+Scheme question templates and question defined in schemes are linked by `Question ID`. Hence it always needs to be unique.
 :::
