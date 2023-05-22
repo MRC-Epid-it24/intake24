@@ -19,15 +19,15 @@
             <v-icon left>fas fa-location-arrow</v-icon>
             {{ $t(`survey-schemes.conditions.types.${condition.type}`) }}
           </v-card-title>
-          <v-card-text class="px-0 my-4">
-            <code class="pa-5 large" :style="{ width: '100%' }">
+          <v-card-text class="px-0">
+            <code class="pa-5 d-flex">
               {{ $t(`survey-schemes.conditions.showIf`) }}
               '{{
                 $t(`survey-schemes.conditions.exTypes.${condition.type}`, {
                   ...condition.props,
                 })
               }}'
-              <span :class="`${opToIconMap[condition.op]} mx-2`"></span>
+              <v-icon left right small>{{ opToIconMap[condition.op] }}</v-icon>
               '{{ condition.value }}'
             </code>
           </v-card-text>
@@ -55,11 +55,11 @@
                   @change="updateValueType(idx)"
                 >
                   <template #item="{ item }">
-                    <span :class="`${opToIconMap[item.op]} mr-3`"></span>
+                    <v-icon left>{{ opToIconMap[item.op] }}</v-icon>
                     {{ item.text }}
                   </template>
                   <template #selection="{ item }">
-                    <span :class="`${opToIconMap[item.op]} mr-3`"></span>
+                    <v-icon left>{{ opToIconMap[item.op] }}</v-icon>
                     {{ item.text }}
                   </template>
                 </v-select>
@@ -217,7 +217,11 @@ export default defineComponent({
       const condition = this.promptConditions.find((item) => item.type === type);
       if (!condition) return;
 
-      this.currentConditions.splice(idx, 1, copy({ ...condition, id: randomString(6) }));
+      this.currentConditions.splice(
+        idx,
+        1,
+        copy({ ...condition, id: this.currentConditions[idx].id })
+      );
     },
 
     add() {
