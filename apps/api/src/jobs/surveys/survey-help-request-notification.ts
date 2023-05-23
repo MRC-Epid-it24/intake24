@@ -2,6 +2,7 @@ import type { Job } from 'bullmq';
 import nunjucks from 'nunjucks';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { Survey } from '@intake24/db';
 import { UserSurveyAlias } from '@intake24/db';
 
 import BaseJob from '../job';
@@ -41,11 +42,7 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
 
     const { survey, alias } = info;
 
-    let users = await this.adminUserService.getSurveySupportUsers(survey.id);
-
-    if (!users.length) users = await this.adminUserService.getGlobalSupportUsers();
-
-    const to = users.map(({ email }) => email).filter(Boolean) as string[];
+    const to = await this.resolveRecipients(survey);
 
     if (!to.length) {
       this.logger.warn(`SurveyHelpRequestNotification: no survey or global support users found.`);
@@ -76,6 +73,26 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
     const { survey } = alias;
 
     return { alias, survey };
+  }
+
+  private async resolveRecipients(survey: Survey) {
+    let to: string[] = [];
+
+    /* 1. Get survey support users */
+    const surveyUsers = await this.adminUserService.getSurveySupportUsers(survey.id);
+    if (surveyUsers.length) to = surveyUsers.map(({ email }) => email).filter(Boolean) as string[];
+
+    /* 2. If no survey support users found, use survey support email */
+    if (!to.length) to = [survey.supportEmail].filter(Boolean);
+
+    /* 3. If no survey support email found, get global support users */
+    if (!to.length) {
+      const globalUsers = await this.adminUserService.getGlobalSupportUsers();
+      if (globalUsers.length)
+        to = globalUsers.map(({ email }) => email).filter(Boolean) as string[];
+    }
+
+    return to;
   }
 
   private async sendEmail(surveyName: string, username: string, to: string[]) {
