@@ -4,7 +4,7 @@ const prompts: LocaleMessageObject = {
   checkboxList: {
     name: 'Multi-choice list',
     label: 'Select any of the options',
-    other: 'Please specify',
+    other: 'Other - please specify',
     validation: {
       required: 'At least one of the options requires to be selected.',
     },
@@ -28,7 +28,7 @@ const prompts: LocaleMessageObject = {
   radioList: {
     name: 'Single-choice list',
     label: 'Select one of the options',
-    other: 'Please specify',
+    other: 'Other - please specify',
     validation: {
       required: 'One of the options requires to be selected.',
     },

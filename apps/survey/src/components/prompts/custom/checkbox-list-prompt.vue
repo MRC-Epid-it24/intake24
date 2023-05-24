@@ -15,7 +15,7 @@
           @change="update"
         ></v-checkbox>
         <v-row v-if="prompt.other" align="center" class="mt-2" no-gutters>
-          <v-checkbox v-model="otherEnabled" class="mb-auto" hide-details></v-checkbox>
+          <v-checkbox v-model="otherEnabled" class="my-auto" hide-details></v-checkbox>
           <v-text-field
             v-model.trim="otherValue"
             :disabled="!otherEnabled"
@@ -67,7 +67,9 @@ export default defineComponent({
       return this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en;
     },
     currentValue(): string[] {
-      return [...this.selected, this.otherValue].filter((item) => item);
+      return [...this.selected, this.otherValue.length ? `Other: ${this.otherValue}` : ''].filter(
+        Boolean
+      );
     },
     isValid(): boolean {
       return !this.prompt.validation.required || !!this.currentValue.length;

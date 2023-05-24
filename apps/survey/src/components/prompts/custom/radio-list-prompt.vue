@@ -18,7 +18,7 @@
             :value="option.value"
           ></v-radio>
           <v-row v-if="prompt.other" align="center" no-gutters>
-            <v-radio hide-details value="other"></v-radio>
+            <v-radio class="my-auto" hide-details value="other"></v-radio>
             <v-text-field
               v-model.trim="otherValue"
               :error="hasErrors"
@@ -69,7 +69,7 @@ export default defineComponent({
       return this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en;
     },
     currentValue(): string {
-      return this.selected !== 'other' ? this.selected : this.otherValue;
+      return this.selected === 'other' ? `Other: ${this.otherValue}` : this.selected;
     },
     isValid(): boolean {
       return !this.prompt.validation.required || !!this.currentValue;
