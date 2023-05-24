@@ -20,6 +20,8 @@
 import type { VForm } from 'vuetify/lib';
 import { defineComponent, ref } from 'vue';
 
+import { useLocale } from '@intake24/survey/composables';
+
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
@@ -39,7 +41,9 @@ export default defineComponent({
   setup() {
     const form = ref<InstanceType<typeof VForm>>();
 
-    return { form };
+    const { getLocaleContent } = useLocale();
+
+    return { form, getLocaleContent };
   },
 
   data() {
