@@ -30,7 +30,11 @@
       </v-expansion-panel>
       <v-expansion-panel :disabled="!objectValid">
         <v-expansion-panel-header>
-          {{ $t(`prompts.${type}.quantity`, { food: foodName }) }}
+          <i18n :path="`prompts.${type}.quantity`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
           <template #actions>
             <expansion-panel-actions :valid="quantityValid"></expansion-panel-actions>
           </template>
