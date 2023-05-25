@@ -17,7 +17,7 @@
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
-    "clean": "rimraf **/coverage **/dist **/node_modules",
+    "clean": "rimraf --glob **/coverage **/dist **/node_modules",
     "build": "pnpm --filter ./apps build",
     "db:migrate": "run-s db:foods:migrate db:system:migrate",
     "db:foods:migrate": "pnpm --filter @intake24/db db:foods:migrate",
