@@ -103,9 +103,9 @@ import { defineComponent } from 'vue';
 import type { FoodActionType } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
+import { useI18n } from '@intake24/i18n';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useI18n } from '@intake24/survey/i18n';
 
 export default defineComponent({
   name: 'FoodItem',

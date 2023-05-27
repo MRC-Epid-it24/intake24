@@ -64,7 +64,7 @@ import type { JobEntry, NutrientTableEntry } from '@intake24/common/types/http/a
 import { detailMixin } from '@intake24/admin/components/entry';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/admin/i18n';
+import { useI18n } from '@intake24/i18n';
 
 type UploadForm = {
   file: File | null;

@@ -38,8 +38,8 @@ import { defineComponent, ref, watch } from 'vue';
 import type { BasePrompt } from '@intake24/common/prompts';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useI18n } from '@intake24/admin/i18n';
 import { capitalize, copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 /*
  * TODO

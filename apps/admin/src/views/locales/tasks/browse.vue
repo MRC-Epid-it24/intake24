@@ -59,7 +59,7 @@ import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/h
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/admin/i18n';
+import { useI18n } from '@intake24/i18n';
 
 type LocaleJobType = Extract<
   JobType,

@@ -182,7 +182,7 @@ import type {
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/admin/i18n';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 

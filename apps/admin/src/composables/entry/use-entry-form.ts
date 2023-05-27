@@ -5,7 +5,6 @@ import { computed, reactive, ref, toRefs, watch } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
 import type { FormConfig } from '@intake24/admin/util';
-import { useI18n } from '@intake24/admin/i18n';
 import {
   type EntryState,
   useEntry as useStoreEntry,
@@ -14,6 +13,7 @@ import {
 } from '@intake24/admin/stores';
 import { createForm } from '@intake24/admin/util';
 import { copy, getObjectNestedKeys } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 import type { UseStoreEntryProps } from './use-entry';
 import { useEntry } from './use-entry';

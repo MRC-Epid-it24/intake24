@@ -55,8 +55,8 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { useI18n } from '@intake24/admin/i18n';
 import { defaultMeals, schemeTypes } from '@intake24/common/surveys';
+import { useI18n } from '@intake24/i18n';
 
 export type SurveySchemeForm = {
   id: string | null;
