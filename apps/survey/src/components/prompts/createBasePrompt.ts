@@ -4,7 +4,7 @@ import { defineComponent, toRefs } from 'vue';
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
 import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
-import { promptType } from '@intake24/survey/util';
+import { promptType } from '@intake24/ui/util';
 
 import { Next } from './actions';
 import { BaseLayout, CardLayout } from './layouts';

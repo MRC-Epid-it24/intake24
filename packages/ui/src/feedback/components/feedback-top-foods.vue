@@ -3,18 +3,21 @@
     <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.topFoods.title') }}
     </h2>
-    <v-row class="d-print-none" justify="center" no-gutters>
-      <v-col
-        v-for="chart in charts"
-        :key="`screen-${chart.id}`"
-        class="chart-wrapper"
-        cols="12"
-        md="6"
-        xl="4"
-      >
-        <chart autoresize class="chart" :option="chart"></chart>
-      </v-col>
-    </v-row>
+    <v-container>
+      <v-row class="d-print-none" justify="center" no-gutters>
+        <v-col
+          v-for="chart in charts"
+          :key="`screen-${chart.id}`"
+          class="chart-wrapper"
+          cols="12"
+          md="6"
+          xl="4"
+        >
+          <chart autoresize class="chart" :option="chart"></chart>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
         <chart autoresize class="chart-print" :option="chart"></chart>
@@ -35,12 +38,12 @@ import Chart from 'vue-echarts';
 
 import { round } from '@intake24/common/util';
 
-import type { TopFoodData } from './top-foods';
+import type { TopFoodData } from '../top-foods';
 
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent]);
 
 export default defineComponent({
-  name: 'FeedbackChartArea',
+  name: 'FeedbackTopFoods',
 
   components: { Chart },
 
@@ -53,9 +56,9 @@ export default defineComponent({
 
   computed: {
     charts() {
-      const { colors, nutrients } = this.topFoods;
+      const { colors } = this.topFoods;
 
-      const chartOptions: EChartsOption[] = nutrients.map((nutrient) => {
+      const chartOptions: EChartsOption[] = this.topFoods.chartData.map((nutrient) => {
         const { name, unit, data } = nutrient;
         const id = nutrient.id.join(':');
 
@@ -128,15 +131,12 @@ export default defineComponent({
 
       return chartOptions;
     },
-
-    matchesPrintMedia(): boolean {
-      return window.matchMedia('print').matches;
-    },
   },
 });
 </script>
 
 <style lang="scss">
+// TODO: extract to common styles as used in other charts
 .chart {
   height: 450px;
 }

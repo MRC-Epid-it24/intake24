@@ -1,24 +1,12 @@
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { round } from '@intake24/common/util';
+import { getNutrientGroupUnit } from '@intake24/ui/util';
 
+import type { NutrientGroupChartData } from './charts';
 import { AggregateFoodStats } from './classes';
 
-export type ChartData = {
-  name: string;
-  value: number;
-};
-
-export type TopFoodNutrient = {
-  id: string[];
-  name: string;
-  unit: string;
-  data: ChartData[];
-  total: number;
-};
-
 export interface TopFoodData extends TopFoods {
-  nutrients: TopFoodNutrient[];
+  chartData: NutrientGroupChartData[];
 }
 
 export const filterAndSortFoodByNutrientTypeId = (
@@ -56,20 +44,13 @@ export const buildTopFoods = (
   locale = 'en'
 ): TopFoodData => {
   const { max } = topFoods;
-  if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, nutrients: [] };
+  if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, chartData: [] };
 
-  const nutrients = topFoods.nutrientTypes.map((nutrientType) => {
-    const { id } = nutrientType;
-    const name = nutrientType.name[locale] ?? nutrientType.name.en;
+  const chartData = topFoods.nutrientTypes.map((nutrientGroup) => {
+    const { id } = nutrientGroup;
+    const name = nutrientGroup.name[locale] ?? nutrientGroup.name.en;
 
-    const nt = nutrientTypes.filter((item) => id.includes(item.id));
-    if (nt.length !== nutrientType.id.length)
-      throw new Error(`Invalid nutrient types (${nutrientType.id}) defined in feedback top foods.`);
-
-    if (nt.some((item) => item.unit !== nt[0].unit))
-      throw new Error('All nutrient types must have the same unit.');
-
-    const { unit } = nt[0];
+    const unit = getNutrientGroupUnit(id, nutrientTypes);
 
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);
     const other = foodHighInNutrient.slice(max);
@@ -81,10 +62,8 @@ export const buildTopFoods = (
       value: food.getGroupAverageIntake(id),
     }));
 
-    const total = foods.map((f) => f.getGroupAverageIntake(id)).reduce((a, b) => a + b, 0);
-
-    return { id, name, unit, data, total: round(total) };
+    return { id, name, unit, data };
   });
 
-  return { ...topFoods, nutrients };
+  return { ...topFoods, chartData };
 };

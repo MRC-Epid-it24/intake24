@@ -1,5 +1,4 @@
 import type { CardType, NutrientRuleType, Sentiment } from '@intake24/common/feedback';
-import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import type {
   CharacterParameters,
   FiveADayParameters,
@@ -9,6 +8,7 @@ import { round } from '@intake24/common/util';
 import { shared } from '@intake24/i18n';
 import { DemographicRange } from '@intake24/ui/feedback';
 import { useApp } from '@intake24/ui/stores';
+import { getLocaleContent } from '@intake24/ui/util';
 
 export type FeedbackDetails = {
   readonly name: string;
@@ -22,11 +22,6 @@ export type FeedbackDetails = {
   readonly iconClass: string;
   readonly warning?: string | null;
 };
-
-export const getLocaleContent = (
-  content: RequiredLocaleTranslation | LocaleTranslation,
-  locale: string
-): string => content[locale] ?? content.en;
 
 export const getTextClass = (sentiment: Sentiment | null): string | undefined => {
   if (!sentiment) return undefined;

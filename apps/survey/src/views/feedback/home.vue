@@ -77,14 +77,17 @@
         </v-col>
       </v-row>
     </v-sheet>
-    <feedback-card-area
-      v-if="cards.length"
-      v-bind="{ cards }"
-      class="feedback-area"
-    ></feedback-card-area>
-    <v-sheet v-if="topFoods.nutrients.length" color="white">
-      <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
+    <feedback-cards v-if="cards.length" v-bind="{ cards }" class="feedback-area"></feedback-cards>
+    <v-sheet v-if="topFoods.chartData.length" color="white">
+      <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
     </v-sheet>
+    <feedback-meals
+      v-if="feedbackDicts?.surveyStats.submissions.length"
+      class="feedback-area"
+      :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
+      :submissions="submissions"
+      :survey-stats="feedbackDicts.surveyStats"
+    ></feedback-meals>
   </v-container>
 </template>
 
@@ -105,16 +108,23 @@ import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {
   buildCardParams,
   buildTopFoods,
-  FeedbackCardArea,
-  FeedbackChartArea,
+  FeedbackCards,
+  FeedbackMeals,
   FeedbackOutputs,
+  FeedbackTopFoods,
   FeedbackUserInfo,
 } from '@intake24/ui/feedback';
 
 export default defineComponent({
   name: 'FeedbackHome',
 
-  components: { FeedbackCardArea, FeedbackChartArea, FeedbackOutputs, FeedbackUserInfo },
+  components: {
+    FeedbackCards,
+    FeedbackMeals,
+    FeedbackOutputs,
+    FeedbackTopFoods,
+    FeedbackUserInfo,
+  },
 
   beforeRouteEnter({ params }, from, next) {
     useSurvey().allowFeedback ? next() : next({ name: 'survey-home', params });

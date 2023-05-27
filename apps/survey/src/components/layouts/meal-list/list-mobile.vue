@@ -30,7 +30,8 @@ import { defineComponent } from 'vue';
 import type { MealTime } from '@intake24/common/types';
 import { useLocale } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
-import { fromMealTime, getMealIndex } from '@intake24/survey/util';
+import { getMealIndex } from '@intake24/survey/util';
+import { fromMealTime } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'MealListMobile',
@@ -61,7 +62,7 @@ export default defineComponent({
     },
 
     mealTimeString(time: MealTime | undefined): string {
-      return time ? fromMealTime(time, true) : '';
+      return time ? fromMealTime(time) : '';
     },
   },
 });

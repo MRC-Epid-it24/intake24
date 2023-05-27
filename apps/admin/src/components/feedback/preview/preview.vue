@@ -25,8 +25,8 @@
         <h1 class="text-h1 font-weight-medium text-center">
           {{ $t('feedback.title') }}
         </h1>
-        <feedback-card-area v-bind="{ cards }" class="feedback-area"></feedback-card-area>
-        <feedback-chart-area v-bind="{ topFoods }" class="feedback-area"></feedback-chart-area>
+        <feedback-cards v-bind="{ cards }" class="feedback-area"></feedback-cards>
+        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
       </v-container>
     </v-card>
   </v-dialog>
@@ -42,8 +42,8 @@ import { feedbackService } from '@intake24/admin/services';
 import {
   buildCardParams,
   buildTopFoods,
-  FeedbackCardArea,
-  FeedbackChartArea,
+  FeedbackCards,
+  FeedbackTopFoods,
 } from '@intake24/ui/feedback';
 
 import * as previewData from './preview-data';
@@ -58,7 +58,7 @@ export type Submission = {
 export default defineComponent({
   name: 'FeedbackPreview',
 
-  components: { FeedbackCardArea, FeedbackChartArea },
+  components: { FeedbackCards, FeedbackTopFoods },
 
   props: {
     feedbackScheme: {

@@ -22,7 +22,7 @@ import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
 import { useLocale } from '@intake24/survey/composables';
-import { fromMealTime } from '@intake24/survey/util';
+import { fromMealTime } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'SurveyProgressBar',
@@ -39,7 +39,7 @@ export default defineComponent({
 
     const stringTime = (time: MealTime | undefined): string => {
       if (time === undefined) return '?';
-      return fromMealTime(time, true);
+      return fromMealTime(time);
     };
 
     const color = (item: MealState) => {

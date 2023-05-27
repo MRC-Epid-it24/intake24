@@ -58,7 +58,7 @@ import { defineComponent } from 'vue';
 
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
-import { fromMealTime } from '@intake24/survey/util';
+import { fromMealTime } from '@intake24/ui/util';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -99,7 +99,7 @@ export default defineComponent({
       return dispalyName;
     },
     stringTime(time: MealTime): string {
-      return fromMealTime(time, true);
+      return fromMealTime(time);
     },
   },
 });

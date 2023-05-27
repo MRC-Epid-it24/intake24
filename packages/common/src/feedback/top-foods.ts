@@ -1,14 +1,9 @@
-import type { RequiredLocaleTranslation } from '../types';
-
-export type TopFoodNutrientType = {
-  id: string[];
-  name: RequiredLocaleTranslation;
-};
+import type { NutrientGroup } from './shared';
 
 export type TopFoods = {
   max: number;
   colors: string[];
-  nutrientTypes: TopFoodNutrientType[];
+  nutrientTypes: NutrientGroup[];
 };
 
 export const defaultTopFoods: TopFoods = {

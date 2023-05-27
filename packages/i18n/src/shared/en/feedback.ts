@@ -65,6 +65,11 @@ const feedback: LocaleMessageObject = {
     chart: 'Highest in {nutrient}',
   },
 
+  meals: {
+    title: 'Meals per-day breakdown',
+    chart: '{nutrient}',
+  },
+
   intake: {
     your: 'Your {nutrient} intake is {amount}',
     estimated: 'Estimated intake',

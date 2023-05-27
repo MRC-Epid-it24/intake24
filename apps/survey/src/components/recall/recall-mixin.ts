@@ -21,7 +21,8 @@ import {
 import { useLocale } from '@intake24/survey/composables';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex, promptType } from '@intake24/survey/util';
+import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
+import { promptType } from '@intake24/ui/util';
 
 import { InfoAlert } from '../elements';
 

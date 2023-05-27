@@ -1,5 +1,5 @@
 <template>
-  <v-col class="d-flex flex-column feedback-user-info" cols>
+  <v-col cols>
     <v-card>
       <v-toolbar color="grey lighten-4" flat tile>
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
@@ -52,7 +52,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { UserDemographic } from './classes';
+import type { UserDemographic } from '../classes';
 
 export default defineComponent({
   name: 'FeedbackUserInfo',
@@ -125,8 +125,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.feedback-user-info {
-  max-width: 35rem;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -1,3 +1,5 @@
+import type { RequiredLocaleTranslation } from '../types';
+
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = (typeof feedbackTypes)[number];
 
@@ -56,3 +58,8 @@ export const weightTargetsData: WeightTargetCoefficient[] = [
   { id: 'lose_weight', name: 'Lose weight', coefficient: -500 },
   { id: 'gain_weight', name: 'Gain weight', coefficient: 500 },
 ];
+
+export type NutrientGroup = {
+  id: string[];
+  name: RequiredLocaleTranslation;
+};

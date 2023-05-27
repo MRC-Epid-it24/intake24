@@ -12,10 +12,10 @@ import {
   mealPortionSizeComplete,
   surveyFreeEntryComplete,
 } from '@intake24/survey/util';
+import { resolveMealGaps } from '@intake24/ui/util';
 
 import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';
-import { resolveMealGaps } from '../util';
 import {
   asServedComplete,
   cerealComplete,

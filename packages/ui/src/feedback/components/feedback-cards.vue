@@ -23,11 +23,11 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FeedbackCardParameters } from './cards-builder';
+import type { FeedbackCardParameters } from '../cards-builder';
 import { PrintCard, ScreenCard } from './cards';
 
 export default defineComponent({
-  name: 'FeedbackCardArea',
+  name: 'FeedbackCards',
 
   components: { PrintCard, ScreenCard },
 

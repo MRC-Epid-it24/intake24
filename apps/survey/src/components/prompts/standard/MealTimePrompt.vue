@@ -57,7 +57,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
-import { fromMealTime, toMealTime } from '@intake24/survey/util';
+import { fromMealTime, toMealTime } from '@intake24/ui/util';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -81,7 +81,7 @@ export default defineComponent({
 
   computed: {
     currentTime(): string {
-      return fromMealTime(this.initialState);
+      return fromMealTime(this.initialState, false);
     },
 
     isValid(): boolean {

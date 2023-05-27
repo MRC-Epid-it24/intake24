@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 import type { Prompts } from '@intake24/common/prompts';
 import { MealGapPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
-import { resolveMealGaps } from '@intake24/survey/util';
+import { resolveMealGaps } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'MealGapPromptHandler',

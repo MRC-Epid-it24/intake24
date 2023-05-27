@@ -30,10 +30,9 @@ import {
   getMealIndex,
   getMealIndexForSelection,
   getMealIndexRequired,
-  toMealTime,
-  toMinutes,
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
+import { toMealTime, toMinutes } from '@intake24/ui/util';
 
 import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';

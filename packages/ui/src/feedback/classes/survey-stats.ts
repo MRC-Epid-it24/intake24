@@ -1,6 +1,7 @@
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
 
 import type SurveyFood from './survey-food';
+import type SurveyMeal from './survey-meal';
 import AggregateFoodStats from './aggregate-food-stats';
 import SurveySubmission from './survey-submission';
 
@@ -13,28 +14,36 @@ export type FruitAndVegPortions = {
   readonly total: number;
 };
 
+export interface MealStats
+  extends Pick<SurveyMeal, 'name' | 'hours' | 'minutes' | 'time' | 'customFields'> {
+  readonly stats: AggregateFoodStats;
+}
+
 export default class SurveyStats {
-  readonly submissions: SurveySubmission[];
+  readonly submissions;
 
   constructor(submissions: SurveySubmission[]) {
     this.submissions = submissions.map((ss) => ss.clone());
   }
 
-  clone(): SurveyStats {
+  clone() {
     return new SurveyStats(this.submissions);
   }
 
-  static fromJson(jsonList: SurveySubmissionEntry[]): SurveyStats {
+  static fromJson(jsonList: SurveySubmissionEntry[]) {
     return new SurveyStats(jsonList.map((js) => SurveySubmission.fromJson(js)));
   }
 
   // Returns a flat array of all food records for the selected day or for all days
   // if no day is selected
-  private getFoods(selected: string[]): SurveyFood[] {
+  private getFoods(selected: string[]) {
     return this.submissions
       .filter((submission) => selected.includes(submission.id))
-      .map((submission) => submission.getFoods())
-      .reduce((acc, foods) => acc.concat(foods), []);
+      .flatMap((submission) => submission.getFoods());
+  }
+
+  private getMeals(selected: string) {
+    return this.submissions.find((submission) => submission.id === selected)?.meals ?? [];
   }
 
   private readonly JUICE_NUTRIENT_IDS = ['254', '255'];
@@ -87,54 +96,58 @@ export default class SurveyStats {
     };
   }
 
-  getAverageIntake(selected: string[]): Map<string, number> {
-    const foods = this.getFoods(selected);
+  getAverageIntake(selected: string[], foods?: SurveyFood[]) {
     const averageIntake = new Map<string, number>();
 
-    foods.forEach((food) =>
-      Array.from(food.nutrientIdConsumptionMap.keys()).forEach((nutrientId) => {
-        if (!averageIntake.has(nutrientId)) {
-          averageIntake.set(nutrientId, food.nutrientIdConsumptionMap.get(nutrientId) as number);
-        } else {
-          averageIntake.set(
-            nutrientId,
-            (averageIntake.get(nutrientId) as number) +
-              (food.nutrientIdConsumptionMap.get(nutrientId) as number)
-          );
-        }
-      })
-    );
+    (foods ?? this.getFoods(selected)).forEach((food) => {
+      for (const [key, value] of food.nutrientIdConsumptionMap.entries()) {
+        if (!averageIntake.has(key)) averageIntake.set(key, 0);
 
-    Array.from(averageIntake.keys()).forEach((nutrientId) => {
-      averageIntake.set(nutrientId, (averageIntake.get(nutrientId) as number) / selected.length);
+        averageIntake.set(key, (averageIntake.get(key) as number) + value);
+      }
     });
+
+    if (selected.length === 1) return averageIntake;
+
+    for (const [key, value] of averageIntake.entries()) {
+      averageIntake.set(key, value / selected.length);
+    }
 
     return averageIntake;
   }
 
-  getReducedFoods(selected: string[]): AggregateFoodStats[] {
+  getMealStats(selected: string): MealStats[] {
+    return this.getMeals(selected).map((meal, idx) => {
+      const name = meal.name ?? `Meal #${idx + 1}`;
+
+      const averageIntake = this.getAverageIntake([selected], meal.foods);
+
+      const stats = new AggregateFoodStats(name, averageIntake);
+
+      return { ...meal, name, stats };
+    });
+  }
+
+  getReducedFoods(selected: string[]) {
     const foods = this.getFoods(selected);
 
-    const uniqueFoodCodes = Array.from(new Set(foods.map((f) => f.code)));
-
-    return uniqueFoodCodes.map((code) => {
+    return [...new Set(foods.map((f) => f.code))].map((code) => {
       const totalConsumptionMap: Map<string, number> = new Map();
       const matchingFoods = foods.filter((f) => f.code === code);
-      matchingFoods.forEach((f) => {
-        Array.from(f.nutrientIdConsumptionMap.keys()).forEach((k) => {
-          if (!totalConsumptionMap.has(k)) totalConsumptionMap.set(k, 0);
 
-          totalConsumptionMap.set(
-            k,
-            (totalConsumptionMap.get(k) as number) + (f.nutrientIdConsumptionMap.get(k) as number)
-          );
-        });
+      matchingFoods.forEach((f) => {
+        for (const [key, value] of f.nutrientIdConsumptionMap.entries()) {
+          if (!totalConsumptionMap.has(key)) totalConsumptionMap.set(key, 0);
+
+          totalConsumptionMap.set(key, (totalConsumptionMap.get(key) as number) + value);
+        }
       });
       // We need to get average consumption per day.
       // At the moment we do that by getting average consumption of nutrient per one submission
-      Array.from(totalConsumptionMap.keys()).forEach((k) => {
-        totalConsumptionMap.set(k, (totalConsumptionMap.get(k) as number) / selected.length);
-      });
+      for (const [key, value] of totalConsumptionMap.entries()) {
+        totalConsumptionMap.set(key, value / selected.length);
+      }
+
       const firstFood = matchingFoods[0];
       return new AggregateFoodStats(firstFood.localName, totalConsumptionMap);
     });

@@ -1,7 +1,7 @@
 import type { Prompts } from '@intake24/common/prompts';
 import type { MealState, MealTime } from '@intake24/common/types';
 
-export const fromMealTime = (time: MealTime, doubleDigit?: boolean): string => {
+export const fromMealTime = (time: MealTime, doubleDigit = true): string => {
   const { hours, minutes } = time;
 
   if (!doubleDigit) return `${hours}:${minutes}`;

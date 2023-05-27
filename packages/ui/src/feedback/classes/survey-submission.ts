@@ -24,7 +24,7 @@ export default class SurveySubmission {
   }
 
   getFoods(): SurveyFood[] {
-    return this.meals.map((meal) => meal.foods).reduce((acc, foods) => acc.concat(foods), []);
+    return this.meals.flatMap(({ foods }) => foods);
   }
 
   static fromJson(submission: SurveySubmissionEntry): SurveySubmission {

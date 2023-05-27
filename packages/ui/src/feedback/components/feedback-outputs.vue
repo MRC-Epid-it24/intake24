@@ -1,5 +1,5 @@
 <template>
-  <v-col class="d-flex flex-column" cols="12" sm="auto">
+  <v-col cols="12" sm="auto">
     <v-card height="100%">
       <v-toolbar color="grey lighten-4" flat tile>
         <v-toolbar-title class="text-subtitle-1 font-weight-medium text-uppercase">
@@ -182,9 +182,8 @@ import { defineComponent } from 'vue';
 
 import type { FeedbackOutput } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
-
-import { useLoading } from '../stores';
-import { downloadFile } from '../util';
+import { useLoading } from '@intake24/ui/stores';
+import { downloadFile } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'FeedbackOutputs',

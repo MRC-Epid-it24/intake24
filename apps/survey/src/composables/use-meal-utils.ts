@@ -2,8 +2,8 @@ import type { Ref } from 'vue';
 import { computed } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { fromMealTime } from '@intake24/ui/util';
 
-import { fromMealTime } from '../util';
 import { useLocale } from './use-locale';
 
 export const useMealUtils = <T extends MealState | undefined>(meal?: Ref<T>) => {
@@ -14,7 +14,7 @@ export const useMealUtils = <T extends MealState | undefined>(meal?: Ref<T>) => 
   const mealName = computed(() => (meal?.value ? getMealName(meal.value) : undefined));
 
   const getMealTime = (mealState?: MealState) =>
-    mealState?.time ? fromMealTime(mealState.time, true) : undefined;
+    mealState?.time ? fromMealTime(mealState.time) : undefined;
 
   const mealTime = computed(() => getMealTime(meal?.value));
 

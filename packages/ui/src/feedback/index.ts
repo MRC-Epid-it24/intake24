@@ -1,10 +1,9 @@
 export * from './cards-builder';
+export * from './charts';
 export * from './classes';
+export * from './components';
 export { default as createFeedbackService } from './feedback.service';
 export * from './feedback.service';
-export { default as FeedbackCardArea } from './feedback-card-area.vue';
-export { default as FeedbackChartArea } from './feedback-chart-area.vue';
-export { default as FeedbackOutputs } from './feedback-outputs.vue';
-export { default as FeedbackUserInfo } from './feedback-user-info.vue';
 export * from './image-maps';
+export * from './meal-stats';
 export * from './top-foods';
