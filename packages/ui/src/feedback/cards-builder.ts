@@ -1,4 +1,4 @@
-import type { CardType, FiveADay, NutrientGroup } from '@intake24/common/feedback';
+import type { CardType, FiveADayCard, NutrientGroupCard } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
 
 import type {
@@ -10,13 +10,13 @@ import type {
 } from './classes';
 import { DemographicRange } from './classes';
 
-export type CardWithCharRules = CharacterRules | FiveADay | NutrientGroup;
+export type CardWithCharRules = CharacterRules | FiveADayCard | NutrientGroupCard;
 
-export interface FiveADayParameters extends FiveADay {
+export interface FiveADayParameters extends FiveADayCard {
   readonly portions: number;
 }
 
-export interface NutrientGroupParameters extends NutrientGroup {
+export interface NutrientGroupParameters extends NutrientGroupCard {
   readonly intake: number;
   readonly recommendedIntake: DemographicRange;
 }
@@ -39,7 +39,7 @@ export const buildCharacterParams = (
 ): FeedbackCardParameters | null => characterRule.getSentiment(userDemographic, foods);
 
 export const buildNutrientGroupParams = (
-  foodGroup: NutrientGroup,
+  foodGroup: NutrientGroupCard,
   { averageIntake }: BuildCardOps
 ): NutrientGroupParameters => {
   const { low, high } = foodGroup;
@@ -58,7 +58,7 @@ export const buildNutrientGroupParams = (
 };
 
 export const buildFiveADayParams = (
-  foodGroup: FiveADay,
+  foodGroup: FiveADayCard,
   { fruitAndVegPortions }: BuildCardOps
 ): FiveADayParameters => ({ ...foodGroup, portions: round(fruitAndVegPortions.total) });
 

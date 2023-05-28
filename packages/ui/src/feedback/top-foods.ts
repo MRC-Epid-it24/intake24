@@ -1,6 +1,6 @@
 import type { TopFoods } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { getNutrientGroupUnit } from '@intake24/ui/util';
+import { getLocaleContent, getNutrientGroupUnit } from '@intake24/ui/util';
 
 import type { NutrientGroupChartData } from './charts';
 import { AggregateFoodStats } from './classes';
@@ -40,16 +40,15 @@ export const summarizeOtherFood = (
 export const buildTopFoods = (
   topFoods: TopFoods,
   foods: AggregateFoodStats[],
-  nutrientTypes: NutrientType[] = [],
-  locale = 'en'
+  nutrientTypes: NutrientType[] = []
 ): TopFoodData => {
   const { max } = topFoods;
   if (!max || !topFoods.nutrientTypes.length) return { ...topFoods, chartData: [] };
 
   const chartData = topFoods.nutrientTypes.map((nutrientGroup) => {
     const { id } = nutrientGroup;
-    const name = nutrientGroup.name[locale] ?? nutrientGroup.name.en;
 
+    const name = getLocaleContent(nutrientGroup.name);
     const unit = getNutrientGroupUnit(id, nutrientTypes);
 
     const foodHighInNutrient = filterAndSortFoodByNutrientTypeId(id, foods);

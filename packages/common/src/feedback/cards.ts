@@ -19,16 +19,16 @@ export type CustomCard = {
   showRecommendations: boolean;
 };
 
-export interface NutrientGroup extends CustomCard {
+export interface NutrientGroupCard extends CustomCard {
   type: 'nutrient-group';
   nutrientTypes: string[];
 }
 
-export interface FiveADay extends CustomCard {
+export interface FiveADayCard extends CustomCard {
   type: 'five-a-day';
 }
 
-export type Card = Character | NutrientGroup | FiveADay;
+export type Card = Character | NutrientGroupCard | FiveADayCard;
 
 // Type for validator
 export type Cards = Cards[];

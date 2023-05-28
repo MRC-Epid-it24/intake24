@@ -143,7 +143,7 @@ export default defineComponent({
       userDemographic: null as UserDemographic | null,
 
       cards: [] as FeedbackCardParameters[],
-      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], [], this.$i18n.locale),
+      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], []),
 
       selectedSubmissions: [] as string[],
     };
@@ -284,12 +284,7 @@ export default defineComponent({
         averageIntake,
         fruitAndVegPortions,
       });
-      this.topFoods = buildTopFoods(
-        feedbackScheme.topFoods,
-        foods,
-        nutrientTypes,
-        this.$i18n.locale
-      );
+      this.topFoods = buildTopFoods(feedbackScheme.topFoods, foods, nutrientTypes);
     },
   },
 });

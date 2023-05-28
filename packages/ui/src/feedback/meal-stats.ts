@@ -2,10 +2,9 @@ import type {
   FeedbackMealChart,
   FeedbackMealStats,
   FeedbackMealTable,
-  MealTableField,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { getNutrientGroupUnit } from '@intake24/ui/util';
+import { getLocaleContent, getNutrientGroupUnit } from '@intake24/ui/util';
 
 import type { NutrientGroupChartData } from './charts';
 import type { MealStats } from './classes';
@@ -14,7 +13,7 @@ export interface FeedbackMealChartData extends FeedbackMealChart {
   chartData: NutrientGroupChartData[];
 }
 
-export type MealTableFieldData = MealTableField & { [key: string]: string };
+export type MealTableFieldData = Record<string, string | number | null>;
 
 export interface FeedbackMealTableData extends FeedbackMealTable {
   tableData: MealTableFieldData[];
@@ -28,15 +27,14 @@ export interface FeedbackMealStatsData extends Omit<FeedbackMealStats, 'chart' |
 export const buildMealStats = (
   feedbackMealStats: FeedbackMealStats,
   meals: MealStats[],
-  nutrientTypes: NutrientType[] = [],
-  locale = 'en'
+  nutrientTypes: NutrientType[] = []
 ): FeedbackMealStatsData => {
   const { chart, table } = feedbackMealStats;
 
   const chartData = chart.nutrientGroups.map((nutrientGroup) => {
     const { id } = nutrientGroup;
-    const name = nutrientGroup.name[locale] ?? nutrientGroup.name.en;
 
+    const name = getLocaleContent(nutrientGroup.name);
     const unit = getNutrientGroupUnit(id, nutrientTypes);
 
     const data = meals.map((meal) => ({
@@ -48,7 +46,7 @@ export const buildMealStats = (
   });
 
   const tableData = meals.map((meal) => {
-    return table.fields.reduce<Record<string, any>>((acc, field) => {
+    return table.fields.reduce<MealTableFieldData>((acc, field) => {
       switch (field.type) {
         case 'standard':
           acc[field.fieldId] = meal[field.fieldId];
@@ -63,7 +61,7 @@ export const buildMealStats = (
       }
 
       return acc;
-    }, {} as MealTableFieldData);
+    }, {});
   });
 
   return { chart: { ...chart, chartData }, table: { ...table, tableData } };

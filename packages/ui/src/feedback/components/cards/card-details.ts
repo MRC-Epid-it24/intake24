@@ -5,9 +5,8 @@ import type {
   NutrientGroupParameters,
 } from '@intake24/ui/feedback';
 import { round } from '@intake24/common/util';
-import { shared } from '@intake24/i18n';
+import { useI18n } from '@intake24/i18n';
 import { DemographicRange } from '@intake24/ui/feedback';
-import { useApp } from '@intake24/ui/stores';
 import { getLocaleContent } from '@intake24/ui/util';
 
 export type FeedbackDetails = {
@@ -79,23 +78,16 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
     } = result;
 
     const { name, description, range, sentiment } = scaleSectors[0];
-    const { lang } = useApp();
-
-    // TODO: resolve this better from local application i18n
-    const feedbackMsgs = shared[lang] ?? shared.en;
-    const unitDescription = (feedbackMsgs.feedback.unitDescription as Record<string, string>)[
-      nutrientRuleType
-    ];
 
     return {
-      name: getLocaleContent(name, lang),
-      description: getLocaleContent(description, lang),
+      name: getLocaleContent(name),
+      description: getLocaleContent(description),
       intake: round(intake),
       recommendedIntake: showRecommendations
         ? new DemographicRange(round(range.start), round(range.end))
         : null,
       unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
-      unitDescription,
+      unitDescription: useI18n().t(`feedback.unitDescription.${nutrientRuleType}`).toString(),
       sentiment,
       textClass: getTextClass(charSentiment ? sentiment : null),
       iconClass: getIconClass(charSentiment ? sentiment : null),
@@ -109,20 +101,18 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { name, description, low, high, unit, portions, showRecommendations } = parameters;
   const sentiment = null;
 
-  const { lang } = useApp();
-
   return {
-    name: getLocaleContent(name, lang),
-    description: getLocaleContent(description, lang),
+    name: getLocaleContent(name),
+    description: getLocaleContent(description),
     intake: portions,
     recommendedIntake: showRecommendations
       ? new DemographicRange(high?.threshold ?? 5, high?.threshold ?? 5)
       : null,
-    unit: getLocaleContent(unit.name, lang),
-    unitDescription: getLocaleContent(unit.description, lang),
+    unit: getLocaleContent(unit.name),
+    unitDescription: getLocaleContent(unit.description),
     sentiment,
     iconClass: getIconClass(sentiment),
-    warning: low && portions < low.threshold ? getLocaleContent(low.message, lang) : undefined,
+    warning: low && portions < low.threshold ? getLocaleContent(low.message) : undefined,
   };
 };
 
@@ -131,22 +121,20 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
     parameters;
   const sentiment = null;
 
-  const { lang } = useApp();
-
   let warning;
 
-  if (low && intake < low.threshold) warning = getLocaleContent(low.message, lang);
-  else if (high && intake > high.threshold) warning = getLocaleContent(high.message, lang);
+  if (low && intake < low.threshold) warning = getLocaleContent(low.message);
+  else if (high && intake > high.threshold) warning = getLocaleContent(high.message);
 
   return {
-    name: getLocaleContent(name, lang),
-    description: getLocaleContent(description, lang),
+    name: getLocaleContent(name),
+    description: getLocaleContent(description),
     intake: round(intake),
     recommendedIntake: showRecommendations
       ? new DemographicRange(round(recommendedIntake.start), round(recommendedIntake.end))
       : null,
-    unit: getLocaleContent(unit.name, lang),
-    unitDescription: getLocaleContent(unit.description, lang),
+    unit: getLocaleContent(unit.name),
+    unitDescription: getLocaleContent(unit.description),
     sentiment,
     iconClass: getIconClass(sentiment),
     warning,

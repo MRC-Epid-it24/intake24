@@ -58,12 +58,13 @@ import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import Chart from 'vue-echarts';
 
 import type { NutrientType } from '@intake24/common/types/http';
 import { defaultMeals } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { getLocaleContent } from '@intake24/ui/util';
 
 import type { SurveyStats, SurveySubmission } from '../classes';
@@ -92,31 +93,44 @@ export default defineComponent({
   },
 
   setup(props) {
+    const i18n = useI18n();
+
     const selected = ref(props.submissions.length ? props.submissions[0].id : null);
+
+    const mealStats = computed(() =>
+      buildMealStats(
+        defaultMeals,
+        selected.value ? props.surveyStats.getMealStats(selected.value) : [],
+        props.nutrientTypes
+      )
+    );
+
+    const submissionItems = computed(() =>
+      props.submissions.map((item, idx) => ({
+        text: `${i18n.t('recall.submissions._')} ${idx + 1}  | ${new Date(
+          item.endTime
+        ).toLocaleDateString()}`,
+        value: item.id,
+      }))
+    );
+
+    const headers = computed(() =>
+      mealStats.value.table.fields.map(({ header, fieldId }) => ({
+        text: getLocaleContent(header),
+        value: fieldId,
+      }))
+    );
 
     return {
       getLocaleContent,
+      headers,
+      mealStats,
       selected,
+      submissionItems,
     };
   },
 
   computed: {
-    mealStats() {
-      return buildMealStats(
-        defaultMeals,
-        this.selected ? this.surveyStats.getMealStats(this.selected) : [],
-        this.nutrientTypes,
-        this.$i18n.locale
-      );
-    },
-
-    headers() {
-      return this.mealStats.table.fields.map(({ header, fieldId }) => ({
-        text: this.getLocaleContent(header, this.$i18n.locale),
-        value: fieldId,
-      }));
-    },
-
     charts() {
       const {
         chart: { chartData, colors },
@@ -194,15 +208,6 @@ export default defineComponent({
       });
 
       return chartOptions;
-    },
-
-    submissionItems() {
-      return this.submissions.map((item, idx) => ({
-        text: `${this.$t('recall.submissions._')} ${idx + 1}  | ${new Date(
-          item.endTime
-        ).toLocaleDateString()}`,
-        value: item.id,
-      }));
     },
   },
 });
