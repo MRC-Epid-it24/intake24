@@ -74,3 +74,13 @@ Environments:
   - `production`: `DB_FOODS_DRIVER` and `DB_SYSTEM_DRIVER`
 - type: `'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql'`
 - default: `'postgres'`
+
+## Security
+
+- object-path: `[environment].security`
+- dotenv vars:
+  - `development`: `DB_CONNECTION_SSL`
+  - `test`: `DB_CONNECTION_SSL`
+  - `production`: `DB_CONNECTION_SSL`
+- type: `'true' | 'false'`
+- default: `'true'`

@@ -23,7 +23,9 @@ const dialectOptions: Record<OpsDialect, Dictionary> = {
     bigNumberStrings: true,
   },
   mssql: {},
-  postgres: {},
+  postgres: {
+    ssl: process.env.DB_CONNECTION_SSL === 'true' ? true : false,
+  },
 };
 
 export const databaseConfig: DatabaseConfig = {
