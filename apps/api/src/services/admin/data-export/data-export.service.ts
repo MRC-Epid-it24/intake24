@@ -93,7 +93,12 @@ const dataExportService = ({
         ],
       },
     ];
-    const order: Order = [['id', 'ASC']];
+
+    const order: Order = [
+      ['meal', 'submission', 'submissionTime', 'ASC'],
+      ['meal', 'hours', 'ASC'],
+      ['meal', 'minutes', 'ASC'],
+    ];
 
     const foods = {
       include: [

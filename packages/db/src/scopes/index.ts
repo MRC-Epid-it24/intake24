@@ -36,33 +36,40 @@ export const submissionScope = (
     where,
     include: [
       {
-        model: User,
-        include: [{ model: UserSurveyAlias, where, required: false }, { model: UserCustomField }],
-      },
-      { model: SurveySubmissionCustomField },
-      {
-        model: SurveySubmissionMeal,
+        association: 'user',
         include: [
-          { model: SurveySubmissionMealCustomField },
+          { association: 'aliases', where, required: false },
+          { association: 'customFields' },
+        ],
+      },
+      { association: 'customFields' },
+      {
+        association: 'meals',
+        include: [
+          { association: 'customFields' },
           {
-            model: SurveySubmissionFood,
+            association: 'foods',
             separate: true,
             include: [
-              { model: SurveySubmissionFoodCustomField },
-              { model: SurveySubmissionField },
+              { association: 'customFields' },
+              { association: 'fields' },
               {
-                model: SurveySubmissionNutrient,
+                association: 'nutrients',
                 separate: true,
-                include: [{ model: SystemNutrientType }],
+                include: [{ association: 'nutrientType' }],
               },
-              { model: SurveySubmissionPortionSizeField, separate: true },
+              { association: 'portionSizes', separate: true },
             ],
           },
-          { model: SurveySubmissionMissingFood, separate: true },
+          { association: 'missingFoods', separate: true },
         ],
       },
     ],
-    order: [['submissionTime', 'ASC']],
+    order: [
+      ['submissionTime', 'ASC'],
+      ['meals', 'hours', 'ASC'],
+      ['meals', 'minutes', 'ASC'],
+    ],
     ...ops,
   };
 };
