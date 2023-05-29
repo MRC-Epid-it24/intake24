@@ -34,6 +34,15 @@ Prompt to add new meals. Multi-select list of options predefined in the scheme m
 
 - `custom` - allow adding custom meal names
 
+### Meal duration prompt
+
+Prompt to collect meal duration in minutes.
+
+- `initial` - initial duration in minutes
+- `min` - minimum duration in minutes
+- `max` - maximum duration in minutes
+- `step` - step in minutes
+
 ### Meal time prompt
 
 Prompt to collect meal time information using standard time picker.

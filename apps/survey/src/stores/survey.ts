@@ -32,7 +32,7 @@ import {
   getMealIndexRequired,
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
-import { toMealTime, toMinutes } from '@intake24/ui/util';
+import { sortMeals, toMealTime, toMinutes } from '@intake24/ui/util';
 
 import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
@@ -246,6 +246,7 @@ export const useSurvey = defineStore('survey', {
           name: meal.name,
           defaultTime: toMealTime(meal.time),
           time: undefined,
+          duration: null,
           flags: [],
           customPromptAnswers: {},
           foods: [],
@@ -384,11 +385,13 @@ export const useSurvey = defineStore('survey', {
     },
 
     sortMeals() {
-      this.data.meals.sort((a, b) => {
-        if (!a.time || !b.time) return 0;
+      this.data.meals.sort(sortMeals);
+    },
 
-        return toMinutes(a.time) - toMinutes(b.time);
-      });
+    setMealDuration(mealId: string, duration: number) {
+      const mealIndex = getMealIndexRequired(this.data.meals, mealId);
+
+      this.data.meals[mealIndex].duration = duration;
     },
 
     setMealTime(mealId: string, time: MealTime) {
@@ -464,6 +467,7 @@ export const useSurvey = defineStore('survey', {
         name: { en: name, [locale]: name },
         defaultTime,
         time: undefined,
+        duration: null,
         flags: [],
         foods: [],
         customPromptAnswers: {},

@@ -47,14 +47,17 @@ export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
   custom: false,
 });
 
-export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
+export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
   ...basePrompt,
   ...promptValidation,
-  component: 'meal-time-prompt',
+  component: 'meal-duration-prompt',
   type: 'standard',
-  id: 'meal-time-prompt',
-  name: 'Meal Time prompt',
-  format: '24hr',
+  id: 'meal-duration-prompt',
+  name: 'Meal Duration prompt',
+  initial: 30,
+  min: 5,
+  max: 120,
+  step: 5,
 });
 
 export const mealGapPrompt: Prompts['meal-gap-prompt'] = copy({
@@ -66,6 +69,16 @@ export const mealGapPrompt: Prompts['meal-gap-prompt'] = copy({
   gap: 180,
   startTime: '09:00',
   endTime: '21:00',
+});
+
+export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
+  ...basePrompt,
+  ...promptValidation,
+  component: 'meal-time-prompt',
+  type: 'standard',
+  id: 'meal-time-prompt',
+  name: 'Meal Time prompt',
+  format: '24hr',
 });
 
 export const readyMealPrompt: Prompts['ready-meal-prompt'] = copy({
@@ -125,6 +138,7 @@ export const standardPromptQuestions: Prompt[] = [
   finalPrompt,
   foodSearchPrompt,
   mealAddPrompt,
+  mealDurationPrompt,
   mealGapPrompt,
   mealTimePrompt,
   readyMealPrompt,

@@ -39,6 +39,7 @@ export const standardComponentTypes = [
   'food-search-prompt',
   'meal-add-prompt',
   'meal-gap-prompt',
+  'meal-duration-prompt',
   'meal-time-prompt',
   'ready-meal-prompt',
   'redirect-prompt',
@@ -173,15 +174,22 @@ export type Prompts = {
     component: 'meal-add-prompt';
     custom: boolean;
   };
-  'meal-time-prompt': ValidatedPrompt & {
-    component: 'meal-time-prompt';
-    format: 'ampm' | '24hr';
+  'meal-duration-prompt': BasePrompt & {
+    component: 'meal-duration-prompt';
+    initial: number;
+    min: number;
+    max: number;
+    step: number;
   };
   'meal-gap-prompt': BasePrompt & {
     component: 'meal-gap-prompt';
     gap: number;
     startTime: string;
     endTime: string;
+  };
+  'meal-time-prompt': BasePrompt & {
+    component: 'meal-time-prompt';
+    format: 'ampm' | '24hr';
   };
   'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BasePrompt & {

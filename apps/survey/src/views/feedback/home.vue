@@ -82,8 +82,9 @@
       <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
     </v-sheet>
     <feedback-meals
-      v-if="feedbackDicts?.surveyStats.submissions.length"
+      v-if="feedbackScheme && feedbackDicts?.surveyStats.submissions.length"
       class="feedback-area"
+      :config="feedbackScheme.meals"
       :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
       :submissions="submissions"
       :survey-stats="feedbackDicts.surveyStats"

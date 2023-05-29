@@ -3,6 +3,7 @@ import EditMealPromptHandler from './EditMealPromptHandler.vue';
 import FinalPromptHandler from './FinalPromptHandler.vue';
 import FoodSearchPromptHandler from './FoodSearchPromptHandler.vue';
 import MealAddPromptHandler from './MealAddPromptHandler.vue';
+import MealDurationPromptHandler from './MealDurationPromptHandler.vue';
 import MealGapPromptHandler from './MealGapPromptHandler.vue';
 import MealTimePromptHandler from './MealTimePromptHandler.vue';
 import ReadyMealPromptHandler from './ReadyMealPromptHandler.vue';
@@ -18,6 +19,7 @@ export default {
   FinalPromptHandler,
   FoodSearchPromptHandler,
   MealAddPromptHandler,
+  MealDurationPromptHandler,
   MealGapPromptHandler,
   MealTimePromptHandler,
   ReadyMealPromptHandler,

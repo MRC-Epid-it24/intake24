@@ -454,12 +454,13 @@ const surveySubmissionService = ({
       );
 
       // Collect meals
-      const mealInputs = state.meals.map(({ name: { en: name }, time }) => ({
+      const mealInputs = state.meals.map(({ name: { en: name }, time, duration }) => ({
         id: randomUUID(),
         surveySubmissionId,
         name,
         hours: time?.hours ?? 0,
         minutes: time?.minutes ?? 0,
+        duration,
       }));
 
       // Collect food & group codes
@@ -484,13 +485,6 @@ const surveySubmissionService = ({
         SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
         SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
       ]);
-
-      // Fetch created meal records
-      const meals = await SurveySubmissionMeal.findAll({
-        where: { surveySubmissionId },
-        order: [['id', 'ASC']],
-        transaction,
-      });
 
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?
@@ -526,7 +520,7 @@ const surveySubmissionService = ({
 
       // Process meals
       for (const [idx, mealState] of state.meals.entries()) {
-        const { id: mealId } = meals[idx];
+        const { id: mealId } = mealInputs[idx];
 
         // Collect meal custom fields
         const mealCustomFieldInputs = collectCustomAnswers(
@@ -549,16 +543,9 @@ const surveySubmissionService = ({
           SurveySubmissionMissingFood.bulkCreate(collectedFoods.missingInputs, { transaction }),
         ]);
 
-        // Fetch created food records
-        const foods = await SurveySubmissionFood.findAll({
-          where: { mealId },
-          order: [['id', 'ASC']],
-          transaction,
-        });
-
         // Process foods
         for (const [idx, foodState] of collectedFoods.states.entries()) {
-          const { id: foodId } = foods[idx];
+          const { id: foodId } = collectedFoods.inputs[idx];
 
           const { customPromptAnswers } = foodState;
 

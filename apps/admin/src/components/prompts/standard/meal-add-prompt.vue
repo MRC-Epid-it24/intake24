@@ -31,7 +31,7 @@ export default defineComponent({
   props: {
     custom: {
       type: Boolean as PropType<Prompts['meal-add-prompt']['custom']>,
-      default: false,
+      required: true,
     },
   },
 });

@@ -111,6 +111,12 @@ const prompts: LocaleMessageObject = {
     no: 'Cancel',
     noMeal: 'No Meals remaining, add at least one',
   },
+  mealDuration: {
+    name: 'Meal duration',
+    text: '{meal}',
+    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    confirm: 'Continue',
+  },
   mealGap: {
     name: 'Meal gap',
     // text: 'Placeholder',
@@ -130,9 +136,6 @@ const prompts: LocaleMessageObject = {
     description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
     no: 'I did not have {meal}',
-    validation: {
-      required: 'Select time you had the meal.',
-    },
   },
   readyMeal: {
     name: 'Ready meal',

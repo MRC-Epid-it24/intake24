@@ -154,6 +154,14 @@ const checkMealStandardConditions = (
       return mealState.foods.length === 0;
     case 'info-prompt':
       return !mealState.flags.includes(`${prompt.id}-acknowledged`);
+    case 'meal-duration-prompt':
+      if (mealState.duration === null) {
+        recallLog().promptCheck('meal-duration-prompt', true, 'duration is null');
+        return true;
+      }
+
+      recallLog().promptCheck('meal-duration-prompt', false, 'duration is defined');
+      return false;
     case 'meal-time-prompt':
       if (!mealState.time) {
         recallLog().promptCheck('meal-time-prompt', true, 'time is undefined');

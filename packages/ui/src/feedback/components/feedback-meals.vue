@@ -61,8 +61,8 @@ import { SVGRenderer } from 'echarts/renderers';
 import { computed, defineComponent, ref } from 'vue';
 import Chart from 'vue-echarts';
 
+import type { FeedbackMeals } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { defaultMeals } from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { getLocaleContent } from '@intake24/ui/util';
@@ -78,6 +78,10 @@ export default defineComponent({
   components: { Chart },
 
   props: {
+    config: {
+      type: Object as PropType<FeedbackMeals>,
+      required: true,
+    },
     surveyStats: {
       type: Object as PropType<SurveyStats>,
       required: true,
@@ -99,7 +103,7 @@ export default defineComponent({
 
     const mealStats = computed(() =>
       buildMealStats(
-        defaultMeals,
+        props.config,
         selected.value ? props.surveyStats.getMealStats(selected.value) : [],
         props.nutrientTypes
       )
@@ -121,20 +125,10 @@ export default defineComponent({
       }))
     );
 
-    return {
-      getLocaleContent,
-      headers,
-      mealStats,
-      selected,
-      submissionItems,
-    };
-  },
-
-  computed: {
-    charts() {
+    const charts = computed(() => {
       const {
         chart: { chartData, colors },
-      } = this.mealStats;
+      } = mealStats.value;
 
       const chartOptions: EChartsOption[] = chartData.map((item) => {
         const { name, unit, data } = item;
@@ -146,7 +140,7 @@ export default defineComponent({
           },
           id,
           title: {
-            text: this.$t('feedback.meals.chart', { nutrient: name }).toString(),
+            text: i18n.t('feedback.meals.chart', { nutrient: name }).toString(),
             left: 'center',
             textStyle: {
               fontWeight: 'bolder',
@@ -208,7 +202,16 @@ export default defineComponent({
       });
 
       return chartOptions;
-    },
+    });
+
+    return {
+      charts,
+      getLocaleContent,
+      headers,
+      mealStats,
+      selected,
+      submissionItems,
+    };
   },
 });
 </script>

@@ -196,6 +196,7 @@ const dataExportFields = () => {
       label: 'Meal time',
       value: (food) => (food.meal ? `${food.meal.hours}:${food.meal.minutes}` : undefined),
     },
+    { id: 'duration', label: 'Meal duration', value: (food) => food.meal?.duration },
   ];
 
   /**

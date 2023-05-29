@@ -9,6 +9,7 @@ import { unique } from '@intake24/api/http/rules';
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
+  feedbackSections,
   feedbackTypes,
 } from '@intake24/common/feedback';
 import { validateDemographicGroups, validateHenryCoefficients } from '@intake24/common/validators';
@@ -69,6 +70,19 @@ export const defaults: Schema = {
         if (value.some((action) => !feedbackPhysicalDataFields.includes(action)))
           throw new Error(
             customTypeErrorMessage('in.options', meta, { options: feedbackPhysicalDataFields })
+          );
+      },
+    },
+  },
+  sections: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
+    custom: {
+      options: async (value: any[], meta): Promise<void> => {
+        if (value.some((action) => !feedbackSections.includes(action)))
+          throw new Error(
+            customTypeErrorMessage('in.options', meta, { options: feedbackSections })
           );
       },
     },

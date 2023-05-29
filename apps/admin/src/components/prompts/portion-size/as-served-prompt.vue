@@ -77,7 +77,7 @@ export default defineComponent({
     },
     linkedQuantityCategories: {
       type: Array as PropType<Prompts['as-served-prompt']['linkedQuantityCategories']>,
-      default: () => [],
+      required: true,
     },
   },
 

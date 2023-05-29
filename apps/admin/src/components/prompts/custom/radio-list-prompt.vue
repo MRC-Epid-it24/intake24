@@ -42,7 +42,10 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { Prompts } from '@intake24/common/prompts';
 
 import { selectListPrompt } from '../partials';
 
@@ -53,8 +56,8 @@ export default defineComponent({
 
   props: {
     orientation: {
-      type: String,
-      default: 'column',
+      type: String as PropType<Prompts['radio-list-prompt']['orientation']>,
+      required: true,
     },
   },
 

@@ -1,7 +1,6 @@
 import type {
   Attributes,
   CreationAttributes,
-  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
@@ -62,6 +61,12 @@ export default class SurveySubmissionMeal extends BaseModel<
     type: DataType.STRING(64),
   })
   declare name: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  declare duration: number | null;
 
   @BelongsTo(() => SurveySubmission, 'surveySubmissionId')
   declare submission?: NonAttribute<SurveySubmission>;

@@ -14,7 +14,7 @@ export type BaseMealTableField = {
 export type MealTableFields = {
   standard: BaseMealTableField & {
     type: 'standard';
-    fieldId: 'name' | 'hours' | 'minutes' | 'time';
+    fieldId: 'name' | 'hours' | 'minutes' | 'time' | 'duration';
   };
   custom: BaseMealTableField & { type: 'custom'; fieldId: string };
   nutrientGroup: BaseMealTableField & {
@@ -30,12 +30,12 @@ export type FeedbackMealTable = {
   fields: MealTableField[];
 };
 
-export type FeedbackMealStats = {
+export type FeedbackMeals = {
   chart: FeedbackMealChart;
   table: FeedbackMealTable;
 };
 
-export const defaultMeals: FeedbackMealStats = {
+export const defaultMeals: FeedbackMeals = {
   chart: {
     colors: ['#FF6384', '#36A2EB', '#FFCE56', '#9c27b0', '#8bc34a', '#999999'],
     nutrientGroups: [{ id: ['1'], name: { en: 'Energy (kcal)' } }],
@@ -53,6 +53,12 @@ export const defaultMeals: FeedbackMealStats = {
         fieldId: 'time',
         header: { en: 'Time' },
         item: { en: '{value}' },
+      },
+      {
+        type: 'standard',
+        fieldId: 'duration',
+        header: { en: 'Duration (min)' },
+        item: { en: '{value} min' },
       },
       {
         type: 'nutrientGroup',

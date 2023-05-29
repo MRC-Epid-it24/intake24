@@ -39,11 +39,11 @@ export default defineComponent({
   props: {
     allowBrowsing: {
       type: Boolean as PropType<Prompts['food-search-prompt']['allowBrowsing']>,
-      default: true,
+      required: true,
     },
     dualLanguage: {
       type: Boolean as PropType<Prompts['food-search-prompt']['dualLanguage']>,
-      default: false,
+      required: true,
     },
   },
 });

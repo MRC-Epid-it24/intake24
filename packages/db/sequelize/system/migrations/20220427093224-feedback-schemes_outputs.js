@@ -13,6 +13,13 @@ module.exports = {
         replacements: { outputs: JSON.stringify(['print', 'email', 'download']) },
         transaction,
       });
+
+      await queryInterface.changeColumn(
+        'feedback_schemes',
+        'outputs',
+        { allowNull: false, type: Sequelize.TEXT() },
+        { transaction }
+      );
     }),
 
   down: (queryInterface) =>

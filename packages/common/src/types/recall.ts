@@ -258,6 +258,7 @@ export interface MealState {
   name: RequiredLocaleTranslation;
   defaultTime: MealTime;
   time: MealTime | undefined;
+  duration: number | null;
   flags: string[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
 

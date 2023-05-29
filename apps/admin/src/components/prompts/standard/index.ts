@@ -3,6 +3,7 @@ import EditMealPrompt from './edit-meal-prompt.vue';
 import FinalPrompt from './final-prompt.vue';
 import FoodSearchPrompt from './food-search-prompt.vue';
 import MealAddPrompt from './meal-add-prompt.vue';
+import MealDurationPrompt from './meal-duration-prompt.vue';
 import MealGapPrompt from './meal-gap-prompt.vue';
 import MealTimePrompt from './meal-time-prompt.vue';
 import ReadyMealPrompt from './ready-meal-prompt.vue';
@@ -18,6 +19,7 @@ export default {
   FinalPrompt,
   FoodSearchPrompt,
   MealAddPrompt,
+  MealDurationPrompt,
   MealGapPrompt,
   MealTimePrompt,
   ReadyMealPrompt,

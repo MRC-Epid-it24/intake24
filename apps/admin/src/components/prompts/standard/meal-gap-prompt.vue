@@ -63,15 +63,15 @@ export default defineComponent({
   props: {
     gap: {
       type: Number as PropType<Prompts['meal-gap-prompt']['gap']>,
-      default: 180,
+      required: true,
     },
     startTime: {
       type: String as PropType<Prompts['meal-gap-prompt']['startTime']>,
-      default: '09:00',
+      required: true,
     },
     endTime: {
       type: String as PropType<Prompts['meal-gap-prompt']['endTime']>,
-      default: '21:00',
+      required: true,
     },
   },
 
@@ -79,7 +79,7 @@ export default defineComponent({
     gapRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string =>
-          isInteger(value) || 'Time gap value needs to be a number.',
+          isInteger(value) || 'Time gap value needs to be an integer.',
       ];
     },
   },

@@ -57,7 +57,7 @@ export default defineComponent({
     },
     orientation: {
       type: String as PropType<Prompts['milk-in-a-hot-drink-prompt']['orientation']>,
-      default: 'column',
+      required: true,
     },
   },
 

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <prompt-validation v-bind.sync="validation"></prompt-validation>
-  </div>
+  <div></div>
 </template>
 
 <script lang="ts">

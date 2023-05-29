@@ -19,6 +19,12 @@ export const toMealTime = (time: string): MealTime => {
 
 export const toMinutes = (time: MealTime) => time.hours * 60 + time.minutes;
 
+export const sortMeals = (a: MealState, b: MealState) => {
+  if (!a.time || !b.time) return 0;
+
+  return toMinutes(a.time) - toMinutes(b.time);
+};
+
 export const minutesWrapAround = (minutes: number) => (minutes < 0 ? 1440 + minutes : minutes);
 
 export const isMealAfter = (time: MealTime, after: MealTime) =>

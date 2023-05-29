@@ -19,9 +19,11 @@ import type {
   SurveySchemeQuestionCreationAttributes,
 } from '@intake24/db';
 import {
-  defaultTopFoods,
-  feedbackOutputs,
+  defaultMeals as defaultFeedbackMeals,
+  defaultTopFoods as defaultFeedbackTopFoods,
+  feedbackOutputs as defaultFeedbackOutputs,
   feedbackPhysicalDataFields,
+  feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
 import { customPromptQuestions } from '@intake24/common/prompts';
 import {
@@ -112,9 +114,11 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
   return {
     name,
     type,
-    outputs: [...feedbackOutputs],
+    outputs: [...defaultFeedbackOutputs],
     physicalDataFields: [...feedbackPhysicalDataFields],
-    topFoods: defaultTopFoods,
+    sections: [...defaultFeedbackSections],
+    topFoods: { ...defaultFeedbackTopFoods },
+    meals: { ...defaultFeedbackMeals },
     cards: [],
     demographicGroups: [
       {

@@ -1,7 +1,6 @@
 import type {
   Attributes,
   CreationAttributes,
-  CreationOptional,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,

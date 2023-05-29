@@ -21,7 +21,7 @@ export default defineComponent({
     },
     other: {
       type: Boolean,
-      default: true,
+      required: true,
     },
   },
 });

@@ -21,13 +21,15 @@ import {
 import type {
   Card,
   DemographicGroup,
+  FeedbackMeals,
   FeedbackOutput,
   FeedbackPhysicalDataField,
+  FeedbackSection,
   FeedbackType,
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
 
 import type { Securable } from '..';
 import { BaseModel } from '..';
@@ -68,7 +70,22 @@ export default class FeedbackScheme
   declare type: FeedbackType;
 
   @Column({
-    allowNull: true,
+    allowNull: false,
+    defaultValue: () => JSON.stringify([]),
+    type: DataType.TEXT,
+  })
+  get sections(): FeedbackSection[] {
+    const val = this.getDataValue('sections') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set sections(value: FeedbackSection[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('sections', JSON.stringify(value ?? []));
+  }
+
+  @Column({
+    allowNull: false,
     defaultValue: () => JSON.stringify([]),
     type: DataType.TEXT,
   })
@@ -83,7 +100,7 @@ export default class FeedbackScheme
   }
 
   @Column({
-    allowNull: true,
+    allowNull: false,
     defaultValue: JSON.stringify([]),
     type: DataType.TEXT,
   })
@@ -110,6 +127,21 @@ export default class FeedbackScheme
   set topFoods(value: TopFoods) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('topFoods', JSON.stringify(value ?? defaultTopFoods));
+  }
+
+  @Column({
+    allowNull: false,
+    defaultValue: () => JSON.stringify(defaultMeals),
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get meals(): FeedbackMeals {
+    const val = this.getDataValue('meals') as unknown;
+    return val ? JSON.parse(val as string) : defaultMeals;
+  }
+
+  set meals(value: FeedbackMeals) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('meals', JSON.stringify(value ?? defaultMeals));
   }
 
   @Column({
@@ -205,12 +237,14 @@ export const updateFeedbackSchemeFields = [
   'type',
   'outputs',
   'physicalDataFields',
+  'sections',
 ] as const;
 
 export type UpdateFeedbackSchemeField = (typeof updateFeedbackSchemeFields)[number];
 
 export const perCardFeedbackSchemeFields = [
   'topFoods',
+  'meals',
   'cards',
   'demographicGroups',
   'henryCoefficients',

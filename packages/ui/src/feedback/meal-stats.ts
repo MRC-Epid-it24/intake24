@@ -1,6 +1,6 @@
 import type {
   FeedbackMealChart,
-  FeedbackMealStats,
+  FeedbackMeals,
   FeedbackMealTable,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
@@ -19,17 +19,17 @@ export interface FeedbackMealTableData extends FeedbackMealTable {
   tableData: MealTableFieldData[];
 }
 
-export interface FeedbackMealStatsData extends Omit<FeedbackMealStats, 'chart' | 'table'> {
+export interface FeedbackMealsData extends Omit<FeedbackMeals, 'chart' | 'table'> {
   chart: FeedbackMealChartData;
   table: FeedbackMealTableData;
 }
 
 export const buildMealStats = (
-  feedbackMealStats: FeedbackMealStats,
+  feedbackMeals: FeedbackMeals,
   meals: MealStats[],
   nutrientTypes: NutrientType[] = []
-): FeedbackMealStatsData => {
-  const { chart, table } = feedbackMealStats;
+): FeedbackMealsData => {
+  const { chart, table } = feedbackMeals;
 
   const chartData = chart.nutrientGroups.map((nutrientGroup) => {
     const { id } = nutrientGroup;
@@ -47,18 +47,22 @@ export const buildMealStats = (
 
   const tableData = meals.map((meal) => {
     return table.fields.reduce<MealTableFieldData>((acc, field) => {
+      let value: string | number | null = null;
+      const item = getLocaleContent(field.item);
+
       switch (field.type) {
         case 'standard':
-          acc[field.fieldId] = meal[field.fieldId];
+          value = meal[field.fieldId];
           break;
         case 'custom':
-          acc[field.fieldId] =
-            meal.customFields.find((item) => item.name === field.fieldId)?.value ?? null;
+          value = meal.customFields.find((item) => item.name === field.fieldId)?.value ?? null;
           break;
         case 'nutrientGroup':
-          acc[field.fieldId] = meal.stats.getGroupAverageIntake(field.nutrientTypes);
+          value = meal.stats.getGroupAverageIntake(field.nutrientTypes);
           break;
       }
+
+      acc[field.fieldId] = item && value ? item.replace('{value}', value.toString()) : value;
 
       return acc;
     }, {});

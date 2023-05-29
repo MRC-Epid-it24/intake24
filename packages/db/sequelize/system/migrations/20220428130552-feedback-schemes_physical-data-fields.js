@@ -25,6 +25,13 @@ module.exports = {
           transaction,
         }
       );
+
+      await queryInterface.changeColumn(
+        'feedback_schemes',
+        'physical_data_fields',
+        { allowNull: false, type: Sequelize.TEXT() },
+        { transaction }
+      );
     }),
 
   down: (queryInterface) =>

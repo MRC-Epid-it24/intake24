@@ -35,6 +35,7 @@ export default () => {
         type: 'invalidType',
         outputs: ['print', 'invalid', 'download'],
         physicalDataFields: ['sex', 'invalid', 'weightKg'],
+        sections: ['not a valid sections'],
         topFoods: {
           max: true,
           colors: 'color',
@@ -66,6 +67,7 @@ export default () => {
         'type',
         'outputs',
         'physicalDataFields',
+        'sections',
         'topFoods.max',
         'topFoods.colors',
         'topFoods.nutrientTypes',

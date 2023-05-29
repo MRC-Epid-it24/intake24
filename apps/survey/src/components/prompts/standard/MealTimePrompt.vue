@@ -9,7 +9,6 @@
           :value="currentTime"
           @input="update"
         ></v-time-picker>
-        <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
       </v-form>
     </v-card-text>
     <template #actions>
@@ -85,7 +84,7 @@ export default defineComponent({
     },
 
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentTime;
+      return !!this.currentTime;
     },
   },
 

@@ -71,15 +71,15 @@ export default defineComponent({
   props: {
     url: {
       type: String as PropType<Prompts['redirect-prompt']['url']>,
-      default: null,
+      required: true,
     },
     identifier: {
       type: String as PropType<Prompts['redirect-prompt']['identifier']>,
-      default: 'username',
+      required: true,
     },
     timer: {
       type: Number as PropType<Prompts['redirect-prompt']['timer']>,
-      default: null,
+      required: true,
     },
   },
 

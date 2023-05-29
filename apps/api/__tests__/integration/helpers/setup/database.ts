@@ -3,9 +3,11 @@ import { Redis } from 'ioredis';
 import type { User, UserSurveyAlias } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import {
-  defaultTopFoods,
-  feedbackOutputs,
+  defaultMeals as defaultFeedbackMeals,
+  defaultTopFoods as defaultFeedbackTopFoods,
+  feedbackOutputs as defaultFeedbackOutputs,
   feedbackPhysicalDataFields,
+  feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
 import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/surveys';
 import {
@@ -84,6 +86,7 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'feedback-schemes|delete', displayName: 'Delete feedback schemes' },
     { name: 'feedback-schemes|cards', displayName: 'Feedback scheme cards' },
     { name: 'feedback-schemes|top-foods', displayName: 'Feedback scheme top foods' },
+    { name: 'feedback-schemes|meals', displayName: 'Feedback scheme meals' },
     { name: 'feedback-schemes|copy', displayName: 'Copy feedback schemes' },
     { name: 'feedback-schemes|security', displayName: 'Feedback schemes security' },
     { name: 'food-groups', displayName: 'Food groups resource access' },
@@ -308,9 +311,11 @@ export const initDatabase = async (): Promise<MockData> => {
     FeedbackScheme.create({
       name: 'Default',
       type: 'default',
-      outputs: [...feedbackOutputs],
+      outputs: [...defaultFeedbackOutputs],
       physicalDataFields: [...feedbackPhysicalDataFields],
-      topFoods: { ...defaultTopFoods },
+      sections: [...defaultFeedbackSections],
+      topFoods: { ...defaultFeedbackTopFoods },
+      meals: { ...defaultFeedbackMeals },
       cards: [],
       demographicGroups: [],
       henryCoefficients: [],
