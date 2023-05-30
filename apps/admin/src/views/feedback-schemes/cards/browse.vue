@@ -3,7 +3,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
-    <card-list v-model="form.cards" :scheme-id="id"></card-list>
+    <card-list v-model="form.cards"></card-list>
   </layout>
 </template>
 

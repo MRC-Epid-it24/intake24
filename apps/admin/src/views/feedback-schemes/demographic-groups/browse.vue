@@ -3,10 +3,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
-    <demographic-group-list
-      v-model="form.demographicGroups"
-      :scheme-id="id"
-    ></demographic-group-list>
+    <demographic-group-list v-model="form.demographicGroups"></demographic-group-list>
   </layout>
 </template>
 

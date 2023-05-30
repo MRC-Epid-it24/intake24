@@ -16,6 +16,7 @@ export const securableDefs = {
     ...standardSecurableActions,
     'copy',
     'top-foods',
+    'meals',
     'cards',
     'demographic-groups',
     'henry-coefficients',

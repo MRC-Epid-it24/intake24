@@ -55,7 +55,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isInteger from 'lodash/isInteger';
 import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -96,7 +95,7 @@ export default defineComponent({
     timerRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string =>
-          isInteger(value) || 'Timer value needs to be a number.',
+          Number.isInteger(value) || 'Timer value needs to be a number.',
       ];
     },
   },

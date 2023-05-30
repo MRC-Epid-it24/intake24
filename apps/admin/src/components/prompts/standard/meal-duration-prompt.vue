@@ -61,7 +61,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import isInteger from 'lodash/isInteger';
 import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
@@ -97,7 +96,7 @@ export default defineComponent({
     isNumber(): RuleCallback[] {
       return [
         (value: string | null): boolean | string =>
-          isInteger(value) || 'Value needs to be an integer.',
+          Number.isInteger(value) || 'Value needs to be an integer.',
       ];
     },
   },

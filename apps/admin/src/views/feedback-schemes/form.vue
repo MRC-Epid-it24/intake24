@@ -27,7 +27,7 @@
                 v-model="form.type"
                 :error-messages="form.errors.get('type')"
                 hide-details="auto"
-                :items="feedbackTypes"
+                :items="types"
                 :label="$t('feedback-schemes.types._')"
                 name="type"
                 outlined
@@ -39,11 +39,12 @@
                 v-model="form.outputs"
                 :error-messages="form.errors.get('outputs')"
                 hide-details="auto"
-                :items="feedbackOutputs"
+                :items="outputs"
                 :label="$t('feedback-schemes.outputs.title')"
                 multiple
                 name="outputs"
                 outlined
+                prepend-inner-icon="fas fa-right-from-bracket"
                 @change="form.errors.clear('outputs')"
               >
                 <template #selection="{ item, index }">
@@ -58,14 +59,39 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-select
+                v-model="form.sections"
+                :error-messages="form.errors.get('sections')"
+                hide-details="auto"
+                :items="sections"
+                :label="$t('feedback-schemes.sections.title')"
+                multiple
+                name="sections"
+                outlined
+                prepend-inner-icon="fas fa-bars-staggered"
+                @change="form.errors.clear('sections')"
+              >
+                <template #selection="{ item, index }">
+                  <template v-if="index === 0">
+                    <span v-if="form.sections.length === 1">{{ item.text }}</span>
+                    <span v-if="form.sections.length > 1">
+                      {{ $t('common.selected', { count: form.sections.length }) }}
+                    </span>
+                  </template>
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
                 v-model="form.physicalDataFields"
+                :class="{ 'mb-2': form.physicalDataFields.length }"
                 :error-messages="form.errors.get('physicalDataFields')"
                 hide-details="auto"
-                :items="feedbackPhysicalDataFields"
+                :items="physicalDataFields"
                 :label="$t('feedback-schemes.physicalDataFields.title')"
                 multiple
                 name="physicalDataFields"
                 outlined
+                prepend-inner-icon="fas fa-person-circle-question"
                 @change="form.errors.clear('physicalDataFields')"
               >
                 <template #selection="{ item, index }">
@@ -77,16 +103,16 @@
                   </template>
                 </template>
               </v-select>
-            </v-col>
-            <v-col>
               <template v-for="(value, key) in requiredPhysicalDataFields">
                 <v-alert
                   v-if="!value && form.physicalDataFields.includes(key)"
                   :key="key"
+                  class="text-caption mb-1"
+                  dense
                   text
                   type="info"
                 >
-                  <i18n path="feedback-schemes.physicalDataFields.notRequired" tag="div">
+                  <i18n path="feedback-schemes.physicalDataFields.notRequired">
                     <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
@@ -97,10 +123,11 @@
                 <v-alert
                   v-if="value && !form.physicalDataFields.includes(key)"
                   :key="key"
+                  dense
                   text
                   type="warning"
                 >
-                  <i18n path="feedback-schemes.physicalDataFields.required" tag="div">
+                  <i18n path="feedback-schemes.physicalDataFields.required">
                     <template #field>
                       <span class="font-weight-medium">
                         "{{ $t(`feedback-schemes.physicalDataFields.${key}`) }}"
@@ -121,13 +148,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type {
   Card,
   DemographicGroup,
+  FeedbackMeals,
   FeedbackOutput,
   FeedbackPhysicalDataField,
+  FeedbackSection,
   FeedbackType,
   HenryCoefficient,
   TopFoods,
@@ -140,16 +169,21 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
+  feedbackSections,
   feedbackTypes,
 } from '@intake24/common/feedback';
+import { kebabCase } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 export type FeedbackSchemeForm = {
   id: string | null;
   name: string | null;
   type: FeedbackType;
   outputs: FeedbackOutput[];
+  sections: FeedbackSection[];
   physicalDataFields: FeedbackPhysicalDataField[];
   topFoods: TopFoods;
+  meals: FeedbackMeals;
   cards: Card[];
   demographicGroups: DemographicGroup[];
   henryCoefficients: HenryCoefficient[];
@@ -157,7 +191,7 @@ export type FeedbackSchemeForm = {
 
 export type PatchFeedbackSchemeForm = Pick<
   FeedbackSchemeForm,
-  'name' | 'type' | 'outputs' | 'physicalDataFields'
+  'name' | 'type' | 'outputs' | 'physicalDataFields' | 'sections'
 >;
 
 export default defineComponent({
@@ -168,6 +202,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const i18n = useI18n();
+
     const { canHandleEntry, entry, entryLoaded, isCreate } = useEntry<FeedbackSchemeEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
@@ -178,35 +214,41 @@ export default defineComponent({
         name: null,
         type: 'default',
         outputs: [...feedbackOutputs],
+        sections: [...feedbackSections],
         physicalDataFields: [...feedbackPhysicalDataFields],
       },
+      editMethod: 'patch',
     });
 
-    return { canHandleEntry, entry, entryLoaded, isCreate, clearError, form, routeLeave, submit };
-  },
+    const types = feedbackTypes.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.types.${value}`),
+    }));
 
-  data() {
-    return {
-      feedbackTypes: feedbackTypes.map((value) => ({
-        value,
-        text: this.$t(`feedback-schemes.types.${value}`),
-      })),
-      feedbackOutputs: feedbackOutputs.map((value) => ({
-        value,
-        text: this.$t(`feedback-schemes.outputs.${value}`),
-      })),
-      feedbackPhysicalDataFields: feedbackPhysicalDataFields.map((value) => ({
-        value,
-        text: this.$t(`feedback-schemes.physicalDataFields.${value}`),
-      })),
-    };
-  },
+    const outputs = feedbackOutputs.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.outputs.${value}`),
+    }));
 
-  computed: {
-    currentFeedbackScheme(): FeedbackSchemeEntry {
-      return { ...this.entry, ...this.form.getData(true) } as FeedbackSchemeEntry;
-    },
-    requiredPhysicalDataFields(): Record<FeedbackPhysicalDataField, boolean> {
+    const sections = feedbackSections.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.${kebabCase(value)}.title`),
+    }));
+
+    const physicalDataFields = feedbackPhysicalDataFields.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.physicalDataFields.${value}`),
+    }));
+
+    const currentFeedbackScheme = computed<FeedbackSchemeEntry>(
+      () =>
+        ({
+          ...entry.value,
+          ...form.getData(true),
+        } as FeedbackSchemeEntry)
+    );
+
+    const requiredPhysicalDataFields = computed<Record<FeedbackPhysicalDataField, boolean>>(() => {
       const flags: Record<FeedbackPhysicalDataField, boolean> = {
         sex: false,
         weightKg: false,
@@ -217,7 +259,7 @@ export default defineComponent({
       };
 
       return (
-        this.entry.demographicGroups?.reduce((acc, group) => {
+        entry.value.demographicGroups?.reduce((acc, group) => {
           if (group.nutrientRuleType === 'energy_divided_by_bmr') {
             Object.keys(acc).forEach((key) => {
               acc[key as FeedbackPhysicalDataField] = true;
@@ -235,7 +277,24 @@ export default defineComponent({
           return acc;
         }, flags) ?? flags
       );
-    },
+    });
+
+    return {
+      canHandleEntry,
+      currentFeedbackScheme,
+      entry,
+      entryLoaded,
+      types,
+      outputs,
+      sections,
+      physicalDataFields,
+      isCreate,
+      clearError,
+      form,
+      routeLeave,
+      submit,
+      requiredPhysicalDataFields,
+    };
   },
 });
 </script>

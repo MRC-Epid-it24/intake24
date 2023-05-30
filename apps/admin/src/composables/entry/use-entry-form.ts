@@ -84,7 +84,7 @@ export const useEntryForm = <F extends object, E extends object>(
       const { id, name } = data;
       await router.push({ name: `${resource.name}-edit`, params: { id } });
 
-      useMessages().success(i18n.t('common.msg.stored', { name: name ?? id }).toString());
+      useMessages().success(i18n.t('common.msg.created', { name: name ?? id }).toString());
     }
 
     setEntry(data);

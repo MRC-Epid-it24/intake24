@@ -30,14 +30,19 @@ const feedbackSchemes: LocaleMessageObject = {
   physicalDataFields: {
     _: 'Physical data fields',
     title: 'Physical data fields',
-    required: `Physical data field {field} is needed to calculate feedback.`,
-    notRequired: `Physical data field {field} is not needed, it can be removed.`,
+    required: `Field {field} is needed to calculate feedback.`,
+    notRequired: `Field {field} is not needed, it can be removed.`,
     sex: 'Sex',
     weightKg: 'Weight',
     heightCm: 'Height',
     physicalActivityLevelId: 'Physical activity level',
     birthdate: 'Birth date',
     weightTarget: 'Weight target',
+  },
+
+  sections: {
+    _: 'Section',
+    title: 'Sections',
   },
 
   copy: {
@@ -129,6 +134,17 @@ const feedbackSchemes: LocaleMessageObject = {
     range: 'Range',
   },
 
+  colors: {
+    _: 'Color',
+    title: 'Color list',
+    edit: 'Edit color',
+    max: {
+      _: 'Number of colors',
+      title: 'Number of colors',
+      required: 'Value must be an integer',
+    },
+  },
+
   physicalActivityLevels: {
     _: 'Physical activity level',
     title: 'Physical activity levels',
@@ -141,23 +157,19 @@ const feedbackSchemes: LocaleMessageObject = {
     max: {
       _: 'Foods number',
       title: 'Number of foods',
-      required: 'Value must be an integer',
     },
+    other: 'Other food',
+  },
+
+  meals: {
+    _: 'Meals',
+    title: 'Meals',
+    tab: 'Meals',
+    chart: 'Meal per-day breakdown chart',
+    table: 'Meal per-day summary table',
     colors: {
-      _: 'Color',
-      title: 'Color list',
-      edit: 'Edit color',
-      other: 'Other food',
-    },
-    nutrientTypes: {
-      reset: {
-        _: 'Reset nutrient types',
-        text: 'Reset nutrient types to default list',
-      },
-      validation: {
-        required: 'Nutrient type must be filled in.',
-        unique: 'Nutrient types combination already exists in current list.',
-      },
+      _: 'Meal color',
+      title: 'Meal colors',
     },
   },
 

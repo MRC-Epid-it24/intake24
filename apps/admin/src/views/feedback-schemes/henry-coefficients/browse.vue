@@ -3,10 +3,7 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
-    <henry-coefficient-list
-      v-model="form.henryCoefficients"
-      :scheme-id="id"
-    ></henry-coefficient-list>
+    <henry-coefficient-list v-model="form.henryCoefficients"></henry-coefficient-list>
   </layout>
 </template>
 

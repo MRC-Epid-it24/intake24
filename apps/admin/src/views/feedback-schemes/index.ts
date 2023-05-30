@@ -3,6 +3,7 @@ import cards from './cards';
 import demographicGroups from './demographic-groups';
 import form from './form.vue';
 import henryCoefficients from './henry-coefficients';
+import meals from './meals';
 import read from './read.vue';
 import securables from './securables';
 import topFoods from './top-foods';
@@ -14,6 +15,7 @@ export default {
   edit: form,
   cards,
   'top-foods': topFoods,
+  meals,
   'demographic-groups': demographicGroups,
   'henry-coefficients': henryCoefficients,
   securables,

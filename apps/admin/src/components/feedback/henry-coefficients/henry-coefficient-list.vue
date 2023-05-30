@@ -205,10 +205,6 @@ export default defineComponent({
   components: { ConfirmDialog, draggable, JsonEditor, OptionsMenu, SelectResource },
 
   props: {
-    schemeId: {
-      type: String,
-      required: true,
-    },
     value: {
       type: Array as PropType<HenryCoefficient[]>,
       required: true,

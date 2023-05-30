@@ -20,15 +20,13 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">
-                {{ color }} ({{
-                  idx + 1 < items.length ? idx + 1 : $t('feedback-schemes.top-foods.colors.other')
-                }})
+                {{ color }} ({{ lastLabel && idx + 1 === items.length ? lastLabel : idx + 1 }})
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn
                 icon
-                :title="$t('feedback-schemes.top-foods.colors.edit')"
+                :title="$t('feedback-schemes.colors.edit')"
                 @click.stop="edit(idx, color)"
               >
                 <v-icon color="primary lighten-2">$edit</v-icon>
@@ -48,7 +46,7 @@
         <v-toolbar color="primary" dark flat>
           <v-icon dark left>fa-palette</v-icon>
           <v-toolbar-title>
-            {{ $t('feedback-schemes.top-foods.colors.edit') }}
+            {{ $t('feedback-schemes.colors.edit') }}
           </v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
@@ -84,9 +82,8 @@ export default defineComponent({
   components: { draggable },
 
   props: {
-    schemeId: {
+    lastLabel: {
       type: String,
-      required: true,
     },
     value: {
       type: Array as PropType<string[]>,

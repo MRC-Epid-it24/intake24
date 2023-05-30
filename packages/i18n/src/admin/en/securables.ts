@@ -25,8 +25,9 @@ const securables: LocaleMessageObject = {
     securables: 'Security',
 
     // Feedback scheme
-    'top-foods': 'Top foods',
     cards: 'Cards',
+    'top-foods': 'Top foods',
+    meals: 'Meals',
     'demographic-groups': 'Demographic groups',
     'henry-coefficients': 'Henry coefficients',
 

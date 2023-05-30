@@ -11,11 +11,11 @@
     <v-toolbar color="grey lighten-5" flat tile>
       <v-icon color="primary" left>fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t('feedback-schemes.top-foods.title') }}
+        {{ $t('feedback-schemes.meals.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <options-menu>
-        <select-resource resource="feedback-schemes" return-object="topFoods" @input="load">
+        <select-resource resource="feedback-schemes" return-object="meals" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
@@ -25,49 +25,58 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.topFoods"></json-editor>
+        <json-editor v-model="form.meals"></json-editor>
       </options-menu>
     </v-toolbar>
+
     <v-form @keydown.native="clearError" @submit.prevent="submit">
+      <v-toolbar color="grey lighten-5" flat tile>
+        <v-icon color="primary" left>fas fa-chart-pie</v-icon>
+        <v-toolbar-title class="font-weight-medium">
+          {{ $t('feedback-schemes.meals.chart') }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-container fluid>
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
               <v-icon color="primary" left>fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
-                {{ $t('feedback-schemes.top-foods.max.title') }}
+                {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-text-field
-                v-model.number="form.topFoods.max"
+                v-model.number="colorMax"
                 background-color="grey lighten-5"
                 dense
-                :error-messages="form.errors.get('topFoods.max')"
                 hide-details
-                :label="$t('feedback-schemes.top-foods.max._')"
-                name="topFoods.max"
+                :label="$t('feedback-schemes.meals.colors._')"
+                name="colorMax"
                 outlined
-                :rules="topFoodsMaxRules"
+                :rules="maxRules"
                 single-line
                 :style="{ maxWidth: '75px' }"
               ></v-text-field>
             </v-toolbar>
             <error-list :errors="nonInputErrors"></error-list>
-            <color-list
-              v-model="form.topFoods.colors"
-              :last-label="$t('feedback-schemes.top-foods.other').toString()"
-            ></color-list>
+            <color-list v-model="form.meals.chart.colors"></color-list>
           </v-col>
           <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <nutrient-list
-              v-model="form.topFoods.nutrientTypes"
+              v-model="form.meals.chart.nutrientGroups"
               :available-nutrient-types="refs.nutrientTypes"
-              :defaults="defaultTopFoods.nutrientTypes"
+              :defaults="defaultMeals.chart.nutrientGroups"
             ></nutrient-list>
           </v-col>
         </v-row>
       </v-container>
+      <v-toolbar color="grey lighten-5" flat tile>
+        <v-icon color="primary" left>fas fa-table-list</v-icon>
+        <v-toolbar-title class="font-weight-medium">
+          {{ $t('feedback-schemes.meals.table') }}
+        </v-toolbar-title>
+      </v-toolbar>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>
@@ -80,7 +89,7 @@ import debounce from 'lodash/debounce';
 import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
-import type { TopFoods } from '@intake24/common/feedback';
+import type { FeedbackMeals } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
@@ -88,15 +97,15 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { defaultTopFoods } from '@intake24/common/feedback';
+import { defaultMeals } from '@intake24/common/feedback';
 import { useI18n } from '@intake24/i18n';
 
 import type { FeedbackSchemeForm } from '../form.vue';
 
-export type FeedbackSchemeTopFoodsForm = Pick<FeedbackSchemeForm, 'topFoods'>;
+export type FeedbackSchemeMealsForm = Pick<FeedbackSchemeForm, 'meals'>;
 
 export default defineComponent({
-  name: 'FeedbackSchemeTopFoods',
+  name: 'FeedbackSchemeMeals',
 
   components: {
     ColorList,
@@ -111,6 +120,7 @@ export default defineComponent({
 
   setup(props) {
     const menu = ref(false);
+    const colorMax = ref(6);
 
     const i18n = useI18n();
 
@@ -120,15 +130,15 @@ export default defineComponent({
     >(props);
     useEntryFetch(props);
     const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
-      FeedbackSchemeTopFoodsForm,
+      FeedbackSchemeMealsForm,
       FeedbackSchemeEntry
     >(props, {
-      data: { topFoods: defaultTopFoods },
+      data: { meals: defaultMeals },
       editMethod: 'patch',
-      nonInputErrorKeys: ['topFoods.max', 'topFoods.colors', 'topFoods.nutrientTypes'],
+      nonInputErrorKeys: ['meals.chart', 'meals.table'],
     });
 
-    const topFoodsMaxRules = computed<RuleCallback[]>(() => [
+    const maxRules = computed<RuleCallback[]>(() => [
       (value: string | null): boolean | string =>
         Number.isInteger(value) || i18n.t('feedback-schemes.colors.max.required').toString(),
     ]);
@@ -139,36 +149,32 @@ export default defineComponent({
     }));
 
     const updateColorList = () => {
-      const size = form.topFoods.max + 1;
-
-      if (size < form.topFoods.colors.length) {
-        form.topFoods.colors = [...form.topFoods.colors.slice(0, size)];
-      } else if (size > form.topFoods.colors.length) {
+      if (colorMax.value < form.meals.chart.colors.length) {
+        form.meals.chart.colors = [...form.meals.chart.colors.slice(0, colorMax.value)];
+      } else if (colorMax.value > form.meals.chart.colors.length) {
         const newColors = Array.from<string>({
-          length: size - form.topFoods.colors.length,
+          length: colorMax.value - form.meals.chart.colors.length,
         }).fill('#EF6C00');
 
-        form.topFoods.colors = [...form.topFoods.colors, ...newColors];
+        form.meals.chart.colors = [...form.meals.chart.colors, ...newColors];
       }
     };
 
-    const load = (topFoods: TopFoods) => {
-      form.topFoods = { ...topFoods };
+    const load = (meals: FeedbackMeals) => {
+      form.meals = { ...meals };
     };
 
     const debouncedUpdateColorList = debounce(() => {
       updateColorList();
     }, 300);
 
-    watch(
-      () => form.topFoods.max,
-      () => {
-        debouncedUpdateColorList();
-      }
-    );
+    watch(colorMax, () => {
+      debouncedUpdateColorList();
+    });
 
     return {
-      defaultTopFoods,
+      colorMax,
+      defaultMeals,
       entry,
       entryLoaded,
       refs,
@@ -179,7 +185,7 @@ export default defineComponent({
       nonInputErrors,
       routeLeave,
       submit,
-      topFoodsMaxRules,
+      maxRules,
       currentFeedbackScheme,
       load,
     };

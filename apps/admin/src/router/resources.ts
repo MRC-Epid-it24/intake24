@@ -91,6 +91,7 @@ export const resources: Resource[] = [
     routes: [
       ...routes,
       'top-foods',
+      'meals',
       'cards',
       'demographic-groups',
       'henry-coefficients',

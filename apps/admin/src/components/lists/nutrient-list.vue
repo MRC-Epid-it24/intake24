@@ -11,7 +11,7 @@
       </v-btn>
       <confirm-dialog
         color="error"
-        :label="$t('feedback-schemes.top-foods.nutrientTypes.reset._').toString()"
+        :label="$t('nutrient-types.reset._').toString()"
         @confirm="resetList"
       >
         <template #activator="{ attrs, on }">
@@ -20,14 +20,14 @@
             color="error"
             fab
             small
-            :title="$t('feedback-schemes.top-foods.nutrientTypes.reset._')"
+            :title="$t('nutrient-types.reset._')"
             v-bind="attrs"
             v-on="on"
           >
             <v-icon small>fa-sync</v-icon>
           </v-btn>
         </template>
-        {{ $t('feedback-schemes.top-foods.nutrientTypes.reset.text') }}
+        {{ $t('nutrient-types.reset.text') }}
       </confirm-dialog>
     </v-toolbar>
     <v-list two-line>
@@ -135,11 +135,10 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { TopFoodNutrientType } from '@intake24/common/feedback';
+import type { NutrientGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
-import { defaultTopFoods } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
@@ -148,16 +147,16 @@ export default defineComponent({
   components: { ConfirmDialog, draggable, LanguageSelector },
 
   props: {
-    schemeId: {
-      type: String,
-      required: true,
-    },
     availableNutrientTypes: {
       type: Array as PropType<NutrientTypeEntry[]>,
       required: true,
     },
+    defaults: {
+      type: Array as PropType<NutrientGroup[]>,
+      default: () => [],
+    },
     value: {
-      type: Array as PropType<TopFoodNutrientType[]>,
+      type: Array as PropType<NutrientGroup[]>,
       required: true,
     },
   },
@@ -172,7 +171,7 @@ export default defineComponent({
       useListWithDialog(props, context, defaultItem);
 
     return {
-      defaultNutrientTypes: defaultTopFoods.nutrientTypes,
+      defaultNutrientTypes: props.defaults,
       dialog,
       form,
       items,
@@ -191,10 +190,7 @@ export default defineComponent({
     rules() {
       return [
         (value: string[]): boolean | string => {
-          if (!value.length)
-            return this.$t(
-              'feedback-schemes.top-foods.nutrientTypes.validation.required'
-            ).toString();
+          if (!value.length) return this.$t('nutrient-types.validation.required').toString();
 
           const { index } = this.dialog;
           const match = this.items.find(
@@ -202,9 +198,7 @@ export default defineComponent({
               [...value].sort().join(':') === [...nutrientType.id].sort().join(':') && index !== idx
           );
 
-          return match
-            ? this.$t('feedback-schemes.top-foods.nutrientTypes.validation.unique').toString()
-            : true;
+          return match ? this.$t('nutrient-types.validation.unique').toString() : true;
         },
       ];
     },
