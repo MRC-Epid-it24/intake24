@@ -18,7 +18,7 @@ import { downloadImage } from '../util';
 
 const category = () => ({
   code: randomString(8),
-  name: faker.random.words(5),
+  name: faker.word.words(5),
   isHidden: faker.datatype.boolean(),
   version: randomUUID(),
 });
@@ -26,12 +26,12 @@ const category = () => ({
 const food = (foodGroupId: string) => ({
   code: randomString(8),
   foodGroupId,
-  name: faker.random.words(5),
+  name: faker.word.words(5),
   version: randomUUID(),
 });
 
 const foodGroup = () => ({
-  name: faker.random.words(10),
+  name: faker.word.words(10),
 });
 
 const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInput> => {
@@ -52,12 +52,12 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
   respLangId: string | undefined,
   adminLangId: string | undefined
 ): CreateLocaleRequest => {
-  const id = faker.address.countryCode();
-  const englishName = faker.address.country();
-  const localName = faker.address.country();
-  const respondentLanguageId = respLangId ?? faker.address.countryCode();
-  const adminLanguageId = adminLangId ?? faker.address.countryCode();
-  const countryFlagCode = faker.address.countryCode();
+  const id = faker.location.countryCode();
+  const englishName = faker.location.country();
+  const localName = faker.location.country();
+  const respondentLanguageId = respLangId ?? faker.location.countryCode();
+  const adminLanguageId = adminLangId ?? faker.location.countryCode();
+  const countryFlagCode = faker.location.countryCode();
   const prototypeLocaleId = null;
   const textDirection = 'ltr';
   const foodIndexLanguageBackendId = 'en';
@@ -78,52 +78,52 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
 const nutrientTable = (): NutrientTableInput => {
   return {
     id: slugify(randomString(16), { strict: true }),
-    description: faker.random.words(5),
+    description: faker.word.words(5),
     csvMapping: {
-      idColumnOffset: faker.datatype.number(100),
-      descriptionColumnOffset: faker.datatype.number(100),
-      localDescriptionColumnOffset: faker.datatype.number(100),
-      rowOffset: faker.datatype.number(100),
+      idColumnOffset: faker.number.int(100),
+      descriptionColumnOffset: faker.number.int(100),
+      localDescriptionColumnOffset: faker.number.int(100),
+      rowOffset: faker.number.int(100),
     },
     csvMappingFields: [
       {
         fieldName: slugify(randomString(16), { strict: true }),
-        columnOffset: faker.datatype.number(200),
+        columnOffset: faker.number.int(200),
       },
       {
         fieldName: slugify(randomString(16), { strict: true }),
-        columnOffset: faker.datatype.number(200),
+        columnOffset: faker.number.int(200),
       },
       {
         fieldName: slugify(randomString(16), { strict: true }),
-        columnOffset: faker.datatype.number(200),
+        columnOffset: faker.number.int(200),
       },
     ],
     csvMappingNutrients: [
-      { nutrientTypeId: '1', columnOffset: faker.datatype.number(200) },
-      { nutrientTypeId: '2', columnOffset: faker.datatype.number(200) },
-      { nutrientTypeId: '3', columnOffset: faker.datatype.number(200) },
+      { nutrientTypeId: '1', columnOffset: faker.number.int(200) },
+      { nutrientTypeId: '2', columnOffset: faker.number.int(200) },
+      { nutrientTypeId: '3', columnOffset: faker.number.int(200) },
     ],
   };
 };
 
 const nutrientType = (unitId: string, kcalPerUnit?: number | null): NutrientTypeRequest => ({
-  id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
+  id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
   unitId,
-  description: faker.random.words(5),
+  description: faker.word.words(5),
   kcalPerUnit,
 });
 
 const nutrientUnit = (): NutrientUnitRequest => ({
-  id: faker.datatype.number({ min: 1000, max: 1000000 }).toString(),
-  description: faker.random.words(5),
-  symbol: faker.random.word(),
+  id: faker.number.int({ min: 1000, max: 1000000 }).toString(),
+  description: faker.word.words(5),
+  symbol: faker.word.words(1),
 });
 
 const standardUnit = (): StandardUnitCreationAttributes => ({
-  id: toStandardUnitId(faker.random.words(3)),
-  estimateIn: { en: faker.random.words(5), es: faker.random.words(5) },
-  howMany: { en: faker.random.words(5), es: faker.random.words(5) },
+  id: toStandardUnitId(faker.word.words(3)),
+  estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
+  howMany: { en: faker.word.words(5), es: faker.word.words(5) },
 });
 
 export default {

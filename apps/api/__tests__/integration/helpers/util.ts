@@ -114,7 +114,7 @@ export const generateCSV = async (filename: string): Promise<string> => {
     username: faker.internet.userName(),
     password: faker.internet.password(),
     email: faker.internet.email(),
-    name: faker.name.firstName(),
+    name: faker.person.firstName(),
     phone: faker.phone.number(),
   }));
 
