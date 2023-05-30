@@ -77,18 +77,24 @@
         </v-col>
       </v-row>
     </v-sheet>
-    <feedback-cards v-if="cards.length" v-bind="{ cards }" class="feedback-area"></feedback-cards>
-    <v-sheet v-if="topFoods.chartData.length" color="white">
-      <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
-    </v-sheet>
-    <feedback-meals
-      v-if="feedbackScheme && feedbackDicts?.surveyStats.submissions.length"
-      class="feedback-area"
-      :config="feedbackScheme.meals"
-      :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
-      :submissions="submissions"
-      :survey-stats="feedbackDicts.surveyStats"
-    ></feedback-meals>
+    <div v-if="feedbackScheme && feedbackDicts" class="d-flex flex-column">
+      <feedback-cards
+        v-if="showCards"
+        v-bind="{ cards }"
+        :class="`feedback-area order-${getSectionOrder('cards')}`"
+      ></feedback-cards>
+      <v-sheet v-if="showTopFoods" :class="`order-${getSectionOrder('topFoods')}`" color="white">
+        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
+      </v-sheet>
+      <feedback-meals
+        v-if="showTopFoods"
+        :class="`feedback-area order-${getSectionOrder('meals')}`"
+        :config="feedbackScheme.meals"
+        :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
+        :submissions="submissions"
+        :survey-stats="feedbackDicts.surveyStats"
+      ></feedback-meals>
+    </div>
   </v-container>
 </template>
 
@@ -96,7 +102,7 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { FeedbackOutput } from '@intake24/common/feedback';
+import type { FeedbackSection } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
 import type {
   FeedbackCardParameters,
@@ -157,8 +163,31 @@ export default defineComponent({
       return this.parameters?.feedbackScheme;
     },
 
-    outputs(): FeedbackOutput[] {
+    outputs() {
       return this.feedbackScheme?.outputs ?? [];
+    },
+
+    sections() {
+      return this.feedbackScheme?.sections ?? [];
+    },
+
+    showCards() {
+      return this.sections.includes('cards') && this.cards.length;
+    },
+
+    showMeals() {
+      if (!this.sections.includes('meals')) return false;
+
+      return !!(
+        this.feedbackScheme?.meals.chart.nutrientGroups.length ||
+        this.feedbackScheme?.meals.table.fields.length
+      );
+    },
+
+    showTopFoods() {
+      if (!this.sections.includes('topFoods')) return false;
+
+      return !!this.topFoods.chartData.length;
     },
 
     surveyName(): string | undefined {
@@ -216,6 +245,10 @@ export default defineComponent({
   },
 
   methods: {
+    getSectionOrder(section: FeedbackSection) {
+      return this.sections.indexOf(section);
+    },
+
     async initSelectedSubmissions() {
       const { submissions } = this.$route.query;
       const submissionIds = this.submissions.map(({ id }) => id);
