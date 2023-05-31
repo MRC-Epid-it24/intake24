@@ -24,7 +24,7 @@
             </v-toolbar>
             <v-form autocomplete="off" @keydown.native="clearError" @submit.prevent="save">
               <v-card-text>
-                <v-container>
+                <v-container fluid>
                   <v-row>
                     <v-col cols="12">
                       <v-text-field

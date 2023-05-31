@@ -9,22 +9,22 @@
       <preview v-if="!isCreate" :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container>
+      <v-container fluid>
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.name"
+                class="mb-4"
                 :error-messages="form.errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
                 name="name"
                 outlined
               ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
               <v-select
                 v-model="form.type"
+                class="mb-4"
                 :error-messages="form.errors.get('type')"
                 hide-details="auto"
                 :items="types"
@@ -33,10 +33,9 @@
                 outlined
                 @change="form.errors.clear('type')"
               ></v-select>
-            </v-col>
-            <v-col cols="12" md="6">
               <v-select
                 v-model="form.outputs"
+                class="mb-4"
                 :error-messages="form.errors.get('outputs')"
                 hide-details="auto"
                 :items="outputs"
@@ -56,31 +55,6 @@
                   </template>
                 </template>
               </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="form.sections"
-                :error-messages="form.errors.get('sections')"
-                hide-details="auto"
-                :items="sections"
-                :label="$t('feedback-schemes.sections.title')"
-                multiple
-                name="sections"
-                outlined
-                prepend-inner-icon="fas fa-bars-staggered"
-                @change="form.errors.clear('sections')"
-              >
-                <template #selection="{ item, index }">
-                  <template v-if="index === 0">
-                    <span v-if="form.sections.length === 1">{{ item.text }}</span>
-                    <span v-if="form.sections.length > 1">
-                      {{ $t('common.selected', { count: form.sections.length }) }}
-                    </span>
-                  </template>
-                </template>
-              </v-select>
-            </v-col>
-            <v-col cols="12" md="6">
               <v-select
                 v-model="form.physicalDataFields"
                 :class="{ 'mb-2': form.physicalDataFields.length }"
@@ -137,6 +111,48 @@
                 </v-alert>
               </template>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-card outlined>
+                <v-toolbar color="grey lighten-2" flat tile>
+                  <v-icon color="primary" left>fas fa-bars-staggered</v-icon>
+                  <v-toolbar-title class="font-weight-medium">
+                    {{ $t('feedback-schemes.sections.title') }}
+                  </v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-list class="py-0">
+                  <draggable
+                    v-model="sections"
+                    handle=".drag-and-drop__handle"
+                    @end="updateSectionOrder"
+                  >
+                    <transition-group name="drag-and-drop" type="transition">
+                      <v-list-item
+                        v-for="section in sections"
+                        :key="section.value"
+                        class="drag-and-drop__item"
+                        draggable
+                        link
+                      >
+                        <v-list-item-avatar class="drag-and-drop__handle">
+                          <v-icon>fa-grip-vertical</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>{{ section.text }}</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-checkbox
+                            v-model="form.sections"
+                            color="primary"
+                            :value="section.value"
+                          ></v-checkbox>
+                        </v-list-item-action>
+                      </v-list-item>
+                    </transition-group>
+                  </draggable>
+                </v-list>
+              </v-card>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-container>
@@ -148,7 +164,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
+import draggable from 'vuedraggable';
 
 import type {
   Card,
@@ -197,12 +214,35 @@ export type PatchFeedbackSchemeForm = Pick<
 export default defineComponent({
   name: 'SchemeForm',
 
-  components: { CopySchemeDialog, Preview },
+  components: { CopySchemeDialog, draggable, Preview },
 
   mixins: [formMixin],
 
   setup(props) {
     const i18n = useI18n();
+
+    const types = feedbackTypes.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.types.${value}`),
+    }));
+
+    const outputs = feedbackOutputs.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.outputs.${value}`),
+    }));
+
+    const sections = ref(
+      feedbackSections.map((value) => ({
+        value,
+        text: i18n.t(`feedback-schemes.${kebabCase(value)}.title`),
+      }))
+    );
+
+    const updateSectionOrder = () => {
+      form.sections = sections.value
+        .filter((section) => form.sections.includes(section.value))
+        .map((section) => section.value);
+    };
 
     const { canHandleEntry, entry, entryLoaded, isCreate } = useEntry<FeedbackSchemeEntry>(props);
     useEntryFetch(props);
@@ -218,22 +258,19 @@ export default defineComponent({
         physicalDataFields: [...feedbackPhysicalDataFields],
       },
       editMethod: 'patch',
+      loadCallback: (entry: FeedbackSchemeEntry) => {
+        sections.value.sort((a, b) => {
+          const aIdx = entry.sections.indexOf(a.value);
+          const bIdx = entry.sections.indexOf(b.value);
+
+          if (aIdx === -1) return 1;
+          if (bIdx === -1) return -1;
+
+          return aIdx - bIdx;
+        });
+        return entry;
+      },
     });
-
-    const types = feedbackTypes.map((value) => ({
-      value,
-      text: i18n.t(`feedback-schemes.types.${value}`),
-    }));
-
-    const outputs = feedbackOutputs.map((value) => ({
-      value,
-      text: i18n.t(`feedback-schemes.outputs.${value}`),
-    }));
-
-    const sections = feedbackSections.map((value) => ({
-      value,
-      text: i18n.t(`feedback-schemes.${kebabCase(value)}.title`),
-    }));
 
     const physicalDataFields = feedbackPhysicalDataFields.map((value) => ({
       value,
@@ -284,9 +321,10 @@ export default defineComponent({
       currentFeedbackScheme,
       entry,
       entryLoaded,
+      updateSectionOrder,
+      sections,
       types,
       outputs,
-      sections,
       physicalDataFields,
       isCreate,
       clearError,

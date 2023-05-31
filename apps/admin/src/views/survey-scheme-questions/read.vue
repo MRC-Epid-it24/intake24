@@ -20,7 +20,7 @@
         </tr>
       </tbody>
     </v-simple-table>
-    <v-container>
+    <v-container fluid>
       <pre>{{ JSON.stringify(entry.question, null, '\t') }}</pre>
     </v-container>
   </layout>

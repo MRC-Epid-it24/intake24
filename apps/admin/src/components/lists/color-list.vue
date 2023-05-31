@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list two-line>
+    <v-list>
       <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item

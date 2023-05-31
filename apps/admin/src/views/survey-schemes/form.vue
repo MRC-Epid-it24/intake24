@@ -8,7 +8,7 @@
       ></copy-scheme-dialog>
     </template>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
-      <v-container>
+      <v-container fluid>
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">

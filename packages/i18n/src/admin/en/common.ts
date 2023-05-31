@@ -146,6 +146,7 @@ const common: LocaleMessageObject = {
       title: 'Do you want to continue?',
       msg: `You're about leave the page with unsaved changes. Do you want to continue?`,
       delete: `Do you want to delete {name}?`,
+      remove: `Do you want to remove {name}?`,
       multi: {
         delete: 'Do you want to delete selected items: {count}',
       },

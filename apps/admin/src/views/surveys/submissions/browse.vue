@@ -32,7 +32,7 @@
             {{ selected.id }}
           </v-toolbar-title>
         </v-toolbar>
-        <v-container>
+        <v-container fluid>
           <pre>{{ JSON.stringify(selected, null, '\t') }}</pre>
         </v-container>
       </v-card>
