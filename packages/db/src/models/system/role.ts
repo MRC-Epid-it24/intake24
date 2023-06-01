@@ -11,6 +11,7 @@ import {
   Column,
   CreatedAt,
   DataType,
+  HasMany,
   Scopes,
   Table,
   UpdatedAt,
@@ -66,8 +67,14 @@ export default class Role extends BaseModel<InferAttributes<Role>, InferCreation
   @BelongsToMany(() => User, () => RoleUser)
   declare users?: NonAttribute<User[]>;
 
+  @HasMany(() => RoleUser, 'roleId')
+  declare userLinks?: NonAttribute<RoleUser[]>;
+
   @BelongsToMany(() => Permission, () => PermissionRole)
   declare permissions?: NonAttribute<Permission[]>;
+
+  @HasMany(() => PermissionRole, 'roleId')
+  declare permissionLinks?: NonAttribute<PermissionRole[]>;
 }
 
 export type RoleAttributes = Attributes<Role>;

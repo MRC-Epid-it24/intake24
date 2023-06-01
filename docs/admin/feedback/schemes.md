@@ -18,6 +18,9 @@ Edit tab allows to modify selected feedback scheme.
 
 - `Physical data inputs` - List of physical data inputs / identifiers, which are required to be collected for feedback calculation
 
+- `Sections` - List of feedback sections to be included in feedback
+  - allows to define order of sections and tick / untick to include / exclude section from feedback
+
 ## Top foods
 
 Settings to populate top foods feedback section. It controls top foods lists and nutrient composition pie charts.
@@ -50,3 +53,19 @@ List of demographic groups definitions, which are used for matching with `charac
 ## Henry coefficients
 
 List of Henry coefficients used for calculations (BMR etc).
+
+# Meals
+
+Meals per-day breakdown stats.
+
+## Chart
+
+Meal per-day breakdown chart for selected nutrient type(s).
+
+- `Colors` - list of colors to use for meal chart
+
+- `Nutrient types` - list of nutrient types groups
+
+## Table
+
+Meal per-day breakdown table with selected meal specific fields.

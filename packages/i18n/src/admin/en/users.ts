@@ -31,10 +31,16 @@ const users: LocaleMessageObject = {
     none: 'No custom field defined',
   },
   permissions: {
-    _: 'Assigned permissions',
+    _: 'Permission',
+    title: 'Permissions',
+    tab: 'Permissions',
     hint: 'Prefer permission assignment through role rather than direct permission assignment.',
   },
-  roles: 'Assigned roles',
+  roles: {
+    _: 'Role',
+    title: 'Roles',
+    tab: 'Roles',
+  },
 
   mfa: {
     _: 'Multi-factor authentication',

@@ -36,5 +36,19 @@ export default () => {
     wrapAsync(permissionController.edit)
   );
 
+  router.get(
+    '/:permissionId/roles',
+    permission('permissions|roles'),
+    validation.browse,
+    wrapAsync(permissionController.roles)
+  );
+
+  router.get(
+    '/:permissionId/users',
+    permission('permissions|users'),
+    validation.browse,
+    wrapAsync(permissionController.users)
+  );
+
   return router;
 };

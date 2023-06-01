@@ -2,11 +2,17 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { RoleEntry, RoleRefs, RolesResponse } from '@intake24/common/types/http/admin';
+import type {
+  PermissionsResponse,
+  RoleEntry,
+  RoleRefs,
+  RolesResponse,
+  UsersResponse,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { roleEntryResponse } from '@intake24/api/http/responses/admin';
-import { Permission, Role } from '@intake24/db';
+import { Permission, Role, User } from '@intake24/db';
 
 const roleController = ({
   aclConfig,
@@ -102,6 +108,44 @@ const roleController = ({
     res.json({ permissions });
   };
 
+  const permissions = async (
+    req: Request<{ roleId: string }, any, any, PaginateQuery>,
+    res: Response<PermissionsResponse>
+  ): Promise<void> => {
+    const { roleId } = req.params;
+
+    const role = await Role.findByPk(roleId);
+    if (!role) throw new NotFoundError();
+
+    const permissions = await Permission.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'displayName'],
+      include: [{ association: 'roleLinks', attributes: ['roleId'], where: { roleId } }],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(permissions);
+  };
+
+  const users = async (
+    req: Request<{ roleId: string }, any, any, PaginateQuery>,
+    res: Response<UsersResponse>
+  ): Promise<void> => {
+    const { roleId } = req.params;
+
+    const role = await Role.findByPk(roleId);
+    if (!role) throw new NotFoundError();
+
+    const users = await User.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'email', 'simpleName'],
+      include: [{ association: 'roleLinks', attributes: ['roleId'], where: { roleId } }],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(users);
+  };
+
   return {
     browse,
     store,
@@ -110,6 +154,8 @@ const roleController = ({
     update,
     destroy,
     refs,
+    permissions,
+    users,
   };
 };
 

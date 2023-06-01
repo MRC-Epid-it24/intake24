@@ -5,7 +5,7 @@ import type { JobEntry } from '@intake24/common/types/http/admin';
 import { useHttp } from '@intake24/admin/services';
 
 export const usePollsForJobs = (jobType: JobType | JobType[]) => {
-  const { http } = useHttp();
+  const http = useHttp();
 
   const dialog = ref<boolean>(false);
   const jobs = ref<JobEntry[]>([]);

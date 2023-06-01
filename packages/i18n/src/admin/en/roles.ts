@@ -8,6 +8,17 @@ const roles: LocaleMessageObject = {
   create: 'Add role',
   edit: 'Edit role',
   delete: 'Delete role',
+
+  permissions: {
+    _: 'Permission',
+    title: 'Permissions',
+    tab: 'Permissions',
+  },
+  users: {
+    _: 'User',
+    title: 'Users',
+    tab: 'Users',
+  },
 };
 
 export default roles;

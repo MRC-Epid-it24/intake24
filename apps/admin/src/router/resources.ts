@@ -193,7 +193,7 @@ export const resources: Resource[] = [
     icon: 'fas fa-fw fa-users',
     api: 'admin/users',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'permissions', 'roles'],
   },
   {
     group: 'acl',
@@ -201,7 +201,7 @@ export const resources: Resource[] = [
     icon: 'far fa-fw fa-id-badge',
     api: 'admin/roles',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'permissions', 'users'],
   },
   {
     group: 'acl',
@@ -209,7 +209,7 @@ export const resources: Resource[] = [
     icon: 'far fa-fw fa-eye-slash',
     api: 'admin/permissions',
     generateRoutes: true,
-    routes: [...routes],
+    routes: [...routes, 'roles', 'users'],
   },
 ];
 

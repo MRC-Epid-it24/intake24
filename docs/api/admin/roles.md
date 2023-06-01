@@ -158,3 +158,57 @@ Content-Type: application/json
     ]
 }
 ```
+
+## Permissions associated with role
+
+Get permissions associated with role
+
+### Request
+
+```json
+GET /api/admin/roles/:roleId/permissions
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Users associated with role
+
+Get users associated with role
+
+### Request
+
+```json
+GET /api/admin/roles/:roleId/users
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```

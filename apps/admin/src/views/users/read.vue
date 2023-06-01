@@ -38,12 +38,6 @@
           <th>{{ $t('users.notifications.sms') }}</th>
           <td>{{ entry.smsNotifications ? $t('common.yes') : $t('common.no') }}</td>
         </tr>
-        <tr>
-          <th>{{ $t('users.roles') }}</th>
-          <td v-if="entry.roles">
-            <div v-for="role in entry.roles" :key="role.id">{{ role.name }}</div>
-          </td>
-        </tr>
       </tbody>
     </v-simple-table>
     <v-card-title>

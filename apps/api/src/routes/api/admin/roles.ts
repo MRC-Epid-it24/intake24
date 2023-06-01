@@ -28,5 +28,19 @@ export default () => {
 
   router.get('/:roleId/edit', permission('roles|edit'), wrapAsync(roleController.edit));
 
+  router.get(
+    '/:roleId/permissions',
+    permission('roles|permissions'),
+    validation.browse,
+    wrapAsync(roleController.permissions)
+  );
+
+  router.get(
+    '/:roleId/users',
+    permission('roles|users'),
+    validation.browse,
+    wrapAsync(roleController.users)
+  );
+
   return router;
 };

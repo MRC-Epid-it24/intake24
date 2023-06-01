@@ -167,11 +167,17 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   @BelongsToMany(() => Permission, () => PermissionUser)
   declare permissions?: NonAttribute<Permission[]>;
 
+  @HasMany(() => PermissionUser, 'userId')
+  declare permissionLinks?: NonAttribute<PermissionUser[]>;
+
   @HasOne(() => UserPhysicalData)
   declare physicalData?: NonAttribute<UserPhysicalData>;
 
   @BelongsToMany(() => Role, () => RoleUser)
   declare roles?: NonAttribute<Role[]>;
+
+  @HasMany(() => RoleUser, 'userId')
+  declare roleLinks?: NonAttribute<RoleUser[]>;
 
   @HasMany(() => UserSurveySession, 'userId')
   declare sessions?: NonAttribute<UserSurveySession[]>;

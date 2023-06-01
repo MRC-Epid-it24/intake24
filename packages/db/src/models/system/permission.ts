@@ -13,6 +13,7 @@ import {
   Column,
   CreatedAt,
   DataType,
+  HasMany,
   Scopes,
   Table,
   UpdatedAt,
@@ -79,8 +80,14 @@ export default class Permission extends BaseModel<
   @BelongsToMany(() => Role, () => PermissionRole)
   declare roles?: NonAttribute<Role[]>;
 
+  @HasMany(() => PermissionRole, 'permissionId')
+  declare roleLinks?: NonAttribute<PermissionRole[]>;
+
   @BelongsToMany(() => User, () => PermissionUser)
   declare users?: NonAttribute<User[]>;
+
+  @HasMany(() => PermissionUser, 'permissionId')
+  declare userLinks?: NonAttribute<PermissionUser[]>;
 
   // Always attach new permission(s) to main admin/superuser role
   @AfterCreate

@@ -159,12 +159,16 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'permissions|create', displayName: 'Create permissions' },
     { name: 'permissions|edit', displayName: 'Edit permissions' },
     { name: 'permissions|delete', displayName: 'Delete permissions' },
+    { name: 'permissions|roles', displayName: 'Permission roles' },
+    { name: 'permissions|users', displayName: 'Permission users' },
     { name: 'roles', displayName: 'Roles resource access' },
     { name: 'roles|browse', displayName: 'Browse roles' },
     { name: 'roles|read', displayName: 'Read roles' },
     { name: 'roles|create', displayName: 'Create roles' },
     { name: 'roles|edit', displayName: 'Edit roles' },
     { name: 'roles|delete', displayName: 'Delete roles' },
+    { name: 'roles|permissions', displayName: 'Role permissions' },
+    { name: 'roles|users', displayName: 'Role users' },
     { name: 'sign-in-logs', displayName: 'Sign-in logs resource access' },
     { name: 'sign-in-logs|browse', displayName: 'Browse sign-in logs' },
     { name: 'sign-in-logs|read', displayName: 'Read sign-in logs' },
@@ -217,6 +221,8 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'users|create', displayName: 'Create users' },
     { name: 'users|edit', displayName: 'Edit users' },
     { name: 'users|delete', displayName: 'Delete users' },
+    { name: 'users|permissions', displayName: 'User permissions' },
+    { name: 'users|roles', displayName: 'User roles' },
   ];
 
   await Permission.bulkCreate(permissions);

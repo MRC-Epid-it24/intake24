@@ -2,7 +2,13 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { UserEntry, UserRefs, UsersResponse } from '@intake24/common/types/http/admin';
+import type {
+  PermissionsResponse,
+  RolesResponse,
+  UserEntry,
+  UserRefs,
+  UsersResponse,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { userEntryResponse } from '@intake24/api/http/responses/admin';
@@ -121,6 +127,44 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
     res.json({ permissions, roles });
   };
 
+  const permissions = async (
+    req: Request<{ userId: string }, any, any, PaginateQuery>,
+    res: Response<PermissionsResponse>
+  ): Promise<void> => {
+    const { userId } = req.params;
+
+    const user = await User.findByPk(userId);
+    if (!user) throw new NotFoundError();
+
+    const permissions = await Permission.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'displayName'],
+      include: [{ association: 'userLinks', attributes: ['userId'], where: { userId } }],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(permissions);
+  };
+
+  const roles = async (
+    req: Request<{ userId: string }, any, any, PaginateQuery>,
+    res: Response<RolesResponse>
+  ): Promise<void> => {
+    const { userId } = req.params;
+
+    const user = await User.findByPk(userId);
+    if (!user) throw new NotFoundError();
+
+    const roles = await Role.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'displayName'],
+      include: [{ association: 'userLinks', attributes: ['userId'], where: { userId } }],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(roles);
+  };
+
   return {
     browse,
     store,
@@ -129,6 +173,8 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
     update,
     destroy,
     refs,
+    permissions,
+    roles,
   };
 };
 

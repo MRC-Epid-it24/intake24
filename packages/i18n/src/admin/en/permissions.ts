@@ -16,10 +16,15 @@ const permissions: LocaleMessageObject = {
     fdbs: 'Food databases',
   },
 
-  survey: {
-    admin: 'Survey admin',
-    staff: 'Survey staff',
-    support: 'Survey support',
+  roles: {
+    _: 'Role',
+    title: 'Roles',
+    tab: 'Roles',
+  },
+  users: {
+    _: 'User',
+    title: 'Users',
+    tab: 'Users',
   },
 };
 

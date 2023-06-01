@@ -29,9 +29,17 @@ export const useEntry = defineStore('entry', {
     refsLoaded: (state) => !!Object.keys(state.refs).length,
   },
   actions: {
-    async requestEntry({ id, action, query }: { id: string; action?: string; query?: any }) {
-      const { api } = useResource();
-
+    async requestEntry({
+      id,
+      api = useResource().api,
+      action,
+      query,
+    }: {
+      id: string;
+      api?: string;
+      action?: string;
+      query?: any;
+    }) {
       this.clearEntry();
 
       if (id === 'create') {

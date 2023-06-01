@@ -1,29 +1,34 @@
-import { toRefs } from 'vue';
 import { onBeforeRouteLeave, useRoute } from 'vue-router/composables';
 
+import resources from '@intake24/admin/router/resources';
 import { useEntry } from '@intake24/admin/stores';
 
 import type { UseStoreEntryProps } from './use-entry';
 
 export const useEntryFetch = (props: UseStoreEntryProps) => {
-  const { id } = toRefs(props);
-
   const { requestEntry } = useEntry();
   const { meta: { action } = {} } = useRoute();
 
-  const fetch = async (overrideId?: string) => {
-    await requestEntry({ id: overrideId ?? id.value, action });
+  const fetch = async (id?: string, module?: string) => {
+    const api = module ? resources.find(({ name }) => name === module)?.api : undefined;
+
+    await requestEntry({ id: id ?? props.id, api, action });
   };
 
   fetch();
 
   onBeforeRouteLeave(async (to, from, next) => {
     if (from.params.id === to.params.id) {
-      next();
-      return;
+      const fromModule = from.meta?.module.parent ?? from.meta?.module.current;
+      const toModule = to.meta?.module.parent ?? to.meta?.module.current;
+      if (fromModule === toModule) {
+        next();
+        return;
+      }
     }
 
-    if (typeof to.params.id === 'string') await fetch(to.params.id);
+    if (typeof to.params.id === 'string')
+      await fetch(to.params.id, to.meta?.module.parent ?? to.meta?.module.current);
 
     next();
   });

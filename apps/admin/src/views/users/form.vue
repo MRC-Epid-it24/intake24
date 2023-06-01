@@ -74,7 +74,7 @@
                 item-text="displayName"
                 item-value="id"
                 :items="refs.roles"
-                :label="$t('users.roles')"
+                :label="$t('users.roles._')"
                 multiple
                 name="roles"
                 outlined

@@ -126,3 +126,57 @@ Content-Type: application/json
 ```json
 204 No Content
 ```
+
+## Roles associated with permission
+
+Get roles associated with permission
+
+### Request
+
+```json
+GET /api/admin/permissions/:permissionId/roles
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Users associated with permission
+
+Get users associated with permission
+
+### Request
+
+```json
+GET /api/admin/permissions/:permissionId/users
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
