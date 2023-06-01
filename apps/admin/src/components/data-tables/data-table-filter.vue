@@ -56,7 +56,7 @@ export default defineComponent({
 
     const items = ref<string[]>([]);
     const defaults = ref({ search: '' });
-    const filter = ref<Dictionary>({});
+    const filter = ref<Dictionary>({ ...getFilter });
 
     const currentSearch = computed(() => filter.value.search);
 
@@ -77,8 +77,7 @@ export default defineComponent({
       (val) => {
         filter.value = { ...(isEmpty(val) ? defaults.value : val) };
         refreshItems();
-      },
-      { immediate: true }
+      }
     );
 
     watchDebounced(

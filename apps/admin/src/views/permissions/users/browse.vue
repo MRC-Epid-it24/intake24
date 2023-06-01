@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <embedded-data-table :api="`admin/permissions/${id}/users`" v-bind="{ headers }">
+    <embedded-data-table :api-url="`admin/permissions/${id}/users`" v-bind="{ headers }">
       <template #[`item.action`]="{ item }">
         <component
           :is="action"

@@ -7,7 +7,7 @@
         </v-col>
         <v-col cols="12" sm>
           <v-text-field
-            v-model="search"
+            v-model="filter.search"
             append-icon="$search"
             clearable
             dense
@@ -33,7 +33,6 @@
       :options.sync="options"
       :server-items-length="meta.total"
       :show-select="showSelect"
-      @item-selected="updateTracked"
     >
       <template v-for="(_, scopedSlotName) in $scopedSlots" #[scopedSlotName]="slotData">
         <slot :name="scopedSlotName" v-bind="slotData" />
@@ -43,23 +42,22 @@
 </template>
 
 <script lang="ts">
-import type { DataOptions } from 'vuetify';
-import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { watchDebounced } from '@vueuse/core';
+import { defineComponent, ref } from 'vue';
 
-import type { Dictionary } from '@intake24/common/types';
-import type { PaginationMeta } from '@intake24/db';
+import { useDataTable } from './use-data-table';
 
 export default defineComponent({
-  name: 'SurveyDataTable',
+  name: 'EmbeddedDataTable',
 
   props: {
-    api: {
+    apiUrl: {
       type: String,
       required: true,
     },
     headers: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
     showSelect: {
@@ -72,68 +70,29 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      search: '',
-      items: [] as Dictionary[],
-      meta: {} as PaginationMeta,
-      options: {} as DataOptions,
-      selected: [] as Dictionary[],
-      tracked: [] as string[] | number[],
+  setup(props) {
+    const filter = ref({ search: '' });
+
+    const { api, fetch, items, meta, options, selected, tracked } = useDataTable(props, filter);
+
+    const setFilter = async () => {
+      await fetch();
     };
-  },
 
-  watch: {
-    options: {
-      async handler(val, oldVal) {
-        if (!deepEqual(val, oldVal)) await this.fetch();
+    const resetFilter = async () => {
+      filter.value.search = '';
+      await fetch();
+    };
+
+    watchDebounced(
+      () => filter.value.search,
+      async () => {
+        await setFilter();
       },
-      deep: true,
-    },
-    selected() {
-      this.updateTracked();
-    },
-  },
+      { debounce: 500, maxWait: 2000 }
+    );
 
-  methods: {
-    async fetch() {
-      const {
-        page,
-        itemsPerPage: limit,
-        sortBy: [column],
-        sortDesc: [desc],
-      } = this.options;
-      const { search } = this;
-
-      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : undefined;
-
-      const {
-        data: { data, meta },
-      } = await this.$http.get(this.api, {
-        params: { limit, page, search, sort },
-        withLoading: true,
-      });
-
-      this.items = data;
-      this.meta = { ...meta };
-    },
-
-    updateTracked() {
-      this.tracked = this.selected.map((item) => item[this.trackBy]);
-    },
-
-    async setFilter() {
-      await this.fetch();
-    },
-
-    async resetFilter() {
-      this.search = '';
-      await this.fetch();
-    },
-
-    async onRefresh() {
-      await this.fetch();
-    },
+    return { api, fetch, items, meta, options, selected, tracked, filter, setFilter, resetFilter };
   },
 });
 </script>

@@ -2,7 +2,7 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
       ref="table"
-      :api="`admin/standard-units/${id}/categories`"
+      :api-url="`admin/standard-units/${id}/categories`"
       :headers="headers"
     >
       <template #[`item.action`]="{ item }">

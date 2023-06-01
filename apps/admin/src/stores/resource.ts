@@ -19,7 +19,7 @@ export const useResource = defineStore('resource', {
     paths: ['filter'],
   },
   getters: {
-    getFilter: (state) => {
+    getFilter: (state): Dictionary => {
       const { name } = state;
       return (name && state.filter[name]) ?? {};
     },

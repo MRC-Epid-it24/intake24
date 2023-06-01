@@ -130,13 +130,13 @@ export default defineComponent({
   },
 
   watch: {
-    page(val, oldVal) {
-      if (val !== oldVal) this.fetch();
+    async page(val, oldVal) {
+      if (val !== oldVal) await this.fetch();
     },
   },
 
-  mounted() {
-    this.fetch();
+  async mounted() {
+    await this.fetch();
   },
 
   methods: {
@@ -160,16 +160,16 @@ export default defineComponent({
 
     async setFilter(data: Dictionary) {
       await this.setResourceFilter(data);
-      this.fetch();
+      await this.fetch();
     },
 
     async resetFilter() {
       await this.resetResourceFilter();
-      this.fetch();
+      await this.fetch();
     },
 
     async refresh() {
-      this.fetch();
+      await this.fetch();
     },
 
     async remove(item: Dictionary): Promise<void> {

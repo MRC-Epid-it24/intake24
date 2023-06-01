@@ -45,26 +45,21 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import type { DataOptions } from 'vuetify';
-import { deepEqual } from 'fast-equals';
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { mapActions } from 'pinia';
+import { computed, defineComponent } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
-import type { Pagination, PaginationMeta } from '@intake24/db';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
-import { resource } from '@intake24/admin/mixins';
 import { useResource } from '@intake24/admin/stores';
 
 import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
+import { useDataTable } from './use-data-table';
 
 export default defineComponent({
   name: 'DataTable',
 
   components: { ActionBar, DataTableFilter, ToolBar },
-
-  mixins: [resource],
 
   props: {
     actions: {
@@ -75,7 +70,7 @@ export default defineComponent({
       type: String,
     },
     headers: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
     trackBy: {
@@ -84,32 +79,12 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      items: [] as Dictionary[],
-      meta: {} as PaginationMeta,
-      options: {} as DataOptions,
-      selected: [] as Dictionary[],
-    };
-  },
+  setup(props) {
+    const resource = useResource();
+    const filter = computed(() => resource.getFilter);
+    const { api, fetch, items, meta, options, selected, tracked } = useDataTable(props, filter);
 
-  computed: {
-    ...mapState(useResource, { filter: 'getFilter' }),
-    api(): string {
-      return this.apiUrl ?? this.resource.api;
-    },
-    tracked(): string[] | number[] {
-      return this.selected.map((item) => item[this.trackBy]);
-    },
-  },
-
-  watch: {
-    options: {
-      async handler(val, oldVal) {
-        if (!deepEqual(val, oldVal)) await this.fetch();
-      },
-      deep: true,
-    },
+    return { api, fetch, items, meta, options, selected, tracked, filter };
   },
 
   methods: {
@@ -118,27 +93,8 @@ export default defineComponent({
       resetResourceFilter: 'resetFilter',
     }),
 
-    async fetch() {
-      const {
-        page,
-        itemsPerPage: limit,
-        sortBy: [column],
-        sortDesc: [desc],
-      } = this.options;
-
-      const sort = column ? `${column}|${desc ? 'desc' : 'asc'}` : undefined;
-
-      const {
-        data: { data, meta },
-      } = await this.$http.get<Pagination>(this.api, {
-        params: { limit, page, sort, ...this.filter },
-        withLoading: true,
-      });
-      this.items = data;
-      this.meta = { ...meta };
-    },
-
     async setFilter(data: Dictionary) {
+      console.log('setFilter', data);
       // this.clearSelected();
       await this.setResourceFilter(data);
       await this.fetch();

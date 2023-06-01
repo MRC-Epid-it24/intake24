@@ -1,6 +1,10 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <embedded-data-table ref="table" :api="`admin/standard-units/${id}/foods`" :headers="headers">
+    <embedded-data-table
+      ref="table"
+      :api-url="`admin/standard-units/${id}/foods`"
+      :headers="headers"
+    >
       <template #[`item.action`]="{ item }">
         <read
           action="read"

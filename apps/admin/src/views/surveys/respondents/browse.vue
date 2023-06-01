@@ -2,7 +2,7 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table
       ref="table"
-      :api="`admin/surveys/${id}/respondents`"
+      :api-url="`admin/surveys/${id}/respondents`"
       :headers="headers"
       track-by="userId"
     >

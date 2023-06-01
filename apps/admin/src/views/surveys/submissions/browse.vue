@@ -1,6 +1,6 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
-    <embedded-data-table ref="table" :api="baseAPI" :headers="headers">
+    <embedded-data-table ref="table" :api-url="baseAPI" :headers="headers">
       <template #[`item.startTime`]="{ item }">
         {{ formatDate(item.startTime) }}
       </template>

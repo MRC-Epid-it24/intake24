@@ -11,7 +11,7 @@
         <owner-dialog v-bind="{ api, owner, resource }" ref="ownerDialog"></owner-dialog>
       </div>
     </v-toolbar>
-    <embedded-data-table v-bind="{ api, headers }" ref="table">
+    <embedded-data-table v-bind="{ apiUrl: api, headers }" ref="table">
       <template #header-add>
         <user-dialog
           v-bind="{ api, actions, resource }"
