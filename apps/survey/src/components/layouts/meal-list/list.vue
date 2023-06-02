@@ -1,15 +1,10 @@
 <template>
   <v-card>
-    <v-list dense>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title">{{ $t('recall._') }}</v-list-item-title>
-          <v-list-item-subtitle>{{ surveyName }}</v-list-item-subtitle>
-        </v-list-item-content>
-        <context-menu icon="fas fa-angle-double-right" :menu="menu" @action="action"></context-menu>
-      </v-list-item>
-    </v-list>
-    <v-list class="meal-list" dense flat tile>
+    <v-card-title>
+      {{ $t('recall.menu.title') }}
+    </v-card-title>
+    <v-divider></v-divider>
+    <v-list class="meal-list pt-0" dense flat tile>
       <template v-for="meal in meals">
         <component
           :is="expandable ? 'meal-item-expandable' : 'meal-item'"
@@ -42,8 +37,6 @@ import { defineComponent } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import type { MenuItem } from '@intake24/survey/components/elements';
-import { ContextMenu } from '@intake24/survey/components/elements';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
@@ -53,7 +46,7 @@ import MealItemExpandable from './meal-item-expandable.vue';
 export default defineComponent({
   name: 'MealList',
 
-  components: { ContextMenu, MealItem, MealItemExpandable },
+  components: { MealItem, MealItemExpandable },
 
   props: {
     expandable: {
@@ -64,21 +57,9 @@ export default defineComponent({
       type: Array as PropType<MealState[]>,
       required: true,
     },
-    surveyName: {
-      type: String,
-      required: true,
-    },
   },
 
   emits: ['action', 'food-selected', 'meal-selected', 'action'],
-
-  data() {
-    const menu: MenuItem[] = [
-      { name: this.$t('recall.menu.recall.addMeal').toString(), action: 'addMeal', icon: '$meal' },
-    ];
-
-    return { menu };
-  },
 
   computed: {
     ...mapState(useSurvey, ['selection']),

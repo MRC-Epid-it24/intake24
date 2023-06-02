@@ -29,6 +29,7 @@ const recall: LocaleMessageObject = {
     confirm: 'Abort current recall?',
   },
   menu: {
+    title: 'Your food and drink intake',
     mealSuggested:
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
     food: {

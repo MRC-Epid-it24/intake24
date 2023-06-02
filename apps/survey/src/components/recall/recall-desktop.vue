@@ -1,8 +1,8 @@
 <template>
   <v-row class="pt-2" justify="center" :no-gutters="isMobile">
-    <v-col v-if="showMealList && surveyName" cols="3">
+    <v-col v-if="showMealList" cols="3">
       <meal-list
-        v-bind="{ meals, surveyName }"
+        v-bind="{ meals }"
         @action="action"
         @food-selected="foodSelected"
         @meal-selected="mealSelected"
@@ -24,7 +24,6 @@
         ></component>
       </transition>
     </v-col>
-
     <info-alert
       :info="undo ? 'Undo deletion of ' + undo.type : ''"
       :status="undo ? true : false"
