@@ -1,21 +1,6 @@
 import type { FindOptions, WhereOptions } from 'sequelize';
 
 import type { SurveySubmissionAttributes } from '../models/system';
-import {
-  SurveySubmissionCustomField,
-  SurveySubmissionField,
-  SurveySubmissionFood,
-  SurveySubmissionFoodCustomField,
-  SurveySubmissionMeal,
-  SurveySubmissionMealCustomField,
-  SurveySubmissionMissingFood,
-  SurveySubmissionNutrient,
-  SurveySubmissionPortionSizeField,
-  SystemNutrientType,
-  User,
-  UserCustomField,
-  UserSurveyAlias,
-} from '../models/system';
 
 export type SubmissionScope = {
   surveyId?: string | string[];
