@@ -131,8 +131,7 @@ export default defineComponent({
 .bottom-navigation .v-btn {
   max-width: unset !important;
 
-  // TODO: Review nav active state
-  &.v-btn--active {
+  &.v-btn--active.secondary {
     color: white !important;
   }
 }
