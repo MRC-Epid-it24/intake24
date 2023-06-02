@@ -9,19 +9,24 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="8" sm="10">
-          <v-form @submit.prevent="addFood">
+          <v-form @submit.prevent="moveToList">
             <div class="d-flex">
               <v-text-field
                 ref="search"
-                v-model.trim="newFoodDescription"
+                v-model.trim="newFood.description"
                 hide-details
                 :name="`${mode}-food`"
                 outlined
                 :placeholder="$t(`prompts.editMeal.${mode}`)"
-                @keydown.prevent.stop.enter="addFood"
+                @input="updateFood(foods.length, $event)"
+                @keydown.prevent.stop.enter="moveToList"
               >
                 <template v-if="$vuetify.breakpoint.xs" #append>
-                  <v-icon class="flip px-2" :disabled="!newFoodDescription.length" @click="addFood">
+                  <v-icon
+                    class="flip px-2"
+                    :disabled="!newFood.description.length"
+                    @click="moveToList"
+                  >
                     fa-arrow-turn-down
                   </v-icon>
                 </template>
@@ -30,10 +35,10 @@
                 v-if="$vuetify.breakpoint.smAndUp"
                 class="ml-2"
                 color="secondary"
-                :disabled="!newFoodDescription.length"
+                :disabled="!newFood.description.length"
                 height="initial"
                 x-large
-                @click="addFood"
+                @click="moveToList"
               >
                 <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
                 {{ $t('prompts.editMeal.add') }}
@@ -55,9 +60,8 @@
                 v-if="food.type === 'free-text' && editIndex === idx"
                 class="v-input-basis-stretch"
                 :value="food.description"
-                @focusout.stop="onEditFocusLost(idx)"
+                @focusout.stop="focusOut(idx)"
                 @input="updateFood(idx, $event)"
-                @keypress.enter.stop="addFood"
               ></v-text-field>
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
               <v-list-item-icon class="my-auto">
@@ -126,19 +130,25 @@ export default defineComponent({
     const search = ref<InstanceType<typeof VTextField>>();
 
     const foods = ref(copy(props.value));
-    const newFoodDescription = ref('');
-    const editIndex = ref<number | null>(null);
 
-    onMounted(async () => {
-      if (!props.focus || !search.value) return;
-
-      await nextTick();
-      //@ts-expect-error - vuetify types
-      search.value.focus();
+    const createFood = (): FreeTextFood => ({
+      id: getEntityId(),
+      type: 'free-text',
+      description: '',
+      flags: props.mode === 'drinksOnly' ? ['is-drink'] : [],
+      customPromptAnswers: {},
+      linkedFoods: [],
     });
 
+    const newFood = ref(createFood());
+
+    const editIndex = ref<number | null>(null);
+
     const updateFoods = () => {
-      emit('input', foods.value);
+      emit(
+        'input',
+        newFood.value.description.length ? [...foods.value, newFood.value] : foods.value
+      );
     };
 
     const debouncedUpdateFoods = useDebounceFn(
@@ -154,36 +164,20 @@ export default defineComponent({
     };
 
     const updateFood = (index: number, description: string) => {
-      const food = foods.value[index];
+      const food = index === foods.value.length ? newFood.value : foods.value[index];
       if (food.type !== 'free-text') return;
 
       food.description = description;
 
-      if (description) debouncedUpdateFoods();
+      if (foods.value.length || description) debouncedUpdateFoods();
     };
 
-    const addFood = () => {
-      if (editIndex.value !== null) {
-        const editEntry = foods.value[editIndex.value];
+    const moveToList = () => {
+      if (!newFood.value.description.length) return;
 
-        if (editEntry.type === 'free-text' && !editEntry.description.trim().length) return;
-      }
-
-      if (!newFoodDescription.value.length) return;
-
-      const newFood: FreeTextFood = {
-        id: getEntityId(),
-        type: 'free-text',
-        description: newFoodDescription.value,
-        flags: props.mode === 'drinksOnly' ? ['is-drink'] : [],
-        customPromptAnswers: {},
-        linkedFoods: [],
-      };
-
-      foods.value.push(newFood);
-
+      foods.value.push(newFood.value);
       editFood(foods.value.length - 1);
-      newFoodDescription.value = '';
+      newFood.value = createFood();
       updateFoods();
     };
 
@@ -194,22 +188,30 @@ export default defineComponent({
       updateFoods();
     };
 
-    const onEditFocusLost = (index: number) => {
+    const focusOut = (index: number) => {
       const editEntry = foods.value[index];
 
       if (editEntry.type === 'free-text' && !editEntry.description.trim().length) deleteFood(index);
     };
 
+    onMounted(async () => {
+      if (!props.focus || !search.value) return;
+
+      await nextTick();
+      //@ts-expect-error - vuetify types
+      search.value.focus();
+    });
+
     return {
       editIndex,
       foods,
-      newFoodDescription,
-      addFood,
+      newFood,
+      moveToList,
       deleteFood,
       editFood,
       updateFood,
       getFoodName,
-      onEditFocusLost,
+      focusOut,
       search,
     };
   },
