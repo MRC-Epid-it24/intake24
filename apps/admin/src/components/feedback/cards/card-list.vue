@@ -86,7 +86,6 @@ import type { Card } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
-import { useEntry } from '@intake24/admin/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
 import CardSelector from './card-selector.vue';
@@ -109,6 +108,10 @@ export default defineComponent({
   },
 
   props: {
+    nutrientTypes: {
+      type: Array as PropType<NutrientTypeEntry[]>,
+      default: () => [],
+    },
     value: {
       type: Array as PropType<Card[]>,
       required: true,
@@ -122,12 +125,6 @@ export default defineComponent({
     const selector = ref<InstanceType<typeof CardSelector>>();
 
     return { cards, selector };
-  },
-
-  computed: {
-    allNutrientTypes(): NutrientTypeEntry[] {
-      return useEntry().refs.nutrientTypes ?? [];
-    },
   },
 
   watch: {
@@ -146,7 +143,7 @@ export default defineComponent({
       if (card.type === 'character') {
         const { characterType, nutrientTypeIds } = card;
 
-        const nutrients = this.allNutrientTypes
+        const nutrients = this.nutrientTypes
           .filter(({ id }) => nutrientTypeIds.includes(id))
           .map((item) => item.description);
 

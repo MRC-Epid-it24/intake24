@@ -238,6 +238,10 @@ export default defineComponent({
   },
 
   props: {
+    nutrientTypes: {
+      type: Array as PropType<NutrientTypeEntry[]>,
+      default: () => [],
+    },
     value: {
       type: Array as PropType<DemographicGroup[]>,
       required: true,
@@ -271,9 +275,6 @@ export default defineComponent({
   },
 
   computed: {
-    nutrientTypes(): NutrientTypeEntry[] {
-      return useEntry().refs.nutrientTypes ?? [];
-    },
     physicalActivityLevels(): PhysicalActivityLevelAttributes[] {
       return [
         { name: this.$t('common.not.selected'), id: null },

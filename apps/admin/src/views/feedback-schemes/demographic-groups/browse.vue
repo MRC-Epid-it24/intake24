@@ -3,14 +3,17 @@
     <template #actions>
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
-    <demographic-group-list v-model="form.demographicGroups"></demographic-group-list>
+    <demographic-group-list
+      v-model="form.demographicGroups"
+      :nutrient-types="refs?.nutrientTypes"
+    ></demographic-group-list>
   </layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
+import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DemographicGroupList, Preview } from '@intake24/admin/components/feedback';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -27,7 +30,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useEntry<FeedbackSchemeEntry>(props);
+    const { entry, entryLoaded, refs } = useEntry<FeedbackSchemeEntry, FeedbackSchemeRefs>(props);
     useEntryFetch(props);
     const { form, routeLeave, submit } = useEntryForm<
       FeedbackSchemeDemographicGroupsForm,
@@ -37,7 +40,7 @@ export default defineComponent({
       editMethod: 'patch',
     });
 
-    return { entry, entryLoaded, form, routeLeave, submit };
+    return { entry, entryLoaded, refs, form, routeLeave, submit };
   },
 
   computed: {
