@@ -62,7 +62,7 @@
   ],
   "devDependencies": {
     "@jest/types": "^29.5.0",
-    "@types/jest": "^29.5.1",
+    "@types/jest": "^29.5.2",
     "@types/node": "^20.2.5",
     "@types/prompts": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
@@ -71,7 +71,7 @@
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^2.2.2",
-    "eslint": "^8.41.0",
+    "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-define-config": "^1.20.0",
     "eslint-plugin-import": "^2.27.5",
@@ -91,7 +91,7 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
-    "typescript": "^5.0.4",
+    "typescript": "^5.1.3",
     "vite": "^4.3.9",
     "vitepress": "1.0.0-beta.1"
   },
