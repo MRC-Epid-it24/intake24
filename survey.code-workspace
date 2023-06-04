@@ -25,6 +25,11 @@
     }
   },
   "extensions": {
-    "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "octref.vetur"]
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "vue.volar",
+      "vue.vscode-typescript-vue-plugin"
+    ]
   }
 }
