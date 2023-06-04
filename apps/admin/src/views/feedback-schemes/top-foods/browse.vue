@@ -62,8 +62,8 @@
           <v-col cols="12" md="6">
             <nutrient-list
               v-model="form.topFoods.nutrientTypes"
-              :available-nutrient-types="refs.nutrientTypes"
               :defaults="defaultTopFoods.nutrientTypes"
+              :nutrient-types="refs.nutrientTypes"
             ></nutrient-list>
           </v-col>
         </v-row>

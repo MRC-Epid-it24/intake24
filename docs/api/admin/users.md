@@ -190,7 +190,7 @@ Content-Type: application/json
 }
 ```
 
-## Permissions associated with user
+## User permissions
 
 Get permissions associated with user
 
@@ -217,7 +217,7 @@ Content-Type: application/json
 }
 ```
 
-## Roles associated with user
+## User roles
 
 Get roles associated with user
 

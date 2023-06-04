@@ -46,6 +46,7 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { defineComponent, ref } from 'vue';
 
+import type { DataTableHeader } from './use-data-table';
 import { useDataTable } from './use-data-table';
 
 export default defineComponent({
@@ -57,7 +58,7 @@ export default defineComponent({
       required: true,
     },
     headers: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<DataTableHeader[]>,
       required: true,
     },
     showSelect: {

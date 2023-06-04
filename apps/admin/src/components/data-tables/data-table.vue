@@ -52,6 +52,7 @@ import type { Dictionary } from '@intake24/common/types';
 import ToolBar from '@intake24/admin/components/toolbar/tool-bar.vue';
 import { useResource } from '@intake24/admin/stores';
 
+import type { DataTableHeader } from './use-data-table';
 import { ActionBar } from './action-bar';
 import DataTableFilter from './data-table-filter.vue';
 import { useDataTable } from './use-data-table';
@@ -70,7 +71,7 @@ export default defineComponent({
       type: String,
     },
     headers: {
-      type: Array as PropType<string[]>,
+      type: Array as PropType<DataTableHeader[]>,
       required: true,
     },
     trackBy: {

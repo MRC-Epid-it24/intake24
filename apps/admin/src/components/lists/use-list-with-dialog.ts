@@ -6,6 +6,7 @@ import { copy } from '@intake24/common/util';
 
 export type ListProps<T> = {
   value: T[];
+  defaults?: T[];
 };
 
 // TODO: fix generic types casting
@@ -60,6 +61,13 @@ export const useListWithDialog = <T>(
     form.value?.resetValidation();
   };
 
+  const resetList = () => {
+    if (!props.defaults) return;
+
+    items.value = [...props.defaults] as UnwrapRef<T>[];
+    update();
+  };
+
   const save = () => {
     const isValid = form.value?.validate();
     if (!isValid) return;
@@ -89,5 +97,6 @@ export const useListWithDialog = <T>(
     reset,
     save,
     update,
+    resetList,
   };
 };

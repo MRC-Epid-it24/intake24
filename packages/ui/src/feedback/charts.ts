@@ -3,7 +3,7 @@ export type ChartData = {
   value: number;
 };
 
-export type NutrientGroupChartData = {
+export type NutrientChartData = {
   id: string[];
   name: string;
   unit: string;

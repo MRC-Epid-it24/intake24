@@ -4,13 +4,13 @@ import type {
   FeedbackMealTable,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { getLocaleContent, getNutrientGroupUnit } from '@intake24/ui/util';
+import { getLocaleContent, getNutrientUnit } from '@intake24/ui/util';
 
-import type { NutrientGroupChartData } from './charts';
+import type { NutrientChartData } from './charts';
 import type { MealStats } from './classes';
 
 export interface FeedbackMealChartData extends FeedbackMealChart {
-  chartData: NutrientGroupChartData[];
+  chartData: NutrientChartData[];
 }
 
 export type MealTableFieldData = Record<string, string | number | null>;
@@ -31,11 +31,11 @@ export const buildMealStats = (
 ): FeedbackMealsData => {
   const { chart, table } = feedbackMeals;
 
-  const chartData = chart.nutrientGroups.map((nutrientGroup) => {
-    const { id } = nutrientGroup;
+  const chartData = chart.nutrients.map((nutrient) => {
+    const { id } = nutrient;
 
-    const name = getLocaleContent(nutrientGroup.name);
-    const unit = getNutrientGroupUnit(id, nutrientTypes);
+    const name = getLocaleContent(nutrient.name);
+    const unit = getNutrientUnit(id, nutrientTypes);
 
     const data = meals.map((meal) => ({
       name: meal.name,
@@ -47,22 +47,24 @@ export const buildMealStats = (
 
   const tableData = meals.map((meal) => {
     return table.fields.reduce<MealTableFieldData>((acc, field) => {
-      let value: string | number | null = null;
-      const item = getLocaleContent(field.item);
+      let resolvedValue: string | number | null = null;
+      const value = getLocaleContent(field.value);
 
       switch (field.type) {
         case 'standard':
-          value = meal[field.fieldId];
+          resolvedValue = meal[field.fieldId];
           break;
         case 'custom':
-          value = meal.customFields.find((item) => item.name === field.fieldId)?.value ?? null;
+          resolvedValue =
+            meal.customFields.find((item) => item.name === field.fieldId)?.value ?? null;
           break;
-        case 'nutrientGroup':
-          value = meal.stats.getGroupAverageIntake(field.nutrientTypes);
+        case 'nutrient':
+          resolvedValue = meal.stats.getGroupAverageIntake(field.types);
           break;
       }
 
-      acc[field.fieldId] = item && value ? item.replace('{value}', value.toString()) : value;
+      acc[field.fieldId] =
+        value && resolvedValue ? value.replace('{value}', resolvedValue.toString()) : resolvedValue;
 
       return acc;
     }, {});

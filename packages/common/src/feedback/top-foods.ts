@@ -1,9 +1,9 @@
-import type { NutrientGroup } from './shared';
+import type { Nutrient } from './shared';
 
 export type TopFoods = {
   max: number;
   colors: string[];
-  nutrientTypes: NutrientGroup[];
+  nutrientTypes: Nutrient[];
 };
 
 export const defaultTopFoods: TopFoods = {

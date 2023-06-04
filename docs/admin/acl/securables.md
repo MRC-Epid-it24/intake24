@@ -3,6 +3,8 @@
 Following resources / record types implement `securable` per-record access.
 
 - `Feedback scheme`
+- `Language`
+- `Locale`
 - `Survey scheme`
 - `Surveys`
 
@@ -11,6 +13,7 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 `Security` tab allows to control:
 
 <!-- prettier-ignore -->
+- [Securables](#securables)
   - [Securable permissions](#securable-permissions)
   - [Record ownership](#record-ownership)
 

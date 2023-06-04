@@ -99,17 +99,9 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
-import type { FeedbackSection } from '@intake24/common/feedback';
-import type { FeedbackSchemeEntryResponse } from '@intake24/common/types/http';
-import type {
-  FeedbackCardParameters,
-  FeedbackDictionaries,
-  SurveySubmission,
-  UserDemographic,
-} from '@intake24/ui/feedback';
+import type { UserDemographic } from '@intake24/ui/feedback';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {
@@ -120,6 +112,7 @@ import {
   FeedbackOutputs,
   FeedbackTopFoods,
   FeedbackUserInfo,
+  useFeedback,
 } from '@intake24/ui/feedback';
 
 export default defineComponent({
@@ -144,59 +137,39 @@ export default defineComponent({
     },
   },
 
-  data() {
+  setup() {
+    const survey = useSurvey();
+    const parameters = computed(() => survey.parameters);
+    const surveyName = computed(() => parameters.value?.name);
+    const feedbackScheme = computed(() => parameters.value?.feedbackScheme);
+    const outputs = computed(() => feedbackScheme.value?.outputs ?? []);
+    const sections = computed(() => feedbackScheme.value?.sections ?? []);
+
+    const userDemographic = ref<UserDemographic | null>(null);
+    const selectedSubmissions = ref<string[]>([]);
+
+    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods } =
+      useFeedback(feedbackScheme);
+
+    const submissions = computed(() => feedbackDicts.value?.surveyStats.submissions ?? []);
+
     return {
-      feedbackDicts: null as FeedbackDictionaries | null,
-      userDemographic: null as UserDemographic | null,
-
-      cards: [] as FeedbackCardParameters[],
-      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], []),
-
-      selectedSubmissions: [] as string[],
+      userDemographic,
+      selectedSubmissions,
+      cards,
+      feedbackDicts,
+      getSectionOrder,
+      topFoods,
+      showCards,
+      showMeals,
+      showTopFoods,
+      parameters,
+      feedbackScheme,
+      outputs,
+      sections,
+      surveyName,
+      submissions,
     };
-  },
-
-  computed: {
-    ...mapState(useSurvey, ['parameters']),
-
-    feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
-      return this.parameters?.feedbackScheme;
-    },
-
-    outputs() {
-      return this.feedbackScheme?.outputs ?? [];
-    },
-
-    sections() {
-      return this.feedbackScheme?.sections ?? [];
-    },
-
-    showCards() {
-      return this.sections.includes('cards') && this.cards.length;
-    },
-
-    showMeals() {
-      if (!this.sections.includes('meals')) return false;
-
-      return !!(
-        this.feedbackScheme?.meals.chart.nutrientGroups.length ||
-        this.feedbackScheme?.meals.table.fields.length
-      );
-    },
-
-    showTopFoods() {
-      if (!this.sections.includes('topFoods')) return false;
-
-      return !!this.topFoods.chartData.length;
-    },
-
-    surveyName(): string | undefined {
-      return this.parameters?.name;
-    },
-
-    submissions(): SurveySubmission[] {
-      return this.feedbackDicts?.surveyStats.submissions ?? [];
-    },
   },
 
   async mounted() {
@@ -245,10 +218,6 @@ export default defineComponent({
   },
 
   methods: {
-    getSectionOrder(section: FeedbackSection) {
-      return this.sections.indexOf(section);
-    },
-
     async initSelectedSubmissions() {
       const { submissions } = this.$route.query;
       const submissionIds = this.submissions.map(({ id }) => id);

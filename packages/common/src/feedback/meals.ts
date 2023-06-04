@@ -1,14 +1,14 @@
 import type { RequiredLocaleTranslation } from '../types';
-import type { NutrientGroup } from './shared';
+import type { Nutrient } from './shared';
 
 export type FeedbackMealChart = {
   colors: string[];
-  nutrientGroups: NutrientGroup[];
+  nutrients: Nutrient[];
 };
 
 export type BaseMealTableField = {
   header: RequiredLocaleTranslation;
-  item: RequiredLocaleTranslation;
+  value: RequiredLocaleTranslation;
 };
 
 export type MealTableFields = {
@@ -17,14 +17,25 @@ export type MealTableFields = {
     fieldId: 'name' | 'hours' | 'minutes' | 'time' | 'duration';
   };
   custom: BaseMealTableField & { type: 'custom'; fieldId: string };
-  nutrientGroup: BaseMealTableField & {
-    type: 'nutrientGroup';
-    fieldId: string;
-    nutrientTypes: string[];
+  nutrient: BaseMealTableField & {
+    type: 'nutrient';
+    fieldId: `nutrient-${string}`;
+    types: string[];
   };
 };
 
 export type MealTableField = MealTableFields[keyof MealTableFields];
+export type MealTableFieldType = MealTableFields[keyof MealTableFields]['type'];
+export type MealTableFieldId = MealTableFields[keyof MealTableFields]['fieldId'];
+
+export const mealTableFieldTypes: MealTableFieldType[] = ['standard', 'custom', 'nutrient'];
+export const mealTableFieldStandardIds: MealTableFieldId[] = [
+  'name',
+  'hours',
+  'minutes',
+  'time',
+  'duration',
+];
 
 export type FeedbackMealTable = {
   fields: MealTableField[];
@@ -38,7 +49,7 @@ export type FeedbackMeals = {
 export const defaultMeals: FeedbackMeals = {
   chart: {
     colors: ['#FF6384', '#36A2EB', '#FFCE56', '#9c27b0', '#8bc34a', '#999999'],
-    nutrientGroups: [{ id: ['1'], name: { en: 'Energy (kcal)' } }],
+    nutrients: [{ id: ['1'], name: { en: 'Energy (kcal)' } }],
   },
   table: {
     fields: [
@@ -46,32 +57,32 @@ export const defaultMeals: FeedbackMeals = {
         type: 'standard',
         fieldId: 'name',
         header: { en: 'Meal' },
-        item: { en: '{value}' },
+        value: { en: '{value}' },
       },
       {
         type: 'standard',
         fieldId: 'time',
         header: { en: 'Time' },
-        item: { en: '{value}' },
+        value: { en: '{value}' },
       },
       {
         type: 'standard',
         fieldId: 'duration',
         header: { en: 'Duration (min)' },
-        item: { en: '{value} min' },
+        value: { en: '{value} min' },
       },
       {
-        type: 'nutrientGroup',
-        fieldId: 'nutrientGroup-1',
+        type: 'nutrient',
+        fieldId: 'nutrient-1',
         header: { en: 'Energy (kcal)' },
-        item: { en: '{value}' },
-        nutrientTypes: ['1'],
+        value: { en: '{value}' },
+        types: ['1'],
       },
       {
         type: 'custom',
         fieldId: 'ask-about-food-source',
         header: { en: 'Eating context' },
-        item: { en: '{value}' },
+        value: { en: '{value}' },
       },
     ],
   },

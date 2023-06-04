@@ -19,7 +19,14 @@ Edit tab allows to modify selected feedback scheme.
 - `Physical data inputs` - List of physical data inputs / identifiers, which are required to be collected for feedback calculation
 
 - `Sections` - List of feedback sections to be included in feedback
-  - allows to define order of sections and tick / untick to include / exclude section from feedback
+
+  - drag & drop re-ordering of sections
+  - tick / untick to include / exclude section from feedback
+
+  - available sections are:
+    - `topFoods` - Top foods
+    - `cards` - Feedback cards
+    - `meals` - Meals per-day breakdown
 
 ## Top foods
 
@@ -54,18 +61,52 @@ List of demographic groups definitions, which are used for matching with `charac
 
 List of Henry coefficients used for calculations (BMR etc).
 
-# Meals
+## Meals per-day breakdown
 
-Meals per-day breakdown stats.
+Meals per-day breakdown statistics.
 
-## Chart
+### Chart breakdown
 
 Meal per-day breakdown chart for selected nutrient type(s).
 
 - `Colors` - list of colors to use for meal chart
 
-- `Nutrient types` - list of nutrient types groups
+- `Nutrient types` - list of nutrient types groups, displayed chart per nutrient type group
 
-## Table
+### Table breakdown
 
 Meal per-day breakdown table with selected meal specific fields.
+
+List of columns to be displayed in meal per-day breakdown table. List can be re-ordered by drag & drop.
+
+1. There are common field properties for all field types:
+
+- `header` - localized column header name
+
+- `value` - localized field value
+
+:::tip Value formatting
+If field value is empty, then field value is display as is. If additional formatting is needed, use `{value}` placeholder to display field value.
+:::
+
+- `type` - field type, possible values `standard`, `custom` or `nutrient`
+
+2. Depending on selected field type, there are additional properties to be set:
+
+- `fieldId` - field id, which is used to match with meal specific field
+
+#### `Standard` field IDs
+
+- `Name` - Meal name (Breakfast, Lunch, Dinner, Snack, ...)
+- `Time` - Meal time to display (HH:MM)
+- `Hours` - Hours part of meal time to display (HH)
+- `Minutes` - Minutes part of meal time minutes to display (MM)
+- `Duration` - Meal duration in minutes
+
+#### `Custom` field IDs
+
+When `custom` field type is selected, `fieldId` must be set to match specific `meal prompt ID` from selected `survey scheme`.
+
+#### `Nutrient` field IDs
+
+When `nutrient` field type is selected, `fieldId` is generated automatically based on selected `nutrient type` list.

@@ -5,7 +5,7 @@ import { useI18n } from '@intake24/i18n';
 export const getLocaleContent = (content: RequiredLocaleTranslation | LocaleTranslation): string =>
   content[useI18n().locale] ?? content.en;
 
-export const getNutrientGroupUnit = (group: string[], nutrientTypes: NutrientType[]): string => {
+export const getNutrientUnit = (group: string[], nutrientTypes: NutrientType[]): string => {
   const nt = nutrientTypes.filter((item) => group.includes(item.id));
   if (nt.length !== group.length)
     throw new Error(`Invalid nutrient types (${group}) defined in feedback top foods.`);

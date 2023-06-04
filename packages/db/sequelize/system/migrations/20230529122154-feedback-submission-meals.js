@@ -1,6 +1,6 @@
 const { createPermissions } = require('../../utils.js');
 
-const defaultMeals = { chart: { colors: [], nutrientGroups: [] }, table: { fields: [] } };
+const defaultMeals = { chart: { colors: [], nutrients: [] }, table: { fields: [] } };
 const defaultSections = ['cards', 'topFoods'];
 
 const permissions = [{ name: 'feedback-schemes|meals', display_name: 'Feedback scheme meals' }];

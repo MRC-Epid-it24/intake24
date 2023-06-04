@@ -127,7 +127,7 @@ Content-Type: application/json
 204 No Content
 ```
 
-## Roles associated with permission
+## Permission roles
 
 Get roles associated with permission
 
@@ -154,7 +154,7 @@ Content-Type: application/json
 }
 ```
 
-## Users associated with permission
+## Permission users
 
 Get users associated with permission
 

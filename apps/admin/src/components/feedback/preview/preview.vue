@@ -25,8 +25,28 @@
         <h1 class="text-h1 font-weight-medium text-center">
           {{ $t('feedback.title') }}
         </h1>
-        <feedback-cards v-bind="{ cards }" class="feedback-area"></feedback-cards>
-        <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
+        <div v-if="feedbackDicts" class="d-flex flex-column">
+          <feedback-cards
+            v-if="showCards"
+            v-bind="{ cards }"
+            :class="`feedback-area order-${getSectionOrder('cards')}`"
+          ></feedback-cards>
+          <v-sheet
+            v-if="showTopFoods"
+            :class="`order-${getSectionOrder('topFoods')}`"
+            color="white"
+          >
+            <feedback-top-foods v-bind="{ topFoods }" class="feedback-area"></feedback-top-foods>
+          </v-sheet>
+          <feedback-meals
+            v-if="showTopFoods"
+            :class="`feedback-area order-${getSectionOrder('meals')}`"
+            :config="feedbackScheme.meals"
+            :nutrient-types="feedbackDicts.feedbackData.nutrientTypes"
+            :submissions="submissions"
+            :survey-stats="feedbackDicts.surveyStats"
+          ></feedback-meals>
+        </div>
       </v-container>
     </v-card>
   </v-dialog>
@@ -34,16 +54,17 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
-import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { feedbackService } from '@intake24/admin/services';
 import {
   buildCardParams,
   buildTopFoods,
   FeedbackCards,
+  FeedbackMeals,
   FeedbackTopFoods,
+  useFeedback,
 } from '@intake24/ui/feedback';
 
 import * as previewData from './preview-data';
@@ -58,7 +79,7 @@ export type Submission = {
 export default defineComponent({
   name: 'FeedbackPreview',
 
-  components: { FeedbackCards, FeedbackTopFoods },
+  components: { FeedbackCards, FeedbackMeals, FeedbackTopFoods },
 
   props: {
     feedbackScheme: {
@@ -67,13 +88,24 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      dialog: false,
-      ...previewData,
+  setup(props) {
+    const dialog = ref(false);
 
-      cards: [] as FeedbackCardParameters[],
-      topFoods: buildTopFoods({ max: 0, colors: [], nutrientTypes: [] }, [], [], this.$i18n.locale),
+    const scheme = computed(() => props.feedbackScheme);
+
+    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods } =
+      useFeedback(scheme);
+
+    return {
+      dialog,
+      ...previewData,
+      cards,
+      feedbackDicts,
+      getSectionOrder,
+      topFoods,
+      showCards,
+      showMeals,
+      showTopFoods,
     };
   },
 
@@ -108,6 +140,8 @@ export default defineComponent({
 
       if (!feedbackDicts || !userDemographic) return;
 
+      this.feedbackDicts = feedbackDicts;
+
       const {
         surveyStats,
         feedbackData: { nutrientTypes },
@@ -125,7 +159,7 @@ export default defineComponent({
         averageIntake,
         fruitAndVegPortions,
       });
-      this.topFoods = buildTopFoods(topFoods, foods, nutrientTypes, this.$i18n.locale);
+      this.topFoods = buildTopFoods(topFoods, foods, nutrientTypes);
     },
 
     close() {

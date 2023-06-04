@@ -44,7 +44,7 @@
               <v-icon>fa-grip-vertical</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ nutrientType.name.en }} </v-list-item-title>
+              <v-list-item-title>{{ nutrientType.name.en }}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('nutrient-types.edit')" @click.stop="edit(idx, nutrientType)">
@@ -87,7 +87,7 @@
               hide-details="auto"
               item-text="description"
               item-value="id"
-              :items="availableNutrientTypes"
+              :items="nutrientTypes"
               :label="$t('nutrient-types.title')"
               multiple
               name="nutrientTypeId"
@@ -135,7 +135,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import type { NutrientGroup } from '@intake24/common/feedback';
+import type { Nutrient } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
@@ -147,31 +147,49 @@ export default defineComponent({
   components: { ConfirmDialog, draggable, LanguageSelector },
 
   props: {
-    availableNutrientTypes: {
+    nutrientTypes: {
       type: Array as PropType<NutrientTypeEntry[]>,
       required: true,
     },
     defaults: {
-      type: Array as PropType<NutrientGroup[]>,
+      type: Array as PropType<Nutrient[]>,
       default: () => [],
     },
     value: {
-      type: Array as PropType<NutrientGroup[]>,
+      type: Array as PropType<Nutrient[]>,
       required: true,
     },
   },
 
   setup(props, context) {
     const defaultItem = () => ({
-      id: [props.availableNutrientTypes[0].id],
-      name: { en: props.availableNutrientTypes[0].description },
+      id: [props.nutrientTypes[0].id],
+      name: { en: props.nutrientTypes[0].description },
     });
 
-    const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
-      useListWithDialog(props, context, defaultItem);
+    const {
+      dialog,
+      form,
+      items,
+      newDialog,
+      add,
+      edit,
+      load,
+      remove,
+      reset,
+      resetList,
+      save,
+      update,
+    } = useListWithDialog(props, context, defaultItem);
+
+    const updateNutrientLabel = (nutrientTypeId: string) => {
+      const match = props.nutrientTypes.find((nutrient) => nutrient.id === nutrientTypeId);
+      if (!match) return;
+
+      dialog.value.item.name.en = match.description;
+    };
 
     return {
-      defaultNutrientTypes: props.defaults,
       dialog,
       form,
       items,
@@ -183,6 +201,8 @@ export default defineComponent({
       reset,
       save,
       update,
+      resetList,
+      updateNutrientLabel,
     };
   },
 
@@ -201,20 +221,6 @@ export default defineComponent({
           return match ? this.$t('nutrient-types.validation.unique').toString() : true;
         },
       ];
-    },
-  },
-
-  methods: {
-    resetList() {
-      this.items = [...this.defaultNutrientTypes];
-      this.update();
-    },
-
-    updateNutrientLabel(nutrientTypeId: string) {
-      const match = this.availableNutrientTypes.find((nutrient) => nutrient.id === nutrientTypeId);
-      if (!match) return;
-
-      this.dialog.item.name.en = match.description;
     },
   },
 });

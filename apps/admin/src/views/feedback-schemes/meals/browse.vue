@@ -64,19 +64,18 @@
           <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <nutrient-list
-              v-model="form.meals.chart.nutrientGroups"
-              :available-nutrient-types="refs.nutrientTypes"
-              :defaults="defaultMeals.chart.nutrientGroups"
+              v-model="form.meals.chart.nutrients"
+              :defaults="defaultMeals.chart.nutrients"
+              :nutrient-types="refs.nutrientTypes"
             ></nutrient-list>
           </v-col>
         </v-row>
       </v-container>
-      <v-toolbar color="grey lighten-5" flat tile>
-        <v-icon color="primary" left>fas fa-table-list</v-icon>
-        <v-toolbar-title class="font-weight-medium">
-          {{ $t('feedback-schemes.meals.table') }}
-        </v-toolbar-title>
-      </v-toolbar>
+      <table-field-list
+        v-model="form.meals.table.fields"
+        :defaults="defaultMeals.table.fields"
+        :nutrient-types="refs.nutrientTypes"
+      ></table-field-list>
       <v-card-text>
         <submit-footer :disabled="form.errors.any()"></submit-footer>
       </v-card-text>
@@ -94,7 +93,7 @@ import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/t
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
-import { Preview } from '@intake24/admin/components/feedback';
+import { Preview, TableFieldList } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultMeals } from '@intake24/common/feedback';
@@ -114,6 +113,7 @@ export default defineComponent({
     OptionsMenu,
     Preview,
     SelectResource,
+    TableFieldList,
   },
 
   mixins: [formMixin],

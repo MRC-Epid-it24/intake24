@@ -62,7 +62,7 @@ export const weightTargetsData: WeightTargetCoefficient[] = [
   { id: 'gain_weight', name: 'Gain weight', coefficient: 500 },
 ];
 
-export type NutrientGroup = {
+export type Nutrient = {
   id: string[];
   name: RequiredLocaleTranslation;
 };
