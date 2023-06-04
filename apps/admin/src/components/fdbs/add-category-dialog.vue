@@ -68,7 +68,7 @@
       </v-card-text>
       <v-card-actions>
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
-          <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
@@ -78,7 +78,7 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
         </v-btn>
       </v-card-actions>
     </v-card>

@@ -38,10 +38,12 @@
           :title="confirmLabel"
           @click.stop="confirm"
         >
-          <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon> {{ confirmLabel }}
+          <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon
+          >{{ confirmLabel }}
         </v-btn>
         <v-btn block :color="color" large outlined :title="cancelLabel" @click.stop="cancel">
-          <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon> {{ cancelLabel }}
+          <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon
+          >{{ cancelLabel }}
         </v-btn>
       </v-container>
     </v-card>

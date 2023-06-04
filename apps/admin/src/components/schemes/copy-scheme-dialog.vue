@@ -8,7 +8,7 @@
         :title="$t(`${resource}.copy._`)"
         v-on="on"
       >
-        <v-icon left>fa-copy</v-icon> {{ $t(`${resource}.copy._`) }}
+        <v-icon left>fa-copy</v-icon>{{ $t(`${resource}.copy._`) }}
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
@@ -39,11 +39,11 @@
       </v-card-text>
       <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
-          <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+          <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
-          <v-icon left>$success</v-icon> {{ $t(`${resource}.copy._`) }}
+          <v-icon left>$success</v-icon>{{ $t(`${resource}.copy._`) }}
         </v-btn>
       </v-card-actions>
     </v-card>

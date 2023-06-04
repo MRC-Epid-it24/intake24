@@ -5,7 +5,8 @@
     :title="$t('common.action.read')"
     @click.stop="onClick"
   >
-    <v-icon left>{{ icon }}</v-icon> {{ $t('common.action.read') }}
+    <v-icon left>{{ icon }}</v-icon>
+    {{ $t('common.action.read') }}
   </v-btn>
 </template>
 

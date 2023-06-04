@@ -42,7 +42,7 @@
                   :style="{ cursor: 'pointer' }"
                   @click="selectObject(idx)"
                 >
-                  <v-icon left>fa-draw-polygon</v-icon> {{ $t('guide-images.objects.id') }}:
+                  <v-icon left>fa-draw-polygon</v-icon>{{ $t('guide-images.objects.id') }}:
                   {{ object.id }}
                   <v-spacer></v-spacer>
                   <confirm-dialog

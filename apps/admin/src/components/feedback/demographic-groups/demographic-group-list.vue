@@ -96,7 +96,7 @@
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark text :title="$t('common.action.ok')" @click.stop="save">
-              <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+              <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
             </v-btn>
           </v-toolbar-items>
           <template #extension>
@@ -191,11 +191,11 @@
             </v-tabs-items>
             <v-card-actions>
               <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+                <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
               </v-btn>
               <v-spacer></v-spacer>
               <v-btn class="font-weight-bold" color="info" text type="submit">
-                <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+                <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
               </v-btn>
             </v-card-actions>
           </v-container>

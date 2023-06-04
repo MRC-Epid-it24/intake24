@@ -86,7 +86,7 @@
             :title="$t('nutrient-tables.mapping.fields.create')"
             @click.stop="addField"
           >
-            <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.fields.create') }}
+            <v-icon left>$add</v-icon>{{ $t('nutrient-tables.mapping.fields.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -150,7 +150,7 @@
             :title="$t('nutrient-tables.mapping.nutrients.create')"
             @click.stop="addNutrient"
           >
-            <v-icon left>$add</v-icon> {{ $t('nutrient-tables.mapping.nutrients.create') }}
+            <v-icon left>$add</v-icon>{{ $t('nutrient-tables.mapping.nutrients.create') }}
           </v-btn>
         </v-toolbar>
         <v-card-text>

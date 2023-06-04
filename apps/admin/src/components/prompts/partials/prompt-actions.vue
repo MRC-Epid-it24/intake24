@@ -121,7 +121,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn class="font-weight-bold" color="error" text @click="remove(idx)">
-                <v-icon left>$delete</v-icon> {{ $t('survey-schemes.actions.remove') }}
+                <v-icon left>$delete</v-icon>{{ $t('survey-schemes.actions.remove') }}
               </v-btn>
             </v-card-actions>
           </v-card>

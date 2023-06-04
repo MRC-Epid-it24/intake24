@@ -43,7 +43,7 @@
                     type="submit"
                     x-large
                   >
-                    <v-icon left>fa-upload</v-icon> {{ $t('common.action.upload') }}
+                    <v-icon left>fa-upload</v-icon>{{ $t('common.action.upload') }}
                   </v-btn>
                 </v-col>
               </v-row>

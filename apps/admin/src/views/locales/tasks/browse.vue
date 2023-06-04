@@ -41,7 +41,7 @@
               type="submit"
               x-large
             >
-              <v-icon left>fa-play</v-icon> {{ $t('common.action.submit') }}
+              <v-icon left>fa-play</v-icon>{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>

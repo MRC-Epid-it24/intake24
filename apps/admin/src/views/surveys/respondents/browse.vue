@@ -10,7 +10,7 @@
         <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
           <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" text v-bind="attrs" v-on="on">
-              <v-icon left>fa-user-plus</v-icon> {{ $t('surveys.respondents.add') }}
+              <v-icon left>fa-user-plus</v-icon>{{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
@@ -105,11 +105,11 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-                  <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+                  <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn class="font-weight-bold" color="info" text type="submit">
-                  <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
+                  <v-icon left>$save</v-icon>{{ $t('common.action.save') }}
                 </v-btn>
               </v-card-actions>
             </v-form>

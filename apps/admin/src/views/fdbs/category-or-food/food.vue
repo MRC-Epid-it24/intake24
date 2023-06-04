@@ -97,7 +97,7 @@
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
         <v-btn color="primary" outlined type="submit" @click="submit">
-          <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
+          <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
       </v-card-actions>
     </v-card>

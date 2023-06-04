@@ -27,7 +27,7 @@
         <v-spacer></v-spacer>
         <v-toolbar-items>
           <v-btn dark text :title="$t('common.action.ok')" @click.stop="confirm">
-            <v-icon left>$success</v-icon> {{ $t('common.action.ok') }}
+            <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>

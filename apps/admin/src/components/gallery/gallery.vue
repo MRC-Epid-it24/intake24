@@ -45,7 +45,7 @@
                 text
                 :to="{ name: `${module}-edit`, params: { id: item.id } }"
               >
-                <v-icon left>$edit</v-icon> {{ $t(`common.action.edit`) }}
+                <v-icon left>$edit</v-icon>{{ $t(`common.action.edit`) }}
               </v-btn>
               <v-spacer></v-spacer>
               <confirm-dialog

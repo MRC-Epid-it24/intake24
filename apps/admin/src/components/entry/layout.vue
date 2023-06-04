@@ -3,7 +3,7 @@
     <v-card class="mb-5" outlined>
       <v-toolbar flat>
         <v-btn color="white" :title="$t(`common.action.back`)" :to="{ name: resource.name }">
-          <v-icon left>$back</v-icon> {{ $t(`common.action.back`) }}
+          <v-icon left>$back</v-icon>{{ $t(`common.action.back`) }}
         </v-btn>
         <v-btn
           v-if="editsResource"
@@ -12,7 +12,7 @@
           :title="$t(`common.action.save`)"
           @click="$emit('save')"
         >
-          <v-icon left>$save</v-icon> {{ $t(`common.action.save`) }}
+          <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
         <slot name="actions"></slot>
         <v-spacer></v-spacer>

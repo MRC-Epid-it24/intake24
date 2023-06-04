@@ -9,7 +9,7 @@
         v-on="on"
         @click.stop="add"
       >
-        <v-icon left>fa-user-plus</v-icon> {{ $t(`${resource}.securables.add`) }}
+        <v-icon left>fa-user-plus</v-icon>{{ $t(`${resource}.securables.add`) }}
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
@@ -134,7 +134,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
-            <v-icon left>$cancel</v-icon> {{ $t('common.action.cancel') }}
+            <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
@@ -144,7 +144,7 @@
             text
             type="submit"
           >
-            <v-icon left>$save</v-icon> {{ $t('common.action.save') }}
+            <v-icon left>$save</v-icon>{{ $t('common.action.save') }}
           </v-btn>
         </v-card-actions>
       </v-form>

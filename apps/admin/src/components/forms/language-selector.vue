@@ -41,7 +41,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="error" :disabled="isRemoveDisabled" text @click.stop="remove">
-            <v-icon left>$delete</v-icon> {{ $t('common.action.delete') }}
+            <v-icon left>$delete</v-icon>{{ $t('common.action.delete') }}
           </v-btn>
         </v-card-actions>
       </v-tab-item>
