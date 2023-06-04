@@ -38,6 +38,7 @@ module.exports = (env) => {
       minimize: false,
     },
     externals: [nodeExternals()],
+    externalsPresets: { node: true },
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],
       plugins: [

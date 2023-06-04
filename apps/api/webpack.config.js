@@ -40,6 +40,7 @@ module.exports = (env) => {
       minimize: false,
     },
     externals: [nodeExternals(), { sharp: 'commonjs sharp' }],
+    externalsPresets: { node: true },
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],
       plugins: [
