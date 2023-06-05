@@ -18,7 +18,7 @@
       <template v-for="(item, idx) in items">
         <v-list-item :key="item.code" link>
           <v-list-item-avatar>
-            <v-icon>fa-list</v-icon>
+            <v-icon>fas fa-list</v-icon>
           </v-list-item-avatar>
           <slot name="item.content" v-bind="{ item }">
             <v-list-item-content>

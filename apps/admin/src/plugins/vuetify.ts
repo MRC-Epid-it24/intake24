@@ -39,6 +39,8 @@ export default new Vuetify({
       otp: 'fas fa-stopwatch',
       // Resource icons
       ...resourceIcons,
+      categories: 'fas fa-list',
+      foods: 'fas fa-drumstick-bite',
     },
   },
   theme: {

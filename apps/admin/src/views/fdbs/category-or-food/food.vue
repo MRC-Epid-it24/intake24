@@ -110,7 +110,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { onBeforeRouteUpdate } from 'vue-router/composables';
 
 import type {
   FoodDatabaseEntry,
@@ -126,6 +127,9 @@ import {
 } from '@intake24/admin/components/fdbs';
 import { AutoComplete } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
+import { useHttp } from '@intake24/admin/services';
+import { useUser } from '@intake24/admin/stores';
+import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -152,6 +156,17 @@ export default defineComponent({
   },
 
   setup(props) {
+    const http = useHttp();
+    const i18n = useI18n();
+    const user = useUser();
+
+    const loading = ref(false);
+    const type = 'foods';
+    const entry = ref<FoodLocalEntry | null>(null);
+
+    const disabled = computed(() => !user.can({ action: 'edit' }));
+    const isEntryLoaded = computed(() => !!entry.value);
+
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
       any,
@@ -177,7 +192,49 @@ export default defineComponent({
       config: { extractNestedKeys: true },
     });
 
+    const fetchCategoryOrFood = async (entryId: string) => {
+      if (!entryId || entryId === 'no-category') return;
+
+      loading.value = true;
+      entry.value = null;
+
+      try {
+        const { data } = await http.get<FoodLocalEntry>(
+          `admin/fdbs/${props.id}/${type}/${entryId}`
+        );
+
+        toForm(data);
+        entry.value = data;
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const submit = async () => {
+      const data = await form.put<FoodLocalEntry>(
+        `admin/fdbs/${props.id}/${type}/${props.entryId}`
+      );
+      toForm(data);
+
+      const { name, main: { name: englishName = 'record' } = {} } = data;
+
+      useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }).toString());
+    };
+
+    onMounted(async () => {
+      await fetchCategoryOrFood(props.entryId);
+    });
+
+    onBeforeRouteUpdate(async (to, from, next) => {
+      if (to.params.entryId !== from.params.entryId) {
+        await fetchCategoryOrFood(to.params.entryId);
+      }
+
+      next();
+    });
+
     return {
+      entry,
       refs,
       clearError,
       form,
@@ -185,61 +242,10 @@ export default defineComponent({
       originalEntry,
       routeLeave,
       toForm,
+      disabled,
+      isEntryLoaded,
+      submit,
     };
-  },
-
-  data() {
-    return {
-      loading: false,
-      type: 'foods',
-      entry: null as FoodLocalEntry | null,
-      disabled: !this.can({ action: 'edit' }),
-    };
-  },
-
-  computed: {
-    isEntryLoaded(): boolean {
-      return !!this.entry;
-    },
-  },
-
-  async mounted() {
-    await this.fetchCategoryOrFood(this.entryId);
-  },
-
-  methods: {
-    async fetchCategoryOrFood(entryId: string) {
-      const { id, type } = this;
-
-      if (entryId === 'no-category') return;
-
-      this.loading = true;
-      this.entry = null;
-
-      try {
-        const { data } = await this.$http.get<FoodLocalEntry>(
-          `admin/fdbs/${id}/${type}/${entryId}`
-        );
-
-        this.toForm(data);
-        this.entry = data;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async submit() {
-      const { id, entryId, type } = this;
-
-      const data = await this.form.put<FoodLocalEntry>(`admin/fdbs/${id}/${type}/${entryId}`);
-      this.toForm(data);
-
-      const { name, main: { name: englishName = 'record' } = {} } = data;
-
-      useMessages().success(
-        this.$t('common.msg.updated', { name: name ?? englishName }).toString()
-      );
-    },
   },
 });
 </script>

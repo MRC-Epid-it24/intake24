@@ -36,7 +36,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['code', 'name', '$main.name$'].map((column) => ({ [column]: op }));
+      const ops = ['categoryCode', 'name', '$main.name$'].map((column) => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }

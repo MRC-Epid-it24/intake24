@@ -10,6 +10,7 @@ import type {
   Transaction,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { foodsResponse } from '@intake24/api/http/responses/admin';
 import {
   Food,
   FoodLocal,
@@ -32,12 +33,12 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['name', '$main.name$'].map((column) => ({ [column]: op }));
+      const ops = ['foodCode', 'name', '$main.name$'].map((column) => ({ [column]: op }));
 
       options.where = { ...options.where, [Op.or]: ops };
     }
 
-    return FoodLocal.paginate({ query, ...options });
+    return FoodLocal.paginate({ query, transform: foodsResponse, ...options });
   };
 
   const getFood = async (foodLocalId: string, localeCode?: string) => {

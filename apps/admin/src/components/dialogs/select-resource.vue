@@ -133,7 +133,7 @@ export default defineComponent({
 
   computed: {
     itemIcon() {
-      return getResource(this.resource)?.icon ?? 'fa-list';
+      return getResource(this.resource)?.icon ?? 'fas fa-list';
     },
     selectedItem(): Dictionary | null {
       const { selectedItemId } = this;

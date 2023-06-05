@@ -3,9 +3,11 @@ import { watchDebounced } from '@vueuse/core';
 import { ref, unref, watch } from 'vue';
 
 import type { Pagination } from '@intake24/db';
-import { httpService } from '@intake24/admin/services';
+import { useHttp } from '@intake24/admin/services';
 
 export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) => {
+  const http = useHttp();
+
   const dialog = ref(false);
   const loading = ref(false);
 
@@ -23,7 +25,7 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
     try {
       const {
         data: { data, meta },
-      } = await httpService.get<Pagination<T>>(apiUrl, {
+      } = await http.get<Pagination<T>>(apiUrl, {
         params: { search: search.value, page: page.value, limit: 6 },
       });
 

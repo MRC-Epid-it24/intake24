@@ -11,6 +11,11 @@ const fdbs: LocaleMessageObject = {
 
   showGlobalName: 'Show global name',
 
+  search: {
+    _: 'Search',
+    title: 'Search categories & foods',
+  },
+
   categories: {
     _: 'Category',
     title: 'Categories',

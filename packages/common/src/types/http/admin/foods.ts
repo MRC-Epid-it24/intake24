@@ -33,7 +33,7 @@ export type FoodListEntry = {
   englishName: string;
 };
 
-export type FoodsResponse = Pagination<FoodLocalAttributes>;
+export type FoodsResponse = Pagination<FoodListEntry>;
 
 export type FoodEntry = FoodAttributes & {
   attributes?: FoodAttributeAttributes;

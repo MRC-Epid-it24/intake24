@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-switch v-model="showGlobalName" class="mt-0" :label="$t('fdbs.showGlobalName')"> </v-switch>
+    <div class="d-flex justify-space-between align-center">
+      <v-switch v-model="showGlobalName" class="my-0" :label="$t('fdbs.showGlobalName')"></v-switch>
+      <food-search v-bind="{ localeId }"></food-search>
+    </div>
     <v-treeview
       activatable
       :active.sync="active"
@@ -12,7 +15,7 @@
       transition
     >
       <template #prepend="{ item }">
-        <v-icon v-if="!item.children">fa-drumstick-bite</v-icon>
+        <v-icon v-if="!item.children">$foods</v-icon>
       </template>
       <template #label="{ item }">
         <router-link
@@ -39,12 +42,16 @@ import type {
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 
+import FoodSearch from './food-search.vue';
+
 export interface CategoryListEntryItem extends CategoryListEntry {
   children: (CategoryListEntryItem | FoodListEntry)[];
 }
 
 export default defineComponent({
   name: 'FoodExplorer',
+
+  components: { FoodSearch },
 
   props: {
     localeId: {

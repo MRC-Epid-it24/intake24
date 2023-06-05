@@ -47,7 +47,7 @@
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-avatar>
-                      <v-icon>fa-list</v-icon>
+                      <v-icon>fas fa-list</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
