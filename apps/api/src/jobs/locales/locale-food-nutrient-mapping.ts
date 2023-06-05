@@ -147,12 +147,15 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
         order: [['foodCode', 'asc']],
       });
 
-      const transform = new Transform<FoodLocal>({
-        fields,
-        defaultValue: EMPTY,
-        withBOM: true,
-        transforms,
-      });
+      const transform = new Transform<FoodLocal>(
+        {
+          fields,
+          defaultValue: EMPTY,
+          withBOM: true,
+          transforms,
+        },
+        { objectMode: true }
+      );
 
       foods.on('error', (err) => {
         clearInterval(progressInterval);
