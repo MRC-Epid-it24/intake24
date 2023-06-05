@@ -11,12 +11,14 @@ const recall: LocaleMessageObject = {
     daily: 'You have reached the daily limit of recalls.',
     total: 'You have reached the total limit of recalls.',
   },
+  survey: 'Study: {name}',
   submissions: {
     _: 'Recall day',
     title: 'Recall days',
     all: 'all',
     past: 'Past recalls',
     none: 'You do not have any past recalls yet.',
+    count: 'Recall number: {count}',
   },
   start: {
     _: 'Start',
@@ -27,6 +29,9 @@ const recall: LocaleMessageObject = {
     _: 'Abort',
     label: 'Abort recall',
     confirm: 'Abort current recall?',
+  },
+  surveyInfo: {
+    recall: 'Recall: {number}',
   },
   menu: {
     title: 'Your food and drink intake',

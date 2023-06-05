@@ -57,7 +57,20 @@
     <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
-        <v-spacer></v-spacer>
+        <div v-if="surveyName" class="app-bar-survey-info">
+          <i18n path="recall.survey" tag="span">
+            <template #name>
+              <span class="font-weight-medium">{{ surveyName }}</span>
+            </template>
+          </i18n>
+          <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical></v-divider>
+          <i18n path="recall.submissions.count" tag="span">
+            <template #count>
+              <span class="font-weight-medium">{{ submissions + 1 }}</span>
+            </template>
+          </i18n>
+        </div>
+        <v-spacer v-if="$vuetify.breakpoint.smAndUp"></v-spacer>
         <v-btn
           v-if="surveyId"
           :icon="isMobile"
@@ -126,7 +139,12 @@ export default defineComponent({
 
   computed: {
     ...mapState(useAuth, ['loggedIn']),
-    ...mapState(useSurvey, ['allowFeedback', 'allowRecall']),
+    ...mapState(useSurvey, {
+      allowFeedback: 'allowFeedback',
+      allowRecall: 'allowRecall',
+      surveyName: (state) => state.parameters?.name,
+      submissions: (state) => state.user?.submissions ?? 1,
+    }),
 
     surveyId(): string {
       return this.$route.params.surveyId;
@@ -174,6 +192,44 @@ export default defineComponent({
 
 <style lang="scss">
 @import './scss/app.scss';
+
+.app-bar-survey-info {
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: inset 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.87);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-left: 8px;
+  padding: 8px 16px 8px 16px;
+
+  span {
+    font-size: 0.9rem;
+    letter-spacing: 0.167em;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: start;
+    justify-content: space-around;
+
+    padding: 0px 16px 0px 16px;
+
+    height: 46px;
+    max-height: 46px;
+    min-height: 46px;
+  }
+}
 
 .v-main:has(.bottom-navigation):has(.meal-list-mobile) {
   padding-bottom: 112px !important;
