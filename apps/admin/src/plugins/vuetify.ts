@@ -35,6 +35,7 @@ export default new Vuetify({
       read: 'far fa-file',
       search: 'fas fa-magnifying-glass',
       save: 'fas fa-save',
+      sync: 'fas fa-sync',
       times: 'fas fa-times-circle',
       upload: 'fas fa-upload',
       user: 'fas fa-user-circle',

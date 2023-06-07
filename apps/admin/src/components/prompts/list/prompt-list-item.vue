@@ -11,7 +11,7 @@
     </v-list-item-content>
     <v-list-item-content v-if="!isOverrideMode && hasTemplate">
       <v-list-item-subtitle>
-        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fas fa-sync</v-icon>
+        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>$sync</v-icon>
         <span color="success">
           {{ $t(`survey-scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
         </span>
@@ -78,7 +78,7 @@
                 v-on="on"
               >
                 <v-list-item-title>
-                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>fas fa-sync</v-icon>
+                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>$sync</v-icon>
                   {{ $t('survey-scheme-questions.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>

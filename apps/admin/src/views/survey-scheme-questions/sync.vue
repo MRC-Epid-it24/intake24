@@ -38,7 +38,7 @@
             v-else
             color="warning"
             icon
-            icon-left="fas fa-sync"
+            icon-left="$sync"
             :label="$t('survey-scheme-questions.sync.synchronize').toString()"
             @confirm="sync(scheme)"
           >
@@ -49,7 +49,7 @@
                 :title="$t('survey-scheme-questions.sync.false')"
                 v-on="on"
               >
-                <v-icon color="warning" large>fas fa-sync</v-icon>
+                <v-icon color="warning" large>$sync</v-icon>
               </v-btn>
             </template>
             {{ $t('survey-scheme-questions.sync.confirm') }}

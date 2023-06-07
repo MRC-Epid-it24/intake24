@@ -31,7 +31,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon small>fas fa-sync</v-icon>
+            <v-icon small>$sync</v-icon>
           </v-btn>
         </template>
         {{ $t('survey-schemes.meals.reset.text') }}

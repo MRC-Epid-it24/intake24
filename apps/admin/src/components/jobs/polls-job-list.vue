@@ -5,7 +5,7 @@
         <template v-for="(job, idx) in jobs">
           <v-list-item :key="job.id">
             <v-list-item-avatar>
-              <v-icon class="grey" dark>fas fa-running</v-icon>
+              <v-icon class="grey" dark>$jobs</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ $t(`jobs.types.${job.type}._`) }}</v-list-item-title>

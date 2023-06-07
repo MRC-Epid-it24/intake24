@@ -15,7 +15,7 @@
                     :label="$t('nutrient-tables.upload.type')"
                     name="type"
                     outlined
-                    prepend-inner-icon="fas fa-running"
+                    prepend-inner-icon="$jobs"
                     @change="form.errors.clear('type')"
                   ></v-select>
                 </v-col>

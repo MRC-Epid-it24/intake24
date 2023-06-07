@@ -118,7 +118,7 @@
         <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
-              <v-icon>$option</v-icon>
+              <v-icon>$options</v-icon>
             </v-btn>
           </template>
           <v-list>
@@ -147,7 +147,7 @@
         <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ attrs, on }">
             <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
-              <v-icon>$option</v-icon>
+              <v-icon>$options</v-icon>
             </v-btn>
           </template>
           <v-list>
