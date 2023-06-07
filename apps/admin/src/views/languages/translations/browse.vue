@@ -37,7 +37,7 @@
         link
       >
         <v-list-item-avatar>
-          <v-icon>fa-language</v-icon>
+          <v-icon>fas fa-language</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>

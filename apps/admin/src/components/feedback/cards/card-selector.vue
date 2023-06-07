@@ -66,7 +66,7 @@
                                     {{ $t(`feedback-schemes.cards.${card.type}.subtitle`) }}
                                   </v-card-subtitle>
                                   <v-card-text v-show="active" class="text-center">
-                                    <v-icon x-large>fa-check-circle</v-icon>
+                                    <v-icon x-large>$check</v-icon>
                                   </v-card-text>
                                 </v-card>
                               </v-item>

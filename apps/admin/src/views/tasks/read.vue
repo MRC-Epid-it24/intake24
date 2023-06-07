@@ -31,8 +31,8 @@
         <tr>
           <th>{{ $t('common.action.active') }}</th>
           <td>
-            <v-icon v-if="entry.active" color="success" left>fa-check-circle</v-icon>
-            <v-icon v-else color="error" left>fa-times-circle</v-icon>
+            <v-icon v-if="entry.active" color="success" left>$check</v-icon>
+            <v-icon v-else color="error" left>$times</v-icon>
             {{ $t(`common.${entry.active}`) }}
           </td>
         </tr>

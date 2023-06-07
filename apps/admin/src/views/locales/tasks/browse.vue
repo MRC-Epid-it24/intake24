@@ -13,7 +13,7 @@
                 :label="$t('locales.tasks._')"
                 name="job"
                 outlined
-                prepend-inner-icon="fa-running"
+                prepend-inner-icon="fas fa-running"
                 @change="updateJob"
               ></v-select>
             </v-card-text>

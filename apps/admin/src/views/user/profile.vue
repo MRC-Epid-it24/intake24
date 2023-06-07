@@ -6,7 +6,7 @@
         <v-subheader>{{ $t('user.info') }}</v-subheader>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-envelope</v-icon>
+            <v-icon class="primary" dark>fas fa-envelope</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.email') }}</v-list-item-title>
@@ -17,7 +17,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-user</v-icon>
+            <v-icon class="primary" dark>fas fa-user</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.name') }}</v-list-item-title>
@@ -28,7 +28,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-phone</v-icon>
+            <v-icon class="primary" dark>fas fa-phone</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.phone') }}</v-list-item-title>
@@ -39,7 +39,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-key</v-icon>
+            <v-icon class="primary" dark>fas fa-key</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>
@@ -53,7 +53,7 @@
         <v-subheader>{{ $t('user.access') }}</v-subheader>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-users</v-icon>
+            <v-icon class="primary" dark>fas fa-users</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.roles') }}</v-list-item-title>
@@ -64,7 +64,7 @@
         </v-list-item>
         <v-list-item>
           <v-list-item-avatar>
-            <v-icon class="primary" dark>fa-eye-slash</v-icon>
+            <v-icon class="primary" dark>fas fa-eye-slash</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ $t('user.permissions') }}</v-list-item-title>
@@ -81,7 +81,7 @@
             <v-subheader>{{ $t('user.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="primary" dark>fa-language</v-icon>
+                <v-icon class="primary" dark>fas fa-language</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select

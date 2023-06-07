@@ -3,14 +3,14 @@
     <template #activator="{ attrs, on }">
       <v-list-item key="authUrls" v-bind="attrs" link v-on="on">
         <v-list-item-title>
-          <v-icon left>fa-download</v-icon>
+          <v-icon left>$download</v-icon>
           {{ $t('surveys.respondents.authUrls._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
-        <v-icon dark left>fa-download</v-icon>
+        <v-icon dark left>$download</v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.authUrls.title`) }}
         </v-toolbar-title>
@@ -20,7 +20,7 @@
           <v-row justify="center">
             <v-col cols="12" md="6" sm="8">
               <v-btn block color="secondary" :disabled="jobInProgress" x-large @click="submit">
-                <v-icon left>fa-download</v-icon>
+                <v-icon left>$download</v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>
             </v-col>

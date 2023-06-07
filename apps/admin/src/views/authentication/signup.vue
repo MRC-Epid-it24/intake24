@@ -64,7 +64,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.password"
-                :append-icon="show.password ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="show.password ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 :error-messages="form.errors.get('password')"
                 hide-details="auto"
@@ -80,7 +80,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.passwordConfirm"
-                :append-icon="show.passwordConfirm ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="show.passwordConfirm ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 :error-messages="form.errors.get('passwordConfirm')"
                 hide-details="auto"

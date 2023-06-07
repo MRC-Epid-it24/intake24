@@ -1,7 +1,7 @@
 <template>
   <v-list-item class="drag-and-drop__item" draggable link>
     <v-list-item-avatar class="drag-and-drop__handle">
-      <v-icon>fa-grip-vertical</v-icon>
+      <v-icon>$handle</v-icon>
     </v-list-item-avatar>
     <v-list-item-content>
       <v-list-item-title>{{ question.name }}</v-list-item-title>
@@ -11,7 +11,7 @@
     </v-list-item-content>
     <v-list-item-content v-if="!isOverrideMode && hasTemplate">
       <v-list-item-subtitle>
-        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fa-sync</v-icon>
+        <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>fas fa-sync</v-icon>
         <span color="success">
           {{ $t(`survey-scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
         </span>
@@ -32,7 +32,7 @@
       >
         <template #activator="{ attrs, on }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon color="primary lighten-1">fa-ellipsis-v</v-icon>
+            <v-icon color="primary lighten-1">$options</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -46,7 +46,7 @@
             <template #activator="{ attrs, on }">
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
-                  <v-icon left>fa-exchange-alt</v-icon>
+                  <v-icon left>fas fa-exchange-alt</v-icon>
                   {{ $t('survey-schemes.questions.move') }}
                 </v-list-item-title>
               </v-list-item>
@@ -78,7 +78,7 @@
                 v-on="on"
               >
                 <v-list-item-title>
-                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>fa-sync</v-icon>
+                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>fas fa-sync</v-icon>
                   {{ $t('survey-scheme-questions.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>

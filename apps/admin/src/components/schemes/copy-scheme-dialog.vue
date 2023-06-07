@@ -8,7 +8,7 @@
         :title="$t(`${resource}.copy._`)"
         v-on="on"
       >
-        <v-icon left>fa-copy</v-icon>{{ $t(`${resource}.copy._`) }}
+        <v-icon left>fas fa-copy</v-icon>{{ $t(`${resource}.copy._`) }}
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">

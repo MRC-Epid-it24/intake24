@@ -122,7 +122,7 @@
               :title="$t('feedback.outputs.download._')"
               v-on="on"
             >
-              <v-icon left>fas fa-download</v-icon>
+              <v-icon left>$download</v-icon>
               {{ $t('feedback.outputs.download._') }}
             </v-btn>
           </template>

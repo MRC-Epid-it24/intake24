@@ -27,7 +27,7 @@
             <v-col cols="12">
               <v-text-field
                 v-model="form.passwordCurrent"
-                :append-icon="showPassword.current ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="showPassword.current ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="current-password"
                 :error-messages="form.errors.get('passwordCurrent')"
                 hide-details="auto"
@@ -43,7 +43,7 @@
             <v-col cols="12">
               <v-text-field
                 v-model="form.password"
-                :append-icon="showPassword.password ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="showPassword.password ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 :error-messages="form.errors.get('password')"
                 hide-details="auto"
@@ -59,7 +59,7 @@
             <v-col cols="12">
               <v-text-field
                 v-model="form.passwordConfirm"
-                :append-icon="showPassword.confirm ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="showPassword.confirm ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 :error-messages="form.errors.get('passwordConfirm')"
                 hide-details="auto"

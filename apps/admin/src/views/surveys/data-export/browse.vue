@@ -36,7 +36,7 @@
                     type="submit"
                     x-large
                   >
-                    <v-icon left>fa-download</v-icon>{{ $t('common.action.export') }}
+                    <v-icon left>$download</v-icon>{{ $t('common.action.export') }}
                   </v-btn>
                 </v-col>
               </v-row>

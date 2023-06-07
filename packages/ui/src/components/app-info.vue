@@ -3,7 +3,7 @@
     <v-subheader>{{ $t('common.app.info') }}</v-subheader>
     <v-list-item>
       <v-list-item-avatar>
-        <v-icon class="primary" dark>fa-code-branch</v-icon>
+        <v-icon class="primary" dark>fas fa-code-branch</v-icon>
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title> {{ $t('common.app._') }}: {{ app.name }} </v-list-item-title>

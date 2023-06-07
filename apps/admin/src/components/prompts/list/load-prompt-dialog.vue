@@ -4,7 +4,7 @@
       <slot name="activator" v-bind="{ on, attrs }">
         <v-list-item v-bind="attrs" link v-on="on">
           <v-list-item-title>
-            <v-icon left>fas fa-download</v-icon>
+            <v-icon left>$download</v-icon>
             {{ $t('survey-schemes.questions.templates.add') }}
           </v-list-item-title>
         </v-list-item>
@@ -50,7 +50,7 @@
                     <v-checkbox :input-value="active"></v-checkbox>
                   </v-list-item-action>
                   <v-list-item-avatar>
-                    <v-icon>fa-question-circle</v-icon>
+                    <v-icon>fas fa-question-circle</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ question.name }}</v-list-item-title>

@@ -169,7 +169,7 @@
               ></v-switch>
               <v-text-field
                 v-model="form.genUserKey"
-                :append-icon="showGenUserKey ? 'fa-eye' : 'fa-eye-slash'"
+                :append-icon="showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
                 class="mt-4"
                 :disabled="!form.allowGenUsers"

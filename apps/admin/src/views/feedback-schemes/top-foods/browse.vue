@@ -19,7 +19,7 @@
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>fas fa-download</v-icon>
+                <v-icon left>$download</v-icon>
                 {{ $t('feedback-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -33,7 +33,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="primary" left>fa-palette</v-icon>
+              <v-icon color="primary" left>fas fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>

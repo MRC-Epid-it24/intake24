@@ -1,7 +1,7 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="primary" left>fa-hamburger</v-icon>
+      <v-icon color="primary" left>fas fa-hamburger</v-icon>
       <div class="d-flex flex-column">
         <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
         <span v-if="subtitle" class="text-subtitle-2">{{ subtitle }}</span>
@@ -31,7 +31,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon small>fa-sync</v-icon>
+            <v-icon small>fas fa-sync</v-icon>
           </v-btn>
         </template>
         {{ $t('survey-schemes.meals.reset.text') }}
@@ -41,7 +41,7 @@
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>fas fa-download</v-icon>
+                <v-icon left>$download</v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -61,7 +61,7 @@
             link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>fa-grip-vertical</v-icon>
+              <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ meal.name.en }}</v-list-item-title>
@@ -95,7 +95,7 @@
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="primary" dark flat>
-          <v-icon dark left>fa-hamburger</v-icon>
+          <v-icon dark left>fas fa-hamburger</v-icon>
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}
           </v-toolbar-title>

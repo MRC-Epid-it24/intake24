@@ -10,7 +10,7 @@
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
-        <v-icon dark left>fa-upload</v-icon>
+        <v-icon dark left>$upload</v-icon>
         <v-toolbar-title>
           {{ dialogTitle }}
         </v-toolbar-title>
@@ -28,13 +28,13 @@
                   name="file"
                   outlined
                   prepend-icon=""
-                  prepend-inner-icon="fa-file-csv"
+                  prepend-inner-icon="fas fa-file-csv"
                   @change="form.errors.clear('file')"
                 ></v-file-input>
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-btn block color="secondary" :disabled="jobInProgress" type="submit" x-large>
-                  <v-icon left>fa-upload</v-icon>
+                  <v-icon left>$upload</v-icon>
                   {{ $t('common.action.upload') }}
                 </v-btn>
               </v-col>

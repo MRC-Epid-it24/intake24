@@ -3,14 +3,14 @@
     <template #activator="{ attrs, on }">
       <v-list-item key="respondentsUpload" v-bind="attrs" link v-on="on">
         <v-list-item-title>
-          <v-icon left>fa-upload</v-icon>
+          <v-icon left>$upload</v-icon>
           {{ $t('surveys.respondents.upload._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="primary" dark flat>
-        <v-icon dark left>fa-upload</v-icon>
+        <v-icon dark left>$upload</v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.upload.title`) }}
         </v-toolbar-title>
@@ -28,13 +28,13 @@
                   name="file"
                   outlined
                   prepend-icon=""
-                  prepend-inner-icon="fa-file-csv"
+                  prepend-inner-icon="fas fa-file-csv"
                   @change="form.errors.clear('file')"
                 ></v-file-input>
               </v-col>
               <v-col cols="12" sm="auto">
                 <v-btn block color="secondary" :disabled="jobInProgress" type="submit" x-large>
-                  <v-icon left>fa-upload</v-icon>
+                  <v-icon left>$upload</v-icon>
                   {{ $t('surveys.respondents.upload.submit') }}
                 </v-btn>
               </v-col>

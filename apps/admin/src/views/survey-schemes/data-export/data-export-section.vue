@@ -36,7 +36,7 @@
                     link
                   >
                     <v-list-item-avatar class="drag-and-drop__handle" size="32">
-                      <v-icon>fa-grip-vertical</v-icon>
+                      <v-icon>$handle</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle class="mb-1">

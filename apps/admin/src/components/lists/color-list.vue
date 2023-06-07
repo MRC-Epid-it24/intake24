@@ -11,7 +11,7 @@
             link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>fa-grip-vertical</v-icon>
+              <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-icon
               class="mx-2 my-auto px-4 py-4"
@@ -44,7 +44,7 @@
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar color="primary" dark flat>
-          <v-icon dark left>fa-palette</v-icon>
+          <v-icon dark left>fas fa-palette</v-icon>
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}
           </v-toolbar-title>

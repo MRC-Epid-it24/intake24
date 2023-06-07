@@ -30,7 +30,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon small>fa-sync</v-icon>
+            <v-icon small>fas fa-sync</v-icon>
           </v-btn>
         </template>
         {{ $t('feedback-schemes.meals.fields.reset.text') }}
@@ -47,7 +47,7 @@
             link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>fa-grip-vertical</v-icon>
+              <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">

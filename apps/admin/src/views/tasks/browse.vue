@@ -1,8 +1,8 @@
 <template>
   <data-table :headers="headers">
     <template #[`item.active`]="{ item }">
-      <v-icon v-if="item.active" color="success">fa-check-circle</v-icon>
-      <v-icon v-else color="error">fa-times-circle</v-icon>
+      <v-icon v-if="item.active" color="success">$check</v-icon>
+      <v-icon v-else color="error">$times</v-icon>
     </template>
     <template #[`item.schedule`]="{ item }">
       {{ readableCron(item.cron) }}

@@ -15,7 +15,7 @@
                     :label="$t('nutrient-tables.upload.type')"
                     name="type"
                     outlined
-                    prepend-inner-icon="fa-running"
+                    prepend-inner-icon="fas fa-running"
                     @change="form.errors.clear('type')"
                   ></v-select>
                 </v-col>
@@ -28,7 +28,7 @@
                     name="file"
                     outlined
                     prepend-icon=""
-                    prepend-inner-icon="fa-file-csv"
+                    prepend-inner-icon="fas fa-file-csv"
                     @change="form.errors.clear('file')"
                   ></v-file-input>
                 </v-col>
@@ -43,7 +43,7 @@
                     type="submit"
                     x-large
                   >
-                    <v-icon left>fa-upload</v-icon>{{ $t('common.action.upload') }}
+                    <v-icon left>$upload</v-icon>{{ $t('common.action.upload') }}
                   </v-btn>
                 </v-col>
               </v-row>

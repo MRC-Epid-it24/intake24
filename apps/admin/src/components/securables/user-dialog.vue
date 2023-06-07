@@ -9,7 +9,7 @@
         v-on="on"
         @click.stop="add"
       >
-        <v-icon left>fa-user-plus</v-icon>{{ $t(`${resource}.securables.add`) }}
+        <v-icon left>fas fa-user-plus</v-icon>{{ $t(`${resource}.securables.add`) }}
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
@@ -23,11 +23,11 @@
         <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
             <v-tab key="search">
-              <v-icon left>fa-search</v-icon>
+              <v-icon left>$search</v-icon>
               {{ $t(`${resource}.securables.search`) }}
             </v-tab>
             <v-tab key="create">
-              <v-icon left>fa-user-plus</v-icon>
+              <v-icon left>fas fa-user-plus</v-icon>
               {{ $t(`${resource}.securables.create`) }}
             </v-tab>
           </v-tabs>
@@ -83,7 +83,7 @@
                       :label="$t('common.email')"
                       name="email"
                       outlined
-                      prepend-inner-icon="fa-at"
+                      prepend-inner-icon="fas fa-at"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -94,7 +94,7 @@
                       :label="$t('users.name')"
                       name="name"
                       outlined
-                      prepend-inner-icon="fa-user"
+                      prepend-inner-icon="fas fa-user"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -105,7 +105,7 @@
                       :label="$t('common.phone')"
                       name="phone"
                       outlined
-                      prepend-inner-icon="fa-phone"
+                      prepend-inner-icon="fas fa-phone"
                     ></v-text-field>
                   </v-col>
                 </v-row>

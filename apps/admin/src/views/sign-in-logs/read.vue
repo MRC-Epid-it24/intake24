@@ -7,8 +7,8 @@
           <td>{{ entry.id }}</td>
           <th>{{ $t('sign-in-logs.successful') }}</th>
           <td>
-            <v-icon v-if="entry.successful" color="success">fa-check-circle</v-icon>
-            <v-icon v-else color="error">fa-times-circle</v-icon>
+            <v-icon v-if="entry.successful" color="success">$check</v-icon>
+            <v-icon v-else color="error">$times</v-icon>
           </td>
         </tr>
         <tr>

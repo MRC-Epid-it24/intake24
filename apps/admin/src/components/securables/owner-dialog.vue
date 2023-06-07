@@ -16,7 +16,7 @@
         </v-toolbar-title>
         <template #extension>
           <div class="mx-auto">
-            <v-icon left>fa-search</v-icon>{{ $t(`${resource}.securables.search`) }}
+            <v-icon left>$search</v-icon>{{ $t(`${resource}.securables.search`) }}
           </div>
         </template>
       </v-toolbar>

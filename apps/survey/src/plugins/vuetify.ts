@@ -17,6 +17,7 @@ export default new Vuetify({
       dashboard: 'fas fa-tachometer-alt',
       decrement: 'fas fa-minus',
       delete: 'fas fa-trash',
+      download: 'fas fa-download',
       drink: 'fas fa-glass-water',
       edit: 'fas fa-edit',
       expandImage: 'fas fa-arrows-alt',

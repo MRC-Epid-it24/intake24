@@ -39,7 +39,7 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-btn block outlined x-large @click.stop="download">
-                <v-icon left>fas fa-download</v-icon>
+                <v-icon left>$download</v-icon>
                 {{ $t(`surveys.respondents.feedback.download`) }}
               </v-btn>
             </v-col>

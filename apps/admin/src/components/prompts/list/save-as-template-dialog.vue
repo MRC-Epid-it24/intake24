@@ -3,7 +3,7 @@
     <template #activator="{ attrs, on }">
       <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
-          <v-icon :disabled="disabled" left>fa-save</v-icon>
+          <v-icon :disabled="disabled" left>$save</v-icon>
           {{ $t('survey-schemes.questions.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>

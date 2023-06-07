@@ -12,7 +12,7 @@
       {{ message.text }}
       <template #action="{ attrs }">
         <v-btn dark icon v-bind="attrs" @click="dismiss(message.id)">
-          <v-icon>fa-times</v-icon>
+          <v-icon>fas fa-times</v-icon>
         </v-btn>
       </template>
     </v-snackbar>

@@ -18,7 +18,7 @@
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
-                <v-icon left>fas fa-download</v-icon>
+                <v-icon left>$download</v-icon>
                 {{ $t('survey-schemes.load') }}
               </v-list-item-title>
             </v-list-item>
@@ -44,7 +44,7 @@
             link
           >
             <v-list-item-avatar class="drag-and-drop__handle">
-              <v-icon>fa-grip-vertical</v-icon>
+              <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
