@@ -132,7 +132,7 @@ export default defineComponent({
 
   methods: {
     updateJob() {
-      this.form.errors.clear('job');
+      this.form.errors.clear();
       this.form.params = this.defaultJobsParams[this.form.job];
     },
 

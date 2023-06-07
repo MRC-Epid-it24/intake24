@@ -43,11 +43,11 @@ import { SelectResource } from '@intake24/admin/components/dialogs';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'SurveyDataExport',
+  name: 'SurveyAuthUrlsExport',
 
   components: { SelectResource },
 
-  mixins: [jobParams<JobParams['SurveyDataExport']>()],
+  mixins: [jobParams<JobParams['SurveyAuthUrlsExport']>()],
 });
 </script>
 

@@ -53,10 +53,11 @@ export default () => {
 
   router.get(
     '/locales',
-    anyPermission(['surveys']),
+    anyPermission(['surveys', 'tasks']),
     browse,
     wrapAsync(referenceController.locales)
   );
+
   router.get(
     '/nutrient-tables',
     anyPermission(['fdbs']),
@@ -70,6 +71,8 @@ export default () => {
     browse,
     wrapAsync(referenceController.standardUnits)
   );
+
+  router.get('/surveys', anyPermission(['tasks']), browse, wrapAsync(referenceController.surveys));
 
   router.get(
     '/survey-schemes',

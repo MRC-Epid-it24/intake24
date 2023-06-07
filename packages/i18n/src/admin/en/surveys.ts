@@ -80,7 +80,6 @@ const surveys: LocaleMessageObject = {
     upload: {
       _: 'Respondents upload',
       title: 'Survey respondents bulk upload',
-      file: 'Browse CSV File',
       submit: 'Upload',
     },
     authUrls: {

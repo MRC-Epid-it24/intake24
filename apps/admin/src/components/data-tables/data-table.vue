@@ -95,7 +95,6 @@ export default defineComponent({
     }),
 
     async setFilter(data: Dictionary) {
-      console.log('setFilter', data);
       // this.clearSelected();
       await this.setResourceFilter(data);
       await this.fetch();

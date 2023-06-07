@@ -7,6 +7,7 @@ const nutrientTables: LocaleMessageObject = {
   create: 'Add nutrient table',
   edit: 'Edit nutrient table',
   delete: 'Delete nutrient table',
+  id: 'Nutrient table ID',
 
   mapping: {
     source: {
@@ -37,7 +38,6 @@ const nutrientTables: LocaleMessageObject = {
     title: 'Nutrient table uploads',
     tab: 'Uploads',
     type: 'Data type upload',
-    file: 'CSV file',
   },
 };
 

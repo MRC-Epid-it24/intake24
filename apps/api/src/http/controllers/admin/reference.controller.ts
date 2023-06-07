@@ -12,6 +12,7 @@ import type {
   LocalesResponse,
   NutrientTablesResponse,
   SurveySchemesResponse,
+  SurveysResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
@@ -19,13 +20,14 @@ import {
   AsServedSet,
   DrinkwareSet,
   FeedbackScheme,
-  FoodsLocale,
   GuideImage,
   ImageMap,
   Language,
   NutrientTable,
   StandardUnit,
+  Survey,
   SurveyScheme,
+  SystemLocale,
 } from '@intake24/db';
 
 const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
@@ -108,10 +110,10 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
   ): Promise<void> => {
-    const locales = await FoodsLocale.paginate({
+    const locales = await SystemLocale.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'englishName', 'localName'],
-      order: [['id', 'ASC']],
+      columns: ['code', 'englishName', 'localName'],
+      order: [['code', 'ASC']],
     });
 
     res.json(locales);
@@ -154,6 +156,19 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(standardUnits);
   };
 
+  const surveys = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<SurveysResponse>
+  ): Promise<void> => {
+    const surveys = await Survey.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'slug', 'name'],
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    });
+    res.json(surveys);
+  };
+
   const surveySchemes = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -176,6 +191,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     nutrientTables,
     feedbackSchemes,
     standardUnits,
+    surveys,
     surveySchemes,
   };
 };

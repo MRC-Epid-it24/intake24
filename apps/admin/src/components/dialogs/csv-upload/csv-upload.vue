@@ -24,7 +24,7 @@
                   v-model="form.file"
                   :error-messages="form.errors.get('file')"
                   hide-details="auto"
-                  :label="$t('common.csvUpload.file')"
+                  :label="$t('common.file.csv')"
                   name="file"
                   outlined
                   prepend-icon=""

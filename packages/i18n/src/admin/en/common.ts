@@ -188,8 +188,8 @@ const common: LocaleMessageObject = {
     title: 'JSON Content editor',
   },
 
-  csvUpload: {
-    file: 'Choose CSV file to upload',
+  file: {
+    csv: 'CSV file to upload',
   },
 };
 

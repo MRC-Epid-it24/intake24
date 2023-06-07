@@ -43,12 +43,15 @@ const jobs: LocaleMessageObject = {
     },
     FoodRankingCsvUpload: {
       _: 'Locale - food ranking CSV upload',
+      file: 'CSV file',
     },
     NutrientTableIMappingImport: {
       _: 'Nutrient table - import NDB mapping',
+      file: 'CSV file',
     },
     NutrientTableDataImport: {
       _: 'Nutrient table - import NDB data',
+      file: 'CSV file',
     },
     PairwiseSearchCopyAssociations: {
       _: 'Search - Copy pairwise associations',
@@ -73,6 +76,7 @@ const jobs: LocaleMessageObject = {
     },
     SurveyRespondentsImport: {
       _: 'Survey - import respondents',
+      file: 'CSV file',
     },
     SurveySubmission: {
       _: 'Survey - process submission',

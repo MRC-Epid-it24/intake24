@@ -3,15 +3,17 @@
     <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12">
-          <v-text-field
+        <v-col cols="12" md="6">
+          <v-file-input
             hide-details="auto"
-            :label="$t('surveys.id')"
-            name="surveyId"
+            :label="$t('common.file.csv')"
+            name="file"
             outlined
-            :value="value.surveyId"
-            @input="input('surveyId', $event)"
-          ></v-text-field>
+            prepend-icon=""
+            prepend-inner-icon="fas fa-paperclip"
+            :value="value.file"
+            @input="input('file', $event)"
+          ></v-file-input>
         </v-col>
         <v-col v-if="error" cols="12">
           <v-alert text type="error">
@@ -31,9 +33,9 @@ import type { JobParams } from '@intake24/common/types';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'SurveyAuthUrlsExport',
+  name: 'FoodRankingCsvUpload',
 
-  mixins: [jobParams<JobParams['SurveyAuthUrlsExport']>()],
+  mixins: [jobParams<JobParams['FoodRankingCsvUpload']>()],
 });
 </script>
 

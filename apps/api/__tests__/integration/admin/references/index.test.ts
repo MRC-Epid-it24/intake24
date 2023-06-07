@@ -8,6 +8,7 @@ import locales from './locales.test';
 import nutrientTables from './nutrient-tables.test';
 import standardUnits from './standard-units.test';
 import surveySchemes from './survey-schemes.test';
+import surveys from './surveys.test';
 
 export default () => {
   describe('GET /api/admin/references/as-served-sets', asServedSets);
@@ -20,4 +21,5 @@ export default () => {
   describe('GET /api/admin/references/nutrient-tables', nutrientTables);
   describe('GET /api/admin/references/standard-units', standardUnits);
   describe('GET /api/admin/references/survey-schemes', surveySchemes);
+  describe('GET /api/admin/references/surveys', surveys);
 };
