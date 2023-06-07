@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="drink-scale-drawer mb-4"
+      class="drink-scale-drawer mb-4 mx-auto"
       :class="{ selected: cursorInScale }"
       @mousedown="touchUpdateSlider"
       @mousemove="onTrackOverlay($event)"
@@ -251,6 +251,7 @@ export default defineComponent({
 
 .drink-scale-drawer {
   position: relative;
+  max-width: 600px;
 
   &.selected {
     cursor: pointer;

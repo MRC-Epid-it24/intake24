@@ -88,6 +88,15 @@ export default <P extends keyof Prompts & keyof PromptStates>() =>
       },
     },
 
+    watch: {
+      panel: {
+        handler() {
+          this.goToActions();
+        },
+        immediate: true,
+      },
+    },
+
     methods: {
       clearErrors() {
         this.errors = [];
@@ -95,6 +104,14 @@ export default <P extends keyof Prompts & keyof PromptStates>() =>
 
       closePanels() {
         this.panel = -1;
+      },
+
+      async goToActions() {
+        if (this.panel === -1) return;
+
+        setTimeout(async () => {
+          await this.$vuetify.goTo('#actions', { duration: 1000 });
+        }, 100);
       },
 
       setPanel(panel: number) {

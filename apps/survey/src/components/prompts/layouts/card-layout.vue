@@ -17,6 +17,7 @@
       <slot></slot>
       <v-card-actions
         v-if="!isMobile || prompt.actions?.both"
+        id="actions"
         class="pa-4 d-flex"
         :class="{ 'flex-column-reverse': isMobile }"
       >
@@ -48,6 +49,7 @@
       </v-card-actions>
       <v-bottom-navigation
         v-if="isMobile"
+        id="actions"
         app
         class="bottom-navigation"
         color="secondary"

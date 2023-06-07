@@ -217,6 +217,8 @@ export default defineComponent({
 
       this.updatePanel();
       this.update();
+
+      if (val) this.goToActions();
     },
   },
 

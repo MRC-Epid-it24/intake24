@@ -11,6 +11,7 @@
     <slot></slot>
     <div
       v-if="!isMobile || prompt.actions?.both"
+      id="actions"
       class="pa-5 px-md-0 d-flex"
       :class="{ 'flex-column-reverse': isMobile }"
     >
@@ -41,6 +42,7 @@
     </div>
     <v-bottom-navigation
       v-if="isMobile"
+      id="actions"
       app
       class="bottom-navigation"
       color="secondary"
