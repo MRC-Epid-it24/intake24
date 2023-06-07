@@ -195,8 +195,8 @@ export default defineComponent({
   },
 
   watch: {
-    leftoversPrompt(val) {
-      if (val === true) this.portionSize.leftovers = null;
+    leftoversPrompt() {
+      this.portionSize.leftovers = null;
 
       this.updatePanel();
       this.update();
