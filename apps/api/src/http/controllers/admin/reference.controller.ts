@@ -5,14 +5,15 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   AsServedSetsResponse,
   DrinkwareSetsResponse,
-  FeedbackSchemesResponse,
+  FeedbackSchemeReferences,
   GuideImagesResponse,
   ImageMapsResponse,
-  LanguagesResponse,
-  LocalesResponse,
-  NutrientTablesResponse,
+  LanguageReferences,
+  NutrientTableReferences,
+  SurveyReferences,
+  SurveySchemeReferences,
   SurveySchemesResponse,
-  SurveysResponse,
+  SystemLocaleReferences,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
@@ -95,10 +96,11 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const languages = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LanguagesResponse>
+    res: Response<LanguageReferences>
   ): Promise<void> => {
     const languages = await Language.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'code', 'englishName', 'localName'],
       columns: ['id', 'englishName', 'localName'],
       order: [['id', 'ASC']],
     });
@@ -108,10 +110,11 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const locales = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<LocalesResponse>
+    res: Response<SystemLocaleReferences>
   ): Promise<void> => {
     const locales = await SystemLocale.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'code', 'englishName', 'localName'],
       columns: ['code', 'englishName', 'localName'],
       order: [['code', 'ASC']],
     });
@@ -121,10 +124,11 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const nutrientTables = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<NutrientTablesResponse>
+    res: Response<NutrientTableReferences>
   ): Promise<void> => {
     const nutrientTables = await NutrientTable.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'description'],
       columns: ['id', 'description'],
       order: [['id', 'ASC']],
     });
@@ -134,7 +138,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const feedbackSchemes = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<FeedbackSchemesResponse>
+    res: Response<FeedbackSchemeReferences>
   ): Promise<void> => {
     const feedbackSchemes = await FeedbackScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -150,6 +154,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
   ): Promise<void> => {
     const standardUnits = await StandardUnit.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'estimateIn', 'howMany'],
       columns: ['id'],
       order: [['id', 'ASC']],
     });
@@ -158,7 +163,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const surveys = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveysResponse>
+    res: Response<SurveyReferences>
   ): Promise<void> => {
     const surveys = await Survey.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -171,7 +176,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   const surveySchemes = async (
     req: Request<any, any, any, PaginateQuery>,
-    res: Response<SurveySchemesResponse>
+    res: Response<SurveySchemeReferences>
   ): Promise<void> => {
     const surveySchemes = await SurveyScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
