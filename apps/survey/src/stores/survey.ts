@@ -166,7 +166,10 @@ export const useSurvey = defineStore('survey', {
     selectedMealIndex(): number | undefined {
       const { element } = this.data.selection;
 
-      if (element === null || element.type !== 'meal') return undefined;
+      if (element === null) return undefined;
+      if (element.type !== 'meal') {
+        return getMealIndexForSelection(this.data.meals, this.data.selection);
+      }
 
       return getMealIndex(this.data.meals, element.mealId);
     },
