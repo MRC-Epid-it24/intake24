@@ -88,15 +88,6 @@ export default <P extends keyof Prompts & keyof PromptStates>() =>
       },
     },
 
-    watch: {
-      panel: {
-        handler() {
-          this.goToActions();
-        },
-        immediate: true,
-      },
-    },
-
     methods: {
       clearErrors() {
         this.errors = [];

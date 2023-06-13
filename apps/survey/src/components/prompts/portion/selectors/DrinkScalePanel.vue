@@ -1,23 +1,24 @@
 <template>
-  <div>
+  <div id="drink-scale-wrapper" ref="wrapper">
     <div
       class="drink-scale-drawer mb-4 mx-auto"
       :class="{ selected: cursorInScale }"
       @mousedown="touchUpdateSlider"
       @mousemove="onTrackOverlay($event)"
     >
-      <v-img ref="imgDrink" v-resize="onImgResize" :src="scale.baseImageUrl">
+      <v-img
+        ref="imgDrink"
+        v-resize="onImgResize"
+        class="drink-scale-image"
+        :src="scale.baseImageUrl"
+        :style="imgVars"
+      >
         <template #placeholder>
           <image-placeholder></image-placeholder>
         </template>
       </v-img>
-      <v-img
-        class="drink-scale-image-overlay"
-        :src="scale.overlayImageUrl"
-        :style="overlayBackground"
-      >
-      </v-img>
-      <div class="drink-scale-image-slider mr-6" :style="{ bottom: sliderBottom }">
+      <v-img class="drink-scale-overlay" :src="scale.overlayImageUrl" :style="overlayVars"> </v-img>
+      <div class="drink-scale-slider mr-6" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
           :height="sliderHeight"
@@ -27,7 +28,7 @@
           vertical
         ></v-slider>
       </div>
-      <div class="drink-scale-image-label">
+      <div class="drink-scale-label">
         <v-chip
           class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
         >
@@ -109,6 +110,7 @@ export default defineComponent({
   emits: ['confirm', 'input'],
 
   setup(props) {
+    const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
     const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
     const sliderMin = ref(0);
@@ -124,6 +126,7 @@ export default defineComponent({
     const cursorInScale = ref(false);
 
     return {
+      wrapper,
       imgDrink,
       height,
       width,
@@ -161,11 +164,17 @@ export default defineComponent({
       return `${this.scale.emptyLevel * this.imgScale}px`;
     },
 
-    overlayBackground() {
+    imgVars() {
       return {
-        '--clip-path': `inset(${
+        '--img-clip': `${(this.scale.height - this.scale.fullLevel) * 0.75 * this.imgScale}px`,
+      };
+    },
+
+    overlayVars() {
+      return {
+        '--overlay-clip': `${
           this.height - (this.scale.emptyLevel + this.sliderValue) * this.imgScale
-        }px 0px 0px 0px)`,
+        }px`,
       };
     },
   },
@@ -196,6 +205,12 @@ export default defineComponent({
   },
 
   methods: {
+    scrollTo() {
+      setTimeout(() => {
+        this.wrapper?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
+    },
+
     updateOverlayDimensions() {
       const el = this.imgDrink?.$el;
       if (!el) {
@@ -206,6 +221,8 @@ export default defineComponent({
       const { width, height } = el.getBoundingClientRect();
       this.width = width;
       this.height = height;
+
+      if (this.open) this.scrollTo();
     },
 
     onImgResize() {
@@ -257,16 +274,21 @@ export default defineComponent({
     cursor: pointer;
   }
 
-  .drink-scale-image-overlay {
+  .drink-scale-image {
+    clip-path: inset(var(--img-clip) 0px 0px 0px);
+    margin-top: calc(var(--img-clip) * -1);
+  }
+
+  .drink-scale-overlay {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    clip-path: var(--clip-path);
+    clip-path: inset(var(--overlay-clip) 0px 0px 0px);
   }
 
-  .drink-scale-image-slider {
+  .drink-scale-slider {
     position: absolute;
     right: 0;
     z-index: 1;
@@ -340,7 +362,7 @@ export default defineComponent({
     }
   }
 
-  .drink-scale-image-label {
+  .drink-scale-label {
     position: absolute;
     bottom: 0;
     right: 0;

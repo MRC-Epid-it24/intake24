@@ -195,13 +195,11 @@ export default defineComponent({
   },
 
   watch: {
-    leftoversPrompt(val: boolean) {
+    leftoversPrompt() {
       this.portionSize.leftovers = null;
 
       this.updatePanel();
       this.update();
-
-      if (val) this.goToActions();
     },
   },
 
