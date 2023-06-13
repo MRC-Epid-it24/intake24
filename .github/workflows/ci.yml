@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
 
       - name: Create foods/system databases
         run: |
@@ -329,7 +329,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -363,7 +363,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -397,7 +397,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -439,7 +439,7 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
