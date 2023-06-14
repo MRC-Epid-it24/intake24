@@ -1,7 +1,7 @@
 <template>
-  <div id="drink-scale-wrapper" ref="wrapper">
+  <div ref="wrapper" class="drink-scale-wrapper">
     <div
-      class="drink-scale-drawer mb-4 mx-auto"
+      class="drink-scale-drawer"
       :class="{ selected: cursorInScale }"
       @mousedown="touchUpdateSlider"
       @mousemove="onTrackOverlay($event)"
@@ -164,10 +164,12 @@ export default defineComponent({
       return `${this.scale.emptyLevel * this.imgScale}px`;
     },
 
+    imgClip() {
+      return (this.scale.height - this.scale.fullLevel) * 0.75 * this.imgScale;
+    },
+
     imgVars() {
-      return {
-        '--img-clip': `${(this.scale.height - this.scale.fullLevel) * 0.75 * this.imgScale}px`,
-      };
+      return { '--img-clip': `${this.imgClip}px` };
     },
 
     overlayVars() {
@@ -207,7 +209,9 @@ export default defineComponent({
   methods: {
     scrollTo() {
       setTimeout(() => {
-        this.wrapper?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        if (!this.wrapper) return;
+
+        this.$vuetify.goTo(this.wrapper);
       }, 100);
     },
 
@@ -266,72 +270,78 @@ export default defineComponent({
 <style lang="scss">
 @import 'vuetify/src/styles/styles.sass';
 
-.drink-scale-drawer {
-  position: relative;
-  max-width: 600px;
+.drink-scale-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 
-  &.selected {
-    cursor: pointer;
-  }
-
-  .drink-scale-image {
-    clip-path: inset(var(--img-clip) 0px 0px 0px);
-    margin-top: calc(var(--img-clip) * -1);
-  }
-
-  .drink-scale-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+  .drink-scale-drawer {
+    position: relative;
     width: 100%;
-    clip-path: inset(var(--overlay-clip) 0px 0px 0px);
-  }
+    max-width: 600px;
 
-  .drink-scale-slider {
-    position: absolute;
-    right: 0;
-    z-index: 1;
+    &.selected {
+      cursor: pointer;
+    }
 
-    .v-slider {
-      height: 100%;
+    .drink-scale-image {
+      clip-path: inset(var(--img-clip) 0px 0px 0px);
+      margin-top: calc(var(--img-clip) * -1);
+    }
 
-      .v-slider__track-container {
-        cursor: pointer;
-        width: 20px;
-      }
+    .drink-scale-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      clip-path: inset(var(--overlay-clip) 0px 0px 0px);
+    }
 
-      .v-slider__thumb-container {
-        cursor: pointer;
+    .drink-scale-slider {
+      position: absolute;
+      right: 0;
+      z-index: 1;
 
-        .v-slider__thumb {
-          width: 30px;
-          height: 24px;
-          position: absolute;
-          left: -15px;
-          border-top-left-radius: 0px;
-          border-bottom-left-radius: 0px;
-          border-top-right-radius: 0px;
-          border-bottom-right-radius: 0px;
+      .v-slider {
+        height: 100%;
 
-          &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -6px;
-            width: 0;
-            height: 0;
-            border-right: 12px solid map-get($blue-grey, 'darken-4');
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-          }
-
-          &::before {
-            content: unset;
-          }
+        .v-slider__track-container {
+          cursor: pointer;
+          width: 20px;
         }
 
-        /* .v-slider__thumb {
+        .v-slider__thumb-container {
+          cursor: pointer;
+
+          .v-slider__thumb {
+            width: 30px;
+            height: 24px;
+            position: absolute;
+            left: -15px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+
+            &::after {
+              content: '';
+              position: absolute;
+              top: 50%;
+              left: -6px;
+              width: 0;
+              height: 0;
+              border-right: 12px solid map-get($blue-grey, 'darken-4');
+              border-top: 12px solid transparent;
+              border-bottom: 12px solid transparent;
+            }
+
+            &::before {
+              content: unset;
+            }
+          }
+
+          /* .v-slider__thumb {
           height: 36px;
           width: 36px;
           left: -18px;
@@ -354,19 +364,20 @@ export default defineComponent({
             left: -12px;
           }
         } */
+        }
+      }
+
+      .v-slider--vertical {
+        min-height: unset;
       }
     }
 
-    .v-slider--vertical {
-      min-height: unset;
+    .drink-scale-label {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: 1;
     }
-  }
-
-  .drink-scale-label {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 1;
   }
 }
 </style>
