@@ -44,7 +44,7 @@
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item[itemId]}`"></v-divider>
               </template>
             </v-list-item-group>
           </v-list>
@@ -139,7 +139,7 @@ export default defineComponent({
       const { selectedItemId } = this;
       if (!selectedItemId) return null;
 
-      return this.items.find((item) => item.id === selectedItemId) ?? null;
+      return this.items.find((item) => item[this.itemId] === selectedItemId) ?? null;
     },
   },
 
