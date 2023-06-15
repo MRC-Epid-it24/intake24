@@ -186,7 +186,7 @@ import draggable from 'vuedraggable';
 import type { Errors } from '@intake24/common/util';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { useListWithDialog } from '@intake24/admin/components/lists';
-import { withInternalId, withoutInternalId } from '@intake24/admin/util';
+import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -230,8 +230,8 @@ export default defineComponent({
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
       useListWithDialog(props, context, {
         newItem,
-        transformIn: withInternalId,
-        transformOut: withoutInternalId,
+        transformIn: withIdAndOrder,
+        transformOut: withoutIdAndOrder,
       });
 
     const clearCategory = (code: string | null) => {

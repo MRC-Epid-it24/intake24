@@ -142,7 +142,7 @@ import { useListWithDialog } from '@intake24/admin/components/lists';
 import { ConfirmDialog } from '@intake24/ui';
 
 export default defineComponent({
-  name: 'TopFoodsNutrientTypeList',
+  name: 'NutrientTypeList',
 
   components: { ConfirmDialog, draggable, LanguageSelector },
 

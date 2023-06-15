@@ -4,8 +4,8 @@
       <draggable v-model="items" handle=".drag-and-drop__handle" @end="update">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
-            v-for="(color, idx) in items"
-            :key="`${color}-${idx}`"
+            v-for="(item, idx) in items"
+            :key="item._id"
             class="drag-and-drop__item"
             draggable
             link
@@ -15,20 +15,16 @@
             </v-list-item-avatar>
             <v-list-item-icon
               class="mx-2 my-auto px-4 py-4"
-              :style="{ backgroundColor: color, borderRadius: '50%' }"
+              :style="{ backgroundColor: item.color, borderRadius: '50%' }"
             >
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium">
-                {{ color }} ({{ lastLabel && idx + 1 === items.length ? lastLabel : idx + 1 }})
+                {{ item.color }} ({{ lastLabel && idx + 1 === items.length ? lastLabel : idx + 1 }})
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn
-                icon
-                :title="$t('feedback-schemes.colors.edit')"
-                @click.stop="edit(idx, color)"
-              >
+              <v-btn icon :title="$t('feedback-schemes.colors.edit')" @click.stop="edit(idx, item)">
                 <v-icon color="primary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -75,9 +71,10 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import { useListWithDialog } from '@intake24/admin/components/lists';
+import { randomString } from '@intake24/common/util';
 
 export default defineComponent({
-  name: 'TopFoodsColorList',
+  name: 'ColorList',
 
   components: { draggable },
 
@@ -92,10 +89,14 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    const newItem = () => ({ _id: randomString(6), color: '#EF6C00' });
+    const transformIn = (color: string) => ({ _id: randomString(6), color });
+    const transformOut = ({ color }: { _id: string; color: string }) => color;
+
     const { dialog, form, items, newDialog, edit, reset, save, update } = useListWithDialog(
       props,
       context,
-      { newItem: () => '#EF6C00' }
+      { newItem, transformIn, transformOut }
     );
 
     return { dialog, form, items, newDialog, edit, reset, save, update };

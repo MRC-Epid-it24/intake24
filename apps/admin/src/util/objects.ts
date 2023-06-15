@@ -6,7 +6,11 @@ export const toIndexedList = <T extends object>(items: T[]): (T & { id: number }
 export const withIdList = <T extends object>(items: T[]): (T & { id: string })[] =>
   items.map((item) => ({ ...item, id: randomString(6) }));
 
-export const withInternalId = <T>(
+export const withId = <T>(item: T): T & { _id: string } => ({ ...item, _id: randomString(6) });
+
+export const withoutId = <T extends { _id: string }>({ _id, ...rest }: T): Omit<T, '_id'> => rest;
+
+export const withIdAndOrder = <T>(
   item: T,
   index: number
 ): T & { _id: string; orderBy: string } => ({
@@ -15,7 +19,7 @@ export const withInternalId = <T>(
   orderBy: index.toString(),
 });
 
-export const withoutInternalId = <T extends { _id: string; orderBy: string }>(
+export const withoutIdAndOrder = <T extends { _id: string; orderBy: string }>(
   { _id, ...rest }: T,
   index: number
 ): Omit<T, '_id'> => ({ ...rest, orderBy: index.toString() });

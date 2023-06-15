@@ -71,7 +71,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Errors } from '@intake24/common/util';
-import { withInternalId, withoutInternalId } from '@intake24/admin/util';
+import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type {
@@ -108,7 +108,7 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props) {
-    const items = ref(props.value.map(withInternalId));
+    const items = ref(props.value.map(withIdAndOrder));
     const selector = ref<InstanceType<typeof PortionSizeMethodSelector>>();
 
     return { items, selector };
@@ -116,7 +116,7 @@ export default defineComponent({
 
   computed: {
     outputItems(): PortionSizeMethodItem[] {
-      return this.items.map(withoutInternalId);
+      return this.items.map(withoutIdAndOrder);
     },
   },
 
@@ -124,7 +124,7 @@ export default defineComponent({
     value(val: PortionSizeMethodItem[]) {
       if (deepEqual(val, this.outputItems)) return;
 
-      this.items = val.map(withInternalId);
+      this.items = val.map(withIdAndOrder);
     },
     outputItems(val: PortionSizeMethodItem[]) {
       if (deepEqual(val, this.value)) return;
