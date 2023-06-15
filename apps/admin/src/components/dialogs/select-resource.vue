@@ -33,16 +33,16 @@
               <template v-for="(item, idx) in items">
                 <v-list-item :key="item[itemId]" :value="item[itemId]">
                   <template #default="{ active }">
-                    <v-list-item-action>
+                    <v-list-item-action class="mr-2">
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-avatar>
                       <v-icon>{{ itemIcon }}</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>
-                        <slot name="item" v-bind="{ item }">{{ item[itemName] }}</slot>
-                      </v-list-item-title>
+                      <slot name="item" v-bind="{ item }">
+                        <v-list-item-title>{{ item[itemName] }}</v-list-item-title>
+                      </slot>
                     </v-list-item-content>
                   </template>
                 </v-list-item>

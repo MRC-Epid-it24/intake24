@@ -118,7 +118,6 @@
                   resource="categories"
                   @input="clearFood"
                 >
-                  <template #title>{{ $t(`fdbs.categories.title`) }}</template>
                   <template #activator="{ attrs, on }">
                     <v-text-field
                       v-bind="attrs"
@@ -134,6 +133,11 @@
                       @input="clearFood"
                     ></v-text-field>
                   </template>
+                  <template #title>{{ $t(`fdbs.categories.title`) }}</template>
+                  <template #item="{ item }">
+                    <v-list-item-title>{{ item.code }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+                  </template>
                 </select-resource>
               </v-col>
               <v-col cols="12" md="6">
@@ -143,7 +147,6 @@
                   resource="foods"
                   @input="clearCategory"
                 >
-                  <template #title>{{ $t(`fdbs.foods.title`) }}</template>
                   <template #activator="{ attrs, on }">
                     <v-text-field
                       v-bind="attrs"
@@ -158,6 +161,11 @@
                       v-on="on"
                       @input="clearCategory"
                     ></v-text-field>
+                  </template>
+                  <template #title>{{ $t(`fdbs.foods.title`) }}</template>
+                  <template #item="{ item }">
+                    <v-list-item-title>{{ item.code }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
                   </template>
                 </select-resource>
               </v-col>
