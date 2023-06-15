@@ -86,44 +86,47 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.id': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'id' }),
     isInt: true,
     optional: true,
   },
   'portionSizeMethods.*.method': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'method' }),
     isIn: {
       options: [portionSizeMethodIds],
-      errorMessage: typeErrorMessage('in.options', { options: portionSizeMethodIds }),
+      errorMessage: typeErrorMessage('in.options', {
+        attributePath: 'method',
+        options: portionSizeMethodIds,
+      }),
     },
   },
   'portionSizeMethods.*.description': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'description' }),
     isString: true,
     isEmpty: { negated: true },
   },
   'portionSizeMethods.*.imageUrl': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'imageUrl' }),
     isString: true,
     isEmpty: { negated: true },
   },
   'portionSizeMethods.*.useForRecipes': {
     in: ['body'],
-    errorMessage: typeErrorMessage('boolean._'),
+    errorMessage: typeErrorMessage('boolean._', { attributePath: 'useForRecipes' }),
     isBoolean: { options: { strict: true } },
   },
   'portionSizeMethods.*.conversionFactor': {
     in: ['body'],
-    errorMessage: typeErrorMessage('float._'),
+    errorMessage: typeErrorMessage('float._', { attributePath: 'conversionFactor' }),
     isFloat: true,
     toFloat: true,
   },
   'portionSizeMethods.*.orderBy': {
     in: ['body'],
-    errorMessage: typeErrorMessage('number._'),
+    errorMessage: typeErrorMessage('number._', { attributePath: 'orderBy' }),
     isInt: true,
   },
   'portionSizeMethods.*.parameters': {
@@ -133,19 +136,19 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.parameters.*.id': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'id' }),
     isInt: true,
     optional: true,
   },
   'portionSizeMethods.*.parameters.*.name': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'name' }),
     isString: true,
     isEmpty: { negated: true },
   },
   'portionSizeMethods.*.parameters.*.value': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'value' }),
     isString: true,
     isEmpty: { negated: true },
   },
@@ -159,13 +162,13 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.id': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'id' }),
     isInt: true,
     optional: true,
   },
   'associatedFoods.*.associatedCategoryCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'main.code' }),
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -177,7 +180,10 @@ export const associatedFoods: Schema = {
           if (associatedFoodCode) throw new Error('Either category or food code can be defined.');
 
           const category = await Category.findOne({ where: { code: value } });
-          if (!category) throw new Error(customTypeErrorMessage('exists._', meta));
+          if (!category)
+            throw new Error(
+              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })
+            );
         } else {
           if (!associatedFoodCode) throw new Error('Category or food code is required');
         }
@@ -186,7 +192,7 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedFoodCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'main.code' }),
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -199,7 +205,10 @@ export const associatedFoods: Schema = {
             throw new Error('Either category or food code can be defined.');
 
           const food = await Food.findOne({ where: { code: value } });
-          if (!food) throw new Error(customTypeErrorMessage('exists._', meta));
+          if (!food)
+            throw new Error(
+              customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })
+            );
         } else {
           if (!associatedCategoryCode) throw new Error('Category or food code is required');
         }
@@ -208,24 +217,24 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.genericName': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'name' }),
     isString: true,
     isEmpty: { negated: true },
   },
   'associatedFoods.*.text': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string._', { attributePath: 'text' }),
     isString: true,
     isEmpty: { negated: true },
   },
   'associatedFoods.*.linkAsMain': {
     in: ['body'],
-    errorMessage: typeErrorMessage('boolean._'),
+    errorMessage: typeErrorMessage('boolean._', { attributePath: 'linkAsMain' }),
     isBoolean: { options: { strict: true } },
   },
   'associatedFoods.*.orderBy': {
     in: ['body'],
-    errorMessage: typeErrorMessage('number._'),
+    errorMessage: typeErrorMessage('number._', { attributePath: 'orderBy' }),
     isInt: true,
   },
 };
