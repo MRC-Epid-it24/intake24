@@ -12,6 +12,7 @@ import type {
 import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import {
+  AssociatedFood,
   Food,
   FoodLocal,
   FoodPortionSizeMethod,
@@ -67,6 +68,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
           separate: true,
           where: { localeId: localeCode },
           include: [{ association: 'associatedCategory' }, { association: 'associatedFood' }],
+          order: [['orderBy', 'ASC']],
         },
         {
           association: 'portionSizeMethods',
@@ -194,13 +196,50 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     return [...methods, ...newMethods];
   };
 
-  const updateFood = async (foodLocalId: string, localeId: string, input: FoodInput) => {
-    const foodLocal = await getFood(foodLocalId, localeId);
+  const updateAssociatedFoods = async (
+    foodCode: string,
+    localeId: string,
+    foods: AssociatedFood[],
+    inputs: FoodInput['associatedFoods'],
+    { transaction }: { transaction: Transaction }
+  ) => {
+    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
+
+    await AssociatedFood.destroy({
+      where: { foodCode, localeId, id: { [Op.notIn]: ids } },
+      transaction,
+    });
+
+    if (!inputs.length) return [];
+
+    const newFoods: AssociatedFood[] = [];
+
+    for (const input of inputs) {
+      const { id, ...rest } = input;
+
+      if (id) {
+        const match = foods.find((food) => food.id === id);
+        if (match) {
+          await match.update(rest, { transaction });
+          continue;
+        }
+      }
+
+      const newFood = await AssociatedFood.create({ ...rest, foodCode, localeId }, { transaction });
+      newFoods.push(newFood);
+    }
+
+    return [...foods, ...newFoods];
+  };
+
+  const updateFood = async (foodLocalId: string, localeCode: string, input: FoodInput) => {
+    const foodLocal = await getFood(foodLocalId, localeCode);
     if (!foodLocal) throw new NotFoundError();
 
-    const { main, portionSizeMethods } = foodLocal;
+    const { main, portionSizeMethods, associatedFoods } = foodLocal;
     if (
       !main ||
+      !associatedFoods ||
       !portionSizeMethods ||
       portionSizeMethods.some((psm) => psm.parameters === undefined)
     )
@@ -230,13 +269,16 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
         updatePortionSizeMethods(foodLocalId, portionSizeMethods, input.portionSizeMethods, {
           transaction,
         }),
+        updateAssociatedFoods(main.code, localeCode, associatedFoods, input.associatedFoods, {
+          transaction,
+        }),
       ]);
 
       if (main.code !== input.main.code)
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
     });
 
-    return getFood(foodLocalId, localeId);
+    return getFood(foodLocalId, localeCode);
   };
 
   return {
