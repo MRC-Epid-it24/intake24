@@ -41,6 +41,12 @@
         <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
       </template>
     </v-list>
+    <v-messages
+      v-if="errors.has('main.parentCategories')"
+      class="px-4 pb-2"
+      color="error"
+      :value="errors.get('main.parentCategories')"
+    ></v-messages>
   </v-card>
 </template>
 
@@ -67,6 +73,7 @@ export default defineComponent({
     },
     errors: {
       type: Object as PropType<Errors>,
+      required: true,
     },
     localeId: {
       type: String,

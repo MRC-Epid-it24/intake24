@@ -17,6 +17,13 @@ export default () => {
   );
 
   router.get(
+    '/categories',
+    anyPermission(['fdbs']),
+    browse,
+    wrapAsync(referenceController.categories)
+  );
+
+  router.get(
     '/drinkware-sets',
     anyPermission(['fdbs']),
     browse,
@@ -29,6 +36,8 @@ export default () => {
     browse,
     wrapAsync(referenceController.feedbackSchemes)
   );
+
+  router.get('/foods', anyPermission(['fdbs']), browse, wrapAsync(referenceController.foods));
 
   router.get(
     '/guide-images',

@@ -1,5 +1,7 @@
 import type {
+  CategoryAttributes,
   FeedbackSchemeAttributes,
+  FoodAttributes,
   LanguageAttributes,
   NutrientTableAttributes,
   Pagination,
@@ -8,6 +10,10 @@ import type {
   SurveySchemeAttributes,
   SystemLocaleAttributes,
 } from '@intake24/db';
+
+export type CategoryReferences = Pagination<Pick<CategoryAttributes, 'code' | 'name'>>;
+
+export type FoodReferences = Pagination<Pick<FoodAttributes, 'code' | 'name'>>;
 
 export type FeedbackSchemeReferences = Pagination<FeedbackSchemeAttributes>;
 

@@ -42,6 +42,12 @@
         <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
       </template>
     </v-list>
+    <v-messages
+      v-if="errors.has('nutrientRecords')"
+      class="px-4 pb-2"
+      color="error"
+      :value="errors.get('nutrientRecords')"
+    ></v-messages>
   </v-card>
 </template>
 

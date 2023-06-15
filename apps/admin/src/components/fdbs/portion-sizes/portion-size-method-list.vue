@@ -30,8 +30,15 @@
               <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ item.description }}</v-list-item-title>
+              <v-list-item-title>
+                {{ $t(`prompts.portionSizeOption.selections.${item.description}`) }}
+              </v-list-item-title>
               <v-list-item-subtitle>{{ item.method }} </v-list-item-subtitle>
+              <v-messages
+                v-if="errors.has('portionSizeMethods', index)"
+                color="error"
+                :value="errors.get('portionSizeMethods', index)"
+              ></v-messages>
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
               <v-btn icon :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })">
@@ -64,6 +71,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Errors } from '@intake24/common/util';
+import { withInternalId, withoutInternalId } from '@intake24/admin/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type {
@@ -72,7 +80,6 @@ import type {
   PortionSizeMethodItem,
 } from './portion-sizes';
 import PortionSizeMethodSelector from './portion-size-method-selector.vue';
-import { withInternalId, withoutInternalId } from './portion-sizes';
 
 export default defineComponent({
   name: 'PortionSizeMethodList',

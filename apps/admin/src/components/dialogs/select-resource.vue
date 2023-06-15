@@ -9,7 +9,9 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`${resource}.title`) }}
+          <slot name="title">
+            {{ $t(`${resource}.title`) }}
+          </slot>
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">

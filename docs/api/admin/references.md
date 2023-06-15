@@ -27,6 +27,33 @@ Content-Type: application/json
 }
 ```
 
+## Categories
+
+Paginated `category` reference list
+
+### Request
+
+```json
+GET /api/admin/references/categories
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
 ## Drinkware sets
 
 Paginated `dinkware set` reference list
@@ -35,6 +62,60 @@ Paginated `dinkware set` reference list
 
 ```json
 GET /api/admin/references/drinkware-sets
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Feedback schemes
+
+Paginated `feedback scheme` reference list
+
+### Request
+
+```json
+GET /api/admin/references/feedback-schemes
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
+## Foods
+
+Paginated `food` reference list
+
+### Request
+
+```json
+GET /api/admin/references/foods
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -170,33 +251,6 @@ Paginated `nutrient table` reference list
 
 ```json
 GET /api/admin/references/nutrient-tables
-    ?search={searchText}
-    &page={page}
-    &limit={limit}
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    "data": [{...}],
-    "meta": {...}
-}
-```
-
-## Feedback schemes
-
-Paginated `feedback scheme` reference list
-
-### Request
-
-```json
-GET /api/admin/references/feedback-schemes
     ?search={searchText}
     &page={page}
     &limit={limit}

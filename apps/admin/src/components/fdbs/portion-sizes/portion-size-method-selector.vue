@@ -35,7 +35,7 @@
                     hide-details="auto"
                     :items="selections"
                     :label="$t('fdbs.portionSizes.description')"
-                    name="method"
+                    name="description"
                     outlined
                   >
                   </v-select>
@@ -46,6 +46,7 @@
                     clearable
                     hide-details="auto"
                     :label="$t('fdbs.portionSizes.imageUrl')"
+                    name="imageUrl"
                     outlined
                   >
                   </v-text-field>
@@ -55,6 +56,7 @@
                     v-model="dialog.item.useForRecipes"
                     hide-details="auto"
                     :label="$t('fdbs.portionSizes.useForRecipes')"
+                    name="useForRecipes"
                   ></v-switch>
                 </v-col>
                 <v-col cols="12">
@@ -64,6 +66,7 @@
                     :label="$t('fdbs.portionSizes.conversionFactor')"
                     :max="10"
                     :min="0.2"
+                    name="conversionFactor"
                     :step="0.1"
                     thumb-label="always"
                   ></v-slider>
@@ -117,55 +120,34 @@ import { copy, merge, randomString } from '@intake24/common/util';
 
 import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
 import portionSizeParams from './parameters';
-import { portionSizeSelectionImages, psmDefaults } from './portion-sizes';
+import { portionSizeSelectionImages, psmDefaults, usePortionSizeMethods } from './portion-sizes';
 
 export default defineComponent({
   name: 'PortionSizeMethodSelector',
 
-  components: {
-    ...portionSizeParams,
-  },
-
-  props: {
-    textRequired: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  components: { ...portionSizeParams },
 
   emits: ['save'],
 
   setup() {
-    const form = ref<InstanceType<typeof HTMLFormElement>>();
+    const { estimationMethods, selections } = usePortionSizeMethods();
 
-    return { form };
-  },
-
-  data() {
-    const dialog = (show = false): PortionSizeMethodDialog => ({
+    const newDialog = (show = false): PortionSizeMethodDialog => ({
       show,
       index: -1,
       item: copy({ ...psmDefaults[0], _id: randomString(6) }),
     });
 
-    const estimationMethods = psmDefaults.map(({ method: value }) => ({
-      value,
-      text: this.$t(`fdbs.portionSizes.methods.${value}._`),
-    }));
-
-    const selections = Object.keys(portionSizeSelectionImages)
-      .map((value) => ({
-        value,
-        text: this.$t(`prompts.portionSizeOption.selections.${value}`),
-      }))
-      .sort((a, b) => (a.text > b.text ? 1 : -1));
+    const dialog = ref(newDialog());
+    const form = ref<InstanceType<typeof HTMLFormElement>>();
 
     return {
-      dialog: dialog(),
-      newDialog: dialog,
-      psmDefaults,
+      dialog,
+      newDialog,
+      form,
       selections,
       estimationMethods,
+      psmDefaults,
       portionSizeSelectionImages,
     };
   },

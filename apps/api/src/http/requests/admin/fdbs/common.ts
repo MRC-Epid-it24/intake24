@@ -5,7 +5,7 @@ import {
   portionSizeMethods as portionSizeMethodIds,
   useInRecipeTypes,
 } from '@intake24/common/types';
-import { Category, NutrientTableRecord } from '@intake24/db';
+import { Category, Food, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {
   'main.attributes.readyMealOption': {
@@ -148,5 +148,84 @@ export const portionSizeMethods: Schema = {
     errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
+  },
+};
+
+export const associatedFoods: Schema = {
+  associatedFoods: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('array._'),
+    isArray: { bail: true },
+  },
+  'associatedFoods.*.id': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isInt: true,
+    optional: true,
+  },
+  'associatedFoods.*.associatedCategoryCode': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    custom: {
+      options: async (value, meta): Promise<void> => {
+        const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
+        if (Number.isNaN(index)) throw new Error('Invalid index');
+
+        const { associatedFoodCode } = meta.req.body.associatedFoods[index];
+
+        if (value) {
+          if (associatedFoodCode) throw new Error('Either category or food code can be defined.');
+
+          const category = await Category.findOne({ where: { code: value } });
+          if (!category) throw new Error(customTypeErrorMessage('exists._', meta));
+        } else {
+          if (!associatedFoodCode) throw new Error('Category or food code is required');
+        }
+      },
+    },
+  },
+  'associatedFoods.*.associatedFoodCode': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    custom: {
+      options: async (value, meta): Promise<void> => {
+        const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
+        if (Number.isNaN(index)) throw new Error('Invalid index');
+
+        const { associatedCategoryCode } = meta.req.body.associatedFoods[index];
+
+        if (value) {
+          if (associatedCategoryCode)
+            throw new Error('Either category or food code can be defined.');
+
+          const food = await Food.findOne({ where: { code: value } });
+          if (!food) throw new Error(customTypeErrorMessage('exists._', meta));
+        } else {
+          if (!associatedCategoryCode) throw new Error('Category or food code is required');
+        }
+      },
+    },
+  },
+  'associatedFoods.*.genericName': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
+  },
+  'associatedFoods.*.text': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    isString: true,
+    isEmpty: { negated: true },
+  },
+  'associatedFoods.*.linkAsMain': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+  },
+  'associatedFoods.*.orderBy': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('number._'),
+    isInt: true,
   },
 };

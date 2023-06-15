@@ -9,7 +9,9 @@
 
 // Drag & drop lists
 .drag-and-drop__item {
-  border-bottom: 1px solid map-get($grey, 'lighten-3');
+  &:not(:last-child) {
+    border-bottom: 1px solid map-get($grey, 'lighten-3');
+  }
 
   .drag-and-drop__handle {
     cursor: move;

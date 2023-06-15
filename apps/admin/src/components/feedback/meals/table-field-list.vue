@@ -266,7 +266,7 @@ export default defineComponent({
       resetList,
       save,
       update,
-    } = useListWithDialog(props, context, () => getTableFieldDefaults('standard'));
+    } = useListWithDialog(props, context, { newItem: () => getTableFieldDefaults('standard') });
 
     const tab = ref(0);
 

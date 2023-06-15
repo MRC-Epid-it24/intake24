@@ -1,52 +1,64 @@
 import type { Ref, SetupContext, UnwrapRef } from 'vue';
 import { deepEqual } from 'fast-equals';
-import { ref, toRefs, watch } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue';
 
 import { copy } from '@intake24/common/util';
 
-export type ListProps<T> = {
-  value: T[];
-  defaults?: T[];
+export type ListProps<O> = {
+  value: O[];
+  defaults?: O[];
+};
+
+export type ListOps<I, O = I> = {
+  newItem: () => I;
+  transformIn?: (item: O, index: number) => I;
+  transformOut?: (item: I, index: number) => O;
 };
 
 // TODO: fix generic types casting
 
-export const useListWithDialog = <T>(
-  props: ListProps<T>,
+export const useListWithDialog = <I, O>(
+  props: ListProps<O>,
   context: SetupContext,
-  newValue: () => T
+  ops: ListOps<I, O>
 ) => {
   const { value } = toRefs(props);
+  const { newItem, transformIn, transformOut } = ops;
   const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-  const items = ref([...value.value]) as Ref<UnwrapRef<T>[]>;
+  const items = ref(copy(transformIn ? value.value.map(transformIn) : value.value)) as Ref<
+    UnwrapRef<I>[]
+  >;
+
+  const outputItems = computed(() => (transformOut ? items.value.map(transformOut) : items.value));
 
   const newDialog = (show = false) => ({
     show,
     index: -1,
-    item: newValue() as UnwrapRef<T>,
+    item: newItem() as UnwrapRef<I>,
   });
 
   const dialog = ref({
     show: false,
     index: -1,
-    item: newValue(),
+    item: newItem(),
   });
 
   watch(value, (val) => {
-    if (deepEqual(val, items.value)) return;
-    items.value = [...(val as any)];
+    if (deepEqual(val, outputItems.value)) return;
+
+    items.value = copy(transformIn ? val.map(transformIn) : val) as any;
   });
 
   const add = () => {
     dialog.value = newDialog(true);
   };
 
-  const edit = (index: number, item: UnwrapRef<T>) => {
+  const edit = (index: number, item: UnwrapRef<I>) => {
     dialog.value = { show: true, index, item: copy(item) };
   };
 
-  const load = (list: UnwrapRef<T>[]) => {
+  const load = (list: UnwrapRef<I>[]) => {
     items.value = [...list];
     update();
   };
@@ -64,7 +76,7 @@ export const useListWithDialog = <T>(
   const resetList = () => {
     if (!props.defaults) return;
 
-    items.value = [...props.defaults] as UnwrapRef<T>[];
+    items.value = [...props.defaults] as UnwrapRef<I>[];
     update();
   };
 
@@ -82,7 +94,7 @@ export const useListWithDialog = <T>(
   };
 
   const update = () => {
-    context.emit('input', items.value);
+    context.emit('input', outputItems.value);
   };
 
   return {

@@ -95,7 +95,7 @@ export default defineComponent({
     const { dialog, form, items, newDialog, edit, reset, save, update } = useListWithDialog(
       props,
       context,
-      () => '#EF6C00'
+      { newItem: () => '#EF6C00' }
     );
 
     return { dialog, form, items, newDialog, edit, reset, save, update };

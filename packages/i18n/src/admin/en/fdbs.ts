@@ -90,6 +90,20 @@ const fdbs: LocaleMessageObject = {
     none: 'No nutrient table record found for provided search.',
   },
 
+  associatedFoods: {
+    _: 'Associated food',
+    title: 'Associated foods',
+    add: 'Add associated food',
+    edit: 'Edit associated food',
+    remove: 'Remove associated food',
+
+    genericName: 'Generic name',
+    text: 'Text',
+    linkAsMain: 'Link as main food',
+    associatedCategoryCode: 'Associated category',
+    associatedFoodCode: 'Associated food',
+  },
+
   portionSizes: {
     _: 'Portion size method',
     title: 'Portion size methods',

@@ -156,10 +156,10 @@ export default defineComponent({
       FoodDatabaseEntry
     >(props, {
       data: {
-        name: null,
+        name: '',
         main: {
-          name: null,
-          code: null,
+          name: '',
+          code: '',
           isHidden: false,
           attributes: {
             readyMealOption: null,

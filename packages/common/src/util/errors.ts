@@ -17,12 +17,23 @@ export class Errors {
     this.errors = {};
   }
 
-  get(field: string): string | undefined {
-    return this.errors[field]?.msg;
+  get(field: string, index?: number): string[] {
+    if (typeof index === 'undefined') return [this.errors[field]?.msg].filter(Boolean);
+
+    return Object.entries(this.errors).reduce<string[]>((acc, [key, value]) => {
+      if (key.startsWith(`${field}[${index}]`)) acc.push(value.msg);
+
+      return acc;
+    }, []);
   }
 
-  has(field: string): boolean {
-    return Object.prototype.hasOwnProperty.call(this.errors, field);
+  has(field: string, index?: number): boolean {
+    if (typeof index === 'undefined')
+      return Object.prototype.hasOwnProperty.call(this.errors, field);
+
+    return Object.keys(this.errors).some(
+      (key) => key === field || key.startsWith(`${field}[${index}]`)
+    );
   }
 
   all(): ValidationErrors {

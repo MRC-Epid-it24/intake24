@@ -8,8 +8,8 @@ export default <T>() =>
     name: 'JobParams',
 
     props: {
-      error: {
-        type: String,
+      errors: {
+        type: Array as PropType<string[]>,
       },
       refs: {
         type: Object as PropType<TaskRefs>,

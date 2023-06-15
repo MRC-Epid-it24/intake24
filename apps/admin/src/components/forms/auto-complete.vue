@@ -53,7 +53,7 @@ export default defineComponent({
       default: false,
     },
     errorMessages: {
-      type: String,
+      type: Array as PropType<string[]>,
     },
     itemText: {
       type: String,

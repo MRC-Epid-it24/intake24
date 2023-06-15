@@ -180,7 +180,7 @@ export default defineComponent({
       resetList,
       save,
       update,
-    } = useListWithDialog(props, context, defaultItem);
+    } = useListWithDialog(props, context, { newItem: defaultItem });
 
     const updateNutrientLabel = (nutrientTypeId: string) => {
       const match = props.nutrientTypes.find((nutrient) => nutrient.id === nutrientTypeId);

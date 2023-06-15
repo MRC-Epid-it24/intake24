@@ -250,7 +250,7 @@ export default defineComponent({
 
   setup(props, context) {
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
-      useListWithDialog(props, context, getDemographicGroupDefaults);
+      useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
 
     const tab = ref(0);
 

@@ -2,7 +2,7 @@ import type {
   FoodPortionSizeMethodCreationAttributes,
   FoodPortionSizeMethodParameterCreationAttributes,
 } from '@intake24/db';
-import { randomString } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 export type PortionSizeMethodParameterItem = FoodPortionSizeMethodParameterCreationAttributes;
 
@@ -18,20 +18,6 @@ export type PortionSizeMethodEvent = {
   index: number;
   item: InternalPortionSizeMethodItem;
 };
-
-export const withInternalId = (
-  item: PortionSizeMethodItem,
-  index: number
-): InternalPortionSizeMethodItem => ({
-  ...item,
-  _id: randomString(6),
-  orderBy: index.toString(),
-});
-
-export const withoutInternalId = (
-  { _id, ...rest }: InternalPortionSizeMethodItem,
-  index: number
-): PortionSizeMethodItem => ({ ...rest, orderBy: index.toString() });
 
 export type PortionSizeMethodDialog = {
   show: boolean;
@@ -152,3 +138,21 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     imageUrl: portionSizeSelectionImages.weight,
   },
 ];
+
+export const usePortionSizeMethods = () => {
+  const i18n = useI18n();
+
+  const estimationMethods = psmDefaults.map(({ method: value }) => ({
+    value,
+    text: i18n.t(`fdbs.portionSizes.methods.${value}._`).toString(),
+  }));
+
+  const selections = Object.keys(portionSizeSelectionImages)
+    .map((value) => ({
+      value,
+      text: i18n.t(`prompts.portionSizeOption.selections.${value}`).toString(),
+    }))
+    .sort((a, b) => a.text.localeCompare(b.text));
+
+  return { estimationMethods, selections };
+};

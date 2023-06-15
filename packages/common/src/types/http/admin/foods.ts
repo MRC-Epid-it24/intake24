@@ -1,4 +1,5 @@
 import type {
+  AssociatedFoodCreationAttributes,
   CategoryAttributes,
   FoodAttributeAttributes,
   FoodAttributes,
@@ -23,6 +24,7 @@ export type FoodInput = {
   portionSizeMethods: (FoodPortionSizeMethodCreationAttributes & {
     parameters: FoodPortionSizeMethodParameterCreationAttributes[];
   })[];
+  associatedFoods: AssociatedFoodCreationAttributes[];
 };
 
 export type FoodListEntry = {

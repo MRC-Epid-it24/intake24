@@ -93,6 +93,14 @@
           :errors="form.errors"
           :locale-id="id"
         ></portion-size-method-list>
+        <associated-food-list
+          v-model="form.associatedFoods"
+          class="mb-6"
+          :disabled="disabled"
+          :errors="form.errors"
+          :food-code="form.main.code"
+          :locale-id="id"
+        ></associated-food-list>
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
@@ -120,6 +128,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
+  AssociatedFoodList,
   AttributeList,
   CategoryList,
   NutrientList,
@@ -136,6 +145,7 @@ export default defineComponent({
   name: 'FoodEntry',
 
   components: {
+    AssociatedFoodList,
     AutoComplete,
     AttributeList,
     CategoryList,
@@ -173,10 +183,10 @@ export default defineComponent({
       FoodDatabaseEntry
     >(props, {
       data: {
-        name: null,
+        name: '',
         main: {
-          name: null,
-          code: null,
+          name: '',
+          code: '',
           foodGroupId: null,
           attributes: {
             readyMealOption: null,
@@ -188,6 +198,7 @@ export default defineComponent({
         },
         nutrientRecords: [],
         portionSizeMethods: [],
+        associatedFoods: [],
       },
       config: { extractNestedKeys: true },
     });

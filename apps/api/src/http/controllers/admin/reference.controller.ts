@@ -4,8 +4,10 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type {
   AsServedSetsResponse,
+  CategoryReferences,
   DrinkwareSetsResponse,
   FeedbackSchemeReferences,
+  FoodReferences,
   GuideImagesResponse,
   ImageMapsResponse,
   LanguageReferences,
@@ -19,8 +21,10 @@ import type { PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import {
   AsServedSet,
+  Category,
   DrinkwareSet,
   FeedbackScheme,
+  Food,
   GuideImage,
   ImageMap,
   Language,
@@ -49,6 +53,20 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(asServedSets);
   };
 
+  const categories = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<CategoryReferences>
+  ): Promise<void> => {
+    const categories = await Category.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['code', 'name'],
+      columns: ['code', 'name'],
+      order: [['code', 'ASC']],
+    });
+
+    res.json(categories);
+  };
+
   const drinkwareSets = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
@@ -62,6 +80,32 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     });
 
     res.json(tasks);
+  };
+
+  const feedbackSchemes = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<FeedbackSchemeReferences>
+  ): Promise<void> => {
+    const feedbackSchemes = await FeedbackScheme.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    });
+    res.json(feedbackSchemes);
+  };
+
+  const foods = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<FoodReferences>
+  ): Promise<void> => {
+    const foods = await Food.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['code', 'name'],
+      columns: ['code', 'name'],
+      order: [['code', 'ASC']],
+    });
+
+    res.json(foods);
   };
 
   const guideImages = async (
@@ -136,18 +180,6 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(nutrientTables);
   };
 
-  const feedbackSchemes = async (
-    req: Request<any, any, any, PaginateQuery>,
-    res: Response<FeedbackSchemeReferences>
-  ): Promise<void> => {
-    const feedbackSchemes = await FeedbackScheme.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name'],
-      order: [['name', 'ASC']],
-    });
-    res.json(feedbackSchemes);
-  };
-
   const standardUnits = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -188,13 +220,15 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
 
   return {
     asServedSets,
+    categories,
     drinkwareSets,
+    feedbackSchemes,
+    foods,
     guideImages,
     imageMaps,
     languages,
     locales,
     nutrientTables,
-    feedbackSchemes,
     standardUnits,
     surveys,
     surveySchemes,

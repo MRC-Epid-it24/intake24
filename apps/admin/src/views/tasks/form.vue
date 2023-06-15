@@ -87,7 +87,7 @@
             :is="form.job"
             v-if="Object.keys(form.params).length"
             v-model="form.params"
-            :error="form.errors.get('params')"
+            :errors="form.errors.get('params')"
             name="params"
             :refs="refs"
             @input="form.errors.clear('params')"

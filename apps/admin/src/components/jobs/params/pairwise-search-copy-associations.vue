@@ -38,10 +38,8 @@
             @input="input('targetLocaleId', $event)"
           ></v-text-field>
         </v-col>
-        <v-col v-if="error" cols="12">
-          <v-alert text type="error">
-            {{ error }}
-          </v-alert>
+        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
+          <v-alert text type="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
     </v-card-text>
