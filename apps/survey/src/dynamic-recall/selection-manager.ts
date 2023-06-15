@@ -24,23 +24,25 @@ export default class SelectionManager {
     this.promptManager = promptManager;
   }
 
-  private mealPromptsAvailable(mealId: string): boolean {
+  private mealPromptsAvailable(mealId: string, withSelection: Selection): boolean {
     return !!(
-      this.promptManager.nextMealSectionPrompt('preFoods', mealId) ||
-      this.promptManager.nextMealSectionPrompt('postFoods', mealId)
+      this.promptManager.nextMealSectionPrompt('preFoods', mealId, withSelection) ||
+      this.promptManager.nextMealSectionPrompt('postFoods', mealId, withSelection)
     );
   }
 
   private selectMealIfPromptsAvailable(mealId: string): Selection | undefined {
-    return this.mealPromptsAvailable(mealId) ? makeMealSelection(mealId) : undefined;
+    const selection = makeMealSelection(mealId);
+    return this.mealPromptsAvailable(mealId, selection) ? selection : undefined;
   }
 
-  private foodPromptsAvailable(foodId: string): boolean {
-    return this.promptManager.nextFoodsPrompt(foodId) !== undefined;
+  private foodPromptsAvailable(foodId: string, forSelection: Selection): boolean {
+    return this.promptManager.nextFoodsPrompt(foodId, forSelection) !== undefined;
   }
 
   private selectFoodIfPromptsAvailable(foodId: string): Selection | undefined {
-    return this.foodPromptsAvailable(foodId) ? makeFoodSelection(foodId) : undefined;
+    const selection = makeFoodSelection(foodId);
+    return this.foodPromptsAvailable(foodId, selection) ? selection : undefined;
   }
 
   public tryAnyFoodInMeal(mealId: string): Selection | undefined {
@@ -56,10 +58,12 @@ export default class SelectionManager {
         ++linkedFoodIndex
       ) {
         const linkedFoodId = meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex].id;
-        if (this.foodPromptsAvailable(linkedFoodId)) return makeFoodSelection(linkedFoodId);
+        const selection = makeFoodSelection(linkedFoodId);
+        if (this.foodPromptsAvailable(linkedFoodId, selection)) return selection;
       }
 
-      if (this.foodPromptsAvailable(foodId)) return makeFoodSelection(foodId);
+      const selection = makeFoodSelection(foodId);
+      if (this.foodPromptsAvailable(foodId, selection)) return selection;
     }
 
     return undefined;
@@ -91,8 +95,9 @@ export default class SelectionManager {
 
     for (let mealIndex = 0; mealIndex < meals.length; mealIndex++) {
       const mealId = meals[mealIndex].id;
+      const selection = makeMealSelection(mealId);
 
-      if (this.mealPromptsAvailable(mealId)) return makeMealSelection(mealId);
+      if (this.mealPromptsAvailable(mealId, selection)) return selection;
     }
     return undefined;
   }
@@ -111,7 +116,8 @@ export default class SelectionManager {
 
       for (let i = foodIndex.linkedFoodIndex + 1; i < parentFood.linkedFoods.length; ++i) {
         const nextLinkedFoodId = parentFood.linkedFoods[i].id;
-        if (this.foodPromptsAvailable(nextLinkedFoodId)) return makeFoodSelection(nextLinkedFoodId);
+        const selection = makeFoodSelection(nextLinkedFoodId);
+        if (this.foodPromptsAvailable(nextLinkedFoodId, selection)) selection;
       }
     }
 
@@ -134,11 +140,15 @@ export default class SelectionManager {
 
       for (let li = 0; li < nextFood.linkedFoods.length; ++li) {
         const linkedFoodId = nextFood.linkedFoods[li].id;
-        if (this.foodPromptsAvailable(linkedFoodId)) return makeFoodSelection(linkedFoodId);
+        const selection = makeFoodSelection(linkedFoodId);
+        if (this.foodPromptsAvailable(linkedFoodId, selection)) return selection;
       }
 
-      if (this.foodPromptsAvailable(nextFoodId)) return makeFoodSelection(nextFoodId);
+      const selection = makeFoodSelection(nextFoodId);
+      if (this.foodPromptsAvailable(nextFoodId, selection)) return selection;
     }
+
+    return undefined;
   }
 
   tryParentFood(foodId: string): Selection | undefined {

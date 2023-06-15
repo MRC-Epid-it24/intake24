@@ -1,6 +1,6 @@
 import type { ComponentType, Condition, Prompt } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
-import type { FoodState, MealState } from '@intake24/common/types';
+import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import { conditionOps } from '@intake24/common/prompts';
 import {
@@ -147,8 +147,11 @@ const checkSurveyCustomConditions = (store: SurveyStore, prompt: Prompt) =>
 const checkMealStandardConditions = (
   surveyState: SurveyState,
   mealState: MealState,
+  withSelection: Selection | null,
   prompt: Prompt
 ): boolean => {
+  const selection = withSelection || surveyState.data.selection;
+
   switch (prompt.component) {
     case 'edit-meal-prompt':
       return mealState.foods.length === 0;
@@ -171,7 +174,7 @@ const checkMealStandardConditions = (
       recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
       return false;
     case 'no-more-information-prompt':
-      if (surveyState.data.selection.mode === 'manual') {
+      if (selection.mode === 'manual') {
         recallLog().promptCheck(
           'no-more-information-prompt',
           true,
@@ -248,9 +251,12 @@ const checkMealCustomConditions = (store: SurveyStore, mealState: MealState, pro
 const checkFoodStandardConditions = (
   surveyState: SurveyState,
   foodState: FoodState,
+  withSelection: Selection | null,
   prompt: Prompt
 ): boolean => {
   const { component } = prompt;
+  const selection = withSelection || surveyState.data.selection;
+
   switch (component) {
     case 'info-prompt': {
       if (foodState.flags.includes(`${prompt.id}-acknowledged`)) {
@@ -273,7 +279,7 @@ const checkFoodStandardConditions = (
         return false;
       }
 
-      if (surveyState.data.selection.mode === 'manual') {
+      if (selection.mode === 'manual') {
         recallLog().promptCheck(
           component,
           true,
@@ -541,8 +547,8 @@ const checkFoodStandardConditions = (
     }
 
     case 'no-more-information-prompt': {
-      if (surveyState.data.selection.mode === 'manual') {
-        if (surveyState.data.selection.element?.type === 'meal') {
+      if (selection.mode === 'manual') {
+        if (selection.element?.type === 'meal') {
           recallLog().promptCheck(
             component,
             true,
@@ -690,7 +696,11 @@ export default class PromptManager {
     );
   }
 
-  nextMealSectionPrompt(section: MealSection, mealId: string): Prompt | undefined {
+  nextMealSectionPrompt(
+    section: MealSection,
+    mealId: string,
+    withSelection: Selection | null
+  ): Prompt | undefined {
     const state = this.store.$state;
     const mealState = findMeal(state.data.meals, mealId);
 
@@ -711,12 +721,12 @@ export default class PromptManager {
 
     return this.scheme.questions.meals[section].find(
       (question) =>
-        checkMealStandardConditions(state, mealState, question) &&
+        checkMealStandardConditions(state, mealState, withSelection, question) &&
         checkMealCustomConditions(this.store, mealState, question)
     );
   }
 
-  nextFoodsPrompt(foodId: string): Prompt | undefined {
+  nextFoodsPrompt(foodId: string, withSelection: Selection | null): Prompt | undefined {
     const state = this.store.$state;
 
     const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
@@ -725,7 +735,7 @@ export default class PromptManager {
 
     return this.scheme.questions.meals.foods.find(
       (question) =>
-        checkFoodStandardConditions(state, foodState, question) &&
+        checkFoodStandardConditions(state, foodState, withSelection, question) &&
         checkFoodCustomConditions(this.store, mealState, foodState, question)
     );
   }

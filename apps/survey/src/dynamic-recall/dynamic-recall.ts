@@ -108,7 +108,7 @@ export default class DynamicRecall {
   foodPromptsComplete(surveyState: SurveyState, mealId: string): boolean {
     const foods = findMeal(surveyState.data.meals, mealId).foods;
 
-    return foods.every((food) => this.promptManager.nextFoodsPrompt(food.id) === undefined);
+    return foods.every((food) => this.promptManager.nextFoodsPrompt(food.id, null) === undefined);
   }
 
   getNextPromptForCurrentSelection(): PromptInstance | undefined {
@@ -119,12 +119,12 @@ export default class DynamicRecall {
       switch (recallState.selection.element.type) {
         case 'meal': {
           const { mealId } = recallState.selection.element;
-          const mealPrompt = this.promptManager.nextMealSectionPrompt('preFoods', mealId);
+          const mealPrompt = this.promptManager.nextMealSectionPrompt('preFoods', mealId, null);
 
           if (mealPrompt) return { prompt: mealPrompt, section: 'preFoods' };
 
           if (this.foodPromptsComplete(surveyState, mealId)) {
-            const mealPrompt = this.promptManager.nextMealSectionPrompt('postFoods', mealId);
+            const mealPrompt = this.promptManager.nextMealSectionPrompt('postFoods', mealId, null);
 
             if (mealPrompt) return { prompt: mealPrompt, section: 'postFoods' };
           }
@@ -132,7 +132,7 @@ export default class DynamicRecall {
         }
         case 'food': {
           const { foodId } = recallState.selection.element;
-          const foodPrompt = this.promptManager.nextFoodsPrompt(foodId);
+          const foodPrompt = this.promptManager.nextFoodsPrompt(foodId, null);
 
           if (foodPrompt) {
             return {
