@@ -90,6 +90,7 @@
         :foods="food.linkedFoods"
         linked
         :selected-food-id="selectedFoodId"
+        @action="action"
         @food-selected="foodSelected"
       ></food-item>
     </div>

@@ -23,6 +23,7 @@ export type FoodFlag =
   | 'ready-meal'
   | 'same-as-before-complete'
   | 'split-food-complete'
+  | 'missing-food-complete'
   | 'portion-size-option-complete'
   | 'portion-size-method-complete'
   | `${string}-acknowledged`;

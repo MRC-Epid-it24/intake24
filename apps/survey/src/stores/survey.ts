@@ -559,10 +559,13 @@ export const useSurvey = defineStore('survey', {
       const food = findFood(this.data.meals, foodId);
       if (food.type === 'free-text') return;
 
-      const flags: FoodFlag[] =
-        food.type === 'encoded-food' && food.data.portionSizeMethods.length === 1
-          ? ['portion-size-method-complete']
-          : ['portion-size-option-complete', 'portion-size-method-complete'];
+      const flags: FoodFlag[] = [];
+      if (food.type === 'encoded-food') {
+        flags.push('portion-size-method-complete');
+
+        if (food.data.portionSizeMethods.length > 1) flags.push('portion-size-option-complete');
+      }
+      if (food.type === 'missing-food') flags.push('missing-food-complete');
 
       this.removeFoodFlag(food, flags);
     },

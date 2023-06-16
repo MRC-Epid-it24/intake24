@@ -35,6 +35,7 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, { emit }) {
+    const survey = useSurvey();
     const { missingFood: food } = useFoodPromptUtils();
 
     const getInitialState = (): PromptStates['missing-food-prompt'] => ({
@@ -60,7 +61,8 @@ export default defineComponent({
       if (Object.values(info).some((value) => !value))
         throw new Error('Missing food prompt: missing data');
 
-      useSurvey().updateFood({ foodId: food().id, update: { info } });
+      survey.updateFood({ foodId: food().id, update: { info } });
+      survey.addFoodFlag({ foodId: food().id, flag: 'missing-food-complete' });
 
       clearStoredState();
     };

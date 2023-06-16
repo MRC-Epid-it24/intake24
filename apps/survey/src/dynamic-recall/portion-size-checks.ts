@@ -202,6 +202,5 @@ export const isPortionSizeComplete = (food: FoodState): boolean => {
   return portionSizeCompleteChecks[food.portionSize.method](food);
 };
 
-export const missingFoodComplete = (food: MissingFood): boolean => {
-  return !food.info || Object.values(food.info).some((value) => !value) ? false : true;
-};
+export const missingFoodComplete = (food: MissingFood): boolean =>
+  !!(food.info && food.flags.includes('missing-food-complete'));

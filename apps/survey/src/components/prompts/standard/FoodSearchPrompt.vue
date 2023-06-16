@@ -43,14 +43,21 @@
           :block="isMobile"
           :class="{ 'ml-2': !isMobile }"
           color="secondary"
+          :disabled="missing"
           large
           outlined
-          :title="$t(`prompts.${type}.missing`)"
-          @click.stop="$emit('food-missing')"
+          :title="$t(`prompts.${type}.missing.label`)"
+          @click.stop="missing = true"
         >
-          {{ $t(`prompts.${type}.missing`) }}
+          {{ $t(`prompts.${type}.missing.label`) }}
         </v-btn>
       </v-card-text>
+      <missing-food-panel
+        v-model="missing"
+        :type="type"
+        @cancel="missing = false"
+        @confirm="$emit('food-missing')"
+      ></missing-food-panel>
     </v-card-text>
     <template #actions>
       <!-- Should not have actions -> only click & select -->
@@ -61,7 +68,7 @@
 
 <script lang="ts">
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FreeTextFood } from '@intake24/common/types';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
@@ -70,11 +77,12 @@ import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 
 import createBasePrompt from '../createBasePrompt';
+import { MissingFoodPanel } from './partials';
 
 export default defineComponent({
   name: 'FoodSearchPrompt',
 
-  components: { FoodSearchResults, ImagePlaceholder },
+  components: { FoodSearchResults, ImagePlaceholder, MissingFoodPanel },
 
   mixins: [createBasePrompt<'food-search-prompt', FreeTextFood>()],
 
@@ -91,12 +99,19 @@ export default defineComponent({
 
   emits: ['food-missing', 'food-selected', 'input'],
 
-  data() {
+  setup(props) {
+    const missing = ref(false);
+    const requestInProgress = ref(true);
+    const requestFailed = ref(false);
+    const searchTerm = ref(props.value);
+    const searchResults = ref<FoodSearchResponse | null>(null);
+
     return {
-      requestInProgress: true,
-      requestFailed: false,
-      searchTerm: this.value,
-      searchResults: null as FoodSearchResponse | null,
+      missing,
+      requestInProgress,
+      requestFailed,
+      searchTerm,
+      searchResults,
     };
   },
 

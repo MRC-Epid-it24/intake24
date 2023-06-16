@@ -68,14 +68,21 @@
                 <v-btn
                   :block="isMobile"
                   color="secondary"
+                  :disabled="missing"
                   large
                   outlined
-                  :title="$t(`prompts.${type}.missing`)"
-                  @click.stop="foodMissing(index)"
+                  :title="$t(`prompts.${type}.missing.label`)"
+                  @click.stop="missing = true"
                 >
-                  {{ $t(`prompts.${type}.missing`) }}
+                  {{ $t(`prompts.${type}.missing.label`) }}
                 </v-btn>
               </v-card-text>
+              <missing-food-panel
+                v-model="missing"
+                :type="type"
+                @cancel="missing = false"
+                @confirm="foodMissing(index)"
+              ></missing-food-panel>
             </v-card>
           </v-expand-transition>
         </v-expansion-panel-content>
@@ -97,6 +104,7 @@ import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
+import { MissingFoodPanel } from './partials';
 
 const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
   (prompt.confirmed && ['no', 'existing', 'missing'].includes(prompt.confirmed)) ||
@@ -108,7 +116,7 @@ const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser },
+  components: { ExpansionPanelActions, FoodBrowser, MissingFoodPanel },
 
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 
@@ -132,6 +140,7 @@ export default defineComponent({
   data() {
     return {
       activePrompt: this.initialState.activePrompt,
+      missing: false,
       prompts: this.initialState.prompts,
       usedExistingFoodIds: [] as string[],
     };

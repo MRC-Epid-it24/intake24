@@ -61,7 +61,13 @@ const prompts: LocaleMessageObject = {
       different: 'Select a different food',
       item: 'Select the food you had',
     },
-    missing: `I can't find my food`,
+    missing: {
+      label: `I can't find my food`,
+      description: `<p>Please try browsing the food categories listed above to find your food.</p>
+      <p>Or click 'Browse all foods' and explore the food categories.</p>`,
+      report: 'Report a missing food',
+      tryAgain: 'OK, let me try again',
+    },
   },
   editMeal: {
     name: 'Edit Meal',
@@ -93,7 +99,14 @@ const prompts: LocaleMessageObject = {
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
     browse: 'Browse all foods',
-    missing: `I can't find my food`,
+    missing: {
+      label: `I can't find my food`,
+      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
+      <p>Or click 'Browse all foods' and explore the food categories.</p>
+      <p>If you still can't find your food, click 'Report a missing food'.</p>`,
+      report: 'Report a missing food',
+      tryAgain: 'OK, let me try again',
+    },
   },
   mealAdd: {
     _: 'Add meal',
