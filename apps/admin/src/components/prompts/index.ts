@@ -26,7 +26,7 @@ export const promptSectionsExceptSubmission: PromptSection[] = [
   'postMeals',
 ];
 
-export const foodsAndPostFoods: MealSection[] = ['foods', 'postFoods'];
+export const foodsAndMeals: MealSection[] = ['foods', 'preFoods', 'postFoods'];
 
 export type PromptSettingsRecord = {
   tabs: string[];
@@ -51,7 +51,7 @@ export const promptSettings: PromptSettings = {
   },
   'no-more-information-prompt': {
     tabs: [...baseTab],
-    sections: [...foodsAndPostFoods],
+    sections: [...foodsAndMeals],
   },
   'radio-list-prompt': {
     tabs: [...listTab],
