@@ -68,16 +68,23 @@ export function findMeal(meals: MealState[], id: string): MealState {
   return meals[mealIndex];
 }
 
-export function foodPortionSizeComplete(food: FoodState) {
-  return food.type === 'encoded-food' && food.portionSize !== null;
-}
+export const foodPortionSizeComplete = (food: FoodState) =>
+  food.type === 'encoded-food' && food.portionSize;
 
-export function associatedFoodPromptsComplete(food: FoodState) {
-  return (
-    food.type === 'encoded-food' &&
-    (food.associatedFoodsComplete || !food.data.associatedFoodPrompts.length)
-  );
-}
+export const associatedFoodPromptsComplete = (food: FoodState) =>
+  food.type === 'encoded-food' &&
+  (food.associatedFoodsComplete || !food.data.associatedFoodPrompts.length);
+
+export const encodedFoodComplete = (food: FoodState) =>
+  foodPortionSizeComplete(food) && associatedFoodPromptsComplete(food);
+
+export const missingFoodComplete = (food: FoodState) => food.type === 'missing-food' && food.info;
+
+export const foodComplete = (food: FoodState) =>
+  encodedFoodComplete(food) || missingFoodComplete(food);
+
+export const mealComplete = (meal: MealState) =>
+  !!meal.foods.length && meal.foods.every(foodComplete);
 
 export function mealPortionSizeComplete(meal: MealState) {
   return !!meal.foods.length && meal.foods.every(foodPortionSizeComplete);

@@ -8,8 +8,7 @@ import {
   foodPortionSizeComplete,
   getFoodByIndex,
   getFoodIndexRequired,
-  mealAssociatedFoodsComplete,
-  mealPortionSizeComplete,
+  mealComplete,
   surveyFreeEntryComplete,
 } from '@intake24/survey/util';
 import { resolveMealGaps } from '@intake24/ui/util';
@@ -708,15 +707,7 @@ export default class PromptManager {
     // TODO: Probably should include food custom questions as well
     if (section === 'postFoods') {
       const meal = findMeal(state.data.meals, mealId);
-      if (!(mealPortionSizeComplete(meal) && mealAssociatedFoodsComplete(meal))) {
-        // TODO: is this required?
-        /* if (state.data.selection.mode === 'manual') {
-          return this.scheme.questions.meals['postFoods'].find((question) => {
-            return checkMealStandardConditions(state, mealState, question);
-          });
-        } */
-        return undefined;
-      }
+      if (!mealComplete(meal)) return undefined;
     }
 
     return this.scheme.questions.meals[section].find(
