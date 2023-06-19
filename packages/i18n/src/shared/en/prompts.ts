@@ -307,9 +307,9 @@ const prompts: LocaleMessageObject = {
       header:
         'Use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
-      less: 'It was less full',
-      more: 'It was more full',
-      confirm: 'It was that full',
+      less: 'I had less',
+      more: 'I had more',
+      confirm: 'I had that much',
     },
     leftovers: {
       header: 'Did you leave some of your {food}?',

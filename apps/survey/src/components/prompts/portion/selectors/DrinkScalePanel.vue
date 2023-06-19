@@ -36,31 +36,34 @@
         </v-chip>
       </div>
     </div>
-    <v-row>
-      <v-col>
+    <v-row class="drink-scale-controls">
+      <v-col cols="6" sm>
         <v-btn
           block
           color="secondary"
           :disabled="sliderValue <= sliderMin"
-          text
+          outlined
           @click="updateSlider(-sliderStep)"
         >
+          <v-icon left>fas fa-circle-down</v-icon>
           {{ $t(`prompts.drinkScale.${type}.less`) }}
         </v-btn>
       </v-col>
-      <v-col>
+      <v-col cols="6" sm>
         <v-btn
           block
           color="secondary"
           :disabled="sliderValue >= sliderMax"
-          text
+          outlined
           @click="updateSlider(sliderStep)"
         >
+          <v-icon left>fas fa-circle-up</v-icon>
           {{ $t(`prompts.drinkScale.${type}.more`) }}
         </v-btn>
       </v-col>
-      <v-col align="center" cols="12" md="4">
+      <v-col cols="12" sm>
         <v-btn block color="secondary" @click="confirm">
+          <v-icon left>$yes</v-icon>
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -208,10 +211,10 @@ export default defineComponent({
 
   methods: {
     scrollTo() {
-      setTimeout(() => {
+      setTimeout(async () => {
         if (!this.wrapper) return;
 
-        this.$vuetify.goTo(this.wrapper);
+        await this.$vuetify.goTo(this.wrapper);
       }, 100);
     },
 
@@ -378,6 +381,11 @@ export default defineComponent({
       right: 0;
       z-index: 1;
     }
+  }
+
+  .drink-scale-controls {
+    width: 100%;
+    max-width: 600px;
   }
 }
 </style>
