@@ -39,6 +39,7 @@ export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDa
   feedbackScheme?: FeedbackSchemeAttributes;
   surveyScheme: SurveySchemeAttributes;
   owner?: Owner;
+  securables?: UserSecurableAttributes[];
 }
 
 export type SurveyRefs = {

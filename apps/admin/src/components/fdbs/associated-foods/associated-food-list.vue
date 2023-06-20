@@ -6,6 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        v-if="!disabled"
         class="mx-3"
         color="secondary"
         fab

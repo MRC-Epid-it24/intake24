@@ -8,6 +8,7 @@ import type {
   SynonymSetAttributes,
   SynonymSetCreationAttributes,
   SystemLocaleAttributes,
+  UserSecurableAttributes,
 } from '@intake24/db';
 
 import type { LanguageListEntry } from './languages';
@@ -33,6 +34,7 @@ export type LocalesResponse = Pagination<SystemLocaleAttributes>;
 
 export interface LocaleEntry extends SystemLocaleAttributes {
   owner?: Owner;
+  securables?: UserSecurableAttributes[];
 }
 
 export type LocaleListEntry = Pick<

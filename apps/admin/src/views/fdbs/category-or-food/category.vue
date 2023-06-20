@@ -109,6 +109,7 @@ import type {
   CategoryLocalEntry,
   FoodDatabaseEntry,
   FoodDatabaseRefs,
+  LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
@@ -143,11 +144,20 @@ export default defineComponent({
     const i18n = useI18n();
     const user = useUser();
 
+    const { entry: localeEntry } = useEntry<LocaleEntry>(props);
+    const disabled = computed(
+      () =>
+        !user.can({
+          resource: 'locales',
+          action: 'food-list',
+          securables: localeEntry.value.securables,
+          ownerId: localeEntry.value.ownerId,
+        })
+    );
+
     const loading = ref(false);
     const type = 'categories';
     const entry = ref<CategoryLocalEntry | null>(null);
-
-    const disabled = computed(() => !user.can({ action: 'edit' }));
     const isEntryLoaded = computed(() => !!entry.value);
 
     useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);

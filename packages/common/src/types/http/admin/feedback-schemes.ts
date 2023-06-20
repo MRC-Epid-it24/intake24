@@ -2,6 +2,7 @@ import type {
   FeedbackSchemeAttributes,
   Pagination,
   PhysicalActivityLevelAttributes,
+  UserSecurable,
 } from '@intake24/db';
 
 import type { LanguageListEntry } from './languages';
@@ -20,6 +21,7 @@ export type FeedbackSchemeRefEntry = FeedbackSchemeAttributes;
 
 export interface FeedbackSchemeEntry extends FeedbackSchemeAttributes {
   owner?: Owner;
+  securables?: UserSecurable[];
 }
 
 export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'name'>;
