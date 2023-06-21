@@ -2,7 +2,9 @@ import type { ComponentType, Condition, Prompt } from '@intake24/common/prompts'
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
 import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
+import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { conditionOps } from '@intake24/common/prompts';
+import { mealSections, PromptSection, surveySections } from '@intake24/common/surveys';
 import {
   findMeal,
   foodPortionSizeComplete,
@@ -677,6 +679,14 @@ export default class PromptManager {
   constructor(store: SurveyStore, scheme: SchemeEntryResponse) {
     this.scheme = scheme;
     this.store = store;
+  }
+
+  findMealPromptById(promptId: string): PromptInstance | null {
+    for (const section of mealSections) {
+      const prompt = this.scheme.questions.meals[section].find((p) => p.id === promptId);
+      if (prompt) return { section: section, prompt: prompt };
+    }
+    return null;
   }
 
   findMealPromptOfType(type: ComponentType, section: MealSection): Prompt | undefined {
