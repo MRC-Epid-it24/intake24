@@ -29,11 +29,14 @@
           </v-card-actions>
         </v-card>
         <v-card v-if="navigationHistory.length > 1" flat>
-          <v-btn large text @click="navigateBack"
-            ><span class="fa fa-chevron-left mr-2"></span> Back to '{{
-              navigationHistory[navigationHistory.length - 2].description
-            }}'</v-btn
-          >
+          <v-btn large text @click="navigateBack">
+            <span class="fa fa-chevron-left mr-2"></span>
+            {{
+              $t(`prompts.foodBrowser.back`, {
+                category: navigationHistory[navigationHistory.length - 2].description,
+              })
+            }}
+          </v-btn>
         </v-card>
         <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
         <category-contents-view

@@ -81,7 +81,7 @@
           <context-menu
             :entity="food"
             :entity-name="getFoodName(food)"
-            v-bind="{ menu: getMenu(food) }"
+            v-bind="{ menu }"
             @action="action"
           ></context-menu>
         </v-list-item-action>
@@ -99,7 +99,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FoodActionType } from '@intake24/common/prompts';
 import type { FoodState } from '@intake24/common/types';
@@ -136,19 +136,19 @@ export default defineComponent({
 
     const { getFoodName } = useFoodUtils();
 
-    const getMenu = (food: FoodState): MenuItem[] => [
+    const menu = ref<MenuItem[]>([
       {
         name: i18n.t('recall.menu.food.edit').toString(),
         action: 'editFood',
         icon: '$food',
       },
       {
-        name: i18n.t('recall.menu.delete._', { item: getFoodName(food) }).toString(),
+        name: i18n.t('recall.menu.food.delete').toString(),
         action: 'deleteFood',
         dialog: true,
         icon: '$delete',
       },
-    ];
+    ]);
 
     const action = (type: FoodActionType, id?: string) => {
       emit('action', type, id);
@@ -158,7 +158,7 @@ export default defineComponent({
       emit('food-selected', foodId);
     };
 
-    return { action, foodSelected, getFoodName, getMenu };
+    return { action, foodSelected, getFoodName, menu };
   },
 });
 </script>

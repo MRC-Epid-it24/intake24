@@ -3,7 +3,7 @@
     <template #actions>
       <template v-if="food">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
+          :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -38,7 +38,7 @@
       </template>
       <template v-if="meal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: mealName }).toString()"
+          :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -76,7 +76,7 @@
     <template #nav-actions>
       <template v-if="food">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: foodName }).toString()"
+          :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -100,7 +100,7 @@
       </template>
       <template v-if="meal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._', { item: mealName }).toString()"
+          :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">

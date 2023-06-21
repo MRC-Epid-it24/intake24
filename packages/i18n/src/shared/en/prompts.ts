@@ -81,12 +81,9 @@ const prompts: LocaleMessageObject = {
     foods: 'Foods and drinks',
     foodsOnly: 'Foods',
     delete: {
-      _: 'Delete {item}',
+      _: 'Delete meal',
       confirm: 'Do you want to delete {item}?',
     },
-    deleteFoodFromMeal: 'Delete {food}',
-    editMeal: 'Edit {meal}',
-    editTime: 'Change Time',
   },
   final: {
     name: 'Final page',
@@ -94,6 +91,7 @@ const prompts: LocaleMessageObject = {
   foodBrowser: {
     browse: 'Browse food',
     search: 'Search food',
+    back: `Back to '{category}'`,
   },
   foodSearch: {
     name: 'Search Food',

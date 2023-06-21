@@ -29,7 +29,7 @@
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`, { meal: mealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`).toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
@@ -68,7 +68,7 @@
         <v-icon class="pb-1">fas fa-clock</v-icon>
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`, { item: mealName }).toString()"
+        :label="$t(`prompts.${type}.delete._`).toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">

@@ -66,7 +66,7 @@
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
               <v-list-item-icon class="my-auto">
                 <confirm-dialog
-                  :label="$t('prompts.editMeal.delete._', { item: getFoodName(food) }).toString()"
+                  :label="$t('prompts.editMeal.delete._').toString()"
                   @confirm="deleteFood(idx)"
                 >
                   <template #activator="{ on, attrs }">

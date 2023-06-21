@@ -55,7 +55,7 @@ export default defineComponent({
         icon: '$mealTime',
       },
       {
-        name: i18n.t('recall.menu.delete._', { item: mealName.value }).toString(),
+        name: i18n.t('recall.menu.meal.delete').toString(),
         action: 'deleteMeal',
         dialog: true,
         icon: '$delete',

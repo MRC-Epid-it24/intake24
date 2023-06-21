@@ -26,7 +26,7 @@
     <confirm-dialog
       v-model="dialog"
       external
-      :label="$t('prompts.editMeal.delete._', { item: entityName }).toString()"
+      :label="$t('prompts.editMeal.delete._').toString()"
       @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
     >
       {{ $t('prompts.editMeal.delete.confirm', { item: entityName }) }}
