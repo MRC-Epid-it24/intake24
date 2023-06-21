@@ -59,7 +59,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['action', 'food-selected', 'meal-selected', 'action'],
+  emits: ['action'],
 
   computed: {
     ...mapState(useSurvey, ['selection']),
@@ -86,10 +86,10 @@ export default defineComponent({
       this.$emit('action', type, id);
     },
     foodSelected(foodId: string) {
-      this.$emit('food-selected', foodId);
+      this.action('selectFood', foodId);
     },
     mealSelected(mealId: string) {
-      this.$emit('meal-selected', mealId);
+      this.action('selectMeal', mealId);
     },
   },
 });

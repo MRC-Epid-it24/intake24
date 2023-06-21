@@ -37,7 +37,7 @@
       class="meal-list-mobile__wrap"
       cols="12"
     >
-      <meal-list-mobile @meal-selected="mealSelected"></meal-list-mobile>
+      <meal-list-mobile v-bind="{ meals }" @action="action"></meal-list-mobile>
     </v-col>
 
     <!-- Context menu for Meal or Food with actions options -->

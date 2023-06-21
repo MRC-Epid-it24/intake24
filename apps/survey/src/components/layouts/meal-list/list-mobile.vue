@@ -11,10 +11,10 @@
             left
             :value="!!meal.foods.length"
           >
-            <p v-if="mealTimeString(meal.time).length === 0">
+            <p v-if="meal.time">{{ getMealTime(meal) }}</p>
+            <p v-else>
               <v-icon x-small>$question</v-icon>
             </p>
-            <p v-else>{{ mealTimeString(meal.time) }}</p>
             {{ getLocaleContent(meal.name) }}
           </v-badge>
         </v-tab>
@@ -24,28 +24,37 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'pinia';
+import type { PropType } from 'vue';
+import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import type { MealTime } from '@intake24/common/types';
-import { useLocale } from '@intake24/survey/composables';
+import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
+import type { MealState } from '@intake24/common/types';
+import { useLocale, useMealUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
 import { getMealIndex } from '@intake24/survey/util';
-import { fromMealTime } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'MealListMobile',
 
-  emits: ['meal-selected'],
+  props: {
+    meals: {
+      type: Array as PropType<MealState[]>,
+      required: true,
+    },
+  },
+
+  emits: ['action'],
 
   setup() {
     const { getLocaleContent } = useLocale();
+    const { getMealTime } = useMealUtils();
 
-    return { getLocaleContent };
+    return { getLocaleContent, getMealTime };
   },
 
   computed: {
-    ...mapState(useSurvey, ['meals', 'selectedMealOptional']),
+    ...mapState(useSurvey, ['selectedMealOptional']),
 
     activeTab() {
       if (this.selectedMealOptional === undefined) return 0;
@@ -54,15 +63,12 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setSelection']),
-
     mealSelected(mealId: string) {
-      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
-      this.$emit('meal-selected', mealId);
+      this.action('selectMeal', mealId);
     },
 
-    mealTimeString(time: MealTime | undefined): string {
-      return time ? fromMealTime(time) : '';
+    action(type: FoodActionType | MealActionType, id?: string) {
+      this.$emit('action', type, id);
     },
   },
 });

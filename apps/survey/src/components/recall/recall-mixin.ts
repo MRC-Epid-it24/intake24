@@ -217,6 +217,7 @@ export default defineComponent({
         case 'editMeal':
         case 'mealTime':
         case 'deleteMeal':
+        case 'selectMeal':
           if (id === undefined) {
             console.warn('Recall: Meal id must be defined for meal action.', type, id);
             return;
@@ -226,6 +227,7 @@ export default defineComponent({
           break;
         case 'deleteFood':
         case 'editFood':
+        case 'selectFood':
           if (id === undefined) {
             console.warn('Recall: Food id must be defined for food action.', type, id);
             return;
@@ -238,16 +240,20 @@ export default defineComponent({
       }
     },
 
-    async mealAction(type: MealActionType, id: string) {
+    async mealAction(type: MealActionType, mealId: string) {
       switch (type) {
         case 'editMeal':
-          this.showMealPrompt(id, 'preFoods', 'edit-meal-prompt');
+          this.showMealPrompt(mealId, 'preFoods', 'edit-meal-prompt');
           break;
         case 'mealTime':
-          this.showMealPrompt(id, 'preFoods', 'meal-time-prompt');
+          this.showMealPrompt(mealId, 'preFoods', 'meal-time-prompt');
           break;
         case 'deleteMeal':
-          this.survey.deleteMeal(id);
+          this.survey.deleteMeal(mealId);
+          await this.nextPrompt();
+          break;
+        case 'selectMeal':
+          this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
           await this.nextPrompt();
           break;
         default:
@@ -255,14 +261,18 @@ export default defineComponent({
       }
     },
 
-    async foodAction(type: FoodActionType, id: string) {
+    async foodAction(type: FoodActionType, foodId: string) {
       switch (type) {
         case 'editFood':
-          this.survey.editFood(id);
+          this.survey.editFood(foodId);
           await this.nextPrompt();
           break;
         case 'deleteFood':
-          this.survey.deleteFood(id);
+          this.survey.deleteFood(foodId);
+          await this.nextPrompt();
+          break;
+        case 'selectFood':
+          this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
           await this.nextPrompt();
           break;
         default:
@@ -287,18 +297,6 @@ export default defineComponent({
           this.showMealPrompt('0', 'postFoods', 'no-more-information-prompt');
           break;
       }
-    },
-
-    async mealSelected(mealId: string) {
-      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
-
-      await this.nextPrompt();
-    },
-
-    async foodSelected(foodId: string) {
-      this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
-
-      await this.nextPrompt();
     },
 
     isSavedStateValid(): boolean {
