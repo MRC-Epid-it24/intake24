@@ -4,7 +4,7 @@
       v-for="food in results.foods"
       :key="food.code"
       class="list-item-border"
-      @click="emitFoodSelected(food.code)"
+      @click="foodSelected(food.code)"
     >
       <v-list-item-content>
         <v-list-item-title>{{ food.description }}</v-list-item-title>
@@ -32,7 +32,7 @@ export default defineComponent({
   emits: ['food-selected'],
 
   methods: {
-    emitFoodSelected(foodCode: string): void {
+    foodSelected(foodCode: string): void {
       this.$emit('food-selected', foodCode);
     },
   },

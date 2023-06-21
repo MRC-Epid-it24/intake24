@@ -1,4 +1,5 @@
 import type { FoodHeader } from '@intake24/common/types/http';
+import type { Pagination } from '@intake24/db';
 
 export interface CategoryHeader {
   code: string;
@@ -10,3 +11,5 @@ export interface CategoryContents {
   foods: FoodHeader[];
   subcategories: CategoryHeader[];
 }
+
+export type CategorySearch = Pagination<FoodHeader>;

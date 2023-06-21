@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { authenticate } from '@intake24/api/http/middleware';
+import validation from '@intake24/api/http/requests/categories';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
@@ -15,7 +16,8 @@ export default () => {
   router.get('/:localeId', wrapAsync(categoriesController.browseRoot));
 
   // Category contents
-  router.get('/:localeId/:code', wrapAsync(categoriesController.browse));
+  router.get('/:localeId/:code', validation.browse, wrapAsync(categoriesController.browse));
+  router.get('/:localeId/:code/contents', wrapAsync(categoriesController.contents));
 
   return router;
 };

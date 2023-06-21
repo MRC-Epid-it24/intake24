@@ -1,20 +1,75 @@
-import type { CategoryContents, CategoryHeader } from '@intake24/common/types/http';
+import type { IoC } from '@intake24/api/ioc';
+import type { CategoryContents, CategoryHeader, CategorySearch } from '@intake24/common/types/http';
+import type { FindOptions, FoodLocalAttributes, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Category, FoodCategory, FoodsLocale as Locale } from '@intake24/db';
+import {
+  Category,
+  FoodCategory,
+  FoodLocal,
+  FoodsLocale as Locale,
+  getAllChildCategories,
+  Op,
+  QueryTypes,
+} from '@intake24/db';
 
-const categoryContentsService = () => {
-  function filterUndefined(
+const categoryContentsService = ({ db }: Pick<IoC, 'db'>) => {
+  const filterUndefined = (
     headers: { code: string; description: string | undefined }[]
-  ): { code: string; description: string }[] {
-    return headers
+  ): { code: string; description: string }[] =>
+    headers
       .filter((h) => h.description !== undefined)
-      .map((h) => {
-        return {
-          code: h.code,
-          description: h.description!,
-        };
-      });
-  }
+      .map((h) => ({ code: h.code, description: h.description! }));
+
+  const searchCategory = async (
+    localeId: string,
+    category: string,
+    query: PaginateQuery
+  ): Promise<CategorySearch> => {
+    const categories = await db.foods.query<{ code: string }>(getAllChildCategories, {
+      type: QueryTypes.SELECT,
+      replacements: { category },
+      plain: false,
+      raw: true,
+    });
+
+    const options: FindOptions<FoodLocalAttributes> = {
+      attributes: ['foodCode', 'name'],
+      where: { localeId },
+      include: [
+        {
+          association: 'main',
+          attributes: ['code'],
+          required: true,
+          include: [
+            {
+              attributes: ['categoryCode'],
+              association: 'parentCategoryMappings',
+              where: { categoryCode: categories.map(({ code }) => code) },
+            },
+          ],
+        },
+      ],
+      order: [['name', 'ASC']],
+    };
+    const { search } = query;
+
+    if (search) {
+      const op =
+        FoodLocal.sequelize?.getDialect() === 'postgres'
+          ? { [Op.iLike]: `%${search}%` }
+          : { [Op.substring]: search };
+
+      const ops = ['name'].map((column) => ({ [column]: op }));
+
+      options.where = { ...options.where, [Op.or]: ops };
+    }
+
+    return FoodLocal.paginate({
+      query,
+      ...options,
+      transform: (food) => ({ code: food.code, description: food.name }),
+    });
+  };
 
   return {
     async getLocaleInfo(localeId: string): Promise<Locale> {
@@ -23,9 +78,7 @@ const categoryContentsService = () => {
         attributes: ['prototypeLocaleId'],
       });
 
-      if (locale === null) {
-        throw new NotFoundError(`Locale ${localeId} not found`);
-      }
+      if (!locale) throw new NotFoundError(`Locale ${localeId} not found`);
 
       return locale;
     },
@@ -137,19 +190,13 @@ const categoryContentsService = () => {
       const foodHeaders = foods.map((row) => {
         const description = row.food?.locals?.[0].name ?? row.food?.prototypeLocals?.[0].name;
 
-        return {
-          code: row.foodCode,
-          description,
-        };
+        return { code: row.foodCode, description };
       });
 
       const categoryHeaders = (category?.subCategories ?? []).map((row) => {
         const description = row.locals?.[0].name ?? row.prototypeLocals?.[0].name;
 
-        return {
-          code: row.code,
-          description,
-        };
+        return { code: row.code, description };
       });
 
       return {
@@ -162,6 +209,7 @@ const categoryContentsService = () => {
         ),
       };
     },
+    searchCategory,
   };
 };
 

@@ -91,6 +91,10 @@ const prompts: LocaleMessageObject = {
   final: {
     name: 'Final page',
   },
+  foodBrowser: {
+    browse: 'Browse food',
+    search: 'Search food',
+  },
   foodSearch: {
     name: 'Search Food',
     text: '{food}',

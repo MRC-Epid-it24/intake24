@@ -54,10 +54,10 @@
           </v-card>
           <v-expand-transition>
             <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
-              <v-card-title class="pl-0 pa-2" style="border-bottom: 1px solid lightgray">
+              <v-card-title class="px-0 pa-2" style="border-bottom: 1px solid lightgray">
                 {{ $t(`prompts.${type}.select.item`) }}
               </v-card-title>
-              <v-card-text class="pl-0">
+              <v-card-text class="px-0">
                 <food-browser
                   :locale-id="localeId"
                   :root-category="associatedFoodPrompts[index].categoryCode"

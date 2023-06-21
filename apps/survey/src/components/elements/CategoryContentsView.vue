@@ -4,21 +4,31 @@
       <v-list-item
         v-for="category in contents.subcategories"
         :key="category.code"
-        @click="emitCategorySelected(category)"
+        class="list-item-border"
+        @click="categorySelected(category)"
       >
+        <v-list-item-icon>
+          <v-icon>$category</v-icon>
+        </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>
-            <span class="fa-regular fa-folder ml-0 mr-3"></span>
             <span class="font-weight-medium">{{ category.description }}</span>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>
-
     <v-list-item-group>
-      <v-list-item v-for="food in contents.foods" :key="food.code" @click="emitFoodSelected(food)">
+      <v-list-item
+        v-for="food in contents.foods"
+        :key="food.code"
+        class="list-item-border"
+        @click="foodSelected(food)"
+      >
+        <v-list-item-icon>
+          <v-icon>$food</v-icon>
+        </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title class="ml-7">{{ food.description }}</v-list-item-title>
+          <v-list-item-title>{{ food.description }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>
@@ -44,12 +54,12 @@ export default defineComponent({
   emits: ['food-selected', 'category-selected'],
 
   methods: {
-    emitFoodSelected(food: FoodHeader): void {
-      this.$emit('food-selected', food);
+    categorySelected(category: CategoryHeader): void {
+      this.$emit('category-selected', category);
     },
 
-    emitCategorySelected(category: CategoryHeader): void {
-      this.$emit('category-selected', category);
+    foodSelected(food: FoodHeader): void {
+      this.$emit('food-selected', food);
     },
   },
 });

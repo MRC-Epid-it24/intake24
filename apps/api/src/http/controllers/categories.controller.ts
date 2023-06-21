@@ -1,44 +1,51 @@
 import type { Request, Response } from 'express';
+import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { CategoryContents } from '@intake24/common/types/http';
+import type { PaginateQuery } from '@intake24/db/models';
+import { ApplicationError } from '@intake24/api/http/errors';
 
 const categoriesController = ({
   categoryContentsService,
 }: Pick<IoC, 'categoryContentsService'>) => {
-  const browseRoot = async (req: Request, res: Response): Promise<void> => {
+  const browseRoot = async (req: Request, res: Response<CategoryContents>): Promise<void> => {
     const { localeId, code } = req.params;
 
-    if (typeof req.query.code !== 'string' || !code.length) {
-      res.status(400).send('code cannot be empty');
-      return Promise.resolve();
-    }
+    if (typeof req.query.code !== 'string' || !code.length)
+      throw new ApplicationError('code cannot be empty');
 
-    return categoryContentsService.getCategoryContents(localeId, code).then(
-      (categoryContents) => {
-        res.json(categoryContents);
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
+    const categoryContents = await categoryContentsService.getCategoryContents(localeId, code);
+    res.json(categoryContents);
   };
 
-  const browse = async (req: Request, res: Response): Promise<void> => {
+  const browse = async (
+    req: Request<{ localeId: string; code: string }, any, any, PaginateQuery>,
+    res: Response
+  ): Promise<void> => {
     const { localeId, code } = req.params;
 
-    return categoryContentsService.getCategoryContents(localeId, code).then(
-      (categoryContents) => {
-        res.json(categoryContents);
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
+    const foods = await categoryContentsService.searchCategory(
+      localeId,
+      code,
+      pick(req.query, ['page', 'limit', 'sort', 'search'])
     );
+
+    res.json(foods);
+  };
+
+  const contents = async (req: Request, res: Response<CategoryContents>): Promise<void> => {
+    const { localeId, code } = req.params;
+
+    const categoryContents = await categoryContentsService.getCategoryContents(localeId, code);
+
+    res.json(categoryContents);
   };
 
   return {
     browse,
     browseRoot,
+    contents,
   };
 };
 

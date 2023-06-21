@@ -11,6 +11,7 @@ export default new Vuetify({
       add: 'fas fa-circle-plus',
       back: 'fas fa-arrow-left',
       cancel: 'fas fa-circle-xmark',
+      category: 'far fa-folder',
       close: 'fas fa-circle-xmark',
       check: 'fas fa-circle-check',
       create: 'fas fa-plus',
