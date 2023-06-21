@@ -8,7 +8,7 @@ import type {
   MealActionType,
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
-import type { FoodState, Selection } from '@intake24/common/types';
+import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
@@ -21,7 +21,7 @@ import {
 import { useLocale } from '@intake24/survey/composables';
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
+import { findMeal, getFoodIndex, getMealIndex } from '@intake24/survey/util';
 import { promptType } from '@intake24/ui/util';
 
 import { InfoAlert } from '../elements';
@@ -52,6 +52,8 @@ export default defineComponent({
       recallController: null as DynamicRecall | null,
       savedState: null as SavedState | null,
       hideCurrentPrompt: false,
+      // This is only required to discern between back and forward history events
+      currentPromptTimestamp: 0,
     };
   },
 
@@ -141,6 +143,8 @@ export default defineComponent({
       return;
     }
 
+    window.onpopstate = this.onPopState;
+
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
     this.survey.startRecall();
   },
@@ -150,6 +154,53 @@ export default defineComponent({
   },
 
   methods: {
+    onPopState(event: PopStateEvent) {
+      function isValidSelection(meals: MealState[], selection: Selection): boolean {
+        if (
+          selection.element &&
+          selection.element.type === 'meal' &&
+          getMealIndex(meals, selection.element.mealId) === undefined
+        ) {
+          console.debug('History: meal does not exist');
+          return false;
+        }
+        if (
+          selection.element &&
+          selection.element.type === 'food' &&
+          getFoodIndex(meals, selection.element.foodId) === undefined
+        ) {
+          console.debug('History: food does not exist');
+          return false;
+        }
+        return true;
+      }
+
+      if (
+        event.state &&
+        event.state.promptInstance &&
+        event.state.selection &&
+        event.state.timeStamp
+      ) {
+        const promptInstance = event.state.promptInstance as PromptInstance;
+        const selection = event.state.selection as Selection;
+        const timeStamp = event.state.timeStamp as number;
+
+        console.debug(`Pop state: ${promptInstance.prompt.id}, ${JSON.stringify(selection)}`);
+
+        if (isValidSelection(this.meals, selection)) {
+          this.setSelection(selection);
+          this.currentPrompt = promptInstance;
+          this.currentPromptTimestamp = timeStamp;
+        } else if (this.currentPromptTimestamp > timeStamp) {
+          history.back();
+        } else {
+          history.forward();
+        }
+      } else {
+        console.debug(`Ignoring unexpected state:`, event.state);
+      }
+    },
+
     setSelection(newSelection: Selection) {
       if (isSelectionEqual(this.survey.data.selection, newSelection)) return;
 
@@ -346,7 +397,21 @@ export default defineComponent({
           console.debug(
             `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`
           );
+
           this.currentPrompt = nextPrompt;
+          this.currentPromptTimestamp = Date.now();
+
+          // Strip Vue reactivity wrappers
+          const promptInstance = JSON.parse(JSON.stringify(this.currentPrompt));
+          const selection = JSON.parse(JSON.stringify(this.selection));
+          const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
+
+          if (selection.element !== null && promptInstance) {
+            console.debug(
+              `Push state: ${promptInstance.prompt.id}, selection: ${JSON.stringify(selection)}`
+            );
+            history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
+          }
         }
       }
     },
