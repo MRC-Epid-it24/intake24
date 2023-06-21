@@ -9,6 +9,7 @@ const express = require('express');
 const fs = require('fs');
 const helmet = require('helmet');
 const path = require('path');
+const { cspHashes } = require('@vitejs/plugin-legacy');
 
 const config = require('./config');
 
@@ -41,6 +42,7 @@ const startApp = async () => {
             'https://www.google.com/recaptcha/',
             'https://www.gstatic.com/recaptcha/',
             'https://storage.googleapis.com',
+            ...cspHashes.map((hash) => `'sha256-${hash}'`),
           ],
           styleSrc: [
             "'self'",

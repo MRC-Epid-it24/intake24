@@ -1,6 +1,7 @@
 import childProcess from 'node:child_process';
 import { fileURLToPath, URL } from 'node:url';
 
+import viteLegacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue2';
 import unFonts from 'unplugin-fonts/vite';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
@@ -31,14 +32,16 @@ export default defineConfig(({ mode }) => {
     DISABLE_PWA,
     EMPTY_OUT_DIR = 'true',
     DEV_HTTPS,
+    LEGACY,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
 
-  const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
   const disablePwa = !!(DISABLE_PWA === 'true');
   const emptyOutDir = !!(EMPTY_OUT_DIR === 'true');
   const https = !!(DEV_HTTPS === 'true');
+  const legacy = !!(LEGACY === 'true');
+  const sourcemap = !!(PRODUCTION_SOURCE_MAP === 'true');
 
   if (captchaProvider && !isCaptchaProvider(captchaProvider))
     throw new Error('Invalid Captcha provider');
@@ -78,6 +81,9 @@ export default defineConfig(({ mode }) => {
 
             return `assets/${subDir}[name]-[hash][extname]`;
           },
+          manualChunks: (id) => {
+            if (id.includes('echarts')) return 'echarts';
+          },
         },
       },
     },
@@ -99,6 +105,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [VuetifyResolver()],
         directoryAsNamespace: true,
       }),
+      legacy ? viteLegacy() : null,
       mkcert(),
       unFonts({
         google: {
@@ -161,6 +168,6 @@ export default defineConfig(({ mode }) => {
           ], */
         },
       }),
-    ],
+    ].filter(Boolean),
   };
 });
