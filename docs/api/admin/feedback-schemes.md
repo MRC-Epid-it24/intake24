@@ -195,15 +195,6 @@ Content-Type: application/json
 200 OK
 
 {
-    "languages": [
-        {
-            "id": string,
-            "englishName": string,
-            "localName": string,
-            "countryFlagCode": string
-        },
-        ...
-    ],
     "nutrients": [
         {
             "id": string,

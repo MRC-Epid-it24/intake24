@@ -38,6 +38,7 @@ const guideImageService = ({
       guideImageId: guideImage.id,
       imageMapObjectId: object.id,
       weight: 0,
+      label: object.label,
     }));
 
     await GuideImageObject.bulkCreate(guideImageObjects);
@@ -57,15 +58,15 @@ const guideImageService = ({
     await guideImage.update({ description });
 
     for (const object of objects) {
-      const { id, weight } = object;
+      const { id, label, weight } = object;
       const match = guideImage.objects.find((guideObject) => guideObject.imageMapObjectId === id);
 
       if (!match) {
-        await GuideImageObject.create({ guideImageId, imageMapObjectId: id, weight });
+        await GuideImageObject.create({ guideImageId, imageMapObjectId: id, label, weight });
         continue;
       }
 
-      await match.update({ weight: object.weight });
+      await match.update({ label, weight });
     }
 
     return portionSizeService.getGuideImage(guideImageId);

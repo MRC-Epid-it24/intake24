@@ -4,7 +4,7 @@ import type { UploadSourceImageInput } from './source-images';
 
 export type ImageMapEntryObject = Pick<
   ImageMapObjectAttributes,
-  'id' | 'description' | 'outlineCoordinates'
+  'id' | 'description' | 'outlineCoordinates' | 'label'
 >;
 
 export type ImageMapInputObjects = ImageMapEntryObject[];

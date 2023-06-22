@@ -14,6 +14,10 @@ const guideImages: LocaleMessageObject = {
     id: 'Object ID',
     add: 'Add guide image',
     delete: 'Delete object',
+    label: {
+      _: 'Label',
+      hint: `Use '{weight}' variable to include object weight.`,
+    },
     weight: 'Weight',
   },
 };

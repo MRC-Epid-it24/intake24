@@ -18,7 +18,6 @@ import { kebabCase } from '@intake24/common/util';
 import {
   createFeedbackSchemeFields,
   FeedbackScheme,
-  Language,
   Op,
   perCardFeedbackSchemeFields,
   PhysicalActivityLevel,
@@ -197,13 +196,12 @@ const feedbackSchemeController = (ioc: IoC) => {
   };
 
   const refs = async (req: Request, res: Response<FeedbackSchemeRefs>): Promise<void> => {
-    const [languages, nutrientTypes, physicalActivityLevels] = await Promise.all([
-      Language.scope('list').findAll(),
+    const [nutrientTypes, physicalActivityLevels] = await Promise.all([
       SystemNutrientType.scope('list').findAll(),
       PhysicalActivityLevel.scope('list').findAll(),
     ]);
 
-    res.json({ languages, nutrientTypes, physicalActivityLevels });
+    res.json({ nutrientTypes, physicalActivityLevels });
   };
 
   return {

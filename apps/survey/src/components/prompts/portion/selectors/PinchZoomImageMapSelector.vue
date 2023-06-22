@@ -14,11 +14,11 @@
             style="border: 1px solid grey"
             :width="width * 0.95"
           >
-            <div v-if="size" class="label">
+            <div v-if="label" class="label">
               <v-chip
                 class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
               >
-                {{ size }}
+                {{ label }}
               </v-chip>
             </div>
             <img :src="imageMapData.baseImageUrl" :width="width" />
@@ -53,10 +53,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import PinchScrollZoom from '@coddicat/vue-pinch-scroll-zoom';
-import chunk from 'lodash/chunk';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRef } from 'vue';
 
 import type { ImageMapResponse } from '@intake24/common/types/http';
+
+import { useImageMap } from './use-image-map';
 
 export type ImageMapObject = {
   id: string;
@@ -83,7 +84,7 @@ export default defineComponent({
       type: Object as PropType<ImageMapResponse>,
       required: true,
     },
-    sizes: {
+    labels: {
       type: Array as PropType<string[]>,
       default: () => [],
     },
@@ -95,65 +96,36 @@ export default defineComponent({
 
   emits: ['confirm', 'select'],
 
-  setup() {
+  setup(props, { emit }) {
     const dialog = ref(false);
     const zoomer = ref<InstanceType<typeof PinchScrollZoom>>();
 
-    const hoverIndex = ref<number | undefined>(undefined);
+    const { hoverIndex, label, objects } = useImageMap(props, toRef(props, 'width'));
+
+    const resetScale = () => {
+      zoomer.value?.setData({ scale: 1, originX: 0, originY: 0, translateX: 0, translateY: 0 });
+    };
+
+    const select = (idx: number, id: string) => {
+      emit('select', idx, id);
+    };
+
+    const confirm = () => {
+      dialog.value = false;
+      emit('confirm');
+    };
 
     return {
+      confirm,
       dialog,
       hoverIndex,
+      label,
+      objects,
+      resetScale,
       scale: 1,
+      select,
       zoomer,
     };
-  },
-
-  computed: {
-    objects(): ImageMapObject[] {
-      const { width } = this;
-
-      return this.imageMapData.objects.map((object) => ({
-        id: object.id,
-        polygon: chunk(
-          object.outline.map((coord) => coord * width),
-          2
-        )
-          .map((node) => node.join(','))
-          .join(' '),
-      }));
-    },
-
-    size(): string | undefined {
-      if (!this.sizes.length || (this.hoverIndex === undefined && this.index === undefined))
-        return undefined;
-
-      const idx = this.hoverIndex ?? this.index;
-      if (idx === undefined) return undefined;
-
-      return this.sizes[idx];
-    },
-  },
-
-  methods: {
-    resetScale() {
-      this.zoomer?.setData({
-        scale: 1,
-        originX: 0,
-        originY: 0,
-        translateX: 0,
-        translateY: 0,
-      });
-    },
-
-    select(idx: number, id: string) {
-      this.$emit('select', idx, id);
-    },
-
-    confirm() {
-      this.dialog = false;
-      this.$emit('confirm');
-    },
   },
 });
 </script>

@@ -15,6 +15,7 @@ export default defineComponent({
   async mounted() {
     const { data } = await this.$http.get<I18nLanguageListEntry[]>('i18n');
     this.languages = data;
+    useApp().setLanguages(data);
   },
 
   methods: {

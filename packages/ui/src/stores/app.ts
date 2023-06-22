@@ -1,8 +1,11 @@
 import trim from 'lodash/trim';
 import { defineStore } from 'pinia';
 
+import type { I18nLanguageListEntry } from '@intake24/common/types/http';
+
 export type AppState = {
   lang: string;
+  langs: I18nLanguageListEntry[];
   app: {
     api: string;
     host: string;
@@ -18,6 +21,7 @@ export type AppState = {
 export const useApp = defineStore('app', {
   state: (): AppState => ({
     lang: navigator.language || navigator.userLanguage,
+    langs: [],
     app: {
       name: import.meta.env.VITE_APP_NAME,
       host: window.location.host,
@@ -38,6 +42,9 @@ export const useApp = defineStore('app', {
   actions: {
     setLanguage(language: string) {
       this.lang = language;
+    },
+    setLanguages(languages: I18nLanguageListEntry[]) {
+      this.langs = languages;
     },
   },
 });

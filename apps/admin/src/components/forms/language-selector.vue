@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4" :disabled="disabled" :flat="flat" :outlined="outlined">
+  <v-card class="mb-4" v-bind="{ disabled, flat, outlined, tile }">
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title>{{ label }}</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -51,12 +51,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { LocaleOptionList } from '@intake24/common/prompts';
 import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
-import type { LanguageListEntry } from '@intake24/common/types/http/admin';
-import { useEntry } from '@intake24/admin/stores';
+import { useApp } from '@intake24/admin/stores';
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -89,63 +88,73 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    tile: {
+      type: Boolean,
+    },
   },
 
   emits: ['input'],
 
-  data() {
-    return {
-      selected: undefined as number | undefined,
-      doNotRemove: this.required ? ['en'] : [],
-    };
-  },
+  setup(props, { emit }) {
+    const selected = ref<number | undefined>(undefined);
+    const doNotRemove = ref<string[]>(props.required ? ['en'] : []);
 
-  computed: {
-    languages(): string[] {
-      return Object.keys(this.value);
-    },
-    allLanguages(): LanguageListEntry[] {
-      return (
-        useEntry().refs.languages ?? [
+    const languages = computed(() => Object.keys(props.value));
+
+    const allLanguages = computed(
+      () =>
+        useApp().langs ?? [
           { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
         ]
-      );
-    },
-    availableLanguages(): LanguageListEntry[] {
-      return this.allLanguages.filter((lang) => !this.languages.includes(lang.code));
-    },
-    isRemoveDisabled(): boolean {
-      if (this.selected === undefined) return true;
+    );
 
-      return this.doNotRemove.includes(this.languages[this.selected]);
-    },
-  },
+    const availableLanguages = computed(() =>
+      allLanguages.value.filter((lang) => !languages.value.includes(lang.code))
+    );
 
-  methods: {
-    getLanguageFlag(code: string) {
-      const language = this.allLanguages.find((lang) => lang.code === code);
+    const isRemoveDisabled = computed(() => {
+      if (selected.value === undefined) return true;
+
+      return doNotRemove.value.includes(languages.value[selected.value]);
+    });
+
+    const getLanguageFlag = (code: string) => {
+      const language = allLanguages.value.find((lang) => lang.code === code);
 
       return language?.countryFlagCode ?? 'gb';
-    },
+    };
 
-    getLanguageName(code: string) {
-      const language = this.allLanguages.find((lang) => lang.code === code);
+    const getLanguageName = (code: string) => {
+      const language = allLanguages.value.find((lang) => lang.code === code);
 
       return language?.englishName ?? 'English';
-    },
+    };
 
-    async add(code: string) {
-      this.$emit('input', { ...this.value, [code]: this.default });
-      this.selected = this.languages.length - 1;
-    },
+    const add = async (code: string) => {
+      emit('input', { ...props.value, [code]: props.default });
+      selected.value = languages.value.length - 1;
+    };
 
-    remove() {
-      if (this.selected === undefined) return;
+    const remove = () => {
+      if (selected.value === undefined) return;
 
-      const code = this.languages[this.selected];
-      const { [code]: remove, ...rest } = this.value;
-      this.$emit('input', { ...rest });
-    },
+      const code = languages.value[selected.value];
+      const { [code]: remove, ...rest } = props.value;
+      emit('input', { ...rest });
+    };
+
+    return {
+      selected,
+      doNotRemove,
+      languages,
+      allLanguages,
+      availableLanguages,
+      isRemoveDisabled,
+      getLanguageFlag,
+      getLanguageName,
+      add,
+      remove,
+    };
   },
 });
 </script>

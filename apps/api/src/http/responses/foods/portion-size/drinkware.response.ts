@@ -4,7 +4,7 @@ import { InternalServerError } from '@intake24/api/http/errors';
 
 export const drinkwareResponse = (baseUrl: string) => {
   const scaleResponse = (item: DrinkwareScale): DrinkwareScaleResponse => {
-    const { baseImageUrl, overlayImageUrl, volumeSamples } = item;
+    const { baseImageUrl, label, overlayImageUrl, volumeSamples } = item;
 
     if (!volumeSamples)
       throw new InternalServerError('DrinkwareScaleResponse: not loaded relationships.');
@@ -17,6 +17,7 @@ export const drinkwareResponse = (baseUrl: string) => {
       height: item.height,
       emptyLevel: item.emptyLevel,
       fullLevel: item.fullLevel,
+      label,
       volumeSamples: volumeSamples.map(({ fill, volume }) => ({ fill, volume })),
     };
   };

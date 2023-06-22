@@ -11,6 +11,6 @@ export default () => {
   it('should return 200 and refs', async () => {
     await suite.util.setPermission(permissions);
 
-    await suite.sharedTests.assertReferencesResult('get', url, ['languages']);
+    await suite.sharedTests.assertReferencesResult('get', url, []);
   });
 };

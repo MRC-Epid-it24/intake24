@@ -20,7 +20,7 @@
               imageMapData: guideImageData.imageMap,
               id: portionSize.objectId,
               index: portionSize.objectIndex,
-              sizes,
+              labels,
             }"
             @confirm="confirmObject"
             @select="selectObject"
@@ -95,13 +95,19 @@ export default defineComponent({
   },
 
   computed: {
-    sizes() {
-      const { guideImageData } = this;
-      if (!guideImageData) return [];
+    labels() {
+      if (!this.prompt.imageMap.labels || !this.guideImageData) return [];
 
-      return guideImageData.imageMap.objects.map(
-        (object) => `${Math.round(guideImageData.weights[object.id])} g`
-      );
+      const { guideImageData } = this;
+
+      return guideImageData.imageMap.objects.map((object) => {
+        const { label, weight } = guideImageData.objects[object.id];
+
+        return (
+          this.getLocaleContent(label, { params: { weight } }) ||
+          this.getLocaleContent(object.label, { params: { weight } })
+        );
+      });
     },
 
     objectValid() {
@@ -158,12 +164,14 @@ export default defineComponent({
     },
 
     update() {
-      if (this.guideImageData && this.portionSize.objectIndex !== undefined) {
-        const idx = this.portionSize.objectIndex;
+      if (this.guideImageData && this.portionSize.objectId !== undefined) {
+        const id = this.portionSize.objectId;
 
-        this.portionSize.objectWeight = this.guideImageData.weights[idx] ?? 0;
+        this.portionSize.objectWeight = this.guideImageData.objects[id].weight ?? 0;
         this.portionSize.servingWeight =
-          this.guideImageData.weights[idx] * this.portionSize.quantity * this.conversionFactor;
+          this.guideImageData.objects[id].weight *
+          this.portionSize.quantity *
+          this.conversionFactor;
       }
 
       const state: PromptStates['guide-image-prompt'] = {

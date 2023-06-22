@@ -9,7 +9,6 @@ import type {
 } from '@intake24/db';
 
 import type { FeedbackSchemeRefEntry } from './feedback-schemes';
-import type { LanguageListEntry } from './languages';
 import type { LocaleListEntry } from './locales';
 import type { SurveySchemeRefEntry } from './survey-schemes';
 import type { Owner } from './users';
@@ -43,7 +42,6 @@ export interface SurveyEntry extends Omit<SurveyAttributes, 'startDate' | 'endDa
 }
 
 export type SurveyRefs = {
-  languages: LanguageListEntry[];
   locales: LocaleListEntry[];
   surveySchemes: SurveySchemeRefEntry[];
   feedbackSchemes: FeedbackSchemeRefEntry[];

@@ -12,14 +12,7 @@ import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { pickJobParams } from '@intake24/common/types';
-import {
-  FoodIndexBackend,
-  FoodsLocale,
-  Language,
-  Op,
-  securableScope,
-  SystemLocale,
-} from '@intake24/db';
+import { FoodIndexBackend, FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
 import { getAndCheckAccess, securableController } from '../securable.controller';
 
@@ -141,13 +134,12 @@ const localeController = (ioc: IoC) => {
   };
 
   const refs = async (req: Request, res: Response<LocaleRefs>): Promise<void> => {
-    const [languages, locales, foodIndexLanguageBackends] = await Promise.all([
-      Language.scope('list').findAll(),
+    const [locales, foodIndexLanguageBackends] = await Promise.all([
       SystemLocale.scope('list').findAll(),
       FoodIndexBackend.scope('list').findAll(),
     ]);
 
-    res.json({ languages, locales, foodIndexLanguageBackends });
+    res.json({ locales, foodIndexLanguageBackends });
   };
 
   const copy = async (

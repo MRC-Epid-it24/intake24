@@ -5,7 +5,6 @@ import type {
   UserSecurable,
 } from '@intake24/db';
 
-import type { LanguageListEntry } from './languages';
 import type { NutrientTypeEntry } from './nutrient-types';
 import type { Owner } from './users';
 
@@ -27,7 +26,6 @@ export interface FeedbackSchemeEntry extends FeedbackSchemeAttributes {
 export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'name'>;
 
 export type FeedbackSchemeRefs = {
-  languages: LanguageListEntry[];
   nutrientTypes: NutrientTypeEntry[];
   physicalActivityLevels: PhysicalActivityLevelAttributes[];
 };

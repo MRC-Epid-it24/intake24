@@ -11,7 +11,6 @@ import type {
   UserSecurableAttributes,
 } from '@intake24/db';
 
-import type { LanguageListEntry } from './languages';
 import type { Owner } from './users';
 
 export type LocaleRequest = {
@@ -44,7 +43,6 @@ export type LocaleListEntry = Pick<
 
 export type LocaleRefs = {
   foodIndexLanguageBackends: FoodIndexBackendAttributes[];
-  languages: LanguageListEntry[];
   locales: LocaleListEntry[];
 };
 

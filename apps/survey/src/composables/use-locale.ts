@@ -9,7 +9,7 @@ import { replaceParams, useI18n } from '@intake24/i18n';
 
 export type LocaleContentOptions = {
   path?: string;
-  params?: Dictionary<string>;
+  params?: Dictionary<string | number>;
 };
 
 export const useLocale = () => {

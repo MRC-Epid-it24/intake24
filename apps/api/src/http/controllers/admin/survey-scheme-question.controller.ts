@@ -10,7 +10,7 @@ import type {
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { isMealSection } from '@intake24/common/surveys';
-import { Language, SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
+import { SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
 
 const surveySchemeQuestionController = () => {
   const entry = async (
@@ -89,15 +89,14 @@ const surveySchemeQuestionController = () => {
   };
 
   const refs = async (req: Request, res: Response<SurveySchemeQuestionRefs>): Promise<void> => {
-    const [languages, schemes, questions] = await Promise.all([
-      Language.scope('list').findAll(),
+    const [schemes, questions] = await Promise.all([
       SurveyScheme.findAll(),
       SurveySchemeQuestion.findAll({ attributes: ['question'] }),
     ]);
 
     const questionIds = questions.map((q) => q.question.id);
 
-    res.json({ languages, schemes, questionIds });
+    res.json({ schemes, questionIds });
   };
 
   const sync = async (

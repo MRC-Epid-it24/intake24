@@ -68,7 +68,7 @@
                 hide-details="auto"
                 item-text="englishName"
                 item-value="code"
-                :items="refs.languages"
+                :items="languages"
                 :label="$t('locales.respondentLanguageId')"
                 name="respondentLanguageId"
                 outlined
@@ -91,7 +91,7 @@
                 hide-details="auto"
                 item-text="englishName"
                 item-value="code"
-                :items="refs.languages"
+                :items="languages"
                 :label="$t('locales.adminLanguageId')"
                 name="adminLanguageId"
                 outlined
@@ -185,6 +185,7 @@ import { defineComponent } from 'vue';
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useApp } from '@intake24/admin/stores';
 import { textDirections } from '@intake24/common/types';
 
 type LocaleForm = {
@@ -256,6 +257,9 @@ export default defineComponent({
   },
 
   computed: {
+    languages() {
+      return useApp().langs;
+    },
     locales() {
       const locales = [{ code: null, englishName: this.$t('common.none').toString() }];
 

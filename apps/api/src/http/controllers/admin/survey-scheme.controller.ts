@@ -21,7 +21,6 @@ import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
 import { kebabCase } from '@intake24/common/util';
 import {
   createSurveySchemeFields,
-  Language,
   Op,
   perCardSurveySchemeFields,
   securableScope,
@@ -185,14 +184,11 @@ const surveySchemeController = (ioc: IoC) => {
   };
 
   const refs = async (req: Request, res: Response<SurveySchemeRefs>): Promise<void> => {
-    const [languages, questions] = await Promise.all([
-      Language.scope('list').findAll(),
-      SurveySchemeQuestion.findAll({ attributes: ['question'] }),
-    ]);
+    const questions = await SurveySchemeQuestion.findAll({ attributes: ['question'] });
 
     const templates = questions.map((schemeQuestion) => schemeQuestion.question);
 
-    res.json({ languages, templates });
+    res.json({ templates });
   };
 
   const templates = async (

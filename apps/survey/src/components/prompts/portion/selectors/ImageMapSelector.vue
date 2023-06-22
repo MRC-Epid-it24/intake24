@@ -14,7 +14,7 @@
               id,
               index,
               imageMapData,
-              sizes,
+              labels,
               height: screenHeight,
               width: screenWidth,
             }"
@@ -42,10 +42,10 @@
         <div class="label">
           <slot name="label"></slot>
           <v-chip
-            v-if="size"
+            v-if="label"
             class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
           >
-            {{ size }}
+            {{ label }}
           </v-chip>
         </div>
         <svg ref="svg">
@@ -77,7 +77,6 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
-import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { defineComponent, ref } from 'vue';
 
@@ -86,6 +85,7 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import PinchZoomImageMapSelector from './PinchZoomImageMapSelector.vue';
+import { useImageMap } from './use-image-map';
 
 export type ImageMapObject = {
   id: string;
@@ -115,7 +115,7 @@ export default defineComponent({
       type: Object as PropType<ImageMapResponse>,
       required: true,
     },
-    sizes: {
+    labels: {
       type: Array as PropType<string[]>,
       default: () => [],
     },
@@ -123,59 +123,33 @@ export default defineComponent({
 
   emits: ['confirm', 'select'],
 
-  setup() {
+  setup(props) {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    const hoverIndex = ref<number | undefined>(undefined);
+    const height = ref(0);
+    const width = ref(0);
+    const screenHeight = ref(0);
+    const screenWidth = ref(0);
 
-    return { img, svg, hoverIndex };
-  },
+    const { hoverIndex, label, objects } = useImageMap(props, width);
 
-  data() {
     return {
-      height: 0,
-      width: 0,
-      screenHeight: 0,
-      screenWidth: 0,
+      height,
+      width,
+      screenHeight,
+      screenWidth,
+      img,
+      svg,
+      hoverIndex,
+      label,
+      objects,
     };
   },
 
   computed: {
     isDisabled() {
       return this.disabled || this.index === undefined;
-    },
-
-    hasLabelSlot(): boolean {
-      return !!this.$slots.label;
-    },
-
-    objects(): ImageMapObject[] {
-      const { width } = this;
-
-      return this.imageMapData.objects.map((object) => ({
-        id: object.id,
-        polygon: chunk(
-          object.outline.map((coord) => coord * width),
-          2
-        )
-          .map((node) => node.join(','))
-          .join(' '),
-      }));
-    },
-
-    size(): string | undefined {
-      if (
-        !this.config.labels ||
-        !this.sizes.length ||
-        (this.hoverIndex === undefined && this.index === undefined)
-      )
-        return undefined;
-
-      const idx = this.hoverIndex ?? this.index;
-      if (idx === undefined) return undefined;
-
-      return this.sizes[idx];
     },
   },
 

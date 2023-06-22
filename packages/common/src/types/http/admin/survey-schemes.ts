@@ -7,7 +7,6 @@ import type {
 
 import type { Prompt } from '../../../prompts';
 import type { ExportField, ExportSectionId } from '../../../surveys';
-import type { LanguageListEntry } from './languages';
 import type { Owner } from './users';
 
 export type SurveySchemeRequest = SurveySchemeCreationAttributes;
@@ -28,7 +27,6 @@ export type SurveySchemeRefEntry = SurveySchemeAttributes;
 export type SurveySchemeListEntry = Pick<SurveySchemeAttributes, 'id' | 'name'>;
 
 export type SurveySchemeRefs = {
-  languages: LanguageListEntry[];
   templates: Prompt[];
 };
 

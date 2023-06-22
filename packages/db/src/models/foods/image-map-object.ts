@@ -8,6 +8,8 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
+import type { LocaleTranslation } from '@intake24/common/types';
+
 import BaseModel from '../model';
 import { ImageMap, ProcessedImage } from '.';
 
@@ -67,6 +69,20 @@ export default class ImageMapObject extends BaseModel<
     type: DataType.BIGINT,
   })
   declare overlayImageId: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get label(): LocaleTranslation {
+    const val = this.getDataValue('label') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set label(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('label', JSON.stringify(value ?? {}));
+  }
 
   @BelongsTo(() => ImageMap, 'imageMapId')
   declare imageMap?: NonAttribute<ImageMap>;

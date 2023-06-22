@@ -14,7 +14,14 @@ export const imageMapsResponse = (baseUrl: string) => {
    * @returns {ImageMapObjectResponse}
    */
   const objectResponse = (item: ImageMapObject): ImageMapObjectResponse => {
-    const { id, description, navigationIndex, outlineCoordinates: outline, overlayImage } = item;
+    const {
+      id,
+      description,
+      label,
+      navigationIndex,
+      outlineCoordinates: outline,
+      overlayImage,
+    } = item;
 
     if (!overlayImage)
       throw new InternalServerError('ImageMapObjectResponse: not loaded relationships.');
@@ -22,6 +29,7 @@ export const imageMapsResponse = (baseUrl: string) => {
     return {
       id,
       description,
+      label,
       navigationIndex,
       outline,
       overlayUrl: `${baseUrl}/${overlayImage.path}`,
@@ -60,16 +68,17 @@ export const imageMapsResponse = (baseUrl: string) => {
     if (!imageMap || !objects)
       throw new InternalServerError('GuideImageResponse: not loaded relationships.');
 
-    const weights = objects.reduce<{ [index: string]: number }>((acc, object) => {
-      acc[object.imageMapObjectId] = object.weight;
-      return acc;
-    }, {});
-
     return {
       id,
       description,
       imageMap: imageResponse(imageMap),
-      weights,
+      objects: objects.reduce<GuideImageResponse['objects']>(
+        (acc, { imageMapObjectId, label, weight }) => {
+          acc[imageMapObjectId] = { label, weight };
+          return acc;
+        },
+        {}
+      ),
     };
   };
 

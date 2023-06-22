@@ -32,7 +32,7 @@
     <v-item-group v-model="selectedObjectIdx">
       <v-container>
         <v-row>
-          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" md="4" sm="6">
+          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" sm="6">
             <v-item v-slot="{ active }">
               <v-card flat min-height="200px" outlined>
                 <v-toolbar
@@ -78,7 +78,27 @@
                         :label="$t('guide-images.objects.weight')"
                         name="weight"
                         outlined
+                        prepend-inner-icon="fas fa-scale-balanced"
                       ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <language-selector
+                        v-model="object.label"
+                        :label="$t('guide-images.objects.label._').toString()"
+                      >
+                        <template v-for="lang in Object.keys(object.label)" #[`lang.${lang}`]>
+                          <v-text-field
+                            :key="lang"
+                            v-model="object.label[lang]"
+                            hide-details="auto"
+                            :hint="isGuideImage ? $t('guide-images.objects.label.hint') : undefined"
+                            :label="$t('guide-images.objects.label._')"
+                            outlined
+                            :persistent-hint="isGuideImage"
+                            @input="updateObjects"
+                          ></v-text-field>
+                        </template>
+                      </language-selector>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -110,9 +130,10 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
+import { watchDebounced } from '@vueuse/core';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type {
   GuideImageEntry,
@@ -120,6 +141,7 @@ import type {
   ImageMapEntry,
   ImageMapEntryObject,
 } from '@intake24/common/types/http/admin';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { ConfirmDialog } from '@intake24/ui';
 
 interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {
@@ -134,7 +156,7 @@ const distance = ([sourceX, sourceY]: number[], [targetX, targetY]: number[]) =>
 export default defineComponent({
   name: 'GuideDrawer',
 
-  components: { ConfirmDialog },
+  components: { ConfirmDialog, LanguageSelector },
 
   props: {
     disabled: {
@@ -145,130 +167,134 @@ export default defineComponent({
       type: Object as PropType<GuideImageEntry | ImageMapEntry>,
       required: true,
     },
+    resource: {
+      type: String as PropType<'image-maps' | 'guide-images'>,
+      required: true,
+    },
   },
 
   emits: ['image-map-objects', 'guide-image-objects'],
 
-  setup() {
+  setup(props, { emit }) {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    return { img, svg };
-  },
+    const objects = ref<Objects[]>([]);
+    const coords = ref<PathCoords>([]);
 
-  data() {
-    const objects: Objects[] = [];
-    const coords: PathCoords = [];
+    const width = ref(0);
+    const height = ref(0);
+    const selectedObjectIdx = ref<number | null>(null);
+    const selectedNodeIdx = ref<number | null>(null);
 
-    this.entry.objects.forEach(({ id, outlineCoordinates, ...rest }) => {
-      coords.push(chunk(outlineCoordinates, 2));
-      objects.push({ weight: 0, id: parseInt(id, 10), ...rest });
+    props.entry.objects.forEach(({ id, outlineCoordinates, ...rest }) => {
+      coords.value.push(chunk(outlineCoordinates, 2));
+      objects.value.push({ weight: 0, id: parseInt(id, 10), ...rest });
     });
 
-    return {
-      objects,
-      coords,
-      width: 0,
-      height: 0,
-      selectedObjectIdx: null as number | null,
-      selectedNodeIdx: null as number | null,
-    };
-  },
+    const isImageMap = computed(() => props.resource === 'image-maps');
+    const isGuideImage = computed(() => props.resource === 'guide-images');
 
-  computed: {
-    isImageMap(): boolean {
-      return this.module === 'image-maps';
-    },
+    const svgCursor = computed(
+      () => `cursor: ${props.disabled || selectedObjectIdx.value === null ? 'no-drop' : 'pointer'}`
+    );
 
-    isGuideImage(): boolean {
-      return this.module === 'guide-images';
-    },
+    const nodeCursor = computed(
+      () => `cursor: ${selectedNodeIdx.value === null ? 'grab' : 'grabbing'}`
+    );
 
-    svgCursor(): string {
-      return `cursor: ${this.disabled || this.selectedObjectIdx === null ? 'no-drop' : 'pointer'}`;
-    },
-
-    nodeCursor(): string {
-      return `cursor: ${this.selectedNodeIdx === null ? 'grab' : 'grabbing'}`;
-    },
-
-    scaled(): { coords: number[][]; polygon: string }[] {
-      const { width } = this;
-
-      return this.coords.map((node) => {
-        const coords = node.map(([x, y]) => [x * width, y * width]);
+    const scaled = computed(() => {
+      return coords.value.map((node) => {
+        const coords = node.map(([x, y]) => [x * width.value, y * width.value]);
         const polygon = coords.map((scaledNode) => scaledNode.join(',')).join(' ');
 
-        return {
-          coords,
-          polygon,
-        };
+        return { coords, polygon };
       });
-    },
+    });
 
-    imageMapObjects(): ImageMapEntryObject[] {
-      return this.objects.map(({ id, weight, ...rest }, index) => ({
+    const imageMapObjects = computed<ImageMapEntryObject[]>(() =>
+      objects.value.map(({ id, weight, ...rest }, index) => ({
         ...rest,
         id: id.toString(),
-        outlineCoordinates: this.coords[index].flat(),
-      }));
-    },
+        outlineCoordinates: coords.value[index].flat(),
+      }))
+    );
 
-    guideImageObjects(): GuideImageEntryObject[] {
-      return this.objects.map(({ id, ...rest }, index) => ({
+    const guideImageObjects = computed<GuideImageEntryObject[]>(() =>
+      objects.value.map(({ id, ...rest }, index) => ({
         ...rest,
         id: id.toString(),
-        outlineCoordinates: this.coords[index].flat(),
-      }));
-    },
-  },
+        outlineCoordinates: coords.value[index].flat(),
+      }))
+    );
 
-  watch: {
-    imageMapObjects() {
-      //@ts-expect-error debounced
-      this.debouncedImageMapObjects();
-    },
-    guideImageObjects() {
-      //@ts-expect-error debounced
-      this.debouncedGuideImageObjects();
-    },
-  },
+    const updateImageMapObjects = () => {
+      emit('image-map-objects', imageMapObjects.value);
+    };
 
-  created() {
-    //@ts-expect-error debounced
-    this.debouncedImgResize = debounce(() => {
-      this.updateSvgDimensions();
+    const updateGuideImageObjects = () => {
+      emit('guide-image-objects', guideImageObjects.value);
+    };
+
+    const updateObjects = debounce(() => {
+      updateImageMapObjects();
+      updateGuideImageObjects();
     }, 500);
 
-    //@ts-expect-error debounced
-    this.debouncedImageMapObjects = debounce(() => {
-      this.$emit('image-map-objects', this.imageMapObjects);
-    }, 200);
-
-    //@ts-expect-error debounced
-    this.debouncedGuideImageObjects = debounce(() => {
-      this.$emit('guide-image-objects', this.guideImageObjects);
-    }, 200);
-  },
-
-  methods: {
-    updateSvgDimensions() {
-      const el = this.img?.$el;
+    const updateSvgDimensions = () => {
+      const el = img.value?.$el;
       if (!el) {
         console.warn(`GuideDrawer: could not update SVG dimensions.`);
         return;
       }
 
-      const { width, height } = el.getBoundingClientRect();
-      this.width = width;
-      this.height = height;
-    },
+      const rect = el.getBoundingClientRect();
+      width.value = rect.width;
+      height.value = rect.height;
+    };
 
-    onImgResize() {
-      //@ts-expect-error debounced
-      this.debouncedImgResize();
-    },
+    const onImgResize = debounce(() => {
+      updateSvgDimensions();
+    }, 500);
 
+    watchDebounced(
+      imageMapObjects,
+      () => {
+        updateImageMapObjects();
+      },
+      { debounce: 500, maxWait: 2000 }
+    );
+
+    watchDebounced(
+      guideImageObjects,
+      () => {
+        updateGuideImageObjects();
+      },
+      { debounce: 500, maxWait: 2000 }
+    );
+
+    return {
+      img,
+      svg,
+      coords,
+      isGuideImage,
+      isImageMap,
+      nodeCursor,
+      objects,
+      onImgResize,
+      selectedNodeIdx,
+      selectedObjectIdx,
+      scaled,
+      svgCursor,
+      width,
+      height,
+      imageMapObjects,
+      guideImageObjects,
+      updateObjects,
+    };
+  },
+
+  methods: {
     selectObject(idx: number) {
       this.selectedObjectIdx = idx;
     },
@@ -276,7 +302,7 @@ export default defineComponent({
     addObject() {
       const nextId = this.objects.reduce((acc, { id }) => (acc < id ? id : acc), -1);
       this.coords.push([]);
-      this.objects.push({ id: nextId + 1, description: '', weight: 0 });
+      this.objects.push({ id: nextId + 1, description: '', label: {}, weight: 0 });
     },
 
     removeObject(index: number) {

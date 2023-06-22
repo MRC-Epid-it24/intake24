@@ -4,7 +4,6 @@ import type {
   SurveySchemeQuestionCreationAttributes,
 } from '@intake24/db';
 
-import type { LanguageListEntry } from './languages';
 import type { SurveySchemeRefEntry } from './survey-schemes';
 
 export type SurveySchemeQuestionRequest = SurveySchemeQuestionCreationAttributes;
@@ -18,7 +17,6 @@ export type SurveySchemeQuestionsResponse = Pagination<SurveySchemeQuestionAttri
 export type SurveySchemeQuestionEntry = SurveySchemeQuestionAttributes;
 
 export type SurveySchemeQuestionRefs = {
-  languages: LanguageListEntry[];
   schemes: SurveySchemeRefEntry[];
   questionIds: string[];
 };

@@ -20,7 +20,7 @@
               imageMapData,
               id: portionSize.containerId,
               index: portionSize.containerIndex,
-              sizes,
+              labels,
             }"
             @confirm="confirmObject"
             @select="selectObject"
@@ -166,18 +166,20 @@ export default defineComponent({
       return this.parameters['skip-fill-level'] === 'true';
     },
 
-    sizes() {
-      return (
-        this.imageMapData?.objects.map(({ id }) => {
-          const match = this.drinkwareSetData?.scales.find(
-            ({ choiceId }) => choiceId === parseInt(id, 10)
-          );
+    labels() {
+      if (!this.prompt.imageMap.labels || !this.imageMapData) return [];
 
-          return match
-            ? `${Math.round(match.volumeSamples[match.volumeSamples.length - 1].volume)} ml`
-            : 'Missing';
-        }) ?? []
-      );
+      return this.imageMapData.objects.map(({ id }) => {
+        const scale = this.drinkwareSetData?.scales.find(
+          ({ choiceId }) => choiceId === parseInt(id, 10)
+        );
+
+        if (!scale) return '';
+
+        return this.getLocaleContent(scale.label, {
+          params: { volume: scale.volumeSamples[scale.volumeSamples.length - 1].volume },
+        });
+      });
     },
 
     volumes(): DrinkwareVolumeSampleResponse[] | undefined {

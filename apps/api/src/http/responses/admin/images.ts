@@ -1,3 +1,4 @@
+import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   AsServedImageEntry,
   AsServedSetEntry,
@@ -21,7 +22,7 @@ import type {
 } from '@intake24/db';
 import { InternalServerError } from '@intake24/api/http/errors';
 
-type Weights = { [index: string]: number };
+type GuideObjects = { [index: string]: { label: LocaleTranslation; weight: number } };
 
 const imageResponseCollection = (baseUrl: string) => {
   /**
@@ -133,37 +134,30 @@ const imageResponseCollection = (baseUrl: string) => {
    * @param {ImageMapObject[]} objects
    * @returns {ImageMapEntryObject[]}
    */
-  const mapObjects = (objects: ImageMapObject[]): ImageMapEntryObject[] => {
-    return objects.map((object) => {
-      const { id, description, outlineCoordinates } = object;
+  const mapObjects = (objects: ImageMapObject[]): ImageMapEntryObject[] =>
+    objects.map((object) => {
+      const { id, description, label, outlineCoordinates } = object;
 
-      return {
-        id,
-        description,
-        outlineCoordinates,
-      };
+      return { id, description, label, outlineCoordinates };
     });
-  };
 
   /**
    * Helper to map guide image objects
    *
-   * @param {ImageMapObject[]} objects
-   * @param {Weights} weights
+   * @param {ImageMapObject[]} mapObjects
+   * @param {GuideObjects} guideObjects
    * @returns {GuideImageEntryObject[]}
    */
-  const guideObjects = (objects: ImageMapObject[], weights: Weights): GuideImageEntryObject[] => {
-    return objects.map((object) => {
+  const guideObjects = (
+    mapObjects: ImageMapObject[],
+    guideObjects: GuideObjects
+  ): GuideImageEntryObject[] =>
+    mapObjects.map((object) => {
       const { id, description, outlineCoordinates } = object;
+      const { label, weight } = guideObjects[id];
 
-      return {
-        id,
-        description,
-        outlineCoordinates,
-        weight: weights[id],
-      };
+      return { id, description, outlineCoordinates, label, weight };
     });
-  };
 
   /**
    * Guide image list entry
@@ -193,31 +187,34 @@ const imageResponseCollection = (baseUrl: string) => {
    * @returns {GuideImageEntry}
    */
   const guideEntryResponse = (item: GuideImage): GuideImageEntry => {
-    const { id, description, imageMapId, imageMap, objects: weightObjects } = item;
+    const { id, description, imageMapId, imageMap, objects: guideImageObjects } = item;
 
-    if (!imageMap || !weightObjects)
+    if (!imageMap || !guideImageObjects)
       throw new InternalServerError(
         'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
       );
 
-    const { baseImage, objects } = imageMap;
+    const { baseImage, objects: imageMapObjects } = imageMap;
 
-    if (!baseImage || !objects)
+    if (!baseImage || !imageMapObjects)
       throw new InternalServerError(
         'ImageResponseCollection|guideEntryResponse: not loaded relationships.'
       );
 
-    const weights = weightObjects.reduce<Weights>((acc, object) => {
-      acc[object.imageMapObjectId] = object.weight;
-      return acc;
-    }, {});
+    const objects = guideImageObjects.reduce<GuideObjects>(
+      (acc, { imageMapObjectId, label, weight }) => {
+        acc[imageMapObjectId] = { label, weight };
+        return acc;
+      },
+      {}
+    );
 
     return {
       id,
       description,
       imageMapId,
       baseImageUrl: `${baseUrl}/${baseImage.path}`,
-      objects: guideObjects(objects, weights),
+      objects: guideObjects(imageMapObjects, objects),
     };
   };
 

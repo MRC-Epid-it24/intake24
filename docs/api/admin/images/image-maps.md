@@ -66,6 +66,7 @@ Content-Type: multipart/form-data
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[]
         },
         ...
@@ -99,6 +100,7 @@ Content-Type: application/json
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[]
         },
         ...
@@ -124,6 +126,7 @@ Content-Type: application/json
         {
             "id": number,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[]
         },
         ...
@@ -144,6 +147,7 @@ Content-Type: application/json
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[]
         },
         ...

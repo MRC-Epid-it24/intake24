@@ -28,7 +28,10 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <guide-drawer :entry="entry" @image-map-objects="updateObjects"></guide-drawer>
+        <guide-drawer
+          v-bind="{ entry, resource: 'image-maps' }"
+          @image-map-objects="updateObjects"
+        ></guide-drawer>
         <error-list :errors="nonInputErrors" tag="v-card-text"></error-list>
         <v-card-text>
           <submit-footer :disabled="form.errors.any()"></submit-footer>

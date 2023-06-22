@@ -1,7 +1,11 @@
 import { checkSchema } from 'express-validator';
+import { isPlainObject } from 'lodash';
 
-import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
-import { validateGuideImageObjects } from '@intake24/common/validators';
+import {
+  customTypeErrorMessage,
+  typeErrorMessage,
+  validate,
+} from '@intake24/api/http/requests/util';
 
 import defaults from './defaults';
 
@@ -10,17 +14,32 @@ export default validate(
     ...defaults,
     objects: {
       in: ['body'],
-      errorMessage: typeErrorMessage('structure._'),
+      errorMessage: typeErrorMessage('array._'),
+      isArray: { bail: true },
+    },
+    'objects.*.id': {
+      in: ['body'],
+      errorMessage: typeErrorMessage('int._', { attributePath: 'id' }),
+      isInt: { bail: true },
+    },
+    'objects.*.label': {
+      in: ['body'],
       custom: {
-        options: (value): boolean => {
-          try {
-            validateGuideImageObjects(value);
-            return true;
-          } catch (err: any) {
-            throw new Error(err.message.split('\n')[0]);
-          }
+        options: async (value, meta): Promise<void> => {
+          if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
         },
       },
+    },
+    'objects.*.label.*': {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string._', { attributePath: 'label' }),
+      isString: true,
+      optional: { options: { nullable: true } },
+    },
+    'objects.*.weight': {
+      in: ['body'],
+      errorMessage: typeErrorMessage('float._', { attributePath: 'weight' }),
+      isFloat: true,
     },
   })
 );

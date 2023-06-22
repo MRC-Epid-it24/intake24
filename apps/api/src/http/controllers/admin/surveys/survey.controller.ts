@@ -11,7 +11,6 @@ import {
   createSurveyFields,
   FeedbackScheme,
   guardedSurveyFields,
-  Language,
   Op,
   overridesFields,
   securableIncludes,
@@ -190,14 +189,13 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRefs>
   ): Promise<void> => {
-    const [languages, locales, surveySchemes, feedbackSchemes] = await Promise.all([
-      Language.scope('list').findAll(),
+    const [locales, surveySchemes, feedbackSchemes] = await Promise.all([
       SystemLocale.scope('list').findAll(),
       SurveyScheme.findAll({ order: [['name', 'ASC']] }),
       FeedbackScheme.findAll({ order: [['name', 'ASC']] }),
     ]);
 
-    res.json({ languages, locales, surveySchemes, feedbackSchemes });
+    res.json({ locales, surveySchemes, feedbackSchemes });
   };
 
   return {

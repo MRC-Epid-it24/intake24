@@ -19,12 +19,14 @@ export default () => {
       {
         id: '0',
         description: 'obj_description_0',
+        label: { en: 'obj_label_01' },
         outlineCoordinates: [1, 2, 3, 4, 5, 6],
         weight: 10,
       },
       {
         id: '1',
         description: 'obj_description_1',
+        label: { en: 'obj_label_11' },
         outlineCoordinates: [7, 8, 9, 10, 11, 12],
         weight: 20,
       },
@@ -47,11 +49,13 @@ export default () => {
           {
             id: '0',
             description: 'obj_description_0',
+            label: { en: 'obj_label_0' },
             outlineCoordinates: [1, 2, 3, 4, 5, 6],
           },
           {
             id: '1',
             description: 'obj_description_1',
+            label: { en: 'obj_label_1' },
             outlineCoordinates: [7, 8, 9, 10, 11, 12],
           },
         ],

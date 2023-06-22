@@ -12,7 +12,6 @@ export default () => {
       await suite.util.setPermission('feedback-schemes');
 
       await suite.sharedTests.assertReferencesResult('get', url, [
-        'languages',
         'nutrientTypes',
         'physicalActivityLevels',
       ]);

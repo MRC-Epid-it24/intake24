@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import type { StandardUnitEntry, StandardUnitsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { CategoryLocal, FoodLocal, Language, Op, StandardUnit, SystemLocale } from '@intake24/db';
+import { CategoryLocal, FoodLocal, Op, StandardUnit, SystemLocale } from '@intake24/db';
 
 const getLocaleMap = async (code: string[]) => {
   if (!code.length) return {};
@@ -108,9 +108,7 @@ const standardUnitController = () => {
   };
 
   const refs = async (req: Request, res: Response): Promise<void> => {
-    const languages = await Language.scope('list').findAll();
-
-    res.json({ languages });
+    res.json({});
   };
 
   const categories = async (

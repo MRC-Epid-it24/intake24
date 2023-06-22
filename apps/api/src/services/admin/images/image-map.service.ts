@@ -41,6 +41,7 @@ const imageMapService = ({
           description: object.description,
           navigationIndex: parseInt(object.id, 10),
           outlineCoordinates: object.outlineCoordinates,
+          label: object.label,
         });
 
         if (guideImageIds.length) {
@@ -49,6 +50,7 @@ const imageMapService = ({
               guideImageId,
               weight: 0,
               imageMapObjectId: object.id,
+              label: object.label,
             }))
           );
         }
@@ -58,6 +60,7 @@ const imageMapService = ({
 
       await match.update({
         description: object.description,
+        label: object.label,
         navigationIndex: parseInt(object.id, 10),
         outlineCoordinates: object.outlineCoordinates,
       });

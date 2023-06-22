@@ -67,6 +67,7 @@ Content-Type: application/json
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[],
             "weight": number
         },
@@ -102,6 +103,7 @@ Content-Type: application/json
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[],
             "weight": number
         },
@@ -127,6 +129,7 @@ Content-Type: application/json
     "objects": [
         {
             "id": number,
+            "label": { "en": string, ... },
             "weight": number
         },
         ...
@@ -148,6 +151,7 @@ Content-Type: application/json
         {
             "id": string,
             "description": string,
+            "label": { "en": string, ... },
             "outlineCoordinates": number[],
             "weight": number
         },

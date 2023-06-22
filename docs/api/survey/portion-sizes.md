@@ -122,15 +122,16 @@ where **id** is the guide image ID.
       {
         "id": number,
         "description": string,
+        "label": {"en": string, ... },
         "overlayUrl": string,
         "outline": number[]
       },
       ...
     ]
    },
-   "weights": {
-      "1": number,
-      "2": number,
+   "objects": {
+      "1": { "label": {"en": string, ... }, "weight": number },
+      "2": { "label": {"en": string, ... }, "weight": number },
       ...
    }
 }
@@ -166,7 +167,7 @@ coordinates are in the range `[0, image width / image height]`.
    
 </div>
 
-**weights** is the map of selectable object indices to weights in grams.
+**objects** is the map of selectable object IDs to labels and weights in grams.
 
 ## Get multiple guide image data
 
@@ -217,6 +218,7 @@ Same as a guide image (see above), but without the weights:
     {
       "id": number,
       "description": string,
+      "label": {"en": string, ... },
       "navigationIndex": number,
       "overlayUrl": string,
       "outline": number[]
@@ -277,6 +279,7 @@ where **id** is the drink scale ID.
       "height": number,
       "emptyLevel": number,
       "fullLevel": number,
+      "label": {"en": string, ... },
       "volumeSamples": [
          {
            "fill": number,
@@ -318,6 +321,8 @@ bottom of the glass/mug/cup),
 
 **fullLevel** is the offset in pixels from the bottom of the base image where the sliding scale ends (i.e. the top of
 the glass/mug/cup),
+
+**label** is the image map object label
 
 **volumeSamples** is an array with the liquid volume samples taken at different fill levels, where:
 

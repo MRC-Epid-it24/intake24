@@ -6,7 +6,7 @@ export interface GuideImageEntryObject extends ImageMapEntryObject {
   weight: number;
 }
 
-export type GuideImageInputObjects = Pick<GuideImageEntryObject, 'id' | 'weight'>[];
+export type GuideImageInputObjects = Pick<GuideImageEntryObject, 'id' | 'weight' | 'label'>[];
 
 export type CreateGuideImageInput = {
   id: string;

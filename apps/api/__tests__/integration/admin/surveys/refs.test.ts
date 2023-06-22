@@ -12,7 +12,6 @@ export default () => {
     await suite.util.setPermission(permissions);
 
     await suite.sharedTests.assertReferencesResult('get', url, [
-      'languages',
       'locales',
       'surveySchemes',
       'feedbackSchemes',

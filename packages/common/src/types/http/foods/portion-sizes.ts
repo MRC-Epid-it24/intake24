@@ -5,7 +5,7 @@ import type {
   StandardUnitAttributes,
 } from '@intake24/db';
 
-import type { Dictionary } from '../..';
+import type { Dictionary, LocaleTranslation } from '../..';
 
 export type AsServedImageResponse = {
   mainImageUrl: string;
@@ -23,6 +23,7 @@ export type AsServedSetResponse = {
 export type ImageMapObjectResponse = {
   id: string;
   description: string;
+  label: LocaleTranslation;
   navigationIndex: number;
   overlayUrl: string;
   outline: number[];
@@ -39,7 +40,7 @@ export type GuideImageResponse = {
   id: string;
   description: string;
   imageMap: ImageMapResponse;
-  weights: { [index: string]: number };
+  objects: { [index: string]: { label: LocaleTranslation; weight: number } };
 };
 
 export type DrinkwareVolumeSampleResponse = Pick<
