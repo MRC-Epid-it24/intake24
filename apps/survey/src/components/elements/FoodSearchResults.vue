@@ -4,7 +4,7 @@
       v-for="food in results.foods"
       :key="food.code"
       class="list-item-border"
-      @click="foodSelected(food.code)"
+      @click="foodSelected(food)"
     >
       <v-list-item-content>
         <v-list-item-title>{{ food.description }}</v-list-item-title>
@@ -17,7 +17,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 
 export default defineComponent({
   name: 'FoodSearchResults',
@@ -32,8 +32,8 @@ export default defineComponent({
   emits: ['food-selected'],
 
   methods: {
-    foodSelected(foodCode: string): void {
-      this.$emit('food-selected', foodCode);
+    foodSelected(food: FoodHeader): void {
+      this.$emit('food-selected', food);
     },
   },
 });

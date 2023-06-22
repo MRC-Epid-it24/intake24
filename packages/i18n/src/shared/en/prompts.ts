@@ -110,6 +110,14 @@ const prompts: LocaleMessageObject = {
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
+    confirmDiscardFood: {
+      label: 'Yes',
+      messageUnsafe: `<p>You have already answered some questions about <strong>"{discardedFoodName}"</strong>!</p>
+                <p>If you change it to <strong>"{selectedFoodName}"</strong> now, you might have to answer some of those questions again.</p>
+                          <p>Are you sure you would like to replace this food?</p>`,
+      message:
+        'You have already answered some questions about "{discardedFoodName}"! If you change it to "{selectedFoodName}" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?',
+    },
   },
   mealAdd: {
     _: 'Add meal',
