@@ -58,6 +58,22 @@
         @cancel="missing = false"
         @confirm="$emit('food-missing')"
       ></missing-food-panel>
+      <confirm-dialog
+        v-model="confirmDialog"
+        external
+        :label="$t('prompts.foodSearch.confirmDiscardFood.label').toString()"
+        @cancel="confirmDialogResolve(false)"
+        @confirm="confirmDialogResolve(true)"
+      >
+        <!-- FIXME: Intended message is prompts.foodSearch.confirmDiscardFood.messageUnsafe,
+                    but food names must be sanitized in order to use HTML here -->
+        {{
+          $t('prompts.foodSearch.confirmDiscardFood.message', {
+            discardedFoodName,
+            selectedFoodName,
+          })
+        }}
+      </confirm-dialog>
     </v-card-text>
     <template #actions>
       <!-- Should not have actions -> only click & select -->
@@ -71,10 +87,11 @@ import { mapState } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
 import type { FreeTextFood } from '@intake24/common/types';
-import type { FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import { FoodSearchResults, ImagePlaceholder } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 import { MissingFoodPanel } from './partials';
@@ -82,7 +99,7 @@ import { MissingFoodPanel } from './partials';
 export default defineComponent({
   name: 'FoodSearchPrompt',
 
-  components: { FoodSearchResults, ImagePlaceholder, MissingFoodPanel },
+  components: { FoodSearchResults, ImagePlaceholder, MissingFoodPanel, ConfirmDialog },
 
   mixins: [createBasePrompt<'food-search-prompt', FreeTextFood>()],
 
@@ -95,6 +112,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    discardedFoodName: {
+      type: String,
+      required: false,
+    },
   },
 
   emits: ['food-missing', 'food-selected', 'input'],
@@ -105,6 +126,10 @@ export default defineComponent({
     const requestFailed = ref(false);
     const searchTerm = ref(props.value);
     const searchResults = ref<FoodSearchResponse | null>(null);
+    const selectedFoodName = ref<string | null>(null);
+
+    const confirmDialog = ref(false);
+    const confirmDialogResolve = ref<((v: boolean) => void) | null>(null);
 
     return {
       missing,
@@ -112,6 +137,9 @@ export default defineComponent({
       requestFailed,
       searchTerm,
       searchResults,
+      confirmDialog,
+      selectedFoodName,
+      confirmDialogResolve,
     };
   },
 
@@ -145,11 +173,22 @@ export default defineComponent({
       this.requestInProgress = false;
     },
 
-    async onFoodSelected(code: string) {
+    async showConfirmDialog(selectedFood: FoodHeader): Promise<boolean> {
+      this.selectedFoodName = selectedFood.description;
+      this.confirmDialog = true;
+
+      return new Promise<boolean>((resolve) => {
+        this.confirmDialogResolve = resolve;
+      });
+    },
+
+    async onFoodSelected(food: FoodHeader) {
+      if (this.discardedFoodName && !(await this.showConfirmDialog(food))) return;
+
       this.requestInProgress = true;
       this.searchResults = null;
       try {
-        const foodData = await foodsService.getData(this.localeId, code);
+        const foodData = await foodsService.getData(this.localeId, food.code);
         this.$emit('food-selected', foodData);
       } catch (e) {
         this.requestFailed = true;

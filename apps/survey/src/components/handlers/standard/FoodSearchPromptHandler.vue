@@ -1,7 +1,8 @@
 <template>
   <food-search-prompt
-    v-bind="{ food: freeTextFood(), localeId, prompt }"
+    v-bind="{ food: food(), localeId, prompt }"
     v-model="searchTerm"
+    :discarded-food-name="discardedFoodName"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
   ></food-search-prompt>
@@ -13,7 +14,7 @@ import { mapActions } from 'pinia';
 import { defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -35,12 +36,42 @@ export default defineComponent({
   emits: ['action'],
 
   setup() {
-    const { freeTextFood, localeId } = useFoodPromptUtils();
+    function getSearchTerm(foodEntry: FoodState) {
+      switch (foodEntry.type) {
+        case 'encoded-food':
+          return foodEntry.searchTerm;
+        case 'free-text':
+          return foodEntry.description;
+        case 'missing-food':
+          return foodEntry.searchTerm;
+      }
+    }
+
+    const { food, localeId } = useFoodPromptUtils();
 
     const foodData = ref<UserFoodData | undefined>(undefined);
-    const searchTerm = ref(freeTextFood().description);
+    const searchTerm = ref(getSearchTerm(food()));
+    const discardedFoodName = ref<string | null>(null);
 
-    return { freeTextFood, localeId, foodData, searchTerm };
+    const currentState = food();
+
+    // Warn user if they try to replace an encoded food that already has some portion size
+    // data associated with it by coming back to the food search prompt using the back or forward
+    // buttons.
+    //
+    // TODO: make sure this cannot result in an invalid survey state some other way, for instance
+    //       by invalidating custom prompt answers or associated food links.
+
+    if (
+      currentState.type === 'encoded-food' &&
+      (currentState.portionSizeMethodIndex !== null || currentState.portionSize !== null)
+    ) {
+      discardedFoodName.value = currentState.data.localName;
+    } else {
+      discardedFoodName.value = null;
+    }
+
+    return { food, localeId, foodData, searchTerm, discardedFoodName };
   },
 
   methods: {
@@ -54,7 +85,7 @@ export default defineComponent({
 
     foodMissing() {
       const { searchTerm } = this;
-      const { id, customPromptAnswers, flags } = this.freeTextFood();
+      const { id, customPromptAnswers, flags } = this.food();
 
       const newState: MissingFood = {
         id,
@@ -78,7 +109,7 @@ export default defineComponent({
         return;
       }
 
-      const { id, customPromptAnswers, flags } = this.freeTextFood();
+      const { id, customPromptAnswers, flags } = this.food();
 
       // Automatically select the only portion size method available to avoid triggering
       // redundant portion size option prompt
