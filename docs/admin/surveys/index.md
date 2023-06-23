@@ -47,11 +47,11 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 #### `1. JWT secret is left blank`
 
-- Anyone can generate new respondent account using following survey URL: `survey-app.domain.com/:surveyId/generate-user`.
+- Anyone can generate new respondent account using following survey URL: `app.domain.com/:surveyId/generate-user`.
 
-- API endpoint is rate limited and protected by captcha to minimize the misuses
+- API endpoint is rate limited and protected by `captcha` to minimize the misuse
 
-- This is useful for `demo-like` surveys.
+- This is useful for `demo-like` surveys to allow open access to anyone
 
 #### `2. JWT secret is set`
 

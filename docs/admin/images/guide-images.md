@@ -1,10 +1,14 @@
 # Guide images
 
-Guide images are enhanced records of corresponding `image map`. They allow to assign localized labels and weights to each of the object defined in [Image map record](/admin/images/image-maps).
+`Guide image` is enhanced record of corresponding `image map`. `Guide image` allows to assign localized labels and weights to each object area defined in [Image map](/admin/images/image-maps).
+
+:::tip
+Setting up multiple independent `guide image` record of the same `image map` allows to assign different labels and weights for same `image map`.
+:::
 
 ## Detail
 
-Detail tab displays selected image map info.
+Detail tab displays selected guide image info.
 
 ## Create / Edit
 
@@ -14,9 +18,9 @@ Edit tab allows to modify selected image map.
 
 - `Description` - Free text to describe the guide image
 
-- `Image map` - Select image maps to build guide image
+- `Image map` - Select existing [image map](/admin/images/image-maps) record to create new guide image
 
-### Object area editor
+## Object area editor
 
 After record is created, existing object areas can be assigned with:
 

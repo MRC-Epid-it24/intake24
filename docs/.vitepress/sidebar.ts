@@ -345,6 +345,35 @@ export const sidebar = {
       ],
     },
     {
+      text: 'Foods',
+      items: [
+        {
+          text: 'Food databases',
+          link: '/admin/foods/fdbs',
+        },
+        {
+          text: 'Food groups',
+          link: '/admin/foods/food-groups',
+        },
+        {
+          text: 'Nutrient tables',
+          link: '/admin/foods/nutrient-tables',
+        },
+        {
+          text: 'Nutrient types',
+          link: '/admin/foods/nutrient-types',
+        },
+        {
+          text: 'Nutrient units',
+          link: '/admin/foods/nutrient-units',
+        },
+        {
+          text: 'Standard units',
+          link: '/admin/foods/standard-units',
+        },
+      ],
+    },
+    {
       text: 'Localization',
       items: [
         {
@@ -375,6 +404,10 @@ export const sidebar = {
         {
           text: 'Guide images',
           link: '/admin/images/guide-images',
+        },
+        {
+          text: 'Drinkware sets',
+          link: '/admin/images/drinkware-sets',
         },
       ],
     },

@@ -16,11 +16,11 @@ Edit tab allows to modify selected image map.
 
 - `Base image map file` - Image to be uploaded
 
-### Object area editor
+## Object area editor
 
 After record is created, object areas can be defined on image.
 
-#### Object area editor supports following functions:
+### Object area editor supports following functions:
 
 - click on `plus` button adds new object
 - to modify an object area, firstly select the object by clicking either or canvas object area or on the object's toolbar header
@@ -28,7 +28,7 @@ After record is created, object areas can be defined on image.
 - `double-click` on node will remove it
 - `drag & drop` can be used to move the nodes about
 
-#### Existing object areas can be assigned with:
+### Existing object areas can be assigned with:
 
 - `Description` - object's description (admin purposes)
 

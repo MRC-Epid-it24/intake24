@@ -1,9 +1,10 @@
 # Introduction
 
-Intake24 admin tools allows to work with three resource types to handle images:
+Admin tools allows to work with following resource types to handle images:
 
 1. [As served sets](/admin/images/as-served-sets)
 2. [Image maps](/admin/images/image-maps)
 3. [Guide images](/admin/images/guide-images)
+4. [Drinkware sets](/admin/images/drinkware-sets)
 
-Each type can be used as portion size method for any food / category.
+Each type can be used in corresponding portion size method for a food or category.
