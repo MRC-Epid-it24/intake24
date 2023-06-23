@@ -112,7 +112,7 @@ const imageResponseCollection = (baseUrl: string) => {
   };
 
   const drinkwareEntryResponse = (item: DrinkwareSet): DrinkwareSetEntry => {
-    const { id, description, guideImageId, imageMap, scales } = item;
+    const { id, description, imageMapId, imageMap, scales } = item;
 
     if (!imageMap || !imageMap.baseImage || !scales)
       throw new InternalServerError(
@@ -122,7 +122,7 @@ const imageResponseCollection = (baseUrl: string) => {
     return {
       id,
       description,
-      guideImageId,
+      imageMapId,
       imageUrl: `${baseUrl}/${imageMap.baseImage.path}`,
       scales,
     };

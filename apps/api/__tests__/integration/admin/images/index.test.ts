@@ -5,6 +5,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 import asServed from './as-served/index.test';
 import asServedImages from './as-served-images/index.test';
+import drinkwareSets from './drinkware-sets/index.test';
 import guideImages from './guide-images/index.test';
 import imageMaps from './image-maps/index.test';
 
@@ -46,12 +47,11 @@ export default () => {
   });
 
   // Drinkware sets - TODO
-  /* describe('GET /api/admin/images/drinkware-sets', drinkwareSets.browse);
+  describe('GET /api/admin/images/drinkware-sets', drinkwareSets.browse);
   describe('POST /api/admin/images/drinkware-sets', drinkwareSets.store);
-  describe('GET /api/admin/images/drinkware-sets/refs', drinkwareSets.refs);
   describe('GET /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.read);
   describe('GET /api/admin/images/drinkware-sets/:drinkwareSetId/edit', drinkwareSets.edit);
-  describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
+  /* describe('PUT /api/admin/images/drinkware-sets/:drinkwareSetId', drinkwareSets.update);
   describe('DELETE /api/admin/images/guide-images/:drinkwareSetId', drinkwareSets.destroy); */
 
   // Guided images

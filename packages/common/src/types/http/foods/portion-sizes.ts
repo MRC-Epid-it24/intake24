@@ -53,7 +53,7 @@ export interface DrinkwareScaleResponse
   volumeSamples: DrinkwareVolumeSampleResponse[];
 }
 
-export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'guideImageId'> {
+export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'imageMapId'> {
   scales: DrinkwareScaleResponse[];
 }
 

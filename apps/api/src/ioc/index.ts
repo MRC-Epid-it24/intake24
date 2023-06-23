@@ -77,6 +77,7 @@ import type {
   DataExportFields,
   DataExportMapper,
   DataExportService,
+  DrinkwareSetService,
   DuoProvider,
   FeedbackService,
   FIDOProvider,
@@ -284,6 +285,7 @@ export interface IoC extends Jobs {
   processedImageService: ProcessedImageService;
   sourceImageService: SourceImageService;
   asServedService: AsServedService;
+  drinkwareSetService: DrinkwareSetService;
   guideImageService: GuideImageService;
   imageMapService: ImageMapService;
 

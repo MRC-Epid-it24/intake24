@@ -23,11 +23,11 @@ export const drinkwareResponse = (baseUrl: string) => {
   };
 
   const setResponse = (item: DrinkwareSet): DrinkwareSetResponse => {
-    const { id, guideImageId, scales } = item;
+    const { id, imageMapId, scales } = item;
 
     if (!scales) throw new InternalServerError('DrinkwareSetResponse: not loaded relationships.');
 
-    return { id, guideImageId, scales: scales.map(scaleResponse) };
+    return { id, imageMapId, scales: scales.map(scaleResponse) };
   };
 
   return { setResponse, scaleResponse };

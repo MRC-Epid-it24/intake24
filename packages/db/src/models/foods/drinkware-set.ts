@@ -41,9 +41,9 @@ export default class DrinkwareSet extends BaseModel<
     allowNull: false,
     type: DataType.STRING(32),
   })
-  declare guideImageId: string;
+  declare imageMapId: string;
 
-  @BelongsTo(() => ImageMap, 'guideImageId')
+  @BelongsTo(() => ImageMap, 'imageMapId')
   declare imageMap?: NonAttribute<ImageMap>;
 
   @HasMany(() => DrinkwareScale, 'drinkwareSetId')

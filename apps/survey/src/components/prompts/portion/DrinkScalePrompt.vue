@@ -161,9 +161,7 @@ export default defineComponent({
       if (!this.labelsEnabled || !this.imageMapData) return [];
 
       return this.imageMapData.objects.map((object) => {
-        const scale = this.drinkwareSetData?.scales.find(
-          ({ choiceId }) => choiceId === parseInt(object.id, 10)
-        );
+        const scale = this.drinkwareSetData?.scales.find(({ choiceId }) => choiceId === object.id);
 
         if (!scale) return '';
 
@@ -180,9 +178,7 @@ export default defineComponent({
       const { containerId } = this.portionSize;
       if (containerId === undefined) return undefined;
 
-      return this.drinkwareSetData?.scales.find(
-        (scale) => scale.choiceId === parseInt(containerId, 10)
-      );
+      return this.drinkwareSetData?.scales.find((scale) => scale.choiceId === containerId);
     },
 
     skipFillLevel() {
@@ -242,7 +238,7 @@ export default defineComponent({
       this.drinkwareSetData = { ...drinkwareSetData };
 
       const { data: imageMapData } = await this.$http.get<ImageMapResponse>(
-        `portion-sizes/image-maps/${this.drinkwareSetData.guideImageId}`
+        `portion-sizes/image-maps/${this.drinkwareSetData.imageMapId}`
       );
 
       this.imageMapData = { ...imageMapData };

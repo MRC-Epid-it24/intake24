@@ -67,9 +67,9 @@ export default class DrinkwareScale extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
-  declare choiceId: number;
+  declare choiceId: string;
 
   @Column({
     allowNull: false,

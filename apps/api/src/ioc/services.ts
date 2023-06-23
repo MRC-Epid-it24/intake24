@@ -14,6 +14,7 @@ import {
   dataExportFields,
   dataExportMapper,
   dataExportService,
+  drinkwareSetService,
   duoProvider,
   feedbackService,
   fidoProvider,
@@ -65,6 +66,7 @@ export default (container: AwilixContainer): void => {
     signInService: asFunction(signInService),
 
     asServedService: asFunction(asServedService),
+    drinkwareSetService: asFunction(drinkwareSetService),
     guideImageService: asFunction(guideImageService),
     imageMapService: asFunction(imageMapService),
     processedImageService: asFunction(processedImageService),

@@ -269,7 +269,7 @@ where **id** is the drink scale ID.
 
 {
   "id": string,
-  "guideImageId": string,
+  "imageMapId": string,
   "scales": [
     {
       "baseImageUrl": string,
@@ -296,11 +296,11 @@ where
 
 **id** is the drink scale ID.
 
-**guideImageId** is the ID of the image map (called guide due to legacy reasons) for the drinkware selection screen,
+**imageMapId** is the ID of the image map (called guide due to legacy reasons) for the drinkware selection screen,
 e.g. an image with glasses of different shapes and sizes from which the respondent is asked to select one
 they would like to use.
 
-**scales** is the list of sliding scale image definitions corresponding to objects in the image map `guideImageId`,
+**scales** is the list of sliding scale image definitions corresponding to objects in the image map `imageMapId`,
 where:
 
 <div class="nested-description">
@@ -310,7 +310,7 @@ where:
 **overlayImageUrl** is the URL of the transparent image with the filled outline of the same glass/mug/cup, used
 to represent the liquid level,
 
-**choiceId** is the ID of the object (glass/mug/cup) from the `guideImageId` image map this scale corresponds to,
+**choiceId** is the ID of the object (glass/mug/cup) from the `imageMapId` image map this scale corresponds to,
 
 **width** is the width of the image at `baseImageUrl`,
 
@@ -370,7 +370,7 @@ Same as the regular drinkware set data response, but returns an array of drinkwa
 [
   {
     "id": string,
-    "guideImageId": string,
+    "imageMapId": string,
     "scales": [
       {
         "baseImageUrl": string,

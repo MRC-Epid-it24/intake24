@@ -42,9 +42,9 @@ const drinkwareSetController = ({
   };
 
   const store = async (req: Request, res: Response<DrinkwareSetEntry>): Promise<void> => {
-    const { id, description, guideImageId } = req.body;
+    const { id, description, imageMapId } = req.body;
 
-    await DrinkwareSet.create({ id, description, guideImageId });
+    await DrinkwareSet.create({ id, description, imageMapId });
 
     const drinkwareSet = await portionSizeService.getDrinkwareSet(id);
     if (!drinkwareSet) throw new NotFoundError();
@@ -71,9 +71,9 @@ const drinkwareSetController = ({
     const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
     if (!drinkwareSet) throw new NotFoundError();
 
-    const { description, guideImageId } = req.body;
+    const { description } = req.body;
 
-    await drinkwareSet.update({ description, guideImageId });
+    await drinkwareSet.update({ description });
 
     res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
   };

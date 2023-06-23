@@ -8,7 +8,7 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { GuideImage, ImageMapObject, ProcessedImage } from '.';
+import { DrinkwareSet, GuideImage, ImageMapObject, ProcessedImage } from '.';
 
 @Scopes(() => ({
   guideImages: { include: [{ model: GuideImage }] },
@@ -47,6 +47,9 @@ export default class ImageMap extends BaseModel<
 
   @BelongsTo(() => ProcessedImage, 'baseImageId')
   declare baseImage?: NonAttribute<ProcessedImage>;
+
+  @HasMany(() => DrinkwareSet, 'imageMapId')
+  declare drinkwareSets?: NonAttribute<DrinkwareSet[]>;
 
   @HasMany(() => GuideImage, 'imageMapId')
   declare guideImages?: NonAttribute<GuideImage[]>;

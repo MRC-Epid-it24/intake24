@@ -18,12 +18,12 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.guideImageId"
+                v-model="form.imageMapId"
                 disabled
-                :error-messages="form.errors.get('guideImageId')"
+                :error-messages="form.errors.get('imageMapId')"
                 hide-details="auto"
                 :label="$t('image-maps._')"
-                name="guideImageId"
+                name="imageMapId"
                 outlined
                 prepend-inner-icon="$image-maps"
               ></v-text-field>
@@ -59,7 +59,7 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 type EditDrinkwareSetForm = {
   id: string | null;
   description: string | null;
-  guideImageId: string | null;
+  imageMapId: string | null;
 };
 
 export default defineComponent({
@@ -74,7 +74,7 @@ export default defineComponent({
       EditDrinkwareSetForm,
       DrinkwareSetEntry
     >(props, {
-      data: { id: null, guideImageId: null, description: null },
+      data: { id: null, imageMapId: null, description: null },
     });
 
     return { entry, entryLoaded, clearError, form, routeLeave, submit };

@@ -6,7 +6,7 @@ import {
   validate,
 } from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
-import { DrinkwareSet, GuideImage } from '@intake24/db';
+import { DrinkwareSet, ImageMap } from '@intake24/db';
 
 import defaults from './defaults';
 
@@ -29,15 +29,15 @@ export default validate(
         },
       },
     },
-    guideImageId: {
+    imageMapId: {
       in: ['body'],
       errorMessage: typeErrorMessage('string._'),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {
-          const guideImage = await GuideImage.findOne({ where: { id: value } });
-          if (!guideImage) throw new Error(customTypeErrorMessage('exists._', meta));
+          const imageMap = await ImageMap.findOne({ where: { id: value } });
+          if (!imageMap) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },
     },
