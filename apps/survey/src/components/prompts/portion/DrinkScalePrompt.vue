@@ -153,6 +153,29 @@ export default defineComponent({
       return !this.prompt.leftovers;
     },
 
+    labelsEnabled() {
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+    },
+
+    labels() {
+      if (!this.labelsEnabled || !this.imageMapData) return [];
+
+      return this.imageMapData.objects.map((object) => {
+        const scale = this.drinkwareSetData?.scales.find(
+          ({ choiceId }) => choiceId === parseInt(object.id, 10)
+        );
+
+        if (!scale) return '';
+
+        const volume = scale.volumeSamples[scale.volumeSamples.length - 1].volume;
+
+        return (
+          this.getLocaleContent(scale.label, { params: { volume } }) ||
+          this.getLocaleContent(object.label, { params: { volume } })
+        );
+      });
+    },
+
     scale() {
       const { containerId } = this.portionSize;
       if (containerId === undefined) return undefined;
@@ -164,22 +187,6 @@ export default defineComponent({
 
     skipFillLevel() {
       return this.parameters['skip-fill-level'] === 'true';
-    },
-
-    labels() {
-      if (!this.prompt.imageMap.labels || !this.imageMapData) return [];
-
-      return this.imageMapData.objects.map(({ id }) => {
-        const scale = this.drinkwareSetData?.scales.find(
-          ({ choiceId }) => choiceId === parseInt(id, 10)
-        );
-
-        if (!scale) return '';
-
-        return this.getLocaleContent(scale.label, {
-          params: { volume: scale.volumeSamples[scale.volumeSamples.length - 1].volume },
-        });
-      });
     },
 
     volumes(): DrinkwareVolumeSampleResponse[] | undefined {

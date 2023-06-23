@@ -17,6 +17,13 @@
         </template>
       </select-resource>
     </v-col>
+    <v-col cols="12">
+      <v-switch
+        v-model="imageMapLabels"
+        hide-details="auto"
+        :label="$t('fdbs.portionSizes.methods.guide-image.imageMapLabels')"
+      ></v-switch>
+    </v-col>
   </v-row>
 </template>
 
@@ -37,6 +44,15 @@ export default defineComponent({
       },
       set(value: string) {
         this.setParameter('guide-image-id', value);
+      },
+    },
+    imageMapLabels: {
+      get(): boolean {
+        const value = this.getParameter('image-map-labels')?.value;
+        return value === 'true';
+      },
+      set(value: boolean) {
+        this.setParameter('image-map-labels', value.toString());
       },
     },
   },

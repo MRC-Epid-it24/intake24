@@ -16,6 +16,7 @@
               imageMapData: imageMaps.type,
               id: portionSize.type.id,
               index: portionSize.type.index,
+              labels: imageMapLabels.type,
             }"
             @confirm="confirmType('type')"
             @select="(idx, id) => selectType('type', idx, id)"
@@ -37,6 +38,7 @@
               imageMapData: imageMaps.thickness,
               id: portionSize.thickness.id,
               index: portionSize.thickness.index,
+              labels: imageMapLabels.thickness,
             }"
             @confirm="confirmType('thickness')"
             @select="(idx, id) => selectType('thickness', idx, id)"
@@ -59,6 +61,7 @@
               imageMapData: imageMaps.slice,
               id: portionSize.slice.id,
               index: portionSize.slice.index ? portionSize.slice.index - 1 : undefined,
+              labels: imageMapLabels.slice,
             }"
             @confirm="confirmType('slice')"
             @select="(idx, id) => selectType('slice', idx + 1, id)"
@@ -100,9 +103,11 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
@@ -142,6 +147,13 @@ export default defineComponent({
 
   mixins: [createBasePortion<'pizza-prompt'>()],
 
+  props: {
+    parameters: {
+      type: Object as PropType<PortionSizeParameters['pizza']>,
+      required: true,
+    },
+  },
+
   emits: ['update'],
 
   data() {
@@ -168,12 +180,26 @@ export default defineComponent({
   },
 
   computed: {
+    labelsEnabled() {
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+    },
+
     imageMapIds(): Record<PizzaImageMap, string> {
       return {
         type: this.typeImageMapId,
         thickness: this.thicknessImageMapId,
         slice: this.sliceImageMapId,
       };
+    },
+
+    imageMapLabels(): Record<PizzaImageMap, string[]> {
+      return Object.keys(this.imageMapIds).reduce<Record<PizzaImageMap, string[]>>((acc, key) => {
+        const pizzaType = key as PizzaImageMap;
+
+        acc[pizzaType] =
+          this.imageMaps[pizzaType]?.objects.map(({ label }) => this.getLocaleContent(label)) ?? [];
+        return acc;
+      }, {} as Record<PizzaImageMap, string[]>);
     },
 
     isWholeSelected(): boolean {

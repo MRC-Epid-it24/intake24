@@ -3,6 +3,7 @@
     v-bind="{
       food: food(),
       initialState: state,
+      parameters,
       parentFood,
       prompt,
     }"
@@ -38,6 +39,7 @@ export default defineComponent({
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
+      parameters,
       parentFoodOptional: parentFood,
       portionSize,
     } = useFoodPromptUtils<'milk-on-cereal'>();
@@ -74,6 +76,7 @@ export default defineComponent({
 
     return {
       food,
+      parameters,
       parentFood,
       portionSize,
       state,

@@ -30,9 +30,7 @@ export const useImageMap = (props: UseImageMapProps, width: Ref<number>) => {
       return undefined;
 
     const idx = hoverIndex.value ?? props.index;
-    if (idx === undefined) return undefined;
-
-    return props.labels[idx];
+    return idx === undefined ? undefined : props.labels[idx];
   });
 
   return {

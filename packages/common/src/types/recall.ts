@@ -56,18 +56,25 @@ export type PortionSizeParameters = {
   };
   cereal: {
     type: CerealType;
+    'image-map-labels': string;
   };
   'drink-scale': {
     'drinkware-id': string;
     'initial-fill-level': string;
     'skip-fill-level': string;
+    'image-map-labels': string;
   };
   'guide-image': {
     'guide-image-id': string;
+    'image-map-labels': string;
   };
   'milk-in-a-hot-drink': never;
-  'milk-on-cereal': never;
-  pizza: never;
+  'milk-on-cereal': {
+    'image-map-labels': string;
+  };
+  pizza: {
+    'image-map-labels': string;
+  };
   'standard-portion': StandardUnitTexts &
     StandardUnitTranslations & {
       'units-count': string;

@@ -78,7 +78,7 @@
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
 import debounce from 'lodash/debounce';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 
 import type { ImageMap } from '@intake24/common/prompts';
 import type { ImageMapResponse } from '@intake24/common/types/http';
@@ -123,7 +123,7 @@ export default defineComponent({
 
   emits: ['confirm', 'select'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
@@ -134,67 +134,57 @@ export default defineComponent({
 
     const { hoverIndex, label, objects } = useImageMap(props, width);
 
-    return {
-      height,
-      width,
-      screenHeight,
-      screenWidth,
-      img,
-      svg,
-      hoverIndex,
-      label,
-      objects,
+    const isDisabled = computed(() => props.disabled || props.index === undefined);
+
+    const getScreenDimensions = () => {
+      screenHeight.value = window.screen.height;
+      screenWidth.value = window.screen.width;
     };
-  },
 
-  computed: {
-    isDisabled() {
-      return this.disabled || this.index === undefined;
-    },
-  },
-
-  created() {
-    //@ts-expect-error fix debounced types
-    this.debouncedGuideImgResize = debounce(() => {
-      this.updateSvgDimensions();
-    }, 500);
-  },
-
-  mounted() {
-    this.getScreenDimensions();
-  },
-
-  methods: {
-    getScreenDimensions() {
-      const { height, width } = window.screen;
-      this.screenHeight = height;
-      this.screenWidth = width;
-    },
-
-    onImgResize() {
-      //@ts-expect-error fix debounced types
-      this.debouncedGuideImgResize();
-    },
-
-    updateSvgDimensions() {
-      const el = this.img?.$el;
+    const updateSvgDimensions = () => {
+      const el = img.value?.$el;
       if (!el) {
         console.warn(`GuideImagePanel: could not update SVG dimensions.`);
         return;
       }
-      const { width, height } = el.getBoundingClientRect();
-      this.width = width;
-      this.height = height;
-    },
+      const rect = el.getBoundingClientRect();
+      width.value = rect.width;
+      height.value = rect.height;
+    };
 
+    const onImgResize = debounce(() => {
+      updateSvgDimensions();
+    }, 500);
+
+    const confirm = () => {
+      emit('confirm');
+    };
+
+    onMounted(() => {
+      getScreenDimensions();
+    });
+
+    return {
+      height,
+      width,
+      confirm,
+      img,
+      isDisabled,
+      svg,
+      hoverIndex,
+      label,
+      objects,
+      onImgResize,
+      screenHeight,
+      screenWidth,
+    };
+  },
+
+  methods: {
     select(idx: number, id: string) {
       this.$emit('select', idx, id);
 
       if (!this.isMobile) this.confirm();
-    },
-
-    confirm() {
-      this.$emit('confirm');
     },
   },
 });

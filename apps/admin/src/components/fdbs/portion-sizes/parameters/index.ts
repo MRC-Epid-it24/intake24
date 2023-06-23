@@ -1,7 +1,9 @@
 import AsServed from './as-served.vue';
 import DrinkScale from './drink-scale.vue';
 import GuideImage from './guide-image.vue';
+import MilkOnCereal from './milk-on-cereal.vue';
 import NoParameters from './no-parameters.vue';
+import Pizza from './pizza.vue';
 
 export default {
   'as-served': AsServed,
@@ -9,8 +11,8 @@ export default {
   'drink-scale': DrinkScale,
   'standard-portion': NoParameters,
   cereal: NoParameters,
-  'milk-on-cereal': NoParameters,
-  pizza: NoParameters,
+  'milk-on-cereal': MilkOnCereal,
+  pizza: Pizza,
   'milk-in-a-hot-drink': NoParameters,
   weight: NoParameters,
 };

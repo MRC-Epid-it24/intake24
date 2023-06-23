@@ -95,8 +95,12 @@ export default defineComponent({
   },
 
   computed: {
+    labelsEnabled() {
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+    },
+
     labels() {
-      if (!this.prompt.imageMap.labels || !this.guideImageData) return [];
+      if (!this.labelsEnabled || !this.guideImageData) return [];
 
       const { guideImageData } = this;
 

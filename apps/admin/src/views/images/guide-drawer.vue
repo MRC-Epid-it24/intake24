@@ -30,9 +30,9 @@
       </g>
     </svg>
     <v-item-group v-model="selectedObjectIdx">
-      <v-container>
+      <v-container fluid>
         <v-row>
-          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" sm="6">
+          <v-col v-for="(object, idx) in objects" :key="object.id" cols="12" lg="4" sm="6">
             <v-item v-slot="{ active }">
               <v-card flat min-height="200px" outlined>
                 <v-toolbar
@@ -105,7 +105,7 @@
               </v-card>
             </v-item>
           </v-col>
-          <v-col v-if="isImageMap && !disabled" cols="12" md="4" sm="6">
+          <v-col v-if="isImageMap && !disabled" cols="12" lg="4" sm="6">
             <v-card
               class="d-flex justify-center align-center"
               flat

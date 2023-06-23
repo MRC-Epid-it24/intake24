@@ -1,6 +1,6 @@
 # Guide images
 
-Guide images are enhanced records of corresponding image map. They allow to assign weights to each of the object defined in [Image map record](/admin/images/image-maps).
+Guide images are enhanced records of corresponding `image map`. They allow to assign localized labels and weights to each of the object defined in [Image map record](/admin/images/image-maps).
 
 ## Detail
 
@@ -16,7 +16,19 @@ Edit tab allows to modify selected image map.
 
 - `Image map` - Select image maps to build guide image
 
-After record is created, existing object areas can be assigned with respective weights.
+### Object area editor
+
+After record is created, existing object areas can be assigned with:
+
+- `Weight` - object's weight in grams
+
+- `Label` - object's localized label, display on hover/selection
+
+:::tip Label settings
+**Display** - Labels are displayed only when enabled in [guide-image-prompt](/admin/surveys/question-types#guide-image-prompt)
+
+**Formatting** - Weight can be embedded into the label with `{weight}` variable placeholder.
+:::
 
 ## Deletion
 

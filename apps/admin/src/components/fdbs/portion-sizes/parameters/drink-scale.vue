@@ -35,6 +35,13 @@
         :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
       ></v-switch>
     </v-col>
+    <v-col cols="12">
+      <v-switch
+        v-model="imageMapLabels"
+        hide-details="auto"
+        :label="$t('fdbs.portionSizes.methods.drink-scale.imageMapLabels')"
+      ></v-switch>
+    </v-col>
   </v-row>
 </template>
 
@@ -73,6 +80,15 @@ export default defineComponent({
       },
       set(value: boolean) {
         this.setParameter('skip-fill-level', value.toString());
+      },
+    },
+    imageMapLabels: {
+      get(): boolean {
+        const value = this.getParameter('image-map-labels')?.value;
+        return value === 'true';
+      },
+      set(value: boolean) {
+        this.setParameter('image-map-labels', value.toString());
       },
     },
   },

@@ -20,6 +20,7 @@
               imageMapData: bowlImageMap,
               id: portionSize.bowlId,
               index: portionSize.bowlIndex,
+              labels: bowlLabels,
             }"
             @confirm="confirmBowl"
             @select="selectBowl"
@@ -41,6 +42,7 @@
               imageMapData: milkLevelImageMap,
               id: portionSize.milkLevelId,
               index: portionSize.milkLevelIndex,
+              labels: milkLevelLabels,
             }"
             @confirm="confirmMilk"
             @select="selectMilk"
@@ -52,9 +54,11 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
@@ -88,6 +92,10 @@ export default defineComponent({
       type: String,
       default: 'gbowl',
     },
+    parameters: {
+      type: Object as PropType<PortionSizeParameters['milk-on-cereal']>,
+      required: true,
+    },
   },
 
   emits: ['update'],
@@ -109,6 +117,16 @@ export default defineComponent({
   },
 
   computed: {
+    labelsEnabled() {
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+    },
+
+    bowlLabels() {
+      if (!this.labelsEnabled || !this.bowlImageMap) return [];
+
+      return this.bowlImageMap.objects.map(({ label }) => this.getLocaleContent(label));
+    },
+
     bowl() {
       return this.portionSize.bowl ?? undefined;
     },
@@ -118,6 +136,12 @@ export default defineComponent({
       if (bowl === undefined) return undefined;
 
       return `${milkLevelImageMapPrefix}${bowl}`;
+    },
+
+    milkLevelLabels() {
+      if (!this.labelsEnabled || !this.milkLevelImageMap) return [];
+
+      return this.milkLevelImageMap.objects.map(({ label }) => this.getLocaleContent(label));
     },
 
     bowlValid() {

@@ -128,12 +128,14 @@ const fdbs: LocaleMessageObject = {
       },
       'guide-image': {
         _: 'Guide image',
+        imageMapLabels: 'Image map labels',
       },
       'drink-scale': {
         _: 'Drink scale',
         drinkwareSet: 'Drinkware set',
         initialLevel: 'Initial fill level',
         skipFillLevelPrompt: 'Skip fill level prompt',
+        imageMapLabels: 'Image map labels',
       },
       'standard-portion': {
         _: 'Standard portion',
@@ -143,9 +145,11 @@ const fdbs: LocaleMessageObject = {
       },
       'milk-on-cereal': {
         _: 'Milk on cereal',
+        imageMapLabels: 'Image map labels',
       },
       pizza: {
         _: 'Pizza',
+        imageMapLabels: 'Image map labels',
       },
       'milk-in-a-hot-drink': {
         _: 'Milk in a hot drink',
