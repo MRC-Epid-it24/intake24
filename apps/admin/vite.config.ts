@@ -130,6 +130,8 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         includeAssets: [/* 'favicon.svg',*/ 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
+          id: '/',
+          start_url: '/',
           name: appName,
           short_name: appName,
           description: pkg.description,
