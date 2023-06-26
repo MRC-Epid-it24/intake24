@@ -20,7 +20,7 @@ import type {
   SurveyState as CurrentSurveyState,
 } from '@intake24/common/types';
 import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
-import { recallLog } from '@intake24/survey/stores';
+import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
   findFood,
   findMeal,
@@ -356,6 +356,7 @@ export const useSurvey = defineStore('survey', {
       try {
         this.user = await surveyService.submit(this.parameters.slug, this.data);
         this.data.submissionTime = new Date();
+        clearPromptStores();
       } finally {
         this.isSubmitting = false;
       }

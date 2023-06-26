@@ -12,6 +12,18 @@ interface FoodOrMealPromptsState<T> {
 
 export const promptStores = new Map<ComponentType, StoreDefinition>();
 
+function storageKey(promptType: ComponentType): string {
+  return `${import.meta.env.VITE_APP_PREFIX ?? ''}${promptType}-state`;
+}
+
+export function clearPromptStores(): void {
+  for (const [promptType, storeDef] of promptStores) {
+    storeDef().$dispose();
+    localStorage.removeItem(storageKey(promptType));
+  }
+  promptStores.clear();
+}
+
 export function getOrCreatePromptStateStore<T extends object>(
   promptType: ComponentType
 ): StoreDefinition {

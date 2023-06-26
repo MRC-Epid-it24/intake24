@@ -56,7 +56,6 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
 
     survey.updateFood({ foodId, update: { portionSize } });
     survey.addFoodFlag({ foodId, flag: 'portion-size-method-complete' });
-    clearStoredState();
   };
 
   return {
