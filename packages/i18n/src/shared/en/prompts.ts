@@ -89,8 +89,9 @@ const prompts: LocaleMessageObject = {
     name: 'Final page',
   },
   foodBrowser: {
-    browse: 'Browse food',
-    search: 'Search food',
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    none: 'No food results. Please try refining your search.',
     back: `Back to '{category}'`,
   },
   foodSearch: {

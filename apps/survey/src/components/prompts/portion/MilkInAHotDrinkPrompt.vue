@@ -27,7 +27,7 @@
                 {{ option.label }}
                 <v-spacer></v-spacer>
                 <quantity-badge
-                  :amount="Number(option.value) * parentServing"
+                  :amount="option.value * parentServing"
                   unit="ml"
                   :valid="portionSize.milkVolumePercentage === option.value"
                 ></quantity-badge>
@@ -45,7 +45,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, PromptStates } from '@intake24/common/prompts';
+import type { PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 
@@ -75,12 +75,9 @@ export default defineComponent({
   },
 
   computed: {
-    localeOptions(): ListOption<string | number>[] {
+    localeOptions() {
       return (this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en)
-        .map((item) => ({
-          ...item,
-          value: Number.parseFloat(item.value.toString()),
-        }))
+        .map((item) => ({ ...item, value: Number(item.value) }))
         .filter(({ value }) => !Number.isNaN(value));
     },
 

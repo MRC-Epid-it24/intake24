@@ -1,23 +1,15 @@
 <template>
   <div>
-    <v-tabs v-model="tab" class="food-explorer" grow height="60px" slider-size="3">
-      <v-tab key="browse">
-        <v-icon left>fas fa-folder-tree</v-icon>
-        {{ $t(`prompts.foodBrowser.browse`) }}
-      </v-tab>
-      <v-tab key="search">
-        <v-text-field
-          v-model="search"
-          clearable
-          flat
-          hide-details
-          :label="$t(`prompts.foodBrowser.search`)"
-          :placeholder="$t(`prompts.foodBrowser.search`)"
-          prepend-icon="$search"
-          solo
-        ></v-text-field>
-      </v-tab>
-    </v-tabs>
+    <v-text-field
+      v-model="search"
+      clearable
+      flat
+      hide-details
+      :label="$t(`prompts.foodBrowser.search`)"
+      outlined
+      :placeholder="$t(`prompts.foodBrowser.search`)"
+      prepend-inner-icon="$search"
+    ></v-text-field>
     <v-tabs-items v-model="tab">
       <v-tab-item key="browse">
         <v-card v-if="requestFailed" flat>
@@ -38,6 +30,9 @@
             }}
           </v-btn>
         </v-card>
+        <v-subheader v-else class="font-weight-bold">
+          {{ $t('prompts.foodBrowser.browse') }}
+        </v-subheader>
         <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
         <category-contents-view
           v-if="currentCategoryContents && !requestInProgress"
@@ -170,11 +165,11 @@ export default defineComponent({
       async () => {
         if (!search.value) {
           searchResults.value = [];
+          tab.value = 0;
           return;
         }
 
-        if (search.value.length < 2) return;
-
+        tab.value = 1;
         await searchCategory();
       },
       { debounce: 500, maxWait: 2000 }
