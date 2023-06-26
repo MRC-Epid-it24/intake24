@@ -196,5 +196,5 @@ pnpm docs:dev
 ```
 
 :::tip
-Documentation is automatically rebuilt and deployed to dedicated site whenever source code is updated.
+Documentation is automatically built and deployed to github pages whenever source code is updated.
 :::

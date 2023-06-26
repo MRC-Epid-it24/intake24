@@ -1,6 +1,6 @@
 # Source code
 
-Install `git` if you don't already have it.
+Project is using `git` versioning system is hosted on [github](https://github.com/MRC-Epid-it24/intake24).
 
 Clone the repository
 
@@ -10,9 +10,9 @@ git clone https://github.com/MRC-Epid-it24/intake24
 
 ## Repository structure
 
-Repository is set as mono-repository with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
+Repository is set as `mono-repository` with [workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces).
 
-Applications are in `apps` folder. Shared components are in `packages` folder.
+Deployable applications are in `apps` folder. Shared components are in `packages` folder.
 
 ```
 .
@@ -24,18 +24,19 @@ Applications are in `apps` folder. Shared components are in `packages` folder.
 │  └─ portal -> Portal website
 │  └─ survey -> Survey application
 ├─ deployment - Ansible playbooks / scripts for deployment
+├─ docker - Docker files for development
 ├─ docs -> Documentation
 └─ packages
-   └─ common (shared code)
-   └─ common-backend (backend shared code, e.g. services)
-   └─ db (database layer)
-   └─ i18n (translations)
-   └─ ui (frontend shared code, e.g. UI components etc)
+   └─ common -> repository-wide shared code
+   └─ common-backend -> backend shared code, e.g. services
+   └─ db -> database layer (models, migrations, etc.)
+   └─ i18n -> translation files for all applications
+   └─ ui -> frontend shared code (admin / survey)
 ```
 
 ## Dependencies
 
-Intake24 dependencies are set up with [pnpm](https://pnpm.io).
+Project is using [pnpm](https://pnpm.io) as a package manager.
 
 Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
 

@@ -1,8 +1,8 @@
 # Requirements
 
-- [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS.
+- [Node.js](https://nodejs.org) runtime environment. System is tested with latest LTS releases.
 
-- [PNPM](https://pnpm.io) Package manager with support for workspaces & mono-repository setup.
+- [PNPM](https://pnpm.io) package manager.
 
 Intake24 system has three main components:
 
@@ -10,7 +10,9 @@ Intake24 system has three main components:
 2. Admin application
 3. Survey application
 
-Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts. For manual/custom deployment, there are few technical aspects to consider.
+Source code is written in Typescript and can be flexibly deployed to various environments. Source code also provides ansible roles for deployment to Ubuntu-based OS. [Deployment](/deployment/) section describes in detail how to use ansible scripts.
+
+For manual deployment, there are few technical aspects to consider.
 
 ## API Server
 
