@@ -149,7 +149,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
         await job.update({ completedAt: new Date(), progress: 1, successful: true });
 
-        await this.notify(job.userId, { jobId, status: 'success' });
+        await this.notify(job.userId, { jobId: dbId, status: 'success' });
       })
       .on('failed', async ({ jobId, failedReason }) => {
         const dbId = jobId.replace('db:', '');
@@ -180,7 +180,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
           stackTrace: stacktrace,
         });
 
-        await this.notify(job.userId, { jobId, status: 'error', message: failedReason });
+        await this.notify(job.userId, { jobId: dbId, status: 'error', message: failedReason });
       });
 
     /*
@@ -217,7 +217,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
     await dbJob.update({ startedAt: new Date() });
 
-    const newJob = ioc.resolve<Job<any>>(name);
+    const newJob = ioc.resolve<Job<typeof dbJob.type>>(name);
     await newJob.run(job);
   }
 
