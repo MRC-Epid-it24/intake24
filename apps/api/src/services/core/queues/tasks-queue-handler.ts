@@ -43,7 +43,10 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   public async init(connection: ConnectionOptions): Promise<void> {
     this.queue = new Queue(this.name, {
       connection,
-      defaultJobOptions: { removeOnComplete: true, removeOnFail: true },
+      defaultJobOptions: {
+        removeOnComplete: { age: 3600 },
+        removeOnFail: { age: 24 * 3600 },
+      },
     });
     this.queue.on('error', (err) => {
       this.logEventError(err);

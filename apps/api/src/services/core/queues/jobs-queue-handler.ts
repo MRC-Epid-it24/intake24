@@ -62,7 +62,14 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
    * @memberof JobsQueueHandler
    */
   public async init(connection: ConnectionOptions): Promise<void> {
-    this.queue = new Queue(this.name, { connection, defaultJobOptions: { delay: 500 } });
+    this.queue = new Queue(this.name, {
+      connection,
+      defaultJobOptions: {
+        delay: 500,
+        removeOnComplete: { age: 3600 },
+        removeOnFail: { age: 24 * 3600 },
+      },
+    });
     this.queue.on('error', (err) => {
       this.logEventError(err);
     });
@@ -182,15 +189,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
 
         await this.notify(job.userId, { jobId: dbId, status: 'error', message: failedReason });
       });
-
-    /*
-     * Clean old jobs when queue is drained
-     * - do not use removeOnComplete / removeOnFail -> can't look up the job details
-     *
-     */
-    this.queueEvents.on('drained', async () => {
-      await this.queue.clean(60 * 1000, 0);
-    });
   }
 
   /**
