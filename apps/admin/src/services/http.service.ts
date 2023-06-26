@@ -1,5 +1,6 @@
 import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import trim from 'lodash/trim';
 
 import type { HttpClient, HttpRequestConfig, SubscribeCallback } from '@intake24/ui/types';
@@ -88,10 +89,9 @@ const httpClient: HttpClient = {
       (response) => response,
       async (err: AxiosError) => {
         const { config, response: { status } = {} } = err;
-        const origRequest = config;
 
         // Exclude non-401s and sign-in 401s (/login)
-        if (!origRequest || status !== 401 || config.url?.match(/auth\/(login|fido|duo|otp)$/))
+        if (!config?.url || status !== 401 || config.url?.match(/auth\/(login|fido|duo|otp)$/))
           return Promise.reject(err);
 
         // Refresh token has failed. Logout the user
@@ -121,18 +121,19 @@ const httpClient: HttpClient = {
             });
         }
 
-        const initTokenSubscriber = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
           subscribeTokenRefresh((errRefreshing) => {
             if (errRefreshing) return reject(errRefreshing);
 
-            return resolve(this.axios(origRequest));
+            return resolve(this.axios(config));
           });
         });
-        return initTokenSubscriber;
       }
     );
   },
 };
+
+axiosRetry(httpClient.axios, { retries: 5, retryDelay: (retryCount) => retryCount * 400 });
 
 export default httpClient;
 

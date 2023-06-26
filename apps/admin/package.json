@@ -24,6 +24,7 @@
     "@tinymce/tinymce-vue": "^3.2.8",
     "@vueuse/core": "^10.2.0",
     "axios": "^1.4.0",
+    "axios-retry": "^3.5.0",
     "cronstrue": "^2.27.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
