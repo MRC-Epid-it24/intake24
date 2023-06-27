@@ -161,6 +161,11 @@ export type PortionSizeStates = {
     milkLevelIndex?: number;
     milkLevelImage: string | null;
   };
+  'parent-food-portion': PortionSizeStateBase & {
+    method: 'parent-food-portion';
+    portionIndex: number | null;
+    portionValue: number | null;
+  };
   pizza: PortionSizeStateBase & {
     method: 'pizza';
     type: {
@@ -188,15 +193,6 @@ export type PortionSizeStates = {
   weight: PortionSizeStateBase & { method: 'weight' };
 };
 
-export type AsServedState = PortionSizeStates['as-served'];
-export type CerealState = PortionSizeStates['cereal'];
-export type GuideImageState = PortionSizeStates['guide-image'];
-export type DrinkScaleState = PortionSizeStates['drink-scale'];
-export type MilkInAHotDrinkState = PortionSizeStates['milk-in-a-hot-drink'];
-export type MilkOnCerealState = PortionSizeStates['milk-on-cereal'];
-export type PizzaState = PortionSizeStates['pizza'];
-export type StandardPortionState = PortionSizeStates['standard-portion'];
-
 export type PortionSizeMethodId = keyof PortionSizeStates;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
 
@@ -209,6 +205,7 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
   'standard-portion',
   'cereal',
   'milk-on-cereal',
+  'parent-food-portion',
   'pizza',
   'milk-in-a-hot-drink',
   'weight',

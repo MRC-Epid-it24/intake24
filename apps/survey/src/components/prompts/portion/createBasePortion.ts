@@ -10,7 +10,10 @@ import { promptType } from '@intake24/ui/util';
 import { Next } from '../actions';
 import { BaseLayout, CardLayout } from '../layouts';
 
-export default <P extends keyof Prompts & keyof PromptStates>() =>
+export default <
+  P extends keyof Prompts & keyof PromptStates,
+  F extends EncodedFood | MissingFood = EncodedFood
+>() =>
   defineComponent({
     name: 'BasePortion',
 
@@ -18,7 +21,7 @@ export default <P extends keyof Prompts & keyof PromptStates>() =>
 
     props: {
       food: {
-        type: Object as PropType<EncodedFood | MissingFood>,
+        type: Object as PropType<F>,
         required: true,
       },
       parentFood: {

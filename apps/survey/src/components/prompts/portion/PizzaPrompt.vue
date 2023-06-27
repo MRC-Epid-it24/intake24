@@ -114,7 +114,7 @@ import { copy } from '@intake24/common/util';
 import createBasePortion from './createBasePortion';
 import { ImageMapSelector, QuantityCard } from './selectors';
 
-export type PizzaImageMap = 'type' | 'thickness' | 'slice';
+type PizzaImageMap = 'type' | 'thickness' | 'slice';
 
 const thicknessFactors = [
   [0.9, 1.0, 1.1, 1.4, 1.6],

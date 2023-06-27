@@ -4,7 +4,7 @@ import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { conditionOps } from '@intake24/common/prompts';
-import { mealSections, PromptSection, surveySections } from '@intake24/common/surveys';
+import { mealSections } from '@intake24/common/surveys';
 import {
   findMeal,
   foodPortionSizeComplete,
@@ -25,6 +25,7 @@ import {
   milkInAHotDrinkComplete,
   milkOnCerealComplete,
   missingFoodComplete,
+  parentFoodPortionComplete,
   pizzaComplete,
   portionSizeMethodSelected,
   standardPortionComplete,
@@ -491,6 +492,28 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'milk-on-cereal')
           ? 'Milk on cereal estimation already complete'
           : 'Milk on cereal estimation not selected'
+      );
+      return false;
+    }
+
+    case 'parent-food-portion-prompt': {
+      if (
+        portionSizeMethodSelected(foodState, 'parent-food-portion') &&
+        !parentFoodPortionComplete(foodState)
+      ) {
+        recallLog().promptCheck(
+          component,
+          true,
+          'Parent food portion selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        component,
+        false,
+        portionSizeMethodSelected(foodState, 'parent-food-portion')
+          ? 'Parent food portion estimation already complete'
+          : 'Parent food portion estimation not selected'
       );
       return false;
     }

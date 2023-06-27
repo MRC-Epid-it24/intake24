@@ -67,22 +67,13 @@ import type { PropType } from 'vue';
 import { defineComponent, toRefs } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type {
-  PortionSizeParameters,
-  RequiredLocaleTranslation,
-  StandardPortionUnit,
-} from '@intake24/common/types';
+import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 
 import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
 import { QuantityCard } from './selectors';
-
-export type StandardUnitRefs = Record<
-  string,
-  { estimateIn: RequiredLocaleTranslation; howMany: RequiredLocaleTranslation }
->;
 
 export default defineComponent({
   name: 'StandardPortionPrompt',

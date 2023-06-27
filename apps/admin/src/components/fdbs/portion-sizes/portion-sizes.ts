@@ -90,10 +90,10 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     imageUrl: portionSizeSelectionImages.use_an_image,
   },
   {
-    method: 'guide-image',
+    method: 'cereal',
     ...psmDefaultAttributes,
-    description: 'in_a_can',
-    imageUrl: portionSizeSelectionImages.in_a_can,
+    description: 'use_an_image',
+    imageUrl: portionSizeSelectionImages.use_an_image,
   },
   {
     method: 'drink-scale',
@@ -102,16 +102,16 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     imageUrl: portionSizeSelectionImages.in_a_mug,
   },
   {
-    method: 'standard-portion',
+    method: 'guide-image',
+    ...psmDefaultAttributes,
+    description: 'in_a_can',
+    imageUrl: portionSizeSelectionImages.in_a_can,
+  },
+  {
+    method: 'milk-in-a-hot-drink',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
     imageUrl: portionSizeSelectionImages.use_a_standard_portion,
-  },
-  {
-    method: 'cereal',
-    ...psmDefaultAttributes,
-    description: 'use_an_image',
-    imageUrl: portionSizeSelectionImages.use_an_image,
   },
   {
     method: 'milk-on-cereal',
@@ -120,16 +120,22 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     imageUrl: portionSizeSelectionImages.in_a_bowl,
   },
   {
+    method: 'standard-portion',
+    ...psmDefaultAttributes,
+    description: 'use_a_standard_portion',
+    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
+  },
+  {
+    method: 'parent-food-portion',
+    ...psmDefaultAttributes,
+    description: 'use_a_standard_portion',
+    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
+  },
+  {
     method: 'pizza',
     ...psmDefaultAttributes,
     description: 'use_an_image',
     imageUrl: portionSizeSelectionImages.use_an_image,
-  },
-  {
-    method: 'milk-in-a-hot-drink',
-    ...psmDefaultAttributes,
-    description: 'use_a_standard_portion',
-    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
   },
   {
     method: 'weight',

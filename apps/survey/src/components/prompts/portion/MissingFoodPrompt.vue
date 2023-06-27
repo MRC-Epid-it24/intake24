@@ -29,7 +29,6 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import { VTextarea, VTextField } from 'vuetify/lib';
 
@@ -44,14 +43,7 @@ export default defineComponent({
 
   components: { VTextField, VTextarea },
 
-  mixins: [createBasePortion<'missing-food-prompt'>()],
-
-  props: {
-    food: {
-      type: Object as PropType<MissingFood>,
-      required: true,
-    },
-  },
+  mixins: [createBasePortion<'missing-food-prompt', MissingFood>()],
 
   emits: ['update'],
 

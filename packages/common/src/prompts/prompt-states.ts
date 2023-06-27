@@ -1,15 +1,4 @@
-import type {
-  AsServedState,
-  CerealState,
-  DrinkScaleState,
-  FoodState,
-  GuideImageState,
-  MilkInAHotDrinkState,
-  MilkOnCerealState,
-  MissingFood,
-  PizzaState,
-  StandardPortionState,
-} from '../types';
+import type { FoodState, MissingFood, PortionSizeStates } from '../types';
 import type { FoodHeader } from '../types/http';
 
 export type AssociatedFoodPromptItemState = {
@@ -20,7 +9,7 @@ export type AssociatedFoodPromptItemState = {
 
 export type PromptStates = {
   'as-served-prompt': {
-    portionSize: AsServedState;
+    portionSize: PortionSizeStates['as-served'];
     panel: number;
     servingImageConfirmed: boolean;
     leftoversImageConfirmed: boolean;
@@ -29,7 +18,7 @@ export type PromptStates = {
     linkedQuantityConfirmed: boolean;
   };
   'cereal-prompt': {
-    portionSize: CerealState;
+    portionSize: PortionSizeStates['cereal'];
     panel: number;
     bowlConfirmed: boolean;
     servingImageConfirmed: boolean;
@@ -38,7 +27,7 @@ export type PromptStates = {
   };
   'direct-weight-prompt': never;
   'drink-scale-prompt': {
-    portionSize: DrinkScaleState;
+    portionSize: PortionSizeStates['drink-scale'];
     panel: number;
     objectConfirmed: boolean;
     quantityConfirmed: boolean;
@@ -46,17 +35,17 @@ export type PromptStates = {
     leftoversPrompt?: boolean;
   };
   'guide-image-prompt': {
-    portionSize: GuideImageState;
+    portionSize: PortionSizeStates['guide-image'];
     panel: number;
     objectConfirmed: boolean;
     quantityConfirmed: boolean;
   };
   'milk-in-a-hot-drink-prompt': {
-    portionSize: MilkInAHotDrinkState;
+    portionSize: PortionSizeStates['milk-in-a-hot-drink'];
     panel: number;
   };
   'milk-on-cereal-prompt': {
-    portionSize: MilkOnCerealState;
+    portionSize: PortionSizeStates['milk-on-cereal'];
     panel: number;
     bowlConfirmed: boolean;
     milkLevelConfirmed: boolean;
@@ -65,8 +54,12 @@ export type PromptStates = {
     info: NonNullable<MissingFood['info']>;
     panel: number;
   };
+  'parent-food-portion-prompt': {
+    portionSize: PortionSizeStates['parent-food-portion'];
+    panel: number;
+  };
   'pizza-prompt': {
-    portionSize: PizzaState;
+    portionSize: PortionSizeStates['pizza'];
     panel: number;
     confirmed: {
       type: boolean;
@@ -79,7 +72,7 @@ export type PromptStates = {
     option: number | null;
   };
   'standard-portion-prompt': {
-    portionSize: StandardPortionState;
+    portionSize: PortionSizeStates['standard-portion'];
     panel: number;
     quantityConfirmed: boolean;
   };

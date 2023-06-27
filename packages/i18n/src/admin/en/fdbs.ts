@@ -147,6 +147,9 @@ const fdbs: LocaleMessageObject = {
         _: 'Milk on cereal',
         imageMapLabels: 'Image map labels',
       },
+      'parent-food-portion': {
+        _: 'Portion of parent food',
+      },
       pizza: {
         _: 'Pizza',
         imageMapLabels: 'Image map labels',

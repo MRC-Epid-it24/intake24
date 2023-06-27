@@ -144,6 +144,20 @@ export const milkInAHotDrinkMapper = (
   ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
+export const parentFoodPortionMapper = (
+  foodId: string,
+  state: PortionSizeStates['parent-food-portion']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const { leftoversWeight, servingWeight, portionIndex, portionValue } = state;
+
+  return [
+    { name: 'portionIndex', value: portionIndex?.toString() ?? '' },
+    { name: 'portionValue', value: portionValue?.toString() ?? '' },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
+};
+
 export const milkOnCerealMapper = (
   foodId: string,
   state: PortionSizeStates['milk-on-cereal']
@@ -221,6 +235,7 @@ export const portionSizeMappers: Record<
   'guide-image': guideImageMapper,
   'milk-in-a-hot-drink': milkInAHotDrinkMapper,
   'milk-on-cereal': milkOnCerealMapper,
+  'parent-food-portion': parentFoodPortionMapper,
   pizza: pizzaPortionMapper,
   'standard-portion': standardPortionMapper,
   weight: genericMapper,

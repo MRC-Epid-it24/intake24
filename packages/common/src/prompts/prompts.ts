@@ -157,6 +157,7 @@ export type Prompts = {
     component: 'missing-food-prompt';
   };
   'parent-food-portion-prompt': BasePrompt & {
+    component: 'parent-food-portion-prompt';
     options: Record<'__default' | string, LocaleOptionList<number>>;
     orientation: RadioOrientation;
   };

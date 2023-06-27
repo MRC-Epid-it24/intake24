@@ -130,6 +130,24 @@ export function milkOnCerealComplete(food: FoodState): boolean {
   return food.portionSize.bowlIndex !== undefined && food.portionSize.milkLevelIndex !== undefined;
 }
 
+export function parentFoodPortionComplete(food: FoodState) {
+  if (
+    food.type !== 'encoded-food' ||
+    !food.portionSize ||
+    !food.flags.includes('portion-size-method-complete')
+  )
+    return false;
+
+  if (food.portionSize.method !== 'parent-food-portion') {
+    console.warn(
+      `Selected portion size method is "parent-food-portion" but portion size data is for ${food.portionSize.method}`
+    );
+    return false;
+  }
+
+  return food.portionSize.portionIndex !== null && food.portionSize.portionValue !== null;
+}
+
 export function pizzaComplete(food: FoodState): boolean {
   if (
     food.type !== 'encoded-food' ||
@@ -191,6 +209,7 @@ export const portionSizeCompleteChecks = {
   'guide-image': guideImageComplete,
   'milk-in-a-hot-drink': milkInAHotDrinkComplete,
   'milk-on-cereal': milkOnCerealComplete,
+  'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
   'standard-portion': standardPortionComplete,
   weight: weightComplete,
