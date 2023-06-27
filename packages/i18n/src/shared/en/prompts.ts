@@ -252,6 +252,7 @@ const prompts: LocaleMessageObject = {
       in_unwrapped_bars: 'In unwrapped bars',
       in_whole_fruit_vegetables: 'In whole fruit / vegetables',
       in_wrapped_bars: 'In wrapped bars',
+      milk_on_cereal: 'Milk on cereal',
       on_a_knife: 'On a knife',
       on_a_plate: 'On a plate',
       slice_from_a_large_cake: 'Slice from a large cake',
@@ -367,6 +368,13 @@ const prompts: LocaleMessageObject = {
       leftovers:
         'How much of the missing food or dish did you eat, e.g. 2 teaspoons, 1 handful, 125 grams, ½ cup etc?',
     },
+  },
+  parentFoodPortion: {
+    name: 'Parent food portion',
+    text: '{food}',
+    // description: 'Placeholder',
+    label: 'How much {food} did you have in your {parentFood}?',
+    confirm: 'I had that much',
   },
   pizza: {
     name: 'Pizza',

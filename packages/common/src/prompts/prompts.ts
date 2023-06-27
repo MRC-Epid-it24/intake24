@@ -158,7 +158,7 @@ export type Prompts = {
   };
   'parent-food-portion-prompt': BasePrompt & {
     component: 'parent-food-portion-prompt';
-    options: Record<'__default' | string, LocaleOptionList<number>>;
+    options: Record<'_default' | string, LocaleOptionList<number>>;
     orientation: RadioOrientation;
   };
   'pizza-prompt': BasePrompt & {

@@ -67,6 +67,7 @@ export const portionSizeSelectionImages = {
   in_unwrapped_bars: 'portion/Gcdmc.jpg',
   in_whole_fruit_vegetables: 'portion/Gapl.jpg',
   in_wrapped_bars: 'portion/Gcdmb.jpg',
+  milk_on_cereal: 'portion/standard-portion.jpg',
   on_a_knife: 'portion/butk4.jpg',
   on_a_plate: 'portion/m332.jpg',
   slice_from_a_large_cake: 'portion/m216.jpg',

@@ -7,6 +7,9 @@
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
             </template>
+            <template #parentFood>
+              <span class="font-weight-medium">{{ parentFoodName }}</span>
+            </template>
           </i18n>
           <template #actions>
             <expansion-panel-actions :valid="!!portionSize.portionValue"></expansion-panel-actions>
@@ -42,11 +45,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useFoodUtils } from '@intake24/survey/composables';
 
 import createBasePortion from './createBasePortion';
 import { QuantityBadge } from './selectors';
@@ -67,6 +71,14 @@ export default defineComponent({
 
   emits: ['update'],
 
+  setup(props) {
+    const { food, parentFood } = toRefs(props);
+
+    const { foodName, parentFoodName } = useFoodUtils(food, parentFood);
+
+    return { foodName, parentFoodName };
+  },
+
   data() {
     return {
       ...copy(this.initialState),
@@ -77,7 +89,8 @@ export default defineComponent({
     category() {
       const categories = Object.keys(this.prompt.options);
       return (
-        this.food.data.categories.find((category) => categories.includes(category)) ?? '__default'
+        this.parentFood.data.categories.find((category) => categories.includes(category)) ??
+        '_default'
       );
     },
     localeOptions() {
@@ -90,7 +103,7 @@ export default defineComponent({
     },
 
     parentServing() {
-      return this.parentFood.portionSize?.servingWeight ?? 100;
+      return this.parentFood.portionSize?.servingWeight ?? 0;
     },
 
     portionValid() {

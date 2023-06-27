@@ -87,7 +87,7 @@ export const parentFoodPortionPrompt: Prompts['parent-food-portion-prompt'] = co
   id: 'parent-food-portion-prompt',
   name: 'Parent food portion',
   options: {
-    __default: {
+    _default: {
       en: [
         { value: 1.5, label: 'Damp' },
         { value: 3, label: 'Average' },
