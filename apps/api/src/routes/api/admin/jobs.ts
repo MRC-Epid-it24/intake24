@@ -22,22 +22,12 @@ export default () => {
 
   router
     .route('/:jobId')
-    .get(permission('jobs|read'), validation.entry('jobId'), wrapAsync(jobController.read))
-    .delete(permission('jobs|delete'), validation.entry('jobId'), wrapAsync(jobController.destroy));
+    .get(permission('jobs|read'), wrapAsync(jobController.read))
+    .delete(permission('jobs|delete'), wrapAsync(jobController.destroy));
 
-  router.get(
-    '/:jobId/download',
-    permission('jobs|read'),
-    validation.entry('jobId'),
-    wrapAsync(jobController.download)
-  );
+  router.get('/:jobId/download', permission('jobs|read'), wrapAsync(jobController.download));
 
-  router.post(
-    '/:jobId/repeat',
-    permission('jobs|edit'),
-    validation.entry('jobId'),
-    wrapAsync(jobController.repeat)
-  );
+  router.post('/:jobId/repeat', permission('jobs|edit'), wrapAsync(jobController.repeat));
 
   return router;
 };

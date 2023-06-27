@@ -159,6 +159,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
+  'parent-food-portion-prompt': {
+    tabs: [...baseTab, 'options'],
+    sections: ['foods'],
+  },
   'pizza-prompt': {
     tabs: [...baseTab, 'options'],
     sections: ['foods'],

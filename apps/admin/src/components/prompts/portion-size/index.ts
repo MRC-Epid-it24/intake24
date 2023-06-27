@@ -5,6 +5,7 @@ import GuideImagePrompt from './guide-image-prompt.vue';
 import MilkInAHotDrinkPrompt from './milk-in-a-hot-drink-prompt.vue';
 import MilkOnCerealPrompt from './milk-on-cereal-prompt.vue';
 import MissingFoodPrompt from './missing-food-prompt.vue';
+import ParentFoodPortionPrompt from './parent-food-portion-prompt.vue';
 import PizzaPrompt from './pizza-prompt.vue';
 import PortionSizeOptionPrompt from './portion-size-option-prompt.vue';
 import StandardPortionPrompt from './standard-portion-prompt.vue';
@@ -17,6 +18,7 @@ export default {
   MilkInAHotDrinkPrompt,
   MilkOnCerealPrompt,
   MissingFoodPrompt,
+  ParentFoodPortionPrompt,
   PizzaPrompt,
   PortionSizeOptionPrompt,
   StandardPortionPrompt,

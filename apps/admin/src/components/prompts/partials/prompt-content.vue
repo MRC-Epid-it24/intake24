@@ -5,13 +5,12 @@
         <v-icon left>fas fa-location-arrow</v-icon>{{ key }}
       </v-tab>
       <v-tab-item v-for="(item, key) in items" :key="key" class="pl-3">
-        <language-selector v-model="items[key]" :label="getKeyTranslation(key)" @input="update">
+        <language-selector v-model="items[key]" :label="getKeyTranslation(key)">
           <template v-for="lang in Object.keys(items[key])" #[`lang.${lang}`]>
             <html-editor
               v-if="richTextOnly.includes(key.toString())"
               :key="lang"
               v-model="items[key][lang]"
-              @input="update"
             ></html-editor>
             <v-text-field
               v-else
@@ -20,7 +19,6 @@
               hide-details="auto"
               :label="getKeyTranslation(key)"
               outlined
-              @input="update"
             ></v-text-field>
           </template>
         </language-selector>
@@ -31,14 +29,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
+import { useVModel } from '@vueuse/core';
 import has from 'lodash/has';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { BasePrompt } from '@intake24/common/prompts';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { capitalize, copy } from '@intake24/common/util';
+import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
 /*
@@ -59,12 +57,10 @@ export default defineComponent({
     },
   },
 
-  emits: ['update:i18n'],
-
   setup(props, { emit }) {
     const i18n = useI18n();
+    const items = useVModel(props, 'i18n', emit);
 
-    const items = ref(copy(props.i18n));
     const richTextOnly = ['description'];
 
     const getKeyTranslation = (key: string | number) => {
@@ -75,24 +71,10 @@ export default defineComponent({
       return check ? i18n.t(`survey-schemes.questions.${key}._`).toString() : capitalize(key);
     };
 
-    const update = () => {
-      emit('update:i18n', items.value);
-    };
-
-    watch(
-      () => props.i18n,
-      (val) => {
-        if (deepEqual(val, items.value)) return;
-
-        items.value = copy(val);
-      }
-    );
-
     return {
       items,
       richTextOnly,
       getKeyTranslation,
-      update,
     };
   },
 });

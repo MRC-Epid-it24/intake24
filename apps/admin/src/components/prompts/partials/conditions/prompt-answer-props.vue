@@ -26,24 +26,30 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import sectionMixin from './section-mixin';
+import { useSelects } from '../';
 
 export default defineComponent({
   name: 'PromptAnswerProps',
-
-  mixins: [sectionMixin],
 
   props: {
     promptId: {
       type: String,
       required: true,
     },
+    section: {
+      type: String,
+      required: true,
+    },
   },
 
-  methods: {
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
-    },
+  setup(props, { emit }) {
+    const { sections } = useSelects();
+
+    const update = (field: string, value: any) => {
+      emit(`update:${field}`, value);
+    };
+
+    return { sections, update };
   },
 });
 </script>

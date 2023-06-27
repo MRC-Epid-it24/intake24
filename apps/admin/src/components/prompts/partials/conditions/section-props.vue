@@ -17,17 +17,26 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import sectionMixin from './section-mixin';
+import { useSelects } from '../';
 
 export default defineComponent({
   name: 'SectionProps',
 
-  mixins: [sectionMixin],
-
-  methods: {
-    update(field: string, value: any) {
-      this.$emit(`update:${field}`, value);
+  props: {
+    section: {
+      type: String,
+      required: true,
     },
+  },
+
+  setup(props, { emit }) {
+    const { sections } = useSelects();
+
+    const update = (field: string, value: any) => {
+      emit(`update:${field}`, value);
+    };
+
+    return { sections, update };
   },
 });
 </script>

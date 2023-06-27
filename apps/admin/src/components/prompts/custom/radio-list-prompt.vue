@@ -47,7 +47,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { selectListPrompt } from '../partials';
+import { selectListPrompt, useSelects } from '../partials';
 
 export default defineComponent({
   name: 'RadioListPrompt',
@@ -61,13 +61,10 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      orientations: ['column', 'row'].map((value) => ({
-        text: this.$t(`survey-schemes.questions.orientation.${value}`),
-        value,
-      })),
-    };
+  setup() {
+    const orientations = useSelects();
+
+    return { orientations };
   },
 });
 </script>

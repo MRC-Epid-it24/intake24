@@ -60,6 +60,7 @@ export const portionSizeComponentTypes = [
   'milk-in-a-hot-drink-prompt',
   'milk-on-cereal-prompt',
   'missing-food-prompt',
+  'parent-food-portion-prompt',
   'pizza-prompt',
   'portion-size-option-prompt',
   'standard-portion-prompt',
@@ -154,6 +155,10 @@ export type Prompts = {
   };
   'missing-food-prompt': BasePrompt & {
     component: 'missing-food-prompt';
+  };
+  'parent-food-portion-prompt': BasePrompt & {
+    options: Record<'__default' | string, LocaleOptionList<number>>;
+    orientation: RadioOrientation;
   };
   'pizza-prompt': BasePrompt & {
     component: 'pizza-prompt';

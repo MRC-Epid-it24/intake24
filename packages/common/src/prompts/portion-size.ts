@@ -80,6 +80,24 @@ export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
   name: 'Missing food',
 });
 
+export const parentFoodPortionPrompt: Prompts['parent-food-portion-prompt'] = copy({
+  ...basePrompt,
+  component: 'parent-food-portion-prompt',
+  type: 'portion-size',
+  id: 'parent-food-portion-prompt',
+  name: 'Parent food portion',
+  options: {
+    __default: {
+      en: [
+        { value: 1.5, label: 'Damp' },
+        { value: 3, label: 'Average' },
+        { value: 5, label: 'Drowned' },
+      ],
+    },
+  },
+  orientation: 'column',
+});
+
 export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
   ...basePrompt,
   component: 'pizza-prompt',
@@ -122,6 +140,7 @@ export const portionSizePromptQuestions: Prompt[] = [
   milkInAHotDrinkPrompt,
   milkOnCerealPrompt,
   missingFoodPrompt,
+  parentFoodPortionPrompt,
   pizzaPrompt,
   portionSizeOptionPrompt,
   standardPortionPrompt,

@@ -140,8 +140,9 @@ import draggable from 'vuedraggable';
 import type { ActionItem, Actions } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { withIdList } from '@intake24/admin/util';
-import { actionTypes, promptLayouts } from '@intake24/common/prompts';
 import { copy, randomString } from '@intake24/common/util';
+
+import { useSelects } from './use-selects';
 
 export const defaultAction: ActionItem = {
   type: 'next',
@@ -165,30 +166,25 @@ export default defineComponent({
 
   emits: ['update:actions'],
 
+  setup() {
+    const { actionList, layoutList } = useSelects();
+
+    return {
+      actionList,
+      layoutList,
+    };
+  },
+
   data() {
     return {
       toggle: !!this.actions,
       currentActions: this.actions
         ? { ...this.actions, items: withIdList(this.actions.items) }
         : undefined,
-      actionTypes,
-      promptLayouts,
     };
   },
 
   computed: {
-    actionList(): { type: string; text: string }[] {
-      return this.actionTypes.map((type) => ({
-        type,
-        text: this.$t(`survey-schemes.actions.types.${type}`).toString(),
-      }));
-    },
-    layoutList(): { text: string; value: string }[] {
-      return this.promptLayouts.map((value) => ({
-        value,
-        text: this.$t(`survey-schemes.actions.layouts.${value}`).toString(),
-      }));
-    },
     outputActions(): Actions | undefined {
       const { currentActions } = this;
       if (!currentActions) return undefined;

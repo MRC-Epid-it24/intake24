@@ -422,11 +422,16 @@ const surveySchemes: LocaleMessageObject = {
     },
     'missing-food-prompt': {
       title: 'Missing food',
-      subtitle: 'Collectin information about missing food',
+      subtitle: 'Collecting information about missing food',
     },
     'pizza-prompt': {
       title: 'Pizza',
       subtitle: 'Use the "pizza" method to estimate the portion size',
+    },
+    'parent-food-portion-prompt': {
+      title: 'Portion of parent food',
+      subtitle: 'Use the "portion of parent food" method to estimate the portion size',
+      portions: 'Category portions list',
     },
     'portion-size-option-prompt': {
       title: 'Portion size estimation method',
