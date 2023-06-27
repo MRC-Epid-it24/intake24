@@ -87,6 +87,7 @@ export default defineComponent({
             endMeal: this.getMealName(endMeal),
             endMealTime: this.getMealTime(endMeal) ?? '',
           },
+          sanitize: true,
         });
 
       if (startMeal)
@@ -96,12 +97,14 @@ export default defineComponent({
             meal: this.getMealName(startMeal),
             mealTime: this.getMealTime(startMeal) ?? '',
           },
+          sanitize: true,
         });
 
       if (endMeal)
         return this.getLocaleContent(this.prompt.i18n.after, {
           path: `prompts.${this.type}.after`,
           params: { meal: this.getMealName(endMeal), mealTime: this.getMealTime(endMeal) ?? '' },
+          sanitize: true,
         });
 
       return '';

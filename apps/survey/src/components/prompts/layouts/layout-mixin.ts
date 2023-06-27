@@ -88,6 +88,7 @@ export default defineComponent({
       return this.getLocaleContent(this.prompt.i18n.description, {
         path: `prompts.${this.type}.description`,
         params: this.params,
+        sanitize: true,
       });
     },
 

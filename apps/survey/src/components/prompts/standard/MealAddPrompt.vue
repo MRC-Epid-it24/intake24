@@ -107,6 +107,7 @@ export default defineComponent({
     localeDescription(): string | undefined {
       return this.getLocaleContent(this.prompt.i18n.description, {
         path: `${this.i18nPrefix}.description`,
+        sanitize: true,
       });
     },
 

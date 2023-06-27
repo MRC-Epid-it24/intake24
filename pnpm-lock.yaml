@@ -789,6 +789,9 @@ importers:
       axios-retry:
         specifier: ^3.5.0
         version: 3.5.0
+      dompurify:
+        specifier: ^3.0.3
+        version: 3.0.3
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -826,6 +829,9 @@ importers:
         specifier: ^2.6.15
         version: 2.6.15(vue@2.7.14)
     devDependencies:
+      '@types/dompurify':
+        specifier: ^3.0.2
+        version: 3.0.2
       '@types/jsdom':
         specifier: ^21.1.1
         version: 21.1.1

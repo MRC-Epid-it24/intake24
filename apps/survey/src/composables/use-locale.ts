@@ -1,3 +1,4 @@
+import dompurify from 'dompurify';
 import has from 'lodash/has';
 
 import type {
@@ -10,6 +11,7 @@ import { replaceParams, useI18n } from '@intake24/i18n';
 export type LocaleContentOptions = {
   path?: string;
   params?: Dictionary<string | number>;
+  sanitize?: boolean;
 };
 
 export const useLocale = () => {
@@ -17,8 +19,16 @@ export const useLocale = () => {
     content?: LocaleTranslation | RequiredLocaleTranslation | string,
     options: LocaleContentOptions = {}
   ): string => {
-    const { path, params = {} } = options;
+    const { path, params = {}, sanitize = false } = options;
     const i18n = useI18n();
+
+    if (sanitize) {
+      for (const key of Object.keys(params)) {
+        params[key] = dompurify.sanitize(params[key].toString(), {
+          USE_PROFILES: { mathMl: false, svg: false, svgFilters: false, html: false },
+        });
+      }
+    }
 
     if (typeof content === 'string') return replaceParams(content, params);
 
