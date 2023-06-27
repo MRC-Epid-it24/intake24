@@ -143,14 +143,17 @@ export default defineComponent({
       return;
     }
 
-    window.onpopstate = this.onPopState;
-
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
     this.survey.startRecall();
   },
 
   async mounted() {
+    addEventListener('popstate', this.onPopState);
     await this.nextPrompt();
+  },
+
+  beforeDestroy() {
+    removeEventListener('popstate', this.onPopState);
   },
 
   methods: {
