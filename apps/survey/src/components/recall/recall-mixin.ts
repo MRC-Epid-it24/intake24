@@ -164,7 +164,6 @@ export default defineComponent({
           selection.element.type === 'meal' &&
           getMealIndex(meals, selection.element.mealId) === undefined
         ) {
-          console.debug('History: meal does not exist');
           return false;
         }
         if (
@@ -172,7 +171,6 @@ export default defineComponent({
           selection.element.type === 'food' &&
           getFoodIndex(meals, selection.element.foodId) === undefined
         ) {
-          console.debug('History: food does not exist');
           return false;
         }
         return true;
@@ -188,8 +186,6 @@ export default defineComponent({
         const selection = event.state.selection as Selection;
         const timeStamp = event.state.timeStamp as number;
 
-        console.debug(`Pop state: ${promptInstance.prompt.id}, ${JSON.stringify(selection)}`);
-
         if (isValidSelection(this.meals, selection)) {
           this.setSelection(selection);
           this.currentPrompt = promptInstance;
@@ -199,8 +195,6 @@ export default defineComponent({
         } else {
           history.forward();
         }
-      } else {
-        console.debug(`Ignoring unexpected state:`, event.state);
       }
     },
 
@@ -409,10 +403,7 @@ export default defineComponent({
           const selection = JSON.parse(JSON.stringify(this.selection));
           const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
 
-          if (selection.element !== null && promptInstance) {
-            console.debug(
-              `Push state: ${promptInstance.prompt.id}, selection: ${JSON.stringify(selection)}`
-            );
+          if (selection && promptInstance) {
             history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
           }
         }
