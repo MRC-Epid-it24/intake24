@@ -45,12 +45,12 @@ module.exports = {
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         'INSERT INTO food_nutrient_mapping (food_local_id, nutrient_table_id, v3_nutrient_table_record_id) SELECT food_local_id, nutrient_table_id, nutrient_table_record_id FROM v3_food_nutrient_mapping_1',
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         `UPDATE food_nutrient_mapping SET nutrient_table_record_id = nutrient_table_records.id from nutrient_table_records
                 WHERE food_nutrient_mapping.nutrient_table_id = nutrient_table_records.nutrient_table_id
                   AND food_nutrient_mapping.v3_nutrient_table_record_id = nutrient_table_records.nutrient_table_record_id`,

@@ -29,7 +29,7 @@ const surveyRespondentController = ({
     const survey = await Survey.findOne({
       where: { slug },
       include: [
-        { association: 'surveyScheme', attributes: ['id', 'type', 'meals', 'questions'] },
+        { association: 'surveyScheme', attributes: ['id', 'type', 'meals', 'prompts'] },
         {
           association: 'feedbackScheme',
           attributes: [
@@ -68,7 +68,7 @@ const surveyRespondentController = ({
     } = survey;
 
     let { meals } = surveyScheme;
-    const { questions } = surveyScheme;
+    const { prompts } = surveyScheme;
 
     let state: SurveyStatus;
     const today = new Date();
@@ -80,22 +80,21 @@ const surveyRespondentController = ({
     // 1) Meals - override whole list
     if (surveySchemeOverrides.meals.length) meals = [...surveySchemeOverrides.meals];
 
-    // 2) Questions - merge by Question ID
-    if (surveySchemeOverrides.questions.length) {
-      const flattenScheme = flattenSchemeWithSection(surveyScheme.questions);
-      for (const question of surveySchemeOverrides.questions) {
-        const match = flattenScheme.find((item) => item.id === question.id);
+    // 2) Prompts - merge by Prompt ID
+    if (surveySchemeOverrides.prompts.length) {
+      const flattenScheme = flattenSchemeWithSection(surveyScheme.prompts);
+      for (const prompt of surveySchemeOverrides.prompts) {
+        const match = flattenScheme.find((item) => item.id === prompt.id);
         if (!match) continue;
 
         const { section } = match;
 
         if (isMealSection(section)) {
-          const index = questions.meals[section].findIndex((item) => item.id === question.id);
-          if (index !== -1)
-            questions.meals[section].splice(index, 1, merge<Prompt>(match, question));
+          const index = prompts.meals[section].findIndex((item) => item.id === prompt.id);
+          if (index !== -1) prompts.meals[section].splice(index, 1, merge<Prompt>(match, prompt));
         } else {
-          const index = questions[section].findIndex((item) => item.id === question.id);
-          if (index !== -1) questions[section].splice(index, 1, merge<Prompt>(match, question));
+          const index = prompts[section].findIndex((item) => item.id === prompt.id);
+          if (index !== -1) prompts[section].splice(index, 1, merge<Prompt>(match, prompt));
         }
       }
     }
@@ -106,7 +105,7 @@ const surveyRespondentController = ({
       name,
       state,
       locale,
-      surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, questions },
+      surveyScheme: { id: surveyScheme.id, type: surveyScheme.type, meals, prompts },
       feedbackScheme,
       numberOfSubmissionsForFeedback,
       storeUserSessionOnServer,

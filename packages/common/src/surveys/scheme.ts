@@ -5,7 +5,7 @@ export const schemeTypes = ['default'] as const;
 export type SchemeType = (typeof schemeTypes)[number];
 
 export const surveySections = ['preMeals', 'postMeals', 'submission'] as const;
-export type SurveyQuestionSection = (typeof surveySections)[number];
+export type SurveyPromptSection = (typeof surveySections)[number];
 
 export const mealSections = ['preFoods', 'foods', 'postFoods'] as const;
 export type MealSection = (typeof mealSections)[number];
@@ -14,33 +14,33 @@ export const isMealSection = (section: any): section is MealSection => {
   return mealSections.includes(section);
 };
 
-export const isSurveySection = (section: any): section is SurveyQuestionSection => {
+export const isSurveySection = (section: any): section is SurveyPromptSection => {
   return surveySections.includes(section);
 };
 
-export type SurveySection = SurveyQuestionSection | 'meals';
+export type SurveySection = SurveyPromptSection | 'meals';
 
-export type PromptSection = SurveyQuestionSection | MealSection;
+export type PromptSection = SurveyPromptSection | MealSection;
 
-export type GenericQuestions = Record<SurveyQuestionSection, Prompt[]>;
+export type GenericPrompts = Record<SurveyPromptSection, Prompt[]>;
 
-export type MealQuestions = Record<MealSection, Prompt[]>;
+export type MealPrompts = Record<MealSection, Prompt[]>;
 
-export interface RecallQuestions extends GenericQuestions {
-  meals: MealQuestions;
+export interface RecallPrompts extends GenericPrompts {
+  meals: MealPrompts;
 }
 
-export const flattenScheme = (scheme: RecallQuestions): Prompt[] =>
-  Object.values(scheme).reduce<Prompt[]>((acc, questions) => {
-    acc.push(...(Array.isArray(questions) ? questions : flattenScheme(questions)));
+export const flattenScheme = (scheme: RecallPrompts): Prompt[] =>
+  Object.values(scheme).reduce<Prompt[]>((acc, prompts) => {
+    acc.push(...(Array.isArray(prompts) ? prompts : flattenScheme(prompts)));
     return acc;
   }, []);
 
-export const flattenSchemeWithSection = (scheme: RecallQuestions): PromptWithSection[] =>
-  Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, questions]) => {
-    const items = Array.isArray(questions)
-      ? questions.map((question) => ({ ...question, section }))
-      : flattenSchemeWithSection(questions);
+export const flattenSchemeWithSection = (scheme: RecallPrompts): PromptWithSection[] =>
+  Object.entries(scheme).reduce<PromptWithSection[]>((acc, [section, prompts]) => {
+    const items = Array.isArray(prompts)
+      ? prompts.map((prompt) => ({ ...prompt, section }))
+      : flattenSchemeWithSection(prompts);
 
     acc.push(...items);
     return acc;
@@ -94,7 +94,7 @@ export const defaultExport: ExportSection[] = [
   { id: 'portionSizes', fields: [] },
 ];
 
-export const defaultQuestions: RecallQuestions = {
+export const defaultPrompts: RecallPrompts = {
   preMeals: [],
   meals: {
     preFoods: [],
@@ -107,10 +107,10 @@ export const defaultQuestions: RecallQuestions = {
 
 export type SchemeOverrides = {
   meals: Meal[];
-  questions: Prompt[];
+  prompts: Prompt[];
 };
 
 export const defaultOverrides: SchemeOverrides = {
   meals: [],
-  questions: [],
+  prompts: [],
 };

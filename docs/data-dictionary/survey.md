@@ -23,5 +23,5 @@ Object that stores details of the current scheme, retrieved by `surveySvc`
 - `id`
 - `meals` - array of meal objects: containing `name` and `time` (24hr)
 - `name`
-- `questions` - object containing arrays of question objects for each of the question stages (custom recall flow)
+- `prompts` - object containing arrays of prompt objects for each of the prompt stages (custom recall flow)
 - `type` - data-driven or legacy

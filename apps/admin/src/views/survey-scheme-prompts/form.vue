@@ -6,29 +6,29 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.question.id"
+                v-model="form.prompt.id"
                 disabled
                 hide-details="auto"
-                :label="$t('survey-schemes.questions.internal.id._')"
-                :messages="$t('survey-schemes.questions.internal.id.hint')"
+                :label="$t('survey-schemes.prompts.internal.id._')"
+                :messages="$t('survey-schemes.prompts.internal.id.hint')"
                 name="id"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.question.name"
+                v-model="form.prompt.name"
                 disabled
                 hide-details="auto"
-                :label="$t('survey-schemes.questions.internal.name._')"
-                :messages="$t('survey-schemes.questions.internal.name.hint')"
+                :label="$t('survey-schemes.prompts.internal.name._')"
+                :messages="$t('survey-schemes.prompts.internal.name.hint')"
                 name="name"
                 outlined
               ></v-text-field>
             </v-col>
             <v-col align="center">
               <v-btn class="pa-6" color="primary" outlined x-large @click="edit">
-                <v-icon left>$edit</v-icon>{{ $t('survey-scheme-questions.editTemplate') }}
+                <v-icon left>$edit</v-icon>{{ $t('survey-scheme-prompts.editTemplate') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -38,7 +38,7 @@
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
       </v-form>
-      <prompt-selector ref="selector" :question-ids="questionIds" @save="save"></prompt-selector>
+      <prompt-selector ref="selector" :prompt-ids="promptIds" @save="save"></prompt-selector>
     </v-container>
   </layout>
 </template>
@@ -48,47 +48,47 @@ import { defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type {
-  SurveySchemeQuestionEntry,
-  SurveySchemeQuestionRefs,
+  SurveySchemePromptEntry,
+  SurveySchemePromptRefs,
 } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import PromptSelector from '@intake24/admin/components/prompts/prompt-selector.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { infoPrompt } from '@intake24/common/prompts';
 
-export type SchemeQuestionForm = {
+export type SchemePromptForm = {
   id: string | null;
   name: string | null;
-  questionId: string | null;
-  question: Prompt;
+  promptId: string | null;
+  prompt: Prompt;
 };
 
 export default defineComponent({
-  name: 'SchemeQuestionForm',
+  name: 'SchemePromptForm',
 
   components: { PromptSelector },
 
   mixins: [formMixin],
 
   setup(props) {
-    const { actions, ...question } = infoPrompt;
+    const { actions, ...prompt } = infoPrompt;
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<
-      SurveySchemeQuestionEntry,
-      SurveySchemeQuestionRefs
+      SurveySchemePromptEntry,
+      SurveySchemePromptRefs
     >(props);
     useEntryFetch(props);
     const { clearError, form, nonInputErrors, routeLeave, submit } = useEntryForm<
-      SchemeQuestionForm,
-      SurveySchemeQuestionEntry
+      SchemePromptForm,
+      SurveySchemePromptEntry
     >(props, {
       data: {
         id: null,
         name: null,
-        questionId: null,
-        question,
+        promptId: null,
+        prompt,
       },
-      nonInputErrorKeys: ['question'],
+      nonInputErrorKeys: ['prompt'],
     });
 
     const selector = ref<InstanceType<typeof PromptSelector>>();
@@ -108,20 +108,20 @@ export default defineComponent({
   },
 
   computed: {
-    questionIds(): string[] {
-      return this.refs.questionIds;
+    promptIds(): string[] {
+      return this.refs.promptIds;
     },
   },
 
   methods: {
     edit() {
-      this.selector?.edit(0, this.form.question);
+      this.selector?.edit(0, this.form.prompt);
     },
 
-    save({ question }: { question: Prompt; index: number }) {
-      this.form.errors.clear('question');
+    save({ prompt }: { prompt: Prompt; index: number }) {
+      this.form.errors.clear('prompt');
 
-      this.form.question = question;
+      this.form.prompt = prompt;
     },
   },
 });

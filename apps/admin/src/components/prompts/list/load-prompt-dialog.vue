@@ -5,7 +5,7 @@
         <v-list-item v-bind="attrs" link v-on="on">
           <v-list-item-title>
             <v-icon left>$download</v-icon>
-            {{ $t('survey-schemes.questions.templates.add') }}
+            {{ $t('survey-schemes.prompts.templates.add') }}
           </v-list-item-title>
         </v-list-item>
       </slot>
@@ -16,7 +16,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('survey-schemes.questions.templates.title') }}
+          {{ $t('survey-schemes.prompts.templates.title') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
@@ -34,17 +34,17 @@
           @keyup.enter="fetch"
         >
         </v-text-field>
-        <v-alert v-if="questionAlreadyExists" text type="error">
+        <v-alert v-if="promptAlreadyExists" text type="error">
           {{
-            $t('survey-schemes.questions.templates.alreadyExists', {
-              questionId: selectedQuestion.questionId,
+            $t('survey-schemes.prompts.templates.alreadyExists', {
+              promptId: selectedPrompt.promptId,
             })
           }}
         </v-alert>
-        <v-list v-if="questions.length" min-height="350px" two-line>
+        <v-list v-if="prompts.length" min-height="350px" two-line>
           <v-list-item-group v-model="selectedId">
-            <template v-for="(question, idx) in questions">
-              <v-list-item :key="question.id" :value="question.id">
+            <template v-for="(prompt, idx) in prompts">
+              <v-list-item :key="prompt.id" :value="prompt.id">
                 <template #default="{ active }">
                   <v-list-item-action>
                     <v-checkbox :input-value="active"></v-checkbox>
@@ -53,19 +53,19 @@
                     <v-icon>fas fa-question-circle</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{ question.name }}</v-list-item-title>
+                    <v-list-item-title>{{ prompt.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      {{ `ID: ${question.id} | Type: ${question.component}` }}
+                      {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </template>
               </v-list-item>
-              <v-divider v-if="idx + 1 < questions.length" :key="`div-${question.id}`"></v-divider>
+              <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`"></v-divider>
             </template>
           </v-list-item-group>
         </v-list>
         <v-alert v-else color="primary" text type="info">
-          {{ $t('survey-schemes.questions.templates.none') }}
+          {{ $t('survey-schemes.prompts.templates.none') }}
         </v-alert>
       </v-card-text>
       <v-card-actions>
@@ -76,7 +76,7 @@
         <v-btn
           class="font-weight-bold"
           color="info"
-          :disabled="!selectedId || questionAlreadyExists"
+          :disabled="!selectedId || promptAlreadyExists"
           text
           @click.stop="confirm"
         >
@@ -103,7 +103,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    questionIds: {
+    promptIds: {
       type: Array as PropType<string[]>,
       default: () => [],
     },
@@ -119,27 +119,27 @@ export default defineComponent({
       dialog: false,
       loading: false,
       search: null as string | null,
-      questions: [] as Prompt[],
+      prompts: [] as Prompt[],
       selectedId: undefined as string | undefined,
     };
   },
 
   computed: {
-    selectedQuestion(): Prompt | undefined {
+    selectedPrompt(): Prompt | undefined {
       const { selectedId } = this;
       if (!selectedId) return undefined;
 
-      return this.questions.find((question) => question.id === selectedId);
+      return this.prompts.find((prompt) => prompt.id === selectedId);
     },
-    questionAlreadyExists(): boolean {
-      const match = this.questionIds.find((id) => id === this.selectedQuestion?.id);
+    promptAlreadyExists(): boolean {
+      const match = this.promptIds.find((id) => id === this.selectedPrompt?.id);
       return !!match;
     },
   },
 
   watch: {
     async dialog(val) {
-      if (val && !this.questions.length) await this.fetch();
+      if (val && !this.prompts.length) await this.fetch();
     },
     search() {
       //@ts-expect-error debounced
@@ -165,9 +165,9 @@ export default defineComponent({
     },
 
     confirm() {
-      if (!this.selectedQuestion) return;
+      if (!this.selectedPrompt) return;
 
-      this.$emit('load', copy(this.selectedQuestion));
+      this.$emit('load', copy(this.selectedPrompt));
       this.close();
     },
 
@@ -175,7 +175,7 @@ export default defineComponent({
       this.loading = true;
 
       try {
-        this.questions = this.items ? this.fetchLocally() : await this.fetchFromApi();
+        this.prompts = this.items ? this.fetchLocally() : await this.fetchFromApi();
       } finally {
         this.loading = false;
       }

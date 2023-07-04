@@ -52,7 +52,7 @@ import type {
   SurveyController,
   SurveyRespondentController,
   SurveySchemeController,
-  SurveySchemeQuestionController,
+  SurveySchemePromptController,
   TaskController,
   // User
   UserFeedbackController,
@@ -207,7 +207,7 @@ export interface IoC extends Jobs {
   // Schemes
   feedbackSchemeController: FeedbackSchemeController;
   surveySchemeController: SurveySchemeController;
-  surveySchemeQuestionController: SurveySchemeQuestionController;
+  surveySchemePromptController: SurveySchemePromptController;
 
   // Survey MGMT
   adminSurveyController: AdminSurveyController;

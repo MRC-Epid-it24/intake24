@@ -24,7 +24,7 @@ import RoleUser from './role-user';
 import SignInLog from './sign-in-log';
 import Survey from './survey';
 import SurveyScheme from './survey-scheme';
-import SurveySchemeQuestion from './survey-scheme-question';
+import SurveySchemePrompt from './survey-scheme-prompt';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionCustomField from './survey-submission-custom-field';
 import SurveySubmissionField from './survey-submission-field';
@@ -98,8 +98,8 @@ export { default as Survey } from './survey';
 export * from './survey';
 export { default as SurveyScheme } from './survey-scheme';
 export * from './survey-scheme';
-export { default as SurveySchemeQuestion } from './survey-scheme-question';
-export * from './survey-scheme-question';
+export { default as SurveySchemePrompt } from './survey-scheme-prompt';
+export * from './survey-scheme-prompt';
 export { default as SurveySubmission } from './survey-submission';
 export * from './survey-submission';
 export { default as SurveySubmissionCustomField } from './survey-submission-custom-field';
@@ -168,7 +168,7 @@ export const system = {
   SignInLog,
   Survey,
   SurveyScheme,
-  SurveySchemeQuestion,
+  SurveySchemePrompt,
   SurveySubmission,
   SurveySubmissionCustomField,
   SurveySubmissionField,

@@ -1,5 +1,5 @@
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection, SurveySection } from '@intake24/common/surveys';
+import type { MealSection, SurveyPromptSection, SurveySection } from '@intake24/common/surveys';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import PromptManager from '@intake24/survey/dynamic-recall/prompt-manager';
 import SelectionManager from '@intake24/survey/dynamic-recall/selection-manager';
@@ -64,7 +64,7 @@ export default class DynamicRecall {
   }
 
   // Detect when portion size estimation for a given meal is complete and reset the selection
-  // to the first food for next pass such as the associated foods questions.
+  // to the first food for next pass such as the associated foods prompts.
   private resetSelectionOnPortionSizeComplete() {
     this.store.$onAction((context) => {
       const store = context.store;
@@ -149,7 +149,7 @@ export default class DynamicRecall {
     return undefined;
   }
 
-  getNextSurveySectionPrompt(section: SurveyQuestionSection): PromptInstance | undefined {
+  getNextSurveySectionPrompt(section: SurveyPromptSection): PromptInstance | undefined {
     const nextPrompt = this.promptManager.nextSurveySectionPrompt(section);
     if (nextPrompt) return { prompt: nextPrompt, section };
 

@@ -5,14 +5,14 @@
         <v-switch
           hide-details="auto"
           :input-value="required"
-          :label="$t('survey-schemes.questions.validation.required')"
+          :label="$t('survey-schemes.prompts.validation.required')"
           @change="update('required', $event)"
         ></v-switch>
       </v-col>
       <v-col cols="12">
         <language-selector
           :disabled="!required"
-          :label="$t('survey-schemes.questions.validation.message').toString()"
+          :label="$t('survey-schemes.prompts.validation.message').toString()"
           :value="message"
           @input="update('message', $event)"
         >
@@ -21,7 +21,7 @@
               :key="lang"
               :disabled="!required"
               hide-details="auto"
-              :label="$t('survey-schemes.questions.validation.message')"
+              :label="$t('survey-schemes.prompts.validation.message')"
               outlined
               :value="message[lang]"
               @input="updateLanguage('message', lang, $event)"

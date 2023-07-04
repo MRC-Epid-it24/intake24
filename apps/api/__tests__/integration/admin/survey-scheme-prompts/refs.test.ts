@@ -1,8 +1,8 @@
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/survey-scheme-questions/refs';
-  const permissions = ['survey-scheme-questions'];
+  const url = '/api/admin/survey-scheme-prompts/refs';
+  const permissions = ['survey-scheme-prompts'];
 
   test('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url);
@@ -11,6 +11,6 @@ export default () => {
   it('should return 200 and refs', async () => {
     await suite.util.setPermission(permissions);
 
-    await suite.sharedTests.assertReferencesResult('get', url, ['schemes', 'questionIds']);
+    await suite.sharedTests.assertReferencesResult('get', url, ['schemes', 'promptIds']);
   });
 };

@@ -1,25 +1,25 @@
-import type { SurveySchemeQuestionCreationAttributes } from '@intake24/db';
+import type { SurveySchemePromptCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { SurveySchemeQuestion } from '@intake24/db';
+import { SurveySchemePrompt } from '@intake24/db';
 
 export default () => {
-  const baseUrl = '/api/admin/survey-scheme-questions';
-  const permissions = ['survey-scheme-questions', 'survey-scheme-questions|read'];
+  const baseUrl = '/api/admin/survey-scheme-prompts';
+  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts|edit'];
 
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveySchemeQuestionCreationAttributes;
-  let output: SurveySchemeQuestionCreationAttributes;
-  let schemeQuestion: SurveySchemeQuestion;
+  let input: SurveySchemePromptCreationAttributes;
+  let output: SurveySchemePromptCreationAttributes;
+  let schemePrompt: SurveySchemePrompt;
 
   beforeAll(async () => {
-    input = mocker.system.surveySchemeQuestion();
-    schemeQuestion = await SurveySchemeQuestion.create(input);
+    input = mocker.system.surveySchemePrompt();
+    schemePrompt = await SurveySchemePrompt.create(input);
     output = { ...input };
 
-    url = `${baseUrl}/${schemeQuestion.id}`;
-    invalidUrl = `${baseUrl}/999999`;
+    url = `${baseUrl}/${schemePrompt.id}/edit`;
+    invalidUrl = `${baseUrl}/999999/edit`;
   });
 
   test('missing authentication / authorization', async () => {

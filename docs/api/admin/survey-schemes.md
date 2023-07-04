@@ -43,7 +43,7 @@ Content-Type: application/json
     "name": string,
     "type": 'default',
     "meals": [{...}],
-    "questions": {...},
+    "prompts": {...},
     "dataExport": [{...}]
 }
 ```
@@ -97,7 +97,7 @@ Content-Type: application/json
     "name": string,
     "type": 'default',
     "meals": [{...}],
-    "questions": {...},
+    "prompts": {...},
     "dataExport": [{...}]
 }
 ```
@@ -177,7 +177,7 @@ Content-Type: application/json
 200 OK
 
 {
-    "templates": PromptQuestion[]
+    "templates": Prompt[]
 }
 ```
 
@@ -220,9 +220,9 @@ Content-Type: application/json
 }
 ```
 
-## Question templates
+## Prompt templates
 
-Browse available question templates for scheme
+Browse available prompt templates for scheme
 
 ### Request
 

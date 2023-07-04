@@ -25,7 +25,7 @@ import {
   perCardSurveySchemeFields,
   securableScope,
   SurveyScheme,
-  SurveySchemeQuestion,
+  SurveySchemePrompt,
   updateSurveySchemeFields,
   UserSecurable,
 } from '@intake24/db';
@@ -169,12 +169,12 @@ const surveySchemeController = (ioc: IoC) => {
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;
-    const { type, questions, meals, dataExport } = surveyScheme;
+    const { type, prompts, meals, dataExport } = surveyScheme;
 
     const surveySchemeCopy = await SurveyScheme.create({
       name,
       type,
-      questions,
+      prompts,
       meals,
       dataExport,
       ownerId: userId,
@@ -184,9 +184,9 @@ const surveySchemeController = (ioc: IoC) => {
   };
 
   const refs = async (req: Request, res: Response<SurveySchemeRefs>): Promise<void> => {
-    const questions = await SurveySchemeQuestion.findAll({ attributes: ['question'] });
+    const prompts = await SurveySchemePrompt.findAll({ attributes: ['prompt'] });
 
-    const templates = questions.map((schemeQuestion) => schemeQuestion.question);
+    const templates = prompts.map(({ prompt }) => prompt);
 
     res.json({ templates });
   };
@@ -199,24 +199,24 @@ const surveySchemeController = (ioc: IoC) => {
       query: { search, limit },
     } = req;
 
-    await getAndCheckAccess(SurveyScheme, 'questions', req as Request<{ surveySchemeId: string }>);
+    await getAndCheckAccess(SurveyScheme, 'prompts', req as Request<{ surveySchemeId: string }>);
 
     const options: FindOptions = { limit };
 
     if (search) {
       const op =
-        SurveySchemeQuestion.sequelize?.getDialect() === 'postgres'
+        SurveySchemePrompt.sequelize?.getDialect() === 'postgres'
           ? { [Op.iLike]: `%${search}%` }
           : { [Op.substring]: search };
 
-      const ops = ['questionId', 'name'].map((column) => ({ [column]: op }));
+      const ops = ['promptId', 'name'].map((column) => ({ [column]: op }));
       options.where = { [Op.or]: ops };
     }
 
-    const surveySchemeQuestions = await SurveySchemeQuestion.findAll(options);
-    const questions = surveySchemeQuestions.map((schemeQuestion) => schemeQuestion.question);
+    const surveySchemePrompts = await SurveySchemePrompt.findAll(options);
+    const prompts = surveySchemePrompts.map(({ prompt }) => prompt);
 
-    res.json(questions);
+    res.json(prompts);
   };
 
   const dataExportRefs = async (

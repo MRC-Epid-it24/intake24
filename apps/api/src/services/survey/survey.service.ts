@@ -264,8 +264,8 @@ const surveyService = ({
     const { id: surveyId, surveyScheme } = survey;
     if (!surveyScheme) throw new NotFoundError();
 
-    const redirectPrompt = surveyScheme.questions.submission.find(
-      (question) => question.component === 'redirect-prompt'
+    const redirectPrompt = surveyScheme.prompts.submission.find(
+      (prompt) => prompt.component === 'redirect-prompt'
     );
     if (!redirectPrompt) return null;
 

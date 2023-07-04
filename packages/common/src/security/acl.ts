@@ -32,7 +32,7 @@ export const securableDefs = {
     'food-ranking',
     'tasks',
   ] as const,
-  SurveyScheme: [...standardSecurableActions, 'copy', 'questions', 'data-export'] as const,
+  SurveyScheme: [...standardSecurableActions, 'copy', 'prompts', 'data-export'] as const,
   Survey: [
     ...standardSecurableActions,
     'overrides',

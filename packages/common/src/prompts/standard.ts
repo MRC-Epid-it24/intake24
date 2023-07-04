@@ -132,7 +132,7 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   name: 'Submit prompt',
 });
 
-export const standardPromptQuestions: Prompt[] = [
+export const standardPrompts: Prompt[] = [
   associatedFoodsPrompt,
   editMealPrompt,
   finalPrompt,

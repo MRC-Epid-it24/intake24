@@ -6,7 +6,7 @@
           <v-switch
             hide-details="auto"
             :input-value="leftovers"
-            :label="$t('survey-schemes.questions.leftovers')"
+            :label="$t('survey-schemes.prompts.leftovers')"
             @change="update('leftovers', $event)"
           >
           </v-switch>

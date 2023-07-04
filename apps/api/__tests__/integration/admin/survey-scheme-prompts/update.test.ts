@@ -1,25 +1,25 @@
-import type { SurveySchemeQuestionCreationAttributes } from '@intake24/db';
+import type { SurveySchemePromptCreationAttributes } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { SurveySchemeQuestion } from '@intake24/db';
+import { SurveySchemePrompt } from '@intake24/db';
 
 export default () => {
-  const baseUrl = '/api/admin/survey-scheme-questions';
-  const permissions = ['survey-scheme-questions', 'survey-scheme-questions|edit'];
+  const baseUrl = '/api/admin/survey-scheme-prompts';
+  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts|edit'];
 
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveySchemeQuestionCreationAttributes;
-  let updateInput: SurveySchemeQuestionCreationAttributes;
-  let schemeQuestion: SurveySchemeQuestion;
+  let input: SurveySchemePromptCreationAttributes;
+  let updateInput: SurveySchemePromptCreationAttributes;
+  let schemePrompt: SurveySchemePrompt;
 
   beforeAll(async () => {
-    input = mocker.system.surveySchemeQuestion();
-    updateInput = mocker.system.surveySchemeQuestion();
+    input = mocker.system.surveySchemePrompt();
+    updateInput = mocker.system.surveySchemePrompt();
 
-    schemeQuestion = await SurveySchemeQuestion.create(input);
+    schemePrompt = await SurveySchemePrompt.create(input);
 
-    url = `${baseUrl}/${schemeQuestion.id}`;
+    url = `${baseUrl}/${schemePrompt.id}`;
     invalidUrl = `${baseUrl}/999999`;
   });
 
@@ -33,12 +33,12 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['question']);
+      await suite.sharedTests.assertInvalidInput('put', url, ['prompt']);
     });
 
     it('should return 422 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('put', url, ['question'], {
-        input: { question: { name: 'missingProps' } },
+      await suite.sharedTests.assertInvalidInput('put', url, ['prompt'], {
+        input: { prompt: { name: 'missingProps' } },
       });
     });
 

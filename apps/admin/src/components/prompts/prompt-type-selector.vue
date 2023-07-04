@@ -1,12 +1,12 @@
 <template>
   <v-tab-item :key="type">
     <v-container>
-      <v-alert v-if="questions.length === 0" color="primary" text type="info">
-        {{ $t(`survey-schemes.questions.${type}.noQuestions`) }}
+      <v-alert v-if="prompts.length === 0" color="primary" text type="info">
+        {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
       <v-row v-else>
-        <v-col v-for="question in questions" :key="question.id" cols="12" md="3">
-          <v-item v-slot="{ active, toggle }" :value="question.component">
+        <v-col v-for="prompt in prompts" :key="prompt.id" cols="12" md="3">
+          <v-item v-slot="{ active, toggle }" :value="prompt.component">
             <v-card
               :color="active ? 'primary' : ''"
               dark
@@ -14,10 +14,10 @@
               @click.stop="tryToggle(active, toggle)"
             >
               <v-card-title class="justify-center">
-                {{ $t(`survey-schemes.prompts.${question.id}.title`) }}
+                {{ $t(`survey-schemes.prompts.${prompt.id}.title`) }}
               </v-card-title>
               <v-card-subtitle class="text-center">
-                {{ $t(`survey-schemes.prompts.${question.id}.subtitle`) }}
+                {{ $t(`survey-schemes.prompts.${prompt.id}.subtitle`) }}
               </v-card-subtitle>
               <v-card-text v-show="active" class="text-center">
                 <v-icon x-large>$check</v-icon>
@@ -43,7 +43,7 @@ export default defineComponent({
       type: String as PropType<PromptType>,
       required: true,
     },
-    questions: {
+    prompts: {
       type: Array as PropType<Prompt[]>,
       default: () => [],
     },

@@ -18,9 +18,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/surveys';
+import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/surveys';
+import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
 
 import type { Securable } from '..';
 import { BaseModel } from '..';
@@ -63,17 +63,17 @@ export default class SurveyScheme
 
   @Column({
     allowNull: true,
-    defaultValue: () => JSON.stringify(defaultQuestions),
+    defaultValue: () => JSON.stringify(defaultPrompts),
     type: DataType.TEXT({ length: 'long' }),
   })
-  get questions(): CreationOptional<RecallQuestions> {
-    const val = this.getDataValue('questions') as unknown;
-    return val ? JSON.parse(val as string) : defaultQuestions;
+  get prompts(): CreationOptional<RecallPrompts> {
+    const val = this.getDataValue('prompts') as unknown;
+    return val ? JSON.parse(val as string) : defaultPrompts;
   }
 
-  set questions(value: RecallQuestions) {
+  set prompts(value: RecallPrompts) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('questions', JSON.stringify(value ?? defaultQuestions));
+    this.setDataValue('prompts', JSON.stringify(value ?? defaultPrompts));
   }
 
   @Column({
@@ -153,7 +153,7 @@ export const updateSurveySchemeFields = ['name', 'type', 'meals'] as const;
 
 export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
 
-export const perCardSurveySchemeFields = ['questions', 'dataExport'] as const;
+export const perCardSurveySchemeFields = ['prompts', 'dataExport'] as const;
 
 export type PerCardSurveySchemeField = (typeof perCardSurveySchemeFields)[number];
 

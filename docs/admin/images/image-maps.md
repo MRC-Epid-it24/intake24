@@ -35,7 +35,7 @@ After record is created, object areas can be defined on image.
 - `Label` - object's localized label, display on hover/selection
 
 :::tip Label settings
-**Display** - Labels are displayed only when enabled in respective [prompt](/admin/surveys/question-types#portion-size-prompts)
+**Display** - Labels are displayed only when enabled in respective [prompt](/admin/surveys/prompt-types#portion-size-prompts)
 
 If image map is used as base image for `guide image` or `drink scale`, then labels of respective records take precedence and image map labels are used as fallback
 :::

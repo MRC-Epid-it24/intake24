@@ -4,16 +4,16 @@ import { isPlainObject } from 'lodash';
 
 import type { WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage } from '@intake24/api/http/requests/util';
-import { Op, SurveySchemeQuestion } from '@intake24/db';
+import { Op, SurveySchemePrompt } from '@intake24/db';
 
 const defaults: Schema = {
-  question: {
+  prompt: {
     in: ['body'],
     custom: {
       options: async (value, meta): Promise<void> => {
-        const { surveySchemeQuestionId } = (meta.req as Request).params;
-        const except: WhereOptions = surveySchemeQuestionId
-          ? { id: { [Op.ne]: surveySchemeQuestionId } }
+        const { surveySchemePromptId } = (meta.req as Request).params;
+        const except: WhereOptions = surveySchemePromptId
+          ? { id: { [Op.ne]: surveySchemePromptId } }
           : {};
 
         if (
@@ -24,9 +24,9 @@ const defaults: Schema = {
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
 
-        const questions = await SurveySchemeQuestion.findAll({ where: except });
-        const match = questions.find((q) => q.question.id === value.id);
-        if (match) throw new Error(`Scheme question ID (${value.id}) already used.`);
+        const prompts = await SurveySchemePrompt.findAll({ where: except });
+        const match = prompts.find((p) => p.prompt.id === value.id);
+        if (match) throw new Error(`Scheme prompt ID (${value.id}) already used.`);
       },
     },
   },

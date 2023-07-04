@@ -66,9 +66,9 @@ export default defineComponent({
     const getKeyTranslation = (key: string | number) => {
       if (typeof key === 'number') return key.toString();
 
-      const check = has(i18n.messages[i18n.locale], `survey-schemes.questions.${key}._`);
+      const check = has(i18n.messages[i18n.locale], `survey-schemes.prompts.${key}._`);
 
-      return check ? i18n.t(`survey-schemes.questions.${key}._`).toString() : capitalize(key);
+      return check ? i18n.t(`survey-schemes.prompts.${key}._`).toString() : capitalize(key);
     };
 
     return {

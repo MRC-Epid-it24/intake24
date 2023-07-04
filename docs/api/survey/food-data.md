@@ -88,7 +88,7 @@ where
 first element is 0, then the second element is a food code, or, if the first element is 1, the second
 element is a category code,
 
-**promptText** is the wording of the associated food question,
+**promptText** is the wording of the associated food prompt,
 
 **linkAsMain** controls whether accepted associated food suggestions should be created as "main" or "linked",
 

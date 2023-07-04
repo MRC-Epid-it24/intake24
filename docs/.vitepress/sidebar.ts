@@ -261,8 +261,8 @@ export const sidebar = {
           link: '/api/admin/survey-schemes',
         },
         {
-          text: 'Survey scheme questions',
-          link: '/api/admin/survey-scheme-questions',
+          text: 'Survey scheme prompts',
+          link: '/api/admin/survey-scheme-prompts',
         },
         {
           text: 'Surveys',
@@ -432,16 +432,16 @@ export const sidebar = {
           link: '/admin/surveys/schemes',
         },
         {
-          text: 'Question editor',
-          link: '/admin/surveys/question-editor',
+          text: 'Prompt editor',
+          link: '/admin/surveys/prompt-editor',
         },
         {
-          text: 'Question types',
-          link: '/admin/surveys/question-types',
+          text: 'Prompt types',
+          link: '/admin/surveys/prompt-types',
         },
         {
-          text: 'Question templates',
-          link: '/admin/surveys/question-templates',
+          text: 'Prompt templates',
+          link: '/admin/surveys/prompt-templates',
         },
       ],
     },

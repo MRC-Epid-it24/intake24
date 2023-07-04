@@ -15,7 +15,7 @@ import securables from './securables';
 import signInLogs from './sign-in-logs';
 import signup from './signup';
 import standardUnits from './standard-units';
-import surveySchemeQuestions from './survey-scheme-questions';
+import SurveySchemePrompts from './survey-scheme-prompts';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
@@ -39,7 +39,7 @@ export default {
   signInLogs,
   signup,
   standardUnits,
-  surveySchemeQuestions,
+  SurveySchemePrompts,
   surveySchemes,
   surveys,
   tasks,

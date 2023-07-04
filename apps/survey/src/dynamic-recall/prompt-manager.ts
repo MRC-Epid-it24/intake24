@@ -1,5 +1,5 @@
 import type { ComponentType, Condition, Prompt } from '@intake24/common/prompts';
-import type { MealSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
@@ -706,25 +706,25 @@ export default class PromptManager {
 
   findMealPromptById(promptId: string): PromptInstance | null {
     for (const section of mealSections) {
-      const prompt = this.scheme.questions.meals[section].find((p) => p.id === promptId);
+      const prompt = this.scheme.prompts.meals[section].find((p) => p.id === promptId);
       if (prompt) return { section: section, prompt: prompt };
     }
     return null;
   }
 
   findMealPromptOfType(type: ComponentType, section: MealSection): Prompt | undefined {
-    return this.scheme.questions.meals[section].find((question) => question.component === type);
+    return this.scheme.prompts.meals[section].find((prompt) => prompt.component === type);
   }
 
-  findSurveyPromptOfType(type: ComponentType, section: SurveyQuestionSection): Prompt | undefined {
-    return this.scheme.questions[section].find((question) => question.component === type);
+  findSurveyPromptOfType(type: ComponentType, section: SurveyPromptSection): Prompt | undefined {
+    return this.scheme.prompts[section].find((prompt) => prompt.component === type);
   }
 
-  nextSurveySectionPrompt(section: SurveyQuestionSection): Prompt | undefined {
-    return this.scheme.questions[section].find(
-      (question) =>
-        checkSurveyStandardConditions(this.store.$state, question) &&
-        checkSurveyCustomConditions(this.store, question)
+  nextSurveySectionPrompt(section: SurveyPromptSection): Prompt | undefined {
+    return this.scheme.prompts[section].find(
+      (prompt) =>
+        checkSurveyStandardConditions(this.store.$state, prompt) &&
+        checkSurveyCustomConditions(this.store, prompt)
     );
   }
 
@@ -737,16 +737,16 @@ export default class PromptManager {
     const mealState = findMeal(state.data.meals, mealId);
 
     // Post foods prompts should only be triggered when all food data is collected
-    // TODO: Probably should include food custom questions as well
+    // TODO: Probably should include food custom prompts as well
     if (section === 'postFoods') {
       const meal = findMeal(state.data.meals, mealId);
       if (!mealComplete(meal)) return undefined;
     }
 
-    return this.scheme.questions.meals[section].find(
-      (question) =>
-        checkMealStandardConditions(state, mealState, withSelection, question) &&
-        checkMealCustomConditions(this.store, mealState, question)
+    return this.scheme.prompts.meals[section].find(
+      (prompt) =>
+        checkMealStandardConditions(state, mealState, withSelection, prompt) &&
+        checkMealCustomConditions(this.store, mealState, prompt)
     );
   }
 
@@ -757,21 +757,21 @@ export default class PromptManager {
     const foodState = getFoodByIndex(state.data.meals, foodIndex);
     const mealState = state.data.meals[foodIndex.mealIndex];
 
-    return this.scheme.questions.meals.foods.find(
-      (question) =>
-        checkFoodStandardConditions(state, foodState, withSelection, question) &&
-        checkFoodCustomConditions(this.store, mealState, foodState, question)
+    return this.scheme.prompts.meals.foods.find(
+      (prompt) =>
+        checkFoodStandardConditions(state, foodState, withSelection, prompt) &&
+        checkFoodCustomConditions(this.store, mealState, foodState, prompt)
     );
   }
 
   /**
    * Set next Prompt in the Survey based on the type of the prompt component
    * @param component type of the prompt component to find
-   * @returns { PromptQuestion }
+   * @returns { Prompt }
    */
   setNextPreMealsPrompt(component: ComponentType): Prompt | undefined {
-    return this.scheme.questions.preMeals.find((question) =>
-      showPrompt(this.store.$state, question, component)
+    return this.scheme.prompts.preMeals.find((prompt) =>
+      showPrompt(this.store.$state, prompt, component)
     );
   }
 }

@@ -92,7 +92,7 @@ export const yesNoPrompt: Prompts['yes-no-prompt'] = copy({
   name: 'Yes / No prompt',
 });
 
-export const customPromptQuestions: Prompt[] = [
+export const customPrompts: Prompt[] = [
   checkboxListPrompt,
   datePickerPrompt,
   infoPrompt,

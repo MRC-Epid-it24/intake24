@@ -3,20 +3,20 @@
     <v-toolbar flat>
       <v-icon left>$image-maps</v-icon>
       <v-toolbar-title>
-        {{ $t('survey-schemes.questions.imageMap._') }}
+        {{ $t('survey-schemes.prompts.imageMap._') }}
       </v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-switch
         hide-details="auto"
         :input-value="imageMap.labels"
-        :label="$t('survey-schemes.questions.imageMap.labels')"
+        :label="$t('survey-schemes.prompts.imageMap.labels')"
         @change="update('labels', $event)"
       ></v-switch>
       <v-switch
         hide-details="auto"
         :input-value="imageMap.pinchZoom"
-        :label="$t('survey-schemes.questions.imageMap.pinchZoom')"
+        :label="$t('survey-schemes.prompts.imageMap.pinchZoom')"
         @change="update('pinchZoom', $event)"
       ></v-switch>
     </v-card-text>

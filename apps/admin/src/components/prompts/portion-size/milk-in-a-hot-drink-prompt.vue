@@ -15,7 +15,7 @@
           <v-select
             hide-details="auto"
             :items="orientations"
-            :label="$t('survey-schemes.questions.orientation._')"
+            :label="$t('survey-schemes.prompts.orientation._')"
             outlined
             :value="orientation"
             @change="update('orientation', $event)"
@@ -24,7 +24,7 @@
       </v-row>
       <language-selector
         :default="[]"
-        :label="$t('survey-schemes.questions.options.title').toString()"
+        :label="$t('survey-schemes.prompts.options.title').toString()"
         :required="true"
         :value="options"
         @input="update('options', $event)"

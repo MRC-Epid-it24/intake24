@@ -1,51 +1,51 @@
 import type {
   SurveySchemeCreationAttributes,
-  SurveySchemeQuestionCreationAttributes,
+  SurveySchemePromptCreationAttributes,
 } from '@intake24/db';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { SurveyScheme, SurveySchemeQuestion } from '@intake24/db';
+import { SurveyScheme, SurveySchemePrompt } from '@intake24/db';
 
 export default () => {
-  const baseUrl = '/api/admin/survey-scheme-questions';
-  const permissions = ['survey-scheme-questions', 'survey-scheme-questions|sync'];
+  const baseUrl = '/api/admin/survey-scheme-prompts';
+  const permissions = ['survey-scheme-prompts', 'survey-scheme-prompts|sync'];
 
   let url: string;
   let invalidUrl: string;
 
   let schemeInput: SurveySchemeCreationAttributes;
-  let schemeQuestionInput: SurveySchemeQuestionCreationAttributes;
+  let schemePromptInput: SurveySchemePromptCreationAttributes;
   let syncInput: any;
 
   let scheme: SurveyScheme;
-  let schemeQuestion: SurveySchemeQuestion;
+  let schemePrompt: SurveySchemePrompt;
 
   beforeAll(async () => {
     schemeInput = mocker.system.surveyScheme();
-    schemeQuestionInput = mocker.system.surveySchemeQuestion();
+    schemePromptInput = mocker.system.surveySchemePrompt();
 
     schemeInput = {
       ...schemeInput,
-      questions: schemeInput.questions
+      prompts: schemeInput.prompts
         ? {
-            ...schemeInput.questions,
-            preMeals: [schemeQuestionInput.question],
+            ...schemeInput.prompts,
+            preMeals: [schemePromptInput.prompt],
           }
         : undefined,
     };
 
-    schemeQuestion = await SurveySchemeQuestion.create(schemeQuestionInput);
+    schemePrompt = await SurveySchemePrompt.create(schemePromptInput);
     scheme = await SurveyScheme.create(schemeInput);
 
     syncInput = {
       surveySchemeId: scheme.id,
       section: 'preMeals',
-      question: {
-        ...mocker.system.surveySchemeQuestion().question,
-        id: schemeQuestionInput.question.id,
+      prompt: {
+        ...mocker.system.surveySchemePrompt().prompt,
+        id: schemePromptInput.prompt.id,
       },
     };
 
-    url = `${baseUrl}/${schemeQuestion.id}/sync`;
+    url = `${baseUrl}/${schemePrompt.id}/sync`;
     invalidUrl = `${baseUrl}/999999/sync`;
   });
 
@@ -62,7 +62,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'surveySchemeId',
         'section',
-        'question',
+        'prompt',
       ]);
     });
 
@@ -70,12 +70,12 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['surveySchemeId', 'section', 'question'],
+        ['surveySchemeId', 'section', 'prompt'],
         {
           input: {
             surveySchemeId: ['123456'],
             section: 'notValidSchemeSection',
-            question: { name: 'missingProps' },
+            prompt: { name: 'missingProps' },
           },
         }
       );
@@ -91,15 +91,15 @@ export default () => {
       });
     });
 
-    it(`should return 404 when question is not in correct section`, async () => {
+    it(`should return 404 when prompt is not in correct section`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
         input: { ...syncInput, section: 'postMeals' },
       });
     });
 
-    it(`should return 404 when question ID is not found in scheme questions set`, async () => {
+    it(`should return 404 when prompt ID is not found in scheme prompts set`, async () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
-        input: { ...syncInput, question: { ...syncInput.question, id: 'invalidQuestionId' } },
+        input: { ...syncInput, prompt: { ...syncInput.prompt, id: 'invalidPromptId' } },
       });
     });
 

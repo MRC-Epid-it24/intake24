@@ -13,7 +13,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`survey-schemes.questions.${dialog.index === -1 ? 'create' : 'edit'}`) }}
+          {{ $t(`survey-schemes.prompts.${dialog.index === -1 ? 'create' : 'edit'}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -24,7 +24,7 @@
         <template #extension>
           <v-container>
             <v-tabs v-model="tab" background-color="primary" dark>
-              <v-tab v-for="item in promptSettings[dialog.question.component].tabs" :key="item">
+              <v-tab v-for="item in promptSettings[dialog.prompt.component].tabs" :key="item">
                 {{ item }}
               </v-tab>
             </v-tabs>
@@ -42,30 +42,30 @@
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
                         <v-icon left>fas fa-fingerprint</v-icon>
-                        {{ $t('survey-schemes.questions.internal._') }}
+                        {{ $t('survey-schemes.prompts.internal._') }}
                       </v-toolbar-title>
                     </v-toolbar>
                     <v-container>
                       <v-row>
                         <v-col cols="12" md="6">
                           <v-text-field
-                            v-model="dialog.question.id"
+                            v-model="dialog.prompt.id"
                             :disabled="isOverrideMode"
                             hide-details="auto"
-                            :label="$t('survey-schemes.questions.internal.id._')"
-                            :messages="$t('survey-schemes.questions.internal.id.hint')"
+                            :label="$t('survey-schemes.prompts.internal.id._')"
+                            :messages="$t('survey-schemes.prompts.internal.id.hint')"
                             outlined
-                            :readonly="dialog.question.type !== 'custom'"
-                            :rules="questionIdRules"
+                            :readonly="dialog.prompt.type !== 'custom'"
+                            :rules="promptIdRules"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field
-                            v-model="dialog.question.name"
+                            v-model="dialog.prompt.name"
                             :disabled="isOverrideMode"
                             hide-details="auto"
-                            :label="$t('survey-schemes.questions.internal.name._')"
-                            :messages="$t('survey-schemes.questions.internal.name.hint')"
+                            :label="$t('survey-schemes.prompts.internal.name._')"
+                            :messages="$t('survey-schemes.prompts.internal.name.hint')"
                             outlined
                           ></v-text-field>
                         </v-col>
@@ -78,31 +78,30 @@
                     <v-toolbar color="grey lighten-4" flat>
                       <v-toolbar-title>
                         <v-icon left>fas fa-circle-question</v-icon>
-                        {{ $t(`survey-schemes.questions.type`) }}
+                        {{ $t(`survey-schemes.prompts.type`) }}
                       </v-toolbar-title>
                       <template #extension>
-                        <v-tabs v-model="questionTypeTab">
+                        <v-tabs v-model="promptTypeTab">
                           <v-tab
-                            v-for="type in Object.keys(availableGroupedPromptQuestions)"
+                            v-for="type in Object.keys(availableGroupedPrompts)"
                             :key="type"
                             class="font-weight-medium"
                           >
-                            {{ $t(`survey-schemes.questions.${type}._`) }}
+                            {{ $t(`survey-schemes.prompts.${type}._`) }}
                           </v-tab>
                         </v-tabs>
                       </template>
                     </v-toolbar>
                     <v-item-group
-                      v-model="dialog.question.component"
+                      v-model="dialog.prompt.component"
                       active-class="secondary"
                       @change="updatePromptProps"
                     >
-                      <v-tabs-items v-model="questionTypeTab">
+                      <v-tabs-items v-model="promptTypeTab">
                         <prompt-type-selector
-                          v-for="(questions, type) in availableGroupedPromptQuestions"
+                          v-for="(items, type) in availableGroupedPrompts"
                           :key="type"
-                          :questions="questions"
-                          :type="type"
+                          v-bind="{ prompts: items, type }"
                         ></prompt-type-selector>
                       </v-tabs-items>
                     </v-item-group>
@@ -110,12 +109,12 @@
                 </v-col>
               </v-row>
             </v-tab-item>
-            <prompt-content :i18n.sync="dialog.question.i18n"></prompt-content>
-            <prompt-actions :actions.sync="dialog.question.actions"></prompt-actions>
-            <prompt-conditions :conditions.sync="dialog.question.conditions"></prompt-conditions>
+            <prompt-content :i18n.sync="dialog.prompt.i18n"></prompt-content>
+            <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
+            <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
             <component
-              :is="dialog.question.component"
-              v-bind.sync="dialog.question"
+              :is="dialog.prompt.component"
+              v-bind.sync="dialog.prompt"
               @validate="validate"
             ></component>
           </v-tabs-items>
@@ -139,7 +138,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
-import type { BasePrompt, PromptType } from '@intake24/common/prompts';
+import type { Prompt, PromptType } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import {
   customPrompts,
@@ -148,23 +147,23 @@ import {
   standardPrompts,
 } from '@intake24/admin/components/prompts';
 import {
-  customPromptQuestions,
-  portionSizePromptQuestions,
-  standardPromptQuestions,
+  customPrompts as customPromptDefaults,
+  portionSizePrompts as portionSizeDefaults,
+  standardPrompts as standardPromptDefaults,
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
 import { PromptActions, PromptConditions, PromptContent } from './partials';
 import PromptTypeSelector from './prompt-type-selector.vue';
 
-export interface EditPromptQuestion extends BasePrompt {
+export type EditPrompt = Prompt & {
   origId?: string;
-}
+};
 
-export type PromptQuestionDialog = {
+export type PromptDialog = {
   show: boolean;
   index: number;
-  question: EditPromptQuestion;
+  prompt: EditPrompt;
 };
 
 export default defineComponent({
@@ -188,7 +187,7 @@ export default defineComponent({
     section: {
       type: String as PropType<PromptSection>,
     },
-    questionIds: {
+    promptIds: {
       type: Array as PropType<string[]>,
       default: () => [],
     },
@@ -203,31 +202,27 @@ export default defineComponent({
   },
 
   data() {
-    const promptQuestions = [
-      ...customPromptQuestions,
-      ...standardPromptQuestions,
-      ...portionSizePromptQuestions,
-    ];
+    const prompts = [...customPromptDefaults, ...standardPromptDefaults, ...portionSizeDefaults];
 
-    const groupedPromptQuestions: Record<PromptType, BasePrompt[]> = {
-      custom: customPromptQuestions,
-      standard: standardPromptQuestions,
-      'portion-size': portionSizePromptQuestions,
+    const groupedPrompts: Record<PromptType, Prompt[]> = {
+      custom: customPromptDefaults,
+      standard: standardPromptDefaults,
+      'portion-size': portionSizeDefaults,
     };
 
-    const dialog: PromptQuestionDialog = {
+    const dialog: PromptDialog = {
       show: false,
       index: -1,
-      question: copy(promptQuestions[0]),
+      prompt: copy(prompts[0]),
     };
 
     return {
       dialog,
-      promptQuestions,
-      groupedPromptQuestions,
+      prompts,
+      groupedPrompts,
       promptSettings,
       tab: 0,
-      questionTypeTab: 0,
+      promptTypeTab: 0,
     };
   },
 
@@ -235,33 +230,33 @@ export default defineComponent({
     isOverrideMode(): boolean {
       return this.mode === 'override';
     },
-    availablePromptQuestions(): BasePrompt[] {
+    availablePrompts(): Prompt[] {
       const { section } = this;
-      if (!section) return this.promptQuestions;
+      if (!section) return this.prompts;
 
-      return this.promptQuestions.filter((prompt) =>
+      return this.prompts.filter((prompt) =>
         this.promptSettings[prompt.component].sections.includes(section)
       );
     },
-    availableGroupedPromptQuestions(): Record<PromptType, BasePrompt[]> {
+    availableGroupedPrompts(): Record<PromptType, Prompt[]> {
       const { section } = this;
-      if (!section) return this.groupedPromptQuestions;
+      if (!section) return this.groupedPrompts;
 
-      return Object.entries(this.groupedPromptQuestions).reduce((acc, [key, value]) => {
+      return Object.entries(this.groupedPrompts).reduce((acc, [key, value]) => {
         acc[key as PromptType] = value.filter((prompt) =>
           this.promptSettings[prompt.component].sections.includes(section)
         );
         return acc;
-      }, {} as Record<PromptType, BasePrompt[]>);
+      }, {} as Record<PromptType, Prompt[]>);
     },
 
-    questionIdRules(): RuleCallback[] {
+    promptIdRules(): RuleCallback[] {
       return [
         (value: string | null): boolean | string => {
-          const { origId } = this.dialog.question;
-          const match = this.questionIds.find((id) => id === value && id !== origId);
+          const { origId } = this.dialog.prompt;
+          const match = this.promptIds.find((id) => id === value && id !== origId);
 
-          return !match || 'Question ID is already used.';
+          return !match || 'Prompt ID is already used.';
         },
       ];
     },
@@ -276,11 +271,11 @@ export default defineComponent({
   },
 
   methods: {
-    newDialog(show = false): PromptQuestionDialog {
+    newDialog(show = false): PromptDialog {
       return {
         show,
         index: -1,
-        question: copy(this.availablePromptQuestions[0]),
+        prompt: copy(this.availablePrompts[0]),
       };
     },
 
@@ -292,52 +287,52 @@ export default defineComponent({
     },
 
     updatePromptProps() {
-      const { show, index, question } = this.dialog;
-      const { component } = question;
+      const { show, index, prompt } = this.dialog;
+      const { component } = prompt;
 
-      const newQuestion =
-        this.availablePromptQuestions.find((item) => item.component === component) ??
-        this.availablePromptQuestions[0];
-      if (!newQuestion) return;
+      const newPrompt =
+        this.availablePrompts.find((item) => item.component === component) ??
+        this.availablePrompts[0];
+      if (!newPrompt) return;
 
       this.dialog = {
         show,
         index,
-        question: copy(newQuestion),
+        prompt: copy(newPrompt),
       };
     },
 
-    updateQuestionTypeTab(type: BasePrompt['type']) {
+    updatePromptTypeTab(type: Prompt['type']) {
       switch (type) {
         case 'standard':
-          this.questionTypeTab = 1;
+          this.promptTypeTab = 1;
           break;
         case 'portion-size':
-          this.questionTypeTab = 2;
+          this.promptTypeTab = 2;
           break;
         default:
-          this.questionTypeTab = 0;
+          this.promptTypeTab = 0;
       }
     },
 
     create() {
       this.dialog = this.newDialog(true);
-      this.updateQuestionTypeTab(this.dialog.question.type);
+      this.updatePromptTypeTab(this.dialog.prompt.type);
     },
 
-    edit(index: number, question: BasePrompt) {
-      const promptDefaults = this.promptQuestions.find((q) => q.component === question.component);
+    edit(index: number, prompt: Prompt) {
+      const promptDefaults = this.prompts.find((p) => p.component === prompt.component);
       if (!promptDefaults) {
-        console.warn(`Prompt defaults for question type '${question.component}' not found.`);
+        console.warn(`Prompt defaults for prompt type '${prompt.component}' not found.`);
         return;
       }
 
-      this.updateQuestionTypeTab(question.type);
+      this.updatePromptTypeTab(prompt.type);
 
       this.dialog = {
         show: true,
         index,
-        question: { origId: question.id, ...merge(promptDefaults, question) },
+        prompt: { origId: prompt.id, ...merge(promptDefaults, prompt) },
       };
     },
 
@@ -347,17 +342,17 @@ export default defineComponent({
 
       const {
         index,
-        question: { origId, ...rest },
+        prompt: { origId, ...rest },
       } = this.dialog;
 
-      this.$emit('save', { question: rest, index });
+      this.$emit('save', { prompt: rest, index });
 
       this.reset();
     },
 
     reset() {
       this.tab = 0;
-      this.questionTypeTab = 0;
+      this.promptTypeTab = 0;
       this.dialog = this.newDialog();
       this.form?.resetValidation();
     },

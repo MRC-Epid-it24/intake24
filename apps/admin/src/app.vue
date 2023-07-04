@@ -47,7 +47,9 @@
         :resources="resources.images"
       ></menu-tree>
       <menu-tree
-        v-if="can(['feedback-schemes', 'survey-schemes', 'scheme-questions|browse', 'surveys'])"
+        v-if="
+          can(['feedback-schemes', 'survey-schemes', 'survey-scheme-prompts|browse', 'surveys'])
+        "
         icon="fas fa-fw fa-tools"
         name="surveyMgmt"
         :resources="resources.surveyMgmt"

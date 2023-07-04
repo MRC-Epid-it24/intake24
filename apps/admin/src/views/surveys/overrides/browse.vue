@@ -1,12 +1,12 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
-    <v-card-title>{{ $t('survey-schemes.overrides.questions.title') }}</v-card-title>
+    <v-card-title>{{ $t('survey-schemes.overrides.prompts.title') }}</v-card-title>
     <v-card-subtitle>
-      {{ $t('survey-schemes.overrides.questions.subtitle') }}
+      {{ $t('survey-schemes.overrides.prompts.subtitle') }}
     </v-card-subtitle>
     <prompt-list
-      v-bind="{ mode: 'override', questionIds, templates: questions }"
-      :items.sync="form.surveySchemeOverrides.questions"
+      v-bind="{ mode: 'override', promptIds, templates: prompts }"
+      :items.sync="form.surveySchemeOverrides.prompts"
     ></prompt-list>
     <meal-list
       v-model="form.surveySchemeOverrides.meals"
@@ -66,17 +66,17 @@ export default defineComponent({
   },
 
   computed: {
-    questions(): Prompt[] {
+    prompts(): Prompt[] {
       if (!this.entryLoaded || !this.refsLoaded) return [];
 
       const scheme = this.refs.surveySchemes.find((item) => item.id === this.entry.surveySchemeId);
       if (!scheme) return [];
 
-      return flattenScheme(scheme.questions);
+      return flattenScheme(scheme.prompts);
     },
 
-    questionIds(): string[] {
-      return this.form.surveySchemeOverrides.questions.map((question) => question.id);
+    promptIds(): string[] {
+      return this.form.surveySchemeOverrides.prompts.map(({ id }) => id);
     },
   },
 });

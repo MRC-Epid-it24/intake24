@@ -22,33 +22,33 @@ Edit tab allows to modify selected survey scheme.
     - Load whole meal list from different scheme
     - Reset the list to default one
 
-## Questions
+## Prompts
 
-Questions tab allows to design dietary survey recall flow and define details about each question asked.
+Prompts tab allows to design dietary survey recall flow and define details about each prompt asked.
 
-Questions are categorized to sections and they are asked in specified fixed order. See table below.
+Prompts are categorized to sections and they are asked in specified fixed order. See table below.
 
 ### Recall sections
 
-| Name          | Description                                                    |
-| ------------- | -------------------------------------------------------------- |
-| 1. Pre-meal   | Questions asked about whole recall before dietary data entered |
-| 2. Pre-foods  | Questions asked about meal before foods were entered           |
-| 3. Foods      | Questions asked about the foods                                |
-| 4. Post-foods | Questions asked about meal after foods were entered            |
-| 5. Post-meal  | Questions asked about whole recall after dietary data          |
-| 6. Submission | Questions asked during data submissions                        |
+| Name          | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| 1. Pre-meal   | Prompts asked about whole recall before dietary data entered |
+| 2. Pre-foods  | Prompts asked about meal before foods were entered           |
+| 3. Foods      | Prompts asked about the foods                                |
+| 4. Post-foods | Prompts asked about meal after foods were entered            |
+| 5. Post-meal  | Prompts asked about whole recall after dietary data          |
+| 6. Submission | Prompts asked during data submissions                        |
 
-Whole question sections group can be loaded from another scheme using `load from scheme` button.
+Whole prompt sections group can be loaded from another scheme using `load from scheme` button.
 
-When question section is selected, list of questions appear below:
+When prompt section is selected, list of prompts appear below:
 
-- New questions can be added
-- Questions can be removed
-- List of questions can be re-arranged by drag & drop
-- Question can be loaded from `template` defined in `scheme questions` section
-- Question can be saved as `template` if it doesn't exist yet (determined by unique `question id`)
-- Question's settings can be synced from `template` if it exists (determined by unique `question id`)
+- New prompts can be added
+- Prompts can be removed
+- List of prompts can be re-arranged by drag & drop
+- Prompt can be loaded from `template` defined in `scheme prompts` section
+- Prompt can be saved as `template` if it doesn't exist yet (determined by unique `prompt id`)
+- Prompt's settings can be synced from `template` if it exists (determined by unique `prompt id`)
 
 ## Data export
 

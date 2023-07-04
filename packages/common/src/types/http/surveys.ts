@@ -28,10 +28,7 @@ export type PublicSurveyEntry = {
   openAccess: boolean;
 };
 
-export type SchemeEntryResponse = Pick<
-  SurveySchemeAttributes,
-  'id' | 'type' | 'meals' | 'questions'
->;
+export type SchemeEntryResponse = Pick<SurveySchemeAttributes, 'id' | 'type' | 'meals' | 'prompts'>;
 export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
 export type LocaleEntryResponse = Pick<SystemLocaleAttributes, 'id' | 'code'>;

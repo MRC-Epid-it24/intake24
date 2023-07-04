@@ -12,14 +12,14 @@ import type { Prompt } from '@intake24/common/prompts';
 import BaseModel from '../model';
 
 @Table({
-  modelName: 'SurveySchemeQuestion',
-  tableName: 'survey_scheme_questions',
+  modelName: 'SurveySchemePrompt',
+  tableName: 'survey_scheme_prompts',
   freezeTableName: true,
   underscored: true,
 })
-export default class SurveySchemeQuestion extends BaseModel<
-  InferAttributes<SurveySchemeQuestion>,
-  InferCreationAttributes<SurveySchemeQuestion>
+export default class SurveySchemePrompt extends BaseModel<
+  InferAttributes<SurveySchemePrompt>,
+  InferCreationAttributes<SurveySchemePrompt>
 > {
   @Column({
     autoIncrement: true,
@@ -32,7 +32,7 @@ export default class SurveySchemeQuestion extends BaseModel<
     allowNull: false,
     type: DataType.STRING(128),
   })
-  declare questionId: string;
+  declare promptId: string;
 
   @Column({
     allowNull: false,
@@ -44,14 +44,14 @@ export default class SurveySchemeQuestion extends BaseModel<
     allowNull: true,
     type: DataType.TEXT({ length: 'long' }),
   })
-  get question(): Prompt {
-    const val = this.getDataValue('question') as unknown;
+  get prompt(): Prompt {
+    const val = this.getDataValue('prompt') as unknown;
     return val ? JSON.parse(val as string) : {};
   }
 
-  set question(value: Prompt) {
+  set prompt(value: Prompt) {
     // @ts-expect-error: Sequelize/TS issue for setting custom values
-    this.setDataValue('question', JSON.stringify(value ?? {}));
+    this.setDataValue('prompt', JSON.stringify(value ?? {}));
   }
 
   @CreatedAt
@@ -61,5 +61,5 @@ export default class SurveySchemeQuestion extends BaseModel<
   declare readonly updatedAt: CreationOptional<Date>;
 }
 
-export type SurveySchemeQuestionAttributes = Attributes<SurveySchemeQuestion>;
-export type SurveySchemeQuestionCreationAttributes = CreationAttributes<SurveySchemeQuestion>;
+export type SurveySchemePromptAttributes = Attributes<SurveySchemePrompt>;
+export type SurveySchemePromptCreationAttributes = CreationAttributes<SurveySchemePrompt>;

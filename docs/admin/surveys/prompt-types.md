@@ -1,6 +1,6 @@
-# Question types
+# Prompt types
 
-Questions / Prompts are divided into three groups:
+Prompts / Prompts are divided into three groups:
 
 - [standard](#standard-prompts) - Standard prompts
 - [portion-size](#portion-size-prompts) - Portion-size estimation prompts
@@ -179,7 +179,7 @@ Calculates portion size based on parent food portion size.
 
 ## Custom prompts
 
-Prompts with customizable generic behavior. Custom prompts can be used multiple times per scheme as long as they are identified with scheme-unique [`Question ID`](/admin/surveys/question-editor#general).
+Prompts with customizable generic behavior. Custom prompts can be used multiple times per scheme as long as they are identified with scheme-unique [`Prompt ID`](/admin/surveys/prompt-editor#general).
 
 ### Checkbox list prompt
 

@@ -15,7 +15,7 @@ import signInLog from './sign-in-log.controller';
 import signup from './signup.controller';
 import standardUnit from './standard-unit.controller';
 import surveyScheme from './survey-scheme.controller';
-import surveySchemeQuestion from './survey-scheme-question.controller';
+import surveySchemePrompt from './survey-scheme-prompt.controller';
 import surveys from './surveys';
 import task from './task.controller';
 import user from './user';
@@ -38,7 +38,7 @@ export * from './sign-in-log.controller';
 export * from './signup.controller';
 export * from './standard-unit.controller';
 export * from './survey-scheme.controller';
-export * from './survey-scheme-question.controller';
+export * from './survey-scheme-prompt.controller';
 export * from './surveys';
 export * from './task.controller';
 export * from './user';
@@ -63,6 +63,6 @@ export default {
   signup,
   standardUnit,
   surveyScheme,
-  surveySchemeQuestion,
+  surveySchemePrompt,
   task,
 };

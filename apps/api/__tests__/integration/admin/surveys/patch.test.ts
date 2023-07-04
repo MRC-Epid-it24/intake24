@@ -75,7 +75,7 @@ export default () => {
         searchMatchScoreWeight: { number: 20 },
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
-          questions: { value: 'not a valid overrides object' },
+          prompts: { value: 'not a valid overrides object' },
         },
         userPersonalIdentifiers: [true],
         userCustomFields: 'not a boolean',

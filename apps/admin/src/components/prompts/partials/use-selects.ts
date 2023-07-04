@@ -22,7 +22,7 @@ export const useSelects = () => {
 
   const orientations = computed(() =>
     ['column', 'row'].map((value) => ({
-      text: i18n.t(`survey-schemes.questions.orientation.${value}`),
+      text: i18n.t(`survey-schemes.prompts.orientation.${value}`),
       value,
     }))
   );

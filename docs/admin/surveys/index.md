@@ -93,15 +93,15 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 Overrides tab allows to override certain parts of the scheme without a need to create whole new scheme.
 
-There are two sections that can be overridden in limited way, so it doesn't influence the overall scheme flow. UI is the same is in [`question editor`](/admin/surveys/schemes), so should feel familiar.
+There are two sections that can be overridden in limited way, so it doesn't influence the overall scheme flow. UI is the same is in [`prompt editor`](/admin/surveys/schemes), so should feel familiar.
 
-### Scheme questions overrides
+### Scheme prompts overrides
 
-Scheme questions overrides section allow to override specific survey scheme question. When added to the list, user can modify the settings of particular question.
+Scheme prompts overrides section allow to override specific survey scheme prompt. When added to the list, user can modify the settings of particular prompt.
 
 ::: warning
 
-New question cannot be added or existing question cannot be removed from the scheme in this way. It only allows to modify existing questions in order to retain original scheme flow. If you need to add / remove questions, clone existing scheme, modify it and assign to the survey.
+New prompt cannot be added or existing prompt cannot be removed from the scheme in this way. It only allows to modify existing prompts in order to retain original scheme flow. If you need to add / remove prompts, clone existing scheme, modify it and assign to the survey.
 
 :::
 

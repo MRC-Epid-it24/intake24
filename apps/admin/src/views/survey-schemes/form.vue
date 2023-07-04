@@ -48,7 +48,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { ExportSection, RecallQuestions, SchemeType } from '@intake24/common/surveys';
+import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
@@ -62,7 +62,7 @@ export type SurveySchemeForm = {
   id: string | null;
   name: string | null;
   type: SchemeType;
-  questions: RecallQuestions;
+  prompts: RecallPrompts;
   meals: Meal[];
   dataExport: ExportSection[];
 };

@@ -52,12 +52,12 @@ module.exports = {
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         'INSERT INTO nutrient_table_record_nutrients (nutrient_table_id, v3_nutrient_table_record_id, nutrient_type_id, units_per_100g) SELECT nutrient_table_id, nutrient_table_record_id, nutrient_type_id, units_per_100g FROM v3_nutrient_table_records_nutrients',
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         `UPDATE nutrient_table_record_nutrients SET nutrient_table_record_id = nutrient_table_records.id from nutrient_table_records
                 WHERE nutrient_table_record_nutrients.nutrient_table_id = nutrient_table_records.nutrient_table_id
                   AND nutrient_table_record_nutrients.v3_nutrient_table_record_id = nutrient_table_records.nutrient_table_record_id`,

@@ -48,7 +48,7 @@ export const defaults: Schema = {
       errorMessage: typeErrorMessage('in.options', { options: schemeTypes }),
     },
   },
-  questions: {
+  prompts: {
     in: ['body'],
     errorMessage: typeErrorMessage('structure._'),
     custom: {

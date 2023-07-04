@@ -38,9 +38,9 @@ const validators = [
     params: '--useNamedExport',
   },
   {
-    type: 'RecallQuestions',
+    type: 'RecallPrompts',
     srcFile: 'src/schemes/index.ts',
-    destFile: 'src/validators/survey-schemes/recall-questions.validator.ts',
+    destFile: 'src/validators/survey-schemes/recall-prompts.validator.ts',
     params: '--useNamedExport',
   },
   {

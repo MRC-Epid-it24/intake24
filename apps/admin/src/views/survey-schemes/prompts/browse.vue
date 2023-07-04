@@ -2,11 +2,11 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }" :route-leave.sync="routeLeave" @save="submit">
     <v-toolbar color="grey lighten-5" flat tile>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t(`survey-schemes.questions.title`) }}
+        {{ $t(`survey-schemes.prompts.title`) }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <options-menu>
-        <select-resource resource="survey-schemes" return-object="questions" @input="load">
+        <select-resource resource="survey-schemes" return-object="prompts" @input="load">
           <template #activator="{ attrs, on }">
             <v-list-item v-bind="attrs" link v-on="on">
               <v-list-item-title>
@@ -16,7 +16,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.questions"></json-editor>
+        <json-editor v-model="form.prompts"></json-editor>
       </options-menu>
     </v-toolbar>
     <prompt-list
@@ -25,9 +25,9 @@
       v-bind="{
         section,
         step: index + 1,
-        questionIds,
+        promptIds,
         templates,
-        items: isMealSection(section) ? form.questions.meals[section] : form.questions[section],
+        items: isMealSection(section) ? form.prompts.meals[section] : form.prompts[section],
       }"
       @move="move"
       @update:items="updateItems(section, $event)"
@@ -38,9 +38,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { PromptQuestionMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
+import type { PromptMoveEvent } from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import type { Prompt } from '@intake24/common/prompts';
-import type { PromptSection, RecallQuestions } from '@intake24/common/surveys';
+import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
@@ -48,14 +48,14 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { promptSections } from '@intake24/admin/components/prompts';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { defaultQuestions, flattenScheme, isMealSection } from '@intake24/common/surveys';
+import { defaultPrompts, flattenScheme, isMealSection } from '@intake24/common/surveys';
 
 import type { SurveySchemeForm } from '../form.vue';
 
-export type SurveySchemeQuestionsForm = Pick<SurveySchemeForm, 'questions'>;
+export type SurveySchemePromptsForm = Pick<SurveySchemeForm, 'prompts'>;
 
 export default defineComponent({
-  name: 'SurveySchemeQuestions',
+  name: 'SurveySchemePrompts',
 
   components: { JsonEditor, OptionsMenu, PromptList, SelectResource },
 
@@ -63,8 +63,8 @@ export default defineComponent({
 
   setup(props) {
     const loadCallback = (data: SurveySchemeEntry) => {
-      const { questions, ...rest } = data;
-      return { ...rest, questions: { ...defaultQuestions, ...questions } };
+      const { prompts, ...rest } = data;
+      return { ...rest, prompts: { ...defaultPrompts, ...prompts } };
     };
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveySchemeEntry, SurveySchemeRefs>(
@@ -72,10 +72,10 @@ export default defineComponent({
     );
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
-      SurveySchemeQuestionsForm,
+      SurveySchemePromptsForm,
       SurveySchemeEntry
     >(props, {
-      data: { questions: defaultQuestions },
+      data: { prompts: defaultPrompts },
       editMethod: 'patch',
       loadCallback,
     });
@@ -94,41 +94,41 @@ export default defineComponent({
   },
 
   computed: {
-    questionIds(): string[] {
-      return flattenScheme(this.form.questions).map((question) => question.id);
+    promptIds(): string[] {
+      return flattenScheme(this.form.prompts).map(({ id }) => id);
     },
     templates(): Prompt[] {
       if (!this.refsLoaded) return [];
 
-      return this.refs.templates.filter((template) => this.questionIds.includes(template.id));
+      return this.refs.templates.filter((template) => this.promptIds.includes(template.id));
     },
   },
 
   methods: {
     isMealSection,
 
-    load(questions: RecallQuestions) {
-      this.form.questions = { ...questions };
+    load(prompts: RecallPrompts) {
+      this.form.prompts = { ...prompts };
     },
 
-    move(event: PromptQuestionMoveEvent) {
-      const { section, question } = event;
+    move(event: PromptMoveEvent) {
+      const { section, prompt } = event;
 
       if (isMealSection(section)) {
-        this.form.questions.meals[section].push(question);
+        this.form.prompts.meals[section].push(prompt);
         return;
       }
 
-      this.form.questions[section].push(question);
+      this.form.prompts[section].push(prompt);
     },
 
     updateItems(section: PromptSection, prompts: Prompt[]) {
       if (isMealSection(section)) {
-        this.form.questions.meals[section] = prompts;
+        this.form.prompts.meals[section] = prompts;
         return;
       }
 
-      this.form.questions[section] = prompts;
+      this.form.prompts[section] = prompts;
     },
   },
 });

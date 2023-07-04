@@ -21,7 +21,7 @@ export * from './sign-in-logs';
 export * from './source-images';
 export * from './standard-units';
 export * from './survey-respondents';
-export * from './survey-scheme-questions';
+export * from './survey-scheme-prompts';
 export * from './survey-schemes';
 export * from './survey-submissions';
 export * from './surveys';

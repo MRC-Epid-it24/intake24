@@ -28,7 +28,7 @@ export default validate(
         },
       },
     },
-    question: {
+    prompt: {
       in: ['body'],
       custom: {
         options: async (value, meta): Promise<void> => {

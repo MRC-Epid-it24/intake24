@@ -55,7 +55,7 @@ import type { PropType } from 'vue';
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 
-import type { Errors } from '@intake24/common/util';
+import { Errors } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import type { CategoryListItem } from '.';
@@ -73,7 +73,7 @@ export default defineComponent({
     },
     errors: {
       type: Object as PropType<Errors>,
-      required: true,
+      default: () => new Errors(),
     },
     localeId: {
       type: String,

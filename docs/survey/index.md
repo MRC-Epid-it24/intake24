@@ -9,7 +9,7 @@ This is currently hosted on Miro (TF's account), will migrate here if useful: [v
 
 ## Custom recall flow
 
-There is a number of places in the user flow where custom questions can be inserted. Custom questions are added to the _scheme_. They can be inserted at the following points in the user flow:
+There is a number of places in the user flow where custom prompts can be inserted. Custom prompts are added to the _scheme_. They can be inserted at the following points in the user flow:
 
 - Pre-meal
 - Post-meal
@@ -18,7 +18,7 @@ There is a number of places in the user flow where custom questions can be inser
 - Foods (during food selection)
 - Post-foods
 
-Further details about the custom recall flow can be see in the [Admin documentation](../admin/#custom-recall-questions).
+Further details about the custom recall flow can be see in the [Admin documentation](../admin/#custom-recall-prompts).
 
 ### Prompts
 

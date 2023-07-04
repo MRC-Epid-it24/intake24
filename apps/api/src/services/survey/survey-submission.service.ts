@@ -302,17 +302,17 @@ const surveySubmissionService = ({
    * @param {T} propId
    * @param {string} id
    * @param {Dictionary<CustomPromptAnswer>} promptAnswers
-   * @param {string[]} promptQuestions
+   * @param {string[]} prompts
    * @returns {CustomAnswers<T>[]}
    */
   const collectCustomAnswers = <T extends 'surveySubmissionId' | 'mealId' | 'foodId'>(
     propId: T,
     id: string,
     promptAnswers: Dictionary<CustomPromptAnswer>,
-    promptQuestions: string[]
+    prompts: string[]
   ): CustomAnswers<T>[] => {
     const customAnswers = Object.entries(promptAnswers)
-      .filter(([name]) => promptQuestions.includes(name))
+      .filter(([name]) => prompts.includes(name))
       .map(([name, answer]) => ({
         id: randomUUID(),
         [propId]: id,
@@ -399,7 +399,7 @@ const surveySubmissionService = ({
     const {
       locale: { code: localeCode },
       surveyScheme: {
-        questions: {
+        prompts: {
           preMeals,
           postMeals,
           meals: { foods, preFoods, postFoods },
@@ -408,15 +408,15 @@ const surveySubmissionService = ({
       submissionNotificationUrl,
     } = survey;
 
-    const surveyCustomQuestions = [...preMeals, ...postMeals]
+    const surveyCustomPrompts = [...preMeals, ...postMeals]
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
-    const mealCustomQuestions = [...preFoods, ...postFoods]
+    const mealCustomPrompts = [...preFoods, ...postFoods]
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
-    const foodCustomQuestions = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
+    const foodCustomPrompts = foods.filter(({ type }) => type === 'custom').map(({ id }) => id);
 
     await db.system.transaction(async (transaction) => {
       const { startTime, endTime, userAgent } = state;
@@ -450,7 +450,7 @@ const surveySubmissionService = ({
         'surveySubmissionId',
         surveySubmissionId,
         state.customPromptAnswers,
-        surveyCustomQuestions
+        surveyCustomPrompts
       );
 
       // Collect meals
@@ -527,7 +527,7 @@ const surveySubmissionService = ({
           'mealId',
           mealId,
           mealState.customPromptAnswers,
-          mealCustomQuestions
+          mealCustomPrompts
         );
 
         // Collect meal foods
@@ -554,7 +554,7 @@ const surveySubmissionService = ({
             'foodId',
             foodId,
             customPromptAnswers,
-            foodCustomQuestions
+            foodCustomPrompts
           );
 
           // Collect food composition fields & food composition nutrients

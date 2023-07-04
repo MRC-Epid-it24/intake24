@@ -13,7 +13,7 @@
             color="secondary"
             fab
             small
-            :title="$t('survey-schemes.questions.create')"
+            :title="$t('survey-schemes.prompts.create')"
             @click.stop="create"
           >
             <v-icon small>$add</v-icon>
@@ -21,11 +21,11 @@
           <options-menu>
             <load-prompt-dialog
               :items="isOverrideMode ? templates : undefined"
-              :question-ids="questionIds"
+              :prompt-ids="promptIds"
               :scheme-id="$route.params.id"
               @load="load"
             ></load-prompt-dialog>
-            <json-editor v-model="questions"></json-editor>
+            <json-editor v-model="prompts"></json-editor>
           </options-menu>
         </template>
         <v-icon :class="{ 'fa-rotate-180': isOpened, 'ml-4': isOpened }">$expand</v-icon>
@@ -33,24 +33,24 @@
     </v-stepper-step>
     <v-stepper-content v-bind="{ step }">
       <v-list two-line>
-        <draggable v-model="questions" handle=".drag-and-drop__handle">
+        <draggable v-model="prompts" handle=".drag-and-drop__handle">
           <transition-group name="drag-and-drop" type="transition">
             <prompt-list-item
-              v-for="(question, index) in questions"
-              :key="question.id"
-              v-bind="{ mode, question, index, templates }"
-              :move-sections="moveSections(question)"
-              @question:edit="edit"
-              @question:move="move"
-              @question:remove="remove"
-              @question:sync="sync"
+              v-for="(prompt, index) in prompts"
+              :key="prompt.id"
+              v-bind="{ mode, prompt, index, templates }"
+              :move-sections="moveSections(prompt)"
+              @prompt:edit="edit"
+              @prompt:move="move"
+              @prompt:remove="remove"
+              @prompt:sync="sync"
             >
             </prompt-list-item>
           </transition-group>
         </draggable>
       </v-list>
     </v-stepper-content>
-    <prompt-selector ref="selector" v-bind="{ mode, section, questionIds }" @save="save">
+    <prompt-selector ref="selector" v-bind="{ mode, section, promptIds }" @save="save">
     </prompt-selector>
   </v-stepper>
 </template>
@@ -62,7 +62,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { MealSection, PromptSection, SurveyQuestionSection } from '@intake24/common/surveys';
+import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditor } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
@@ -73,13 +73,13 @@ import PromptListItem from './prompt-list-item.vue';
 
 export type MoveSection = { value: string; text: string };
 
-export type PromptQuestionEvent = {
+export type PromptEvent = {
   index: number;
-  question: Prompt;
+  prompt: Prompt;
 };
 
-export interface PromptQuestionMoveEvent extends PromptQuestionEvent {
-  section: MealSection | SurveyQuestionSection;
+export interface PromptMoveEvent extends PromptEvent {
+  section: MealSection | SurveyPromptSection;
 }
 
 export default defineComponent({
@@ -106,7 +106,7 @@ export default defineComponent({
       type: Number,
       default: 1,
     },
-    questionIds: {
+    promptIds: {
       type: Array as PropType<string[]>,
       default: () => [],
     },
@@ -130,7 +130,7 @@ export default defineComponent({
 
   data() {
     return {
-      questions: this.items,
+      prompts: this.items,
       promptSettings,
       open: this.step,
     };
@@ -146,26 +146,26 @@ export default defineComponent({
     title(): string {
       return this.$t(
         this.isOverrideMode
-          ? `survey-schemes.overrides.questions.title`
-          : `survey-schemes.questions.${this.section}.title`
+          ? `survey-schemes.overrides.prompts.title`
+          : `survey-schemes.prompts.${this.section}.title`
       ).toString();
     },
     subtitle(): string {
       return this.$t(
         this.isOverrideMode
-          ? `survey-schemes.overrides.questions.subtitle`
-          : `survey-schemes.questions.${this.section}.subtitle`
+          ? `survey-schemes.overrides.prompts.subtitle`
+          : `survey-schemes.prompts.${this.section}.subtitle`
       ).toString();
     },
   },
 
   watch: {
     items(val) {
-      if (deepEqual(val, this.questions)) return;
+      if (deepEqual(val, this.prompts)) return;
 
-      this.questions = [...val];
+      this.prompts = [...val];
     },
-    questions(val) {
+    prompts(val) {
       if (deepEqual(val, this.items)) return;
 
       this.update();
@@ -183,47 +183,47 @@ export default defineComponent({
       this.selector?.create();
     },
 
-    load(question: Prompt) {
-      this.questions.push(question);
+    load(prompt: Prompt) {
+      this.prompts.push(prompt);
     },
 
-    edit({ question, index }: PromptQuestionEvent) {
-      this.selector?.edit(index, question);
+    edit({ prompt, index }: PromptEvent) {
+      this.selector?.edit(index, prompt);
     },
 
-    save({ question, index }: PromptQuestionEvent) {
-      if (index === -1) this.questions.push(question);
-      else this.questions.splice(index, 1, question);
+    save({ prompt, index }: PromptEvent) {
+      if (index === -1) this.prompts.push(prompt);
+      else this.prompts.splice(index, 1, prompt);
     },
 
-    moveSections(question: Prompt): MoveSection[] {
-      return this.promptSettings[question.component].sections
+    moveSections(prompt: Prompt): MoveSection[] {
+      return this.promptSettings[prompt.component].sections
         .filter((item) => item !== this.section)
         .map((item) => ({
           value: item,
-          text: this.$t(`survey-schemes.questions.${item}.title`).toString(),
+          text: this.$t(`survey-schemes.prompts.${item}.title`).toString(),
         }));
     },
 
-    move(event: PromptQuestionMoveEvent) {
+    move(event: PromptMoveEvent) {
       if (this.isOverrideMode) return;
 
       this.$emit('move', event);
-      this.questions.splice(event.index, 1);
+      this.prompts.splice(event.index, 1);
     },
 
     remove(index: number) {
-      this.questions.splice(index, 1);
+      this.prompts.splice(index, 1);
     },
 
-    sync({ question, index }: PromptQuestionEvent) {
+    sync({ prompt, index }: PromptEvent) {
       if (this.isOverrideMode) return;
 
-      this.questions.splice(index, 1, question);
+      this.prompts.splice(index, 1, prompt);
     },
 
     update() {
-      this.$emit('update:items', this.questions);
+      this.$emit('update:items', this.prompts);
     },
   },
 });

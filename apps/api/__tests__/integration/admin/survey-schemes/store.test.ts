@@ -33,13 +33,13 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['name', 'type', 'meals', 'questions', 'dataExport'],
+        ['name', 'type', 'meals', 'prompts', 'dataExport'],
         {
           input: {
             name: [],
             type: 'invalidType',
             meals: 5,
-            questions: [],
+            prompts: [],
             dataExport: 'notExportScheme',
           },
         }

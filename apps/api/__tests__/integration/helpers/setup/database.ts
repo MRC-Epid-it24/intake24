@@ -9,7 +9,7 @@ import {
   feedbackPhysicalDataFields,
   feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
-import { defaultExport, defaultMeals, defaultQuestions } from '@intake24/common/surveys';
+import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
 import {
   FeedbackScheme,
   FoodIndexBackend,
@@ -188,16 +188,16 @@ export const setupPermissions = async (): Promise<void> => {
     { name: 'survey-schemes|edit', displayName: 'Edit survey schemes' },
     { name: 'survey-schemes|delete', displayName: 'Delete survey schemes' },
     { name: 'survey-schemes|data-export', displayName: 'Survey scheme data export' },
-    { name: 'survey-schemes|questions', displayName: 'Survey scheme questions' },
+    { name: 'survey-schemes|prompts', displayName: 'Survey scheme prompts' },
     { name: 'survey-schemes|copy', displayName: 'Copy survey schemes' },
     { name: 'survey-schemes|security', displayName: 'Survey schemes security' },
-    { name: 'survey-scheme-questions', displayName: 'Survey scheme questions resource access' },
-    { name: 'survey-scheme-questions|browse', displayName: 'Browse survey scheme questions' },
-    { name: 'survey-scheme-questions|read', displayName: 'Read survey scheme questions' },
-    { name: 'survey-scheme-questions|create', displayName: 'Create survey scheme questions' },
-    { name: 'survey-scheme-questions|edit', displayName: 'Edit survey scheme questions' },
-    { name: 'survey-scheme-questions|delete', displayName: 'Delete survey scheme questions' },
-    { name: 'survey-scheme-questions|sync', displayName: 'Sync survey scheme questions' },
+    { name: 'survey-scheme-prompts', displayName: 'Survey scheme prompts resource access' },
+    { name: 'survey-scheme-prompts|browse', displayName: 'Browse survey scheme prompts' },
+    { name: 'survey-scheme-prompts|read', displayName: 'Read survey scheme prompts' },
+    { name: 'survey-scheme-prompts|create', displayName: 'Create survey scheme prompts' },
+    { name: 'survey-scheme-prompts|edit', displayName: 'Edit survey scheme prompts' },
+    { name: 'survey-scheme-prompts|delete', displayName: 'Delete survey scheme prompts' },
+    { name: 'survey-scheme-prompts|sync', displayName: 'Sync survey scheme prompts' },
     { name: 'surveys', displayName: 'Surveys resource access' },
     { name: 'surveys|browse', displayName: 'Browse surveys' },
     { name: 'surveys|read', displayName: 'Read surveys' },
@@ -329,7 +329,7 @@ export const initDatabase = async (): Promise<MockData> => {
     SurveyScheme.create({
       name: 'Default',
       type: 'default',
-      questions: defaultQuestions,
+      prompts: defaultPrompts,
       meals: [...defaultMeals],
       dataExport: defaultExport,
     }),
@@ -351,7 +351,7 @@ export const initDatabase = async (): Promise<MockData> => {
     allowGenUsers: false,
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
-    surveySchemeOverrides: { meals: [], questions: [] },
+    surveySchemeOverrides: { meals: [], prompts: [] },
   });
 
   await setupPermissions();

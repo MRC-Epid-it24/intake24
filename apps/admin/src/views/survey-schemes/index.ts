@@ -1,7 +1,7 @@
 import browse from './browse.vue';
 import dataExport from './data-export';
 import form from './form.vue';
-import questions from './questions';
+import prompts from './prompts';
 import read from './read.vue';
 import securables from './securables';
 
@@ -10,7 +10,7 @@ export default {
   create: form,
   read,
   edit: form,
-  questions,
+  prompts,
   'data-export': dataExport,
   securables,
 };

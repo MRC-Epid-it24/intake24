@@ -20,10 +20,10 @@ const dataExportFields = () => {
   /**
    * Helper to map custom Prompt to ExportField
    *
-   * @param {Prompt} question
+   * @param {Prompt} prompt
    * @returns {ExportField}
    */
-  const customQuestionMapper = ({ id, name: label }: Prompt): ExportField => ({
+  const customPromptMapper = ({ id, name: label }: Prompt): ExportField => ({
     id,
     label,
   });
@@ -34,7 +34,7 @@ const dataExportFields = () => {
    * @param {Prompt} { type }
    * @returns {boolean}
    */
-  const customQuestionFilter = ({ type }: Prompt): boolean => type === 'custom';
+  const customPromptFilter = ({ type }: Prompt): boolean => type === 'custom';
 
   /**
    * Default user fields
@@ -177,10 +177,10 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const surveyCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
-    const { preMeals, postMeals, submission } = surveyScheme.questions;
+    const { preMeals, postMeals, submission } = surveyScheme.prompts;
     return [...preMeals, ...postMeals, ...submission]
-      .filter(customQuestionFilter)
-      .map(customQuestionMapper);
+      .filter(customPromptFilter)
+      .map(customPromptMapper);
   };
 
   /**
@@ -207,9 +207,9 @@ const dataExportFields = () => {
   const mealCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
     const {
       meals: { preFoods, postFoods },
-    } = surveyScheme.questions;
+    } = surveyScheme.prompts;
 
-    return [...preFoods, ...postFoods].filter(customQuestionFilter).map(customQuestionMapper);
+    return [...preFoods, ...postFoods].filter(customPromptFilter).map(customPromptMapper);
   };
 
   /**
@@ -260,7 +260,7 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const foodCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> =>
-    surveyScheme.questions.meals.foods.filter(customQuestionFilter).map(customQuestionMapper);
+    surveyScheme.prompts.meals.foods.filter(customPromptFilter).map(customPromptMapper);
 
   /**
    * Default food composition fields

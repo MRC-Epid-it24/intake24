@@ -29,7 +29,7 @@ After record is created, existing object areas can be assigned with:
 - `Label` - object's localized label, display on hover/selection
 
 :::tip Label settings
-**Display** - Labels are displayed only when enabled in [guide-image-prompt](/admin/surveys/question-types#guide-image-prompt)
+**Display** - Labels are displayed only when enabled in [guide-image-prompt](/admin/surveys/prompt-types#guide-image-prompt)
 
 **Formatting** - Weight can be embedded into the label with `{weight}` variable placeholder.
 :::

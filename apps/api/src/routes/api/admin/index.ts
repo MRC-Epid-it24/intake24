@@ -21,7 +21,7 @@ import roles from './roles';
 import signInLogs from './sign-in-logs';
 import signup from './signup';
 import standardUnits from './standard-units';
-import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemePrompts from './survey-scheme-prompts';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
@@ -60,7 +60,7 @@ export default () => {
   router.use('/sign-in-logs', signInLogs());
   router.use('/standard-units', standardUnits());
   router.use('/survey-schemes', surveySchemes());
-  router.use('/survey-scheme-questions', surveySchemeQuestions());
+  router.use('/survey-scheme-prompts', surveySchemePrompts());
   router.use('/surveys', surveys());
   router.use('/tasks', tasks());
   router.use('/user', user());

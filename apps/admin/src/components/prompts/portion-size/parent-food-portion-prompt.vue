@@ -15,7 +15,7 @@
           <v-select
             hide-details="auto"
             :items="orientations"
-            :label="$t('survey-schemes.questions.orientation._')"
+            :label="$t('survey-schemes.prompts.orientation._')"
             outlined
             :value="orientation"
             @change="update('orientation', $event)"

@@ -4,7 +4,7 @@
       <v-list-item v-bind="attrs" :disabled="disabled" link v-on="on">
         <v-list-item-title>
           <v-icon :disabled="disabled" left>$save</v-icon>
-          {{ $t('survey-schemes.questions.templates.saveAs._') }}
+          {{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-list-item-title>
       </v-list-item>
     </template>
@@ -14,18 +14,18 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('survey-schemes.questions.templates.saveAs.title') }}
+          {{ $t('survey-schemes.prompts.templates.saveAs.title') }}
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text class="pa-6">
         <v-row>
           <v-col cols="12">
             <v-text-field
-              v-model="form.question.id"
+              v-model="form.prompt.id"
               disabled
               hide-details="auto"
-              :label="$t('survey-schemes.questions.internal.id._')"
-              :messages="$t('survey-schemes.questions.internal.id.hint')"
+              :label="$t('survey-schemes.prompts.internal.id._')"
+              :messages="$t('survey-schemes.prompts.internal.id.hint')"
               name="id"
               outlined
             >
@@ -33,11 +33,11 @@
           </v-col>
           <v-col cols="12">
             <v-text-field
-              v-model="form.question.name"
+              v-model="form.prompt.name"
               disabled
               hide-details="auto"
-              :label="$t('survey-schemes.questions.internal.name._')"
-              :messages="$t('survey-schemes.questions.internal.name.hint')"
+              :label="$t('survey-schemes.prompts.internal.name._')"
+              :messages="$t('survey-schemes.prompts.internal.name.hint')"
               name="name"
               outlined
             ></v-text-field>
@@ -54,7 +54,7 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
-          <v-icon left>$success</v-icon>{{ $t('survey-schemes.questions.templates.saveAs._') }}
+          <v-icon left>$success</v-icon>{{ $t('survey-schemes.prompts.templates.saveAs._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -68,15 +68,15 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { SurveySchemeQuestionEntry } from '@intake24/common/types/http/admin';
+import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
 import type { ValidationError } from '@intake24/common/util';
 import { ErrorList } from '@intake24/admin/components/forms';
 import { useEntry } from '@intake24/admin/stores';
 import { createForm } from '@intake24/admin/util';
 import { copy } from '@intake24/common/util';
 
-export type SchemeQuestionForm = {
-  question: Prompt;
+export type SchemePromptForm = {
+  prompt: Prompt;
 };
 
 export default defineComponent({
@@ -89,7 +89,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    question: {
+    prompt: {
       type: Object as PropType<Prompt>,
       required: true,
     },
@@ -97,10 +97,10 @@ export default defineComponent({
 
   data() {
     return {
-      form: createForm<SchemeQuestionForm>({
-        question: this.question,
+      form: createForm<SchemePromptForm>({
+        prompt: this.prompt,
       }),
-      nonInputErrorKeys: ['question'],
+      nonInputErrorKeys: ['prompt'],
       dialog: false,
       redirect: false,
     };
@@ -125,19 +125,19 @@ export default defineComponent({
     },
 
     async confirm() {
-      const { id, question } = await this.form.post<SurveySchemeQuestionEntry>(
-        'admin/survey-scheme-questions'
+      const { id, prompt } = await this.form.post<SurveySchemePromptEntry>(
+        'admin/survey-scheme-prompts'
       );
 
       const templates = copy(this.refs.templates);
-      templates.push(question);
+      templates.push(prompt);
 
       this.setRefs({ ...copy(this.refs), templates });
 
       this.close();
 
       if (this.redirect)
-        await this.$router.push({ name: 'survey-scheme-questions-read', params: { id } });
+        await this.$router.push({ name: 'survey-scheme-prompts-read', params: { id } });
     },
   },
 });

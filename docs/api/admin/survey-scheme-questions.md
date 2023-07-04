@@ -1,15 +1,15 @@
-# Survey scheme questions
+# Survey scheme prompts
 
-Manage survey scheme question templates
+Manage survey scheme prompt templates
 
-## Browse survey scheme questions
+## Browse survey scheme prompts
 
-Browse paginated survey scheme questions list
+Browse paginated survey scheme prompts list
 
 ### Request
 
 ```json
-GET /api/admin/survey-scheme-questions
+GET /api/admin/survey-scheme-prompts
     ?search={searchText}
     &page={page}
     &limit={limit}
@@ -29,20 +29,20 @@ Content-Type: application/json
 }
 ```
 
-## Create survey scheme question
+## Create survey scheme prompt
 
-Create new survey scheme question entry
+Create new survey scheme prompt entry
 
 ### Request
 
 ```json
-POST /api/admin/survey-scheme-questions
+POST /api/admin/survey-scheme-prompts
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "question": {...}
+    "prompt": {...}
 }
 ```
 
@@ -56,14 +56,14 @@ Content-Type: application/json
 }
 ```
 
-## Get survey scheme question
+## Get survey scheme prompt
 
-Get survey scheme question entry
+Get survey scheme prompt entry
 
 ### Request
 
 ```json
-GET /api/admin/survey-scheme-questions/:surveySchemeQuestionId
+GET /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -79,20 +79,20 @@ Content-Type: application/json
 }
 ```
 
-## Update survey scheme question
+## Update survey scheme prompt
 
-Update survey scheme question entry
+Update survey scheme prompt entry
 
 ### Request
 
 ```json
-PUT /api/admin/survey-scheme-questions/:surveySchemeQuestionId
+PUT /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
-    "question": {...}
+    "prompt": {...}
 }
 ```
 
@@ -106,14 +106,14 @@ Content-Type: application/json
 }
 ```
 
-## Delete survey scheme question
+## Delete survey scheme prompt
 
-Delete survey scheme question entry
+Delete survey scheme prompt entry
 
 ### Request
 
 ```json
-DELETE /api/admin/survey-scheme-questions/:surveySchemeQuestionId
+DELETE /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -125,14 +125,14 @@ Content-Type: application/json
 204 No Content
 ```
 
-## Survey scheme question references
+## Survey scheme prompt references
 
-Get survey scheme question references
+Get survey scheme prompt references
 
 ### Request
 
 ```json
-GET /api/admin/survey-scheme-questions/refs
+GET /api/admin/survey-scheme-prompts/refs
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -144,19 +144,19 @@ Content-Type: application/json
 200 OK
 
 {
-    "questionIds": string[],
+    "promptIds": string[],
     "schemes": [{...}]
 }
 ```
 
-## Scheme question sync
+## Scheme prompt sync
 
-Synchronize scheme question template with specific question in scheme section
+Synchronize scheme prompt template with specific prompt in scheme section
 
 ### Request
 
 ```json
-POST /api/admin/survey-scheme-questions/:surveySchemeQuestionId/sync
+POST /api/admin/survey-scheme-prompts/:surveySchemePromptId/sync
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -164,7 +164,7 @@ Content-Type: application/json
 {
     "surveySchemeId": string,
     "section": string,
-    "question": {...}
+    "prompt": {...}
 }
 ```
 

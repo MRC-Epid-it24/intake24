@@ -1,4 +1,4 @@
-# Question editor
+# Prompt editor
 
 Full screen modal opens when `add` or `edit` button is clicked.
 
@@ -7,28 +7,28 @@ Top level toolbar has:
 - `Cancel` button on the left - prompt changes are discarded
 - `Confirm` button on the right - prompt changes are confirmed, but not yet saved to server's database
 - Tab list with:
-  - `General` - Question type & id & name of the question `internal-only` purposes
-  - `Content` - Localized question content fields
-  - `Conditions` - Conditions list to be met to display the question
-  - `Validation` - Validation options, i.e. question is optional or required
-  - `Options` - Additional per-question type options
+  - `General` - Prompt type & id & name of the prompt `internal-only` purposes
+  - `Content` - Localized prompt content fields
+  - `Conditions` - Conditions list to be met to display the prompt
+  - `Validation` - Validation options, i.e. prompt is optional or required
+  - `Options` - Additional per-prompt type options
 
 ## General
 
 General tab defines administrative fields
 
-- `Type` - Questions are categorized to three types:
+- `Type` - Prompts are categorized to three types:
 
-  - [custom questions](/admin/surveys/question-types#custom-prompts)
-  - [standard questions](/admin/surveys/question-types#standard-prompts)
-  - [portion size questions](/admin/surveys/question-types#portion-size-prompts)
+  - [custom prompts](/admin/surveys/prompt-types#custom-prompts)
+  - [standard prompts](/admin/surveys/prompt-types#standard-prompts)
+  - [portion size prompts](/admin/surveys/prompt-types#portion-size-prompts)
 
-- `ID` - `scheme-unique` ID assigned to question
+- `ID` - `scheme-unique` ID assigned to prompt
 
-::: tip Question ID usage
+::: tip Prompt ID usage
 
-- Question ID of custom prompt is used as identifier in data exports file. It is also used to identify question in the scheme.
-- Question ID is used to load question from `template` and to sync question properties from `template`.
+- Prompt ID of custom prompt is used as identifier in data exports file. It is also used to identify prompt in the scheme.
+- Prompt ID is used to load prompt from `template` and to sync prompt properties from `template`.
   :::
 
 - `Name` - User friendly name for easier orientation (for internal use only).
@@ -37,9 +37,9 @@ General tab defines administrative fields
 
 Content tab defines respondent facing content text fields and their localized versions.
 
-- `Name` - Short question name displayed in top breadcrumbs component
-- `Text` - Text displayed in the header component (usually defaults to meal name for meal-level questions and to food name for food-level questions)
-- `Description` - Main body of question details, which allows to embed `rich-text` content
+- `Name` - Short prompt name displayed in top breadcrumbs component
+- `Text` - Text displayed in the header component (usually defaults to meal name for meal-level prompts and to food name for food-level prompts)
+- `Description` - Main body of prompt details, which allows to embed `rich-text` content
 
 All fields can be localized to [languages](/admin/localization/languages) set up in the database.
 
@@ -49,14 +49,14 @@ Following variables can be used in the fields:
 - `{mealName}` - Meal name
 - `{mealTime}` - Meal time
 - `{food}` - Food name
-- `{item}` - Food name or Meal name depending on question level type
+- `{item}` - Food name or Meal name depending on prompt level type
 
 ## Conditions
 
-Conditions tab defines list of conditions that needs to be met to display the question.
+Conditions tab defines list of conditions that needs to be met to display the prompt.
 
-- If conditions is empty, question is always displayed.
-- If conditions is not empty, question is only displayed once all conditions are met.
+- If conditions is empty, prompt is always displayed.
+- If conditions is not empty, prompt is only displayed once all conditions are met.
 
 ### Operations
 
@@ -75,8 +75,8 @@ Each condition can be defined by following operations:
 
 ## Validation
 
-Validation tab defines validation options, i.e. whether question is optional or required.
+Validation tab defines validation options, i.e. whether prompt is optional or required.
 
 ## Options
 
-Options tab defines additional per-question type options. See [Question types](/admin/surveys/question-types) for more details.
+Options tab defines additional per-prompt type options. See [Prompt types](/admin/surveys/prompt-types) for more details.

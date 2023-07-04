@@ -43,7 +43,7 @@ const securables: LocaleMessageObject = {
     tasks: 'Tasks',
 
     // Survey scheme
-    questions: 'Questions',
+    prompts: 'Prompts',
     'data-export': 'Data export',
 
     // Survey

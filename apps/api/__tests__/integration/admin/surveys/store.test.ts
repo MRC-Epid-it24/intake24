@@ -67,7 +67,7 @@ export default () => {
         searchMatchScoreWeight: 500,
         surveySchemeOverrides: {
           meals: ['shouldBeProperlyFormatMealList'],
-          questions: 'invalidQuestions',
+          prompts: 'invalidPrompts',
         },
       };
 

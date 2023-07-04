@@ -1,11 +1,11 @@
 <template>
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <v-card-title>{{
-      $t(`survey-scheme-questions.sync.title`, { id: entry.question.id })
+      $t(`survey-scheme-prompts.sync.title`, { id: entry.prompt.id })
     }}</v-card-title>
     <v-card-text v-if="!schemes.length">
       <v-alert color="primary" text type="info">
-        {{ $t(`survey-scheme-questions.sync.noSchemes`) }}
+        {{ $t(`survey-scheme-prompts.sync.noSchemes`) }}
       </v-alert>
     </v-card-text>
     <v-list two-line>
@@ -22,7 +22,7 @@
             {{ $t('survey-schemes._') }}: {{ scheme.name }}
           </v-list-item-title>
           <v-list-item-subtitle>
-            {{ $t('common.status') }}: {{ $t(`survey-scheme-questions.sync.${scheme.synced}`) }}
+            {{ $t('common.status') }}: {{ $t(`survey-scheme-prompts.sync.${scheme.synced}`) }}
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
@@ -30,7 +30,7 @@
             v-if="scheme.synced"
             color="success"
             large
-            :title="$t('survey-scheme-questions.sync.true')"
+            :title="$t('survey-scheme-prompts.sync.true')"
           >
             fa-check-circle
           </v-icon>
@@ -39,20 +39,15 @@
             color="warning"
             icon
             icon-left="$sync"
-            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
+            :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
             @confirm="sync(scheme)"
           >
             <template #activator="{ attrs, on }">
-              <v-btn
-                v-bind="attrs"
-                icon
-                :title="$t('survey-scheme-questions.sync.false')"
-                v-on="on"
-              >
+              <v-btn v-bind="attrs" icon :title="$t('survey-scheme-prompts.sync.false')" v-on="on">
                 <v-icon color="warning" large>$sync</v-icon>
               </v-btn>
             </template>
-            {{ $t('survey-scheme-questions.sync.confirm') }}
+            {{ $t('survey-scheme-prompts.sync.confirm') }}
           </confirm-dialog>
         </v-list-item-action>
       </v-list-item>
@@ -66,8 +61,8 @@ import { defineComponent } from 'vue';
 
 import type { PromptSection } from '@intake24/common/surveys';
 import type {
-  SurveySchemeQuestionEntry,
-  SurveySchemeQuestionRefs,
+  SurveySchemePromptEntry,
+  SurveySchemePromptRefs,
 } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
@@ -82,7 +77,7 @@ export type SchemeStatus = {
 };
 
 export default defineComponent({
-  name: 'SchemeQuestionSync',
+  name: 'SchemePromptSync',
 
   components: { ConfirmDialog },
 
@@ -90,8 +85,8 @@ export default defineComponent({
 
   setup(props) {
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<
-      SurveySchemeQuestionEntry,
-      SurveySchemeQuestionRefs
+      SurveySchemePromptEntry,
+      SurveySchemePromptRefs
     >(props);
     const { fetch } = useEntryFetch(props);
 
@@ -103,17 +98,17 @@ export default defineComponent({
       if (!this.refsLoaded) return [];
 
       return this.refs.schemes.reduce<SchemeStatus[]>((acc, scheme) => {
-        const questions = flattenSchemeWithSection(scheme.questions);
+        const prompts = flattenSchemeWithSection(scheme.prompts);
 
-        const match = questions.find((question) => question.id === this.entry.question.id);
+        const match = prompts.find((prompt) => prompt.id === this.entry.prompt.id);
         if (match) {
-          const { section, ...question } = match;
+          const { section, ...prompt } = match;
 
           acc.push({
             id: scheme.id,
             name: scheme.name,
             section,
-            synced: deepEqual(this.entry.question, question),
+            synced: deepEqual(this.entry.prompt, prompt),
           });
         }
 
@@ -124,13 +119,13 @@ export default defineComponent({
 
   methods: {
     async sync(scheme: SchemeStatus) {
-      const { question } = this.entry;
+      const { prompt } = this.entry;
       const { id: surveySchemeId, section } = scheme;
 
       await this.$http.post(`admin/${this.module}/${this.id}/sync`, {
         surveySchemeId,
         section,
-        question,
+        prompt,
       });
       await this.fetch();
     },

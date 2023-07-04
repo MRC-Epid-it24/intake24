@@ -221,7 +221,7 @@ export const surveySchemeOverrides: ParamSchema = {
     options: async (value): Promise<void> => {
       if (
         typeof value !== 'object' ||
-        Object.keys(value).some((key) => !['meals', 'questions'].includes(key))
+        Object.keys(value).some((key) => !['meals', 'prompts'].includes(key))
       )
         throw new Error();
 
@@ -232,11 +232,8 @@ export const surveySchemeOverrides: ParamSchema = {
         throw new Error(err.message.split('\n')[0]);
       }
 
-      // Questions
-      if (
-        !Array.isArray(value.questions) ||
-        value.questions.some((item: any) => !isPlainObject(item))
-      )
+      // Prompts
+      if (!Array.isArray(value.prompts) || value.prompts.some((item: any) => !isPlainObject(item)))
         throw new Error();
     },
   },

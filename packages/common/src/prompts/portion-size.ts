@@ -133,7 +133,7 @@ export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
   name: 'Direct weight',
 });
 
-export const portionSizePromptQuestions: Prompt[] = [
+export const portionSizePrompts: Prompt[] = [
   asServedPrompt,
   cerealPrompt,
   directWeightPrompt,

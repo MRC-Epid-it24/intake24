@@ -1,10 +1,10 @@
 <template>
   <data-table :headers="headers">
     <template #[`item.type`]="{ item }">
-      {{ $t(`survey-schemes.questions.${item.question.type}._`) }}
+      {{ $t(`survey-schemes.prompts.${item.prompt.type}._`) }}
     </template>
     <template #[`item.component`]="{ item }">
-      {{ $t(`survey-schemes.prompts.${item.question.component}.title`) }}
+      {{ $t(`survey-schemes.prompts.${item.prompt.component}.title`) }}
     </template>
   </data-table>
 </template>
@@ -15,7 +15,7 @@ import { defineComponent } from 'vue';
 import { DataTable } from '@intake24/admin/components/data-tables';
 
 export default defineComponent({
-  name: 'SchemeQuestionList',
+  name: 'SchemePromptList',
 
   components: { DataTable },
 
@@ -23,22 +23,22 @@ export default defineComponent({
     return {
       headers: [
         {
-          text: this.$t('survey-schemes.questions.internal.id._'),
+          text: this.$t('survey-schemes.prompts.internal.id._'),
           sortable: true,
-          value: 'questionId',
+          value: 'promptId',
         },
         {
-          text: this.$t('survey-schemes.questions.internal.name._'),
+          text: this.$t('survey-schemes.prompts.internal.name._'),
           sortable: true,
           value: 'name',
         },
         {
-          text: this.$t('survey-schemes.questions.type'),
+          text: this.$t('survey-schemes.prompts.type'),
           sortable: false,
           value: 'type',
         },
         {
-          text: this.$t('survey-schemes.questions.component'),
+          text: this.$t('survey-schemes.prompts.component'),
           sortable: false,
           value: 'component',
         },

@@ -4,21 +4,21 @@
       <v-icon>$handle</v-icon>
     </v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title>{{ question.name }}</v-list-item-title>
+      <v-list-item-title>{{ prompt.name }}</v-list-item-title>
       <v-list-item-subtitle>
-        {{ `ID: ${question.id} | Type: ${question.component}` }}
+        {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-content v-if="!isOverrideMode && hasTemplate">
       <v-list-item-subtitle>
         <v-icon :color="isInSyncWithTemplate ? `success` : `warning`" left>$sync</v-icon>
         <span color="success">
-          {{ $t(`survey-scheme-questions.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
+          {{ $t(`survey-scheme-prompts.sync.${isInSyncWithTemplate ? 'true' : 'false'}`) }}
         </span>
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
-      <v-btn icon :title="$t('survey-schemes.questions.edit')" @click.stop="edit">
+      <v-btn icon :title="$t('survey-schemes.prompts.edit')" @click.stop="edit">
         <v-icon color="primary lighten-1">$edit</v-icon>
       </v-btn>
     </v-list-item-action>
@@ -38,7 +38,7 @@
         <v-list>
           <confirm-dialog
             color="primary lighten-1"
-            :label="$t('survey-schemes.questions.move').toString()"
+            :label="$t('survey-schemes.prompts.move').toString()"
             max-width="450px"
             @close="clearMoveToSection"
             @confirm="move"
@@ -47,7 +47,7 @@
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
                   <v-icon left>fas fa-exchange-alt</v-icon>
-                  {{ $t('survey-schemes.questions.move') }}
+                  {{ $t('survey-schemes.prompts.move') }}
                 </v-list-item-title>
               </v-list-item>
             </template>
@@ -55,18 +55,18 @@
               v-model="moveToSection"
               hide-details="auto"
               :items="moveSections"
-              :label="$t('survey-schemes.questions.section')"
+              :label="$t('survey-schemes.prompts.section')"
               outlined
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('survey-schemes-questions|create')"
+            v-if="can('survey-schemes-prompts|create')"
             :disabled="hasTemplate"
-            :question="question"
+            :prompt="prompt"
           ></save-as-template-dialog>
           <confirm-dialog
             color="primary lighten-1"
-            :label="$t('survey-scheme-questions.sync.synchronize').toString()"
+            :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
             max-width="450px"
             @confirm="sync"
           >
@@ -79,11 +79,11 @@
               >
                 <v-list-item-title>
                   <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>$sync</v-icon>
-                  {{ $t('survey-scheme-questions.sync.synchronize') }}
+                  {{ $t('survey-scheme-prompts.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>
             </template>
-            {{ $t('survey-scheme-questions.sync.confirm') }}
+            {{ $t('survey-scheme-prompts.sync.confirm') }}
           </confirm-dialog>
         </v-list>
       </v-menu>
@@ -93,10 +93,10 @@
         color="error"
         icon
         icon-left="$delete"
-        :label="$t('survey-schemes.questions.remove').toString()"
+        :label="$t('survey-schemes.prompts.remove').toString()"
         @confirm="remove"
       >
-        {{ $t('common.action.confirm.delete', { name: question.name }) }}
+        {{ $t('common.action.confirm.delete', { name: prompt.name }) }}
       </confirm-dialog>
     </v-list-item-action>
   </v-list-item>
@@ -115,7 +115,7 @@ import type { MoveSection } from './prompt-list.vue';
 import SaveAsTemplateDialog from './save-as-template-dialog.vue';
 
 export default defineComponent({
-  name: 'QuestionListItem',
+  name: 'PromptListItem',
 
   components: {
     ConfirmDialog,
@@ -127,7 +127,7 @@ export default defineComponent({
       type: String as PropType<'full' | 'override'>,
       default: 'full',
     },
-    question: {
+    prompt: {
       type: Object as PropType<Prompt>,
       required: true,
     },
@@ -145,7 +145,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['question:edit', 'question:move', 'question:remove', 'question:sync'],
+  emits: ['prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync'],
 
   data() {
     return {
@@ -160,7 +160,7 @@ export default defineComponent({
     },
 
     template(): Prompt | undefined {
-      return this.templates.find((template) => template.id === this.question.id);
+      return this.templates.find((template) => template.id === this.prompt.id);
     },
 
     hasTemplate(): boolean {
@@ -168,23 +168,23 @@ export default defineComponent({
     },
 
     isInSyncWithTemplate(): boolean {
-      return !!this.template && deepEqual(this.question, this.template);
+      return !!this.template && deepEqual(this.prompt, this.template);
     },
   },
 
   methods: {
     edit() {
-      const { index, question } = this;
-      this.$emit('question:edit', { index, question });
+      const { index, prompt } = this;
+      this.$emit('prompt:edit', { index, prompt });
     },
 
     move() {
       if (!this.moveToSection) return;
 
-      this.$emit('question:move', {
+      this.$emit('prompt:move', {
         section: this.moveToSection,
         index: this.index,
-        question: copy(this.question),
+        prompt: copy(this.prompt),
       });
 
       // DOM object is destroyed so we have to clear it manually as event can't be emitted anymore
@@ -196,14 +196,14 @@ export default defineComponent({
     },
 
     remove() {
-      this.$emit('question:remove', this.index);
+      this.$emit('prompt:remove', this.index);
     },
 
     sync() {
       if (!this.template || this.isInSyncWithTemplate) return;
 
-      this.$emit('question:sync', {
-        question: copy(this.template),
+      this.$emit('prompt:sync', {
+        prompt: copy(this.template),
         index: this.index,
       });
     },

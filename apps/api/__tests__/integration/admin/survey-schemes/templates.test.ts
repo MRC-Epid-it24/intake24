@@ -6,7 +6,7 @@ import { SurveyScheme } from '@intake24/db';
 
 export default () => {
   const baseUrl = '/api/admin/survey-schemes';
-  const permissions = ['survey-schemes', 'survey-schemes|questions'];
+  const permissions = ['survey-schemes', 'survey-schemes|prompts'];
 
   let url: string;
   let invalidUrl: string;

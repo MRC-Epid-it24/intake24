@@ -16,7 +16,7 @@ import type {
 import type {
   FeedbackSchemeCreationAttributes,
   SurveySchemeCreationAttributes,
-  SurveySchemeQuestionCreationAttributes,
+  SurveySchemePromptCreationAttributes,
 } from '@intake24/db';
 import {
   defaultMeals as defaultFeedbackMeals,
@@ -25,11 +25,11 @@ import {
   feedbackPhysicalDataFields,
   feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
-import { customPromptQuestions } from '@intake24/common/prompts';
+import { customPrompts } from '@intake24/common/prompts';
 import {
   defaultExport,
   defaultMeals,
-  defaultQuestions,
+  defaultPrompts,
   searchSortingAlgorithms,
 } from '@intake24/common/surveys';
 import { jobTypes } from '@intake24/common/types';
@@ -206,23 +206,23 @@ const surveyScheme = (): SurveySchemeCreationAttributes => {
   return {
     name,
     type,
-    questions: defaultQuestions,
+    prompts: defaultPrompts,
     meals: defaultMeals,
     dataExport: defaultExport,
   };
 };
 
-const surveySchemeQuestion = (): SurveySchemeQuestionCreationAttributes => {
-  const question = {
-    ...customPromptQuestions[faker.number.int({ min: 0, max: customPromptQuestions.length - 1 })],
+const surveySchemePrompt = (): SurveySchemePromptCreationAttributes => {
+  const prompt = {
+    ...customPrompts[faker.number.int({ min: 0, max: customPrompts.length - 1 })],
     id: slugify(faker.word.words(6), { strict: true }),
     name: faker.word.words(6),
   };
 
   return {
-    questionId: question.id,
-    name: question.name,
-    question,
+    promptId: prompt.id,
+    name: prompt.name,
+    prompt,
   };
 };
 
@@ -259,7 +259,7 @@ const survey = (
 
   const surveySchemeOverrides = {
     meals: [{ name: { en: faker.word.words(3) }, time: '8:00' }],
-    questions: [],
+    prompts: [],
   };
 
   const userPersonalIdentifiers = faker.datatype.boolean();
@@ -329,7 +329,7 @@ export default {
   permission,
   role,
   surveyScheme,
-  surveySchemeQuestion,
+  surveySchemePrompt,
   survey,
   submission,
   respondent,

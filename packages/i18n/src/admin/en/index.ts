@@ -20,7 +20,7 @@ import permissions from './permissions';
 import roles from './roles';
 import signInLogs from './sign-in-logs';
 import standardUnits from './standard-units';
-import surveySchemeQuestions from './survey-scheme-questions';
+import surveySchemePrompts from './survey-scheme-prompts';
 import surveySchemes from './survey-schemes';
 import surveys from './surveys';
 import tasks from './tasks';
@@ -49,7 +49,7 @@ const messages: LocaleMessages = {
   'sign-in-logs': signInLogs,
   'standard-units': standardUnits,
   'survey-schemes': surveySchemes,
-  'survey-scheme-questions': surveySchemeQuestions,
+  'survey-scheme-prompts': surveySchemePrompts,
   surveys,
   tasks,
   user,

@@ -64,11 +64,14 @@ const surveySchemes: LocaleMessageObject = {
       next: 'Next',
       'no-more-information': 'No More Information',
       review: 'Review',
+      addFood: 'Add food',
       addMeal: 'Add meal',
       deleteFood: 'Delete food',
       deleteMeal: 'Delete meal',
+      editFood: 'Edit food',
       editMeal: 'Edit meal',
       mealTime: 'Meal time',
+      selectMeal: 'Select meal',
     },
   },
 
@@ -142,81 +145,93 @@ const surveySchemes: LocaleMessageObject = {
       portionSizes: 'Portion size fields',
     },
   },
-  questions: {
-    _: 'Scheme question',
-    tab: 'Questions',
-    title: 'Scheme questions',
-    create: 'New question',
-    edit: 'Edit question',
-    move: 'Move question',
-    remove: 'Remove question',
-    section: 'Questions section',
-    preMeals: {
-      title: 'Pre-recall questions',
+  overrides: {
+    _: 'Scheme overrides',
+    meals: {
+      title: 'Scheme meals overrides',
       subtitle:
-        'General questions asked before the dietary recall, including personal questions and the initial instructions.',
+        'Override scheme meal list. If left empty, scheme list is used. If any item added, whole list is used.',
+    },
+    prompts: {
+      title: 'Scheme prompts overrides',
+      subtitle: 'Override specific scheme prompt. Changes will get merged by Prompts ID.',
+    },
+  },
+  prompts: {
+    _: 'Scheme prompt',
+    tab: 'Prompts',
+    title: 'Scheme prompts',
+    create: 'New prompt',
+    edit: 'Edit prompt',
+    move: 'Move prompt',
+    remove: 'Remove prompt',
+    section: 'Prompts section',
+    preMeals: {
+      title: 'Pre-recall prompts',
+      subtitle:
+        'General prompt asked before the dietary recall, including personal prompts and the initial instructions.',
     },
     postMeals: {
-      title: 'Post-recall questions',
-      subtitle: 'General questions asked after the dietary recall.',
+      title: 'Post-recall prompts',
+      subtitle: 'General prompts asked after the dietary recall.',
     },
     submission: {
-      title: 'Submission questions',
-      subtitle: 'Final questions asked before the submission.',
+      title: 'Submission prompts',
+      subtitle: 'Final prompts asked before the submission.',
     },
     preFoods: {
-      title: 'Pre-foods meal questions',
-      subtitle: 'Questions asked about meals before foods are entered, such as the meal time.',
+      title: 'Pre-foods meal prompts',
+      subtitle: 'prompts asked about meals before foods are entered, such as the meal time.',
     },
     foods: {
-      title: 'Food questions',
+      title: 'Food prompts',
       subtitle:
-        'Questions asked about foods, including food database search and portion size estimation.',
+        'prompts asked about foods, including food database search and portion size estimation.',
     },
     postFoods: {
-      title: 'Post-foods meal questions',
+      title: 'Post-foods meal prompts',
       subtitle:
-        'Questions asked about meals after the portion size estimation is complete for all foods in the meal.',
+        'Prompts asked about meals after the portion size estimation is complete for all foods in the meal.',
     },
     internal: {
       _: 'Internal identifiers',
       id: {
-        _: 'Question ID',
+        _: 'Prompt ID',
         hint: 'Internal unique identifier, used e.g. in data-exports as header',
       },
       name: {
-        _: 'Question Name',
+        _: 'Prompt Name',
         hint: 'Internal descriptive name for better orientation ',
       },
     },
-    type: 'Question type',
-    component: 'Question component',
+    type: 'Prompt type',
+    component: 'Prompt component',
     name: {
-      _: 'Question Name',
-      hint: 'Short question name (e.g. for breadcrumbs)',
-      required: 'Question name is required.',
+      _: 'Prompt Name',
+      hint: 'Short prompt name (e.g. for breadcrumbs)',
+      required: 'Prompt name is required.',
     },
     text: {
-      _: 'Question text',
-      hint: 'Main question text',
-      required: 'Question text is required.',
+      _: 'Prompt text',
+      hint: 'Main prompt text',
+      required: 'Prompt text is required.',
     },
     description: {
-      _: 'Question description',
-      hint: 'Additional question information',
-      required: 'Question description is required.',
+      _: 'Prompt description',
+      hint: 'Additional prompt information',
+      required: 'Prompt description is required.',
     },
     custom: {
       _: 'Custom',
-      noQuestions: 'No custom questions available for this section',
+      noPrompts: 'No custom prompts available for this section',
     },
     standard: {
       _: 'Standard',
-      noQuestions: 'No standard questions available for this section',
+      noPrompts: 'No standard prompts available for this section',
     },
     'portion-size': {
       _: 'Portion size',
-      noQuestions: 'No portion size questions available for this section',
+      noPrompts: 'No portion size prompts available for this section',
     },
     imageMap: {
       _: 'Image map settings',
@@ -240,34 +255,21 @@ const surveySchemes: LocaleMessageObject = {
       value: 'Value',
     },
     validation: {
-      required: 'Question is required to be filled in',
+      required: 'Prompt is required to be filled in',
       message: 'Error message to be displayed',
     },
     templates: {
-      _: 'Question Template',
-      title: 'Question Templates',
+      _: 'Prompt Template',
+      title: 'Prompt Templates',
       add: 'Load from template',
-      alreadyExists: `Question with ID '{questionId}' already exists in scheme`,
-      none: 'No question template found',
+      alreadyExists: `Prompt with ID '{promptId}' already exists in scheme`,
+      none: 'No prompt template found',
       saveAs: {
         _: 'Save as template',
-        title: 'Save question as template',
+        title: 'Save prompt as template',
       },
     },
-  },
-  overrides: {
-    _: 'Scheme overrides',
-    meals: {
-      title: 'Scheme meals overrides',
-      subtitle:
-        'Override scheme meal list. If left empty, scheme list is used. If any item added, whole list is used.',
-    },
-    questions: {
-      title: 'Scheme questions overrides',
-      subtitle: 'Override specific scheme question prompt. Changes will get merged by Question ID.',
-    },
-  },
-  prompts: {
+
     // Standard
     'associated-foods-prompt': {
       title: 'Associated foods',

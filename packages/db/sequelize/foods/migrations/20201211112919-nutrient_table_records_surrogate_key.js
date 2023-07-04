@@ -34,7 +34,7 @@ module.exports = {
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         'INSERT INTO nutrient_table_records (nutrient_table_id, nutrient_table_record_id, name, local_name) SELECT nutrient_table_id, id, english_description, local_description FROM v3_nutrient_table_records',
         { transaction }
       );

@@ -16,7 +16,7 @@ import roles from './roles/index.test';
 import signInLogs from './sign-in-logs/index.test';
 import signup from './signup/index.test';
 import standardUnits from './standard-units/index.test';
-import surveySchemeQuestions from './survey-scheme-questions/index.test';
+import surveySchemePrompts from './survey-scheme-prompts/index.test';
 import surveySchemes from './survey-schemes/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
@@ -43,7 +43,7 @@ export default () => {
   describe('/api/admin/sign-in-logs', signInLogs);
   describe('/api/admin/standard-units', standardUnits);
   describe('/api/admin/survey-schemes', surveySchemes);
-  describe('/api/admin/survey-scheme-questions', surveySchemeQuestions);
+  describe('/api/admin/survey-scheme-prompts', surveySchemePrompts);
   describe('/api/admin/surveys', surveys);
   describe('/api/admin/tasks', tasks);
   describe('/api/admin/user', user);
