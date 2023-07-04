@@ -2,7 +2,16 @@
   <div>
     <v-tab-item key="options">
       <v-row class="mb-3">
-        <v-col cols="12">
+        <v-col cols="12" md="6">
+          <v-switch
+            hide-details="auto"
+            :input-value="amountLabel"
+            :label="$t('survey-schemes.prompts.milk-in-a-hot-drink-prompt.amountLabel')"
+            @change="update('amountLabel', $event)"
+          >
+          </v-switch>
+        </v-col>
+        <v-col cols="12" md="6">
           <v-select
             hide-details="auto"
             :items="orientations"
@@ -50,6 +59,10 @@ export default defineComponent({
   mixins: [basePrompt],
 
   props: {
+    amountLabel: {
+      type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['amountLabel']>,
+      required: true,
+    },
     options: {
       type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']['options']>,
       required: true,

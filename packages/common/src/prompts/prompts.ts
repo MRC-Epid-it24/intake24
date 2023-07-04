@@ -146,6 +146,7 @@ export type Prompts = {
   };
   'milk-in-a-hot-drink-prompt': BasePrompt & {
     component: 'milk-in-a-hot-drink-prompt';
+    amountLabel: boolean;
     options: LocaleOptionList<number>;
     orientation: RadioOrientation;
   };
@@ -158,6 +159,7 @@ export type Prompts = {
   };
   'parent-food-portion-prompt': BasePrompt & {
     component: 'parent-food-portion-prompt';
+    amountLabel: boolean;
     options: Record<'_default' | string, LocaleOptionList<number>>;
     orientation: RadioOrientation;
   };

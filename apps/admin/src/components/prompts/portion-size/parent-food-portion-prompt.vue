@@ -2,7 +2,16 @@
   <div>
     <v-tab-item key="options">
       <v-row class="mb-3">
-        <v-col cols="12">
+        <v-col cols="12" md="6">
+          <v-switch
+            hide-details="auto"
+            :input-value="amountLabel"
+            :label="$t('survey-schemes.prompts.parent-food-portion-prompt.amountLabel')"
+            @change="update('amountLabel', $event)"
+          >
+          </v-switch>
+        </v-col>
+        <v-col cols="12" md="6">
           <v-select
             hide-details="auto"
             :items="orientations"
@@ -49,7 +58,13 @@
                 ></prompt-list-options>
               </template>
             </language-selector>
-            <v-btn class="align-self-end" color="error" text @click="removeCategory(key)">
+            <v-btn
+              class="align-self-end"
+              color="error"
+              :disabled="key === '_default'"
+              text
+              @click="removeCategory(key)"
+            >
               <v-icon left>$delete</v-icon>{{ $t(`fdbs.categories.remove`) }}
             </v-btn>
           </div>
@@ -78,6 +93,10 @@ export default defineComponent({
   mixins: [basePrompt],
 
   props: {
+    amountLabel: {
+      type: Boolean as PropType<Prompts['parent-food-portion-prompt']['amountLabel']>,
+      required: true,
+    },
     options: {
       type: Object as PropType<Prompts['parent-food-portion-prompt']['options']>,
       required: true,
@@ -107,6 +126,8 @@ export default defineComponent({
     };
 
     const removeCategory = (category: string) => {
+      if (category === '_default') return;
+
       const { [category]: _, ...rest } = items.value;
       items.value = rest;
     };

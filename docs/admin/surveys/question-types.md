@@ -141,6 +141,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `options` - locale-specific list of options for milk portion in hot drink (`0-1 range`)
 
+- `amount label` - true/false whether to show amount label for option
+
 - `orientation` - orientation of radio buttons (column/row)
 
 ### Milk on cereal prompt
@@ -150,6 +152,18 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 - `image map labels` - true/false whether to show image map labels
 
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+
+### Parent food portion prompt
+
+Calculates portion size based on parent food portion size.
+
+#### Options
+
+- `options` - `per-category` locale-specific list of options for parent portion (`range > 0`)
+
+- `amount label` - true/false whether to show amount label for option
+
+- `orientation` - orientation of radio buttons (column/row)
 
 ### Pizza prompt
 

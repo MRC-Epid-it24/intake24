@@ -415,6 +415,7 @@ const surveySchemes: LocaleMessageObject = {
     'milk-in-a-hot-drink-prompt': {
       title: 'Milk in a hot drink',
       subtitle: 'Use the "milk in a hot drink" method to estimate the amount of milk',
+      amountLabel: 'Show amount label',
     },
     'milk-on-cereal-prompt': {
       title: 'Milk on cereal',
@@ -432,6 +433,7 @@ const surveySchemes: LocaleMessageObject = {
       title: 'Portion of parent food',
       subtitle: 'Use the "portion of parent food" method to estimate the portion size',
       portions: 'Category portions list',
+      amountLabel: 'Show amount label',
     },
     'portion-size-option-prompt': {
       title: 'Portion size estimation method',

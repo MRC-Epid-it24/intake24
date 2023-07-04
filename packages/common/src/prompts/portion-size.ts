@@ -53,6 +53,7 @@ export const milkInAHotDrinkPrompt: Prompts['milk-in-a-hot-drink-prompt'] = copy
   type: 'portion-size',
   id: 'milk-in-a-hot-drink-prompt',
   name: 'Milk in a hot drink',
+  amountLabel: true,
   options: {
     en: [
       { value: 0.1, label: 'A little' },
@@ -86,6 +87,7 @@ export const parentFoodPortionPrompt: Prompts['parent-food-portion-prompt'] = co
   type: 'portion-size',
   id: 'parent-food-portion-prompt',
   name: 'Parent food portion',
+  amountLabel: true,
   options: {
     _default: {
       en: [
