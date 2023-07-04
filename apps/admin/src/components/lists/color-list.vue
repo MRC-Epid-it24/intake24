@@ -48,7 +48,7 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
-            <v-color-picker v-model="dialog.item" show-swatches></v-color-picker>
+            <v-color-picker v-model="dialog.item.color" show-swatches></v-color-picker>
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
