@@ -16,8 +16,10 @@
   },
   "scripts": {},
   "dependencies": {
+    "@ericblade/quagga2": "^1.8.2",
     "@hcaptcha/vue-hcaptcha": "^1.2.1",
     "@pinia/plugin-debounce": "^0.1.0",
+    "@vueuse/core": "^10.2.1",
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
     "js-file-download": "^0.4.12",
