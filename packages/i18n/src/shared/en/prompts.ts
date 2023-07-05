@@ -357,17 +357,12 @@ const prompts: LocaleMessageObject = {
   missingFood: {
     name: 'Missing food',
     text: '{food}',
-    description: `You said you were unable to find a good match for "{food}" in our food database.
-      Please answer the following questions to help us identify this food and add it to our food list.`,
-    info: {
-      name: 'What is the name of the missing food, dish or drink?',
-      brand: 'What brand is the missing food, or what shop/store was it purchased from?',
-      description:
-        'Please provide a description of the missing food or dish. If it was a homemade dish, please specify ingredients and quantities, where possible.',
-      portionSize: 'How was the missing food or dish cooked?',
-      leftovers:
-        'How much of the missing food or dish did you eat, e.g. 2 teaspoons, 1 handful, 125 grams, ½ cup etc?',
-    },
+    description: `You said you were unable to find a good match for "{food}". Please provide as much detail as you can to the following questions, to help us identify your food or drink.`,
+    source: 'Was it homemade?',
+    homemade: 'Provide further details e.g. description of dish or ingredients.',
+    purchased: 'Tell us where was it purchased from? Does it have a brand name?',
+    barcode: 'Can you provide the barcode?',
+    portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
   },
   parentFoodPortion: {
     name: 'Parent food portion',

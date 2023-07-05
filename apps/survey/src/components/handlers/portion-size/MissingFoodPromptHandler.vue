@@ -47,6 +47,7 @@ export default defineComponent({
         portionSize: '',
       },
       panel: 0,
+      homemadePrompt: undefined,
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(
@@ -58,7 +59,7 @@ export default defineComponent({
     const commitAnswer = () => {
       const { info } = state.value;
 
-      if (Object.values(info).some((value) => !value))
+      if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
         throw new Error('Missing food prompt: missing data');
 
       survey.updateFood({ foodId: food().id, update: { info } });

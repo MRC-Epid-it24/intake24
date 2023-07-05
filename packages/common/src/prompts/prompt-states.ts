@@ -53,6 +53,7 @@ export type PromptStates = {
   'missing-food-prompt': {
     info: NonNullable<MissingFood['info']>;
     panel: number;
+    homemadePrompt?: boolean;
   };
   'parent-food-portion-prompt': {
     portionSize: PortionSizeStates['parent-food-portion'];

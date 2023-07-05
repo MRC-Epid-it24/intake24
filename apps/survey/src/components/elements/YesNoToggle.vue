@@ -1,5 +1,11 @@
 <template>
-  <v-btn-toggle class="d-flex" color="secondary" :value="value" @change="change">
+  <v-btn-toggle
+    class="d-flex"
+    color="secondary"
+    :mandatory="mandatory && value !== undefined"
+    :value="value"
+    @change="change"
+  >
     <v-btn class="px-10 flex-grow-1 flex-md-grow-0" :title="$t('common.action.no')" :value="false">
       <v-icon :color="value === false ? 'secondary' : 'primary '" left>$no</v-icon>
       {{ $t('common.action.no') }}
@@ -18,6 +24,9 @@ export default defineComponent({
   name: 'YesNoToggle',
 
   props: {
+    mandatory: {
+      type: Boolean,
+    },
     value: {
       type: Boolean,
     },
