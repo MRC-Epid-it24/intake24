@@ -49,6 +49,8 @@ Prompt to collect meal time information using standard time picker.
 
 #### Options
 
+- `allowedMinutes` - allowed minutes for selection (`1`, `5`, `10`, `15`, `20`, `30`)
+
 - `format` - time format (`am/pm` or `24h`)
 
 ### Ready meal prompt
@@ -228,6 +230,8 @@ Prompt to offer free-form text input.
 ### Time picker prompt
 
 Prompt to collect time information.
+
+- `allowedMinutes` - allowed minutes for selection (`1`, `5`, `10`, `15`, `20`, `30`)
 
 - `format` - time format (`am/pm` or `24h`)
 

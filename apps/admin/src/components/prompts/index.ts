@@ -62,7 +62,7 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   'time-picker-prompt': {
-    tabs: [...validatedTab],
+    tabs: [...validatedTab, 'options'],
     sections: [...promptSectionsExceptSubmission],
   },
   'yes-no-prompt': {
@@ -99,7 +99,7 @@ export const promptSettings: PromptSettings = {
     sections: ['postMeals'],
   },
   'meal-time-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['preFoods'],
   },
   'ready-meal-prompt': {

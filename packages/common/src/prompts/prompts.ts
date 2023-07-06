@@ -101,6 +101,11 @@ export type ImageMap = {
   pinchZoom: boolean;
 };
 
+export type TimePicker = {
+  format: 'ampm' | '24hr';
+  allowedMinutes: 1 | 5 | 10 | 15 | 20 | 30;
+};
+
 export type Prompts = {
   // Custom
   'checkbox-list-prompt': ValidatedPrompt & {
@@ -118,10 +123,10 @@ export type Prompts = {
     other: boolean;
   };
   'textarea-prompt': ValidatedPrompt & { component: 'textarea-prompt' };
-  'time-picker-prompt': ValidatedPrompt & {
-    component: 'time-picker-prompt';
-    format: 'ampm' | '24hr';
-  };
+  'time-picker-prompt': ValidatedPrompt &
+    TimePicker & {
+      component: 'time-picker-prompt';
+    };
   'yes-no-prompt': BasePrompt & { component: 'yes-no-prompt' };
   // Portion size
   'as-served-prompt': BasePrompt & {
@@ -195,10 +200,10 @@ export type Prompts = {
     startTime: string;
     endTime: string;
   };
-  'meal-time-prompt': BasePrompt & {
-    component: 'meal-time-prompt';
-    format: 'ampm' | '24hr';
-  };
+  'meal-time-prompt': BasePrompt &
+    TimePicker & {
+      component: 'meal-time-prompt';
+    };
   'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BasePrompt & {
     component: 'redirect-prompt';

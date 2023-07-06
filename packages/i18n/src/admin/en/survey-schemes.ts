@@ -254,6 +254,17 @@ const surveySchemes: LocaleMessageObject = {
       label: 'Label',
       value: 'Value',
     },
+    timePicker: {
+      allowedMinutes: {
+        _: 'Allowed minutes',
+        item: 'Every {item} minutes',
+      },
+      format: {
+        _: 'Time format',
+        ampm: 'AM/PM',
+        '24hr': '24-hour',
+      },
+    },
     validation: {
       required: 'Prompt is required to be filled in',
       message: 'Error message to be displayed',

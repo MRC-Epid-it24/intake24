@@ -3,6 +3,7 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker
+          :allowed-minutes="allowedMinutes"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
@@ -79,6 +80,9 @@ export default defineComponent({
   emits: ['update'],
 
   computed: {
+    allowedMinutes() {
+      return (minutes: number) => minutes % this.prompt.allowedMinutes === 0;
+    },
     currentTime(): string {
       return fromMealTime(this.initialState, false);
     },
