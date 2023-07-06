@@ -77,7 +77,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const dialog = ref(false);
 
-    const isMeal = computed(() => props.entity && 'food' in props.entity);
+    const isMeal = computed(() => props.entity && 'foods' in props.entity);
 
     const action = (type: FoodActionType | MealActionType) => {
       emit('action', type, props.entity?.id);
