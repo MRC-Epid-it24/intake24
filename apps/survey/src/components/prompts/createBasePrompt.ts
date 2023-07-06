@@ -52,11 +52,11 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
       },
 
       isFood() {
-        return !!this.food;
+        return !!this.food && !!this.meal;
       },
 
       isMeal() {
-        return !!this.meal;
+        return !!this.meal && !this.food;
       },
 
       foodOrMealName() {

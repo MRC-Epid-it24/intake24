@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #actions>
-      <template v-if="food">
+      <template v-if="isFood">
         <confirm-dialog
           :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteFood', food?.id)"
@@ -36,7 +36,7 @@
           {{ $t('recall.actions.editFood') }}
         </v-btn>
       </template>
-      <template v-if="meal">
+      <template v-if="isMeal">
         <confirm-dialog
           :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteMeal', meal?.id)"
@@ -74,7 +74,7 @@
       <next :disabled="!isValid" @click="action('next')"></next>
     </template>
     <template #nav-actions>
-      <template v-if="food">
+      <template v-if="isFood">
         <confirm-dialog
           :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteFood', food?.id)"
@@ -98,7 +98,7 @@
         </v-btn>
         <v-divider vertical></v-divider>
       </template>
-      <template v-if="meal">
+      <template v-if="isMeal">
         <confirm-dialog
           :label="$t('prompts.editMeal.delete._').toString()"
           @confirm="action('deleteMeal', meal?.id)"
