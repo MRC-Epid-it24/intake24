@@ -83,9 +83,10 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'pinia';
+import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
+import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FreeTextFood } from '@intake24/common/types';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import {
@@ -94,10 +95,14 @@ import {
   MissingFoodPanel,
 } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
-import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
+
+export type FoodSearchPromptParameters = {
+  matchScoreWeight?: number;
+  rankingAlgorithm?: SearchSortingAlgorithm;
+};
 
 export default defineComponent({
   name: 'FoodSearchPrompt',
@@ -107,17 +112,21 @@ export default defineComponent({
   mixins: [createBasePrompt<'food-search-prompt', FreeTextFood>()],
 
   props: {
+    discardedFoodName: {
+      type: String,
+      required: false,
+    },
     localeId: {
       type: String,
+      required: true,
+    },
+    parameters: {
+      type: Object as PropType<FoodSearchPromptParameters>,
       required: true,
     },
     value: {
       type: String,
       required: true,
-    },
-    discardedFoodName: {
-      type: String,
-      required: false,
     },
   },
 
@@ -146,10 +155,6 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    ...mapState(useSurvey, ['parameters']),
-  },
-
   async mounted() {
     await this.search();
   },
@@ -160,8 +165,7 @@ export default defineComponent({
       this.requestInProgress = true;
       this.searchResults = null;
 
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
-        this.parameters ?? {};
+      const { matchScoreWeight, rankingAlgorithm } = this.parameters;
 
       try {
         this.searchResults = await foodsService.search(this.localeId, this.searchTerm, {
