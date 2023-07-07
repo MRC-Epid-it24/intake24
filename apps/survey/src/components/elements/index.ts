@@ -7,6 +7,7 @@ export { default as FoodBrowser } from './FoodBrowser.vue';
 export { default as FoodSearchResults } from './FoodSearchResults.vue';
 export { default as ImagePlaceholder } from './ImagePlaceholder.vue';
 export { default as InfoAlert } from './InfoAlert.vue';
+export { default as MissingFoodPanel } from './MissingFoodPanel.vue';
 export { default as SurveyProgressBar } from './SurveyProgressBar.vue';
 export { default as ValidInvalidIcon } from './ValidInvalidIcon.vue';
 export { default as YesNoToggle } from './YesNoToggle.vue';

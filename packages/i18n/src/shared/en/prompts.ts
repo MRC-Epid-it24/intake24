@@ -80,10 +80,6 @@ const prompts: LocaleMessageObject = {
     drinksOnly: 'Drinks',
     foods: 'Foods and drinks',
     foodsOnly: 'Foods',
-    delete: {
-      _: 'Delete meal',
-      confirm: 'Do you want to delete {item}?',
-    },
   },
   final: {
     name: 'Final page',

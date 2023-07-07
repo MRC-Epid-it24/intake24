@@ -3,7 +3,7 @@
     <template #actions>
       <template v-if="isFood">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._').toString()"
+          :label="$t('recall.menu.food.delete').toString()"
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -21,7 +21,7 @@
               {{ $t('recall.actions.deleteFood') }}
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
+          {{ $t('recall.menu.confirmDelete', { item: foodName }) }}
         </confirm-dialog>
         <v-btn
           :block="isMobile"
@@ -38,7 +38,7 @@
       </template>
       <template v-if="isMeal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._').toString()"
+          :label="$t('recall.menu.meal.delete').toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -56,7 +56,7 @@
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: mealName }) }}
+          {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
         </confirm-dialog>
         <v-btn
           :block="isMobile"
@@ -76,7 +76,7 @@
     <template #nav-actions>
       <template v-if="isFood">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._').toString()"
+          :label="$t('recall.menu.food.delete').toString()"
           @confirm="action('deleteFood', food?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -87,7 +87,7 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: foodName }) }}
+          {{ $t('recall.menu.confirmDelete', { item: foodName }) }}
         </confirm-dialog>
         <v-divider vertical></v-divider>
         <v-btn value="editFood" @click.stop="action('editFood', food?.id)">
@@ -100,7 +100,7 @@
       </template>
       <template v-if="isMeal">
         <confirm-dialog
-          :label="$t('prompts.editMeal.delete._').toString()"
+          :label="$t('recall.menu.meal.delete').toString()"
           @confirm="action('deleteMeal', meal?.id)"
         >
           <template #activator="{ on, attrs }">
@@ -111,7 +111,7 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('prompts.editMeal.delete.confirm', { item: mealName }) }}
+          {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
         </confirm-dialog>
         <v-divider vertical></v-divider>
         <v-btn value="editMeal" @click.stop="action('editMeal', meal?.id)">

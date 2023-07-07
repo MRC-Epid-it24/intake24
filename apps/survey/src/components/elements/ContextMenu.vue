@@ -26,10 +26,10 @@
     <confirm-dialog
       v-model="dialog"
       external
-      :label="$t('prompts.editMeal.delete._').toString()"
+      :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`).toString()"
       @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
     >
-      {{ $t('prompts.editMeal.delete.confirm', { item: entityName }) }}
+      {{ $t('recall.menu.confirmDelete', { item: entityName }) }}
     </confirm-dialog>
   </div>
 </template>

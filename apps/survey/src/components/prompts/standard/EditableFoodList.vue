@@ -27,7 +27,7 @@
                     :disabled="!newFood.description.length"
                     @click="moveToList"
                   >
-                    fa-arrow-turn-down
+                    fas fa-turn-down fa-flip-horizontal
                   </v-icon>
                 </template>
               </v-text-field>
@@ -40,7 +40,7 @@
                 x-large
                 @click="moveToList"
               >
-                <v-icon class="flip" left>fa-arrow-turn-down</v-icon>
+                <v-icon class="flip" left>fas fa-turn-down fa-flip-horizontal</v-icon>
                 {{ $t('prompts.editMeal.add') }}
               </v-btn>
             </div>
@@ -66,20 +66,15 @@
               <v-list-item-title v-else>{{ getFoodName(food) }}</v-list-item-title>
               <v-list-item-icon class="my-auto">
                 <confirm-dialog
-                  :label="$t('prompts.editMeal.delete._').toString()"
+                  :label="$t('recall.menu.food.delete').toString()"
                   @confirm="deleteFood(idx)"
                 >
                   <template #activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      :title="$t('prompts.editMeal.delete._', { item: getFoodName(food) })"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
+                    <v-btn icon :title="$t('recall.menu.food.delete')" v-bind="attrs" v-on="on">
                       <v-icon>$delete</v-icon>
                     </v-btn>
                   </template>
-                  {{ $t(`prompts.editMeal.delete.confirm`, { item: getFoodName(food) }) }}
+                  {{ $t(`recall.menu.confirmDelete`, { item: getFoodName(food) }) }}
                 </confirm-dialog>
               </v-list-item-icon>
             </v-list-item>
@@ -219,9 +214,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.flip {
-  transform: scaleX(-1);
-}
 .v-input-basis-stretch {
   flex: 1 1 100%;
 }

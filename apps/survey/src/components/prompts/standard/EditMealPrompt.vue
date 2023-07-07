@@ -29,7 +29,7 @@
         {{ $t('recall.actions.mealTime') }}
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`).toString()"
+        :label="$t('recall.menu.meal.delete').toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
@@ -48,7 +48,7 @@
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
-        {{ $t(`prompts.${type}.delete.confirm`, { item: mealName }) }}
+        {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
       </confirm-dialog>
       <next
         :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
@@ -68,7 +68,7 @@
         <v-icon class="pb-1">fas fa-clock</v-icon>
       </v-btn>
       <confirm-dialog
-        :label="$t(`prompts.${type}.delete._`).toString()"
+        :label="$t('recall.menu.meal.delete').toString()"
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
@@ -79,7 +79,7 @@
             <v-icon class="pb-1">$delete</v-icon>
           </v-btn>
         </template>
-        {{ $t(`prompts.${type}.delete.confirm`, { item: mealName }) }}
+        {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
       </confirm-dialog>
       <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">

@@ -5,7 +5,7 @@
     :min-height="$vuetify.breakpoint.mobile ? undefined : '400px'"
     :value="dialog"
   >
-    <v-card ref="card" :rounded="$vuetify.breakpoint.mobile">
+    <v-card ref="card" :tile="$vuetify.breakpoint.mobile">
       <v-toolbar color="primary" dark flat>
         <v-btn icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>

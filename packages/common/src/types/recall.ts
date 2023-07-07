@@ -72,6 +72,7 @@ export type PortionSizeParameters = {
   'milk-on-cereal': {
     'image-map-labels': string;
   };
+  'parent-food-portion': never;
   pizza: {
     'image-map-labels': string;
   };

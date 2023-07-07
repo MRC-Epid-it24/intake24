@@ -54,6 +54,7 @@ const recall: LocaleMessageObject = {
       editFoods: 'Change / Add foods',
       editTime: 'Change time',
     },
+    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: 'Close',

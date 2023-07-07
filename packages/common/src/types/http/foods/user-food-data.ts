@@ -16,8 +16,8 @@ export interface UserPortionSizeMethod {
 }
 
 export type UserAssociatedFoodPrompt = {
-  foodCode: string | undefined;
-  categoryCode: string | undefined;
+  foodCode?: string;
+  categoryCode?: string;
   promptText: string;
   linkAsMain: boolean;
   genericName: string;

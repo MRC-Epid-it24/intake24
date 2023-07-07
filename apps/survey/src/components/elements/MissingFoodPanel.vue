@@ -52,12 +52,13 @@ export default defineComponent({
     },
   },
 
-  emits: ['confirm', 'input'],
+  emits: ['cancel', 'confirm', 'input'],
 
   setup(props, { emit }) {
     const card = ref<InstanceType<typeof VCard>>();
 
     const cancel = () => {
+      emit('cancel');
       emit('input', false);
     };
 

@@ -42,42 +42,29 @@
             </v-radio-group>
           </v-container>
           <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
-            <v-card-title>
-              <v-icon left>$ok</v-icon>
-              {{ prompt.selectedFood.description }}
-            </v-card-title>
-            <v-card-actions>
-              <v-btn @click="onSelectDifferentFood(prompt)">
+            <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
+              <v-btn class="flex-md-grow-1" color="grey lighten-3" elevation="0" large>
+                <v-icon left>$ok</v-icon>
+                {{ prompt.selectedFood.description }}
+              </v-btn>
+              <v-btn
+                class="flex-md-grow-0"
+                color="secondary"
+                large
+                outlined
+                @click="selectDifferentFood(prompt)"
+              >
                 {{ $t(`prompts.${type}.select.different`) }}
               </v-btn>
-            </v-card-actions>
+            </v-card-text>
           </v-card>
           <v-expand-transition>
             <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
               <food-browser
-                :locale-id="localeId"
-                :root-category="associatedFoodPrompts[index].categoryCode"
+                v-bind="{ localeId, rootCategory: associatedFoodPrompts[index].categoryCode, type }"
+                @food-missing="foodMissing(index)"
                 @food-selected="(food) => foodSelected(food, index)"
               ></food-browser>
-              <v-card-text>
-                <v-btn
-                  :block="isMobile"
-                  color="secondary"
-                  :disabled="missing"
-                  large
-                  outlined
-                  :title="$t(`prompts.${type}.missing.label`)"
-                  @click.stop="missing = true"
-                >
-                  {{ $t(`prompts.${type}.missing.label`) }}
-                </v-btn>
-              </v-card-text>
-              <missing-food-panel
-                v-model="missing"
-                :type="type"
-                @cancel="missing = false"
-                @confirm="foodMissing(index)"
-              ></missing-food-panel>
             </v-card>
           </v-expand-transition>
         </v-expansion-panel-content>
@@ -88,18 +75,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapState } from 'pinia';
-import Vue, { defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { AssociatedFoodPromptItemState, PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
-import { useSurvey } from '@intake24/survey/stores';
-import { getFoodIndexRequired } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
-import { MissingFoodPanel } from './partials';
 
 const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
   (prompt.confirmed && ['no', 'existing', 'missing'].includes(prompt.confirmed)) ||
@@ -111,7 +94,7 @@ const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser, MissingFoodPanel },
+  components: { ExpansionPanelActions, FoodBrowser },
 
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 
@@ -135,18 +118,14 @@ export default defineComponent({
   data() {
     return {
       activePrompt: this.initialState.activePrompt,
-      missing: false,
       prompts: this.initialState.prompts,
       usedExistingFoodIds: [] as string[],
     };
   },
 
   computed: {
-    ...mapState(useSurvey, ['meals']),
-
     foodsAlreadyEntered(): (string | undefined)[] {
-      const foodIndex = getFoodIndexRequired(this.meals, this.food.id);
-      const foodsInThisMeal = this.meals[foodIndex.mealIndex].foods;
+      const foodsInThisMeal = this.meal?.foods ?? [];
 
       return this.associatedFoodPrompts.map((prompt) => {
         for (const food of foodsInThisMeal) {
@@ -202,7 +181,7 @@ export default defineComponent({
         const foodId = this.foodsAlreadyEntered[index];
 
         if (foodId !== undefined) {
-          Vue.set(this.prompts, index, {
+          this.prompts.splice(index, 1, {
             confirmed: 'existing',
             existingFoodId: foodId,
             selectedFood: this.prompts[index].selectedFood,
@@ -217,39 +196,35 @@ export default defineComponent({
           this.usedExistingFoodIds = this.usedExistingFoodIds.filter((id) => id !== existingFoodId);
         }
 
+        const { foodCode, genericName } = this.associatedFoodPrompts[index];
+
         const selectedFood =
-          this.prompts[index].confirmed === 'yes' && this.associatedFoodPrompts[index].foodCode
-            ? {
-                code: this.associatedFoodPrompts[index].foodCode,
-                description: this.associatedFoodPrompts[index].genericName,
-              }
+          this.prompts[index].confirmed === 'yes' && foodCode
+            ? { code: foodCode, description: genericName }
             : this.prompts[index].selectedFood;
 
-        Vue.set(this.prompts, index, { confirmed: this.prompts[index].confirmed, selectedFood });
+        this.prompts.splice(index, 1, { confirmed: this.prompts[index].confirmed, selectedFood });
       }
 
       this.goToNextIfCan(index);
       this.updatePrompts();
     },
 
-    onSelectDifferentFood(prompt: AssociatedFoodPromptItemState) {
+    selectDifferentFood(prompt: AssociatedFoodPromptItemState) {
       prompt.selectedFood = undefined;
 
       this.updatePrompts();
     },
 
     foodSelected(food: FoodHeader, promptIndex: number): void {
-      Vue.set(this.prompts, promptIndex, {
-        confirmed: 'yes',
-        selectedFood: food,
-      });
+      this.prompts.splice(promptIndex, 1, { confirmed: 'yes', selectedFood: food });
 
       this.goToNextIfCan(promptIndex);
       this.updatePrompts();
     },
 
     foodMissing(promptIndex: number) {
-      Vue.set(this.prompts, promptIndex, { confirmed: 'missing' });
+      this.prompts.splice(promptIndex, 1, { confirmed: 'missing' });
 
       this.goToNextIfCan(promptIndex);
       this.updatePrompts();
@@ -264,4 +239,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.food-selection {
+  gap: 0.5rem 0.5rem;
+}
+</style>

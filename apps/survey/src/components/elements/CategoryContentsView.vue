@@ -29,9 +29,11 @@
       </v-list-item-content>
     </v-list-item>
   </div>
-  <v-alert v-else class="mt-2" color="grey lighten-2" icon="fas fa-triangle-exclamation">
-    {{ $t('prompts.foodBrowser.none') }}
-  </v-alert>
+  <div v-else class="pa-4">
+    <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
+      {{ $t('prompts.foodBrowser.none') }}
+    </v-alert>
+  </div>
 </template>
 
 <script lang="ts">

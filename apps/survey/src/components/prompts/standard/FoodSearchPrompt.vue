@@ -88,13 +88,16 @@ import { defineComponent, ref } from 'vue';
 
 import type { FreeTextFood } from '@intake24/common/types';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
-import { FoodSearchResults, ImagePlaceholder } from '@intake24/survey/components/elements';
+import {
+  FoodSearchResults,
+  ImagePlaceholder,
+  MissingFoodPanel,
+} from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
 import { useSurvey } from '@intake24/survey/stores';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
-import { MissingFoodPanel } from './partials';
 
 export default defineComponent({
   name: 'FoodSearchPrompt',

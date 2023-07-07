@@ -2,6 +2,7 @@
   <associated-foods-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       localeId,
       prompt,
@@ -30,7 +31,7 @@ import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 const initialPromptState = (): AssociatedFoodPromptItemState => ({
   confirmed: undefined,
@@ -54,6 +55,7 @@ export default defineComponent({
 
   setup(props) {
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
@@ -69,6 +71,7 @@ export default defineComponent({
     return {
       food,
       localeId,
+      meal,
       meals,
       state,
       update,
