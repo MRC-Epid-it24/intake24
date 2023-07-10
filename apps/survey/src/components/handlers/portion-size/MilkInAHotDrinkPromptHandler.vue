@@ -2,6 +2,7 @@
   <milk-in-a-hot-drink-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       parentFood,
       prompt,
@@ -19,7 +20,7 @@ import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPromptHandler',
@@ -42,6 +43,7 @@ export default defineComponent({
       parentFood,
       portionSize,
     } = useFoodPromptUtils<'milk-in-a-hot-drink'>();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['milk-in-a-hot-drink-prompt'] => ({
       portionSize: encodedFoodPortionSizeData() ?? {
@@ -113,6 +115,7 @@ export default defineComponent({
 
     return {
       food,
+      meal,
       parentFood,
       portionSize,
       state,

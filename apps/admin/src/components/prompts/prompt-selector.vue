@@ -242,12 +242,15 @@ export default defineComponent({
       const { section } = this;
       if (!section) return this.groupedPrompts;
 
-      return Object.entries(this.groupedPrompts).reduce((acc, [key, value]) => {
-        acc[key as PromptType] = value.filter((prompt) =>
-          this.promptSettings[prompt.component].sections.includes(section)
-        );
-        return acc;
-      }, {} as Record<PromptType, Prompt[]>);
+      return Object.entries(this.groupedPrompts).reduce(
+        (acc, [key, value]) => {
+          acc[key as PromptType] = value.filter((prompt) =>
+            this.promptSettings[prompt.component].sections.includes(section)
+          );
+          return acc;
+        },
+        {} as Record<PromptType, Prompt[]>
+      );
     },
 
     promptIdRules(): RuleCallback[] {

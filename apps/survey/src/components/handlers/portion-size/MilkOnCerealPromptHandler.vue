@@ -2,6 +2,7 @@
   <milk-on-cereal-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       parameters,
       parentFood,
@@ -19,7 +20,7 @@ import { defineComponent } from 'vue';
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { MilkOnCerealPrompt } from '@intake24/survey/components/prompts';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'MilkOnCerealPromptHandler',
@@ -43,6 +44,7 @@ export default defineComponent({
       parentFoodOptional: parentFood,
       portionSize,
     } = useFoodPromptUtils<'milk-on-cereal'>();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['milk-on-cereal-prompt'] => ({
       portionSize: encodedFoodPortionSizeData() ?? {
@@ -76,6 +78,7 @@ export default defineComponent({
 
     return {
       food,
+      meal,
       parameters,
       parentFood,
       portionSize,

@@ -2,6 +2,7 @@
   <missing-food-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       prompt,
     }"
@@ -18,7 +19,7 @@ import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { MissingFoodPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'MissingFoodPromptHandler',
@@ -37,6 +38,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const survey = useSurvey();
     const { missingFood: food } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['missing-food-prompt'] => ({
       info: food().info ?? {
@@ -74,7 +76,7 @@ export default defineComponent({
       emit('action', type, id);
     };
 
-    return { food, state, update, action };
+    return { food, meal, state, update, action };
   },
 });
 </script>

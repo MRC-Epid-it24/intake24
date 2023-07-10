@@ -3,6 +3,7 @@
     v-bind="{
       availableMethods,
       food,
+      meal,
       initialState: state,
       parentFood,
       prompt,
@@ -22,7 +23,7 @@ import type { EncodedFood } from '@intake24/common/types';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',
@@ -40,6 +41,8 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { encodedFood, parentFoodOptional: parentFood } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
+
     const food = encodedFood();
 
     const getInitialState = (): PromptStates['portion-size-option-prompt'] => ({
@@ -86,6 +89,7 @@ export default defineComponent({
 
     return {
       food,
+      meal,
       parentFood,
       state,
       update,

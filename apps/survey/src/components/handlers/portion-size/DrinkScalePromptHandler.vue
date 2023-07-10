@@ -2,6 +2,7 @@
   <drink-scale-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       parameters,
       parentFood,
@@ -20,7 +21,7 @@ import { defineComponent } from 'vue';
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { DrinkScalePrompt } from '@intake24/survey/components/prompts';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'DrinkScalePromptHandler',
@@ -71,6 +72,7 @@ export default defineComponent({
       props.prompt.component,
       getInitialState
     );
+    const { meal } = useMealPromptUtils();
 
     const action = (type: string, id?: string) => {
       if (type === 'next') commitPortionSize();
@@ -80,6 +82,7 @@ export default defineComponent({
 
     return {
       food,
+      meal,
       parameters,
       parentFood,
       state,

@@ -56,7 +56,7 @@ export type BaseModelStatic<M extends Model = Model> = { new (): M };
 
 export default class Model<
   TModelAttributes extends {} = any,
-  TCreationAttributes extends {} = TModelAttributes
+  TCreationAttributes extends {} = TModelAttributes,
 > extends BaseModel<TModelAttributes, TCreationAttributes> {
   /**
    * Paginate results of Model.findAll

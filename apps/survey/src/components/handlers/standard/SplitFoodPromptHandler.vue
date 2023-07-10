@@ -1,5 +1,5 @@
 <template>
-  <split-food-prompt v-bind="{ food: freeTextFood(), prompt, suggestions }" @action="action">
+  <split-food-prompt v-bind="{ food: freeTextFood(), meal, prompt, suggestions }" @action="action">
   </split-food-prompt>
 </template>
 
@@ -13,7 +13,7 @@ import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
-import { useFoodPromptUtils } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
 
 export default defineComponent({
   name: 'SplitFoodPromptHandler',
@@ -31,6 +31,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { freeTextFood, meals } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
     // TODO: use server-side implementation for split words & lists
@@ -47,14 +48,13 @@ export default defineComponent({
 
     const separate = () => {
       const foodId = freeTextFood().id;
-      const { foodIndex, mealIndex } = getFoodIndexRequired(meals.value, foodId);
-      const mealId = meals.value[mealIndex].id;
+      const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
       const [first, ...rest] = suggestions.value;
 
       rest.forEach((suggestion, idx) => {
         survey.addFood({
-          mealId,
+          mealId: meal.value.id,
           food: {
             id: getEntityId(),
             type: 'free-text',
@@ -76,7 +76,7 @@ export default defineComponent({
       if (suggestions.value.length === 1) single();
     });
 
-    return { freeTextFood, separate, single, suggestions };
+    return { freeTextFood, meal, separate, single, suggestions };
   },
 
   methods: {

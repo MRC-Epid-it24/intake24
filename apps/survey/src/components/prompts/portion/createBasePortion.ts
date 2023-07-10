@@ -2,7 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent, toRefs } from 'vue';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, MealState, MissingFood } from '@intake24/common/types';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils, useLocale } from '@intake24/survey/composables';
 import { promptType } from '@intake24/ui/util';
@@ -12,7 +12,7 @@ import { BaseLayout, CardLayout } from '../layouts';
 
 export default <
   P extends keyof Prompts & keyof PromptStates,
-  F extends EncodedFood | MissingFood = EncodedFood
+  F extends EncodedFood | MissingFood = EncodedFood,
 >() =>
   defineComponent({
     name: 'BasePortion',
@@ -26,6 +26,10 @@ export default <
       },
       parentFood: {
         type: Object as PropType<EncodedFood>,
+      },
+      meal: {
+        type: Object as PropType<MealState>,
+        required: true,
       },
       initialState: {
         type: Object as PropType<PromptStates[P]>,

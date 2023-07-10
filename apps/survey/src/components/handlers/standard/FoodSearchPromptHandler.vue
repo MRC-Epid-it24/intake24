@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ discardedFoodName, food: food(), localeId, parameters, prompt }"
+    v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt }"
     v-model="searchTerm"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
@@ -18,7 +18,7 @@ import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
 
 export default defineComponent({
   name: 'FoodSearchPromptHandler',
@@ -47,6 +47,7 @@ export default defineComponent({
     }
 
     const { food, localeId } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
     const parameters = computed(() => {
       const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
         useSurvey().parameters ?? {};
@@ -76,7 +77,7 @@ export default defineComponent({
       discardedFoodName.value = null;
     }
 
-    return { food, localeId, foodData, parameters, searchTerm, discardedFoodName };
+    return { food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
   },
 
   methods: {

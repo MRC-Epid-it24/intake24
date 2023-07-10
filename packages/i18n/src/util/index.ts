@@ -37,7 +37,7 @@ export const mergeTranslations = (target: any, source: any) => {
  */
 export const compareMessageKeys = <
   T1 extends Dictionary = Dictionary,
-  T2 extends Dictionary = Dictionary
+  T2 extends Dictionary = Dictionary,
 >(
   x: T1,
   y: T2

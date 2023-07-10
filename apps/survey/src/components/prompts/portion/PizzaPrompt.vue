@@ -193,13 +193,17 @@ export default defineComponent({
     },
 
     imageMapLabels(): Record<PizzaImageMap, string[]> {
-      return Object.keys(this.imageMapIds).reduce<Record<PizzaImageMap, string[]>>((acc, key) => {
-        const pizzaType = key as PizzaImageMap;
+      return Object.keys(this.imageMapIds).reduce<Record<PizzaImageMap, string[]>>(
+        (acc, key) => {
+          const pizzaType = key as PizzaImageMap;
 
-        acc[pizzaType] =
-          this.imageMaps[pizzaType]?.objects.map(({ label }) => this.getLocaleContent(label)) ?? [];
-        return acc;
-      }, {} as Record<PizzaImageMap, string[]>);
+          acc[pizzaType] =
+            this.imageMaps[pizzaType]?.objects.map(({ label }) => this.getLocaleContent(label)) ??
+            [];
+          return acc;
+        },
+        {} as Record<PizzaImageMap, string[]>
+      );
     },
 
     isWholeSelected(): boolean {

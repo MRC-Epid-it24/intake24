@@ -1,7 +1,7 @@
 <template>
   <same-as-before-prompt
     v-if="sabFood"
-    v-bind="{ food: encodedFood(), prompt, sabFood }"
+    v-bind="{ food: encodedFood(), meal, prompt, sabFood }"
     @action="action"
   >
   </same-as-before-prompt>
@@ -16,7 +16,7 @@ import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
 
-import { useFoodPromptUtils } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils } from '../mixins';
 
 export default defineComponent({
   name: 'SameAsBeforePromptHandler',
@@ -34,6 +34,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { encodedFood } = useFoodPromptUtils();
+    const { meal } = useMealPromptUtils();
     const {
       id: foodId,
       data: { code },
@@ -75,7 +76,7 @@ export default defineComponent({
       if (!sabFood) sabAction('notSame');
     });
 
-    return { action, encodedFood, sabFood };
+    return { action, encodedFood, meal, sabFood };
   },
 });
 </script>

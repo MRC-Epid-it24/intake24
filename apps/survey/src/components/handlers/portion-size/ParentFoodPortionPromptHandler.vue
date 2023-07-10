@@ -2,6 +2,7 @@
   <parent-food-portion-prompt
     v-bind="{
       food: food(),
+      meal,
       initialState: state,
       parentFood,
       prompt,
@@ -19,7 +20,7 @@ import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { ParentFoodPortionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'ParentFoodPortionPromptHandler',
@@ -42,6 +43,7 @@ export default defineComponent({
       parentFood,
       portionSize,
     } = useFoodPromptUtils<'parent-food-portion'>();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['parent-food-portion-prompt'] => ({
       portionSize: encodedFoodPortionSizeData() ?? {
@@ -103,6 +105,7 @@ export default defineComponent({
 
     return {
       food,
+      meal,
       parentFood,
       portionSize,
       state,

@@ -1,6 +1,6 @@
 export const arrayToObject = <
   T extends object /* Record<PropertyKey, unknown> */,
-  K extends keyof T
+  K extends keyof T,
 >(
   array: T[],
   key: K

@@ -282,7 +282,7 @@ export default defineComponent({
         ({
           ...entry.value,
           ...form.getData(true),
-        } as FeedbackSchemeEntry)
+        }) as FeedbackSchemeEntry
     );
 
     const requiredPhysicalDataFields = computed<Record<FeedbackPhysicalDataField, boolean>>(() => {

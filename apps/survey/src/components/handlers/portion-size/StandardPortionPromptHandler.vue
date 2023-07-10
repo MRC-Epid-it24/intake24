@@ -3,6 +3,7 @@
     v-bind="{
       conversionFactor,
       food: food(),
+      meal,
       initialState: state,
       parameters,
       parentFood,
@@ -21,7 +22,7 @@ import { defineComponent } from 'vue';
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { StandardPortionPrompt } from '@intake24/survey/components/prompts';
 
-import { useFoodPromptUtils, usePromptHandlerStore } from '../mixins';
+import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 export default defineComponent({
   name: 'StandardPortionPromptHandler',
@@ -45,6 +46,7 @@ export default defineComponent({
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'standard-portion'>();
+    const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['standard-portion-prompt'] => ({
       portionSize: encodedFoodPortionSizeData() ?? {
@@ -73,6 +75,7 @@ export default defineComponent({
     return {
       conversionFactor,
       food,
+      meal,
       parameters,
       parentFood,
       state,
