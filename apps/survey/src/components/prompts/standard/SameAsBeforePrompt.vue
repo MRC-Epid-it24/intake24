@@ -77,14 +77,14 @@
     <template #nav-actions>
       <v-btn value="notSame" @click.stop="action('notSame')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.notSame`) }}
+          {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
       <v-btn value="same" @click.stop="action('same')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.same`) }}
+          {{ $t('common.action.yes') }}
         </span>
         <v-icon class="pb-1">$yes</v-icon>
       </v-btn>
