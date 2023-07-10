@@ -1,12 +1,12 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-card-text class="pt-2">
+    <v-card-text class="pt-2 time-picker-prompt">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker
-          v-model="currentValue"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
+          :value="value"
           @input="update"
         ></v-time-picker>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
@@ -32,29 +32,23 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
-
-  data() {
-    return {
-      currentValue: this.value,
-    };
-  },
+  emits: ['input'],
 
   computed: {
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.value;
     },
   },
 
   methods: {
-    update() {
+    update(value: string) {
       this.clearErrors();
 
-      this.$emit('update', { state: this.currentValue });
+      this.$emit('input', value);
     },
 
     confirm() {
-      if (!this.prompt.validation.required || this.currentValue) return true;
+      if (!this.prompt.validation.required || this.value) return true;
 
       this.errors = [
         this.getLocaleContent(this.prompt.validation.message, {
@@ -67,4 +61,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.time-picker-prompt {
+  .v-time-picker-title {
+    justify-content: center;
+  }
+}
+</style>

@@ -60,7 +60,7 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
       },
 
       foodOrMealName() {
-        return this.mealName ?? this.foodName ?? '';
+        return this.foodName ?? this.mealName ?? '';
       },
 
       isValid(): boolean {

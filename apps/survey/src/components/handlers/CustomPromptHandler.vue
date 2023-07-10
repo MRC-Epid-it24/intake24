@@ -2,20 +2,19 @@
   <component
     :is="prompt.component"
     :key="prompt.id"
+    v-model="state"
     v-bind="{
       meal: mealOptional,
       food: foodOptional,
       prompt,
     }"
     @action="action"
-    @update="update"
   ></component>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
@@ -38,100 +37,88 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props, { emit }) {
     const { foodOptional } = useFoodPromptUtils();
     const { mealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
-    return {
-      foodOptional,
-      mealOptional,
-      survey,
+    const state = ref<CustomPromptAnswer | undefined>(undefined);
+
+    const action = (type: string, id?: string) => {
+      if (type === 'next') commitAnswer();
+
+      emit('action', type, id);
     };
-  },
 
-  data() {
-    return {
-      state: undefined as CustomPromptAnswer | undefined,
-    };
-  },
-
-  computed: {
-    ...mapState(useSurvey, ['selection']),
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setSelection']),
-
-    update(data: { state?: CustomPromptAnswer }) {
-      this.state = data.state;
-    },
-
-    action(type: string, id?: string) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, id);
-    },
-
-    commitAnswer() {
-      if (this.state === undefined) {
+    const commitAnswer = () => {
+      if (state.value === undefined) {
         console.warn('Did not expect answer to be undefined');
         return;
       }
 
-      if (this.prompt.component === 'no-more-information-prompt') {
-        const newSelection = this.selection;
+      if (props.prompt.component === 'no-more-information-prompt') {
+        const newSelection = survey.selection;
         newSelection.mode = 'auto';
-        this.setSelection(newSelection);
+        survey.setSelection(newSelection);
       }
 
-      if (this.selection !== undefined && this.selection.element !== null) {
+      const promptId = props.prompt.id;
+
+      if (survey.selection !== undefined && survey.selection.element !== null) {
         // eslint-disable-next-line default-case
-        switch (this.selection.element.type) {
+        switch (survey.selection.element.type) {
           case 'food': {
-            const food = this.foodOptional;
+            const food = foodOptional.value;
             if (!food) {
               console.warn('Expected meal to be defined');
               return;
             }
 
-            if (infoPrompts.includes(this.prompt.component))
-              this.survey.addFoodFlag({ foodId: food.id, flag: `${this.prompt.id}-acknowledged` });
+            if (infoPrompts.includes(props.prompt.component))
+              survey.addFoodFlag({ foodId: food.id, flag: `${promptId}-acknowledged` });
             else
-              this.survey.setFoodCustomPromptAnswer({
+              survey.setFoodCustomPromptAnswer({
                 foodId: food.id,
-                promptId: this.prompt.id,
-                answer: this.state,
+                promptId,
+                answer: state.value,
               });
             break;
           }
           case 'meal': {
-            if (!this.mealOptional) {
+            if (!mealOptional.value) {
               console.warn('Expected meal to be defined');
               return;
             }
 
-            if (infoPrompts.includes(this.prompt.component))
-              this.survey.setMealFlag({
-                mealId: this.mealOptional.id,
-                flag: `${this.prompt.id}-acknowledged`,
+            if (infoPrompts.includes(props.prompt.component))
+              survey.setMealFlag({
+                mealId: mealOptional.value.id,
+                flag: `${promptId}-acknowledged`,
               });
             else
-              this.survey.setMealCustomPromptAnswer({
-                mealId: this.mealOptional.id,
-                promptId: this.prompt.id,
-                answer: this.state,
+              survey.setMealCustomPromptAnswer({
+                mealId: mealOptional.value.id,
+                promptId,
+                answer: state.value,
               });
 
             break;
           }
         }
-      } else if (infoPrompts.includes(this.prompt.component)) {
-        this.survey.setSurveyFlag(`${this.prompt.id}-acknowledged`);
+      } else if (infoPrompts.includes(props.prompt.component)) {
+        survey.setSurveyFlag(`${promptId}-acknowledged`);
       } else {
-        this.survey.setCustomPromptAnswer({ promptId: this.prompt.id, answer: this.state });
+        survey.setCustomPromptAnswer({ promptId, answer: state.value });
       }
-    },
+    };
+
+    return {
+      action,
+      foodOptional,
+      mealOptional,
+      state,
+      survey,
+    };
   },
 });
 </script>

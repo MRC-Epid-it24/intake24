@@ -52,7 +52,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
     return {
@@ -86,7 +86,7 @@ export default defineComponent({
     update() {
       this.clearErrors();
 
-      this.$emit('update', { state: [...this.currentValue] });
+      this.$emit('input', [...this.currentValue]);
     },
 
     confirm() {

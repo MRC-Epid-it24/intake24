@@ -12,13 +12,14 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'info-prompt'>()],
 
-  emits: ['update'],
-
-  data() {
-    return {
-      currentValue: 'ok',
-    };
+  props: {
+    value: {
+      type: String,
+      default: 'ok',
+    },
   },
+
+  emits: ['input'],
 
   computed: {
     isValid(): boolean {
@@ -28,7 +29,7 @@ export default defineComponent({
 
   methods: {
     update() {
-      this.$emit('update', { state: this.currentValue });
+      this.$emit('input', this.value);
     },
 
     confirm() {

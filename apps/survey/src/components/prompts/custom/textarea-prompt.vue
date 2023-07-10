@@ -3,12 +3,12 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-textarea
-          v-model.trim="currentValue"
           hide-details="auto"
           :hint="getLocaleContent(prompt.i18n.hint)"
           :label="getLocaleContent(prompt.i18n.label)"
           outlined
           :rules="rules"
+          :value="value"
           @input="update"
         ></v-textarea>
       </v-form>
@@ -20,7 +20,8 @@
 import type { VForm } from 'vuetify/lib';
 import { defineComponent, ref } from 'vue';
 
-import { useLocale } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/i18n';
+import { useLocale, usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -36,39 +37,38 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup() {
+  setup(props) {
     const form = ref<InstanceType<typeof VForm>>();
 
+    const i18n = useI18n();
     const { getLocaleContent } = useLocale();
+    const { type } = usePromptUtils(props);
 
-    return { form, getLocaleContent };
-  },
-
-  data() {
-    return {
-      currentValue: this.value,
-      rules: this.prompt.validation.required
+    const rules = ref(
+      props.prompt.validation.required
         ? [
             (v: string | null) =>
               !!v ||
-              (this.getLocaleContent(this.prompt.validation.message) ??
-                this.$t(`prompts.${this.type}}.validation.required`)),
+              (getLocaleContent(props.prompt.validation.message) ??
+                i18n.t(`prompts.${type.value}.validation.required`)),
           ]
-        : [],
-    };
+        : []
+    );
+
+    return { form, getLocaleContent, rules };
   },
 
   computed: {
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.value;
     },
   },
 
   methods: {
-    update() {
-      this.$emit('update', { state: this.currentValue });
+    update(value: string) {
+      this.$emit('input', value);
     },
 
     confirm() {

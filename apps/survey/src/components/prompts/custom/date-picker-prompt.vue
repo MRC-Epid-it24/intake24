@@ -3,10 +3,10 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-date-picker
-          v-model="currentValue"
           full-width
           :landscape="!isMobile"
           :max="max"
+          :value="value"
           @input="update"
         ></v-date-picker>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
@@ -32,28 +32,22 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
-
-  data() {
-    return {
-      currentValue: this.value,
-    };
-  },
+  emits: ['input'],
 
   computed: {
     max() {
       return this.prompt.futureDates ? undefined : new Date().toISOString().substring(0, 10);
     },
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentValue;
+      return !this.prompt.validation.required || !!this.value;
     },
   },
 
   methods: {
-    update() {
+    update(value: string) {
       this.clearErrors();
 
-      this.$emit('update', { state: this.currentValue });
+      this.$emit('input', value);
     },
 
     confirm() {

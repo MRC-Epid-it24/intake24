@@ -1,17 +1,17 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }">
     <template #actions>
-      <yes-no-toggle v-model="currentValue" @change="update"></yes-no-toggle>
+      <yes-no-toggle :value="value" @input="update"></yes-no-toggle>
     </template>
     <template #nav-actions>
-      <v-btn value="no" @click.stop="setValue(false)">
+      <v-btn value="no" @click.stop="update(false)">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="yes" @click.stop="setValue(true)">
+      <v-btn value="yes" @click.stop="update(true)">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
@@ -35,29 +35,25 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'yes-no-prompt'>()],
 
-  emits: ['action', 'update'],
-
-  data() {
-    return {
-      currentValue: undefined as boolean | undefined,
-    };
+  props: {
+    value: {
+      type: Boolean,
+      default: undefined,
+    },
   },
+
+  emits: ['input'],
 
   computed: {
     isValid(): boolean {
-      return this.currentValue !== undefined;
+      return this.value !== undefined;
     },
   },
 
   methods: {
-    setValue(value: boolean) {
-      this.currentValue = value;
-      this.update();
-    },
-
-    update() {
-      this.$emit('update', { state: this.currentValue });
-      this.$emit('action', 'next');
+    update(value: boolean) {
+      this.$emit('input', value);
+      this.action('next');
     },
   },
 });
