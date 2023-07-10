@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^20.3.3",
+    "@types/node": "^20.4.1",
     "@types/validator": "^13.7.17",
     "@types/web-push": "^3.3.2",
     "@types/webpack-env": "^1.18.1",
