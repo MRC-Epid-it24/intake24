@@ -21,7 +21,7 @@
         text
         @click.stop="action('cancel')"
       >
-        {{ $t(`prompts.${type}.no`, { meal: mealName }) }}
+        {{ $t(`prompts.${type}.no`) }}
       </v-btn>
       <v-btn
         :block="isMobile"
@@ -31,20 +31,20 @@
         large
         @click.stop="action('next')"
       >
-        {{ $t(`prompts.${type}.yes`, { meal: mealName }) }}
+        {{ $t(`prompts.${type}.yes`) }}
       </v-btn>
     </template>
     <template #nav-actions>
       <v-btn value="cancel" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.remove') }}
+          {{ $t(`prompts.${type}.no`) }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
       <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.confirm') }}
+          {{ $t(`prompts.${type}.yes`) }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>

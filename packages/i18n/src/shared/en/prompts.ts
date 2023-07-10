@@ -155,7 +155,7 @@ const prompts: LocaleMessageObject = {
     text: '{meal}',
     description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
-    no: 'I did not have {meal}',
+    no: 'Did not have',
   },
   readyMeal: {
     name: 'Ready meal',
