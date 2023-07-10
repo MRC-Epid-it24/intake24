@@ -1,9 +1,9 @@
 <template>
   <v-row class="pt-0" justify="center" :no-gutters="isMobile">
-    <recall-bread-crumbs-mobile
+    <recall-bread-crumbs
       v-if="promptName"
       v-bind="{ meals, promptName, selection }"
-    ></recall-bread-crumbs-mobile>
+    ></recall-bread-crumbs>
     <transition mode="out-in" type="fade">
       <v-alert
         border="left"
@@ -67,7 +67,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { MealListMobile, RecallBreadCrumbsMobile } from '../layouts';
+import { MealListMobile } from '../layouts';
 import FoodMobileContextMenu from './mobile/FoodMobileContextMenu.vue';
 import MealMobileContextMenu from './mobile/MealMobileContextMenu.vue';
 import recallMixin from './recall-mixin';
@@ -77,7 +77,6 @@ export default defineComponent({
 
   components: {
     MealListMobile,
-    RecallBreadCrumbsMobile,
     FoodMobileContextMenu,
     MealMobileContextMenu,
   },

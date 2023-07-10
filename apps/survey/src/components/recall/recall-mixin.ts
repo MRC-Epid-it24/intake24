@@ -25,6 +25,7 @@ import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 import { promptType } from '@intake24/ui/util';
 
 import { InfoAlert } from '../elements';
+import { RecallBreadCrumbs } from '../layouts';
 
 interface SavedState {
   prompt: PromptInstance | null;
@@ -37,6 +38,7 @@ export default defineComponent({
   components: {
     CustomPromptHandler,
     InfoAlert,
+    RecallBreadCrumbs,
     ...standardHandlers,
     ...portionSizeHandlers,
   },

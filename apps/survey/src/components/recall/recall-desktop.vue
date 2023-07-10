@@ -29,13 +29,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { MealList, RecallBreadCrumbs } from '../layouts';
+import { MealList } from '../layouts';
 import recallMixin from './recall-mixin';
 
 export default defineComponent({
   name: 'RecallDesktop',
 
-  components: { MealList, RecallBreadCrumbs },
+  components: { MealList },
 
   mixins: [recallMixin],
 });
