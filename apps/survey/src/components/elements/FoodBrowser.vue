@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="dialog ? `food-browser-dialog` : `v-card`" v-model="dialog" :flat="!dialog">
-      <div :class="{ 'px-4': dialog, 'pt-4': dialog }">
+      <div :class="{ 'pa-4': dialog, 'mb-2': dialog, 'elevation-2': dialog }">
         <v-text-field
           ref="searchRef"
           v-model="search"

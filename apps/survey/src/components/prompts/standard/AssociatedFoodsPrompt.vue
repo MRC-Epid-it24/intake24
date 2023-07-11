@@ -43,17 +43,11 @@
           </v-container>
           <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
             <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
-              <v-btn class="flex-md-grow-1" color="grey lighten-3" elevation="0" large>
+              <v-alert class="flex-md-grow-1 mb-0" color="grey lighten-3">
                 <v-icon left>$ok</v-icon>
                 {{ prompt.selectedFood.description }}
-              </v-btn>
-              <v-btn
-                class="flex-md-grow-0"
-                color="secondary"
-                large
-                outlined
-                @click="selectDifferentFood(prompt)"
-              >
+              </v-alert>
+              <v-btn color="secondary" large outlined @click="selectDifferentFood(prompt)">
                 {{ $t(`prompts.${type}.select.different`) }}
               </v-btn>
             </v-card-text>
