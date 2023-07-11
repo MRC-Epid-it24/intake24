@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@8.6.5",
+  "packageManager": "pnpm@8.6.7",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
@@ -62,11 +62,11 @@
   ],
   "devDependencies": {
     "@jest/types": "^29.6.1",
-    "@types/jest": "^29.5.2",
+    "@types/jest": "^29.5.3",
     "@types/node": "^20.4.1",
     "@types/prompts": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
@@ -75,7 +75,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-define-config": "^1.21.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.0.0-alpha.2",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-vue": "^9.15.1",
     "execa": "^5.1.1",
@@ -92,7 +92,7 @@
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vite": "^4.4.2",
+    "vite": "^4.4.3",
     "vitepress": "1.0.0-beta.5"
   },
   "pnpm": {

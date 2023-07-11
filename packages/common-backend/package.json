@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "jsdom": "^22.1.0",
     "nodemailer": "^6.9.3",
-    "winston": "^3.9.0",
+    "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
