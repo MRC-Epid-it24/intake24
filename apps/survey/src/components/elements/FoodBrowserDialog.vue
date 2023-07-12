@@ -1,8 +1,18 @@
 <template>
-  <v-dialog fullscreen :value="dialog" @input="$emit('update:dialog', $event)">
-    <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <slot></slot>
-    </v-card>
+  <v-dialog
+    fullscreen
+    transition="dialog-bottom-transition"
+    :value="dialog"
+    @input="toggle($event)"
+  >
+    <v-sheet class="food-browser-dialog-wrapper" color="primary">
+      <v-card-title class="flex-grow-0" dark>
+        <v-icon color="white" @click="toggle(false)">$cancel</v-icon>
+      </v-card-title>
+      <v-card class="food-browser-dialog-content">
+        <slot></slot>
+      </v-card>
+    </v-sheet>
   </v-dialog>
 </template>
 
@@ -17,7 +27,34 @@ export default defineComponent({
       type: Boolean,
     },
   },
+
+  setup(props, { emit }) {
+    const toggle = (value: boolean) => {
+      emit('update:dialog', value);
+    };
+
+    return {
+      toggle,
+    };
+  },
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.food-browser-dialog-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .food-browser-dialog-content {
+    flex-grow: 1;
+    flex-basis: calc(100% - 52px);
+
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+</style>

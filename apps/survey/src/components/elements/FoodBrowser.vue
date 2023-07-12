@@ -5,7 +5,7 @@
       :dialog.sync="dialog"
       :flat="!dialog"
     >
-      <div :class="{ 'pa-4': dialog, 'mb-2': dialog, 'elevation-2': dialog }">
+      <div :class="{ 'px-4 pt-4 pb-2': dialog }">
         <v-text-field
           ref="searchRef"
           v-model="search"
@@ -16,6 +16,7 @@
           outlined
           :placeholder="$t(`prompts.foodBrowser.search`)"
           prepend-inner-icon="$search"
+          :rounded="dialog"
           @focus="openInDialog"
         ></v-text-field>
       </div>
