@@ -1,5 +1,5 @@
 <template>
-  <v-dialog fullscreen :value="value" @input="$emit('input', $event)">
+  <v-dialog fullscreen :value="dialog" @input="$emit('update:dialog', $event)">
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <slot></slot>
     </v-card>
@@ -13,7 +13,7 @@ export default defineComponent({
   name: 'FoodBrowserDialog',
 
   props: {
-    value: {
+    dialog: {
       type: Boolean,
     },
   },
