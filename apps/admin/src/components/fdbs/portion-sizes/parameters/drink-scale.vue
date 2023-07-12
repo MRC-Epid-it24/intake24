@@ -46,51 +46,43 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import selectsResource from './selectsResource';
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
+import type { PortionSizeMethodParameterItem } from '..';
+import { useParameters } from './use-parameters';
 
 export default defineComponent({
   name: 'DrinkScaleParameters',
 
-  mixins: [selectsResource],
+  components: { SelectResource },
 
-  computed: {
-    drinkwareSetId: {
-      get(): string | undefined {
-        return this.getParameter('drinkware-id')?.value;
-      },
-      set(value: string) {
-        this.setParameter('drinkware-id', value);
-      },
+  props: {
+    value: {
+      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      required: true,
     },
-    initialFillLevel: {
-      get(): number {
-        const value = parseFloat(this.getParameter('initial-fill-level')?.value ?? '0');
-        return Number.isNaN(value) ? 0 : value;
-      },
-      set(value: number) {
-        this.setParameter('initial-fill-level', value.toString());
-      },
-    },
-    skipFillLevel: {
-      get(): boolean {
-        const value = this.getParameter('skip-fill-level')?.value;
-        return value === 'true';
-      },
-      set(value: boolean) {
-        this.setParameter('skip-fill-level', value.toString());
-      },
-    },
-    imageMapLabels: {
-      get(): boolean {
-        const value = this.getParameter('image-map-labels')?.value;
-        return value === 'true';
-      },
-      set(value: boolean) {
-        this.setParameter('image-map-labels', value.toString());
-      },
-    },
+  },
+
+  setup(props, context) {
+    const { createBooleanParameter, createNumberParameter, createStringParameter } = useParameters(
+      props,
+      context
+    );
+
+    const drinkwareSetId = createStringParameter('drinkware-id');
+    const initialFillLevel = createNumberParameter('initial-fill-level');
+    const skipFillLevel = createBooleanParameter('skip-fill-level');
+    const imageMapLabels = createBooleanParameter('image-map-labels');
+
+    return {
+      drinkwareSetId,
+      initialFillLevel,
+      skipFillLevel,
+      imageMapLabels,
+    };
   },
 });
 </script>

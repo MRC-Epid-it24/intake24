@@ -139,6 +139,9 @@ const fdbs: LocaleMessageObject = {
       },
       'standard-portion': {
         _: 'Standard portion',
+        unit: 'Unit',
+        weight: 'Weight (g)',
+        omitFoodDescription: 'Omit food description',
       },
       cereal: {
         _: 'Cereal',

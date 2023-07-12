@@ -42,32 +42,37 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import selectsResource from './selectsResource';
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
+import type { PortionSizeMethodParameterItem } from '..';
+import { useParameters } from './use-parameters';
 
 export default defineComponent({
   name: 'AsServedParameters',
 
-  mixins: [selectsResource],
+  components: { SelectResource },
 
-  computed: {
-    servingSetId: {
-      get(): string | undefined {
-        return this.getParameter('serving-image-set')?.value;
-      },
-      set(value: string) {
-        this.setParameter('serving-image-set', value);
-      },
+  props: {
+    value: {
+      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      required: true,
     },
-    leftoverSetId: {
-      get(): string | undefined {
-        return this.getParameter('leftovers-image-set')?.value;
-      },
-      set(value: string) {
-        this.setParameter('leftovers-image-set', value);
-      },
-    },
+  },
+
+  setup(props, context) {
+    const { createStringParameter, removeParameter } = useParameters(props, context);
+
+    const servingSetId = createStringParameter('serving-image-set');
+    const leftoverSetId = createStringParameter('leftovers-image-set');
+
+    return {
+      servingSetId,
+      leftoverSetId,
+      removeParameter,
+    };
   },
 });
 </script>

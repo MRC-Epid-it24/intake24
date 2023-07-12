@@ -117,7 +117,7 @@ export default defineComponent({
 
       const units: StandardPortionUnit[] = [];
 
-      const unitsCount = parseInt(parameters['units-count'], 10);
+      const unitsCount = Math.floor(Object.keys(parameters).length / 3);
 
       for (let i = 0; i < unitsCount; ++i) {
         units.push({

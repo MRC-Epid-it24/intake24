@@ -28,33 +28,36 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import selectsResource from './selectsResource';
+import { SelectResource } from '@intake24/admin/components/dialogs';
+
+import type { PortionSizeMethodParameterItem } from '..';
+import { useParameters } from './use-parameters';
 
 export default defineComponent({
   name: 'GuideImageParameters',
 
-  mixins: [selectsResource],
+  components: { SelectResource },
 
-  computed: {
-    guideImageId: {
-      get(): string | undefined {
-        return this.getParameter('guide-image-id')?.value;
-      },
-      set(value: string) {
-        this.setParameter('guide-image-id', value);
-      },
+  props: {
+    value: {
+      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      required: true,
     },
-    imageMapLabels: {
-      get(): boolean {
-        const value = this.getParameter('image-map-labels')?.value;
-        return value === 'true';
-      },
-      set(value: boolean) {
-        this.setParameter('image-map-labels', value.toString());
-      },
-    },
+  },
+
+  setup(props, context) {
+    const { createBooleanParameter, createStringParameter } = useParameters(props, context);
+
+    const guideImageId = createStringParameter('guide-image-id');
+    const imageMapLabels = createBooleanParameter('image-map-labels');
+
+    return {
+      guideImageId,
+      imageMapLabels,
+    };
   },
 });
 </script>

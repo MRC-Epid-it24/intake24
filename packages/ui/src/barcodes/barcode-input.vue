@@ -45,7 +45,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:model-value', 'update:dialog']);
+const emit = defineEmits(['update:model-value']);
 
 const barcode = useVModel(props, 'modelValue', emit);
 
