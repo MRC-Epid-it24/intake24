@@ -62,7 +62,7 @@ export default defineComponent({
   },
 
   setup() {
-    const orientations = useSelects();
+    const { orientations } = useSelects();
 
     return { orientations };
   },
