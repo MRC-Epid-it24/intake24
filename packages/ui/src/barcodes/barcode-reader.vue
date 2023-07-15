@@ -1,19 +1,30 @@
 <template>
   <v-dialog
+    v-model="dialog"
     :fullscreen="$vuetify.breakpoint.mobile"
-    :max-width="$vuetify.breakpoint.mobile ? undefined : '600px'"
-    :min-height="$vuetify.breakpoint.mobile ? undefined : '400px'"
-    :value="dialog"
+    :max-width="$vuetify.breakpoint.mobile ? undefined : '640px'"
+    :min-height="$vuetify.breakpoint.mobile ? undefined : '480px'"
   >
     <v-card ref="card" :tile="$vuetify.breakpoint.mobile">
       <v-toolbar color="primary" dark flat>
-        <v-btn icon :title="$t('common.action.cancel')" @click.stop="close">
-          <v-icon>$cancel</v-icon>
+        <v-btn icon :title="$t('common.action.close')" @click.stop="close">
+          <v-icon>$close</v-icon>
         </v-btn>
         <v-toolbar-title>Scan barcode</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="white"
+          :disabled="!deviceCapabilities.torch"
+          icon
+          title="Torch"
+          @click="toggleTorch"
+        >
+          <v-icon>fas fa-lightbulb</v-icon>
+        </v-btn>
       </v-toolbar>
-      <div ref="reader" v-resize="onReaderResize" class="reader">
-        <canvas class="drawingBuffer" v-bind="{ height, width }"></canvas>
+      <div ref="reader" v-resize="onReaderResize" class="barcode-reader">
+        <canvas class="drawingBuffer"></canvas>
+        <video :style="{ height: `${height - 56}px` }"></video>
       </div>
     </v-card>
   </v-dialog>
@@ -23,6 +34,7 @@
 import type { QuaggaJSCodeReader, QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
+import { useVModel } from '@vueuse/core';
 import debounce from 'lodash/debounce';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { VCard } from 'vuetify/lib';
@@ -42,25 +54,72 @@ const props = defineProps({
   },
   readers: {
     type: Array as PropType<QuaggaJSCodeReader[]>,
-    default: () => ['code_128_reader', 'ean_reader'],
+    default: () => ['ean_reader', 'ean_8_reader', 'ean_5_reader'],
   },
   successfulReads: {
     type: Number,
     default: 3,
   },
+  vibrateOnRead: {
+    type: Boolean,
+    default: true,
+  },
 });
 
-const emit = defineEmits(['update:model-value', 'update:dialog']);
+const emit = defineEmits(['update:dialog', 'update:model-value']);
+
+const dialog = useVModel(props, 'dialog', emit);
 
 const height = ref(0);
 const width = ref(0);
-
-const results = ref<QuaggaJSResultObject[]>([]);
 
 const card = ref<InstanceType<typeof VCard>>();
 const reader = ref<InstanceType<typeof HTMLFormElement>>();
 
 const initializing = ref(false);
+const capabilities = ref<MediaTrackCapabilities | null>(null);
+const deviceCapabilities = ref<{ torch: boolean }>({ torch: false });
+const results = ref<QuaggaJSResultObject[]>([]);
+
+const initCapabilities = () => {
+  const track = Quagga.CameraAccess.getActiveTrack();
+  if (!track) return;
+
+  capabilities.value = track.getCapabilities();
+
+  if ('torch' in capabilities.value && typeof capabilities.value.torch === 'boolean')
+    deviceCapabilities.value.torch = true;
+};
+
+const initScanBox = async () => {
+  const ctx = Quagga.canvas.ctx.overlay;
+  const canvas = Quagga.canvas.dom.overlay;
+  const canvasWidth = parseInt(canvas.getAttribute('width') ?? '0');
+  const canvasHeight = parseInt(canvas.getAttribute('height') ?? '0');
+
+  const boxHeight = canvasHeight * 0.3;
+  const boxWidth = canvasWidth * 0.8;
+
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#FAFAFA';
+  ctx.rect(canvasWidth * 0.1, canvasHeight / 2 - boxHeight / 2, boxWidth, boxHeight);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#EEEEEE';
+  ctx.moveTo(canvasWidth * 0.15, canvasHeight * 0.5);
+  ctx.lineTo(canvasWidth * 0.85, canvasHeight * 0.5);
+  ctx.stroke();
+};
+
+const toggleTorch = async () => {
+  const track = Quagga.CameraAccess.getActiveTrack();
+
+  //@ts-expect-error torch is not in the types ?
+  await track?.applyConstraints({ advanced: [{ torch: !track.getSettings().torch }] });
+};
 
 const updateDimensions = () => {
   const el = card.value?.$el;
@@ -121,11 +180,19 @@ const start = async () => {
         type: 'LiveStream',
         target: reader.value,
         constraints: {
-          width: width.value,
-          height: height.value,
+          facingMode: 'environment',
+          height: { min: 480, ideal: 720, max: 1080 },
+          width: { min: 640, ideal: 1280, max: 1920 },
+        },
+        area: {
+          top: '45%',
+          right: '0%',
+          left: '0%',
+          bottom: '45%',
         },
         willReadFrequently: true,
       },
+      locate: false,
       decoder: {
         readers: props.readers,
       },
@@ -138,6 +205,8 @@ const start = async () => {
 
       // Quagga.onProcessed(this.onProcessed);
       Quagga.onDetected(onDetected);
+      initCapabilities();
+      initScanBox();
 
       console.log('Initialization finished. Ready to start');
       Quagga.start();
@@ -198,6 +267,8 @@ const checkResults = async () => {
 };
 
 const successfulRead = async (barcode: string) => {
+  if (props.vibrateOnRead) navigator.vibrate(200);
+
   emit('update:model-value', barcode);
   await close();
 };
@@ -210,11 +281,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.reader {
-  // width: 640px;
-  // height: 480px;
-  min-height: 400px;
+.barcode-reader {
   position: relative;
+  min-height: 480px;
 
   canvas {
     position: absolute;
@@ -222,6 +291,12 @@ export default defineComponent({
     left: 0;
     height: 100%;
     width: 100%;
+  }
+
+  video {
+    display: block;
+    width: 100%;
+    object-fit: cover;
   }
 }
 </style>

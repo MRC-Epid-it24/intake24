@@ -10,9 +10,9 @@ export default new Vuetify({
     values: {
       add: 'fas fa-circle-plus',
       back: 'fas fa-arrow-left',
-      cancel: 'fas fa-circle-xmark',
+      cancel: 'fas fa-xmark',
       category: 'far fa-folder',
-      close: 'fas fa-circle-xmark',
+      close: 'fas fa-xmark',
       check: 'fas fa-circle-check',
       create: 'fas fa-plus',
       dashboard: 'fas fa-tachometer-alt',

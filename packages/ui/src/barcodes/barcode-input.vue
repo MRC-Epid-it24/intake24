@@ -33,15 +33,12 @@ const props = defineProps({
   },
   errorThreshold: {
     type: Number,
-    default: 0.2,
   },
   readers: {
     type: Array as PropType<QuaggaJSCodeReader[]>,
-    default: () => ['code_128_reader', 'ean_reader'],
   },
   successfulReads: {
     type: Number,
-    default: 3,
   },
 });
 
