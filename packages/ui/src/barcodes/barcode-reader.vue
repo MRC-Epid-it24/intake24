@@ -39,6 +39,8 @@ import debounce from 'lodash/debounce';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { VCard } from 'vuetify/lib';
 
+import { useMessages } from '../stores';
+
 const props = defineProps({
   dialog: {
     type: Boolean,
@@ -181,8 +183,8 @@ const start = async () => {
         target: reader.value,
         constraints: {
           facingMode: 'environment',
-          height: { min: 480, ideal: 720, max: 1080 },
-          width: { min: 640, ideal: 1280, max: 1920 },
+          height: { min: 480, ideal: 720 },
+          width: { min: 640, ideal: 1280 },
         },
         area: {
           top: '45%',
@@ -200,6 +202,7 @@ const start = async () => {
     (err) => {
       if (err) {
         console.warn(err);
+        useMessages().warning('Could not find suitable camera.');
         return;
       }
 
