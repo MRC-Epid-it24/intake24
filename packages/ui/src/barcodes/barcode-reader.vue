@@ -12,6 +12,12 @@
         </v-btn>
         <v-toolbar-title>Scan barcode</v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-switch v-model="locate" class="mt-0" hide-details name="locate">
+          <template #label>
+            <v-icon>fas fa-crosshairs</v-icon>
+          </template>
+        </v-switch>
+        <v-divider class="ml-2" vertical></v-divider>
         <v-btn
           color="white"
           :disabled="!deviceCapabilities.torch"
@@ -82,6 +88,7 @@ const initializing = ref(false);
 const capabilities = ref<MediaTrackCapabilities | null>(null);
 const deviceCapabilities = ref<{ torch: boolean }>({ torch: false });
 const results = ref<QuaggaJSResultObject[]>([]);
+const locate = ref(true);
 
 const initCapabilities = () => {
   const track = Quagga.CameraAccess.getActiveTrack();
@@ -93,7 +100,7 @@ const initCapabilities = () => {
     deviceCapabilities.value.torch = true;
 };
 
-const initScanBox = async () => {
+const drawScanBox = () => {
   const ctx = Quagga.canvas.ctx.overlay;
   const canvas = Quagga.canvas.dom.overlay;
   const canvasWidth = parseInt(canvas.getAttribute('width') ?? '0');
@@ -114,6 +121,37 @@ const initScanBox = async () => {
   ctx.moveTo(canvasWidth * 0.15, canvasHeight * 0.5);
   ctx.lineTo(canvasWidth * 0.85, canvasHeight * 0.5);
   ctx.stroke();
+};
+
+const clearCanvas = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+  ctx.clearRect(
+    0,
+    0,
+    parseInt(canvas.getAttribute('width') ?? '0'),
+    parseInt(canvas.getAttribute('height') ?? '0')
+  );
+};
+
+const drawResult = (result: QuaggaJSResultObject) => {
+  const ctx = Quagga.canvas.ctx.overlay;
+  const canvas = Quagga.canvas.dom.overlay;
+
+  if (result.boxes.length) {
+    clearCanvas(ctx, canvas);
+
+    result.boxes
+      .filter((box) => box !== result.box)
+      .forEach((box) => {
+        Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, ctx, { color: '#FAFAFA', lineWidth: 2 });
+      });
+  }
+
+  if (result.box.length) {
+    Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, ctx, {
+      color: '#EEEEEE',
+      lineWidth: 2,
+    });
+  }
 };
 
 const toggleTorch = async () => {
@@ -162,7 +200,7 @@ const stop = async () => {
   await Quagga.stop();
 };
 
-const close = async () => {
+const close = () => {
   emit('update:dialog', false);
 };
 
@@ -186,15 +224,10 @@ const start = async () => {
           height: { min: 480, ideal: 720 },
           width: { min: 640, ideal: 1280 },
         },
-        area: {
-          top: '45%',
-          right: '0%',
-          left: '0%',
-          bottom: '45%',
-        },
+        area: locate.value ? undefined : { top: '45%', right: '0%', left: '0%', bottom: '45%' },
         willReadFrequently: true,
       },
-      locate: false,
+      locate: locate.value,
       decoder: {
         readers: props.readers,
       },
@@ -209,7 +242,8 @@ const start = async () => {
       // Quagga.onProcessed(this.onProcessed);
       Quagga.onDetected(onDetected);
       initCapabilities();
-      initScanBox();
+
+      if (!locate.value) drawScanBox();
 
       console.log('Initialization finished. Ready to start');
       Quagga.start();
@@ -217,6 +251,10 @@ const start = async () => {
     }
   );
 };
+
+watch(locate, async () => {
+  await start();
+});
 
 watch(
   () => props.dialog,
@@ -243,15 +281,18 @@ const onReaderResize = debounce(async () => {
 
 /* onProcessed(result: QuaggaJSResultObject) {}, */
 
-const onDetected = async (result: QuaggaJSResultObject) => {
+const onDetected = (result: QuaggaJSResultObject) => {
   const err = getMedianOfCodeErrors(result.codeResult.decodedCodes);
+
   if (err > props.errorThreshold) return;
 
+  if (locate.value) drawResult(result);
+
   results.value.push(result);
-  await checkResults();
+  checkResults();
 };
 
-const checkResults = async () => {
+const checkResults = () => {
   if (results.value.length < props.successfulReads) return;
 
   const occurrences = results.value.reduce<Record<string, number>>((acc, curr) => {
@@ -266,14 +307,14 @@ const checkResults = async () => {
   const match = Object.entries(occurrences).find(([code, count]) => count >= props.successfulReads);
   if (!match) return;
 
-  await successfulRead(match[0]);
+  successfulRead(match[0]);
 };
 
-const successfulRead = async (barcode: string) => {
+const successfulRead = (barcode: string) => {
   if (props.vibrateOnRead) navigator.vibrate(200);
 
   emit('update:model-value', barcode);
-  await close();
+  close();
 };
 </script>
 
