@@ -1,4 +1,5 @@
 import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType } from '../prompts';
 import type { UserFoodData } from './http';
@@ -238,13 +239,7 @@ export interface EncodedFood extends AbstractFoodState {
 export interface MissingFood extends AbstractFoodState {
   type: 'missing-food';
   searchTerm: string;
-  info: {
-    name: string;
-    brand: string;
-    description: string;
-    leftovers: string;
-    portionSize: string;
-  } | null;
+  info: SurveySubmissionMissingFoodCreationAttributes | null;
 }
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood;

@@ -44,34 +44,34 @@ export default class SurveySubmissionMissingFood extends BaseModel<
   declare mealId: string;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(512),
   })
-  declare name: string;
+  declare name: string | null;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(512),
   })
-  declare brand: string;
+  declare brand: string | null;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(512),
   })
-  declare description: string;
+  declare description: string | null;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(512),
   })
-  declare portionSize: string;
+  declare portionSize: string | null;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(512),
   })
-  declare leftovers: string;
+  declare leftovers: string | null;
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   declare meal?: NonAttribute<SurveySubmissionMeal>;

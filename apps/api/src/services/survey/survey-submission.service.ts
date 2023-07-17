@@ -137,7 +137,7 @@ const surveySubmissionService = ({
           return collectedFoods;
         }
 
-        collectedFoods.missingInputs.push({ id: randomUUID(), parentId, mealId, ...info });
+        collectedFoods.missingInputs.push({ ...info, id: randomUUID(), parentId, mealId });
         collectedFoods.missingStates.push(foodState);
         return collectedFoods;
       }
