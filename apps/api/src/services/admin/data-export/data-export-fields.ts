@@ -3,14 +3,21 @@ import uaParser from 'ua-parser-js';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { ExportField as BaseExportField } from '@intake24/common/surveys';
-import type { SurveyScheme, SurveySubmissionFood } from '@intake24/db';
-import { NutrientTableCsvMappingField, SystemNutrientType, UserCustomField } from '@intake24/db';
+import type { SurveyScheme } from '@intake24/db';
+import {
+  NutrientTableCsvMappingField,
+  SurveySubmissionFood,
+  SurveySubmissionMissingFood,
+  SystemNutrientType,
+  UserCustomField,
+} from '@intake24/db';
 
 export type ExportFieldTransform<T = SurveySubmissionFood> = (
   food: T
 ) => string | number | null | undefined;
 
-export interface ExportField<T = SurveySubmissionFood> extends BaseExportField {
+export interface ExportField<T = SurveySubmissionFood | SurveySubmissionMissingFood>
+  extends BaseExportField {
   value?: string | ExportFieldTransform<T>;
 }
 
@@ -218,7 +225,11 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const food = async (): Promise<ExportField[]> => [
-    { id: 'foodId', label: 'Food ID', value: 'id' },
+    {
+      id: 'foodId',
+      label: 'Food ID',
+      value: (food) => (food instanceof SurveySubmissionFood ? food.id : undefined),
+    },
     { id: 'parentId', label: 'Parent food ID', value: 'parentId' },
     { id: 'code', label: 'Food code', value: 'code' },
     { id: 'englishName', label: 'Name (en)', value: 'englishName' },
@@ -237,18 +248,29 @@ const dataExportFields = () => {
       label: 'Food group (local)',
       value: 'foodGroupLocalName',
     },
-    { id: 'brand', label: 'Brand', value: 'brand' },
+    {
+      id: 'brand',
+      label: 'Brand',
+      value: (food) => (food instanceof SurveySubmissionFood ? food.brand : undefined),
+    },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'nutrientTableCode' },
 
     /*
      * Missing food fields
-     * - this is actually different record / table
-     * - TODO: overlapping fields will populate both, e.g. ID
      */
-    { id: 'missingId', label: 'Missing ID', value: 'id' },
+    {
+      id: 'missingId',
+      label: 'Missing ID',
+      value: (food) => (food instanceof SurveySubmissionMissingFood ? food.id : undefined),
+    },
     { id: 'missingParentId', label: 'Missing parent food ID', value: 'parentId' },
     { id: 'missingName', label: 'Missing name', value: 'name' },
+    {
+      id: 'missingBrand',
+      label: 'Missing brand',
+      value: (food) => (food instanceof SurveySubmissionMissingFood ? food.brand : undefined),
+    },
     { id: 'missingDescription', label: 'Missing description', value: 'description' },
     { id: 'missingPortionSize', label: 'Missing portion size', value: 'portionSize' },
     { id: 'missingLeftovers', label: 'Missing leftovers', value: 'leftovers' },
@@ -318,6 +340,8 @@ const dataExportFields = () => {
       id: 'portionWeight',
       label: 'Portion Weight',
       value: (foodEntry) => {
+        if (!('portionSizes' in foodEntry)) return undefined;
+
         const servingWeightVal = foodEntry.portionSizes?.find(
           (item) => item.name === 'servingWeight'
         )?.value;

@@ -61,10 +61,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
     const [nutrients, total] = await Promise.all([
       FoodsNutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
-      FoodLocal.count({
-        where: { localeId: localeCode },
-        include: [{ association: 'main' }],
-      }),
+      FoodLocal.count({ where: { localeId: localeCode }, include: [{ association: 'main' }] }),
     ]);
 
     const nutrientFields = nutrients.map((nutrient) => ({
@@ -148,12 +145,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
       });
 
       const transform = new Transform<FoodLocal>(
-        {
-          fields,
-          defaultValue: EMPTY,
-          withBOM: true,
-          transforms,
-        },
+        { fields, withBOM: true, transforms },
         { objectMode: true }
       );
 

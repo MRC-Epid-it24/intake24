@@ -6,7 +6,6 @@ import fs from 'fs-extra';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { EMPTY } from '@intake24/api/services/admin/data-export';
 import { addTime } from '@intake24/api/util';
 import { Job as DbJob } from '@intake24/db';
 
@@ -78,10 +77,7 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = this.dataExportService.getSubmissionsWithStream(options);
-      const transform = new Transform(
-        { fields, defaultValue: EMPTY, withBOM: true },
-        { objectMode: true }
-      );
+      const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
 
       foods.on('error', (err) => {
         clearInterval(progressInterval);

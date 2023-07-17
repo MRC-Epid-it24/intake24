@@ -16,14 +16,19 @@ import type {
   WhereOptions,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Op, Survey, SurveySubmissionFood, SurveySubmissionMissingFood } from '@intake24/db';
+import {
+  Op,
+  Survey,
+  SurveySubmissionFood,
+  SurveySubmissionMeal,
+  SurveySubmissionMissingFood,
+} from '@intake24/db';
 
 import type { ExportFieldInfo } from './data-export-mapper';
-import { EMPTY } from './data-export-fields';
 
 export type DataExportInput = JobParams['SurveyDataExport'];
 
-export type SubmissionFindOptions = Record<'foods' | 'missingFoods', StreamFindOptions>;
+export type SubmissionFindOptions = Record<'foods' | 'missingFoods' | 'meals', StreamFindOptions>;
 
 export type DataExportOptions = {
   options: SubmissionFindOptions;
@@ -94,6 +99,15 @@ const dataExportService = ({
       },
     ];
 
+    const meals: StreamFindOptions = {
+      include: [{ association: 'submission', required: true, where: surveySubmissionConditions }],
+      order: [
+        ['submission', 'submissionTime', 'ASC'],
+        ['hours', 'ASC'],
+        ['minutes', 'ASC'],
+      ],
+    };
+
     const order: Order = [
       ['meal', 'submission', 'submissionTime', 'ASC'],
       ['meal', 'hours', 'ASC'],
@@ -117,7 +131,7 @@ const dataExportService = ({
 
     const missingFoods = { include, order };
 
-    return { foods, missingFoods };
+    return { meals, foods, missingFoods };
   };
 
   /**
@@ -131,10 +145,10 @@ const dataExportService = ({
     inputStream: Readable,
     options: SubmissionFindOptions
   ): Promise<void> => {
-    const { batchSize = 100, limit, offset: startOffset = 0, ...params } = options.foods;
+    const { batchSize = 25, limit, offset: startOffset = 0, ...params } = options.meals;
 
     try {
-      const max = limit ?? (await SurveySubmissionFood.count(params));
+      const max = limit ?? (await SurveySubmissionMeal.count(params));
 
       const offsets = [];
       let start = startOffset;
@@ -146,23 +160,27 @@ const dataExportService = ({
 
       for (const offset of offsets) {
         const difference = batchSize + offset - max;
-        const foods = await SurveySubmissionFood.findAll({
+        const meals = await SurveySubmissionMeal.findAll({
           ...params,
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
         });
 
-        const mealId = foods.map((food) => food.mealId);
-        const missingFoods = await SurveySubmissionMissingFood.findAll({
-          ...options.missingFoods,
-          where: { mealId },
-        });
+        const mealId = meals.map(({ id }) => id);
+
+        const [foods, missingFoods] = await Promise.all([
+          SurveySubmissionFood.findAll({ ...options.foods, where: { mealId } }),
+          SurveySubmissionMissingFood.findAll({
+            ...options.missingFoods,
+            where: { mealId },
+          }),
+        ]);
 
         const groupedFoods = groupBy(foods, 'mealId');
         const groupedMissingFoods = groupBy(missingFoods, 'mealId');
 
-        for (const [id, records] of Object.entries(groupedFoods)) {
-          records.forEach((record) => inputStream.push(record));
+        for (const id of mealId) {
+          if (groupedFoods[id]?.length) groupedFoods[id].forEach((food) => inputStream.push(food));
 
           if (groupedMissingFoods[id]?.length)
             groupedMissingFoods[id].forEach((missingFood) => inputStream.push(missingFood));
@@ -258,10 +276,7 @@ const dataExportService = ({
     const { options, fields, filename } = await prepareExportInfo(input);
 
     const foods = SurveySubmissionFood.findAllWithStream(options.foods);
-    const transform = new Transform(
-      { fields, defaultValue: EMPTY, withBOM: true },
-      { objectMode: true }
-    );
+    const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
 
     foods.on('error', (err) => {
       throw err;
