@@ -236,7 +236,7 @@ const dataExportFields = () => {
     { id: 'localName', label: 'Name (local)', value: 'localName' },
     { id: 'readyMeal', label: 'Ready meal', value: 'readyMeal' },
     { id: 'searchTerm', label: 'Search term', value: 'searchTerm' },
-    { id: 'reasonableAmount', label: 'Food code', value: 'reasonableAmount' },
+    { id: 'reasonableAmount', label: 'Reasonable amount', value: 'reasonableAmount' },
     { id: 'foodGroupId', label: 'Food group code', value: 'foodGroupId' },
     {
       id: 'foodGroupEnglishName',
