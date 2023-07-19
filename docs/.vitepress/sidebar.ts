@@ -338,10 +338,6 @@ export const sidebar = {
           text: 'Introduction',
           link: '/admin/',
         },
-        {
-          text: 'Nutritionist dictionary',
-          link: '/admin/nutritionist-dictionary',
-        },
       ],
     },
     {
