@@ -1,6 +1,6 @@
 <template>
-  <v-overlay absolute :dark="false" :value="show">
-    <v-card class="card-overlay" :tile="isMobile">
+  <v-overlay absolute :dark="false" :opacity="0.2" :value="show">
+    <v-card class="card-overlay" flat :tile="isMobile">
       <v-card-text class="d-flex flex-column align-center">
         <v-btn
           v-if="!isMobile"
@@ -175,6 +175,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card-overlay {
-  background-color: rgb(white, 0.85);
+  background-color: rgb(white, 0.8);
 }
 </style>
