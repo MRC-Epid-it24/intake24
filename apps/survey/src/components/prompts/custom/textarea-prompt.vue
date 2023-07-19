@@ -21,7 +21,8 @@ import type { VForm } from 'vuetify/lib';
 import { defineComponent, ref } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
-import { useLocale, usePromptUtils } from '@intake24/survey/composables';
+import { usePromptUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 

@@ -51,7 +51,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import { useLocale, useMealUtils } from '@intake24/survey/composables';
+import { useMealUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 

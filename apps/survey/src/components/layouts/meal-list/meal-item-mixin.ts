@@ -6,7 +6,8 @@ import type { MealState } from '@intake24/common/types';
 import type { MenuItem } from '@intake24/survey/components/elements';
 import { useI18n } from '@intake24/i18n';
 import { ContextMenu } from '@intake24/survey/components/elements';
-import { useLocale, useMealUtils } from '@intake24/survey/composables';
+import { useMealUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import FoodItem from './food-item.vue';
 

@@ -98,7 +98,7 @@ import { defineComponent } from 'vue';
 
 import type { EncodedFood, FoodState } from '@intake24/common/types';
 import type { SameAsBeforeItem } from '@intake24/survey/stores';
-import { useLocale } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 import { useStandardUnits } from '../useStandardUnits';

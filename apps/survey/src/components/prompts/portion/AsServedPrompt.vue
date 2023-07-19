@@ -102,7 +102,8 @@ import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
-import { useFoodUtils, useLocale } from '@intake24/survey/composables';
+import { useFoodUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';

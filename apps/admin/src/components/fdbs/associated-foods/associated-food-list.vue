@@ -30,8 +30,8 @@
               <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ item.genericName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ item.text }} </v-list-item-subtitle>
+              <v-list-item-title>{{ getLocaleContent(item.genericName) }}</v-list-item-title>
+              <v-list-item-subtitle>{{ getLocaleContent(item.text.en) }} </v-list-item-subtitle>
               <v-messages
                 v-if="errors.has('associatedFoods', index)"
                 color="error"
@@ -84,24 +84,40 @@
           <v-container>
             <v-row class="mt-2">
               <v-col cols="12">
-                <v-text-field
+                <language-selector
                   v-model="dialog.item.genericName"
-                  hide-details="auto"
-                  :label="$t('fdbs.associatedFoods.genericName')"
-                  name="genericName"
-                  outlined
+                  :label="$t('fdbs.associatedFoods.genericName').toString()"
+                  required
                 >
-                </v-text-field>
+                  <template v-for="lang in Object.keys(dialog.item.genericName)" #[`lang.${lang}`]>
+                    <v-text-field
+                      :key="lang"
+                      v-model="dialog.item.genericName[lang]"
+                      hide-details="auto"
+                      :label="$t('fdbs.associatedFoods.genericName')"
+                      :name="`genericName.${lang}`"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                </language-selector>
               </v-col>
               <v-col cols="12">
-                <v-text-field
+                <language-selector
                   v-model="dialog.item.text"
-                  hide-details="auto"
-                  :label="$t('fdbs.associatedFoods.text')"
-                  name="text"
-                  outlined
+                  :label="$t('fdbs.associatedFoods.text').toString()"
+                  required
                 >
-                </v-text-field>
+                  <template v-for="lang in Object.keys(dialog.item.text)" #[`lang.${lang}`]>
+                    <v-text-field
+                      :key="lang"
+                      v-model="dialog.item.text[lang]"
+                      hide-details="auto"
+                      :label="$t('fdbs.associatedFoods.text')"
+                      :name="`text.${lang}`"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                </language-selector>
               </v-col>
               <v-col cols="12">
                 <v-switch
@@ -193,10 +209,11 @@ import draggable from 'vuedraggable';
 
 import type { Errors } from '@intake24/common/util';
 import { SelectResource } from '@intake24/admin/components/dialogs';
+import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useLocale } from '@intake24/ui';
 
 import type { AssociatedFoodItem } from './associated-foods';
 import { createDefaultAssociatedFood } from './associated-foods';
@@ -204,7 +221,7 @@ import { createDefaultAssociatedFood } from './associated-foods';
 export default defineComponent({
   name: 'AssociatedFoodList',
 
-  components: { ConfirmDialog, draggable, SelectResource },
+  components: { ConfirmDialog, draggable, LanguageSelector, SelectResource },
 
   props: {
     disabled: {
@@ -230,6 +247,8 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    const { getLocaleContent } = useLocale();
+
     const newItem = () => ({
       ...createDefaultAssociatedFood(props.foodCode, props.localeId),
       _id: randomString(6),
@@ -257,6 +276,7 @@ export default defineComponent({
     return {
       dialog,
       form,
+      getLocaleContent,
       items,
       newDialog,
       add,

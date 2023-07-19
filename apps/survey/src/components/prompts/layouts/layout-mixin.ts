@@ -3,7 +3,8 @@ import { defineComponent, toRefs } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
-import { useFoodUtils, useLocale, useMealUtils } from '@intake24/survey/composables';
+import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 import { promptType } from '@intake24/ui/util';
 
 import { Next } from '../actions';

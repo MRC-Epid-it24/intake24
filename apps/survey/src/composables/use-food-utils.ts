@@ -3,8 +3,7 @@ import { computed } from 'vue';
 
 import type { EncodedFood, FoodState } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
-
-import { useLocale } from './use-locale';
+import { useLocale } from '@intake24/ui';
 
 export const useFoodUtils = <F extends FoodState | undefined, P extends EncodedFood | undefined>(
   food?: Ref<F>,

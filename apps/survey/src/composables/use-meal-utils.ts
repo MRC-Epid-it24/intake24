@@ -2,9 +2,8 @@ import type { Ref } from 'vue';
 import { computed } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { useLocale } from '@intake24/ui';
 import { fromMealTime } from '@intake24/ui/util';
-
-import { useLocale } from './use-locale';
 
 export const useMealUtils = <T extends MealState | undefined>(meal?: Ref<T>) => {
   const { getLocaleContent } = useLocale();

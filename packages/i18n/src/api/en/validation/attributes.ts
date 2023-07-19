@@ -38,6 +38,7 @@ const attributes: LocaleMessageObject = {
   estimateIn: 'Estimate in',
   feedbackSchemeId: 'Feedback scheme ID',
   file: 'File',
+  genericName: 'Generic name',
   genUserKey: 'Generate user key',
   guideImageId: 'Guide image ID',
   heightCm: 'Height',

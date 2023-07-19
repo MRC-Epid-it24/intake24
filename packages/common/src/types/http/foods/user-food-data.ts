@@ -1,4 +1,4 @@
-import type { PortionSizeMethodId } from '../..';
+import type { LocaleTranslation, PortionSizeMethodId } from '../..';
 
 // TODO: generic mapping from DB -> should use union of methods?
 export interface UserPortionSizeMethodParameters {
@@ -18,9 +18,9 @@ export interface UserPortionSizeMethod {
 export type UserAssociatedFoodPrompt = {
   foodCode?: string;
   categoryCode?: string;
-  promptText: string;
+  promptText: LocaleTranslation;
   linkAsMain: boolean;
-  genericName: string;
+  genericName: LocaleTranslation;
 };
 
 export interface UserFoodData {

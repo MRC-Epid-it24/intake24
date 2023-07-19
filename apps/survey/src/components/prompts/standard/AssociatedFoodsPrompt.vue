@@ -8,7 +8,7 @@
     >
       <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
         <v-expansion-panel-header>
-          {{ associatedFoodPrompts[index].promptText }}
+          {{ getLocaleContent(associatedFoodPrompts[index].promptText) }}
           <template #actions>
             <expansion-panel-actions :valid="isPromptValid(prompt)"></expansion-panel-actions>
           </template>
@@ -69,12 +69,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { AssociatedFoodPromptItemState, PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
+import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -109,12 +110,14 @@ export default defineComponent({
 
   emits: ['update'],
 
-  data() {
-    return {
-      activePrompt: this.initialState.activePrompt,
-      prompts: this.initialState.prompts,
-      usedExistingFoodIds: [] as string[],
-    };
+  setup(props) {
+    const { getLocaleContent } = useLocale();
+
+    const activePrompt = ref(props.initialState.activePrompt);
+    const prompts = ref(props.initialState.prompts);
+    const usedExistingFoodIds = ref<string[]>([]);
+
+    return { activePrompt, prompts, usedExistingFoodIds, getLocaleContent };
   },
 
   computed: {
@@ -194,7 +197,7 @@ export default defineComponent({
 
         const selectedFood =
           this.prompts[index].confirmed === 'yes' && foodCode
-            ? { code: foodCode, description: genericName }
+            ? { code: foodCode, description: this.getLocaleContent(genericName) }
             : this.prompts[index].selectedFood;
 
         this.prompts.splice(index, 1, { confirmed: this.prompts[index].confirmed, selectedFood });

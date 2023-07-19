@@ -8,6 +8,7 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, ForeignKey, Scopes, Table } from 'sequelize-typescript';
 
+import type { LocaleTranslation } from '@intake24/common/types';
 import { Category, Food, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -64,9 +65,17 @@ export default class AssociatedFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(1024),
+    type: DataType.TEXT({ length: 'long' }),
   })
-  declare text: string;
+  get text(): LocaleTranslation {
+    const val = this.getDataValue('text') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set text(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('text', JSON.stringify(value ?? {}));
+  }
 
   @Column({
     allowNull: false,
@@ -76,9 +85,23 @@ export default class AssociatedFood extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.BOOLEAN,
   })
-  declare genericName: string;
+  declare multiple: boolean;
+
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get genericName(): LocaleTranslation {
+    const val = this.getDataValue('genericName') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set genericName(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('genericName', JSON.stringify(value ?? {}));
+  }
 
   @Column({
     allowNull: false,

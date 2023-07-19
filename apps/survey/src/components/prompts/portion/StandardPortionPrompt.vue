@@ -69,7 +69,8 @@ import { defineComponent, toRefs } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
-import { useFoodUtils, useLocale } from '@intake24/survey/composables';
+import { useFoodUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
 import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';

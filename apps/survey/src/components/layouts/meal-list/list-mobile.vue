@@ -30,9 +30,10 @@ import { defineComponent } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import { useLocale, useMealUtils } from '@intake24/survey/composables';
+import { useMealUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
 import { getMealIndex } from '@intake24/survey/util';
+import { useLocale } from '@intake24/ui';
 
 export default defineComponent({
   name: 'MealListMobile',

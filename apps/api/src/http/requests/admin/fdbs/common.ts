@@ -1,4 +1,5 @@
 import type { Schema } from 'express-validator';
+import { isPlainObject } from 'lodash';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import {
@@ -217,19 +218,40 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.genericName': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'name' }),
-    isString: true,
-    isEmpty: { negated: true },
+    custom: {
+      options: async (value, meta): Promise<void> => {
+        if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
+      },
+    },
+  },
+  'associatedFoods.*.genericName.*': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._', { path: 'genericName' }),
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
   },
   'associatedFoods.*.text': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'text' }),
-    isString: true,
-    isEmpty: { negated: true },
+    custom: {
+      options: async (value, meta): Promise<void> => {
+        if (!isPlainObject(value)) throw new Error(customTypeErrorMessage('object._', meta));
+      },
+    },
+  },
+  'associatedFoods.*.text.*': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._', { path: 'text' }),
+    isString: { bail: true },
+    isEmpty: { negated: true, bail: true },
   },
   'associatedFoods.*.linkAsMain': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._', { attributePath: 'linkAsMain' }),
+    isBoolean: { options: { strict: true } },
+  },
+  'associatedFoods.*.multiple': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._', { attributePath: 'multiple' }),
     isBoolean: { options: { strict: true } },
   },
   'associatedFoods.*.orderBy': {
