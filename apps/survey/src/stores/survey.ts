@@ -137,12 +137,12 @@ export const useSurvey = defineStore('survey', {
         this.user?.maximumDailySubmissionsReached || this.user?.maximumTotalSubmissionsReached
       );
     },
-    allowRecall(): boolean {
+    recallAllowed(): boolean {
       return this.surveyEnabled && !this.limitReached;
     },
     feedbackEnabled: (state) => !!state.parameters?.feedbackScheme,
     feedbackAvailable: (state) => !!state.user?.showFeedback,
-    allowFeedback(): boolean {
+    feedbackAllowed(): boolean {
       return this.feedbackEnabled && this.feedbackAvailable;
     },
     hasStarted: (state) => !!state.data.startTime,
@@ -156,6 +156,10 @@ export const useSurvey = defineStore('survey', {
       state.parameters?.surveyScheme.prompts.meals.foods
         .filter((item) => item.type === 'portion-size')
         .map((item) => item.component.replace('-prompt', '')) ?? [],
+    sameAsBeforeAllowed: (state) =>
+      !!state.parameters?.surveyScheme.prompts.meals.foods.find(
+        (item) => item.component === 'same-as-before-prompt'
+      ),
     selection: (state) => state.data.selection,
     freeEntryComplete: (state) =>
       !!state.data.meals.length &&
@@ -542,7 +546,11 @@ export const useSurvey = defineStore('survey', {
 
       // Save to `same-as-before` for encoded foods with finished portion size estimation
       // TODO: check associated foods ?
+      if (!this.sameAsBeforeAllowed) return;
+
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
+      if (mainFood.type !== 'encoded-food' || !mainFood.data?.readyMealOption) return;
+
       if (
         mainFood.type !== 'encoded-food' ||
         !isPortionSizeComplete(mainFood) ||

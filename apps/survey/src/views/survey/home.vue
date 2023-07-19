@@ -25,7 +25,7 @@
           </v-list>
           <v-divider></v-divider>
           <!-- Recall info -->
-          <template v-if="allowRecall">
+          <template v-if="recallAllowed">
             <v-list class="list-no-wrap" subheader>
               <v-subheader>{{ $t('recall.info') }}</v-subheader>
               <template v-if="limitReached">
@@ -198,7 +198,7 @@
             <v-divider></v-divider>
           </template>
           <!-- Feedback info -->
-          <template v-if="allowFeedback">
+          <template v-if="feedbackAllowed">
             <v-list class="list-no-wrap" subheader>
               <v-subheader>{{ $t('feedback.info') }}</v-subheader>
               <template v-if="feedbackAvailable">
@@ -330,8 +330,8 @@ export default defineComponent({
 
   computed: {
     ...mapState(useSurvey, [
-      'allowFeedback',
-      'allowRecall',
+      'feedbackAllowed',
+      'recallAllowed',
       'feedbackAvailable',
       'hasStarted',
       'hasFinished',
