@@ -1,0 +1,407 @@
+import type { LocaleMessageObject } from 'vue-i18n';
+
+const prompts: LocaleMessageObject = {
+  checkboxList: {
+    name: '多选列表',
+    label: '选择任意选项',
+    other: '请指定',
+    validation: {
+      required: '必须选择至少一个选项。',
+    },
+  },
+  datePicker: {
+    name: '选择日期',
+    validation: {
+      required: '必须填写此字段。',
+    },
+  },
+  info: {
+    name: '信息/确认',
+  },
+  noMoreInformation: {
+    name: '不需要更多信息',
+    text: '不需要更多信息',
+    description: `<p>我们目前已经获取了关于您的 <strong>{item}</strong> 所有需要的信息。</p>
+        <p>为了继续进行调查， 请单击下面的“ 继续” 按钮， 我们将自动选择我们仍需要有关其它食物或餐点的信息。</p>
+        <p>或者，如果您想专注于某个项目，请单击左侧的餐点或食物。</p>`,
+  },
+  radioList: {
+    name: '单选列表',
+    label: '选择一个选项',
+    other: '请指定',
+    validation: {
+      required: '必须选择一个选项。',
+    },
+  },
+  textarea: {
+    name: '自由文本',
+    label: '在文本区域中输入答案',
+    validation: {
+      required: '必须填写此字段。',
+    },
+  },
+  timePicker: {
+    name: '选择时间',
+    validation: {
+      required: '必须填写此字段。',
+    },
+  },
+  yesNo: {
+    name: '是/否确认',
+  },
+  // Standard
+  associatedFoods: {
+    name: '相关食物',
+    text: '{food}',
+    // description: 'Placeholder',
+    yes: '是的，我有',
+    no: '不是的，我没有吃',
+    alreadyEntered: '是的，已输入',
+    select: {
+      different: '选择其他食物',
+      item: '选择您的食物',
+    },
+    missing: {
+      label: `I can't find my food`,
+      description: `<p>Please try browsing the food categories listed above to find your food.</p>
+      <p>Or click 'Browse all foods' and explore the food categories.</p>`,
+      report: 'Report a missing food',
+      tryAgain: 'OK, let me try again',
+    },
+  },
+  editMeal: {
+    name: '编辑餐食',
+    text: '列出您在{meal}中食用的所有食物，每行一个项目。',
+    description: `例如：<p><ul><li>香蕉</li><li>薯片</li><li>米饭</li><li>茶</li></ul></p>
+      <p>您可以在输入时按Enter键或“ 添加食物/ 饮料” 按钮， 以进行下一行。</p>
+      <p><strong>不要</strong> 输入您吃了多少， 只需输入食物名称即可。`,
+    add: '添加',
+    drinksOnly: '饮料',
+    foods: 'Foods and drinks',
+    foodsOnly: 'Foods',
+  },
+  final: {
+    name: '最后一页',
+  },
+  foodBrowser: {
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    none: 'No food results. Please try refining your search.',
+    back: `Back to '{category}'`,
+  },
+  foodSearch: {
+    name: '搜索食物',
+    text: '以下是我们数据库中与{food}相似的食物列表。',
+    description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
+      <p>Choose the item you had or the closest match.</p>`,
+    empty: '我们的数据库中没有与“{searchTerm}”匹配的内容。',
+    reword: '请尝试重新描述。',
+    browse: 'Browse all foods',
+    missing: {
+      label: `I can't find my food`,
+      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
+      <p>Or click 'Browse all foods' and explore the food categories.</p>
+      <p>If you still can't find your food, click 'Report a missing food'.</p>`,
+      report: 'Report a missing food',
+      tryAgain: 'OK, let me try again',
+    },
+    confirmDiscardFood: {
+      label: 'Yes',
+      messageUnsafe: `<p>You have already answered some questions about <strong>"{discardedFoodName}"</strong>!</p>
+                <p>If you change it to <strong>"{selectedFoodName}"</strong> now, you might have to answer some of those questions again.</p>
+                          <p>Are you sure you would like to replace this food?</p>`,
+      message:
+        'You have already answered some questions about "{discardedFoodName}"! If you change it to "{selectedFoodName}" now, you might have to answer some of those questions again. Are you sure you would like to replace this food?',
+    },
+  },
+  mealAdd: {
+    _: '添加餐食',
+    name: '添加餐食',
+    // text: 'Placeholder',
+    description: '如果合适，请从下面的列表中选择一个。',
+    label: '选择预定义餐食',
+    custom: {
+      // text: 'Placeholder',
+      description: '<p>您可以输入自己的餐食名称，或者如果合适，请从下面的列表中选择一个。。</p>',
+      label: '选择预定义名称或输入餐食名称',
+    },
+    yes: '添加这餐食',
+    no: '取消',
+    noMeal: '没有剩余餐食，至少添加一个',
+  },
+  mealDuration: {
+    name: '编辑时间',
+    text: '您是否吃了{meal}？如果是，是什么时候吃的？',
+    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    confirm: 'Continue',
+  },
+  mealGap: {
+    name: 'Meal gap',
+    // text: 'Placeholder',
+    // description: 'Placeholder',
+    before:
+      '<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>',
+    after:
+      '<p>Did you have any meals, snacks or drinks after your <strong>{meal}</strong> at {mealTime}?</p>',
+    between:
+      '<p>Did you have any meals, snacks or drinks between your <strong>{startMeal}</strong> (at {startMealTime}) and your <strong>{endMeal}</strong> (at {endMealTime})?</p>',
+    yes: 'Yes, add a meal',
+    no: 'No, I did not',
+  },
+  mealTime: {
+    name: 'Edit Time',
+    text: '{meal}',
+    description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
+    yes: 'Around that time',
+    no: 'Did not have',
+  },
+  readyMeal: {
+    name: '现成食物',
+    text: '这是现成的餐食或现成的食物吗？',
+    description: `<p>Was this a ready-made meal or food?</p>
+      <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
+  },
+  redirect: {
+    name: '重定向',
+    missingUrl: 'Missing redirection URL',
+    goTo: 'Go to the questionnaire',
+  },
+  reviewConfirm: {
+    name: '回顾和确认',
+  },
+  sameAsBefore: {
+    name: '和以前一样',
+    text: '{food}',
+    description: '<p>Was this <strong>{food}</strong> the same as the one you had before?</p>',
+    serving: '{amount} serving size',
+    leftovers: 'Left about {amount}',
+    noLeftovers: {
+      drink: 'Drank it all',
+      food: 'Ate everything',
+    },
+    hadWith: 'Had it with:',
+    noAddedFoods: 'Nothing added (e.g. milk, sugar, sauces)',
+    same: 'Yes, I had the same',
+    notSame: 'No, I had a different one',
+  },
+  splitFood: {
+    name: '拆分食物',
+    text: '{food}',
+    description: 'It looks like you entered more than one food item on the line.',
+    searchTerm: '搜索词：{food}',
+    split: 'Are these separate foods?',
+    singleSuggestion: '如果您是指像鸡肉蔬菜汤这样的单一食物，请单击“保留为单一食物”。',
+    singleSuggestionEx: '如果您是指像{food}这样的单一食物，请单击“保留为单一食物”。',
+    separateSuggestion: '如果是鱼和薯条等项目，请单击“分开食物”。',
+    separateSuggestionEx: '如果是{food}等项目，请单击“分开食物”。',
+    separate: '分开食物',
+    single: '保留为单一食物',
+  },
+  submit: {
+    name: '提交页面',
+  },
+
+  // Portion sizes
+  quantity: {
+    whole: '整个',
+    fraction: '分数',
+    and: '和',
+    confirm: '我吃了那么多',
+  },
+  portionSizeOption: {
+    name: '分量方法',
+    text: '您想如何估计{food}的份量？',
+    description: 'How do you want to estimate your portion?',
+    selections: {
+      grated: '磨碎的',
+      in_a_bag: '装在袋里的',
+      in_a_bottle: '装在瓶里的',
+      in_a_bowl: '装在碗里的',
+      in_a_can: '装在罐里的',
+      in_a_carton: '装在盒里的',
+      in_a_glass: '装在杯里的',
+      in_a_mug: '装在杯子里的',
+      in_a_pot: '装在锅里的',
+      in_a_takeaway_cup: '装在外带杯里的',
+      in_baby_carrots: '以小胡萝卜的形式的',
+      in_bars: '条状的',
+      in_batons: '以粗棍的形式',
+      in_berries: '一粒一粒的',
+      in_burgers: '汉堡形式',
+      in_chopped_fruit: '是切碎水果的形式供应',
+      in_crinkle_cut_chips: '是波纹薯条的形式供应',
+      in_cubes: '以方块形式',
+      in_curly_fries: '是卷曲薯条的形式上桌的',
+      in_dollops: '以小团块的形式',
+      in_french_fries: '是薯条（直切）的形式上桌的',
+      in_individual_cakes: '单独的蛋糕装的',
+      in_individual_packs: '单独的包装装的',
+      in_individual_puddings: '单独的布丁装的',
+      in_individual_sweets: '一粒一粒的糖果',
+      in_slices: '以切片形式的',
+      in_spoonfuls: '以勺子为单位',
+      in_straight_cut_chips: '是薯条（直切）的形式上桌的',
+      in_thick_cut_chips: '是薯条（厚切）的形式上桌的',
+      in_unwrapped_bars: '未包装的条状物装的',
+      in_whole_fruit_vegetables: '整个水果/蔬菜装的',
+      in_wrapped_bars: '包装的棒形状的',
+      milk_on_cereal: 'Milk on cereal',
+      on_a_knife: '涂抹在刀上',
+      on_a_plate: '盘子里的',
+      slice_from_a_large_cake: '从大蛋糕上切片的',
+      slice_from_a_large_pudding: '从大布丁上切片的',
+      spread_on_a_cracker: '涂在饼干上的',
+      spread_on_a_scone: '涂在司康上的',
+      spread_on_bread: '涂在面包上的',
+      use_a_standard_measure: '标准的度量单位',
+      use_a_standard_portion: '标准的份量',
+      use_an_image: '使用一张图片',
+      use_these_crisps_in_a_bag: '使用袋装的薯',
+      use_tortilla_chips_in_a_bowl: '使用碗中的墨西哥玉米片',
+      weight: '输入重量/体积',
+    },
+  },
+  linkedAmount: {
+    label: `在 {food} 中，您吃了多少片 ({quantity})?`,
+    unit: 'How many slices',
+    all: '全部上',
+  },
+  asServed: {
+    name: '上菜集',
+    text: '请根据以下提示，选择您吃了多少{food}，以及是否剩余了食物。',
+    // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    serving: {
+      header: '第1步。请选择您的食物份量。',
+      less: '我吃了更少的量',
+      more: '我吃了更多的量',
+      confirm: '我吃了这么多',
+    },
+    leftovers: {
+      header: 'Did you leave some of your {food}?',
+      label: '请根据以下图片，选择您剩余了多少{food}。',
+      less: '我剩余的量更少',
+      more: '我剩余的量更多',
+      confirm: '我剩余了这么多',
+    },
+    weightFactor: {
+      serving: {
+        more: '我吃了{whole}和{fraction}',
+        less: '我吃了{fraction}',
+      },
+      leftovers: {
+        more: '我剩余了{whole}和{fraction}',
+        less: '我剩余了{fraction}',
+      },
+      // and: 'and',
+      less: '最小份量的量',
+      more: '最大份量的量',
+    },
+  },
+  cereal: {
+    name: '麦片',
+    text: '{food}',
+    // description: 'Placeholder',
+    container: '请选择一个看起来最像您在吃{food}时使用的餐碗的图片。',
+  },
+  drinkScale: {
+    name: '饮料秤',
+    text: '{food}',
+    // description: 'Placeholder',
+    container: '选择外观与您用来盛放{food}的杯子或玻璃杯最相似的一个。',
+    serving: {
+      header: '第1步。请选择您的饮料份量。',
+      hint: '滑动此处表示您的杯子或玻璃杯有多满。',
+      less: '少了一些',
+      more: '多了一些',
+      confirm: '就是那么多',
+    },
+    leftovers: {
+      header: 'Did you leave some of your {food}?',
+      label: 'Use the slider on the right to choose how much you had left.',
+      less: '我留下了少量',
+      more: '我留下了大量',
+      confirm: '就是那么多',
+    },
+  },
+  guideImage: {
+    name: '指南图片',
+    text: '{food}',
+    // description: 'Placeholder',
+    label: '选择最接近你所吃{food}大小的图片。',
+    quantity: 'Choose how many of {food} you had.',
+    confirm: '我吃了那么多',
+    expand: '展开图片',
+  },
+  milkInAHotDrink: {
+    name: '热饮中的牛奶',
+    text: '你在茶或咖啡中加了多少{food}？',
+    // description: 'Placeholder',
+    label: 'How much {food} did you have in your tea or coffee?',
+    confirm: '我加了那么多',
+  },
+  milkOnCereal: {
+    name: 'Milk on cereal',
+    text: '{food}',
+    // description: 'Placeholder',
+    container: '选择最接近你用来盛放{food}的碗。',
+    milk: 'Choose the level your milk came up to (without cereal).',
+  },
+  missingFood: {
+    name: 'Missing food',
+    text: '{food}',
+    description: `You said you were unable to find a good match for "{food}". Please provide as much detail as you can to the following questions, to help us identify your food or drink.`,
+    source: 'Was it homemade?',
+    homemade: 'Provide further details e.g. description of dish or ingredients.',
+    purchased: 'Tell us where was it purchased from? Does it have a brand name?',
+    barcode: 'Can you provide the barcode?',
+    portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
+  },
+  parentFoodPortion: {
+    name: 'Parent food portion',
+    text: '{food}',
+    // description: 'Placeholder',
+    label: 'How much {food} did you have in your {parentFood}?',
+    confirm: 'I had that much',
+  },
+  pizza: {
+    name: '披萨',
+    text: '{food}',
+    // description: 'Placeholder',
+    typeLabel: '选择最接近你所吃披萨大小的种类。',
+    thicknessLabel: '你的披萨有多厚？',
+    sizeLabel: '你吃的是什么大小的披萨片？',
+    whole: {
+      label: '你吃了几个这样的披萨？',
+      confirm: '我吃了整个披萨',
+    },
+    slices: {
+      label: '你吃了几片这样的披萨？',
+    },
+    confirm: '我吃了那么多',
+  },
+  standardPortion: {
+    name: '标准份量',
+    text: '{food}',
+    // description: 'Placeholder',
+    label: '你想如何估计你吃的{food}份量？',
+    estimateIn: '{unit}里',
+    howMany: {
+      _: '你吃了多少{unit}？',
+      placeholder: '你吃了多少？',
+      withFood: '你吃了{unit}的{food}？',
+    },
+    confirm: '我吃了那么多',
+  },
+  unknown: {
+    name: '未知',
+    text: '{food}没有当前的份量估计方法。',
+    // description: 'Placeholder',
+  },
+  weight: {
+    name: '重量',
+    text: '输入你吃了多少。',
+    // description: 'Placeholder',
+  },
+};
+
+export default prompts;

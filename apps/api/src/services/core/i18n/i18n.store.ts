@@ -50,6 +50,7 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
   };
 
   const getAvailableLanguages = () => availableLanguages;
+  const hasLanguage = (locale: string) => availableLanguages.includes(locale);
 
   /**
    * Resolve dot-notation i18n object path
@@ -78,7 +79,7 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     return params ? replaceParams(message, params) : message;
   };
 
-  return { init, reload, getAvailableLanguages, translate };
+  return { init, reload, getAvailableLanguages, translate, hasLanguage };
 };
 
 export default i18nStore;

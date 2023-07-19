@@ -1,0 +1,88 @@
+import type { LocaleMessageObject } from 'vue-i18n';
+
+const feedback: LocaleMessageObject = {
+  _: '反馈',
+  info: '反馈信息',
+  status: {
+    available: '您的反馈已准备就绪',
+    lowRecalls: '只有在您提交至少 {minRecalls} 次召回后，才能获取反馈。',
+    notAvailable: '此调查未提供反馈。',
+  },
+  title: '您的召回反馈',
+  missingFoods: '任何报告为丢失的食物将不包含在您的饮食反馈中',
+
+  physicalData: {
+    title: '关于您',
+    subtitle: '我们只需要您的几个详细信息',
+    change: '更改我的信息',
+    recall: '记录另一天',
+
+    sexes: {
+      _: '性别',
+      m: '男性',
+      f: '女性',
+    },
+    sex: '性别: {sex}',
+    age: '年龄: {age}',
+    birthdate: '出生年份',
+    height: '身高: {height} 厘米',
+    heightCm: '身高（厘米）',
+    weight: '体重: {weight} 公斤',
+    weightKg: '体重（公斤）',
+    physicalActivityLevelId: '身体活动水平',
+    weightTarget: '目标体重: {target}',
+    weightTargets: {
+      _: '体重目标',
+      title: '体重目标',
+      keep_weight: '保持体重',
+      lose_weight: '减轻体重',
+      gain_weight: '增加体重',
+    },
+  },
+
+  outputs: {
+    title: '输出',
+    download: {
+      _: '下载',
+      title: '下载 PDF',
+      subtitle: '下载反馈的 PDF 文件副本。需要几秒钟，请耐心等待。',
+      send: '提交请求',
+      sent: '反馈 PDF 文件已保存。',
+    },
+    email: {
+      _: '电子邮件',
+      title: '发送到电子邮件',
+      send: '提交请求',
+      sent: '我们已将您的反馈发送至提供的电子邮件地址。',
+    },
+    retry: '最近已请求反馈输出，请在 {secs} 秒后重试。',
+    print: '打印',
+  },
+
+  topFoods: {
+    title: '对您的营养摄入量做出最大贡献的食物',
+    chart: '{nutrient} 最高',
+  },
+
+  meals: {
+    title: 'Meals per-day breakdown',
+    chart: '{nutrient}',
+  },
+
+  intake: {
+    your: '您的 {nutrient} 摄入量为 {amount}',
+    estimated: '估计摄入量',
+    recommended: '建议摄入量',
+    tellMeMore: '让我知道多一点',
+    gotIt: '明白了！',
+  },
+
+  unitDescription: {
+    percentage_of_energy: '反馈基于该营养素对您的能量摄入的贡献以及与建议的比较。',
+    energy_divided_by_bmr: '反馈是基于您的能量摄入量除以BMR以及与推荐值的比较。',
+    per_unit_of_weight: '反馈基于你每公斤体重的营养素摄入量以及与建议的摄入量的比较。',
+    range: '反馈基于您对该营养素的摄入量及其与建议值的比较。',
+  },
+};
+
+export default feedback;

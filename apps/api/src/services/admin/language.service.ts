@@ -28,6 +28,28 @@ const languageService = ({
   const logger = globalLogger.child({ service: 'LanguageService' });
 
   /**
+   * Get the in-code language for initialization (en or any other existing language)
+   *
+   * @param {string} languageId
+   * @returns {Record<Application, LocaleMessages>}
+   */
+  const languageForInitialization = async (
+    languageId: string
+  ): Promise<Record<Application, LocaleMessages>> => {
+    const language = await Language.findByPk(languageId);
+    if (language?.code && i18nStore.hasLanguage(language.code)) {
+      // this is a language that exists in the code
+      return {
+        admin: admin[language.code],
+        api: api[language.code],
+        shared: shared[language.code],
+        survey: survey[language.code],
+      };
+    }
+    return defaultI18nMessages;
+  };
+
+  /**
    * Get language record with messages
    *
    * @param {string} languageId
@@ -62,8 +84,10 @@ const languageService = ({
    * @returns {Promise<void>}
    */
   const createLanguageTranslations = async (languageId: string, reload = false): Promise<void> => {
+    const languageMessagesForInitialization = await languageForInitialization(languageId);
+
     const languageMessages: LanguageTranslationCreationAttributes[] = Object.entries(
-      defaultI18nMessages
+      languageMessagesForInitialization
     )
       .map(([application, messages]) =>
         Object.keys(messages).map((section) => ({
