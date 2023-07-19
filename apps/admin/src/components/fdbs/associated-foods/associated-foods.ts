@@ -8,8 +8,9 @@ export const createDefaultAssociatedFood = (
 ): Omit<AssociatedFoodItem, 'id'> => ({
   foodCode,
   localeId,
-  genericName: '',
-  text: '',
+  genericName: { en: '' },
+  text: { en: '' },
   linkAsMain: false,
+  multiple: false,
   orderBy: '0',
 });

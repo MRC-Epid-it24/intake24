@@ -97,11 +97,11 @@ const fdbs: LocaleMessageObject = {
     edit: 'Edit associated food',
     remove: 'Remove associated food',
 
+    association: 'Association',
     genericName: 'Generic name',
     text: 'Text',
     linkAsMain: 'Link as main food',
-    associatedCategoryCode: 'Associated category',
-    associatedFoodCode: 'Associated food',
+    multiple: 'Allow multiple foods',
   },
 
   portionSizes: {

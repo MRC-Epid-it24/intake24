@@ -83,6 +83,81 @@
         <v-form ref="form" @submit.prevent="save">
           <v-container>
             <v-row class="mt-2">
+              <v-col cols="12" md="6">
+                <v-card-title>{{ $t('common.options') }}</v-card-title>
+                <v-switch
+                  v-model="dialog.item.linkAsMain"
+                  hide-details="auto"
+                  :label="$t('fdbs.associatedFoods.linkAsMain')"
+                  name="linkAsMain"
+                ></v-switch>
+                <v-switch
+                  v-model="dialog.item.multiple"
+                  hide-details="auto"
+                  :label="$t('fdbs.associatedFoods.multiple')"
+                  name="multiple"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-card-title>{{ $t('fdbs.associatedFoods.association') }}</v-card-title>
+                <select-resource
+                  v-model="dialog.item.associatedCategoryCode"
+                  item-id="code"
+                  resource="categories"
+                  @input="clearFood"
+                >
+                  <template #activator="{ attrs, on }">
+                    <v-text-field
+                      v-bind="attrs"
+                      v-model="dialog.item.associatedCategoryCode"
+                      class="mb-2"
+                      clearable
+                      hide-details="auto"
+                      :label="$t('fdbs.categories._')"
+                      name="associatedCategoryCode"
+                      outlined
+                      prepend-inner-icon="$categories"
+                      readonly
+                      v-on="on"
+                      @input="clearFood"
+                    ></v-text-field>
+                  </template>
+                  <template #title>{{ $t(`fdbs.categories.title`) }}</template>
+                  <template #item="{ item }">
+                    <v-list-item-title>{{ item.code }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+                  </template>
+                </select-resource>
+                <select-resource
+                  v-model="dialog.item.associatedFoodCode"
+                  item-id="code"
+                  resource="foods"
+                  @input="clearCategory"
+                >
+                  <template #activator="{ attrs, on }">
+                    <v-text-field
+                      v-bind="attrs"
+                      v-model="dialog.item.associatedFoodCode"
+                      clearable
+                      hide-details="auto"
+                      :label="$t('fdbs.foods._')"
+                      name="associatedFoodCode"
+                      outlined
+                      prepend-inner-icon="$foods"
+                      readonly
+                      v-on="on"
+                      @input="clearCategory"
+                    ></v-text-field>
+                  </template>
+                  <template #title>{{ $t(`fdbs.foods.title`) }}</template>
+                  <template #item="{ item }">
+                    <v-list-item-title>{{ item.code }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
+                  </template>
+                </select-resource>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12">
                 <language-selector
                   v-model="dialog.item.genericName"
@@ -118,72 +193,6 @@
                     ></v-text-field>
                   </template>
                 </language-selector>
-              </v-col>
-              <v-col cols="12">
-                <v-switch
-                  v-model="dialog.item.linkAsMain"
-                  hide-details="auto"
-                  :label="$t('fdbs.associatedFoods.linkAsMain')"
-                  name="linkAsMain"
-                ></v-switch>
-              </v-col>
-              <v-col cols="12" md="6">
-                <select-resource
-                  v-model="dialog.item.associatedCategoryCode"
-                  item-id="code"
-                  resource="categories"
-                  @input="clearFood"
-                >
-                  <template #activator="{ attrs, on }">
-                    <v-text-field
-                      v-bind="attrs"
-                      v-model="dialog.item.associatedCategoryCode"
-                      clearable
-                      hide-details="auto"
-                      :label="$t('fdbs.associatedFoods.associatedCategoryCode')"
-                      name="associatedCategoryCode"
-                      outlined
-                      prepend-inner-icon="$categories"
-                      readonly
-                      v-on="on"
-                      @input="clearFood"
-                    ></v-text-field>
-                  </template>
-                  <template #title>{{ $t(`fdbs.categories.title`) }}</template>
-                  <template #item="{ item }">
-                    <v-list-item-title>{{ item.code }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
-                  </template>
-                </select-resource>
-              </v-col>
-              <v-col cols="12" md="6">
-                <select-resource
-                  v-model="dialog.item.associatedFoodCode"
-                  item-id="code"
-                  resource="foods"
-                  @input="clearCategory"
-                >
-                  <template #activator="{ attrs, on }">
-                    <v-text-field
-                      v-bind="attrs"
-                      v-model="dialog.item.associatedFoodCode"
-                      clearable
-                      hide-details="auto"
-                      :label="$t('fdbs.associatedFoods.associatedFoodCode')"
-                      name="associatedFoodCode"
-                      outlined
-                      prepend-inner-icon="$foods"
-                      readonly
-                      v-on="on"
-                      @input="clearCategory"
-                    ></v-text-field>
-                  </template>
-                  <template #title>{{ $t(`fdbs.foods.title`) }}</template>
-                  <template #item="{ item }">
-                    <v-list-item-title>{{ item.code }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
-                  </template>
-                </select-resource>
               </v-col>
             </v-row>
             <v-card-actions>

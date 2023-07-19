@@ -30,6 +30,7 @@ import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/stand
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+import { useLocale } from '@intake24/ui';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
@@ -54,6 +55,7 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props) {
+    const { getLocaleContent } = useLocale();
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
@@ -70,6 +72,7 @@ export default defineComponent({
 
     return {
       food,
+      getLocaleContent,
       localeId,
       meal,
       meals,
@@ -110,7 +113,9 @@ export default defineComponent({
             id: getEntityId(),
             type: 'missing-food',
             info: null,
-            searchTerm: capitalize(this.food().data.associatedFoodPrompts[idx].genericName),
+            searchTerm: capitalize(
+              this.getLocaleContent(this.food().data.associatedFoodPrompts[idx].genericName)
+            ),
             customPromptAnswers: {},
             flags: [],
             linkedFoods: [],

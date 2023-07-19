@@ -95,6 +95,7 @@ const foodDataService = () => {
       promptText: row.text,
       linkAsMain: row.linkAsMain,
       genericName: row.genericName,
+      multiple: row.multiple,
     }));
   };
 

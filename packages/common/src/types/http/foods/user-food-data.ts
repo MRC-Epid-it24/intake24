@@ -21,6 +21,7 @@ export type UserAssociatedFoodPrompt = {
   promptText: LocaleTranslation;
   linkAsMain: boolean;
   genericName: LocaleTranslation;
+  multiple: boolean;
 };
 
 export interface UserFoodData {
