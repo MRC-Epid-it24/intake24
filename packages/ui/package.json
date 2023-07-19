@@ -21,7 +21,8 @@
     "@pinia/plugin-debounce": "^0.1.0",
     "@vueuse/core": "^10.2.1",
     "axios": "^1.4.0",
-    "echarts": "^5.4.2",
+    "dompurify": "^3.0.5",
+    "echarts": "^5.4.3",
     "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
@@ -36,10 +37,11 @@
     "vuetify": "^2.7.0"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.2",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "typescript": "^5.1.6",
-    "vite": "^4.4.3",
+    "vite": "^4.4.4",
     "vite-plugin-pwa": "^0.16.4",
     "workbox-window": "^7.0.0"
   },

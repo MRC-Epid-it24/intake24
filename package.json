@@ -63,15 +63,15 @@
   "devDependencies": {
     "@jest/types": "^29.6.1",
     "@types/jest": "^29.5.3",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "@types/prompts": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^3.0.0",
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-define-config": "^1.21.0",
     "eslint-plugin-import": "^2.27.5",
@@ -92,7 +92,7 @@
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vite": "^4.4.3",
+    "vite": "^4.4.4",
     "vitepress": "1.0.0-beta.5"
   },
   "pnpm": {

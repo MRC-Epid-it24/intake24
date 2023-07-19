@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "@types/validator": "^13.7.17",
     "@types/web-push": "^3.3.2",
     "@types/webpack-env": "^1.18.1",
@@ -51,10 +51,10 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "tsconfig-paths-webpack-plugin": "^4.0.1",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0",
     "webpackbar": "^5.0.2"
