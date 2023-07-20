@@ -50,7 +50,9 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
   };
 
   const getAvailableLanguages = () => availableLanguages;
-  const hasLanguage = (locale: string) => availableLanguages.includes(locale);
+  const hasExactLanguage = (locale: string) => availableLanguages.includes(locale.toLowerCase());
+  const hasLanguageWithSomeDialect = (locale: string) =>
+    availableLanguages.find((l) => l.toLowerCase().startsWith(locale.toLowerCase()));
 
   /**
    * Resolve dot-notation i18n object path
@@ -79,7 +81,14 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
     return params ? replaceParams(message, params) : message;
   };
 
-  return { init, reload, getAvailableLanguages, translate, hasLanguage };
+  return {
+    init,
+    reload,
+    getAvailableLanguages,
+    translate,
+    hasExactLanguage,
+    hasLanguageWithSomeDialect,
+  };
 };
 
 export default i18nStore;

@@ -37,14 +37,36 @@ const languageService = ({
     languageId: string
   ): Promise<Record<Application, LocaleMessages>> => {
     const language = await Language.findByPk(languageId);
-    if (language?.code && i18nStore.hasLanguage(language.code)) {
-      // this is a language that exists in the code
-      return {
-        admin: admin[language.code],
-        api: api[language.code],
-        shared: shared[language.code],
-        survey: survey[language.code],
-      };
+    if (language?.code) {
+      // 1.: check if the exact match for the language exists in the code (without the dialect)
+      if (i18nStore.hasExactLanguage(language.code.toLowerCase())) {
+        return {
+          admin: admin[language.code],
+          api: api[language.code],
+          shared: shared[language.code],
+          survey: survey[language.code],
+        };
+      }
+      const [languageCode, dialect] = language.code.toLowerCase().split(/[-_]/);
+      // 2.: check if the language exists in the code (without the dialect)
+      if (i18nStore.hasExactLanguage(languageCode)) {
+        return {
+          admin: admin[languageCode],
+          api: api[languageCode],
+          shared: shared[languageCode],
+          survey: survey[languageCode],
+        };
+      }
+      // 3.: check if the language exists in the code (with some other dialect). Picking the first one
+      const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
+      if (languageWithDialect) {
+        return {
+          admin: admin[languageWithDialect],
+          api: api[languageWithDialect],
+          shared: shared[languageWithDialect],
+          survey: survey[languageWithDialect],
+        };
+      }
     }
     return defaultI18nMessages;
   };
@@ -253,6 +275,8 @@ const languageService = ({
 
       const inserts: LanguageTranslationCreationAttributes[] = [];
       const promises: PromiseLike<any>[] = [];
+      //added check for existing languages with the same code in the source code
+      //const languageMessagesForInitialization = await languageForInitialization(languageId);
 
       for (const [app, appMessages] of Object.entries(defaultI18nMessages)) {
         const application = app as Application;
