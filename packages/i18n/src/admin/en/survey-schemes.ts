@@ -285,6 +285,7 @@ const surveySchemes: LocaleMessageObject = {
     'associated-foods-prompt': {
       title: 'Associated foods',
       subtitle: 'Suggest foods typically consumed together',
+      multiple: 'Allow multiple foods to be selected',
     },
     'edit-meal-prompt': {
       title: 'Food list',

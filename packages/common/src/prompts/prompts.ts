@@ -175,7 +175,10 @@ export type Prompts = {
   'portion-size-option-prompt': BasePrompt & { component: 'portion-size-option-prompt' };
   'standard-portion-prompt': BasePrompt & { component: 'standard-portion-prompt' };
   // Standard
-  'associated-foods-prompt': BasePrompt & { component: 'associated-foods-prompt' };
+  'associated-foods-prompt': BasePrompt & {
+    component: 'associated-foods-prompt';
+    multiple: boolean;
+  };
   'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt'; separateDrinks: boolean };
   'final-prompt': BasePrompt & { component: 'final-prompt' };
   'food-search-prompt': BasePrompt & {

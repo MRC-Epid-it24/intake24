@@ -71,7 +71,7 @@ export const promptSettings: PromptSettings = {
   },
   // Standard
   'associated-foods-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
   'edit-meal-prompt': {
