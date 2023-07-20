@@ -2,11 +2,18 @@
   <v-app :class="{ mobile: isMobile }">
     <loader :show="isAppLoading" />
     <v-navigation-drawer v-model="sidebar" app>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="my-1">{{ $t('common._') }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list>
+        <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
+          <v-list-item-avatar>
+            <v-icon large>fas fa-circle-user</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-medium text-h6">
+              {{ userName ?? $t('profile._') }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
       <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item-group>
@@ -122,7 +129,7 @@ import { Loader } from '@intake24/survey/components';
 import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
-import { useAuth, useSurvey } from './stores';
+import { useAuth, useSurvey, useUser } from './stores';
 
 export default defineComponent({
   name: 'App',
@@ -144,6 +151,7 @@ export default defineComponent({
       recallAllowed: 'recallAllowed',
       surveyName: (state) => state.parameters?.name,
       submissions: (state) => state.user?.submissions ?? 1,
+      userName: (state) => state.user?.name,
     }),
 
     surveyId(): string {

@@ -7,6 +7,17 @@
             <v-subheader>{{ $t('profile.info') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
+                <v-icon class="primary" dark>fas fa-user</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.name') }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ user?.name || $t('common.not.provided') }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-avatar>
                 <v-icon class="primary" dark>fa-id-badge</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
@@ -80,7 +91,7 @@
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import { useAuth, useUser } from '@intake24/survey/stores';
+import { useAuth, useSurvey, useUser } from '@intake24/survey/stores';
 import { AppInfo, ConfirmDialog, setsLanguage } from '@intake24/ui';
 
 export default defineComponent({
@@ -99,6 +110,7 @@ export default defineComponent({
 
   computed: {
     ...mapState(useUser, ['profile']),
+    ...mapState(useSurvey, ['user']),
   },
 
   methods: {
