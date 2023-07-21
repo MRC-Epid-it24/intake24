@@ -138,6 +138,7 @@ export type PortionSizeStates = {
     fillLevel: number;
     leftoversLevel: number;
     leftovers: boolean;
+    count: number;
   };
   'guide-image': PortionSizeStateBase & {
     method: 'guide-image';

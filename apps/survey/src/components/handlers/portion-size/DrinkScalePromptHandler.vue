@@ -59,12 +59,14 @@ export default defineComponent({
         leftoversLevel: 0,
         leftoversWeight: 0,
         leftovers: false,
+        count: 1,
       },
       panel: 0,
       objectConfirmed: false,
       quantityConfirmed: false,
       leftoversConfirmed: false,
       leftoversPrompt: undefined,
+      countConfirmed: false,
     });
 
     const { state, update, commitPortionSize } = usePromptHandlerStore(

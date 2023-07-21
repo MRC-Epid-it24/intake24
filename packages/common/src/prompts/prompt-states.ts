@@ -33,6 +33,7 @@ export type PromptStates = {
     quantityConfirmed: boolean;
     leftoversConfirmed: boolean;
     leftoversPrompt?: boolean;
+    countConfirmed: boolean;
   };
   'guide-image-prompt': {
     portionSize: PortionSizeStates['guide-image'];

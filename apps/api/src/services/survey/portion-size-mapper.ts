@@ -77,6 +77,7 @@ export const drinkScaleMapper = (
   const {
     containerId,
     containerIndex,
+    count,
     drinkwareId,
     fillLevel,
     imageUrl,
@@ -91,6 +92,7 @@ export const drinkScaleMapper = (
   return [
     { name: 'containerId', value: containerId ?? '' },
     { name: 'containerIndex', value: containerIndex?.toString() ?? '' },
+    { name: 'count', value: count.toString() },
     { name: 'drinkware-id', value: drinkwareId },
     { name: 'fillLevel', value: fillLevel.toString() },
     { name: 'imageUrl', value: imageUrl },

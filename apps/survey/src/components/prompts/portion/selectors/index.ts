@@ -6,3 +6,4 @@ export { default as ImageMapSelector } from './ImageMapSelector.vue';
 export { default as PinchZoomImageMapSelector } from './PinchZoomImageMapSelector.vue';
 export { default as QuantityBadge } from './QuantityBadge.vue';
 export { default as QuantityCard } from './QuantityCard.vue';
+export { default as QuantitySlider } from './QuantitySlider.vue';

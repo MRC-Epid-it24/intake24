@@ -37,7 +37,11 @@
           <template #actions>
             <expansion-panel-actions :valid="quantityConfirmed">
               <quantity-badge
-                :amount="portionSize.servingWeight ?? undefined"
+                :amount="
+                  portionSize.servingWeight
+                    ? portionSize.servingWeight / portionSize.count
+                    : undefined
+                "
                 unit="ml"
                 :valid="quantityConfirmed"
               ></quantity-badge>
@@ -66,7 +70,11 @@
           <template #actions>
             <expansion-panel-actions :valid="leftoversPrompt === false || leftoversConfirmed">
               <quantity-badge
-                :amount="portionSize.leftoversWeight ?? undefined"
+                :amount="
+                  portionSize.leftoversWeight
+                    ? portionSize.leftoversWeight / portionSize.count
+                    : undefined
+                "
                 unit="ml"
                 :valid="leftoversConfirmed"
               ></quantity-badge>
@@ -95,6 +103,31 @@
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <v-expansion-panel :disabled="!quantityConfirmed">
+        <v-expansion-panel-header>
+          <i18n :path="`prompts.${type}.count`">
+            <template #food>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
+          <template #actions>
+            <expansion-panel-actions :valid="countConfirmed">
+              <quantity-badge
+                :amount="portionSize.count ?? undefined"
+                unit=""
+                :valid="leftoversConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <quantity-slider
+            v-model="portionSize.count"
+            @confirm="confirmCount"
+            @input="updateCount"
+          ></quantity-slider>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
     </v-expansion-panels>
   </base-layout>
 </template>
@@ -114,12 +147,18 @@ import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import createBasePortion from './createBasePortion';
-import { calculateVolume, DrinkScalePanel, ImageMapSelector, QuantityBadge } from './selectors';
+import {
+  calculateVolume,
+  DrinkScalePanel,
+  ImageMapSelector,
+  QuantityBadge,
+  QuantitySlider,
+} from './selectors';
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, YesNoToggle },
+  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, QuantitySlider, YesNoToggle },
 
   mixins: [createBasePortion<'drink-scale-prompt'>()],
 
@@ -205,12 +244,17 @@ export default defineComponent({
       return this.leftoversConfirmed;
     },
 
+    countValid() {
+      return this.countConfirmed;
+    },
+
     validConditions(): boolean[] {
       const conditions = [this.objectValid, this.quantityValid];
 
       if (!this.disabledLeftovers)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
+      conditions.push(this.countValid);
       return conditions;
     },
   },
@@ -306,14 +350,24 @@ export default defineComponent({
       this.update();
     },
 
+    updateCount() {
+      this.countConfirmed = false;
+      this.update();
+    },
+
+    confirmCount() {
+      this.countConfirmed = true;
+      this.updatePanel();
+      this.update();
+    },
+
     update() {
       const { volumes } = this;
       if (volumes) {
-        this.portionSize.servingWeight = calculateVolume(volumes, this.portionSize.fillLevel);
-        this.portionSize.leftoversWeight = calculateVolume(
-          volumes,
-          this.portionSize.leftoversLevel
-        );
+        this.portionSize.servingWeight =
+          calculateVolume(volumes, this.portionSize.fillLevel) * this.portionSize.count;
+        this.portionSize.leftoversWeight =
+          calculateVolume(volumes, this.portionSize.leftoversLevel) * this.portionSize.count;
       }
 
       const state: PromptStates['drink-scale-prompt'] = {
@@ -323,6 +377,7 @@ export default defineComponent({
         quantityConfirmed: this.quantityConfirmed,
         leftoversConfirmed: this.leftoversConfirmed,
         leftoversPrompt: this.leftoversPrompt,
+        countConfirmed: this.countConfirmed,
       };
 
       this.$emit('update', { state });
