@@ -72,7 +72,10 @@ export default defineComponent({
       return this.selected === 'other' ? `Other: ${this.otherValue}` : this.selected;
     },
     isValid(): boolean {
-      return !this.prompt.validation.required || !!this.currentValue;
+      return (
+        !this.prompt.validation.required ||
+        (!!this.currentValue && (this.selected !== 'other' || !!this.otherValue))
+      );
     },
   },
 
