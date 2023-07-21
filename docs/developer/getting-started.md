@@ -5,6 +5,7 @@
 Steps to getting a local instance running
 
 - Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
+- Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
 - Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
 - To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
@@ -13,6 +14,7 @@ Steps to getting a local instance running
 - IDE for developing Node, Typescript, npm and associated tooling (e.g. VS Code)
 - Virtual Box (v6.x minimum) for running database VM
 - Database browser (e.g. DBeaver) for exploring/manipulating PostgreSQL DB.
+- Redis
 
 ::: tip
 Intake24 requires node.js version 16 or newer, please make sure to check your node.js version before continuing.
@@ -24,7 +26,8 @@ Follow the readme instructions in the root of the repository.
 
 ## Databases
 
-Standalone database snapshots are currently unavailable, please use the [development virtual machine](/developer/vm.html).
+Please contact the intake24 team for the latest development virtual machine. [Please also check the guidance on using the development virtual machine](https://docs.intake24.org/developer/vm.html).
+Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). If using the database snapshots, you need to set up your own Redis instance.
 
 ## API server
 
@@ -47,11 +50,11 @@ Copy the `.env-template` file to `.env` and change the following settings:
 
 Check that the settings are correct by starting the server with `pnpm dev`.
 
+:::tip
+Add `DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT=500` and `DB_DEV_FOODS_DEBUG_QUERY_LIMIT=500` to the API `.env` file to limit debug query char limit. It can prevent long queries from cluttering the console. The API server runs food indexing each time it starts so the console outputs can be quite a lot. The server does that for all locales in the food database, so for the DEV instance, you can also limit number of locales it runs against in `.env` by setting `APP_ENABLED_LOCALES = ["UK_V2_2022"]`.
+:::
+
 ## API access
 
-The default user with superuser rights is `admin` and the password is `intake24`. Refer to the [API docs](/api/) for
-further details.
-
-::: tip
-Use the e-mail log in endpoint (`/api/login`) for the admin user even though "admin" is not a valid e-mail address.
-:::
+Please add your email in DBeaver `users` tables, then go to `apps/cli`, and run `pnpm cli:dev hash-password yourNewPassword`.
+Grab the hash and put it manually into the `password_hash` column of the `user_passwords` table for your user record (find you user_id in users).
