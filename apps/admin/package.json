@@ -55,7 +55,7 @@
     "@types/node": "^20.4.4",
     "@types/pluralize": "^0.0.30",
     "@vitejs/plugin-vue2": "^2.2.0",
-    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "eslint": "^8.45.0",
     "eslint-plugin-import": "^2.27.5",

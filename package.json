@@ -67,7 +67,7 @@
     "@types/prompts": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
-    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^3.0.0",
