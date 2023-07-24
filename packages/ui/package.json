@@ -27,7 +27,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "pinia": "^2.1.4",
-    "pinia-plugin-persistedstate": "^3.1.0",
+    "pinia-plugin-persistedstate": "^3.2.0",
     "svg-gauge": "^1.0.7",
     "vue": "^2.7.14",
     "vue-echarts": "^6.6.0",
@@ -39,9 +39,9 @@
   "devDependencies": {
     "@types/dompurify": "^3.0.2",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^20.4.2",
+    "@types/node": "^20.4.4",
     "typescript": "^5.1.6",
-    "vite": "^4.4.4",
+    "vite": "^4.4.6",
     "vite-plugin-pwa": "^0.16.4",
     "workbox-window": "^7.0.0"
   },
