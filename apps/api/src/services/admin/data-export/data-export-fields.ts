@@ -1,3 +1,4 @@
+import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash';
 import uaParser from 'ua-parser-js';
 
@@ -126,6 +127,16 @@ const dataExportFields = () => {
       id: 'endTime',
       label: 'End DateTime',
       value: (food) => food.meal?.submission?.endTime?.toString(),
+    },
+    {
+      id: 'recallDuration',
+      label: 'Recall Duration (mins)',
+      value: (food) => {
+        const { startTime, endTime } = food.meal?.submission ?? {};
+        if (!startTime || !endTime) return undefined;
+
+        return differenceInMinutes(endTime, startTime);
+      },
     },
     {
       id: 'submissionTime',
