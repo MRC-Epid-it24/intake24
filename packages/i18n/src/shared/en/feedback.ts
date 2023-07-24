@@ -4,12 +4,12 @@ const feedback: LocaleMessageObject = {
   _: 'Feedback',
   info: 'Feedback information',
   status: {
-    available: 'Your feedback is available',
+    available: 'Feedback is available',
     lowRecalls: 'Feedback will be available once you submitted at least {minRecalls} recalls.',
     notAvailable: 'Feedback is not available for this survey.',
   },
-  title: 'Feedback from your recalls',
-  missingFoods: 'Any foods reported as missing will not be included in your dietary feedback',
+  title: 'Feedback from {name} recalls',
+  missingFoods: 'Any foods reported as missing will not be included in dietary feedback',
 
   physicalData: {
     title: 'About you',

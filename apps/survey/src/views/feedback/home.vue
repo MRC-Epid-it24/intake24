@@ -4,7 +4,9 @@
       <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center px-4 pb-4">
         {{ surveyName }}
       </h1>
-      <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">{{ $t('feedback.title') }}</h2>
+      <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">
+        {{ $t('feedback.title', { name: userName ? `${userName}'s` : '' }) }}
+      </h2>
       <v-row class="pa-4 d-print-none" justify="center" no-gutters>
         <v-col cols="12" lg="7" md="8" xl="6">
           <v-row justify="space-around">
@@ -141,6 +143,7 @@ export default defineComponent({
     const survey = useSurvey();
     const parameters = computed(() => survey.parameters);
     const surveyName = computed(() => parameters.value?.name);
+    const userName = computed(() => survey.user?.name);
     const feedbackScheme = computed(() => parameters.value?.feedbackScheme);
     const outputs = computed(() => feedbackScheme.value?.outputs ?? []);
     const sections = computed(() => feedbackScheme.value?.sections ?? []);
@@ -169,6 +172,7 @@ export default defineComponent({
       sections,
       surveyName,
       submissions,
+      userName,
     };
   },
 
