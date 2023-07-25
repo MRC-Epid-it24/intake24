@@ -3,6 +3,8 @@ import type { LocaleMessageObject } from 'vue-i18n';
 const prompts: LocaleMessageObject = {
   checkboxList: {
     name: '多选列表',
+    text: '',
+    description: '',
     label: '选择任意选项',
     other: '请指定',
     validation: {
@@ -11,22 +13,28 @@ const prompts: LocaleMessageObject = {
   },
   datePicker: {
     name: '选择日期',
+    text: '',
+    description: '',
     validation: {
       required: '必须填写此字段。',
     },
   },
   info: {
     name: '信息/确认',
+    text: '',
+    description: '',
   },
   noMoreInformation: {
     name: '不需要更多信息',
-    text: '不需要更多信息',
+    text: '',
     description: `<p>我们目前已经获取了关于您的 <strong>{item}</strong> 所有需要的信息。</p>
         <p>为了继续进行调查， 请单击下面的“ 继续” 按钮， 我们将自动选择我们仍需要有关其它食物或餐点的信息。</p>
         <p>或者，如果您想专注于某个项目，请单击左侧的餐点或食物。</p>`,
   },
   radioList: {
     name: '单选列表',
+    text: '',
+    description: '',
     label: '选择一个选项',
     other: '请指定',
     validation: {
@@ -35,6 +43,8 @@ const prompts: LocaleMessageObject = {
   },
   textarea: {
     name: '自由文本',
+    text: '',
+    description: '',
     label: '在文本区域中输入答案',
     validation: {
       required: '必须填写此字段。',
@@ -42,18 +52,22 @@ const prompts: LocaleMessageObject = {
   },
   timePicker: {
     name: '选择时间',
+    text: '',
+    description: '',
     validation: {
       required: '必须填写此字段。',
     },
   },
   yesNo: {
     name: '是/否确认',
+    text: '',
+    description: '',
   },
   // Standard
   associatedFoods: {
     name: '相关食物',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     yes: '是的，我有',
     no: '不是的，我没有吃',
     alreadyEntered: '是的，已输入',
@@ -71,7 +85,7 @@ const prompts: LocaleMessageObject = {
   },
   editMeal: {
     name: '编辑餐食',
-    text: '列出您在{meal}中食用的所有食物，每行一个项目。',
+    text: '',
     description: `例如：<p><ul><li>香蕉</li><li>薯片</li><li>米饭</li><li>茶</li></ul></p>
       <p>您可以在输入时按Enter键或“ 添加食物/ 饮料” 按钮， 以进行下一行。</p>
       <p><strong>不要</strong> 输入您吃了多少， 只需输入食物名称即可。`,
@@ -82,6 +96,8 @@ const prompts: LocaleMessageObject = {
   },
   final: {
     name: '最后一页',
+    text: '',
+    description: '',
   },
   foodBrowser: {
     browse: 'Browse all foods',
@@ -91,7 +107,7 @@ const prompts: LocaleMessageObject = {
   },
   foodSearch: {
     name: '搜索食物',
-    text: '以下是我们数据库中与{food}相似的食物列表。',
+    text: '',
     description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
       <p>Choose the item you had or the closest match.</p>`,
     empty: '我们的数据库中没有与“{searchTerm}”匹配的内容。',
@@ -117,11 +133,11 @@ const prompts: LocaleMessageObject = {
   mealAdd: {
     _: '添加餐食',
     name: '添加餐食',
-    // text: 'Placeholder',
+    text: '',
     description: '如果合适，请从下面的列表中选择一个。',
     label: '选择预定义餐食',
     custom: {
-      // text: 'Placeholder',
+      text: '',
       description: '<p>您可以输入自己的餐食名称，或者如果合适，请从下面的列表中选择一个。。</p>',
       label: '选择预定义名称或输入餐食名称',
     },
@@ -131,14 +147,14 @@ const prompts: LocaleMessageObject = {
   },
   mealDuration: {
     name: '编辑时间',
-    text: '您是否吃了{meal}？如果是，是什么时候吃的？',
+    text: '',
     description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
     confirm: 'Continue',
   },
   mealGap: {
     name: 'Meal gap',
-    // text: 'Placeholder',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     before:
       '<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>',
     after:
@@ -150,28 +166,32 @@ const prompts: LocaleMessageObject = {
   },
   mealTime: {
     name: 'Edit Time',
-    text: '{meal}',
+    text: '',
     description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
     no: 'Did not have',
   },
   readyMeal: {
     name: '现成食物',
-    text: '这是现成的餐食或现成的食物吗？',
+    text: '',
     description: `<p>Was this a ready-made meal or food?</p>
       <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
   },
   redirect: {
     name: '重定向',
+    text: '',
+    description: '',
     missingUrl: 'Missing redirection URL',
     goTo: 'Go to the questionnaire',
   },
   reviewConfirm: {
     name: '回顾和确认',
+    text: '',
+    description: '',
   },
   sameAsBefore: {
     name: '和以前一样',
-    text: '{food}',
+    text: '',
     description: '<p>Was this <strong>{food}</strong> the same as the one you had before?</p>',
     serving: '{amount} serving size',
     leftovers: 'Left about {amount}',
@@ -186,7 +206,7 @@ const prompts: LocaleMessageObject = {
   },
   splitFood: {
     name: '拆分食物',
-    text: '{food}',
+    text: '',
     description: 'It looks like you entered more than one food item on the line.',
     searchTerm: '搜索词：{food}',
     split: 'Are these separate foods?',
@@ -199,6 +219,8 @@ const prompts: LocaleMessageObject = {
   },
   submit: {
     name: '提交页面',
+    text: '',
+    description: '',
   },
 
   // Portion sizes
@@ -210,7 +232,7 @@ const prompts: LocaleMessageObject = {
   },
   portionSizeOption: {
     name: '分量方法',
-    text: '您想如何估计{food}的份量？',
+    text: '',
     description: 'How do you want to estimate your portion?',
     selections: {
       grated: '磨碎的',
@@ -268,8 +290,8 @@ const prompts: LocaleMessageObject = {
   },
   asServed: {
     name: '上菜集',
-    text: '请根据以下提示，选择您吃了多少{food}，以及是否剩余了食物。',
-    // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    text: '',
+    description: '',
     serving: {
       header: '第1步。请选择您的食物份量。',
       less: '我吃了更少的量',
@@ -299,14 +321,14 @@ const prompts: LocaleMessageObject = {
   },
   cereal: {
     name: '麦片',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: '请选择一个看起来最像您在吃{food}时使用的餐碗的图片。',
   },
   drinkScale: {
     name: '饮料秤',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: '选择外观与您用来盛放{food}的杯子或玻璃杯最相似的一个。',
     serving: {
       header: '第1步。请选择您的饮料份量。',
@@ -325,8 +347,8 @@ const prompts: LocaleMessageObject = {
   },
   guideImage: {
     name: '指南图片',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: '选择最接近你所吃{food}大小的图片。',
     quantity: 'Choose how many of {food} you had.',
     confirm: '我吃了那么多',
@@ -334,21 +356,21 @@ const prompts: LocaleMessageObject = {
   },
   milkInAHotDrink: {
     name: '热饮中的牛奶',
-    text: '你在茶或咖啡中加了多少{food}？',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How much {food} did you have in your tea or coffee?',
     confirm: '我加了那么多',
   },
   milkOnCereal: {
     name: 'Milk on cereal',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: '选择最接近你用来盛放{food}的碗。',
     milk: 'Choose the level your milk came up to (without cereal).',
   },
   missingFood: {
     name: 'Missing food',
-    text: '{food}',
+    text: '',
     description: `You said you were unable to find a good match for "{food}". Please provide as much detail as you can to the following questions, to help us identify your food or drink.`,
     source: 'Was it homemade?',
     homemade: 'Provide further details e.g. description of dish or ingredients.',
@@ -358,15 +380,15 @@ const prompts: LocaleMessageObject = {
   },
   parentFoodPortion: {
     name: 'Parent food portion',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How much {food} did you have in your {parentFood}?',
     confirm: 'I had that much',
   },
   pizza: {
     name: '披萨',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     typeLabel: '选择最接近你所吃披萨大小的种类。',
     thicknessLabel: '你的披萨有多厚？',
     sizeLabel: '你吃的是什么大小的披萨片？',
@@ -381,8 +403,8 @@ const prompts: LocaleMessageObject = {
   },
   standardPortion: {
     name: '标准份量',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: '你想如何估计你吃的{food}份量？',
     estimateIn: '{unit}里',
     howMany: {
@@ -394,13 +416,13 @@ const prompts: LocaleMessageObject = {
   },
   unknown: {
     name: '未知',
-    text: '{food}没有当前的份量估计方法。',
-    // description: 'Placeholder',
+    text: '',
+    description: '{food}没有当前的份量估计方法。',
   },
   weight: {
     name: '重量',
-    text: '输入你吃了多少。',
-    // description: 'Placeholder',
+    text: '',
+    description: '输入你吃了多少。',
   },
 };
 

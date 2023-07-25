@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-card class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
+    <v-card
+      v-if="localeText || localeDescription"
+      class="px-5 py-4 mb-4"
+      :flat="isMobile"
+      :tile="isMobile"
+    >
       <h3>
         <slot name="prompt-text">{{ localeText }}</slot>
       </h3>

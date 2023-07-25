@@ -88,9 +88,7 @@ export default defineComponent({
       const foodElement = this.getFoodElement();
       const promptElement = { text: this.promptName, disabled: false };
 
-      elements.push(
-        mealElement ?? { text: this.$t('breadcrumbs.general').toString(), disabled: false }
-      );
+      elements.push(mealElement ?? { text: this.$t('recall._').toString(), disabled: false });
       if (foodElement) elements.push(foodElement);
 
       elements.push(promptElement);

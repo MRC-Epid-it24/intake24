@@ -3,6 +3,8 @@ import type { LocaleMessageObject } from 'vue-i18n';
 const prompts: LocaleMessageObject = {
   checkboxList: {
     name: 'பல தேர்வு பட்டியல்',
+    text: '',
+    description: '',
     label: 'விருப்பங்களில் ஏதேனும் ஒன்றைத் தேர்ந்தெடுக்கவும்',
     other: 'தயவுசெய்து குறிப்பிடவும்',
     validation: {
@@ -10,6 +12,8 @@ const prompts: LocaleMessageObject = {
     },
   },
   datePicker: {
+    text: '',
+    description: '',
     name: 'தேதியைத் தேர்ந்தெடுக்கவும்',
     validation: {
       required: 'இந்தப் புலம் நிரப்பப்பட வேண்டும்.',
@@ -17,16 +21,20 @@ const prompts: LocaleMessageObject = {
   },
   info: {
     name: 'தகவல் / உறுதிப்படுத்தல்',
+    text: '',
+    description: '',
   },
   noMoreInformation: {
     name: 'மேலும் தகவல் தேவையில்லை',
-    text: 'மேலும் தகவல் தேவையில்லை',
+    text: '',
     description: `<p>இந்த நேரத்தில் உங்கள் <strong>{item}</strong> தொடர்பாக எங்களுக்குத் தேவையான அனைத்து தகவல்களும் எங்களிடம் உள்ளன.</p>
         <p>கருத்துக்கணிப்பைத் தொடர, கீழே உள்ள "தொடரவும்" பொத்தானைக் கிளிக் செய்யவும். அடுத்த உணவு அல்லது உணவைத் தானாகத் தேர்ந்தெடுப்போம்.</p>
         <p>மாற்றாக, நீங்கள் ஒரு குறிப்பிட்ட பொருளில் கவனம் செலுத்த விரும்பினால், இடதுபுறத்தில் உள்ள உணவு அல்லது உணவைக் கிளிக் செய்யவும்.</p>`,
   },
   radioList: {
     name: 'ஒற்றைத் தேர்வு பட்டியல்',
+    text: '',
+    description: '',
     label: 'விருப்பங்களில் ஒன்றைத் தேர்ந்தெடுக்கவும்',
     other: 'தயவுசெய்து குறிப்பிடவும்',
     validation: {
@@ -35,6 +43,8 @@ const prompts: LocaleMessageObject = {
   },
   textarea: {
     name: 'இலவச உரை',
+    text: '',
+    description: '',
     label: 'உரை பகுதியில் உங்கள் பதிலை உள்ளிடவும்',
     validation: {
       required: 'இந்தப் புலம் நிரப்பப்பட வேண்டும்.',
@@ -42,18 +52,22 @@ const prompts: LocaleMessageObject = {
   },
   timePicker: {
     name: 'நேரத்தைத் தேர்ந்தெடுக்கவும்',
+    text: '',
+    description: '',
     validation: {
       required: 'இந்தப் புலம் நிரப்பப்பட வேண்டும்.',
     },
   },
   yesNo: {
     name: 'ஆம் / இல்லை உறுதிப்படுத்தல் ',
+    text: '',
+    description: '',
   },
   // Standard
   associatedFoods: {
     name: 'தொடர்புடைய உணவுகள்',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     yes: 'ஆம், என்னிடம் சில இருந்தது',
     no: 'இல்லை நான் செய்யவில்லை',
     alreadyEntered: 'ஆம், ஏற்கனவே உள்ளிடப்பட்டுள்ளது',
@@ -71,7 +85,7 @@ const prompts: LocaleMessageObject = {
   },
   editMeal: {
     name: 'உணவைத் திருத்தவும்',
-    text: 'உங்கள் {meal} நீங்கள் வைத்திருந்த அனைத்தையும் பட்டியலிடுங்கள், ஒரு வரிக்கு ஒரு வகை.',
+    text: '',
     description: `எடுத்துக்காட்டாக:<p><ul><li>வாழைப்பழம்</li><li>கிரிஸ்ப்ஸ்</li><li>அரிசி</li><li>தேநீர்</li></ul></p>
       <p>நீங்கள் தட்டச்சு செய்யும் போது அடுத்த வரிக்குச் செல்ல உங்கள் விசைப்பலகையில் Enter அல்லது "உணவு/பானத்தைச் சேர்" பொத்தானை அழுத்தலாம்.</p>
       <p> உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிட <strong>வேண்டாம்</strong>, உணவுப் பெயர்கள் மட்டுமே.`,
@@ -83,6 +97,8 @@ const prompts: LocaleMessageObject = {
   },
   final: {
     name: 'இறுதிப் பக்கம்',
+    text: '',
+    description: '',
   },
   foodBrowser: {
     browse: 'Browse all foods',
@@ -92,7 +108,7 @@ const prompts: LocaleMessageObject = {
   },
   foodSearch: {
     name: 'உணவைத் தேடு',
-    text: 'எங்கள் தரவுத்தளத்திலிருந்து "{food} போன்ற உணவுகளின் பட்டியல் கீழே உள்ளது".',
+    text: '',
     description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
       <p>Choose the item you had or the closest match.</p>`,
     empty: 'எங்கள் தரவுத்தளத்தில் "{searchTerm} உடன் பொருந்தக்கூடிய எதுவும் இல்லை".',
@@ -118,11 +134,11 @@ const prompts: LocaleMessageObject = {
   mealAdd: {
     _: 'சாப்பாடு சேர்க்கவும்',
     name: 'சாப்பாடு சேர்க்கவும்',
-    // text: 'Placeholder',
+    text: '',
     description: 'பொருத்தமானதாக இருந்தால் கீழே உள்ள பட்டியலில் இருந்து ஒன்றைத் தேர்ந்தெடுக்கவும்.',
     label: 'முன் வரையறுக்கப்பட்ட உணவைத் தேர்ந்தெடுக்கவும்',
     custom: {
-      // text: 'Placeholder',
+      text: '',
       description:
         '<p>நீங்கள் உங்கள் சொந்த பெயரைத் தட்டச்சு செய்யலாம் அல்லது பொருத்தமானதாக இருந்தால் கீழே உள்ள பட்டியலில் இருந்து ஒன்றைத் தேர்ந்தெடுக்கலாம்.</p>',
       label: 'முன் வரையறுக்கப்பட்டதைத் தேர்ந்தெடுக்கவும் அல்லது உணவின் பெயரை உள்ளிடவும்',
@@ -133,14 +149,14 @@ const prompts: LocaleMessageObject = {
   },
   mealDuration: {
     name: 'நேரத்தை திருத்தவும்',
-    text: 'நீங்கள் {meal} சாப்பிட்டீர்களா? அப்படியானால், இது எப்போது?',
+    text: '',
     description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
     confirm: 'Continue',
   },
   mealGap: {
     name: 'Meal gap',
-    // text: 'Placeholder',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     before:
       '<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>',
     after:
@@ -152,28 +168,32 @@ const prompts: LocaleMessageObject = {
   },
   mealTime: {
     name: 'Edit Time',
-    text: '{meal}',
+    text: '',
     description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
     no: 'Did not have',
   },
   readyMeal: {
     name: 'தயார் சாப்பாடு',
-    text: '{meal}',
+    text: '',
     description: `<p>Was this a ready-made meal or food?</p>
       <p>இவற்றில் ஏதேனும் ரெடிமேட் சாப்பாடு அல்லது உணவாக இருந்தால் பெட்டியை டிக் செய்யவும் (எ.கா. சமைக்க / சாப்பிட / முன் பேக் செய்யப்பட்ட).</p>`,
   },
   redirect: {
     name: 'வழிமாற்று',
+    text: '',
+    description: '',
     missingUrl: 'Missing redirection URL',
     goTo: 'Go to the questionnaire',
   },
   reviewConfirm: {
     name: 'மதிப்பாய்வு செய்து உறுதிப்படுத்தவும்',
+    text: '',
+    description: '',
   },
   sameAsBefore: {
     name: 'முன்பு போலவே',
-    text: '{food}',
+    text: '',
     description: '<p>Was this <strong>{food}</strong> the same as the one you had before?</p>',
     serving: '{amount} serving size',
     leftovers: 'Left about {amount}',
@@ -188,7 +208,7 @@ const prompts: LocaleMessageObject = {
   },
   splitFood: {
     name: 'உணவை பிரிக்கவும் ',
-    text: '{food}',
+    text: '',
     description: 'It looks like you entered more than one food item on the line.',
     searchTerm: 'தேடல் சொல்: {food}',
     split: 'இவை தனி உணவுகளா?',
@@ -204,6 +224,8 @@ const prompts: LocaleMessageObject = {
   },
   submit: {
     name: 'பக்கத்தை சமர்ப்பிக்கவும்',
+    text: '',
+    description: '',
   },
 
   // Portion sizes
@@ -215,7 +237,7 @@ const prompts: LocaleMessageObject = {
   },
   portionSizeOption: {
     name: 'பகுதி முறை',
-    text: 'உங்கள் {food} பகுதியின் அளவை எப்படி மதிப்பிட விரும்புகிறீர்கள்?',
+    text: '',
     description: 'How do you want to estimate your portion?',
     selections: {
       grated: 'அரைக்கப்பட்டது',
@@ -273,8 +295,8 @@ const prompts: LocaleMessageObject = {
   },
   asServed: {
     name: 'என பரிமாறப்பட்டது',
-    text: 'கீழே உள்ள முனைவுகளைப் பயன்படுத்தி, நீங்கள் எவ்வளவு {food} வைத்திருந்தீர்கள், மீதமுள்ளவை உங்களிடம் உள்ளதா என்பதைத் தேர்ந்தெடுக்கவும்.',
-    // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    text: '',
+    description: '',
     serving: {
       header: 'Using these pictures, choose how much {food} you had.',
       less: 'நான் குறைவாக எடுத்துக்கொண்டேன்  ',
@@ -305,15 +327,15 @@ const prompts: LocaleMessageObject = {
   },
   cereal: {
     name: 'தானியம்',
-    text: '{food}',
-    // description: 'கொள்ளிடம்',
+    text: '',
+    description: '',
     container:
       'உங்கள் {food} நீங்கள் பயன்படுத்திய கிண்ணத்தைப் போலவே இருக்கும் கிண்ணத்தைத் தேர்ந்தெடுக்கவும்.',
   },
   drinkScale: {
     name: 'பானம் அளவு',
-    text: '{food}',
-    // description: 'கொள்ளிடம்',
+    text: '',
+    description: '',
     container: 'உங்கள் {food} நீங்கள் பயன்படுத்திய கோப்பை அல்லது கண்ணாடியைத் தேர்ந்தெடுக்கவும்.',
     serving: {
       header:
@@ -334,8 +356,8 @@ const prompts: LocaleMessageObject = {
   },
   guideImage: {
     name: 'வழிகாட்டி படம்',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'நீங்கள் வைத்திருந்த {food} அளவுக்கு மிக நெருக்கமான படத்தைத் தேர்ந்தெடுக்கவும்.',
     quantity: 'Choose how many of {food} you had.',
     confirm: 'என்னிடம் இவ்வளவு இருந்தது',
@@ -343,22 +365,22 @@ const prompts: LocaleMessageObject = {
   },
   milkInAHotDrink: {
     name: 'சூடான பானத்தில் பால்',
-    text: 'உங்கள் டீ அல்லது காபியில் எவ்வளவு {food} இருந்தீர்கள்?',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'உங்களிடம் உள்ள அளவைத் தேர்ந்தெடுக்கவும்.',
     confirm: 'நான் அவ்வளவு எடுத்துக்கொண்டேன்',
   },
   milkOnCereal: {
     name: 'தானியத்தின் மீது பால்',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container:
       'உங்கள் {food} நீங்கள் பயன்படுத்திய கிண்ணத்தைப் போலவே இருக்கும் கிண்ணத்தைத் தேர்ந்தெடுக்கவும்.',
     milk: 'உங்கள் பால் வந்த அளவைத் தேர்ந்தெடுங்கள் (தானியம் இல்லாமல்).',
   },
   missingFood: {
     name: 'Missing food',
-    text: '{food}',
+    text: '',
     description: `You said you were unable to find a good match for "{food}". Please provide as much detail as you can to the following questions, to help us identify your food or drink.`,
     source: 'Was it homemade?',
     homemade: 'Provide further details e.g. description of dish or ingredients.',
@@ -368,15 +390,15 @@ const prompts: LocaleMessageObject = {
   },
   parentFoodPortion: {
     name: 'Parent food portion',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How much {food} did you have in your {parentFood}?',
     confirm: 'I had that much',
   },
   pizza: {
     name: 'பீட்சா',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     typeLabel: 'நீங்கள் வைத்திருந்த அளவுக்கு மிக நெருக்கமான பீட்சாவைத் தேர்ந்தெடுக்கவும்.',
     thicknessLabel: 'உங்கள் பீட்சா தடிமனாக இருந்ததா?',
     sizeLabel: 'உங்களிடம் என்ன அளவு துண்டுகள் இருந்தன?',
@@ -391,8 +413,8 @@ const prompts: LocaleMessageObject = {
   },
   standardPortion: {
     name: 'நிலையான பகுதி',
-    text: '{food}',
-    // description: 'கொள்ளிடம்',
+    text: '',
+    description: '',
     label: 'உங்கள் {food} பகுதியின் அளவை எவ்வாறு மதிப்பிட விரும்புகிறீர்கள்?',
     estimateIn: 'இல் {unit}',
     howMany: {
@@ -404,13 +426,13 @@ const prompts: LocaleMessageObject = {
   },
   unknown: {
     name: 'தெரியாதவை ',
-    text: 'தற்போது {food}க்கான பகுதி அளவை மதிப்பிடும் முறை இல்லை.',
-    // description: 'கொள்ளிடம்',
+    text: '',
+    description: 'தற்போது {food}க்கான பகுதி அளவை மதிப்பிடும் முறை இல்லை.',
   },
   weight: {
     name: 'எடை',
-    text: 'உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிடவும்.',
-    // description: 'கொள்ளிடம்',
+    text: '',
+    description: 'உங்களிடம் எவ்வளவு இருந்தது என்பதை உள்ளிடவும்.',
   },
 };
 

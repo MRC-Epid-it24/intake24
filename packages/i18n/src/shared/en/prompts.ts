@@ -3,6 +3,8 @@ import type { LocaleMessageObject } from 'vue-i18n';
 const prompts: LocaleMessageObject = {
   checkboxList: {
     name: 'Multi-choice list',
+    text: '',
+    description: '',
     label: 'Select any of the options',
     other: 'Other - please specify',
     validation: {
@@ -11,22 +13,28 @@ const prompts: LocaleMessageObject = {
   },
   datePicker: {
     name: 'Select date',
+    text: '',
+    description: '',
     validation: {
       required: 'This field is required to be filled in.',
     },
   },
   info: {
     name: 'Info / confirmation',
+    text: '',
+    description: '',
   },
   noMoreInformation: {
     name: 'No more information needed',
-    text: '{item}',
+    text: '',
     description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
         <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
         <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
   },
   radioList: {
     name: 'Single-choice list',
+    text: '',
+    description: '',
     label: 'Select one of the options',
     other: 'Other - please specify',
     validation: {
@@ -35,6 +43,8 @@ const prompts: LocaleMessageObject = {
   },
   textarea: {
     name: 'Free text',
+    text: '',
+    description: '',
     label: 'Enter your answer in textarea',
     validation: {
       required: 'This field is required to be filled in.',
@@ -42,18 +52,22 @@ const prompts: LocaleMessageObject = {
   },
   timePicker: {
     name: 'Select time',
+    text: '',
+    description: '',
     validation: {
       required: 'This field is required to be filled in.',
     },
   },
   yesNo: {
     name: 'Yes / No confirmation',
+    text: '',
+    description: '',
   },
   // Standard
   associatedFoods: {
     name: 'Associated foods',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     yes: 'Yes, I had some',
     no: 'No, I did not',
     alreadyEntered: 'Yes, already entered',
@@ -71,7 +85,7 @@ const prompts: LocaleMessageObject = {
   },
   editMeal: {
     name: 'Edit Meal',
-    text: '{meal}',
+    text: '',
     description: `<p>List everything you had for your <strong>{meal}</strong>, one item per line.</p>
       For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
       <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
@@ -83,6 +97,8 @@ const prompts: LocaleMessageObject = {
   },
   final: {
     name: 'Final page',
+    text: '',
+    description: '',
   },
   foodBrowser: {
     browse: 'Browse all foods',
@@ -92,7 +108,7 @@ const prompts: LocaleMessageObject = {
   },
   foodSearch: {
     name: 'Search Food',
-    text: '{food}',
+    text: '',
     description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
       <p>Choose the item you had or the closest match.</p>`,
     empty: 'There is nothing in our database that matches "{searchTerm}".',
@@ -118,11 +134,11 @@ const prompts: LocaleMessageObject = {
   mealAdd: {
     _: 'Add meal',
     name: 'Add Meal',
-    // text: 'Placeholder',
+    text: '',
     description: '<p>Select one from the list below if it is appropriate.</p>',
     label: 'Select predefined meal',
     custom: {
-      // text: 'Placeholder',
+      text: '',
       description:
         '<p>Enter the name of this meal. You can either type your own name, or select one from the list below if it is appropriate.</p>',
       label: 'Select predefined or enter meal name',
@@ -133,14 +149,14 @@ const prompts: LocaleMessageObject = {
   },
   mealDuration: {
     name: 'Meal duration',
-    text: '{meal}',
+    text: '',
     description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
     confirm: 'Continue',
   },
   mealGap: {
     name: 'Meal gap',
-    // text: 'Placeholder',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     before:
       '<p>Did you have any meals, snacks or drinks before your <strong>{meal}</strong> at {mealTime}?</p>',
     after:
@@ -152,28 +168,32 @@ const prompts: LocaleMessageObject = {
   },
   mealTime: {
     name: 'Edit Time',
-    text: '{meal}',
+    text: '',
     description: '<p>Did you have <strong>{meal}</strong>? If so, what time was this?</p>',
     yes: 'Around that time',
     no: 'Did not have',
   },
   readyMeal: {
     name: 'Ready meal',
-    text: '{meal}',
+    text: '',
     description: `<p>Was this a ready-made meal or food?</p>
       <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
   },
   redirect: {
     name: 'Redirect',
+    text: '',
+    description: '',
     missingUrl: 'Missing redirection URL',
     goTo: 'Go to the questionnaire',
   },
   reviewConfirm: {
     name: 'Review and Confirm',
+    text: '',
+    description: '',
   },
   sameAsBefore: {
     name: 'Same as before',
-    text: '{food}',
+    text: '',
     description: '<p>Was this <strong>{food}</strong> the same as the one you had before?</p>',
     serving: '{amount} serving size',
     leftovers: 'Left about {amount}',
@@ -188,7 +208,7 @@ const prompts: LocaleMessageObject = {
   },
   splitFood: {
     name: 'Split food',
-    text: '{food}',
+    text: '',
     description: 'It looks like you entered more than one food item on the line.',
     searchTerm: 'Search term: {food}',
     split: 'Are these separate foods?',
@@ -202,6 +222,8 @@ const prompts: LocaleMessageObject = {
   },
   submit: {
     name: 'Submit page',
+    text: '',
+    description: '',
   },
 
   // Portion sizes
@@ -213,7 +235,7 @@ const prompts: LocaleMessageObject = {
   },
   portionSizeOption: {
     name: 'Portion method',
-    text: '{food}',
+    text: '',
     description: 'How do you want to estimate your portion?',
     selections: {
       grated: 'Grated',
@@ -271,8 +293,8 @@ const prompts: LocaleMessageObject = {
   },
   asServed: {
     name: 'As served',
-    text: '{food}',
-    // description: 'Using the prompts below, select how much {food} you had, and whether you had leftovers.',
+    text: '',
+    description: '',
     serving: {
       header: 'Using these pictures, choose how much {food} you had.',
       less: 'I had less',
@@ -302,14 +324,14 @@ const prompts: LocaleMessageObject = {
   },
   cereal: {
     name: 'Cereal',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: 'Select the bowl that looks most like the one you used for your {food}.',
   },
   drinkScale: {
     name: 'Drink scale',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
       header:
@@ -330,8 +352,8 @@ const prompts: LocaleMessageObject = {
   },
   guideImage: {
     name: 'Guide image',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'Select the image that is the closest match to the size of {food} you had.',
     quantity: 'Choose how many of {food} you had.',
     confirm: 'I had that many',
@@ -339,21 +361,21 @@ const prompts: LocaleMessageObject = {
   },
   milkInAHotDrink: {
     name: 'Milk in a hot drink',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How much {food} did you have in your tea or coffee?',
     confirm: 'I had that much',
   },
   milkOnCereal: {
     name: 'Milk on cereal',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     container: 'Select the bowl that looks most like the one you used for your {food}.',
     milk: 'Choose the level your milk came up to (without cereal).',
   },
   missingFood: {
     name: 'Missing food',
-    text: '{food}',
+    text: '',
     description: `You said you were unable to find a good match for "{food}". Please provide as much detail as you can to the following questions, to help us identify your food or drink.`,
     source: 'Was it homemade?',
     homemade: 'Provide further details e.g. description of dish or ingredients.',
@@ -363,15 +385,15 @@ const prompts: LocaleMessageObject = {
   },
   parentFoodPortion: {
     name: 'Parent food portion',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How much {food} did you have in your {parentFood}?',
     confirm: 'I had that much',
   },
   pizza: {
     name: 'Pizza',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     typeLabel: 'Select the pizza that is closest to the size you had.',
     thicknessLabel: 'How thick was your pizza?',
     sizeLabel: 'What size slice(s) did you have?',
@@ -386,8 +408,8 @@ const prompts: LocaleMessageObject = {
   },
   standardPortion: {
     name: 'Standard portion',
-    text: '{food}',
-    // description: 'Placeholder',
+    text: '',
+    description: '',
     label: 'How would you like to estimate the portion size of your {food}?',
     estimateIn: 'In {unit}',
     howMany: {
@@ -399,13 +421,13 @@ const prompts: LocaleMessageObject = {
   },
   unknown: {
     name: 'Unknown',
-    text: 'There is currently no portion size estimation method for {food}.',
-    // description: 'Placeholder',
+    text: '',
+    description: 'There is currently no portion size estimation method for {food}.',
   },
   weight: {
     name: 'Weight',
-    text: 'Enter how much you had.',
-    // description: 'Placeholder',
+    text: '',
+    description: 'Enter how much you had.',
   },
 };
 
