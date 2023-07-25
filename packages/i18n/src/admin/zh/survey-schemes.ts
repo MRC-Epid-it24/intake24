@@ -71,7 +71,15 @@ const surveySchemes: LocaleMessageObject = {
       editFood: 'Edit food',
       editMeal: 'Edit meal',
       mealTime: 'Meal time',
+      selectFood: 'Select food',
       selectMeal: 'Select meal',
+    },
+    variants: {
+      _: 'Action variant',
+      title: 'Action variants',
+      elevated: 'Elevated',
+      outlined: 'Outlined',
+      text: 'Text',
     },
   },
 

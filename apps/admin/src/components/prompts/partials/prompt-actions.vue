@@ -44,7 +44,6 @@
                   <v-select
                     v-model="item.type"
                     hide-details="auto"
-                    item-value="type"
                     :items="actionList"
                     :label="$t('survey-schemes.actions.types._')"
                     outlined
@@ -62,6 +61,15 @@
                     :label="layout.text"
                     :value="layout.value"
                   ></v-checkbox>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-select
+                    v-model="item.variant"
+                    hide-details="auto"
+                    :items="actionVariantsList"
+                    :label="$t('survey-schemes.actions.variants._')"
+                    outlined
+                  ></v-select>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
@@ -148,7 +156,8 @@ export const defaultAction: ActionItem = {
   type: 'next',
   text: { en: '' },
   label: {},
-  color: '',
+  color: 'secondary',
+  variant: 'outlined',
   icon: '$next',
   layout: [],
 };
@@ -167,10 +176,11 @@ export default defineComponent({
   emits: ['update:actions'],
 
   setup() {
-    const { actionList, layoutList } = useSelects();
+    const { actionList, actionVariantsList, layoutList } = useSelects();
 
     return {
       actionList,
+      actionVariantsList,
       layoutList,
     };
   },

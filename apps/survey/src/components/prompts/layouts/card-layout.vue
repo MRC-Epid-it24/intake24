@@ -34,7 +34,8 @@
             :color="item.color"
             :disabled="item.type === 'next' && !isValid"
             large
-            :text="item.type !== 'next'"
+            :outlined="item.variant === 'outlined'"
+            :text="item.variant === 'text'"
             :title="
               Object.keys(item.label).length
                 ? getLocaleContent(item.label)
@@ -67,6 +68,8 @@
               :key="item.type"
               :color="item.type === 'next' ? 'secondary' : undefined"
               :disabled="item.type === 'next' && !isValid"
+              :outlined="item.variant === 'outlined'"
+              :text="item.variant === 'text'"
               :title="
                 Object.keys(item.label).length
                   ? getLocaleContent(item.label)

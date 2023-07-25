@@ -19,11 +19,16 @@ export type MealActionType = (typeof mealActionTypes)[number];
 export type FoodActionType = (typeof foodActionTypes)[number];
 export type ActionType = (typeof actionTypes)[number];
 
+export const actionVariants = ['elevated', 'outlined', 'text'] as const;
+
+export type ActionVariant = (typeof actionVariants)[number];
+
 export type ActionItem = {
   type: ActionType;
   text: LocaleTranslation;
   label: LocaleTranslation;
   color: string | null;
+  variant: ActionVariant;
   icon: string | null;
   layout: PromptLayout[];
 };
