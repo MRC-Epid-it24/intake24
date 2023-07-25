@@ -549,7 +549,7 @@ export const useSurvey = defineStore('survey', {
       if (!this.sameAsBeforeAllowed) return;
 
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
-      if (mainFood.type !== 'encoded-food' || !mainFood.data?.readyMealOption) return;
+      if (mainFood.type !== 'encoded-food') return;
 
       if (
         mainFood.type !== 'encoded-food' ||

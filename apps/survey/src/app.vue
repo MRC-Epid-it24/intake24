@@ -2,19 +2,21 @@
   <v-app :class="{ mobile: isMobile }">
     <loader :show="isAppLoading" />
     <v-navigation-drawer v-model="sidebar" app>
-      <v-list>
-        <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
-          <v-list-item-avatar>
-            <v-icon large>fas fa-circle-user</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title class="font-weight-medium text-h6">
-              {{ userName ?? $t('profile._') }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-divider></v-divider>
+      <template v-if="loggedIn && surveyId">
+        <v-list>
+          <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
+            <v-list-item-avatar>
+              <v-icon large>fas fa-circle-user</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title class="font-weight-medium text-h6">
+                {{ userName ?? $t('profile._') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+      </template>
       <v-list dense nav>
         <v-list-item-group>
           <v-list-item
@@ -129,7 +131,7 @@ import { Loader } from '@intake24/survey/components';
 import { Navigation } from '@intake24/survey/components/layouts';
 import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
-import { useAuth, useSurvey, useUser } from './stores';
+import { useAuth, useSurvey } from './stores';
 
 export default defineComponent({
   name: 'App',

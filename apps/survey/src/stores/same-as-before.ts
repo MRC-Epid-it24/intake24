@@ -33,16 +33,26 @@ export const useSameAsBefore = defineStore('same-as-before', {
       const item = this.items[userId]?.[foodCode];
       if (item?.localeId !== localeId) return undefined;
 
-      return item;
+      if (item.food.data.sameAsBeforeOption) return item;
+
+      this.removeItem(foodCode);
+    },
+
+    removeItem(foodCode: string) {
+      const { userId } = useUser();
+      if (!userId) return undefined;
+
+      const { [foodCode]: remove, ...rest } = this.items[userId] ?? {};
+      this.items = { ...this.items, [userId]: { ...rest } };
     },
 
     saveItem(localeId: string, food: EncodedFood) {
       const { userId } = useUser();
       if (!userId) return;
 
-      if (!this.items[userId]) this.items[userId] = {};
+      if (!food.data.sameAsBeforeOption) return;
 
-      console.log('Saving same as before item', food.data.code);
+      if (!this.items[userId]) this.items[userId] = {};
 
       this.items[userId]![food.data.code] = { food, localeId, createdAt: Date.now() };
     },
