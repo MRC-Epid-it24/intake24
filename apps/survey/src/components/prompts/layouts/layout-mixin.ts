@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { computed, defineComponent, toRefs } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
@@ -8,11 +8,12 @@ import { useLocale } from '@intake24/ui';
 import { promptType } from '@intake24/ui/util';
 
 import { Next } from '../actions';
+import Breadcrumbs from './breadcrumbs.vue';
 
 export default defineComponent({
   name: 'LayoutMixin',
 
-  components: { Next },
+  components: { Next, Breadcrumbs },
 
   props: {
     prompt: {
@@ -44,7 +45,15 @@ export default defineComponent({
     const { foodName } = useFoodUtils(food);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(meal);
 
-    return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime };
+    const promptName = computed(() => {
+      const type = promptType(props.prompt.component);
+
+      return getLocaleContent(props.prompt.i18n.name, {
+        path: `prompts.${type}.name`,
+      });
+    });
+
+    return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime, promptName };
   },
 
   computed: {

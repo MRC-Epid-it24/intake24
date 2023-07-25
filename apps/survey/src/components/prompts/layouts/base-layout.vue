@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-card
-      v-if="localeText || localeDescription"
-      class="px-5 py-4 mb-4"
-      :flat="isMobile"
-      :tile="isMobile"
-    >
-      <h3>
-        <slot name="prompt-text">{{ localeText }}</slot>
-      </h3>
-      <slot name="prompt-description">
-        <div v-if="localeDescription" class="mt-4" v-html="localeDescription"></div>
+    <v-card class="mb-4" :tile="isMobile">
+      <breadcrumbs v-bind="{ food, meal, promptName }"></breadcrumbs>
+      <slot name="prompt-text">
+        <v-card-text v-if="localeText" class="pt-0">
+          <v-divider class="mb-2"></v-divider>
+          <h3>{{ localeText }}</h3>
+        </v-card-text>
       </slot>
     </v-card>
+    <slot name="prompt-description">
+      <v-card v-if="localeDescription" class="mb-4" :tile="isMobile">
+        <div class="pa-4" v-html="localeDescription"></div>
+      </v-card>
+    </slot>
     <slot></slot>
     <div
       v-if="!isMobile || prompt.actions?.both"

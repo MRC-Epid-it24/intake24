@@ -1,6 +1,6 @@
 <template>
   <base-layout v-bind="{ food, prompt, isValid }" @action="action">
-    <v-expansion-panels v-model="panel" :flat="isMobile" :tile="isMobile">
+    <v-expansion-panels v-model="panel" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header>
           {{ $t(`prompts.${type}.typeLabel`) }}

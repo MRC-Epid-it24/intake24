@@ -1,11 +1,15 @@
 <template>
   <div>
-    <v-card v-if="headerText" class="px-5 py-4 mb-4" :flat="isMobile" :tile="isMobile">
-      <h3>
-        <slot name="prompt-text">{{ headerText }}</slot>
-      </h3>
+    <v-card class="mb-4" :tile="isMobile">
+      <breadcrumbs v-bind="{ food, meal, promptName }"></breadcrumbs>
+      <slot name="prompt-text">
+        <v-card-text v-if="localeText" class="pt-0">
+          <v-divider class="mb-2"></v-divider>
+          <h3>{{ localeText }}</h3>
+        </v-card-text>
+      </slot>
     </v-card>
-    <v-card :flat="isMobile" :tile="isMobile">
+    <v-card :tile="isMobile">
       <slot name="prompt-description">
         <div
           v-if="localeDescription"

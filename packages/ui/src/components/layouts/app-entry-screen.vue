@@ -3,7 +3,6 @@
     <v-col cols="12" sm="auto">
       <v-card
         :class="{ 'mt-10': !isMobile }"
-        :flat="isMobile"
         :tile="isMobile"
         :width="!isMobile ? width : undefined"
       >

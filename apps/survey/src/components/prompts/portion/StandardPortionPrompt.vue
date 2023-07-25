@@ -3,7 +3,6 @@
     <v-expansion-panels
       v-if="Object.keys(standardUnitRefs).length"
       v-model="panel"
-      :flat="isMobile"
       :tile="isMobile"
     >
       <v-expansion-panel>

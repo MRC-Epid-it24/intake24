@@ -1,9 +1,5 @@
 <template>
   <v-row class="pt-0" justify="center" :no-gutters="isMobile">
-    <recall-bread-crumbs
-      v-if="promptName"
-      v-bind="{ meals, promptName, selection }"
-    ></recall-bread-crumbs>
     <transition mode="out-in" type="fade">
       <v-alert
         border="left"
@@ -32,13 +28,13 @@
       </transition>
     </v-col>
 
-    <v-col
+    <!-- <v-col
       v-if="showMealList && !hasFinished && meals.length"
       class="meal-list-mobile__wrap"
       cols="12"
     >
       <meal-list-mobile v-bind="{ meals }" @action="action"></meal-list-mobile>
-    </v-col>
+    </v-col> -->
 
     <!-- Context menu for Meal or Food with actions options -->
     <food-mobile-context-menu

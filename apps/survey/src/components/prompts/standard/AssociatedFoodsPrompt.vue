@@ -1,11 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <v-expansion-panels
-      v-model="activePrompt"
-      :flat="isMobile"
-      :tile="isMobile"
-      @change="updatePrompts"
-    >
+    <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
       <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
         <v-expansion-panel-header>
           {{ getLocaleContent(associatedFoodPrompts[index].promptText) }}

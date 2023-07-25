@@ -2,7 +2,7 @@
   <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify="center" :no-gutters="isMobile">
       <v-col cols="12" md="8" sm="9">
-        <v-card :flat="isMobile" :tile="isMobile">
+        <v-card :tile="isMobile">
           <v-card-title>{{ $t('feedback.physicalData.title') }}</v-card-title>
           <v-card-subtitle>{{ $t('feedback.physicalData.subtitle') }}</v-card-subtitle>
           <v-card-text class="pa-4">

@@ -2,7 +2,7 @@
   <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify="center" :no-gutters="isMobile">
       <v-col cols="12" md="8" sm="9">
-        <v-card v-if="profile" :flat="isMobile" :tile="isMobile">
+        <v-card v-if="profile" :tile="isMobile">
           <v-list subheader two-line>
             <v-subheader>{{ $t('profile.info') }}</v-subheader>
             <v-list-item>

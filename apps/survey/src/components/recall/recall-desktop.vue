@@ -1,13 +1,9 @@
 <template>
   <v-row class="pt-2" justify="center" :no-gutters="isMobile">
-    <v-col v-if="showMealList" cols="3">
+    <v-col v-if="showMealList" cols="auto">
       <meal-list v-bind="{ meals }" @action="action"></meal-list>
     </v-col>
     <v-col :cols="showMealList ? 8 : 9">
-      <recall-bread-crumbs
-        v-if="promptName"
-        v-bind="{ meals, promptName, selection }"
-      ></recall-bread-crumbs>
       <transition mode="out-in" name="component-fade">
         <component
           :is="handlerComponent"

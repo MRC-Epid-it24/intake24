@@ -2,7 +2,7 @@
   <v-container :class="{ 'pa-0': isMobile }">
     <v-row justify="center" :no-gutters="isMobile">
       <v-col cols="12" lg="9">
-        <v-card :flat="isMobile" :tile="isMobile">
+        <v-card :tile="isMobile">
           <!-- Survey info -->
           <v-list class="list-no-wrap" subheader two-line>
             <v-subheader>{{ $t('survey.info') }}</v-subheader>
