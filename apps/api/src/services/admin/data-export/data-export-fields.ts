@@ -121,12 +121,12 @@ const dataExportFields = () => {
     {
       id: 'startTime',
       label: 'Start DateTime',
-      value: (food) => food.meal?.submission?.startTime?.toString(),
+      value: (food) => food.meal?.submission?.startTime?.toISOString(),
     },
     {
       id: 'endTime',
       label: 'End DateTime',
-      value: (food) => food.meal?.submission?.endTime?.toString(),
+      value: (food) => food.meal?.submission?.endTime?.toISOString(),
     },
     {
       id: 'recallDuration',
@@ -141,7 +141,7 @@ const dataExportFields = () => {
     {
       id: 'submissionTime',
       label: 'Submission DateTime',
-      value: (food) => food.meal?.submission?.submissionTime?.toString(),
+      value: (food) => food.meal?.submission?.submissionTime?.toISOString(),
     },
     {
       id: 'userAgent',
