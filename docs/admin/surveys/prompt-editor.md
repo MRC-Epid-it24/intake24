@@ -51,6 +51,23 @@ Following variables can be used in the fields:
 - `{food}` - Food name
 - `{item}` - Food name or Meal name depending on prompt level type
 
+## Actions
+
+Actions tab defines list of actions to be performed when prompt is displayed.
+
+- `Enable custom prompt actions` - flag whether to enable custom prompt actions defined in this list
+- `Display both layout actions in mobile UI` - flag whether to display `desktop` actions also in `mobile` UI below the prompt content
+
+### Actions options
+
+- `type` - type of action that should happen when button is clicked
+- `layout` - layout of where the button should be included (`desktop` or `mobile`)
+- `variant` - style variant (`elevated`, `outlined`, `text`)
+- `color` - color variant (`primary`, `secondary`, `success`, `warning`, `error`, color hex code)
+- `icon` - icon, [existing alias](https://github.com/MRC-Epid-it24/intake24/blob/master/apps/survey/src/plugins/vuetify.ts) or [FontAwesome](https://fontawesome.com/search?o=r&m=free) icon name
+- `text` - localized text to be displayed on the button
+- `label` - option localized label to be displayed on the button tooltip. If not specified, `text` is used instead.
+
 ## Conditions
 
 Conditions tab defines list of conditions that needs to be met to display the prompt.
