@@ -1,6 +1,6 @@
 <template>
   <v-row class="pt-2" justify="center" :no-gutters="isMobile">
-    <v-col v-if="showMealList" cols="auto">
+    <v-col v-if="showMealList" cols="3">
       <meal-list v-bind="{ meals }" @action="action"></meal-list>
     </v-col>
     <v-col :cols="showMealList ? 8 : 9">
