@@ -7,10 +7,14 @@ const path = require('path');
 
 const baseUrl =
   'https://raw.githubusercontent.com/MRC-Epid-it24/survey-frontend/master/SurveyClient/src/main/java/uk/ac/ncl/openlab/intake24/client/survey/portionsize';
-const filename = 'StandardUnits_en.properties';
+const baseFilename = 'StandardUnits_{locale}.properties';
 
-const fetchStandardUnits = async () =>
+const locales = ['en', 'en_AU', 'en_NZ', 'ar', 'da', 'pt'];
+const addonLocales = locales.filter((locale) => locale !== 'en');
+
+const fetchStandardUnits = async (locale) =>
   new Promise((resolve, reject) => {
+    const filename = baseFilename.replace('{locale}', locale);
     const url = `${baseUrl}/${filename}`;
 
     const file = fs.createWriteStream(filename);
@@ -22,7 +26,7 @@ const fetchStandardUnits = async () =>
           file.close();
 
           const fileMap = fs
-            .readFileSync('StandardUnits_en.properties', 'utf-8')
+            .readFileSync(filename, 'utf-8')
             .split(/\r?\n/)
             .filter(Boolean)
             .reduce((acc, line) => {
@@ -42,15 +46,9 @@ const fetchStandardUnits = async () =>
               return acc;
             }, {});
 
-          const records = Object.entries(fileMap).map(([id, { estimate_in, how_many }]) => ({
-            id,
-            estimate_in: JSON.stringify({ en: estimate_in }),
-            how_many: JSON.stringify({ en: how_many }),
-          }));
-
           fs.unlinkSync(path.resolve(filename));
 
-          resolve(records);
+          resolve(fileMap);
         })
         .on('error', (err) => {
           reject(err);
@@ -61,7 +59,27 @@ const fetchStandardUnits = async () =>
 module.exports = {
   up: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      const standardUnits = await fetchStandardUnits();
+      const fileMaps = await Promise.all(locales.map((locale) => fetchStandardUnits(locale)));
+      const localeFileMap = fileMaps.reduce((acc, fileMap, index) => {
+        const locale = locales[index];
+        acc[locale] = fileMap;
+        return acc;
+      }, {});
+
+      const standardUnits = Object.entries(localeFileMap.en).map(([id, data]) => {
+        const estimate_in = { en: data.estimate_in };
+        const how_many = { en: data.how_many };
+
+        for (const locale of addonLocales) {
+          if (estimate_in.en !== localeFileMap[locale][id].estimate_in)
+            estimate_in[locale] = localeFileMap[locale][id].estimate_in;
+
+          if (how_many.en !== localeFileMap[locale][id].how_many)
+            how_many[locale] = localeFileMap[locale][id].how_many;
+        }
+
+        return { id, estimate_in: JSON.stringify(estimate_in), how_many: JSON.stringify(how_many) };
+      });
 
       const created_at = new Date();
       const updated_at = created_at;
@@ -76,9 +94,12 @@ module.exports = {
 
   down: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      const standardUnits = await fetchStandardUnits();
-      const id = standardUnits.map(({ id }) => `'${id}'`).join(`,`);
-      await queryInterface.sequelize.query(`DELETE FROM standard_units WHERE id IN (${id});`, {
+      const standardUnits = await fetchStandardUnits('en');
+      const id = Object.entries(standardUnits).map(([id]) => id);
+
+      await queryInterface.sequelize.query(`DELETE FROM standard_units WHERE id IN (:id);`, {
+        type: queryInterface.sequelize.QueryTypes.DELETE,
+        replacements: { id },
         transaction,
       });
     }),

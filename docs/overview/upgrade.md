@@ -45,5 +45,5 @@ Standard units are being moved from V3 translation files to database. To seed th
 ```sh
 cd packages/db
 
-pnpm sequelize db:seed --seed 20220926160654-v3-standard-portions.js --options-path sequelize/foods/options.js
+pnpm sequelize db:seed --seed v3-standard-portions.js --options-path sequelize/foods/options.js
 ```
