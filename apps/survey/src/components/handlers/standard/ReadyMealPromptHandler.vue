@@ -47,10 +47,10 @@ export default defineComponent({
       for (const food of state.value.foods) {
         if (!food.value) continue;
 
-        survey.addFoodFlag({ foodId: food.id, flag: 'ready-meal' });
+        survey.addFoodFlag(food.id, 'ready-meal');
       }
 
-      survey.setMealFlag({ mealId: meal.value.id, flag: 'ready-meal-complete' });
+      survey.addMealFlag(meal.value.id, 'ready-meal-complete');
     };
 
     const action = (type: string, id?: string) => {

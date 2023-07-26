@@ -59,7 +59,7 @@ export default defineComponent({
         });
       }
 
-      survey.addFoodFlag({ foodId, flag: 'same-as-before-complete' });
+      survey.addFoodFlag(foodId, 'same-as-before-complete');
       emit('action', 'next');
     };
 

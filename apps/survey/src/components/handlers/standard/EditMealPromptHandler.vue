@@ -52,7 +52,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['setFoods', 'setMealFlag']),
+    ...mapActions(useSurvey, ['setFoods', 'addMealFlag']),
 
     action(type: string, id?: string) {
       if (type === 'next') this.commitAnswer();
@@ -66,7 +66,7 @@ export default defineComponent({
 
       this.setFoods({ mealId, foods });
       this.clearStoredState();
-      this.setMealFlag({ mealId, flag: 'free-entry-complete' });
+      this.addMealFlag(mealId, 'free-entry-complete');
     },
   },
 });

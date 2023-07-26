@@ -75,7 +75,7 @@ export default defineComponent({
             }
 
             if (infoPrompts.includes(props.prompt.component))
-              survey.addFoodFlag({ foodId: food.id, flag: `${promptId}-acknowledged` });
+              survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
             else
               survey.setFoodCustomPromptAnswer({
                 foodId: food.id,
@@ -91,10 +91,7 @@ export default defineComponent({
             }
 
             if (infoPrompts.includes(props.prompt.component))
-              survey.setMealFlag({
-                mealId: mealOptional.value.id,
-                flag: `${promptId}-acknowledged`,
-              });
+              survey.addMealFlag(mealOptional.value.id, `${promptId}-acknowledged`);
             else
               survey.setMealCustomPromptAnswer({
                 mealId: mealOptional.value.id,
@@ -106,7 +103,7 @@ export default defineComponent({
           }
         }
       } else if (infoPrompts.includes(props.prompt.component)) {
-        survey.setSurveyFlag(`${promptId}-acknowledged`);
+        survey.addFlag(`${promptId}-acknowledged`);
       } else {
         survey.setCustomPromptAnswer({ promptId, answer: state.value });
       }

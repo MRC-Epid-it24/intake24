@@ -92,7 +92,7 @@ export default defineComponent({
       const survey = useSurvey();
 
       survey.updateFood({ foodId: food().id, update: { portionSize } });
-      survey.addFoodFlag({ foodId: food().id, flag: 'portion-size-method-complete' });
+      survey.addFoodFlag(food().id, 'portion-size-method-complete');
 
       clearStoredState();
     };

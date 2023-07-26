@@ -382,14 +382,23 @@ export const useSurvey = defineStore('survey', {
       };
     },
 
-    hasSurveyFlag(flag: SurveyFlag) {
+    hasFlag(flag: SurveyFlag) {
       return this.data.flags.includes(flag);
     },
 
-    setSurveyFlag(flag: SurveyFlag) {
-      if (this.data.flags.includes(flag)) return;
+    addFlag(flag: SurveyFlag | SurveyFlag[]) {
+      const flags = Array.isArray(flag) ? flag : [flag];
 
-      this.data.flags.push(flag);
+      flags.filter((flag) => this.data.flags.includes(flag));
+      if (!flags.length) return;
+
+      this.data.flags.push(...flags);
+    },
+
+    removeFlag(flag: SurveyFlag | SurveyFlag[]) {
+      const flags = Array.isArray(flag) ? flag : [flag];
+
+      this.data.flags = this.data.flags.filter((flag) => !flags.includes(flag as SurveyFlag));
     },
 
     sortMeals() {
@@ -486,12 +495,27 @@ export const useSurvey = defineStore('survey', {
       return id;
     },
 
-    setMealFlag(data: { mealId: string; flag: MealFlag }) {
-      const meal = findMeal(this.data.meals, data.mealId);
+    hasMealFlag(mealId: string, flag: SurveyFlag) {
+      const meal = findMeal(this.data.meals, mealId);
 
-      if (meal.flags.includes(data.flag)) return;
+      return meal.flags.includes(flag);
+    },
 
-      meal.flags.push(data.flag);
+    addMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
+      const meal = findMeal(this.data.meals, mealId);
+      const flags = Array.isArray(flag) ? flag : [flag];
+
+      flags.filter((flag) => meal.flags.includes(flag));
+      if (!flags.length) return;
+
+      meal.flags.push(...flags);
+    },
+
+    removeMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
+      const meal = findMeal(this.data.meals, mealId);
+      const flags = Array.isArray(flag) ? flag : [flag];
+
+      meal.flags = meal.flags.filter((flag) => !flags.includes(flag as MealFlag));
     },
 
     setMealCustomPromptAnswer(data: {
@@ -514,15 +538,26 @@ export const useSurvey = defineStore('survey', {
       food.customPromptAnswers[data.promptId] = data.answer;
     },
 
-    addFoodFlag(data: { foodId: string; flag: FoodFlag }) {
-      const food = findFood(this.data.meals, data.foodId);
-      if (food.flags.includes(data.flag)) return;
+    hasFoodFlag(foodId: string, flag: SurveyFlag) {
+      const food = findFood(this.data.meals, foodId);
 
-      food.flags.push(data.flag);
+      return food.flags.includes(flag);
     },
 
-    removeFoodFlag(foodId: string | FoodState, flag: FoodFlag | FoodFlag[]) {
-      const food = typeof foodId === 'string' ? findFood(this.data.meals, foodId) : foodId;
+    addFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
+      const food = findFood(this.data.meals, foodId);
+      const flags = Array.isArray(flag) ? flag : [flag];
+
+      flags.filter((flag) => food.flags.includes(flag));
+      if (!flags.length) return;
+
+      food.flags.push(...flags);
+
+      if (flags.includes('portion-size-method-complete')) this.saveSameAsBefore(foodId);
+    },
+
+    removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
+      const food = findFood(this.data.meals, foodId);
       const flags = Array.isArray(flag) ? flag : [flag];
 
       food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
@@ -543,13 +578,22 @@ export const useSurvey = defineStore('survey', {
           data.food
         );
       }
+    },
 
-      // Save to `same-as-before` for encoded foods with finished portion size estimation
+    /*
+     * Save to `same-as-before` for encoded foods with finished portion size estimation
+     * - triggered when 'portion-size-method-complete' flag added
+     */
+    saveSameAsBefore(foodId: string) {
       // TODO: check associated foods ?
       if (!this.sameAsBeforeAllowed) return;
 
+      const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
+        this.data.meals,
+        foodId
+      );
+
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
-      if (mainFood.type !== 'encoded-food') return;
 
       if (
         mainFood.type !== 'encoded-food' ||
@@ -576,7 +620,7 @@ export const useSurvey = defineStore('survey', {
       }
       if (food.type === 'missing-food') flags.push('missing-food-complete');
 
-      this.removeFoodFlag(food, flags);
+      this.removeFoodFlag(foodId, flags);
     },
 
     updateFood(data: {

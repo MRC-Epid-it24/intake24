@@ -32,12 +32,12 @@ export default defineComponent({
       const [startMeal, endMeal] = meals;
 
       if (startMeal && endMeal) {
-        survey.setMealFlag({ mealId: startMeal.id, flag: 'no-meals-between' });
+        survey.addMealFlag(startMeal.id, 'no-meals-between');
         return;
       }
 
-      if (startMeal) survey.setMealFlag({ mealId: startMeal.id, flag: 'no-meals-before' });
-      if (endMeal) survey.setMealFlag({ mealId: endMeal.id, flag: 'no-meals-after' });
+      if (startMeal) survey.addMealFlag(startMeal.id, 'no-meals-before');
+      if (endMeal) survey.addMealFlag(endMeal.id, 'no-meals-after');
     };
 
     const action = async (type: 'addMeal' | 'next') => {

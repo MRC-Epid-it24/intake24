@@ -65,7 +65,7 @@ export default defineComponent({
         throw new Error('Missing food prompt: missing data');
 
       survey.updateFood({ foodId: food().id, update: { info } });
-      survey.addFoodFlag({ foodId: food().id, flag: 'missing-food-complete' });
+      survey.addFoodFlag(food().id, 'missing-food-complete');
 
       clearStoredState();
     };

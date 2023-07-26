@@ -42,7 +42,7 @@ export default defineComponent({
     );
 
     const single = () => {
-      survey.addFoodFlag({ foodId: freeTextFood().id, flag: 'split-food-complete' });
+      survey.addFoodFlag(freeTextFood().id, 'split-food-complete');
       emit('action', 'next');
     };
 
@@ -68,7 +68,7 @@ export default defineComponent({
       });
 
       survey.updateFood({ foodId, update: { description: first } });
-      survey.addFoodFlag({ foodId, flag: 'split-food-complete' });
+      survey.addFoodFlag(foodId, 'split-food-complete');
       emit('action', 'next');
     };
 

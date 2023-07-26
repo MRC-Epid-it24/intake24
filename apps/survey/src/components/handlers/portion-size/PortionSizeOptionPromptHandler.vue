@@ -76,7 +76,7 @@ export default defineComponent({
       }
 
       survey.updateFood({ foodId: food.id, update });
-      survey.addFoodFlag({ foodId: food.id, flag: 'portion-size-option-complete' });
+      survey.addFoodFlag(food.id, 'portion-size-option-complete');
 
       clearStoredState();
     };

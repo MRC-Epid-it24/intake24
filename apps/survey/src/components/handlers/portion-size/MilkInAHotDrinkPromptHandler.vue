@@ -102,7 +102,7 @@ export default defineComponent({
         foodId: parentFood.value.id,
         update: { portionSize: drinkPortionSize },
       });
-      survey.addFoodFlag({ foodId: food().id, flag: 'portion-size-method-complete' });
+      survey.addFoodFlag(food().id, 'portion-size-method-complete');
 
       clearStoredState();
     };
