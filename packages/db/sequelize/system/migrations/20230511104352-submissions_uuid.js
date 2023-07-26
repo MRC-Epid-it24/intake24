@@ -281,6 +281,10 @@ module.exports = {
             type: Sequelize.BIGINT,
             allowNull: false,
           },
+          index: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
           name: {
             type: Sequelize.STRING(512),
             allowNull: false,
@@ -306,7 +310,7 @@ module.exports = {
       );
 
       await queryInterface.sequelize.query(
-        'INSERT INTO survey_submission_missing_foods (id, meal_id_old, "name", brand, description, portion_size, leftovers) SELECT uuid_generate_v4(), meal_id, "name", brand, description, portion_size, leftovers FROM survey_submission_missing_foods_old',
+        'INSERT INTO survey_submission_missing_foods (id, index, meal_id_old, "name", brand, description, portion_size, leftovers) SELECT uuid_generate_v4(), id, meal_id, "name", brand, description, portion_size, leftovers FROM survey_submission_missing_foods_old',
         { transaction }
       );
 
@@ -327,6 +331,12 @@ module.exports = {
 
       await queryInterface.addIndex('survey_submission_missing_foods', ['parent_id'], {
         name: 'survey_submission_missing_foods_parent_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('survey_submission_missing_foods', ['index'], {
+        name: 'survey_submission_missing_foods_index_idx',
         indexType: 'btree',
         transaction,
       });
@@ -395,6 +405,10 @@ module.exports = {
             type: Sequelize.BIGINT,
             allowNull: false,
           },
+          index: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+          },
           code: {
             type: Sequelize.STRING(32),
             allowNull: false,
@@ -452,7 +466,7 @@ module.exports = {
       );
 
       await queryInterface.sequelize.query(
-        'INSERT INTO survey_submission_foods (id, id_old, meal_id_old, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code) SELECT uuid_generate_v4(), id, meal_id, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code FROM survey_submission_foods_old',
+        'INSERT INTO survey_submission_foods (id, id_old, index, meal_id_old, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code) SELECT uuid_generate_v4(), id, id, meal_id, code, english_name, local_name, ready_meal, search_term, portion_size_method_id, reasonable_amount, food_group_id, food_group_english_name, food_group_local_name, brand, nutrient_table_id, nutrient_table_code FROM survey_submission_foods_old',
         { transaction }
       );
 
@@ -486,6 +500,12 @@ module.exports = {
 
       await queryInterface.addIndex('survey_submission_foods', ['parent_id'], {
         name: 'survey_submission_foods_parent_id_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('survey_submission_foods', ['index'], {
+        name: 'survey_submission_foods_index_idx',
         indexType: 'btree',
         transaction,
       });

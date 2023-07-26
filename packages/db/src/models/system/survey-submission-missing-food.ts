@@ -44,6 +44,12 @@ export default class SurveySubmissionMissingFood extends BaseModel<
   declare mealId: string;
 
   @Column({
+    allowNull: false,
+    type: DataType.INTEGER,
+  })
+  declare index: number;
+
+  @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })

@@ -116,13 +116,11 @@ const surveySubmissionService = ({
   /**
    * Collect foods from submissions state
    *
-   * @param {string} mealId
-   * @param {FoodLocalMap} foods
-   * @param {FoodGroupMap} foodGroups
-   * @returns
+   * @param {CollectFoodsOps} ops
    */
   const collectFoods =
-    (ops: CollectFoodsOps) => (collectedFoods: CollectedFoods, foodState: FoodState) => {
+    (ops: CollectFoodsOps) =>
+    (collectedFoods: CollectedFoods, foodState: FoodState): CollectedFoods => {
       const { foodGroups, foods, mealId, parentId } = ops;
 
       if (foodState.type === 'free-text') {
@@ -137,8 +135,15 @@ const surveySubmissionService = ({
           return collectedFoods;
         }
 
-        collectedFoods.missingInputs.push({ ...info, id: randomUUID(), parentId, mealId });
+        collectedFoods.missingInputs.push({
+          ...info,
+          id: randomUUID(),
+          parentId,
+          mealId,
+          index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
+        });
         collectedFoods.missingStates.push(foodState);
+
         return collectedFoods;
       }
 
@@ -194,6 +199,7 @@ const surveySubmissionService = ({
         id,
         parentId,
         mealId,
+        index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
         code,
         englishName,
         localName,
@@ -210,18 +216,10 @@ const surveySubmissionService = ({
       });
       collectedFoods.states.push(foodState);
 
-      if (linkedFoods.length) {
-        const { states, inputs, missingInputs, missingStates } = linkedFoods.reduce(
-          collectFoods({ foodGroups, foods, mealId, parentId: id }),
-          { inputs: [], missingInputs: [], states: [], missingStates: [] }
-        );
-        collectedFoods.inputs.push(...inputs);
-        collectedFoods.missingInputs.push(...missingInputs);
-        collectedFoods.states.push(...states);
-        collectedFoods.missingStates.push(...missingStates);
-      }
-
-      return collectedFoods;
+      return linkedFoods.reduce(
+        collectFoods({ foodGroups, foods, mealId, parentId: id }),
+        collectedFoods
+      );
     };
 
   const collectFoodCompositionData = (

@@ -236,6 +236,14 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const food = async (): Promise<ExportField[]> => [
+    // Common fields for food and missing food
+    {
+      id: 'index',
+      label: 'Food index',
+      value: 'index',
+    },
+
+    // Food fields
     {
       id: 'foodId',
       label: 'Food ID',
@@ -267,9 +275,7 @@ const dataExportFields = () => {
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'nutrientTableCode' },
 
-    /*
-     * Missing food fields
-     */
+    // Missing food fields
     {
       id: 'missingId',
       label: 'Missing ID',

@@ -240,7 +240,10 @@ export interface EncodedFood extends AbstractFoodState {
 export interface MissingFood extends AbstractFoodState {
   type: 'missing-food';
   searchTerm: string;
-  info: SurveySubmissionMissingFoodCreationAttributes | null;
+  info: Pick<
+    SurveySubmissionMissingFoodCreationAttributes,
+    'name' | 'brand' | 'description' | 'leftovers' | 'portionSize'
+  > | null;
 }
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood;

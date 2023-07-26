@@ -112,6 +112,7 @@ const dataExportService = ({
       ['meal', 'submission', 'submissionTime', 'ASC'],
       ['meal', 'hours', 'ASC'],
       ['meal', 'minutes', 'ASC'],
+      ['index', 'ASC'],
     ];
 
     const foods = {
@@ -180,10 +181,9 @@ const dataExportService = ({
         const groupedMissingFoods = groupBy(missingFoods, 'mealId');
 
         for (const id of mealId) {
-          if (groupedFoods[id]?.length) groupedFoods[id].forEach((food) => inputStream.push(food));
-
-          if (groupedMissingFoods[id]?.length)
-            groupedMissingFoods[id].forEach((missingFood) => inputStream.push(missingFood));
+          [...(groupedFoods[id] ?? []), ...(groupedMissingFoods[id] ?? [])]
+            .sort(({ index: a }, { index: b }) => a - b)
+            .forEach((food) => inputStream.push(food));
         }
       }
 
