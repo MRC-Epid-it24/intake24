@@ -25,6 +25,7 @@ const themeColor = '#EF6C00';
 
 export default defineConfig(({ mode }) => {
   const {
+    API_HOST,
     BASE_URL: base = '/',
     OUTPUT_DIR: outDir = 'dist',
     PRODUCTION_SOURCE_MAP,
@@ -92,7 +93,7 @@ export default defineConfig(({ mode }) => {
       https,
       proxy: {
         '/api': {
-          target: 'http://localhost:3100',
+          target: API_HOST,
           changeOrigin: true,
           secure: false,
         },
@@ -104,7 +105,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [VuetifyResolver()],
         directoryAsNamespace: true,
       }),
-      mkcert(),
+      https ? mkcert() : undefined,
       unFonts({
         google: {
           families: [
@@ -169,6 +170,6 @@ export default defineConfig(({ mode }) => {
           ], */
         },
       }),
-    ],
+    ].filter(Boolean),
   };
 });
