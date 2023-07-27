@@ -213,7 +213,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       return;
     }
 
-    await dbJob.update({ startedAt: new Date() });
+    await dbJob.update({ progress: 0, startedAt: new Date() });
 
     const newJob = ioc.resolve<Job<typeof dbJob.type>>(name);
     await newJob.run(job);
