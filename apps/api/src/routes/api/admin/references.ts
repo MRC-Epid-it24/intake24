@@ -50,7 +50,7 @@ export default () => {
     '/image-maps',
     anyPermission(['fdbs', 'guide-images']),
     browse,
-    wrapAsync(referenceController.guideImages)
+    wrapAsync(referenceController.imageMaps)
   );
 
   router.get(
