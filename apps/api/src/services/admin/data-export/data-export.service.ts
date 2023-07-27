@@ -103,6 +103,7 @@ const dataExportService = ({
       include: [{ association: 'submission', required: true, where: surveySubmissionConditions }],
       order: [
         ['submission', 'submissionTime', 'ASC'],
+        ['submission', 'id', 'ASC'],
         ['hours', 'ASC'],
         ['minutes', 'ASC'],
       ],
@@ -110,6 +111,7 @@ const dataExportService = ({
 
     const order: Order = [
       ['meal', 'submission', 'submissionTime', 'ASC'],
+      ['meal', 'submission', 'id', 'ASC'],
       ['meal', 'hours', 'ASC'],
       ['meal', 'minutes', 'ASC'],
       ['index', 'ASC'],
@@ -167,7 +169,20 @@ const dataExportService = ({
           limit: difference > 0 ? batchSize - difference : batchSize,
         });
 
-        const mealId = meals.map(({ id }) => id);
+        const mealId: string[] = [];
+        const mealIndex: Record<string, number> = {};
+
+        let currentIndex = 0;
+        const mealCount = meals.length;
+        meals.forEach(({ id, surveySubmissionId }, index, array) => {
+          mealId.push(id);
+          mealIndex[id] = currentIndex;
+
+          currentIndex++;
+
+          if (index + 1 < mealCount && surveySubmissionId !== array[index + 1].surveySubmissionId)
+            currentIndex = 0;
+        });
 
         const [foods, missingFoods] = await Promise.all([
           SurveySubmissionFood.findAll({ ...options.foods, where: { mealId } }),
@@ -183,7 +198,7 @@ const dataExportService = ({
         for (const id of mealId) {
           [...(groupedFoods[id] ?? []), ...(groupedMissingFoods[id] ?? [])]
             .sort(({ index: a }, { index: b }) => a - b)
-            .forEach((food) => inputStream.push(food));
+            .forEach((food) => inputStream.push({ food, custom: { mealIndex: mealIndex[id] } }));
         }
       }
 

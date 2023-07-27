@@ -1,50 +1,55 @@
 import type { FieldInfo } from '@json2csv/node';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { SurveySubmissionFood } from '@intake24/db';
 
-import type { ExportField, ExportFieldTransform } from './data-export-fields';
+import type { ExportField, ExportFieldTransform, ExportRow } from './data-export-fields';
 
-export type ExportFieldInfo = FieldInfo<SurveySubmissionFood>;
+export type ExportFieldInfo = FieldInfo<ExportRow>;
 
-export type ExportFieldTransformCallback<T = SurveySubmissionFood> = (
+export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField
 ) => ExportFieldTransform<T>;
 
 export const userCustomFieldValue: ExportFieldTransformCallback =
   (field: ExportField): ExportFieldTransform =>
-  (food) =>
+  ({ food }) =>
     food.meal?.submission?.user?.customFields?.find((item) => field.id === item.name)?.value;
 
 export const surveyCustomFieldValue: ExportFieldTransformCallback =
   (field: ExportField): ExportFieldTransform =>
-  (food) =>
+  ({ food }) =>
     food.meal?.submission?.customFields?.find((item) => field.id === item.name)?.value;
 
 export const mealCustomFieldValue: ExportFieldTransformCallback =
   (field: ExportField): ExportFieldTransform =>
-  (food) =>
+  ({ food }) =>
     food.meal?.customFields?.find((item) => field.id === item.name)?.value;
 
 export const foodCustomFieldValue: ExportFieldTransformCallback =
   (field: ExportField): ExportFieldTransform =>
-  (food) =>
-    food.customFields?.find((item) => field.id === item.name)?.value;
+  ({ food }) =>
+    'customFields' in food
+      ? food.customFields?.find((item) => field.id === item.name)?.value
+      : undefined;
 
 export const foodFieldValue =
   (field: ExportField): ExportFieldTransform =>
-  (food: SurveySubmissionFood) =>
-    food.fields?.find((item) => field.id === item.fieldName)?.value;
+  ({ food }) =>
+    'fields' in food ? food.fields?.find((item) => field.id === item.fieldName)?.value : undefined;
 
 export const foodNutrientValue =
   (field: ExportField): ExportFieldTransform =>
-  (food: SurveySubmissionFood) =>
-    food.nutrients?.find((item) => field.id === item.nutrientTypeId)?.amount;
+  ({ food }) =>
+    'nutrients' in food
+      ? food.nutrients?.find((item) => field.id === item.nutrientTypeId)?.amount
+      : undefined;
 
 export const portionSizeValue =
   (field: ExportField): ExportFieldTransform =>
-  (food) =>
-    food.portionSizes?.find((item) => field.id === item.name)?.value;
+  ({ food }) =>
+    'portionSizes' in food
+      ? food.portionSizes?.find((item) => field.id === item.name)?.value
+      : undefined;
 
 const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) => {
   /**
