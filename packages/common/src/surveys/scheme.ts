@@ -59,7 +59,8 @@ export type ExportSectionId =
   | 'user'
   | 'userCustom'
   | 'survey'
-  | 'surveyCustom'
+  | 'submission'
+  | 'submissionCustom'
   | 'meal'
   | 'mealCustom'
   | 'food'
@@ -84,7 +85,8 @@ export const defaultExport: ExportSection[] = [
   { id: 'user', fields: [] },
   { id: 'userCustom', fields: [] },
   { id: 'survey', fields: [] },
-  { id: 'surveyCustom', fields: [] },
+  { id: 'submission', fields: [] },
+  { id: 'submissionCustom', fields: [] },
   { id: 'meal', fields: [] },
   { id: 'mealCustom', fields: [] },
   { id: 'food', fields: [] },

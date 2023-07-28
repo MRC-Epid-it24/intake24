@@ -406,7 +406,7 @@ const surveySubmissionService = ({
       submissionNotificationUrl,
     } = survey;
 
-    const surveyCustomPrompts = [...preMeals, ...postMeals]
+    const submissionCustomPrompts = [...preMeals, ...postMeals]
       .filter(({ type }) => type === 'custom')
       .map(({ id }) => id);
 
@@ -443,12 +443,12 @@ const surveySubmissionService = ({
         { transaction }
       );
 
-      // Collect survey custom fields
-      const surveyCustomFieldInputs = collectCustomAnswers(
+      // Collect submission custom fields
+      const submissionCustomFieldInputs = collectCustomAnswers(
         'surveySubmissionId',
         surveySubmissionId,
         state.customPromptAnswers,
-        surveyCustomPrompts
+        submissionCustomPrompts
       );
 
       // Collect meals
@@ -480,7 +480,7 @@ const surveySubmissionService = ({
           userId,
           params: { localeCode, foodCodes },
         }),
-        SurveySubmissionCustomField.bulkCreate(surveyCustomFieldInputs, { transaction }),
+        SurveySubmissionCustomField.bulkCreate(submissionCustomFieldInputs, { transaction }),
         SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
       ]);
 

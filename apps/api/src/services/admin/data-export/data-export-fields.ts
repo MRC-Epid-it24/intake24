@@ -47,7 +47,7 @@ const dataExportFields = () => {
   const customPromptFilter = ({ type }: Prompt): boolean => type === 'custom';
 
   /**
-   * Default user fields
+   * User fields
    *
    * @returns {Promise<ExportField[]>}
    */
@@ -77,14 +77,6 @@ const dataExportFields = () => {
       label: 'User Simple Name',
       value: ({ food }) => food.meal?.submission?.user?.simpleName,
     },
-    {
-      id: 'username',
-      label: 'Survey Alias / username',
-      value: ({ food }) => {
-        const aliases = food.meal?.submission?.user?.aliases;
-        return aliases && aliases.length ? aliases[0].username : undefined;
-      },
-    },
   ];
 
   /**
@@ -105,20 +97,36 @@ const dataExportFields = () => {
   };
 
   /**
-   * Default survey fields
+   * Survey fields
    *
    * @returns {Promise<ExportField[]>}
    */
   const survey = async (): Promise<ExportField[]> => [
     {
-      id: 'submissionId',
-      label: 'Submission ID',
-      value: ({ food }) => food.meal?.submission?.id,
-    },
-    {
       id: 'surveyId',
       label: 'Survey ID',
       value: ({ food }) => food.meal?.submission?.surveyId,
+    },
+    {
+      id: 'username',
+      label: 'Survey Alias / username',
+      value: ({ food }) => {
+        const aliases = food.meal?.submission?.user?.aliases;
+        return aliases && aliases.length ? aliases[0].username : undefined;
+      },
+    },
+  ];
+
+  /**
+   * Submission fields
+   *
+   * @returns {Promise<ExportField[]>}
+   */
+  const submission = async (): Promise<ExportField[]> => [
+    {
+      id: 'submissionId',
+      label: 'Submission ID',
+      value: ({ food }) => food.meal?.submission?.id,
     },
     {
       id: 'startTime',
@@ -192,11 +200,11 @@ const dataExportFields = () => {
   ];
 
   /**
-   * Survey custom fields
+   * Submission custom fields
    *
    * @returns {Promise<ExportField[]>}
    */
-  const surveyCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
+  const submissionCustom = async (surveyScheme: SurveyScheme): Promise<ExportField[]> => {
     const { preMeals, postMeals, submission } = surveyScheme.prompts;
     return [...preMeals, ...postMeals, ...submission]
       .filter(customPromptFilter)
@@ -204,7 +212,7 @@ const dataExportFields = () => {
   };
 
   /**
-   * Default meal fields
+   * Meal fields
    *
    * @returns {Promise<ExportField[]>}
    */
@@ -234,14 +242,14 @@ const dataExportFields = () => {
   };
 
   /**
-   * Default food fields
+   * Food fields
    *
    * @returns {Promise<ExportField[]>}
    */
   const food = async (): Promise<ExportField[]> => [
     // Common fields for food and missing food
     {
-      id: 'index',
+      id: 'foodIndex',
       label: 'Food index',
       value: 'food.index',
     },
@@ -305,7 +313,7 @@ const dataExportFields = () => {
     surveyScheme.prompts.meals.foods.filter(customPromptFilter).map(customPromptMapper);
 
   /**
-   * Default food composition fields
+   * Food composition fields
    *
    * @returns {Promise<ExportField[]>}
    */
@@ -318,7 +326,7 @@ const dataExportFields = () => {
   };
 
   /**
-   * Default food nutrient fields
+   * Food nutrient fields
    *
    * @returns {Promise<ExportField[]>}
    */
@@ -329,7 +337,7 @@ const dataExportFields = () => {
   };
 
   /**
-   * Default portion size fields
+   * Portion size fields
    * TODO: Pull from DB? labels to translations?
    *
    * @returns {Promise<ExportField[]>}
@@ -408,7 +416,8 @@ const dataExportFields = () => {
     user,
     userCustom,
     survey,
-    surveyCustom,
+    submission,
+    submissionCustom,
     meal,
     mealCustom,
     food,
