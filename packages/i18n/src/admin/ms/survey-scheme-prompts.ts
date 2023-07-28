@@ -1,0 +1,25 @@
+import type { LocaleMessageObject } from 'vue-i18n';
+
+const surveySchemePrompts: LocaleMessageObject = {
+  _: 'Scheme prompt',
+  id: 'Scheme ID',
+  title: 'Scheme prompts',
+  read: 'Scheme prompt detail',
+  create: 'Add scheme prompt',
+  edit: 'Edit scheme prompt',
+  delete: 'Delete scheme prompt',
+
+  editTemplate: 'Edit prompt template',
+  sync: {
+    _: 'Synchronization',
+    tab: 'Synchronization',
+    synchronize: 'Synchronize',
+    confirm: 'Synchronize template with scheme',
+    title: 'List of schemes containing prompt with ID: {id}',
+    true: 'Prompt is synchronized',
+    false: 'Prompt is not synchronized',
+    noSchemes: 'No scheme contains this template yet.',
+  },
+};
+
+export default surveySchemePrompts;
