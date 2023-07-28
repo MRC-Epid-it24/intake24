@@ -33,8 +33,8 @@ export const sidebar = {
           link: '/overview/get-started',
         },
         {
-          text: 'Upgrade',
-          link: '/overview/upgrade',
+          text: 'Database',
+          link: '/overview/database',
         },
       ],
     },
