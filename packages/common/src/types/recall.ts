@@ -242,7 +242,7 @@ export interface MissingFood extends AbstractFoodState {
   searchTerm: string;
   info: Pick<
     SurveySubmissionMissingFoodCreationAttributes,
-    'name' | 'brand' | 'description' | 'leftovers' | 'portionSize'
+    'name' | 'brand' | 'description' | 'leftovers' | 'portionSize' | 'barcode'
   > | null;
 }
 

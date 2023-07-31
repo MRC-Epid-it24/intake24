@@ -34,7 +34,7 @@
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <barcode-input :model-value.sync="info.brand"></barcode-input>
+            <barcode-input :model-value.sync="info.barcode"></barcode-input>
           </template>
           <v-btn :block="isMobile" color="secondary" :disabled="!info.description" @click="confirm">
             {{ $t('common.action.continue') }}

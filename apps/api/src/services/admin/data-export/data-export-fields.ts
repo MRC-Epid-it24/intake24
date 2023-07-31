@@ -279,6 +279,11 @@ const dataExportFields = () => {
       value: 'food.foodGroupLocalName',
     },
     {
+      id: 'barcode',
+      label: 'Barcode',
+      value: ({ food }) => (food instanceof SurveySubmissionFood ? food.barcode : undefined),
+    },
+    {
       id: 'brand',
       label: 'Brand',
       value: ({ food }) => (food instanceof SurveySubmissionFood ? food.brand : undefined),
@@ -294,6 +299,11 @@ const dataExportFields = () => {
     },
     { id: 'missingParentId', label: 'Missing parent food ID', value: 'food.parentId' },
     { id: 'missingName', label: 'Missing name', value: 'food.name' },
+    {
+      id: 'missingBarcode',
+      label: 'Missing barcode',
+      value: ({ food }) => (food instanceof SurveySubmissionMissingFood ? food.barcode : undefined),
+    },
     {
       id: 'missingBrand',
       label: 'Missing brand',

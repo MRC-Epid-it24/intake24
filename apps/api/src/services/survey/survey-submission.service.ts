@@ -210,7 +210,8 @@ const surveySubmissionService = ({
         foodGroupId,
         foodGroupEnglishName,
         foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
-        brand: brandNames.join(' '),
+        brand: brandNames.join(' ').trim() || null,
+        barcode: null,
         nutrientTableId: nutrientTableRecord.nutrientTableId,
         nutrientTableCode: nutrientTableRecord.nutrientTableRecordId,
       });

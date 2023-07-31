@@ -79,6 +79,12 @@ export default class SurveySubmissionMissingFood extends BaseModel<
   })
   declare leftovers: string | null;
 
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(128),
+  })
+  declare barcode: string | null;
+
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   declare meal?: NonAttribute<SurveySubmissionMeal>;
 }

@@ -122,10 +122,10 @@ export default class SurveySubmissionFood extends BaseModel<
   declare foodGroupLocalName: CreationOptional<string | null>;
 
   @Column({
-    allowNull: false,
+    allowNull: true,
     type: DataType.STRING(128),
   })
-  declare brand: string;
+  declare brand: string | null;
 
   @Column({
     allowNull: false,
@@ -138,6 +138,12 @@ export default class SurveySubmissionFood extends BaseModel<
     type: DataType.STRING(64),
   })
   declare nutrientTableCode: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(128),
+  })
+  declare barcode: string | null;
 
   @BelongsTo(() => SurveySubmissionMeal, 'mealId')
   declare meal?: NonAttribute<SurveySubmissionMeal>;
