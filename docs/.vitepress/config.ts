@@ -33,4 +33,8 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/MRC-Epid-it24/intake24' },
     ],
   },
+
+  sitemap: {
+    hostname: 'https://docs.intake24.org'
+  }
 });
