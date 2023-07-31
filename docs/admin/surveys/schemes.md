@@ -181,6 +181,8 @@ List of available nutrient type fields
 
 List of portion size fields based on collection portion size methods
 
+- `portion` - Stringified whole portion size object
+- `portionMethod` - Portion size method ID
+- `portionWeight` - Calculated portion weight (`servingWeight` - `leftoversWeight`)
 - `servingWeight` - Food weight in grams
 - `leftoversWeight` - Leftovers weight in grams
-- `portionWeight` - Calculated portion weight (`servingWeight` - `leftoversWeight`)

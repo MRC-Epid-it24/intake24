@@ -1,5 +1,6 @@
 import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash';
+import stringify from 'safe-stable-stringify';
 import uaParser from 'ua-parser-js';
 
 import type { Prompt } from '@intake24/common/prompts';
@@ -353,27 +354,26 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const portionSizes = async (): Promise<ExportField[]> => [
-    { id: 'bowl', label: 'Bowl' },
-    { id: 'bowlIndex', label: 'Bowl Index' },
-    { id: 'containerIndex', label: 'Container Idx' },
-    { id: 'drinkware-id', label: 'Drinkware ID' },
-    { id: 'fillLevel', label: 'Fill Level' },
-    { id: 'guide-image-id', label: 'Guide Image ID' },
-    { id: 'imageUrl', label: 'Image URL' },
-    { id: 'initial-fill-level', label: 'Initial Fill Level' },
-    { id: 'leftovers', label: 'Leftovers' },
-    { id: 'leftovers-image-set', label: 'Leftovers Image Set' },
-    { id: 'leftoversChoiceIndex', label: 'Leftovers Choice Idx' },
-    { id: 'leftoversImage', label: 'Leftovers image' },
-    { id: 'leftoversLevel', label: 'Leftovers Level' },
-    { id: 'leftoversWeight', label: 'Leftovers Weight' },
-    { id: 'leftoversWeightFactor', label: 'Leftovers Weight Factor' },
-    { id: 'milkLevelChoice', label: 'Milk Level Choice' },
-    { id: 'milkLevelImage', label: 'Milk Level Image' },
-    { id: 'milkPartIndex', label: 'Milk Part Index' },
-    { id: 'milkVolumePercentage', label: 'Milk Volume Percentage' },
-    { id: 'objectIndex', label: 'Object Index' },
-    { id: 'objectWeight', label: 'Object Weight' },
+    { id: 'portionMethod', label: 'Portion method', value: 'food.portionSizeMethodId' },
+    // Stringified portion size fields
+    {
+      id: 'portion',
+      label: 'Portion',
+      value: ({ food }) => {
+        if (!('portionSizes' in food)) return undefined;
+
+        return stringify(
+          food.portionSizes?.reduce(
+            (acc, item) => {
+              acc[item.name] = item.value;
+              return acc;
+            },
+            {} as Record<string, string>
+          )
+        );
+      },
+    },
+    // servingWeight - leftoversWeight
     {
       id: 'portionWeight',
       label: 'Portion Weight',
@@ -394,6 +394,35 @@ const dataExportFields = () => {
         return servingWeight - leftoversWeight;
       },
     },
+
+    { id: 'bowl', label: 'Bowl' },
+    { id: 'bowlId', label: 'Bowl ID' },
+    { id: 'bowlIndex', label: 'Bowl Index' },
+    { id: 'containerId', label: 'Container ID' },
+    { id: 'containerIndex', label: 'Container Idx' },
+    { id: 'count', label: 'Count' },
+    { id: 'drinkware-id', label: 'Drinkware ID' },
+    { id: 'fillLevel', label: 'Fill Level' },
+    { id: 'guide-image-id', label: 'Guide Image ID' },
+    { id: 'imageUrl', label: 'Image URL' },
+    { id: 'initial-fill-level', label: 'Initial Fill Level' },
+    { id: 'leftovers', label: 'Leftovers' },
+    { id: 'leftovers-image-set', label: 'Leftovers Image Set' },
+    { id: 'leftoversChoiceIndex', label: 'Leftovers Choice Idx' },
+    { id: 'leftoversImage', label: 'Leftovers image' },
+    { id: 'leftoversLevel', label: 'Leftovers Level' },
+    { id: 'leftoversWeight', label: 'Leftovers Weight' },
+    { id: 'leftoversWeightFactor', label: 'Leftovers Weight Factor' },
+    { id: 'milkLevelChoice', label: 'Milk Level Choice' },
+    { id: 'milkLevelId', label: 'Milk Level ID' },
+    { id: 'milkLevelImage', label: 'Milk Level Image' },
+    { id: 'milkPartIndex', label: 'Milk Part Index' },
+    { id: 'milkVolumePercentage', label: 'Milk Volume Percentage' },
+    { id: 'objectId', label: 'Object ID' },
+    { id: 'objectIndex', label: 'Object Index' },
+    { id: 'objectWeight', label: 'Object Weight' },
+    { id: 'portionIndex', label: 'Portion Index' },
+    { id: 'portionValue', label: 'Portion Value' },
     { id: 'quantity', label: 'Quantity' },
     { id: 'reason', label: 'Reason' },
     { id: 'serving-image-set', label: 'As served Image Set' },
@@ -402,7 +431,20 @@ const dataExportFields = () => {
     { id: 'servingWeight', label: 'As served Weight' },
     { id: 'servingWeightFactor', label: 'As served weight factor' },
     { id: 'skip-fill-level', label: 'Skip Fill Level' },
+    { id: 'sliceId', label: 'sliceId' },
+    { id: 'sliceIndex', label: 'sliceIndex' },
+    { id: 'sliceImage', label: 'sliceImage' },
+    { id: 'sliceQuantity', label: 'sliceQuantity' },
+    { id: 'thicknessId', label: 'thicknessId' },
+    { id: 'thicknessIndex', label: 'thicknessIndex' },
+    { id: 'thicknessImage', label: 'thicknessImage' },
     { id: 'type', label: 'Type' },
+    { id: 'typeId', label: 'typeId' },
+    { id: 'typeIndex', label: 'typeIndex' },
+    { id: 'typeImage', label: 'typeImage' },
+    { id: 'unitName', label: 'unitName' },
+    { id: 'unitWeight', label: 'unitWeight' },
+    { id: 'unitOmitFoodDescription', label: 'unitOmitFoodDescription' },
     { id: 'unit-choice', label: 'Unit Choice' },
     { id: 'unit0-name', label: 'unit0-name' },
     { id: 'unit0-omit-food-description', label: 'unit0-omit-food-description' },
