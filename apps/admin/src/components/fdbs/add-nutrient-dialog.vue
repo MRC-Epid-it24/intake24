@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type {
   FoodDatabaseRefs,
@@ -128,10 +128,10 @@ export default defineComponent({
   emits: ['add'],
 
   setup(props) {
-    const selectedTableId = ref<string>(
+    const selectedRecordId = ref<string | null>(null);
+    const selectedTableId = computed(() =>
       props.nutrientTables.length ? props.nutrientTables[0].id : ':id'
     );
-    const selectedRecordId = ref<string | null>(null);
 
     const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
       NutrientTableRecordsResponse['data'][number]

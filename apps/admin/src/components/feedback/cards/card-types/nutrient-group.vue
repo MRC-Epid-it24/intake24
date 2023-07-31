@@ -93,7 +93,7 @@ import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { NutrientGroup } from '@intake24/common/feedback';
+import type { NutrientGroupCard } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 
@@ -106,27 +106,27 @@ export default defineComponent({
 
   props: {
     name: {
-      type: Object as PropType<NutrientGroup['name']>,
+      type: Object as PropType<NutrientGroupCard['name']>,
       required: true,
     },
     description: {
-      type: Object as PropType<NutrientGroup['description']>,
+      type: Object as PropType<NutrientGroupCard['description']>,
       required: true,
     },
     high: {
-      type: Object as PropType<NutrientGroup['high']>,
+      type: Object as PropType<NutrientGroupCard['high']>,
       default: null,
     },
     low: {
-      type: Object as PropType<NutrientGroup['low']>,
+      type: Object as PropType<NutrientGroupCard['low']>,
       default: null,
     },
     unit: {
-      type: Object as PropType<NutrientGroup['unit']>,
+      type: Object as PropType<NutrientGroupCard['unit']>,
       required: true,
     },
     nutrientTypes: {
-      type: Array as PropType<NutrientGroup['nutrientTypes']>,
+      type: Array as PropType<NutrientGroupCard['nutrientTypes']>,
       required: true,
     },
   },

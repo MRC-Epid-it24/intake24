@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
@@ -89,12 +89,12 @@ export default defineComponent({
       jobType.value.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
 
-    const defaultJobsParams = ref<
+    const defaultJobsParams = computed<
       Pick<JobParams, 'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'>
-    >({
+    >(() => ({
       LocaleFoodNutrientMapping: { localeId: props.id },
       PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: props.id },
-    });
+    }));
 
     const disabledJobParams = {
       LocaleFoodNutrientMapping: { localeId: true },

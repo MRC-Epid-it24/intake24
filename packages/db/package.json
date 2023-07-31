@@ -33,9 +33,9 @@
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
-    "@simplewebauthn/typescript-types": "^7.0.0",
-    "@types/lodash": "^4.14.195",
-    "@types/node": "^20.4.4",
+    "@simplewebauthn/typescript-types": "^7.4.0",
+    "@types/lodash": "^4.14.196",
+    "@types/node": "^20.4.5",
     "@types/pg": "^8.10.2",
     "@types/validator": "^13.7.17",
     "sequelize-cli": "^6.6.1",

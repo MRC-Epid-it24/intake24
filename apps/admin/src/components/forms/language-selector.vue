@@ -97,7 +97,7 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
-    const doNotRemove = ref<string[]>(props.required ? ['en'] : []);
+    const doNotRemove = computed(() => (props.required ? ['en'] : []));
 
     const languages = computed(() => Object.keys(props.value));
 
