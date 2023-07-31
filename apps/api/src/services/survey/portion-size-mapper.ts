@@ -3,6 +3,16 @@ import { randomUUID } from 'node:crypto';
 import type { PortionSizeStates } from '@intake24/common/types';
 import type { SurveySubmissionPortionSizeFieldCreationAttributes } from '@intake24/db';
 
+const parseUrlPathname = (url?: string | null) => {
+  if (!url) return '';
+
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return '';
+  }
+};
+
 export const genericMapper = <T extends keyof PortionSizeStates>(
   foodId: string,
   state: PortionSizeStates[T]
@@ -25,11 +35,11 @@ export const asServedMapper = (
 
   return [
     { name: 'leftovers', value: (!!leftovers).toString() },
-    { name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { name: 'leftoversImage', value: parseUrlPathname(leftovers?.imageUrl) },
     { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { name: 'servingImage', value: parseUrlPathname(serving?.imageUrl) },
     { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
     { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
@@ -56,13 +66,13 @@ export const cerealMapper = (
     { name: 'bowl', value: bowl ?? '' },
     { name: 'bowlId', value: bowlId?.toString() ?? '' },
     { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
     { name: 'leftovers', value: (!!leftovers).toString() },
-    { name: 'leftoversImage', value: leftovers?.imageUrl ?? '' },
+    { name: 'leftoversImage', value: parseUrlPathname(leftovers?.imageUrl) },
     { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
-    { name: 'servingImage', value: serving?.imageUrl ?? '' },
+    { name: 'servingImage', value: parseUrlPathname(serving?.imageUrl) },
     { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
     { name: 'servingChoiceIndex', value: serving?.index?.toString() ?? '' },
@@ -95,7 +105,7 @@ export const drinkScaleMapper = (
     { name: 'count', value: count.toString() },
     { name: 'drinkware-id', value: drinkwareId },
     { name: 'fillLevel', value: fillLevel.toString() },
-    { name: 'imageUrl', value: imageUrl },
+    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
     { name: 'initial-fill-level', value: initialFillLevel.toString() },
     { name: 'leftovers', value: leftovers.toString() },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
@@ -122,7 +132,7 @@ export const guideImageMapper = (
 
   return [
     { name: 'guide-image-id', value: guideImageId },
-    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { name: 'objectId', value: objectId ?? '' },
     { name: 'objectIndex', value: objectIndex?.toString() ?? '' },
@@ -180,7 +190,7 @@ export const milkOnCerealMapper = (
     { name: 'bowl', value: bowl ?? '' },
     { name: 'bowlId', value: bowlId ?? '' },
     { name: 'bowlIndex', value: bowlIndex?.toString() ?? '' },
-    { name: 'imageUrl', value: imageUrl ?? '' },
+    { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
     { name: 'milkLevelId', value: milkLevelId ?? '' },
     { name: 'milkLevelChoice', value: milkLevelIndex?.toString() ?? '' },
     { name: 'milkLevelImage', value: milkLevelImage ?? '' },
@@ -198,13 +208,13 @@ export const pizzaPortionMapper = (
   return [
     { name: 'typeId', value: type.id ?? '' },
     { name: 'typeIndex', value: type.index?.toString() ?? '' },
-    { name: 'typeImage', value: type.image ?? '' },
+    { name: 'typeImage', value: parseUrlPathname(type.image) },
     { name: 'thicknessId', value: thickness.id ?? '' },
     { name: 'thicknessIndex', value: thickness.index?.toString() ?? '' },
-    { name: 'thicknessImage', value: type.image ?? '' },
+    { name: 'thicknessImage', value: parseUrlPathname(type.image) },
     { name: 'sliceId', value: slice.id ?? '' },
     { name: 'sliceIndex', value: slice.index?.toString() ?? '' },
-    { name: 'sliceImage', value: slice.image ?? '' },
+    { name: 'sliceImage', value: parseUrlPathname(slice.image) },
     { name: 'sliceQuantity', value: slice.quantity?.toString() ?? '' },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
