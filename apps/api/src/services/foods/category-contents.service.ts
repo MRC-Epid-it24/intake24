@@ -67,7 +67,7 @@ const categoryContentsService = ({ db }: Pick<IoC, 'db'>) => {
     return FoodLocal.paginate({
       query,
       ...options,
-      transform: (food) => ({ code: food.code, description: food.name }),
+      transform: (food) => ({ code: food.foodCode, description: food.name }),
     });
   };
 
