@@ -58,20 +58,20 @@ There is a fixed list of possible data export sections
 
 ### Sections
 
-| Name                     | Description |
-| ------------------------ | ----------- |
-| User record fields       |             |
-| User custom fields       |             |
-| Survey record fields     |             |
-| Submission record fields |             |
-| Submission custom fields |             |
-| Meal record fields       |             |
-| Meal custom fields       |             |
-| Food record fields       |             |
-| Food custom fields       |             |
-| Food composition fields  |             |
-| Food nutrient fields     |             |
-| Portion size fields      |             |
+| Name                     | Description                                                                            |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| User record fields       | `users` table row based fields                                                         |
+| User custom fields       | `key:value` pairs from `user_custom_fields` table                                      |
+| Survey record fields     | `surveys` table row based fields                                                       |
+| Submission record fields | `survey_submissions` table row based fields                                            |
+| Submission custom fields | `key:value` pairs from `survey_submission_custom_fields` table                         |
+| Meal record fields       | `survey_submission_meals` table row based fields                                       |
+| Meal custom fields       | `key:value` pairs from `survey_submission_meal_custom_fields` table                    |
+| Food record fields       | `survey_submission_foods` and `survey_submission_missing_foods` table row based fields |
+| Food custom fields       | `key:value` pairs from `survey_submission_food_custom_fields` table                    |
+| Food composition fields  | `key:value` pairs from `nutrient_table_records_fields` table                           |
+| Food nutrient fields     | `nutrient_types` table row based fields                                                |
+| Portion size fields      | `key:value` pairs from `survey_submission_portion_size_fields` table                   |
 
 Sections can be re-arranged by drag & drop and they will appear accordingly in export file.
 
@@ -150,6 +150,7 @@ Contains `encoded food` and `missing food` records data
 - `foodGroupEnglishName` - Food group name (English)
 - `foodGroupLocalName` - Food group name (local)
 - `brand` - Food brand
+- `barcode` - Food barcode
 - `nutrientTableId` - Nutrient table identifier
 - `nutrientTableCode` - Nutrient table code
 
@@ -157,6 +158,7 @@ Contains `encoded food` and `missing food` records data
 - `missingParentId` - unique food identifier of parent food, UUIDv4
 - `missingName` - Missing food name
 - `missingBrand` - Missing food brand
+- `missingBarcode` - Missing food barcode
 - `missingDescription` - Missing food description
 - `missingPortionSize` - Missing food portion size
 - `missingLeftovers` - Missing food leftovers
