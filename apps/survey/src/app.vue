@@ -75,7 +75,7 @@
           <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical></v-divider>
           <i18n path="recall.submissions.count" tag="span">
             <template #count>
-              <span class="font-weight-medium">{{ submissions + 1 }}</span>
+              <span class="font-weight-medium">{{ recallNumber }}</span>
             </template>
           </i18n>
         </div>
@@ -151,8 +151,8 @@ export default defineComponent({
     ...mapState(useSurvey, {
       feedbackAllowed: 'feedbackAllowed',
       recallAllowed: 'recallAllowed',
+      recallNumber: 'recallNumber',
       surveyName: (state) => state.parameters?.name,
-      submissions: (state) => state.user?.submissions ?? 1,
       userName: (state) => state.user?.name,
     }),
 
