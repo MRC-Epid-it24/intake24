@@ -85,7 +85,14 @@ const common: LocaleMessageObject = {
   id: 'ID',
   type: 'Type',
   status: 'Status',
-  options: 'Options',
+  options: {
+    _: 'Options',
+    title: 'Option list',
+    add: 'New option',
+    remove: 'Remove option',
+    label: 'Label',
+    value: 'Value',
+  },
 
   date: 'Date',
   expiredAt: 'Expired at',

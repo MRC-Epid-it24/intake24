@@ -1,7 +1,7 @@
 import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { ComponentType } from '../prompts';
+import type { ComponentType, LocaleOptionList } from '../prompts';
 import type { UserFoodData } from './http';
 
 /*
@@ -35,16 +35,15 @@ export type CustomPromptAnswer = string | string[] | number | number[];
 
 export type CerealType = 'hoop' | 'flake' | 'rkris';
 
-export type StandardUnitString =
-  | `unit${number}-name`
-  | `unit${number}-omit-food-description`
-  | `unit${number}-weight`;
+export type StandardUnitString = `unit${number}-name`;
+export type StandardUnitNumber = `unit${number}-weight`;
+export type StandardUnitBoolean = `unit${number}-omit-food-description`;
 
 export type StandardUnitTranslation = `unit${number}-howMany` | `unit${number}-estimateIn`;
 
-export type StandardUnitTexts = {
-  [standardUnitString in StandardUnitString]: string;
-};
+export type StandardUnitTexts = Record<StandardUnitBoolean, boolean> &
+  Record<StandardUnitNumber, number> &
+  Record<StandardUnitString, string>;
 
 export type StandardUnitTranslations = {
   [standardUnitTranslation in StandardUnitTranslation]: RequiredLocaleTranslation;
@@ -57,29 +56,33 @@ export type PortionSizeParameters = {
   };
   cereal: {
     type: CerealType;
-    'image-map-labels': string;
+    'image-map-labels': boolean;
   };
   'drink-scale': {
     'drinkware-id': string;
-    'initial-fill-level': string;
-    'skip-fill-level': string;
-    'image-map-labels': string;
+    'initial-fill-level': number;
+    'skip-fill-level': boolean;
+    'image-map-labels': boolean;
   };
   'guide-image': {
     'guide-image-id': string;
-    'image-map-labels': string;
+    'image-map-labels': boolean;
   };
-  'milk-in-a-hot-drink': never;
+  'milk-in-a-hot-drink': {
+    options: LocaleOptionList<number>;
+  };
   'milk-on-cereal': {
-    'image-map-labels': string;
+    'image-map-labels': boolean;
   };
-  'parent-food-portion': never;
+  'parent-food-portion': {
+    options: LocaleOptionList<number>;
+  };
   pizza: {
-    'image-map-labels': string;
+    'image-map-labels': boolean;
   };
   'standard-portion': StandardUnitTexts &
     StandardUnitTranslations & {
-      'units-count': string;
+      'units-count': number;
     };
   weight: never;
 };

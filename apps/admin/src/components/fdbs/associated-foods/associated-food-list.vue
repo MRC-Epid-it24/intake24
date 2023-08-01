@@ -84,7 +84,7 @@
           <v-container>
             <v-row class="mt-2">
               <v-col cols="12" md="6">
-                <v-card-title>{{ $t('common.options') }}</v-card-title>
+                <v-card-title>{{ $t('common.options._') }}</v-card-title>
                 <v-switch
                   v-model="dialog.item.linkAsMain"
                   hide-details="auto"

@@ -122,8 +122,8 @@ export default defineComponent({
       for (let i = 0; i < unitsCount; ++i) {
         units.push({
           name: parameters[`unit${i}-name`],
-          weight: parseFloat(parameters[`unit${i}-weight`]),
-          omitFoodDescription: parameters[`unit${i}-omit-food-description`] === 'true',
+          weight: parameters[`unit${i}-weight`],
+          omitFoodDescription: parameters[`unit${i}-omit-food-description`],
         });
       }
 

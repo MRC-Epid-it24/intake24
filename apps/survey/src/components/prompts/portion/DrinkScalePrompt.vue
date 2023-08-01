@@ -174,8 +174,8 @@ export default defineComponent({
   data() {
     const state = copy(this.initialState);
     state.portionSize.drinkwareId = this.parameters['drinkware-id'];
-    state.portionSize.initialFillLevel = Number.parseFloat(this.parameters['initial-fill-level']);
-    state.portionSize.skipFillLevel = this.parameters['skip-fill-level'] === 'true';
+    state.portionSize.initialFillLevel = this.parameters['initial-fill-level'];
+    state.portionSize.skipFillLevel = this.parameters['skip-fill-level'];
 
     if (!state.portionSize.fillLevel)
       state.portionSize.fillLevel = state.portionSize.initialFillLevel;
@@ -193,7 +193,7 @@ export default defineComponent({
     },
 
     labelsEnabled() {
-      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'];
     },
 
     labels() {
@@ -221,7 +221,7 @@ export default defineComponent({
     },
 
     skipFillLevel() {
-      return this.parameters['skip-fill-level'] === 'true';
+      return this.parameters['skip-fill-level'];
     },
 
     volumes(): DrinkwareVolumeSampleResponse[] | undefined {

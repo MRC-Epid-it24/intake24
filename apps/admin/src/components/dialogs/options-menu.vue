@@ -8,7 +8,7 @@
           color="secondary"
           fab
           small
-          :title="$t('common.options')"
+          :title="$t('common.options._')"
           v-on="on"
         >
           <v-icon>$options</v-icon>

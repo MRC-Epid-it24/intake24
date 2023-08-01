@@ -255,14 +255,6 @@ const surveySchemes: LocaleMessageObject = {
       column: 'Column',
       row: 'Row',
     },
-    options: {
-      _: 'Options',
-      title: 'Option list',
-      add: 'New option',
-      remove: 'Remove option',
-      label: 'Label',
-      value: 'Value',
-    },
     timePicker: {
       allowedMinutes: {
         _: 'Allowed minutes',

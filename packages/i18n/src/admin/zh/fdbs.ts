@@ -126,9 +126,8 @@ const fdbs: LocaleMessageObject = {
         leftoverImageSet: 'Leftover image set',
         removeLeftoverImageSet: 'Remove leftover image set',
       },
-      'guide-image': {
-        _: 'Guide image',
-        imageMapLabels: 'Image map labels',
+      cereal: {
+        _: 'Cereal',
       },
       'drink-scale': {
         _: 'Drink scale',
@@ -137,28 +136,31 @@ const fdbs: LocaleMessageObject = {
         skipFillLevelPrompt: 'Skip fill level prompt',
         imageMapLabels: 'Image map labels',
       },
-      'standard-portion': {
-        _: 'Standard portion',
-        unit: 'Unit',
-        weight: 'Weight (g)',
-        omitFoodDescription: 'Omit food description',
+      'guide-image': {
+        _: 'Guide image',
+        imageMapLabels: 'Image map labels',
       },
-      cereal: {
-        _: 'Cereal',
+      'milk-in-a-hot-drink': {
+        _: 'Milk in a hot drink',
       },
       'milk-on-cereal': {
         _: 'Milk on cereal',
         imageMapLabels: 'Image map labels',
+        options: 'Portion options',
       },
       'parent-food-portion': {
         _: 'Portion of parent food',
+        options: 'Portion options',
       },
       pizza: {
         _: 'Pizza',
         imageMapLabels: 'Image map labels',
       },
-      'milk-in-a-hot-drink': {
-        _: 'Milk in a hot drink',
+      'standard-portion': {
+        _: 'Standard portion',
+        unit: 'Unit',
+        weight: 'Weight (g)',
+        omitFoodDescription: 'Omit food description',
       },
       weight: {
         _: 'Weight',

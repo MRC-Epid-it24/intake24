@@ -39,7 +39,11 @@ const transformPortionSizeMethodParameters = (
       break;
   }
 
-  acc[0][name] = value;
+  try {
+    acc[0][name] = JSON.parse(value);
+  } catch {
+    acc[0][name] = value;
+  }
 
   return acc;
 };

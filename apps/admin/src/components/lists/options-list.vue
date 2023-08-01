@@ -3,16 +3,10 @@
     <v-col cols="12">
       <v-toolbar flat tile>
         <v-toolbar-title class="font-weight-medium">
-          <div class="text-h5">{{ $t('survey-schemes.prompts.options._') }}</div>
+          <div class="text-h5">{{ $t('common.options._') }}</div>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn
-          color="secondary"
-          fab
-          small
-          :title="$t('survey-schemes.prompts.options.add')"
-          @click.stop="add"
-        >
+        <v-btn color="secondary" fab small :title="$t('common.options.add')" @click.stop="add">
           <v-icon small>$add</v-icon>
         </v-btn>
       </v-toolbar>
@@ -31,30 +25,25 @@
               <v-list-item-avatar class="drag-and-drop__handle">
                 <v-icon>$handle</v-icon>
               </v-list-item-avatar>
-              <v-list-item-content>
+              <v-list-item-content class="options-list__item">
                 <v-text-field
                   v-model="option.label"
-                  class="mr-3"
                   dense
                   hide-details="auto"
-                  :label="$t('survey-schemes.prompts.options.label')"
+                  :label="$t('common.options.label')"
                   outlined
                 ></v-text-field>
                 <v-text-field
                   v-model="option.value"
                   dense
                   hide-details="auto"
-                  :label="$t('survey-schemes.prompts.options.value')"
+                  :label="$t('common.options.value')"
                   outlined
                   :rules="optionValueRules"
                 ></v-text-field>
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn
-                  icon
-                  :title="$t('survey-schemes.prompts.options.remove')"
-                  @click.stop="remove(idx)"
-                >
+                <v-btn icon :title="$t('common.options.remove')" @click.stop="remove(idx)">
                   <v-icon color="error">$delete</v-icon>
                 </v-btn>
               </v-list-item-action>
@@ -77,7 +66,7 @@ import type { ListOption } from '@intake24/common/prompts';
 import { toIndexedList } from '@intake24/admin/util';
 
 export default defineComponent({
-  name: 'PromptListOptions',
+  name: 'OptionsList',
 
   components: { draggable },
 
@@ -147,4 +136,8 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.options-list__item {
+  gap: 0.5rem;
+}
+</style>

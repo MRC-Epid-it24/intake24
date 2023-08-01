@@ -15,13 +15,13 @@ export const useParameters = (props: UserParametersProps, { emit }: SetupContext
     parameters.value.find((parameter) => parameter.name === name);
 
   const setParameter = (name: string, value: boolean | number | string | null) => {
-    const parameter = parameters.value.find((parameter) => parameter.name === name);
-    if (parameter) {
-      parameter.value = value?.toString() ?? '';
-      return;
-    }
-
-    parameters.value.push({ name, value: value?.toString() ?? '' });
+    const index = parameters.value.findIndex((parameter) => parameter.name === name);
+    if (index !== -1) {
+      parameters.value.splice(index, 1, {
+        ...parameters.value[index],
+        value: value?.toString() ?? '',
+      });
+    } else parameters.value.push({ name, value: value?.toString() ?? '' });
   };
 
   const removeParameter = (name: string | string[]) => {
@@ -60,10 +60,17 @@ export const useParameters = (props: UserParametersProps, { emit }: SetupContext
       },
     });
 
+  const createObjectParameter = <T extends object>(name: string, defaultValue = {}) =>
+    computed<T>(() => {
+      const parameter = getParameter(name)?.value;
+      return parameter ? JSON.parse(parameter) : defaultValue;
+    });
+
   return {
     createBooleanParameter,
     createNumberParameter,
     createStringParameter,
+    createObjectParameter,
     parameters,
     getParameter,
     setParameter,

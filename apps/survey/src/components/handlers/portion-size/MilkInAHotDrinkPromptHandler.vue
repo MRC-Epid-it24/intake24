@@ -4,6 +4,7 @@
       food: food(),
       meal,
       initialState: state,
+      parameters,
       parentFood,
       prompt,
     }"
@@ -40,6 +41,7 @@ export default defineComponent({
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
+      parameters,
       parentFood,
       portionSize,
     } = useFoodPromptUtils<'milk-in-a-hot-drink'>();
@@ -116,6 +118,7 @@ export default defineComponent({
     return {
       food,
       meal,
+      parameters,
       parentFood,
       portionSize,
       state,

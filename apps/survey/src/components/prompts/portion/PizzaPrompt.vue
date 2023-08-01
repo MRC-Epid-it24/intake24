@@ -181,7 +181,7 @@ export default defineComponent({
 
   computed: {
     labelsEnabled() {
-      return this.prompt.imageMap.labels && this.parameters['image-map-labels'] === 'true';
+      return this.prompt.imageMap.labels && this.parameters['image-map-labels'];
     },
 
     imageMapIds(): Record<PizzaImageMap, string> {

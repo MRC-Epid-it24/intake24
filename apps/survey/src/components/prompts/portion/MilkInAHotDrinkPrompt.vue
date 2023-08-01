@@ -51,7 +51,7 @@ import type { PropType } from 'vue';
 import { defineComponent, toRefs } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood, PortionSizeParameters } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useFoodUtils } from '@intake24/survey/composables';
 
@@ -66,6 +66,10 @@ export default defineComponent({
   mixins: [createBasePortion<'milk-in-a-hot-drink-prompt'>()],
 
   props: {
+    parameters: {
+      type: Object as PropType<PortionSizeParameters['milk-in-a-hot-drink']>,
+      required: true,
+    },
     parentFood: {
       type: Object as PropType<EncodedFood>,
       required: true,
@@ -90,7 +94,7 @@ export default defineComponent({
 
   computed: {
     localeOptions() {
-      return (this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en)
+      return (this.parameters.options[this.$i18n.locale] ?? this.parameters.options.en)
         .map((item) => ({ ...item, value: Number(item.value) }))
         .filter(({ value }) => !Number.isNaN(value));
     },

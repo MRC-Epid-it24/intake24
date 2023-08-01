@@ -22,22 +22,6 @@
           ></v-select>
         </v-col>
       </v-row>
-      <language-selector
-        :default="[]"
-        :label="$t('survey-schemes.prompts.options.title').toString()"
-        :required="true"
-        :value="options"
-        @input="update('options', $event)"
-      >
-        <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
-          <prompt-list-options
-            :key="lang"
-            :options="options[lang]"
-            :rules="rules"
-            @update:options="updateOptions(lang, $event)"
-          ></prompt-list-options>
-        </template>
-      </language-selector>
     </v-tab-item>
   </div>
 </template>
@@ -46,25 +30,18 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, Prompts } from '@intake24/common/prompts';
-import { LanguageSelector } from '@intake24/admin/components/forms';
+import type { Prompts } from '@intake24/common/prompts';
 
-import { basePrompt, PromptListOptions, useSelects } from '../partials';
+import { basePrompt, useSelects } from '../partials';
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',
-
-  components: { PromptListOptions, LanguageSelector },
 
   mixins: [basePrompt],
 
   props: {
     amountLabel: {
       type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['amountLabel']>,
-      required: true,
-    },
-    options: {
-      type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']['options']>,
       required: true,
     },
     orientation: {
@@ -76,30 +53,9 @@ export default defineComponent({
   setup() {
     const { orientations } = useSelects();
 
-    const rules = [
-      (value: any): boolean | string => {
-        const msg = 'Value must be between 0 and 1';
-        const number = Number.parseFloat(value);
-        if (Number.isNaN(number)) return msg;
-
-        return (number > 0 && number < 1) || msg;
-      },
-    ];
-
     return {
       orientations,
-      rules,
     };
-  },
-
-  methods: {
-    updateOptions(lang: string, options: ListOption[]) {
-      this.updateLanguage(
-        'options',
-        lang,
-        options.map((item) => ({ ...item, value: Number.parseFloat(item.value) }))
-      );
-    },
   },
 });
 </script>

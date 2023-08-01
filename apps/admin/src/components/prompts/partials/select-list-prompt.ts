@@ -3,14 +3,14 @@ import { defineComponent } from 'vue';
 
 import type { LocaleOptionList } from '@intake24/common/prompts';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { OptionsList } from '@intake24/admin/components/lists';
 
 import basePrompt from './base-prompt';
-import PromptListOptions from './prompt-list-options.vue';
 
 export default defineComponent({
   name: 'SelectListPrompt',
 
-  components: { PromptListOptions, LanguageSelector },
+  components: { OptionsList, LanguageSelector },
 
   mixins: [basePrompt],
 
