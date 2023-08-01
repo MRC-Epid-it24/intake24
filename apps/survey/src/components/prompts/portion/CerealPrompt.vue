@@ -36,6 +36,7 @@
           <template #actions>
             <expansion-panel-actions :valid="servingImageConfirmed">
               <quantity-badge
+                v-if="prompt.badges"
                 :amount="portionSize.serving?.weight"
                 :valid="servingImageConfirmed"
               ></quantity-badge>
@@ -65,6 +66,7 @@
           <template #actions>
             <expansion-panel-actions :valid="leftoversPrompt === false || leftoversImageConfirmed">
               <quantity-badge
+                v-if="prompt.badges"
                 :amount="portionSize.leftovers?.weight"
                 :valid="leftoversImageConfirmed"
               >

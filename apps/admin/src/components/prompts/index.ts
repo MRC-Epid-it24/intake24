@@ -172,7 +172,7 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'standard-portion-prompt': {
-    tabs: [...baseTab],
+    tabs: [...baseTab, 'options'],
     sections: ['foods'],
   },
 };

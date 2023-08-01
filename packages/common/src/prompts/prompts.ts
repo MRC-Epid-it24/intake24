@@ -92,6 +92,8 @@ export type BasePrompt = {
 
 export type ValidatedPrompt = BasePrompt & PromptValidationProps;
 
+export type BasePortionPrompt = BasePrompt & { badges: boolean };
+
 export interface PromptWithSection extends BasePrompt {
   section: PromptSection;
 }
@@ -129,49 +131,47 @@ export type Prompts = {
     };
   'yes-no-prompt': BasePrompt & { component: 'yes-no-prompt' };
   // Portion size
-  'as-served-prompt': BasePrompt & {
+  'as-served-prompt': BasePortionPrompt & {
     component: 'as-served-prompt';
     leftovers: boolean;
     linkedQuantityCategories: { code: string; unit?: string }[];
   };
-  'cereal-prompt': BasePrompt & {
+  'cereal-prompt': BasePortionPrompt & {
     component: 'cereal-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
   };
-  'direct-weight-prompt': BasePrompt & { component: 'direct-weight-prompt' };
-  'drink-scale-prompt': BasePrompt & {
+  'direct-weight-prompt': BasePortionPrompt & { component: 'direct-weight-prompt' };
+  'drink-scale-prompt': BasePortionPrompt & {
     component: 'drink-scale-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
   };
-  'guide-image-prompt': BasePrompt & {
+  'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
     imageMap: ImageMap;
   };
-  'milk-in-a-hot-drink-prompt': BasePrompt & {
+  'milk-in-a-hot-drink-prompt': BasePortionPrompt & {
     component: 'milk-in-a-hot-drink-prompt';
-    amountLabel: boolean;
     orientation: RadioOrientation;
   };
-  'milk-on-cereal-prompt': BasePrompt & {
+  'milk-on-cereal-prompt': BasePortionPrompt & {
     component: 'milk-on-cereal-prompt';
     imageMap: ImageMap;
   };
-  'missing-food-prompt': BasePrompt & {
+  'missing-food-prompt': BasePortionPrompt & {
     component: 'missing-food-prompt';
   };
-  'parent-food-portion-prompt': BasePrompt & {
+  'parent-food-portion-prompt': BasePortionPrompt & {
     component: 'parent-food-portion-prompt';
-    amountLabel: boolean;
     orientation: RadioOrientation;
   };
-  'pizza-prompt': BasePrompt & {
+  'pizza-prompt': BasePortionPrompt & {
     component: 'pizza-prompt';
     imageMap: ImageMap;
   };
-  'portion-size-option-prompt': BasePrompt & { component: 'portion-size-option-prompt' };
-  'standard-portion-prompt': BasePrompt & { component: 'standard-portion-prompt' };
+  'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
+  'standard-portion-prompt': BasePortionPrompt & { component: 'standard-portion-prompt' };
   // Standard
   'associated-foods-prompt': BasePrompt & {
     component: 'associated-foods-prompt';

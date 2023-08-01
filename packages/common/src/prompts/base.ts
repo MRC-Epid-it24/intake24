@@ -1,4 +1,6 @@
-export const basePrompt = {
+import type { BasePortionPrompt, BasePrompt } from './prompts';
+
+export const basePrompt: Pick<BasePrompt, 'i18n' | 'conditions' | 'actions'> = {
   i18n: {
     name: {},
     text: {},
@@ -6,6 +8,20 @@ export const basePrompt = {
   },
   conditions: [],
   actions: undefined,
+};
+
+export const basePortionPrompt: Pick<
+  BasePortionPrompt,
+  'i18n' | 'conditions' | 'actions' | 'badges'
+> = {
+  i18n: {
+    name: {},
+    text: {},
+    description: {},
+  },
+  conditions: [],
+  actions: undefined,
+  badges: false,
 };
 
 export const promptValidation = {

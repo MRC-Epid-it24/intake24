@@ -5,6 +5,13 @@
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
+            :input-value="badges"
+            :label="$t('survey-schemes.prompts.badges')"
+            @change="update('badges', $event)"
+          >
+          </v-switch>
+          <v-switch
+            hide-details="auto"
             :input-value="leftovers"
             :label="$t('survey-schemes.prompts.leftovers')"
             @change="update('leftovers', $event)"
@@ -36,6 +43,10 @@ export default defineComponent({
   mixins: [basePrompt],
 
   props: {
+    badges: {
+      type: Boolean as PropType<Prompts['cereal-prompt']['badges']>,
+      required: true,
+    },
     imageMap: {
       type: Object as PropType<Prompts['cereal-prompt']['imageMap']>,
       required: true,

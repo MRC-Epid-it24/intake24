@@ -45,7 +45,14 @@
           </i18n>
           <template v-else>{{ $t(`prompts.${type}.howMany.placeholder`) }}</template>
           <template #actions>
-            <expansion-panel-actions :valid="quantityValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="quantityValid">
+              <quantity-badge
+                v-if="prompt.badges"
+                :amount="portionSize.quantity"
+                unit=""
+                :valid="quantityValid"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -73,12 +80,12 @@ import { useLocale } from '@intake24/ui';
 
 import { useStandardUnits } from '../useStandardUnits';
 import createBasePortion from './createBasePortion';
-import { QuantityCard } from './selectors';
+import { QuantityBadge, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
-  components: { QuantityCard },
+  components: { QuantityBadge, QuantityCard },
 
   mixins: [createBasePortion<'standard-portion-prompt'>()],
 

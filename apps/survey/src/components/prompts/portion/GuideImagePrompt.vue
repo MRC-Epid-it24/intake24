@@ -36,7 +36,14 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="quantityValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="quantityValid">
+              <quantity-badge
+                v-if="prompt.badges"
+                :amount="portionSize.quantity"
+                unit=""
+                :valid="quantityConfirmed"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -62,12 +69,12 @@ import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { ImageMapSelector, QuantityCard } from './selectors';
+import { ImageMapSelector, QuantityBadge, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { ImageMapSelector, QuantityCard },
+  components: { ImageMapSelector, QuantityBadge, QuantityCard },
 
   mixins: [createBasePortion<'guide-image-prompt'>()],
 

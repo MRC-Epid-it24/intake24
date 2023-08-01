@@ -31,7 +31,13 @@
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.milk`"></i18n>
           <template #actions>
-            <expansion-panel-actions :valid="milkLevelValid"></expansion-panel-actions>
+            <expansion-panel-actions :valid="milkLevelValid">
+              <quantity-badge
+                v-if="prompt.badges"
+                :amount="milkLevelWeight"
+                :valid="milkLevelValid"
+              ></quantity-badge>
+            </expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -63,7 +69,7 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
 import createBasePortion from './createBasePortion';
-import { ImageMapSelector } from './selectors';
+import { ImageMapSelector, QuantityBadge } from './selectors';
 
 const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 
@@ -83,7 +89,7 @@ const volumeDefs: Record<Bowl, number[]> = {
 export default defineComponent({
   name: 'MilkOnCerealPrompt',
 
-  components: { ImageMapSelector },
+  components: { ImageMapSelector, QuantityBadge },
 
   mixins: [createBasePortion<'milk-on-cereal-prompt'>()],
 
@@ -150,6 +156,15 @@ export default defineComponent({
         this.portionSize.bowlIndex !== undefined &&
         this.portionSize.bowl &&
         this.bowlConfirmed
+      );
+    },
+
+    milkLevelWeight() {
+      if (!this.portionSize.bowl || this.portionSize.milkLevelIndex === undefined) return undefined;
+
+      return (
+        volumeDefs[this.portionSize.bowl as Bowl][this.portionSize.milkLevelIndex] *
+        this.milkDensity
       );
     },
 
@@ -229,10 +244,6 @@ export default defineComponent({
       this.milkLevelConfirmed = false;
     },
 
-    calculateMilkWeight(bowl: Bowl, idx: number) {
-      return volumeDefs[bowl][idx] * this.milkDensity;
-    },
-
     selectMilk(idx: number, id: string) {
       this.portionSize.milkLevelIndex = idx;
       this.portionSize.milkLevelId = id;
@@ -247,12 +258,9 @@ export default defineComponent({
     },
 
     update() {
-      const {
-        portionSize: { bowl, milkLevelIndex },
-      } = this;
+      const { milkLevelWeight } = this;
 
-      if (bowl && milkLevelIndex !== undefined)
-        this.portionSize.servingWeight = this.calculateMilkWeight(bowl as Bowl, milkLevelIndex);
+      if (milkLevelWeight !== undefined) this.portionSize.servingWeight = milkLevelWeight;
 
       const state: PromptStates['milk-on-cereal-prompt'] = {
         portionSize: this.portionSize,

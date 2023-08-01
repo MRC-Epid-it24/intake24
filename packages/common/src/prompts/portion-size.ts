@@ -1,7 +1,7 @@
 import { copy } from '@intake24/common/util';
 
 import type { ImageMap, Prompt, Prompts } from './prompts';
-import { basePrompt } from './base';
+import { basePortionPrompt } from './base';
 
 export const imageMap: ImageMap = {
   labels: false,
@@ -9,37 +9,38 @@ export const imageMap: ImageMap = {
 };
 
 export const asServedPrompt: Prompts['as-served-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'as-served-prompt',
   type: 'portion-size',
   id: 'as-served-prompt',
   name: 'As served',
-  leftovers: true,
+  leftovers: false,
   linkedQuantityCategories: [{ code: 'BREAD' }],
 });
 
 export const cerealPrompt: Prompts['cereal-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'cereal-prompt',
   type: 'portion-size',
   id: 'cereal-prompt',
   name: 'Cereal',
   imageMap,
-  leftovers: true,
+  leftovers: false,
 });
 
 export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'drink-scale-prompt',
   type: 'portion-size',
   id: 'drink-scale-prompt',
   name: 'Drink Scale',
   imageMap,
-  leftovers: true,
+  leftovers: false,
+  multiple: false,
 });
 
 export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'guide-image-prompt',
   type: 'portion-size',
   id: 'guide-image-prompt',
@@ -48,24 +49,16 @@ export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
 });
 
 export const milkInAHotDrinkPrompt: Prompts['milk-in-a-hot-drink-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'milk-in-a-hot-drink-prompt',
   type: 'portion-size',
   id: 'milk-in-a-hot-drink-prompt',
   name: 'Milk in a hot drink',
-  amountLabel: true,
-  options: {
-    en: [
-      { value: 0.1, label: 'A little' },
-      { value: 0.16, label: 'Average amount' },
-      { value: 0.24, label: 'A lot' },
-    ],
-  },
   orientation: 'column',
 });
 
 export const milkOnCerealPrompt: Prompts['milk-on-cereal-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'milk-on-cereal-prompt',
   type: 'portion-size',
   id: 'milk-on-cereal-prompt',
@@ -74,7 +67,7 @@ export const milkOnCerealPrompt: Prompts['milk-on-cereal-prompt'] = copy({
 });
 
 export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'missing-food-prompt',
   type: 'portion-size',
   id: 'missing-food-prompt',
@@ -82,26 +75,16 @@ export const missingFoodPrompt: Prompts['missing-food-prompt'] = copy({
 });
 
 export const parentFoodPortionPrompt: Prompts['parent-food-portion-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'parent-food-portion-prompt',
   type: 'portion-size',
   id: 'parent-food-portion-prompt',
   name: 'Parent food portion',
-  amountLabel: true,
-  options: {
-    _default: {
-      en: [
-        { value: 1.5, label: 'Damp' },
-        { value: 3, label: 'Average' },
-        { value: 5, label: 'Drowned' },
-      ],
-    },
-  },
   orientation: 'column',
 });
 
 export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'pizza-prompt',
   type: 'portion-size',
   id: 'pizza-prompt',
@@ -110,7 +93,7 @@ export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
 });
 
 export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'portion-size-option-prompt',
   type: 'portion-size',
   id: 'portion-size-option-prompt',
@@ -118,7 +101,7 @@ export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = co
 });
 
 export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'standard-portion-prompt',
   type: 'portion-size',
   id: 'standard-portion-prompt',
@@ -126,7 +109,7 @@ export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
 });
 
 export const directWeightPrompt: Prompts['direct-weight-prompt'] = copy({
-  ...basePrompt,
+  ...basePortionPrompt,
   component: 'direct-weight-prompt',
   type: 'portion-size',
   id: 'direct-weight-prompt',

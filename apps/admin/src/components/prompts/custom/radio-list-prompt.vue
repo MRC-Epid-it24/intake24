@@ -24,7 +24,7 @@
       </v-row>
       <language-selector
         :default="[]"
-        :label="$t('survey-schemes.prompts.options.title')"
+        :label="$t('common.options.title')"
         :required="true"
         :value="options"
         @input="update('options', $event)"

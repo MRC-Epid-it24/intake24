@@ -37,6 +37,7 @@
           <template #actions>
             <expansion-panel-actions :valid="quantityConfirmed">
               <quantity-badge
+                v-if="prompt.badges"
                 :amount="
                   portionSize.servingWeight
                     ? portionSize.servingWeight / portionSize.count
@@ -70,6 +71,7 @@
           <template #actions>
             <expansion-panel-actions :valid="leftoversPrompt === false || leftoversConfirmed">
               <quantity-badge
+                v-if="prompt.badges"
                 :amount="
                   portionSize.leftoversWeight
                     ? portionSize.leftoversWeight / portionSize.count
@@ -113,6 +115,7 @@
           <template #actions>
             <expansion-panel-actions :valid="countConfirmed">
               <quantity-badge
+                v-if="prompt.badges"
                 :amount="portionSize.count ?? undefined"
                 unit=""
                 :valid="leftoversConfirmed"

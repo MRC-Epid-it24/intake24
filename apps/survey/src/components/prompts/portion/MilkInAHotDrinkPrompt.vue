@@ -28,7 +28,7 @@
             <v-radio v-for="option in localeOptions" :key="option.value" :value="option.value">
               <template #label>
                 {{ option.label }}
-                <template v-if="prompt.amountLabel">
+                <template v-if="prompt.badges">
                   <v-spacer></v-spacer>
                   <quantity-badge
                     :amount="option.value * parentServing"

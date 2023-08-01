@@ -5,9 +5,9 @@
         <v-col cols="12" md="6">
           <v-switch
             hide-details="auto"
-            :input-value="amountLabel"
-            :label="$t('survey-schemes.prompts.milk-in-a-hot-drink-prompt.amountLabel')"
-            @change="update('amountLabel', $event)"
+            :input-value="badges"
+            :label="$t('survey-schemes.prompts.badges')"
+            @change="update('badges', $event)"
           >
           </v-switch>
         </v-col>
@@ -40,8 +40,8 @@ export default defineComponent({
   mixins: [basePrompt],
 
   props: {
-    amountLabel: {
-      type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['amountLabel']>,
+    badges: {
+      type: Boolean as PropType<Prompts['milk-in-a-hot-drink-prompt']['badges']>,
       required: true,
     },
     orientation: {
