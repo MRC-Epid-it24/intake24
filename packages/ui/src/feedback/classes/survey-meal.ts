@@ -1,5 +1,5 @@
 import type { SurveySubmissionMealEntry } from '@intake24/common/types/http';
-import { fromMealTime } from '@intake24/ui/util';
+import { fromMealTime } from '@intake24/common/surveys';
 
 import SurveyFood from './survey-food';
 

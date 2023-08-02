@@ -57,7 +57,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
-import { fromMealTime, toMealTime } from '@intake24/ui/util';
+import { fromMealTime, toMealTime } from '@intake24/common/surveys';
 
 import createBasePrompt from '../createBasePrompt';
 

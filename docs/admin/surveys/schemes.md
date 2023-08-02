@@ -137,9 +137,14 @@ Meal-level custom data collected during the recall.
 
 Contains `encoded food` and `missing food` records data
 
+**Common fields**
+
 - `foodIndex` - zero-based food index within a meal (includes encoded food and missing food records)
-- `foodId` - unique food identifier, UUIDv4
 - `parentId` - unique food identifier of parent food, UUIDv4
+
+**Food record fields**
+
+- `foodId` - unique food identifier, UUIDv4
 - `code` - Food code
 - `englishName` - Food name (English)
 - `localName` - Food name (local)
@@ -154,8 +159,9 @@ Contains `encoded food` and `missing food` records data
 - `nutrientTableId` - Nutrient table identifier
 - `nutrientTableCode` - Nutrient table code
 
+**Missing Food record fields**
+
 - `missingId` - unique missing food identifier, UUIDv4
-- `missingParentId` - unique food identifier of parent food, UUIDv4
 - `missingName` - Missing food name
 - `missingBrand` - Missing food brand
 - `missingBarcode` - Missing food barcode

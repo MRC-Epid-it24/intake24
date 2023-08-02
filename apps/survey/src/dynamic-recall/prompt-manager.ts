@@ -4,7 +4,7 @@ import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { conditionOps } from '@intake24/common/prompts';
-import { mealSections } from '@intake24/common/surveys';
+import { mealSections, resolveMealGaps } from '@intake24/common/surveys';
 import {
   findMeal,
   foodPortionSizeComplete,
@@ -13,7 +13,6 @@ import {
   mealComplete,
   surveyFreeEntryComplete,
 } from '@intake24/survey/util';
-import { resolveMealGaps } from '@intake24/ui/util';
 
 import type { SurveyState, SurveyStore } from '../stores';
 import { recallLog } from '../stores';

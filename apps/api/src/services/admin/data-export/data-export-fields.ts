@@ -4,8 +4,8 @@ import stringify from 'safe-stable-stringify';
 import uaParser from 'ua-parser-js';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { ExportField as BaseExportField } from '@intake24/common/surveys';
 import type { SurveyScheme } from '@intake24/db';
+import { type ExportField as BaseExportField, fromMealTime } from '@intake24/common/surveys';
 import {
   NutrientTableCsvMappingField,
   SurveySubmissionFood,
@@ -224,7 +224,10 @@ const dataExportFields = () => {
     {
       id: 'time',
       label: 'Meal time',
-      value: ({ food }) => (food.meal ? `${food.meal.hours}:${food.meal.minutes}` : undefined),
+      value: ({ food }) =>
+        food.meal
+          ? fromMealTime({ hours: food.meal.hours, minutes: food.meal.minutes })
+          : undefined,
     },
     { id: 'duration', label: 'Meal duration', value: ({ food }) => food.meal?.duration },
   ];
@@ -254,6 +257,7 @@ const dataExportFields = () => {
       label: 'Food index',
       value: 'food.index',
     },
+    { id: 'parentId', label: 'Parent food ID', value: 'food.parentId' },
 
     // Food fields
     {
@@ -261,7 +265,6 @@ const dataExportFields = () => {
       label: 'Food ID',
       value: ({ food }) => (food instanceof SurveySubmissionFood ? food.id : undefined),
     },
-    { id: 'parentId', label: 'Parent food ID', value: 'food.parentId' },
     { id: 'code', label: 'Food code', value: 'food.code' },
     { id: 'englishName', label: 'Name (en)', value: 'food.englishName' },
     { id: 'localName', label: 'Name (local)', value: 'food.localName' },
@@ -298,7 +301,6 @@ const dataExportFields = () => {
       label: 'Missing ID',
       value: ({ food }) => (food instanceof SurveySubmissionMissingFood ? food.id : undefined),
     },
-    { id: 'missingParentId', label: 'Missing parent food ID', value: 'food.parentId' },
     { id: 'missingName', label: 'Missing name', value: 'food.name' },
     {
       id: 'missingBarcode',
