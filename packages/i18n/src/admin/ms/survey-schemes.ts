@@ -423,6 +423,7 @@ const surveySchemes: LocaleMessageObject = {
     'drink-scale-prompt': {
       title: 'Drink Scale',
       subtitle: 'Use the "drink scale" method to estimate the amount of liquid consumed',
+      multiple: 'Allow specifying multiple items',
     },
     'guide-image-prompt': {
       title: 'Guide image',

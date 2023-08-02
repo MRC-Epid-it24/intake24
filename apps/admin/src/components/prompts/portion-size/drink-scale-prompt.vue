@@ -17,6 +17,13 @@
             @change="update('leftovers', $event)"
           >
           </v-switch>
+          <v-switch
+            hide-details="auto"
+            :input-value="multiple"
+            :label="$t('survey-schemes.prompts.drink-scale-prompt.multiple')"
+            @change="update('multiple', $event)"
+          >
+          </v-switch>
         </v-col>
         <v-col cols="12" md="6">
           <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)">
@@ -53,6 +60,10 @@ export default defineComponent({
     },
     leftovers: {
       type: Boolean as PropType<Prompts['drink-scale-prompt']['leftovers']>,
+      required: true,
+    },
+    multiple: {
+      type: Boolean as PropType<Prompts['drink-scale-prompt']['multiple']>,
       required: true,
     },
   },

@@ -135,6 +135,7 @@ const fdbs: LocaleMessageObject = {
         initialLevel: 'Initial fill level',
         skipFillLevelPrompt: 'Skip fill level prompt',
         imageMapLabels: 'Image map labels',
+        multiple: 'Allow specifying multiple items',
       },
       'guide-image': {
         _: 'Guide image',

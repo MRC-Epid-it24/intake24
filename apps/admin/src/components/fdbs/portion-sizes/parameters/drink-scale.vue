@@ -42,6 +42,13 @@
         :label="$t('fdbs.portionSizes.methods.drink-scale.imageMapLabels')"
       ></v-switch>
     </v-col>
+    <v-col cols="12">
+      <v-switch
+        v-model="multiple"
+        hide-details="auto"
+        :label="$t('fdbs.portionSizes.methods.drink-scale.multiple')"
+      ></v-switch>
+    </v-col>
   </v-row>
 </template>
 
@@ -76,12 +83,14 @@ export default defineComponent({
     const initialFillLevel = createNumberParameter('initial-fill-level');
     const skipFillLevel = createBooleanParameter('skip-fill-level');
     const imageMapLabels = createBooleanParameter('image-map-labels');
+    const multiple = createBooleanParameter('multiple');
 
     return {
       drinkwareSetId,
       initialFillLevel,
       skipFillLevel,
       imageMapLabels,
+      multiple,
     };
   },
 });

@@ -63,6 +63,7 @@ export type PortionSizeParameters = {
     'initial-fill-level': number;
     'skip-fill-level': boolean;
     'image-map-labels': boolean;
+    multiple: boolean;
   };
   'guide-image': {
     'guide-image-id': string;

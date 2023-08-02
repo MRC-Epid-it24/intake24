@@ -101,6 +101,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
+- `badges` - true/false whether to show quantity badge on expansion panel header
+
 - `leftovers` - true/false whether to show leftovers option
 
 - `linked quantity categories`
@@ -110,6 +112,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 ### Cereal prompt
 
 #### Options
+
+- `badges` - true/false whether to show quantity badge on expansion panel header
 
 - `leftovers` - true/false whether to show leftovers option
 
@@ -123,7 +127,11 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
+- `badges` - true/false whether to show quantity badge on expansion panel header
+
 - `leftovers` - true/false whether to show leftovers option
+
+- `multiple` - true/false whether to allow multiple item to be selected
 
 - `image map labels` - true/false whether to show image map labels
 
@@ -133,6 +141,8 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
+- `badges` - true/false whether to show quantity badge on expansion panel header
+
 - `image map labels` - true/false whether to show image map labels
 
 - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
@@ -141,15 +151,15 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
-- `options` - locale-specific list of options for milk portion in hot drink (`0-1 range`)
-
-- `amount label` - true/false whether to show amount label for option
+- `badges` - true/false whether to show quantity badge on expansion panel header and option labels
 
 - `orientation` - orientation of radio buttons (column/row)
 
 ### Milk on cereal prompt
 
 #### Options
+
+- `badges` - true/false whether to show quantity badge on expansion panel header
 
 - `image map labels` - true/false whether to show image map labels
 
@@ -161,15 +171,15 @@ Calculates portion size based on parent food portion size.
 
 #### Options
 
-- `options` - `per-category` locale-specific list of options for parent portion (`range > 0`)
-
-- `amount label` - true/false whether to show amount label for option
+- `badges` - true/false whether to show quantity badge on expansion panel header and option labels
 
 - `orientation` - orientation of radio buttons (column/row)
 
 ### Pizza prompt
 
 #### Options
+
+- `badges` - true/false whether to show quantity badge on expansion panel header
 
 - `image map labels` - true/false whether to show image map labels
 

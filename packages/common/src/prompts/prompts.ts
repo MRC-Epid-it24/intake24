@@ -146,6 +146,7 @@ export type Prompts = {
     component: 'drink-scale-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
+    multiple: boolean;
   };
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';

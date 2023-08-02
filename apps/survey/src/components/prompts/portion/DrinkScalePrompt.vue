@@ -105,7 +105,7 @@
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel :disabled="!quantityConfirmed">
+      <v-expansion-panel v-if="allowMultiple" :disabled="!quantityConfirmed">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.count`">
             <template #food>
@@ -191,6 +191,10 @@ export default defineComponent({
   },
 
   computed: {
+    allowMultiple() {
+      return this.prompt.multiple && this.parameters['multiple'];
+    },
+
     disabledLeftovers() {
       return !this.prompt.leftovers;
     },
@@ -257,7 +261,8 @@ export default defineComponent({
       if (!this.disabledLeftovers)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      conditions.push(this.countValid);
+      if (this.allowMultiple) conditions.push(this.countValid);
+
       return conditions;
     },
   },
