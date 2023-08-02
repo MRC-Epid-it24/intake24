@@ -43,10 +43,10 @@ export default defineComponent({
     const getInitialState = (): PromptStates['missing-food-prompt'] => ({
       info: food().info ?? {
         name: food().searchTerm,
-        brand: '',
-        description: '',
-        leftovers: '',
-        portionSize: '',
+        brand: null,
+        description: null,
+        leftovers: null,
+        portionSize: null,
       },
       panel: 0,
       homemadePrompt: undefined,
@@ -60,9 +60,6 @@ export default defineComponent({
 
     const commitAnswer = () => {
       const { info } = state.value;
-
-      if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
-        throw new Error('Missing food prompt: missing data');
 
       survey.updateFood({ foodId: food().id, update: { info } });
       survey.addFoodFlag(food().id, 'missing-food-complete');

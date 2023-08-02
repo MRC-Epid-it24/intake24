@@ -9,7 +9,7 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!info.description"></expansion-panel-actions>
+            <expansion-panel-actions :valid="homemadeValid"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -28,7 +28,7 @@
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <v-text-field v-model="info.description" outlined @input="update"></v-text-field>
+            <v-text-field v-model="info.brand" outlined @input="update"></v-text-field>
             <i18n class="mb-4" :path="`prompts.${type}.barcode`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
@@ -36,7 +36,7 @@
             </i18n>
             <barcode-input :model-value.sync="info.barcode"></barcode-input>
           </template>
-          <v-btn :block="isMobile" color="secondary" :disabled="!info.description" @click="confirm">
+          <v-btn :block="isMobile" color="secondary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
@@ -97,8 +97,14 @@ export default defineComponent({
   },
 
   computed: {
+    homemadeValid() {
+      return (
+        (this.homemadePrompt === true && !!this.info.description) ||
+        (this.homemadePrompt === false && !!this.info.brand)
+      );
+    },
     validConditions(): boolean[] {
-      return this.fields.map((item) => !!this.info[item]);
+      return [this.homemadeValid, !!this.info.portionSize];
     },
   },
 
