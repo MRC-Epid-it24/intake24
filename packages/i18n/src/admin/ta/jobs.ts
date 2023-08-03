@@ -37,6 +37,10 @@ const jobs: LocaleMessageObject = {
     LanguageTranslationsSync: {
       _: 'Language - Synchronize translations',
     },
+    LocaleFoods: {
+      _: 'Locale - Export foods',
+      localeId: 'Locale ID',
+    },
     LocaleFoodNutrientMapping: {
       _: 'Locale - Export food nutrient mapping',
       localeId: 'Locale ID',

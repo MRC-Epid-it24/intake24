@@ -9,7 +9,7 @@ import {
 import { pickJobParams } from '@intake24/common/types';
 import { SystemLocale } from '@intake24/db';
 
-const jobOptions = ['LocaleFoodNutrientMapping', 'PairwiseSearchCopyAssociations'];
+const jobOptions = ['LocaleFoods', 'LocaleFoodNutrientMapping', 'PairwiseSearchCopyAssociations'];
 
 export default validate(
   checkSchema({
@@ -43,6 +43,7 @@ export default validate(
               });
               if (locales.length !== 2) throw new Error(customTypeErrorMessage('exists._', meta));
               break;
+            case 'LocaleFoods':
             case 'LocaleFoodNutrientMapping':
               if (typeof value?.localeId !== 'string')
                 throw new Error(customTypeErrorMessage('string._', meta));

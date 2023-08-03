@@ -7,7 +7,7 @@
           <v-text-field
             :disabled="disabled.localeId"
             hide-details="auto"
-            :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
+            :label="$t('jobs.types.LocaleFoods.localeId')"
             name="localeId"
             outlined
             :value="value.localeId"
@@ -30,9 +30,9 @@ import type { JobParams } from '@intake24/common/types';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'LocaleFoodNutrientMapping',
+  name: 'LocaleFoods',
 
-  mixins: [jobParams<JobParams['LocaleFoodNutrientMapping']>()],
+  mixins: [jobParams<JobParams['LocaleFoods']>()],
 });
 </script>
 

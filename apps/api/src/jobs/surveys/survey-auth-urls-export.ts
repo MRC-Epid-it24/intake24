@@ -94,7 +94,7 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     let counter = 0;
     const progressInterval = setInterval(() => {
       this.setProgress(counter);
-    }, 1500);
+    }, 1000);
 
     return new Promise((resolve, reject) => {
       const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
@@ -119,8 +119,10 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
         .on('end', async () => {
           clearInterval(progressInterval);
 
-          const downloadUrlExpiresAt = addTime(this.fsConfig.urlExpiresAt);
-          await this.dbJob.update({ downloadUrl: filename, downloadUrlExpiresAt });
+          await this.dbJob.update({
+            downloadUrl: filename,
+            downloadUrlExpiresAt: addTime(this.fsConfig.urlExpiresAt),
+          });
 
           resolve();
         });

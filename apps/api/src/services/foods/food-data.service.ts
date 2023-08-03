@@ -16,7 +16,7 @@ import {
 } from '@intake24/db';
 
 import InheritableAttributesImpl from './inheritable-attributes-service';
-import PortionSizeMethodsImpl from './portion-size-methods-service';
+import PortionSizeMethodsImpl from './portion-size-methods.service';
 
 // const for KCAL Nutrient
 const KCAL_NUTRIENT_TYPE_ID = 1;

@@ -7,3 +7,5 @@ export * from './inheritable-attributes-service';
 export { default as InvalidIdError } from './invalid-id-error';
 export * from './portion-size.service';
 export { default as portionSizeService } from './portion-size.service';
+export { default as portionSizeMethodsService } from './portion-size-methods.service';
+export * from './portion-size-methods.service';

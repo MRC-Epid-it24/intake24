@@ -34,6 +34,7 @@ import {
   otpProvider,
   pairwiseSearchService,
   PopularityCountersService,
+  portionSizeMethodsService,
   portionSizeService,
   processedImageService,
   Pusher,
@@ -74,6 +75,7 @@ export default (container: AwilixContainer): void => {
 
     feedbackService: asFunction(feedbackService),
     foodDataService: asFunction(foodDataService),
+    portionSizeMethodsService: asFunction(portionSizeMethodsService),
     portionSizeService: asFunction(portionSizeService),
     categoryContentsService: asFunction(categoryContentsService),
     inheritableAttributesService: asFunction(inheritableAttributesService).singleton(),

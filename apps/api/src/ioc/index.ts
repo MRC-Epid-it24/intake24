@@ -97,6 +97,7 @@ import type {
   OTPProvider,
   PairwiseSearchService,
   PopularityCountersService,
+  PortionSizeMethodsService,
   PortionSizeService,
   ProcessedImageService,
   Pusher,
@@ -271,6 +272,7 @@ export interface IoC extends Jobs {
 
   // Foods
   foodDataService: FoodDataService;
+  portionSizeMethodsService: PortionSizeMethodsService;
   portionSizeService: PortionSizeService;
   inheritableAttributesService: InheritableAttributesService;
   cachedInheritableAttributesService: CachedInheritableAttributesService;

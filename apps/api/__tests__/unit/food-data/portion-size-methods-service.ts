@@ -1,6 +1,6 @@
-import type { PortionSizeMethodsService } from '@intake24/api/services/foods/portion-size-methods-service';
+import type { PortionSizeMethodsService } from '@intake24/api/services/foods/portion-size-methods.service';
 import type { DatabasesInterface } from '@intake24/db';
-import portionSizeMethodsService from '@intake24/api/services/foods/portion-size-methods-service';
+import portionSizeMethodsService from '@intake24/api/services/foods/portion-size-methods.service';
 import {
   createTestData,
   generatedPortionSizeMethods,

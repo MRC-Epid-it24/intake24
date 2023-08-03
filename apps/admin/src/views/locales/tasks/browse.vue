@@ -63,7 +63,7 @@ import { useI18n } from '@intake24/i18n';
 
 type LocaleJobType = Extract<
   JobType,
-  'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
+  'LocaleFoods' | 'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
 >;
 
 type LocaleTasksForm = {
@@ -82,6 +82,7 @@ export default defineComponent({
     const i18n = useI18n();
 
     const jobType = ref<LocaleJobType[]>([
+      'LocaleFoods',
       'LocaleFoodNutrientMapping',
       'PairwiseSearchCopyAssociations',
     ]);
@@ -89,14 +90,14 @@ export default defineComponent({
       jobType.value.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
 
-    const defaultJobsParams = computed<
-      Pick<JobParams, 'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'>
-    >(() => ({
+    const defaultJobsParams = computed<Pick<JobParams, LocaleJobType>>(() => ({
+      LocaleFoods: { localeId: props.id },
       LocaleFoodNutrientMapping: { localeId: props.id },
       PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: props.id },
     }));
 
     const disabledJobParams = {
+      LocaleFoods: { localeId: true },
       LocaleFoodNutrientMapping: { localeId: true },
       PairwiseSearchCopyAssociations: { targetLocaleId: true },
     };

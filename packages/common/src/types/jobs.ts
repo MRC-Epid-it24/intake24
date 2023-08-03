@@ -23,6 +23,9 @@ export type JobParams = {
   };
   CleanStorageFiles: EmptyJobParams;
   LanguageTranslationsSync: EmptyJobParams;
+  LocaleFoods: {
+    localeId: string;
+  };
   LocaleFoodNutrientMapping: {
     localeId: string;
   };
@@ -106,6 +109,9 @@ export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
   LanguageTranslationsSync: {},
+  LocaleFoods: {
+    localeId: '',
+  },
   LocaleFoodNutrientMapping: {
     localeId: '',
   },
