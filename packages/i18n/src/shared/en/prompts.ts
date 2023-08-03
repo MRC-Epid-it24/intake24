@@ -348,7 +348,7 @@ const prompts: LocaleMessageObject = {
       more: 'I left more',
       confirm: 'I left that much',
     },
-    count: 'How many of these drinks did you have?',
+    count: 'How many of these drinks did you have at this time?',
   },
   guideImage: {
     name: 'Guide image',

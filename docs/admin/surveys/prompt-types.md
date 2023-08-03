@@ -117,9 +117,10 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `leftovers` - true/false whether to show leftovers option
 
-- `image map labels` - true/false whether to show image map labels
+- `image map settings` - image map settings
 
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - true/false whether to show image map labels
+  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Direct weight prompt
 
@@ -131,11 +132,17 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `leftovers` - true/false whether to show leftovers option
 
-- `multiple` - true/false whether to allow multiple item to be selected
+- `multiple` - true/false whether to allow multiple item to be selected. When enabled, additional slider options are available:
 
-- `image map labels` - true/false whether to show image map labels
+  - `initial` - initial value
+  - `min` - minimum value
+  - `max` - maximum value
+  - `step` step increment
 
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+- `image map settings` - image map settings
+
+  - `image map labels` - true/false whether to show image map labels
+  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Guide image prompt
 
@@ -143,9 +150,10 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `badges` - true/false whether to show quantity badge on expansion panel header
 
-- `image map labels` - true/false whether to show image map labels
+- `image map settings` - image map settings
 
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - true/false whether to show image map labels
+  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Milk in a hot drink prompt
 
@@ -161,9 +169,10 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `badges` - true/false whether to show quantity badge on expansion panel header
 
-- `image map labels` - true/false whether to show image map labels
+- `image map settings` - image map settings
 
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - true/false whether to show image map labels
+  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Parent food portion prompt
 
@@ -181,9 +190,10 @@ Calculates portion size based on parent food portion size.
 
 - `badges` - true/false whether to show quantity badge on expansion panel header
 
-- `image map labels` - true/false whether to show image map labels
+- `image map settings` - image map settings
 
-- `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - true/false whether to show image map labels
+  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
 
 ### Portion size option prompt
 

@@ -3,7 +3,8 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-slider
-          class="meal-duration-slider"
+          class="meal-duration-slider px-8"
+          color="grey darken-1"
           :max="prompt.max"
           :min="prompt.min"
           :step="prompt.step"
@@ -79,6 +80,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .meal-duration-slider {
-  padding: 85px 30px 0 30px;
+  padding-top: 85px;
 }
 </style>

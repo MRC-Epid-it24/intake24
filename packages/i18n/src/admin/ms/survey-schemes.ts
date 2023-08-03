@@ -256,6 +256,13 @@ const surveySchemes: LocaleMessageObject = {
       column: 'Column',
       row: 'Row',
     },
+    slider: {
+      _: 'Slider settings',
+      initial: 'Initial value',
+      min: 'Minimum value',
+      max: 'Maximum value',
+      step: 'Step increment',
+    },
     timePicker: {
       allowedMinutes: {
         _: 'Allowed minutes',

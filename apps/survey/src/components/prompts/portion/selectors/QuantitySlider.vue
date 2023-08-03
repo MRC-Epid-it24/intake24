@@ -1,23 +1,24 @@
 <template>
   <div>
     <v-slider
-      class="drink-scale-count-slider align-center mb-4"
-      color="primary"
+      class="drink-scale-count-slider align-center mb-4 px-2 px-sm-4"
+      color="grey darken-1"
       hide-details="auto"
       thumb-label="always"
       :thumb-size="50"
       v-bind="{
         max,
         min,
+        step,
         value,
       }"
       @input="updateValue($event)"
     >
       <template #prepend>
-        <v-icon color="primary" large @click="decrement">fas fa-circle-minus</v-icon>
+        <v-icon large @click="decrement">fas fa-circle-minus</v-icon>
       </template>
       <template #append>
-        <v-icon color="primary" large @click="increment">fas fa-circle-plus</v-icon>
+        <v-icon large @click="increment">fas fa-circle-plus</v-icon>
       </template>
       <template #thumb-label="{ value }">
         <div class="d-flex flex-column align-center">
@@ -25,7 +26,7 @@
         </div>
       </template>
     </v-slider>
-    <v-row class="m">
+    <v-row>
       <v-col cols="12" sm="auto">
         <v-btn :block="isMobile" color="secondary" @click="confirm">
           {{ $t('common.action.continue') }}
@@ -49,6 +50,10 @@ export default defineComponent({
     max: {
       type: Number,
       default: 10,
+    },
+    step: {
+      type: Number,
+      default: 1,
     },
     value: {
       type: Number,
@@ -87,6 +92,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .drink-scale-count-slider {
-  padding: 85px 15px 0 15px;
+  padding-top: 85px;
 }
 </style>

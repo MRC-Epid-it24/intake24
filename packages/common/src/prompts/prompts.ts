@@ -103,6 +103,13 @@ export type ImageMap = {
   pinchZoom: boolean;
 };
 
+export type Slider = {
+  initial: number;
+  min: number;
+  max: number;
+  step: number;
+};
+
 export type TimePicker = {
   format: 'ampm' | '24hr';
   allowedMinutes: 1 | 5 | 10 | 15 | 20 | 30;
@@ -146,7 +153,7 @@ export type Prompts = {
     component: 'drink-scale-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
-    multiple: boolean;
+    multiple: boolean | Slider;
   };
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
@@ -189,13 +196,10 @@ export type Prompts = {
     component: 'meal-add-prompt';
     custom: boolean;
   };
-  'meal-duration-prompt': BasePrompt & {
-    component: 'meal-duration-prompt';
-    initial: number;
-    min: number;
-    max: number;
-    step: number;
-  };
+  'meal-duration-prompt': BasePrompt &
+    Slider & {
+      component: 'meal-duration-prompt';
+    };
   'meal-gap-prompt': BasePrompt & {
     component: 'meal-gap-prompt';
     gap: number;

@@ -21,9 +21,15 @@
             hide-details="auto"
             :input-value="multiple"
             :label="$t('survey-schemes.prompts.drink-scale-prompt.multiple')"
-            @change="update('multiple', $event)"
+            @change="updateMultiple($event)"
           >
           </v-switch>
+          <slider-settings
+            v-if="typeof multiple !== 'boolean'"
+            :slider="multiple"
+            @update:slider="update('multiple', $event)"
+          >
+          </slider-settings>
         </v-col>
         <v-col cols="12" md="6">
           <image-map-settings :image-map="imageMap" @update:imageMap="update('imageMap', $event)">
@@ -40,12 +46,12 @@ import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 
-import { basePrompt, ImageMapSettings } from '../partials';
+import { basePrompt, ImageMapSettings, SliderSettings } from '../partials';
 
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { ImageMapSettings },
+  components: { ImageMapSettings, SliderSettings },
 
   mixins: [basePrompt],
 
@@ -63,8 +69,14 @@ export default defineComponent({
       required: true,
     },
     multiple: {
-      type: Boolean as PropType<Prompts['drink-scale-prompt']['multiple']>,
+      type: [Boolean, Object] as PropType<Prompts['drink-scale-prompt']['multiple']>,
       required: true,
+    },
+  },
+
+  methods: {
+    updateMultiple(value: boolean) {
+      this.update('multiple', value ? { min: 1, max: 10, step: 1, initial: 1 } : false);
     },
   },
 });
