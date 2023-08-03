@@ -390,9 +390,9 @@ export const useSurvey = defineStore('survey', {
     },
 
     addFlag(flag: SurveyFlag | SurveyFlag[]) {
-      const flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags.filter((flag) => this.data.flags.includes(flag));
+      flags = flags.filter((flag) => !this.data.flags.includes(flag));
       if (!flags.length) return;
 
       this.data.flags.push(...flags);
@@ -506,9 +506,9 @@ export const useSurvey = defineStore('survey', {
 
     addMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
       const meal = findMeal(this.data.meals, mealId);
-      const flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags.filter((flag) => meal.flags.includes(flag));
+      flags = flags.filter((flag) => !meal.flags.includes(flag));
       if (!flags.length) return;
 
       meal.flags.push(...flags);
@@ -549,9 +549,9 @@ export const useSurvey = defineStore('survey', {
 
     addFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
       const food = findFood(this.data.meals, foodId);
-      const flags = Array.isArray(flag) ? flag : [flag];
+      let flags = Array.isArray(flag) ? flag : [flag];
 
-      flags.filter((flag) => food.flags.includes(flag));
+      flags = flags.filter((flag) => !food.flags.includes(flag));
       if (!flags.length) return;
 
       food.flags.push(...flags);
