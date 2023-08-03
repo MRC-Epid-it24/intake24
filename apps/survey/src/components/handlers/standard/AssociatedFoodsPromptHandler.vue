@@ -163,10 +163,39 @@ export default defineComponent({
 
       this.setFoods({ mealId, foods: keepFoods });
 
-      this.updateFood({
-        foodId,
-        update: { associatedFoodsComplete: true, linkedFoods },
-      });
+      if (foodIndex.linkedFoodIndex !== undefined) {
+        // This is a linked food. Currently, more than one level of nesting is not supported,
+        // so the new foods that came from the associated foods prompt cannot be linked to this one.
+
+        // As a workaround, they can be linked to the parent food.
+
+        // Associated foods prompts for the new linked foods need to be disabled to prevent
+        // potential circular associations.
+        const linkedFoodsWithoutPrompts = linkedFoods.map((food) => ({
+          ...food,
+          associatedFoodsComplete: true,
+        }));
+
+        const parentFood = this.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+        const newLinkedFoods = [...parentFood.linkedFoods, ...linkedFoodsWithoutPrompts];
+
+        // Order of the updates is important because any changes to the linked foods will be
+        // overwritten by the update to the parent food.
+        this.updateFood({
+          foodId: parentFood.id,
+          update: { linkedFoods: newLinkedFoods },
+        });
+
+        this.updateFood({
+          foodId,
+          update: { associatedFoodsComplete: true },
+        });
+      } else {
+        this.updateFood({
+          foodId,
+          update: { associatedFoodsComplete: true, linkedFoods },
+        });
+      }
 
       this.clearStoredState();
     },
