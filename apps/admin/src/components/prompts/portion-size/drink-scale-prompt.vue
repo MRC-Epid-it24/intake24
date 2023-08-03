@@ -26,6 +26,7 @@
           </v-switch>
           <slider-settings
             v-if="typeof multiple !== 'boolean'"
+            class="mt-4"
             :slider="multiple"
             @update:slider="update('multiple', $event)"
           >

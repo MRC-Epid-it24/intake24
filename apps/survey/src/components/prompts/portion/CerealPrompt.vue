@@ -75,7 +75,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="leftoversPrompt" class="mb-4"></yes-no-toggle>
+          <yes-no-toggle v-model="leftoversPrompt" class="mb-4" mandatory></yes-no-toggle>
           <template v-if="leftoversPrompt">
             <i18n class="mb-4" :path="`prompts.asServed.leftovers.label`" tag="div">
               <template #food>
