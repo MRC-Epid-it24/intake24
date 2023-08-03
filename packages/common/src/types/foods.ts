@@ -1,3 +1,5 @@
+import type { RequiredLocaleTranslation } from '.';
+
 export const useInRecipeTypes = {
   USE_ANYWHERE: 0,
   USE_AS_REGULAR_FOOD: 1,
@@ -5,3 +7,20 @@ export const useInRecipeTypes = {
 } as const;
 
 export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipeTypes];
+
+// Special Foods | Foods Builder section
+
+export type SpecialFood = {
+  code: string;
+  name: RequiredLocaleTranslation;
+  specialWords: string;
+  steps: SpecialFoodStepsType[];
+};
+
+export type SpecialFoodStepsType = {
+  order: number;
+  code: string;
+  specialFoodsCode: string;
+  step_name: RequiredLocaleTranslation;
+  step_description: RequiredLocaleTranslation;
+};
