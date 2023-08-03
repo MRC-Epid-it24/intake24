@@ -32,10 +32,6 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING(512),
           },
-          steps: {
-            allowNull: false,
-            type: Sequelize.TEXT({ length: 'long' }),
-          },
           created_at: {
             allowNull: false,
             defaultValue: Sequelize.NOW,
