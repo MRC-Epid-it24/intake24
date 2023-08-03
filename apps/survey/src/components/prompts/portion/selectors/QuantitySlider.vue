@@ -73,11 +73,11 @@ export default defineComponent({
     };
 
     const decrement = () => {
-      updateValue(props.value - 1);
+      updateValue(props.value - props.step);
     };
 
     const increment = () => {
-      updateValue(props.value + 1);
+      updateValue(props.value + props.step);
     };
 
     return {
