@@ -33,21 +33,25 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
+    const alreadyAnswered = computed(() => meal.value.flags.includes('ready-meal-complete'));
+
     const getInitialState = computed(() => ({
       foods: (
         meal.value.foods.filter(
           (food) => food.type === 'encoded-food' && food.data.readyMealOption
         ) as EncodedFood[]
-      ).map((food) => ({ id: food.id, name: food.data.localName, value: false })),
+      ).map((food) => ({
+        id: food.id,
+        name: food.data.localName,
+        value: alreadyAnswered.value ? food.flags.includes('ready-meal') : undefined,
+      })),
     }));
 
     const { state, update } = usePromptHandlerNoStore(getInitialState);
 
     const commitAnswer = () => {
       for (const food of state.value.foods) {
-        if (!food.value) continue;
-
-        survey.addFoodFlag(food.id, 'ready-meal');
+        survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
       }
 
       survey.addMealFlag(meal.value.id, 'ready-meal-complete');

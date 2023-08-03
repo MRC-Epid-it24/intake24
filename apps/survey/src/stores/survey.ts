@@ -566,6 +566,15 @@ export const useSurvey = defineStore('survey', {
       food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
     },
 
+    setFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[], state: boolean) {
+      if (state) {
+        this.addFoodFlag(foodId, flag);
+        return;
+      }
+
+      this.removeFoodFlag(foodId, flag);
+    },
+
     replaceFood(data: { foodId: string; food: FoodState }) {
       const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
         this.data.meals,
