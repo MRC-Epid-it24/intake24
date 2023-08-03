@@ -22,12 +22,13 @@ const startApp = async (ops: Ops): Promise<void> => {
 
   if (https) {
     const home = homedir();
-    const [cert, key] = await Promise.all([
-      readFile(join(home, '.vite-plugin-mkcert/cert.pem')),
-      readFile(join(home, '.vite-plugin-mkcert/dev.pem')),
-    ]);
+    const [cert, key, ca] = await Promise.all(
+      ['cert.pem', 'dev.pem', 'rootCA.pem'].map((file) =>
+        readFile(join(home, '.vite-plugin-mkcert', file))
+      )
+    );
 
-    server = createServer({ key, cert }, server);
+    server = createServer({ key, cert, ca }, server);
   }
 
   // Start listening
