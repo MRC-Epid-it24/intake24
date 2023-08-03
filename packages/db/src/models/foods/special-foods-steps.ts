@@ -57,16 +57,18 @@ export default class SpecialFoodsSteps
   @Column({
     allowNull: false,
     type: DataType.STRING(16),
-    unique: false,
+    unique: true,
   })
   declare code: string;
 
   @Column({
     allowNull: false,
     defaultValue: () =>
-      JSON.stringify({
-        en: `${Sequelize.col('id')}-${Sequelize.col('specialFoodsCode')}${Sequelize.col('code')}`,
-      }),
+      JSON.stringify([
+        {
+          en: `${Sequelize.col('id')}-${Sequelize.col('specialFoodsCode')}${Sequelize.col('code')}`,
+        },
+      ]),
     type: DataType.TEXT({ length: 'long' }),
   })
   declare name: string;

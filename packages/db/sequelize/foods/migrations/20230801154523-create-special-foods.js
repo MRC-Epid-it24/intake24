@@ -131,6 +131,22 @@ module.exports = {
         { transaction }
       );
 
+      // Add Defaults for timestamps
+      await queryInterface.sequelize.query(
+        `ALTER TABLE special_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+        { transaction }
+      );
+
+      await queryInterface.sequelize.query(
+        `ALTER TABLE special_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+        { transaction }
+      );
+
+      await queryInterface.sequelize.query(
+        `ALTER TABLE special_foods_category_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+        { transaction }
+      );
+
       // Add Indexes and FKs
       await queryInterface.addConstraint('special_foods', {
         fields: ['locale_id'],
