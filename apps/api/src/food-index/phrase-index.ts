@@ -285,7 +285,8 @@ export class PhraseIndex<K> {
   constructor(
     phrases: Array<PhraseWithKey<K>>,
     wordOps: LanguageBackend,
-    synonymSets: Array<Set<string>>
+    synonymSets: Array<Set<string>>,
+    specialFoodsSynonymsSet: Array<Set<string>>
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
@@ -305,6 +306,11 @@ export class PhraseIndex<K> {
       }
     }
 
-    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, synonymSets);
+    this.dictionary = new RichDictionary(
+      dictionaryWords,
+      wordOps.phoneticEncoder,
+      synonymSets,
+      specialFoodsSynonymsSet
+    );
   }
 }

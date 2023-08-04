@@ -24,8 +24,9 @@ describe('Phrase index', () => {
   const indexFilter: Array<string> = ['with'];
 
   const synonyms: Array<Set<string>> = [];
+  const specialFoodsSynonyms: Array<Set<string>> = [];
 
-  const index = new PhraseIndex(phrases, EnglishLanguageBackend, synonyms);
+  const index = new PhraseIndex(phrases, EnglishLanguageBackend, synonyms, specialFoodsSynonyms);
 
   describe('Interpretation combinations', () => {
     it('Empty interpretations list', () => {

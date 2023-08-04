@@ -42,6 +42,8 @@ import ProcessedImage from './processed-image';
 import SourceImage from './source-image';
 import SourceImageKeyword from './source-image-keyword';
 import SpecialFoods from './special-foods';
+import SpecialFoodsCategoryFoods from './special-foods-category-foods';
+import SpecialFoodsSteps from './special-foods-steps';
 import SplitList from './split-list';
 import SplitWord from './split-word';
 import StandardUnit from './standard-unit';
@@ -135,6 +137,10 @@ export { default as SourceImageKeyword } from './source-image-keyword';
 export * from './source-image-keyword';
 export { default as SpecialFoods } from './special-foods';
 export * from './special-foods';
+export { default as SpecialFoodsCategoryFoods } from './special-foods-category-foods';
+export * from './special-foods-category-foods';
+export { default as SpecialFoodsSteps } from './special-foods-steps';
+export * from './special-foods-steps';
 export { default as SplitList } from './split-list';
 export * from './split-list';
 export { default as SplitWord } from './split-word';
@@ -192,4 +198,7 @@ export const foods = {
   SplitWord,
   StandardUnit,
   SynonymSet,
+  SpecialFoods,
+  SpecialFoodsSteps,
+  SpecialFoodsCategoryFoods,
 };

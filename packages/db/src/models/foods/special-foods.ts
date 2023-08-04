@@ -19,7 +19,6 @@ import {
 
 import { FoodsLocale } from '@intake24/db';
 
-import type { Securable } from '..';
 import BaseModel from '../model';
 import SpecialFoodsSteps from './special-foods-steps';
 
@@ -36,10 +35,10 @@ import SpecialFoodsSteps from './special-foods-steps';
   freezeTableName: true,
   underscored: true,
 })
-export default class SpecialFoods
-  extends BaseModel<InferAttributes<SpecialFoods>, InferCreationAttributes<SpecialFoods>>
-  implements Securable
-{
+export default class SpecialFoods extends BaseModel<
+  InferAttributes<SpecialFoods>,
+  InferCreationAttributes<SpecialFoods>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,

@@ -1,4 +1,6 @@
 import type {
+  Attributes,
+  CreationAttributes,
   CreationOptional,
   InferAttributes,
   InferCreationAttributes,
@@ -17,7 +19,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { FoodsLocale, Securable } from '@intake24/db';
+import type { FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
 import SpecialFoods from './special-foods';
@@ -35,10 +37,10 @@ import SpecialFoodsCategoryFoods from './special-foods-category-foods';
   freezeTableName: true,
   underscored: true,
 })
-export default class SpecialFoodsSteps
-  extends BaseModel<InferAttributes<SpecialFoodsSteps>, InferCreationAttributes<SpecialFoodsSteps>>
-  implements Securable
-{
+export default class SpecialFoodsSteps extends BaseModel<
+  InferAttributes<SpecialFoodsSteps>,
+  InferCreationAttributes<SpecialFoodsSteps>
+> {
   @Column({
     autoIncrement: true,
     primaryKey: true,
@@ -124,3 +126,6 @@ export default class SpecialFoodsSteps
   @HasMany(() => SpecialFoodsCategoryFoods, 'specialFoodsStepCode')
   declare specialFoodsCategoryFoods?: NonAttribute<SpecialFoodsCategoryFoods[]>;
 }
+
+export type SpecialFoodsStepsAttributes = Attributes<SpecialFoodsSteps>;
+export type SpecialFoodsStepsCreationAttributes = CreationAttributes<SpecialFoodsSteps>;

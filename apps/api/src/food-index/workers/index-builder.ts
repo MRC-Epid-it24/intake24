@@ -18,8 +18,11 @@ import {
   FoodsLocale,
   models,
   SequelizeTS,
+  SpecialFoods,
   SynonymSet,
 } from '@intake24/db';
+
+import type InterpretedPhrase from '../interpreted-phrase';
 
 if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
 
@@ -31,7 +34,7 @@ const foodsDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.foods,
   models: Object.values(models.foods),
   logging:
-    config.env === 'development'
+    config.env !== 'development'
       ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.foods.debugQueryLimit)
       : false,
 });
@@ -40,7 +43,7 @@ const systemDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.system,
   models: Object.values(models.system),
   logging:
-    config.env === 'development'
+    config.env !== 'development'
       ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.system.debugQueryLimit)
       : false,
 });
@@ -54,12 +57,29 @@ const foodIndex: FoodIndex = {};
 const logger = servicesLogger.child({ service: 'Food index' });
 
 function parseSynonymSet(value: string): Set<string> {
-  return new Set<string>(value.trim().split('\\s+'));
+  const resultSet = new Set<string>(
+    value
+      .trim()
+      .split(' ')
+      .filter((s) => s.length > 0)
+  );
+  logger.debug(`\n\nParsed synonym set: ${value} => ${Array.from(resultSet).join(', ')}\n\n`);
+  return resultSet;
 }
 
 async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
   const synSets = await SynonymSet.findAll({ attributes: ['synonyms'], where: { localeId } });
   return synSets.map((s) => parseSynonymSet(s.synonyms));
+}
+
+async function getSpecialFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
+  const specialFoods = await SpecialFoods.findAll({
+    attributes: ['synonyms', 'specialWords'],
+    where: { localeId },
+  });
+  return specialFoods.map((specFoodEntry) =>
+    parseSynonymSet(specFoodEntry.specialWords.concat(' ', specFoodEntry.synonyms))
+  );
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
@@ -77,7 +97,7 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   const foodList = await FoodLocalList.findAll({ attributes: ['foodCode'], where: { localeId } });
 
   const foodCodes = foodList.map((row) => row.foodCode);
-  const [localFoods, synonymSets, languageBackendId] = await Promise.all([
+  const [localFoods, synonymSets, specialFoodsSynomSet, languageBackendId] = await Promise.all([
     FoodLocal.findAll({
       where: { foodCode: foodCodes, localeId },
       include: {
@@ -88,6 +108,7 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
       },
     }),
     getSynonymSets(localeId),
+    getSpecialFoodsSynomSets(localeId),
     getLanguageBackendId(localeId),
   ]);
 
@@ -109,8 +130,53 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   return new PhraseIndex<string>(
     foodDescriptions,
     LanguageBackends[languageBackendId],
-    synonymSets
+    synonymSets,
+    specialFoodsSynomSet
   );
+}
+
+/**
+ * Function for checking interpreted query against the Special Foods Set and returning the result
+ * @param interpretedQuery {InterpretedPhrase} - interpreted query
+ * @param query {SearchQuery} - search query
+ * @returns FoodHeader[] - array of FoodHeaders of special foods
+ */
+
+async function matchSpecialFoods(
+  interpretedQuery: InterpretedPhrase,
+  query: SearchQuery
+): Promise<FoodHeader[]> {
+  const localeIndex = foodIndex[query.localeId];
+  if (!localeIndex)
+    throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
+  const specialFoodsMap = localeIndex.dictionary.specialFoodsMap;
+  const specialFoodsHeaders: FoodHeader[] = [];
+
+  // TODO: Optimise the performance of this function
+  for (const specialFood of specialFoodsMap) {
+    logger.debug(
+      `\n\nSpecial food for query ${query.description} searching in : ${JSON.stringify(
+        specialFood[0]
+      )}`
+    );
+    interpretedQuery.words.forEach((word) => {
+      word.interpretations.forEach((interpretation) => {
+        if (specialFood[1].has(interpretation.dictionaryWord)) {
+          // logger.debug(
+          //   `Special food for query ${query.description} with word ${
+          //     interpretation.dictionaryWord
+          //   } found: ${[...specialFood[1].values()]}`
+          // );
+          return specialFoodsHeaders.push({
+            code: specialFood[0],
+            description: specialFood[0],
+          });
+        }
+      });
+    });
+  }
+
+  return specialFoodsHeaders;
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
@@ -119,8 +185,26 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
 
   const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
+  logger.debug(`Interpreted query of ${query.description}: ${JSON.stringify(interpreted)}`);
+  let specialFoodsHeaders: FoodHeader[] = [];
+  if (interpreted.words.length > 0) {
+    specialFoodsHeaders = await matchSpecialFoods(interpreted, query);
+    if (specialFoodsHeaders.length > 0)
+      specialFoodsHeaders.forEach((header, idx) =>
+        logger.debug(
+          `${idx}] Special food for query ${query.description} found: ${JSON.stringify(header)}`
+        )
+      );
+    // TODO: Return special FoodHeader from the special_foods_table in DB to append to the results
+    // [{"code":"$SND","description":"Local Description"},
+    // {"code":"$SLD","description":"Local Description"}]
+  }
 
   const results = localeIndex.findMatches(interpreted, 100, 100);
+  logger.debug(
+    `Found ${results.length} results for query ${query.description} in locale ${query.localeId}`
+  );
+  logger.debug(`Results: ${JSON.stringify(results)}`);
 
   return rankSearchResults(
     results,
@@ -162,6 +246,10 @@ async function buildIndex() {
 
     try {
       const results = await queryIndex(msg);
+      logger.debug(
+        `\n\n\nSending ${results.length} results for query ${msg.description} in locale ${msg.localeId} with queryId ${msg.queryId}`
+      );
+      logger.debug(`Results: ${JSON.stringify(results)}\n\n\n`);
 
       parentPort.postMessage({
         queryId: msg.queryId,

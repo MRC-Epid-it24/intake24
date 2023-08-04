@@ -6,6 +6,7 @@ import {
   Synonym,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
+import { logger } from '@intake24/common-backend/services';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 
@@ -20,6 +21,8 @@ export class RichDictionary {
 
   private readonly synonymMap: Map<string, Set<string>>;
 
+  public readonly specialFoodsMap: Map<string, Set<string>>;
+
   private readonly phoneticEncoder: PhoneticEncoder | undefined;
 
   private readonly transducer: LevenshteinTransducer;
@@ -27,7 +30,8 @@ export class RichDictionary {
   constructor(
     words: Set<string>,
     phoneticEncoder: PhoneticEncoder | undefined,
-    synSets: Array<Set<string>>
+    synSets: Array<Set<string>>,
+    specialFoodsSynSets: Array<Set<string>>
   ) {
     this.words = new Set<string>();
 
@@ -56,22 +60,52 @@ export class RichDictionary {
 
     this.synonymMap = new Map<string, Set<string>>();
 
-    for (const synSet of synSets) {
-      for (const word of synSet) {
-        const lowerCaseWord = word.toLocaleLowerCase();
+    [synSets, specialFoodsSynSets].forEach((generalSynSets) => {
+      for (const synSet of generalSynSets) {
+        logger.debug(`Loading synonym set of Size: ${synSet.size}`);
+        for (const word of synSet) {
+          const lowerCaseWord = word.toLocaleLowerCase();
+          logger.debug(`word in the synonym set: ${lowerCaseWord}`);
+          let synList = this.synonymMap.get(lowerCaseWord);
 
-        let synList = this.synonymMap.get(lowerCaseWord);
+          if (!synList) synList = new Set<string>();
 
-        if (!synList) synList = new Set<string>();
+          for (const word2 of synSet) {
+            const lowerCaseWord2 = word2.toLocaleLowerCase();
+            if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
+          }
 
-        for (const word2 of synSet) {
-          const lowerCaseWord2 = word2.toLocaleLowerCase();
-          if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
+          this.synonymMap.set(lowerCaseWord, synList);
         }
-
-        this.synonymMap.set(lowerCaseWord, synList);
       }
+    });
+
+    // Add special foods for the locale
+    this.specialFoodsMap = new Map<string, Set<string>>();
+
+    for (const specialSynSet of specialFoodsSynSets) {
+      if (specialSynSet.size === 0) continue;
+      if (this.specialFoodsMap.has([...specialSynSet][0].toLocaleLowerCase())) continue;
+      this.specialFoodsMap.set([...specialSynSet][0].toLocaleLowerCase(), specialSynSet);
+
+      // for (const word of specialSynSet) {
+      //   const lowerCaseWord = word.toLocaleLowerCase();
+      //   let synList = this.specialFoodsMap.get(lowerCaseWord);
+      //   if (!synList) synList = new Set<string>();
+
+      //   for (const word2 of specialSynSet) {
+      //     const lowerCaseWord2 = word2.toLocaleLowerCase();
+      //     if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
+      //   }
+      //   this.specialFoodsMap.set(lowerCaseWord, synList);
+      // }
     }
+
+    logger.debug(`Loaded dictionary with ${this.words.size} words`);
+    logger.debug(`Loaded ${this.synonymMap.size} synonyms\n\n\n`);
+    this.specialFoodsMap.forEach((value, key) => {
+      logger.debug(`special food: ${key} synonyms: ${[...value]}`);
+    });
   }
 
   exactMatch(lowerCaseWord: string): boolean {
@@ -80,7 +114,7 @@ export class RichDictionary {
 
   synonyms(lowerCaseWord: string): Array<string> {
     const result = this.synonymMap.get(lowerCaseWord);
-
+    logger.debug(`\n 2] - synonyms for ${lowerCaseWord}: ${result}\n`);
     if (!result) return new Array<string>();
     return new Array(...result);
   }
@@ -161,6 +195,9 @@ export class RichDictionary {
     const synonyms: Array<string> = interpretations.flatMap((sp) =>
       this.synonyms(sp.dictionaryWord)
     );
+
+    logger.debug(`\n\n 1] - Synonyms for ${lowerCaseWord}: ${synonyms}\n`);
+    logger.debug(`SynonymsMap: ${JSON.stringify(this.synonymMap)}\n\n`);
 
     interpretations.push(
       ...synonyms.slice(0, maxInterpretations - interpretations.length).map((s) => new Synonym(s))
