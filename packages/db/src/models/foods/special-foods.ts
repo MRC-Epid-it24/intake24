@@ -1,4 +1,6 @@
 import type {
+  Attributes,
+  CreationAttributes,
   CreationOptional,
   InferAttributes,
   InferCreationAttributes,
@@ -102,3 +104,6 @@ export default class SpecialFoods
     return SpecialFoods.findAll({ where: { localeId } });
   }
 }
+
+export type SpecialFoodsAttributes = Attributes<SpecialFoods>;
+export type SpecialFoodsCreationAttributes = CreationAttributes<SpecialFoods>;
