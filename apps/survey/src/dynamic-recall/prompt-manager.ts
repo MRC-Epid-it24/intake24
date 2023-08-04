@@ -79,7 +79,7 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: Prompt): bool
     case 'submit-prompt':
       return !state.data.endTime;
     case 'meal-add-prompt':
-      return false;
+      return !state.data.meals.length;
     case 'meal-gap-prompt': {
       const [firstMeal, lastMeal] = resolveMealGaps(state.data.meals, prompt);
 

@@ -5,14 +5,14 @@
     </template>
     <v-card-text class="pt-2">
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="8">
           <component
             :is="prompt.custom ? 'v-combobox' : 'v-select'"
             v-model="currentValue"
             autofocus
             class="meal-add-prompt__combobox"
             clearable
-            :items="meals"
+            :items="defaultMeals"
             :label="$t(`${i18nPrefix}.label`)"
             outlined
             @change="update"
@@ -26,6 +26,7 @@
         :block="isMobile"
         class="px-4"
         color="secondary"
+        :disabled="!hasMeals"
         large
         text
         :title="$t(`prompts.${type}.no`)"
@@ -48,7 +49,7 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="$t(`prompts.${type}.no`)" value="cancel">
+      <v-btn :disabled="!hasMeals" :title="$t(`prompts.${type}.no`)" value="cancel">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
           {{ $t(`prompts.${type}.no`) }}
         </span>
@@ -85,8 +86,12 @@ export default defineComponent({
   mixins: [createBasePrompt<'meal-add-prompt'>()],
 
   props: {
-    meals: {
+    defaultMeals: {
       type: Array as PropType<string[]>,
+      required: true,
+    },
+    hasMeals: {
+      type: Boolean,
       required: true,
     },
   },

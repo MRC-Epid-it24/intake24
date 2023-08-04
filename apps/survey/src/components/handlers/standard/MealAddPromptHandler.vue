@@ -1,14 +1,17 @@
 <template>
-  <meal-add-prompt v-bind="{ meals, prompt }" @action="action" @update="update"></meal-add-prompt>
+  <meal-add-prompt
+    v-bind="{ defaultMeals, hasMeals, prompt }"
+    @action="action"
+    @update="update"
+  ></meal-add-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions, mapState } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { Meal } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -28,46 +31,37 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup() {
+  setup(props, { emit }) {
     const getInitialState = computed<string | undefined>(() => undefined);
 
     const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const i18n = useI18n();
+    const survey = useSurvey();
 
-    return { state, update };
-  },
+    const hasMeals = computed(() => survey.hasMeals);
+    const defaultMeals = computed(
+      () => survey.defaultSchemeMeals?.map((meal) => meal.name[i18n.locale] ?? meal.name.en) ?? []
+    );
 
-  computed: {
-    ...mapState(useSurvey, ['defaultSchemeMeals']),
+    const action = async (type: 'next' | 'cancel') => {
+      if (type === 'next') commitAnswer();
+      else survey.setAutoSelection();
 
-    meals(): string[] {
-      return (
-        this.defaultSchemeMeals?.map(
-          (meal: Meal) => meal.name[this.$i18n.locale] ?? meal.name.en
-        ) ?? []
-      );
-    },
-  },
+      emit('action', 'next');
+    };
 
-  methods: {
-    ...mapActions(useSurvey, ['addMeal', 'setAutoSelection', 'setSelection']),
-
-    async action(type: 'next' | 'cancel') {
-      if (type === 'next') this.commitAnswer();
-      else this.setAutoSelection();
-
-      this.$emit('action', 'next');
-    },
-
-    commitAnswer() {
-      if (!this.state) {
+    const commitAnswer = () => {
+      if (!state.value) {
         console.warn('MealAddPromptHandler: no meal selected');
-        this.setAutoSelection();
+        survey.setAutoSelection();
         return;
       }
 
-      const mealId = this.addMeal(this.state, this.$i18n.locale);
-      this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
-    },
+      const mealId = survey.addMeal(state.value, i18n.locale);
+      survey.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
+    };
+
+    return { state, action, update, defaultMeals, hasMeals };
   },
 });
 </script>
