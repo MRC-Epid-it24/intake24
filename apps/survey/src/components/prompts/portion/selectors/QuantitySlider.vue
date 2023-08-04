@@ -20,9 +20,9 @@
       <template #append>
         <v-icon large @click="increment">fas fa-circle-plus</v-icon>
       </template>
-      <template #thumb-label="{ value }">
+      <template #thumb-label="{ value: thumbValue }">
         <div class="d-flex flex-column align-center">
-          <span class="text-h5 font-weight-bold">{{ value }}</span>
+          <span class="text-h5 font-weight-bold">{{ thumbValue }}</span>
         </div>
       </template>
     </v-slider>

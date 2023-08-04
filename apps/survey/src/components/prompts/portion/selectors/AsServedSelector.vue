@@ -193,7 +193,7 @@ export default defineComponent({
     thumbnailWeight(): string | null {
       if (this.objectIdx === undefined || !this.asServedData) return null;
 
-      return `${this.asServedData.images[this.objectIdx].weight}g`;
+      return `${Math.round(this.asServedData.images[this.objectIdx].weight)}g`;
     },
     firstThumbnail(): string {
       if (this.objectIdx === undefined) return '';
@@ -237,16 +237,11 @@ export default defineComponent({
 
   methods: {
     async fetchAsServedImageData() {
-      try {
-        const { data } = await this.$http.get<AsServedSetResponse>(
-          `portion-sizes/as-served-sets/${this.asServedSetId}`
-        );
-        this.asServedData = { ...data };
-        this.initSelection();
-      } catch (e) {
-        //FIXME: proper error handling
-        console.log(e);
-      }
+      const { data } = await this.$http.get<AsServedSetResponse>(
+        `portion-sizes/as-served-sets/${this.asServedSetId}`
+      );
+      this.asServedData = { ...data };
+      this.initSelection();
     },
 
     initSelection() {
