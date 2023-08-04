@@ -18,12 +18,14 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-radio-group v-model="portionSize.unit" @change="selectMethod">
-            <v-radio
-              v-for="unit in standardUnits"
-              :key="unit.name"
-              :label="estimateInLabel(unit.name)"
-              :value="unit"
-            >
+            <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
+              <template #label>
+                <i18n :path="`prompts.${type}.estimateIn`">
+                  <template #unit>
+                    {{ getLocaleContent(standardUnitRefs[unit.name].estimateIn) }}
+                  </template>
+                </i18n>
+              </template>
             </v-radio>
           </v-radio-group>
         </v-expansion-panel-content>
@@ -161,12 +163,6 @@ export default defineComponent({
   },
 
   methods: {
-    estimateInLabel(unit: string) {
-      return this.$t(`prompts.${this.type}.estimateIn`, {
-        unit: this.getLocaleContent(this.standardUnitRefs[unit].estimateIn),
-      });
-    },
-
     selectMethod() {
       this.clearErrors();
       this.updatePanel();

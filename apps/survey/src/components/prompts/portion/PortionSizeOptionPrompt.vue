@@ -28,14 +28,18 @@
                   v-if="availableMethod.method === 'standard-portion'"
                   class="d-flex justify-center flex-grow-1"
                 >
-                  <v-radio-group hide-details="auto" :value="standardUnitSelected">
-                    <v-radio
-                      v-for="[key, value] in Object.entries(standardUnitRefs).slice(0, 4)"
-                      :key="key"
-                      :value="key"
-                    >
+                  <v-radio-group
+                    v-if="Object.keys(standardUnitRefs).length"
+                    hide-details="auto"
+                    :value="standardUnitSelected"
+                  >
+                    <v-radio v-for="unit in standardUnits.slice(0, 4)" :key="unit" :value="unit">
                       <template #label>
-                        <span class="font-weight-medium">{{ value.estimateIn.en }}</span>
+                        <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
+                          <template #unit>
+                            {{ getLocaleContent(standardUnitRefs[unit].estimateIn) }}
+                          </template>
+                        </i18n>
                       </template>
                     </v-radio>
                   </v-radio-group>
@@ -73,10 +77,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
+import { useLocale } from '@intake24/ui';
 
 import { ImagePlaceholder } from '../../elements';
 import { useStandardUnits } from '../useStandardUnits';
@@ -99,9 +104,10 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
+    const { getLocaleContent } = useLocale();
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    const findStandardUnits = () => {
+    const standardUnits = computed(() => {
       const standardPortionMethod = props.availableMethods.find(
         ({ method }) => method === 'standard-portion'
       );
@@ -115,7 +121,7 @@ export default defineComponent({
         },
         []
       );
-    };
+    });
 
     const selectNextStandardUnit = () => {
       const keys = Object.keys(standardUnitRefs.value);
@@ -142,10 +148,9 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      const names = findStandardUnits();
-      if (!names.length) return;
+      if (!standardUnits.value.length) return;
 
-      await fetchStandardUnits(names);
+      await fetchStandardUnits(standardUnits.value);
       selectNextStandardUnit();
       startStandardUnitTimer();
     });
@@ -154,7 +159,7 @@ export default defineComponent({
       clearStandardUnitTimer();
     });
 
-    return { standardUnitRefs, standardUnitSelected };
+    return { getLocaleContent, standardUnits, standardUnitRefs, standardUnitSelected };
   },
 
   data() {
