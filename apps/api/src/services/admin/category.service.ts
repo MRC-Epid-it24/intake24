@@ -200,6 +200,17 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
                   include: [{ association: 'selectionImage', attributes: ['path'] }],
                 },
                 {
+                  association: 'drinkwareSet',
+                  where: { $method$: 'drink-scale', '$parameters.name$': ['drinkware-id'] },
+                  required: false,
+                  include: [
+                    {
+                      association: 'imageMap',
+                      include: [{ association: 'baseImage', attributes: ['path'] }],
+                    },
+                  ],
+                },
+                {
                   association: 'guideImage',
                   where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
                   required: false,

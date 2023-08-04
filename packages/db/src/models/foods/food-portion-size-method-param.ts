@@ -10,7 +10,14 @@ import type {
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { AsServedSet, FoodPortionSizeMethod, GuideImage, StandardUnit } from '.';
+import {
+  AsServedSet,
+  DrinkwareSet,
+  FoodPortionSizeMethod,
+  GuideImage,
+  ImageMap,
+  StandardUnit,
+} from '.';
 
 @Table({
   modelName: 'FoodPortionSizeMethodParameter',
@@ -57,11 +64,23 @@ export default class FoodPortionSizeMethodParameter extends BaseModel<
   })
   declare asServedSet?: NonAttribute<AsServedSet>;
 
+  @BelongsTo(() => DrinkwareSet, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  declare drinkwareSet?: NonAttribute<DrinkwareSet>;
+
   @BelongsTo(() => GuideImage, {
     foreignKey: 'value',
     constraints: false,
   })
   declare guideImage?: NonAttribute<GuideImage>;
+
+  @BelongsTo(() => ImageMap, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  declare imageMap?: NonAttribute<ImageMap>;
 
   @BelongsTo(() => StandardUnit, {
     foreignKey: 'value',

@@ -20,7 +20,7 @@ const foodController = ({
         ].imageUrl = `${imagesBaseUrl}/${response.portionSizeMethods[i].imageUrl}`;
       }
 
-      res.status(200).json(response);
+      res.json(response);
     } catch (err) {
       if (err instanceof InvalidIdError) throw new NotFoundError(err.message);
       throw err;

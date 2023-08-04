@@ -9,7 +9,14 @@ import type {
 } from 'sequelize';
 import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import { AsServedSet, CategoryPortionSizeMethod, GuideImage, StandardUnit } from '@intake24/db';
+import {
+  AsServedSet,
+  CategoryPortionSizeMethod,
+  DrinkwareSet,
+  GuideImage,
+  ImageMap,
+  StandardUnit,
+} from '@intake24/db';
 
 import BaseModel from '../model';
 
@@ -58,11 +65,23 @@ export default class CategoryPortionSizeMethodParameter extends BaseModel<
   })
   declare asServedSet?: NonAttribute<AsServedSet>;
 
+  @BelongsTo(() => DrinkwareSet, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  declare drinkwareSet?: NonAttribute<DrinkwareSet>;
+
   @BelongsTo(() => GuideImage, {
     foreignKey: 'value',
     constraints: false,
   })
   declare guideImage?: NonAttribute<GuideImage>;
+
+  @BelongsTo(() => ImageMap, {
+    foreignKey: 'value',
+    constraints: false,
+  })
+  declare imageMap?: NonAttribute<ImageMap>;
 
   @BelongsTo(() => StandardUnit, {
     foreignKey: 'value',

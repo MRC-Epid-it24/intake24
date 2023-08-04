@@ -32,6 +32,9 @@ const transformPortionSizeMethodParameters = (
       // case 'leftovers-image-set':
       acc[1] = parameter.asServedSet?.selectionImage?.path;
       break;
+    case 'drinkware-id':
+      acc[1] = parameter.drinkwareSet?.imageMap?.baseImage?.path;
+      break;
     case 'guide-image-id':
       acc[1] = parameter.guideImage?.selectionImage?.path;
       break;
