@@ -77,6 +77,10 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       { label: 'Local name', value: 'name' },
       { label: 'FCT', value: 'nutrientTableId' },
       { label: 'FCT record ID', value: 'nutrientTableRecordId' },
+      { label: 'Ready Meal', value: 'readyMealOption' },
+      { label: 'Same As Before', value: 'sameAsBeforeOption' },
+      { label: 'Reasonable Amount', value: 'reasonableAmount' },
+      { label: 'Use In Recipes', value: 'useInRecipes' },
       { label: 'Associated Food / Category', value: 'associatedFoods' },
       { label: 'Brands', value: 'brands' },
       { label: 'Portion Size methods', value: 'portionSizeMethods' },
@@ -88,7 +92,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           foodCode,
           name,
           localeId,
-          main: { name: englishName, brands = [] } = {},
+          main: { name: englishName, attributes, brands = [] } = {},
           associatedFoods = [],
           nutrientRecords: [{ nutrientTableId, nutrientTableRecordId }] = [],
           portionSizeMethods = [],
@@ -101,6 +105,12 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           englishName,
           nutrientTableId,
           nutrientTableRecordId,
+          readyMealOption: attributes?.readyMealOption ?? 'Inherited',
+          sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
+          reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
+          useInRecipes: attributes?.useInRecipes
+            ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
+            : 'Inherited',
           brands: brands.map(({ name }) => name).join(', '),
           associatedFoods: associatedFoods
             .map(
@@ -110,10 +120,8 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
             .join(', '),
           portionSizeMethods: portionSizeMethods
             .map(
-              (psm) =>
-                `Method: ${psm.method}, conversion: ${psm.conversionFactor}, ${(
-                  psm.parameters ?? []
-                )
+              ({ method, conversionFactor, parameters = [] }) =>
+                `Method: ${method}, conversion: ${conversionFactor}, ${parameters
                   .map(({ name, value }) => `${name}: ${value}`)
                   .join(', ')}`
             )
@@ -148,7 +156,10 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
             separate: true,
             where: { localeId: localeCode },
           },
-          { association: 'main', include: [{ association: 'brands' }] },
+          {
+            association: 'main',
+            include: [{ association: 'attributes' }, { association: 'brands' }],
+          },
           { association: 'nutrientRecords' },
           {
             association: 'portionSizeMethods',
