@@ -1,4 +1,4 @@
-import type { UserPortionSizeMethodParameters } from '@intake24/common/types/http/foods/user-food-data';
+import type { UserPortionSizeMethodParameters } from '@intake24/common/types/http';
 import type {
   CategoryPortionSizeMethodParameter,
   FoodPortionSizeMethodParameter,
@@ -9,23 +9,6 @@ const transformPortionSizeMethodParameters = (
   parameter: FoodPortionSizeMethodParameter | CategoryPortionSizeMethodParameter
 ) => {
   const { name, value } = parameter;
-
-  /*
-   * Fetch through separate API
-   * Could include directly, but would be better to have locale info at this moment not to fetch all locales
-   *
-   */
-  /* if (name.match(/unit\d{1}-name/) && parameter.standardUnit) {
-    const {
-      standardUnit: { howMany, estimateIn },
-    } = parameter;
-
-    acc[0][name] = value;
-    acc[0][name.replace('-name', '-estimateIn')] = estimateIn;
-    acc[0][name.replace('-name', '-howMany')] = howMany;
-    return acc;
-  }
-  */
 
   switch (name) {
     case 'serving-image-set':

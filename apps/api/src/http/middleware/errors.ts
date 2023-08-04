@@ -2,6 +2,7 @@ import type { Express, NextFunction, Request, Response } from 'express';
 import { MulterError } from 'multer';
 
 import type { Ops } from '@intake24/api/app';
+import { IndexNotReadyError } from '@intake24/api/food-index';
 import { DatabaseError } from '@intake24/db';
 
 import {
@@ -87,6 +88,13 @@ export default (app: Express, { logger }: Ops): void => {
       const { message, name, stack } = err.original;
       logger.error(`${name}: ${message}`, { stack });
       res.status(503).json({ message: 'Internal Database Error' });
+      return;
+    }
+
+    if (err instanceof IndexNotReadyError) {
+      const { message, name, stack } = err;
+      logger.error(`${name}: ${message}`, { stack });
+      res.status(503).json({ message: 'Internal Server Error' });
       return;
     }
     next(err);

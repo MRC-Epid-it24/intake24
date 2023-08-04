@@ -9,16 +9,6 @@ import { ApplicationError } from '@intake24/api/http/errors';
 const categoriesController = ({
   categoryContentsService,
 }: Pick<IoC, 'categoryContentsService'>) => {
-  const browseRoot = async (req: Request, res: Response<CategoryContents>): Promise<void> => {
-    const { localeId, code } = req.params;
-
-    if (typeof req.query.code !== 'string' || !code.length)
-      throw new ApplicationError('code cannot be empty');
-
-    const categoryContents = await categoryContentsService.getCategoryContents(localeId, code);
-    res.json(categoryContents);
-  };
-
   const browse = async (
     req: Request<{ localeId: string; code: string }, any, any, PaginateQuery>,
     res: Response
@@ -42,10 +32,20 @@ const categoriesController = ({
     res.json(categoryContents);
   };
 
+  const rootContents = async (req: Request, res: Response<CategoryContents>): Promise<void> => {
+    const { localeId, code } = req.params;
+
+    if (typeof req.query.code !== 'string' || !code.length)
+      throw new ApplicationError('code cannot be empty');
+
+    const categoryContents = await categoryContentsService.getCategoryContents(localeId, code);
+    res.json(categoryContents);
+  };
+
   return {
     browse,
-    browseRoot,
     contents,
+    rootContents,
   };
 };
 

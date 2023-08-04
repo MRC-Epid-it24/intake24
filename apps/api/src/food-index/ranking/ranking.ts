@@ -19,7 +19,7 @@ function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] 
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
-  const entries: [string, T1][] = Object.entries(obj); // inference fails
+  const entries = Object.entries(obj);
   return Object.fromEntries(entries.map((entry) => [entry[0], fn(entry[1])]));
 }
 

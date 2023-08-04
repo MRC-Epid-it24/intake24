@@ -25,8 +25,5 @@ export default () => {
   router.get('/:localeId/:code/associated-foods', wrapAsync(foodController.associatedFoods));
   router.get('/:localeId/:code/composition', wrapAsync(foodController.composition));
 
-  // Category browser
-  router.get('/:localeId/:code', wrapAsync(foodController.entry));
-
   return router;
 };

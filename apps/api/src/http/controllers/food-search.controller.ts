@@ -3,8 +3,7 @@ import type { Request, Response } from 'express';
 import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
-import foodIndex, { IndexNotReadyError } from '@intake24/api/food-index';
-import { NotFoundError } from '@intake24/api/http/errors';
+import foodIndex from '@intake24/api/food-index';
 
 interface SearchParams {
   localeId: string;
@@ -59,31 +58,19 @@ const foodSearchController = ({
     req: Request<SearchParams, unknown, unknown, SearchQuery>,
     res: Response
   ): Promise<void> => {
-    try {
-      const results = await foodIndex.search(
-        req.query.description,
-        req.params.localeId,
-        req.query.rankingAlgorithm ?? 'popularity',
-        parseFloat(req.query.matchScoreWeight ?? '20')
-      );
+    const results = await foodIndex.search(
+      req.query.description,
+      req.params.localeId,
+      req.query.rankingAlgorithm ?? 'popularity',
+      parseFloat(req.query.matchScoreWeight ?? '20')
+    );
 
-      const withFilteredIngredients = await filterRecipeIngredients(
-        req.query.recipe === 'true',
-        results
-      );
+    const withFilteredIngredients = await filterRecipeIngredients(
+      req.query.recipe === 'true',
+      results
+    );
 
-      res.json(withFilteredIngredients);
-    } catch (err) {
-      if (err instanceof IndexNotReadyError) {
-        res.sendStatus(503);
-        return;
-      }
-      if (err instanceof NotFoundError) {
-        res.sendStatus(404);
-        return;
-      }
-      throw err;
-    }
+    res.json(withFilteredIngredients);
   };
 
   const recipe = async (req: Request, res: Response): Promise<void> => {
