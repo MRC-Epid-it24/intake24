@@ -28,7 +28,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel
-        v-if="!disabledLeftovers && parameters['leftovers-image-set']"
+        v-if="leftoversEnabled && parameters['leftovers-image-set']"
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header>
@@ -71,6 +71,7 @@
         v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
         v-model="portionSize.linkedQuantity"
         :confirm.sync="linkedQuantityConfirmed"
+        :disabled="leftoversEnabled ? !leftoversValid : !servingValid"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
       ></linked-quantity>
@@ -131,12 +132,8 @@ export default defineComponent({
   },
 
   computed: {
-    disabledLeftovers() {
-      return !this.prompt.leftovers;
-    },
-
-    hasLeftovers() {
-      return !!this.parameters['leftovers-image-set'];
+    leftoversEnabled() {
+      return this.prompt.leftovers && !!this.parameters['leftovers-image-set'];
     },
 
     servingValid(): boolean {
@@ -150,10 +147,8 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.servingValid];
 
-      if (!this.disabledLeftovers && this.hasLeftovers)
-        conditions.push(
-          !this.hasLeftovers || this.leftoversPrompt === false || this.leftoversValid
-        );
+      if (this.leftoversEnabled)
+        conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
 

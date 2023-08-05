@@ -53,10 +53,7 @@
           ></as-served-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel
-        v-if="!disabledLeftovers && leftoverImageSet"
-        :disabled="!servingImageConfirmed"
-      >
+      <v-expansion-panel v-if="leftoversEnabled" :disabled="!servingImageConfirmed">
         <v-expansion-panel-header>
           <i18n :path="`prompts.asServed.leftovers.header`">
             <template #food>
@@ -143,8 +140,8 @@ export default defineComponent({
   },
 
   computed: {
-    disabledLeftovers() {
-      return !this.prompt.leftovers;
+    leftoversEnabled() {
+      return this.prompt.leftovers && !!this.leftoverImageSet;
     },
 
     servingImageSet(): string | undefined {
@@ -189,7 +186,7 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.bowlValid, this.servingValid];
 
-      if (!this.disabledLeftovers)
+      if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
       return conditions;

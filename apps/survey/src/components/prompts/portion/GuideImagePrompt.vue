@@ -60,6 +60,7 @@
         v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
         v-model="portionSize.linkedQuantity"
         :confirm.sync="linkedQuantityConfirmed"
+        :disabled="!quantityValid"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
       ></linked-quantity>

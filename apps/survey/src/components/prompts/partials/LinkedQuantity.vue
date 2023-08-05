@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel>
+  <v-expansion-panel v-bind="$attrs">
     <v-expansion-panel-header>
       <i18n path="prompts.linkedAmount.label">
         <template #unit>{{ linkedQuantityUnit }}</template>

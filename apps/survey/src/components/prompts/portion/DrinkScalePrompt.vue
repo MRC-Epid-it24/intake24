@@ -61,7 +61,7 @@
           </drink-scale-panel>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="!disabledLeftovers" :disabled="!quantityConfirmed">
+      <v-expansion-panel v-if="leftoversEnabled" :disabled="!quantityConfirmed">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.leftovers.header`">
             <template #food>
@@ -105,7 +105,7 @@
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="allowMultiple" :disabled="!quantityConfirmed">
+      <v-expansion-panel v-if="multipleEnabled" :disabled="!quantityConfirmed">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.count`">
             <template #food>
@@ -192,12 +192,12 @@ export default defineComponent({
   },
 
   computed: {
-    allowMultiple() {
+    multipleEnabled() {
       return this.prompt.multiple && this.parameters['multiple'];
     },
 
-    disabledLeftovers() {
-      return !this.prompt.leftovers;
+    leftoversEnabled() {
+      return this.prompt.leftovers;
     },
 
     labelsEnabled() {
@@ -259,10 +259,10 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.objectValid, this.quantityValid];
 
-      if (!this.disabledLeftovers)
+      if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.allowMultiple) conditions.push(this.countValid);
+      if (this.multipleEnabled) conditions.push(this.countValid);
 
       return conditions;
     },
