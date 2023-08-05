@@ -1,16 +1,19 @@
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-import type { PromptStates } from '@intake24/common/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
 
+export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
+  prompt: Prompts[P];
+};
+
 export const usePromptHandlerStore = <P extends keyof PromptStates, S extends PromptStates[P]>(
-  promptId: string,
-  promptType: P,
+  props: UsePromptHandlerStoreProps<P>,
   getInitialState: () => S
 ) => {
-  const promptStore = getOrCreatePromptStateStore<S>(promptType)();
+  const promptStore = getOrCreatePromptStateStore<S>(props.prompt.component)();
   const survey = useSurvey();
 
   const getFoodId = () => {
@@ -27,9 +30,10 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     return mealId;
   };
 
-  const getFoodOrMealId = promptType === 'edit-meal-prompt' ? getMealId : getFoodId;
+  const getFoodOrMealId = props.prompt.component === 'edit-meal-prompt' ? getMealId : getFoodId;
 
-  const storedState: S | undefined = promptStore.prompts[getFoodOrMealId()]?.[promptId];
+  const storedState: S | undefined =
+    promptStore.prompts[getFoodOrMealId()]?.[props.prompt.component];
 
   const state = ref(
     storedState ? merge<S>(getInitialState(), storedState) : getInitialState()
@@ -38,13 +42,13 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
   const update = (data: { state?: S }) => {
     const { state: newState } = data;
     if (newState) {
-      promptStore.updateState(getFoodOrMealId(), promptId, newState);
+      promptStore.updateState(getFoodOrMealId(), props.prompt.id, newState);
       state.value = newState;
     }
   };
 
   const clearStoredState = () => {
-    promptStore.clearState(getFoodOrMealId(), promptId);
+    promptStore.clearState(getFoodOrMealId(), props.prompt.id);
   };
 
   const commitPortionSize = () => {

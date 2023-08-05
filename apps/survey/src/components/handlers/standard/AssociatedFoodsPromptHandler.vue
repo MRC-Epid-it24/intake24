@@ -64,11 +64,7 @@ export default defineComponent({
       prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     return {
       food,

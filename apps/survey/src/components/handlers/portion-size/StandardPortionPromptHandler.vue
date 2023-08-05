@@ -64,11 +64,7 @@ export default defineComponent({
       linkedQuantityConfirmed: false,
     });
 
-    const { state, update, commitPortionSize } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
 
     const action = (type: string, id?: string) => {
       if (type === 'next') commitPortionSize();

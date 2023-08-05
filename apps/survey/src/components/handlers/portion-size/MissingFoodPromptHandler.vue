@@ -52,11 +52,7 @@ export default defineComponent({
       homemadePrompt: undefined,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     const commitAnswer = () => {
       const { info } = state.value;

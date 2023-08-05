@@ -37,11 +37,7 @@ export default defineComponent({
 
     const getInitialState = (): PromptStates['edit-meal-prompt'] => ({ foods: meal.value.foods });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     return {
       meal,

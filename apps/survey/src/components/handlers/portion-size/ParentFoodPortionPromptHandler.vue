@@ -58,11 +58,7 @@ export default defineComponent({
       panel: 0,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     const commitAnswer = () => {
       const {

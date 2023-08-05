@@ -49,11 +49,7 @@ export default defineComponent({
       option: food.portionSizeMethodIndex,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     const survey = useSurvey();
 

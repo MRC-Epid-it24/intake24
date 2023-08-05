@@ -69,11 +69,7 @@ export default defineComponent({
       countConfirmed: false,
     });
 
-    const { state, update, commitPortionSize } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
     const { meal } = useMealPromptUtils();
 
     const action = (type: string, id?: string) => {
