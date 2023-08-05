@@ -63,6 +63,7 @@ export const portionSizeComponentTypes = [
   'parent-food-portion-prompt',
   'pizza-prompt',
   'portion-size-option-prompt',
+  'recipe-builder-prompt',
   'standard-portion-prompt',
 ] as const;
 
@@ -179,6 +180,9 @@ export type Prompts = {
     imageMap: ImageMap;
   };
   'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
+  'recipe-builder-prompt': BasePortionPrompt & {
+    component: 'recipe-builder-prompt';
+  };
   'standard-portion-prompt': BasePortionPrompt & { component: 'standard-portion-prompt' };
   // Standard
   'associated-foods-prompt': BasePrompt & {
