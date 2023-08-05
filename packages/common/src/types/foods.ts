@@ -17,6 +17,14 @@ export type SpecialFood = {
   steps: SpecialFoodStepsType[];
 };
 
+export type SpecialFoodsHeader = {
+  code: string;
+  description: string;
+  name: string;
+  synonyms: Set<string>;
+  specialWords: string;
+};
+
 export type SpecialFoodStepsType = {
   order: number;
   code: string;

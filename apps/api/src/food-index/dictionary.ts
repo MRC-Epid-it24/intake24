@@ -83,10 +83,10 @@ export class RichDictionary {
     // Add special foods for the locale
     this.specialFoodsMap = new Map<string, Set<string>>();
 
-    for (const specialSynSet of specialFoodsSynSets) {
-      if (specialSynSet.size === 0) continue;
-      if (this.specialFoodsMap.has([...specialSynSet][0].toLocaleLowerCase())) continue;
-      this.specialFoodsMap.set([...specialSynSet][0].toLocaleLowerCase(), specialSynSet);
+    for (const specialFoodsSynSet of specialFoodsSynSets) {
+      if (specialFoodsSynSet.size === 0) continue;
+      if (this.specialFoodsMap.has([...specialFoodsSynSet][0].toLocaleLowerCase())) continue;
+      this.specialFoodsMap.set([...specialFoodsSynSet][0].toLocaleLowerCase(), specialFoodsSynSet);
 
       // for (const word of specialSynSet) {
       //   const lowerCaseWord = word.toLocaleLowerCase();
