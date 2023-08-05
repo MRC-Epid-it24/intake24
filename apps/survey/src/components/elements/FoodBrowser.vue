@@ -126,7 +126,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'food-missing'],
+  emits: ['food-selected', 'food-missing', 'recipe-builder'],
 
   setup(props, { emit }) {
     const showInDialog = computed(
@@ -242,6 +242,11 @@ export default defineComponent({
       emit('food-missing', food);
     };
 
+    const recipeBuilder = (food: FoodHeader) => {
+      closeInDialog();
+      emit('recipe-builder', food);
+    };
+
     const navigateBack = () => {
       if (navigationHistory.value.length < 2) {
         console.warn('Navigation history length should be at least 2 at this point');
@@ -292,6 +297,7 @@ export default defineComponent({
       foodMissing,
       foodSelected,
       navigateBack,
+      recipeBuilder,
       search,
       searchCategory,
       searchContents,

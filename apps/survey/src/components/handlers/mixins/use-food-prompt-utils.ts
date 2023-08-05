@@ -9,6 +9,7 @@ import type {
   PortionSizeMethodId,
   PortionSizeParameters,
   PortionSizeStates,
+  RecipeBuilder,
 } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
@@ -83,6 +84,15 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return foodEntry;
   };
 
+  const recipeBuilder = (): RecipeBuilder => {
+    const foodEntry = food();
+
+    if (foodEntry.type !== 'recipe-builder')
+      throw new Error('This selected food must be an Recipe Builder food');
+
+    return foodEntry;
+  };
+
   const foodName = (): LocaleTranslation => ({ en: encodedFood().data.localName });
 
   const portionSize = (): UserPortionSizeMethod => {
@@ -126,6 +136,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     foodName,
     missingFood,
     portionSize,
+    recipeBuilder,
     conversionFactor,
     parameters,
   };

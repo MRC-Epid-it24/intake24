@@ -4,6 +4,7 @@
     v-model="searchTerm"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
+    @recipe-builder="recipeBuilder"
   ></food-search-prompt>
 </template>
 
@@ -13,7 +14,7 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, FoodState, MissingFood, RecipeBuilder } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -42,6 +43,8 @@ export default defineComponent({
         case 'free-text':
           return foodEntry.description;
         case 'missing-food':
+          return foodEntry.searchTerm;
+        case 'recipe-builder':
           return foodEntry.searchTerm;
       }
     }
@@ -97,7 +100,26 @@ export default defineComponent({
         id,
         type: 'missing-food',
         info: null,
-        searchTerm,
+        searchTerm: searchTerm ? searchTerm : '',
+        customPromptAnswers,
+        flags,
+        linkedFoods: [],
+      };
+
+      this.replaceFood({ foodId: id, food: newState });
+
+      this.$emit('action', 'next');
+    },
+
+    recipeBuilder() {
+      const { searchTerm } = this;
+      const { id, customPromptAnswers, flags } = this.food();
+
+      const newState: RecipeBuilder = {
+        id,
+        type: 'recipe-builder',
+        info: null,
+        searchTerm: searchTerm ? searchTerm : '',
         customPromptAnswers,
         flags,
         linkedFoods: [],
@@ -126,7 +148,7 @@ export default defineComponent({
         id,
         type: 'encoded-food',
         data: foodData,
-        searchTerm,
+        searchTerm: searchTerm ? searchTerm : '',
         portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
         portionSize: null,
         customPromptAnswers,

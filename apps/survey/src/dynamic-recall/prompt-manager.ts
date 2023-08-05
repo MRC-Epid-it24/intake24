@@ -27,6 +27,7 @@ import {
   parentFoodPortionComplete,
   pizzaComplete,
   portionSizeMethodSelected,
+  recipeBuilderComplete,
   standardPortionComplete,
 } from './portion-size-checks';
 
@@ -271,7 +272,7 @@ const checkFoodStandardConditions = (
     case 'food-search-prompt': {
       const freeEntryComplete = surveyFreeEntryComplete(surveyState.data);
 
-      if (['encoded-food', 'missing-food'].includes(foodState.type)) {
+      if (['encoded-food', 'missing-food', 'recipe-builder'].includes(foodState.type)) {
         recallLog().promptCheck(
           component,
           false,
@@ -597,6 +598,18 @@ const checkFoodStandardConditions = (
 
       if (missingFoodComplete(foodState)) {
         recallLog().promptCheck(component, false, `Missing food info entered.`);
+        return false;
+      }
+
+      recallLog().promptCheck(component, true, `Missing food info not entered yet..`);
+      return true;
+    }
+
+    case 'recipe-builder-prompt': {
+      if (foodState.type !== 'recipe-builder') return false;
+
+      if (recipeBuilderComplete(foodState)) {
+        recallLog().promptCheck(component, false, `Recipe Builder food info entered.`);
         return false;
       }
 

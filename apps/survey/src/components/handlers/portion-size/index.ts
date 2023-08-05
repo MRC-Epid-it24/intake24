@@ -8,6 +8,7 @@ import MissingFoodPromptHandler from './MissingFoodPromptHandler.vue';
 import ParentFoodPortionPromptHandler from './ParentFoodPortionPromptHandler.vue';
 import PizzaPromptHandler from './PizzaPromptHandler.vue';
 import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
+import RecipeBuilderPromptHandler from './RecipeBuilderPromptHandler.vue';
 import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
 
 export default {
@@ -21,5 +22,6 @@ export default {
   ParentFoodPortionPromptHandler,
   PizzaPromptHandler,
   PortionSizeOptionPromptHandler,
+  RecipeBuilderPromptHandler,
   StandardPortionPromptHandler,
 };

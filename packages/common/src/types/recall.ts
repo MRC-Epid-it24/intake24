@@ -27,6 +27,7 @@ export type FoodFlag =
   | 'missing-food-complete'
   | 'portion-size-option-complete'
   | 'portion-size-method-complete'
+  | 'recipe-builder-complete'
   | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
@@ -226,7 +227,7 @@ export interface AbstractFoodState {
   flags: string[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  type: 'free-text' | 'encoded-food' | 'missing-food';
+  type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
 }
 
 export interface FreeTextFood extends AbstractFoodState {
@@ -253,7 +254,16 @@ export interface MissingFood extends AbstractFoodState {
   > | null;
 }
 
-export type FoodState = FreeTextFood | EncodedFood | MissingFood;
+export interface RecipeBuilder extends AbstractFoodState {
+  type: 'recipe-builder';
+  searchTerm: string;
+  info: Pick<
+    SurveySubmissionMissingFoodCreationAttributes,
+    'name' | 'brand' | 'description' | 'leftovers' | 'portionSize' | 'barcode'
+  > | null;
+}
+
+export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;
 
 export interface FoodEntry {
   text: string;

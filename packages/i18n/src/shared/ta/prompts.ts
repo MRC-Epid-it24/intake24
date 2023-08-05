@@ -122,6 +122,12 @@ const prompts: LocaleMessageObject = {
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
+    recipeBuilder: {
+      label: `Add your own {searchTerm} recipe`,
+      description: `<p>Build your own recipe.</p>`,
+      report: 'Report a missing food',
+      tryAgain: 'OK, let me try again',
+    },
     confirmDiscardFood: {
       label: 'Yes',
       messageUnsafe: `<p>You have already answered some questions about <strong>"{discardedFoodName}"</strong>!</p>

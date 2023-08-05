@@ -23,6 +23,24 @@
         <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
         <p>{{ $t(`prompts.${type}.reword`) }}</p>
       </v-alert>
+      <v-card-text v-if="recipeBuilder">
+        <v-btn
+          :block="isMobile"
+          :class="{ 'ml-2': !isMobile }"
+          color="secondary"
+          :disabled="!recipeBuilder"
+          large
+          outlined
+          :v-model="recipeBuilderFood?.description"
+          @click.stop="recipeBuilder = true"
+        >
+          {{
+            $t(`prompts.${type}.recipeBuilder.label`, {
+              recipeBuilderFood: recipeBuilderFood?.description,
+            })
+          }}
+        </v-btn>
+      </v-card-text>
       <food-search-results
         v-if="searchResults"
         :results="searchResults"
@@ -130,10 +148,12 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-missing', 'food-selected', 'input'],
+  emits: ['food-missing', 'food-selected', 'input', 'recipe-builder'],
 
   setup(props) {
     const missing = ref(false);
+    const recipeBuilder = ref(false);
+    const recipeBuilderFood = ref<FoodHeader | null>(null);
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
     const searchTerm = ref(props.value);
@@ -145,6 +165,8 @@ export default defineComponent({
 
     return {
       missing,
+      recipeBuilder,
+      recipeBuilderFood,
       requestInProgress,
       requestFailed,
       searchTerm,
@@ -174,6 +196,11 @@ export default defineComponent({
           recipe: false,
         });
         this.requestFailed = false;
+        if (this.searchResults.foods[0].code.charAt(0) === '$') {
+          this.recipeBuilderFood = this.searchResults.foods[0];
+          this.recipeBuilder = true;
+        }
+        // console.log(`Got some Builder Food ${this.searchResults.foods[0].code}}`);
       } catch (e) {
         this.requestFailed = true;
       }

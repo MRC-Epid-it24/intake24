@@ -73,6 +73,11 @@ export type PromptStates = {
   'portion-size-option-prompt': {
     option: number | null;
   };
+  'recipe-builder-prompt': {
+    info: NonNullable<MissingFood['info']>;
+    panel: number;
+    homemadePrompt?: boolean;
+  };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];
     panel: number;

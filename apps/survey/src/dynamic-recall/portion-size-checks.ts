@@ -1,4 +1,9 @@
-import type { FoodState, MissingFood, PortionSizeMethodId } from '@intake24/common/types';
+import type {
+  FoodState,
+  MissingFood,
+  PortionSizeMethodId,
+  RecipeBuilder,
+} from '@intake24/common/types';
 
 export function portionSizeMethodSelected(food: FoodState, method: PortionSizeMethodId): boolean {
   if (food.type !== 'encoded-food') return false;
@@ -223,3 +228,6 @@ export const isPortionSizeComplete = (food: FoodState): boolean => {
 
 export const missingFoodComplete = (food: MissingFood): boolean =>
   !!(food.info && food.flags.includes('missing-food-complete'));
+
+export const recipeBuilderComplete = (food: RecipeBuilder): boolean =>
+  !!(food.info && food.flags.includes('recipe-builder-complete'));
