@@ -66,32 +66,14 @@
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
-      <v-expansion-panel v-if="linkedQuantityCategories.length">
-        <v-expansion-panel-header>
-          <i18n path="prompts.linkedAmount.label">
-            <template #unit>{{ linkedQuantityUnit }}</template>
-            <template #food>
-              <span class="font-weight-medium">{{ foodName }}</span>
-            </template>
-            <template #quantity>
-              <span class="font-weight-medium">{{ parentQuantity }}</span>
-            </template>
-          </i18n>
-          <template #actions>
-            <expansion-panel-actions :valid="linkedQuantityConfirmed"></expansion-panel-actions>
-          </template>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <quantity-card
-            v-model="linkedQuantity"
-            :confirm.sync="linkedQuantityConfirmed"
-            :max="parentQuantity"
-            :show-all="!!linkedQuantityCategories.length"
-            @input="selectLinkedQuantity"
-            @update:confirm="confirmLinkedQuantity"
-          ></quantity-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+      <linked-quantity
+        v-if="linkedQuantityCategories.length"
+        v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
+        v-model="portionSize.linkedQuantity"
+        :confirm.sync="linkedQuantityConfirmed"
+        @input="selectLinkedQuantity"
+        @update:confirm="confirmLinkedQuantity"
+      ></linked-quantity>
     </v-expansion-panels>
   </base-layout>
 </template>
@@ -100,25 +82,28 @@
 import type { PropType } from 'vue';
 import { defineComponent, toRefs } from 'vue';
 
-import type { PromptStates } from '@intake24/common/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
 import { useLocale } from '@intake24/ui';
 
-import { useStandardUnits } from '../useStandardUnits';
+import { AsServedSelector, LinkedQuantity, QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
-import { AsServedSelector, QuantityBadge, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'AsServedPrompt',
 
-  components: { AsServedSelector, QuantityBadge, QuantityCard, YesNoToggle },
+  components: { AsServedSelector, LinkedQuantity, QuantityBadge, YesNoToggle },
 
   mixins: [createBasePortion<'as-served-prompt'>()],
 
   props: {
+    linkedQuantityCategories: {
+      type: Array as PropType<Prompts['guide-image-prompt']['linkedQuantityCategories']>,
+      required: true,
+    },
     parameters: {
       type: Object as PropType<PortionSizeParameters['as-served']>,
       required: true,
@@ -132,9 +117,11 @@ export default defineComponent({
 
     const { getLocaleContent } = useLocale();
     const { foodName } = useFoodUtils(food);
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    return { standardUnitRefs, fetchStandardUnits, foodName, getLocaleContent };
+    return {
+      foodName,
+      getLocaleContent,
+    };
   },
 
   data() {
@@ -160,19 +147,6 @@ export default defineComponent({
       return !!(this.portionSize.leftovers && this.leftoversImageConfirmed);
     },
 
-    linkedQuantityUnit() {
-      const unit = this.linkedQuantityCategories[0]?.unit;
-      if (!unit || !this.standardUnitRefs[unit]) return this.$t('prompts.linkedAmount.unit');
-
-      return this.getLocaleContent(this.standardUnitRefs[unit].howMany, {
-        path: 'prompts.linkedAmount.unit',
-      });
-    },
-
-    linkedQuantityValid(): boolean {
-      return this.linkedQuantityConfirmed;
-    },
-
     validConditions(): boolean[] {
       const conditions = [this.servingValid];
 
@@ -194,15 +168,6 @@ export default defineComponent({
       this.updatePanel();
       this.update();
     },
-  },
-
-  async mounted() {
-    if (!this.linkedQuantityCategories.length) return;
-
-    const names = this.linkedQuantityCategories.map(({ unit }) => unit).filter(Boolean);
-    if (names.length) await this.fetchStandardUnits(names as string[]);
-
-    if (!this.linkedQuantityConfirmed) this.linkedQuantity = this.parentQuantity;
   },
 
   methods: {
@@ -254,9 +219,9 @@ export default defineComponent({
 
     update() {
       this.portionSize.servingWeight =
-        (this.portionSize.serving?.weight ?? 0) * this.linkedQuantity;
+        (this.portionSize.serving?.weight ?? 0) * this.portionSize.linkedQuantity;
       this.portionSize.leftoversWeight =
-        (this.portionSize.leftovers?.weight ?? 0) * this.linkedQuantity;
+        (this.portionSize.leftovers?.weight ?? 0) * this.portionSize.linkedQuantity;
 
       const state: PromptStates['as-served-prompt'] = {
         portionSize: this.portionSize,
@@ -264,7 +229,6 @@ export default defineComponent({
         servingImageConfirmed: this.servingImageConfirmed,
         leftoversImageConfirmed: this.leftoversImageConfirmed,
         leftoversPrompt: this.leftoversPrompt,
-        linkedQuantity: this.linkedQuantity,
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 

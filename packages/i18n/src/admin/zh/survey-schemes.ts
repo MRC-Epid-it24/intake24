@@ -250,6 +250,7 @@ const surveySchemes: LocaleMessageObject = {
     },
     label: 'Options list label',
     leftovers: 'Allow leftovers',
+    linkedQuantityCategories: 'Linked quantity categories',
     other: 'Allow custom other option',
     orientation: {
       _: 'Orientation',
@@ -416,7 +417,6 @@ const surveySchemes: LocaleMessageObject = {
     'as-served-prompt': {
       title: 'As served portion size',
       subtitle: 'Use the "as served" method to estimate the portion size',
-      linkedQuantityCategories: 'Linked quantity categories',
     },
     'cereal-prompt': {
       title: 'Cereal',

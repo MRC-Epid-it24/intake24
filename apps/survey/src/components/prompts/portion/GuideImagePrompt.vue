@@ -55,32 +55,46 @@
           ></quantity-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <linked-quantity
+        v-if="linkedQuantityCategories.length"
+        v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
+        v-model="portionSize.linkedQuantity"
+        :confirm.sync="linkedQuantityConfirmed"
+        @input="selectLinkedQuantity"
+        @update:confirm="confirmLinkedQuantity"
+      ></linked-quantity>
     </v-expansion-panels>
   </base-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
-import type { PromptStates } from '@intake24/common/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
+import { useFoodUtils } from '@intake24/survey/composables';
+import { useLocale } from '@intake24/ui';
 
+import { ImageMapSelector, LinkedQuantity, QuantityBadge, QuantityCard } from '../partials';
 import createBasePortion from './createBasePortion';
-import { ImageMapSelector, QuantityBadge, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'GuideImagePrompt',
 
-  components: { ImageMapSelector, QuantityBadge, QuantityCard },
+  components: { ImageMapSelector, LinkedQuantity, QuantityBadge, QuantityCard },
 
   mixins: [createBasePortion<'guide-image-prompt'>()],
 
   props: {
     conversionFactor: {
       type: Number,
+      required: true,
+    },
+    linkedQuantityCategories: {
+      type: Array as PropType<Prompts['guide-image-prompt']['linkedQuantityCategories']>,
       required: true,
     },
     parameters: {
@@ -90,6 +104,18 @@ export default defineComponent({
   },
 
   emits: ['update'],
+
+  setup(props) {
+    const { food } = toRefs(props);
+
+    const { getLocaleContent } = useLocale();
+    const { foodName } = useFoodUtils(food);
+
+    return {
+      foodName,
+      getLocaleContent,
+    };
+  },
 
   data() {
     const state = copy(this.initialState);
@@ -134,7 +160,11 @@ export default defineComponent({
     },
 
     validConditions(): boolean[] {
-      return [this.objectValid, this.quantityValid];
+      const conditions = [this.objectValid, this.quantityValid];
+
+      if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
+
+      return conditions;
     },
   },
 
@@ -174,6 +204,15 @@ export default defineComponent({
       this.update();
     },
 
+    selectLinkedQuantity() {
+      this.update();
+    },
+
+    confirmLinkedQuantity() {
+      this.updatePanel();
+      this.update();
+    },
+
     update() {
       if (this.guideImageData && this.portionSize.objectId !== undefined) {
         const id = this.portionSize.objectId;
@@ -182,7 +221,8 @@ export default defineComponent({
         this.portionSize.servingWeight =
           this.guideImageData.objects[id].weight *
           this.portionSize.quantity *
-          this.conversionFactor;
+          this.conversionFactor *
+          this.portionSize.linkedQuantity;
       }
 
       const state: PromptStates['guide-image-prompt'] = {
@@ -190,6 +230,7 @@ export default defineComponent({
         panel: this.panel,
         objectConfirmed: this.objectConfirmed,
         quantityConfirmed: this.quantityConfirmed,
+        linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
       this.$emit('update', { state });

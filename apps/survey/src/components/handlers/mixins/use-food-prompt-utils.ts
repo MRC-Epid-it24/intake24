@@ -100,11 +100,22 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     () => portionSize().parameters as unknown as PortionSizeParameters[T]
   );
 
+  const linkedQuantityCategories = computed(() => {
+    if (parentFoodOptional.value === undefined) return [];
+
+    const { data, portionSize } = parentFoodOptional.value;
+    if (!portionSize || portionSize.method !== 'guide-image' || portionSize.quantity <= 1)
+      return [];
+
+    return survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
+  });
+
   return {
-    localeId,
     food,
     foodIndex,
     foodOptional,
+    linkedQuantityCategories,
+    localeId,
     meals,
     parentFood,
     parentFoodOptional,

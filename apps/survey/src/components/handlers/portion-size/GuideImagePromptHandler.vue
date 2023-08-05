@@ -3,6 +3,7 @@
     v-bind="{
       conversionFactor,
       food: food(),
+      linkedQuantityCategories,
       meal,
       initialState: state,
       parameters,
@@ -43,6 +44,7 @@ export default defineComponent({
       conversionFactor,
       encodedFood: food,
       encodedFoodPortionSizeData,
+      linkedQuantityCategories,
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'guide-image'>();
@@ -57,12 +59,15 @@ export default defineComponent({
         objectIndex: undefined,
         objectWeight: 0,
         quantity: 1,
+        linkedQuantity: 1,
         servingWeight: 0,
         leftoversWeight: 0,
       },
       panel: 0,
       objectConfirmed: false,
       quantityConfirmed: false,
+      linkedQuantity: 1,
+      linkedQuantityConfirmed: false,
     });
 
     const { state, update, commitPortionSize } = usePromptHandlerStore(
@@ -80,6 +85,7 @@ export default defineComponent({
     return {
       conversionFactor,
       food,
+      linkedQuantityCategories,
       meal,
       parameters,
       parentFood,

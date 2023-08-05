@@ -55,8 +55,8 @@ import type { EncodedFood, PortionSizeParameters } from '@intake24/common/types'
 import { copy } from '@intake24/common/util';
 import { useFoodUtils } from '@intake24/survey/composables';
 
+import { QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
-import { QuantityBadge } from './selectors';
 
 export default defineComponent({
   name: 'MilkInAHotDrinkPrompt',

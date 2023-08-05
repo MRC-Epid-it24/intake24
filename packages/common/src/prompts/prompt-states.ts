@@ -14,7 +14,6 @@ export type PromptStates = {
     servingImageConfirmed: boolean;
     leftoversImageConfirmed: boolean;
     leftoversPrompt?: boolean;
-    linkedQuantity: number;
     linkedQuantityConfirmed: boolean;
   };
   'cereal-prompt': {
@@ -40,6 +39,7 @@ export type PromptStates = {
     panel: number;
     objectConfirmed: boolean;
     quantityConfirmed: boolean;
+    linkedQuantityConfirmed: boolean;
   };
   'milk-in-a-hot-drink-prompt': {
     portionSize: PortionSizeStates['milk-in-a-hot-drink'];
@@ -77,6 +77,7 @@ export type PromptStates = {
     portionSize: PortionSizeStates['standard-portion'];
     panel: number;
     quantityConfirmed: boolean;
+    linkedQuantityConfirmed: boolean;
   };
   // Standard prompts
   'edit-meal-prompt': {

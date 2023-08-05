@@ -141,7 +141,6 @@ export type Prompts = {
   'as-served-prompt': BasePortionPrompt & {
     component: 'as-served-prompt';
     leftovers: boolean;
-    linkedQuantityCategories: { code: string; unit?: string }[];
   };
   'cereal-prompt': BasePortionPrompt & {
     component: 'cereal-prompt';
@@ -158,6 +157,7 @@ export type Prompts = {
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
     imageMap: ImageMap;
+    linkedQuantityCategories: { code: string; unit?: string }[];
   };
   'milk-in-a-hot-drink-prompt': BasePortionPrompt & {
     component: 'milk-in-a-hot-drink-prompt';

@@ -31,7 +31,7 @@ export const asServedMapper = (
   foodId: string,
   state: PortionSizeStates['as-served']
 ): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
-  const { leftoversWeight, servingWeight, serving, leftovers } = state;
+  const { leftoversWeight, servingWeight, serving, leftovers, linkedQuantity } = state;
 
   return [
     { name: 'leftovers', value: (!!leftovers).toString() },
@@ -39,6 +39,7 @@ export const asServedMapper = (
     { name: 'leftovers-image-set', value: leftovers?.asServedSetId ?? '' },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
     { name: 'leftoversChoiceIndex', value: leftovers?.index?.toString() ?? '' },
+    { name: 'linkedQuantity', value: linkedQuantity.toString() },
     { name: 'servingImage', value: parseUrlPathname(serving?.imageUrl) },
     { name: 'serving-image-set', value: serving?.asServedSetId ?? '' },
     { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
@@ -126,6 +127,7 @@ export const guideImageMapper = (
     objectIndex,
     objectWeight,
     leftoversWeight,
+    linkedQuantity,
     quantity,
     servingWeight,
   } = state;
@@ -134,6 +136,7 @@ export const guideImageMapper = (
     { name: 'guide-image-id', value: guideImageId },
     { name: 'imageUrl', value: parseUrlPathname(imageUrl) },
     { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'linkedQuantity', value: linkedQuantity.toString() },
     { name: 'objectId', value: objectId ?? '' },
     { name: 'objectIndex', value: objectIndex?.toString() ?? '' },
     { name: 'objectWeight', value: objectWeight.toString() },
@@ -225,9 +228,10 @@ export const standardPortionMapper = (
   foodId: string,
   state: PortionSizeStates['standard-portion']
 ): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
-  const { quantity, unit, leftoversWeight, servingWeight } = state;
+  const { linkedQuantity, quantity, unit, leftoversWeight, servingWeight } = state;
 
   return [
+    { name: 'linkedQuantity', value: linkedQuantity.toString() },
     { name: 'quantity', value: quantity.toString() },
     { name: 'unitName', value: unit?.name ?? '' },
     { name: 'unitWeight', value: unit?.weight.toString() ?? '' },

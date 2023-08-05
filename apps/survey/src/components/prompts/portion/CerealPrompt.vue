@@ -107,8 +107,8 @@ import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
+import { AsServedSelector, ImageMapSelector, QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
-import { AsServedSelector, ImageMapSelector, QuantityBadge } from './selectors';
 
 export default defineComponent({
   name: 'CerealPrompt',

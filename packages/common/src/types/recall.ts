@@ -120,6 +120,7 @@ export type PortionSizeStates = {
     method: 'as-served';
     serving: SelectedAsServedImage | null;
     leftovers: SelectedAsServedImage | null;
+    linkedQuantity: number;
   };
   cereal: PortionSizeStateBase & {
     method: 'cereal';
@@ -152,6 +153,7 @@ export type PortionSizeStates = {
     objectIndex?: number;
     objectWeight: number;
     quantity: number;
+    linkedQuantity: number;
   };
   'milk-in-a-hot-drink': PortionSizeStateBase & {
     method: 'milk-in-a-hot-drink';
@@ -196,6 +198,7 @@ export type PortionSizeStates = {
     method: 'standard-portion';
     unit: StandardPortionUnit | null;
     quantity: number;
+    linkedQuantity: number;
   };
   weight: PortionSizeStateBase & { method: 'weight' };
 };

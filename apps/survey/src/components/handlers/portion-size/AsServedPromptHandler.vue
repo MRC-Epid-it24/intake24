@@ -2,6 +2,7 @@
   <as-served-prompt
     v-bind="{
       food: food(),
+      linkedQuantityCategories,
       meal,
       parentFood,
       initialState: state,
@@ -40,6 +41,7 @@ export default defineComponent({
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
+      linkedQuantityCategories,
       parameters,
       parentFoodOptional: parentFood,
       portionSize,
@@ -51,6 +53,7 @@ export default defineComponent({
         method: 'as-served',
         serving: null,
         leftovers: null,
+        linkedQuantity: 1,
         servingWeight: 0,
         leftoversWeight: 0,
       },
@@ -58,7 +61,6 @@ export default defineComponent({
       servingImageConfirmed: false,
       leftoversPrompt: undefined,
       leftoversImageConfirmed: false,
-      linkedQuantity: 1,
       linkedQuantityConfirmed: false,
     });
 
@@ -76,6 +78,7 @@ export default defineComponent({
 
     return {
       food,
+      linkedQuantityCategories,
       meal,
       parameters,
       parentFood,

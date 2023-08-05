@@ -150,14 +150,14 @@ import type {
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
-import createBasePortion from './createBasePortion';
 import {
   calculateVolume,
   DrinkScalePanel,
   ImageMapSelector,
   QuantityBadge,
   QuantitySlider,
-} from './selectors';
+} from '../partials';
+import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'DrinkScalePrompt',

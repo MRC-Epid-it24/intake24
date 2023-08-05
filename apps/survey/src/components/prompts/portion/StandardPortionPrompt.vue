@@ -66,6 +66,14 @@
           ></quantity-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      <linked-quantity
+        v-if="linkedQuantityCategories.length"
+        v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
+        v-model="portionSize.linkedQuantity"
+        :confirm.sync="linkedQuantityConfirmed"
+        @input="selectLinkedQuantity"
+        @update:confirm="confirmLinkedQuantity"
+      ></linked-quantity>
     </v-expansion-panels>
   </base-layout>
 </template>
@@ -74,26 +82,29 @@
 import type { PropType } from 'vue';
 import { defineComponent, toRefs } from 'vue';
 
-import type { PromptStates } from '@intake24/common/prompts';
+import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useFoodUtils } from '@intake24/survey/composables';
 import { useLocale } from '@intake24/ui';
 
-import { useStandardUnits } from '../useStandardUnits';
+import { LinkedQuantity, QuantityBadge, QuantityCard, useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
-import { QuantityBadge, QuantityCard } from './selectors';
 
 export default defineComponent({
   name: 'StandardPortionPrompt',
 
-  components: { QuantityBadge, QuantityCard },
+  components: { LinkedQuantity, QuantityBadge, QuantityCard },
 
   mixins: [createBasePortion<'standard-portion-prompt'>()],
 
   props: {
     conversionFactor: {
       type: Number,
+      required: true,
+    },
+    linkedQuantityCategories: {
+      type: Array as PropType<Prompts['guide-image-prompt']['linkedQuantityCategories']>,
       required: true,
     },
     parameters: {
@@ -148,7 +159,11 @@ export default defineComponent({
     },
 
     validConditions(): boolean[] {
-      return [this.unitValid, this.quantityValid];
+      const conditions = [this.unitValid, this.quantityValid];
+
+      if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
+
+      return conditions;
     },
   },
 
@@ -178,16 +193,29 @@ export default defineComponent({
       this.update();
     },
 
+    selectLinkedQuantity() {
+      this.update();
+    },
+
+    confirmLinkedQuantity() {
+      this.updatePanel();
+      this.update();
+    },
+
     update() {
       const { portionSize } = this;
 
       this.portionSize.servingWeight =
-        (portionSize.unit?.weight ?? 0) * portionSize.quantity * this.conversionFactor;
+        (portionSize.unit?.weight ?? 0) *
+        portionSize.quantity *
+        this.conversionFactor *
+        this.portionSize.linkedQuantity;
 
       const state: PromptStates['standard-portion-prompt'] = {
         portionSize: this.portionSize,
         panel: this.panel,
         quantityConfirmed: this.quantityConfirmed,
+        linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
       this.$emit('update', { state });

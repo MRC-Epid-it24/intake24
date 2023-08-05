@@ -84,7 +84,7 @@ import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { useLocale } from '@intake24/ui';
 
 import { ImagePlaceholder } from '../../elements';
-import { useStandardUnits } from '../useStandardUnits';
+import { useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({

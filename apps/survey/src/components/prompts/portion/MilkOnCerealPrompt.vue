@@ -68,8 +68,8 @@ import type { PortionSizeParameters } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 
+import { ImageMapSelector, QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
-import { ImageMapSelector, QuantityBadge } from './selectors';
 
 const bowls = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 

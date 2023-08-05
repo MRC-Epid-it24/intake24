@@ -101,7 +101,7 @@ import type { SameAsBeforeItem } from '@intake24/survey/stores';
 import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
-import { useStandardUnits } from '../useStandardUnits';
+import { useStandardUnits } from '../partials';
 
 export default defineComponent({
   name: 'SameAsBeforePrompt',

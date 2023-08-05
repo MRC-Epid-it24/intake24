@@ -73,24 +73,6 @@ export default <
         return this.validConditions.every((conditions) => conditions);
       },
 
-      parentQuantity(): number {
-        return this.parentFood?.portionSize?.method === 'guide-image'
-          ? this.parentFood.portionSize.quantity
-          : 0;
-      },
-
-      linkedQuantityCategories(): Prompts['as-served-prompt']['linkedQuantityCategories'] {
-        const prompt = this.prompt as Prompt;
-        if (prompt.component !== 'as-served-prompt' || !prompt.linkedQuantityCategories.length)
-          return [];
-
-        const { parentFood: { data, portionSize } = {} } = this;
-        if (!portionSize || portionSize.method !== 'guide-image' || portionSize.quantity <= 1)
-          return [];
-
-        return prompt.linkedQuantityCategories.filter((cat) => data?.categories.includes(cat.code));
-      },
-
       type() {
         return promptType((this.prompt as Prompt).component);
       },
