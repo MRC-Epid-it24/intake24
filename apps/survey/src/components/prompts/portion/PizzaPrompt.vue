@@ -111,8 +111,8 @@ import type { PortionSizeParameters } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 
+import { ImageMapSelector, QuantityCard } from '../partials';
 import createBasePortion from './createBasePortion';
-import { ImageMapSelector, QuantityCard } from './selectors';
 
 type PizzaImageMap = 'type' | 'thickness' | 'slice';
 
@@ -330,9 +330,9 @@ export default defineComponent({
 
       this.portionSize.servingWeight =
         this.sliceWeight(
-          portionSize.type.index,
-          portionSize.slice.index,
-          portionSize.thickness.index
+          Number(portionSize.type.id) - 1,
+          Number(portionSize.slice.id),
+          Number(portionSize.thickness.id) - 1
         ) * portionSize.slice.quantity;
 
       const state: PromptStates['pizza-prompt'] = {
