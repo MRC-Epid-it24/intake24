@@ -206,6 +206,15 @@ export type PortionSizeStates = {
 
 export type PortionSizeMethodId = keyof PortionSizeStates;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
+export type RecipeBuilderComponent = {
+  order: number;
+  ingredients: string[];
+};
+
+export type RecipeBuilderLinkedFood = {
+  id: string;
+  linkedTo: string[] | null;
+};
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
 
@@ -257,10 +266,11 @@ export interface MissingFood extends AbstractFoodState {
 export interface RecipeBuilder extends AbstractFoodState {
   type: 'recipe-builder';
   searchTerm: string;
-  info: Pick<
-    SurveySubmissionMissingFoodCreationAttributes,
-    'name' | 'brand' | 'description' | 'leftovers' | 'portionSize' | 'barcode'
-  > | null;
+  components: RecipeBuilderComponent[];
+  description: string;
+  template_id: string;
+  link: RecipeBuilderLinkedFood[];
+  markedAsComplete: number[];
 }
 
 export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;

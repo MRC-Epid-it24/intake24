@@ -9,34 +9,33 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!info.description"></expansion-panel-actions>
+            <expansion-panel-actions></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <yes-no-toggle v-model="homemadePrompt" class="mb-4" mandatory></yes-no-toggle>
-          <template v-if="homemadePrompt === true">
+          <!-- <yes-no-toggle v-model="finishedSteps" class="mb-4" mandatory></yes-no-toggle> -->
+          <template>
             <i18n class="mb-4" :path="`prompts.${type}.homemade`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <v-textarea v-model="info.description" outlined @input="update"></v-textarea>
+            <v-textarea outlined @input="update"></v-textarea>
           </template>
-          <template v-if="homemadePrompt === false">
+          <template>
             <i18n class="mb-4" :path="`prompts.${type}.purchased`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <v-text-field v-model="info.description" outlined @input="update"></v-text-field>
+            <v-text-field outlined @input="update"></v-text-field>
             <i18n class="mb-4" :path="`prompts.${type}.barcode`" tag="div">
               <template #food>
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <barcode-input :model-value.sync="info.barcode"></barcode-input>
           </template>
-          <v-btn :block="isMobile" color="secondary" :disabled="!info.description" @click="confirm">
+          <v-btn :block="isMobile" color="secondary" :disabled="false" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
@@ -49,12 +48,12 @@
             </template>
           </i18n>
           <template #actions>
-            <expansion-panel-actions :valid="!!info.portionSize"></expansion-panel-actions>
+            <expansion-panel-actions></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-textarea v-model="info.portionSize" outlined @input="update"></v-textarea>
-          <v-btn :block="isMobile" color="secondary" :disabled="!info.portionSize" @click="confirm">
+          <v-textarea outlined @input="update"></v-textarea>
+          <v-btn :block="isMobile" color="secondary" :disabled="false" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
@@ -69,15 +68,13 @@ import { defineComponent } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
-import { YesNoToggle } from '@intake24/survey/components/elements';
-import { BarcodeInput } from '@intake24/ui';
 
 import createBasePortion from './createBasePortion';
 
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
-  components: { BarcodeInput, YesNoToggle },
+  components: {},
 
   mixins: [createBasePortion<'recipe-builder-prompt', RecipeBuilder>()],
 
@@ -90,15 +87,21 @@ export default defineComponent({
         // 'name',
         // 'brand',
         'description',
-        'portionSize',
+        'components',
+        'customPromptAnswers',
+        'searchTerm',
+        'markedAsComplete',
+        'template_id',
+        'link',
         // 'leftovers',
-      ] as (keyof RecipeBuilder['info'])[],
+      ] as (keyof RecipeBuilder)[],
     };
   },
 
   computed: {
     validConditions(): boolean[] {
-      return this.fields.map((item) => !!this.info[item]);
+      // return this.fields.map((item) => !!this.info[item]);
+      return [true];
     },
   },
 
@@ -109,9 +112,9 @@ export default defineComponent({
 
     update() {
       const state: PromptStates['recipe-builder-prompt'] = {
-        info: this.info,
+        steps: this.steps,
         panel: this.panel,
-        homemadePrompt: this.homemadePrompt,
+        finishedSteps: this.finishedSteps,
       };
 
       this.$emit('update', { state });

@@ -23,5 +23,31 @@
   "typescript.inlayHints.enumMemberValues.enabled": true,
   "files.watcherExclude": {
     "**/target": true
+  },
+  "colorTabs.config": [
+    {
+      "regex": "apps/survey/*",
+      "color": "#851e3e",
+      "label": "Survey"
+    },
+    {
+      "regex": "apps/api/.*",
+      "color": "#f9caa7",
+      "label": "Api"
+    },
+    {
+      "regex": ".*/admin/.*",
+      "color": "#89CFF0",
+      "label": "Admin"
+    },
+  ],
+  "colorTabs.titleBackground": true,
+  "colorTabs.ignoreCase": true,
+  "workbench.colorCustomizations": {
+    "tab.activeBorder": "#851e3e",
+    "titleBar.activeBackground": "#851e3e",
+    "titleBar.activeForeground": "#000000",
+    "statusBar.background": "#851e3e",
+    "statusBar.foreground": "#000000"
   }
 }

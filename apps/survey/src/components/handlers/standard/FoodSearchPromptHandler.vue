@@ -80,7 +80,15 @@ export default defineComponent({
       discardedFoodName.value = null;
     }
 
-    return { food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
+    return {
+      food,
+      meal,
+      localeId,
+      foodData,
+      parameters,
+      searchTerm,
+      discardedFoodName,
+    };
   },
 
   methods: {
@@ -117,12 +125,16 @@ export default defineComponent({
 
       const newState: RecipeBuilder = {
         id,
-        type: 'recipe-builder',
-        info: null,
+        type: 'recipe-builder', // TODO: Check if "recipe-builder" is the correct type here or should ity be "template"
+        description: 'sandwich',
         searchTerm: searchTerm ? searchTerm : '',
         customPromptAnswers,
         flags,
         linkedFoods: [],
+        template_id: 'sandwich',
+        markedAsComplete: [],
+        components: [],
+        link: [],
       };
 
       this.replaceFood({ foodId: id, food: newState });

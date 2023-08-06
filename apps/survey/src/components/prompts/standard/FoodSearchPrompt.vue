@@ -32,7 +32,7 @@
           large
           outlined
           :v-model="recipeBuilderFood?.description"
-          @click.stop="recipeBuilder = true"
+          @click.stop="$emit('recipe-builder')"
         >
           {{
             $t(`prompts.${type}.recipeBuilder.label`, {
@@ -186,6 +186,7 @@ export default defineComponent({
       this.$emit('input', this.searchTerm);
       this.requestInProgress = true;
       this.searchResults = null;
+      this.recipeBuilder = false;
 
       const { matchScoreWeight, rankingAlgorithm } = this.parameters;
 

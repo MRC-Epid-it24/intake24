@@ -41,15 +41,9 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
 
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
-      info: food().info ?? {
-        name: food().searchTerm,
-        brand: '',
-        description: '',
-        leftovers: '',
-        portionSize: '',
-      },
       panel: 0,
-      homemadePrompt: undefined,
+      finishedSteps: [],
+      steps: [],
     });
 
     // eslint-disable-next-line vue/no-setup-props-destructure
@@ -60,13 +54,13 @@ export default defineComponent({
     );
 
     const commitAnswer = () => {
-      const { info } = state.value;
+      const { steps } = state.value;
 
-      if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
-        throw new Error('Recipe Builder food prompt: missing data');
+      // if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
+      //   throw new Error('Recipe Builder food prompt: missing data');
 
-      survey.updateFood({ foodId: food().id, update: { info } });
-      survey.addFoodFlag(food().id, 'missing-food-complete');
+      // survey.updateFood({ foodId: food().id, update: { info } });
+      survey.addFoodFlag(food().id, 'recipe-builder-complete');
 
       clearStoredState();
     };

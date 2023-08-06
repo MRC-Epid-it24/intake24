@@ -389,6 +389,16 @@ const prompts: LocaleMessageObject = {
     barcode: 'Can you provide the barcode?',
     portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
   },
+  recipeBuilder: {
+    name: '{food} recipe builder',
+    text: 'Build your own recipe',
+    description: `Please follow the steps below to build your own recipe for {food}.`,
+    source: 'Was it homemade?',
+    homemade: 'Provide further details e.g. description of dish or ingredients.',
+    purchased: 'Tell us where was it purchased from? Does it have a brand name?',
+    barcode: 'Can you provide the barcode?',
+    portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
+  },
   parentFoodPortion: {
     name: 'Parent food portion',
     text: '',

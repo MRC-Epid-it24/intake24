@@ -1,10 +1,15 @@
-import type { FoodState, MissingFood, PortionSizeStates } from '../types';
+import type { FoodState, MissingFood, PortionSizeStates, RecipeBuilder } from '../types';
 import type { FoodHeader } from '../types/http';
 
 export type AssociatedFoodPromptItemState = {
   confirmed?: 'yes' | 'no' | 'existing' | 'missing';
   selectedFood?: FoodHeader;
   existingFoodId?: string;
+};
+
+export type RecipeBuilderStepState = {
+  order: number;
+  description: string;
 };
 
 export type PromptStates = {
@@ -74,9 +79,9 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    info: NonNullable<MissingFood['info']>;
     panel: number;
-    homemadePrompt?: boolean;
+    finishedSteps?: number[];
+    steps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];
