@@ -7,6 +7,7 @@ import type {
   EncodedFood,
   FoodState,
   MissingFood,
+  RecipeBuilder,
   SurveyState,
   WithKey,
 } from '@intake24/common/types';
@@ -56,6 +57,9 @@ export type CollectedFoods = {
   states: EncodedFood[];
   missingInputs: SurveySubmissionMissingFoodCreationAttributes[];
   missingStates: MissingFood[];
+  //TODO: RecipeBuilder define the logic
+  recipeBuilderInputs: SurveySubmissionMissingFoodCreationAttributes[];
+  recipeBuilderStates: RecipeBuilder[];
 };
 
 export type CollectedNutrientInfo = {
@@ -143,6 +147,26 @@ const surveySubmissionService = ({
           index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
         });
         collectedFoods.missingStates.push(foodState);
+
+        return collectedFoods;
+      }
+
+      //TODO: RecipeBuilder define the logic
+      if (foodState.type === 'recipe-builder') {
+        const { info } = foodState;
+        if (!info) {
+          logger.warn(`Submission: ${foodState.type} without info, skipping...`);
+          return collectedFoods;
+        }
+
+        collectedFoods.recipeBuilderInputs.push({
+          ...info,
+          id: randomUUID(),
+          parentId,
+          mealId,
+          index: collectedFoods.inputs.length + collectedFoods.recipeBuilderInputs.length,
+        });
+        collectedFoods.recipeBuilderStates.push(foodState);
 
         return collectedFoods;
       }
@@ -532,7 +556,14 @@ const surveySubmissionService = ({
         // Collect meal foods
         const collectedFoods = mealState.foods.reduce(
           collectFoods({ foods: foodMap, foodGroups: foodGroupMap, mealId }),
-          { inputs: [], states: [], missingInputs: [], missingStates: [] }
+          {
+            inputs: [],
+            states: [],
+            missingInputs: [],
+            missingStates: [],
+            recipeBuilderInputs: [],
+            recipeBuilderStates: [],
+          }
         );
 
         // Store meal custom fields & foods
@@ -540,6 +571,7 @@ const surveySubmissionService = ({
           SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs, { transaction }),
           SurveySubmissionFood.bulkCreate(collectedFoods.inputs, { transaction }),
           SurveySubmissionMissingFood.bulkCreate(collectedFoods.missingInputs, { transaction }),
+          // TODO: add recipe builder submission support
         ]);
 
         // Process foods
