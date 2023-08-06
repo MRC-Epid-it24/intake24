@@ -66,7 +66,7 @@ module.exports = {
           },
           special_foods_code: {
             allowNull: false,
-            type: Sequelize.STRING(16),
+            type: Sequelize.BIGINT,
           },
           name: {
             allowNull: false,
@@ -167,7 +167,7 @@ module.exports = {
         type: 'foreign key',
         references: {
           table: 'special_foods',
-          field: 'code',
+          field: 'id',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
@@ -227,6 +227,5 @@ module.exports = {
       });
       await queryInterface.dropTable('special_foods_steps', { transaction });
       await queryInterface.dropTable('special_foods', { transaction });
-
     }),
 };

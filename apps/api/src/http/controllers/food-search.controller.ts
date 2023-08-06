@@ -18,6 +18,10 @@ interface SearchQuery {
   recipe?: string;
 }
 
+interface SpecialFoodQuery {
+  code: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ATTR_USE_ANYWHERE = 0;
 const ATTR_AS_REGULAR_FOOD_ONLY = 1;
@@ -81,12 +85,22 @@ const foodSearchController = ({
   const category = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     const { code } = req.query;
-
-    res.json();
   };
 
   const splitDescription = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
+    const { code } = req.query;
+    res.json();
+  };
+
+  const specialFood = async (
+    req: Request<SearchParams, unknown, unknown, SpecialFoodQuery>,
+    res: Response
+  ): Promise<void> => {
+    const { localeId } = req.params;
+    const { code } = req.query;
+    const result = await foodIndex.getSpecialFood(localeId, code);
+    res.json(result);
     res.json();
   };
 
@@ -95,6 +109,7 @@ const foodSearchController = ({
     recipe,
     category,
     splitDescription,
+    specialFood,
   };
 };
 

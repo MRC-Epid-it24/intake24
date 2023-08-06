@@ -102,6 +102,10 @@ export default class SpecialFoods extends BaseModel<
   static async findByLocaleId(localeId: string): Promise<SpecialFoods[]> {
     return SpecialFoods.findAll({ where: { localeId } });
   }
+
+  static async findByLocaleIdAndCode(localeId: string, code: string): Promise<SpecialFoods | null> {
+    return SpecialFoods.findOne({ where: { localeId, code } });
+  }
 }
 
 export type SpecialFoodsAttributes = Attributes<SpecialFoods>;

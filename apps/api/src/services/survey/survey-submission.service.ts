@@ -153,14 +153,14 @@ const surveySubmissionService = ({
 
       //TODO: RecipeBuilder define the logic
       if (foodState.type === 'recipe-builder') {
-        const { info } = foodState;
-        if (!info) {
+        const { components } = foodState;
+        if (!components) {
           logger.warn(`Submission: ${foodState.type} without info, skipping...`);
           return collectedFoods;
         }
 
         collectedFoods.recipeBuilderInputs.push({
-          ...info,
+          ...components,
           id: randomUUID(),
           parentId,
           mealId,

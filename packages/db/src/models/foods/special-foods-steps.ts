@@ -19,7 +19,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { FoodsLocale } from '@intake24/db';
+import { FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
 import SpecialFoods from './special-foods';
@@ -51,10 +51,10 @@ export default class SpecialFoodsSteps extends BaseModel<
   @ForeignKey(() => SpecialFoods)
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.BIGINT,
     unique: false,
   })
-  declare specialFoodsCode: string;
+  declare specialFoodId: number;
 
   @Column({
     allowNull: false,
@@ -62,6 +62,12 @@ export default class SpecialFoodsSteps extends BaseModel<
     unique: true,
   })
   declare code: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.STRING(16),
+  })
+  declare localeId: string;
 
   @Column({
     allowNull: false,
@@ -121,7 +127,10 @@ export default class SpecialFoodsSteps extends BaseModel<
   declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => SpecialFoods, 'specialFoodsCode')
-  declare specialFoods?: NonAttribute<FoodsLocale>;
+  declare specialFoods?: NonAttribute<SpecialFoods>;
+
+  @BelongsTo(() => FoodsLocale, 'localeId')
+  declare locale?: NonAttribute<FoodsLocale>;
 
   @HasMany(() => SpecialFoodsCategoryFoods, 'specialFoodsStepCode')
   declare specialFoodsCategoryFoods?: NonAttribute<SpecialFoodsCategoryFoods[]>;
