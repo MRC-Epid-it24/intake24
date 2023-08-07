@@ -52,11 +52,7 @@ export default defineComponent({
     });
 
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const { state, update, clearStoredState } = usePromptHandlerStore(
-      props.prompt.id,
-      props.prompt.component,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     const commitAnswer = () => {
       //const { steps } = state.value;

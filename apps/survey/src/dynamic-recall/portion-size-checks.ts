@@ -230,4 +230,4 @@ export const missingFoodComplete = (food: MissingFood): boolean =>
   !!(food.info && food.flags.includes('missing-food-complete'));
 
 export const recipeBuilderComplete = (food: RecipeBuilder): boolean =>
-  !!(food.info && food.flags.includes('recipe-builder-complete'));
+  !!food.flags.includes('recipe-builder-complete');
