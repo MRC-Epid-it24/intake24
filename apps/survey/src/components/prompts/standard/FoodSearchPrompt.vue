@@ -23,6 +23,7 @@
         <p>{{ $t(`prompts.${type}.empty`, { searchTerm }) }}</p>
         <p>{{ $t(`prompts.${type}.reword`) }}</p>
       </v-alert>
+      <!-- TODO: Refactor recipeBuilder as a speerate component with ability to show more than one option a.k.a. Salad Sandwich-->
       <v-card-text v-if="recipeBuilder">
         <v-btn
           :block="isMobile"
@@ -32,11 +33,11 @@
           large
           outlined
           :v-model="recipeBuilderFood?.description"
-          @click.stop="$emit('recipe-builder')"
+          @click.stop="onRecipeBuilderSelected"
         >
           {{
             $t(`prompts.${type}.recipeBuilder.label`, {
-              recipeBuilderFood: recipeBuilderFood?.description,
+              searchTerm: recipeBuilderFood?.description,
             })
           }}
         </v-btn>
@@ -105,7 +106,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FreeTextFood } from '@intake24/common/types';
+import type { FreeTextFood, SpecialFood } from '@intake24/common/types';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import {
   FoodSearchResults,
@@ -154,6 +155,7 @@ export default defineComponent({
     const missing = ref(false);
     const recipeBuilder = ref(false);
     const recipeBuilderFood = ref<FoodHeader | null>(null);
+    const specialFood = ref<SpecialFood | null>(null);
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
     const searchTerm = ref(props.value);
@@ -167,6 +169,7 @@ export default defineComponent({
       missing,
       recipeBuilder,
       recipeBuilderFood,
+      specialFood,
       requestInProgress,
       requestFailed,
       searchTerm,
@@ -198,8 +201,8 @@ export default defineComponent({
         });
         this.requestFailed = false;
         if (this.searchResults.foods[0].code.charAt(0) === '$') {
-          this.recipeBuilderFood = this.searchResults.foods[0];
-          this.recipeBuilder = true;
+          this.recipeBuilderFood = this.searchResults.foods.splice(0, 1)[0];
+          this.onRecipeBuilderDetected(this.recipeBuilderFood);
         }
         // console.log(`Got some Builder Food ${this.searchResults.foods[0].code}}`);
       } catch (e) {
@@ -229,6 +232,23 @@ export default defineComponent({
         this.requestFailed = true;
       }
       this.requestInProgress = false;
+    },
+
+    async onRecipeBuilderDetected(specialFood: FoodHeader) {
+      this.requestInProgress = true;
+      try {
+        const specialfoodData = await foodsService.getSpecialFood(this.localeId, specialFood.code);
+        console.log(`Got some Builder Food ${JSON.stringify(specialfoodData)}`);
+        this.specialFood = specialfoodData;
+        this.recipeBuilder = true;
+      } catch (e) {
+        this.requestFailed = true;
+      }
+      this.requestInProgress = false;
+    },
+
+    onRecipeBuilderSelected() {
+      this.$emit('recipe-builder', this.specialFood);
     },
   },
 });

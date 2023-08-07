@@ -12,7 +12,7 @@ export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipe
 
 export type SpecialFood = {
   code: string;
-  name: RequiredLocaleTranslation;
+  name: string;
   specialWords: string;
   steps: SpecialFoodStepsType[];
 };
@@ -29,6 +29,6 @@ export type SpecialFoodStepsType = {
   order: number;
   code: string;
   specialFoodsCode: string;
-  step_name: RequiredLocaleTranslation;
-  step_description: RequiredLocaleTranslation;
+  name: RequiredLocaleTranslation;
+  description: RequiredLocaleTranslation;
 };

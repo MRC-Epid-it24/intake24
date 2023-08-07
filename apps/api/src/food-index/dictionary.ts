@@ -62,10 +62,8 @@ export class RichDictionary {
 
     [synSets, specialFoodsSynSets].forEach((generalSynSets) => {
       for (const synSet of generalSynSets) {
-        logger.debug(`Loading synonym set of Size: ${synSet.size}`);
         for (const word of synSet) {
           const lowerCaseWord = word.toLocaleLowerCase();
-          logger.debug(`word in the synonym set: ${lowerCaseWord}`);
           let synList = this.synonymMap.get(lowerCaseWord);
 
           if (!synList) synList = new Set<string>();
@@ -87,25 +85,7 @@ export class RichDictionary {
       if (specialFoodsSynSet.size === 0) continue;
       if (this.specialFoodsMap.has([...specialFoodsSynSet][0].toLocaleLowerCase())) continue;
       this.specialFoodsMap.set([...specialFoodsSynSet][0].toLocaleLowerCase(), specialFoodsSynSet);
-
-      // for (const word of specialSynSet) {
-      //   const lowerCaseWord = word.toLocaleLowerCase();
-      //   let synList = this.specialFoodsMap.get(lowerCaseWord);
-      //   if (!synList) synList = new Set<string>();
-
-      //   for (const word2 of specialSynSet) {
-      //     const lowerCaseWord2 = word2.toLocaleLowerCase();
-      //     if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
-      //   }
-      //   this.specialFoodsMap.set(lowerCaseWord, synList);
-      // }
     }
-
-    logger.debug(`Loaded dictionary with ${this.words.size} words`);
-    logger.debug(`Loaded ${this.synonymMap.size} synonyms\n\n\n`);
-    this.specialFoodsMap.forEach((value, key) => {
-      logger.debug(`special food: ${key} synonyms: ${[...value]}`);
-    });
   }
 
   exactMatch(lowerCaseWord: string): boolean {
@@ -114,7 +94,6 @@ export class RichDictionary {
 
   synonyms(lowerCaseWord: string): Array<string> {
     const result = this.synonymMap.get(lowerCaseWord);
-    logger.debug(`\n 2] - synonyms for ${lowerCaseWord}: ${result}\n`);
     if (!result) return new Array<string>();
     return new Array(...result);
   }
@@ -195,9 +174,6 @@ export class RichDictionary {
     const synonyms: Array<string> = interpretations.flatMap((sp) =>
       this.synonyms(sp.dictionaryWord)
     );
-
-    logger.debug(`\n\n 1] - Synonyms for ${lowerCaseWord}: ${synonyms}\n`);
-    logger.debug(`SynonymsMap: ${JSON.stringify(this.synonymMap)}\n\n`);
 
     interpretations.push(
       ...synonyms.slice(0, maxInterpretations - interpretations.length).map((s) => new Synonym(s))

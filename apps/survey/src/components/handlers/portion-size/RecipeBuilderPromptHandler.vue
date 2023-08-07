@@ -1,7 +1,9 @@
 <template>
   <recipe-builder-prompt
     v-bind="{
-      food: food(),
+      food: recipeBuilder(),
+      specialFood,
+      recipeBuilder,
       meal,
       initialState: state,
       prompt,
@@ -37,10 +39,13 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const survey = useSurvey();
-    const { recipeBuilder: food } = useFoodPromptUtils();
+    const { recipeBuilder } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
+    const specialFood = recipeBuilder().template;
+
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
+      recipe: specialFood,
       panel: 0,
       finishedSteps: [],
       steps: [],
@@ -54,13 +59,13 @@ export default defineComponent({
     );
 
     const commitAnswer = () => {
-      const { steps } = state.value;
+      //const { steps } = state.value;
 
       // if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
       //   throw new Error('Recipe Builder food prompt: missing data');
 
       // survey.updateFood({ foodId: food().id, update: { info } });
-      survey.addFoodFlag(food().id, 'recipe-builder-complete');
+      // survey.addFoodFlag(food().id, 'recipe-builder-complete');
 
       clearStoredState();
     };
@@ -71,7 +76,7 @@ export default defineComponent({
       emit('action', type, id);
     };
 
-    return { food, meal, state, update, action };
+    return { recipeBuilder, specialFood, meal, state, update, action };
   },
 });
 </script>

@@ -99,6 +99,7 @@ const foodSearchController = ({
   ): Promise<void> => {
     const { localeId } = req.params;
     const { code } = req.query;
+    // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
     const result = await foodIndex.getSpecialFood(localeId, code);
     res.json(result);
     res.json();

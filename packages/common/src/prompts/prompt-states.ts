@@ -1,4 +1,10 @@
-import type { FoodState, MissingFood, PortionSizeStates, RecipeBuilder } from '../types';
+import type {
+  FoodState,
+  MissingFood,
+  PortionSizeStates,
+  RecipeBuilder,
+  SpecialFood,
+} from '../types';
 import type { FoodHeader } from '../types/http';
 
 export type AssociatedFoodPromptItemState = {
@@ -79,6 +85,7 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
+    recipe: SpecialFood;
     panel: number;
     finishedSteps?: number[];
     steps: RecipeBuilderStepState[];

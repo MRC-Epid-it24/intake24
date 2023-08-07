@@ -30,6 +30,7 @@ import SpecialFoodsCategoryFoods from './special-foods-category-foods';
     attributes: ['id', 'specialFoodsCode', 'code', 'order'],
     order: [['specialFoodsCode', 'ASC']],
   },
+  categoriesAndFoods: { include: [{ model: SpecialFoodsCategoryFoods }] },
 }))
 @Table({
   modelName: 'SpecialFoodsSteps',

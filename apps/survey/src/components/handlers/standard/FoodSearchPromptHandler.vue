@@ -14,7 +14,13 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState, MissingFood, RecipeBuilder } from '@intake24/common/types';
+import type {
+  EncodedFood,
+  FoodState,
+  MissingFood,
+  RecipeBuilder,
+  SpecialFood,
+} from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -119,9 +125,11 @@ export default defineComponent({
       this.$emit('action', 'next');
     },
 
-    recipeBuilder() {
+    recipeBuilder(specialFood: SpecialFood) {
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.food();
+
+      console.log('specialFood', JSON.stringify(specialFood));
 
       const newState: RecipeBuilder = {
         id,
@@ -131,7 +139,8 @@ export default defineComponent({
         customPromptAnswers,
         flags,
         linkedFoods: [],
-        template_id: 'sandwich',
+        template_id: specialFood.name,
+        template: specialFood,
         markedAsComplete: [],
         components: [],
         link: [],

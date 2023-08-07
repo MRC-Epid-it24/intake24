@@ -4,7 +4,6 @@ import { parentPort as parentPortNullable, workerData } from 'node:worker_thread
 
 import type { PhraseWithKey, SpecialFoodTuple } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
-import type { SpecialFood, SpecialFoodsHeader } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
@@ -14,7 +13,6 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import {
   databaseLogQuery,
-  Food,
   FoodLocal,
   FoodLocalList,
   FoodsLocale,
@@ -36,7 +34,7 @@ const foodsDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.foods,
   models: Object.values(models.foods),
   logging:
-    config.env !== 'development'
+    config.env === 'development'
       ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.foods.debugQueryLimit)
       : false,
 });
@@ -45,7 +43,7 @@ const systemDb = new SequelizeTS({
   ...workerData.dbConnectionInfo.system,
   models: Object.values(models.system),
   logging:
-    config.env !== 'development'
+    config.env === 'development'
       ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.system.debugQueryLimit)
       : false,
 });
@@ -188,20 +186,10 @@ async function matchSpecialFoods(
 
   // TODO: Optimise the performance of this function
   for (const specialFood of specialFoodsTuples) {
-    logger.debug(
-      `\n\nSpecial food for query ${query.description} searching in : ${JSON.stringify(
-        specialFood[0]
-      )}`
-    );
     interpretedQuery.words.forEach((word) => {
       const asTypedExactMatch = specialFood[1].synonyms.has(word.asTyped);
       word.interpretations.forEach((interpretation) => {
         if (specialFood[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
-          // logger.debug(
-          //   `Special food for query ${query.description} with word ${
-          //     interpretation.dictionaryWord
-          //   } found: ${[...specialFood[1].values()]}`
-          // );
           return specialFoodHeaders.push({
             code: specialFood[1].code,
             description: specialFood[1].description,
@@ -228,23 +216,12 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
 
   const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
-  logger.debug(`Interpreted query of ${query.description}: ${JSON.stringify(interpreted)}`);
   let specialFoodsHeaders: FoodHeader[] = [];
   if (interpreted.words.length > 0) {
     specialFoodsHeaders = await matchSpecialFoods(interpreted, query);
-    if (specialFoodsHeaders.length > 0)
-      specialFoodsHeaders.forEach((header, idx) =>
-        logger.debug(
-          `${idx}] Special food for query ${query.description} found: ${JSON.stringify(header)}`
-        )
-      );
   }
 
   const results = localeIndex.findMatches(interpreted, 100, 100);
-  logger.debug(
-    `Found ${results.length} results for query ${query.description} in locale ${query.localeId}`
-  );
-  logger.debug(`Results: ${JSON.stringify(results)}`);
 
   return rankSearchResults(
     results,
@@ -287,10 +264,6 @@ async function buildIndex() {
 
     try {
       const results = await queryIndex(msg);
-      logger.debug(
-        `\n\n\nSending ${results.length} results for query ${msg.description} in locale ${msg.localeId} with queryId ${msg.queryId}`
-      );
-      logger.debug(`Results: ${JSON.stringify(results)}\n\n\n`);
 
       parentPort.postMessage({
         queryId: msg.queryId,
