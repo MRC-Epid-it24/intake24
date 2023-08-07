@@ -31,6 +31,7 @@ const common: LocaleMessageObject = {
   emailConfirm: '确认电子邮件',
   password: '密码',
   phone: '电话',
+  message: 'Message',
   continue: '继续',
 
   help: {

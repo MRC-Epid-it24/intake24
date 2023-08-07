@@ -33,6 +33,7 @@ const common: LocaleMessageObject = {
   emailConfirm: 'மின்னஞ்சலை உறுதிப்படுத்தவும்',
   password: 'கடவுச்சொல்',
   phone: 'தொலைபேசி',
+  message: 'Message',
   continue: 'தொடரவும்',
 
   help: {

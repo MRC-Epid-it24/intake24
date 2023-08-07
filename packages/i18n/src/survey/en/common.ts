@@ -32,6 +32,7 @@ const common: LocaleMessageObject = {
   emailConfirm: 'Confirm email',
   password: 'Password',
   phone: 'Phone',
+  message: 'Message',
   continue: 'Continue',
 
   help: {

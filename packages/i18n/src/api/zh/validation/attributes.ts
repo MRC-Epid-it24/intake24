@@ -72,6 +72,7 @@ const attributes: LocaleMessageObject = {
   maximumTotalSubmissions: 'Maximum total submissions',
   meals: 'Meals',
   method: 'Method',
+  message: 'Message',
   minimumSubmissionInterval: 'Minimum submission interval',
   multiFactorAuthentication: 'Multi-factor authentication',
   name: 'Name',

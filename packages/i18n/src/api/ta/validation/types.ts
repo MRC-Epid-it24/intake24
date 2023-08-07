@@ -44,16 +44,16 @@ const attributes: LocaleMessageObject = {
     options: '{attribute} must be one of the values: {options}.',
   },
   int: {
-    _: '{attribute} must be a integer.',
-    min: '{attribute} must be a integer (min: {min}).',
-    max: '{attribute} must be a integer (max: {max}).',
-    minMax: '{attribute} must be a integer (min: {min}, max: {max}).',
+    _: '{attribute} must be an integer.',
+    min: '{attribute} must be an integer (min: {min}).',
+    max: '{attribute} must be an integer (max: {max}).',
+    minMax: '{attribute} must be an integer (min: {min}, max: {max}).',
   },
   jwt: {
-    _: '{attribute} must be valid JWT.',
+    _: '{attribute} must be a valid JWT.',
   },
   locale: {
-    _: '{attribute} must be valid locale code.',
+    _: '{attribute} must be a valid locale code.',
   },
   match: {
     _: '{attribute} must match with {match} value.',
@@ -64,6 +64,9 @@ const attributes: LocaleMessageObject = {
   password: {
     _: 'Password must contain at least 10 chars of lower/upper chars and numbers.',
   },
+  phone: {
+    _: '{attribute} must be a valid telephone number.',
+  },
   regEx: {
     _: `{attribute} is invalid.`,
   },
@@ -71,8 +74,9 @@ const attributes: LocaleMessageObject = {
     _: `{attribute} must be unique code (charset [a-zA-Z0-9-_]).`,
   },
   string: {
-    _: '{attribute} must be a string.',
-    minMax: '{attribute} must be a string (min: {min}, max: {max}).',
+    _: '{attribute} must be filled in.',
+    max: '{attribute} maximum length is {max}.',
+    minMax: '{attribute} must be a filled in (min: {min}, max: {max}).',
     or: {
       array: '{attribute} must be a string or an array.',
     },
@@ -88,7 +92,7 @@ const attributes: LocaleMessageObject = {
     _: 'Record with this {attribute} value already exists.',
   },
   url: {
-    _: '{attribute} must be valid URL.',
+    _: '{attribute} must be a valid URL.',
   },
 };
 

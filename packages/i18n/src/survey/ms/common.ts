@@ -33,6 +33,7 @@ const common: LocaleMessageObject = {
   emailConfirm: 'Sahkan emel',
   password: 'Kata laluan',
   phone: 'Telefon',
+  message: 'Message',
   continue: 'Teruskan',
 
   help: {

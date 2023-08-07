@@ -10,7 +10,7 @@
                 <v-icon class="primary" dark>fas fa-user</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>{{ $t('profile.name') }}</v-list-item-title>
+                <v-list-item-title>{{ $t('common.name') }}</v-list-item-title>
                 <v-list-item-subtitle>
                   {{ user?.name || $t('common.not.provided') }}
                 </v-list-item-subtitle>

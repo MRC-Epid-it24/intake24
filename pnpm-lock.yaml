@@ -285,6 +285,9 @@ importers:
       '@simplewebauthn/server':
         specifier: ^7.4.0
         version: 7.4.0
+      awesome-phonenumber:
+        specifier: ^5.10.0
+        version: 5.10.0
       awilix:
         specifier: ^8.0.1
         version: 8.0.1
@@ -3996,7 +3999,7 @@ packages:
       builtin-modules: 3.3.0
       deepmerge: 4.3.1
       is-module: 1.0.0
-      resolve: 1.22.2
+      resolve: 1.22.3
       rollup: 2.79.1
     dev: true
 
@@ -5752,6 +5755,11 @@ packages:
   /available-typed-arrays@1.0.5:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
+
+  /awesome-phonenumber@5.10.0:
+    resolution: {integrity: sha512-O/j+lUcJu0AIO3PJU3Fff+poeSO1JQ4o70Y3efxNTdyXTrkKUbCHFuUOiQpEeHFDE8rK2Pq7Cy3mTkjZNSfSfw==}
+    engines: {node: '>=14'}
+    dev: false
 
   /awilix@8.0.1:
     resolution: {integrity: sha512-zDSp4R204scvQIDb2GMoWigzXemn0+3AKKIAt543T9v2h7lmoypvkmcx1W/Jet/nm27R1N1AsqrsYVviAR9KrA==}

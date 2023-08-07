@@ -5,9 +5,6 @@ const profile: LocaleMessageObject = {
   info: '信息',
   settings: '设置',
 
-  name: '名字',
-  email: '电子邮件',
-  phone: '电话号码',
   provider: '供应商',
   providerId: '供应商ID',
 
