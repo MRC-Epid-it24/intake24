@@ -57,10 +57,10 @@ export default defineComponent({
       survey.addMealFlag(meal.value.id, 'ready-meal-complete');
     };
 
-    const action = (type: string, id?: string) => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commitAnswer();
 
-      context.emit('action', type, id);
+      context.emit('action', type, ...args);
     };
 
     if (!state.value.foods.length) action('next');

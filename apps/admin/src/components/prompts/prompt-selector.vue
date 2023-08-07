@@ -22,7 +22,7 @@
           </v-btn>
         </v-toolbar-items>
         <template #extension>
-          <v-container>
+          <v-container :fluid="$vuetify.breakpoint.mdAndDown">
             <v-tabs v-model="tab" background-color="primary" dark>
               <v-tab v-for="item in promptSettings[dialog.prompt.component].tabs" :key="item">
                 {{ item }}
@@ -31,9 +31,8 @@
           </v-container>
         </template>
       </v-toolbar>
-
       <v-form ref="form" @submit.prevent="save">
-        <v-container class="prompt-container">
+        <v-container class="prompt-container" :fluid="$vuetify.breakpoint.mdAndDown">
           <v-tabs-items v-model="tab" class="pt-1 flex-grow-1">
             <v-tab-item key="general">
               <v-row>
@@ -335,7 +334,7 @@ export default defineComponent({
       this.dialog = {
         show: true,
         index,
-        prompt: { origId: prompt.id, ...merge(promptDefaults, prompt) },
+        prompt: { origId: prompt.id, ...merge<Prompt>(promptDefaults, prompt) },
       };
     },
 

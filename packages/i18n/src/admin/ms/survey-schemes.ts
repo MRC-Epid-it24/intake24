@@ -58,6 +58,7 @@ const surveySchemes: LocaleMessageObject = {
       desktop: 'Desktop',
       mobile: 'Mobile',
     },
+    parameters: 'Parameters',
     types: {
       _: 'Action type',
       title: 'Action types',

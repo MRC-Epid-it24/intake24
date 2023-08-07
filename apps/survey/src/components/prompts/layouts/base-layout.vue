@@ -37,7 +37,7 @@
               ? getLocaleContent(item.label)
               : getLocaleContent(item.text)
           "
-          @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
+          @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
         >
           {{ getLocaleContent(item.text) }}
         </v-btn>
@@ -72,7 +72,7 @@
                 : getLocaleContent(item.text)
             "
             :value="item.type"
-            @click="item.type === 'next' ? next() : action(item.type, foodOrMealId)"
+            @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
           >
             <span class="text-overline font-weight-medium">
               {{ getLocaleContent(item.text) }}

@@ -61,10 +61,10 @@ export default defineComponent({
 
     const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
 
-    const action = (type: string, id?: string) => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commitPortionSize();
 
-      emit('action', type, id);
+      emit('action', type, ...args);
     };
 
     return {

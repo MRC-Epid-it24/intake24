@@ -44,10 +44,10 @@ export default defineComponent({
 
     const state = ref<CustomPromptAnswer | undefined>(undefined);
 
-    const action = (type: string, id?: string) => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commitAnswer();
 
-      emit('action', type, id);
+      emit('action', type, ...args);
     };
 
     const commitAnswer = () => {

@@ -40,8 +40,8 @@ export default defineComponent({
     const showFeedback = ref(user?.showFeedback);
     const followUpUrl = ref(user?.followUpUrl);
 
-    const action = (type: string, id?: string) => {
-      emit('action', type, id);
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
     };
 
     return { action, followUpUrl, showFeedback };

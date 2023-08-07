@@ -84,7 +84,10 @@ export default defineComponent({
     },
 
     confirm() {
-      this.$emit('input', this.content);
+      this.$emit(
+        'input',
+        typeof this.content === 'string' ? JSON.parse(this.content) : this.content
+      );
       this.close();
     },
   },

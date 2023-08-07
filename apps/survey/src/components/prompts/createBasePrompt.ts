@@ -83,15 +83,15 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         return true;
       },
 
-      action(type: string, id?: string) {
+      action(type: string, ...args: [id?: string, params?: object]) {
         if (type !== 'next') {
-          this.$emit('action', type, id);
+          this.$emit('action', type, ...args);
           return;
         }
 
         if (!this.confirm()) return;
 
-        this.$emit('action', type, id);
+        this.$emit('action', type, ...args);
       },
     },
   });

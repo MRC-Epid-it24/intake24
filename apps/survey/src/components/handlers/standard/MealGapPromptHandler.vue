@@ -40,10 +40,10 @@ export default defineComponent({
       if (endMeal) survey.addMealFlag(endMeal.id, 'no-meals-after');
     };
 
-    const action = async (type: 'addMeal' | 'next') => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commit();
 
-      emit('action', type);
+      emit('action', type, ...args);
     };
 
     return { action, meals };

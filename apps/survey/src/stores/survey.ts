@@ -3,6 +3,7 @@ import 'lodash/debounce';
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
+import { OptionalKeys } from 'vue/types/v3-component-props';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type {
@@ -11,10 +12,12 @@ import type {
   FoodFlag,
   FoodState,
   FreeTextFood,
+  MealCreationState,
   MealFlag,
   MealState,
   MealTime,
   MissingFood,
+  Optional,
   PromptAnswer,
   Selection,
   SurveyFlag,
@@ -484,24 +487,27 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.splice(data.mealIndex, 0, data.meal);
     },
 
-    addMeal(name: string, locale: string) {
+    addMeal(meal: MealCreationState, locale: string) {
       const id = getEntityId();
       const defaultTime = toMealTime(
-        this.defaultSchemeMeals?.find((meal) => meal.name[locale] === name)?.time ?? '8:00'
+        this.defaultSchemeMeals?.find((item) => item.name[locale] === meal.name[locale])?.time ??
+          '8:00'
       );
 
       this.data.meals.push({
         id,
-        name: { en: name, [locale]: name },
         defaultTime,
         time: undefined,
         duration: null,
         flags: [],
         foods: [],
         customPromptAnswers: {},
+        ...meal,
       });
 
       this.sortMeals();
+
+      this.setSelection({ element: { type: 'meal', mealId: id }, mode: 'manual' });
 
       return id;
     },

@@ -8,7 +8,7 @@ import type {
   MealActionType,
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealState, Selection } from '@intake24/common/types';
+import type { FoodState, MealCreationState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
@@ -240,7 +240,7 @@ export default defineComponent({
       this.currentPrompt = { section: promptSection, prompt };
     },
 
-    async action(type: string, id?: string) {
+    async action(type: string, id?: string, params?: object) {
       switch (type) {
         case 'next':
         case 'restart':
@@ -248,7 +248,7 @@ export default defineComponent({
           break;
         case 'addMeal':
         case 'review':
-          this.recallAction(type);
+          await this.recallAction(type, params);
           break;
         case 'editMeal':
         case 'mealTime':
@@ -316,12 +316,17 @@ export default defineComponent({
       }
     },
 
-    recallAction(action: GenericActionType) {
+    async recallAction(action: GenericActionType, params?: object) {
       if (this.hasFinished) return;
 
       switch (action) {
         case 'addMeal':
-          this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          if (typeof params === 'object' && params !== null) {
+            // TODO: validate params properly
+            const { name, time, flags } = params as MealCreationState;
+            this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
+            await this.nextPrompt();
+          } else this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
         case 'review':
           this.saveCurrentState();
@@ -374,7 +379,7 @@ export default defineComponent({
           // TODO: handle completion
           console.log('No prompts remaining');
           if (this.hasMeals) {
-            this.recallAction('addMeal');
+            await this.recallAction('addMeal');
           } else {
             this.currentPrompt = null;
           }

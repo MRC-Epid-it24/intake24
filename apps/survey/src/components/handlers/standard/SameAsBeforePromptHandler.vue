@@ -11,7 +11,7 @@
 import type { PropType } from 'vue';
 import { defineComponent, onMounted } from 'vue';
 
-import type { GenericActionType, Prompts } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
@@ -63,13 +63,13 @@ export default defineComponent({
       emit('action', 'next');
     };
 
-    const action = (type: 'notSame' | 'same' | GenericActionType, id?: string) => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (['notSame', 'same'].includes(type)) {
         sabAction(type as 'notSame' | 'same');
         return;
       }
 
-      emit('action', type, id);
+      emit('action', type, ...args);
     };
 
     onMounted(() => {

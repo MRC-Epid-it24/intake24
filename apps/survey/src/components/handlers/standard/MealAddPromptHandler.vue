@@ -43,11 +43,11 @@ export default defineComponent({
       () => survey.defaultSchemeMeals?.map((meal) => meal.name[i18n.locale] ?? meal.name.en) ?? []
     );
 
-    const action = async (type: 'next' | 'cancel') => {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commitAnswer();
       else survey.setAutoSelection();
 
-      emit('action', 'next');
+      emit('action', type, ...args);
     };
 
     const commitAnswer = () => {
@@ -57,8 +57,7 @@ export default defineComponent({
         return;
       }
 
-      const mealId = survey.addMeal(state.value, i18n.locale);
-      survey.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
+      survey.addMeal({ name: { en: state.value, [i18n.locale]: state.value } }, i18n.locale);
     };
 
     return { state, action, update, defaultMeals, hasMeals };

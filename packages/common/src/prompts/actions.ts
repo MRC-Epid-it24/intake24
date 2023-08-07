@@ -25,6 +25,7 @@ export type ActionVariant = (typeof actionVariants)[number];
 
 export type ActionItem = {
   type: ActionType;
+  params: object;
   text: LocaleTranslation;
   label: LocaleTranslation;
   color: string | null;

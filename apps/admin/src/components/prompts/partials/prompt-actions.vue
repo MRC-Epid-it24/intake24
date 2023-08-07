@@ -48,38 +48,34 @@
                     :label="$t('survey-schemes.actions.types._')"
                     outlined
                   ></v-select>
-                </v-col>
-                <v-col class="d-flex flex-row align-center" cols="12" md="6">
-                  <div class="mr-4">
-                    {{ $t('survey-schemes.actions.layouts._') }}
+                  <div class="d-flex flex-row align-center">
+                    <div class="mr-4">
+                      {{ $t('survey-schemes.actions.layouts._') }}
+                    </div>
+                    <v-checkbox
+                      v-for="layout in layoutList"
+                      :key="layout.value"
+                      v-model="item.layout"
+                      class="mr-2"
+                      :label="layout.text"
+                      :value="layout.value"
+                    ></v-checkbox>
                   </div>
-                  <v-checkbox
-                    v-for="layout in layoutList"
-                    :key="layout.value"
-                    v-model="item.layout"
-                    class="mr-2"
-                    :label="layout.text"
-                    :value="layout.value"
-                  ></v-checkbox>
-                </v-col>
-                <v-col cols="12" md="6">
                   <v-select
                     v-model="item.variant"
+                    class="mb-4"
                     hide-details="auto"
                     :items="actionVariantsList"
                     :label="$t('survey-schemes.actions.variants._')"
                     outlined
                   ></v-select>
-                </v-col>
-                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="item.color"
+                    class="mb-4"
                     hide-details="auto"
                     :label="$t('survey-schemes.actions.color')"
                     outlined
                   ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="item.icon"
                     hide-details="auto"
@@ -87,8 +83,6 @@
                     outlined
                   ></v-text-field>
                 </v-col>
-              </v-row>
-              <v-row>
                 <v-col cols="12" md="6">
                   <language-selector
                     v-model="item.text"
@@ -106,8 +100,6 @@
                       ></v-text-field>
                     </template>
                   </language-selector>
-                </v-col>
-                <v-col cols="12" md="6">
                   <language-selector
                     v-model="item.label"
                     :label="$t('survey-schemes.actions.label').toString()"
@@ -123,6 +115,18 @@
                       ></v-text-field>
                     </template>
                   </language-selector>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <json-editor v-model="item.params">
+                    <template #activator="{ attrs, on }">
+                      <v-btn v-bind="attrs" large outlined text v-on="on">
+                        <v-icon left>fas fa-code</v-icon>
+                        {{ $t('survey-schemes.actions.parameters') }}
+                      </v-btn>
+                    </template>
+                  </json-editor>
                 </v-col>
               </v-row>
             </v-container>
@@ -146,6 +150,7 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { ActionItem, Actions } from '@intake24/common/prompts';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { withIdList } from '@intake24/admin/util';
 import { copy, randomString } from '@intake24/common/util';
@@ -160,12 +165,13 @@ export const defaultAction: ActionItem = {
   variant: 'outlined',
   icon: '$next',
   layout: [],
+  params: {},
 };
 
 export default defineComponent({
   name: 'PromptActions',
 
-  components: { draggable, LanguageSelector },
+  components: { draggable, JsonEditor, LanguageSelector },
 
   props: {
     actions: {

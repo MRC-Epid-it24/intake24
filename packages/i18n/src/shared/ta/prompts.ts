@@ -150,7 +150,7 @@ const prompts: LocaleMessageObject = {
   mealDuration: {
     name: 'நேரத்தை திருத்தவும்',
     text: '',
-    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
     confirm: 'Continue',
   },
   mealGap: {

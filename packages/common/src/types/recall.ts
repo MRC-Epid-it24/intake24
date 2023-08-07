@@ -1,4 +1,4 @@
-import type { Dictionary, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, Optional, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType, LocaleOptionList } from '../prompts';
@@ -276,6 +276,11 @@ export interface MealState {
 
   foods: FoodState[];
 }
+
+export type MealCreationState = Optional<
+  Pick<MealState, 'name' | 'time' | 'duration' | 'flags'>,
+  'flags' | 'time' | 'duration' | 'flags'
+>;
 
 export interface SelectedMeal {
   type: 'meal';
