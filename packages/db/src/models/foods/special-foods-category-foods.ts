@@ -41,7 +41,7 @@ export default class SpecialFoodsCategoryFoods extends BaseModel<
   @ForeignKey(() => SpecialFoodsSteps)
   @Column({
     allowNull: false,
-    type: DataType.BIGINT,
+    type: DataType.STRING(16),
     unique: false,
   })
   declare specialFoodsStepCode: string;

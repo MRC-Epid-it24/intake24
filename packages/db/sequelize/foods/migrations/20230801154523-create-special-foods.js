@@ -103,7 +103,7 @@ module.exports = {
         {
           special_foods_step_code: {
             allowNull: false,
-            type: Sequelize.BIGINT,
+            type: Sequelize.STRING(16),
           },
           category_code: {
             allowNull: true,
@@ -180,7 +180,7 @@ module.exports = {
         type: 'foreign key',
         references: {
           table: 'special_foods_steps',
-          field: 'id',
+          field: 'code',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',

@@ -30,7 +30,7 @@ import SpecialFoodsCategoryFoods from './special-foods-category-foods';
     attributes: ['id', 'specialFoodsCode', 'code', 'order'],
     order: [['specialFoodsCode', 'ASC']],
   },
-  categoriesAndFoods: { include: [{ model: SpecialFoodsCategoryFoods }] },
+  specialFoodsCategoryFoods: { include: [{ model: SpecialFoodsCategoryFoods }] },
 }))
 @Table({
   modelName: 'SpecialFoodsSteps',
@@ -99,21 +99,6 @@ export default class SpecialFoodsSteps extends BaseModel<
     type: DataType.TEXT({ length: 'long' }),
   })
   declare description: string;
-
-  // @Column({
-  //   allowNull: false,
-  //   defaultValue: () => JSON.stringify(defaultSteps),
-  //   type: DataType.TEXT({ length: 'long' }),
-  // })
-  // get steps(): CreationOptional<SpecialFoodStepsType[]> {
-  //   const val = this.getDataValue('steps') as unknown;
-  //   return val ? JSON.parse(val as string) : defaultSteps;
-  // }
-
-  // set steps(value: SpecialFoodStepsType[]) {
-  //   // @ts-expect-error: Sequelize/TS issue for setting custom values
-  //   this.setDataValue('steps', JSON.stringify(value ?? defaultSteps));
-  // }
 
   @Column({
     allowNull: true,
