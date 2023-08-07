@@ -88,7 +88,7 @@ export default () => {
             localName: ['United Kingdom'],
             respondentLanguageId: 10,
             adminLanguageId: 'nonLocaleString',
-            countryFlagCode: false,
+            countryFlagCode: 'notWellFormedLocale',
             prototypeLocaleId: 'nonExistingLocale',
             textDirection: 'wrongDirection',
           },
