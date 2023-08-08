@@ -5,10 +5,10 @@
       :dialog.sync="dialog"
       :flat="!dialog"
     >
-      <div :class="{ 'px-4 pt-4 pb-2': dialog }">
+      <div class="pb-2" :class="{ 'px-4 pt-4': dialog }">
         <v-text-field
           ref="searchRef"
-          v-model="search"
+          v-model="searchTerm"
           clearable
           flat
           hide-details
@@ -20,7 +20,7 @@
           @focus="openInDialog"
         ></v-text-field>
       </div>
-      <v-tabs-items v-show="dialog || !showInDialog" v-model="tab">
+      <v-tabs-items v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab">
         <v-tab-item key="browse">
           <v-card v-if="requestFailed" flat>
             <v-card-text>
@@ -59,9 +59,19 @@
           ></category-contents-view>
         </v-tab-item>
       </v-tabs-items>
-      <div v-if="dialog || !showInDialog" class="pa-4">
+      <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 gap-2">
         <v-btn
-          :block="isMobile"
+          v-if="type === 'foodSearch' && searchTerm"
+          color="secondary"
+          :disabled="missingDialog"
+          large
+          outlined
+          :title="$t(`prompts.${type}.browse`)"
+          @click.stop="searchTerm = ''"
+        >
+          {{ $t(`prompts.${type}.browse`) }}
+        </v-btn>
+        <v-btn
           color="secondary"
           :disabled="missingDialog"
           large
@@ -84,14 +94,16 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/lib';
 import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
-import { categoriesService } from '@intake24/survey/services';
+import { categoriesService, foodsService } from '@intake24/survey/services';
 
+import type { FoodSearchPromptParameters } from '../prompts/standard/FoodSearchPrompt.vue';
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import ImagePlaceholder from './ImagePlaceholder.vue';
@@ -117,6 +129,9 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    parameters: {
+      type: Object as PropType<FoodSearchPromptParameters>,
+    },
     rootCategory: {
       type: String,
     },
@@ -124,9 +139,13 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    value: {
+      type: String,
+      default: '',
+    },
   },
 
-  emits: ['food-selected', 'food-missing'],
+  emits: ['food-selected', 'food-missing', 'input'],
 
   setup(props, { emit }) {
     const showInDialog = computed(
@@ -173,12 +192,12 @@ export default defineComponent({
       }, 100);
     };
 
-    const search = ref('');
+    const searchTerm = ref(props.value);
     const searchRef = ref<InstanceType<typeof VTextField>>();
     const searchResults = ref<FoodHeader[]>([]);
 
     const searchContents = computed<CategoryContents>(() => ({
-      header: { code: props.rootCategory ?? 'root', description: props.rootCategory ?? 'root' },
+      header: { code: props.rootCategory ?? '', description: props.rootCategory ?? 'root' },
       foods: searchResults.value,
       subcategories: [],
     }));
@@ -191,7 +210,7 @@ export default defineComponent({
     const requestFailed = ref(false);
     const tab = ref(0);
 
-    const browseCategory = async (categoryCode: string) => {
+    const browseCategory = async (categoryCode?: string) => {
       requestInProgress.value = true;
       retryCode.value = categoryCode;
 
@@ -208,24 +227,55 @@ export default defineComponent({
       }
     };
 
+    /*
+     * TODO: searchCategory and searchGlobal should be merged into a single search
+     */
     const searchCategory = async () => {
       if (!props.rootCategory) return;
       requestInProgress.value = true;
 
       try {
         const { data } = await categoriesService.search(props.localeId, props.rootCategory, {
-          search: search.value,
+          search: searchTerm.value,
           limit: 25,
         });
 
         searchResults.value = data;
 
-        requestInProgress.value = false;
         requestFailed.value = false;
       } catch (err) {
-        requestInProgress.value = false;
         requestFailed.value = true;
+      } finally {
+        requestInProgress.value = false;
       }
+    };
+
+    const searchGlobal = async () => {
+      if (!props.parameters) return;
+
+      requestInProgress.value = true;
+      const { matchScoreWeight, rankingAlgorithm } = props.parameters;
+
+      try {
+        const { foods } = await foodsService.search(props.localeId, searchTerm.value, {
+          rankingAlgorithm,
+          matchScoreWeight,
+          recipe: false,
+        });
+
+        searchResults.value = foods;
+
+        requestFailed.value = false;
+      } catch (e) {
+        requestFailed.value = true;
+      } finally {
+        requestInProgress.value = false;
+      }
+    };
+
+    const search = async () => {
+      if (props.type === 'foodSearch') await searchGlobal();
+      else await searchCategory();
     };
 
     const categorySelected = (category: CategoryHeader) => {
@@ -255,20 +305,34 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (props.rootCategory) await browseCategory(props.rootCategory);
+      if (searchTerm.value) {
+        await search();
+        tab.value = 1;
+        return;
+      }
+
+      await browseCategory(props.rootCategory);
     });
 
     watchDebounced(
-      search,
+      searchTerm,
       async () => {
-        if (!search.value) {
-          searchResults.value = [];
-          tab.value = 0;
+        emit('input', searchTerm.value);
+
+        if (searchTerm.value) {
+          await search();
+          tab.value = 1;
           return;
         }
 
-        tab.value = 1;
-        await searchCategory();
+        searchResults.value = [];
+        if (
+          !currentCategoryContents.value ||
+          props.rootCategory !== currentCategoryContents.value.header.code
+        )
+          await browseCategory(props.rootCategory);
+
+        tab.value = 0;
       },
       { debounce: 500, maxWait: 2000 }
     );
@@ -292,8 +356,7 @@ export default defineComponent({
       foodMissing,
       foodSelected,
       navigateBack,
-      search,
-      searchCategory,
+      searchTerm,
       searchContents,
       searchRef,
       searchResults,

@@ -37,7 +37,7 @@
             </v-radio-group>
           </v-container>
           <v-card v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined" flat>
-            <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
+            <v-card-text class="d-flex flex-column flex-md-row pa-0 gap-2">
               <v-alert class="flex-md-grow-1 mb-0" color="grey lighten-3">
                 <v-icon left>$ok</v-icon>
                 {{ prompt.selectedFood.description }}
@@ -231,8 +231,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.food-selection {
-  gap: 0.5rem 0.5rem;
-}
-</style>
+<style lang="scss" scoped></style>
