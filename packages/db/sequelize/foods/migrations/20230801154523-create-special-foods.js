@@ -68,6 +68,16 @@ module.exports = {
             allowNull: false,
             type: Sequelize.BIGINT,
           },
+          category_code: {
+            allowNull: true,
+            unique: false,
+            type: Sequelize.STRING(16),
+          },
+          locale_id: {
+            allowNull: false,
+            defaultValue: 'en_GB',
+            type: Sequelize.STRING(16),
+          },
           name: {
             allowNull: false,
             type: Sequelize.TEXT({ length: 'long' }),
@@ -98,39 +108,6 @@ module.exports = {
         { transaction }
       );
 
-      await queryInterface.createTable(
-        'special_foods_category_foods',
-        {
-          special_foods_step_code: {
-            allowNull: false,
-            type: Sequelize.STRING(16),
-          },
-          category_code: {
-            allowNull: true,
-            type: Sequelize.STRING(16),
-          },
-          food_code: {
-            allowNull: true,
-            type: Sequelize.STRING(16),
-          },
-          created_at: {
-            allowNull: false,
-            defaultValue: Sequelize.NOW,
-            type: Sequelize.DATE,
-          },
-          updated_at: {
-            allowNull: false,
-            defaultValue: Sequelize.NOW,
-            type: Sequelize.DATE,
-          },
-          owner_id: {
-            allowNull: true,
-            type: Sequelize.BIGINT,
-          },
-        },
-        { transaction }
-      );
-
       // Add Defaults for timestamps
       await queryInterface.sequelize.query(
         `ALTER TABLE special_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
@@ -139,11 +116,6 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         `ALTER TABLE special_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
-        { transaction }
-      );
-
-      await queryInterface.sequelize.query(
-        `ALTER TABLE special_foods_category_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
         { transaction }
       );
 
@@ -174,12 +146,12 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('special_foods_category_foods', {
-        fields: ['special_foods_step_code'],
-        name: 'special_foods_step_code_fk',
+      await queryInterface.addConstraint('special_foods_steps', {
+        fields: ['category_code'],
+        name: 'category_foods_code_fk',
         type: 'foreign key',
         references: {
-          table: 'special_foods_steps',
+          table: 'categories',
           field: 'code',
         },
         onUpdate: 'cascade',
@@ -187,13 +159,13 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('special_foods_category_foods', {
-        fields: ['category_code'],
-        name: 'category_locale_code_fk',
+      await queryInterface.addConstraint('special_foods_steps', {
+        fields: ['locale_id'],
+        name: 'special_foods_steps_locale_id_fk',
         type: 'foreign key',
         references: {
-          table: 'categories',
-          field: 'code',
+          table: 'locales',
+          field: 'id',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
@@ -212,19 +184,10 @@ module.exports = {
         indexType: 'btree',
         transaction,
       });
-
-      await queryInterface.addIndex('special_foods_category_foods', ['special_foods_step_code'], {
-        name: 'special_foods_steps_category_foods_idx',
-        indexType: 'btree',
-        transaction,
-      });
     }),
 
   down: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.dropTable('special_foods_category_foods', {
-        transaction,
-      });
       await queryInterface.dropTable('special_foods_steps', { transaction });
       await queryInterface.dropTable('special_foods', { transaction });
     }),

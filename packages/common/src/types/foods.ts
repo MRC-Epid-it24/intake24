@@ -31,4 +31,6 @@ export type SpecialFoodStepsType = {
   specialFoodsCode: string;
   name: RequiredLocaleTranslation;
   description: RequiredLocaleTranslation;
+  localeId: string;
+  categoryCode: string;
 };

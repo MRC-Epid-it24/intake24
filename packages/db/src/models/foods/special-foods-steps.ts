@@ -12,25 +12,22 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  HasMany,
   Scopes,
   Sequelize,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import { FoodsLocale } from '@intake24/db';
+import { FoodCategory, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
 import SpecialFoods from './special-foods';
-import SpecialFoodsCategoryFoods from './special-foods-category-foods';
 
 @Scopes(() => ({
   list: {
     attributes: ['id', 'specialFoodsCode', 'code', 'order'],
     order: [['specialFoodsCode', 'ASC']],
   },
-  specialFoodsCategoryFoods: { include: [{ model: SpecialFoodsCategoryFoods }] },
 }))
 @Table({
   modelName: 'SpecialFoodsSteps',
@@ -69,6 +66,14 @@ export default class SpecialFoodsSteps extends BaseModel<
     type: DataType.STRING(16),
   })
   declare localeId: string;
+
+  @ForeignKey(() => FoodCategory)
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(16),
+    unique: false,
+  })
+  declare categoryCode: string;
 
   @Column({
     allowNull: false,
@@ -118,8 +123,8 @@ export default class SpecialFoodsSteps extends BaseModel<
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @HasMany(() => SpecialFoodsCategoryFoods, 'specialFoodsStepCode')
-  declare specialFoodsCategoryFoods?: NonAttribute<SpecialFoodsCategoryFoods[]>;
+  @BelongsTo(() => FoodCategory, 'categoryCode')
+  declare category?: NonAttribute<FoodCategory>;
 }
 
 export type SpecialFoodsStepsAttributes = Attributes<SpecialFoodsSteps>;
