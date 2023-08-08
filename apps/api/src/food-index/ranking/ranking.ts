@@ -15,7 +15,7 @@ export type RankingData = {
 function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map((result) => ({ code: result.key, description: result.phrase }));
+    .map((result) => ({ code: result.key, name: result.phrase }));
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
@@ -85,10 +85,7 @@ function applyRankingData(
         rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
 
       return {
-        header: {
-          code: result.key,
-          description: result.phrase,
-        },
+        header: { code: result.key, name: result.phrase },
         rankingScore: combinedScore,
       };
     })
