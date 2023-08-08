@@ -1,6 +1,12 @@
 @import "vuetify/src/styles/styles.sass";
 @import "fontawesome";
 
+.v-application {
+    p {
+        margin-bottom: $spacer * 3;
+    }
+}
+
 // TODO: create a map and generate flex gap utility classes
 .gap-1 {
     gap: 0.25rem;
