@@ -5,6 +5,7 @@ import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
+import { useSurvey } from '@intake24/survey/stores';
 
 import { Next } from '../actions';
 import Breadcrumbs from './breadcrumbs.vue';
@@ -42,6 +43,7 @@ export default defineComponent({
     const { type } = usePromptUtils(props);
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
+    const survey = useSurvey();
 
     const params = computed(() => {
       const build: Record<string, string> = {};
@@ -69,7 +71,16 @@ export default defineComponent({
       return build;
     });
 
-    return { foodName, translate, mealName, mealTime, mealNameWithTime, params, type };
+    return {
+      foodName,
+      translate,
+      mealName,
+      mealTime,
+      mealNameWithTime,
+      params,
+      type,
+      meals: survey.data.meals,
+    };
   },
 
   computed: {

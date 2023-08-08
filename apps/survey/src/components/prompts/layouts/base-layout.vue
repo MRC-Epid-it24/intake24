@@ -52,6 +52,7 @@
       grow
       :value="navTab"
     >
+      <review-list :meals="meals" @action="action"></review-list>
       <template v-if="mobileActions.length">
         <template v-for="(item, idx) in mobileActions">
           <v-btn
@@ -85,13 +86,6 @@
             <v-icon class="pb-1">$add</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
-          <v-btn value="review" @click.stop="action('review')">
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.review') }}
-            </span>
-            <v-icon class="pb-1">$survey</v-icon>
-          </v-btn>
-          <v-divider vertical></v-divider>
           <v-btn
             :color="isValid ? 'secondary' : 'primary'"
             :disabled="!isValid"
@@ -114,11 +108,14 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { EncodedFood, MissingFood } from '@intake24/common/types';
+import ReviewList from '@intake24/survey/components/layouts/meal-list/review-list.vue';
 
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
   name: 'BaseLayout',
+
+  components: { ReviewList },
 
   mixins: [layoutMixin],
 
