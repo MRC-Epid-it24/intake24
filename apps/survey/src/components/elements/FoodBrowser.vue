@@ -34,7 +34,7 @@
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
             {{
               $t(`prompts.foodBrowser.back`, {
-                category: navigationHistory[navigationHistory.length - 2].description,
+                category: navigationHistory[navigationHistory.length - 2].name,
               })
             }}
           </v-btn>
@@ -197,7 +197,7 @@ export default defineComponent({
     const searchResults = ref<FoodHeader[]>([]);
 
     const searchContents = computed<CategoryContents>(() => ({
-      header: { code: props.rootCategory ?? '', description: props.rootCategory ?? 'root' },
+      header: { code: props.rootCategory ?? '', name: props.rootCategory ?? 'root' },
       foods: searchResults.value,
       subcategories: [],
     }));

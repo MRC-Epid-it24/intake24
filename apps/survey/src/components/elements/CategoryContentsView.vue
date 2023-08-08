@@ -11,7 +11,7 @@
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>
-          <span class="font-weight-medium">{{ category.description }}</span>
+          <span class="font-weight-medium">{{ category.name }}</span>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -25,7 +25,7 @@
         <v-icon>$food</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title>{{ food.description }}</v-list-item-title>
+        <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </div>

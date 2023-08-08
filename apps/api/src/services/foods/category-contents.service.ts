@@ -1,5 +1,10 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { CategoryContents, CategoryHeader, CategorySearch } from '@intake24/common/types/http';
+import type {
+  CategoryContents,
+  CategoryHeader,
+  CategorySearch,
+  FoodHeader,
+} from '@intake24/common/types/http';
 import type { FindOptions, FoodLocalAttributes, PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
@@ -17,11 +22,9 @@ const categoryContentsService = ({
   db,
 }: Pick<IoC, 'db' | 'adminCategoryService'>) => {
   const filterUndefined = (
-    headers: { code: string; description: string | undefined }[]
-  ): { code: string; description: string }[] =>
-    headers
-      .filter((h) => h.description !== undefined)
-      .map((h) => ({ code: h.code, description: h.description! }));
+    headers: { code: string; name: string | undefined }[]
+  ): (CategoryHeader | FoodHeader)[] =>
+    headers.filter((h) => h.name !== undefined).map((h) => ({ code: h.code, name: h.name! }));
 
   const getLocaleInfo = async (localeId: string): Promise<Locale> => {
     const locale = await Locale.findOne({
@@ -38,11 +41,11 @@ const categoryContentsService = ({
     const categories = await adminCategoryService.getRootCategories(localeId);
 
     return {
-      header: { code: '', description: 'Root' },
+      header: { code: '', name: 'Root' },
       foods: [],
       subcategories: categories
         .filter(({ isHidden }) => !isHidden)
-        .map(({ code, name }) => ({ code, description: name })),
+        .map(({ code, name }) => ({ code, name })),
     };
   };
 
@@ -74,8 +77,7 @@ const categoryContentsService = ({
 
     return {
       code: categoryCode,
-      description:
-        category.locals?.[0].name ?? category.prototypeLocals?.[0].name ?? '# Description missing!',
+      name: category.locals?.[0].name ?? category.prototypeLocals?.[0].name ?? '# Name missing!',
     };
   };
 
@@ -152,25 +154,21 @@ const categoryContentsService = ({
     });
 
     const foodHeaders = foods.map((row) => {
-      const description = row.food?.locals?.[0].name ?? row.food?.prototypeLocals?.[0].name;
+      const name = row.food?.locals?.[0].name ?? row.food?.prototypeLocals?.[0].name;
 
-      return { code: row.foodCode, description };
+      return { code: row.foodCode, name };
     });
 
     const categoryHeaders = (category?.subCategories ?? []).map((row) => {
-      const description = row.locals?.[0].name ?? row.prototypeLocals?.[0].name;
+      const name = row.locals?.[0].name ?? row.prototypeLocals?.[0].name;
 
-      return { code: row.code, description };
+      return { code: row.code, name };
     });
 
     return {
       header,
-      foods: filterUndefined(foodHeaders).sort((a, b) =>
-        a.description.localeCompare(b.description)
-      ),
-      subcategories: filterUndefined(categoryHeaders).sort((a, b) =>
-        a.description.localeCompare(b.description)
-      ),
+      foods: filterUndefined(foodHeaders).sort((a, b) => a.name.localeCompare(b.name)),
+      subcategories: filterUndefined(categoryHeaders).sort((a, b) => a.name.localeCompare(b.name)),
     };
   };
 
@@ -221,7 +219,7 @@ const categoryContentsService = ({
     return FoodLocal.paginate({
       query,
       ...options,
-      transform: (food) => ({ code: food.foodCode, description: food.name }),
+      transform: (food) => ({ code: food.foodCode, name: food.name }),
     });
   };
 

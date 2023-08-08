@@ -1,6 +1,6 @@
 export interface FoodHeader {
   code: string;
-  description: string;
+  name: string;
 }
 
 export interface FoodSearchResponse {

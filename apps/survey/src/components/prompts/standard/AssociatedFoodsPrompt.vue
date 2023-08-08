@@ -40,7 +40,7 @@
             <v-card-text class="d-flex flex-column flex-md-row pa-0 gap-2">
               <v-alert class="flex-md-grow-1 mb-0" color="grey lighten-3">
                 <v-icon left>$ok</v-icon>
-                {{ prompt.selectedFood.description }}
+                {{ prompt.selectedFood.name }}
               </v-alert>
               <v-btn color="secondary" large outlined @click="selectDifferentFood(prompt)">
                 {{ $t(`prompts.${type}.select.different`) }}
@@ -192,7 +192,7 @@ export default defineComponent({
 
         const selectedFood =
           this.prompts[index].confirmed === 'yes' && foodCode
-            ? { code: foodCode, description: this.getLocaleContent(genericName) }
+            ? { code: foodCode, name: this.getLocaleContent(genericName) }
             : this.prompts[index].selectedFood;
 
         this.prompts.splice(index, 1, { confirmed: this.prompts[index].confirmed, selectedFood });

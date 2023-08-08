@@ -7,7 +7,7 @@
       @click="foodSelected(food)"
     >
       <v-list-item-content>
-        <v-list-item-title>{{ food.description }}</v-list-item-title>
+        <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </v-list-item-group>

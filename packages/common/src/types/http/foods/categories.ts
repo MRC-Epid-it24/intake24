@@ -3,7 +3,7 @@ import type { Pagination } from '@intake24/db';
 
 export interface CategoryHeader {
   code: string;
-  description: string;
+  name: string;
 }
 
 export interface CategoryContents {
