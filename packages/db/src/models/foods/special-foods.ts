@@ -92,7 +92,7 @@ export default class SpecialFoods extends BaseModel<
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @HasMany(() => SpecialFoodsSteps, 'specialFoodsCode')
+  @HasMany(() => SpecialFoodsSteps, 'specialFoodsId')
   steps?: NonAttribute<SpecialFoodsSteps[]>;
 
   static async findByCode(code: string): Promise<SpecialFoods | null> {

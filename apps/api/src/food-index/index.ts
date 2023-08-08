@@ -68,7 +68,7 @@ export default {
         attributes: ['code', 'name', 'localeId', 'specialWords', 'synonyms'],
         include: {
           association: 'steps',
-          attributes: ['code', 'name', 'description', 'order'],
+          attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
           order: ['order', 'ASC'],
         },
       });

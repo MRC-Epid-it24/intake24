@@ -25,8 +25,8 @@ import SpecialFoods from './special-foods';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'specialFoodsCode', 'code', 'order'],
-    order: [['specialFoodsCode', 'ASC']],
+    attributes: ['id', 'specialFoodsId', 'code', 'order'],
+    order: [['order', 'ASC']],
   },
 }))
 @Table({
@@ -52,7 +52,7 @@ export default class SpecialFoodsSteps extends BaseModel<
     type: DataType.BIGINT,
     unique: false,
   })
-  declare specialFoodId: number;
+  declare specialFoodsId: number;
 
   @Column({
     allowNull: false,
@@ -80,7 +80,7 @@ export default class SpecialFoodsSteps extends BaseModel<
     defaultValue: () =>
       JSON.stringify([
         {
-          en: `${Sequelize.col('id')}-${Sequelize.col('specialFoodsCode')}${Sequelize.col('code')}`,
+          en: `${Sequelize.col('id')}-${Sequelize.col('specialFoodsId')}${Sequelize.col('code')}`,
         },
       ]),
     type: DataType.TEXT({ length: 'long' }),
@@ -98,7 +98,7 @@ export default class SpecialFoodsSteps extends BaseModel<
     defaultValue: () =>
       JSON.stringify({
         en: `Step description for step ${Sequelize.col('name')} of special food ${Sequelize.col(
-          'specialFoodsCode'
+          'specialFoodsId'
         )}`,
       }),
     type: DataType.TEXT({ length: 'long' }),
@@ -117,7 +117,7 @@ export default class SpecialFoodsSteps extends BaseModel<
   @UpdatedAt
   declare readonly updatedAt: CreationOptional<Date>;
 
-  @BelongsTo(() => SpecialFoods, 'specialFoodsCode')
+  @BelongsTo(() => SpecialFoods, 'specialFoodsId')
   declare specialFoods?: NonAttribute<SpecialFoods>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')

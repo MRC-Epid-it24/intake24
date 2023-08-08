@@ -4,6 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import foodIndex from '@intake24/api/food-index';
+import { logger } from '@intake24/common-backend/services';
 
 interface SearchParams {
   localeId: string;
@@ -101,6 +102,8 @@ const foodSearchController = ({
     const { code } = req.query;
     // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
     const result = await foodIndex.getSpecialFood(localeId, code);
+
+    logger.debug('Special food result', JSON.stringify(result.steps));
     res.json(result);
     res.json();
   };

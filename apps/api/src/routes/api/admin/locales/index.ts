@@ -7,6 +7,7 @@ import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
 import securables from '../securables';
+import specialFoods from './special-foods';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import synonymSets from './synonym-sets';
@@ -37,6 +38,7 @@ export default () => {
   router.post('/:localeId/copy', validation.copy, wrapAsync(localeController.copy));
   router.post('/:localeId/tasks', validation.tasks, wrapAsync(localeController.tasks));
 
+  router.use('/:localeId/special-foods', specialFoods());
   router.use('/:localeId/split-lists', splitLists());
   router.use('/:localeId/split-words', splitWords());
   router.use('/:localeId/synonym-sets', synonymSets());
