@@ -70,8 +70,8 @@
             <v-icon class="pb-1">$survey</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
-          <template v-if="mobileActions.length">
-            <template v-for="(item, idx) in mobileActions">
+          <template v-if="mobileActionsFiltered.length">
+            <template v-for="(item, idx) in mobileActionsFiltered">
               <v-btn
                 :key="item.type"
                 :color="item.type === 'next' ? 'secondary' : undefined"
@@ -94,7 +94,7 @@
                 <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
               </v-btn>
               <v-divider
-                v-if="idx + 1 < mobileActions.length"
+                v-if="idx + 1 < mobileActionsFiltered.length"
                 :key="`div-${item.type}`"
                 vertical
               ></v-divider>
@@ -144,6 +144,12 @@ export default defineComponent({
   name: 'CardLayout',
 
   mixins: [layoutMixin],
+
+  computed: {
+    mobileActionsFiltered() {
+      return this.mobileActions.filter((action) => action.type !== 'review');
+    },
+  },
 });
 </script>
 

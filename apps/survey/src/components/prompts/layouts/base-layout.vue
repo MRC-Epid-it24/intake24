@@ -66,7 +66,7 @@
       </v-btn>
       <v-divider vertical></v-divider>
 
-      <template v-if="mobileActions.length">
+      <template v-if="mobileActionsFiltered.length">
         <template v-for="(item, idx) in mobileActions">
           <v-btn
             :key="item.type"
@@ -88,7 +88,7 @@
             <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
           </v-btn>
           <v-divider
-            v-if="idx + 1 < mobileActions.length"
+            v-if="idx + 1 < mobileActionsFiltered.length"
             :key="`div-${item.type}`"
             vertical
           ></v-divider>
@@ -144,6 +144,12 @@ export default defineComponent({
     food: {
       type: Object as PropType<EncodedFood | MissingFood>,
       required: true,
+    },
+  },
+
+  computed: {
+    mobileActionsFiltered() {
+      return this.mobileActions.filter((action) => action.type !== 'review');
     },
   },
 });
