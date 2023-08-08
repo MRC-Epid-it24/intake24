@@ -332,6 +332,21 @@ export type SurveyState = {
   meals: MealState[];
 };
 
+export function isEncodedFood(food: FoodState): food is EncodedFood {
+  return food.type === 'encoded-food';
+}
+
+export function getFoodDisplayText(food: FoodState): string {
+  switch (food.type) {
+    case 'free-text':
+      return food.description;
+    case 'encoded-food':
+      return food.data.localName;
+    default:
+      return food.searchTerm;
+  }
+}
+
 export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
   if (s1.mode === s2.mode) {
     if (s1.element !== null) {

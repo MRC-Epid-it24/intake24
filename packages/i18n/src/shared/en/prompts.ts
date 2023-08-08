@@ -72,8 +72,9 @@ const prompts: LocaleMessageObject = {
     no: 'No, I did not',
     alreadyEntered: 'Yes, already entered',
     select: {
-      different: 'Select a different food',
+      different: 'Change',
       item: 'Select the food you had',
+      remove: 'Remove',
     },
     missing: {
       label: `I can't find my food`,
