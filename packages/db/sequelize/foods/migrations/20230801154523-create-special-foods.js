@@ -64,7 +64,7 @@ module.exports = {
             unique: true,
             type: Sequelize.STRING(16),
           },
-          special_foods_code: {
+          special_foods_id: {
             allowNull: false,
             type: Sequelize.BIGINT,
           },
@@ -134,8 +134,8 @@ module.exports = {
       });
 
       await queryInterface.addConstraint('special_foods_steps', {
-        fields: ['special_foods_code'],
-        name: 'special_foods_code_fk',
+        fields: ['special_foods_id'],
+        name: 'special_foods_id_fk',
         type: 'foreign key',
         references: {
           table: 'special_foods',
@@ -180,7 +180,7 @@ module.exports = {
 
       await queryInterface.addIndex('special_foods_steps', ['code'], {
         name: 'special_foods_steps_idx',
-        fields: ['code', 'special_foods_code'],
+        fields: ['code', 'special_foods_id'],
         indexType: 'btree',
         transaction,
       });
