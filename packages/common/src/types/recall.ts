@@ -343,7 +343,7 @@ export function getFoodDescription(food: FoodState): string {
     case 'encoded-food':
       return food.data.localName;
     default:
-      return food.searchTerm;
+      return food.searchTerm ?? '??';
   }
 }
 
