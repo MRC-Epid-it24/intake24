@@ -238,7 +238,7 @@ export interface FreeTextFood extends AbstractFoodState {
 export interface EncodedFood extends AbstractFoodState {
   type: 'encoded-food';
   data: UserFoodData;
-  searchTerm: string;
+  searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
   associatedFoodsComplete: boolean;
@@ -247,7 +247,7 @@ export interface EncodedFood extends AbstractFoodState {
 
 export interface MissingFood extends AbstractFoodState {
   type: 'missing-food';
-  searchTerm: string;
+  searchTerm: string | null;
   info: Pick<
     SurveySubmissionMissingFoodCreationAttributes,
     'name' | 'brand' | 'description' | 'leftovers' | 'portionSize' | 'barcode'
