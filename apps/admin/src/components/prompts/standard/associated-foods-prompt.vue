@@ -7,7 +7,7 @@
             hide-details="auto"
             :input-value="multiple"
             :label="$t('survey-schemes.prompts.associated-foods-prompt.multiple')"
-            @change="update('associated-foods-prompt', $event)"
+            @change="update('multiple', $event)"
           ></v-switch>
         </v-col>
       </v-row>
