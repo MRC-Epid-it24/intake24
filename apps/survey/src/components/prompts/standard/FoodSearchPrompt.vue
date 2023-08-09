@@ -57,9 +57,17 @@ export default defineComponent({
   emits: ['food-missing', 'food-selected', 'input'],
 
   setup(props, { emit }) {
-    const rootCategory = computed(
-      () => props.meal?.flags?.find((flag) => flag.startsWith('food-search:'))?.split(':')[1]
-    );
+    const rootCategory = computed(() => {
+      const foodSearch = props.meal?.flags
+        ?.find((flag) => flag.startsWith('food-search:'))
+        ?.split(':')[1];
+
+      if (!foodSearch) return undefined;
+
+      const [foodsCategory, drinksCategory] = foodSearch.split('|');
+
+      return props.food?.flags.includes('is-drink') ? drinksCategory : foodsCategory;
+    });
 
     const foodSelected = async (food: FoodHeader) => {
       const foodData = await foodsService.getData(props.localeId, food.code);

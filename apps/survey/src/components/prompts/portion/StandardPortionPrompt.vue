@@ -5,7 +5,7 @@
       v-model="panel"
       :tile="isMobile"
     >
-      <v-expansion-panel>
+      <v-expansion-panel v-show="standardUnits.length !== 1">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
             <template #food>

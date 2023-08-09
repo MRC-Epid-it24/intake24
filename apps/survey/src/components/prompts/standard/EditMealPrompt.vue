@@ -1,6 +1,6 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <template v-if="separateDrinks">
+    <template v-if="prompt.separateDrinks">
       <editable-food-list
         v-model="foodsOnly"
         focus
@@ -101,7 +101,7 @@ import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
-import EditableFoodList from './EditableFoodList.vue';
+import { EditableFoodList } from '../partials';
 
 export default defineComponent({
   name: 'EditMealPrompt',
@@ -128,11 +128,6 @@ export default defineComponent({
   },
 
   computed: {
-    separateDrinks() {
-      if (this.meal.flags.find((flag) => flag.startsWith('food-search:'))) return false;
-
-      return this.prompt.separateDrinks;
-    },
     drinksOnly: {
       get() {
         return this.foods.filter((food) => food.flags.includes('is-drink'));

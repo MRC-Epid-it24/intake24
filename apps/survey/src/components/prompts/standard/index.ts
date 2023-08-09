@@ -1,5 +1,4 @@
 export { default as AssociatedFoodsPrompt } from './AssociatedFoodsPrompt.vue';
-export { default as EditableFoodList } from './EditableFoodList.vue';
 export { default as EditMealPrompt } from './EditMealPrompt.vue';
 export { default as FinalPrompt } from './FinalPrompt.vue';
 export { default as FoodSearchPrompt } from './FoodSearchPrompt.vue';
