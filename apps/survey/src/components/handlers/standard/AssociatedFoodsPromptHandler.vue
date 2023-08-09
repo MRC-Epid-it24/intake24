@@ -34,9 +34,9 @@ import { useLocale } from '@intake24/ui';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (): AssociatedFoodPromptItemState => ({
+const initialPromptState = (allowMultiple: boolean): AssociatedFoodPromptItemState => ({
   mainFoodConfirmed: undefined,
-  additionalFoodConfirmed: undefined,
+  additionalFoodConfirmed: allowMultiple ? undefined : false,
   foods: [],
 });
 
@@ -61,7 +61,9 @@ export default defineComponent({
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
-      prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
+      prompts: food().data.associatedFoodPrompts.map(() =>
+        initialPromptState(props.prompt.multiple)
+      ),
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);

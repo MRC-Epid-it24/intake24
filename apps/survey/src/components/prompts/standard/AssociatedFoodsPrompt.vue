@@ -56,7 +56,12 @@
                     >
                       {{ $t(`prompts.${type}.select.different`) }}
                     </v-btn>
-                    <v-btn color="secondary" outlined @click="removeFood(index, foodIndex)">
+                    <v-btn
+                      v-if="allowMultiple"
+                      color="secondary"
+                      outlined
+                      @click="removeFood(index, foodIndex)"
+                    >
                       {{ $t(`prompts.${type}.select.remove`) }}
                     </v-btn>
                   </v-row>
@@ -191,6 +196,7 @@ export default defineComponent({
 
     const activePrompt = ref(props.initialState.activePrompt);
     const prompts = ref(props.initialState.prompts);
+    const allowMultiple = ref(props.prompt.multiple);
 
     const foods = ref(props.meal?.foods);
     const replaceFoodIndex = ref(
@@ -237,7 +243,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     );
 
-    return { activePrompt, prompts, replaceFoodIndex, getLocaleContent };
+    return { activePrompt, prompts, replaceFoodIndex, allowMultiple, getLocaleContent };
   },
 
   computed: {
@@ -310,6 +316,7 @@ export default defineComponent({
       const prompt = this.prompts[promptIndex];
 
       return (
+        this.allowMultiple &&
         prompt.mainFoodConfirmed &&
         prompt.foods.length > 0 &&
         this.replaceFoodIndex[promptIndex] === undefined
