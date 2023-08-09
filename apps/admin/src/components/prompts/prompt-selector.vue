@@ -54,8 +54,6 @@
                             :label="$t('survey-schemes.prompts.internal.id._')"
                             :messages="$t('survey-schemes.prompts.internal.id.hint')"
                             outlined
-                            :readonly="dialog.prompt.type !== 'custom'"
-                            :rules="promptIdRules"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" md="6">
@@ -136,7 +134,6 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompt, PromptType } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import {
@@ -250,17 +247,6 @@ export default defineComponent({
         },
         {} as Record<PromptType, Prompt[]>
       );
-    },
-
-    promptIdRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string => {
-          const { origId } = this.dialog.prompt;
-          const match = this.promptIds.find((id) => id === value && id !== origId);
-
-          return !match || 'Prompt ID is already used.';
-        },
-      ];
     },
   },
 
