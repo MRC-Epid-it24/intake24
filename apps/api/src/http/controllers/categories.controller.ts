@@ -4,7 +4,6 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { CategoryContents } from '@intake24/common/types/http';
 import type { PaginateQuery } from '@intake24/db/models';
-import { ApplicationError } from '@intake24/api/http/errors';
 
 const categoriesController = ({
   categoryContentsService,

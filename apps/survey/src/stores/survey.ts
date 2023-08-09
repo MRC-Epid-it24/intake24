@@ -3,7 +3,6 @@ import 'lodash/debounce';
 import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
-import { OptionalKeys } from 'vue/types/v3-component-props';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type {
@@ -17,7 +16,6 @@ import type {
   MealState,
   MealTime,
   MissingFood,
-  Optional,
   PromptAnswer,
   Selection,
   SurveyFlag,

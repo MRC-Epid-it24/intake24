@@ -28,7 +28,6 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { RequestHelp } from '@intake24/survey/components';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';

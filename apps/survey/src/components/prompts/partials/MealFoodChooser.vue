@@ -18,7 +18,7 @@ import { defineComponent, ref } from 'vue';
 import type { FoodState } from '@intake24/common/types';
 import { getFoodDescription } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
-import { findMeal, getFoodIndex } from '@intake24/survey/util';
+import { findMeal } from '@intake24/survey/util';
 
 export default defineComponent({
   name: 'MealFoodChooser',

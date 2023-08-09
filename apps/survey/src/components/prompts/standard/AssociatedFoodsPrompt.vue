@@ -37,7 +37,7 @@
               class="pa-0"
               flat
             >
-              <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
+              <v-card-text class="d-flex flex-column flex-md-row pa-0 gap-2">
                 <v-container>
                   <v-row
                     v-for="(food, foodIndex) in prompt.foods"
@@ -142,14 +142,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, set, watch } from 'vue';
+import { computed, defineComponent, ref, set, watch } from 'vue';
 
 import type {
   AssociatedFood,
   AssociatedFoodPromptItemState,
   PromptStates,
 } from '@intake24/common/prompts';
-import type { EncodedFood, FoodState } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { getFoodDescription } from '@intake24/common/types';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
@@ -196,7 +196,7 @@ export default defineComponent({
 
     const activePrompt = ref(props.initialState.activePrompt);
     const prompts = ref(props.initialState.prompts);
-    const allowMultiple = ref(props.prompt.multiple);
+    const allowMultiple = computed(() => props.prompt.multiple);
 
     const foods = ref(props.meal?.foods);
     const replaceFoodIndex = ref(
@@ -305,7 +305,7 @@ export default defineComponent({
     showFoodChooser(promptIndex: number): boolean {
       const prompt = this.prompts[promptIndex];
 
-      return (
+      return !!(
         this.replaceFoodIndex[promptIndex] !== undefined ||
         (prompt.mainFoodConfirmed && prompt.foods.length == 0) ||
         prompt.additionalFoodConfirmed
@@ -315,7 +315,7 @@ export default defineComponent({
     showMoreFoodsQuestion(promptIndex: number): boolean {
       const prompt = this.prompts[promptIndex];
 
-      return (
+      return !!(
         this.allowMultiple &&
         prompt.mainFoodConfirmed &&
         prompt.foods.length > 0 &&
@@ -429,8 +429,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.food-selection {
-  gap: 0.5rem 0.5rem;
-}
-</style>
+<style lang="scss" scoped></style>
