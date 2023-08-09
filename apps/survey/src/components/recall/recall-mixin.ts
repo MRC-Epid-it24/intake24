@@ -113,6 +113,8 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
+      if (this.hasFinished) return false;
+
       // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
       return (
         this.currentPrompt?.section !== 'preMeals' ||

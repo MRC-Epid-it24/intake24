@@ -45,7 +45,11 @@ export default defineComponent({
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') commitAnswer();
-      else survey.setAutoSelection();
+
+      if (type === 'cancel') {
+        survey.setAutoSelection();
+        type = 'next';
+      }
 
       emit('action', type, ...args);
     };
