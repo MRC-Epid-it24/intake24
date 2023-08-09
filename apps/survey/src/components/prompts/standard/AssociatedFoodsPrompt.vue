@@ -318,10 +318,11 @@ export default defineComponent({
 
     associatedFoodDescription(food: AssociatedFood): string {
       if (food.type === 'selected' && food.selectedFood !== undefined)
-        return food.selectedFood.description;
+        return food.selectedFood.name;
       if (food.type === 'existing' && food.existingFoodId !== undefined)
         return this.existingFoodDescription(food.existingFoodId);
-      if (food.type === 'missing') return 'Missing food';
+      if (food.type === 'missing')
+        return this.$t(`prompts.${this.type}.missing.placeholder`).toString();
       return 'No food selected';
     },
 

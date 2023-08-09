@@ -86,6 +86,7 @@ const prompts: LocaleMessageObject = {
       <p>Or click 'Browse all foods' and explore the food categories.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
+      placeholder: 'Missing food',
     },
   },
   editMeal: {
