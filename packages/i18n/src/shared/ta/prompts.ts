@@ -104,6 +104,7 @@ const prompts: LocaleMessageObject = {
     browse: 'Browse all foods',
     search: 'Search for a food',
     none: 'No food results. Please try refining your search.',
+    root: 'all food categories',
     back: `Back to '{category}'`,
   },
   foodSearch: {

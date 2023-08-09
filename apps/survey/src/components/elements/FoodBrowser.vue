@@ -101,6 +101,7 @@ import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import { useI18n } from '@intake24/i18n/i18n';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
 import type { FoodSearchPromptParameters } from '../prompts/standard/FoodSearchPrompt.vue';
@@ -148,6 +149,7 @@ export default defineComponent({
   emits: ['food-selected', 'food-missing', 'input'],
 
   setup(props, { emit }) {
+    const i18n = useI18n();
     const showInDialog = computed(
       () => props.inDialog && searchRef.value?.$vuetify.breakpoint.mobile
     );
@@ -195,9 +197,13 @@ export default defineComponent({
     const searchTerm = ref(props.value);
     const searchRef = ref<InstanceType<typeof VTextField>>();
     const searchResults = ref<FoodHeader[]>([]);
+    const rootHeader = computed(() => ({
+      code: props.rootCategory ?? '',
+      name: props.rootCategory ?? i18n.t('prompts.foodBrowser.root').toString(),
+    }));
 
     const searchContents = computed<CategoryContents>(() => ({
-      header: { code: props.rootCategory ?? '', name: props.rootCategory ?? 'root' },
+      header: rootHeader.value,
       foods: searchResults.value,
       subcategories: [],
     }));
@@ -219,8 +225,11 @@ export default defineComponent({
 
         requestInProgress.value = false;
         requestFailed.value = false;
-        navigationHistory.value.push(contents.header);
-        currentCategoryContents.value = contents;
+
+        const header = contents.header.code ? contents.header : rootHeader.value;
+
+        currentCategoryContents.value = { ...contents, header };
+        navigationHistory.value.push(header);
       } catch (err) {
         requestInProgress.value = false;
         requestFailed.value = true;
@@ -232,7 +241,9 @@ export default defineComponent({
      */
     const searchCategory = async () => {
       if (!props.rootCategory) return;
+
       requestInProgress.value = true;
+      searchResults.value = [];
 
       try {
         const { data } = await categoriesService.search(props.localeId, props.rootCategory, {
@@ -251,9 +262,10 @@ export default defineComponent({
     };
 
     const searchGlobal = async () => {
-      if (!props.parameters) return;
+      if (!props.parameters || !searchTerm.value) return;
 
       requestInProgress.value = true;
+      searchResults.value = [];
       const { matchScoreWeight, rankingAlgorithm } = props.parameters;
 
       try {
@@ -274,8 +286,8 @@ export default defineComponent({
     };
 
     const search = async () => {
-      if (props.type === 'foodSearch') await searchGlobal();
-      else await searchCategory();
+      if (props.rootCategory) await searchCategory();
+      else await searchGlobal();
     };
 
     const categorySelected = (category: CategoryHeader) => {
@@ -317,7 +329,7 @@ export default defineComponent({
     watchDebounced(
       searchTerm,
       async () => {
-        emit('input', searchTerm.value);
+        emit('input', searchTerm.value ?? '');
 
         if (searchTerm.value) {
           await search();
@@ -325,7 +337,6 @@ export default defineComponent({
           return;
         }
 
-        searchResults.value = [];
         if (
           !currentCategoryContents.value ||
           props.rootCategory !== currentCategoryContents.value.header.code

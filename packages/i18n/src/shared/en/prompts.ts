@@ -88,7 +88,7 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: `<p>List everything you had for your <strong>{meal}</strong>, one item per line.</p>
       For example:<p><ul><li>Weetabix</li><li>Tea</li></ul></p>
-      <p>You can press Enter on your keyboard or click the "down arrow ADD" button to go to the next line.</p>
+      <p>You can press Enter on your keyboard or click the <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> button to go to the next line.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.`,
     add: 'Add',
     drinksOnly: 'Drinks',
@@ -104,6 +104,7 @@ const prompts: LocaleMessageObject = {
     browse: 'Browse all foods',
     search: 'Search for a food',
     none: 'No food results. Please try refining your search.',
+    root: 'all food categories',
     back: `Back to '{category}'`,
   },
   foodSearch: {
