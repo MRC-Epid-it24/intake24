@@ -13,6 +13,7 @@ private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-c
 export type SurveyFlag = `${string}-acknowledged`;
 
 export type MealFlag =
+  | `food-search:${string}`
   | 'free-entry-complete'
   | 'no-meals-after'
   | 'no-meals-between'

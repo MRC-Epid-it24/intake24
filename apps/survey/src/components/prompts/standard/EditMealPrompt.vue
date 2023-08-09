@@ -1,6 +1,6 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
-    <template v-if="prompt.separateDrinks">
+    <template v-if="separateDrinks">
       <editable-food-list
         v-model="foodsOnly"
         focus
@@ -128,6 +128,11 @@ export default defineComponent({
   },
 
   computed: {
+    separateDrinks() {
+      if (this.meal.flags.find((flag) => flag.startsWith('food-search:'))) return false;
+
+      return this.prompt.separateDrinks;
+    },
     drinksOnly: {
       get() {
         return this.foods.filter((food) => food.flags.includes('is-drink'));

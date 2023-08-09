@@ -22,12 +22,8 @@
                 @keydown.prevent.stop.enter="moveToList"
               >
                 <template v-if="$vuetify.breakpoint.xs" #append>
-                  <v-icon
-                    class="flip px-2"
-                    :disabled="!newFood.description.length"
-                    @click="moveToList"
-                  >
-                    fas fa-turn-down fa-flip-horizontal
+                  <v-icon class="px-2" :disabled="!newFood.description.length" @click="moveToList">
+                    fas fa-turn-down fa-rotate-90
                   </v-icon>
                 </template>
               </v-text-field>
@@ -40,7 +36,7 @@
                 x-large
                 @click="moveToList"
               >
-                <v-icon class="flip" left>fas fa-turn-down fa-flip-horizontal</v-icon>
+                <v-icon left>fas fa-turn-down fa-rotate-90</v-icon>
                 {{ $t('prompts.editMeal.add') }}
               </v-btn>
             </div>

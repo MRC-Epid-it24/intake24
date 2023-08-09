@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-card-text>
       <food-browser
-        v-bind="{ localeId, parameters, type, value }"
+        v-bind="{ localeId, parameters, rootCategory, type, value }"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @input="$emit('input', $event)"
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FreeTextFood } from '@intake24/common/types';
@@ -57,6 +57,10 @@ export default defineComponent({
   emits: ['food-missing', 'food-selected', 'input'],
 
   setup(props, { emit }) {
+    const rootCategory = computed(
+      () => props.meal?.flags?.find((flag) => flag.startsWith('food-search:'))?.split(':')[1]
+    );
+
     const foodSelected = async (food: FoodHeader) => {
       const foodData = await foodsService.getData(props.localeId, food.code);
       emit('food-selected', foodData);
@@ -69,6 +73,7 @@ export default defineComponent({
     return {
       foodSelected,
       foodMissing,
+      rootCategory,
     };
   },
 });

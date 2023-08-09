@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer } from '@intake24/common/types';
@@ -42,10 +42,12 @@ export default defineComponent({
     const { mealOptional } = useMealPromptUtils();
     const survey = useSurvey();
 
-    const state = ref<CustomPromptAnswer | undefined>(undefined);
+    const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
+
+    const state = ref<CustomPromptAnswer | undefined>(isInfoPrompt.value ? 'ok' : undefined);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
+      if (type === 'next' || isInfoPrompt.value) commitAnswer();
 
       emit('action', type, ...args);
     };
@@ -74,8 +76,7 @@ export default defineComponent({
               return;
             }
 
-            if (infoPrompts.includes(props.prompt.component))
-              survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
+            if (isInfoPrompt.value) survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
             else
               survey.setFoodCustomPromptAnswer({
                 foodId: food.id,
@@ -90,7 +91,7 @@ export default defineComponent({
               return;
             }
 
-            if (infoPrompts.includes(props.prompt.component))
+            if (isInfoPrompt.value)
               survey.addMealFlag(mealOptional.value.id, `${promptId}-acknowledged`);
             else
               survey.setMealCustomPromptAnswer({
@@ -102,7 +103,7 @@ export default defineComponent({
             break;
           }
         }
-      } else if (infoPrompts.includes(props.prompt.component)) {
+      } else if (isInfoPrompt.value) {
         survey.addFlag(`${promptId}-acknowledged`);
       } else {
         survey.setCustomPromptAnswer({ promptId, answer: state.value });
