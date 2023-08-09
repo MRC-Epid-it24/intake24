@@ -26,7 +26,7 @@
           <v-divider></v-divider>
           <!-- Recall info -->
           <template v-if="recallAllowed">
-            <v-list class="list-no-wrap" subheader>
+            <v-list class="list__no-wrap" subheader>
               <v-subheader>{{ $t('recall.info') }}</v-subheader>
               <template v-if="limitReached">
                 <v-list-item>
@@ -359,10 +359,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.list-no-wrap {
-  .v-list-item__title {
-    white-space: initial !important;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

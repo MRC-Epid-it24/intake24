@@ -1,5 +1,5 @@
 <template>
-  <div v-if="contents.subcategories.length || contents.foods.length">
+  <v-list v-if="contents.subcategories.length || contents.foods.length" class="list__no-wrap py-0">
     <v-list-item
       v-for="category in contents.subcategories"
       :key="category.code"
@@ -28,7 +28,7 @@
         <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
-  </div>
+  </v-list>
   <div v-else class="pa-4">
     <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
       {{ $t('prompts.foodBrowser.none') }}

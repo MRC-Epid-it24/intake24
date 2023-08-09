@@ -30,7 +30,7 @@
               <v-btn large @click="browseCategory(retryCode)">Try again</v-btn>
             </v-card-actions>
           </v-card>
-          <v-btn v-if="navigationHistory.length > 1" class="my-1" large text @click="navigateBack">
+          <v-btn v-if="navigationHistory.length > 1" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
             {{
               $t(`prompts.foodBrowser.back`, {
