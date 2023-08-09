@@ -132,6 +132,18 @@ const promptConditions: Condition[] = [
     },
   },
   {
+    type: 'flag',
+    op: 'eq',
+    value: '',
+    props: {},
+  },
+  {
+    type: 'foodCategory',
+    op: 'eq',
+    value: '',
+    props: {},
+  },
+  {
     type: 'promptAnswer',
     op: 'eq',
     value: '',
@@ -145,15 +157,6 @@ const promptConditions: Condition[] = [
     op: 'eq',
     value: '',
     props: {},
-  },
-  {
-    type: 'foodCategory',
-    op: 'eq',
-    value: '',
-    props: {
-      section: 'food',
-      categoryId: '',
-    },
   },
 ];
 

@@ -5,7 +5,8 @@ import SectionProps from './section-props.vue';
 export default {
   drinks: SectionProps,
   energy: SectionProps,
+  flag: NoopProps,
+  foodCategory: NoopProps,
   promptAnswer: PromptAnswerProps,
   recallNumber: NoopProps,
-  foodCategory: NoopProps,
 };

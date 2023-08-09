@@ -127,6 +127,8 @@ const checkSurveyCustomConditions = (store: SurveyStore, prompt: Prompt) =>
         console.error(`Unexpected condition: ${type} & ${props.section}`);
         return false;
       }
+      case 'flag':
+        return conditionOps[op]({ value, answer: store.data.flags });
       case 'promptAnswer': {
         if (props.section === 'survey')
           return conditionOps[op]({
@@ -224,6 +226,8 @@ const checkMealCustomConditions = (store: SurveyStore, mealState: MealState, pro
             return false;
         }
       }
+      case 'flag':
+        return conditionOps[op]({ value, answer: mealState.flags });
       case 'promptAnswer': {
         switch (props.section) {
           case 'survey':
@@ -653,6 +657,12 @@ const checkFoodCustomConditions = (
             return false;
         }
       }
+      case 'flag':
+        return conditionOps[op]({ value, answer: foodState.flags });
+      case 'foodCategory': {
+        if (foodState.type !== 'encoded-food') return false;
+        return conditionOps[op]({ value, answer: foodState.data.categories });
+      }
       case 'promptAnswer': {
         switch (props.section) {
           case 'survey':
@@ -677,10 +687,6 @@ const checkFoodCustomConditions = (
       }
       case 'recallNumber':
         return checkRecallNumber(store, condition);
-      case 'foodCategory': {
-        if (foodState.type !== 'encoded-food') return false;
-        return conditionOps[op]({ value, answer: foodState.data.categories });
-      }
       default:
         console.error(`Unexpected condition type: ${condition}`);
         return false;
