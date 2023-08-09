@@ -1,16 +1,16 @@
 import type { FoodState, MissingFood, PortionSizeStates } from '../types';
 import type { FoodHeader } from '../types/http';
 
-export type AssociatedFoodPromptState = {
-  confirmed?: 'yes' | 'no' | 'existing' | 'missing';
+export type AssociatedFood = {
+  type: 'selected' | 'existing' | 'missing';
   selectedFood?: FoodHeader;
   existingFoodId?: string;
 };
 
 export type AssociatedFoodPromptItemState = {
-  confirmed?: 'yes' | 'no' | 'existing' | 'missing';
-  selectedFood?: FoodHeader;
-  existingFoodId?: string;
+  mainFoodConfirmed?: boolean;
+  additionalFoodConfirmed?: boolean;
+  foods: AssociatedFood[];
 };
 
 export type PromptStates = {

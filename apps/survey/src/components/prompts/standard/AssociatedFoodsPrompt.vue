@@ -11,7 +11,7 @@
         <v-expansion-panel-content>
           <v-container class="pa-0">
             <v-radio-group
-              v-model="prompt.confirmed"
+              v-model="prompt.mainFoodConfirmed"
               :row="!isMobile"
               @change="onConfirmStateChanged(index)"
             >
@@ -19,78 +19,113 @@
                 :label="$t(`prompts.${type}.no`)"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
-                value="no"
+                :value="false"
               ></v-radio>
               <v-radio
                 :label="$t(`prompts.${type}.yes`)"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
-                value="yes"
-              ></v-radio>
-              <v-radio
-                v-if="prompt.confirmed === 'existing' || availableFoods[index].length > 0"
-                :label="getAlreadyEnteredLabel(index)"
-                off-icon="fa-regular fa-circle"
-                on-icon="$yes"
-                value="existing"
+                :value="true"
               ></v-radio>
             </v-radio-group>
           </v-container>
-          <v-card
-            v-if="prompt.confirmed === 'yes' && prompt.selectedFood !== undefined"
-            class="pa-1"
-            flat
-          >
-            <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
-              <v-container>
-                <v-row align="baseline">
-                  <v-alert class="flex-md-grow-1 mr-2" color="grey lighten-3">
-                    <v-icon left>$ok</v-icon>
-                    {{ prompt.selectedFood.description }}
-                  </v-alert>
-                  <v-btn
-                    class="mr-2"
-                    color="secondary"
-                    outlined
-                    @click="selectDifferentFood(prompt)"
-                  >
-                    {{ $t(`prompts.${type}.select.different`) }}
-                  </v-btn>
-                  <v-btn color="secondary" outlined>
-                    {{ $t(`prompts.${type}.select.remove`) }}
-                  </v-btn>
-                </v-row>
-              </v-container>
-            </v-card-text>
-          </v-card>
 
+          <!-- Selected foods list -->
           <v-expand-transition>
-            <v-card v-show="prompt.confirmed === 'yes' && prompt.selectedFood === undefined" flat>
-              <food-browser
-                v-bind="{ localeId, rootCategory: associatedFoodPrompts[index].categoryCode, type }"
-                @food-missing="foodMissing(index)"
-                @food-selected="(food) => foodSelected(food, index)"
-              ></food-browser>
+            <v-card
+              v-if="prompt.mainFoodConfirmed && prompt.foods.length > 0 && !showFoodChooser(index)"
+              class="pa-0"
+              flat
+            >
+              <v-card-text class="d-flex flex-column flex-md-row pa-0 food-selection">
+                <v-container>
+                  <v-row
+                    v-for="(food, foodIndex) in prompt.foods"
+                    :key="foodIndex"
+                    align="baseline"
+                    class="pa-0"
+                  >
+                    <v-alert class="flex-md-grow-1 mr-1" color="grey lighten-4" dense>
+                      {{ associatedFoodDescription(food) }}
+                    </v-alert>
+                    <v-btn
+                      class="mr-2"
+                      color="secondary"
+                      outlined
+                      @click="replaceFood(index, foodIndex)"
+                    >
+                      {{ $t(`prompts.${type}.select.different`) }}
+                    </v-btn>
+                    <v-btn color="secondary" outlined @click="removeFood(index, foodIndex)">
+                      {{ $t(`prompts.${type}.select.remove`) }}
+                    </v-btn>
+                  </v-row>
+                </v-container>
+              </v-card-text>
             </v-card>
           </v-expand-transition>
 
+          <!-- Additional food confirmation -->
           <v-expand-transition>
-            <v-card
-              v-show="
-                prompt.confirmed === 'existing' &&
-                prompt.existingFoodId === undefined &&
-                availableFoods[index].length > 1
-              "
-              flat
-            >
-              <v-card-title>Which one of these?</v-card-title>
+            <v-card v-show="showMoreFoodsQuestion(index)" flat>
+              <v-card-title>{{ $t(`prompts.${type}.moreFoodsQuestion`) }}</v-card-title>
+              <v-card-text>
+                <v-radio-group
+                  v-model="prompt.additionalFoodConfirmed"
+                  :row="!isMobile"
+                  @change="onConfirmStateChanged(index)"
+                >
+                  <v-radio
+                    :label="$t(`prompts.${type}.no`)"
+                    off-icon="fa-regular fa-circle"
+                    on-icon="$yes"
+                    :value="false"
+                  ></v-radio>
+                  <v-radio
+                    :label="$t(`prompts.${type}.yesAnother`)"
+                    off-icon="fa-regular fa-circle"
+                    on-icon="$yes"
+                    :value="true"
+                  ></v-radio>
+                </v-radio-group>
+              </v-card-text>
+            </v-card>
+          </v-expand-transition>
+
+          <!-- Existing food option: if there are any foods in the same meal that match
+            the associated food criteria, allow to pick one of them -->
+          <v-expand-transition>
+            <v-card v-if="showFoodChooser(index) && availableFoods[index].length > 0" flat>
+              <v-card-title>{{ $t(`prompts.${type}.existingFoodsTitle`) }}</v-card-title>
               <v-card-text>
                 <meal-food-chooser
                   v-if="meal"
-                  :filter="(food) => availableFoods[index].includes(food)"
+                  :filter="(id) => availableFoods[index].includes(id)"
                   :meal-id="meal.id"
-                  @selected="(food) => existingFoodSelected(food, index)"
+                  @selected="(id) => existingFoodSelected(id, index)"
                 ></meal-food-chooser>
+              </v-card-text>
+            </v-card>
+          </v-expand-transition>
+
+          <!-- Database lookup -->
+          <v-expand-transition>
+            <v-card v-if="showFoodChooser(index)" flat>
+              <v-card-title>{{
+                availableFoods[index].length > 0
+                  ? $t(`prompts.${type}.databaseLookupWithExisting`)
+                  : $t(`prompts.${type}.databaseLookupTitle`)
+              }}</v-card-title>
+              <v-card-text>
+                <food-browser
+                  v-bind="{
+                    localeId,
+                    rootCategory: associatedFoodPrompts[index].categoryCode,
+                    type,
+                  }"
+                  @food-missing="foodMissing(index)"
+                  @food-selected="(food) => foodSelected(food, index)"
+                ></food-browser>
               </v-card-text>
             </v-card>
           </v-expand-transition>
@@ -104,10 +139,14 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref, set, watch } from 'vue';
 
-import type { AssociatedFoodPromptItemState, PromptStates } from '@intake24/common/prompts';
+import type {
+  AssociatedFood,
+  AssociatedFoodPromptItemState,
+  PromptStates,
+} from '@intake24/common/prompts';
 import type { EncodedFood, FoodState } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
-import { getFoodDisplayText } from '@intake24/common/types';
+import { getFoodDescription } from '@intake24/common/types';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
 import { useLocale } from '@intake24/ui';
@@ -115,8 +154,10 @@ import { useLocale } from '@intake24/ui';
 import createBasePrompt from '../createBasePrompt';
 
 const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
-  (prompt.confirmed && ['no', 'existing', 'missing'].includes(prompt.confirmed)) ||
-  (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined);
+  prompt.mainFoodConfirmed === false ||
+  (prompt.mainFoodConfirmed === true &&
+    prompt.foods.length > 0 &&
+    prompt.additionalFoodConfirmed === false);
 
 const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
   prompts.findIndex((prompt) => !isPromptValid(prompt));
@@ -152,43 +193,51 @@ export default defineComponent({
     const prompts = ref(props.initialState.prompts);
 
     const foods = ref(props.meal?.foods);
+    const replaceFoodIndex = ref(
+      props.food.data.associatedFoodPrompts.map(() => undefined as number | undefined)
+    );
 
-    // Corner case: an existing food id becomes invalid if the food is removed from the meal
-    // before the associated food prompt is completed.
+    // Case 1: an existing food id becomes invalid if the food is removed from the meal
+    //         before the associated food prompt is completed.
+
+    // Case 2: a prompt state restored from local storage refers to an invalid food id
+    //         (covered by the 'immediate' option)
 
     // FIXME
     //
     // This seems to depend on food order for some reason.
     //
-    // For example, when entering soup, toast, identifying toast, then moving to soup, selecting
-    // toast as existing food reference, then deleting toast it works.
+    // For example, this works:
     //
-    // But if done the exact same way except for enterint toast before soup the watch doesn't
+    // Enter soup
+    // Enter toast
+    // Select toast and complete database lookup
+    // Select soup
+    // Select toast as the "already entered" option
+    // Delete toast from the meal list on the left
+    //
+    // But if done the exact same way except for entering toast before soup the watch doesn't
     // trigger.
     watch(
       foods,
       (newFoods) => {
         for (let i = 0; i < prompts.value.length; ++i) {
           const prompt = prompts.value[i];
-          if (
-            prompt.confirmed === 'existing' &&
-            prompt.existingFoodId !== undefined &&
-            (!newFoods || !newFoods.some((food) => food.id === prompt.existingFoodId))
-          ) {
-            const updatedPrompt = {
-              ...prompt,
-              confirmed: undefined,
-              existingFoodId: undefined,
-            };
 
-            set(prompts.value, i, updatedPrompt);
-          }
+          const update = {
+            ...prompt,
+            foods: prompt.foods.filter((food) =>
+              food.type === 'existing' ? newFoods?.some((f) => f.id === food.existingFoodId) : true
+            ),
+          };
+
+          set(prompts.value, i, update);
         }
       },
-      { deep: true }
+      { deep: true, immediate: true }
     );
 
-    return { activePrompt, prompts, getLocaleContent };
+    return { activePrompt, prompts, replaceFoodIndex, getLocaleContent };
   },
 
   computed: {
@@ -201,9 +250,13 @@ export default defineComponent({
     },
 
     usedExistingFoodIds(): string[] {
-      return this.prompts
-        .filter((prompt) => prompt.confirmed === 'existing' && prompt.existingFoodId)
-        .map((prompt) => prompt.existingFoodId!);
+      const result = this.prompts.flatMap((prompt) =>
+        prompt.foods
+          .filter((food) => food.type === 'existing' && food.existingFoodId !== undefined)
+          .map((food) => food.existingFoodId!)
+      );
+
+      return result;
     },
 
     availableFoods(): string[][] {
@@ -243,93 +296,120 @@ export default defineComponent({
   methods: {
     isPromptValid,
 
-    getFoodLabel(foodId: string): string {
-      const food = this.meal?.foods.find((food) => food.id === foodId);
-      return food ? getFoodDisplayText(food) : '';
+    showFoodChooser(promptIndex: number): boolean {
+      const prompt = this.prompts[promptIndex];
+
+      return (
+        this.replaceFoodIndex[promptIndex] !== undefined ||
+        (prompt.mainFoodConfirmed && prompt.foods.length == 0) ||
+        prompt.additionalFoodConfirmed
+      );
     },
 
-    getAlreadyEnteredLabel(index: number): string {
-      const prompt = this.prompts[index];
+    showMoreFoodsQuestion(promptIndex: number): boolean {
+      const prompt = this.prompts[promptIndex];
 
-      if (prompt.confirmed === 'existing' && prompt.existingFoodId) {
-        return (
-          this.$t(`prompts.${this.type}.alreadyEntered`) +
-          ` (${this.getFoodLabel(prompt.existingFoodId)})`
-        );
+      return (
+        prompt.mainFoodConfirmed &&
+        prompt.foods.length > 0 &&
+        this.replaceFoodIndex[promptIndex] === undefined
+      );
+    },
+
+    associatedFoodDescription(food: AssociatedFood): string {
+      if (food.type === 'selected' && food.selectedFood !== undefined)
+        return food.selectedFood.description;
+      if (food.type === 'existing' && food.existingFoodId !== undefined)
+        return this.existingFoodDescription(food.existingFoodId);
+      if (food.type === 'missing') return 'Missing food';
+      return 'No food selected';
+    },
+
+    existingFoodDescription(foodId: string): string {
+      const food = this.meal?.foods.find((food) => food.id === foodId);
+      return food ? getFoodDescription(food) : '';
+    },
+
+    replaceFood(promptIndex: number, foodIndex: number) {
+      set(this.replaceFoodIndex, promptIndex, foodIndex);
+    },
+
+    removeFood(promptIndex: number, foodIndex: number) {
+      const prompt = this.prompts[promptIndex];
+
+      const update = {
+        ...prompt,
+        foods: prompt.foods.slice(0, foodIndex).concat(prompt.foods.slice(foodIndex + 1)),
+      };
+
+      this.prompts.splice(promptIndex, 1, update);
+
+      this.updatePrompts();
+    },
+
+    foodSelected(food: FoodHeader, promptIndex: number): void {
+      this.onFoodSelected(
+        {
+          type: 'selected',
+          selectedFood: food,
+        },
+        promptIndex
+      );
+    },
+
+    existingFoodSelected(foodId: string, promptIndex: number) {
+      this.onFoodSelected(
+        {
+          type: 'existing',
+          existingFoodId: foodId,
+        },
+        promptIndex
+      );
+    },
+
+    foodMissing(promptIndex: number) {
+      this.onFoodSelected(
+        {
+          type: 'missing',
+        },
+        promptIndex
+      );
+    },
+
+    onFoodSelected(selectedFood: AssociatedFood, promptIndex: number): void {
+      const prompt = this.prompts[promptIndex];
+      const replaceIndex = this.replaceFoodIndex[promptIndex];
+
+      const foods = prompt.foods.slice();
+
+      if (replaceIndex !== undefined) {
+        foods[replaceIndex] = selectedFood;
+        set(this.replaceFoodIndex, promptIndex, undefined);
+      } else {
+        foods.push(selectedFood);
       }
 
-      if (this.availableFoods[index].length == 1) {
-        return (
-          this.$t(`prompts.${this.type}.alreadyEntered`) +
-          ` (${this.getFoodLabel(this.availableFoods[index][0])})`
-        );
-      }
+      const update = {
+        ...prompt,
+        additionalFoodConfirmed:
+          prompt.additionalFoodConfirmed === true ? undefined : prompt.additionalFoodConfirmed,
+        foods,
+      };
 
-      return this.$t(`prompts.${this.type}.alreadyEntered`).toString();
+      this.prompts.splice(promptIndex, 1, update);
+
+      this.goToNextIfCan(promptIndex);
+      this.updatePrompts();
+    },
+
+    onConfirmStateChanged(index: number) {
+      this.goToNextIfCan(index);
     },
 
     goToNextIfCan(index: number) {
       if (!isPromptValid(this.prompts[index])) return;
 
       this.activePrompt = getNextPrompt(this.prompts);
-    },
-
-    isFoodIdValid(id: string): boolean {
-      return this.meal?.foods.some((food) => food.id === id) ?? false;
-    },
-
-    onConfirmStateChanged(index: number) {
-      if (this.prompts[index].confirmed === 'existing') {
-        // If there is only one compatible food available in this meal, select it automatically
-        if (this.availableFoods[index].length === 1) {
-          this.prompts.splice(index, 1, {
-            confirmed: 'existing',
-            existingFoodId: this.availableFoods[index][0],
-            selectedFood: this.prompts[index].selectedFood,
-          });
-          this.updatePrompts();
-        }
-        // Do nothing otherwise, the food selection will be handled by the food chooser
-      } else {
-        const { foodCode, genericName } = this.associatedFoodPrompts[index];
-
-        const selectedFood =
-          this.prompts[index].confirmed === 'yes' && foodCode
-            ? { code: foodCode, description: this.getLocaleContent(genericName) }
-            : this.prompts[index].selectedFood;
-
-        this.prompts.splice(index, 1, { confirmed: this.prompts[index].confirmed, selectedFood });
-        this.updatePrompts();
-      }
-
-      // this.goToNextIfCan(index);
-    },
-
-    selectDifferentFood(prompt: AssociatedFoodPromptItemState) {
-      prompt.selectedFood = undefined;
-
-      this.updatePrompts();
-    },
-
-    foodSelected(food: FoodHeader, promptIndex: number): void {
-      this.prompts.splice(promptIndex, 1, { confirmed: 'yes', selectedFood: food });
-
-      this.goToNextIfCan(promptIndex);
-      this.updatePrompts();
-    },
-
-    foodMissing(promptIndex: number) {
-      this.prompts.splice(promptIndex, 1, { confirmed: 'missing' });
-
-      this.goToNextIfCan(promptIndex);
-      this.updatePrompts();
-    },
-
-    existingFoodSelected(food: FoodState, promptIndex: number) {
-      this.prompts.splice(promptIndex, 1, {
-        confirmed: 'existing',
-        existingFoodId: food.id,
-      });
     },
 
     updatePrompts() {

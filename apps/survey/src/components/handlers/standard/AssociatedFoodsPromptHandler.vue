@@ -35,9 +35,9 @@ import { useLocale } from '@intake24/ui';
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
 const initialPromptState = (): AssociatedFoodPromptItemState => ({
-  confirmed: undefined,
-  selectedFood: undefined,
-  existingFoodId: undefined,
+  mainFoodConfirmed: undefined,
+  additionalFoodConfirmed: undefined,
+  foods: [],
 });
 
 export default defineComponent({
@@ -98,31 +98,35 @@ export default defineComponent({
     async commitAnswer() {
       const newFoods: FoodHeader[] = [];
       const missingFoods: MissingFood[] = [];
+      const existingFoods: string[] = [];
 
       this.state.prompts.forEach((prompt, idx) => {
-        if (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined) {
-          newFoods.push(prompt.selectedFood);
-        }
-
-        if (prompt.confirmed === 'missing') {
-          missingFoods.push({
-            id: getEntityId(),
-            type: 'missing-food',
-            info: null,
-            searchTerm: capitalize(
-              this.getLocaleContent(this.food().data.associatedFoodPrompts[idx].genericName)
-            ),
-            customPromptAnswers: {},
-            flags: [],
-            linkedFoods: [],
+        if (prompt.mainFoodConfirmed) {
+          prompt.foods.forEach((food) => {
+            switch (food.type) {
+              case 'selected':
+                if (food.selectedFood !== undefined) newFoods.push(food.selectedFood);
+                break;
+              case 'existing':
+                if (food.existingFoodId !== undefined) existingFoods.push(food.existingFoodId);
+                break;
+              case 'missing':
+                missingFoods.push({
+                  id: getEntityId(),
+                  type: 'missing-food',
+                  info: null,
+                  searchTerm: capitalize(
+                    this.getLocaleContent(this.food().data.associatedFoodPrompts[idx].genericName)
+                  ),
+                  customPromptAnswers: {},
+                  flags: [],
+                  linkedFoods: [],
+                });
+                break;
+            }
           });
         }
       });
-
-      const existingFoods = this.state.prompts
-        .filter((prompt) => prompt.confirmed === 'existing')
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .map((prompt) => prompt.existingFoodId!);
 
       const foodId = this.food().id;
       const foodIndex = getFoodIndexRequired(this.meals, foodId);

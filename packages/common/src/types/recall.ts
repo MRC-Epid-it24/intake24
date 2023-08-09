@@ -336,7 +336,7 @@ export function isEncodedFood(food: FoodState): food is EncodedFood {
   return food.type === 'encoded-food';
 }
 
-export function getFoodDisplayText(food: FoodState): string {
+export function getFoodDescription(food: FoodState): string {
   switch (food.type) {
     case 'free-text':
       return food.description;

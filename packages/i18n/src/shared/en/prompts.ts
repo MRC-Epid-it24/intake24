@@ -69,8 +69,12 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
     yes: 'Yes, I had some',
+    moreFoodsQuestion: 'Did you have any other foods from this category?',
+    databaseLookupTitle: 'What was it?',
+    databaseLookupWithExisting: 'If not, what was it?',
+    existingFoodsTitle: 'Was it something you already entered?',
+    yesAnother: 'Yes, I had another',
     no: 'No, I did not',
-    alreadyEntered: 'Yes, already entered',
     select: {
       different: 'Change',
       item: 'Select the food you had',
