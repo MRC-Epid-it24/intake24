@@ -42,9 +42,9 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "@types/lodash": "^4.14.196",
-    "@types/node": "^20.4.8",
-    "@types/validator": "^13.9.0",
+    "@types/lodash": "^4.14.197",
+    "@types/node": "^20.4.9",
+    "@types/validator": "^13.11.1",
     "@types/web-push": "^3.3.2",
     "@types/webpack-env": "^1.18.1",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
