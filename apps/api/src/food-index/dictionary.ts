@@ -32,9 +32,10 @@ export class RichDictionary {
     this.words = new Set<string>();
 
     //Merging all the words and synSets into one set
-    const allWords = [...synSets, words].reduce((acc, next) => (next.forEach(word => acc.add(word)), acc), new Set<string>());
-
-    for (const word of allWords) this.words.add(word.toLocaleLowerCase());
+    for (const word of words) this.words.add(word.toLocaleLowerCase());
+    synSets.forEach((synSet) => {
+      for (const synWord of synSet) this.words.add(synWord.toLocaleLowerCase());
+    });
 
     this.phoneticEncoder = phoneticEncoder;
 
