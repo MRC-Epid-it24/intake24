@@ -177,8 +177,7 @@ const prompts: LocaleMessageObject = {
   readyMeal: {
     name: 'தயார் சாப்பாடு',
     text: '',
-    description: `<p>Was this a ready-made meal or food?</p>
-      <p>இவற்றில் ஏதேனும் ரெடிமேட் சாப்பாடு அல்லது உணவாக இருந்தால் பெட்டியை டிக் செய்யவும் (எ.கா. சமைக்க / சாப்பிட / முன் பேக் செய்யப்பட்ட).</p>`,
+    description: `<p>Was this a ready-made meal or food?</p>`,
   },
   redirect: {
     name: 'வழிமாற்று',

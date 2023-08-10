@@ -175,8 +175,7 @@ const prompts: LocaleMessageObject = {
   readyMeal: {
     name: '现成食物',
     text: '',
-    description: `<p>Was this a ready-made meal or food?</p>
-      <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
+    description: `<p>Was this a ready-made meal or food?</p>`,
   },
   redirect: {
     name: '重定向',
