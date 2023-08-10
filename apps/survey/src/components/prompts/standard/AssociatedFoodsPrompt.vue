@@ -198,34 +198,20 @@ export default defineComponent({
     const prompts = ref(props.initialState.prompts);
     const allowMultiple = computed(() => props.prompt.multiple);
 
-    const foods = ref(props.meal?.foods);
     const replaceFoodIndex = ref(
       props.food.data.associatedFoodPrompts.map(() => undefined as number | undefined)
     );
 
+    // React to changes to the meal's foods list and filter out references to foods (created
+    // by the "use existing food" option) that have been removed from the meal.
+    //
     // Case 1: an existing food id becomes invalid if the food is removed from the meal
-    //         before the associated food prompt is completed.
+    //         before the associated food prompt is completed (e.g., deleted via the side panel)
 
     // Case 2: a prompt state restored from local storage refers to an invalid food id
     //         (covered by the 'immediate' option)
-
-    // FIXME
-    //
-    // This seems to depend on food order for some reason.
-    //
-    // For example, this works:
-    //
-    // Enter soup
-    // Enter toast
-    // Select toast and complete database lookup
-    // Select soup
-    // Select toast as the "already entered" option
-    // Delete toast from the meal list on the left
-    //
-    // But if done the exact same way except for entering toast before soup the watch doesn't
-    // trigger.
     watch(
-      foods,
+      () => props.meal?.foods,
       (newFoods) => {
         for (let i = 0; i < prompts.value.length; ++i) {
           const prompt = prompts.value[i];
