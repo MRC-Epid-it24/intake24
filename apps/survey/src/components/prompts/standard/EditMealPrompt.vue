@@ -16,9 +16,7 @@
     <editable-food-list v-else v-model="foods" focus @input="update"></editable-food-list>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        :class="{ 'mr-2': !isMobile }"
         color="secondary"
         large
         text
@@ -34,9 +32,7 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn
-            :block="isMobile"
             class="px-4"
-            :class="{ 'mr-2': !isMobile }"
             color="secondary"
             large
             text
@@ -50,11 +46,7 @@
         </template>
         {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
       </confirm-dialog>
-      <next
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        :disabled="!isValid"
-        @click="action('next')"
-      ></next>
+      <next :disabled="!isValid" @click="action('next')"></next>
     </template>
     <template #nav-actions>
       <v-btn

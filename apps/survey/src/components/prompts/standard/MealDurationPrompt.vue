@@ -23,7 +23,7 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <v-btn :block="isMobile" class="px-4" color="secondary" large @click.stop="action('next')">
+      <v-btn class="px-4" color="secondary" large @click.stop="action('next')">
         {{ $t(`prompts.${type}.confirm`) }}
       </v-btn>
     </template>

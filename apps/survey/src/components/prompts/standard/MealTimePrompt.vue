@@ -13,24 +13,10 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        color="secondary"
-        large
-        text
-        @click.stop="action('cancel')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('cancel')">
         {{ $t(`prompts.${type}.no`) }}
       </v-btn>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
-        large
-        @click.stop="action('next')"
-      >
+      <v-btn class="px-4" color="secondary" large @click.stop="action('next')">
         {{ $t(`prompts.${type}.yes`) }}
       </v-btn>
     </template>

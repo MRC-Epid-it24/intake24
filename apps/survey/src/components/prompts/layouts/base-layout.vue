@@ -18,14 +18,12 @@
     <div
       v-if="!isMobile || prompt.actions?.both"
       id="actions"
-      class="pa-5 px-md-0 d-flex"
-      :class="{ 'flex-column-reverse': isMobile }"
+      class="pa-5 px-md-0 d-flex flex-column-reverse flex-md-row align-stretch gap-3"
     >
       <template v-if="desktopActions.length">
         <v-btn
           v-for="item in desktopActions"
           :key="item.type"
-          :block="isMobile"
           class="px-4"
           :color="item.color"
           :disabled="item.type === 'next' && !isValid"

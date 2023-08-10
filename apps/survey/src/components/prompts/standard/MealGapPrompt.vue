@@ -4,26 +4,11 @@
       <div class="px-4 pt-4" :class="{ 'pb-4': isMobile }" v-html="description"></div>
     </template>
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        color="secondary"
-        large
-        text
-        @click.stop="action('addMeal')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('addMeal')">
         <v-icon left>$add</v-icon>
         {{ $t(`prompts.${type}.yes`) }}
       </v-btn>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
-        large
-        text
-        @click.stop="action('next')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('next')">
         <v-icon left>$next</v-icon>
         {{ $t(`prompts.${type}.no`) }}
       </v-btn>

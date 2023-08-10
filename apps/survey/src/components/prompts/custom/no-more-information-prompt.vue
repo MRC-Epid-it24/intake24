@@ -8,7 +8,6 @@
         >
           <template #activator="{ on, attrs }">
             <v-btn
-              :block="isMobile"
               class="px-4"
               color="secondary"
               large
@@ -24,7 +23,6 @@
           {{ $t('recall.menu.confirmDelete', { item: foodName }) }}
         </confirm-dialog>
         <v-btn
-          :block="isMobile"
           class="px-4"
           color="secondary"
           large
@@ -43,7 +41,6 @@
         >
           <template #activator="{ on, attrs }">
             <v-btn
-              :block="isMobile"
               class="px-4"
               color="secondary"
               large
@@ -59,7 +56,6 @@
           {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
         </confirm-dialog>
         <v-btn
-          :block="isMobile"
           class="px-4"
           color="secondary"
           large

@@ -4,10 +4,8 @@
       <v-card-text class="px-6">
         <div v-html="$t(`prompts.${type}.missing.description`)"></div>
       </v-card-text>
-      <v-card-text class="px-6 pt-0">
+      <v-card-text class="px-6 pt-0 d-flex flex-column flex-md-row align-stretch gap-3">
         <v-btn
-          :block="isMobile"
-          :class="{ 'mb-2': isMobile }"
           color="secondary"
           large
           outlined
@@ -18,8 +16,6 @@
           {{ $t(`prompts.${type}.missing.tryAgain`) }}
         </v-btn>
         <v-btn
-          :block="isMobile"
-          :class="{ 'ml-2': !isMobile }"
           color="secondary"
           large
           outlined

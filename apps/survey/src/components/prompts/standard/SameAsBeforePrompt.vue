@@ -50,26 +50,11 @@
       </v-card>
     </v-card-text>
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        color="secondary"
-        large
-        text
-        @click.stop="action('notSame')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('notSame')">
         <v-icon left>$no</v-icon>
         {{ $t(`prompts.${type}.notSame`) }}
       </v-btn>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
-        large
-        text
-        @click.stop="action('same')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('same')">
         <v-icon left>$yes</v-icon>
         {{ $t(`prompts.${type}.same`) }}
       </v-btn>

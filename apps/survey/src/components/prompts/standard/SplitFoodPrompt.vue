@@ -26,26 +26,11 @@
       <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
     </v-card-text>
     <template #actions>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        color="secondary"
-        large
-        text
-        @click.stop="action('separate')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('separate')">
         <v-icon left>fas fa-arrows-left-right-to-line</v-icon>
         {{ $t(`prompts.${type}.separate`) }}
       </v-btn>
-      <v-btn
-        :block="isMobile"
-        class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
-        large
-        text
-        @click.stop="action('single')"
-      >
+      <v-btn class="px-4" color="secondary" large text @click.stop="action('single')">
         <v-icon left>fas fa-arrow-up-long</v-icon>
         {{ $t(`prompts.${type}.single`) }}
       </v-btn>

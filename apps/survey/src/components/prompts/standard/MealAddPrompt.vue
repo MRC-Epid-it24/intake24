@@ -23,7 +23,6 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
         color="secondary"
         :disabled="!hasMeals"
@@ -36,7 +35,6 @@
         {{ $t(`prompts.${type}.no`) }}
       </v-btn>
       <v-btn
-        :block="isMobile"
         class="px-4"
         color="secondary"
         :disabled="!isValid"
