@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <v-tab-item key="options"></v-tab-item>
 </template>
 
 <script lang="ts">

@@ -114,6 +114,7 @@
               v-bind.sync="dialog.prompt"
               @validate="validate"
             ></component>
+            <prompt-json v-model="dialog.prompt"></prompt-json>
           </v-tabs-items>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -149,7 +150,7 @@ import {
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
-import { PromptActions, PromptConditions, PromptContent } from './partials';
+import { PromptActions, PromptConditions, PromptContent, PromptJson } from './partials';
 import PromptTypeSelector from './prompt-type-selector.vue';
 
 export type EditPrompt = Prompt & {
@@ -169,6 +170,7 @@ export default defineComponent({
     PromptActions,
     PromptConditions,
     PromptContent,
+    PromptJson,
     PromptTypeSelector,
     ...customPrompts,
     ...standardPrompts,

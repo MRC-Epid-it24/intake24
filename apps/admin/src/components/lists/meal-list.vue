@@ -47,7 +47,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="meals"></json-editor>
+        <json-editor-dialog v-model="meals"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -155,7 +155,7 @@ import { copy } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
 import { OptionsMenu } from '../dialogs';
-import { JsonEditor } from '../editors';
+import { JsonEditorDialog } from '../editors';
 
 export type MealDialog = {
   show: boolean;
@@ -169,7 +169,7 @@ export default defineComponent({
   components: {
     ConfirmDialog,
     draggable,
-    JsonEditor,
+    JsonEditorDialog,
     LanguageSelector,
     OptionsMenu,
     SelectResource,

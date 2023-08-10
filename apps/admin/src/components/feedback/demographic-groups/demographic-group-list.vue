@@ -30,7 +30,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="items"></json-editor>
+        <json-editor-dialog v-model="items"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -214,7 +214,7 @@ import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { useEntry } from '@intake24/admin/stores';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
@@ -232,7 +232,7 @@ export default defineComponent({
     draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
-    JsonEditor,
+    JsonEditorDialog,
     OptionsMenu,
     SelectResource,
   },

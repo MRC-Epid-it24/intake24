@@ -16,7 +16,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.prompts"></json-editor>
+        <json-editor-dialog v-model="form.prompts"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <prompt-list
@@ -43,7 +43,7 @@ import type { Prompt } from '@intake24/common/prompts';
 import type { PromptSection, RecallPrompts } from '@intake24/common/surveys';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { promptSections } from '@intake24/admin/components/prompts';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
@@ -57,7 +57,7 @@ export type SurveySchemePromptsForm = Pick<SurveySchemeForm, 'prompts'>;
 export default defineComponent({
   name: 'SurveySchemePrompts',
 
-  components: { JsonEditor, OptionsMenu, PromptList, SelectResource },
+  components: { JsonEditorDialog, OptionsMenu, PromptList, SelectResource },
 
   mixins: [formMixin],
 

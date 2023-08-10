@@ -26,7 +26,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="cards"></json-editor>
+        <json-editor-dialog v-model="cards"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -85,7 +85,7 @@ import draggable from 'vuedraggable';
 import type { Card } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { ConfirmDialog } from '@intake24/ui';
 
 import CardSelector from './card-selector.vue';
@@ -102,7 +102,7 @@ export default defineComponent({
     draggable,
     CardSelector,
     ConfirmDialog,
-    JsonEditor,
+    JsonEditorDialog,
     OptionsMenu,
     SelectResource,
   },

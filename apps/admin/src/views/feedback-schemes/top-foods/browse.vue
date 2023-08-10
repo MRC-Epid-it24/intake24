@@ -25,7 +25,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.topFoods"></json-editor>
+        <json-editor-dialog v-model="form.topFoods"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-form @keydown.native="clearError" @submit.prevent="submit">
@@ -83,7 +83,7 @@ import type { RuleCallback } from '@intake24/admin/types';
 import type { TopFoods } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
@@ -100,7 +100,7 @@ export default defineComponent({
 
   components: {
     ColorList,
-    JsonEditor,
+    JsonEditorDialog,
     NutrientList,
     OptionsMenu,
     Preview,

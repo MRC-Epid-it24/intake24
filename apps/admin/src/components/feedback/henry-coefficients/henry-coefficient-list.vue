@@ -30,7 +30,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="items"></json-editor>
+        <json-editor-dialog v-model="items"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -192,7 +192,7 @@ import draggable from 'vuedraggable';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
@@ -202,7 +202,7 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
-  components: { ConfirmDialog, draggable, JsonEditor, OptionsMenu, SelectResource },
+  components: { ConfirmDialog, draggable, JsonEditorDialog, OptionsMenu, SelectResource },
 
   props: {
     value: {

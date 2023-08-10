@@ -5,9 +5,9 @@ export { default as customPrompts } from './custom';
 export { default as portionSizePrompts } from './portion-size';
 export { default as standardPrompts } from './standard';
 
-const baseTab = ['general', 'content', 'actions', 'conditions'];
-const validatedTab = [...baseTab, 'validation'];
-const listTab = [...validatedTab, 'options'];
+const baseTabs = ['general', 'content', 'actions', 'conditions'];
+const tabs = ['general', 'content', 'actions', 'conditions', 'options', 'json'];
+const tabsWithValidation = [...baseTabs, 'validation', 'options', 'json'];
 
 export const promptSections: PromptSection[] = [
   'preMeals',
@@ -38,141 +38,141 @@ export type PromptSettings = Record<ComponentType, PromptSettingsRecord>;
 export const promptSettings: PromptSettings = {
   // Custom
   'checkbox-list-prompt': {
-    tabs: [...listTab],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   'date-picker-prompt': {
-    tabs: [...validatedTab, 'options'],
+    tabs: [...tabsWithValidation, 'options'],
     sections: [...promptSectionsExceptSubmission],
   },
   'info-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
   'no-more-information-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: [...foodsAndMeals],
   },
   'radio-list-prompt': {
-    tabs: [...listTab],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   'textarea-prompt': {
-    tabs: [...validatedTab],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   'time-picker-prompt': {
-    tabs: [...validatedTab, 'options'],
+    tabs: [...tabsWithValidation, 'options'],
     sections: [...promptSectionsExceptSubmission],
   },
   'yes-no-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
   // Standard
   'associated-foods-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'edit-meal-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['preFoods'],
   },
   'final-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['submission'],
   },
   'food-search-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'meal-add-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['preMeals'],
   },
   'meal-duration-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['preFoods', 'postFoods'],
   },
   'meal-gap-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['postMeals'],
   },
   'meal-time-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['preFoods'],
   },
   'ready-meal-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['postFoods'],
   },
   'redirect-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['submission'],
   },
   'review-confirm-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['submission'],
   },
   'same-as-before-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'split-food-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'submit-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['submission'],
   },
   // Portion size
   'as-served-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'cereal-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'direct-weight-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'drink-scale-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'guide-image-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'milk-in-a-hot-drink-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'milk-on-cereal-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'missing-food-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'parent-food-portion-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'pizza-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'portion-size-option-prompt': {
-    tabs: [...baseTab],
+    tabs: [...tabs],
     sections: ['foods'],
   },
   'standard-portion-prompt': {
-    tabs: [...baseTab, 'options'],
+    tabs: [...tabs],
     sections: ['foods'],
   },
 };

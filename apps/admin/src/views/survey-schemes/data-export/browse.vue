@@ -24,7 +24,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.dataExport"></json-editor>
+        <json-editor-dialog v-model="form.dataExport"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <data-export-section
@@ -77,7 +77,7 @@ import type {
   SurveySchemeExportRefsResponse,
 } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultExport } from '@intake24/common/surveys';
@@ -90,7 +90,7 @@ export type SurveySchemeDataExportForm = Pick<SurveySchemeForm, 'dataExport'>;
 export default defineComponent({
   name: 'SurveySchemeDataExport',
 
-  components: { draggable, DataExportSection, JsonEditor, OptionsMenu, SelectResource },
+  components: { draggable, DataExportSection, JsonEditorDialog, OptionsMenu, SelectResource },
 
   mixins: [formMixin],
 

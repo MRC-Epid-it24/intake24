@@ -119,14 +119,14 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <json-editor v-model="item.params">
+                  <json-editor-dialog v-model="item.params">
                     <template #activator="{ attrs, on }">
                       <v-btn v-bind="attrs" large outlined text v-on="on">
                         <v-icon left>fas fa-code</v-icon>
                         {{ $t('survey-schemes.actions.parameters') }}
                       </v-btn>
                     </template>
-                  </json-editor>
+                  </json-editor-dialog>
                 </v-col>
               </v-row>
             </v-container>
@@ -150,7 +150,7 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { ActionItem, Actions } from '@intake24/common/prompts';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { withIdList } from '@intake24/admin/util';
 import { copy, randomString } from '@intake24/common/util';
@@ -171,7 +171,7 @@ export const defaultAction: ActionItem = {
 export default defineComponent({
   name: 'PromptActions',
 
-  components: { draggable, JsonEditor, LanguageSelector },
+  components: { draggable, JsonEditorDialog, LanguageSelector },
 
   props: {
     actions: {
