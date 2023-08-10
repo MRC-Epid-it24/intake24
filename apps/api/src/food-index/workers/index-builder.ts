@@ -54,7 +54,7 @@ const foodIndex: FoodIndex = {};
 const logger = servicesLogger.child({ service: 'Food index' });
 
 function parseSynonymSet(value: string): Set<string> {
-  return new Set<string>(value.trim().split('\\s+'));
+  return new Set<string>(value.trim().split(/\s+/));
 }
 
 async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
