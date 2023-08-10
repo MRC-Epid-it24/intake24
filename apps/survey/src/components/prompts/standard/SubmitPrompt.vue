@@ -13,13 +13,6 @@
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="review" @click.stop="action('review')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.review') }}
-        </span>
-        <v-icon class="pb-1">$survey</v-icon>
-      </v-btn>
-      <v-divider vertical></v-divider>
       <v-btn
         :color="isValid ? 'secondary' : 'primary'"
         :disabled="!isValid"

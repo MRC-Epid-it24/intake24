@@ -56,7 +56,7 @@
         grow
         :value="navTab"
       >
-        <review-list :meals="meals" @action="action"></review-list>
+        <meal-list-mobile :meals="meals" @action="action"></meal-list-mobile>
         <template v-if="mobileActions.length">
           <template v-for="(item, idx) in mobileActions">
             <v-btn
@@ -111,6 +111,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import MealListMobile from '@intake24/survey/components/layouts/meal-list/list-mobile.vue';
 import ReviewList from '@intake24/survey/components/layouts/meal-list/review-list.vue';
 
 import layoutMixin from './layout-mixin';
@@ -118,7 +119,7 @@ import layoutMixin from './layout-mixin';
 export default defineComponent({
   name: 'CardLayout',
 
-  components: { ReviewList },
+  components: { MealListMobile },
 
   mixins: [layoutMixin],
 });
