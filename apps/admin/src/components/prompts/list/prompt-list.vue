@@ -40,6 +40,7 @@
               :key="`${prompt.id}:${prompt.name}`"
               v-bind="{ mode, prompt, index, templates }"
               :move-sections="moveSections(prompt)"
+              @prompt:copy="copy"
               @prompt:edit="edit"
               @prompt:move="move"
               @prompt:remove="remove"
@@ -66,6 +67,7 @@ import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
+import { copy } from '@intake24/common/util';
 
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
@@ -185,6 +187,10 @@ export default defineComponent({
 
     load(prompt: Prompt) {
       this.prompts.push(prompt);
+    },
+
+    copy({ prompt, index }: PromptEvent) {
+      this.prompts.splice(index + 1, 0, { ...copy(prompt), name: `${prompt.name} (copy)` });
     },
 
     edit({ prompt, index }: PromptEvent) {

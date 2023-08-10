@@ -175,6 +175,7 @@ const surveySchemes: LocaleMessageObject = {
     title: 'Scheme prompts',
     create: 'New prompt',
     edit: 'Edit prompt',
+    copy: 'Copy prompt',
     move: 'Move prompt',
     remove: 'Remove prompt',
     section: 'Prompts section',

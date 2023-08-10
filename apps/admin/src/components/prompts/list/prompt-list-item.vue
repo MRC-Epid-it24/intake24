@@ -36,6 +36,12 @@
           </v-btn>
         </template>
         <v-list>
+          <v-list-item link @click="copy">
+            <v-list-item-title>
+              <v-icon left>fas fa-copy</v-icon>
+              {{ $t('survey-schemes.prompts.copy') }}
+            </v-list-item-title>
+          </v-list-item>
           <confirm-dialog
             color="primary lighten-1"
             :label="$t('survey-schemes.prompts.move').toString()"
@@ -60,7 +66,7 @@
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('survey-schemes-prompts|create')"
+            v-if="can('survey-scheme-prompts|create')"
             :disabled="hasTemplate"
             :prompt="prompt"
           ></save-as-template-dialog>
@@ -145,7 +151,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync'],
+  emits: ['prompt:copy', 'prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync'],
 
   data() {
     return {
@@ -173,6 +179,11 @@ export default defineComponent({
   },
 
   methods: {
+    copy() {
+      const { index, prompt } = this;
+      this.$emit('prompt:copy', { index, prompt });
+    },
+
     edit() {
       const { index, prompt } = this;
       this.$emit('prompt:edit', { index, prompt });
