@@ -57,14 +57,7 @@ const foodIndex: FoodIndex = {};
 const logger = servicesLogger.child({ service: 'Food index' });
 
 function parseSynonymSet(value: string): Set<string> {
-  const resultSet = new Set<string>(
-    value
-      .trim()
-      .split(' ')
-      .filter((s) => s.length > 0)
-  );
-  logger.debug(`\n\nParsed synonym set: ${value} => ${Array.from(resultSet).join(', ')}\n\n`);
-  return resultSet;
+  return new Set<string>(value.trim().split(/\s+/));
 }
 
 async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
