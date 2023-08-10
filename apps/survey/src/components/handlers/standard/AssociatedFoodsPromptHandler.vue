@@ -25,6 +25,7 @@ import type {
 } from '@intake24/common/prompts';
 import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
+import type { MealFoodIndex } from '@intake24/survey/stores';
 import { capitalize } from '@intake24/common/util';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
@@ -39,6 +40,16 @@ const initialPromptState = (allowMultiple: boolean): AssociatedFoodPromptItemSta
   additionalFoodConfirmed: allowMultiple ? undefined : false,
   foods: [],
 });
+
+interface LinkAsMainNew {
+  header: FoodHeader;
+  linkAsMain: boolean;
+}
+
+interface LinkAsMainExisting {
+  id: string;
+  linkAsMain: boolean;
+}
 
 export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
@@ -97,31 +108,80 @@ export default defineComponent({
       this.$emit('action', type, id);
     },
 
+    // The link as main feature can be applied only if exactly one of the linked foods has the
+    // 'link-as-main' flag.
+    //
+    // In that case we need to reverse the relationship so that the linked food becomes the
+    // new main (top level) food, the current main food becomes linked to that food and any foods
+    // that were linked to the current main food become linked to the new main food.
+    processLinkAsMain(foodIndex: MealFoodIndex) {
+      const oldMainFood = this.meal.foods[foodIndex.foodIndex];
+      const newMainFoods = oldMainFood.linkedFoods.filter((food) =>
+        food.flags.includes('link-as-main')
+      );
+
+      // We don't need the flags anymore so we can clear them here
+      oldMainFood.linkedFoods.forEach((food) => {
+        food.flags = food.flags.filter((flag) => flag !== 'link-as-main');
+      });
+
+      if (newMainFoods.length === 1) {
+        const newMainFood = newMainFoods[0];
+
+        const foodsUpdate = [...this.meal.foods];
+
+        foodsUpdate[foodIndex.foodIndex] = newMainFood;
+
+        newMainFood.linkedFoods = [
+          oldMainFood,
+          ...oldMainFood.linkedFoods.filter((food) => food.id !== newMainFood.id),
+        ];
+        oldMainFood.linkedFoods = [];
+
+        this.setFoods({ mealId: this.meal.id, foods: foodsUpdate });
+      } else {
+        // Nothing we can do, abort
+      }
+    },
+
     async commitAnswer() {
-      const newFoods: FoodHeader[] = [];
+      // The legacy "link as main" feature doesn't make sense when combined with the multiple foods
+      // option (because it is defined on the prompt level and there cannot be several main foods),
+      // but we still need to support it when possible.
+      //
+      // The strategy is to add a 'link-as-main' flag to each food that comes from a prompt with
+      // this option enabled, and then check if the final set of foods still makes sense for the
+      // feature.
+      //
+      // For clarity the checks are done in a separate function, so we just need to collect the link
+      // as main flags here.
+
+      const newFoods: LinkAsMainNew[] = [];
       const missingFoods: MissingFood[] = [];
-      const existingFoods: string[] = [];
+      const existingFoods: LinkAsMainExisting[] = [];
 
       this.state.prompts.forEach((prompt, idx) => {
+        const promptDef = this.food().data.associatedFoodPrompts[idx];
+
         if (prompt.mainFoodConfirmed) {
           prompt.foods.forEach((food) => {
             switch (food.type) {
               case 'selected':
-                if (food.selectedFood !== undefined) newFoods.push(food.selectedFood);
+                if (food.selectedFood !== undefined)
+                  newFoods.push({ header: food.selectedFood, linkAsMain: promptDef.linkAsMain });
                 break;
               case 'existing':
-                if (food.existingFoodId !== undefined) existingFoods.push(food.existingFoodId);
+                if (food.existingFoodId !== undefined)
+                  existingFoods.push({ id: food.existingFoodId, linkAsMain: promptDef.linkAsMain });
                 break;
               case 'missing':
                 missingFoods.push({
                   id: getEntityId(),
                   type: 'missing-food',
                   info: null,
-                  searchTerm: capitalize(
-                    this.getLocaleContent(this.food().data.associatedFoodPrompts[idx].genericName)
-                  ),
+                  searchTerm: capitalize(this.getLocaleContent(promptDef.genericName)),
                   customPromptAnswers: {},
-                  flags: [],
+                  flags: promptDef.linkAsMain ? ['link-as-main'] : [],
                   linkedFoods: [],
                 });
                 break;
@@ -135,26 +195,39 @@ export default defineComponent({
       const mealIndex = foodIndex.mealIndex;
       const mealId = this.meals[mealIndex].id;
 
+      // Existing foods in this meal that were marked for use by one of the associated food prompts.
+      // These need to be moved to the current food's linked meal list.
       const moveFoods: EncodedFood[] = [];
+
+      // The rest of the foods in this meal that should stay how they are.
       const keepFoods: FoodState[] = [];
 
       this.meals[mealIndex].foods.forEach((food) => {
-        if (food.type === 'encoded-food' && existingFoods.includes(food.id)) {
+        const existingFoodRef = existingFoods.find((ref) => ref.id === food.id);
+
+        if (food.type === 'encoded-food' && existingFoodRef !== undefined) {
+          if (existingFoodRef.linkAsMain) {
+            food.flags = [...food.flags, 'link-as-main'];
+          }
           moveFoods.push(food);
         } else {
           keepFoods.push(food);
         }
       });
 
-      const foodData = await this.fetchFoodData(newFoods);
+      const foodData = await this.fetchFoodData(newFoods.map((f) => f.header));
 
-      const linkedFoods: FoodState[] = foodData.map((data) => {
+      const linkedFoods: FoodState[] = foodData.map((data, index) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
+
+        const flags = [];
+        if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
+        if (newFoods[index].linkAsMain) flags.push('link-as-main');
 
         return {
           type: 'encoded-food',
           id: getEntityId(),
-          flags: hasOnePortionSizeMethod ? ['portion-size-option-complete'] : [],
+          flags,
           linkedFoods: [],
           customPromptAnswers: {},
           data,
@@ -202,6 +275,8 @@ export default defineComponent({
           update: { associatedFoodsComplete: true, linkedFoods },
         });
       }
+
+      this.processLinkAsMain(foodIndex);
 
       this.clearStoredState();
     },
