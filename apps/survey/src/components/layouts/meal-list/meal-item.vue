@@ -19,14 +19,12 @@
         </v-tooltip>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <v-expand-transition>
-          <context-menu
-            :entity="meal"
-            :entity-name="mealName"
-            v-bind="{ menu }"
-            @action="action"
-          ></context-menu>
-        </v-expand-transition>
+        <context-menu
+          :entity="meal"
+          :entity-name="mealName"
+          v-bind="{ menu }"
+          @action="action"
+        ></context-menu>
       </v-list-item-action>
     </v-list-item>
     <v-divider></v-divider>

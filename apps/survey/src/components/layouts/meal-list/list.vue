@@ -33,10 +33,11 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
+import { useMealListUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
@@ -59,38 +60,26 @@ export default defineComponent({
     },
   },
 
-  emits: ['action'],
+  setup(props) {
+    const mealsRef = ref(props.meals);
 
-  computed: {
-    ...mapState(useSurvey, ['selection']),
+    const {
+      selectedMealId,
+      selectedFoodId,
+      isSelectedFoodInMeal,
+      action,
+      foodSelected,
+      mealSelected,
+    } = useMealListUtils(mealsRef);
 
-    selectedMealId() {
-      if (this.selection.element?.type !== 'meal') return undefined;
-      return this.selection.element.mealId;
-    },
-    selectedFoodId() {
-      if (this.selection.element?.type !== 'food') return undefined;
-      return this.selection.element.foodId;
-    },
-  },
-
-  methods: {
-    isSelectedFoodInMeal(mealId: string): boolean {
-      if (this.selection.element?.type !== 'food') return false;
-
-      const foodIndex = getFoodIndexRequired(this.meals, this.selection.element.foodId);
-
-      return this.meals[foodIndex.mealIndex].id === mealId;
-    },
-    action(type: FoodActionType | MealActionType, id?: string) {
-      this.$emit('action', type, id);
-    },
-    foodSelected(foodId: string) {
-      this.action('selectFood', foodId);
-    },
-    mealSelected(mealId: string) {
-      this.action('selectMeal', mealId);
-    },
+    return {
+      selectedMealId,
+      selectedFoodId,
+      isSelectedFoodInMeal,
+      action,
+      foodSelected,
+      mealSelected,
+    };
   },
 });
 </script>

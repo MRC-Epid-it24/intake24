@@ -108,8 +108,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { EncodedFood, MissingFood } from '@intake24/common/types';
-import MealListMobile from '@intake24/survey/components/layouts/meal-list/list-mobile.vue';
-import ReviewList from '@intake24/survey/components/layouts/meal-list/review-list.vue';
+import { MealListMobile } from '@intake24/survey/components/layouts/meal-list';
 
 import layoutMixin from './layout-mixin';
 
