@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { EncodedFood, PortionSizeParameters } from '@intake24/common/types';
@@ -78,9 +78,7 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { food, parentFood } = toRefs(props);
-
-    const { foodName, parentFoodName } = useFoodUtils(food, parentFood);
+    const { foodName, parentFoodName } = useFoodUtils(props);
 
     return { foodName, parentFoodName };
   },

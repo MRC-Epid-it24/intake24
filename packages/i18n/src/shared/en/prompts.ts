@@ -69,17 +69,21 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
     yes: 'Yes, I had some',
+    yesAnother: 'Yes, I had another',
+    no: 'No, I did not',
     moreFoodsQuestion: 'Did you have any other foods from this category?',
     databaseLookupTitle: 'What was it?',
     databaseLookupWithExisting: 'If not, what was it?',
     existingFoodsTitle: 'Was it something you already entered?',
-    yesAnother: 'Yes, I had another',
-    no: 'No, I did not',
     select: {
       different: 'Change',
-      item: 'Select the food you had',
       remove: 'Remove',
     },
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>Please try browsing the food categories listed above to find your food.</p>
@@ -106,13 +110,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
   },
-  foodBrowser: {
-    browse: 'Browse all foods',
-    search: 'Search for a food',
-    none: 'No food results. Please try refining your search.',
-    root: 'all food categories',
-    back: `Back to '{category}'`,
-  },
   foodSearch: {
     name: 'Search Food',
     text: '',
@@ -121,6 +118,10 @@ const prompts: LocaleMessageObject = {
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
     browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -139,7 +140,6 @@ const prompts: LocaleMessageObject = {
     },
   },
   mealAdd: {
-    _: 'Add meal',
     name: 'Add Meal',
     text: '',
     description: '<p>Select one from the list below if it is appropriate.</p>',
@@ -152,12 +152,13 @@ const prompts: LocaleMessageObject = {
     },
     yes: 'Add this meal',
     no: 'Cancel',
-    noMeal: 'No Meals remaining, add at least one',
+    noMeal: 'No meals remaining, add at least one',
   },
   mealDuration: {
     name: 'Meal duration',
     text: '',
     description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
+    minutes: 'mins',
     confirm: 'Continue',
   },
   mealGap: {

@@ -31,7 +31,7 @@
   </v-list>
   <div v-else class="pa-4">
     <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
-      {{ $t('prompts.foodBrowser.none') }}
+      {{ i18n.none }}
     </v-alert>
   </div>
 </template>
@@ -48,6 +48,10 @@ export default defineComponent({
   props: {
     contents: {
       type: Object as PropType<CategoryContents>,
+      required: true,
+    },
+    i18n: {
+      type: Object as PropType<Record<string, string>>,
       required: true,
     },
   },

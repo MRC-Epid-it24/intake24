@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
@@ -7,7 +7,6 @@ import type { MenuItem } from '@intake24/survey/components/elements';
 import { useI18n } from '@intake24/i18n';
 import { ContextMenu } from '@intake24/survey/components/elements';
 import { useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import FoodItem from './food-item.vue';
 
@@ -38,11 +37,8 @@ export default defineComponent({
   emits: ['food-selected', 'meal-selected', 'action'],
 
   setup(props, { emit }) {
-    const { meal } = toRefs(props);
-
-    const i18n = useI18n();
-    const { getLocaleContent } = useLocale();
-    const { mealName, mealTime } = useMealUtils(meal);
+    const { i18n, translate } = useI18n();
+    const { mealName, mealTime } = useMealUtils(props);
 
     const menu = ref<MenuItem[]>([
       {
@@ -75,6 +71,6 @@ export default defineComponent({
       emit('action', type, id);
     };
 
-    return { action, getLocaleContent, menu, mealName, mealTime, foodSelected, mealSelected };
+    return { action, translate, menu, mealName, mealTime, foodSelected, mealSelected };
   },
 });

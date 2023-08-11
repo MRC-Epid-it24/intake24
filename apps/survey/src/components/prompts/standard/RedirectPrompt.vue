@@ -20,15 +20,16 @@
           class="mb-6"
           :class="{ 'px-10': !isMobile }"
           color="secondary"
+          :title="i18n.goTo"
           x-large
           @click="redirect"
         >
           <v-icon left>$redirect</v-icon>
-          {{ $t(`prompts.${type}.goTo`) }}
+          {{ i18n.goTo }}
         </v-btn>
       </v-card>
       <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
-        {{ $t(`prompts.${type}.missingUrl`) }}
+        {{ i18n.missingUrl }}
       </v-alert>
     </v-card-text>
     <template #actions>
@@ -82,6 +83,8 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
+import { usePromptUtils } from '@intake24/survey/composables';
+
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
@@ -104,12 +107,18 @@ export default defineComponent({
   },
 
   setup(props) {
+    const { translatePrompt } = usePromptUtils(props);
+
     const timerInterval = ref<undefined | number>(undefined);
-    const timerValue = ref<number>(props.prompt.timer ? 100 : 0);
-    const timerTick = ref<number>(props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0);
+    const timerValue = ref(props.prompt.timer ? 100 : 0);
+    const timerTick = computed(() =>
+      props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0
+    );
     const timerSecs = computed(() =>
       props.prompt.timer ? Math.round((timerValue.value / 100) * props.prompt.timer) : 0
     );
+
+    const i18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
     const redirect = () => {
       if (!props.followUpUrl) return;
@@ -143,6 +152,7 @@ export default defineComponent({
     });
 
     return {
+      i18n,
       timerSecs,
       timerValue,
       clearTimer,

@@ -33,7 +33,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
     const user = useUser();
 
     const actions = ['read', 'edit'].filter((action) => user.can(`roles|${action}`));

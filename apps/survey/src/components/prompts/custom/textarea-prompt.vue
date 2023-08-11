@@ -4,8 +4,8 @@
       <v-form ref="form" @submit.prevent="action('next')">
         <v-textarea
           hide-details="auto"
-          :hint="getLocaleContent(prompt.i18n.hint)"
-          :label="getLocaleContent(prompt.i18n.label)"
+          :hint="translate(prompt.i18n.hint)"
+          :label="translate(prompt.i18n.label)"
           outlined
           :rules="rules"
           :value="value"
@@ -22,7 +22,6 @@ import { defineComponent, ref } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -43,8 +42,7 @@ export default defineComponent({
   setup(props) {
     const form = ref<InstanceType<typeof VForm>>();
 
-    const i18n = useI18n();
-    const { getLocaleContent } = useLocale();
+    const { i18n, translate } = useI18n();
     const { type } = usePromptUtils(props);
 
     const rules = ref(
@@ -52,13 +50,13 @@ export default defineComponent({
         ? [
             (v: string | null) =>
               !!v ||
-              (getLocaleContent(props.prompt.validation.message) ??
+              (translate(props.prompt.validation.message) ??
                 i18n.t(`prompts.${type.value}.validation.required`)),
           ]
         : []
     );
 
-    return { form, getLocaleContent, rules };
+    return { form, translate, rules };
   },
 
   computed: {

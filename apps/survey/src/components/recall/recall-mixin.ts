@@ -13,6 +13,7 @@ import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { isSelectionEqual } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import {
   CustomPromptHandler,
   portionSizeHandlers,
@@ -21,7 +22,6 @@ import {
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
-import { useLocale } from '@intake24/ui';
 
 import { InfoAlert } from '../elements';
 
@@ -41,11 +41,11 @@ export default defineComponent({
   },
 
   data() {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const survey = useSurvey();
 
     return {
-      getLocaleContent,
+      translate,
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,

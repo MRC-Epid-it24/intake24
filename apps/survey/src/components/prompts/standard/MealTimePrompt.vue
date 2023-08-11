@@ -13,24 +13,37 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <v-btn class="px-4" color="secondary" large text @click.stop="action('cancel')">
-        {{ $t(`prompts.${type}.no`) }}
+      <v-btn
+        class="px-4"
+        color="secondary"
+        large
+        text
+        :title="i18n.no"
+        @click.stop="action('cancel')"
+      >
+        {{ i18n.no }}
       </v-btn>
-      <v-btn class="px-4" color="secondary" large @click.stop="action('next')">
-        {{ $t(`prompts.${type}.yes`) }}
+      <v-btn class="px-4" color="secondary" large :title="i18n.yes" @click.stop="action('next')">
+        {{ i18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="cancel" @click.stop="action('cancel')">
+      <v-btn :title="i18n.no" value="cancel" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.no`) }}
+          {{ i18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
+      <v-btn
+        color="secondary"
+        :disabled="!isValid"
+        :title="i18n.yes"
+        value="next"
+        @click.stop="action('next')"
+      >
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.yes`) }}
+          {{ i18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -40,10 +53,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -65,23 +79,23 @@ export default defineComponent({
 
   emits: ['update'],
 
-  computed: {
-    allowedMinutes() {
-      return (minutes: number) => minutes % this.prompt.allowedMinutes === 0;
-    },
-    currentTime(): string {
-      return fromMealTime(this.initialState, false);
-    },
+  setup(props, { emit }) {
+    const { translatePrompt } = usePromptUtils(props);
 
-    isValid(): boolean {
-      return !!this.currentTime;
-    },
-  },
+    const allowedMinutes = computed(
+      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0
+    );
+    const currentTime = computed(() => fromMealTime(props.initialState, false));
 
-  methods: {
-    update(time: string) {
-      this.$emit('update', { state: toMealTime(time) });
-    },
+    const i18n = computed(() => translatePrompt(['no', 'yes']));
+
+    const isValid = computed(() => !!currentTime.value);
+
+    const update = (time: string) => {
+      emit('update', { state: toMealTime(time) });
+    };
+
+    return { allowedMinutes, currentTime, i18n, isValid, update };
   },
 });
 </script>

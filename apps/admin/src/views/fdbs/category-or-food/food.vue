@@ -168,7 +168,7 @@ export default defineComponent({
 
   setup(props) {
     const http = useHttp();
-    const i18n = useI18n();
+    const { i18n } = useI18n();
     const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);

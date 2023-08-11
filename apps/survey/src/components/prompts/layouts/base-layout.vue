@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-card class="mb-4" :tile="isMobile">
-      <breadcrumbs v-bind="{ food, meal, promptName }"></breadcrumbs>
+      <breadcrumbs v-bind="{ food, meal, promptName: i18n.name }"></breadcrumbs>
       <slot name="prompt-text">
-        <v-card-text v-if="localeText" class="pt-0">
+        <v-card-text v-if="i18n.text" class="pt-0">
           <v-divider class="mb-2"></v-divider>
-          <h3>{{ localeText }}</h3>
+          <h3>{{ i18n.text }}</h3>
         </v-card-text>
       </slot>
     </v-card>
     <slot name="prompt-description">
-      <v-card v-if="localeDescription" class="mb-4" :tile="isMobile">
-        <div class="pa-4" v-html="localeDescription"></div>
+      <v-card v-if="i18n.description" class="mb-4" :tile="isMobile">
+        <div class="pa-4" v-html="i18n.description"></div>
       </v-card>
     </slot>
     <slot></slot>
@@ -30,14 +30,10 @@
           large
           :outlined="item.variant === 'outlined'"
           :text="item.variant === 'text'"
-          :title="
-            Object.keys(item.label).length
-              ? getLocaleContent(item.label)
-              : getLocaleContent(item.text)
-          "
+          :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
           @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
         >
-          {{ getLocaleContent(item.text) }}
+          {{ translate(item.text) }}
         </v-btn>
       </template>
       <template v-else>
@@ -64,16 +60,12 @@
             :disabled="item.type === 'next' && !isValid"
             :outlined="item.variant === 'outlined'"
             :text="item.variant === 'text'"
-            :title="
-              Object.keys(item.label).length
-                ? getLocaleContent(item.label)
-                : getLocaleContent(item.text)
-            "
+            :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
             :value="item.type"
             @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
           >
             <span class="text-overline font-weight-medium">
-              {{ getLocaleContent(item.text) }}
+              {{ translate(item.text) }}
             </span>
             <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
           </v-btn>

@@ -2,28 +2,28 @@
   <v-expand-transition>
     <v-card v-show="value" ref="card" color="grey lighten-4" outlined>
       <v-card-text class="px-6">
-        <div v-html="$t(`prompts.${type}.missing.description`)"></div>
+        <div v-html="i18n['missing.description']"></div>
       </v-card-text>
       <v-card-text class="px-6 pt-0 d-flex flex-column flex-md-row align-stretch gap-3">
         <v-btn
           color="secondary"
           large
           outlined
-          :title="$t(`prompts.${type}.missing.tryAgain`)"
+          :title="i18n['missing.tryAgain']"
           @click.stop="cancel"
         >
           <v-icon left>fas fa-repeat</v-icon>
-          {{ $t(`prompts.${type}.missing.tryAgain`) }}
+          {{ i18n['missing.tryAgain'] }}
         </v-btn>
         <v-btn
           color="secondary"
           large
           outlined
-          :title="$t(`prompts.${type}.missing.report`)"
+          :title="i18n['missing.report']"
           @click.stop="confirm"
         >
           <v-icon left>fas fa-flag</v-icon>
-          {{ $t(`prompts.${type}.missing.report`) }}
+          {{ i18n['missing.report'] }}
         </v-btn>
       </v-card-text>
     </v-card>
@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import type { VCard } from 'vuetify/lib';
 import { defineComponent, ref, watch } from 'vue';
 
@@ -38,8 +39,8 @@ export default defineComponent({
   name: 'MissingFoodPanel',
 
   props: {
-    type: {
-      type: String,
+    i18n: {
+      type: Object as PropType<Record<string, string>>,
       required: true,
     },
     value: {

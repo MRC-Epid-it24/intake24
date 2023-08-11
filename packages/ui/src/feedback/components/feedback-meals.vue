@@ -65,7 +65,6 @@ import type { FeedbackMeals } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
 import { round } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import { getLocaleContent } from '@intake24/ui/util';
 
 import type { SurveyStats, SurveySubmission } from '../classes';
 import { buildMealStats } from '../meal-stats';
@@ -97,7 +96,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n, translate } = useI18n();
 
     const selected = ref(props.submissions.length ? props.submissions[0].id : null);
 
@@ -120,7 +119,7 @@ export default defineComponent({
 
     const headers = computed(() =>
       mealStats.value.table.fields.map(({ header, fieldId }) => ({
-        text: getLocaleContent(header),
+        text: translate(header),
         value: fieldId,
       }))
     );
@@ -206,7 +205,7 @@ export default defineComponent({
 
     return {
       charts,
-      getLocaleContent,
+      translate,
       headers,
       mealStats,
       selected,

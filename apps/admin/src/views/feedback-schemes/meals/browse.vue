@@ -122,7 +122,7 @@ export default defineComponent({
     const menu = ref(false);
     const colorMax = ref(6);
 
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       FeedbackSchemeEntry,

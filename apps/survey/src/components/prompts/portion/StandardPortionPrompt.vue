@@ -22,7 +22,7 @@
               <template #label>
                 <i18n :path="`prompts.${type}.estimateIn`">
                   <template #unit>
-                    {{ getLocaleContent(standardUnitRefs[unit.name].estimateIn) }}
+                    {{ translate(standardUnitRefs[unit.name].estimateIn) }}
                   </template>
                 </i18n>
               </template>
@@ -39,7 +39,7 @@
             }`"
           >
             <template #unit>
-              {{ getLocaleContent(standardUnitRefs[portionSize.unit.name].howMany) }}
+              {{ translate(standardUnitRefs[portionSize.unit.name].howMany) }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
@@ -81,13 +81,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import { LinkedQuantity, QuantityBadge, QuantityCard, useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
@@ -117,13 +117,11 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { food } = toRefs(props);
-
-    const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(food);
+    const { translate } = useI18n();
+    const { foodName } = useFoodUtils(props);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    return { standardUnitRefs, fetchStandardUnits, getLocaleContent, foodName };
+    return { standardUnitRefs, fetchStandardUnits, translate, foodName };
   },
 
   data() {

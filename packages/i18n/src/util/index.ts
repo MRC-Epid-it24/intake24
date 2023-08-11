@@ -1,5 +1,14 @@
-import type { Dictionary } from '@intake24/common/types';
+import dompurify from 'dompurify';
+import has from 'lodash/has';
+
+import type {
+  Dictionary,
+  LocaleTranslation,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 import { getObjectNestedKeys } from '@intake24/common/util';
+
+import { i18n } from '../i18n';
 
 /**
  * Merges two translations files together
@@ -9,7 +18,7 @@ import { getObjectNestedKeys } from '@intake24/common/util';
  * @param {*} source
  * @returns
  */
-export const mergeTranslations = (target: any, source: any) => {
+export function mergeTranslations(target: any, source: any) {
   if (typeof target === 'undefined') return undefined;
 
   if (typeof source === 'undefined') return target;
@@ -24,7 +33,7 @@ export const mergeTranslations = (target: any, source: any) => {
   }
 
   return undefined;
-};
+}
 
 /**
  * Compares two translation messages objects if they same deeply nested keys
@@ -35,18 +44,15 @@ export const mergeTranslations = (target: any, source: any) => {
  * @param {T2} y
  * @returns {boolean}
  */
-export const compareMessageKeys = <
+export function compareMessageKeys<
   T1 extends Dictionary = Dictionary,
   T2 extends Dictionary = Dictionary,
->(
-  x: T1,
-  y: T2
-): boolean => {
+>(x: T1, y: T2): boolean {
   const xKeys = getObjectNestedKeys(x);
   const yKeys = getObjectNestedKeys(y);
 
   return xKeys.length === yKeys.length && xKeys.every((key) => yKeys.includes(key));
-};
+}
 
 /**
  * Check that input is either string of object of strings
@@ -54,7 +60,7 @@ export const compareMessageKeys = <
  * @param {(string | Record<string, any>)} translation
  * @returns {boolean}
  */
-export const validateTranslations = (translation: string | Record<string, any>): boolean => {
+export function validateTranslations(translation: string | Record<string, any>): boolean {
   if (Object.prototype.toString.call(translation) === '[object Object]') {
     for (const value of Object.values(translation)) {
       if (!validateTranslations(value)) return false;
@@ -63,7 +69,7 @@ export const validateTranslations = (translation: string | Record<string, any>):
   }
 
   return typeof translation === 'string';
-};
+}
 
 export type I18nParams = Record<
   string,
@@ -76,8 +82,44 @@ export type I18nParams = Record<
  * @param {string} message
  * @param {I18nParams} [params={}]
  */
-export const replaceParams = (message: string, params: I18nParams = {}) =>
-  Object.entries(params).reduce((acc, [key, value]) => {
+export function replaceParams(message: string, params: I18nParams = {}) {
+  return Object.entries(params).reduce((acc, [key, value]) => {
     acc = acc.replace(`{${key}}`, value.toString());
     return acc;
   }, message);
+}
+
+export type LocaleContentOptions = {
+  path?: string;
+  params?: Dictionary<string | number>;
+  sanitize?: boolean;
+};
+
+export function translate(
+  content?: LocaleTranslation | RequiredLocaleTranslation | string,
+  options: LocaleContentOptions = {}
+): string {
+  const { path, params = {}, sanitize = false } = options;
+
+  if (sanitize) {
+    for (const key of Object.keys(params)) {
+      params[key] = dompurify.sanitize(params[key].toString(), {
+        USE_PROFILES: { mathMl: false, svg: false, svgFilters: false, html: false },
+      });
+    }
+  }
+
+  if (typeof content === 'string') return replaceParams(content, params);
+
+  const localeContent = content ? content[i18n.locale] : undefined;
+  if (localeContent) return replaceParams(localeContent, params);
+
+  if (path && has(i18n.messages[i18n.locale], path)) return i18n.t(path, params).toString();
+
+  const enContent = content?.en;
+  if (enContent) return replaceParams(enContent, params);
+
+  if (path && has(i18n.messages.en, path)) return i18n.t(path, params).toString();
+
+  return '';
+}

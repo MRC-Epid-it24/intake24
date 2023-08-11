@@ -29,14 +29,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, onMounted, toRefs } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import QuantityCard from './QuantityCard.vue';
 import { useStandardUnits } from './use-standard-units';
@@ -75,18 +74,15 @@ export default defineComponent({
   emits: ['input', 'update:confirm'],
 
   setup(props, { emit }) {
-    const { food } = toRefs(props);
-    const { foodName } = useFoodUtils(food);
-
-    const i18n = useI18n();
-    const { getLocaleContent } = useLocale();
+    const { foodName } = useFoodUtils(props);
+    const { i18n, translate } = useI18n();
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const linkedQuantityUnit = computed(() => {
       const unit = props.linkedQuantityCategories[0]?.unit;
       if (!unit || !standardUnitRefs.value[unit]) return i18n.t('prompts.linkedAmount.unit');
 
-      return getLocaleContent(standardUnitRefs.value[unit].howMany, {
+      return translate(standardUnitRefs.value[unit].howMany, {
         path: 'prompts.linkedAmount.unit',
       });
     });

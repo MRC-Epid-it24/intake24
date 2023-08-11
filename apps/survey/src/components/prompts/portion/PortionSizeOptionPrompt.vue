@@ -37,7 +37,7 @@
                       <template #label>
                         <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
                           <template #unit>
-                            {{ getLocaleContent(standardUnitRefs[unit].estimateIn) }}
+                            {{ translate(standardUnitRefs[unit].estimateIn) }}
                           </template>
                         </i18n>
                       </template>
@@ -81,7 +81,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
 
 import { ImagePlaceholder } from '../../elements';
 import { useStandardUnits } from '../partials';
@@ -104,7 +104,7 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const standardUnits = computed(() => {
@@ -159,7 +159,7 @@ export default defineComponent({
       clearStandardUnitTimer();
     });
 
-    return { getLocaleContent, standardUnits, standardUnitRefs, standardUnitSelected };
+    return { translate, standardUnits, standardUnitRefs, standardUnitSelected };
   },
 
   data() {

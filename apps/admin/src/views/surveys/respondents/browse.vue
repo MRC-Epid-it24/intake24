@@ -217,7 +217,7 @@ export default defineComponent({
     const dialog = ref(false);
     const loading = ref(false);
 
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const headers = [
       {

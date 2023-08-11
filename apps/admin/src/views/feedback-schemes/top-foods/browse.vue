@@ -112,7 +112,7 @@ export default defineComponent({
   setup(props) {
     const menu = ref(false);
 
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       FeedbackSchemeEntry,

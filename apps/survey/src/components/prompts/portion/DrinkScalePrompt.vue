@@ -215,8 +215,8 @@ export default defineComponent({
         const volume = scale.volumeSamples[scale.volumeSamples.length - 1].volume;
 
         return (
-          this.getLocaleContent(scale.label, { params: { volume } }) ||
-          this.getLocaleContent(object.label, { params: { volume } })
+          this.translate(scale.label, { params: { volume } }) ||
+          this.translate(object.label, { params: { volume } })
         );
       });
     },

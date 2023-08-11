@@ -106,7 +106,10 @@
                 </v-col>
               </v-row>
             </v-tab-item>
-            <prompt-content :i18n.sync="dialog.prompt.i18n"></prompt-content>
+            <prompt-content
+              :component="dialog.prompt.component"
+              :i18n.sync="dialog.prompt.i18n"
+            ></prompt-content>
             <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
             <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
             <component
@@ -332,10 +335,14 @@ export default defineComponent({
 
       const {
         index,
-        prompt: { origId, ...rest },
+        prompt: { origId, i18n, ...rest },
       } = this.dialog;
 
-      this.$emit('save', { prompt: rest, index });
+      for (const [key, value] of Object.entries(i18n)) {
+        if (!Object.keys(value).length) delete i18n[key];
+      }
+
+      this.$emit('save', { prompt: { i18n, ...rest }, index });
 
       this.reset();
     },

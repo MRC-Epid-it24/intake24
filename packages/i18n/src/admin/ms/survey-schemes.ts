@@ -157,6 +157,14 @@ const surveySchemes: LocaleMessageObject = {
       portionSizes: 'Portion size fields',
     },
   },
+  i18n: {
+    _: 'Prompt translation',
+    title: 'Prompt translations',
+    core: `Default translations for field '{key}'`,
+    custom: `Custom translations for field '{key}'`,
+    init: 'Initialize translation field',
+    none: 'No translation',
+  },
   overrides: {
     _: 'Scheme overrides',
     meals: {

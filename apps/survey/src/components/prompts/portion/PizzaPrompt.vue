@@ -198,8 +198,7 @@ export default defineComponent({
           const pizzaType = key as PizzaImageMap;
 
           acc[pizzaType] =
-            this.imageMaps[pizzaType]?.objects.map(({ label }) => this.getLocaleContent(label)) ??
-            [];
+            this.imageMaps[pizzaType]?.objects.map(({ label }) => this.translate(label)) ?? [];
           return acc;
         },
         {} as Record<PizzaImageMap, string[]>

@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-card-text>
       <food-browser
-        v-bind="{ localeId, parameters, rootCategory, type, value }"
+        v-bind="{ localeId, parameters, prompt, rootCategory, value }"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @input="$emit('input', $event)"

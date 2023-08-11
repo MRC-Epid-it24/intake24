@@ -8,7 +8,7 @@
       </i18n>
       <v-card class="mb-4" flat outlined tile>
         <v-list color="grey lighten-5 py-0" subheader>
-          <v-subheader>{{ $t(`prompts.${type}.split`) }}</v-subheader>
+          <v-subheader>{{ i18n.split }}</v-subheader>
           <template v-for="(suggestion, idx) in suggestions">
             <v-list-item :key="suggestion" link>
               <v-list-item-icon>
@@ -22,30 +22,44 @@
           </template>
         </v-list>
       </v-card>
-      <p class="font-italic">{{ $t(`prompts.${type}.separateSuggestion`) }}</p>
-      <p class="font-italic">{{ $t(`prompts.${type}.singleSuggestion`) }}</p>
+      <p class="font-italic">{{ i18n.separateSuggestion }}</p>
+      <p class="font-italic">{{ i18n.singleSuggestion }}</p>
     </v-card-text>
     <template #actions>
-      <v-btn class="px-4" color="secondary" large text @click.stop="action('separate')">
+      <v-btn
+        class="px-4"
+        color="secondary"
+        large
+        text
+        :title="i18n.separate"
+        @click.stop="action('separate')"
+      >
         <v-icon left>fas fa-arrows-left-right-to-line</v-icon>
-        {{ $t(`prompts.${type}.separate`) }}
+        {{ i18n.separate }}
       </v-btn>
-      <v-btn class="px-4" color="secondary" large text @click.stop="action('single')">
+      <v-btn
+        class="px-4"
+        color="secondary"
+        large
+        text
+        :title="i18n.single"
+        @click.stop="action('single')"
+      >
         <v-icon left>fas fa-arrow-up-long</v-icon>
-        {{ $t(`prompts.${type}.single`) }}
+        {{ i18n.single }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="separate" @click.stop="action('separate')">
+      <v-btn :title="i18n.separate" value="separate" @click.stop="action('separate')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.separate`) }}
+          {{ i18n.separate }}
         </span>
         <v-icon class="pb-1">fas fa-arrows-left-right-to-line</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="single" @click.stop="action('single')">
+      <v-btn :title="i18n.single" value="single" @click.stop="action('single')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.single`) }}
+          {{ i18n.single }}
         </span>
         <v-icon class="pb-1">fas fa-arrow-up-long</v-icon>
       </v-btn>
@@ -55,9 +69,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FreeTextFood } from '@intake24/common/types';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -77,10 +92,28 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    isValid(): boolean {
-      return true;
-    },
+  setup(props) {
+    const { translatePrompt } = usePromptUtils(props);
+
+    const i18n = computed(() =>
+      translatePrompt([
+        'searchTerm',
+        'split',
+        'singleSuggestion',
+        'singleSuggestionEx',
+        'separateSuggestion',
+        'separateSuggestionEx',
+        'separate',
+        'single',
+      ])
+    );
+
+    const isValid = computed(() => true);
+
+    return {
+      i18n,
+      isValid,
+    };
   },
 });
 </script>

@@ -147,7 +147,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
 ];
 
 export const usePortionSizeMethods = () => {
-  const i18n = useI18n();
+  const { i18n } = useI18n();
 
   const estimationMethods = psmDefaults.map(({ method: value }) => ({
     value,

@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-form @submit.prevent="action('next')">
-        <v-label v-if="prompt.i18n.label">{{ getLocaleContent(prompt.i18n.label) }}</v-label>
+        <v-label v-if="prompt.i18n.label">{{ translate(prompt.i18n.label) }}</v-label>
         <v-checkbox
           v-for="option in localeOptions"
           :key="option.value"
@@ -93,7 +93,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.prompt.validation.message, {
+        this.translate(this.prompt.validation.message, {
           path: `prompts.${this.type}.validation.required`,
         }),
       ];

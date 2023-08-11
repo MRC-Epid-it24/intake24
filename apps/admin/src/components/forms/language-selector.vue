@@ -1,6 +1,6 @@
 <template>
   <v-card class="mb-4" v-bind="{ disabled, flat, outlined, tile }">
-    <v-toolbar color="grey lighten-4" flat>
+    <v-toolbar color="grey lighten-4" v-bind="{ flat, tile }">
       <v-toolbar-title>{{ label }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu bottom left>
@@ -93,7 +93,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['input', 'lang-add', 'lang-remove'],
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
@@ -133,6 +133,7 @@ export default defineComponent({
     const add = async (code: string) => {
       emit('input', { ...props.value, [code]: props.default });
       selected.value = languages.value.length - 1;
+      emit('lang-add');
     };
 
     const remove = () => {
@@ -141,6 +142,7 @@ export default defineComponent({
       const code = languages.value[selected.value];
       const { [code]: remove, ...rest } = props.value;
       emit('input', { ...rest });
+      emit('lang-remove');
     };
 
     return {

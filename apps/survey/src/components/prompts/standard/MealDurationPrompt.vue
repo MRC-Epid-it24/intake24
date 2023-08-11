@@ -16,7 +16,7 @@
           <template #thumb-label="{ value }">
             <div class="d-flex flex-column align-center">
               <span class="text-h5 font-weight-bold">{{ value }}</span>
-              <span class="text-h6 font-weight-bold">mins</span>
+              <span class="text-h6 font-weight-bold">{{ i18n.minutes }}</span>
             </div>
           </template>
         </v-slider>
@@ -24,7 +24,7 @@
     </v-card-text>
     <template #actions>
       <v-btn class="px-4" color="secondary" large @click.stop="action('next')">
-        {{ $t(`prompts.${type}.confirm`) }}
+        {{ i18n.confirm }}
       </v-btn>
     </template>
     <template #nav-actions>
@@ -40,9 +40,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -64,16 +65,18 @@ export default defineComponent({
 
   emits: ['update'],
 
-  computed: {
-    isValid(): boolean {
-      return this.initialState !== null;
-    },
-  },
+  setup(props, { emit }) {
+    const { translatePrompt } = usePromptUtils(props);
 
-  methods: {
-    update(duration: string) {
-      this.$emit('update', { state: duration });
-    },
+    const i18n = computed(() => translatePrompt(['minutes', 'confirm']));
+
+    const isValid = computed(() => props.initialState !== null);
+
+    const update = (duration: string) => {
+      emit('update', { state: duration });
+    };
+
+    return { i18n, isValid, update };
   },
 });
 </script>

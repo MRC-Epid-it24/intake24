@@ -35,7 +35,7 @@ export default defineComponent({
     const getInitialState = computed<string | undefined>(() => undefined);
 
     const { state, update } = usePromptHandlerNoStore(getInitialState);
-    const i18n = useI18n();
+    const { i18n } = useI18n();
     const survey = useSurvey();
 
     const hasMeals = computed(() => survey.hasMeals);

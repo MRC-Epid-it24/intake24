@@ -219,7 +219,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const types = feedbackTypes.map((value) => ({
       value,
