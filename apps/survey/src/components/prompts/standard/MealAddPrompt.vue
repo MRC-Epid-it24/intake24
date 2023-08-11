@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4 pt-4" v-html="localeDescription"></div>
+      <div class="px-4 pt-4" v-html="i18n.description"></div>
     </template>
     <v-card-text class="pt-2">
       <v-row>
@@ -13,7 +13,7 @@
             class="meal-add-prompt__combobox"
             clearable
             :items="defaultMeals"
-            :label="$t(`${i18nPrefix}.label`)"
+            :label="i18n.label"
             outlined
             @change="update"
           >
@@ -28,40 +28,40 @@
         :disabled="!hasMeals"
         large
         text
-        :title="$t(`prompts.${type}.no`)"
+        :title="i18n.no"
         @click.stop="action('cancel')"
       >
         <v-icon left>$cancel</v-icon>
-        {{ $t(`prompts.${type}.no`) }}
+        {{ i18n.no }}
       </v-btn>
       <v-btn
         class="px-4"
         color="secondary"
         :disabled="!isValid"
         large
-        :title="$t(`prompts.${type}.yes`)"
+        :title="i18n.yes"
         @click="action('next')"
       >
         <v-icon left>$add</v-icon>
-        {{ $t(`prompts.${type}.yes`) }}
+        {{ i18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :disabled="!hasMeals" :title="$t(`prompts.${type}.no`)" value="cancel">
+      <v-btn :disabled="!hasMeals" :title="i18n.no" value="cancel">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
-          {{ $t(`prompts.${type}.no`) }}
+          {{ i18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-btn
         color="secondary"
         :disabled="!isValid"
-        :title="$t(`prompts.${type}.yes`)"
+        :title="i18n.yes"
         value="next"
         @click="action('next')"
       >
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.yes`) }}
+          {{ i18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -71,8 +71,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { VCombobox, VSelect } from 'vuetify/lib';
+
+import { useI18n } from '@intake24/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -96,33 +99,41 @@ export default defineComponent({
 
   emits: ['update'],
 
-  data() {
-    return {
-      currentValue: undefined as string | undefined,
+  setup(props, { emit }) {
+    const { translate } = useI18n();
+    const { type } = usePromptUtils(props);
+
+    const currentValue = ref<string | undefined>(undefined);
+
+    const i18nPrefix = computed(
+      () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`
+    );
+
+    const i18n = computed(() => {
+      const {
+        prompt: { i18n },
+      } = props;
+
+      return {
+        no: translate(i18n.no, { path: `prompts.${type.value}.no` }),
+        yes: translate(i18n.yes, { path: `prompts.${type.value}.yes` }),
+        description: translate(i18n.description, {
+          path: `${i18nPrefix.value}.description`,
+          sanitize: true,
+        }),
+        label: translate(i18n.label, {
+          path: `${i18nPrefix.value}.label`,
+        }),
+      };
+    });
+
+    const isValid = computed(() => !!currentValue.value);
+
+    const update = () => {
+      emit('update', { state: currentValue.value });
     };
-  },
 
-  computed: {
-    i18nPrefix() {
-      return `prompts.${this.type}${this.prompt.custom ? '.custom' : ''}`;
-    },
-
-    localeDescription(): string | undefined {
-      return this.getLocaleContent(this.prompt.i18n.description, {
-        path: `${this.i18nPrefix}.description`,
-        sanitize: true,
-      });
-    },
-
-    isValid() {
-      return !!this.currentValue;
-    },
-  },
-
-  methods: {
-    update() {
-      this.$emit('update', { state: this.currentValue });
-    },
+    return { currentValue, i18n, isValid, update };
   },
 });
 </script>

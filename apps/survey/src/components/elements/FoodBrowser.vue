@@ -12,9 +12,9 @@
           clearable
           flat
           hide-details
-          :label="$t(`prompts.foodBrowser.search`)"
+          :label="i18n.search"
           outlined
-          :placeholder="$t(`prompts.foodBrowser.search`)"
+          :placeholder="i18n.search"
           prepend-inner-icon="$search"
           :rounded="dialog"
           @focus="openInDialog"
@@ -32,19 +32,16 @@
           </v-card>
           <v-btn v-if="navigationHistory.length > 1" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
-            {{
-              $t(`prompts.foodBrowser.back`, {
-                category: navigationHistory[navigationHistory.length - 2].name,
-              })
-            }}
+            {{ i18n.back }}
           </v-btn>
           <v-subheader v-else class="font-weight-bold">
-            {{ $t('prompts.foodBrowser.browse') }}
+            {{ i18n.browse }}
           </v-subheader>
           <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
             :contents="currentCategoryContents"
+            :i18n="i18n"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           ></category-contents-view>
@@ -54,6 +51,7 @@
           <category-contents-view
             v-if="!requestInProgress"
             :contents="searchContents"
+            :i18n="i18n"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           ></category-contents-view>
@@ -66,27 +64,27 @@
           :disabled="missingDialog"
           large
           outlined
-          :title="$t(`prompts.${type}.browse`)"
+          :title="i18n.browse"
           @click.stop="searchTerm = ''"
         >
-          {{ $t(`prompts.${type}.browse`) }}
+          {{ i18n.browse }}
         </v-btn>
         <v-btn
           color="secondary"
           :disabled="missingDialog"
           large
           outlined
-          :title="$t(`prompts.${type}.missing.label`)"
+          :title="i18n['missing.label']"
           @click.stop="openMissingDialog"
         >
-          {{ $t(`prompts.${type}.missing.label`) }}
+          {{ i18n['missing.label'] }}
         </v-btn>
       </div>
     </component>
     <missing-food-panel
       v-model="missingDialog"
       :class="{ 'mt-4': isMobile }"
-      :type="type"
+      :i18n="i18n"
       @cancel="closeMissingDialog"
       @confirm="foodMissing"
     ></missing-food-panel>
@@ -100,8 +98,9 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
+import type { Prompt } from '@intake24/common/prompts';
 import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
 import type { FoodSearchPromptParameters } from '../prompts/standard/FoodSearchPrompt.vue';
@@ -136,8 +135,8 @@ export default defineComponent({
     rootCategory: {
       type: String,
     },
-    type: {
-      type: String,
+    prompt: {
+      type: Object as PropType<Prompt>,
       required: true,
     },
     value: {
@@ -149,7 +148,34 @@ export default defineComponent({
   emits: ['food-selected', 'food-missing', 'input'],
 
   setup(props, { emit }) {
-    const i18n = useI18n();
+    const { translatePrompt, type } = usePromptUtils(props);
+
+    const i18n = computed(() => {
+      return {
+        ...translatePrompt(
+          [
+            'browse',
+            'search',
+            'root',
+            'back',
+            'none',
+            'missing.label',
+            'missing.description',
+            'missing.report',
+            'missing.tryAgain',
+          ],
+          {
+            back: {
+              category:
+                navigationHistory.value.length > 1
+                  ? navigationHistory.value[navigationHistory.value.length - 2].name
+                  : '??',
+            },
+          }
+        ),
+      };
+    });
+
     const showInDialog = computed(
       () => props.inDialog && searchRef.value?.$vuetify.breakpoint.mobile
     );
@@ -199,7 +225,7 @@ export default defineComponent({
     const searchResults = ref<FoodHeader[]>([]);
     const rootHeader = computed(() => ({
       code: props.rootCategory ?? '',
-      name: props.rootCategory ?? i18n.t('prompts.foodBrowser.root').toString(),
+      name: props.rootCategory ?? i18n.value.root,
     }));
 
     const searchContents = computed<CategoryContents>(() => ({
@@ -359,9 +385,11 @@ export default defineComponent({
       navigationHistory,
       retryCode,
       currentCategoryContents,
+      i18n,
       requestInProgress,
       requestFailed,
       tab,
+      type,
       browseCategory,
       categorySelected,
       foodMissing,

@@ -36,7 +36,7 @@ export const useEntryForm = <F extends object, E extends object>(
   const { id: entryId } = toRefs(props);
   const { data, config, editMethod = 'put', loadCallback, nonInputErrorKeys = [] } = formProps;
 
-  const i18n = useI18n();
+  const { i18n } = useI18n();
   const resource = useResource();
   const router = useRouter();
 

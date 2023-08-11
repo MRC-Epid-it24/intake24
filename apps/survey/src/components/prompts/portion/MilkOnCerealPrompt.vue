@@ -130,7 +130,7 @@ export default defineComponent({
     bowlLabels() {
       if (!this.labelsEnabled || !this.bowlImageMap) return [];
 
-      return this.bowlImageMap.objects.map(({ label }) => this.getLocaleContent(label));
+      return this.bowlImageMap.objects.map(({ label }) => this.translate(label));
     },
 
     bowl() {
@@ -147,7 +147,7 @@ export default defineComponent({
     milkLevelLabels() {
       if (!this.labelsEnabled || !this.milkLevelImageMap) return [];
 
-      return this.milkLevelImageMap.objects.map(({ label }) => this.getLocaleContent(label));
+      return this.milkLevelImageMap.objects.map(({ label }) => this.translate(label));
     },
 
     bowlValid() {

@@ -1,28 +1,28 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
-      <v-expansion-panel v-for="(prompt, index) in prompts" :key="index">
+      <v-expansion-panel v-for="(assocPrompt, index) in prompts" :key="index">
         <v-expansion-panel-header>
-          {{ getLocaleContent(associatedFoodPrompts[index].promptText) }}
+          {{ translate(associatedFoodPrompts[index].promptText) }}
           <template #actions>
-            <expansion-panel-actions :valid="isPromptValid(prompt)"></expansion-panel-actions>
+            <expansion-panel-actions :valid="isPromptValid(assocPrompt)"></expansion-panel-actions>
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container class="pa-0">
             <v-radio-group
-              v-model="prompt.mainFoodConfirmed"
+              v-model="assocPrompt.mainFoodConfirmed"
               :row="!isMobile"
               @change="onConfirmStateChanged(index)"
             >
               <v-radio
-                :label="$t(`prompts.${type}.no`)"
+                :label="i18n.no"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
                 :value="false"
               ></v-radio>
               <v-radio
-                :label="$t(`prompts.${type}.yes`)"
+                :label="i18n.yes"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
                 :value="true"
@@ -33,37 +33,63 @@
           <!-- Selected foods list -->
           <v-expand-transition>
             <v-card
-              v-if="prompt.mainFoodConfirmed && prompt.foods.length > 0 && !showFoodChooser(index)"
+              v-if="
+                assocPrompt.mainFoodConfirmed &&
+                assocPrompt.foods.length > 0 &&
+                !showFoodChooser(index)
+              "
               class="pa-0"
               flat
             >
               <v-card-text class="d-flex flex-column flex-md-row pa-0 gap-2">
                 <v-container>
                   <v-row
-                    v-for="(food, foodIndex) in prompt.foods"
+                    v-for="(food, foodIndex) in assocPrompt.foods"
                     :key="foodIndex"
                     align="baseline"
                     class="pa-0"
                   >
-                    <v-alert class="flex-md-grow-1 mr-1" color="grey lighten-4" dense>
+                    <v-alert class="flex-md-grow-1 mr-1" color="grey lighten-4" dense icon="$food">
                       {{ associatedFoodDescription(food) }}
+                      <template #prepend>
+                        <v-icon left>$food</v-icon>
+                      </template>
+                      <template #append>
+                        <v-btn
+                          color="secondary lighten-1"
+                          depressed
+                          :title="i18n['select.different']"
+                          @click="replaceFood(index, foodIndex)"
+                        >
+                          <v-icon left>$edit</v-icon>
+                          {{ i18n['select.different'] }}
+                        </v-btn>
+                        <confirm-dialog
+                          v-if="allowMultiple"
+                          :label="i18n['select.remove']"
+                          @confirm="removeFood(index, foodIndex)"
+                        >
+                          <template #activator="{ on, attrs }">
+                            <v-btn
+                              v-bind="attrs"
+                              class="ml-2"
+                              color="secondary lighten-1"
+                              depressed
+                              :title="i18n['select.remove']"
+                              v-on="on"
+                            >
+                              <v-icon left>$delete</v-icon>
+                              {{ i18n['select.remove'] }}
+                            </v-btn>
+                          </template>
+                          {{
+                            $t(`recall.menu.confirmDelete`, {
+                              item: associatedFoodDescription(food),
+                            })
+                          }}
+                        </confirm-dialog>
+                      </template>
                     </v-alert>
-                    <v-btn
-                      class="mr-2"
-                      color="secondary"
-                      outlined
-                      @click="replaceFood(index, foodIndex)"
-                    >
-                      {{ $t(`prompts.${type}.select.different`) }}
-                    </v-btn>
-                    <v-btn
-                      v-if="allowMultiple"
-                      color="secondary"
-                      outlined
-                      @click="removeFood(index, foodIndex)"
-                    >
-                      {{ $t(`prompts.${type}.select.remove`) }}
-                    </v-btn>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -73,21 +99,21 @@
           <!-- Additional food confirmation -->
           <v-expand-transition>
             <v-card v-show="showMoreFoodsQuestion(index)" flat>
-              <v-card-title>{{ $t(`prompts.${type}.moreFoodsQuestion`) }}</v-card-title>
+              <v-card-title>{{ i18n.moreFoodsQuestion }}</v-card-title>
               <v-card-text>
                 <v-radio-group
-                  v-model="prompt.additionalFoodConfirmed"
+                  v-model="assocPrompt.additionalFoodConfirmed"
                   :row="!isMobile"
                   @change="onConfirmStateChanged(index)"
                 >
                   <v-radio
-                    :label="$t(`prompts.${type}.no`)"
+                    :label="i18n.no"
                     off-icon="fa-regular fa-circle"
                     on-icon="$yes"
                     :value="false"
                   ></v-radio>
                   <v-radio
-                    :label="$t(`prompts.${type}.yesAnother`)"
+                    :label="i18n.yesAnother"
                     off-icon="fa-regular fa-circle"
                     on-icon="$yes"
                     :value="true"
@@ -100,8 +126,8 @@
           <!-- Existing food option: if there are any foods in the same meal that match
             the associated food criteria, allow to pick one of them -->
           <v-expand-transition>
-            <v-card v-if="showFoodChooser(index) && availableFoods[index].length > 0" flat>
-              <v-card-title>{{ $t(`prompts.${type}.existingFoodsTitle`) }}</v-card-title>
+            <v-card v-if="showFoodChooser(index) && availableFoods[index].length" flat>
+              <v-card-title>{{ i18n.existingFoodsTitle }}</v-card-title>
               <v-card-text>
                 <meal-food-chooser
                   v-if="meal"
@@ -116,17 +142,19 @@
           <!-- Database lookup -->
           <v-expand-transition>
             <v-card v-if="showFoodChooser(index)" flat>
-              <v-card-title>{{
-                availableFoods[index].length > 0
-                  ? $t(`prompts.${type}.databaseLookupWithExisting`)
-                  : $t(`prompts.${type}.databaseLookupTitle`)
-              }}</v-card-title>
+              <v-card-title>
+                {{
+                  availableFoods[index].length
+                    ? i18n.databaseLookupWithExisting
+                    : i18n.databaseLookupTitle
+                }}
+              </v-card-title>
               <v-card-text>
                 <food-browser
                   v-bind="{
                     localeId,
+                    prompt,
                     rootCategory: associatedFoodPrompts[index].categoryCode,
-                    type,
                   }"
                   @food-missing="foodMissing(index)"
                   @food-selected="(food) => foodSelected(food, index)"
@@ -152,9 +180,11 @@ import type {
 import type { EncodedFood } from '@intake24/common/types';
 import type { FoodHeader, UserAssociatedFoodPrompt } from '@intake24/common/types/http';
 import { getFoodDescription } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import MealFoodChooser from '@intake24/survey/components/prompts/partials/MealFoodChooser.vue';
-import { useLocale } from '@intake24/ui';
+import { usePromptUtils } from '@intake24/survey/composables';
+import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -170,7 +200,7 @@ const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
 export default defineComponent({
   name: 'AssociatedFoodsPrompt',
 
-  components: { MealFoodChooser, ExpansionPanelActions, FoodBrowser },
+  components: { ConfirmDialog, ExpansionPanelActions, FoodBrowser, MealFoodChooser },
 
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 
@@ -192,7 +222,22 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
+    const { translatePrompt } = usePromptUtils(props);
+
+    const i18n = computed(() =>
+      translatePrompt([
+        'yes',
+        'yesAnother',
+        'no',
+        'moreFoodsQuestion',
+        'databaseLookupTitle',
+        'databaseLookupWithExisting',
+        'existingFoodsTitle',
+        'select.different',
+        'select.remove',
+      ])
+    );
 
     const activePrompt = ref(props.initialState.activePrompt);
     const prompts = ref(props.initialState.prompts);
@@ -229,7 +274,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     );
 
-    return { activePrompt, prompts, replaceFoodIndex, allowMultiple, getLocaleContent };
+    return { activePrompt, i18n, prompts, replaceFoodIndex, allowMultiple, translate };
   },
 
   computed: {

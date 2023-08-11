@@ -7,7 +7,7 @@
           :column="prompt.orientation === 'column'"
           :error="hasErrors"
           hide-details="auto"
-          :label="getLocaleContent(prompt.i18n.label)"
+          :label="translate(prompt.i18n.label)"
           :row="prompt.orientation === 'row'"
           @change="update"
         >
@@ -90,7 +90,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.prompt.validation.message, {
+        this.translate(this.prompt.validation.message, {
           path: `prompts.${this.type}.validation.required`,
         }),
       ];

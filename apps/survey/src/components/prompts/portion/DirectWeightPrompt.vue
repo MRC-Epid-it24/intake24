@@ -34,7 +34,7 @@ export default defineComponent({
 
   computed: {
     localeDescription(): string {
-      return this.getLocaleContent(this.prompt.i18n.description);
+      return this.translate(this.prompt.i18n.description);
     },
   },
 

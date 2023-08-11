@@ -66,15 +66,24 @@ const prompts: LocaleMessageObject = {
   // Standard
   associatedFoods: {
     name: 'Makanan berkaitan',
-    text: '{food}',
+    text: '',
     description: '',
     yes: 'Ya, saya ada mengambilnya',
+    yesAnother: 'Yes, I had another',
     no: 'Tidak, saya tidak mengambilnya',
-    alreadyEntered: 'Ya, sudah dimasukkan',
+    moreFoodsQuestion: 'Did you have any other foods from this category?',
+    databaseLookupTitle: 'What was it?',
+    databaseLookupWithExisting: 'If not, what was it?',
+    existingFoodsTitle: 'Was it something you already entered?',
     select: {
       different: 'Pilih makanan yang lain',
-      item: 'Pilih makanan yang telah anda ambil',
+      remove: 'Remove',
     },
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>Please try browsing the food categories listed above to find your food.</p>
@@ -99,13 +108,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
   },
-  foodBrowser: {
-    browse: 'Browse all foods',
-    search: 'Search for a food',
-    none: 'No food results. Please try refining your search.',
-    root: 'all food categories',
-    back: `Back to '{category}'`,
-  },
   foodSearch: {
     name: 'Cari Makanan',
     text: 'Senarai makanan di bawah adalah daripada pangkalan data kami yang kelihatan seperti "{food}".',
@@ -113,6 +115,10 @@ const prompts: LocaleMessageObject = {
     empty: 'Tiada yang sepadan dalam pangkalan data kami dengan "{searchTerm}".',
     reword: 'Cuba ungkapkan semula penerangan anda.',
     browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -131,7 +137,6 @@ const prompts: LocaleMessageObject = {
     },
   },
   mealAdd: {
-    _: 'Tambah hidangan',
     name: 'Tambah hidangan',
     text: 'Masukkan nama hidangan ini',
     description: 'Pilih satu daripada senarai di bawah jika sesuai.',
@@ -150,6 +155,7 @@ const prompts: LocaleMessageObject = {
     name: 'Meal duration',
     text: '',
     description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
+    minutes: 'mins',
     confirm: 'Continue',
   },
   mealGap: {
@@ -324,14 +330,14 @@ const prompts: LocaleMessageObject = {
   },
   cereal: {
     name: 'Bijirin',
-    text: '{food}',
+    text: '',
     description: '',
     container:
       'Pilih mangkuk yang paling sama seperti mangkuk yang anda gunakan untuk {food} anda.',
   },
   drinkScale: {
     name: 'Skala minuman',
-    text: '{food}',
+    text: '',
     description: '',
     container:
       'Pilih cawan atau gelas yang paling sama seperti yang anda gunakan untuk {food} anda.',
@@ -354,7 +360,7 @@ const prompts: LocaleMessageObject = {
   },
   guideImage: {
     name: 'Gambar panduan',
-    text: '{food}',
+    text: '',
     description: '',
     label: 'Pilih imej yang paling hampir sama dengan saiz {food} yang anda ambil.',
     quantity: 'Pilih berapa banyak yang telah anda ambil.',
@@ -370,7 +376,7 @@ const prompts: LocaleMessageObject = {
   },
   milkOnCereal: {
     name: 'Susu pada bijirin',
-    text: '{food}',
+    text: '',
     description: '',
     container:
       'Pilih mangkuk yang paling sama seperti mangkuk yang anda gunakan untuk {food} anda.',
@@ -395,7 +401,7 @@ const prompts: LocaleMessageObject = {
   },
   pizza: {
     name: 'Piza',
-    text: '{food}',
+    text: '',
     description: '',
     typeLabel: 'Pilih piza yang paling hampir dengan saiz yang telah anda ambil.',
     thicknessLabel: 'Berapa tebalkah piza anda?',
@@ -411,7 +417,7 @@ const prompts: LocaleMessageObject = {
   },
   standardPortion: {
     name: 'Porsi standard',
-    text: '{food}',
+    text: '',
     description: '',
     label: 'Bagaimanakah anda ingin menganggarkan saiz porsi {food} anda?',
     estimateIn: 'Dalam {unit}',

@@ -79,7 +79,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const jobType = ref<LocaleJobType[]>([
       'LocaleFoods',

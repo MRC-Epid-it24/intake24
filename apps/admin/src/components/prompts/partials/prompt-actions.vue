@@ -164,7 +164,7 @@ export const defaultAction: ActionItem = {
   color: 'secondary',
   variant: 'outlined',
   icon: '$next',
-  layout: [],
+  layout: ['desktop', 'mobile'],
   params: {},
 };
 

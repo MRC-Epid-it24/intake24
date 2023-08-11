@@ -132,8 +132,7 @@ export default defineComponent({
   emits: ['food-selected', 'action'],
 
   setup(props, { emit }) {
-    const i18n = useI18n();
-
+    const { i18n } = useI18n();
     const { getFoodName } = useFoodUtils();
 
     const menu = ref<MenuItem[]>([

@@ -5,3 +5,7 @@ $flag-icons-use-square: false !default;
 
 @import "flag-icons/sass/flag-icons-base.scss";
 @import "flag-icons/sass/flag-icons-list.scss";
+
+.fi-en {
+    background-image: url(#{$flag-icons-path}#{$flag-icons-rect-path}/gb.svg);
+}

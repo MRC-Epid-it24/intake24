@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -45,10 +45,12 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'submit-prompt'>()],
 
-  computed: {
-    isValid(): boolean {
-      return true;
-    },
+  setup() {
+    const isValid = computed(() => true);
+
+    return {
+      isValid,
+    };
   },
 });
 </script>

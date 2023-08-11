@@ -15,7 +15,7 @@
             <p v-else>
               <v-icon x-small>$question</v-icon>
             </p>
-            {{ getLocaleContent(meal.name) }}
+            {{ translate(meal.name) }}
           </v-badge>
         </v-tab>
       </v-tabs>
@@ -30,10 +30,10 @@ import { defineComponent } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { useMealUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
 import { getMealIndex } from '@intake24/survey/util';
-import { useLocale } from '@intake24/ui';
 
 export default defineComponent({
   name: 'MealListMobile',
@@ -48,10 +48,10 @@ export default defineComponent({
   emits: ['action'],
 
   setup() {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const { getMealTime } = useMealUtils();
 
-    return { getLocaleContent, getMealTime };
+    return { translate, getMealTime };
   },
 
   computed: {

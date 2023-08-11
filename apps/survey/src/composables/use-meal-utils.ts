@@ -1,21 +1,24 @@
-import type { Ref } from 'vue';
 import { computed } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import { fromMealTime } from '@intake24/common/surveys';
-import { useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
 
-export const useMealUtils = <T extends MealState | undefined>(meal?: Ref<T>) => {
-  const { getLocaleContent } = useLocale();
+export type UseMealUtilsProps = {
+  meal?: MealState;
+};
 
-  const getMealName = (mealState: MealState) => getLocaleContent(mealState.name);
+export const useMealUtils = ({ meal }: UseMealUtilsProps = {}) => {
+  const { translate } = useI18n();
 
-  const mealName = computed(() => (meal?.value ? getMealName(meal.value) : undefined));
+  const getMealName = (mealState: MealState) => translate(mealState.name);
+
+  const mealName = computed(() => (meal ? getMealName(meal) : undefined));
 
   const getMealTime = (mealState?: MealState) =>
     mealState?.time ? fromMealTime(mealState.time) : undefined;
 
-  const mealTime = computed(() => getMealTime(meal?.value));
+  const mealTime = computed(() => getMealTime(meal));
 
   const getMealNameWithTime = (mealState: MealState) => {
     const mealName = getMealName(mealState);

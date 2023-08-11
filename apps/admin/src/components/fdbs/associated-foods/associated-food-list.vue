@@ -30,8 +30,8 @@
               <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ getLocaleContent(item.genericName) }}</v-list-item-title>
-              <v-list-item-subtitle>{{ getLocaleContent(item.text.en) }} </v-list-item-subtitle>
+              <v-list-item-title>{{ translate(item.genericName) }}</v-list-item-title>
+              <v-list-item-subtitle>{{ translate(item.text.en) }} </v-list-item-subtitle>
               <v-messages
                 v-if="errors.has('associatedFoods', index)"
                 color="error"
@@ -222,7 +222,8 @@ import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
-import { ConfirmDialog, useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog } from '@intake24/ui';
 
 import type { AssociatedFoodItem } from './associated-foods';
 import { createDefaultAssociatedFood } from './associated-foods';
@@ -256,7 +257,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
 
     const newItem = () => ({
       ...createDefaultAssociatedFood(props.foodCode, props.localeId),
@@ -285,7 +286,7 @@ export default defineComponent({
     return {
       dialog,
       form,
-      getLocaleContent,
+      translate,
       items,
       newDialog,
       add,

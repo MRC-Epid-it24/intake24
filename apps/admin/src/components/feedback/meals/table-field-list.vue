@@ -251,7 +251,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const {
       dialog,

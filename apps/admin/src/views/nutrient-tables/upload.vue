@@ -79,7 +79,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const jobType: JobType[] = ['NutrientTableIMappingImport', 'NutrientTableDataImport'];
     const jobTypeList = jobType.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }));

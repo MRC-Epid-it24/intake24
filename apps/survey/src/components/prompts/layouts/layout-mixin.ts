@@ -1,11 +1,10 @@
 import type { PropType } from 'vue';
-import { computed, defineComponent, toRefs } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
-import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
-import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
-import { promptType } from '@intake24/ui/util';
+import type { FoodState, MealState } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
+import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 
 import { Next } from '../actions';
 import Breadcrumbs from './breadcrumbs.vue';
@@ -39,21 +38,38 @@ export default defineComponent({
   emits: ['action', 'update:navTab'],
 
   setup(props) {
-    const { food, meal } = toRefs(props);
+    const { translate } = useI18n();
+    const { type } = usePromptUtils(props);
+    const { foodName } = useFoodUtils(props);
+    const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
 
-    const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(food);
-    const { mealName, mealTime, mealNameWithTime } = useMealUtils(meal);
+    const params = computed(() => {
+      const build: Record<string, string> = {};
 
-    const promptName = computed(() => {
-      const type = promptType(props.prompt.component);
+      if (foodName.value) {
+        build.item = foodName.value;
+        build.food = foodName.value;
+      }
 
-      return getLocaleContent(props.prompt.i18n.name, {
-        path: `prompts.${type}.name`,
-      });
+      if (mealName.value) {
+        build.mealName = mealName.value;
+
+        if (mealTime.value) {
+          build.mealTime = mealTime.value;
+
+          const meal = `${mealName.value} (${mealTime.value})`;
+          build.item = meal;
+          build.meal = meal;
+        } else {
+          build.item = mealName.value;
+          build.meal = mealName.value;
+        }
+      }
+
+      return build;
     });
 
-    return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime, promptName };
+    return { foodName, translate, mealName, mealTime, mealNameWithTime, params, type };
   },
 
   computed: {
@@ -77,60 +93,22 @@ export default defineComponent({
       return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
     },
 
-    localeText(): string {
-      return this.getLocaleContent(this.prompt.i18n.text, {
-        path: `prompts.${this.type}.text`,
-        params: this.params,
-      });
-    },
-
-    headerText(): string | undefined {
-      if (this.localeText) return this.localeText;
-
-      if (this.prompt.type !== 'custom') return undefined;
-
-      if (this.foodName) return this.foodName;
-
-      return this.mealNameWithTime;
-    },
-
-    localeDescription(): string | undefined {
-      return this.getLocaleContent(this.prompt.i18n.description, {
-        path: `prompts.${this.type}.description`,
-        params: this.params,
-        sanitize: true,
-      });
-    },
-
-    params(): Dictionary<string> {
-      const params: Dictionary<string> = {};
-      const { foodName, mealName, mealTime } = this;
-
-      if (foodName) {
-        params.item = foodName;
-        params.food = foodName;
-      }
-
-      if (mealName) {
-        params.mealName = mealName;
-
-        if (mealTime) {
-          params.mealTime = mealTime;
-
-          const meal = `${mealName} (${mealTime})`;
-          params.item = meal;
-          params.meal = meal;
-        } else {
-          params.item = mealName;
-          params.meal = mealName;
-        }
-      }
-
-      return params;
-    },
-
-    type() {
-      return promptType(this.prompt.component);
+    i18n() {
+      return {
+        name: this.translate(this.prompt.i18n.name, {
+          path: `prompts.${this.type}.name`,
+          params: this.params,
+        }),
+        text: this.translate(this.prompt.i18n.text, {
+          path: `prompts.${this.type}.text`,
+          params: this.params,
+        }),
+        description: this.translate(this.prompt.i18n.description, {
+          path: `prompts.${this.type}.description`,
+          params: this.params,
+          sanitize: true,
+        }),
+      };
     },
   },
 

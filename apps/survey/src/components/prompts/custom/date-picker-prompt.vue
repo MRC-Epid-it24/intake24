@@ -54,7 +54,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.prompt.validation.message, {
+        this.translate(this.prompt.validation.message, {
           path: `prompts.${this.type}.validation.required`,
         }),
       ];

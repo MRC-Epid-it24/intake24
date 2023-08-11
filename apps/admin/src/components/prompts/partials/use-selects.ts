@@ -4,7 +4,7 @@ import { actionTypes, actionVariants, promptLayouts } from '@intake24/common/pro
 import { useI18n } from '@intake24/i18n';
 
 export const useSelects = () => {
-  const i18n = useI18n();
+  const { i18n } = useI18n();
 
   const actionList = computed(() =>
     actionTypes.map((value) => ({
