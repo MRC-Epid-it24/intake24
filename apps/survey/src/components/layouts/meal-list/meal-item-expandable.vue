@@ -28,12 +28,7 @@
       </v-list-item-action>
     </template>
     <v-divider></v-divider>
-    <food-item
-      :foods="meal.foods"
-      :selected-food-id="selectedFoodId"
-      @action="action"
-      @food-selected="foodSelected"
-    ></food-item>
+    <food-item :foods="meal.foods" :selected-food-id="selectedFoodId" @action="action"></food-item>
     <v-divider v-if="meal.foods.length"></v-divider>
   </v-list-group>
 </template>

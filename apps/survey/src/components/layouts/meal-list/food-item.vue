@@ -91,7 +91,6 @@
         linked
         :selected-food-id="selectedFoodId"
         @action="action"
-        @food-selected="foodSelected"
       ></food-item>
     </div>
   </v-list>
@@ -129,7 +128,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'action'],
+  emits: ['action'],
 
   setup(props, { emit }) {
     const { i18n } = useI18n();
@@ -154,7 +153,7 @@ export default defineComponent({
     };
 
     const foodSelected = (foodId: string) => {
-      emit('food-selected', foodId);
+      action('selectFood', foodId);
     };
 
     return { action, foodSelected, getFoodName, menu };

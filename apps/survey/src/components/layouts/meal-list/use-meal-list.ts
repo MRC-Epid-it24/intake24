@@ -1,13 +1,17 @@
-import type { Ref } from 'vue';
-import { mapState } from 'pinia';
+import type { SetupContext } from 'vue';
 import { computed } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
+import type { MealState } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndexRequired } from '@intake24/survey/util';
 
-export const useMealListUtils = <M extends any[]>(meals: Ref<M>) => {
-  const { selection } = mapState(useSurvey, ['selection']);
+export type UseMealListProps = {
+  meals: MealState[];
+};
+
+export const useMealList = (props: UseMealListProps, { emit }: SetupContext) => {
+  const { selection } = useSurvey();
 
   const selectedMealId = computed(() => {
     if (selection.element?.type !== 'meal') return undefined;
@@ -22,21 +26,13 @@ export const useMealListUtils = <M extends any[]>(meals: Ref<M>) => {
   const isSelectedFoodInMeal = (mealId: string) => {
     if (selection.element?.type !== 'food') return false;
 
-    const foodIndex = getFoodIndexRequired(meals.value, selection.element.foodId);
+    const foodIndex = getFoodIndexRequired(props.meals, selection.element.foodId);
 
-    return meals.value[foodIndex.mealIndex].id === mealId;
+    return props.meals[foodIndex.mealIndex].id === mealId;
   };
 
   const action = (type: FoodActionType | MealActionType, id?: string) => {
-    // This action will be overridden in the components
-  };
-
-  const foodSelected = (foodId: string) => {
-    action('selectFood', foodId);
-  };
-
-  const mealSelected = (mealId: string) => {
-    action('selectMeal', mealId);
+    emit('action', type, id);
   };
 
   return {
@@ -44,7 +40,5 @@ export const useMealListUtils = <M extends any[]>(meals: Ref<M>) => {
     selectedFoodId,
     isSelectedFoodInMeal,
     action,
-    foodSelected,
-    mealSelected,
   };
 };
