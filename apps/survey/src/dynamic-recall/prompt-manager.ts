@@ -562,8 +562,9 @@ const checkFoodStandardConditions = (
       if (foodState.type !== 'encoded-food') return false;
       if (!foodPortionSizeComplete(foodState)) return false;
 
-      return (
-        foodState.data.associatedFoodPrompts.length !== 0 && !foodState.associatedFoodsComplete
+      return !!(
+        foodState.data.associatedFoodPrompts.length &&
+        !foodState.flags.includes('associated-foods-complete')
       );
     }
 

@@ -36,6 +36,7 @@ export const useSameAsBefore = defineStore('same-as-before', {
       if (item.food.data.sameAsBeforeOption) return item;
 
       this.removeItem(foodCode);
+      return undefined;
     },
 
     removeItem(foodCode: string) {

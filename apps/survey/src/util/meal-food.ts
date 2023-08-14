@@ -73,7 +73,7 @@ export const foodPortionSizeComplete = (food: FoodState) =>
 
 export const associatedFoodPromptsComplete = (food: FoodState) =>
   food.type === 'encoded-food' &&
-  (food.associatedFoodsComplete || !food.data.associatedFoodPrompts.length);
+  (food.flags.includes('associated-foods-complete') || !food.data.associatedFoodPrompts.length);
 
 export const encodedFoodComplete = (food: FoodState) =>
   foodPortionSizeComplete(food) && associatedFoodPromptsComplete(food);

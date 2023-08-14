@@ -28,6 +28,8 @@ export type FoodFlag =
   | 'missing-food-complete'
   | 'portion-size-option-complete'
   | 'portion-size-method-complete'
+  | 'portion-size-method-complete'
+  | 'associated-foods-complete'
   | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
@@ -241,7 +243,6 @@ export interface EncodedFood extends AbstractFoodState {
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  associatedFoodsComplete: boolean;
   // brand: string[]; TODO V3?
 }
 
