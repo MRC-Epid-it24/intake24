@@ -19,7 +19,7 @@ import type {
   FoodState,
   MissingFood,
   RecipeBuilder,
-  SpecialFood,
+  RecipeFood,
 } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
@@ -125,11 +125,11 @@ export default defineComponent({
       this.$emit('action', 'next');
     },
 
-    recipeBuilder(specialFood: SpecialFood) {
+    recipeBuilder(recipeFood: RecipeFood) {
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.food();
 
-      console.log('specialFood', JSON.stringify(specialFood));
+      console.log('recipeFood', JSON.stringify(recipeFood));
 
       const newState: RecipeBuilder = {
         id,
@@ -139,8 +139,8 @@ export default defineComponent({
         customPromptAnswers,
         flags,
         linkedFoods: [],
-        template_id: specialFood.name,
-        template: specialFood,
+        template_id: recipeFood.name,
+        template: recipeFood,
         markedAsComplete: [],
         components: [],
         link: [],

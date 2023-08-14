@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
-import type { PhraseWithKey, SpecialFoodTuple } from '@intake24/api/food-index/phrase-index';
-import type { SpecialFoodsHeader } from '@intake24/common/types';
+import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
+import type { RecipeFoodsHeader } from '@intake24/common/types';
 import EnglishLanguageBackend from '@intake24/api/food-index/english-language-backend';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
@@ -26,7 +26,7 @@ describe('Phrase index', () => {
 
   const synonyms: Array<Set<string>> = [];
   const specialFoodsSynonyms: Array<Set<string>> = [];
-  const specialFoodsList: SpecialFoodTuple[] = [];
+  const specialFoodsList: RecipeFoodTuple[] = [];
 
   const index = new PhraseIndex(
     phrases,

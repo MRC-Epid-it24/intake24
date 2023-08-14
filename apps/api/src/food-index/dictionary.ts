@@ -21,7 +21,7 @@ export class RichDictionary {
 
   private readonly synonymMap: Map<string, Set<string>>;
 
-  public readonly specialFoodsMap: Map<string, Set<string>>;
+  public readonly recipeFoodsMap: Map<string, Set<string>>;
 
   private readonly phoneticEncoder: PhoneticEncoder | undefined;
 
@@ -31,7 +31,7 @@ export class RichDictionary {
     words: Set<string>,
     phoneticEncoder: PhoneticEncoder | undefined,
     synSets: Array<Set<string>>,
-    specialFoodsSynSets: Array<Set<string>>
+    recipeFoodsSynSets: Array<Set<string>>
   ) {
     this.words = new Set<string>();
 
@@ -67,7 +67,7 @@ export class RichDictionary {
 
     this.synonymMap = new Map<string, Set<string>>();
 
-    [synSets, specialFoodsSynSets].forEach((generalSynSets) => {
+    [synSets, recipeFoodsSynSets].forEach((generalSynSets) => {
       for (const synSet of generalSynSets) {
         for (const word of synSet) {
           const lowerCaseWord = word.toLocaleLowerCase();
@@ -86,12 +86,12 @@ export class RichDictionary {
     });
 
     // Add special foods for the locale
-    this.specialFoodsMap = new Map<string, Set<string>>();
+    this.recipeFoodsMap = new Map<string, Set<string>>();
 
-    for (const specialFoodsSynSet of specialFoodsSynSets) {
-      if (specialFoodsSynSet.size === 0) continue;
-      if (this.specialFoodsMap.has([...specialFoodsSynSet][0].toLocaleLowerCase())) continue;
-      this.specialFoodsMap.set([...specialFoodsSynSet][0].toLocaleLowerCase(), specialFoodsSynSet);
+    for (const recipeFoodsSynSet of recipeFoodsSynSets) {
+      if (recipeFoodsSynSet.size === 0) continue;
+      if (this.recipeFoodsMap.has([...recipeFoodsSynSet][0].toLocaleLowerCase())) continue;
+      this.recipeFoodsMap.set([...recipeFoodsSynSet][0].toLocaleLowerCase(), recipeFoodsSynSet);
     }
   }
 

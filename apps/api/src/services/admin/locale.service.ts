@@ -1,7 +1,7 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { GetJobParams, JobType } from '@intake24/common/types';
 import type {
-  LocaleSpecialFoodsInput,
+  LocaleRecipeFoodsInput,
   LocaleSplitListInput,
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
@@ -10,8 +10,8 @@ import type { Job } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Op,
-  SpecialFoods,
-  SpecialFoodsSteps,
+  RecipeFoods,
+  RecipeFoodsSteps,
   SplitList,
   SplitWord,
   SynonymSet,
@@ -146,54 +146,54 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   };
 
   // Special Foods Get & Set
-  const getSpecialFoods = async (localeId: string | SystemLocale) => {
+  const getRecipeFoods = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
-    return SpecialFoods.findAll({
+    return RecipeFoods.findAll({
       where: { localeId: code },
       order: [['id', 'ASC']],
-      include: [{ model: SpecialFoodsSteps }],
+      include: [{ model: RecipeFoodsSteps }],
     });
   };
 
-  const setSpecialFoods = async (
+  const setRecipeFoods = async (
     localeId: string | SystemLocale,
-    specialFoods: LocaleSpecialFoodsInput[]
+    recipeFoods: LocaleRecipeFoodsInput[]
   ) => {
     const { code } = await resolveLocale(localeId);
     // To distinguish between the locale code and the special food code
     const localeCode = code;
 
-    const ids = specialFoods.map(({ id }) => id) as string[];
-    await SpecialFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
+    const ids = recipeFoods.map(({ id }) => id) as string[];
+    await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
 
-    if (!specialFoods.length) return [];
+    if (!recipeFoods.length) return [];
 
-    const records = await SpecialFoods.findAll({
+    const records = await RecipeFoods.findAll({
       where: { localeId: localeCode },
       order: [['id', 'ASC']],
     });
-    const newRecords: SpecialFoods[] = [];
+    const newRecords: RecipeFoods[] = [];
 
-    for (const specialFood of specialFoods) {
-      const { id, code, name, specialWords, synonyms } = specialFood;
+    for (const recipeFood of recipeFoods) {
+      const { id, code, name, recipeWord, synonyms_id } = recipeFood;
       // To distinguish between the locale code and the special food code
-      const specialFoodCode = code;
+      const recipeFoodCode = code;
 
       if (id) {
         const match = records.find((record) => record.id === id);
         if (match) {
-          await match.update({ code, name, specialWords, synonyms });
+          await match.update({ code, name, recipeWord, synonyms_id });
           continue;
         }
       }
 
-      const newRecord = await SpecialFoods.create({
+      const newRecord = await RecipeFoods.create({
         localeId: localeCode,
-        code: specialFoodCode,
+        code: recipeFoodCode,
         name,
-        specialWords,
-        synonyms,
+        recipeWord,
+        synonyms_id,
       });
       newRecords.push(newRecord);
     }
@@ -230,8 +230,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   };
 
   return {
-    getSpecialFoods,
-    setSpecialFoods,
+    getRecipeFoods,
+    setRecipeFoods,
     getSplitLists,
     setSplitLists,
     getSplitWords,

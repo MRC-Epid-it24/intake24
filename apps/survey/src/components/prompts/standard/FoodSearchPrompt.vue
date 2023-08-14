@@ -106,7 +106,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FreeTextFood, SpecialFood } from '@intake24/common/types';
+import type { FreeTextFood, RecipeFood } from '@intake24/common/types';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import {
   FoodSearchResults,
@@ -155,7 +155,7 @@ export default defineComponent({
     const missing = ref(false);
     const recipeBuilder = ref(false);
     const recipeBuilderFood = ref<FoodHeader | null>(null);
-    const specialFood = ref<SpecialFood | null>(null);
+    const recipeFood = ref<RecipeFood | null>(null);
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
     const searchTerm = ref(props.value);
@@ -169,7 +169,7 @@ export default defineComponent({
       missing,
       recipeBuilder,
       recipeBuilderFood,
-      specialFood,
+      recipeFood,
       requestInProgress,
       requestFailed,
       searchTerm,
@@ -234,12 +234,12 @@ export default defineComponent({
       this.requestInProgress = false;
     },
 
-    async onRecipeBuilderDetected(specialFood: FoodHeader) {
+    async onRecipeBuilderDetected(recipeFood: FoodHeader) {
       this.requestInProgress = true;
       try {
-        const specialfoodData = await foodsService.getSpecialFood(this.localeId, specialFood.code);
+        const specialfoodData = await foodsService.getRecipeFood(this.localeId, recipeFood.code);
         console.log(`Got some Builder Food ${JSON.stringify(specialfoodData)}`);
-        this.specialFood = specialfoodData;
+        this.recipeFood = specialfoodData;
         this.recipeBuilder = true;
       } catch (e) {
         this.requestFailed = true;
@@ -248,7 +248,7 @@ export default defineComponent({
     },
 
     onRecipeBuilderSelected() {
-      this.$emit('recipe-builder', this.specialFood);
+      this.$emit('recipe-builder', this.recipeFood);
     },
   },
 });

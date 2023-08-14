@@ -1,4 +1,4 @@
-import type { Dictionary, RequiredLocaleTranslation, SpecialFood } from '@intake24/common/types';
+import type { Dictionary, RecipeFood, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType, LocaleOptionList } from '../prompts';
@@ -269,7 +269,7 @@ export interface RecipeBuilder extends AbstractFoodState {
   components: RecipeBuilderComponent[];
   description: string;
   template_id: string;
-  template: SpecialFood;
+  template: RecipeFood;
   link: RecipeBuilderLinkedFood[];
   markedAsComplete: number[];
 }

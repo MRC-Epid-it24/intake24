@@ -21,23 +21,23 @@ import {
 import { FoodCategory, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
-import SpecialFoods from './special-foods';
+import RecipeFoods from './recipe-foods';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'specialFoodsId', 'code', 'order'],
+    attributes: ['id', 'recipeFoodsId', 'code', 'order'],
     order: [['order', 'ASC']],
   },
 }))
 @Table({
-  modelName: 'SpecialFoodsSteps',
-  tableName: 'special_foods_steps',
+  modelName: 'RecipeFoodsSteps',
+  tableName: 'recipe_foods_steps',
   freezeTableName: true,
   underscored: true,
 })
-export default class SpecialFoodsSteps extends BaseModel<
-  InferAttributes<SpecialFoodsSteps>,
-  InferCreationAttributes<SpecialFoodsSteps>
+export default class RecipeFoodsSteps extends BaseModel<
+  InferAttributes<RecipeFoodsSteps>,
+  InferCreationAttributes<RecipeFoodsSteps>
 > {
   @Column({
     autoIncrement: true,
@@ -46,13 +46,13 @@ export default class SpecialFoodsSteps extends BaseModel<
   })
   declare id: CreationOptional<string>;
 
-  @ForeignKey(() => SpecialFoods)
+  @ForeignKey(() => RecipeFoods)
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
     unique: false,
   })
-  declare specialFoodsId: number;
+  declare recipeFoodsId: number;
 
   @Column({
     allowNull: false,
@@ -80,7 +80,7 @@ export default class SpecialFoodsSteps extends BaseModel<
     defaultValue: () =>
       JSON.stringify([
         {
-          en: `${Sequelize.col('id')}-${Sequelize.col('specialFoodsId')}${Sequelize.col('code')}`,
+          en: `${Sequelize.col('id')}-${Sequelize.col('recipeFoodsId')}${Sequelize.col('code')}`,
         },
       ]),
     type: DataType.TEXT({ length: 'long' }),
@@ -98,18 +98,12 @@ export default class SpecialFoodsSteps extends BaseModel<
     defaultValue: () =>
       JSON.stringify({
         en: `Step description for step ${Sequelize.col('name')} of special food ${Sequelize.col(
-          'specialFoodsId'
+          'recipeFoodsId'
         )}`,
       }),
     type: DataType.TEXT({ length: 'long' }),
   })
   declare description: string;
-
-  @Column({
-    allowNull: true,
-    type: DataType.BIGINT,
-  })
-  declare ownerId: CreationOptional<string | null>;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
@@ -117,8 +111,8 @@ export default class SpecialFoodsSteps extends BaseModel<
   @UpdatedAt
   declare readonly updatedAt: CreationOptional<Date>;
 
-  @BelongsTo(() => SpecialFoods, 'specialFoodsId')
-  declare specialFoods?: NonAttribute<SpecialFoods>;
+  @BelongsTo(() => RecipeFoods, 'recipeFoodsId')
+  declare recipeFoods?: NonAttribute<RecipeFoods>;
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
@@ -127,5 +121,5 @@ export default class SpecialFoodsSteps extends BaseModel<
   declare category?: NonAttribute<FoodCategory>;
 }
 
-export type SpecialFoodsStepsAttributes = Attributes<SpecialFoodsSteps>;
-export type SpecialFoodsStepsCreationAttributes = CreationAttributes<SpecialFoodsSteps>;
+export type RecipeFoodsStepsAttributes = Attributes<RecipeFoodsSteps>;
+export type RecipeFoodsStepsCreationAttributes = CreationAttributes<RecipeFoodsSteps>;

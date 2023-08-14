@@ -3,7 +3,7 @@ import type {
   MissingFood,
   PortionSizeStates,
   RecipeBuilder,
-  SpecialFood,
+  RecipeFood,
 } from '../types';
 import type { FoodHeader } from '../types/http';
 
@@ -85,7 +85,7 @@ export type PromptStates = {
     option: number | null;
   };
   'recipe-builder-prompt': {
-    recipe: SpecialFood;
+    recipe: RecipeFood;
     panel: number;
     finishedSteps?: number[];
     steps: RecipeBuilderStepState[];

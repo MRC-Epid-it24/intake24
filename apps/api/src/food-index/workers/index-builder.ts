@@ -2,7 +2,7 @@ import '@intake24/api/bootstrap';
 
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
-import type { PhraseWithKey, SpecialFoodTuple } from '@intake24/api/food-index/phrase-index';
+import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
 import type { FoodHeader } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
@@ -17,8 +17,8 @@ import {
   FoodLocalList,
   FoodsLocale,
   models,
+  RecipeFoods,
   SequelizeTS,
-  SpecialFoods,
   SynonymSet,
 } from '@intake24/db';
 
@@ -65,42 +65,48 @@ async function getSynonymSets(localeId: string): Promise<Set<string>[]> {
   return synSets.map((s) => parseSynonymSet(s.synonyms));
 }
 
-async function getSpecialFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
-  const specialFoods = await SpecialFoods.findAll({
-    attributes: ['synonyms', 'specialWords'],
+async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]> {
+  const recipeFoods = await RecipeFoods.findAll({
+    attributes: ['recipeWord'],
     where: { localeId },
+    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
   });
-  return specialFoods.map((specFoodEntry) =>
-    parseSynonymSet(specFoodEntry.specialWords.concat(' ', specFoodEntry.synonyms))
+  return recipeFoods.map((recipeFoodEntry) =>
+    parseSynonymSet(
+      recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
+    )
   );
 }
 
 /**
  * Build special foods list for a given locale
  * @param {string} localeId - food Locale
- * @returns {Promise<Map<string, SpecialFood>[]>} special foods list
+ * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
  */
-async function getspecialFoodsList(localeId: string): Promise<SpecialFoodTuple[]> {
-  const specialFoods = await SpecialFoods.findAll({
-    attributes: ['code', 'name', 'specialWords', 'synonyms'],
+async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
+  const recipeFoods = await RecipeFoods.findAll({
+    attributes: ['code', 'name', 'recipeWord'],
     where: { localeId },
+    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
   });
 
-  const specialFoodsList: SpecialFoodTuple[] = [];
-  specialFoods.map((specFoodEntry: SpecialFoods) =>
-    specialFoodsList.push([
-      specFoodEntry.name.toLowerCase(),
+  const recipeFoodsList: RecipeFoodTuple[] = [];
+  recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
+    recipeFoodsList.push([
+      recipeFoodEntry.name.toLowerCase(),
       {
-        code: specFoodEntry.code,
-        name: specFoodEntry.name.toLowerCase(),
-        specialWords: specFoodEntry.specialWords,
-        synonyms: parseSynonymSet(specFoodEntry.specialWords.concat(' ', specFoodEntry.synonyms)),
+        code: recipeFoodEntry.code,
+        name: recipeFoodEntry.name.toLowerCase(),
+        recipeWord: recipeFoodEntry.recipeWord,
+        synonyms: parseSynonymSet(
+          recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
+        ),
         // TODO: add Localised description to special foods
-        description: specFoodEntry.name.toLocaleLowerCase(),
+        description: recipeFoodEntry.name.toLocaleLowerCase(),
       },
     ])
   );
-  return specialFoodsList;
+  return recipeFoodsList;
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
@@ -119,7 +125,7 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
   const foodList = await FoodLocalList.findAll({ attributes: ['foodCode'], where: { localeId } });
 
   const foodCodes = foodList.map((row) => row.foodCode);
-  const [localFoods, synonymSets, specialFoodsSynomSet, languageBackendId, specialFoodslist] =
+  const [localFoods, synonymSets, recipeFoodsSynomSet, languageBackendId, recipeFoodslist] =
     await Promise.all([
       FoodLocal.findAll({
         where: { foodCode: foodCodes, localeId },
@@ -131,9 +137,9 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
         },
       }),
       getSynonymSets(localeId),
-      getSpecialFoodsSynomSets(localeId),
+      getRecipeFoodsSynomSets(localeId),
       getLanguageBackendId(localeId),
-      getspecialFoodsList(localeId),
+      getRecipeFoodsList(localeId),
     ]);
 
   const languageBackend = LanguageBackends[languageBackendId];
@@ -155,8 +161,8 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
     foodDescriptions,
     LanguageBackends[languageBackendId],
     synonymSets,
-    specialFoodsSynomSet,
-    specialFoodslist
+    recipeFoodsSynomSet,
+    recipeFoodslist
   );
 }
 
@@ -167,32 +173,32 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
  * @returns FoodHeader[] - array of FoodHeaders of special foods
  */
 
-async function matchSpecialFoods(
+async function matchRecipeFoods(
   interpretedQuery: InterpretedPhrase,
   query: SearchQuery
 ): Promise<FoodHeader[]> {
   const localeIndex = foodIndex[query.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
-  const specialFoodsTuples = localeIndex.specialFoodsList;
-  const specialFoodHeaders: FoodHeader[] = [];
+  const recipeFoodsTuples = localeIndex.recipeFoodsList;
+  const recipeFoodHeaders: FoodHeader[] = [];
 
   // TODO: Optimise the performance of this function
-  for (const specialFood of specialFoodsTuples) {
+  for (const recipeFood of recipeFoodsTuples) {
     interpretedQuery.words.forEach((word) => {
-      const asTypedExactMatch = specialFood[1].synonyms.has(word.asTyped);
+      const asTypedExactMatch = recipeFood[1].synonyms.has(word.asTyped);
       word.interpretations.forEach((interpretation) => {
-        if (specialFood[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
-          return specialFoodHeaders.push({
-            code: specialFood[1].code,
-            description: specialFood[1].description,
+        if (recipeFood[1].synonyms.has(interpretation.dictionaryWord) || asTypedExactMatch) {
+          return recipeFoodHeaders.push({
+            code: recipeFood[1].code,
+            description: recipeFood[1].description,
           });
         }
       });
     });
   }
 
-  const specialFoodHeadersFiltered: FoodHeader[] = specialFoodHeaders.reduce((acc, current) => {
+  const recipeFoodHeadersFiltered: FoodHeader[] = recipeFoodHeaders.reduce((acc, current) => {
     const temp = acc.find((item) => item.code === current.code);
     if (!temp) {
       return acc.concat([current]);
@@ -200,7 +206,7 @@ async function matchSpecialFoods(
       return acc;
     }
   }, [] as FoodHeader[]);
-  return specialFoodHeadersFiltered;
+  return recipeFoodHeadersFiltered;
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
@@ -209,9 +215,9 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
 
   const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
-  let specialFoodsHeaders: FoodHeader[] = [];
+  let recipeFoodsHeaders: FoodHeader[] = [];
   if (interpreted.words.length > 0) {
-    specialFoodsHeaders = await matchSpecialFoods(interpreted, query);
+    recipeFoodsHeaders = await matchRecipeFoods(interpreted, query);
   }
 
   const results = localeIndex.findMatches(interpreted, 100, 100);
@@ -222,7 +228,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
     query.rankingAlgorithm,
     query.matchScoreWeight,
     logger,
-    specialFoodsHeaders
+    recipeFoodsHeaders
   );
 }
 

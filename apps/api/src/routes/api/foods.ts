@@ -17,7 +17,7 @@ export default () => {
   router.get('/:localeId/recipes', wrapAsync(foodSearchController.recipe));
   router.get('/:localeId/category', wrapAsync(foodSearchController.category));
   router.get('/:localeId/split-description', wrapAsync(foodSearchController.splitDescription));
-  router.get('/:localeId/special-food', wrapAsync(foodSearchController.specialFood));
+  router.get('/:localeId/recipe-food', wrapAsync(foodSearchController.recipeFood));
 
   // Food data
   router.get('/:localeId/:code', wrapAsync(foodController.entry));

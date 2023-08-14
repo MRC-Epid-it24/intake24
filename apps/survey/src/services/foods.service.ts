@@ -1,5 +1,5 @@
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { SpecialFood } from '@intake24/common/types';
+import type { RecipeFood } from '@intake24/common/types';
 import type { FoodSearchResponse, UserFoodData } from '@intake24/common/types/http';
 
 import http from './http.service';
@@ -27,8 +27,8 @@ export default {
     return data;
   },
 
-  getSpecialFood: async (localeId: string, code: string): Promise<SpecialFood> => {
-    const { data } = await http.get<SpecialFood>(`foods/${localeId}/special-food`, {
+  getRecipeFood: async (localeId: string, code: string): Promise<RecipeFood> => {
+    const { data } = await http.get<RecipeFood>(`foods/${localeId}/recipe-food`, {
       params: { code },
     });
     return data;

@@ -39,10 +39,10 @@ import NutrientTypeInKcal from './nutrient-type-in-kcal';
 import FoodsNutrientUnit from './nutrient-unit';
 import PhysicalActivityLevel from './physical-activity-level';
 import ProcessedImage from './processed-image';
+import RecipeFoods from './recipe-foods';
+import RecipeFoodsSteps from './recipe-foods-steps';
 import SourceImage from './source-image';
 import SourceImageKeyword from './source-image-keyword';
-import SpecialFoods from './special-foods';
-import SpecialFoodsSteps from './special-foods-steps';
 import SplitList from './split-list';
 import SplitWord from './split-word';
 import StandardUnit from './standard-unit';
@@ -130,14 +130,14 @@ export { default as PhysicalActivityLevel } from './physical-activity-level';
 export * from './physical-activity-level';
 export { default as ProcessedImage } from './processed-image';
 export * from './processed-image';
+export { default as RecipeFoods } from './recipe-foods';
+export * from './recipe-foods';
+export { default as RecipeFoodsSteps } from './recipe-foods-steps';
+export * from './recipe-foods-steps';
 export { default as SourceImage } from './source-image';
 export * from './source-image';
 export { default as SourceImageKeyword } from './source-image-keyword';
 export * from './source-image-keyword';
-export { default as SpecialFoods } from './special-foods';
-export * from './special-foods';
-export { default as SpecialFoodsSteps } from './special-foods-steps';
-export * from './special-foods-steps';
 export { default as SplitList } from './split-list';
 export * from './split-list';
 export { default as SplitWord } from './split-word';
@@ -195,6 +195,6 @@ export const foods = {
   SplitWord,
   StandardUnit,
   SynonymSet,
-  SpecialFoods,
-  SpecialFoodsSteps,
+  RecipeFoods,
+  RecipeFoodsSteps,
 };

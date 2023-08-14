@@ -1,7 +1,7 @@
 import { browse, entry } from '../generic';
 import copy from './copy';
 import fixedFoodRanking from './fixed-food-ranking';
-import specialFoods from './special-foods';
+import recipeFoods from './recipe-foods';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import store from './store';
@@ -15,7 +15,7 @@ export default {
   store,
   update,
   copy,
-  specialFoods,
+  recipeFoods,
   splitLists,
   splitWords,
   synonymLists,

@@ -1,9 +1,11 @@
 import { Worker } from 'node:worker_threads';
 
-import type { SpecialFood } from '@intake24/common/types/foods';
+import { Op } from 'sequelize';
+
+import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
-import { SpecialFoods } from '@intake24/db/models';
+import { RecipeFoods } from '@intake24/db/models';
 
 let indexReady = false;
 let queryIdCounter = 0;
@@ -19,10 +21,10 @@ interface SearchResponse {
   error: Error;
 }
 
-interface SpecialFoodResponse {
+interface RecipeFoodResponse {
   specialQueryId: number;
   success: boolean;
-  result: SpecialFood;
+  result: RecipeFood;
   error: Error;
 }
 
@@ -56,21 +58,27 @@ export default {
    * get special food and its steps by given locale and code
    * @param localeId - locale Code of the food index
    * @param code - code of the special food
-   * @returns { SpecialFood }
+   * @returns { RecipeFood }
    */
-  async getSpecialFood(localeId: string, code: string): Promise<SpecialFoods> {
+  async getRecipeFood(localeId: string, code: string): Promise<RecipeFoods> {
     if (indexReady) {
       specialQueryIdCounter++;
 
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
-      const result = await SpecialFoods.findOne({
+      const result = await RecipeFoods.findOne({
         where: { localeId, code },
-        attributes: ['code', 'name', 'localeId', 'specialWords', 'synonyms'],
-        include: {
-          association: 'steps',
-          attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
-          order: ['order', 'ASC'],
-        },
+        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id'],
+        include: [
+          {
+            association: 'steps',
+            attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
+            order: ['order', 'ASC'],
+          },
+          {
+            association: 'synonyms',
+            attributes: ['synonyms'],
+          },
+        ],
       });
 
       if (result) {

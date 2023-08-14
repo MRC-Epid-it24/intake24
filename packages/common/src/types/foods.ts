@@ -10,25 +10,25 @@ export type UseInRecipeType = (typeof useInRecipeTypes)[keyof typeof useInRecipe
 
 // Special Foods | Foods Builder section
 
-export type SpecialFood = {
+export type RecipeFood = {
   code: string;
   name: string;
-  specialWords: string;
-  steps: SpecialFoodStepsType[];
+  recipeWord: string;
+  steps: RecipeFoodStepsType[];
 };
 
-export type SpecialFoodsHeader = {
+export type RecipeFoodsHeader = {
   code: string;
   description: string;
   name: string;
   synonyms: Set<string>;
-  specialWords: string;
+  recipeWord: string;
 };
 
-export type SpecialFoodStepsType = {
+export type RecipeFoodStepsType = {
   order: number;
   code: string;
-  specialFoodsCode: string;
+  recipeFoodsCode: string;
   name: RequiredLocaleTranslation;
   description: RequiredLocaleTranslation;
   localeId: string;

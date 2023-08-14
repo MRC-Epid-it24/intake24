@@ -1,5 +1,5 @@
 import type { MatchStrategy, PhoneticEncoder } from '@intake24/api/food-index/dictionary';
-import type { SpecialFoodsHeader } from '@intake24/common/types';
+import type { RecipeFoodsHeader } from '@intake24/common/types';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
 import {
@@ -21,7 +21,7 @@ export interface PhraseWithKey<K> {
   key: K;
 }
 
-export type SpecialFoodTuple = [key: string, entry: SpecialFoodsHeader];
+export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
 
 export interface LanguageBackend {
   indexIgnore: string[];
@@ -71,7 +71,7 @@ export class PhraseIndex<K> {
 
   readonly wordIndex: Map<string, Array<[number, number]>>;
 
-  readonly specialFoodsList: SpecialFoodTuple[];
+  readonly recipeFoodsList: RecipeFoodTuple[];
 
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
@@ -291,13 +291,13 @@ export class PhraseIndex<K> {
     phrases: Array<PhraseWithKey<K>>,
     wordOps: LanguageBackend,
     synonymSets: Array<Set<string>>,
-    specialFoodsSynonymsSet: Array<Set<string>>,
-    specialFoodsList: SpecialFoodTuple[]
+    recipeFoodsSynonymsSet: Array<Set<string>>,
+    recipeFoodsList: RecipeFoodTuple[]
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
     this.wordIndex = new Map<string, Array<[number, number]>>();
-    this.specialFoodsList = specialFoodsList;
+    this.recipeFoodsList = recipeFoodsList;
 
     const dictionaryWords = new Set<string>();
 
@@ -318,7 +318,7 @@ export class PhraseIndex<K> {
       dictionaryWords,
       wordOps.phoneticEncoder,
       synonymSets,
-      specialFoodsSynonymsSet
+      recipeFoodsSynonymsSet
     );
   }
 }

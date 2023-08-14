@@ -55,7 +55,7 @@ export default (container: AwilixContainer): void => {
 
     // Locales
     localeController: asFunction(controllers.admin.locales.locale),
-    localeSpecialFoodsController: asFunction(controllers.admin.locales.specialFoods),
+    localeRecipeFoodsController: asFunction(controllers.admin.locales.recipeFoods),
     localeSplitListController: asFunction(controllers.admin.locales.splitList),
     localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),

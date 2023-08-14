@@ -7,20 +7,20 @@ export default validate(
     .custom((value: any[]) => {
       if (
         value.some(
-          ({ id, code, localeId, name, specialWords, synonyms }) =>
+          ({ id, code, localeId, name, recipeWord, synonyms }) =>
             (typeof id !== 'undefined' && typeof id !== 'string') ||
             typeof code !== 'string' ||
             typeof localeId !== 'string' ||
             typeof name !== 'string' ||
-            typeof specialWords !== 'string' ||
+            typeof recipeWord !== 'string' ||
             typeof synonyms !== 'string' ||
             typeof name !== 'string' ||
-            typeof specialWords !== 'string'
+            typeof recipeWord !== 'string'
         )
       )
         return false;
 
       return true;
     })
-    .withMessage('Invalid Special Foods object')
+    .withMessage('Invalid Recipe Foods object')
 );

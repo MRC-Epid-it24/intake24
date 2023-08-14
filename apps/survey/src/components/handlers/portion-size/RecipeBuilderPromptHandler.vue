@@ -2,7 +2,7 @@
   <recipe-builder-prompt
     v-bind="{
       food: recipeBuilder(),
-      specialFood,
+      recipeFood,
       recipeBuilder,
       meal,
       initialState: state,
@@ -42,10 +42,10 @@ export default defineComponent({
     const { recipeBuilder } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
-    const specialFood = recipeBuilder().template;
+    const recipeFood = recipeBuilder().template;
 
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
-      recipe: specialFood,
+      recipe: recipeFood,
       panel: 0,
       finishedSteps: [],
       steps: [],
@@ -72,7 +72,7 @@ export default defineComponent({
       emit('action', type, id);
     };
 
-    return { recipeBuilder, specialFood, meal, state, update, action };
+    return { recipeBuilder, recipeFood, meal, state, update, action };
   },
 });
 </script>

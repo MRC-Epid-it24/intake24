@@ -1,9 +1,9 @@
 module.exports = {
   up: async (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      // Create Special Foods Table and Special_Foods Steps Table and Special_Foods <-> Category <-> Foods Table)
+      // Create Recipe Foods Table and Recipe_Foods Steps Table and Recipe_Foods <-> Category <-> Foods Table)
       await queryInterface.createTable(
-        'special_foods',
+        'recipe_foods',
         {
           id: {
             allowNull: false,
@@ -13,7 +13,7 @@ module.exports = {
           },
           code: {
             allowNull: false,
-            unique: true,
+            unique: false,
             type: Sequelize.STRING(16),
           },
           name: {
@@ -24,13 +24,13 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING(16),
           },
-          special_words: {
+          recipe_word: {
             allowNull: false,
             type: Sequelize.STRING(512),
           },
-          synonyms: {
-            allowNull: false,
-            type: Sequelize.STRING(512),
+          synonyms_id: {
+            allowNull: true,
+            type: Sequelize.BIGINT,
           },
           created_at: {
             allowNull: false,
@@ -42,16 +42,12 @@ module.exports = {
             defaultValue: Sequelize.NOW,
             type: Sequelize.DATE,
           },
-          owner_id: {
-            allowNull: true,
-            type: Sequelize.BIGINT,
-          },
         },
         { transaction }
       );
 
       await queryInterface.createTable(
-        'special_foods_steps',
+        'recipe_foods_steps',
         {
           id: {
             allowNull: false,
@@ -64,7 +60,7 @@ module.exports = {
             unique: true,
             type: Sequelize.STRING(16),
           },
-          special_foods_id: {
+          recipe_foods_id: {
             allowNull: false,
             type: Sequelize.BIGINT,
           },
@@ -100,29 +96,25 @@ module.exports = {
             defaultValue: Sequelize.NOW,
             type: Sequelize.DATE,
           },
-          owner_id: {
-            allowNull: true,
-            type: Sequelize.BIGINT,
-          },
         },
         { transaction }
       );
 
       // Add Defaults for timestamps
       await queryInterface.sequelize.query(
-        `ALTER TABLE special_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+        `ALTER TABLE recipe_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
         { transaction }
       );
 
       await queryInterface.sequelize.query(
-        `ALTER TABLE special_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+        `ALTER TABLE recipe_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
         { transaction }
       );
 
       // Add Indexes and FKs
-      await queryInterface.addConstraint('special_foods', {
+      await queryInterface.addConstraint('recipe_foods', {
         fields: ['locale_id'],
-        name: 'special_foods_locale_id_fk',
+        name: 'recipe_foods_locale_id_fk',
         type: 'foreign key',
         references: {
           table: 'locales',
@@ -133,12 +125,25 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('special_foods_steps', {
-        fields: ['special_foods_id'],
-        name: 'special_foods_id_fk',
+      await queryInterface.addConstraint('recipe_foods', {
+        fields: ['synonyms_id'],
+        name: 'recipe_foods_synonyms_fk',
         type: 'foreign key',
         references: {
-          table: 'special_foods',
+          table: 'synonym_sets',
+          field: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
+        transaction,
+      });
+
+      await queryInterface.addConstraint('recipe_foods_steps', {
+        fields: ['recipe_foods_id'],
+        name: 'recipe_foods_id_fk',
+        type: 'foreign key',
+        references: {
+          table: 'recipe_foods',
           field: 'id',
         },
         onUpdate: 'cascade',
@@ -146,7 +151,7 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('special_foods_steps', {
+      await queryInterface.addConstraint('recipe_foods_steps', {
         fields: ['category_code'],
         name: 'category_foods_code_fk',
         type: 'foreign key',
@@ -159,9 +164,9 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addConstraint('special_foods_steps', {
+      await queryInterface.addConstraint('recipe_foods_steps', {
         fields: ['locale_id'],
-        name: 'special_foods_steps_locale_id_fk',
+        name: 'recipe_foods_steps_locale_id_fk',
         type: 'foreign key',
         references: {
           table: 'locales',
@@ -172,15 +177,15 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addIndex('special_foods', ['code'], {
-        name: 'special_foods_idx',
+      await queryInterface.addIndex('recipe_foods', ['code'], {
+        name: 'recipe_foods_idx',
         indexType: 'btree',
         transaction,
       });
 
-      await queryInterface.addIndex('special_foods_steps', ['code'], {
-        name: 'special_foods_steps_idx',
-        fields: ['code', 'special_foods_id'],
+      await queryInterface.addIndex('recipe_foods_steps', ['code'], {
+        name: 'recipe_foods_steps_idx',
+        fields: ['code', 'recipe_foods_id'],
         indexType: 'btree',
         transaction,
       });
@@ -188,7 +193,7 @@ module.exports = {
 
   down: (queryInterface, Sequelize) =>
     queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.dropTable('special_foods_steps', { transaction });
-      await queryInterface.dropTable('special_foods', { transaction });
+      await queryInterface.dropTable('recipe_foods_steps', { transaction });
+      await queryInterface.dropTable('recipe_foods', { transaction });
     }),
 };

@@ -19,7 +19,7 @@ interface SearchQuery {
   recipe?: string;
 }
 
-interface SpecialFoodQuery {
+interface RecipeFoodQuery {
   code: string;
 }
 
@@ -94,16 +94,16 @@ const foodSearchController = ({
     res.json();
   };
 
-  const specialFood = async (
-    req: Request<SearchParams, unknown, unknown, SpecialFoodQuery>,
+  const recipeFood = async (
+    req: Request<SearchParams, unknown, unknown, RecipeFoodQuery>,
     res: Response
   ): Promise<void> => {
     const { localeId } = req.params;
     const { code } = req.query;
     // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
-    const result = await foodIndex.getSpecialFood(localeId, code);
+    const result = await foodIndex.getRecipeFood(localeId, code);
 
-    logger.debug('Special food result', JSON.stringify(result.steps));
+    logger.debug('Recipe food result', JSON.stringify(result.steps));
     res.json(result);
     res.json();
   };
@@ -113,7 +113,7 @@ const foodSearchController = ({
     recipe,
     category,
     splitDescription,
-    specialFood,
+    recipeFood,
   };
 };
 
