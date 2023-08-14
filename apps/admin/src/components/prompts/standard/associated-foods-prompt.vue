@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <v-tab-item key="options">
-      <v-row>
-        <v-col cols="12">
-          <v-switch
-            hide-details="auto"
-            :input-value="multiple"
-            :label="$t('survey-schemes.prompts.associated-foods-prompt.multiple')"
-            @change="update('multiple', $event)"
-          ></v-switch>
-        </v-col>
-      </v-row>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="options">
+    <v-row>
+      <v-col cols="12">
+        <v-switch
+          hide-details="auto"
+          :input-value="multiple"
+          :label="$t('survey-schemes.prompts.associated-foods-prompt.multiple')"
+          @change="update('multiple', $event)"
+        ></v-switch>
+      </v-col>
+    </v-row>
+  </v-tab-item>
 </template>
 
 <script lang="ts">

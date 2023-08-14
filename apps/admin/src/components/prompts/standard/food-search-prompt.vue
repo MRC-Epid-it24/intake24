@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <v-tab-item key="options">
-      <v-row>
-        <v-col cols="12">
-          <v-switch
-            hide-details="auto"
-            :input-value="allowBrowsing"
-            :label="$t('survey-schemes.prompts.food-search-prompt.allowBrowsing')"
-            @change="update('allowBrowsing', $event)"
-          ></v-switch>
-        </v-col>
-        <v-col cols="12">
-          <v-switch
-            hide-details="auto"
-            :input-value="dualLanguage"
-            :label="$t('survey-schemes.prompts.food-search-prompt.dualLanguage')"
-            @change="update('dualLanguage', $event)"
-          ></v-switch>
-        </v-col>
-      </v-row>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="options">
+    <v-row>
+      <v-col cols="12">
+        <v-switch
+          hide-details="auto"
+          :input-value="allowBrowsing"
+          :label="$t('survey-schemes.prompts.food-search-prompt.allowBrowsing')"
+          @change="update('allowBrowsing', $event)"
+        ></v-switch>
+      </v-col>
+      <v-col cols="12">
+        <v-switch
+          hide-details="auto"
+          :input-value="dualLanguage"
+          :label="$t('survey-schemes.prompts.food-search-prompt.dualLanguage')"
+          @change="update('dualLanguage', $event)"
+        ></v-switch>
+      </v-col>
+    </v-row>
+  </v-tab-item>
 </template>
 
 <script lang="ts">

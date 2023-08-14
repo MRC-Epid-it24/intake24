@@ -112,6 +112,10 @@
             ></prompt-content>
             <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
             <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
+            <prompt-validation
+              v-if="'validation' in dialog.prompt"
+              v-bind.sync="dialog.prompt.validation"
+            ></prompt-validation>
             <component
               :is="dialog.prompt.component"
               v-bind.sync="dialog.prompt"
@@ -153,7 +157,13 @@ import {
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
-import { PromptActions, PromptConditions, PromptContent, PromptJson } from './partials';
+import {
+  PromptActions,
+  PromptConditions,
+  PromptContent,
+  PromptJson,
+  PromptValidation,
+} from './partials';
 import PromptTypeSelector from './prompt-type-selector.vue';
 
 export type EditPrompt = Prompt & {
@@ -175,6 +185,7 @@ export default defineComponent({
     PromptContent,
     PromptJson,
     PromptTypeSelector,
+    PromptValidation,
     ...customPrompts,
     ...standardPrompts,
     ...portionSizePrompts,

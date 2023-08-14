@@ -1,29 +1,27 @@
 <template>
-  <div>
-    <v-tab-item key="options">
-      <v-row class="mb-3">
-        <v-col cols="12" md="6">
-          <v-switch
-            hide-details="auto"
-            :input-value="badges"
-            :label="$t('survey-schemes.prompts.badges')"
-            @change="update('badges', $event)"
-          >
-          </v-switch>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-select
-            hide-details="auto"
-            :items="orientations"
-            :label="$t('survey-schemes.prompts.orientation._')"
-            outlined
-            :value="orientation"
-            @change="update('orientation', $event)"
-          ></v-select>
-        </v-col>
-      </v-row>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="options">
+    <v-row class="mb-3">
+      <v-col cols="12" md="6">
+        <v-switch
+          hide-details="auto"
+          :input-value="badges"
+          :label="$t('survey-schemes.prompts.badges')"
+          @change="update('badges', $event)"
+        >
+        </v-switch>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-select
+          hide-details="auto"
+          :items="orientations"
+          :label="$t('survey-schemes.prompts.orientation._')"
+          outlined
+          :value="orientation"
+          @change="update('orientation', $event)"
+        ></v-select>
+      </v-col>
+    </v-row>
+  </v-tab-item>
 </template>
 
 <script lang="ts">

@@ -1,56 +1,54 @@
 <template>
-  <div>
-    <v-tab-item key="options">
-      <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
-      <v-card-subtitle>
-        {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
-      </v-card-subtitle>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              hide-details="auto"
-              :hint="$t('survey-schemes.prompts.redirect-prompt.url.hint')"
-              :label="$t('survey-schemes.prompts.redirect-prompt.url._')"
-              name="url"
-              outlined
-              persistent-hint
-              :value="url"
-              @input="update('url', $event)"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-combobox
-              hide-details="auto"
-              :hint="$t('survey-schemes.prompts.redirect-prompt.identifier.hint')"
-              :items="identifiers"
-              :label="$t('survey-schemes.prompts.redirect-prompt.identifier._')"
-              outlined
-              persistent-hint
-              :value="identifier"
-              @change="updateIdentifier"
-            ></v-combobox>
-          </v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.timer.title') }}</v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              hide-details="auto"
-              :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
-              name="timer"
-              outlined
-              :rules="timerRules"
-              :value="timer"
-              @input="updateTimerValue"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="options">
+    <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
+    <v-card-subtitle>
+      {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
+    </v-card-subtitle>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-text-field
+            hide-details="auto"
+            :hint="$t('survey-schemes.prompts.redirect-prompt.url.hint')"
+            :label="$t('survey-schemes.prompts.redirect-prompt.url._')"
+            name="url"
+            outlined
+            persistent-hint
+            :value="url"
+            @input="update('url', $event)"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-combobox
+            hide-details="auto"
+            :hint="$t('survey-schemes.prompts.redirect-prompt.identifier.hint')"
+            :items="identifiers"
+            :label="$t('survey-schemes.prompts.redirect-prompt.identifier._')"
+            outlined
+            persistent-hint
+            :value="identifier"
+            @change="updateIdentifier"
+          ></v-combobox>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.timer.title') }}</v-card-title>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-text-field
+            hide-details="auto"
+            :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
+            name="timer"
+            outlined
+            :rules="timerRules"
+            :value="timer"
+            @input="updateTimerValue"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-tab-item>
 </template>
 
 <script lang="ts">
