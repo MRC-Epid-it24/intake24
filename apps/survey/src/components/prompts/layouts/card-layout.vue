@@ -56,6 +56,7 @@
         grow
         :value="navTab"
       >
+        <meal-list-mobile :meals="meals" @action="action"></meal-list-mobile>
         <template v-if="mobileActions.length">
           <template v-for="(item, idx) in mobileActions">
             <v-btn
@@ -89,13 +90,6 @@
               <v-icon class="pb-1">$add</v-icon>
             </v-btn>
             <v-divider vertical></v-divider>
-            <v-btn value="review" @click.stop="action('review')">
-              <span class="text-overline font-weight-medium">
-                {{ $t('recall.actions.nav.review') }}
-              </span>
-              <v-icon class="pb-1">$survey</v-icon>
-            </v-btn>
-            <v-divider vertical></v-divider>
             <v-btn
               :color="isValid ? 'secondary' : 'primary'"
               :disabled="!isValid"
@@ -117,10 +111,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { MealListMobile } from '@intake24/survey/components/layouts/meal-list';
+
 import layoutMixin from './layout-mixin';
 
 export default defineComponent({
   name: 'CardLayout',
+
+  components: { MealListMobile },
 
   mixins: [layoutMixin],
 });

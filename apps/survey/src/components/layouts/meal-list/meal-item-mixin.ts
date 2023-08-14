@@ -34,7 +34,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'meal-selected', 'action'],
+  emits: ['action'],
 
   setup(props, { emit }) {
     const { i18n, translate } = useI18n();
@@ -59,18 +59,14 @@ export default defineComponent({
       },
     ]);
 
-    const foodSelected = (foodId: number) => {
-      emit('food-selected', foodId);
-    };
-
     const mealSelected = () => {
-      emit('meal-selected', props.meal.id);
+      action('selectMeal', props.meal.id);
     };
 
     const action = (type: FoodActionType | MealActionType, id?: string) => {
       emit('action', type, id);
     };
 
-    return { action, translate, menu, mealName, mealTime, foodSelected, mealSelected };
+    return { action, translate, menu, mealName, mealTime, mealSelected };
   },
 });
