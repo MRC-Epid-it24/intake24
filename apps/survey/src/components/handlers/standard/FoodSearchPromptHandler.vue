@@ -132,7 +132,6 @@ export default defineComponent({
         customPromptAnswers,
         flags,
         linkedFoods: [],
-        associatedFoodsComplete: false,
       };
 
       this.replaceFood({ foodId: id, food: newState });

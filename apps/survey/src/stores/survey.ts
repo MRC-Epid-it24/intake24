@@ -25,6 +25,7 @@ import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/comm
 import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
+  associatedFoodPromptsComplete,
   findFood,
   findMeal,
   getEntityId,
@@ -568,7 +569,11 @@ export const useSurvey = defineStore('survey', {
 
       food.flags.push(...flags);
 
-      if (flags.includes('portion-size-method-complete')) this.saveSameAsBefore(foodId);
+      if (
+        flags.includes('portion-size-method-complete') ||
+        flags.includes('associated-foods-complete')
+      )
+        this.saveSameAsBefore(foodId);
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
@@ -612,20 +617,19 @@ export const useSurvey = defineStore('survey', {
       // TODO: check associated foods ?
       if (!this.sameAsBeforeAllowed) return;
 
-      const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
-        this.data.meals,
-        foodId
-      );
-
+      const { foodIndex, mealIndex } = getFoodIndexRequired(this.data.meals, foodId);
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
 
       if (
+        // 1) food is not encoded
         mainFood.type !== 'encoded-food' ||
+        // 2) food portion size estimation is not finished
         !isPortionSizeComplete(mainFood) ||
-        (linkedFoodIndex !== undefined &&
-          !isPortionSizeComplete(
-            this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex]
-          ))
+        // 3) associated food prompts are not finished
+        !associatedFoodPromptsComplete(mainFood) ||
+        // 4) associated foods portion size estimations are not finished
+        (mainFood.linkedFoods.length &&
+          mainFood.linkedFoods.some((item) => !isPortionSizeComplete(item)))
       )
         return;
 

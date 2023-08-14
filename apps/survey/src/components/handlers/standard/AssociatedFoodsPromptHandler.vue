@@ -92,7 +92,7 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setFoods']),
+    ...mapActions(useSurvey, ['addFoodFlag', 'updateFood', 'setFoods']),
 
     async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
@@ -234,7 +234,6 @@ export default defineComponent({
           searchTerm: 'associated food prompt',
           portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
           portionSize: null,
-          associatedFoodsComplete: false,
         };
       });
 
@@ -252,7 +251,7 @@ export default defineComponent({
         // potential circular associations.
         const linkedFoodsWithoutPrompts = linkedFoods.map((food) => ({
           ...food,
-          associatedFoodsComplete: true,
+          flags: [...new Set([...food.flags, 'associated-foods-complete'])],
         }));
 
         const parentFood = this.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
@@ -260,21 +259,12 @@ export default defineComponent({
 
         // Order of the updates is important because any changes to the linked foods will be
         // overwritten by the update to the parent food.
-        this.updateFood({
-          foodId: parentFood.id,
-          update: { linkedFoods: newLinkedFoods },
-        });
-
-        this.updateFood({
-          foodId,
-          update: { associatedFoodsComplete: true },
-        });
+        this.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
       } else {
-        this.updateFood({
-          foodId,
-          update: { associatedFoodsComplete: true, linkedFoods },
-        });
+        this.updateFood({ foodId, update: { linkedFoods } });
       }
+
+      this.addFoodFlag(foodId, 'associated-foods-complete');
 
       this.processLinkAsMain(foodIndex);
 
