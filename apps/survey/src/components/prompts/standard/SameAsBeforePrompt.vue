@@ -21,7 +21,7 @@
               <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item v-if="!sabFood.food.linkedFoods.length" class="pl-0" dense>
+          <v-list-item v-if="!linkedFoods.length" class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
@@ -30,20 +30,15 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-list v-if="sabFood.food.linkedFoods.length" class="px-4" color="grey lighten-4">
+        <v-list v-if="linkedFoods.length" class="px-4" color="grey lighten-4">
           <v-subheader>{{ promptI18n.hadWith }}</v-subheader>
           <v-divider></v-divider>
-          <v-list-item
-            v-for="linkedFood in sabFood.food.linkedFoods"
-            :key="linkedFood.id"
-            class="pl-0"
-            dense
-          >
+          <v-list-item v-for="linkedFood in linkedFoods" :key="linkedFood.id" class="pl-0" dense>
             <v-list-item-avatar class="my-auto mr-2">
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ linkedFoodInfo(linkedFood) }}</v-list-item-title>
+              <v-list-item-title>{{ linkedFood.text }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -95,7 +90,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { EncodedFood, FoodState } from '@intake24/common/types';
+import type { EncodedFood } from '@intake24/common/types';
 import type { SameAsBeforeItem } from '@intake24/survey/stores';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -128,7 +123,17 @@ export default defineComponent({
 
       if (food.portionSize?.method === 'standard-portion') return food.portionSize?.quantity;
 
-      return Math.round(food.portionSize?.servingWeight ?? 0);
+      const servingWeight = food.portionSize?.servingWeight ?? 0;
+      const linkedServingWeight =
+        (
+          food.linkedFoods.find(
+            (linkedFood) =>
+              linkedFood.type === 'encoded-food' &&
+              linkedFood.portionSize?.method === 'milk-in-a-hot-drink'
+          ) as EncodedFood | undefined
+        )?.portionSize?.servingWeight ?? 0;
+
+      return Math.round(servingWeight + linkedServingWeight);
     };
 
     const foodUnit = (food: EncodedFood) => {
@@ -143,14 +148,17 @@ export default defineComponent({
       return 'g';
     };
 
-    const linkedFoodInfo = (food: FoodState) => {
-      if (food.type === 'free-text') return food.description;
-      if (food.type === 'missing-food') return food.info?.name ?? food.searchTerm;
+    const linkedFoods = computed(() =>
+      props.sabFood.food.linkedFoods.map((food) => {
+        const { id } = food;
+        if (food.type === 'free-text') return { id, text: food.description };
+        if (food.type === 'missing-food') return { id, text: food.info?.name ?? food.searchTerm };
 
-      const amount = Math.round(foodAmount(food));
-      const unit = foodUnit(food);
-      return `${translate(food.data.localName)} (${amount} ${unit})`;
-    };
+        const amount = Math.round(foodAmount(food));
+        const unit = foodUnit(food);
+        return { id, text: `${translate(food.data.localName)} (${amount} ${unit})` };
+      })
+    );
 
     const serving = computed(() => {
       const amount = foodAmount(props.sabFood.food);
@@ -202,7 +210,7 @@ export default defineComponent({
     return {
       promptI18n,
       isValid,
-      linkedFoodInfo,
+      linkedFoods,
       translate,
     };
   },
