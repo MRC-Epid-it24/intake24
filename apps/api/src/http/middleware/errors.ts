@@ -16,7 +16,7 @@ import {
 
 export default (app: Express, { logger }: Ops): void => {
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    if (err instanceof ApplicationError) {
+    if (err instanceof ApplicationError || err instanceof SyntaxError) {
       const { message } = err;
       res.status(400).json({ message });
       return;
