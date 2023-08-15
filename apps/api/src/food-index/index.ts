@@ -1,6 +1,6 @@
 import { Worker } from 'node:worker_threads';
 
-import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
 
 let indexReady = false;
@@ -12,7 +12,7 @@ export class IndexNotReadyError extends Error {}
 interface SearchResponse {
   queryId: number;
   success: boolean;
-  results: FoodHeader[];
+  results: FoodSearchResponse;
   error: Error;
 }
 
@@ -59,7 +59,7 @@ export default {
             indexWorker.removeListener('message', listener);
 
             if (msg.success) {
-              resolve({ foods: msg.results });
+              resolve(msg.results);
             } else {
               reject(msg.error);
             }

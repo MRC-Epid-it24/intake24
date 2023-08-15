@@ -51,6 +51,7 @@ const foodSearchController = ({
       foods: items.foods.filter((header) =>
         acceptForQuery(recipe, attrs[header.code]?.useInRecipes)
       ),
+      categories: items.categories,
     };
   }
 

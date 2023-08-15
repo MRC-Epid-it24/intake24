@@ -4,14 +4,15 @@ import { parentPort as parentPortNullable, workerData } from 'node:worker_thread
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
-import type { FoodHeader } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
-import { rankSearchResults } from '@intake24/api/food-index/ranking/ranking';
+import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import {
+  CategoryLocal,
   databaseLogQuery,
   FoodLocal,
   FoodLocalList,
@@ -45,8 +46,13 @@ const systemDb = new SequelizeTS({
       : false,
 });
 
+interface LocalFoodIndex {
+  foodIndex: PhraseIndex<string>;
+  categoryIndex: PhraseIndex<string>;
+}
+
 interface FoodIndex {
-  [key: string]: PhraseIndex<string>;
+  [key: string]: LocalFoodIndex;
 }
 
 const foodIndex: FoodIndex = {};
@@ -73,17 +79,30 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
   return row.foodIndexLanguageBackendId;
 }
 
-async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string>> {
+async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   const foodList = await FoodLocalList.findAll({ attributes: ['foodCode'], where: { localeId } });
 
   const foodCodes = foodList.map((row) => row.foodCode);
-  const [localFoods, synonymSets, languageBackendId] = await Promise.all([
+
+  // FIXME: requests should be limited to a constant amount of rows (paginated)
+
+  const [localFoods, localCategories, synonymSets, languageBackendId] = await Promise.all([
     FoodLocal.findAll({
       where: { foodCode: foodCodes, localeId },
       include: {
         required: true,
         association: 'main',
         attributes: ['code'],
+        include: [{ association: 'parentCategories', where: { isHidden: false } }],
+      },
+    }),
+    CategoryLocal.findAll({
+      where: { localeId },
+      include: {
+        required: true,
+        association: 'main',
+        attributes: ['code'],
+        where: { isHidden: false },
         include: [{ association: 'parentCategories', where: { isHidden: false } }],
       },
     }),
@@ -106,29 +125,64 @@ async function buildIndexForLocale(localeId: string): Promise<PhraseIndex<string
     foodDescriptions.push({ phrase: food.name, key: food.foodCode });
   }
 
-  return new PhraseIndex<string>(
+  const categoryDescriptions = new Array<PhraseWithKey<string>>();
+
+  for (const category of localCategories) {
+    if (!category.name) continue;
+
+    categoryDescriptions.push({ phrase: category.name, key: category.categoryCode });
+  }
+
+  const foodIndex = new PhraseIndex<string>(
     foodDescriptions,
     LanguageBackends[languageBackendId],
     synonymSets
   );
+
+  const categoryIndex = new PhraseIndex<string>(
+    categoryDescriptions,
+    LanguageBackends[languageBackendId],
+    synonymSets
+  );
+
+  return {
+    foodIndex,
+    categoryIndex,
+  };
 }
 
-async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
+async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   const localeIndex = foodIndex[query.localeId];
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
 
-  const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
+  const foodInterpretation = localeIndex.foodIndex.interpretPhrase(
+    query.description,
+    'match-fewer'
+  );
+  const foodResults = localeIndex.foodIndex.findMatches(foodInterpretation, 100, 100);
 
-  const results = localeIndex.findMatches(interpreted, 100, 100);
+  const categoryInterpretation = localeIndex.categoryIndex.interpretPhrase(
+    query.description,
+    'match-fewer'
+  );
 
-  return rankSearchResults(
-    results,
+  const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
+
+  const foods = await rankFoodResults(
+    foodResults,
     query.localeId,
     query.rankingAlgorithm,
     query.matchScoreWeight,
     logger
   );
+
+  const categories = rankCategoryResults(categoryResults);
+
+  return {
+    foods,
+    categories,
+  };
 }
 
 const cleanUpIndexBuilder = async () => Promise.all([foodsDb.close(), systemDb.close()]);
