@@ -8,7 +8,7 @@
       </i18n>
       <v-card class="mb-4" flat outlined tile>
         <v-list color="grey lighten-5 py-0" subheader>
-          <v-subheader>{{ i18n.split }}</v-subheader>
+          <v-subheader>{{ promptI18n.split }}</v-subheader>
           <template v-for="(suggestion, idx) in suggestions">
             <v-list-item :key="suggestion" link>
               <v-list-item-icon>
@@ -22,8 +22,8 @@
           </template>
         </v-list>
       </v-card>
-      <p class="font-italic">{{ i18n.separateSuggestion }}</p>
-      <p class="font-italic">{{ i18n.singleSuggestion }}</p>
+      <p class="font-italic">{{ promptI18n.separateSuggestion }}</p>
+      <p class="font-italic">{{ promptI18n.singleSuggestion }}</p>
     </v-card-text>
     <template #actions>
       <v-btn
@@ -31,35 +31,35 @@
         color="secondary"
         large
         text
-        :title="i18n.separate"
+        :title="promptI18n.separate"
         @click.stop="action('separate')"
       >
         <v-icon left>fas fa-arrows-left-right-to-line</v-icon>
-        {{ i18n.separate }}
+        {{ promptI18n.separate }}
       </v-btn>
       <v-btn
         class="px-4"
         color="secondary"
         large
         text
-        :title="i18n.single"
+        :title="promptI18n.single"
         @click.stop="action('single')"
       >
         <v-icon left>fas fa-arrow-up-long</v-icon>
-        {{ i18n.single }}
+        {{ promptI18n.single }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="i18n.separate" value="separate" @click.stop="action('separate')">
+      <v-btn :title="promptI18n.separate" value="separate" @click.stop="action('separate')">
         <span class="text-overline font-weight-medium">
-          {{ i18n.separate }}
+          {{ promptI18n.separate }}
         </span>
         <v-icon class="pb-1">fas fa-arrows-left-right-to-line</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn :title="i18n.single" value="single" @click.stop="action('single')">
+      <v-btn :title="promptI18n.single" value="single" @click.stop="action('single')">
         <span class="text-overline font-weight-medium">
-          {{ i18n.single }}
+          {{ promptI18n.single }}
         </span>
         <v-icon class="pb-1">fas fa-arrow-up-long</v-icon>
       </v-btn>
@@ -95,7 +95,7 @@ export default defineComponent({
   setup(props) {
     const { translatePrompt } = usePromptUtils(props);
 
-    const i18n = computed(() =>
+    const promptI18n = computed(() =>
       translatePrompt([
         'searchTerm',
         'split',
@@ -111,7 +111,7 @@ export default defineComponent({
     const isValid = computed(() => true);
 
     return {
-      i18n,
+      promptI18n,
       isValid,
     };
   },

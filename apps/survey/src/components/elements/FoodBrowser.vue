@@ -12,9 +12,9 @@
           clearable
           flat
           hide-details
-          :label="i18n.search"
+          :label="promptI18n.search"
           outlined
-          :placeholder="i18n.search"
+          :placeholder="promptI18n.search"
           prepend-inner-icon="$search"
           :rounded="dialog"
           @focus="openInDialog"
@@ -32,16 +32,16 @@
           </v-card>
           <v-btn v-if="navigationHistory.length > 1" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
-            {{ i18n.back }}
+            {{ promptI18n.back }}
           </v-btn>
           <v-subheader v-else class="font-weight-bold">
-            {{ i18n.browse }}
+            {{ promptI18n.browse }}
           </v-subheader>
           <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
             :contents="currentCategoryContents"
-            :i18n="i18n"
+            :i18n="promptI18n"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           ></category-contents-view>
@@ -51,7 +51,7 @@
           <category-contents-view
             v-if="!requestInProgress"
             :contents="searchContents"
-            :i18n="i18n"
+            :i18n="promptI18n"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           ></category-contents-view>
@@ -64,27 +64,27 @@
           :disabled="missingDialog"
           large
           outlined
-          :title="i18n.browse"
+          :title="promptI18n.browse"
           @click.stop="searchTerm = ''"
         >
-          {{ i18n.browse }}
+          {{ promptI18n.browse }}
         </v-btn>
         <v-btn
           color="secondary"
           :disabled="missingDialog"
           large
           outlined
-          :title="i18n['missing.label']"
+          :title="promptI18n['missing.label']"
           @click.stop="openMissingDialog"
         >
-          {{ i18n['missing.label'] }}
+          {{ promptI18n['missing.label'] }}
         </v-btn>
       </div>
     </component>
     <missing-food-panel
       v-model="missingDialog"
       :class="{ 'mt-4': isMobile }"
-      :i18n="i18n"
+      :i18n="promptI18n"
       @cancel="closeMissingDialog"
       @confirm="foodMissing"
     ></missing-food-panel>
@@ -150,7 +150,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { translatePrompt, type } = usePromptUtils(props);
 
-    const i18n = computed(() => {
+    const promptI18n = computed(() => {
       return {
         ...translatePrompt(
           [
@@ -225,7 +225,7 @@ export default defineComponent({
     const searchResults = ref<FoodHeader[]>([]);
     const rootHeader = computed(() => ({
       code: props.rootCategory ?? '',
-      name: props.rootCategory ?? i18n.value.root,
+      name: props.rootCategory ?? promptI18n.value.root,
     }));
 
     const searchContents = computed<CategoryContents>(() => ({
@@ -385,7 +385,7 @@ export default defineComponent({
       navigationHistory,
       retryCode,
       currentCategoryContents,
-      i18n,
+      promptI18n,
       requestInProgress,
       requestFailed,
       tab,

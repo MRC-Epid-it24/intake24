@@ -1,7 +1,7 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4 pt-4" v-html="i18n.description"></div>
+      <div class="px-4 pt-4" v-html="promptI18n.description"></div>
     </template>
     <v-card-text class="pt-2">
       <v-row>
@@ -13,7 +13,7 @@
             class="meal-add-prompt__combobox"
             clearable
             :items="defaultMeals"
-            :label="i18n.label"
+            :label="promptI18n.label"
             outlined
             @change="update"
           >
@@ -28,40 +28,40 @@
         :disabled="!hasMeals"
         large
         text
-        :title="i18n.no"
+        :title="promptI18n.no"
         @click.stop="action('cancel')"
       >
         <v-icon left>$cancel</v-icon>
-        {{ i18n.no }}
+        {{ promptI18n.no }}
       </v-btn>
       <v-btn
         class="px-4"
         color="secondary"
         :disabled="!isValid"
         large
-        :title="i18n.yes"
+        :title="promptI18n.yes"
         @click="action('next')"
       >
         <v-icon left>$add</v-icon>
-        {{ i18n.yes }}
+        {{ promptI18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :disabled="!hasMeals" :title="i18n.no" value="cancel">
+      <v-btn :disabled="!hasMeals" :title="promptI18n.no" value="cancel">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
-          {{ i18n.no }}
+          {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-btn
         color="secondary"
         :disabled="!isValid"
-        :title="i18n.yes"
+        :title="promptI18n.yes"
         value="next"
         @click="action('next')"
       >
         <span class="text-overline font-weight-medium">
-          {{ i18n.yes }}
+          {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -100,8 +100,8 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props, { emit }) {
-    const { translate } = useI18n();
-    const { type } = usePromptUtils(props);
+    const { i18n, translatePath } = useI18n();
+    const { params, type } = usePromptUtils(props);
 
     const currentValue = ref<string | undefined>(undefined);
 
@@ -109,23 +109,12 @@ export default defineComponent({
       () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`
     );
 
-    const i18n = computed(() => {
-      const {
-        prompt: { i18n },
-      } = props;
-
-      return {
-        no: translate(i18n.no, { path: `prompts.${type.value}.no` }),
-        yes: translate(i18n.yes, { path: `prompts.${type.value}.yes` }),
-        description: translate(i18n.description, {
-          path: `${i18nPrefix.value}.description`,
-          sanitize: true,
-        }),
-        label: translate(i18n.label, {
-          path: `${i18nPrefix.value}.label`,
-        }),
-      };
-    });
+    const promptI18n = computed(() => ({
+      no: i18n.t(`prompts.${type.value}.no`),
+      yes: i18n.t(`prompts.${type.value}.yes`),
+      description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
+      label: i18n.t(`${i18nPrefix.value}.label`),
+    }));
 
     const isValid = computed(() => !!currentValue.value);
 
@@ -133,7 +122,7 @@ export default defineComponent({
       emit('update', { state: currentValue.value });
     };
 
-    return { currentValue, i18n, isValid, update };
+    return { currentValue, promptI18n, isValid, update };
   },
 });
 </script>

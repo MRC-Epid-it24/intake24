@@ -16,13 +16,13 @@
               @change="onConfirmStateChanged(index)"
             >
               <v-radio
-                :label="i18n.no"
+                :label="promptI18n.no"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
                 :value="false"
               ></v-radio>
               <v-radio
-                :label="i18n.yes"
+                :label="promptI18n.yes"
                 off-icon="fa-regular fa-circle"
                 on-icon="$yes"
                 :value="true"
@@ -58,15 +58,15 @@
                         <v-btn
                           color="secondary lighten-1"
                           depressed
-                          :title="i18n['select.different']"
+                          :title="promptI18n['select.different']"
                           @click="replaceFood(index, foodIndex)"
                         >
                           <v-icon left>$edit</v-icon>
-                          {{ i18n['select.different'] }}
+                          {{ promptI18n['select.different'] }}
                         </v-btn>
                         <confirm-dialog
                           v-if="allowMultiple"
-                          :label="i18n['select.remove']"
+                          :label="promptI18n['select.remove']"
                           @confirm="removeFood(index, foodIndex)"
                         >
                           <template #activator="{ on, attrs }">
@@ -75,11 +75,11 @@
                               class="ml-2"
                               color="secondary lighten-1"
                               depressed
-                              :title="i18n['select.remove']"
+                              :title="promptI18n['select.remove']"
                               v-on="on"
                             >
                               <v-icon left>$delete</v-icon>
-                              {{ i18n['select.remove'] }}
+                              {{ promptI18n['select.remove'] }}
                             </v-btn>
                           </template>
                           {{
@@ -99,7 +99,7 @@
           <!-- Additional food confirmation -->
           <v-expand-transition>
             <v-card v-show="showMoreFoodsQuestion(index)" flat>
-              <v-card-title>{{ i18n.moreFoodsQuestion }}</v-card-title>
+              <v-card-title>{{ promptI18n.moreFoodsQuestion }}</v-card-title>
               <v-card-text>
                 <v-radio-group
                   v-model="assocPrompt.additionalFoodConfirmed"
@@ -107,13 +107,13 @@
                   @change="onConfirmStateChanged(index)"
                 >
                   <v-radio
-                    :label="i18n.no"
+                    :label="promptI18n.no"
                     off-icon="fa-regular fa-circle"
                     on-icon="$yes"
                     :value="false"
                   ></v-radio>
                   <v-radio
-                    :label="i18n.yesAnother"
+                    :label="promptI18n.yesAnother"
                     off-icon="fa-regular fa-circle"
                     on-icon="$yes"
                     :value="true"
@@ -127,7 +127,7 @@
             the associated food criteria, allow to pick one of them -->
           <v-expand-transition>
             <v-card v-if="showFoodChooser(index) && availableFoods[index].length" flat>
-              <v-card-title>{{ i18n.existingFoodsTitle }}</v-card-title>
+              <v-card-title>{{ promptI18n.existingFoodsTitle }}</v-card-title>
               <v-card-text>
                 <meal-food-chooser
                   v-if="meal"
@@ -145,8 +145,8 @@
               <v-card-title>
                 {{
                   availableFoods[index].length
-                    ? i18n.databaseLookupWithExisting
-                    : i18n.databaseLookupTitle
+                    ? promptI18n.databaseLookupWithExisting
+                    : promptI18n.databaseLookupTitle
                 }}
               </v-card-title>
               <v-card-text>
@@ -225,7 +225,7 @@ export default defineComponent({
     const { translate } = useI18n();
     const { translatePrompt } = usePromptUtils(props);
 
-    const i18n = computed(() =>
+    const promptI18n = computed(() =>
       translatePrompt([
         'yes',
         'yesAnother',
@@ -274,7 +274,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     );
 
-    return { activePrompt, i18n, prompts, replaceFoodIndex, allowMultiple, translate };
+    return { activePrompt, promptI18n, prompts, replaceFoodIndex, allowMultiple, translate };
   },
 
   computed: {

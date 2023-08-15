@@ -1,8 +1,10 @@
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import set from 'lodash/set';
+import { defineComponent, onBeforeMount } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
+import type { LocaleMessageObject } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
@@ -39,41 +41,35 @@ export default defineComponent({
   emits: ['action', 'update:navTab'],
 
   setup(props) {
-    const { translate } = useI18n();
-    const { type } = usePromptUtils(props);
+    const { i18n, translate, translatePath } = useI18n();
+    const { params, type } = usePromptUtils(props);
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
     const survey = useSurvey();
 
-    const params = computed(() => {
-      const build: Record<string, string> = {};
+    const loadPromptTranslations = () => {
+      if (!Object.keys(props.prompt.i18n).length) return;
 
-      if (foodName.value) {
-        build.item = foodName.value;
-        build.food = foodName.value;
-      }
+      const locale = i18n.locale;
+      const messages = i18n.getLocaleMessage(locale);
 
-      if (mealName.value) {
-        build.mealName = mealName.value;
+      Object.entries(props.prompt.i18n).forEach(([key, value]) => {
+        if (!value[locale]) return;
 
-        if (mealTime.value) {
-          build.mealTime = mealTime.value;
+        set(messages, `prompts.${type.value}.${key}`, value[locale]);
+      });
 
-          const meal = `${mealName.value} (${mealTime.value})`;
-          build.item = meal;
-          build.meal = meal;
-        } else {
-          build.item = mealName.value;
-          build.meal = mealName.value;
-        }
-      }
+      i18n.setLocaleMessage(locale, messages);
+    };
 
-      return build;
+    onBeforeMount(() => {
+      loadPromptTranslations();
     });
 
     return {
       foodName,
       translate,
+      translatePath,
       mealName,
       mealTime,
       mealNameWithTime,
@@ -106,19 +102,9 @@ export default defineComponent({
 
     i18n() {
       return {
-        name: this.translate(this.prompt.i18n.name, {
-          path: `prompts.${this.type}.name`,
-          params: this.params,
-        }),
-        text: this.translate(this.prompt.i18n.text, {
-          path: `prompts.${this.type}.text`,
-          params: this.params,
-        }),
-        description: this.translate(this.prompt.i18n.description, {
-          path: `prompts.${this.type}.description`,
-          params: this.params,
-          sanitize: true,
-        }),
+        name: this.$t(`prompts.${this.type}.name`, this.params),
+        text: this.$t(`prompts.${this.type}.text`, this.params),
+        description: this.translatePath(`prompts.${this.type}.description`, this.params, true),
       };
     },
   },

@@ -3,7 +3,7 @@
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title>
         <v-icon left>{{ mode === 'drinksOnly' ? '$drink' : '$food' }}</v-icon>
-        {{ i18n.title }}
+        {{ promptI18n.title }}
       </v-toolbar-title>
     </v-toolbar>
     <v-container>
@@ -17,7 +17,7 @@
                 hide-details
                 :name="`${mode}-food`"
                 outlined
-                :placeholder="i18n.title"
+                :placeholder="promptI18n.title"
                 @input="updateFood(foods.length, $event)"
                 @keydown.prevent.stop.enter="moveToList"
               >
@@ -33,12 +33,12 @@
                 color="secondary"
                 :disabled="!newFood.description.length"
                 height="initial"
-                :title="i18n.add"
+                :title="promptI18n.add"
                 x-large
                 @click="moveToList"
               >
                 <v-icon left>fas fa-turn-down fa-rotate-90</v-icon>
-                {{ i18n.add }}
+                {{ promptI18n.add }}
               </v-btn>
             </div>
           </v-form>
@@ -124,19 +124,13 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { getFoodName } = useFoodUtils();
-    const { translate } = useI18n();
+    const { i18n } = useI18n();
     const { type } = usePromptUtils(props);
 
-    const i18n = computed(() => {
-      const {
-        prompt: { i18n },
-      } = props;
-
-      return {
-        title: translate(i18n[props.mode], { path: `prompts.${type.value}.${props.mode}` }),
-        add: translate(i18n.add, { path: `prompts.${type.value}.add` }),
-      };
-    });
+    const promptI18n = computed(() => ({
+      title: i18n.t(`prompts.${type.value}.${props.mode}`),
+      add: i18n.t(`prompts.${type.value}.add`),
+    }));
 
     const search = ref<InstanceType<typeof VTextField>>();
 
@@ -216,7 +210,7 @@ export default defineComponent({
     return {
       editIndex,
       foods,
-      i18n,
+      promptI18n,
       newFood,
       moveToList,
       deleteFood,

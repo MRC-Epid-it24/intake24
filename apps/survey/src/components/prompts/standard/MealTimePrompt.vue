@@ -18,19 +18,25 @@
         color="secondary"
         large
         text
-        :title="i18n.no"
+        :title="promptI18n.no"
         @click.stop="action('cancel')"
       >
-        {{ i18n.no }}
+        {{ promptI18n.no }}
       </v-btn>
-      <v-btn class="px-4" color="secondary" large :title="i18n.yes" @click.stop="action('next')">
-        {{ i18n.yes }}
+      <v-btn
+        class="px-4"
+        color="secondary"
+        large
+        :title="promptI18n.yes"
+        @click.stop="action('next')"
+      >
+        {{ promptI18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="i18n.no" value="cancel" @click.stop="action('cancel')">
+      <v-btn :title="promptI18n.no" value="cancel" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
-          {{ i18n.no }}
+          {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
@@ -38,12 +44,12 @@
       <v-btn
         color="secondary"
         :disabled="!isValid"
-        :title="i18n.yes"
+        :title="promptI18n.yes"
         value="next"
         @click.stop="action('next')"
       >
         <span class="text-overline font-weight-medium">
-          {{ i18n.yes }}
+          {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -87,7 +93,7 @@ export default defineComponent({
     );
     const currentTime = computed(() => fromMealTime(props.initialState, false));
 
-    const i18n = computed(() => translatePrompt(['no', 'yes']));
+    const promptI18n = computed(() => translatePrompt(['no', 'yes']));
 
     const isValid = computed(() => !!currentTime.value);
 
@@ -95,7 +101,7 @@ export default defineComponent({
       emit('update', { state: toMealTime(time) });
     };
 
-    return { allowedMinutes, currentTime, i18n, isValid, update };
+    return { allowedMinutes, currentTime, promptI18n, isValid, update };
   },
 });
 </script>

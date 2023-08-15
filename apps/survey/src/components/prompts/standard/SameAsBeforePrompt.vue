@@ -10,7 +10,7 @@
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ i18n.serving }}</v-list-item-title>
+              <v-list-item-title>{{ promptI18n.serving }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item class="pl-0" dense>
@@ -18,7 +18,7 @@
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ i18n.leftovers }}</v-list-item-title>
+              <v-list-item-title>{{ promptI18n.leftovers }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item v-if="!sabFood.food.linkedFoods.length" class="pl-0" dense>
@@ -26,12 +26,12 @@
               <v-icon>fas fa-caret-right</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ i18n.noAddedFoods }}</v-list-item-title>
+              <v-list-item-title>{{ promptI18n.noAddedFoods }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
         <v-list v-if="sabFood.food.linkedFoods.length" class="px-4" color="grey lighten-4">
-          <v-subheader>{{ i18n.hadWith }}</v-subheader>
+          <v-subheader>{{ promptI18n.hadWith }}</v-subheader>
           <v-divider></v-divider>
           <v-list-item
             v-for="linkedFood in sabFood.food.linkedFoods"
@@ -55,22 +55,22 @@
         color="secondary"
         large
         text
-        :title="i18n.notSame"
+        :title="promptI18n.notSame"
         @click.stop="action('notSame')"
       >
         <v-icon left>$no</v-icon>
-        {{ i18n.notSame }}
+        {{ promptI18n.notSame }}
       </v-btn>
       <v-btn
         class="px-4"
         color="secondary"
         large
         text
-        :title="i18n.same"
+        :title="promptI18n.same"
         @click.stop="action('same')"
       >
         <v-icon left>$yes</v-icon>
-        {{ i18n.same }}
+        {{ promptI18n.same }}
       </v-btn>
     </template>
     <template #nav-actions>
@@ -116,7 +116,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { translate } = useI18n();
+    const { translate, i18n } = useI18n();
     const { translatePrompt, type } = usePromptUtils(props);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
@@ -156,32 +156,20 @@ export default defineComponent({
       const amount = foodAmount(props.sabFood.food);
       const unit = foodUnit(props.sabFood.food);
 
-      return translate(props.prompt.i18n.serving, {
-        path: `prompts.${type.value}.serving`,
-        params: { amount: `${amount} ${unit}` },
-      });
+      return i18n.t(`prompts.${type.value}.serving`, { amount: `${amount} ${unit}` });
     });
 
     const leftovers = computed(() => {
-      const {
-        prompt: { i18n },
-      } = props;
-
       const { leftoversWeight, servingWeight } = props.sabFood.food.portionSize ?? {};
       if (!servingWeight || !leftoversWeight)
-        return translate(isDrink.value ? i18n['noLeftovers.drink'] : i18n['noLeftovers.food'], {
-          path: `prompts.${type.value}.noLeftovers.${isDrink.value ? 'drink' : 'food'}`,
-        });
+        return i18n.t(`prompts.${type.value}.noLeftovers.${isDrink.value ? 'drink' : 'food'}`);
 
       const leftoversPercentage = Math.round(leftoversWeight / (servingWeight / 100));
 
-      return translate(i18n.leftovers, {
-        path: `prompts.${type.value}.leftovers`,
-        params: { amount: `${leftoversPercentage}%` },
-      });
+      return i18n.t(`prompts.${type.value}.leftovers`, { amount: `${leftoversPercentage}%` });
     });
 
-    const i18n = computed(() => ({
+    const promptI18n = computed(() => ({
       serving: serving.value,
       leftovers: leftovers.value,
       ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
@@ -212,7 +200,7 @@ export default defineComponent({
     });
 
     return {
-      i18n,
+      promptI18n,
       isValid,
       linkedFoodInfo,
       translate,

@@ -6,16 +6,16 @@ import { useI18n } from '@intake24/i18n';
 
 export type UseFoodUtilsProps<
   F extends FoodState | undefined,
-  P extends EncodedFood | undefined,
+  FP extends EncodedFood | undefined,
 > = {
   food?: F;
-  parentFood?: P;
+  parentFood?: FP;
 };
 
-export const useFoodUtils = <F extends FoodState | undefined, P extends EncodedFood | undefined>({
+export const useFoodUtils = <F extends FoodState | undefined, FP extends EncodedFood | undefined>({
   food,
   parentFood,
-}: UseFoodUtilsProps<F, P> = {}) => {
+}: UseFoodUtilsProps<F, FP> = {}) => {
   const { translate } = useI18n();
 
   const getFoodName = (foodState: FoodState) => {
@@ -31,7 +31,9 @@ export const useFoodUtils = <F extends FoodState | undefined, P extends EncodedF
   );
   const parentFoodName = computed(
     () =>
-      (parentFood ? getFoodName(parentFood) : undefined) as P extends undefined ? undefined : string
+      (parentFood ? getFoodName(parentFood) : undefined) as FP extends undefined
+        ? undefined
+        : string
   );
 
   return {

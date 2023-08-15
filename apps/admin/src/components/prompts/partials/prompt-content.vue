@@ -2,44 +2,44 @@
   <v-tab-item key="content">
     <v-tabs vertical>
       <v-tab v-for="key in keys" :key="key" class="justify-start">
-        <v-icon left>fas fa-language</v-icon>{{ key }}
+        <v-icon left>$languages</v-icon>{{ key }}
       </v-tab>
       <v-tab-item v-for="key in keys" :key="key" class="pl-3">
         <v-card outlined>
-          <template v-if="items[key]">
-            <v-toolbar v-if="Object.keys(items[key]).length" color="grey lighten-4" flat>
-              <v-toolbar-title>
-                <i18n path="survey-schemes.i18n.core">
-                  <template #key>
-                    <span class="font-weight-medium">{{ key }}</span>
-                  </template>
-                </i18n>
-              </v-toolbar-title>
-            </v-toolbar>
-            <v-alert
-              v-for="lang in Object.keys(items[key])"
-              :key="lang"
-              class="mb-0"
-              text
-              tile
-              type="info"
-            >
-              <template #prepend>
-                <span :class="`fi fi-${lang} mr-3`"></span>
-              </template>
-              <template #default>
-                <template v-if="$t(`prompts.${promptType}.${key}`, lang)">
-                  <div
-                    v-if="key.includes('description')"
-                    v-html="$t(`prompts.${promptType}.${key}`, lang)"
-                  ></div>
-                  <div v-else>{{ $t(`prompts.${promptType}.${key}`, lang) }}</div>
+          <v-toolbar color="grey lighten-4" flat>
+            <v-toolbar-title>
+              <i18n path="survey-schemes.i18n.core">
+                <template #key>
+                  <span class="font-weight-medium">{{ key }}</span>
                 </template>
-                <div v-else>
-                  {{ $t('survey-schemes.i18n.none') }}
-                </div>
+              </i18n>
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-alert
+            v-for="lang in getAvailableLanguages(key, items)"
+            :key="lang"
+            class="mb-0"
+            text
+            tile
+            type="info"
+          >
+            <template #prepend>
+              <span :class="`fi fi-${lang} mr-3`"></span>
+            </template>
+            <template #default>
+              <template v-if="$t(`prompts.${promptType}.${key}`, lang)">
+                <div
+                  v-if="key.includes('description')"
+                  v-html="$t(`prompts.${promptType}.${key}`, lang)"
+                ></div>
+                <div v-else>{{ $t(`prompts.${promptType}.${key}`, lang) }}</div>
               </template>
-            </v-alert>
+              <div v-else>
+                {{ $t('survey-schemes.i18n.none') }}
+              </div>
+            </template>
+          </v-alert>
+          <template v-if="items[key]">
             <language-selector
               v-if="items[key]"
               v-model="items[key]"
@@ -135,8 +135,16 @@ export default defineComponent({
       delete items.value[key];
     };
 
+    const getAvailableLanguages = (key: string, items: BasePrompt['i18n']) => {
+      if (!items[key]) return ['en'];
+
+      const langs = Object.keys(items[key]);
+      return langs.length ? langs : ['en'];
+    };
+
     return {
       addKey,
+      getAvailableLanguages,
       items,
       keys,
       promptType,

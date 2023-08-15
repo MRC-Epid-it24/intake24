@@ -20,16 +20,16 @@
           class="mb-6"
           :class="{ 'px-10': !isMobile }"
           color="secondary"
-          :title="i18n.goTo"
+          :title="promptI18n.goTo"
           x-large
           @click="redirect"
         >
           <v-icon left>$redirect</v-icon>
-          {{ i18n.goTo }}
+          {{ promptI18n.goTo }}
         </v-btn>
       </v-card>
       <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
-        {{ i18n.missingUrl }}
+        {{ promptI18n.missingUrl }}
       </v-alert>
     </v-card-text>
     <template #actions>
@@ -118,7 +118,7 @@ export default defineComponent({
       props.prompt.timer ? Math.round((timerValue.value / 100) * props.prompt.timer) : 0
     );
 
-    const i18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
+    const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
     const redirect = () => {
       if (!props.followUpUrl) return;
@@ -152,7 +152,7 @@ export default defineComponent({
     });
 
     return {
-      i18n,
+      promptI18n,
       timerSecs,
       timerValue,
       clearTimer,

@@ -95,19 +95,24 @@ export type LocaleContentOptions = {
   sanitize?: boolean;
 };
 
+export function sanitizeParams(content: Dictionary<string | number>) {
+  return Object.entries(content).reduce((acc, [key, value]) => {
+    acc[key] = value = dompurify.sanitize(value.toString(), {
+      USE_PROFILES: { mathMl: false, svg: false, svgFilters: false, html: false },
+    });
+
+    return acc;
+  }, {} as Dictionary<string>);
+}
+
 export function translate(
   content?: LocaleTranslation | RequiredLocaleTranslation | string,
   options: LocaleContentOptions = {}
 ): string {
-  const { path, params = {}, sanitize = false } = options;
+  const { path, sanitize = false } = options;
+  let { params = {} } = options;
 
-  if (sanitize) {
-    for (const key of Object.keys(params)) {
-      params[key] = dompurify.sanitize(params[key].toString(), {
-        USE_PROFILES: { mathMl: false, svg: false, svgFilters: false, html: false },
-      });
-    }
-  }
+  if (sanitize) params = sanitizeParams(params as Dictionary<string | number>);
 
   if (typeof content === 'string') return replaceParams(content, params);
 
@@ -122,4 +127,13 @@ export function translate(
   if (path && has(i18n.messages.en, path)) return i18n.t(path, params).toString();
 
   return '';
+}
+
+export function translatePath(
+  path: string,
+  params: Dictionary<string | number> = {},
+  sanitize: boolean = false
+) {
+  if (sanitize) params = sanitizeParams(params as Dictionary<string | number>);
+  return i18n.t(path, params).toString();
 }
