@@ -129,9 +129,7 @@ export default defineComponent({
 
   setup(props) {
     const selectedRecordId = ref<string | null>(null);
-    const selectedTableId = computed(() =>
-      props.nutrientTables.length ? props.nutrientTables[0].id : ':id'
-    );
+    const selectedTableId = ref(props.nutrientTables.length ? props.nutrientTables[0].id : ':id');
 
     const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
       NutrientTableRecordsResponse['data'][number]

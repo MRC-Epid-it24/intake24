@@ -118,7 +118,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
 
     const nutrientTableRecords = await NutrientTableRecord.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name', 'localName'],
+      columns: ['name', 'localName', 'nutrientTableRecordId'],
       where: { nutrientTableId },
       order: [['id', 'ASC']],
     });
