@@ -195,7 +195,9 @@ export default defineComponent({
       const mealIndex = foodIndex.mealIndex;
       const mealId = this.meals[mealIndex].id;
 
-      // Existing foods in this meal that were marked for use by one of the associated food prompts.
+      // Existing foods in this meal that were marked as 'associated foods already entered' by one
+      // of the associated food prompts.
+      //
       // These need to be moved to the current food's linked meal list.
       const moveFoods: EncodedFood[] = [];
 
