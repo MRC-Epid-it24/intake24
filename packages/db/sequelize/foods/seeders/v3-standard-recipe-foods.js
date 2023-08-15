@@ -6,46 +6,55 @@ const recipeFoods = [
     recipe_food: { code: '$SND', name: 'Sandwich', recipe_word: 'sandwich' },
     recipe_food_steps: [
       {
-        name: `"en": { "name": "Bread and Base", }`,
-        description: `"en": { "description": "What bread did you have in your sandwich?", }`,
+        code: 'SND_1',
+        name: '"name": { "en": "Bread and Base", }',
+        description: '"description": { "en": "What bread did you have in your sandwich?", }',
         order: 1,
-        repetable: false,
-        categoryCode: 'SW01',
+        repeatable: false,
+        category_code: 'SW01',
       },
       {
-        name: `"en": { "name": "Spread", }`,
-        description: `"en": { "description": "What spread did you have in your sandwich?", }`,
+        code: 'SND_2',
+        name: '"name": { "en": "Spread", }',
+        description: '"description": { "en": "What spread did you have in your sandwich?", }',
         order: 2,
-        repetable: false,
-        categoryCode: 'SW02',
+        repeatable: false,
+        category_code: 'SW02',
       },
       {
-        name: `"en": { "name": "Meat, Fish or Other Protein Source", }`,
-        description: `"en": { "description": "What meat, fish or other protein source did you have in your sandwich?", }`,
+        code: 'SND_3',
+        name: '"name": { "en": "Meat, Fish or Other Protein Source", }',
+        description:
+          '"description": { "en": "What meat, fish or other protein source did you have in your sandwich?", }',
         order: 3,
-        repetable: false,
-        categoryCode: 'SW03',
+        repeatable: false,
+        category_code: 'SW03',
       },
       {
-        name: `"en": { "name": "Cheese", }`,
-        description: `"en": { "description": "What cheese did you have in your sandwich?", }`,
+        code: 'SND_4',
+        name: '"name": { "en": "Cheese", }',
+        description: '"description": { "en": "What cheese did you have in your sandwich?", }',
         order: 4,
-        repetable: false,
-        categoryCode: 'SW04',
+        repeatable: false,
+        category_code: 'SW04',
       },
       {
-        name: `"en": { "name": "Extra Filling", }`,
-        description: `"en": { "description": "What extra filling did you have in your sandwich?", }`,
+        code: 'SND_5',
+        name: '"name": { "en": "Extra Filling", }',
+        description:
+          '"description": { "en": "What extra filling did you have in your sandwich?", }',
         order: 5,
-        repetable: true,
-        categoryCode: 'SW05',
+        repeatable: true,
+        category_code: 'SW05',
       },
       {
-        name: `"en": { "name": "Sauce and Dressing", }`,
-        description: `"en": { "description": "What sauce or dressing did you have in your sandwich?", }`,
+        code: 'SND_6',
+        name: '"name": { "en": "Sauce and Dressing", }',
+        description:
+          '"description": { "en": "What sauce or dressing did you have in your sandwich?", }',
         order: 6,
-        repetable: true,
-        categoryCode: 'SW06',
+        repeatable: true,
+        category_code: 'SW06',
       },
     ],
   },
@@ -53,18 +62,20 @@ const recipeFoods = [
     recipe_food: { code: '$SLD', name: 'Salad', recipe_word: 'salad' },
     recipe_food_steps: [
       {
-        name: `"en": { "name": "Salad Ingridients", }`,
-        description: `"en": { "description": "What ingridients did you have in your salad?", }`,
+        code: 'SLD_1',
+        name: '"name": { "en": "Salad Ingridients", }',
+        description: '"description": { "en": "What ingridients did you have in your salad?", }',
         order: 1,
-        repetable: true,
-        categoryCode: 'SLW1',
+        repeatable: true,
+        category_code: 'SLW1',
       },
       {
-        name: `"en": { "name": "Salad Dressing", }`,
-        description: `"en": { "description": "What dressing did you have in your salad?", }`,
+        code: 'SLD_2',
+        name: '"name": { "en": "Salad Dressing", }',
+        description: '"description": { "en": "What dressing did you have in your salad?", }',
         order: 2,
-        repetable: true,
-        categoryCode: 'SLW2',
+        repeatable: true,
+        category_code: 'SLW2',
       },
     ],
   },
@@ -107,7 +118,40 @@ module.exports = {
       }
 
       // Creating recipe foods
-      await queryInterface.bulkInsert('recipe_foods', recipeFoodsEntries, {
+      const recipeFoodsRes = await queryInterface.bulkInsert('recipe_foods', recipeFoodsEntries, {
+        transaction,
+      });
+
+      // Getting all the recipe foods created
+      const recipeFoodsCreated = await queryInterface.sequelize.query(
+        `SELECT id, code, locale_id FROM recipe_foods;`,
+        {
+          type: Sequelize.QueryTypes.SELECT,
+          transaction,
+        }
+      );
+
+      const recipeFoodsStepsEntries = [];
+      // Creating recipe food steps
+      await recipeFoodsCreated.map(async (recipeFoodCreated) => {
+        const index = recipeFoods.find(
+          (recipeFood) => recipeFood.recipe_food.code === recipeFoodCreated.code
+        );
+        if (index) {
+          recipeFoodsStepsEntries.push(
+            ...index.recipe_food_steps.map((recipeFoodStep) => ({
+              ...recipeFoodStep,
+              recipe_foods_id: recipeFoodCreated.id,
+              locale_id: recipeFoodCreated.locale_id,
+              code: `${recipeFoodCreated.locale_id}_${recipeFoodCreated.id}${recipeFoodStep.code}`,
+            }))
+          );
+        }
+      });
+
+      console.log(`\n\nFoodSteps to enter Example: `, recipeFoodsStepsEntries[0]);
+
+      await queryInterface.bulkInsert('recipe_foods_steps', recipeFoodsStepsEntries, {
         transaction,
       });
     }),

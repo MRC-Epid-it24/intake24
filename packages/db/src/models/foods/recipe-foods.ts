@@ -88,7 +88,7 @@ export default class RecipeFoods extends BaseModel<
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
 
-  @BelongsTo(() => SynonymSet, 'id')
+  @BelongsTo(() => SynonymSet, 'synonyms_id')
   declare synonyms?: NonAttribute<SynonymSet>;
 
   @HasMany(() => RecipeFoodsSteps, 'recipeFoodsId')

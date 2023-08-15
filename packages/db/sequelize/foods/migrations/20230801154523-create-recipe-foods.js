@@ -58,7 +58,7 @@ module.exports = {
           code: {
             allowNull: false,
             unique: true,
-            type: Sequelize.STRING(16),
+            type: Sequelize.STRING(128),
           },
           recipe_foods_id: {
             allowNull: false,
@@ -85,6 +85,11 @@ module.exports = {
           order: {
             allowNull: false,
             type: Sequelize.INTEGER,
+          },
+          repeatable: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
           },
           created_at: {
             allowNull: false,

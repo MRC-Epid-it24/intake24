@@ -56,7 +56,7 @@ export default class RecipeFoodsSteps extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(16),
+    type: DataType.STRING(128),
     unique: true,
   })
   declare code: string;
@@ -104,6 +104,13 @@ export default class RecipeFoodsSteps extends BaseModel<
     type: DataType.TEXT({ length: 'long' }),
   })
   declare description: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare repeatable: boolean;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

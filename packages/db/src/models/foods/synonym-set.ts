@@ -6,10 +6,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { FoodsLocale } from '.';
+import { FoodsLocale, RecipeFoods } from '.';
 
 @Table({
   modelName: 'SynonymSet',
@@ -43,6 +43,9 @@ export default class SynonymSet extends BaseModel<
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
+
+  @HasMany(() => RecipeFoods, 'id')
+  declare recipeFoods?: NonAttribute<RecipeFoods>;
 }
 
 export type SynonymSetAttributes = Attributes<SynonymSet>;
