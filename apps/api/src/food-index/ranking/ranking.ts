@@ -1,6 +1,6 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FoodHeader } from '@intake24/common/types/http';
+import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 import type { Logger } from '@intake24/common-backend';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
@@ -113,7 +113,7 @@ async function getRankingData(
   }
 }
 
-export async function rankSearchResults(
+export async function rankFoodResults(
   results: PhraseMatchResult<string>[],
   localeId: string,
   algorithm: SearchSortingAlgorithm,
@@ -128,4 +128,10 @@ export async function rankSearchResults(
   } else {
     return noAlgorithmRanking(results);
   }
+}
+
+export function rankCategoryResults(results: PhraseMatchResult<string>[]): CategoryHeader[] {
+  return results
+    .sort((a, b) => a.quality - b.quality)
+    .map((result) => ({ code: result.key, name: result.phrase }));
 }
