@@ -77,6 +77,7 @@ export default {
           {
             association: 'synonyms',
             attributes: ['synonyms'],
+            required: true,
           },
         ],
       });

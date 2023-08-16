@@ -10,6 +10,8 @@ import { logger } from '@intake24/common-backend/services';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 
+export type DictionaryType = 'foods' | 'recipes';
+
 export interface PhoneticEncoder {
   encode(input: string): Array<string>;
 }
@@ -21,8 +23,6 @@ export class RichDictionary {
 
   private readonly synonymMap: Map<string, Set<string>>;
 
-  public readonly recipeFoodsMap: Map<string, Set<string>>;
-
   private readonly phoneticEncoder: PhoneticEncoder | undefined;
 
   private readonly transducer: LevenshteinTransducer;
@@ -30,18 +30,16 @@ export class RichDictionary {
   constructor(
     words: Set<string>,
     phoneticEncoder: PhoneticEncoder | undefined,
-    synSets: Array<Set<string>>,
-    recipeFoodsSynSets: Array<Set<string>>
+    synSets: Array<Set<string>>
   ) {
     this.words = new Set<string>();
 
     //Merging all the words and synSets into one set
-    const allWords = [...synSets, words].reduce(
-      (acc, next) => (next.forEach((word) => acc.add(word)), acc),
-      new Set<string>()
-    );
-
-    for (const word of allWords) this.words.add(word.toLocaleLowerCase());
+    for (const word of words) this.words.add(word.toLocaleLowerCase());
+    if (synSets.length > 0)
+      synSets.forEach((synSet) => {
+        for (const synWord of synSet) this.words.add(synWord.toLocaleLowerCase());
+      });
 
     this.phoneticEncoder = phoneticEncoder;
 
@@ -67,32 +65,31 @@ export class RichDictionary {
 
     this.synonymMap = new Map<string, Set<string>>();
 
-    [synSets, recipeFoodsSynSets].forEach((generalSynSets) => {
-      for (const synSet of generalSynSets) {
-        for (const word of synSet) {
-          const lowerCaseWord = word.toLocaleLowerCase();
-          let synList = this.synonymMap.get(lowerCaseWord);
+    for (const synSet of synSets) {
+      for (const word of synSet) {
+        const lowerCaseWord = word.toLocaleLowerCase();
 
-          if (!synList) synList = new Set<string>();
+        let synList = this.synonymMap.get(lowerCaseWord);
 
-          for (const word2 of synSet) {
-            const lowerCaseWord2 = word2.toLocaleLowerCase();
-            if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
-          }
+        if (!synList) synList = new Set<string>();
 
-          this.synonymMap.set(lowerCaseWord, synList);
+        for (const word2 of synSet) {
+          const lowerCaseWord2 = word2.toLocaleLowerCase();
+          if (lowerCaseWord !== lowerCaseWord2) synList.add(lowerCaseWord2);
         }
+
+        this.synonymMap.set(lowerCaseWord, synList);
       }
-    });
+    }
 
     // Add special foods for the locale
-    this.recipeFoodsMap = new Map<string, Set<string>>();
+    // this.recipeFoodsMap = new Map<string, Set<string>>();
 
-    for (const recipeFoodsSynSet of recipeFoodsSynSets) {
-      if (recipeFoodsSynSet.size === 0) continue;
-      if (this.recipeFoodsMap.has([...recipeFoodsSynSet][0].toLocaleLowerCase())) continue;
-      this.recipeFoodsMap.set([...recipeFoodsSynSet][0].toLocaleLowerCase(), recipeFoodsSynSet);
-    }
+    // for (const recipeFoodsSynSet of recipeFoodsSynSets) {
+    //   if (recipeFoodsSynSet.size === 0) continue;
+    //   if (this.recipeFoodsMap.has([...recipeFoodsSynSet][0].toLocaleLowerCase())) continue;
+    //   this.recipeFoodsMap.set([...recipeFoodsSynSet][0].toLocaleLowerCase(), recipeFoodsSynSet);
+    // }
   }
 
   exactMatch(lowerCaseWord: string): boolean {

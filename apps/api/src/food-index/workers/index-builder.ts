@@ -214,10 +214,15 @@ async function queryIndex(query: SearchQuery): Promise<FoodHeader[]> {
   if (!localeIndex)
     throw new NotFoundError(`Locale ${query.localeId} does not exist or is not enabled`);
 
-  const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer');
+  const interpreted = localeIndex.interpretPhrase(query.description, 'match-fewer', 'foods');
+  const interpretedRecipeFoods = localeIndex.interpretPhrase(
+    query.description,
+    'match-fewer',
+    'recipes'
+  );
   let recipeFoodsHeaders: FoodHeader[] = [];
-  if (interpreted.words.length > 0) {
-    recipeFoodsHeaders = await matchRecipeFoods(interpreted, query);
+  if (interpretedRecipeFoods.words.length > 0) {
+    recipeFoodsHeaders = await matchRecipeFoods(interpretedRecipeFoods, query);
   }
 
   const results = localeIndex.findMatches(interpreted, 100, 100);
