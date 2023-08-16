@@ -37,6 +37,7 @@ const common: LocaleMessageObject = {
   help: {
     _: '帮助',
     title: '请求帮助',
+    text: 'Please complete the form below and one of our support staff will get in touch as soon as they can.',
     sent: '您的帮助请求已发送。',
   },
 

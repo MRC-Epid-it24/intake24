@@ -68,7 +68,7 @@ export const getUnitFromNutrientRule = (
 export const formatOutput = (value: number | string, unit: string): string => `${value} ${unit}`;
 
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
-  const { translate } = useI18n();
+  const { translate, i18n } = useI18n();
 
   const { sentiment: charSentiment, results, showRecommendations } = parameters;
 
@@ -88,7 +88,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
         ? new DemographicRange(round(range.start), round(range.end))
         : null,
       unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
-      unitDescription: translate(`feedback.unitDescription.${nutrientRuleType}`).toString(),
+      unitDescription: i18n.t(`feedback.unitDescription.${nutrientRuleType}`).toString(),
       sentiment,
       textClass: getTextClass(charSentiment ? sentiment : null),
       iconClass: getIconClass(charSentiment ? sentiment : null),
