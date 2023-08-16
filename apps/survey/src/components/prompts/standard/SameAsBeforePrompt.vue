@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 d-flex">
       <v-card flat outlined width="100%">
         <v-list class="px-4" color="grey lighten-4">

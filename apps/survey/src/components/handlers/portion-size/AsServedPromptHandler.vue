@@ -8,6 +8,7 @@
       initialState: state,
       parameters,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -19,6 +20,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { AsServedPrompt } from '@intake24/survey/components/prompts';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
@@ -31,6 +33,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['as-served-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

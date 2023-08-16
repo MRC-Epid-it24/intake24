@@ -1,5 +1,5 @@
 <template>
-  <meal-gap-prompt v-bind="{ meals, prompt }" @action="action"></meal-gap-prompt>
+  <meal-gap-prompt v-bind="{ meals, prompt, section }" @action="action"></meal-gap-prompt>
 </template>
 
 <script lang="ts">
@@ -7,6 +7,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { resolveMealGaps } from '@intake24/common/surveys';
 import { MealGapPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -19,6 +20,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['meal-gap-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

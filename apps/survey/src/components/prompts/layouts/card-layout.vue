@@ -53,10 +53,9 @@
         class="bottom-navigation"
         color="secondary"
         fixed
-        grow
         :value="navTab"
       >
-        <meal-list-mobile :meals="meals" @action="action"></meal-list-mobile>
+        <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action"></meal-list-mobile>
         <template v-if="mobileActions.length">
           <template v-for="(item, idx) in mobileActions">
             <v-btn
@@ -83,13 +82,6 @@
         </template>
         <template v-else>
           <slot name="nav-actions">
-            <v-btn value="addMeal" @click.stop="action('addMeal')">
-              <span class="text-overline font-weight-medium">
-                {{ $t('recall.actions.nav.addMeal') }}
-              </span>
-              <v-icon class="pb-1">$add</v-icon>
-            </v-btn>
-            <v-divider vertical></v-divider>
             <v-btn
               :color="isValid ? 'secondary' : 'primary'"
               :disabled="!isValid"
@@ -127,6 +119,8 @@ export default defineComponent({
 <style lang="scss">
 .bottom-navigation .v-btn {
   max-width: unset !important;
+
+  flex: 1 1 auto !important;
 
   &.v-btn--active.secondary {
     color: white !important;

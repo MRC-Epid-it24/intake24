@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 meal-time-prompt">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker

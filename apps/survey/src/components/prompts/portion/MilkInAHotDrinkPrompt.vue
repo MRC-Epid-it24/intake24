@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header>

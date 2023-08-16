@@ -1,10 +1,10 @@
 import type { PropType } from 'vue';
 import set from 'lodash/set';
-import { defineComponent, onBeforeMount } from 'vue';
+import { computed, defineComponent, onBeforeMount } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { FoodState, MealState } from '@intake24/common/types';
-import type { LocaleMessageObject } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { useSurvey } from '@intake24/survey/stores';
@@ -20,6 +20,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompt>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
     food: {
@@ -46,6 +50,12 @@ export default defineComponent({
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
     const survey = useSurvey();
+
+    const showSummary = computed(() => {
+      if (survey.hasFinished) return false;
+
+      return !['preMeals'].includes(props.section);
+    });
 
     const loadPromptTranslations = () => {
       if (!Object.keys(props.prompt.i18n).length) return;
@@ -74,6 +84,7 @@ export default defineComponent({
       mealTime,
       mealNameWithTime,
       params,
+      showSummary,
       type,
       meals: survey.data.meals,
     };

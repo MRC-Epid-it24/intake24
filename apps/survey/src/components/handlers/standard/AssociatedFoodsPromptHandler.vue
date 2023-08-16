@@ -6,6 +6,7 @@
       initialState: state,
       localeId,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -23,6 +24,7 @@ import type {
   Prompts,
   PromptStates,
 } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import type { MealFoodIndex } from '@intake24/survey/stores';
@@ -59,6 +61,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['associated-foods-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },
@@ -102,10 +108,10 @@ export default defineComponent({
       );
     },
 
-    async action(type: string, id?: string) {
+    async action(type: string, ...args: [id?: string, params?: object]) {
       if (type === 'next') await this.commitAnswer();
 
-      this.$emit('action', type, id);
+      this.$emit('action', type, ...args);
     },
 
     // The link as main feature can be applied only if exactly one of the linked foods has the

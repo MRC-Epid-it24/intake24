@@ -1,6 +1,6 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, meal, prompt }"
+    v-bind="{ initialState: state, meal, prompt, section }"
     @action="action"
     @update="update"
   ></meal-time-prompt>
@@ -12,6 +12,7 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -25,6 +26,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['meal-time-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },
@@ -44,14 +49,19 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
 
-    action(type: 'next' | 'cancel') {
+    action(type: string, ...args: [id?: string, params?: object]) {
       if (type === 'next') {
         this.commitAnswer();
         this.$emit('action', type);
-      } else {
+        return;
+      }
+      if (type === 'cancel') {
         this.deleteMeal(this.meal.id);
         this.$emit('action', 'next');
+        return;
       }
+
+      this.$emit('action', type, ...args);
     },
 
     commitAnswer() {

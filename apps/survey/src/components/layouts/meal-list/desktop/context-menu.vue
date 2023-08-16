@@ -42,12 +42,7 @@ import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { ConfirmDialog } from '@intake24/ui';
 
-export type MenuItem = {
-  name: string;
-  action: FoodActionType | MealActionType;
-  dialog?: boolean;
-  icon?: string;
-};
+import type { MenuItem } from '../use-food-item';
 
 export default defineComponent({
   name: 'ContextMenu',

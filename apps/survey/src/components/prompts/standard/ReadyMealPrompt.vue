@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-card v-for="(food, idx) in foods" :key="food.id" class="mb-3" outlined>
         <v-card-text

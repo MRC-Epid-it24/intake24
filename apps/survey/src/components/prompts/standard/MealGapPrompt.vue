@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #prompt-description>
       <div class="px-4 pt-4" :class="{ 'pb-4': isMobile }" v-html="promptI18n.description"></div>
     </template>

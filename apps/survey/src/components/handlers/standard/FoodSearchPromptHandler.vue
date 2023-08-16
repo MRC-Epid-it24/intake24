@@ -1,6 +1,6 @@
 <template>
   <food-search-prompt
-    v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt }"
+    v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt, section }"
     v-model="searchTerm"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
@@ -13,6 +13,7 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
@@ -28,6 +29,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['food-search-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

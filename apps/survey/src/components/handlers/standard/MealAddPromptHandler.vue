@@ -1,6 +1,6 @@
 <template>
   <meal-add-prompt
-    v-bind="{ defaultMeals, hasMeals, prompt }"
+    v-bind="{ defaultMeals, hasMeals, prompt, section }"
     @action="action"
     @update="update"
   ></meal-add-prompt>
@@ -11,6 +11,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 import { MealAddPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -25,6 +26,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['meal-add-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="activePrompt" :tile="isMobile" @change="updatePrompts">
       <v-expansion-panel v-for="(assocPrompt, index) in prompts" :key="index">
         <v-expansion-panel-header>

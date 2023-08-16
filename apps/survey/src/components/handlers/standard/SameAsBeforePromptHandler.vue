@@ -1,7 +1,7 @@
 <template>
   <same-as-before-prompt
     v-if="sabFood"
-    v-bind="{ food: encodedFood(), meal, prompt, sabFood }"
+    v-bind="{ food: encodedFood(), meal, prompt, sabFood, section }"
     @action="action"
   >
   </same-as-before-prompt>
@@ -12,6 +12,7 @@ import type { PropType } from 'vue';
 import { defineComponent, onMounted } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { SameAsBeforePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSameAsBefore, useSurvey } from '@intake24/survey/stores';
 import { getEntityId } from '@intake24/survey/util';
@@ -26,6 +27,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['same-as-before-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

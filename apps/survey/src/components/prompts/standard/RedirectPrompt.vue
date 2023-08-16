@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-card v-if="followUpUrl" class="d-flex flex-column align-center" flat tile>
         <v-progress-circular

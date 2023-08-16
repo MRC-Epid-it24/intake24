@@ -1,6 +1,6 @@
 <template>
   <review-confirm-prompt
-    v-bind="{ meals, prompt }"
+    v-bind="{ meals, prompt, section }"
     @action="action"
     @food-selected="onFoodClick"
     @meal-selected="onMealClick"
@@ -13,6 +13,7 @@ import { mapActions, mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { ReviewConfirmPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -26,6 +27,10 @@ export default defineComponent({
       type: Object as PropType<Prompts['review-confirm-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action', 'food-context-menu', 'meal-context-menu'],
@@ -37,8 +42,8 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['submitRecall']),
 
-    action(type: string, id?: string) {
-      this.$emit('action', type, id);
+    action(type: string, ...args: [id?: string, params?: object]) {
+      this.$emit('action', type, ...args);
     },
 
     async submit() {

@@ -7,6 +7,7 @@
       meal: mealOptional,
       food: foodOptional,
       prompt,
+      section,
     }"
     @action="action"
   ></component>
@@ -17,6 +18,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -33,6 +35,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompt>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },

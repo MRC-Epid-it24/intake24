@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <i18n class="text-subtitle-1" :path="`prompts.${type}.searchTerm`" tag="p">
         <template #food>

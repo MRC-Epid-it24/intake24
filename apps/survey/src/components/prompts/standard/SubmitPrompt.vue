@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
       <next :disabled="!isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}

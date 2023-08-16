@@ -1,5 +1,8 @@
 <template>
-  <split-food-prompt v-bind="{ food: freeTextFood(), meal, prompt, suggestions }" @action="action">
+  <split-food-prompt
+    v-bind="{ food: freeTextFood(), meal, prompt, section, suggestions }"
+    @action="action"
+  >
   </split-food-prompt>
 </template>
 
@@ -9,6 +12,7 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { GenericActionType, Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
@@ -23,6 +27,10 @@ export default defineComponent({
   props: {
     prompt: {
       type: Object as PropType<Prompts['split-food-prompt']>,
+      required: true,
+    },
+    section: {
+      type: String as PropType<PromptSection>,
       required: true,
     },
   },
@@ -82,13 +90,13 @@ export default defineComponent({
   methods: {
     ...mapActions(useSurvey, ['setFoods']),
 
-    action(type: 'single' | 'separate' | GenericActionType, id?: string) {
+    action(type: string, ...args: [id?: string, params?: object]) {
       if (['single', 'separate'].includes(type)) {
         this[type as 'single' | 'separate']();
         return;
       }
 
-      this.$emit('action', type, id);
+      this.$emit('action', type, ...args);
     },
   },
 });

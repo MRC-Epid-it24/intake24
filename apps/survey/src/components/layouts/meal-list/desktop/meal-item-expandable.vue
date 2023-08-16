@@ -1,12 +1,12 @@
 <template>
   <v-list-group
-    :class="{ selected: selected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
+    :class="{ selected: isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
     :sub-group="true"
     :value="true"
     @click="mealSelected"
   >
     <template #prependIcon>
-      <v-icon :class="{ rotate: selected || selectedFoodInMeal }">$expand</v-icon>
+      <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">$expand</v-icon>
     </template>
     <template #activator>
       <v-list-item-title class="font-weight-bold text-wrap">
@@ -34,14 +34,52 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import mealItemMixin from './meal-item-mixin';
+import type { MealState } from '@intake24/common/types';
+
+import { useMealItem } from '../use-meal-item';
+import ContextMenu from './context-menu.vue';
+import FoodItem from './food-item.vue';
 
 export default defineComponent({
   name: 'MealItem',
 
-  mixins: [mealItemMixin],
+  components: { ContextMenu, FoodItem },
+
+  props: {
+    meal: {
+      type: Object as PropType<MealState>,
+      required: true,
+    },
+    selectedFoodId: {
+      type: String,
+    },
+    selectedFoodInMeal: {
+      type: Boolean,
+      required: true,
+    },
+    selectedMealId: {
+      type: String,
+    },
+  },
+
+  setup(props, context) {
+    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(
+      props,
+      context
+    );
+
+    return {
+      action,
+      isSelected,
+      menu,
+      mealName,
+      mealTime,
+      mealSelected,
+    };
+  },
 });
 </script>
 

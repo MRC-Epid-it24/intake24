@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
       <yes-no-toggle :value="value" @input="update"></yes-no-toggle>
     </template>
