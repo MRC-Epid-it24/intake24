@@ -27,10 +27,10 @@
               <v-alert type="error">Something went wrong :(</v-alert>
             </v-card-text>
             <v-card-actions>
-              <v-btn large @click="browseCategory(retryCode)">Try again</v-btn>
+              <v-btn large @click="browseCategory(retryCode, false)">Try again</v-btn>
             </v-card-actions>
           </v-card>
-          <v-btn v-if="navigationHistory.length > 1" large text @click="navigateBack">
+          <v-btn v-if="navigationHistory.length > 0" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
             {{ i18n.back }}
           </v-btn>
@@ -50,6 +50,7 @@
           <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
           <category-contents-view
             v-if="!requestInProgress"
+            :categories-first="false"
             :contents="searchContents"
             :i18n="i18n"
             @category-selected="categorySelected"
@@ -59,13 +60,13 @@
       </v-tabs-items>
       <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 gap-2">
         <v-btn
-          v-if="type === 'foodSearch' && searchTerm"
+          v-if="type === 'foodSearch' && tab === 1"
           color="secondary"
           :disabled="missingDialog"
           large
           outlined
           :title="i18n.browse"
-          @click.stop="searchTerm = ''"
+          @click.stop="browseRootCategory"
         >
           {{ i18n.browse }}
         </v-btn>
@@ -99,7 +100,12 @@ import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
 import type { Prompt } from '@intake24/common/prompts';
-import type { CategoryContents, CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import type {
+  CategoryContents,
+  CategoryHeader,
+  FoodHeader,
+  FoodSearchResponse,
+} from '@intake24/common/types/http';
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
@@ -151,6 +157,16 @@ export default defineComponent({
     const { translatePrompt, type } = usePromptUtils(props);
 
     const i18n = computed(() => {
+      function backCategoryLabel(): string {
+        if (navigationHistory.value.length === 0) return '??';
+
+        const last = navigationHistory.value[navigationHistory.value.length - 1];
+
+        if (last === 'search') return 'Search results';
+
+        return last.name;
+      }
+
       return {
         ...translatePrompt(
           [
@@ -166,10 +182,7 @@ export default defineComponent({
           ],
           {
             back: {
-              category:
-                navigationHistory.value.length > 1
-                  ? navigationHistory.value[navigationHistory.value.length - 2].name
-                  : '??',
+              category: backCategoryLabel(),
             },
           }
         ),
@@ -222,7 +235,7 @@ export default defineComponent({
 
     const searchTerm = ref(props.value);
     const searchRef = ref<InstanceType<typeof VTextField>>();
-    const searchResults = ref<FoodHeader[]>([]);
+    const searchResults = ref<FoodSearchResponse>({ foods: [], categories: [] });
     const rootHeader = computed(() => ({
       code: props.rootCategory ?? '',
       name: props.rootCategory ?? i18n.value.root,
@@ -230,11 +243,11 @@ export default defineComponent({
 
     const searchContents = computed<CategoryContents>(() => ({
       header: rootHeader.value,
-      foods: searchResults.value,
-      subcategories: [],
+      foods: searchResults.value.foods,
+      subcategories: searchResults.value.categories,
     }));
 
-    const navigationHistory = ref<CategoryHeader[]>([]);
+    const navigationHistory = ref<('search' | CategoryHeader)[]>([]);
     const retryCode = ref(props.rootCategory);
     const currentCategoryContents = ref<CategoryContents | undefined>(undefined);
 
@@ -242,9 +255,14 @@ export default defineComponent({
     const requestFailed = ref(false);
     const tab = ref(0);
 
-    const browseCategory = async (categoryCode?: string) => {
+    const browseRootCategory = () => {
+      browseCategory(props.rootCategory, true);
+    };
+
+    const browseCategory = async (categoryCode: string | undefined, makeHistoryEntry: boolean) => {
       requestInProgress.value = true;
       retryCode.value = categoryCode;
+      tab.value = 0;
 
       try {
         const contents = await categoriesService.contents(props.localeId, categoryCode);
@@ -254,8 +272,15 @@ export default defineComponent({
 
         const header = contents.header.code ? contents.header : rootHeader.value;
 
+        if (makeHistoryEntry) {
+          if (currentCategoryContents.value !== undefined) {
+            navigationHistory.value.push(currentCategoryContents.value.header);
+          } else {
+            navigationHistory.value.push('search');
+          }
+        }
+
         currentCategoryContents.value = { ...contents, header };
-        navigationHistory.value.push(header);
       } catch (err) {
         requestInProgress.value = false;
         requestFailed.value = true;
@@ -269,7 +294,7 @@ export default defineComponent({
       if (!props.rootCategory) return;
 
       requestInProgress.value = true;
-      searchResults.value = [];
+      searchResults.value = { foods: [], categories: [] };
 
       try {
         const { data } = await categoriesService.search(props.localeId, props.rootCategory, {
@@ -277,7 +302,7 @@ export default defineComponent({
           limit: 25,
         });
 
-        searchResults.value = data;
+        // searchResults.value = data;
 
         requestFailed.value = false;
       } catch (err) {
@@ -291,17 +316,17 @@ export default defineComponent({
       if (!props.parameters || !searchTerm.value) return;
 
       requestInProgress.value = true;
-      searchResults.value = [];
+      searchResults.value = { foods: [], categories: [] };
       const { matchScoreWeight, rankingAlgorithm } = props.parameters;
 
       try {
-        const { foods } = await foodsService.search(props.localeId, searchTerm.value, {
+        const searchResponse = await foodsService.search(props.localeId, searchTerm.value, {
           rankingAlgorithm,
           matchScoreWeight,
           recipe: false,
         });
 
-        searchResults.value = foods;
+        searchResults.value = searchResponse;
 
         requestFailed.value = false;
       } catch (e) {
@@ -317,7 +342,7 @@ export default defineComponent({
     };
 
     const categorySelected = (category: CategoryHeader) => {
-      browseCategory(category.code);
+      browseCategory(category.code, true);
     };
 
     const foodSelected = (food: FoodHeader) => {
@@ -331,14 +356,23 @@ export default defineComponent({
     };
 
     const navigateBack = () => {
-      if (navigationHistory.value.length < 2) {
-        console.warn('Navigation history length should be at least 2 at this point');
+      if (navigationHistory.value.length === 0) {
+        console.warn('Navigation history is empty');
+        return;
+      }
+
+      const lastItem = navigationHistory.value[navigationHistory.value.length - 1];
+      navigationHistory.value = navigationHistory.value.slice(
+        0,
+        navigationHistory.value.length - 1
+      );
+
+      if (lastItem === 'search') {
+        tab.value = 1;
+        currentCategoryContents.value = undefined;
       } else {
-        const previousCategory = navigationHistory.value.splice(
-          navigationHistory.value.length - 2,
-          2
-        );
-        browseCategory(previousCategory[0].code);
+        tab.value = 0;
+        browseCategory(lastItem.code, false);
       }
     };
 
@@ -349,7 +383,7 @@ export default defineComponent({
         return;
       }
 
-      await browseCategory(props.rootCategory);
+      await browseCategory(props.rootCategory, false);
     });
 
     watchDebounced(
@@ -359,6 +393,8 @@ export default defineComponent({
 
         if (searchTerm.value) {
           await search();
+          currentCategoryContents.value = undefined;
+          navigationHistory.value = [];
           tab.value = 1;
           return;
         }
@@ -367,9 +403,7 @@ export default defineComponent({
           !currentCategoryContents.value ||
           props.rootCategory !== currentCategoryContents.value.header.code
         )
-          await browseCategory(props.rootCategory);
-
-        tab.value = 0;
+          await browseCategory(props.rootCategory, true);
       },
       { debounce: 500, maxWait: 2000 }
     );
@@ -390,6 +424,7 @@ export default defineComponent({
       requestFailed,
       tab,
       type,
+      browseRootCategory,
       browseCategory,
       categorySelected,
       foodMissing,

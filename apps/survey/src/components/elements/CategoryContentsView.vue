@@ -1,5 +1,9 @@
 <template>
-  <v-list v-if="contents.subcategories.length || contents.foods.length" class="list__no-wrap py-0">
+  <v-list
+    v-if="contents.subcategories.length || contents.foods.length"
+    class="list__no-wrap py-0 d-flex"
+    :class="categoriesFirst ? 'flex-column' : 'flex-column-reverse'"
+  >
     <v-list-item
       v-for="category in contents.subcategories"
       :key="category.code"
@@ -53,6 +57,10 @@ export default defineComponent({
     i18n: {
       type: Object as PropType<Record<string, string>>,
       required: true,
+    },
+    categoriesFirst: {
+      type: Boolean,
+      default: true,
     },
   },
 
