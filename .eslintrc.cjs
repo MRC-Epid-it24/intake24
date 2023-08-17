@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 // @ts-check
 const { defineConfig } = require('eslint-define-config');
 
@@ -27,7 +29,7 @@ module.exports = defineConfig({
       {
         groups: [
           ['^\\u0000'],
-          ["^node:"],
+          ['^node:'],
           ['^@?(?!intake24)\\w.*\\u0000$', '^@?(?!intake24)\\w'],
           ['(?<=\\u0000)$', '^'],
           ['^\\..*\\u0000$', '^\\.'],
@@ -41,14 +43,14 @@ module.exports = defineConfig({
     ],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
-    "@typescript-eslint/ban-types": [
-      "error",
+    '@typescript-eslint/ban-types': [
+      'error',
       {
-        "types": {
-          "{}": false
+        types: {
+          '{}': false,
         },
-        "extendDefaults": true
-      }
-    ]
+        extendDefaults: true,
+      },
+    ],
   },
 });
