@@ -100,7 +100,9 @@ export default defineComponent({
       return this.refs.schemes.reduce<SchemeStatus[]>((acc, scheme) => {
         const prompts = flattenSchemeWithSection(scheme.prompts);
 
-        const match = prompts.find((prompt) => prompt.id === this.entry.prompt.id);
+        const match = prompts.find(
+          (prompt) => prompt.id === this.entry.prompt.id && prompt.name === this.entry.prompt.name
+        );
         if (match) {
           const { section, ...prompt } = match;
 

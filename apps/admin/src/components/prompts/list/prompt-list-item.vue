@@ -66,25 +66,20 @@
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('survey-scheme-prompts|create')"
-            :disabled="hasTemplate"
+            v-if="can('survey-scheme-prompts|create') && !hasTemplate"
             :prompt="prompt"
           ></save-as-template-dialog>
           <confirm-dialog
+            v-if="hasTemplate && !isInSyncWithTemplate"
             color="primary lighten-1"
             :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
             max-width="450px"
             @confirm="sync"
           >
             <template #activator="{ attrs, on }">
-              <v-list-item
-                v-bind="attrs"
-                :disabled="!hasTemplate || isInSyncWithTemplate"
-                link
-                v-on="on"
-              >
+              <v-list-item v-bind="attrs" link v-on="on">
                 <v-list-item-title>
-                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>$sync</v-icon>
+                  <v-icon left>$sync</v-icon>
                   {{ $t('survey-scheme-prompts.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>
@@ -166,7 +161,9 @@ export default defineComponent({
     },
 
     template(): Prompt | undefined {
-      return this.templates.find((template) => template.id === this.prompt.id);
+      return this.templates.find(
+        (template) => template.id === this.prompt.id && template.name === this.prompt.name
+      );
     },
 
     hasTemplate(): boolean {

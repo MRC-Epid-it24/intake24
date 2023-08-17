@@ -28,11 +28,7 @@
       </v-toolbar>
       <v-form @keydown.native="errors.clear()" @submit.prevent="requestHelp">
         <v-card-text>
-          <p class="mx-2">
-            If you would like someone from our team to help, enter your contact details that we can
-            use to reach you.
-          </p>
-          <p class="mx-2">One of our support staff will get in touch as soon as they can.</p>
+          <p class="mx-2">{{ $t('common.help.text') }}</p>
           <v-container>
             <v-row>
               <v-col cols="12">
