@@ -51,7 +51,7 @@
         id="actions"
         app
         class="bottom-navigation"
-        color="secondary"
+        color="primary"
         fixed
         :value="navTab"
       >
@@ -60,7 +60,7 @@
           <template v-for="(item, idx) in mobileActions">
             <v-btn
               :key="item.type"
-              :color="item.type === 'next' ? 'secondary' : undefined"
+              :color="item.type === 'next' ? 'primary' : undefined"
               :disabled="item.type === 'next' && !isValid"
               :outlined="item.variant === 'outlined'"
               :text="item.variant === 'text'"
@@ -83,7 +83,7 @@
         <template v-else>
           <slot name="nav-actions">
             <v-btn
-              :color="isValid ? 'secondary' : 'primary'"
+              :color="isValid ? 'primary' : 'secondary'"
               :disabled="!isValid"
               value="next"
               @click="next"
@@ -122,7 +122,7 @@ export default defineComponent({
 
   flex: 1 1 auto !important;
 
-  &.v-btn--active.secondary {
+  &.v-btn--active.primary {
     color: white !important;
   }
 }

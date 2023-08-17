@@ -6,7 +6,7 @@
           <div class="text-h5">{{ $t('common.options._') }}</div>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn color="secondary" fab small :title="$t('common.options.add')" @click.stop="add">
+        <v-btn color="primary" fab small :title="$t('common.options.add')" @click.stop="add">
           <v-icon small>$add</v-icon>
         </v-btn>
       </v-toolbar>

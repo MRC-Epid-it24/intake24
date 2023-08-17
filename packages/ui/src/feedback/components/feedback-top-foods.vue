@@ -64,7 +64,7 @@ export default defineComponent({
 
         return {
           textStyle: {
-            fontFamily: `"Open Sans", sans-serif`,
+            fontFamily: `Rubik, sans-serif`,
           },
           id,
           title: {

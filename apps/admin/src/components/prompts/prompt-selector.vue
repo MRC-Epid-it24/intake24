@@ -8,7 +8,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -23,7 +23,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container :fluid="$vuetify.breakpoint.mdAndDown">
-            <v-tabs v-model="tab" background-color="primary" dark>
+            <v-tabs v-model="tab" background-color="secondary" dark>
               <v-tab v-for="item in promptSettings[dialog.prompt.component].tabs" :key="item">
                 {{ item }}
               </v-tab>
@@ -91,7 +91,7 @@
                     </v-toolbar>
                     <v-item-group
                       v-model="dialog.prompt.component"
-                      active-class="secondary"
+                      active-class="primary"
                       @change="updatePromptProps"
                     >
                       <v-tabs-items v-model="promptTypeTab">

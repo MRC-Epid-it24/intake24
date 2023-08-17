@@ -63,7 +63,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
+    <v-app-bar app color="primary" dark flat hide-on-scroll permanent>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">

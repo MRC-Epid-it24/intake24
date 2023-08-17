@@ -20,7 +20,7 @@
       </slot>
     </template>
     <v-card :tile="isMobile">
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -81,7 +81,7 @@
               <v-col :cols="isMobile ? '12' : 'auto'">
                 <v-btn
                   :block="isMobile"
-                  color="secondary"
+                  color="primary"
                   :disabled="errors.any()"
                   outlined
                   rounded

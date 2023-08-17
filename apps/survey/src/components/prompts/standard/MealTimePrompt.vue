@@ -15,7 +15,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.no"
@@ -25,7 +25,7 @@
       </v-btn>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         :title="promptI18n.yes"
         @click.stop="action('next')"
@@ -42,7 +42,7 @@
       </v-btn>
       <v-divider vertical></v-divider>
       <v-btn
-        color="secondary"
+        color="primary"
         :disabled="!isValid"
         :title="promptI18n.yes"
         value="next"

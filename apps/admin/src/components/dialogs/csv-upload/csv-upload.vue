@@ -9,7 +9,7 @@
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-icon dark left>$upload</v-icon>
         <v-toolbar-title>
           {{ dialogTitle }}
@@ -33,7 +33,7 @@
                 ></v-file-input>
               </v-col>
               <v-col cols="12" sm="auto">
-                <v-btn block color="secondary" :disabled="jobInProgress" type="submit" x-large>
+                <v-btn block color="primary" :disabled="jobInProgress" type="submit" x-large>
                   <v-icon left>$upload</v-icon>
                   {{ $t('common.action.upload') }}
                 </v-btn>

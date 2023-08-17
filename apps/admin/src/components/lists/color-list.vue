@@ -25,7 +25,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('feedback-schemes.colors.edit')" @click.stop="edit(idx, item)">
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -39,7 +39,7 @@
       persistent
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar color="secondary" dark flat>
           <v-icon dark left>fas fa-palette</v-icon>
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}
@@ -89,7 +89,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const newItem = () => ({ _id: randomString(6), color: '#EF6C00' });
+    const newItem = () => ({ _id: randomString(6), color: '#EE672D' });
     const transformIn = (color: string) => ({ _id: randomString(6), color });
     const transformOut = ({ color }: { _id: string; color: string }) => color;
 

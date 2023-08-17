@@ -36,7 +36,7 @@
             </i18n>
             <barcode-input :model-value.sync="info.barcode"></barcode-input>
           </template>
-          <v-btn :block="isMobile" color="secondary" :disabled="!homemadeValid" @click="confirm">
+          <v-btn :block="isMobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
@@ -54,7 +54,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-textarea v-model="info.portionSize" outlined @input="update"></v-textarea>
-          <v-btn :block="isMobile" color="secondary" :disabled="!info.portionSize" @click="confirm">
+          <v-btn :block="isMobile" color="primary" :disabled="!info.portionSize" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>

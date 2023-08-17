@@ -9,7 +9,7 @@
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -85,7 +85,7 @@
                 </v-radio-group>
               </v-col>
               <v-col class="ml-auto" cols="12" sm="auto">
-                <v-btn block color="secondary" :disabled="form.errors.any()" type="submit" x-large>
+                <v-btn block color="primary" :disabled="form.errors.any()" type="submit" x-large>
                   <v-icon left>fas fa-envelope</v-icon>
                   {{ $t('surveys.respondents.feedback.email.sent') }}
                 </v-btn>

@@ -9,7 +9,7 @@
           <template #activator="{ on, attrs }">
             <v-btn
               class="px-4"
-              color="secondary"
+              color="primary"
               large
               text
               :title="$t('recall.actions.deleteFood')"
@@ -24,7 +24,7 @@
         </confirm-dialog>
         <v-btn
           class="px-4"
-          color="secondary"
+          color="primary"
           large
           text
           :title="$t('recall.actions.editFood')"
@@ -42,7 +42,7 @@
           <template #activator="{ on, attrs }">
             <v-btn
               class="px-4"
-              color="secondary"
+              color="primary"
               large
               text
               :title="$t('recall.actions.deleteMeal')"
@@ -57,7 +57,7 @@
         </confirm-dialog>
         <v-btn
           class="px-4"
-          color="secondary"
+          color="primary"
           large
           text
           :title="$t('recall.actions.editMeal')"
@@ -118,7 +118,7 @@
         </v-btn>
         <v-divider vertical></v-divider>
       </template>
-      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
+      <v-btn color="primary" :disabled="!isValid" value="next" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.next') }}
         </span>

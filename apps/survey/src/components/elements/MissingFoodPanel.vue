@@ -6,7 +6,7 @@
       </v-card-text>
       <v-card-text class="px-6 pt-0 d-flex flex-column flex-md-row align-stretch gap-3">
         <v-btn
-          color="secondary"
+          color="primary"
           large
           outlined
           :title="i18n['missing.tryAgain']"
@@ -15,13 +15,7 @@
           <v-icon left>fas fa-repeat</v-icon>
           {{ i18n['missing.tryAgain'] }}
         </v-btn>
-        <v-btn
-          color="secondary"
-          large
-          outlined
-          :title="i18n['missing.report']"
-          @click.stop="confirm"
-        >
+        <v-btn color="primary" large outlined :title="i18n['missing.report']" @click.stop="confirm">
           <v-icon left>fas fa-flag</v-icon>
           {{ i18n['missing.report'] }}
         </v-btn>

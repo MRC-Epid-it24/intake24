@@ -24,7 +24,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         :disabled="!hasMeals"
         large
         text
@@ -36,7 +36,7 @@
       </v-btn>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         :disabled="!isValid"
         large
         :title="promptI18n.yes"
@@ -54,7 +54,7 @@
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-btn
-        color="secondary"
+        color="primary"
         :disabled="!isValid"
         :title="promptI18n.yes"
         value="next"

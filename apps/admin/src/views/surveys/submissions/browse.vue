@@ -8,7 +8,12 @@
         {{ formatDate(item.endTime) }}
       </template>
       <template #[`item.action`]="{ item }">
-        <v-btn color="primary" icon :title="$t('common.action.read')" @click.stop="detail(item.id)">
+        <v-btn
+          color="secondary"
+          icon
+          :title="$t('common.action.read')"
+          @click.stop="detail(item.id)"
+        >
           <v-icon>$read</v-icon>
         </v-btn>
         <confirm-dialog
@@ -24,7 +29,7 @@
     </embedded-data-table>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card tile>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
           <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
             <v-icon>$cancel</v-icon>
           </v-btn>

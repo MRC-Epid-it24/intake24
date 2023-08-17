@@ -1,19 +1,13 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-2" flat tile>
-      <v-icon color="primary" left>fas fa-hamburger</v-icon>
+      <v-icon color="secondary" left>fas fa-hamburger</v-icon>
       <div class="d-flex flex-column">
         <v-toolbar-title class="font-weight-medium">{{ title }}</v-toolbar-title>
         <span v-if="subtitle" class="text-subtitle-2">{{ subtitle }}</span>
       </div>
       <v-spacer></v-spacer>
-      <v-btn
-        color="secondary"
-        fab
-        small
-        :title="$t('survey-schemes.meals.create')"
-        @click.stop="add"
-      >
+      <v-btn color="primary" fab small :title="$t('survey-schemes.meals.create')" @click.stop="add">
         <v-icon small>$add</v-icon>
       </v-btn>
       <confirm-dialog
@@ -69,7 +63,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('survey-schemes.meals.edit')" @click.stop="edit(index, meal)">
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -94,7 +88,7 @@
       persistent
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar color="secondary" dark flat>
           <v-icon dark left>fas fa-hamburger</v-icon>
           <v-toolbar-title>
             {{ $t(`survey-schemes.meals.${dialog.index === -1 ? 'create' : 'edit'}`) }}

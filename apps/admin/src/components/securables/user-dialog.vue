@@ -3,7 +3,7 @@
     <template #activator="{ attrs, on }">
       <v-btn
         class="font-weight-bold"
-        color="primary"
+        color="secondary"
         outlined
         v-bind="attrs"
         v-on="on"
@@ -13,7 +13,7 @@
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>

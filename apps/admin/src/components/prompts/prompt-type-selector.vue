@@ -1,14 +1,14 @@
 <template>
   <v-tab-item :key="type">
     <v-container>
-      <v-alert v-if="prompts.length === 0" color="primary" text type="info">
+      <v-alert v-if="prompts.length === 0" color="secondary" text type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
       <v-row v-else>
         <v-col v-for="prompt in prompts" :key="prompt.id" cols="12" md="3">
           <v-item v-slot="{ active, toggle }" :value="prompt.component">
             <v-card
-              :color="active ? 'primary' : ''"
+              :color="active ? 'secondary' : ''"
               dark
               height="180"
               @click.stop="tryToggle(active, toggle)"

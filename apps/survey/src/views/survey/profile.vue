@@ -7,7 +7,7 @@
             <v-subheader>{{ $t('profile.info') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="primary" dark>fas fa-user</v-icon>
+                <v-icon class="secondary" dark>fas fa-user</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('common.name') }}</v-list-item-title>
@@ -18,7 +18,7 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="primary" dark>fa-id-badge</v-icon>
+                <v-icon class="secondary" dark>fa-id-badge</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
@@ -29,7 +29,7 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="primary" dark>fa-key</v-icon>
+                <v-icon class="secondary" dark>fa-key</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
@@ -44,7 +44,7 @@
             <v-subheader>{{ $t('profile.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="primary" dark>fa-language</v-icon>
+                <v-icon class="secondary" dark>fa-language</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select
@@ -69,7 +69,7 @@
                   v-bind="attrs"
                   :block="isMobile"
                   class="px-10"
-                  color="secondary"
+                  color="primary"
                   outlined
                   x-large
                   v-on="on"

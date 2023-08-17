@@ -37,7 +37,7 @@
                 <v-col cols="12" lg="6" md="8" sm="10">
                   <v-btn
                     block
-                    color="secondary"
+                    color="primary"
                     :disabled="form.errors.any() || jobInProgress || isAppLoading"
                     :title="$t('common.action.upload')"
                     type="submit"

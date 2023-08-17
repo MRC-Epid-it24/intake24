@@ -10,7 +10,7 @@
         <template v-if="isOpened">
           <v-btn
             v-if="!isOverrideMode"
-            color="secondary"
+            color="primary"
             fab
             small
             :title="$t('survey-schemes.prompts.create')"

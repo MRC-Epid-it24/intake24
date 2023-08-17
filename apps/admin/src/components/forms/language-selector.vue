@@ -6,7 +6,7 @@
       <v-menu bottom left>
         <template #activator="{ attrs, on }">
           <v-btn
-            color="secondary"
+            color="primary"
             :disabled="!availableLanguages.length"
             fab
             small

@@ -5,7 +5,7 @@
         <v-progress-circular
           v-if="prompt.timer"
           class="mb-6"
-          color="primary"
+          color="secondary"
           :rotate="-90"
           :size="200"
           :value="timerValue"
@@ -19,7 +19,7 @@
           :block="isMobile"
           class="mb-6"
           :class="{ 'px-10': !isMobile }"
-          color="secondary"
+          color="primary"
           :title="promptI18n.goTo"
           x-large
           @click="redirect"
@@ -35,7 +35,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'survey-home', params: { surveyId } }"
@@ -46,7 +46,7 @@
       <v-btn
         v-if="showFeedback"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'feedback-home', params: { surveyId } }"

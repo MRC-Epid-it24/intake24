@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-people-arrows</v-icon>
+      <v-icon color="secondary" left>fas fa-people-arrows</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.demographic-groups.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('feedback-schemes.demographic-groups.create')"
@@ -57,7 +57,7 @@
                 :title="$t('feedback-schemes.demographic-groups.edit')"
                 @click.stop="edit(index, group)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -83,7 +83,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
           <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
@@ -101,7 +101,7 @@
           </v-toolbar-items>
           <template #extension>
             <v-container>
-              <v-tabs v-model="tab" background-color="primary" dark>
+              <v-tabs v-model="tab" background-color="secondary" dark>
                 <v-tab v-for="item in ['general', 'sectors']" :key="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>

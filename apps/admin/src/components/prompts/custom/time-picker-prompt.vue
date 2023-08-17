@@ -39,7 +39,7 @@
           </v-card-title>
           <v-btn-toggle
             class="d-flex"
-            color="secondary"
+            color="primary"
             mandatory
             :value="format"
             @change="update('format', $event)"

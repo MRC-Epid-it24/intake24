@@ -22,7 +22,7 @@ process.env.VITE_APP_BUILD_REVISION = childProcess
   .trim();
 process.env.VITE_APP_BUILD_DATE = new Date().toISOString();
 
-const themeColor = '#EF6C00';
+const themeColor = '#EE672D';
 
 export default defineConfig(({ mode }) => {
   const {
@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         sass: {
           additionalData: [
-            '@import "./src/scss/variables"',
+            '@import "./src/scss/vuetify"',
             '@import "vuetify/src/styles/settings/_variables"',
             '',
           ].join('\n'),
@@ -112,8 +112,8 @@ export default defineConfig(({ mode }) => {
         google: {
           families: [
             {
-              name: 'Open Sans',
-              styles: 'wght@300;400;600;700;900',
+              name: 'Rubik',
+              styles: 'wght@300;400;500;600;700',
               defer: false,
             },
           ],

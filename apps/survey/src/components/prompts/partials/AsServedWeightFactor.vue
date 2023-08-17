@@ -5,7 +5,7 @@
         <v-btn
           v-if="!isMobile"
           class="mb-3"
-          color="primary"
+          color="secondary"
           :disabled="numerator === maxNumerator"
           icon
           large
@@ -36,7 +36,7 @@
         </span>
         <div>
           <v-btn
-            color="primary"
+            color="secondary"
             :disabled="numerator === minNumerator"
             icon
             large
@@ -49,7 +49,7 @@
           <v-btn
             v-if="isMobile"
             class="ml-6"
-            color="primary"
+            color="secondary"
             :disabled="numerator === maxNumerator"
             icon
             large

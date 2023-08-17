@@ -28,7 +28,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.separate"
@@ -39,7 +39,7 @@
       </v-btn>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.single"

@@ -60,7 +60,7 @@
       <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 gap-2">
         <v-btn
           v-if="type === 'foodSearch' && searchTerm"
-          color="secondary"
+          color="primary"
           :disabled="missingDialog"
           large
           outlined
@@ -70,7 +70,7 @@
           {{ promptI18n.browse }}
         </v-btn>
         <v-btn
-          color="secondary"
+          color="primary"
           :disabled="missingDialog"
           large
           outlined

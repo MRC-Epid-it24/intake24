@@ -9,7 +9,7 @@
           <v-btn
             block
             class="my-4"
-            color="primary"
+            color="secondary"
             :loading="!!regChallenge"
             rounded
             @click="challenge"
@@ -45,7 +45,7 @@
               name="token"
               @input="form.errors.clear('token')"
             ></v-otp-input>
-            <v-btn block class="my-4" color="primary" rounded type="submit">
+            <v-btn block class="my-4" color="secondary" rounded type="submit">
               {{ $t('user.mfa.devices.verify') }}
             </v-btn>
           </v-form>

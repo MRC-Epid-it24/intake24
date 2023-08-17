@@ -1,14 +1,11 @@
 <template>
   <v-expand-transition>
-    <v-sheet
-      v-show="contextId === entity?.id"
-      class="meal-list-mobile__context"
-      color="orange lighten-5"
-    >
+    <v-sheet v-show="contextId === entity?.id" class="meal-list-mobile__context" color="ternary">
       <div class="d-flex flex-row justify-center pa-4 gap-4">
         <v-card
           v-for="(item, idx) in menu"
           :key="idx"
+          class="rounded-xl"
           link
           tile
           @click="item.dialog ? openDialog(item.action) : action(item.action)"

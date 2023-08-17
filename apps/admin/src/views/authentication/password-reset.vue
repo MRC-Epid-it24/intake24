@@ -54,7 +54,7 @@
           </v-row>
           <v-row justify="center">
             <v-col cols="12">
-              <v-btn block color="secondary" :disabled="isAppLoading" rounded type="submit" x-large>
+              <v-btn block color="primary" :disabled="isAppLoading" rounded type="submit" x-large>
                 {{ $t('common.password.reset._') }}
               </v-btn>
             </v-col>

@@ -7,7 +7,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -22,7 +22,7 @@
         </v-toolbar-items>
         <template #extension>
           <v-container>
-            <v-tabs v-model="tab" background-color="primary" dark>
+            <v-tabs v-model="tab" background-color="secondary" dark>
               <v-tab v-for="item in cardSettings[dialog.card.type].tabs" :key="item">
                 {{ $t(`feedback-schemes.cards.tabs.${item}`) }}
               </v-tab>
@@ -46,7 +46,7 @@
                       </v-toolbar>
                       <v-item-group
                         v-model="dialog.card.type"
-                        active-class="secondary"
+                        active-class="primary"
                         @change="updateCardProps"
                       >
                         <v-container>
@@ -54,7 +54,7 @@
                             <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
                               <v-item v-slot="{ active, toggle }" :value="card.type">
                                 <v-card
-                                  :color="active ? 'primary' : ''"
+                                  :color="active ? 'secondary' : ''"
                                   dark
                                   height="180"
                                   @click.stop="toggle"

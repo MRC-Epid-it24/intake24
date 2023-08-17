@@ -21,7 +21,7 @@
       <v-spacer></v-spacer>
       <v-btn
         class="font-weight-medium"
-        color="primary"
+        color="secondary"
         text
         @click="$refs.menu.save(internalValue)"
       >

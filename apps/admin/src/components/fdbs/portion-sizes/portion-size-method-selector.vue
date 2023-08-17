@@ -7,7 +7,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>

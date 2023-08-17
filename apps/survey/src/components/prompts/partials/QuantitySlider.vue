@@ -28,7 +28,7 @@
     </v-slider>
     <v-row>
       <v-col cols="12" sm="auto">
-        <v-btn :block="isMobile" color="secondary" @click="confirm">
+        <v-btn :block="isMobile" color="primary" @click="confirm">
           {{ $t('common.action.continue') }}
         </v-btn>
       </v-col>

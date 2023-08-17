@@ -9,7 +9,7 @@
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-sort-amount-down</v-icon>
+      <v-icon color="secondary" left>fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.top-foods.title') }}
       </v-toolbar-title>
@@ -33,7 +33,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="primary" left>fas fa-palette</v-icon>
+              <v-icon color="secondary" left>fas fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.top-foods.max.title') }}
               </v-toolbar-title>
@@ -146,7 +146,7 @@ export default defineComponent({
       } else if (size > form.topFoods.colors.length) {
         const newColors = Array.from<string>({
           length: size - form.topFoods.colors.length,
-        }).fill('#EF6C00');
+        }).fill('#EE672D');
 
         form.topFoods.colors = [...form.topFoods.colors, ...newColors];
       }

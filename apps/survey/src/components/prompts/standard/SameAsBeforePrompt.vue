@@ -47,7 +47,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.notSame"
@@ -58,7 +58,7 @@
       </v-btn>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.same"

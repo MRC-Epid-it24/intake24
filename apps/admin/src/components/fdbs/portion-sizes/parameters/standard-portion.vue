@@ -3,7 +3,7 @@
     <v-col class="d-flex flex-column" cols="12">
       <v-btn
         class="mb-4 align-self-end"
-        color="primary"
+        color="secondary"
         outlined
         rounded
         :title="$t('standard-units.add')"

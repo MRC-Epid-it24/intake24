@@ -2,7 +2,7 @@
   <div class="d-flex img-placeholder">
     <v-progress-circular
       class="ma-auto"
-      color="primary"
+      color="secondary"
       indeterminate
       :size="size"
       :width="width"

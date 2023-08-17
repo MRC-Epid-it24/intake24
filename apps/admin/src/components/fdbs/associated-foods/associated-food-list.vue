@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <v-btn
         v-if="!disabled"
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('fdbs.associatedFoods.add')"
@@ -40,7 +40,7 @@
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
               <v-btn icon :title="$t('fdbs.associatedFoods.edit')" @click.stop="edit(index, item)">
-                <v-icon color="primary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">
@@ -66,7 +66,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
           <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>

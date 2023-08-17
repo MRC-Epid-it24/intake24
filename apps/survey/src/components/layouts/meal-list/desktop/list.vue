@@ -18,7 +18,7 @@
       <v-hover v-slot="{ hover }">
         <v-btn
           block
-          :color="hover ? 'secondary' : 'inherit'"
+          :color="hover ? 'primary' : 'inherit'"
           depressed
           :title="$t('recall.menu.meal.add')"
           @click="action('addMeal')"

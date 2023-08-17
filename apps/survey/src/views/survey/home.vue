@@ -53,7 +53,7 @@
                   <v-list-item-action v-if="!isMobile">
                     <v-btn
                       block
-                      color="primary"
+                      color="secondary"
                       outlined
                       rounded
                       :title="$t('recall.start.another')"
@@ -67,7 +67,7 @@
                 <v-list-item v-if="isMobile">
                   <v-btn
                     block
-                    color="primary"
+                    color="secondary"
                     large
                     outlined
                     rounded
@@ -92,7 +92,7 @@
                   <v-list-item-action v-if="!isMobile" class="align-stretch">
                     <v-btn
                       class="mb-2"
-                      color="primary"
+                      color="info"
                       outlined
                       rounded
                       :title="$t('recall.continue')"
@@ -108,7 +108,7 @@
                       <template #activator="{ on, attrs }">
                         <v-btn
                           v-bind="attrs"
-                          color="secondary"
+                          color="error"
                           outlined
                           rounded
                           :title="$t('recall.abort.label')"
@@ -131,7 +131,7 @@
                       <v-btn
                         v-bind="attrs"
                         class="flex-grow-1 mr-2"
-                        color="secondary"
+                        color="primary"
                         large
                         outlined
                         rounded
@@ -146,7 +146,7 @@
                   </confirm-dialog>
                   <v-btn
                     class="flex-grow-1"
-                    color="primary"
+                    color="info"
                     large
                     outlined
                     rounded
@@ -168,7 +168,7 @@
                   </v-list-item-content>
                   <v-list-item-action v-if="!isMobile">
                     <v-btn
-                      color="primary"
+                      color="info"
                       outlined
                       rounded
                       :title="$t('recall.start._')"
@@ -182,7 +182,7 @@
                 <v-list-item v-if="isMobile">
                   <v-btn
                     block
-                    color="primary"
+                    color="info"
                     large
                     outlined
                     rounded
@@ -211,7 +211,7 @@
                   </v-list-item-content>
                   <v-list-item-action v-if="!isMobile">
                     <v-btn
-                      color="primary"
+                      color="info"
                       outlined
                       rounded
                       :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -224,7 +224,7 @@
                 <v-list-item v-if="isMobile">
                   <v-btn
                     block
-                    color="primary"
+                    color="info"
                     large
                     outlined
                     rounded
@@ -260,7 +260,7 @@
                 <v-timeline-item
                   v-for="(submission, idx) in submissions"
                   :key="submission.id"
-                  :color="idx % 2 ? 'info' : 'secondary'"
+                  :color="idx % 2 ? 'info' : 'primary'"
                   small
                 >
                   <v-row class="pt-1">

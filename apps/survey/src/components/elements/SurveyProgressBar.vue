@@ -6,7 +6,7 @@
           class="font-weight-medium"
           :color="color(item)"
           label
-          :text-color="item.time ? 'white' : 'secondary'"
+          :text-color="item.time ? 'white' : 'primary'"
         >
           {{ stringTime(item.time) }}
         </v-chip>
@@ -43,8 +43,8 @@ export default defineComponent({
     };
 
     const color = (item: MealState) => {
-      if (!item.time) return 'primary';
-      if (item.foods.length === 0) return 'secondary';
+      if (!item.time) return 'secondary';
+      if (item.foods.length === 0) return 'primary';
       //   const finishedRecall = item.foods.reduce();
       return 'success';
     };

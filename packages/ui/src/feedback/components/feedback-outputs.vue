@@ -10,7 +10,7 @@
         <v-btn
           v-if="outputs.includes('print')"
           class="mb-3"
-          color="primary"
+          color="secondary"
           link
           outlined
           rounded
@@ -30,7 +30,7 @@
             <v-btn
               v-bind="attrs"
               class="mb-3"
-              color="primary"
+              color="secondary"
               link
               outlined
               rounded
@@ -42,7 +42,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.breakpoint.smAndDown">
-            <v-toolbar color="primary" dark>
+            <v-toolbar color="secondary" dark>
               <v-btn
                 dark
                 icon
@@ -115,7 +115,7 @@
             <v-btn
               v-bind="attrs"
               class="mb-3"
-              color="primary"
+              color="secondary"
               link
               outlined
               rounded
@@ -127,7 +127,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.breakpoint.smAndDown">
-            <v-toolbar color="primary" dark>
+            <v-toolbar color="secondary" dark>
               <v-btn
                 dark
                 icon

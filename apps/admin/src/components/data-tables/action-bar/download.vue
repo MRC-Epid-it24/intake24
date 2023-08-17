@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="primary"
+    color="secondary"
     :href="`${app.api}/${route}/${item.id}`"
     icon
     target="_blank"

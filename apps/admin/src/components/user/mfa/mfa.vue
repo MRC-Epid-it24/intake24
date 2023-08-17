@@ -24,7 +24,7 @@
         <template #activator="{ attrs, on }">
           <v-btn
             v-bind="attrs"
-            color="primary"
+            color="secondary"
             outlined
             rounded
             :title="$t('user.mfa.devices.add')"
@@ -35,7 +35,7 @@
           </v-btn>
         </template>
         <v-card :tile="isMobile">
-          <v-toolbar color="primary" dark flat>
+          <v-toolbar color="secondary" dark flat>
             <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
               <v-icon>$cancel</v-icon>
             </v-btn>
@@ -43,7 +43,7 @@
               {{ $t('user.mfa.devices.add') }}
             </v-toolbar-title>
           </v-toolbar>
-          <v-tabs v-model="tab" background-color="primary" dark grow @change="clear">
+          <v-tabs v-model="tab" background-color="secondary" dark grow @change="clear">
             <v-tabs-slider></v-tabs-slider>
             <v-tab v-for="provider in providers" :key="provider" :href="`#${provider}`">
               <v-icon left>{{ `$${provider}` }}</v-icon>
@@ -82,12 +82,12 @@
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-chip v-if="device.preferred" color="primary" outlined>
+              <v-chip v-if="device.preferred" color="secondary" outlined>
                 {{ $t('user.mfa.devices.preferred._') }}
               </v-chip>
               <confirm-dialog
                 v-else
-                color="primary"
+                color="secondary"
                 icon
                 icon-left="far fa-circle-up"
                 :label="$t('user.mfa.devices.preferred.promote').toString()"

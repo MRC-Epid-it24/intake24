@@ -12,7 +12,7 @@
     <v-list class="meal-list__list meal-list-mobile__list" dense subheader>
       <v-subheader class="pt-8 pb-7 pl-4 pr-3 d-flex flex-row justify-space-between">
         <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
-        <v-btn color="secondary" icon @click="action('addMeal')">
+        <v-btn color="primary" icon @click="action('addMeal')">
           <v-icon large>$add</v-icon>
         </v-btn>
       </v-subheader>

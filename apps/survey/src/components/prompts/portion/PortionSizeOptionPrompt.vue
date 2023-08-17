@@ -17,7 +17,7 @@
           >
             <v-item v-slot="{ active, toggle }">
               <v-card
-                border-color="primary"
+                border-color="secondary"
                 class="d-flex flex-column justify-space-between"
                 height="100%"
                 hover
@@ -51,11 +51,11 @@
                 </v-img>
                 <v-card-actions
                   class="d-flex justify-end"
-                  :class="{ 'grey lighten-5': !active, 'orange lighten-5': active }"
+                  :class="{ 'grey lighten-5': !active, ternary: active }"
                 >
                   <v-chip
                     class="font-weight-medium px-4"
-                    :color="option === index ? 'secondary' : 'orange lighten-4'"
+                    :color="option === index ? 'primary' : 'ternary'"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>

@@ -1,4 +1,5 @@
 @import "vuetify/src/styles/styles.sass";
+@import "variables";
 @import "fontawesome";
 @import "meal-list";
 
@@ -25,11 +26,11 @@
     gap: 1rem;
 }
 
-.border-primary-1 {
+.border-secondary-1 {
     border: 1px solid map-get($blue-grey, "darken-4") !important;
 }
 
-.border-secondary-2 {
+.border-primary-2 {
     border: 2px solid map-get($orange, "darken-3") !important;
 }
 

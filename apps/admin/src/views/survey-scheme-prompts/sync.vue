@@ -4,7 +4,7 @@
       $t(`survey-scheme-prompts.sync.title`, { id: entry.prompt.id })
     }}</v-card-title>
     <v-card-text v-if="!schemes.length">
-      <v-alert color="primary" text type="info">
+      <v-alert color="secondary" text type="info">
         {{ $t(`survey-scheme-prompts.sync.noSchemes`) }}
       </v-alert>
     </v-card-text>
@@ -12,7 +12,7 @@
       <v-list-item
         v-for="scheme in schemes"
         :key="scheme.id"
-        :class="scheme.synced ? `green lighten-5` : `orange lighten-5`"
+        :class="scheme.synced ? `green lighten-5` : `ternary`"
       >
         <v-list-item-avatar>
           <v-icon>fas fa-route</v-icon>

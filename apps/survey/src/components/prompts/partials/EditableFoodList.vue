@@ -30,7 +30,7 @@
               <v-btn
                 v-if="$vuetify.breakpoint.smAndUp"
                 class="ml-2"
-                color="secondary"
+                color="primary"
                 :disabled="!newFood.description.length"
                 height="initial"
                 :title="promptI18n.add"

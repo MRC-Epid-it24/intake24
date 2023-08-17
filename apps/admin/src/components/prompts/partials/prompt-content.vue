@@ -71,7 +71,7 @@
               {{ $t('survey-schemes.i18n.init') }}
             </v-card-title>
             <v-card-text class="d-flex justify-center align-center">
-              <v-btn color="primary" fab x-large>
+              <v-btn color="secondary" fab x-large>
                 <v-icon>$add</v-icon>
               </v-btn>
             </v-card-text>

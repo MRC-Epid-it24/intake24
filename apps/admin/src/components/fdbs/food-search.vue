@@ -1,12 +1,12 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">
     <template #activator="{ attrs, on }">
-      <v-btn v-bind="attrs" color="secondary" fab small :title="$t('fdbs.search._')" v-on="on">
+      <v-btn v-bind="attrs" color="primary" fab small :title="$t('fdbs.search._')" v-on="on">
         <v-icon>$search</v-icon>
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>

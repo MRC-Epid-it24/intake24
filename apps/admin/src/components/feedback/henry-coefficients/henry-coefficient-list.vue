@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-square-root-alt</v-icon>
+      <v-icon color="secondary" left>fas fa-square-root-alt</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('feedback-schemes.henry-coefficients.create')"
@@ -60,7 +60,7 @@
                 :title="$t('feedback-schemes.henry-coefficients.edit')"
                 @click.stop="edit(index, coefficient)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -85,7 +85,7 @@
       persistent
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar color="secondary" dark flat>
           <v-icon dark left>fas fa-square-root-alt</v-icon>
           <v-toolbar-title>
             {{

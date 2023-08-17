@@ -3,7 +3,7 @@
     v-if="isWebPushSupported"
     border="left"
     class="my-4"
-    color="secondary"
+    color="primary"
     dark
     dismissible
     outlined
@@ -16,7 +16,7 @@
       for it. E.g. if you submit a job, which runs in background and is finished later. You don't
       have to re-check the status as you will get notified with push notification.
     </p>
-    <v-divider class="my-4 secondary" style="opacity: 0.5"></v-divider>
+    <v-divider class="my-4 primary" style="opacity: 0.5"></v-divider>
     <v-row v-if="isPermissionGranted" align="center" no-gutters>
       <v-col class="grow">
         <div class="subtitle-2">
@@ -24,7 +24,7 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn color="primary" @click="testWebPush">Test PUSH</v-btn>
+        <v-btn color="secondary" @click="testWebPush">Test PUSH</v-btn>
       </v-col>
     </v-row>
     <v-row v-else align="center" no-gutters>
@@ -34,7 +34,7 @@
         </div>
       </v-col>
       <v-col class="shrink">
-        <v-btn color="primary" @click="requestPermission">Allow PUSH</v-btn>
+        <v-btn color="secondary" @click="requestPermission">Allow PUSH</v-btn>
       </v-col>
     </v-row>
   </v-alert>

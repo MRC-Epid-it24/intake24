@@ -6,7 +6,7 @@
           class="d-flex flex-column flex-sm-row justify-space-between ready-meal-prompt__item"
         >
           <div class="d-flex align-center">
-            <v-btn class="primary font-weight-medium mr-2" dark icon readonly size="x-small">
+            <v-btn class="secondary font-weight-medium mr-2" dark icon readonly size="x-small">
               {{ idx + 1 }}
             </v-btn>
             <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>

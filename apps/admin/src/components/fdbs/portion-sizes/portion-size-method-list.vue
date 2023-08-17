@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <v-btn
         v-if="!disabled"
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('fdbs.portionSizes.add')"
@@ -42,7 +42,7 @@
             </v-list-item-content>
             <v-list-item-action v-if="!disabled">
               <v-btn icon :title="$t('fdbs.portionSizes.edit')" @click.stop="edit({ item, index })">
-                <v-icon color="primary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action v-if="!disabled">

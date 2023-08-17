@@ -9,7 +9,7 @@
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-sort-amount-down</v-icon>
+      <v-icon color="secondary" left>fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.title') }}
       </v-toolbar-title>
@@ -31,7 +31,7 @@
 
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-toolbar color="grey lighten-5" flat tile>
-        <v-icon color="primary" left>fas fa-chart-pie</v-icon>
+        <v-icon color="secondary" left>fas fa-chart-pie</v-icon>
         <v-toolbar-title class="font-weight-medium">
           {{ $t('feedback-schemes.meals.chart') }}
         </v-toolbar-title>
@@ -40,7 +40,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="primary" left>fa-palette</v-icon>
+              <v-icon color="secondary" left>fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>
@@ -154,7 +154,7 @@ export default defineComponent({
       } else if (colorMax.value > form.meals.chart.colors.length) {
         const newColors = Array.from<string>({
           length: colorMax.value - form.meals.chart.colors.length,
-        }).fill('#EF6C00');
+        }).fill('#EE672D');
 
         form.meals.chart.colors = [...form.meals.chart.colors, ...newColors];
       }

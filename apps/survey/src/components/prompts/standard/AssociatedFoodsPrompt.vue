@@ -56,7 +56,7 @@
                       </template>
                       <template #append>
                         <v-btn
-                          color="secondary lighten-1"
+                          color="primary lighten-1"
                           depressed
                           :title="promptI18n['select.different']"
                           @click="replaceFood(index, foodIndex)"
@@ -73,7 +73,7 @@
                             <v-btn
                               v-bind="attrs"
                               class="ml-2"
-                              color="secondary lighten-1"
+                              color="primary lighten-1"
                               depressed
                               :title="promptI18n['select.remove']"
                               v-on="on"

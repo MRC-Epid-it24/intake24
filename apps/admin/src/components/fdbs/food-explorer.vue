@@ -7,7 +7,7 @@
     <v-treeview
       activatable
       :active.sync="active"
-      color="secondary"
+      color="primary"
       dense
       :items="items"
       :load-children="fetchCategoryContent"

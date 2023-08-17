@@ -14,7 +14,7 @@
       </v-btn>
       <v-divider vertical></v-divider>
       <v-btn
-        :color="isValid ? 'secondary' : 'primary'"
+        :color="isValid ? 'primary' : 'secondary'"
         :disabled="!isValid"
         value="next"
         @click="action('next')"

@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="primary" icon :title="internalTitle" :to="internalTo">
+  <v-btn color="secondary" icon :title="internalTitle" :to="internalTo">
     <v-icon dark>{{ icon }}</v-icon>
   </v-btn>
 </template>

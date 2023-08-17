@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <loader :show="isAppLoading" />
-    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="primary" dark>
+    <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="secondary" dark>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="my-1 title">{{ $t('common._') }}</v-list-item-title>
@@ -68,7 +68,7 @@
       ></menu-tree>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" app color="secondary" dark fixed>
+    <v-app-bar v-if="loggedIn" app color="primary" dark fixed>
       <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-btn v-if="isVerified" text :to="{ name: 'user' }">

@@ -27,7 +27,7 @@ export default defineComponent({
 
   computed: {
     color() {
-      return this.valid ? 'secondary' : undefined;
+      return this.valid ? 'primary' : undefined;
     },
 
     amountWithUnit(): string {

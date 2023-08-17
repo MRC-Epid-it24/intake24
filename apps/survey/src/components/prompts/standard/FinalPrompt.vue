@@ -3,7 +3,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'survey-home', params: { surveyId } }"
@@ -14,7 +14,7 @@
       <v-btn
         v-if="showFeedback"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'feedback-home', params: { surveyId } }"

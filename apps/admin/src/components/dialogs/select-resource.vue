@@ -4,7 +4,7 @@
       <slot name="activator" v-bind="{ on, attrs }"></slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -54,7 +54,7 @@
             <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
           </div>
         </template>
-        <v-alert v-else color="primary" text type="info">
+        <v-alert v-else color="secondary" text type="info">
           {{ $t('common.search.none') }}
         </v-alert>
       </v-card-text>

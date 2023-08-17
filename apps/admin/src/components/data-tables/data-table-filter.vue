@@ -19,7 +19,7 @@
     <v-row justify="space-between">
       <v-col col="12" sm="auto">
         {{ $t('common.search.filter') }}:
-        <v-chip v-for="item in items" :key="item" class="mr-1" color="orange darken-2" pill>
+        <v-chip v-for="item in items" :key="item" class="mr-1" color="info" pill>
           {{ item }}
         </v-chip>
       </v-col>

@@ -20,7 +20,7 @@
         {{ $t(`survey-schemes.actions.title`) }}
       </v-card-subtitle>
       <v-tabs vertical>
-        <v-btn class="mb-4" color="primary" @click="add">
+        <v-btn class="mb-4" color="secondary" @click="add">
           <v-icon left>$add</v-icon>
           {{ $t(`survey-schemes.actions.add`) }}
         </v-btn>
@@ -161,7 +161,7 @@ export const defaultAction: ActionItem = {
   type: 'next',
   text: { en: '' },
   label: {},
-  color: 'secondary',
+  color: 'primary',
   variant: 'outlined',
   icon: '$next',
   layout: ['desktop', 'mobile'],

@@ -57,7 +57,7 @@
                 :title="$t('survey-schemes.data-export.edit')"
                 @click.stop="edit(section)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>

@@ -1,18 +1,12 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-cloud-meatball</v-icon>
+      <v-icon color="secondary" left>fas fa-cloud-meatball</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        color="secondary"
-        fab
-        small
-        :title="$t('feedback-schemes.cards.add')"
-        @click.stop="add"
-      >
+      <v-btn color="primary" fab small :title="$t('feedback-schemes.cards.add')" @click.stop="add">
         <v-icon small>$add</v-icon>
       </v-btn>
       <options-menu>
@@ -54,7 +48,7 @@
                 :title="$t('feedback-schemes.cards.edit')"
                 @click.stop="edit({ card, index })"
               >
-                <v-icon color="primary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>

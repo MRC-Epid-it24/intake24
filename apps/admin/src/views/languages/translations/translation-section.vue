@@ -182,7 +182,7 @@ export default defineComponent({
       },
       [
         h(VCard, { props: { tile: true } }, [
-          h(VToolbar, { props: { dark: true, color: 'primary' } }, [
+          h(VToolbar, { props: { dark: true, color: 'secondary' } }, [
             h(
               VBtn,
               {

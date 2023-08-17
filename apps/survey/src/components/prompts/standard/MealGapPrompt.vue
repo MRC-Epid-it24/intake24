@@ -6,7 +6,7 @@
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.yes"
@@ -17,7 +17,7 @@
       </v-btn>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
         :title="promptI18n.no"

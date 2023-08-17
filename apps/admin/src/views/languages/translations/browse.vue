@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <template v-if="form.translations.length">
         <confirm-dialog
-          color="secondary"
+          color="primary"
           fab
           icon
           icon-left="fas fa-rotate"
@@ -47,7 +47,7 @@
         </v-list-item-content>
         <v-list-item-action>
           <v-btn icon :title="$t('languages.translations.edit')" @click.stop="edit(translation)">
-            <v-icon color="primary lighten-2">$edit</v-icon>
+            <v-icon color="secondary lighten-2">$edit</v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
@@ -57,7 +57,7 @@
         {{ $t('languages.translations.create') }}
       </v-card-title>
       <v-card-text class="d-flex justify-center align-center">
-        <v-btn color="primary" fab x-large>
+        <v-btn color="secondary" fab x-large>
           <v-icon>$add</v-icon>
         </v-btn>
       </v-card-text>

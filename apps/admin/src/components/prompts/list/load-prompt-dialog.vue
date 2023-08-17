@@ -11,7 +11,7 @@
       </slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -64,7 +64,7 @@
             </template>
           </v-list-item-group>
         </v-list>
-        <v-alert v-else color="primary" text type="info">
+        <v-alert v-else color="secondary" text type="info">
           {{ $t('survey-schemes.prompts.templates.none') }}
         </v-alert>
       </v-card-text>
