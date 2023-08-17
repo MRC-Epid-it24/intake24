@@ -1,10 +1,10 @@
 :root {
-  --vp-c-accent: #FF6D00;
-  --vp-c-brand: #EF6C00;
-  --vp-c-brand-light: #FB8C00;
-  --vp-c-brand-lighter: #F57C00;
-  --vp-c-brand-dark: #E65100;
-  --vp-c-brand-darker: #E65100;
+  --vp-c-accent: #f68623;
+  --vp-c-brand: #EE672D;
+  --vp-c-brand-light: #f3946b;
+  --vp-c-brand-lighter: #f18557;
+  --vp-c-brand-dark: #c4460f;
+  --vp-c-brand-darker: #de4f12;
 }
 
 a {
