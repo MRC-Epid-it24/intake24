@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options">
+  <v-tab-item key="options" value="options">
     <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
     <v-card-subtitle>
       {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}

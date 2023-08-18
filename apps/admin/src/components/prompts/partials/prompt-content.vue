@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="content">
+  <v-tab-item key="content" value="content">
     <v-tabs vertical>
       <v-tab v-for="key in keys" :key="key" class="justify-start">
         <v-icon left>$languages</v-icon>{{ key }}

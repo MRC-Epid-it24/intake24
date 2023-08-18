@@ -6,7 +6,7 @@ export { default as portionSizePrompts } from './portion-size';
 export { default as standardPrompts } from './standard';
 
 const baseTabs = ['general', 'content', 'actions', 'conditions'];
-const tabs = ['general', 'content', 'actions', 'conditions', 'options', 'json'];
+const tabs = [...baseTabs, 'options', 'json'];
 const tabsWithValidation = [...baseTabs, 'validation', 'options', 'json'];
 
 export const promptSections: PromptSection[] = [
@@ -42,7 +42,7 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   'date-picker-prompt': {
-    tabs: [...tabsWithValidation, 'options'],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   'info-prompt': {
@@ -62,7 +62,7 @@ export const promptSettings: PromptSettings = {
     sections: [...promptSectionsExceptSubmission],
   },
   'time-picker-prompt': {
-    tabs: [...tabsWithValidation, 'options'],
+    tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
   },
   'yes-no-prompt': {

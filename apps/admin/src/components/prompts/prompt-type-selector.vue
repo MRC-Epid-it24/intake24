@@ -8,7 +8,7 @@
         <v-col v-for="prompt in prompts" :key="prompt.id" cols="12" md="3">
           <v-item v-slot="{ active, toggle }" :value="prompt.component">
             <v-card
-              :color="active ? 'secondary' : ''"
+              :color="active ? 'primary' : ''"
               dark
               height="180"
               @click.stop="tryToggle(active, toggle)"

@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options">
+  <v-tab-item key="options" value="options">
     <v-card-text>
       <v-row>
         <v-col cols="12" lg="4" md="6">

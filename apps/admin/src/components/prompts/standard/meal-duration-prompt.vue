@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options">
+  <v-tab-item key="options" value="options">
     <v-card outlined>
       <v-toolbar color="grey lighten-4" flat>
         <v-icon left>fas fa-sliders</v-icon>

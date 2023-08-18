@@ -1,7 +1,7 @@
 import { copy } from '@intake24/common/util';
 
 import type { Prompt, Prompts } from './prompts';
-import { basePrompt, promptValidation } from './base';
+import { basePrompt } from './base';
 
 export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   ...basePrompt,
@@ -50,7 +50,6 @@ export const mealAddPrompt: Prompts['meal-add-prompt'] = copy({
 
 export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
   ...basePrompt,
-  ...promptValidation,
   component: 'meal-duration-prompt',
   type: 'standard',
   id: 'meal-duration-prompt',
@@ -74,7 +73,6 @@ export const mealGapPrompt: Prompts['meal-gap-prompt'] = copy({
 
 export const mealTimePrompt: Prompts['meal-time-prompt'] = copy({
   ...basePrompt,
-  ...promptValidation,
   component: 'meal-time-prompt',
   type: 'standard',
   id: 'meal-time-prompt',
