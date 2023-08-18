@@ -69,14 +69,14 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="$t('common.action.no')" value="notSame" @click.stop="action('notSame')">
+      <v-btn color="primary" text :title="$t('common.action.no')" @click.stop="action('notSame')">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn :title="$t('common.action.yes')" value="same" @click.stop="action('same')">
+      <v-btn color="primary" text title="$t('common.action.yes')" @click.stop="action('same')">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>

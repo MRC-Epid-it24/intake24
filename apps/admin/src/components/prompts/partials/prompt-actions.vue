@@ -69,13 +69,29 @@
                     :label="$t('survey-schemes.actions.variants._')"
                     outlined
                   ></v-select>
-                  <v-text-field
+                  <v-select
                     v-model="item.color"
                     class="mb-4"
                     hide-details="auto"
+                    :items="colors"
                     :label="$t('survey-schemes.actions.color')"
                     outlined
-                  ></v-text-field>
+                  >
+                    <template #item="{ item }">
+                      <span
+                        class="mr-2 pa-4 rounded-circle"
+                        :style="{ backgroundColor: item.color }"
+                      ></span>
+                      {{ item.text }}
+                    </template>
+                    <template #selection="{ item }">
+                      <span
+                        class="mr-2 pa-4 rounded-circle"
+                        :style="{ backgroundColor: item.color }"
+                      ></span>
+                      {{ item.text }}
+                    </template>
+                  </v-select>
                   <v-text-field
                     v-model="item.icon"
                     hide-details="auto"
@@ -153,6 +169,7 @@ import type { ActionItem, Actions } from '@intake24/common/prompts';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { withIdList } from '@intake24/admin/util';
+import { colors } from '@intake24/common/theme';
 import { copy, randomString } from '@intake24/common/util';
 
 import { useSelects } from './use-selects';
@@ -182,11 +199,12 @@ export default defineComponent({
   emits: ['update:actions'],
 
   setup() {
-    const { actionList, actionVariantsList, layoutList } = useSelects();
+    const { actionList, actionVariantsList, colors, layoutList } = useSelects();
 
     return {
       actionList,
       actionVariantsList,
+      colors,
       layoutList,
     };
   },

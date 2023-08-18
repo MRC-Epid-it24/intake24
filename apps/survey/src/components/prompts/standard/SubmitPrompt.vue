@@ -6,24 +6,16 @@
       </next>
     </template>
     <template #nav-actions>
-      <v-btn value="addMeal" @click.stop="action('addMeal')">
+      <v-btn color="primary" text @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.addMeal') }}
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn
-        :color="isValid ? 'primary' : 'secondary'"
-        :disabled="!isValid"
-        value="next"
-        @click="action('next')"
-      >
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.submit') }}
-        </span>
-        <v-icon class="pb-1">$next</v-icon>
-      </v-btn>
+      <next-mobile :disabled="!isValid" @click="action('next')">
+        {{ $t('recall.actions.nav.submit') }}
+      </next-mobile>
     </template>
   </card-layout>
 </template>

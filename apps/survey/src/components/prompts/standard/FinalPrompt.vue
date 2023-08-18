@@ -24,12 +24,17 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
+      <v-btn color="primary" text :to="{ name: 'survey-home', params: { surveyId } }">
         <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
         <v-icon class="pb-1">$home</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+      <v-btn
+        v-if="showFeedback"
+        color="primary"
+        text
+        :to="{ name: 'feedback-home', params: { surveyId } }"
+      >
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.feedback') }}
         </span>

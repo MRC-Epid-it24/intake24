@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 
 import type { Dictionary } from '@intake24/common/types';
+import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';
 
@@ -51,16 +52,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#EE672D',
-        secondary: '#020202',
-        ternary: '#FEE8E1',
-        quaternary: '#d34980',
-        info: '#4456a6',
-        accent: '#f68623',
-        // #77c044
-        // #B968DC
-        // #41C3EC
-        // #FFDB59
+        ...colors,
       },
     },
   },

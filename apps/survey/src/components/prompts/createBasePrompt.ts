@@ -8,14 +8,14 @@ import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/ui';
 
-import { Next } from './actions';
+import { Next, NextMobile } from './actions';
 import { BaseLayout, CardLayout } from './layouts';
 
 export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
-    components: { Next, BaseLayout, CardLayout },
+    components: { Next, NextMobile, BaseLayout, CardLayout },
 
     props: {
       food: {

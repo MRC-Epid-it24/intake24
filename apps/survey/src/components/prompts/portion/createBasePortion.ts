@@ -9,7 +9,7 @@ import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/compon
 import { useFoodUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/ui';
 
-import { Next } from '../actions';
+import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout } from '../layouts';
 
 export default <
@@ -19,7 +19,14 @@ export default <
   defineComponent({
     name: 'BasePortion',
 
-    components: { ExpansionPanelActions, Next, BaseLayout, CardLayout, ValidInvalidIcon },
+    components: {
+      ExpansionPanelActions,
+      Next,
+      NextMobile,
+      BaseLayout,
+      CardLayout,
+      ValidInvalidIcon,
+    },
 
     props: {
       food: {

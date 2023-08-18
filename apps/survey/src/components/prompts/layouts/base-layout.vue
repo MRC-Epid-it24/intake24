@@ -31,67 +31,49 @@
           :outlined="item.variant === 'outlined'"
           :text="item.variant === 'text'"
           :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
-          @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
+          @click="action(item.type, foodOrMealId, item.params)"
         >
           {{ translate(item.text) }}
         </v-btn>
       </template>
       <template v-else>
-        <slot name="actions">
-          <next :disabled="!isValid" @click="next"></next>
-        </slot>
+        <slot name="actions"></slot>
       </template>
     </div>
-    <v-bottom-navigation
-      v-if="isMobile"
-      id="actions"
-      app
-      class="bottom-navigation"
-      color="primary"
-      fixed
-      :value="navTab"
-    >
-      <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action"></meal-list-mobile>
-      <template v-if="mobileActions.length">
-        <template v-for="(item, idx) in mobileActions">
-          <v-btn
-            :key="item.type"
-            :color="item.type === 'next' ? 'primary' : undefined"
-            :disabled="item.type === 'next' && !isValid"
-            :outlined="item.variant === 'outlined'"
-            :text="item.variant === 'text'"
-            :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
-            :value="item.type"
-            @click="item.type === 'next' ? next() : action(item.type, foodOrMealId, item.params)"
-          >
-            <span class="text-overline font-weight-medium">
-              {{ translate(item.text) }}
-            </span>
-            <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
-          </v-btn>
-          <v-divider
-            v-if="idx + 1 < mobileActions.length"
-            :key="`div-${item.type}`"
-            vertical
-          ></v-divider>
+    <div v-if="isMobile" id="actions" class="bottom-navigation">
+      <div v-if="showSummary" class="bottom-navigation__summary">
+        <meal-list-mobile v-if="showSummary" v-bind="{ meals }" @action="action"></meal-list-mobile>
+      </div>
+      <div v-if="mobileActions.length || hasNavActionsSlot" class="bottom-navigation__actions">
+        <template v-if="mobileActions.length">
+          <template v-for="(item, idx) in mobileActions">
+            <v-btn
+              :key="item.type"
+              :color="item.color"
+              :disabled="item.type === 'next' && !isValid"
+              :outlined="item.variant === 'outlined'"
+              :text="item.variant === 'text'"
+              :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
+              :value="item.type"
+              @click="action(item.type, foodOrMealId, item.params)"
+            >
+              <span class="text-overline font-weight-medium">
+                {{ translate(item.text) }}
+              </span>
+              <v-icon v-if="item.icon" class="pb-1">{{ item.icon }}</v-icon>
+            </v-btn>
+            <v-divider
+              v-if="idx + 1 < mobileActions.length"
+              :key="`div-${item.type}`"
+              vertical
+            ></v-divider>
+          </template>
         </template>
-      </template>
-      <template v-else>
-        <slot name="nav-actions">
-          <v-btn
-            :color="isValid ? 'primary' : 'secondary'"
-            :disabled="!isValid"
-            value="next"
-            @click="next"
-          >
-            <span class="text-overline font-weight-medium">
-              {{ $t('recall.actions.nav.next') }}
-            </span>
-            <v-icon class="pb-1">$next</v-icon>
-          </v-btn>
-        </slot>
-      </template>
-    </v-bottom-navigation>
+        <template v-else>
+          <slot name="nav-actions"></slot>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 

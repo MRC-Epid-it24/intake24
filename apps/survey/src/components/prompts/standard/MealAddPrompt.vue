@@ -47,19 +47,13 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :disabled="!hasMeals" :title="promptI18n.no" value="cancel">
+      <v-btn color="primary" :disabled="!hasMeals" text :title="promptI18n.no">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
           {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
-      <v-btn
-        color="primary"
-        :disabled="!isValid"
-        :title="promptI18n.yes"
-        value="next"
-        @click="action('next')"
-      >
+      <v-btn color="primary" :disabled="!isValid" :title="promptI18n.yes" @click="action('next')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>

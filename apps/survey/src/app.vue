@@ -243,7 +243,7 @@ export default defineComponent({
   }
 }
 
-.v-main:has(.bottom-navigation):has(.meal-list-mobile) {
-  padding-bottom: 112px !important;
+.v-main:has(.bottom-navigation) {
+  padding-bottom: 65px !important;
 }
 </style>

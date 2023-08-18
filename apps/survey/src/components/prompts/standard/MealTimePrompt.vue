@@ -34,7 +34,7 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="promptI18n.no" value="cancel" @click.stop="action('cancel')">
+      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>
@@ -45,7 +45,6 @@
         color="primary"
         :disabled="!isValid"
         :title="promptI18n.yes"
-        value="next"
         @click.stop="action('next')"
       >
         <span class="text-overline font-weight-medium">
