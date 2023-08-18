@@ -53,7 +53,7 @@
                   <v-list-item-action v-if="!isMobile">
                     <v-btn
                       block
-                      color="secondary"
+                      color="info"
                       outlined
                       rounded
                       :title="$t('recall.start.another')"
@@ -67,7 +67,7 @@
                 <v-list-item v-if="isMobile">
                   <v-btn
                     block
-                    color="secondary"
+                    color="info"
                     large
                     outlined
                     rounded

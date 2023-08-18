@@ -1,7 +1,7 @@
 <template>
   <v-tab-item key="conditions">
     <v-tabs vertical>
-      <v-btn class="my-4" color="secondary" @click="add">
+      <v-btn class="my-4" color="primary" @click="add">
         <v-icon left>$add</v-icon>
         {{ $t(`survey-schemes.conditions.add`) }}
       </v-btn>
