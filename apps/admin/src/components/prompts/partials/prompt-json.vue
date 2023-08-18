@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="json">
+  <v-tab-item key="json" value="json">
     <json-editor v-bind="{ value }" @input="$emit('input', $event)"></json-editor>
   </v-tab-item>
 </template>

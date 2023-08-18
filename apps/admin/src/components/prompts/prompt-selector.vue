@@ -24,7 +24,11 @@
         <template #extension>
           <v-container :fluid="$vuetify.breakpoint.mdAndDown">
             <v-tabs v-model="tab" background-color="secondary" dark>
-              <v-tab v-for="item in promptSettings[dialog.prompt.component].tabs" :key="item">
+              <v-tab
+                v-for="item in promptSettings[dialog.prompt.component].tabs"
+                :key="item"
+                :tab-value="item"
+              >
                 {{ item }}
               </v-tab>
             </v-tabs>
@@ -34,7 +38,7 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container class="prompt-container" :fluid="$vuetify.breakpoint.mdAndDown">
           <v-tabs-items v-model="tab" class="pt-1 flex-grow-1">
-            <v-tab-item key="general">
+            <v-tab-item key="general" value="general">
               <v-row>
                 <v-col cols="12">
                   <v-card outlined>
@@ -113,7 +117,7 @@
             <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
             <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
             <prompt-validation
-              v-if="'validation' in dialog.prompt"
+              v-if="promptSettings[dialog.prompt.component].tabs.includes('validation')"
               v-bind.sync="dialog.prompt.validation"
             ></prompt-validation>
             <component

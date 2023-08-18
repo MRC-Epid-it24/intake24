@@ -127,8 +127,26 @@ const checkSurveyCustomConditions = (store: SurveyStore, prompt: Prompt) =>
         console.error(`Unexpected condition: ${type} & ${props.section}`);
         return false;
       }
-      case 'flag':
-        return conditionOps[op]({ value, answer: store.data.flags });
+      case 'flag': {
+        switch (props.section) {
+          case 'survey':
+            return conditionOps[op]({ value, answer: store.data.flags });
+          case 'meal':
+            return store.data.meals.every(({ flags }) =>
+              conditionOps[op]({ value, answer: flags })
+            );
+          case 'food':
+            return store.data.meals.every((meal) =>
+              meal.foods.every(({ flags }) => conditionOps[op]({ value, answer: flags }))
+            );
+          default:
+            console.error(`Unexpected condition: ${type} & ${props.section}`);
+            return false;
+        }
+      }
+      case 'meals': {
+        return conditionOps[op]({ value, answer: store.data.meals.length });
+      }
       case 'promptAnswer': {
         if (props.section === 'survey')
           return conditionOps[op]({
@@ -226,8 +244,22 @@ const checkMealCustomConditions = (store: SurveyStore, mealState: MealState, pro
             return false;
         }
       }
-      case 'flag':
-        return conditionOps[op]({ value, answer: mealState.flags });
+      case 'flag': {
+        switch (props.section) {
+          case 'survey':
+            return conditionOps[op]({ value, answer: store.data.flags });
+          case 'meal':
+            return conditionOps[op]({ value, answer: mealState.flags });
+          case 'food':
+            return mealState.foods.every(({ flags }) => conditionOps[op]({ value, answer: flags }));
+          default:
+            console.error(`Unexpected condition: ${type} & ${props.section}`);
+            return false;
+        }
+      }
+      case 'meals': {
+        return conditionOps[op]({ value, answer: store.data.meals.length });
+      }
       case 'promptAnswer': {
         switch (props.section) {
           case 'survey':
@@ -658,11 +690,25 @@ const checkFoodCustomConditions = (
             return false;
         }
       }
-      case 'flag':
-        return conditionOps[op]({ value, answer: foodState.flags });
+      case 'flag': {
+        switch (props.section) {
+          case 'survey':
+            return conditionOps[op]({ value, answer: store.data.flags });
+          case 'meal':
+            return conditionOps[op]({ value, answer: mealState.flags });
+          case 'food':
+            return conditionOps[op]({ value, answer: foodState.flags });
+          default:
+            console.error(`Unexpected condition: ${type} & ${props.section}`);
+            return false;
+        }
+      }
       case 'foodCategory': {
         if (foodState.type !== 'encoded-food') return false;
         return conditionOps[op]({ value, answer: foodState.data.categories });
+      }
+      case 'meals': {
+        return conditionOps[op]({ value, answer: store.data.meals.length });
       }
       case 'promptAnswer': {
         switch (props.section) {

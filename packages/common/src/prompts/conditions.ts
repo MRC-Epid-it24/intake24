@@ -71,6 +71,7 @@ export const conditionTypes = [
   'energy',
   'flag',
   'foodCategory',
+  'meals',
   'promptAnswer',
   'recallNumber',
 ] as const;
@@ -96,10 +97,16 @@ export type Conditions = {
   };
   flag: BaseCondition & {
     type: 'flag';
-    props: {};
+    props: {
+      section: ConditionSection;
+    };
   };
   foodCategory: BaseCondition & {
     type: 'foodCategory';
+    props: {};
+  };
+  meals: BaseCondition & {
+    type: 'meals';
     props: {};
   };
   promptAnswer: BaseCondition & {

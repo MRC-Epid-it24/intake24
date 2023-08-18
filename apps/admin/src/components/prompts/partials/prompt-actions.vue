@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="actions">
+  <v-tab-item key="actions" value="actions">
     <v-col cols="12">
       <v-switch
         v-model="toggle"

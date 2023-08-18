@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="validation">
+  <v-tab-item key="validation" value="validation">
     <v-row>
       <v-col cols="12">
         <v-switch
