@@ -44,7 +44,7 @@ export default defineComponent({
 
   emits: ['action', 'update:navTab'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const { i18n, translate, translatePath } = useI18n();
     const { params, type } = usePromptUtils(props);
     const { foodName } = useFoodUtils(props);
@@ -72,11 +72,16 @@ export default defineComponent({
       i18n.setLocaleMessage(locale, messages);
     };
 
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
+    };
+
     onBeforeMount(() => {
       loadPromptTranslations();
     });
 
     return {
+      action,
       foodName,
       translate,
       translatePath,
@@ -107,6 +112,10 @@ export default defineComponent({
       return !!this.$slots.actions;
     },
 
+    hasNavActionsSlot(): boolean {
+      return !!this.$slots['nav-actions'];
+    },
+
     mobileActions(): ActionItem[] {
       return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
     },
@@ -117,27 +126,6 @@ export default defineComponent({
         text: this.$t(`prompts.${this.type}.text`, this.params),
         description: this.translatePath(`prompts.${this.type}.description`, this.params, true),
       };
-    },
-  },
-
-  methods: {
-    update(type: string) {
-      this.$emit('update:navTab', type);
-    },
-
-    action(type: string, ...args: [id?: string, params?: object]) {
-      this.update(type);
-      this.$emit('action', type, ...args);
-    },
-
-    /*
-     * probably redundant at this point since nav actions is being handled by click rather than watching the navTab prop
-     * component -> nav -> is being rendered
-     * TODO remove
-     */
-    next() {
-      this.update('next');
-      this.$emit('action', 'next');
     },
   },
 });

@@ -28,14 +28,14 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="promptI18n.yes" value="addMeal" @click.stop="action('addMeal')">
+      <v-btn color="primary" text :title="promptI18n.yes" @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn :title="promptI18n.no" value="next" @click.stop="action('next')">
+      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.no }}
         </span>

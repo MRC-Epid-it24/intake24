@@ -69,9 +69,6 @@
     <v-alert v-else border="left" outlined type="warning">
       {{ $t('prompts.unknown.text', { food: foodName }) }}
     </v-alert>
-    <template v-if="!optionValid" #actions>
-      <div></div>
-    </template>
   </card-layout>
 </template>
 

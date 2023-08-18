@@ -12,6 +12,7 @@ import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
 
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
+import { colors } from '../../packages/common/src/theme';
 import pkg from './package.json';
 
 // Set build info for application
@@ -21,8 +22,6 @@ process.env.VITE_APP_BUILD_REVISION = childProcess
   .toString()
   .trim();
 process.env.VITE_APP_BUILD_DATE = new Date().toISOString();
-
-const themeColor = '#EE672D';
 
 export default defineConfig(({ mode }) => {
   const {
@@ -123,7 +122,7 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: appName,
-            themeColor,
+            themeColor: colors.primary,
             captcha: resolveCaptchaScript(captchaProvider),
           },
         },
@@ -138,7 +137,7 @@ export default defineConfig(({ mode }) => {
           name: appName,
           short_name: appName,
           description: pkg.description,
-          theme_color: themeColor,
+          theme_color: colors.primary,
           icons: [
             {
               src: 'img/icons/pwa-192x192.png',

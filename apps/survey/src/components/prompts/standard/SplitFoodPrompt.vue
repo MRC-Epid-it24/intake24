@@ -50,14 +50,14 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :title="promptI18n.separate" value="separate" @click.stop="action('separate')">
+      <v-btn color="primary" text :title="promptI18n.separate" @click.stop="action('separate')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.separate }}
         </span>
         <v-icon class="pb-1">fas fa-arrows-left-right-to-line</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn :title="promptI18n.single" value="single" @click.stop="action('single')">
+      <v-btn color="primary" text :title="promptI18n.single" @click.stop="action('single')">
         <span class="text-overline font-weight-medium">
           {{ promptI18n.single }}
         </span>

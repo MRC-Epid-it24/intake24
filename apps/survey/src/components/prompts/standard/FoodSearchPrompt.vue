@@ -8,10 +8,6 @@
         @input="$emit('input', $event)"
       ></food-browser>
     </v-card-text>
-    <template #actions>
-      <!-- Should not have actions -> only click & select -->
-      <div></div>
-    </template>
   </card-layout>
 </template>
 

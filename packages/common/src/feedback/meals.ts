@@ -1,5 +1,6 @@
 import type { RequiredLocaleTranslation } from '../types';
 import type { Nutrient } from './shared';
+import { colors } from '../theme';
 
 export type FeedbackMealChart = {
   colors: string[];
@@ -48,7 +49,7 @@ export type FeedbackMeals = {
 
 export const defaultMeals: FeedbackMeals = {
   chart: {
-    colors: ['#FF6384', '#36A2EB', '#FFCE56', '#9c27b0', '#8bc34a', '#999999'],
+    colors: Object.values(colors).slice(0, 5),
     nutrients: [{ id: ['1'], name: { en: 'Energy (kcal)' } }],
   },
   table: {

@@ -89,6 +89,7 @@ import { Preview } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultTopFoods } from '@intake24/common/feedback';
+import { colors } from '@intake24/common/theme';
 import { useI18n } from '@intake24/i18n';
 
 import type { FeedbackSchemeForm } from '../form.vue';
@@ -146,7 +147,7 @@ export default defineComponent({
       } else if (size > form.topFoods.colors.length) {
         const newColors = Array.from<string>({
           length: size - form.topFoods.colors.length,
-        }).fill('#EE672D');
+        }).fill(colors.primary);
 
         form.topFoods.colors = [...form.topFoods.colors, ...newColors];
       }

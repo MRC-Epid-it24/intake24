@@ -23,17 +23,14 @@
       </v-form>
     </v-card-text>
     <template #actions>
-      <v-btn class="px-4" color="primary" large @click.stop="action('next')">
+      <next :disabled="!isValid" @click="action('next')">
         {{ promptI18n.confirm }}
-      </v-btn>
+      </next>
     </template>
     <template #nav-actions>
-      <v-btn color="primary" :disabled="!isValid" value="next" @click.stop="action('next')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.next') }}
-        </span>
-        <v-icon class="pb-1">$next</v-icon>
-      </v-btn>
+      <next-mobile :disabled="!isValid" @click="action('next')">
+        {{ promptI18n.confirm }}
+      </next-mobile>
     </template>
   </card-layout>
 </template>

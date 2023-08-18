@@ -1,5 +1,12 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action"></card-layout>
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
+  </card-layout>
 </template>
 
 <script lang="ts">

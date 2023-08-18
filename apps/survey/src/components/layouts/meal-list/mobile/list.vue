@@ -1,13 +1,12 @@
 <template>
   <v-bottom-sheet v-model="navigation" content-class="meal-list-mobile__sheet">
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" value="summary" v-on="on">
+      <v-btn v-bind="attrs" class="navigation__btn-summary" value="summary" v-on="on">
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.review') }}
         </span>
         <v-icon class="pb-1">fas fa-list-check</v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
     </template>
     <v-list class="meal-list__list meal-list-mobile__list" dense subheader>
       <v-subheader class="pt-8 pb-7 pl-4 pr-3 d-flex flex-row justify-space-between">
