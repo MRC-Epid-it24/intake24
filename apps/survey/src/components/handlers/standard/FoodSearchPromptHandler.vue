@@ -2,6 +2,7 @@
   <food-search-prompt
     v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt, section }"
     v-model="searchTerm"
+    @action="action"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
   ></food-search-prompt>
@@ -39,7 +40,7 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup() {
+  setup(props, { emit }) {
     function getSearchTerm(foodEntry: FoodState) {
       switch (foodEntry.type) {
         case 'encoded-food':
@@ -82,7 +83,11 @@ export default defineComponent({
       discardedFoodName.value = null;
     }
 
-    return { food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
+    };
+
+    return { action, food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
   },
 
   methods: {
@@ -91,7 +96,7 @@ export default defineComponent({
     foodSelected(foodData: UserFoodData) {
       this.foodData = foodData;
       this.commitAnswer();
-      this.$emit('action', 'next');
+      this.action('next');
     },
 
     foodMissing() {
@@ -110,7 +115,7 @@ export default defineComponent({
 
       this.replaceFood({ foodId: id, food: newState });
 
-      this.$emit('action', 'next');
+      this.action('next');
     },
 
     commitAnswer() {

@@ -11,7 +11,7 @@ import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { GenericActionType, Prompts } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import { SplitFoodPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
