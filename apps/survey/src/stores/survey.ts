@@ -101,10 +101,18 @@ export const surveyInitialState = (): CurrentSurveyState => ({
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
   if (parameters && !parameters.storeUserSessionOnServer) return false;
 
-  const { startTime /*, submissionTime */ } = state;
-  if (!startTime /*|| submissionTime*/) return false;
+  const { startTime, submissionTime } = state;
+  if (!startTime) return false;
 
-  // TODO: check old stale data
+  if (submissionTime) return true;
+
+  const now = new Date();
+  const startDt = new Date(startTime);
+
+  const timeDifference = (now.getTime() - startDt.getTime()) / 1000 / 60 / 60;
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+
+  if (timeDifference > 12 || startDt.getTime() < startOfDay.getTime()) return false;
 
   return true;
 };
@@ -250,7 +258,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (this.hasStarted && !this.isSubmitted && !force) {
+      if (this.hasStarted && !force) {
         console.warn('Survey already started, not restarting.');
         return;
       }
