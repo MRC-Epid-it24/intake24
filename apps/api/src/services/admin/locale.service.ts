@@ -145,14 +145,14 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     return [...records, ...newRecords];
   };
 
-  // Special Foods Get & Set
+  // Recipe Foods Get & Set
   const getRecipeFoods = async (localeId: string | SystemLocale) => {
     const { code } = await resolveLocale(localeId);
 
     return RecipeFoods.findAll({
       where: { localeId: code },
       order: [['id', 'ASC']],
-      include: [{ model: RecipeFoodsSteps }],
+      include: [{ model: RecipeFoodsSteps }, { model: SynonymSet }],
     });
   };
 
@@ -163,6 +163,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const { code } = await resolveLocale(localeId);
     // To distinguish between the locale code and the special food code
     const localeCode = code;
+    console.log(`\n\n setRecipeFoods - Recieved saving request: ${recipeFoods} - ${localeId}\n\n`);
 
     const ids = recipeFoods.map(({ id }) => id) as string[];
     await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });

@@ -46,8 +46,19 @@ const locales: LocaleMessageObject = {
     tab: 'Synonym sets',
     add: 'Add synonym set',
     remove: 'Remove synonym set',
-
     synonyms: 'Synonyms (space-delimited)',
+  },
+
+  'recipe-foods': {
+    _: 'Recipe food sets',
+    title: 'Recipe foods set',
+    tab: 'Recipe foods',
+    add: 'Add recipe food',
+    remove: 'Remove recipe food',
+    special: 'Trigger word',
+    code: 'Food code (start with $ symbol)',
+    synonyms_id: 'Synonyms (space-delimited)',
+    steps: 'Recipe Builder Steps',
   },
 
   'food-ranking': {

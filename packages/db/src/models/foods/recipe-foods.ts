@@ -77,7 +77,7 @@ export default class RecipeFoods extends BaseModel<
     type: DataType.BIGINT,
     unique: false,
   })
-  declare synonyms_id: number;
+  declare synonyms_id: number | null;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
@@ -89,10 +89,10 @@ export default class RecipeFoods extends BaseModel<
   declare locale?: NonAttribute<FoodsLocale>;
 
   @BelongsTo(() => SynonymSet, 'synonyms_id')
-  declare synonyms?: NonAttribute<SynonymSet>;
+  declare synonyms?: Attributes<SynonymSet>;
 
   @HasMany(() => RecipeFoodsSteps, 'recipeFoodsId')
-  steps?: NonAttribute<RecipeFoodsSteps[]>;
+  steps?: Attributes<RecipeFoodsSteps>[];
 
   static async findByCode(code: string): Promise<RecipeFoods | null> {
     return RecipeFoods.findOne({ where: { code }, include: [{ model: RecipeFoodsSteps }] });

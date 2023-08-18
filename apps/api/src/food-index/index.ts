@@ -67,12 +67,13 @@ export default {
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
       const result = await RecipeFoods.findOne({
         where: { localeId, code },
-        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id'],
+        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id', 'steps', 'synonyms'],
         include: [
           {
             association: 'steps',
             attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
             order: ['order', 'ASC'],
+            required: true,
           },
           {
             association: 'synonyms',

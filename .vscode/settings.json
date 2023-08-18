@@ -44,10 +44,10 @@
   "colorTabs.titleBackground": true,
   "colorTabs.ignoreCase": true,
   "workbench.colorCustomizations": {
-    "tab.activeBorder": "#f9caa7",
-    "titleBar.activeBackground": "#f9caa7",
+    "tab.activeBorder": "#89CFF0",
+    "titleBar.activeBackground": "#89CFF0",
     "titleBar.activeForeground": "#000000",
-    "statusBar.background": "#f9caa7",
+    "statusBar.background": "#89CFF0",
     "statusBar.foreground": "#000000"
   }
 }

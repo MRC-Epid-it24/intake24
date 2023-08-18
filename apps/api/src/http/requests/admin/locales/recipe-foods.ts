@@ -7,13 +7,11 @@ export default validate(
     .custom((value: any[]) => {
       if (
         value.some(
-          ({ id, code, localeId, name, recipeWord, synonyms }) =>
+          ({ id, code, localeId, name, recipeWord, synonyms_id }) =>
             (typeof id !== 'undefined' && typeof id !== 'string') ||
-            typeof code !== 'string' ||
+            (typeof code !== 'string' && code[0] !== '$') ||
             typeof localeId !== 'string' ||
             typeof name !== 'string' ||
-            typeof recipeWord !== 'string' ||
-            typeof synonyms !== 'string' ||
             typeof name !== 'string' ||
             typeof recipeWord !== 'string'
         )

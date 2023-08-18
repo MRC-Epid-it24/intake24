@@ -11,7 +11,7 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     req: Request<{ localeId: string }>,
     res: Response<LocaleRecipeFoods[]>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'special-foods', req);
+    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
     const recipeFoods = await localeService.getRecipeFoods(locale);
 
     res.json(recipeFoods);
@@ -23,7 +23,8 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
   ): Promise<void> => {
     const { body } = req;
 
-    const locale = await getAndCheckAccess(SystemLocale, 'special-foods', req);
+    console.log(`\n\nlocaleRecipeFoodsController - Recieved saving request: ${body}\n\n`);
+    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
     const recipeFoods = await localeService.setRecipeFoods(locale, body);
 
     res.json(recipeFoods);

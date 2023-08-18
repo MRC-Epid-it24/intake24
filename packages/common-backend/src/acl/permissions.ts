@@ -72,6 +72,7 @@ export const permissions = [
   { name: 'locales|food-list', displayName: 'Locale food list' },
   { name: 'locales|security', displayName: 'Locales security' },
   { name: 'locales|split-lists', displayName: 'Locale split lists' },
+  { name: 'locales|recipe-foods', displayName: 'Locale recipe foods' },
   { name: 'locales|split-words', displayName: 'Locale split words' },
   { name: 'locales|synonym-sets', displayName: 'Locale synonym sets' },
   { name: 'locales|tasks', displayName: 'Locale tasks' },
