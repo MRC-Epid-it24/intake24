@@ -1,9 +1,6 @@
-export interface FoodHeader {
-  code: string;
-  name: string;
-}
+import type { CategoryHeader } from '@intake24/common/types/http';
 
-export interface CategoryHeader {
+export interface FoodHeader {
   code: string;
   name: string;
 }

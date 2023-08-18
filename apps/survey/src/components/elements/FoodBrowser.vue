@@ -287,32 +287,7 @@ export default defineComponent({
       }
     };
 
-    /*
-     * TODO: searchCategory and searchGlobal should be merged into a single search
-     */
-    const searchCategory = async () => {
-      if (!props.rootCategory) return;
-
-      requestInProgress.value = true;
-      searchResults.value = { foods: [], categories: [] };
-
-      try {
-        const { data } = await categoriesService.search(props.localeId, props.rootCategory, {
-          search: searchTerm.value,
-          limit: 25,
-        });
-
-        // searchResults.value = data;
-
-        requestFailed.value = false;
-      } catch (err) {
-        requestFailed.value = true;
-      } finally {
-        requestInProgress.value = false;
-      }
-    };
-
-    const searchGlobal = async () => {
+    const search = async () => {
       if (!props.parameters || !searchTerm.value) return;
 
       requestInProgress.value = true;
@@ -320,13 +295,12 @@ export default defineComponent({
       const { matchScoreWeight, rankingAlgorithm } = props.parameters;
 
       try {
-        const searchResponse = await foodsService.search(props.localeId, searchTerm.value, {
+        searchResults.value = await foodsService.search(props.localeId, searchTerm.value, {
           rankingAlgorithm,
           matchScoreWeight,
           recipe: false,
+          category: props.rootCategory,
         });
-
-        searchResults.value = searchResponse;
 
         requestFailed.value = false;
       } catch (e) {
@@ -334,11 +308,6 @@ export default defineComponent({
       } finally {
         requestInProgress.value = false;
       }
-    };
-
-    const search = async () => {
-      if (props.rootCategory) await searchCategory();
-      else await searchGlobal();
     };
 
     const categorySelected = (category: CategoryHeader) => {

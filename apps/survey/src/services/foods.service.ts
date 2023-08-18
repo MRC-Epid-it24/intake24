@@ -7,6 +7,7 @@ export type SearchOptions = {
   rankingAlgorithm?: SearchSortingAlgorithm;
   matchScoreWeight?: number;
   recipe?: boolean;
+  category?: string;
 };
 
 export default {

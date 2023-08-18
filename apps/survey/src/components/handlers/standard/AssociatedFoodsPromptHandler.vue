@@ -6,6 +6,7 @@
       initialState: state,
       localeId,
       prompt,
+      searchParameters,
       section,
     }"
     @action="action"
@@ -17,7 +18,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type {
   AssociatedFoodPromptItemState,
@@ -85,6 +86,13 @@ export default defineComponent({
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
+    const searchParameters = computed(() => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        useSurvey().parameters ?? {};
+
+      return { matchScoreWeight, rankingAlgorithm };
+    });
+
     return {
       food,
       translate,
@@ -94,6 +102,7 @@ export default defineComponent({
       state,
       update,
       clearStoredState,
+      searchParameters,
     };
   },
 
