@@ -65,7 +65,7 @@
                           {{ promptI18n['select.different'] }}
                         </v-btn>
                         <confirm-dialog
-                          v-if="allowMultiple"
+                          v-if="allowMultiple && associatedFoodPrompts[index].multiple"
                           :label="promptI18n['select.remove']"
                           @confirm="removeFood(index, foodIndex)"
                         >
@@ -360,6 +360,7 @@ export default defineComponent({
 
       return !!(
         this.allowMultiple &&
+        this.associatedFoodPrompts[promptIndex].multiple &&
         prompt.mainFoodConfirmed &&
         prompt.foods.length > 0 &&
         this.replaceFoodIndex[promptIndex] === undefined

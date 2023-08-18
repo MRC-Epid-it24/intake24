@@ -79,8 +79,8 @@ export default defineComponent({
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
-      prompts: food().data.associatedFoodPrompts.map(() =>
-        initialPromptState(props.prompt.multiple)
+      prompts: food().data.associatedFoodPrompts.map((prompt) =>
+        initialPromptState(props.prompt.multiple && prompt.multiple)
       ),
     });
 
