@@ -58,7 +58,7 @@
           ></category-contents-view>
         </v-tab-item>
       </v-tabs-items>
-      <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 gap-2">
+      <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 ga-2">
         <v-btn
           v-if="type === 'foodSearch' && tab === 1"
           color="primary"

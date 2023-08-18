@@ -26,7 +26,7 @@
         </v-btn>
         <draggable v-model="currentActions.items" handle=".drag-and-drop__handle" @end="update">
           <transition-group name="drag-and-drop" type="transition">
-            <v-tab v-for="(item, idx) in currentActions.items" :key="item.id" class="d-flex gap-3">
+            <v-tab v-for="(item, idx) in currentActions.items" :key="item.id" class="d-flex ga-3">
               <v-icon class="drag-and-drop__handle flex-grow-0">$handle</v-icon>
               <div class="flex-grow-1">
                 <v-icon left>fas fa-location-arrow</v-icon>

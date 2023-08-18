@@ -1,7 +1,7 @@
 <template>
   <v-expand-transition>
     <v-sheet v-show="contextId === entity?.id" class="meal-list-mobile__context" color="ternary">
-      <div class="d-flex flex-row justify-center pa-4 gap-4">
+      <div class="d-flex flex-row justify-center pa-4 ga-4">
         <v-card
           v-for="(item, idx) in menu"
           :key="idx"
@@ -10,7 +10,7 @@
           tile
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
         >
-          <v-card-text class="d-flex flex-column justify-center align-center gap-2">
+          <v-card-text class="d-flex flex-column justify-center align-center ga-2">
             <v-icon large>{{ item.icon }}</v-icon>
             <span class="text-center font-weight-medium">{{ item.name }}</span>
           </v-card-text>

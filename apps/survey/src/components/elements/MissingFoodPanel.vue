@@ -4,7 +4,7 @@
       <v-card-text class="px-6">
         <div v-html="i18n['missing.description']"></div>
       </v-card-text>
-      <v-card-text class="px-6 pt-0 d-flex flex-column flex-md-row align-stretch gap-3">
+      <v-card-text class="px-6 pt-0 d-flex flex-column flex-md-row align-stretch ga-3">
         <v-btn
           color="primary"
           large

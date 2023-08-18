@@ -1,3 +1,5 @@
+@import "vuetify/src/styles/styles.sass";
+
 $body-font-family: Rubik, sans-serif;
 
 $material-light: (
@@ -50,3 +52,24 @@ $headings: (
 );
 
 $list-item-action-icon-margin: 6px;
+
+$utilities: (
+  "gap": (
+    responsive: true,
+    property: gap,
+    class: ga,
+    values: $spacers
+  ),
+  "gap-column": (
+    responsive: true,
+    property: column-gap,
+    class: gc,
+    values: $spacers
+  ),
+  "gap-row": (
+    responsive: true,
+    property: row-gap,
+    class: gr,
+    values: $spacers
+  )
+);

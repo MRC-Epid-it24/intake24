@@ -41,7 +41,7 @@
               class="pa-0"
               flat
             >
-              <v-card-text class="d-flex flex-column flex-md-row pa-0 gap-2">
+              <v-card-text class="d-flex flex-column flex-md-row pa-0 ga-2">
                 <v-container>
                   <v-row
                     v-for="(food, foodIndex) in assocPrompt.foods"
