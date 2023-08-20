@@ -66,7 +66,9 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Object as PropType<LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList>,
+      type: Object as PropType<
+        LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList<string | number>
+      >,
       required: true,
     },
     default: {

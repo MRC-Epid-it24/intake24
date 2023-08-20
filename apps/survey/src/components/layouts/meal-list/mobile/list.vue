@@ -49,10 +49,10 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup(props, ctx) {
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
-      context
+      ctx
     );
 
     const { getMealName, getMealTime } = useMealUtils();

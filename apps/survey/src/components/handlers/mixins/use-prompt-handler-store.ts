@@ -1,4 +1,4 @@
-import type { Ref } from 'vue';
+import type { Ref, SetupContext } from 'vue';
 import { ref } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
@@ -11,7 +11,9 @@ export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
 
 export const usePromptHandlerStore = <P extends keyof PromptStates, S extends PromptStates[P]>(
   props: UsePromptHandlerStoreProps<P>,
-  getInitialState: () => S
+  { emit }: SetupContext<any>, // fix any - infer from component
+  getInitialState: () => S,
+  commitAnswer?: () => void | Promise<void>
 ) => {
   const promptStore = getOrCreatePromptStateStore<S>(props.prompt.component)();
   const survey = useSurvey();
@@ -51,6 +53,12 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     promptStore.clearState(getFoodOrMealId(), props.prompt.id);
   };
 
+  const action = async (type: string, ...args: [id?: string, params?: object]) => {
+    if (type === 'next' && commitAnswer) await commitAnswer();
+
+    emit('action', type, ...args);
+  };
+
   const commitPortionSize = () => {
     if (!('portionSize' in state.value))
       throw new Error('This prompt does not support portion size method');
@@ -62,6 +70,12 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     survey.addFoodFlag(foodId, 'portion-size-method-complete');
   };
 
+  const actionPortionSize = (type: string, ...args: [id?: string, params?: object]) => {
+    if (type === 'next') commitPortionSize();
+
+    emit('action', type, ...args);
+  };
+
   return {
     state,
     promptStore,
@@ -70,6 +84,8 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     getFoodOrMealId,
     update,
     clearStoredState,
+    action,
+    actionPortionSize,
     commitPortionSize,
   };
 };

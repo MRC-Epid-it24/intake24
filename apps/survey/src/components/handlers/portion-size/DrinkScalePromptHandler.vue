@@ -43,7 +43,7 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
@@ -75,14 +75,12 @@ export default defineComponent({
       countConfirmed: false,
     });
 
-    const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
+    const {
+      state,
+      actionPortionSize: action,
+      update,
+    } = usePromptHandlerStore(props, ctx, getInitialState);
     const { meal } = useMealPromptUtils();
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitPortionSize();
-
-      emit('action', type, ...args);
-    };
 
     return {
       food,

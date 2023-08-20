@@ -78,6 +78,7 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent, ref, toRefs } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -107,7 +108,7 @@ export default defineComponent({
       default: false,
     },
     value: {
-      type: String,
+      type: Object as PropType<Dictionary | string | null>,
     },
   },
 

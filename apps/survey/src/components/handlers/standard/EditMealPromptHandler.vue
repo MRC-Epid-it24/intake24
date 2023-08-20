@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
@@ -37,38 +36,35 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = (): PromptStates['edit-meal-prompt'] => ({ foods: meal.value.foods });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
+    const commitAnswer = () => {
+      const { foods } = state.value;
+      const mealId = meal.value.id;
+
+      survey.setFoods({ mealId, foods });
+      clearStoredState();
+      survey.addMealFlag(mealId, 'free-entry-complete');
+    };
+
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
     return {
       meal,
       state,
+      action,
       update,
       clearStoredState,
     };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setFoods', 'addMealFlag']),
-
-    action(type: string, ...args: [id?: string, params?: object]) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, ...args);
-    },
-
-    commitAnswer() {
-      const { foods } = this.state;
-      const mealId = this.meal.id;
-
-      this.setFoods({ mealId, foods });
-      this.clearStoredState();
-      this.addMealFlag(mealId, 'free-entry-complete');
-    },
   },
 });
 </script>

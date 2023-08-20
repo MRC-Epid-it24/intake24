@@ -72,11 +72,8 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(
-      props,
-      context
-    );
+  setup(props, ctx) {
+    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
 
     return {
       action,

@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
@@ -36,37 +35,34 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup() {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const { state, update } = usePromptHandlerNoStore(ctx, getInitialState);
 
-    return { meal, state, update };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
-
-    action(type: string, ...args: [id?: string, params?: object]) {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') {
-        this.commitAnswer();
-        this.$emit('action', type);
+        commitAnswer();
+        ctx.emit('action', type);
         return;
       }
       if (type === 'cancel') {
-        this.deleteMeal(this.meal.id);
-        this.$emit('action', 'next');
+        survey.deleteMeal(meal.value.id);
+        ctx.emit('action', 'next');
         return;
       }
 
-      this.$emit('action', type, ...args);
-    },
+      ctx.emit('action', type, ...args);
+    };
 
-    commitAnswer() {
-      this.setMealTime(this.meal.id, this.state);
-    },
+    const commitAnswer = () => {
+      survey.setMealTime(meal.value.id, state.value);
+    };
+
+    return { meal, state, action, update };
   },
 });
 </script>

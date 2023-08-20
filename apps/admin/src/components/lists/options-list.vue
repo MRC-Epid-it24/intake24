@@ -72,7 +72,7 @@ export default defineComponent({
 
   props: {
     options: {
-      type: Array as PropType<ListOption[]>,
+      type: Array as PropType<ListOption<string | number>[]>,
       required: true,
     },
     rules: {

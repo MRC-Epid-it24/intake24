@@ -45,7 +45,7 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const { encodedFood, parentFoodOptional: parentFood } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
@@ -54,16 +54,6 @@ export default defineComponent({
     const getInitialState = (): PromptStates['portion-size-option-prompt'] => ({
       option: food.portionSizeMethodIndex,
     });
-
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
-
-    const survey = useSurvey();
-
-    const availableMethods = computed(() =>
-      food.data.portionSizeMethods.filter((item) =>
-        survey.registeredPortionSizeMethods.includes(item.method)
-      )
-    );
 
     const commitAnswer = () => {
       const update: Partial<Omit<EncodedFood, 'type'>> = {
@@ -83,11 +73,20 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
-      emit('action', type, ...args);
-    };
+    const survey = useSurvey();
+
+    const availableMethods = computed(() =>
+      food.data.portionSizeMethods.filter((item) =>
+        survey.registeredPortionSizeMethods.includes(item.method)
+      )
+    );
 
     return {
       food,

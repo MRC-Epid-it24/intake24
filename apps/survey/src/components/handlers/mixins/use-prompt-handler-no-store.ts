@@ -1,7 +1,11 @@
-import type { ComputedRef, Ref } from 'vue';
+import type { ComputedRef, Ref, SetupContext } from 'vue';
 import { ref, watch } from 'vue';
 
-export const usePromptHandlerNoStore = <T>(getInitialState: ComputedRef<T>) => {
+export const usePromptHandlerNoStore = <T>(
+  { emit }: SetupContext<any>, // fix any - infer from component
+  getInitialState: ComputedRef<T>,
+  commitAnswer?: () => void
+) => {
   const state = ref(getInitialState.value) as Ref<T>;
 
   watch(getInitialState, (initialState) => {
@@ -13,5 +17,11 @@ export const usePromptHandlerNoStore = <T>(getInitialState: ComputedRef<T>) => {
     if (newState) state.value = newState;
   };
 
-  return { state, update };
+  const action = (type: string, ...args: [id?: string, params?: object]) => {
+    if (type === 'next' && commitAnswer) commitAnswer();
+
+    emit('action', type, ...args);
+  };
+
+  return { state, action, update };
 };

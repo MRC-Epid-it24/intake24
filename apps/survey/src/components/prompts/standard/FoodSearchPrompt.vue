@@ -16,7 +16,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FreeTextFood } from '@intake24/common/types';
+import type { FoodState } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { FoodBrowser } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
@@ -33,7 +33,7 @@ export default defineComponent({
 
   components: { FoodBrowser },
 
-  mixins: [createBasePrompt<'food-search-prompt', FreeTextFood>()],
+  mixins: [createBasePrompt<'food-search-prompt', FoodState>()],
 
   props: {
     localeId: {
@@ -45,7 +45,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: String,
+      type: String as PropType<string | null>,
       required: true,
     },
   },

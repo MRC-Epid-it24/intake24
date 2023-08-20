@@ -6,7 +6,7 @@ import type { MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { useMealUtils } from '@intake24/survey/composables';
 
-import type { MenuItem } from './context-menu.vue';
+import type { MenuItem } from './use-food-item';
 
 export type UseMealItemProps = {
   meal: MealState;

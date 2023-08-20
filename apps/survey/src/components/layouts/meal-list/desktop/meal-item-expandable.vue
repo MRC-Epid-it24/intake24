@@ -28,8 +28,15 @@
       </v-list-item-action>
     </template>
     <v-divider></v-divider>
-    <food-item :foods="meal.foods" :selected-food-id="selectedFoodId" @action="action"></food-item>
-    <v-divider v-if="meal.foods.length"></v-divider>
+    <template v-if="meal.foods.length">
+      <food-item
+        v-for="food in meal.foods"
+        :key="food.id"
+        v-bind="{ food, selectedFoodId }"
+        @action="action"
+      ></food-item>
+      <v-divider></v-divider>
+    </template>
   </v-list-group>
 </template>
 
@@ -65,11 +72,8 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(
-      props,
-      context
-    );
+  setup(props, ctx) {
+    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
 
     return {
       action,

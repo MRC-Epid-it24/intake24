@@ -75,14 +75,11 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(
-      props,
-      context
-    );
+  setup(props, ctx) {
+    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
 
     const updateContextId = (id: string) => {
-      context.emit('update:context-id', id);
+      ctx.emit('update:context-id', id);
     };
 
     return {

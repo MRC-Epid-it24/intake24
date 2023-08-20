@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
@@ -36,28 +35,19 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = computed(() => props.prompt.initial);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const commitAnswer = () => {
+      survey.setMealDuration(meal.value.id, state.value);
+    };
 
-    return { meal, state, update };
-  },
+    const { state, action, update } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
-  methods: {
-    ...mapActions(useSurvey, ['setMealDuration']),
-
-    action(type: string, ...args: [id?: string, params?: object]) {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type, ...args);
-    },
-
-    commitAnswer() {
-      this.setMealDuration(this.meal.id, this.state);
-    },
+    return { meal, state, action, update };
   },
 });
 </script>

@@ -34,7 +34,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
@@ -52,8 +52,6 @@ export default defineComponent({
       })),
     }));
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
-
     const commitAnswer = () => {
       for (const food of state.value.foods) {
         survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
@@ -62,15 +60,11 @@ export default defineComponent({
       survey.addMealFlag(meal.value.id, 'ready-meal-complete');
     };
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
-
-      context.emit('action', type, ...args);
-    };
+    const { state, action, update } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
     if (!state.value.foods.length) action('next');
 
-    return { meal, state, update, action };
+    return { meal, state, action, update };
   },
 });
 </script>

@@ -36,13 +36,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    navTab: {
-      type: String,
-      default: 'next',
-    },
   },
 
-  emits: ['action', 'update:navTab'],
+  emits: ['action'],
 
   setup(props, { emit }) {
     const { i18n, translate, translatePath } = useI18n();

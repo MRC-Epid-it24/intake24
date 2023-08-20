@@ -70,7 +70,7 @@ export default defineComponent({
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
 
-      if (prompt === undefined) throw new Error('Current prompt must be defined');
+      if (!prompt) throw new Error('Current prompt must be defined');
 
       switch (prompt.type) {
         case 'custom':
@@ -197,18 +197,19 @@ export default defineComponent({
     },
 
     clearUndo() {
-      // FIXME: Stop components from re-rendering after clearing objectrs in vuex store.
+      // FIXME: Stop components from re-rendering after clearing objects in vuex store.
       this.survey.clearUndo();
     },
 
     showMealPrompt(mealId: string, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
-      const prompt = this.recallController
-        ? this.recallController.promptManager.findMealPromptOfType(promptType, promptSection)
-        : undefined;
+      const prompt = this.recallController?.promptManager.findMealPromptOfType(
+        promptType,
+        promptSection
+      );
 
-      if (prompt === undefined)
+      if (!prompt)
         throw new Error(
           `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`
         );
@@ -230,11 +231,12 @@ export default defineComponent({
     showSurveyPrompt(promptSection: SurveyPromptSection, promptType: ComponentType) {
       this.setSelection({ element: null, mode: 'manual' });
 
-      const prompt = this.recallController
-        ? this.recallController.promptManager.findSurveyPromptOfType(promptType, promptSection)
-        : undefined;
+      const prompt = this.recallController?.promptManager.findSurveyPromptOfType(
+        promptType,
+        promptSection
+      );
 
-      if (prompt === undefined)
+      if (!prompt)
         throw new Error(
           `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`
         );
@@ -261,7 +263,7 @@ export default defineComponent({
             return;
           }
 
-          this.mealAction(type, id);
+          await this.mealAction(type, id);
           break;
         case 'deleteFood':
         case 'editFood':
@@ -271,7 +273,7 @@ export default defineComponent({
             return;
           }
 
-          this.foodAction(type, id);
+          await this.foodAction(type, id);
           break;
         default:
           console.warn(`Recall: Unknown action type: ${type}`);

@@ -53,7 +53,7 @@ const props = defineProps({
     default: false,
   },
   modelValue: {
-    type: String,
+    type: String as PropType<string | null>,
     default: '',
   },
   errorThreshold: {

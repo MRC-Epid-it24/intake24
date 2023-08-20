@@ -36,10 +36,10 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const getInitialState = computed<string | undefined>(() => undefined);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const { state, update } = usePromptHandlerNoStore(ctx, getInitialState);
     const { i18n } = useI18n();
     const survey = useSurvey();
 
@@ -56,7 +56,7 @@ export default defineComponent({
         type = 'next';
       }
 
-      emit('action', type, ...args);
+      ctx.emit('action', type, ...args);
     };
 
     const commitAnswer = () => {

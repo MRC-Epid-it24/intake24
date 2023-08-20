@@ -41,7 +41,7 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const survey = useSurvey();
     const { missingFood: food } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
@@ -58,8 +58,6 @@ export default defineComponent({
       homemadePrompt: undefined,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
-
     const commitAnswer = () => {
       const { info } = state.value;
 
@@ -69,13 +67,14 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') commitAnswer();
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
-      emit('action', type, ...args);
-    };
-
-    return { food, meal, state, update, action };
+    return { food, meal, state, action, update };
   },
 });
 </script>

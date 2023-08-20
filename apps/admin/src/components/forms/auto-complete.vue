@@ -77,7 +77,7 @@ export default defineComponent({
       type: String,
     },
     value: {
-      type: String,
+      type: String as PropType<string | null>,
     },
     selected: {
       type: Object as PropType<Dictionary>,

@@ -14,7 +14,11 @@ const adminUserProfileController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       await Promise.all([aclService.getPermissions(), aclService.getRoles()])
     ).map((aclItem) => aclItem.map((item) => item.name));
 
-    res.json({ profile: { id, name, email, phone, verifiedAt }, permissions, roles });
+    res.json({
+      profile: { id, name, email: email as string, phone, verifiedAt },
+      permissions,
+      roles,
+    });
   };
 
   const verify = async (req: Request, res: Response<undefined>): Promise<void> => {

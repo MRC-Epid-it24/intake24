@@ -17,7 +17,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type {
@@ -72,10 +71,11 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { translate } = useI18n();
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
@@ -84,44 +84,20 @@ export default defineComponent({
       ),
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
-    const searchParameters = computed(() => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
-        useSurvey().parameters ?? {};
-
-      return { matchScoreWeight, rankingAlgorithm };
-    });
-
-    return {
-      food,
-      translate,
-      localeId,
-      meal,
-      meals,
-      state,
-      update,
-      clearStoredState,
-      searchParameters,
-    };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['addFoodFlag', 'updateFood', 'setFoods']),
-
-    async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
+    async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
 
       return Promise.all(
-        headers.map((header) => foodSearchService.getData(this.localeId, header.code))
+        headers.map((header) => foodSearchService.getData(localeId.value, header.code))
       );
-    },
-
-    async action(type: string, ...args: [id?: string, params?: object]) {
-      if (type === 'next') await this.commitAnswer();
-
-      this.$emit('action', type, ...args);
-    },
+    }
 
     // The link as main feature can be applied only if exactly one of the linked foods has the
     // 'link-as-main' flag.
@@ -129,8 +105,8 @@ export default defineComponent({
     // In that case we need to reverse the relationship so that the linked food becomes the
     // new main (top level) food, the current main food becomes linked to that food and any foods
     // that were linked to the current main food become linked to the new main food.
-    processLinkAsMain(foodIndex: MealFoodIndex) {
-      const oldMainFood = this.meal.foods[foodIndex.foodIndex];
+    function processLinkAsMain(foodIndex: MealFoodIndex) {
+      const oldMainFood = meal.value.foods[foodIndex.foodIndex];
       const newMainFoods = oldMainFood.linkedFoods.filter((food) =>
         food.flags.includes('link-as-main')
       );
@@ -143,7 +119,7 @@ export default defineComponent({
       if (newMainFoods.length === 1) {
         const newMainFood = newMainFoods[0];
 
-        const foodsUpdate = [...this.meal.foods];
+        const foodsUpdate = [...meal.value.foods];
 
         foodsUpdate[foodIndex.foodIndex] = newMainFood;
 
@@ -153,13 +129,13 @@ export default defineComponent({
         ];
         oldMainFood.linkedFoods = [];
 
-        this.setFoods({ mealId: this.meal.id, foods: foodsUpdate });
+        survey.setFoods({ mealId: meal.value.id, foods: foodsUpdate });
       } else {
         // Nothing we can do, abort
       }
-    },
+    }
 
-    async commitAnswer() {
+    async function commitAnswer() {
       // The legacy "link as main" feature doesn't make sense when combined with the multiple foods
       // option (because it is defined on the prompt level and there cannot be several main foods),
       // but we still need to support it when possible.
@@ -175,8 +151,8 @@ export default defineComponent({
       const missingFoods: MissingFood[] = [];
       const existingFoods: LinkAsMainExisting[] = [];
 
-      this.state.prompts.forEach((prompt, idx) => {
-        const promptDef = this.food().data.associatedFoodPrompts[idx];
+      state.value.prompts.forEach((prompt, idx) => {
+        const promptDef = food().data.associatedFoodPrompts[idx];
 
         if (prompt.mainFoodConfirmed) {
           prompt.foods.forEach((food) => {
@@ -194,7 +170,7 @@ export default defineComponent({
                   id: getEntityId(),
                   type: 'missing-food',
                   info: null,
-                  searchTerm: capitalize(this.translate(promptDef.genericName)),
+                  searchTerm: capitalize(translate(promptDef.genericName)),
                   customPromptAnswers: {},
                   flags: promptDef.linkAsMain ? ['link-as-main'] : [],
                   linkedFoods: [],
@@ -205,10 +181,10 @@ export default defineComponent({
         }
       });
 
-      const foodId = this.food().id;
-      const foodIndex = getFoodIndexRequired(this.meals, foodId);
+      const foodId = food().id;
+      const foodIndex = getFoodIndexRequired(meals.value, foodId);
       const mealIndex = foodIndex.mealIndex;
-      const mealId = this.meals[mealIndex].id;
+      const mealId = meals.value[mealIndex].id;
 
       // Existing foods in this meal that were marked as 'associated foods already entered' by one
       // of the associated food prompts.
@@ -219,7 +195,7 @@ export default defineComponent({
       // The rest of the foods in this meal that should stay how they are.
       const keepFoods: FoodState[] = [];
 
-      this.meals[mealIndex].foods.forEach((food) => {
+      meals.value[mealIndex].foods.forEach((food) => {
         const existingFoodRef = existingFoods.find((ref) => ref.id === food.id);
 
         if (food.type === 'encoded-food' && existingFoodRef !== undefined) {
@@ -232,7 +208,7 @@ export default defineComponent({
         }
       });
 
-      const foodData = await this.fetchFoodData(newFoods.map((f) => f.header));
+      const foodData = await fetchFoodData(newFoods.map((f) => f.header));
 
       const linkedFoods: FoodState[] = foodData.map((data, index) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
@@ -256,7 +232,7 @@ export default defineComponent({
 
       linkedFoods.push(...moveFoods, ...missingFoods);
 
-      this.setFoods({ mealId, foods: keepFoods });
+      survey.setFoods({ mealId, foods: keepFoods });
 
       if (foodIndex.linkedFoodIndex !== undefined) {
         // This is a linked food. Currently, more than one level of nesting is not supported,
@@ -271,22 +247,42 @@ export default defineComponent({
           flags: [...new Set([...food.flags, 'associated-foods-complete'])],
         }));
 
-        const parentFood = this.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+        const parentFood = meals.value[foodIndex.mealIndex].foods[foodIndex.foodIndex];
         const newLinkedFoods = [...parentFood.linkedFoods, ...linkedFoodsWithoutPrompts];
 
         // Order of the updates is important because any changes to the linked foods will be
         // overwritten by the update to the parent food.
-        this.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
+        survey.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
       } else {
-        this.updateFood({ foodId, update: { linkedFoods } });
+        survey.updateFood({ foodId, update: { linkedFoods } });
       }
 
-      this.addFoodFlag(foodId, 'associated-foods-complete');
+      survey.addFoodFlag(foodId, 'associated-foods-complete');
 
-      this.processLinkAsMain(foodIndex);
+      processLinkAsMain(foodIndex);
 
-      this.clearStoredState();
-    },
+      clearStoredState();
+    }
+
+    const searchParameters = computed(() => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        survey.parameters ?? {};
+
+      return { matchScoreWeight, rankingAlgorithm };
+    });
+
+    return {
+      food,
+      translate,
+      localeId,
+      meal,
+      meals,
+      state,
+      action,
+      update,
+      clearStoredState,
+      searchParameters,
+    };
   },
 });
 </script>

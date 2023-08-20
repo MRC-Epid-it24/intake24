@@ -1,8 +1,14 @@
+// Vars
 @import "vuetify/src/styles/styles.sass";
 @import "variables";
+
+// Libs
 @import "fontawesome";
+
+// Partials
 @import "bottom-navigation";
 @import "meal-list";
+@import "print";
 
 .v-application {
     p {
@@ -11,15 +17,15 @@
 }
 
 .border-secondary-1 {
-    border: 1px solid map-get($blue-grey, "darken-4") !important;
+    border: 1px solid $secondary !important;
 }
 
 .border-primary-2 {
-    border: 2px solid map-get($orange, "darken-3") !important;
+    border: 2px solid $primary !important;
 }
 
 .border-info-2 {
-    border: 2px solid map-get($blue, "darken-3") !important;
+    border: 2px solid $info !important;
 }
 
 .list__no-wrap {
@@ -57,25 +63,3 @@
     }
 }
 
-@media print {
-    @page {
-        size: A4;
-        margin: 15mm 10mm;
-    }
-
-    .v-application {
-        background-color: #fff !important;
-
-        .v-toolbar {
-            display: none !important;
-        }
-
-        .v-navigation-drawer {
-            display: none !important;
-        }
-
-        .v-main {
-            padding: 0px !important;
-        }
-    }
-}

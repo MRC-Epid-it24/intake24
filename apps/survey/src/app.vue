@@ -110,7 +110,6 @@
     </v-app-bar>
     <v-main>
       <router-view></router-view>
-      <router-view name="nav"></router-view>
     </v-main>
     <navigation
       v-if="showNav"

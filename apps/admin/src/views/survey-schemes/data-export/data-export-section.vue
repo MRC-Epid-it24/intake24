@@ -176,7 +176,7 @@ export default defineComponent({
 
   props: {
     section: {
-      type: Object as PropType<ExportSection>,
+      type: Object as PropType<ExportSection | null>,
       default: null,
     },
     refFields: {

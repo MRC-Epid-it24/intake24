@@ -125,11 +125,11 @@ export default defineComponent({
     },
   },
 
-  setup(props, context) {
-    const { action, foodName, menu } = useFoodItem(props, context);
+  setup(props, ctx) {
+    const { action, foodName, menu } = useFoodItem(props, ctx);
 
     const updateContextId = (id: string) => {
-      context.emit('update:context-id', id);
+      ctx.emit('update:context-id', id);
     };
 
     return { action, foodName, menu, updateContextId };

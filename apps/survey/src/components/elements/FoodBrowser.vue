@@ -109,7 +109,7 @@ import type {
 import { usePromptUtils } from '@intake24/survey/composables';
 import { categoriesService, foodsService } from '@intake24/survey/services';
 
-import type { FoodSearchPromptParameters } from '../prompts/standard/FoodSearchPrompt.vue';
+import type { FoodSearchPromptParameters } from '../prompts';
 import CategoryContentsView from './CategoryContentsView.vue';
 import FoodBrowserDialog from './FoodBrowserDialog.vue';
 import ImagePlaceholder from './ImagePlaceholder.vue';
@@ -146,7 +146,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: String,
+      type: String as PropType<string | null>,
       default: '',
     },
   },
