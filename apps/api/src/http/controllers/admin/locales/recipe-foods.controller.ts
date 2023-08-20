@@ -23,7 +23,6 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
   ): Promise<void> => {
     const { body } = req;
 
-    console.log(`\n\nlocaleRecipeFoodsController - Recieved saving request: ${body}\n\n`);
     const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
     const recipeFoods = await localeService.setRecipeFoods(locale, body);
 

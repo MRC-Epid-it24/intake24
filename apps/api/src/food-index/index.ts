@@ -5,7 +5,7 @@ import { Op } from 'sequelize';
 import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
-import { RecipeFoods } from '@intake24/db/models';
+import { RecipeFoods, RecipeFoodsSteps, SynonymSet } from '@intake24/db/models';
 
 let indexReady = false;
 let queryIdCounter = 0;
@@ -67,16 +67,16 @@ export default {
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
       const result = await RecipeFoods.findOne({
         where: { localeId, code },
-        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id', 'steps', 'synonyms'],
+        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id'],
         include: [
           {
-            association: 'steps',
+            model: RecipeFoodsSteps,
             attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
             order: ['order', 'ASC'],
             required: true,
           },
           {
-            association: 'synonyms',
+            model: SynonymSet,
             attributes: ['synonyms'],
             required: true,
           },
