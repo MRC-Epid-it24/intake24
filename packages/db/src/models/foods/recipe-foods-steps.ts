@@ -18,6 +18,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
+import type { LocaleTranslation } from '@intake24/common/types';
 import { FoodCategory, FoodsLocale } from '@intake24/db';
 
 import BaseModel from '../model';
@@ -25,7 +26,7 @@ import RecipeFoods from './recipe-foods';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'recipeFoodsId', 'code', 'order'],
+    attributes: ['id', 'recipeFoodsId', 'code', 'order', 'name', 'description', 'repeatable'],
     order: [['order', 'ASC']],
   },
 }))
@@ -85,7 +86,14 @@ export default class RecipeFoodsSteps extends BaseModel<
       ]),
     type: DataType.TEXT({ length: 'long' }),
   })
-  declare name: string;
+  get name(): LocaleTranslation {
+    const val = this.getDataValue('name') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+  set name(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('name', JSON.stringify(value ?? {}));
+  }
 
   @Column({
     allowNull: false,
@@ -103,7 +111,14 @@ export default class RecipeFoodsSteps extends BaseModel<
       }),
     type: DataType.TEXT({ length: 'long' }),
   })
-  declare description: string;
+  get description(): LocaleTranslation {
+    const val = this.getDataValue('description') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+  set description(value: LocaleTranslation) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('description', JSON.stringify(value ?? {}));
+  }
 
   @Column({
     allowNull: false,

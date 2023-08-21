@@ -2,9 +2,9 @@
   <base-layout v-bind="{ food, prompt, isValid, fields, recipe }" @action="action">
     <v-expansion-panels>
       <v-expansion-panel v-for="step in recipe.steps" :key="step.order">
-        <v-expansion-panel-header>{{ getStepProperty(step.name) }}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{ getLocaleContent(step.name) }}</v-expansion-panel-header>
         <v-expansion-panel-content>
-          {{ getStepProperty(step.description) }}
+          {{ getLocaleContent(step.description) }}
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
