@@ -40,16 +40,16 @@ export default <
         type: Object as PropType<MealState>,
         required: true,
       },
-      initialState: {
-        type: Object as PropType<PromptStates[P]>,
-        required: true,
-      },
       prompt: {
         type: Object as PropType<Prompts[P]>,
         required: true,
       },
       section: {
         type: String as PropType<PromptSection>,
+        required: true,
+      },
+      value: {
+        type: Object as PropType<PromptStates[P]>,
         required: true,
       },
     },

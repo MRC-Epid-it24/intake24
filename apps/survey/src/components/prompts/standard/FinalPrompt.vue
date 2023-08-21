@@ -47,6 +47,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { usePromptUtils } from '@intake24/survey/composables';
+
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
@@ -63,6 +65,14 @@ export default defineComponent({
       type: String,
       required: true,
     },
+  },
+
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
+
+    const isValid = true;
+
+    return { action, isValid };
   },
 });
 </script>

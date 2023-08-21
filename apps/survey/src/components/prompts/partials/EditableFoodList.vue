@@ -122,10 +122,10 @@ export default defineComponent({
 
   emits: ['input'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const { getFoodName } = useFoodUtils();
     const { i18n } = useI18n();
-    const { type } = usePromptUtils(props);
+    const { type } = usePromptUtils(props, ctx);
 
     const promptI18n = computed(() => ({
       title: i18n.t(`prompts.${type.value}.${props.mode}`),
@@ -150,7 +150,7 @@ export default defineComponent({
     const editIndex = ref<number | null>(null);
 
     const updateFoods = () => {
-      emit(
+      ctx.emit(
         'input',
         newFood.value.description.length ? [...foods.value, newFood.value] : foods.value
       );

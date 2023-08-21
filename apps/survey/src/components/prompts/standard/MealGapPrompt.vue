@@ -67,9 +67,9 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, ctx) {
     const { i18n } = useI18n();
-    const { translatePrompt, type } = usePromptUtils(props);
+    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
     const { getMealName, getMealTime } = useMealUtils();
 
     const description = computed(() => {
@@ -98,14 +98,13 @@ export default defineComponent({
       return '';
     });
 
+    const isValid = true;
     const promptI18n = computed(() => ({
       ...translatePrompt(['yes', 'no']),
       description: description.value,
     }));
 
-    const isValid = computed(() => true);
-
-    return { promptI18n, isValid, getMealName, getMealTime };
+    return { action, isValid, promptI18n, getMealName, getMealTime };
   },
 });
 </script>

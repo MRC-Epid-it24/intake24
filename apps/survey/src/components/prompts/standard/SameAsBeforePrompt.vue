@@ -110,12 +110,13 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, ctx) {
     const { translate, i18n } = useI18n();
-    const { translatePrompt, type } = usePromptUtils(props);
+    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const isDrink = computed(() => props.sabFood.food.data.categories.includes('DRNK'));
+    const isValid = true;
 
     const foodAmount = (food: EncodedFood) => {
       if (food.portionSize?.method === 'milk-in-a-hot-drink')
@@ -183,8 +184,6 @@ export default defineComponent({
       ...translatePrompt(['hadWith', 'noAddedFoods', 'same', 'notSame']),
     }));
 
-    const isValid = computed(() => true);
-
     onMounted(async () => {
       const names = [props.sabFood.food, ...props.sabFood.food.linkedFoods].reduce<string[]>(
         (acc, food) => {
@@ -208,9 +207,10 @@ export default defineComponent({
     });
 
     return {
-      promptI18n,
+      action,
       isValid,
       linkedFoods,
+      promptI18n,
       translate,
     };
   },

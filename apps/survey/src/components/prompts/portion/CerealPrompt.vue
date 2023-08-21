@@ -131,7 +131,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
     const bowls = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -141,7 +141,7 @@ export default defineComponent({
 
       bowlImageMap: null as ImageMapResponse | null,
 
-      ...copy(this.initialState),
+      ...copy(this.value),
     };
   },
 
@@ -279,7 +279,7 @@ export default defineComponent({
         leftoversPrompt: this.leftoversPrompt,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

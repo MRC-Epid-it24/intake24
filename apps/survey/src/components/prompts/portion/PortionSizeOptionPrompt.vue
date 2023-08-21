@@ -98,7 +98,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   setup(props) {
     const { translate } = useI18n();
@@ -161,7 +161,7 @@ export default defineComponent({
 
   data() {
     return {
-      option: this.initialState.option ?? undefined,
+      option: this.value.option ?? undefined,
     };
   },
 
@@ -203,7 +203,7 @@ export default defineComponent({
     update() {
       const state: PromptStates['portion-size-option-prompt'] = { option: this.option ?? null };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

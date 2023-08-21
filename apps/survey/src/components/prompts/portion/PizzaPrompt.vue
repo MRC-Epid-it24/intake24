@@ -160,7 +160,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
     const typeImageMapId = 'gpizza';
@@ -181,7 +181,7 @@ export default defineComponent({
         slice: null,
       } as Record<PizzaImageMap, ImageMapResponse | null>,
 
-      ...copy(this.initialState),
+      ...copy(this.value),
     };
   },
 
@@ -346,7 +346,7 @@ export default defineComponent({
         confirmed: this.confirmed,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

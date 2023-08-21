@@ -1,14 +1,14 @@
 <template>
   <missing-food-prompt
+    v-model="state"
     v-bind="{
       food: food(),
       meal,
-      initialState: state,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   ></missing-food-prompt>
 </template>
 

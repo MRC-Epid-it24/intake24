@@ -1,18 +1,18 @@
 <template>
   <standard-portion-prompt
+    v-model="state"
     v-bind="{
       conversionFactor,
       food: food(),
       linkedQuantityCategories,
       meal,
-      initialState: state,
       parameters,
       parentFood,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   >
   </standard-portion-prompt>
 </template>

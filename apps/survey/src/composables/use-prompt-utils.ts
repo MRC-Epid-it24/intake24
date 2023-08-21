@@ -1,6 +1,8 @@
-import { computed } from 'vue';
+import type { SetupContext } from 'vue';
+import { computed, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, PartialRecord } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
@@ -13,6 +15,7 @@ import { useMealUtils } from './use-meal-utils';
 
 export type UsePromptPropsBase<P extends keyof Prompts> = {
   prompt: Prompts[P];
+  section: PromptSection;
 };
 
 export type UsePromptProps<
@@ -26,11 +29,25 @@ export const usePromptUtils = <
   F extends FoodState | undefined,
   FP extends EncodedFood | undefined,
 >(
-  props: UsePromptProps<P, F, FP>
+  props: UsePromptProps<P, F, FP>,
+  { emit }: SetupContext<any>,
+  confirmCallback?: () => boolean
 ) => {
   const { i18n } = useI18n();
   const { mealName, mealTime } = useMealUtils(props);
   const { foodName } = useFoodUtils(props);
+
+  const isFood = computed(() => !!props.food && !!props.meal);
+
+  const isMeal = computed(() => !!props.meal && !props.food);
+
+  const foodOrMealName = computed(() => foodName.value ?? mealName.value ?? '');
+
+  const errors = ref<string[]>([]);
+  const hasErrors = computed(() => !!errors.value.length);
+  const clearErrors = () => {
+    errors.value = [];
+  };
 
   const type = computed(() => promptType(props.prompt.component));
 
@@ -73,7 +90,27 @@ export const usePromptUtils = <
     );
   };
 
+  const action = (type: string, ...args: [id?: string, params?: object]) => {
+    if (type !== 'next') {
+      emit('action', type, ...args);
+      return;
+    }
+
+    if (confirmCallback && !confirmCallback()) return;
+
+    emit('action', type, ...args);
+  };
+
   return {
+    action,
+    clearErrors,
+    errors,
+    foodName,
+    foodOrMealName,
+    hasErrors,
+    isFood,
+    isMeal,
+    mealName,
     params,
     translatePrompt,
     type,

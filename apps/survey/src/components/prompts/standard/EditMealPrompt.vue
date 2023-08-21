@@ -6,22 +6,14 @@
         v-bind="{ prompt }"
         focus
         mode="foodsOnly"
-        @input="update"
       ></editable-food-list>
       <editable-food-list
         v-bind="{ prompt }"
         v-model="drinksOnly"
         mode="drinksOnly"
-        @input="update"
       ></editable-food-list>
     </template>
-    <editable-food-list
-      v-else
-      v-bind="{ prompt }"
-      v-model="foods"
-      focus
-      @input="update"
-    ></editable-food-list>
+    <editable-food-list v-else v-bind="{ prompt }" v-model="state" focus></editable-food-list>
     <template #actions>
       <v-btn
         class="px-4"
@@ -89,13 +81,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { FoodState, MealState } from '@intake24/common/types';
-import { copy } from '@intake24/common/util';
+import type { MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
-import { useMealUtils } from '@intake24/survey/composables';
+import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
@@ -109,60 +100,50 @@ export default defineComponent({
   mixins: [createBasePrompt<'edit-meal-prompt'>()],
 
   props: {
-    initialState: {
-      type: Object as PropType<PromptStates['edit-meal-prompt']>,
-      required: true,
-    },
     meal: {
       type: Object as PropType<MealState>,
       required: true,
     },
+    value: {
+      type: Array as PropType<PromptStates['edit-meal-prompt']>,
+      required: true,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { translate } = useI18n();
     const { mealName } = useMealUtils(props);
+    const { action } = usePromptUtils(props, ctx);
 
-    return { translate, mealName };
-  },
-
-  data() {
-    return { ...copy(this.initialState) };
-  },
-
-  computed: {
-    drinksOnly: {
+    const state = computed({
       get() {
-        return this.foods.filter((food) => food.flags.includes('is-drink'));
+        return props.value;
       },
-      set(val: FoodState[]) {
-        this.foods = [...this.foodsOnly, ...val];
+      set(value) {
+        ctx.emit('input', value);
       },
-    },
-
-    foodsOnly: {
+    });
+    const isValid = computed(() => !!state.value.length);
+    const drinksOnly = computed({
       get() {
-        return this.foods.filter((food) => !food.flags.includes('is-drink'));
+        return state.value.filter((food) => food.flags.includes('is-drink'));
       },
-      set(val: FoodState[]) {
-        this.foods = [...this.drinksOnly, ...val];
+      set(val) {
+        state.value = [...foodsOnly.value, ...val];
       },
-    },
+    });
+    const foodsOnly = computed({
+      get() {
+        return state.value.filter((food) => !food.flags.includes('is-drink'));
+      },
+      set(val) {
+        state.value = [...drinksOnly.value, ...val];
+      },
+    });
 
-    isValid() {
-      return !!this.foods.length;
-    },
-  },
-
-  methods: {
-    update() {
-      const { foods } = this;
-      const state: PromptStates['edit-meal-prompt'] = { foods };
-
-      this.$emit('update', { state });
-    },
+    return { action, drinksOnly, foodsOnly, isValid, mealName, state, translate };
   },
 });
 </script>

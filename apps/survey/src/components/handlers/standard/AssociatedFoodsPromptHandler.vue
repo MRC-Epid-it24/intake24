@@ -1,16 +1,16 @@
 <template>
   <associated-foods-prompt
+    v-model="state"
     v-bind="{
       food: food(),
       meal,
-      initialState: state,
       localeId,
       prompt,
       searchParameters,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   >
   </associated-foods-prompt>
 </template>
@@ -280,7 +280,6 @@ export default defineComponent({
       state,
       action,
       update,
-      clearStoredState,
       searchParameters,
     };
   },

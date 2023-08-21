@@ -106,9 +106,10 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
-    const { translatePrompt } = usePromptUtils(props);
+  setup(props, ctx) {
+    const { action, translatePrompt } = usePromptUtils(props, ctx);
 
+    const isValid = true;
     const timerInterval = ref<undefined | number>(undefined);
     const timerValue = ref(props.prompt.timer ? 100 : 0);
     const timerTick = computed(() =>
@@ -152,6 +153,8 @@ export default defineComponent({
     });
 
     return {
+      action,
+      isValid,
       promptI18n,
       timerSecs,
       timerValue,

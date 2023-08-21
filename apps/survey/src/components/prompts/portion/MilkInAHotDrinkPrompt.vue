@@ -82,7 +82,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   setup(props) {
     const { foodName, parentFoodName } = useFoodUtils(props);
@@ -92,7 +92,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.initialState),
+      ...copy(this.value),
     };
   },
 
@@ -138,7 +138,7 @@ export default defineComponent({
 
       const state: PromptStates['milk-in-a-hot-drink-prompt'] = { portionSize, panel };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

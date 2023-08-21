@@ -1,8 +1,9 @@
 <template>
   <edit-meal-prompt
-    v-bind="{ initialState: state, meal, prompt, section }"
+    v-model="state"
+    v-bind="{ meal, prompt, section }"
     @action="action"
-    @update="update"
+    @input="update"
   >
   </edit-meal-prompt>
 </template>
@@ -40,15 +41,15 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
-    const getInitialState = (): PromptStates['edit-meal-prompt'] => ({ foods: meal.value.foods });
+    const getInitialState = (): PromptStates['edit-meal-prompt'] => meal.value.foods;
 
     const commitAnswer = () => {
-      const { foods } = state.value;
       const mealId = meal.value.id;
 
-      survey.setFoods({ mealId, foods });
-      clearStoredState();
+      survey.setFoods({ mealId, foods: state.value });
       survey.addMealFlag(mealId, 'free-entry-complete');
+
+      clearStoredState();
     };
 
     const { state, action, update, clearStoredState } = usePromptHandlerStore(
@@ -63,7 +64,6 @@ export default defineComponent({
       state,
       action,
       update,
-      clearStoredState,
     };
   },
 });

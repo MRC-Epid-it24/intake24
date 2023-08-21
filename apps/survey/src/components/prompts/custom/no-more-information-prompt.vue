@@ -124,8 +124,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
+import { usePromptUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
@@ -146,21 +147,28 @@ export default defineComponent({
 
   emits: ['input'],
 
-  computed: {
-    isValid(): boolean {
-      return true;
-    },
-  },
+  setup(props, ctx) {
+    const { action, foodName, isFood, isMeal, mealName } = usePromptUtils(props, ctx);
 
-  methods: {
-    update() {
-      this.$emit('input', this.value);
-    },
+    const isValid = true;
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+      },
+    });
 
-    confirm() {
-      this.update();
-      return true;
-    },
+    return {
+      action,
+      foodName,
+      isFood,
+      isMeal,
+      isValid,
+      mealName,
+      state,
+    };
   },
 });
 </script>

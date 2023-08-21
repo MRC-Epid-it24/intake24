@@ -1,8 +1,8 @@
 <template>
   <meal-duration-prompt
-    v-bind="{ initialState: state, meal, prompt, section }"
+    v-model="state"
+    v-bind="{ meal, prompt, section }"
     @action="action"
-    @update="update"
   ></meal-duration-prompt>
 </template>
 
@@ -45,9 +45,9 @@ export default defineComponent({
       survey.setMealDuration(meal.value.id, state.value);
     };
 
-    const { state, action, update } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
+    const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
-    return { meal, state, action, update };
+    return { meal, state, action };
   },
 });
 </script>

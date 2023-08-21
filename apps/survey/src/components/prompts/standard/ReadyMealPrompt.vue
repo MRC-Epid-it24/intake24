@@ -1,17 +1,15 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
-      <v-card v-for="(food, idx) in foods" :key="food.id" class="mb-3" outlined>
-        <v-card-text
-          class="d-flex flex-column flex-sm-row justify-space-between ready-meal-prompt__item"
-        >
+      <v-card v-for="(food, idx) in state" :key="food.id" class="mb-3" outlined>
+        <v-card-text class="d-flex flex-column flex-sm-row justify-space-between gr-2">
           <div class="d-flex align-center">
             <v-btn class="secondary font-weight-medium mr-2" dark icon readonly size="x-small">
               {{ idx + 1 }}
             </v-btn>
             <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>
           </div>
-          <yes-no-toggle v-model="food.value" mandatory @input="update"></yes-no-toggle>
+          <yes-no-toggle v-model="food.value" mandatory></yes-no-toggle>
         </v-card-text>
       </v-card>
     </v-card-text>
@@ -20,17 +18,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
+import type { PromptStates } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
-import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
-
-export interface ReadyMealPromptState {
-  foods: { id: string; name: string; value: boolean | undefined }[];
-}
 
 export default defineComponent({
   name: 'ReadyMealPrompt',
@@ -40,38 +35,38 @@ export default defineComponent({
   mixins: [createBasePrompt<'ready-meal-prompt'>()],
 
   props: {
-    initialState: {
-      type: Object as PropType<ReadyMealPromptState>,
-      required: true,
-    },
     meal: {
       type: Object as PropType<MealState>,
       required: true,
     },
+    value: {
+      type: Array as PropType<PromptStates['ready-meal-prompt']>,
+      required: true,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props, { emit }) {
-    const foods = ref(copy(props.initialState.foods));
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
 
-    const isValid = computed(() => foods.value.every((food) => food.value !== undefined));
-
-    const update = () => {
-      emit('update', { state: { foods: foods.value } });
-    };
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+      },
+    });
+    const isValid = computed(() => state.value.every((food) => food.value !== undefined));
 
     return {
-      foods,
+      action,
       isValid,
-      update,
+      state,
     };
   },
 });
 </script>
 
-<style lang="scss" scoped>
-.ready-meal-prompt__item {
-  row-gap: 0.5rem;
-}
-</style>
+<style lang="scss" scoped></style>
