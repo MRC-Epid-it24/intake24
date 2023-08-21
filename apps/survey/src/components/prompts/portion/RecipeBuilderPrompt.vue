@@ -48,7 +48,7 @@ import createBasePortion from './createBasePortion';
 // const isPromptValid = (step: RecipeBuilderStepState): boolean =>
 //   (step.confirmed && ['no'].includes(step.confirmed)) ||
 //   (step.confirmed === 'yes' && step.selectedFood !== undefined);
-const isStepValid = (step): boolean => true;
+const isStepValid = (step): boolean => false;
 
 const { getLocaleContent } = useLocale();
 
@@ -66,8 +66,6 @@ export default defineComponent({
       ...copy(this.initialState),
       isStepValid,
       fields: [
-        // 'name',
-        // 'brand',
         'description',
         'components',
         'customPromptAnswers',
@@ -76,7 +74,6 @@ export default defineComponent({
         'template_id',
         'template',
         'link',
-        // 'leftovers',
       ] as (keyof RecipeBuilder)[],
     };
   },
