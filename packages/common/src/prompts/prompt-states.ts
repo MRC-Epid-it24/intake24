@@ -14,6 +14,8 @@ export type AssociatedFoodPromptItemState = {
 };
 
 export type RecipeBuilderStepState = {
+  confirmed?: 'yes' | 'no' | 'existing' | 'missing';
+  selectedFood?: FoodHeader;
   order: number;
   description: string;
 };

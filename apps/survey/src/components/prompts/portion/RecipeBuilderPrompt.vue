@@ -1,10 +1,32 @@
 <template>
   <base-layout v-bind="{ food, prompt, isValid, fields, recipe }" @action="action">
     <v-expansion-panels>
-      <v-expansion-panel v-for="step in recipe.steps" :key="step.order">
-        <v-expansion-panel-header>{{ getLocaleContent(step.name) }}</v-expansion-panel-header>
+      <v-expansion-panel v-for="(step, index) in recipe.steps" :key="index">
+        <v-expansion-panel-header
+          ><div>
+            <b>{{ step.order }}:</b> {{ getLocaleContent(step.name) }}
+          </div>
+          <template #actions>
+            <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
+          </template>
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
-          {{ getLocaleContent(step.description) }}
+          <v-container class="pl-0">
+            <p>{{ getLocaleContent(step.description) }}</p>
+          </v-container>
+          <v-expand-transition>
+            <v-card flat>
+              <food-browser
+                v-bind="{
+                  localeId: step.localeId,
+                  rootCategory: step.categoryCode,
+                  type,
+                }"
+                @food-missing="foodMissing(index)"
+                @food-selected="(food) => foodSelected(food, index)"
+              ></food-browser>
+            </v-card>
+          </v-expand-transition>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -14,19 +36,26 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { PromptStates } from '@intake24/common/prompts';
+import type { PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { RecipeBuilder, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
+import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
 import { useLocale } from '@intake24/ui';
 
 import createBasePortion from './createBasePortion';
+
+// const isPromptValid = (step: RecipeBuilderStepState): boolean =>
+//   (step.confirmed && ['no'].includes(step.confirmed)) ||
+//   (step.confirmed === 'yes' && step.selectedFood !== undefined);
+const isStepValid = (step): boolean => true;
 
 const { getLocaleContent } = useLocale();
 
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
-  components: {},
+  components: { ExpansionPanelActions, FoodBrowser },
 
   mixins: [createBasePortion<'recipe-builder-prompt', RecipeBuilder>()],
 
@@ -35,6 +64,7 @@ export default defineComponent({
   data() {
     return {
       ...copy(this.initialState),
+      isStepValid,
       fields: [
         // 'name',
         // 'brand',
@@ -74,8 +104,12 @@ export default defineComponent({
       this.$emit('update', { state });
     },
 
-    getStepProperty(step_property: RequiredLocaleTranslation) {
-      return getLocaleContent(step_property);
+    foodSelected(food: FoodHeader, promptIndex: number): void {
+      console.log(food, promptIndex);
+    },
+
+    foodMissing(promptIndex: number): void {
+      console.log(promptIndex);
     },
   },
 });
