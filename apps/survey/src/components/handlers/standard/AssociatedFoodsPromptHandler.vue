@@ -84,12 +84,7 @@ export default defineComponent({
       ),
     });
 
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState,
-      commitAnswer
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
     async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
@@ -263,6 +258,12 @@ export default defineComponent({
 
       clearStoredState();
     }
+
+    const action = async (type: string, ...args: [id?: string, params?: object]) => {
+      if (type === 'next') await commitAnswer();
+
+      ctx.emit('action', type, ...args);
+    };
 
     const searchParameters = computed(() => {
       const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =

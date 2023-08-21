@@ -13,7 +13,7 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
   props: UsePromptHandlerStoreProps<P>,
   { emit }: SetupContext<any>, // fix any - infer from component
   getInitialState: () => S,
-  commitAnswer?: () => void | Promise<void>
+  commitAnswer?: () => void
 ) => {
   const promptStore = getOrCreatePromptStateStore<S>(props.prompt.component)();
   const survey = useSurvey();
@@ -49,8 +49,8 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
     promptStore.clearState(getFoodOrMealId(), props.prompt.id);
   };
 
-  const action = async (type: string, ...args: [id?: string, params?: object]) => {
-    if (type === 'next' && commitAnswer) await commitAnswer();
+  const action = (type: string, ...args: [id?: string, params?: object]) => {
+    if (type === 'next' && commitAnswer) commitAnswer();
 
     emit('action', type, ...args);
   };
