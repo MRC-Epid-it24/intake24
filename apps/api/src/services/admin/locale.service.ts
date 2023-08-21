@@ -151,8 +151,14 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
 
     return RecipeFoods.findAll({
       where: { localeId: code },
-      order: [['id', 'ASC']],
-      include: [{ model: RecipeFoodsSteps }, { model: SynonymSet }],
+      include: [
+        { model: RecipeFoodsSteps, as: 'steps' },
+        { model: SynonymSet, as: 'synonyms' },
+      ],
+      order: [
+        ['id', 'ASC'],
+        [{ model: RecipeFoodsSteps, as: 'steps' }, 'order', 'ASC'],
+      ],
     });
   };
 

@@ -71,16 +71,18 @@ export default {
         include: [
           {
             model: RecipeFoodsSteps,
+            as: 'steps',
             attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
-            order: ['order', 'ASC'],
             required: true,
           },
           {
             model: SynonymSet,
+            as: 'synonyms',
             attributes: ['synonyms'],
             required: true,
           },
         ],
+        order: [[{ model: RecipeFoodsSteps, as: 'steps' }, 'order', 'ASC']],
       });
 
       if (result) {
