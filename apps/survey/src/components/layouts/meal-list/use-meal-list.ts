@@ -11,22 +11,22 @@ export type UseMealListProps = {
 };
 
 export const useMealList = (props: UseMealListProps, { emit }: SetupContext) => {
-  const { selection } = useSurvey();
+  const survey = useSurvey();
 
   const selectedMealId = computed(() => {
-    if (selection.element?.type !== 'meal') return undefined;
-    return selection.element.mealId;
+    if (survey.selection.element?.type !== 'meal') return undefined;
+    return survey.selection.element.mealId;
   });
 
   const selectedFoodId = computed(() => {
-    if (selection.element?.type !== 'food') return undefined;
-    return selection.element.foodId;
+    if (survey.selection.element?.type !== 'food') return undefined;
+    return survey.selection.element.foodId;
   });
 
   const isSelectedFoodInMeal = (mealId: string) => {
-    if (selection.element?.type !== 'food') return false;
+    if (survey.selection.element?.type !== 'food') return false;
 
-    const foodIndex = getFoodIndexRequired(props.meals, selection.element.foodId);
+    const foodIndex = getFoodIndexRequired(props.meals, survey.selection.element.foodId);
 
     return props.meals[foodIndex.mealIndex].id === mealId;
   };

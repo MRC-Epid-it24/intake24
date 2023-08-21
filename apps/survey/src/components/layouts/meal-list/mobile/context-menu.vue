@@ -6,6 +6,7 @@
           v-for="(item, idx) in menu"
           :key="idx"
           class="rounded-xl"
+          :disabled="item.action === 'editFood' && 'type' in entity && entity.type === 'free-text'"
           link
           tile
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
@@ -49,6 +50,7 @@ export default defineComponent({
     },
     entity: {
       type: Object as PropType<FoodState | MealState>,
+      required: true,
     },
     entityName: {
       type: String,
