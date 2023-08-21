@@ -13,6 +13,12 @@
         </v-card-text>
       </v-card>
     </v-card-text>
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
   </card-layout>
 </template>
 
