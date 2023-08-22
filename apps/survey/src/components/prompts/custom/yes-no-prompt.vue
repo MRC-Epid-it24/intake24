@@ -1,17 +1,17 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
-      <yes-no-toggle v-mode="state"></yes-no-toggle>
+      <yes-no-toggle v-model="state"></yes-no-toggle>
     </template>
     <template #nav-actions>
-      <v-btn @click.stop="state = false">
+      <v-btn color="primary" text :title="$t('common.action.no')" @click.stop="state = false">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn @click.stop="state = true">
+      <v-btn color="primary" text :title="$t('common.action.yes')" @click.stop="state = true">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
@@ -55,6 +55,8 @@ export default defineComponent({
       },
       set(value) {
         ctx.emit('input', value);
+
+        if (typeof value === 'boolean') action('next');
       },
     });
 
