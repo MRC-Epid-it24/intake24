@@ -12,10 +12,9 @@ export type UseFoodUtilsProps<
   parentFood?: FP;
 };
 
-export const useFoodUtils = <F extends FoodState | undefined, FP extends EncodedFood | undefined>({
-  food,
-  parentFood,
-}: UseFoodUtilsProps<F, FP> = {}) => {
+export const useFoodUtils = <F extends FoodState | undefined, FP extends EncodedFood | undefined>(
+  props: UseFoodUtilsProps<F, FP> = {}
+) => {
   const { translate } = useI18n();
 
   const getFoodName = (foodState: FoodState) => {
@@ -27,11 +26,12 @@ export const useFoodUtils = <F extends FoodState | undefined, FP extends Encoded
   };
 
   const foodName = computed(
-    () => (food ? getFoodName(food) : undefined) as F extends undefined ? undefined : string
+    () =>
+      (props.food ? getFoodName(props.food) : undefined) as F extends undefined ? undefined : string
   );
   const parentFoodName = computed(
     () =>
-      (parentFood ? getFoodName(parentFood) : undefined) as FP extends undefined
+      (props.parentFood ? getFoodName(props.parentFood) : undefined) as FP extends undefined
         ? undefined
         : string
   );
