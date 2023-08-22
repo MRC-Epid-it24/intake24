@@ -173,8 +173,7 @@ export default defineComponent({
       if (food.type !== 'free-text') return;
 
       food.description = description;
-
-      if (foods.value.length || description) debouncedUpdateFoods();
+      debouncedUpdateFoods();
     };
 
     const moveToList = () => {
