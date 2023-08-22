@@ -74,6 +74,18 @@ module.exports = {
         transaction,
       });
 
+      await queryInterface.addIndex('food_locals', ['name'], {
+        name: 'food_locals_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
+      await queryInterface.addIndex('food_locals', ['simple_name'], {
+        name: 'food_locals_simple_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
+
       await queryInterface.sequelize.query(
         'INSERT INTO food_locals (food_code, locale_id, "name", simple_name, "version") SELECT food_code, locale_id, local_description, simple_local_description, "version" FROM v3_foods_local',
         { transaction }
