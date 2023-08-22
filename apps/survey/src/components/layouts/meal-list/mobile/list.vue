@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-sheet v-model="navigation" content-class="meal-list-mobile__sheet">
+  <v-bottom-sheet v-model="navigation" content-class="meal-list-mobile__sheet" scrollable>
     <template #activator="{ on, attrs }">
       <v-btn v-bind="attrs" class="navigation__btn-summary" value="summary" v-on="on">
         <span class="text-overline font-weight-medium">
@@ -8,22 +8,26 @@
         <v-icon class="pb-1">fas fa-list-check</v-icon>
       </v-btn>
     </template>
-    <v-list class="meal-list__list meal-list-mobile__list" dense subheader>
-      <v-subheader class="pt-8 pb-7 pl-4 pr-3 d-flex flex-row justify-space-between">
+    <v-card class="meal-list-mobile__card">
+      <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
         <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
         <v-btn color="primary" icon @click="action('addMeal')">
           <v-icon large>$add</v-icon>
         </v-btn>
-      </v-subheader>
-      <meal-item
-        v-for="meal in meals"
-        :key="meal.id"
-        v-bind="{ contextId, meal, selectedMealId, selectedFoodId }"
-        :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
-        @action="action"
-        @update:context-id="updateContextId"
-      ></meal-item>
-    </v-list>
+      </div>
+      <v-card-text class="pa-0">
+        <v-list class="meal-list__list" dense subheader>
+          <meal-item
+            v-for="meal in meals"
+            :key="meal.id"
+            v-bind="{ contextId, meal, selectedMealId, selectedFoodId }"
+            :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
+            @action="action"
+            @update:context-id="updateContextId"
+          ></meal-item>
+        </v-list>
+      </v-card-text>
+    </v-card>
   </v-bottom-sheet>
 </template>
 

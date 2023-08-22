@@ -29,14 +29,15 @@
 }
 
 .meal-list-mobile__sheet {
-  border-top-left-radius: 25px !important;
-  border-top-right-radius: 25px !important;
+  max-height: 80% !important;
   box-shadow: unset !important;
 }
 
-.meal-list-mobile__list {
+.meal-list-mobile__card {
   border-top-left-radius: 25px !important;
   border-top-right-radius: 25px !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 .meal-list-mobile__context {
