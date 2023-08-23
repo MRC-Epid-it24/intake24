@@ -33,7 +33,7 @@ import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
-import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+import { findFood, getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
@@ -100,8 +100,9 @@ export default defineComponent({
     // In that case we need to reverse the relationship so that the linked food becomes the
     // new main (top level) food, the current main food becomes linked to that food and any foods
     // that were linked to the current main food become linked to the new main food.
-    function processLinkAsMain(foodIndex: MealFoodIndex) {
-      const oldMainFood = meal.value.foods[foodIndex.foodIndex];
+    function processLinkAsMain(foodId: string) {
+      const oldFoodIndex = getFoodIndexRequired(meals.value, foodId);
+      const oldMainFood = meals.value[oldFoodIndex.mealIndex].foods[oldFoodIndex.foodIndex];
       const newMainFoods = oldMainFood.linkedFoods.filter((food) =>
         food.flags.includes('link-as-main')
       );
@@ -116,7 +117,7 @@ export default defineComponent({
 
         const foodsUpdate = [...meal.value.foods];
 
-        foodsUpdate[foodIndex.foodIndex] = newMainFood;
+        foodsUpdate[oldFoodIndex.foodIndex] = newMainFood;
 
         newMainFood.linkedFoods = [
           oldMainFood,
@@ -254,7 +255,7 @@ export default defineComponent({
 
       survey.addFoodFlag(foodId, 'associated-foods-complete');
 
-      processLinkAsMain(foodIndex);
+      processLinkAsMain(foodId);
 
       clearStoredState();
     }
