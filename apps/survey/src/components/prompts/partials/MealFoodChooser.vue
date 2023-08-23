@@ -2,7 +2,7 @@
   <div>
     <v-list-item v-for="food in filteredFoods" :key="food.id" @click="foodSelected(food)">
       <v-list-item-icon>
-        <v-icon x-small>$food</v-icon>
+        <v-icon>$food</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{ getFoodDescription(food) }} </v-list-item-title>
