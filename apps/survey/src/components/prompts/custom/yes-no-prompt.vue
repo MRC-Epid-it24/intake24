@@ -1,17 +1,17 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
-      <yes-no-toggle :value="value" @input="update"></yes-no-toggle>
+      <yes-no-toggle v-model="state"></yes-no-toggle>
     </template>
     <template #nav-actions>
-      <v-btn @click.stop="update(false)">
+      <v-btn color="primary" text :title="$t('common.action.no')" @click.stop="state = false">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn @click.stop="update(true)">
+      <v-btn color="primary" text :title="$t('common.action.yes')" @click.stop="state = true">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>
@@ -22,9 +22,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { YesNoToggle } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -44,17 +45,26 @@ export default defineComponent({
 
   emits: ['input'],
 
-  computed: {
-    isValid(): boolean {
-      return this.value !== undefined;
-    },
-  },
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
 
-  methods: {
-    update(value: boolean) {
-      this.$emit('input', value);
-      this.action('next');
-    },
+    const isValid = computed(() => props.value !== undefined);
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+
+        if (typeof value === 'boolean') action('next');
+      },
+    });
+
+    return {
+      action,
+      isValid,
+      state,
+    };
   },
 });
 </script>

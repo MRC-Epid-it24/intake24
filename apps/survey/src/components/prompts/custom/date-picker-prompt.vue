@@ -3,11 +3,10 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-date-picker
+          v-model="state"
           full-width
           :landscape="!isMobile"
-          :max="max"
-          :value="value"
-          @input="update"
+          v-bind="{ max }"
         ></v-date-picker>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
       </v-form>
@@ -22,7 +21,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { computed, defineComponent } from 'vue';
+
+import { useI18n } from '@intake24/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -33,40 +36,48 @@ export default defineComponent({
 
   props: {
     value: {
-      type: String,
+      type: String as PropType<string | null>,
       default: null,
     },
   },
 
   emits: ['input'],
 
-  computed: {
-    max() {
-      return this.prompt.futureDates ? undefined : new Date().toISOString().substring(0, 10);
-    },
-    isValid(): boolean {
-      return !this.prompt.validation.required || !!this.value;
-    },
-  },
+  setup(props, ctx) {
+    const { i18n } = useI18n();
 
-  methods: {
-    update(value: string) {
-      this.clearErrors();
+    const isValid = computed(() => !props.prompt.validation.required || !!state.value);
+    const max = computed(() =>
+      props.prompt.futureDates ? undefined : new Date().toISOString().substring(0, 10)
+    );
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        clearErrors();
+        ctx.emit('input', value);
+      },
+    });
 
-      this.$emit('input', value);
-    },
+    const confirm = () => {
+      if (isValid.value) return true;
 
-    confirm() {
-      if (this.isValid) return true;
-
-      this.errors = [
-        this.translate(this.prompt.validation.message, {
-          path: `prompts.${this.type}.validation.required`,
-        }),
-      ];
+      errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
 
       return false;
-    },
+    };
+
+    const { action, clearErrors, errors, hasErrors, type } = usePromptUtils(props, ctx, confirm);
+
+    return {
+      action,
+      errors,
+      hasErrors,
+      isValid,
+      max,
+      state,
+    };
   },
 });
 </script>

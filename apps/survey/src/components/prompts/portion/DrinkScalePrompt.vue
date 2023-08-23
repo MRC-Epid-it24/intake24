@@ -179,10 +179,10 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
-    const state = copy(this.initialState);
+    const state = copy(this.value);
     state.portionSize.drinkwareId = this.parameters['drinkware-id'];
     state.portionSize.initialFillLevel = this.parameters['initial-fill-level'];
     state.portionSize.skipFillLevel = this.parameters['skip-fill-level'];
@@ -395,7 +395,7 @@ export default defineComponent({
         countConfirmed: this.countConfirmed,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

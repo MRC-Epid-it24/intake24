@@ -1,16 +1,16 @@
 <template>
   <portion-size-option-prompt
+    v-model="state"
     v-bind="{
       availableMethods,
       food,
       meal,
-      initialState: state,
       parentFood,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   >
   </portion-size-option-prompt>
 </template>

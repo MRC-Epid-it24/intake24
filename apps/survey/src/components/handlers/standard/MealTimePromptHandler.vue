@@ -1,8 +1,8 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, meal, prompt, section }"
+    v-model="state"
+    v-bind="{ meal, prompt, section }"
     @action="action"
-    @update="update"
   ></meal-time-prompt>
 </template>
 
@@ -41,7 +41,7 @@ export default defineComponent({
 
     const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-    const { state, update } = usePromptHandlerNoStore(ctx, getInitialState);
+    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') {
@@ -62,7 +62,7 @@ export default defineComponent({
       survey.setMealTime(meal.value.id, state.value);
     };
 
-    return { meal, state, action, update };
+    return { meal, state, action };
   },
 });
 </script>

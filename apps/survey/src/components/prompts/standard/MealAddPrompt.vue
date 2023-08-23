@@ -8,14 +8,13 @@
         <v-col cols="12" md="8">
           <component
             :is="prompt.custom ? 'v-combobox' : 'v-select'"
-            v-model="currentValue"
+            v-model="state"
             autofocus
             class="meal-add-prompt__combobox"
             clearable
             :items="defaultMeals"
             :label="promptI18n.label"
             outlined
-            @change="update"
           >
           </component>
         </v-col>
@@ -65,7 +64,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { VCombobox, VSelect } from 'vuetify/lib';
 
 import { useI18n } from '@intake24/i18n';
@@ -89,20 +88,29 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    value: {
+      type: String,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const { i18n, translatePath } = useI18n();
-    const { params, type } = usePromptUtils(props);
+    const { action, params, type } = usePromptUtils(props, ctx);
 
-    const currentValue = ref<string | undefined>(undefined);
-
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+      },
+    });
+    const isValid = computed(() => !!state.value);
     const i18nPrefix = computed(
       () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`
     );
-
     const promptI18n = computed(() => ({
       no: i18n.t(`prompts.${type.value}.no`),
       yes: i18n.t(`prompts.${type.value}.yes`),
@@ -110,13 +118,7 @@ export default defineComponent({
       label: i18n.t(`${i18nPrefix.value}.label`),
     }));
 
-    const isValid = computed(() => !!currentValue.value);
-
-    const update = () => {
-      emit('update', { state: currentValue.value });
-    };
-
-    return { currentValue, promptI18n, isValid, update };
+    return { action, isValid, promptI18n, state };
   },
 });
 </script>

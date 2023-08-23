@@ -1,17 +1,17 @@
 <template>
   <as-served-prompt
+    v-model="state"
     v-bind="{
       food: food(),
       linkedQuantityCategories,
       meal,
       parentFood,
-      initialState: state,
       parameters,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   ></as-served-prompt>
 </template>
 

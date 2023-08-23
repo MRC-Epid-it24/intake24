@@ -10,6 +10,9 @@
         <template v-for="(item, idx) in menu">
           <v-list-item
             :key="item.name"
+            :disabled="
+              item.action === 'editFood' && 'type' in entity && entity.type === 'free-text'
+            "
             @click="item.dialog ? openDialog(item.action) : action(item.action)"
           >
             <v-list-item-icon v-if="item.icon">
@@ -52,6 +55,7 @@ export default defineComponent({
   props: {
     entity: {
       type: Object as PropType<FoodState | MealState>,
+      required: true,
     },
     entityName: {
       type: String,

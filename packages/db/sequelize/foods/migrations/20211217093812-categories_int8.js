@@ -248,9 +248,10 @@ module.exports = {
         transaction,
       });
 
-      await queryInterface.addIndex('category_locals', ['category_code', 'locale_id'], {
-        name: 'category_locals_category_code_locale_id_idx',
-        indexType: 'btree',
+      await queryInterface.addConstraint('category_locals', {
+        fields: ['category_code', 'locale_id'],
+        type: 'unique',
+        name: 'category_locals_unique',
         transaction,
       });
 

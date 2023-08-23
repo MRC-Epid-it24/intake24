@@ -92,9 +92,10 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
-    const { translatePrompt } = usePromptUtils(props);
+  setup(props, ctx) {
+    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
 
+    const isValid = true;
     const promptI18n = computed(() =>
       translatePrompt([
         'searchTerm',
@@ -108,11 +109,11 @@ export default defineComponent({
       ])
     );
 
-    const isValid = computed(() => true);
-
     return {
-      promptI18n,
+      action,
       isValid,
+      promptI18n,
+      type,
     };
   },
 });

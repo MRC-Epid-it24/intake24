@@ -40,9 +40,9 @@ export default defineComponent({
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const { i18n, translate, translatePath } = useI18n();
-    const { params, type } = usePromptUtils(props);
+    const { action, params, type } = usePromptUtils(props, ctx);
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
     const survey = useSurvey();
@@ -66,10 +66,6 @@ export default defineComponent({
       });
 
       i18n.setLocaleMessage(locale, messages);
-    };
-
-    const action = (type: string, ...args: [id?: string, params?: object]) => {
-      emit('action', type, ...args);
     };
 
     onBeforeMount(() => {

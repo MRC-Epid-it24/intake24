@@ -110,7 +110,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
     const milkLevelImageMapPrefix = 'milkbowl';
@@ -124,7 +124,7 @@ export default defineComponent({
       bowlImageMap: null as ImageMapResponse | null,
       milkLevelImageMap: null as ImageMapResponse | null,
 
-      ...copy(this.initialState),
+      ...copy(this.value),
     };
   },
 
@@ -275,7 +275,7 @@ export default defineComponent({
         milkLevelConfirmed: this.milkLevelConfirmed,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

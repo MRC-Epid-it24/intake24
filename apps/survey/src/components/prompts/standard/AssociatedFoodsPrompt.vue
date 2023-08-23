@@ -213,10 +213,6 @@ export default defineComponent({
   mixins: [createBasePrompt<'associated-foods-prompt'>()],
 
   props: {
-    initialState: {
-      type: Object as PropType<PromptStates['associated-foods-prompt']>,
-      required: true,
-    },
     food: {
       type: Object as PropType<EncodedFood>,
       required: true,
@@ -229,13 +225,17 @@ export default defineComponent({
       type: Object as PropType<FoodSearchPromptParameters>,
       required: true,
     },
+    value: {
+      type: Object as PropType<PromptStates['associated-foods-prompt']>,
+      required: true,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { translate } = useI18n();
-    const { translatePrompt } = usePromptUtils(props);
+    const { action, translatePrompt, type } = usePromptUtils(props, ctx);
 
     const promptI18n = computed(() =>
       translatePrompt([
@@ -251,8 +251,8 @@ export default defineComponent({
       ])
     );
 
-    const activePrompt = ref(props.initialState.activePrompt);
-    const prompts = ref(props.initialState.prompts);
+    const activePrompt = ref(props.value.activePrompt);
+    const prompts = ref(props.value.prompts);
     const allowMultiple = computed(() => props.prompt.multiple);
 
     const replaceFoodIndex = ref(
@@ -286,7 +286,16 @@ export default defineComponent({
       { deep: true, immediate: true }
     );
 
-    return { activePrompt, promptI18n, prompts, replaceFoodIndex, allowMultiple, translate };
+    return {
+      action,
+      activePrompt,
+      promptI18n,
+      prompts,
+      replaceFoodIndex,
+      allowMultiple,
+      translate,
+      type,
+    };
   },
 
   computed: {
@@ -400,32 +409,15 @@ export default defineComponent({
     },
 
     foodSelected(food: FoodHeader, promptIndex: number): void {
-      this.onFoodSelected(
-        {
-          type: 'selected',
-          selectedFood: food,
-        },
-        promptIndex
-      );
+      this.onFoodSelected({ type: 'selected', selectedFood: food }, promptIndex);
     },
 
     existingFoodSelected(foodId: string, promptIndex: number) {
-      this.onFoodSelected(
-        {
-          type: 'existing',
-          existingFoodId: foodId,
-        },
-        promptIndex
-      );
+      this.onFoodSelected({ type: 'existing', existingFoodId: foodId }, promptIndex);
     },
 
     foodMissing(promptIndex: number) {
-      this.onFoodSelected(
-        {
-          type: 'missing',
-        },
-        promptIndex
-      );
+      this.onFoodSelected({ type: 'missing' }, promptIndex);
     },
 
     onFoodSelected(selectedFood: AssociatedFood, promptIndex: number): void {
@@ -467,7 +459,7 @@ export default defineComponent({
     updatePrompts() {
       const { activePrompt, prompts } = this;
 
-      this.$emit('update', { state: { activePrompt, prompts } });
+      this.$emit('input', { activePrompt, prompts });
     },
   },
 });

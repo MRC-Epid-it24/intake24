@@ -21,7 +21,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
+
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -30,12 +32,12 @@ export default defineComponent({
 
   mixins: [createBasePrompt<'submit-prompt'>()],
 
-  setup() {
-    const isValid = computed(() => true);
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
 
-    return {
-      isValid,
-    };
+    const isValid = true;
+
+    return { action, isValid };
   },
 });
 </script>

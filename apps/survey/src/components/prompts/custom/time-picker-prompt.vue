@@ -6,8 +6,7 @@
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
-          :value="value"
-          @input="update"
+          v-bind="state"
         ></v-time-picker>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
       </v-form>
@@ -22,7 +21,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { computed, defineComponent } from 'vue';
+
+import { useI18n } from '@intake24/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -33,36 +36,43 @@ export default defineComponent({
 
   props: {
     value: {
-      type: String,
+      type: String as PropType<string | null>,
       default: null,
     },
   },
 
   emits: ['input'],
 
-  computed: {
-    isValid(): boolean {
-      return !this.prompt.validation.required || !!this.value;
-    },
-  },
+  setup(props, ctx) {
+    const { i18n } = useI18n();
 
-  methods: {
-    update(value: string) {
-      this.clearErrors();
+    const confirm = () => {
+      if (isValid.value) return true;
 
-      this.$emit('input', value);
-    },
-
-    confirm() {
-      if (!this.prompt.validation.required || this.value) return true;
-
-      this.errors = [
-        this.translate(this.prompt.validation.message, {
-          path: `prompts.${this.type}.validation.required`,
-        }),
-      ];
+      errors.value = [i18n.t(`prompts.${type}.validation.required`).toString()];
       return false;
-    },
+    };
+
+    const { action, clearErrors, errors, hasErrors, type } = usePromptUtils(props, ctx, confirm);
+
+    const isValid = computed(() => !props.prompt.validation.required || !!state.value);
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        clearErrors();
+        ctx.emit('input', value);
+      },
+    });
+
+    return {
+      action,
+      errors,
+      hasErrors,
+      isValid,
+      state,
+    };
   },
 });
 </script>

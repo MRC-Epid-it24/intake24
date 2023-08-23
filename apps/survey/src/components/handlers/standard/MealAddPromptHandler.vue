@@ -1,8 +1,8 @@
 <template>
   <meal-add-prompt
+    v-model="state"
     v-bind="{ defaultMeals, hasMeals, prompt, section }"
     @action="action"
-    @update="update"
   ></meal-add-prompt>
 </template>
 
@@ -39,7 +39,7 @@ export default defineComponent({
   setup(props, ctx) {
     const getInitialState = computed<string | undefined>(() => undefined);
 
-    const { state, update } = usePromptHandlerNoStore(ctx, getInitialState);
+    const { state } = usePromptHandlerNoStore(ctx, getInitialState);
     const { i18n } = useI18n();
     const survey = useSurvey();
 
@@ -69,7 +69,7 @@ export default defineComponent({
       survey.addMeal({ name: { en: state.value, [i18n.locale]: state.value } }, i18n.locale);
     };
 
-    return { state, action, update, defaultMeals, hasMeals };
+    return { state, action, defaultMeals, hasMeals };
   },
 });
 </script>

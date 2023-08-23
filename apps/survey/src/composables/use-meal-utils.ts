@@ -8,17 +8,17 @@ export type UseMealUtilsProps = {
   meal?: MealState;
 };
 
-export const useMealUtils = ({ meal }: UseMealUtilsProps = {}) => {
+export const useMealUtils = (props: UseMealUtilsProps = {}) => {
   const { translate } = useI18n();
 
   const getMealName = (mealState: MealState) => translate(mealState.name);
 
-  const mealName = computed(() => (meal ? getMealName(meal) : undefined));
+  const mealName = computed(() => (props.meal ? getMealName(props.meal) : undefined));
 
   const getMealTime = (mealState?: MealState) =>
     mealState?.time ? fromMealTime(mealState.time) : undefined;
 
-  const mealTime = computed(() => getMealTime(meal));
+  const mealTime = computed(() => getMealTime(props.meal));
 
   const getMealNameWithTime = (mealState: MealState) => {
     const mealName = getMealName(mealState);

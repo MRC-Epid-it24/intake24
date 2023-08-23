@@ -59,6 +59,7 @@ import { defineComponent } from 'vue';
 import type { FoodState, MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime } from '@intake24/common/surveys';
 import { SurveyProgressBar } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -78,10 +79,11 @@ export default defineComponent({
 
   emits: ['meal-selected', 'food-selected'],
 
-  computed: {
-    isValid(): boolean {
-      return true;
-    },
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
+    const isValid = true;
+
+    return { action, isValid };
   },
 
   methods: {

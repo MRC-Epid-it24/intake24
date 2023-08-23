@@ -110,7 +110,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   setup(props) {
     const { translate } = useI18n();
@@ -123,7 +123,7 @@ export default defineComponent({
   },
 
   data() {
-    const state = copy(this.initialState);
+    const state = copy(this.value);
     state.portionSize.guideImageId = this.parameters['guide-image-id'];
 
     return {
@@ -238,7 +238,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });

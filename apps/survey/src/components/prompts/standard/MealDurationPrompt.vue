@@ -3,6 +3,7 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-slider
+          v-model="state"
           class="meal-duration-slider px-8"
           color="grey darken-1"
           :max="prompt.max"
@@ -10,8 +11,6 @@
           :step="prompt.step"
           thumb-label="always"
           :thumb-size="75"
-          :value="initialState"
-          @input="update"
         >
           <template #thumb-label="{ value }">
             <div class="d-flex flex-column align-center">
@@ -50,30 +49,33 @@ export default defineComponent({
   mixins: [createBasePrompt<'meal-duration-prompt'>()],
 
   props: {
-    initialState: {
-      type: Number,
-      required: true,
-    },
     meal: {
       type: Object as PropType<MealState>,
       required: true,
     },
+    value: {
+      type: Number,
+      required: true,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props, { emit }) {
-    const { translatePrompt } = usePromptUtils(props);
+  setup(props, ctx) {
+    const { action, translatePrompt } = usePromptUtils(props, ctx);
 
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+      },
+    });
+    const isValid = computed(() => state.value !== null);
     const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
 
-    const isValid = computed(() => props.initialState !== null);
-
-    const update = (duration: string) => {
-      emit('update', { state: duration });
-    };
-
-    return { promptI18n, isValid, update };
+    return { action, isValid, promptI18n, state };
   },
 });
 </script>

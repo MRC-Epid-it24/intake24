@@ -174,8 +174,8 @@ export default defineComponent({
 
   emits: ['food-selected', 'food-missing', 'recipe-builder', 'input'],
 
-  setup(props, { emit }) {
-    const { translatePrompt, type } = usePromptUtils(props);
+  setup(props, ctx) {
+    const { translatePrompt, type } = usePromptUtils(props, ctx);
 
     const promptI18n = computed(() => {
       function backCategoryLabel(): string {
@@ -358,12 +358,12 @@ export default defineComponent({
 
     const foodSelected = (food: FoodHeader) => {
       closeInDialog();
-      emit('food-selected', food);
+      ctx.emit('food-selected', food);
     };
 
     const foodMissing = (food: FoodHeader) => {
       closeInDialog();
-      emit('food-missing', food);
+      ctx.emit('food-missing', food);
     };
 
     const recipeBuilder = () => {
@@ -405,7 +405,7 @@ export default defineComponent({
     watchDebounced(
       searchTerm,
       async () => {
-        emit('input', searchTerm.value ?? '');
+        ctx.emit('input', searchTerm.value ?? '');
 
         if (searchTerm.value) {
           await search();

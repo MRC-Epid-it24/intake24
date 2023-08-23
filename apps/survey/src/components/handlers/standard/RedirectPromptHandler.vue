@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -23,7 +23,7 @@ import { RedirectPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
 export default defineComponent({
-  name: 'FinalPromptHandler',
+  name: 'RedirectPromptHandler',
 
   components: { RedirectPrompt },
 
@@ -41,10 +41,10 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, { emit }) {
-    const { user } = useSurvey();
+    const survey = useSurvey();
 
-    const showFeedback = ref(user?.showFeedback);
-    const followUpUrl = ref(user?.followUpUrl);
+    const showFeedback = computed(() => survey.user?.showFeedback);
+    const followUpUrl = computed(() => survey.user?.followUpUrl);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       emit('action', type, ...args);

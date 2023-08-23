@@ -7,7 +7,7 @@
           :column="prompt.orientation === 'column'"
           :error="hasErrors"
           hide-details="auto"
-          :label="translate(prompt.i18n.label)"
+          :label="$t(`prompts.${type}.label`)"
           :row="prompt.orientation === 'row'"
           @change="update"
         >
@@ -43,9 +43,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
-import type { ListOption } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -63,45 +64,50 @@ export default defineComponent({
 
   emits: ['input'],
 
-  data() {
-    return {
-      otherValue: '',
-      selected: this.value,
-    };
-  },
+  setup(props, ctx) {
+    const { i18n } = useI18n();
 
-  computed: {
-    localeOptions(): ListOption[] {
-      return this.prompt.options[this.$i18n.locale] ?? this.prompt.options.en;
-    },
-    currentValue(): string {
-      return this.selected === 'other' ? `Other: ${this.otherValue}` : this.selected;
-    },
-    isValid(): boolean {
-      return (
-        !this.prompt.validation.required ||
-        (!!this.currentValue && (this.selected !== 'other' || !!this.otherValue))
-      );
-    },
-  },
+    const otherValue = ref('');
+    const selected = ref(props.value);
 
-  methods: {
-    update() {
-      this.clearErrors();
+    const state = computed(() =>
+      selected.value === 'other' ? `Other: ${otherValue.value}` : selected.value
+    );
+    const isValid = computed(
+      () =>
+        !props.prompt.validation.required ||
+        (!!state.value && (selected.value !== 'other' || !!otherValue.value))
+    );
+    const localeOptions = computed(
+      () => props.prompt.options[i18n.locale] ?? props.prompt.options.en
+    );
 
-      this.$emit('input', this.currentValue);
-    },
+    const confirm = () => {
+      if (isValid.value) return true;
 
-    confirm() {
-      if (this.isValid) return true;
-
-      this.errors = [
-        this.translate(this.prompt.validation.message, {
-          path: `prompts.${this.type}.validation.required`,
-        }),
-      ];
+      errors.value = [i18n.t(`prompts.${type.value}.validation.required`).toString()];
       return false;
-    },
+    };
+
+    const { action, clearErrors, errors, hasErrors, type } = usePromptUtils(props, ctx, confirm);
+
+    const update = () => {
+      clearErrors();
+
+      ctx.emit('input', state.value);
+    };
+
+    return {
+      action,
+      errors,
+      hasErrors,
+      isValid,
+      localeOptions,
+      otherValue,
+      selected,
+      type,
+      update,
+    };
   },
 });
 </script>

@@ -3,13 +3,12 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-textarea
+          v-model="state"
           hide-details="auto"
           :hint="translate(prompt.i18n.hint)"
           :label="translate(prompt.i18n.label)"
           outlined
           :rules="rules"
-          :value="value"
-          @input="update"
         ></v-textarea>
       </v-form>
     </v-card-text>
@@ -24,7 +23,7 @@
 
 <script lang="ts">
 import type { VForm } from 'vuetify/lib';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -45,13 +44,29 @@ export default defineComponent({
 
   emits: ['input'],
 
-  setup(props) {
-    const form = ref<InstanceType<typeof VForm>>();
-
+  setup(props, ctx) {
     const { i18n, translate } = useI18n();
-    const { type } = usePromptUtils(props);
 
-    const rules = ref(
+    const form = ref<InstanceType<typeof VForm>>();
+    const isValid = computed(() => !props.prompt.validation.required || !!props.value);
+    const state = computed({
+      get() {
+        return props.value;
+      },
+      set(value) {
+        ctx.emit('input', value);
+      },
+    });
+
+    const confirm = () => {
+      //@ts-expect-error - not typed vuetify component
+      const isValid = this.form?.validate();
+      return isValid;
+    };
+
+    const { action, type } = usePromptUtils(props, ctx, confirm);
+
+    const rules = computed(() =>
       props.prompt.validation.required
         ? [
             (v: string | null) =>
@@ -62,25 +77,7 @@ export default defineComponent({
         : []
     );
 
-    return { form, translate, rules };
-  },
-
-  computed: {
-    isValid(): boolean {
-      return !this.prompt.validation.required || !!this.value;
-    },
-  },
-
-  methods: {
-    update(value: string) {
-      this.$emit('input', value);
-    },
-
-    confirm() {
-      //@ts-expect-error - not typed vuetify component
-      const isValid = this.form?.validate();
-      return isValid;
-    },
+    return { action, form, isValid, rules, state, translate };
   },
 });
 </script>

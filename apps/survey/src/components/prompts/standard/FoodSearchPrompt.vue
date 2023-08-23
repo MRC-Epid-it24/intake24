@@ -19,6 +19,7 @@ import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodState } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { FoodBrowser } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 import { foodsService } from '@intake24/survey/services';
 
 import createBasePrompt from '../createBasePrompt';
@@ -52,7 +53,10 @@ export default defineComponent({
 
   emits: ['food-missing', 'food-selected', 'input', 'recipe-builder'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
+    const { action } = usePromptUtils(props, ctx);
+
+    const isValid = true;
     const rootCategory = computed(() => {
       const foodSearch = props.meal?.flags
         ?.find((flag) => flag.startsWith('food-search:'))
@@ -67,16 +71,18 @@ export default defineComponent({
 
     const foodSelected = async (food: FoodHeader) => {
       const foodData = await foodsService.getData(props.localeId, food.code);
-      emit('food-selected', foodData);
+      ctx.emit('food-selected', foodData);
     };
 
     const foodMissing = () => {
-      emit('food-missing');
+      ctx.emit('food-missing');
     };
 
     return {
+      action,
       foodSelected,
       foodMissing,
+      isValid,
       rootCategory,
     };
   },

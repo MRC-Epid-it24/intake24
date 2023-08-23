@@ -99,13 +99,12 @@ export type PromptStates = {
     linkedQuantityConfirmed: boolean;
   };
   // Standard prompts
-  'edit-meal-prompt': {
-    foods: FoodState[];
-  };
+  'edit-meal-prompt': FoodState[];
   'associated-foods-prompt': {
     activePrompt: number;
     prompts: AssociatedFoodPromptItemState[];
   };
+  'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];
 };
 
 export type PromptState = PromptStates[keyof PromptStates];

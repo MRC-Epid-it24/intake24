@@ -12,16 +12,11 @@ export const usePromptHandlerNoStore = <T>(
     state.value = initialState;
   });
 
-  const update = (data: { state?: T }) => {
-    const { state: newState } = data;
-    if (newState) state.value = newState;
-  };
-
   const action = (type: string, ...args: [id?: string, params?: object]) => {
     if (type === 'next' && commitAnswer) commitAnswer();
 
     emit('action', type, ...args);
   };
 
-  return { state, action, update };
+  return { state, action };
 };

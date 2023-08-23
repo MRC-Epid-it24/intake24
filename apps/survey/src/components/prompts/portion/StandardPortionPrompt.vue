@@ -132,7 +132,7 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.initialState),
+      ...copy(this.value),
     };
   },
 
@@ -223,7 +223,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('update', { state });
+      this.$emit('update', state);
     },
   },
 });

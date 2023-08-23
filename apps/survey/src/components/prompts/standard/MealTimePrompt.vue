@@ -3,12 +3,11 @@
     <v-card-text class="pt-2 meal-time-prompt">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker
+          v-model="state"
           :allowed-minutes="allowedMinutes"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
-          :value="currentTime"
-          @input="update"
         ></v-time-picker>
       </v-form>
     </v-card-text>
@@ -72,35 +71,36 @@ export default defineComponent({
   mixins: [createBasePrompt<'meal-time-prompt'>()],
 
   props: {
-    initialState: {
-      type: Object as PropType<MealTime>,
-      required: true,
-    },
     meal: {
       type: Object as PropType<MealState>,
       required: true,
     },
+    value: {
+      type: Object as PropType<MealTime>,
+      required: true,
+    },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
-  setup(props, { emit }) {
-    const { translatePrompt } = usePromptUtils(props);
+  setup(props, ctx) {
+    const { action, translatePrompt } = usePromptUtils(props, ctx);
 
     const allowedMinutes = computed(
       () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0
     );
-    const currentTime = computed(() => fromMealTime(props.initialState, false));
-
     const promptI18n = computed(() => translatePrompt(['no', 'yes']));
+    const state = computed({
+      get() {
+        return fromMealTime(props.value, false);
+      },
+      set(value) {
+        ctx.emit('input', toMealTime(value));
+      },
+    });
+    const isValid = computed(() => !!state.value);
 
-    const isValid = computed(() => !!currentTime.value);
-
-    const update = (time: string) => {
-      emit('update', { state: toMealTime(time) });
-    };
-
-    return { allowedMinutes, currentTime, promptI18n, isValid, update };
+    return { action, allowedMinutes, isValid, promptI18n, state };
   },
 });
 </script>

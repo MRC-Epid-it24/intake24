@@ -1,16 +1,16 @@
 <template>
   <parent-food-portion-prompt
+    v-model="state"
     v-bind="{
       food: food(),
       meal,
-      initialState: state,
       parameters,
       parentFood,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @input="update"
   ></parent-food-portion-prompt>
 </template>
 

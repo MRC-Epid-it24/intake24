@@ -87,11 +87,11 @@ export default defineComponent({
 
   mixins: [createBasePortion<'missing-food-prompt', MissingFood>()],
 
-  emits: ['update'],
+  emits: ['input'],
 
   data() {
     return {
-      ...copy(this.initialState),
+      ...copy(this.value),
       fields: [
         // 'name',
         // 'brand',
@@ -126,7 +126,7 @@ export default defineComponent({
         homemadePrompt: this.homemadePrompt,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
   },
 });
