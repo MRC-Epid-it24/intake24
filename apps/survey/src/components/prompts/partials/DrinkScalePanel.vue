@@ -6,13 +6,7 @@
       @mousedown="touchUpdateSlider"
       @mousemove="onTrackOverlay($event)"
     >
-      <v-img
-        ref="imgDrink"
-        v-resize="onImgResize"
-        class="drink-scale-image"
-        :src="scale.baseImageUrl"
-        :style="imgVars"
-      >
+      <v-img ref="imgDrink" class="drink-scale-image" :src="scale.baseImageUrl" :style="imgVars">
         <template #placeholder>
           <image-placeholder></image-placeholder>
         </template>
@@ -75,8 +69,9 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
+import { useElementSize } from '@vueuse/core';
 import debounce from 'lodash/debounce';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { DrinkwareScaleResponse } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
@@ -113,101 +108,117 @@ export default defineComponent({
 
   emits: ['confirm', 'input'],
 
-  setup(props) {
+  setup(props, { emit }) {
     const wrapper = ref<InstanceType<typeof HTMLFormElement>>();
     const imgDrink = ref<InstanceType<typeof VImg>>();
+    //@ts-expect-error should allow vue instance?
+    const { height, width } = useElementSize(imgDrink);
+
+    const imgScale = computed(() => height.value / props.scale.height);
+
+    const cursorInScale = ref(false);
     const sliderMax = ref(props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel));
     const sliderMin = ref(0);
     const sliderStep = ref(Math.round(sliderMax.value / 6));
     const sliderValue = ref(sliderMax.value * props.value);
-    const height = ref(0);
-    const width = ref(0);
+    const sliderBottom = computed(() => `${props.scale.emptyLevel * imgScale.value}px`);
+    const sliderHeight = computed(() => sliderMax.value * imgScale.value);
 
     const isInScale = (y: number) =>
       y >= sliderMin.value + props.scale.emptyLevel &&
       y <= sliderMax.value + props.scale.emptyLevel;
 
-    const cursorInScale = ref(false);
+    const updateSlider = (value: number) => {
+      sliderValue.value = Math.min(
+        sliderMax.value,
+        Math.max(sliderMin.value, sliderValue.value + value)
+      );
+    };
+
+    const touchUpdateSlider = (event: MouseEvent) => {
+      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__')) return;
+
+      const position = props.scale.height - event.offsetY / imgScale.value;
+      if (!isInScale(position)) return;
+
+      sliderValue.value = Math.round(position - props.scale.emptyLevel);
+    };
+
+    const trackOverlay = (event: MouseEvent) => {
+      const position = props.scale.height - event.offsetY / imgScale.value;
+      cursorInScale.value = isInScale(position);
+    };
+
+    const onTrackOverlay = debounce((event: MouseEvent) => {
+      trackOverlay(event);
+    }, 100);
+
+    const fillLevel = computed(() => (sliderValue.value / sliderMax.value) * props.maxFillLevel);
+
+    const fillVolume = computed(() =>
+      Math.round(calculateVolume(props.scale.volumeSamples, fillLevel.value))
+    );
+
+    const label = computed(() => `${fillVolume.value} ml`);
+
+    const imgClip = computed(
+      () => (props.scale.height - props.scale.fullLevel) * 0.75 * imgScale.value
+    );
+
+    const imgVars = computed(() => ({ '--img-clip': `${imgClip.value}px` }));
+
+    const overlayVars = computed(() => ({
+      '--overlay-clip': `${
+        height.value - (props.scale.emptyLevel + sliderValue.value) * imgScale.value
+      }px`,
+    }));
+
+    const confirm = () => {
+      emit('confirm');
+    };
+
+    watch(fillLevel, (val) => {
+      if (!props.open) return;
+
+      emit('input', val);
+    });
+
+    watch(
+      () => props.open,
+      () => {
+        sliderMax.value = props.maxFillLevel * (props.scale.fullLevel - props.scale.emptyLevel);
+        sliderValue.value = sliderMax.value * props.value;
+      }
+    );
 
     return {
       wrapper,
       imgDrink,
       height,
       width,
+      confirm,
+      imgScale,
+      isInScale,
+      cursorInScale,
       sliderMax,
       sliderMin,
       sliderStep,
       sliderValue,
-      isInScale,
-      cursorInScale,
+      sliderBottom,
+      sliderHeight,
+      updateSlider,
+      touchUpdateSlider,
+      onTrackOverlay,
+      label,
+      imgVars,
+      overlayVars,
     };
   },
 
-  computed: {
-    fillLevel(): number {
-      return (this.sliderValue / this.sliderMax) * this.maxFillLevel;
-    },
-
-    fillVolume(): number {
-      return Math.round(calculateVolume(this.scale.volumeSamples, this.fillLevel));
-    },
-
-    label(): string {
-      return `${this.fillVolume} ml`;
-    },
-
-    imgScale() {
-      return this.height / this.scale.height;
-    },
-
-    sliderHeight() {
-      return this.sliderMax * this.imgScale;
-    },
-
-    sliderBottom() {
-      return `${this.scale.emptyLevel * this.imgScale}px`;
-    },
-
-    imgClip() {
-      return (this.scale.height - this.scale.fullLevel) * 0.75 * this.imgScale;
-    },
-
-    imgVars() {
-      return { '--img-clip': `${this.imgClip}px` };
-    },
-
-    overlayVars() {
-      return {
-        '--overlay-clip': `${
-          this.height - (this.scale.emptyLevel + this.sliderValue) * this.imgScale
-        }px`,
-      };
-    },
-  },
-
   watch: {
-    fillLevel(val) {
-      if (!this.open) return;
-
-      this.$emit('input', val);
+    height() {
+      if (this.open) this.scrollTo();
     },
-    open() {
-      this.onImgResize();
-      this.sliderMax = this.maxFillLevel * (this.scale.fullLevel - this.scale.emptyLevel);
-      this.sliderValue = this.sliderMax * this.value;
-    },
-  },
-
-  created() {
-    //@ts-expect-error fix debounced types
-    this.debouncedDrinkScaleImgResize = debounce(() => {
-      this.updateOverlayDimensions();
-    }, 500);
-
-    //@ts-expect-error fix debounced types
-    this.debouncedTrackOverlay = debounce((event: MouseEvent) => {
-      this.trackOverlay(event);
-    }, 100);
   },
 
   methods: {
@@ -217,55 +228,6 @@ export default defineComponent({
 
         await this.$vuetify.goTo(this.wrapper);
       }, 100);
-    },
-
-    updateOverlayDimensions() {
-      const el = this.imgDrink?.$el;
-      if (!el) {
-        console.warn(`DrinkScalePrompt: could not update IMG dimensions. ${el}`);
-        return;
-      }
-
-      const { width, height } = el.getBoundingClientRect();
-      this.width = width;
-      this.height = height;
-
-      if (this.open) this.scrollTo();
-    },
-
-    onImgResize() {
-      //@ts-expect-error fix debounced types
-      this.debouncedDrinkScaleImgResize();
-    },
-
-    onTrackOverlay(event: MouseEvent) {
-      //@ts-expect-error fix debounced types
-      this.debouncedTrackOverlay(event);
-    },
-
-    touchUpdateSlider(event: MouseEvent) {
-      if (event.target && (event.target as HTMLElement).className.startsWith('v-slider__')) return;
-
-      const position = this.scale.height - event.offsetY / this.imgScale;
-      if (!this.isInScale(position)) return;
-
-      this.sliderValue = Math.round(position - this.scale.emptyLevel);
-    },
-
-    trackOverlay(event: MouseEvent) {
-      const position = this.scale.height - event.offsetY / this.imgScale;
-      this.cursorInScale = this.isInScale(position);
-    },
-
-    updateSlider(value: number) {
-      this.sliderValue = Math.min(
-        this.sliderMax,
-        Math.max(this.sliderMin, this.sliderValue + value)
-      );
-    },
-
-    confirm() {
-      this.$emit('confirm');
     },
   },
 });

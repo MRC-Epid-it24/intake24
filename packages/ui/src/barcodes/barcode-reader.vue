@@ -28,7 +28,7 @@
           <v-icon>fas fa-lightbulb</v-icon>
         </v-btn>
       </v-toolbar>
-      <div ref="reader" v-resize="onReaderResize" class="barcode-reader">
+      <div ref="reader" class="barcode-reader">
         <canvas class="drawingBuffer"></canvas>
         <video :style="{ height: `${height - 56}px` }"></video>
       </div>
@@ -40,8 +40,7 @@
 import type { QuaggaJSCodeReader, QuaggaJSResultObject } from '@ericblade/quagga2';
 import type { PropType } from 'vue';
 import Quagga from '@ericblade/quagga2';
-import { useVModel } from '@vueuse/core';
-import debounce from 'lodash/debounce';
+import { useElementSize, useVModel, watchDebounced } from '@vueuse/core';
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue';
 import { VCard } from 'vuetify/lib';
 
@@ -78,11 +77,11 @@ const emit = defineEmits(['update:dialog', 'update:model-value']);
 
 const dialog = useVModel(props, 'dialog', emit);
 
-const height = ref(0);
-const width = ref(0);
-
 const card = ref<InstanceType<typeof VCard>>();
 const reader = ref<InstanceType<typeof HTMLFormElement>>();
+
+//@ts-expect-error should allow vue instance?
+const { height, width } = useElementSize(card);
 
 const initializing = ref(false);
 const capabilities = ref<MediaTrackCapabilities | null>(null);
@@ -159,22 +158,6 @@ const toggleTorch = async () => {
 
   //@ts-expect-error torch is not in the types ?
   await track?.applyConstraints({ advanced: [{ torch: !track.getSettings().torch }] });
-};
-
-const updateDimensions = () => {
-  const el = card.value?.$el;
-  if (!el) {
-    console.warn(`Reader: could not update dimensions. ${el}`);
-    return;
-  }
-
-  const rect = el.getBoundingClientRect();
-  const cWidth = Math.floor(rect.width);
-  const cHeight = Math.floor(rect.height);
-  if (width.value === cWidth && height.value === cHeight) return;
-
-  width.value = cWidth;
-  height.value = cHeight;
 };
 
 const getMedian = (numbers: number[]) => {
@@ -259,25 +242,24 @@ watch(locate, async () => {
 watch(
   () => props.dialog,
   async (val) => {
-    if (val) {
-      await onReaderResize();
-      return;
-    }
-
-    await stop();
+    if (val) await start();
+    else await stop();
   }
+);
+
+watchDebounced(
+  [height, width],
+  async () => {
+    if (!props.dialog) return;
+
+    await start();
+  },
+  { debounce: 500, maxWait: 2000 }
 );
 
 onBeforeUnmount(async () => {
   await stop();
 });
-
-const onReaderResize = debounce(async () => {
-  if (!props.dialog) return;
-
-  updateDimensions();
-  await start();
-}, 500);
 
 /* onProcessed(result: QuaggaJSResultObject) {}, */
 
