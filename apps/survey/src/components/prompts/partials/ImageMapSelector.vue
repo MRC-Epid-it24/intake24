@@ -134,7 +134,9 @@ export default defineComponent({
 
     const { hoverIndex, label, objects } = useImageMap(props, width);
 
-    const isDisabled = computed(() => props.disabled || props.index === undefined);
+    const isDisabled = computed(() =>
+      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled
+    );
 
     const getScreenDimensions = () => {
       screenHeight.value = window.screen.height;
