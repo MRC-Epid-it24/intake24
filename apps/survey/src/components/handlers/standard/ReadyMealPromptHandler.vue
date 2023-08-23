@@ -1,6 +1,6 @@
 <template>
   <ready-meal-prompt
-    v-bind="{ initialState: state, meal, prompt }"
+    v-bind="{ initialState: state, meal, prompt, section }"
     @action="action"
     @update="update"
   ></ready-meal-prompt>
@@ -11,6 +11,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood } from '@intake24/common/types';
 import { ReadyMealPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -27,9 +28,13 @@ export default defineComponent({
       type: Object as PropType<Prompts['ready-meal-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
-  setup(props, context) {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
@@ -47,8 +52,6 @@ export default defineComponent({
       })),
     }));
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
-
     const commitAnswer = () => {
       for (const food of state.value.foods) {
         survey.setFoodFlag(food.id, 'ready-meal', !!food.value);
@@ -57,15 +60,11 @@ export default defineComponent({
       survey.addMealFlag(meal.value.id, 'ready-meal-complete');
     };
 
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitAnswer();
-
-      context.emit('action', type, id);
-    };
+    const { state, action, update } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
     if (!state.value.foods.length) action('next');
 
-    return { meal, state, update, action };
+    return { meal, state, action, update };
   },
 });
 </script>

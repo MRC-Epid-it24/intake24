@@ -69,26 +69,36 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
     yes: 'Yes, I had some',
+    yesAnother: 'Yes, I had another',
     no: 'No, I did not',
-    alreadyEntered: 'Yes, already entered',
+    moreFoodsQuestion: 'Did you have any other foods from this category?',
+    databaseLookupTitle: 'What was it?',
+    databaseLookupWithExisting: 'If not, what was it?',
+    existingFoodsTitle: 'Was it something you already entered?',
     select: {
-      different: 'Select a different food',
-      item: 'Select the food you had',
+      different: 'Change',
+      remove: 'Remove',
     },
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>Please try browsing the food categories listed above to find your food.</p>
       <p>Or click 'Browse all foods' and explore the food categories.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
+      placeholder: 'Missing food',
     },
   },
   editMeal: {
     name: 'Edit Meal',
     text: '',
     description: `<p>List everything you had for your <strong>{meal}</strong>, one item per line.</p>
-      For example:<p><ul><li>banana</li><li>crisps</li><li>rice</li><li>tea</li></ul></p>
-      <p>You can press Enter on your keyboard or the "add a food/drink" button to go to the next line as you type.</p>
+      For example:<p><ul><li>Weetabix</li><li>Tea</li></ul></p>
+      <p>You can press Enter on your keyboard or click the <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> button to go to the next line.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.`,
     add: 'Add',
     drinksOnly: 'Drinks',
@@ -100,12 +110,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
   },
-  foodBrowser: {
-    browse: 'Browse all foods',
-    search: 'Search for a food',
-    none: 'No food results. Please try refining your search.',
-    back: `Back to '{category}'`,
-  },
   foodSearch: {
     name: 'Search Food',
     text: '',
@@ -114,6 +118,10 @@ const prompts: LocaleMessageObject = {
     empty: 'There is nothing in our database that matches "{searchTerm}".',
     reword: 'Try re-wording your description.',
     browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -138,7 +146,6 @@ const prompts: LocaleMessageObject = {
     },
   },
   mealAdd: {
-    _: 'Add meal',
     name: 'Add Meal',
     text: '',
     description: '<p>Select one from the list below if it is appropriate.</p>',
@@ -151,12 +158,13 @@ const prompts: LocaleMessageObject = {
     },
     yes: 'Add this meal',
     no: 'Cancel',
-    noMeal: 'No Meals remaining, add at least one',
+    noMeal: 'No meals remaining, add at least one',
   },
   mealDuration: {
     name: 'Meal duration',
     text: '',
-    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
+    minutes: 'mins',
     confirm: 'Continue',
   },
   mealGap: {
@@ -182,8 +190,7 @@ const prompts: LocaleMessageObject = {
   readyMeal: {
     name: 'Ready meal',
     text: '',
-    description: `<p>Was this a ready-made meal or food?</p>
-      <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
+    description: `<p>Was this a ready-made meal or food?</p>`,
   },
   redirect: {
     name: 'Redirect',

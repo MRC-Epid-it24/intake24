@@ -15,7 +15,7 @@
           <v-col cols="12">
             <v-btn
               block
-              color="secondary"
+              color="primary"
               :disabled="isAppLoading"
               outlined
               rounded

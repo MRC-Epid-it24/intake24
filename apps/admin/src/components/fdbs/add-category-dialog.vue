@@ -1,19 +1,12 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ attrs, on }">
-      <v-btn
-        v-bind="attrs"
-        color="secondary"
-        fab
-        small
-        :title="$t('fdbs.categories.add')"
-        v-on="on"
-      >
+      <v-btn v-bind="attrs" color="primary" fab small :title="$t('fdbs.categories.add')" v-on="on">
         <v-icon>$add</v-icon>
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -62,7 +55,7 @@
             <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
           </div>
         </template>
-        <v-alert v-else color="primary" text type="info">
+        <v-alert v-else color="secondary" text type="info">
           {{ $t('fdbs.categories.none') }}
         </v-alert>
       </v-card-text>

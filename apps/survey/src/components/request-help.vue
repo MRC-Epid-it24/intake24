@@ -20,19 +20,15 @@
       </slot>
     </template>
     <v-card :tile="isMobile">
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>{{ $t('common.help.title') }}</v-toolbar-title>
       </v-toolbar>
-      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="requestHelp">
+      <v-form @keydown.native="errors.clear()" @submit.prevent="requestHelp">
         <v-card-text>
-          <p class="mx-2">
-            If you would like someone from our team to help, enter your contact details that we can
-            use to reach you.
-          </p>
-          <p class="mx-2">One of our support staff will get in touch as soon as they can.</p>
+          <p class="mx-2">{{ $t('common.help.text') }}</p>
           <v-container>
             <v-row>
               <v-col cols="12">
@@ -68,12 +64,24 @@
                   prepend-inner-icon="fas fa-phone"
                 ></v-text-field>
               </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="form.message"
+                  :counter="500"
+                  :error-messages="errors.get('message')"
+                  hide-details="auto"
+                  :label="$t('common.message')"
+                  name="message"
+                  outlined
+                  prepend-inner-icon="fas fa-message"
+                ></v-textarea>
+              </v-col>
             </v-row>
             <v-row justify="center">
               <v-col :cols="isMobile ? '12' : 'auto'">
                 <v-btn
                   :block="isMobile"
-                  color="secondary"
+                  color="primary"
                   :disabled="errors.any()"
                   outlined
                   rounded
@@ -121,7 +129,12 @@ export default defineComponent({
   emits: ['cancel'],
 
   data() {
-    const createForm = (): SurveyRequestHelpInput => ({ name: '', email: '', phone: '' });
+    const createForm = (): SurveyRequestHelpInput => ({
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+    });
 
     return {
       dialog: false,

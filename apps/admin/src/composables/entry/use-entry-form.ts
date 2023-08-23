@@ -21,7 +21,7 @@ import { useEntryWatch } from './use-entry-watch';
 
 type FormMethod = Extract<Method, 'get' | 'post' | 'patch' | 'put'>;
 
-export type FormProps<F> = {
+export type UseEntryFormProps<F> = {
   data: F;
   config?: FormConfig;
   editMethod?: FormMethod;
@@ -31,12 +31,12 @@ export type FormProps<F> = {
 
 export const useEntryForm = <F extends object, E extends object>(
   props: UseStoreEntryProps,
-  formProps: FormProps<F>
+  formProps: UseEntryFormProps<F>
 ) => {
   const { id: entryId } = toRefs(props);
   const { data, config, editMethod = 'put', loadCallback, nonInputErrorKeys = [] } = formProps;
 
-  const i18n = useI18n();
+  const { i18n } = useI18n();
   const resource = useResource();
   const router = useRouter();
 

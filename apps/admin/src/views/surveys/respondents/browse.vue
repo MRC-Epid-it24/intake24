@@ -9,12 +9,12 @@
       <template #header-add>
         <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
           <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="primary" text v-bind="attrs" v-on="on">
+            <v-btn class="font-weight-bold" color="secondary" text v-bind="attrs" v-on="on">
               <v-icon left>fas fa-user-plus</v-icon>{{ $t('surveys.respondents.add') }}
             </v-btn>
           </template>
           <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-            <v-toolbar color="primary" dark flat>
+            <v-toolbar color="secondary" dark flat>
               <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
                 <v-icon>$cancel</v-icon>
               </v-btn>
@@ -117,7 +117,7 @@
         </v-dialog>
         <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
+            <v-btn class="font-weight-bold" color="secondary" v-bind="attrs" icon v-on="on">
               <v-icon>$options</v-icon>
             </v-btn>
           </template>
@@ -146,7 +146,7 @@
       <template #[`item.action`]="{ item }">
         <v-menu close-on-click close-on-content-click offset-y>
           <template #activator="{ attrs, on }">
-            <v-btn class="font-weight-bold" color="primary" v-bind="attrs" icon v-on="on">
+            <v-btn class="font-weight-bold" color="secondary" v-bind="attrs" icon v-on="on">
               <v-icon>$options</v-icon>
             </v-btn>
           </template>
@@ -154,7 +154,7 @@
             <respondent-feedback :survey-id="id" :user="item"></respondent-feedback>
           </v-list>
         </v-menu>
-        <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
+        <v-btn color="secondary" icon :title="$t('common.action.edit')" @click.stop="edit(item)">
           <v-icon dark>$edit</v-icon>
         </v-btn>
         <confirm-dialog
@@ -217,7 +217,7 @@ export default defineComponent({
     const dialog = ref(false);
     const loading = ref(false);
 
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const headers = [
       {

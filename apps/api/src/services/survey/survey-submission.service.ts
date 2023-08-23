@@ -228,7 +228,7 @@ const surveySubmissionService = ({
         englishName,
         localName,
         readyMeal: flags.includes('ready-meal'),
-        searchTerm,
+        searchTerm: searchTerm ?? '',
         portionSizeMethodId: portionSize.method,
         reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify
         foodGroupId,

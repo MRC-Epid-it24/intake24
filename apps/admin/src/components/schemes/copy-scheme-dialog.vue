@@ -4,7 +4,7 @@
       <v-btn
         v-bind="attrs"
         class="ml-3"
-        color="primary"
+        color="secondary"
         :title="$t(`${resource}.copy._`)"
         v-on="on"
       >
@@ -12,7 +12,7 @@
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>

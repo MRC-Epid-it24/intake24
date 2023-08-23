@@ -5,6 +5,7 @@
       meal,
       initialState: state,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -16,6 +17,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { MissingFoodPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -31,11 +33,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['missing-food-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const survey = useSurvey();
     const { missingFood: food } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
@@ -52,8 +58,6 @@ export default defineComponent({
       homemadePrompt: undefined,
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
-
     const commitAnswer = () => {
       const { info } = state.value;
 
@@ -63,13 +67,14 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitAnswer();
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
-      emit('action', type, id);
-    };
-
-    return { food, meal, state, update, action };
+    return { food, meal, state, action, update };
   },
 });
 </script>

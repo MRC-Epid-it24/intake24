@@ -1,4 +1,9 @@
-import type { Dictionary, RecipeFood, RequiredLocaleTranslation } from '@intake24/common/types';
+import type {
+  Dictionary,
+  Optional,
+  RecipeFood,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType, LocaleOptionList } from '../prompts';
@@ -13,6 +18,7 @@ private static final String FLAG_ASSOCIATED_FOODS_COMPLETE = "associated-foods-c
 export type SurveyFlag = `${string}-acknowledged`;
 
 export type MealFlag =
+  | `food-search:${string}`
   | 'free-entry-complete'
   | 'no-meals-after'
   | 'no-meals-between'
@@ -28,6 +34,7 @@ export type FoodFlag =
   | 'portion-size-option-complete'
   | 'portion-size-method-complete'
   | 'recipe-builder-complete'
+  | 'associated-foods-complete'
   | `${string}-acknowledged`;
 
 export type CustomPromptAnswer = string | string[] | number | number[];
@@ -247,16 +254,15 @@ export interface FreeTextFood extends AbstractFoodState {
 export interface EncodedFood extends AbstractFoodState {
   type: 'encoded-food';
   data: UserFoodData;
-  searchTerm: string;
+  searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  associatedFoodsComplete: boolean;
   // brand: string[]; TODO V3?
 }
 
 export interface MissingFood extends AbstractFoodState {
   type: 'missing-food';
-  searchTerm: string;
+  searchTerm: string | null;
   info: Pick<
     SurveySubmissionMissingFoodCreationAttributes,
     'name' | 'brand' | 'description' | 'leftovers' | 'portionSize' | 'barcode'
@@ -265,7 +271,7 @@ export interface MissingFood extends AbstractFoodState {
 
 export interface RecipeBuilder extends AbstractFoodState {
   type: 'recipe-builder';
-  searchTerm: string;
+  searchTerm: string | null;
   components: RecipeBuilderComponent[];
   description: string;
   template_id: string;
@@ -297,6 +303,11 @@ export interface MealState {
 
   foods: FoodState[];
 }
+
+export type MealCreationState = Optional<
+  Pick<MealState, 'name' | 'time' | 'duration' | 'flags'>,
+  'flags' | 'time' | 'duration' | 'flags'
+>;
 
 export interface SelectedMeal {
   type: 'meal';
@@ -346,6 +357,21 @@ export type SurveyState = {
   selection: Selection;
   meals: MealState[];
 };
+
+export function isEncodedFood(food: FoodState): food is EncodedFood {
+  return food.type === 'encoded-food';
+}
+
+export function getFoodDescription(food: FoodState): string {
+  switch (food.type) {
+    case 'free-text':
+      return food.description;
+    case 'encoded-food':
+      return food.data.localName;
+    default:
+      return food.searchTerm ?? '??';
+  }
+}
 
 export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
   if (s1.mode === s2.mode) {

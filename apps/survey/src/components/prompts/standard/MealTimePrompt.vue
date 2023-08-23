@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2 meal-time-prompt">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker
@@ -14,37 +14,41 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
+        :title="promptI18n.no"
         @click.stop="action('cancel')"
       >
-        {{ $t(`prompts.${type}.no`) }}
+        {{ promptI18n.no }}
       </v-btn>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
+        color="primary"
         large
+        :title="promptI18n.yes"
         @click.stop="action('next')"
       >
-        {{ $t(`prompts.${type}.yes`) }}
+        {{ promptI18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="cancel" @click.stop="action('cancel')">
+      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('cancel')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.no`) }}
+          {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
+      <v-btn
+        color="primary"
+        :disabled="!isValid"
+        :title="promptI18n.yes"
+        @click.stop="action('next')"
+      >
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.yes`) }}
+          {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -54,10 +58,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime, toMealTime } from '@intake24/common/surveys';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -79,23 +84,23 @@ export default defineComponent({
 
   emits: ['update'],
 
-  computed: {
-    allowedMinutes() {
-      return (minutes: number) => minutes % this.prompt.allowedMinutes === 0;
-    },
-    currentTime(): string {
-      return fromMealTime(this.initialState, false);
-    },
+  setup(props, { emit }) {
+    const { translatePrompt } = usePromptUtils(props);
 
-    isValid(): boolean {
-      return !!this.currentTime;
-    },
-  },
+    const allowedMinutes = computed(
+      () => (minutes: number) => minutes % props.prompt.allowedMinutes === 0
+    );
+    const currentTime = computed(() => fromMealTime(props.initialState, false));
 
-  methods: {
-    update(time: string) {
-      this.$emit('update', { state: toMealTime(time) });
-    },
+    const promptI18n = computed(() => translatePrompt(['no', 'yes']));
+
+    const isValid = computed(() => !!currentTime.value);
+
+    const update = (time: string) => {
+      emit('update', { state: toMealTime(time) });
+    };
+
+    return { allowedMinutes, currentTime, promptI18n, isValid, update };
   },
 });
 </script>

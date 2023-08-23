@@ -5,7 +5,7 @@
         <v-btn
           v-bind="attrs"
           class="ml-3"
-          color="secondary"
+          color="primary"
           fab
           small
           :title="$t('common.options._')"

@@ -14,8 +14,8 @@
               <v-icon>$handle</v-icon>
             </v-list-item-avatar>
             <v-list-item-icon
-              class="mx-2 my-auto px-4 py-4"
-              :style="{ backgroundColor: item.color, borderRadius: '50%' }"
+              class="mx-2 my-auto pa-4 rounded-circle"
+              :style="{ backgroundColor: item.color }"
             >
             </v-list-item-icon>
             <v-list-item-content>
@@ -25,7 +25,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon :title="$t('feedback-schemes.colors.edit')" @click.stop="edit(idx, item)">
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -39,7 +39,7 @@
       persistent
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar color="secondary" dark flat>
           <v-icon dark left>fas fa-palette</v-icon>
           <v-toolbar-title>
             {{ $t('feedback-schemes.colors.edit') }}
@@ -48,7 +48,32 @@
         <v-divider></v-divider>
         <v-form ref="form" @submit.prevent="save">
           <v-card-text>
-            <v-color-picker v-model="dialog.item.color" show-swatches></v-color-picker>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-list>
+                  <v-list-item
+                    v-for="[key, color] in Object.entries(colors)"
+                    :key="key"
+                    link
+                    @click="dialog.item.color = color"
+                  >
+                    <v-list-item-icon
+                      class="mx-2 my-auto pa-4 rounded-circle"
+                      :style="{ backgroundColor: color }"
+                    >
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-medium text-uppercase">
+                        {{ key }}
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-color-picker v-model="dialog.item.color" show-swatches></v-color-picker>
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -71,6 +96,7 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import { useListWithDialog } from '@intake24/admin/components/lists';
+import { colors } from '@intake24/common/theme';
 import { randomString } from '@intake24/common/util';
 
 export default defineComponent({
@@ -89,7 +115,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const newItem = () => ({ _id: randomString(6), color: '#EF6C00' });
+    const newItem = () => ({ _id: randomString(6), color: colors.primary });
     const transformIn = (color: string) => ({ _id: randomString(6), color });
     const transformOut = ({ color }: { _id: string; color: string }) => color;
 
@@ -99,7 +125,7 @@ export default defineComponent({
       { newItem, transformIn, transformOut }
     );
 
-    return { dialog, form, items, newDialog, edit, reset, save, update };
+    return { colors, dialog, form, items, newDialog, edit, reset, save, update };
   },
 });
 </script>

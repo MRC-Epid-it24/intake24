@@ -11,7 +11,12 @@ export default () => {
     url = `/api/surveys/${suite.data.system.survey.slug}/request-help`;
     invalidUrl = `/api/surveys/invalid-survey/request-help`;
 
-    input = { name: 'John', email: 'test@example.com', phone: '01234 567 890' };
+    input = {
+      name: 'John',
+      email: 'test@example.com',
+      phone: '+44 1234 567 890',
+      message: 'Help me!',
+    };
   });
 
   it('should return 401 when no / invalid token', async () => {
@@ -30,14 +35,35 @@ export default () => {
     });
   });
 
-  it('should return 422 for invalid input data', async () => {
+  it('should return 422 when both email and phone empty', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
       bearer: 'respondent',
-      input: { name: [], email: 'notAnEmailAddress', phone: null },
+      input: { email: null, phone: null },
     });
   });
 
-  it('should return 200', async () => {
+  it('should return 422 for invalid input data', async () => {
+    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
+      bearer: 'respondent',
+      input: { name: [], email: 'notAnEmailAddress', phone: { myPhone: '+44 1234 567 890' } },
+    });
+  });
+
+  it('should return 200 | email & phone', async () => {
     await suite.sharedTests.assertAcknowledged('post', url, { bearer: 'respondent', input });
+  });
+
+  it('should return 200 | email only', async () => {
+    await suite.sharedTests.assertAcknowledged('post', url, {
+      bearer: 'respondent',
+      input: { name: 'John', email: 'test@example.com', message: 'Help me!' },
+    });
+  });
+
+  it('should return 200 | phone only', async () => {
+    await suite.sharedTests.assertAcknowledged('post', url, {
+      bearer: 'respondent',
+      input: { name: 'John', phone: '+44 1234 567 890', message: 'Help me!' },
+    });
   });
 };

@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -65,19 +65,25 @@
         @update:confirm="confirmLinkedQuantity"
       ></linked-quantity>
     </v-expansion-panels>
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
   </base-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/types';
 import type { GuideImageResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import { ImageMapSelector, LinkedQuantity, QuantityBadge, QuantityCard } from '../partials';
 import createBasePortion from './createBasePortion';
@@ -107,14 +113,12 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { food } = toRefs(props);
-
-    const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(food);
+    const { translate } = useI18n();
+    const { foodName } = useFoodUtils(props);
 
     return {
       foodName,
-      getLocaleContent,
+      translate,
     };
   },
 
@@ -142,8 +146,8 @@ export default defineComponent({
         const { label, weight } = guideImageData.objects[object.id];
 
         return (
-          this.getLocaleContent(label, { params: { weight } }) ||
-          this.getLocaleContent(object.label, { params: { weight } })
+          this.translate(label, { params: { weight } }) ||
+          this.translate(object.label, { params: { weight } })
         );
       });
     },

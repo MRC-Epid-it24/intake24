@@ -51,7 +51,7 @@
           @click.stop="addImage"
         >
           <div class="d-flex justify-center align-center upload-input-wrapper">
-            <v-btn color="secondary" fab x-large>
+            <v-btn color="primary" fab x-large>
               <v-icon>$add</v-icon>
             </v-btn>
           </div>

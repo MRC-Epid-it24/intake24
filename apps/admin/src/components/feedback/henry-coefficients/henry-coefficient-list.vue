@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-square-root-alt</v-icon>
+      <v-icon color="secondary" left>fas fa-square-root-alt</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.henry-coefficients.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('feedback-schemes.henry-coefficients.create')"
@@ -30,7 +30,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="items"></json-editor>
+        <json-editor-dialog v-model="items"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -60,7 +60,7 @@
                 :title="$t('feedback-schemes.henry-coefficients.edit')"
                 @click.stop="edit(index, coefficient)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -85,7 +85,7 @@
       persistent
     >
       <v-card :tile="$vuetify.breakpoint.smAndDown">
-        <v-toolbar color="primary" dark flat>
+        <v-toolbar color="secondary" dark flat>
           <v-icon dark left>fas fa-square-root-alt</v-icon>
           <v-toolbar-title>
             {{
@@ -192,7 +192,7 @@ import draggable from 'vuedraggable';
 
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
@@ -202,7 +202,7 @@ import { getHenryCoefficientDefaults } from './henry-coefficient';
 export default defineComponent({
   name: 'HenryCoefficientList',
 
-  components: { ConfirmDialog, draggable, JsonEditor, OptionsMenu, SelectResource },
+  components: { ConfirmDialog, draggable, JsonEditorDialog, OptionsMenu, SelectResource },
 
   props: {
     value: {

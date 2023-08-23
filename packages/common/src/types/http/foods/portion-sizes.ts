@@ -25,7 +25,6 @@ export type ImageMapObjectResponse = {
   description: string;
   label: LocaleTranslation;
   navigationIndex: number;
-  overlayUrl: string;
   outline: number[];
 };
 

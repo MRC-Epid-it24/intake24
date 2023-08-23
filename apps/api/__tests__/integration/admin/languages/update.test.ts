@@ -66,7 +66,7 @@ export default () => {
           input: {
             englishName: { name: 'United Kingdom' },
             localName: ['United Kingdom'],
-            countryFlagCode: false,
+            countryFlagCode: 'notWellFormedLocale',
             textDirection: 'wrongDirection',
           },
         }

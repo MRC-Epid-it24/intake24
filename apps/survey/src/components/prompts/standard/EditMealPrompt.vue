@@ -1,25 +1,31 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template v-if="prompt.separateDrinks">
       <editable-food-list
         v-model="foodsOnly"
+        v-bind="{ prompt }"
         focus
         mode="foodsOnly"
         @input="update"
       ></editable-food-list>
       <editable-food-list
+        v-bind="{ prompt }"
         v-model="drinksOnly"
         mode="drinksOnly"
         @input="update"
       ></editable-food-list>
     </template>
-    <editable-food-list v-else v-model="foods" focus @input="update"></editable-food-list>
+    <editable-food-list
+      v-else
+      v-bind="{ prompt }"
+      v-model="foods"
+      focus
+      @input="update"
+    ></editable-food-list>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        :class="{ 'mr-2': !isMobile }"
-        color="secondary"
+        color="primary"
         large
         text
         :title="$t('recall.actions.mealTime')"
@@ -34,10 +40,8 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn
-            :block="isMobile"
             class="px-4"
-            :class="{ 'mr-2': !isMobile }"
-            color="secondary"
+            color="primary"
             large
             text
             :title="$t('recall.actions.deleteMeal')"
@@ -50,15 +54,12 @@
         </template>
         {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
       </confirm-dialog>
-      <next
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        :disabled="!isValid"
-        @click="action('next')"
-      ></next>
+      <next :disabled="!isValid" @click="action('next')"></next>
     </template>
     <template #nav-actions>
       <v-btn
-        large
+        color="primary"
+        text
         :title="$t('recall.actions.nav.mealTime')"
         @click.stop="action('mealTime', meal.id)"
       >
@@ -72,7 +73,7 @@
         @confirm="action('deleteMeal', meal.id)"
       >
         <template #activator="{ on, attrs }">
-          <v-btn value="deleteMeal" v-bind="attrs" v-on="on">
+          <v-btn color="primary" text v-bind="attrs" v-on="on">
             <span class="text-overline font-weight-medium">
               {{ $t('recall.actions.nav.deleteMeal') }}
             </span>
@@ -81,12 +82,7 @@
         </template>
         {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
       </confirm-dialog>
-      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.next') }}
-        </span>
-        <v-icon class="pb-1">$next</v-icon>
-      </v-btn>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
   </card-layout>
 </template>
@@ -98,10 +94,12 @@ import { defineComponent } from 'vue';
 import type { PromptStates } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
+import { useMealUtils } from '@intake24/survey/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
 import createBasePrompt from '../createBasePrompt';
-import EditableFoodList from './EditableFoodList.vue';
+import { EditableFoodList } from '../partials';
 
 export default defineComponent({
   name: 'EditMealPrompt',
@@ -122,6 +120,13 @@ export default defineComponent({
   },
 
   emits: ['update'],
+
+  setup(props) {
+    const { translate } = useI18n();
+    const { mealName } = useMealUtils(props);
+
+    return { translate, mealName };
+  },
 
   data() {
     return { ...copy(this.initialState) };

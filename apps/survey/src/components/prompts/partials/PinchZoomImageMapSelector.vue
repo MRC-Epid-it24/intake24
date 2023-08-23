@@ -16,7 +16,7 @@
           >
             <div v-if="label" class="label">
               <v-chip
-                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+                class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
               >
                 {{ label }}
               </v-chip>
@@ -36,12 +36,12 @@
           </PinchScrollZoom>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" color="secondary" @click="confirm">
+          <v-btn :block="isMobile" color="primary" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn :block="isMobile" color="secondary" text @click="resetScale">
+          <v-btn :block="isMobile" color="primary" text @click="resetScale">
             {{ $t('common.action.reset') }}
           </v-btn>
         </v-col>

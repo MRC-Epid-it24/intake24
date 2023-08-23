@@ -64,7 +64,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: 'secondary',
+      default: 'info',
     },
     disabled: {
       type: Boolean,

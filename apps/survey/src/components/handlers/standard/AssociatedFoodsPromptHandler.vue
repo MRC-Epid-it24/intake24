@@ -6,6 +6,8 @@
       initialState: state,
       localeId,
       prompt,
+      searchParameters,
+      section,
     }"
     @action="action"
     @update="update"
@@ -15,30 +17,41 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type {
   AssociatedFoodPromptItemState,
   Prompts,
   PromptStates,
 } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
+import type { MealFoodIndex } from '@intake24/survey/stores';
 import { capitalize } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
 import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
-import { useLocale } from '@intake24/ui';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (): AssociatedFoodPromptItemState => ({
-  confirmed: undefined,
-  selectedFood: undefined,
-  existingFoodId: undefined,
+const initialPromptState = (allowMultiple: boolean): AssociatedFoodPromptItemState => ({
+  mainFoodConfirmed: undefined,
+  additionalFoodConfirmed: allowMultiple ? undefined : false,
+  foods: [],
 });
+
+interface LinkAsMainNew {
+  header: FoodHeader;
+  linkAsMain: boolean;
+}
+
+interface LinkAsMainExisting {
+  id: string;
+  linkAsMain: boolean;
+}
 
 export default defineComponent({
   name: 'AssociatedFoodsPromptHandler',
@@ -50,126 +63,226 @@ export default defineComponent({
       type: Object as PropType<Prompts['associated-foods-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props) {
-    const { getLocaleContent } = useLocale();
+  setup(props, ctx) {
+    const { translate } = useI18n();
     const { encodedFood: food, localeId, meals } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = (): PromptStates['associated-foods-prompt'] => ({
       activePrompt: 0,
-      prompts: food().data.associatedFoodPrompts.map(() => initialPromptState()),
+      prompts: food().data.associatedFoodPrompts.map((prompt) =>
+        initialPromptState(props.prompt.multiple && prompt.multiple)
+      ),
     });
 
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
-    return {
-      food,
-      getLocaleContent,
-      localeId,
-      meal,
-      meals,
-      state,
-      update,
-      clearStoredState,
-    };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['updateFood', 'setFoods']),
-
-    async fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
+    async function fetchFoodData(headers: FoodHeader[]): Promise<UserFoodData[]> {
       //TODO: Show loading
 
       return Promise.all(
-        headers.map((header) => foodSearchService.getData(this.localeId, header.code))
+        headers.map((header) => foodSearchService.getData(localeId.value, header.code))
       );
-    },
+    }
 
-    async action(type: string, id?: string) {
-      if (type === 'next') await this.commitAnswer();
+    // The link as main feature can be applied only if exactly one of the linked foods has the
+    // 'link-as-main' flag.
+    //
+    // In that case we need to reverse the relationship so that the linked food becomes the
+    // new main (top level) food, the current main food becomes linked to that food and any foods
+    // that were linked to the current main food become linked to the new main food.
+    function processLinkAsMain(foodIndex: MealFoodIndex) {
+      const oldMainFood = meal.value.foods[foodIndex.foodIndex];
+      const newMainFoods = oldMainFood.linkedFoods.filter((food) =>
+        food.flags.includes('link-as-main')
+      );
 
-      this.$emit('action', type, id);
-    },
+      // We don't need the flags anymore so we can clear them here
+      oldMainFood.linkedFoods.forEach((food) => {
+        food.flags = food.flags.filter((flag) => flag !== 'link-as-main');
+      });
 
-    async commitAnswer() {
-      const newFoods: FoodHeader[] = [];
+      if (newMainFoods.length === 1) {
+        const newMainFood = newMainFoods[0];
+
+        const foodsUpdate = [...meal.value.foods];
+
+        foodsUpdate[foodIndex.foodIndex] = newMainFood;
+
+        newMainFood.linkedFoods = [
+          oldMainFood,
+          ...oldMainFood.linkedFoods.filter((food) => food.id !== newMainFood.id),
+        ];
+        oldMainFood.linkedFoods = [];
+
+        survey.setFoods({ mealId: meal.value.id, foods: foodsUpdate });
+      } else {
+        // Nothing we can do, abort
+      }
+    }
+
+    async function commitAnswer() {
+      // The legacy "link as main" feature doesn't make sense when combined with the multiple foods
+      // option (because it is defined on the prompt level and there cannot be several main foods),
+      // but we still need to support it when possible.
+      //
+      // The strategy is to add a 'link-as-main' flag to each food that comes from a prompt with
+      // this option enabled, and then check if the final set of foods still makes sense for the
+      // feature.
+      //
+      // For clarity the checks are done in a separate function, so we just need to collect the link
+      // as main flags here.
+
+      const newFoods: LinkAsMainNew[] = [];
       const missingFoods: MissingFood[] = [];
+      const existingFoods: LinkAsMainExisting[] = [];
 
-      this.state.prompts.forEach((prompt, idx) => {
-        if (prompt.confirmed === 'yes' && prompt.selectedFood !== undefined) {
-          newFoods.push(prompt.selectedFood);
-        }
+      state.value.prompts.forEach((prompt, idx) => {
+        const promptDef = food().data.associatedFoodPrompts[idx];
 
-        if (prompt.confirmed === 'missing') {
-          missingFoods.push({
-            id: getEntityId(),
-            type: 'missing-food',
-            info: null,
-            searchTerm: capitalize(
-              this.getLocaleContent(this.food().data.associatedFoodPrompts[idx].genericName)
-            ),
-            customPromptAnswers: {},
-            flags: [],
-            linkedFoods: [],
+        if (prompt.mainFoodConfirmed) {
+          prompt.foods.forEach((food) => {
+            switch (food.type) {
+              case 'selected':
+                if (food.selectedFood !== undefined)
+                  newFoods.push({ header: food.selectedFood, linkAsMain: promptDef.linkAsMain });
+                break;
+              case 'existing':
+                if (food.existingFoodId !== undefined)
+                  existingFoods.push({ id: food.existingFoodId, linkAsMain: promptDef.linkAsMain });
+                break;
+              case 'missing':
+                missingFoods.push({
+                  id: getEntityId(),
+                  type: 'missing-food',
+                  info: null,
+                  searchTerm: capitalize(translate(promptDef.genericName)),
+                  customPromptAnswers: {},
+                  flags: promptDef.linkAsMain ? ['link-as-main'] : [],
+                  linkedFoods: [],
+                });
+                break;
+            }
           });
         }
       });
 
-      const existingFoods = this.state.prompts
-        .filter((prompt) => prompt.confirmed === 'existing')
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        .map((prompt) => prompt.existingFoodId!);
-
-      const foodId = this.food().id;
-      const foodIndex = getFoodIndexRequired(this.meals, foodId);
+      const foodId = food().id;
+      const foodIndex = getFoodIndexRequired(meals.value, foodId);
       const mealIndex = foodIndex.mealIndex;
-      const mealId = this.meals[mealIndex].id;
+      const mealId = meals.value[mealIndex].id;
 
+      // Existing foods in this meal that were marked as 'associated foods already entered' by one
+      // of the associated food prompts.
+      //
+      // These need to be moved to the current food's linked meal list.
       const moveFoods: EncodedFood[] = [];
+
+      // The rest of the foods in this meal that should stay how they are.
       const keepFoods: FoodState[] = [];
 
-      this.meals[mealIndex].foods.forEach((food) => {
-        if (food.type === 'encoded-food' && existingFoods.includes(food.id)) {
+      meals.value[mealIndex].foods.forEach((food) => {
+        const existingFoodRef = existingFoods.find((ref) => ref.id === food.id);
+
+        if (food.type === 'encoded-food' && existingFoodRef !== undefined) {
+          if (existingFoodRef.linkAsMain) {
+            food.flags = [...food.flags, 'link-as-main'];
+          }
           moveFoods.push(food);
         } else {
           keepFoods.push(food);
         }
       });
 
-      const foodData = await this.fetchFoodData(newFoods);
+      const foodData = await fetchFoodData(newFoods.map((f) => f.header));
 
-      const linkedFoods: FoodState[] = foodData.map((data) => {
+      const linkedFoods: FoodState[] = foodData.map((data, index) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
+
+        const flags = [];
+        if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
+        if (newFoods[index].linkAsMain) flags.push('link-as-main');
 
         return {
           type: 'encoded-food',
           id: getEntityId(),
-          flags: hasOnePortionSizeMethod ? ['portion-size-option-complete'] : [],
+          flags,
           linkedFoods: [],
           customPromptAnswers: {},
           data,
           searchTerm: 'associated food prompt',
           portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
           portionSize: null,
-          associatedFoodsComplete: false,
         };
       });
 
       linkedFoods.push(...moveFoods, ...missingFoods);
 
-      this.setFoods({ mealId, foods: keepFoods });
+      survey.setFoods({ mealId, foods: keepFoods });
 
-      this.updateFood({
-        foodId,
-        update: { associatedFoodsComplete: true, linkedFoods },
-      });
+      if (foodIndex.linkedFoodIndex !== undefined) {
+        // This is a linked food. Currently, more than one level of nesting is not supported,
+        // so the new foods that came from the associated foods prompt cannot be linked to this one.
 
-      this.clearStoredState();
-    },
+        // As a workaround, they can be linked to the parent food.
+
+        // Associated foods prompts for the new linked foods need to be disabled to prevent
+        // potential circular associations.
+        const linkedFoodsWithoutPrompts = linkedFoods.map((food) => ({
+          ...food,
+          flags: [...new Set([...food.flags, 'associated-foods-complete'])],
+        }));
+
+        const parentFood = meals.value[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+        const newLinkedFoods = [...parentFood.linkedFoods, ...linkedFoodsWithoutPrompts];
+
+        // Order of the updates is important because any changes to the linked foods will be
+        // overwritten by the update to the parent food.
+        survey.updateFood({ foodId: parentFood.id, update: { linkedFoods: newLinkedFoods } });
+      } else {
+        survey.updateFood({ foodId, update: { linkedFoods } });
+      }
+
+      survey.addFoodFlag(foodId, 'associated-foods-complete');
+
+      processLinkAsMain(foodIndex);
+
+      clearStoredState();
+    }
+
+    const searchParameters = computed(() => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        survey.parameters ?? {};
+
+      return { matchScoreWeight, rankingAlgorithm };
+    });
+
+    return {
+      food,
+      translate,
+      localeId,
+      meal,
+      meals,
+      state,
+      action,
+      update,
+      clearStoredState,
+      searchParameters,
+    };
   },
 });
 </script>

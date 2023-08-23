@@ -10,9 +10,19 @@
 </p>
 <p>
   <strong>Name:</strong> {{ name }}<br>
+  {% if email %}
   <strong>Email:</strong> {{ email }}<br>
+  {% endif %}
+  {% if phone %}
   <strong>Phone:</strong> {{ phone }}
+  {% endif %}
 </p>
+{% if message %}
+  <p>
+  <strong>Message:</strong><br>
+  {{ message }}
+</p>
+{% endif %}
 <p>
 Kind regards,<br />
 {{ app.name }} Team

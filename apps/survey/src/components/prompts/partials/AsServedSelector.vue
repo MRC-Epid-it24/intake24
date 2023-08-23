@@ -8,7 +8,7 @@
         <v-row>
           <v-col class="d-flex justify-end mr-auto">
             <v-chip
-              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+              class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
             >
               {{ thumbnailWeight }}
             </v-chip>
@@ -58,7 +58,7 @@
     </v-row>
     <v-row>
       <v-col class="px-1" cols="12" sm="auto">
-        <v-btn :block="isMobile" color="secondary" @click="confirm">
+        <v-btn :block="isMobile" color="primary" @click="confirm">
           {{ $t(`prompts.asServed.${type}.confirm`) }}
         </v-btn>
       </v-col>
@@ -330,7 +330,7 @@ export default defineComponent({
     },
 
     isSelected(idx: number): string {
-      return idx === this.objectIdx ? 'border-secondary-2' : '';
+      return idx === this.objectIdx ? 'border-primary-2' : '';
     },
 
     update() {

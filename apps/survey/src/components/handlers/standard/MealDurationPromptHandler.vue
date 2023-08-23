@@ -1,6 +1,6 @@
 <template>
   <meal-duration-prompt
-    v-bind="{ initialState: state, meal, prompt }"
+    v-bind="{ initialState: state, meal, prompt, section }"
     @action="action"
     @update="update"
   ></meal-duration-prompt>
@@ -8,10 +8,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { MealDurationPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -27,32 +27,27 @@ export default defineComponent({
       type: Object as PropType<Prompts['meal-duration-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props) {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = computed(() => props.prompt.initial);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const commitAnswer = () => {
+      survey.setMealDuration(meal.value.id, state.value);
+    };
 
-    return { meal, state, update };
-  },
+    const { state, action, update } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
-  methods: {
-    ...mapActions(useSurvey, ['setMealDuration']),
-
-    action(type: 'next') {
-      if (type === 'next') this.commitAnswer();
-
-      this.$emit('action', type);
-    },
-
-    commitAnswer() {
-      this.setMealDuration(this.meal.id, this.state);
-    },
+    return { meal, state, action, update };
   },
 });
 </script>

@@ -6,7 +6,7 @@
     :min-height="$vuetify.breakpoint.mobile ? undefined : '480px'"
   >
     <v-card ref="card" :tile="$vuetify.breakpoint.mobile">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn icon :title="$t('common.action.close')" @click.stop="close">
           <v-icon>$close</v-icon>
         </v-btn>
@@ -53,7 +53,7 @@ const props = defineProps({
     default: false,
   },
   modelValue: {
-    type: String,
+    type: String as PropType<string | null>,
     default: '',
   },
   errorThreshold: {

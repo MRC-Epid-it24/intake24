@@ -1,7 +1,8 @@
 <template>
   <food-search-prompt
-    v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt }"
+    v-bind="{ discardedFoodName, food: food(), meal, localeId, parameters, prompt, section }"
     v-model="searchTerm"
+    @action="action"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
     @recipe-builder="recipeBuilder"
@@ -14,6 +15,7 @@ import { mapActions } from 'pinia';
 import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type {
   EncodedFood,
   FoodState,
@@ -37,11 +39,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['food-search-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup() {
+  setup(props, { emit }) {
     function getSearchTerm(foodEntry: FoodState) {
       switch (foodEntry.type) {
         case 'encoded-food':
@@ -86,15 +92,11 @@ export default defineComponent({
       discardedFoodName.value = null;
     }
 
-    return {
-      food,
-      meal,
-      localeId,
-      foodData,
-      parameters,
-      searchTerm,
-      discardedFoodName,
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
     };
+
+    return { action, food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
   },
 
   methods: {
@@ -103,7 +105,7 @@ export default defineComponent({
     foodSelected(foodData: UserFoodData) {
       this.foodData = foodData;
       this.commitAnswer();
-      this.$emit('action', 'next');
+      this.action('next');
     },
 
     foodMissing() {
@@ -122,7 +124,7 @@ export default defineComponent({
 
       this.replaceFood({ foodId: id, food: newState });
 
-      this.$emit('action', 'next');
+      this.action('next');
     },
 
     recipeBuilder(recipeFood: RecipeFood) {
@@ -175,7 +177,6 @@ export default defineComponent({
         customPromptAnswers,
         flags,
         linkedFoods: [],
-        associatedFoodsComplete: false,
       };
 
       this.replaceFood({ foodId: id, food: newState });

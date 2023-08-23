@@ -12,12 +12,9 @@ export default () => {
 
   authenticate(router, 'survey');
 
-  // Root category contents
   router.get('/:localeId', wrapAsync(categoriesController.rootContents));
-
-  // Category contents
-  router.get('/:localeId/:code', validation.browse, wrapAsync(categoriesController.browse));
-  router.get('/:localeId/:code/contents', wrapAsync(categoriesController.contents));
+  router.get('/:localeId/:code', wrapAsync(categoriesController.contents));
+  router.get('/:localeId/:code/search', validation.browse, wrapAsync(categoriesController.browse));
 
   return router;
 };

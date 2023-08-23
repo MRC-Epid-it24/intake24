@@ -1,17 +1,17 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
       <yes-no-toggle :value="value" @input="update"></yes-no-toggle>
     </template>
     <template #nav-actions>
-      <v-btn value="no" @click.stop="update(false)">
+      <v-btn @click.stop="update(false)">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.no') }}
         </span>
         <v-icon class="pb-1">$no</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="yes" @click.stop="update(true)">
+      <v-btn @click.stop="update(true)">
         <span class="text-overline font-weight-medium">
           {{ $t('common.action.yes') }}
         </span>

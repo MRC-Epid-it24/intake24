@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="conditions">
+  <v-tab-item key="conditions" value="conditions">
     <v-tabs vertical>
       <v-btn class="my-4" color="primary" @click="add">
         <v-icon left>$add</v-icon>
@@ -132,6 +132,26 @@ const promptConditions: Condition[] = [
     },
   },
   {
+    type: 'flag',
+    op: 'eq',
+    value: '',
+    props: {
+      section: 'survey',
+    },
+  },
+  {
+    type: 'foodCategory',
+    op: 'eq',
+    value: '',
+    props: {},
+  },
+  {
+    type: 'meals',
+    op: 'eq',
+    value: '',
+    props: {},
+  },
+  {
     type: 'promptAnswer',
     op: 'eq',
     value: '',
@@ -145,15 +165,6 @@ const promptConditions: Condition[] = [
     op: 'eq',
     value: '',
     props: {},
-  },
-  {
-    type: 'foodCategory',
-    op: 'eq',
-    value: '',
-    props: {
-      section: 'food',
-      categoryId: '',
-    },
   },
 ];
 
@@ -240,7 +251,7 @@ export default defineComponent({
       const condition = this.currentConditions[idx];
 
       if (this.comboOps.includes(condition.op) && !Array.isArray(condition.value)) {
-        this.currentConditions[idx].value = [condition.value];
+        this.currentConditions[idx].value = condition.value ? [condition.value] : [];
         return;
       }
 

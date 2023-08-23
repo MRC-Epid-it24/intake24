@@ -82,11 +82,7 @@ export type BasePrompt = {
   id: string;
   name: string;
   type: PromptType;
-  i18n: {
-    name: LocaleTranslation;
-    text: LocaleTranslation;
-    description: LocaleTranslation;
-  } & { [key: string]: LocaleTranslation };
+  i18n: Record<string, LocaleTranslation>;
   actions?: Actions;
   conditions: Condition[];
 };

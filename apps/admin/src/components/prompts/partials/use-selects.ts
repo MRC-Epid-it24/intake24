@@ -1,10 +1,11 @@
 import { computed } from 'vue';
 
 import { actionTypes, actionVariants, promptLayouts } from '@intake24/common/prompts';
+import { colors as themeColors } from '@intake24/common/theme';
 import { useI18n } from '@intake24/i18n';
 
 export const useSelects = () => {
-  const i18n = useI18n();
+  const { i18n } = useI18n();
 
   const actionList = computed(() =>
     actionTypes.map((value) => ({
@@ -17,6 +18,14 @@ export const useSelects = () => {
     actionVariants.map((value) => ({
       value,
       text: i18n.t(`survey-schemes.actions.variants.${value}`).toString(),
+    }))
+  );
+
+  const colors = computed(() =>
+    Object.entries(themeColors).map(([key, color]) => ({
+      value: key,
+      text: key.toUpperCase(),
+      color,
     }))
   );
 
@@ -40,5 +49,5 @@ export const useSelects = () => {
     }))
   );
 
-  return { actionList, actionVariantsList, layoutList, orientations, sections };
+  return { actionList, actionVariantsList, colors, layoutList, orientations, sections };
 };

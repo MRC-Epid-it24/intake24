@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="secondary"
+    color="primary"
     :title="$t(`${module}.create`)"
     :to="{ name: `${route}-create`, params: { id: 'create' } }"
   >

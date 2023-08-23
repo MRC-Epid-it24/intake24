@@ -8,11 +8,12 @@ import type {
   MealActionType,
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealState, Selection } from '@intake24/common/types';
+import type { FoodState, MealCreationState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
 import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { isSelectionEqual } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import {
   CustomPromptHandler,
   portionSizeHandlers,
@@ -21,7 +22,6 @@ import {
 import DynamicRecall from '@intake24/survey/dynamic-recall/dynamic-recall';
 import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
-import { useLocale } from '@intake24/ui';
 
 import { InfoAlert } from '../elements';
 
@@ -41,11 +41,11 @@ export default defineComponent({
   },
 
   data() {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const survey = useSurvey();
 
     return {
-      getLocaleContent,
+      translate,
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
@@ -70,7 +70,7 @@ export default defineComponent({
     handlerComponent(): string {
       const prompt = this.currentPrompt?.prompt;
 
-      if (prompt === undefined) throw new Error('Current prompt must be defined');
+      if (!prompt) throw new Error('Current prompt must be defined');
 
       switch (prompt.type) {
         case 'custom':
@@ -113,6 +113,8 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
+      if (this.hasFinished) return false;
+
       // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
       return (
         this.currentPrompt?.section !== 'preMeals' ||
@@ -195,18 +197,19 @@ export default defineComponent({
     },
 
     clearUndo() {
-      // FIXME: Stop components from re-rendering after clearing objectrs in vuex store.
+      // FIXME: Stop components from re-rendering after clearing objects in vuex store.
       this.survey.clearUndo();
     },
 
     showMealPrompt(mealId: string, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
-      const prompt = this.recallController
-        ? this.recallController.promptManager.findMealPromptOfType(promptType, promptSection)
-        : undefined;
+      const prompt = this.recallController?.promptManager.findMealPromptOfType(
+        promptType,
+        promptSection
+      );
 
-      if (prompt === undefined)
+      if (!prompt)
         throw new Error(
           `Survey scheme is missing required meal (preFoods) prompt of type ${promptType}`
         );
@@ -228,11 +231,12 @@ export default defineComponent({
     showSurveyPrompt(promptSection: SurveyPromptSection, promptType: ComponentType) {
       this.setSelection({ element: null, mode: 'manual' });
 
-      const prompt = this.recallController
-        ? this.recallController.promptManager.findSurveyPromptOfType(promptType, promptSection)
-        : undefined;
+      const prompt = this.recallController?.promptManager.findSurveyPromptOfType(
+        promptType,
+        promptSection
+      );
 
-      if (prompt === undefined)
+      if (!prompt)
         throw new Error(
           `Survey scheme is missing required survey (preMeals) prompt of type ${promptType}`
         );
@@ -240,7 +244,7 @@ export default defineComponent({
       this.currentPrompt = { section: promptSection, prompt };
     },
 
-    async action(type: string, id?: string) {
+    async action(type: string, id?: string, params?: object) {
       switch (type) {
         case 'next':
         case 'restart':
@@ -248,7 +252,7 @@ export default defineComponent({
           break;
         case 'addMeal':
         case 'review':
-          this.recallAction(type);
+          await this.recallAction(type, params);
           break;
         case 'editMeal':
         case 'mealTime':
@@ -259,7 +263,7 @@ export default defineComponent({
             return;
           }
 
-          this.mealAction(type, id);
+          await this.mealAction(type, id);
           break;
         case 'deleteFood':
         case 'editFood':
@@ -269,7 +273,7 @@ export default defineComponent({
             return;
           }
 
-          this.foodAction(type, id);
+          await this.foodAction(type, id);
           break;
         default:
           console.warn(`Recall: Unknown action type: ${type}`);
@@ -316,12 +320,17 @@ export default defineComponent({
       }
     },
 
-    recallAction(action: GenericActionType) {
+    async recallAction(action: GenericActionType, params?: object) {
       if (this.hasFinished) return;
 
       switch (action) {
         case 'addMeal':
-          this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          if (typeof params === 'object' && params !== null) {
+            // TODO: validate params properly
+            const { name, time, flags } = params as MealCreationState;
+            this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
+            await this.nextPrompt();
+          } else this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
         case 'review':
           this.saveCurrentState();
@@ -374,7 +383,7 @@ export default defineComponent({
           // TODO: handle completion
           console.log('No prompts remaining');
           if (this.hasMeals) {
-            this.recallAction('addMeal');
+            await this.recallAction('addMeal');
           } else {
             this.currentPrompt = null;
           }

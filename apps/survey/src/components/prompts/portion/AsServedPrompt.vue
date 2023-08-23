@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -76,19 +76,25 @@
         @update:confirm="confirmLinkedQuantity"
       ></linked-quantity>
     </v-expansion-panels>
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
   </base-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 import { AsServedSelector, LinkedQuantity, QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
@@ -114,14 +120,12 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { food } = toRefs(props);
-
-    const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(food);
+    const { translate } = useI18n();
+    const { foodName } = useFoodUtils(props);
 
     return {
       foodName,
-      getLocaleContent,
+      translate,
     };
   },
 

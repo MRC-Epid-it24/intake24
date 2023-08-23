@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-bind="{ value }" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -15,33 +15,33 @@
                 <v-sheet class="d-flex flex-column align-center py-6" color="grey lighten-3">
                   <v-progress-circular
                     class="mb-4"
-                    color="secondary"
+                    color="primary"
                     :rotate="-90"
                     :size="200"
                     :value="duo.value"
                     :width="20"
                   >
                     <div class="d-flex align-center flex-column">
-                      <v-icon class="provider-icon mb-2 ml-2" color="primary">$duo</v-icon>
+                      <v-icon class="provider-icon mb-2 ml-2" color="secondary">$duo</v-icon>
                       <span class="font-weight-bold text-h4">{{ duo.value / 20 }} </span>
                     </div>
                   </v-progress-circular>
-                  <v-btn block color="primary" rounded @click="duoChallenge">
+                  <v-btn block color="secondary" rounded @click="duoChallenge">
                     {{ $t('common.action.redirect') }}
                   </v-btn>
                 </v-sheet>
               </v-card>
               <v-card v-if="provider === 'fido'" flat link tile @click="fidoChallenge">
                 <v-sheet class="d-flex flex-column align-center py-6" color="grey lighten-3">
-                  <v-icon class="provider-icon mb-6" color="primary">$fido</v-icon>
-                  <v-btn block color="primary" rounded @click="fidoChallenge">
+                  <v-icon class="provider-icon mb-6" color="secondary">$fido</v-icon>
+                  <v-btn block color="secondary" rounded @click="fidoChallenge">
                     {{ $t('common.action.retry') }}
                   </v-btn>
                 </v-sheet>
               </v-card>
               <v-form v-if="provider === 'otp'" autocomplete="off" @submit.prevent="otpChallenge">
                 <div class="d-flex flex-column align-center" :style="{ maxWidth: '300px' }">
-                  <v-icon class="provider-icon mb-4" color="primary">$otp</v-icon>
+                  <v-icon class="provider-icon mb-4" color="secondary">$otp</v-icon>
                   <p class="mb-2 text-subtitle-1">{{ $t('common.mfa.otp') }}</p>
                   <v-otp-input
                     v-model="otp.token"
@@ -53,7 +53,7 @@
                     name="token"
                     @input="otp.errors.clear('token')"
                   ></v-otp-input>
-                  <v-btn block color="primary" rounded type="submit">
+                  <v-btn block color="secondary" rounded type="submit">
                     {{ $t('common.action.confirm._') }}
                   </v-btn>
                 </div>

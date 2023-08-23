@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="primary"
+    color="secondary"
     :disabled="disabled"
     :title="$t('common.action.edit')"
     @click.stop="onClick"

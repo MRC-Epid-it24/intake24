@@ -58,6 +58,7 @@ const surveySchemes: LocaleMessageObject = {
       desktop: 'Desktop',
       mobile: 'Mobile',
     },
+    parameters: 'Parameters',
     types: {
       _: 'Action type',
       title: 'Action types',
@@ -98,18 +99,22 @@ const surveySchemes: LocaleMessageObject = {
     types: {
       _: 'Condition type',
       title: 'Condition types',
-      promptAnswer: 'Prompt answer',
-      recallNumber: 'Recall number',
       drinks: 'Drinks',
       energy: 'Energy',
+      flag: 'Flag',
       foodCategory: 'Food category',
+      meals: 'Meals',
+      promptAnswer: 'Prompt answer',
+      recallNumber: 'Recall number',
     },
     exTypes: {
-      promptAnswer: 'Prompt answer {section}: {promptId}',
-      recallNumber: 'Recall number',
       drinks: 'Drinks ({section})',
       energy: 'Energy ({section})',
+      flag: 'Flag ({section})',
       foodCategory: 'Food category',
+      meals: 'Meals',
+      promptAnswer: 'Prompt answer {section}: {promptId}',
+      recallNumber: 'Recall number',
     },
     ops: {
       _: 'Operation',
@@ -154,6 +159,14 @@ const surveySchemes: LocaleMessageObject = {
       portionSizes: 'Portion size fields',
     },
   },
+  i18n: {
+    _: 'Prompt translation',
+    title: 'Prompt translations',
+    core: `Default translations for field '{key}'`,
+    custom: `Custom translations for field '{key}'`,
+    init: 'Initialize translation field',
+    none: 'No translation',
+  },
   overrides: {
     _: 'Scheme overrides',
     meals: {
@@ -172,6 +185,7 @@ const surveySchemes: LocaleMessageObject = {
     title: 'Scheme prompts',
     create: 'New prompt',
     edit: 'Edit prompt',
+    copy: 'Copy prompt',
     move: 'Move prompt',
     remove: 'Remove prompt',
     section: 'Prompts section',

@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-radio-group
@@ -7,7 +7,7 @@
           :column="prompt.orientation === 'column'"
           :error="hasErrors"
           hide-details="auto"
-          :label="getLocaleContent(prompt.i18n.label)"
+          :label="translate(prompt.i18n.label)"
           :row="prompt.orientation === 'row'"
           @change="update"
         >
@@ -33,6 +33,12 @@
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
       </v-form>
     </v-card-text>
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
   </card-layout>
 </template>
 
@@ -90,7 +96,7 @@ export default defineComponent({
       if (this.isValid) return true;
 
       this.errors = [
-        this.getLocaleContent(this.prompt.validation.message, {
+        this.translate(this.prompt.validation.message, {
           path: `prompts.${this.type}.validation.required`,
         }),
       ];

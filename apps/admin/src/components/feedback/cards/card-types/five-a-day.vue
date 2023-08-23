@@ -18,7 +18,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FiveADay } from '@intake24/common/feedback';
+import type { FiveADayCard } from '@intake24/common/feedback';
 
 import { CardContent, CardThresholds, CardUnit } from '../partials';
 
@@ -29,23 +29,23 @@ export default defineComponent({
 
   props: {
     name: {
-      type: Object as PropType<FiveADay['name']>,
+      type: Object as PropType<FiveADayCard['name']>,
       required: true,
     },
     description: {
-      type: Object as PropType<FiveADay['description']>,
+      type: Object as PropType<FiveADayCard['description']>,
       required: true,
     },
     high: {
-      type: Object as PropType<FiveADay['high']>,
+      type: Object as PropType<FiveADayCard['high']>,
       default: null,
     },
     low: {
-      type: Object as PropType<FiveADay['low']>,
+      type: Object as PropType<FiveADayCard['low']>,
       default: null,
     },
     unit: {
-      type: Object as PropType<FiveADay['unit']>,
+      type: Object as PropType<FiveADayCard['unit']>,
       required: true,
     },
   },

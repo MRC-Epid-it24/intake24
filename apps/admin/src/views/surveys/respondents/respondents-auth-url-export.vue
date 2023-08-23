@@ -9,7 +9,7 @@
       </v-list-item>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-icon dark left>$download</v-icon>
         <v-toolbar-title>
           {{ $t(`surveys.respondents.authUrls.title`) }}
@@ -19,7 +19,7 @@
         <v-container>
           <v-row justify="center">
             <v-col cols="12" md="6" sm="8">
-              <v-btn block color="secondary" :disabled="jobInProgress" x-large @click="submit">
+              <v-btn block color="primary" :disabled="jobInProgress" x-large @click="submit">
                 <v-icon left>$download</v-icon>
                 {{ $t('surveys.respondents.authUrls.submit') }}
               </v-btn>

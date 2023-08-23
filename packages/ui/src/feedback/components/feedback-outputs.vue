@@ -10,7 +10,7 @@
         <v-btn
           v-if="outputs.includes('print')"
           class="mb-3"
-          color="primary"
+          color="secondary"
           link
           outlined
           rounded
@@ -30,7 +30,7 @@
             <v-btn
               v-bind="attrs"
               class="mb-3"
-              color="primary"
+              color="secondary"
               link
               outlined
               rounded
@@ -42,7 +42,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.breakpoint.smAndDown">
-            <v-toolbar color="primary" dark>
+            <v-toolbar color="secondary" dark>
               <v-btn
                 dark
                 icon
@@ -115,7 +115,7 @@
             <v-btn
               v-bind="attrs"
               class="mb-3"
-              color="primary"
+              color="secondary"
               link
               outlined
               rounded
@@ -127,7 +127,7 @@
             </v-btn>
           </template>
           <v-card :tile="$vuetify.breakpoint.smAndDown">
-            <v-toolbar color="primary" dark>
+            <v-toolbar color="secondary" dark>
               <v-btn
                 dark
                 icon
@@ -182,8 +182,8 @@ import { defineComponent } from 'vue';
 
 import type { FeedbackOutput } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
+import { downloadFile } from '@intake24/ui';
 import { useLoading } from '@intake24/ui/stores';
-import { downloadFile } from '@intake24/ui/util';
 
 export default defineComponent({
   name: 'FeedbackOutputs',

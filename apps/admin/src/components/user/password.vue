@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -75,7 +75,7 @@
           </v-row>
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
-          <v-btn color="secondary" type="submit" width="100%" x-large>
+          <v-btn color="primary" type="submit" width="100%" x-large>
             {{ $t('common.password.update') }}
           </v-btn>
         </v-card-actions>

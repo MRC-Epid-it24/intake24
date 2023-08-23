@@ -4,7 +4,7 @@
       <confirm-dialog
         v-if="!isCreate && can({ action: 'edit' })"
         :activator-class="['ml-2']"
-        color="secondary"
+        color="primary"
         icon-left="fas fa-play"
         :label="$t('tasks.run._').toString()"
         @confirm="triggerJob"

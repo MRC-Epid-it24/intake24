@@ -10,7 +10,7 @@
         <template v-if="isOpened">
           <v-btn
             v-if="!isOverrideMode"
-            color="secondary"
+            color="primary"
             fab
             small
             :title="$t('survey-schemes.prompts.create')"
@@ -25,7 +25,7 @@
               :scheme-id="$route.params.id"
               @load="load"
             ></load-prompt-dialog>
-            <json-editor v-model="prompts"></json-editor>
+            <json-editor-dialog v-model="prompts"></json-editor-dialog>
           </options-menu>
         </template>
         <v-icon :class="{ 'fa-rotate-180': isOpened, 'ml-4': isOpened }">$expand</v-icon>
@@ -37,9 +37,10 @@
           <transition-group name="drag-and-drop" type="transition">
             <prompt-list-item
               v-for="(prompt, index) in prompts"
-              :key="prompt.id"
+              :key="`${prompt.id}:${prompt.name}`"
               v-bind="{ mode, prompt, index, templates }"
               :move-sections="moveSections(prompt)"
+              @prompt:copy="copy"
               @prompt:edit="edit"
               @prompt:move="move"
               @prompt:remove="remove"
@@ -64,8 +65,9 @@ import draggable from 'vuedraggable';
 import type { Prompt } from '@intake24/common/prompts';
 import type { MealSection, PromptSection, SurveyPromptSection } from '@intake24/common/surveys';
 import { OptionsMenu } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { promptSettings } from '@intake24/admin/components/prompts';
+import { copy } from '@intake24/common/util';
 
 import PromptSelector from '../prompt-selector.vue';
 import LoadPromptDialog from './load-prompt-dialog.vue';
@@ -87,7 +89,7 @@ export default defineComponent({
 
   components: {
     draggable,
-    JsonEditor,
+    JsonEditorDialog,
     LoadPromptDialog,
     OptionsMenu,
     PromptListItem,
@@ -185,6 +187,10 @@ export default defineComponent({
 
     load(prompt: Prompt) {
       this.prompts.push(prompt);
+    },
+
+    copy({ prompt, index }: PromptEvent) {
+      this.prompts.splice(index + 1, 0, { ...copy(prompt), name: `${prompt.name} (copy)` });
     },
 
     edit({ prompt, index }: PromptEvent) {

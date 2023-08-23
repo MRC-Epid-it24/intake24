@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <v-tab-item key="options">
-      <v-row>
-        <v-col cols="12">
-          <v-switch
-            hide-details="auto"
-            :input-value="separateDrinks"
-            :label="$t('survey-schemes.prompts.edit-meal-prompt.separateDrinks')"
-            @change="update('separateDrinks', $event)"
-          ></v-switch>
-        </v-col>
-      </v-row>
-    </v-tab-item>
-  </div>
+  <v-tab-item key="options" value="options">
+    <v-row>
+      <v-col cols="12">
+        <v-switch
+          hide-details="auto"
+          :input-value="separateDrinks"
+          :label="$t('survey-schemes.prompts.edit-meal-prompt.separateDrinks')"
+          @change="update('separateDrinks', $event)"
+        ></v-switch>
+      </v-col>
+    </v-row>
+  </v-tab-item>
 </template>
 
 <script lang="ts">

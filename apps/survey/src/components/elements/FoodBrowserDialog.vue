@@ -5,7 +5,7 @@
     :value="dialog"
     @input="toggle($event)"
   >
-    <v-sheet class="food-browser-dialog-wrapper" color="primary">
+    <v-sheet class="food-browser-dialog-wrapper" color="secondary">
       <v-card-title class="flex-grow-0" dark>
         <v-icon color="white" @click="toggle(false)">$cancel</v-icon>
       </v-card-title>

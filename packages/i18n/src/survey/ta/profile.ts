@@ -5,9 +5,6 @@ const profile: LocaleMessageObject = {
   info: 'தகவல்',
   settings: 'அமைப்புகள்',
 
-  name: 'பெயர்',
-  email: 'மின்னஞ்சல்',
-  phone: 'தொலைபேசி',
   provider: 'சேவையாளர்',
   providerId: 'சேவையாளர்கள் ஐடி',
 

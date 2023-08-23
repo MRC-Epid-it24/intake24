@@ -31,11 +31,13 @@ const common: LocaleMessageObject = {
   emailConfirm: '确认电子邮件',
   password: '密码',
   phone: '电话',
+  message: 'Message',
   continue: '继续',
 
   help: {
     _: '帮助',
     title: '请求帮助',
+    text: 'Please complete the form below and one of our support staff will get in touch as soon as they can.',
     sent: '您的帮助请求已发送。',
   },
 

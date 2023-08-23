@@ -3,12 +3,16 @@ import type { CategoryContents, CategorySearch } from '@intake24/common/types/ht
 import http from './http.service';
 
 export default {
-  contents: async (localeId: string, code: string | undefined) => {
-    const { data } = await http.get<CategoryContents>(`categories/${localeId}/${code}/contents`);
+  contents: async (localeId: string, code?: string) => {
+    const { data } = await http.get<CategoryContents>(
+      code ? `categories/${localeId}/${code}` : `categories/${localeId}`
+    );
     return data;
   },
-  search: async (localeId: string, code: string | undefined, params: any) => {
-    const { data } = await http.get<CategorySearch>(`categories/${localeId}/${code}`, { params });
+  search: async (localeId: string, code: string, params: any) => {
+    const { data } = await http.get<CategorySearch>(`categories/${localeId}/${code}/search`, {
+      params,
+    });
     return data;
   },
 };

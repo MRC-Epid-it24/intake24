@@ -1,8 +1,11 @@
+import type { CategoryHeader } from '@intake24/common/types/http';
+
 export interface FoodHeader {
   code: string;
-  description: string;
+  name: string;
 }
 
 export interface FoodSearchResponse {
   foods: FoodHeader[];
+  categories: CategoryHeader[];
 }

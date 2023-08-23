@@ -4,14 +4,14 @@ import { computed, reactive } from 'vue';
 import type { FormConfig } from '@intake24/admin/util';
 import { createForm } from '@intake24/admin/util';
 
-export type FormProps<F> = {
+export type UseFormProps<F> = {
   data: F;
   config?: FormConfig;
   loadCallback?: (data: any) => any;
   nonInputErrorKeys?: string[];
 };
 
-export const useForm = <F extends object>(formProps: FormProps<F>) => {
+export const useForm = <F extends object>(formProps: UseFormProps<F>) => {
   const { data, config, loadCallback, nonInputErrorKeys = [] } = formProps;
 
   const form = reactive(createForm<F>(data, config));

@@ -1,13 +1,5 @@
 <template>
-  <v-btn
-    :block="isMobile"
-    class="px-4"
-    :color="color"
-    :disabled="disabled"
-    large
-    :title="label"
-    v-on="$listeners"
-  >
+  <v-btn class="px-4" :color="color" :disabled="disabled" large :title="label" v-on="$listeners">
     <v-icon v-if="icon" left>{{ icon }}</v-icon>
     <slot>
       {{ $t('recall.actions.next') }}
@@ -24,7 +16,7 @@ export default defineComponent({
   props: {
     color: {
       type: String,
-      default: 'secondary',
+      default: 'primary',
     },
     disabled: {
       type: Boolean,

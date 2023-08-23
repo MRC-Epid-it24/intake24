@@ -36,7 +36,7 @@
             <v-item v-slot="{ active }">
               <v-card flat min-height="200px" outlined>
                 <v-toolbar
-                  :color="active ? `secondary` : `orange lighten-4`"
+                  :color="active ? `primary` : `ternary`"
                   :dark="active"
                   flat
                   :style="{ cursor: 'pointer' }"
@@ -116,7 +116,7 @@
               :title="$t('guide-images.objects.add')"
               @click.stop="addObject"
             >
-              <v-btn color="secondary" fab x-large>
+              <v-btn color="primary" fab x-large>
                 <v-icon>$add</v-icon>
               </v-btn>
             </v-card>

@@ -6,7 +6,7 @@
         <v-list>
           <v-list-item link :to="{ name: 'survey-profile', params: { surveyId } }">
             <v-list-item-avatar>
-              <v-icon large>fas fa-circle-user</v-icon>
+              <v-icon color="info" large>fas fa-circle-user</v-icon>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title class="font-weight-medium text-h6">
@@ -63,7 +63,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app color="secondary" dark flat hide-on-scroll permanent>
+    <v-app-bar app color="primary" dark flat hide-on-scroll>
       <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">
@@ -110,7 +110,6 @@
     </v-app-bar>
     <v-main>
       <router-view></router-view>
-      <router-view name="nav"></router-view>
     </v-main>
     <navigation
       v-if="showNav"
@@ -243,7 +242,7 @@ export default defineComponent({
   }
 }
 
-.v-main:has(.bottom-navigation):has(.meal-list-mobile) {
-  padding-bottom: 112px !important;
+.v-main:has(.bottom-navigation) {
+  padding-bottom: 65px !important;
 }
 </style>

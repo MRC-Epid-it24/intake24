@@ -7,6 +7,7 @@
       parameters,
       parentFood,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -18,6 +19,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { MilkInAHotDrinkPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -33,11 +35,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['milk-in-a-hot-drink-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
@@ -57,8 +63,6 @@ export default defineComponent({
       },
       panel: 0,
     });
-
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
 
     const commitAnswer = () => {
       const {
@@ -105,11 +109,12 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitAnswer();
-
-      emit('action', type, id);
-    };
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState,
+      commitAnswer
+    );
 
     return {
       food,

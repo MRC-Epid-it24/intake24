@@ -1,12 +1,12 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">
     <template #activator="{ attrs, on }">
-      <v-btn v-bind="attrs" color="secondary" fab small :title="$t('fdbs.search._')" v-on="on">
+      <v-btn v-bind="attrs" color="primary" fab small :title="$t('fdbs.search._')" v-on="on">
         <v-icon>$search</v-icon>
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -53,7 +53,7 @@ import type {
   FoodsResponse,
 } from '@intake24/common/types/http/admin';
 import { useHttp } from '@intake24/admin/services';
-import { useI18n } from '@intake24/i18n/i18n';
+import { useI18n } from '@intake24/i18n';
 
 export type Category = CategoryListEntry & { resource: 'categories' };
 export type Food = FoodsResponse['data'][number] & { resource: 'foods' };
@@ -68,7 +68,7 @@ const props = defineProps({
 });
 
 const http = useHttp();
-const i18n = useI18n();
+const { i18n } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -163,3 +163,10 @@ export default defineComponent({
   name: 'FoodExplorer',
 });
 </script>
+
+<style lang="scss">
+.v-data-table tr {
+  cursor: pointer;
+}
+</style>
+```

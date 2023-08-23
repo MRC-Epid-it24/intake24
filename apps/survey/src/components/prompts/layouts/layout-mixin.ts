@@ -1,11 +1,13 @@
 import type { PropType } from 'vue';
-import { computed, defineComponent, toRefs } from 'vue';
+import set from 'lodash/set';
+import { computed, defineComponent, onBeforeMount } from 'vue';
 
 import type { ActionItem, Prompt } from '@intake24/common/prompts';
-import type { Dictionary, FoodState, MealState } from '@intake24/common/types';
-import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
-import { promptType } from '@intake24/ui/util';
+import type { PromptSection } from '@intake24/common/surveys';
+import type { FoodState, MealState } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
+import { useFoodUtils, useMealUtils, usePromptUtils } from '@intake24/survey/composables';
+import { useSurvey } from '@intake24/survey/stores';
 
 import { Next } from '../actions';
 import Breadcrumbs from './breadcrumbs.vue';
@@ -20,6 +22,10 @@ export default defineComponent({
       type: Object as PropType<Prompt>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
     food: {
       type: Object as PropType<FoodState>,
     },
@@ -30,30 +36,59 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    navTab: {
-      type: String,
-      default: 'next',
-    },
   },
 
-  emits: ['action', 'update:navTab'],
+  emits: ['action'],
 
-  setup(props) {
-    const { food, meal } = toRefs(props);
+  setup(props, { emit }) {
+    const { i18n, translate, translatePath } = useI18n();
+    const { params, type } = usePromptUtils(props);
+    const { foodName } = useFoodUtils(props);
+    const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
+    const survey = useSurvey();
 
-    const { getLocaleContent } = useLocale();
-    const { foodName } = useFoodUtils(food);
-    const { mealName, mealTime, mealNameWithTime } = useMealUtils(meal);
+    const showSummary = computed(() => {
+      if (survey.hasFinished) return false;
 
-    const promptName = computed(() => {
-      const type = promptType(props.prompt.component);
-
-      return getLocaleContent(props.prompt.i18n.name, {
-        path: `prompts.${type}.name`,
-      });
+      return !['preMeals'].includes(props.section);
     });
 
-    return { foodName, getLocaleContent, mealName, mealTime, mealNameWithTime, promptName };
+    const loadPromptTranslations = () => {
+      if (!Object.keys(props.prompt.i18n).length) return;
+
+      const locale = i18n.locale;
+      const messages = i18n.getLocaleMessage(locale);
+
+      Object.entries(props.prompt.i18n).forEach(([key, value]) => {
+        if (!value[locale]) return;
+
+        set(messages, `prompts.${type.value}.${key}`, value[locale]);
+      });
+
+      i18n.setLocaleMessage(locale, messages);
+    };
+
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
+    };
+
+    onBeforeMount(() => {
+      loadPromptTranslations();
+    });
+
+    return {
+      action,
+      foodName,
+      translate,
+      translatePath,
+      mealName,
+      mealTime,
+      mealNameWithTime,
+      params,
+      showSummary,
+      type,
+      meals: survey.data.meals,
+    };
   },
 
   computed: {
@@ -73,85 +108,20 @@ export default defineComponent({
       return !!this.$slots.actions;
     },
 
+    hasNavActionsSlot(): boolean {
+      return !!this.$slots['nav-actions'];
+    },
+
     mobileActions(): ActionItem[] {
       return this.prompt.actions?.items.filter((action) => action.layout.includes('mobile')) ?? [];
     },
 
-    localeText(): string {
-      return this.getLocaleContent(this.prompt.i18n.text, {
-        path: `prompts.${this.type}.text`,
-        params: this.params,
-      });
-    },
-
-    headerText(): string | undefined {
-      if (this.localeText) return this.localeText;
-
-      if (this.prompt.type !== 'custom') return undefined;
-
-      if (this.foodName) return this.foodName;
-
-      return this.mealNameWithTime;
-    },
-
-    localeDescription(): string | undefined {
-      return this.getLocaleContent(this.prompt.i18n.description, {
-        path: `prompts.${this.type}.description`,
-        params: this.params,
-        sanitize: true,
-      });
-    },
-
-    params(): Dictionary<string> {
-      const params: Dictionary<string> = {};
-      const { foodName, mealName, mealTime } = this;
-
-      if (foodName) {
-        params.item = foodName;
-        params.food = foodName;
-      }
-
-      if (mealName) {
-        params.mealName = mealName;
-
-        if (mealTime) {
-          params.mealTime = mealTime;
-
-          const meal = `${mealName} (${mealTime})`;
-          params.item = meal;
-          params.meal = meal;
-        } else {
-          params.item = mealName;
-          params.meal = mealName;
-        }
-      }
-
-      return params;
-    },
-
-    type() {
-      return promptType(this.prompt.component);
-    },
-  },
-
-  methods: {
-    update(type: string) {
-      this.$emit('update:navTab', type);
-    },
-
-    action(type: string, id?: string) {
-      this.update(type);
-      this.$emit('action', type, id);
-    },
-
-    /*
-     * probably redundant at this point since nav actions is being handled by click rather than watching the navTab prop
-     * component -> nav -> is being rendered
-     * TODO remove
-     */
-    next() {
-      this.update('next');
-      this.$emit('action', 'next');
+    i18n() {
+      return {
+        name: this.$t(`prompts.${this.type}.name`, this.params),
+        text: this.$t(`prompts.${this.type}.text`, this.params),
+        description: this.translatePath(`prompts.${this.type}.description`, this.params, true),
+      };
     },
   },
 });

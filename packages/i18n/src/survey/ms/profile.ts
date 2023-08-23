@@ -5,9 +5,6 @@ const profile: LocaleMessageObject = {
   info: 'Maklumat',
   settings: 'Tetapan',
 
-  name: 'Nama',
-  email: 'Emel',
-  phone: 'Telefon',
   provider: 'Penyedia',
   providerId: 'ID Penyedia',
 

@@ -33,11 +33,13 @@ const common: LocaleMessageObject = {
   emailConfirm: 'Sahkan emel',
   password: 'Kata laluan',
   phone: 'Telefon',
+  message: 'Message',
   continue: 'Teruskan',
 
   help: {
     _: 'Bantuan',
     title: 'Mohon bantuan',
+    text: 'Please complete the form below and one of our support staff will get in touch as soon as they can.',
     sent: 'Permohonan bantuan anda telah dihantar.',
   },
 

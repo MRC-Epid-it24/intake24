@@ -6,11 +6,10 @@ import {
   Synonym,
 } from '@intake24/api/food-index/interpreted-word';
 import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
-import { logger } from '@intake24/common-backend/services';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 
-export type DictionaryType = 'foods' | 'recipes';
+export type DictionaryType = 'foods' | 'recipes' | 'categories';
 
 export interface PhoneticEncoder {
   encode(input: string): Array<string>;
@@ -34,7 +33,6 @@ export class RichDictionary {
   ) {
     this.words = new Set<string>();
 
-    //Merging all the words and synSets into one set
     for (const word of words) this.words.add(word.toLocaleLowerCase());
     if (synSets.length > 0)
       synSets.forEach((synSet) => {

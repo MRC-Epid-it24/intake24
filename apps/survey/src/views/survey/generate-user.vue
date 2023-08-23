@@ -8,11 +8,11 @@
           to stop filling out the survey and resume at a later time, write down generated
           credentials.
         </p>
-        <v-btn v-if="!status" block class="my-5" color="secondary" rounded x-large @click="submit">
+        <v-btn v-if="!status" block class="my-5" color="primary" rounded x-large @click="submit">
           {{ $t('survey.generateUser._') }}
         </v-btn>
         <template v-if="status">
-          <v-sheet v-if="status === 200" class="pa-5 my-5" color="deep-orange lighten-5">
+          <v-sheet v-if="status === 200" class="pa-5 my-5" color="ternary">
             <h4 class="my-2">{{ $t('common.username') }}: {{ username }}</h4>
             <h4 class="my-2">{{ $t('common.password') }}: {{ password }}</h4>
           </v-sheet>
@@ -30,7 +30,7 @@
         </p>
       </v-card-text>
       <v-card-actions class="px-6 pb-6">
-        <v-btn block color="secondary" :disabled="!canContinue" rounded x-large @click="login">
+        <v-btn block color="primary" :disabled="!canContinue" rounded x-large @click="login">
           {{ $t('common.action.continue') }}
         </v-btn>
       </v-card-actions>

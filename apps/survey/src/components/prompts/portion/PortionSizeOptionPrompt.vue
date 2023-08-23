@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, prompt, section, isValid }" @action="action">
     <v-item-group
       v-if="availableMethods.length"
       v-model="option"
@@ -17,7 +17,7 @@
           >
             <v-item v-slot="{ active, toggle }">
               <v-card
-                border-color="primary"
+                border-color="secondary"
                 class="d-flex flex-column justify-space-between"
                 height="100%"
                 hover
@@ -37,7 +37,7 @@
                       <template #label>
                         <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
                           <template #unit>
-                            {{ getLocaleContent(standardUnitRefs[unit].estimateIn) }}
+                            {{ translate(standardUnitRefs[unit].estimateIn) }}
                           </template>
                         </i18n>
                       </template>
@@ -51,11 +51,11 @@
                 </v-img>
                 <v-card-actions
                   class="d-flex justify-end"
-                  :class="{ 'grey lighten-5': !active, 'orange lighten-5': active }"
+                  :class="{ 'grey lighten-5': !active, ternary: active }"
                 >
                   <v-chip
                     class="font-weight-medium px-4"
-                    :color="option === index ? 'secondary' : 'orange lighten-4'"
+                    :color="option === index ? 'primary' : 'ternary'"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
@@ -69,9 +69,6 @@
     <v-alert v-else border="left" outlined type="warning">
       {{ $t('prompts.unknown.text', { food: foodName }) }}
     </v-alert>
-    <template v-if="!optionValid" #actions>
-      <div></div>
-    </template>
   </card-layout>
 </template>
 
@@ -81,7 +78,7 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
 
 import { ImagePlaceholder } from '../../elements';
 import { useStandardUnits } from '../partials';
@@ -104,7 +101,7 @@ export default defineComponent({
   emits: ['update'],
 
   setup(props) {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const standardUnits = computed(() => {
@@ -159,7 +156,7 @@ export default defineComponent({
       clearStandardUnitTimer();
     });
 
-    return { getLocaleContent, standardUnits, standardUnitRefs, standardUnitSelected };
+    return { translate, standardUnits, standardUnitRefs, standardUnitSelected };
   },
 
   data() {

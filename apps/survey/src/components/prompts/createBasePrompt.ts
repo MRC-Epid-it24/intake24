@@ -1,20 +1,21 @@
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
-import { promptType } from '@intake24/ui/util';
+import { promptType } from '@intake24/ui';
 
-import { Next } from './actions';
+import { Next, NextMobile } from './actions';
 import { BaseLayout, CardLayout } from './layouts';
 
 export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
-    components: { Next, BaseLayout, CardLayout },
+    components: { Next, NextMobile, BaseLayout, CardLayout },
 
     props: {
       food: {
@@ -27,18 +28,20 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         type: Object as PropType<Prompts[P]>,
         required: true,
       },
+      section: {
+        type: String as PropType<PromptSection>,
+        required: true,
+      },
     },
 
     emits: ['action'],
 
     setup(props) {
-      const { food, meal } = toRefs(props);
+      const { translate } = useI18n();
+      const { foodName } = useFoodUtils(props);
+      const { mealName } = useMealUtils(props);
 
-      const { getLocaleContent } = useLocale();
-      const { foodName } = useFoodUtils(food);
-      const { mealName } = useMealUtils(meal);
-
-      return { foodName, getLocaleContent, mealName };
+      return { foodName, translate, mealName };
     },
 
     data() {
@@ -83,15 +86,15 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         return true;
       },
 
-      action(type: string, id?: string) {
+      action(type: string, ...args: [id?: string, params?: object]) {
         if (type !== 'next') {
-          this.$emit('action', type, id);
+          this.$emit('action', type, ...args);
           return;
         }
 
         if (!this.confirm()) return;
 
-        this.$emit('action', type, id);
+        this.$emit('action', type, ...args);
       },
     },
   });

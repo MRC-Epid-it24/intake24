@@ -28,11 +28,10 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, MealState } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { RequestHelp } from '@intake24/survey/components';
 import { useFoodUtils, useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
 
 export type BreadcrumbsElement = {
   text: string;
@@ -58,13 +57,13 @@ export default defineComponent({
   },
 
   setup() {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
     const { getFoodName } = useFoodUtils();
     const { getMealName, getMealNameWithTime } = useMealUtils();
 
     const forwardIcon = ref('fas fa-caret-right');
 
-    return { forwardIcon, getFoodName, getLocaleContent, getMealName, getMealNameWithTime };
+    return { forwardIcon, getFoodName, translate, getMealName, getMealNameWithTime };
   },
 
   computed: {

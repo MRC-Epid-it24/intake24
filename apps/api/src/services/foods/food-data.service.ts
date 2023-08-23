@@ -85,6 +85,7 @@ const foodDataService = () => {
         'text',
         'linkAsMain',
         'genericName',
+        'multiple',
       ],
       order: [['orderBy', 'ASC']],
     });

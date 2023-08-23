@@ -4,7 +4,8 @@ import type {
   FeedbackMealTable,
 } from '@intake24/common/feedback';
 import type { NutrientType } from '@intake24/common/types/http';
-import { getLocaleContent, getNutrientUnit } from '@intake24/ui/util';
+import { useI18n } from '@intake24/i18n';
+import { getNutrientUnit } from '@intake24/ui';
 
 import type { NutrientChartData } from './charts';
 import type { MealStats } from './classes';
@@ -34,7 +35,7 @@ export const buildMealStats = (
   const chartData = chart.nutrients.map((nutrient) => {
     const { id } = nutrient;
 
-    const name = getLocaleContent(nutrient.name);
+    const name = useI18n().translate(nutrient.name);
     const unit = getNutrientUnit(id, nutrientTypes);
 
     const data = meals.map((meal) => ({
@@ -48,7 +49,7 @@ export const buildMealStats = (
   const tableData = meals.map((meal) => {
     return table.fields.reduce<MealTableFieldData>((acc, field) => {
       let resolvedValue: string | number | null = null;
-      const value = getLocaleContent(field.value);
+      const value = useI18n().translate(field.value);
 
       switch (field.type) {
         case 'standard':

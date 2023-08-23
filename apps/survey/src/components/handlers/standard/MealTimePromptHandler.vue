@@ -1,6 +1,6 @@
 <template>
   <meal-time-prompt
-    v-bind="{ initialState: state, meal, prompt }"
+    v-bind="{ initialState: state, meal, prompt, section }"
     @action="action"
     @update="update"
   ></meal-time-prompt>
@@ -8,10 +8,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { MealTimePrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -27,36 +27,42 @@ export default defineComponent({
       type: Object as PropType<Prompts['meal-time-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup() {
+  setup(props, ctx) {
     const { meal } = useMealPromptUtils();
+    const survey = useSurvey();
 
     const getInitialState = computed(() => meal.value.time ?? meal.value.defaultTime);
 
-    const { state, update } = usePromptHandlerNoStore(getInitialState);
+    const { state, update } = usePromptHandlerNoStore(ctx, getInitialState);
 
-    return { meal, state, update };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setMealTime', 'deleteMeal']),
-
-    action(type: 'next' | 'cancel') {
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') {
-        this.commitAnswer();
-        this.$emit('action', type);
-      } else {
-        this.deleteMeal(this.meal.id);
-        this.$emit('action', 'next');
+        commitAnswer();
+        ctx.emit('action', type);
+        return;
       }
-    },
+      if (type === 'cancel') {
+        survey.deleteMeal(meal.value.id);
+        ctx.emit('action', 'next');
+        return;
+      }
 
-    commitAnswer() {
-      this.setMealTime(this.meal.id, this.state);
-    },
+      ctx.emit('action', type, ...args);
+    };
+
+    const commitAnswer = () => {
+      survey.setMealTime(meal.value.id, state.value);
+    };
+
+    return { meal, state, action, update };
   },
 });
 </script>

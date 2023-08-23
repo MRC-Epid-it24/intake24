@@ -1,5 +1,9 @@
 <template>
-  <div v-if="contents.subcategories.length || contents.foods.length">
+  <v-list
+    v-if="contents.subcategories.length || contents.foods.length"
+    class="list__no-wrap py-0 d-flex"
+    :class="categoriesFirst ? 'flex-column' : 'flex-column-reverse'"
+  >
     <v-list-item
       v-for="category in contents.subcategories"
       :key="category.code"
@@ -11,7 +15,7 @@
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>
-          <span class="font-weight-medium">{{ category.description }}</span>
+          <span class="font-weight-medium">{{ category.name }}</span>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -25,13 +29,13 @@
         <v-icon>$food</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title>{{ food.description }}</v-list-item-title>
+        <v-list-item-title>{{ food.name }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
-  </div>
+  </v-list>
   <div v-else class="pa-4">
     <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
-      {{ $t('prompts.foodBrowser.none') }}
+      {{ i18n.none }}
     </v-alert>
   </div>
 </template>
@@ -49,6 +53,14 @@ export default defineComponent({
     contents: {
       type: Object as PropType<CategoryContents>,
       required: true,
+    },
+    i18n: {
+      type: Object as PropType<Record<string, string>>,
+      required: true,
+    },
+    categoriesFirst: {
+      type: Boolean,
+      default: true,
     },
   },
 

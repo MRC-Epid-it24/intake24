@@ -104,7 +104,7 @@ export class PhraseIndex<K> {
     // FIXME: Not sure if unmatched words are being completely ignored?
     //        Check that the unmatched word penalty is correctly applied
     switch (dictionaryType) {
-      case 'foods':
+      case 'foods' || 'categories':
         interpretedWords = words
           .map((w) => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
           .filter((w) => w.interpretations.length > 0);
@@ -315,8 +315,8 @@ export class PhraseIndex<K> {
     phrases: Array<PhraseWithKey<K>>,
     wordOps: LanguageBackend,
     synonymSets: Array<Set<string>>,
-    recipeFoodsSynonymsSet: Array<Set<string>>,
-    recipeFoodsList: RecipeFoodTuple[]
+    recipeFoodsSynonymsSet: Array<Set<string>> = [],
+    recipeFoodsList: RecipeFoodTuple[] = []
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);

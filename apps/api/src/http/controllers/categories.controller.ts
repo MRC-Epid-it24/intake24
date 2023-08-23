@@ -4,7 +4,6 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { CategoryContents } from '@intake24/common/types/http';
 import type { PaginateQuery } from '@intake24/db/models';
-import { ApplicationError } from '@intake24/api/http/errors';
 
 const categoriesController = ({
   categoryContentsService,
@@ -33,12 +32,9 @@ const categoriesController = ({
   };
 
   const rootContents = async (req: Request, res: Response<CategoryContents>): Promise<void> => {
-    const { localeId, code } = req.params;
+    const { localeId } = req.params;
 
-    if (typeof req.query.code !== 'string' || !code.length)
-      throw new ApplicationError('code cannot be empty');
-
-    const categoryContents = await categoryContentsService.getCategoryContents(localeId, code);
+    const categoryContents = await categoryContentsService.getRootCategories(localeId);
     res.json(categoryContents);
   };
 

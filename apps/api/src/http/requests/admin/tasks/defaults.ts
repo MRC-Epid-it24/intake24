@@ -54,11 +54,11 @@ const defaults: Schema = {
   },
   params: {
     in: ['body'],
-    errorMessage: 'Parameters must be valid object.',
+    errorMessage: 'Parameters must be a valid object.',
     isEmpty: { negated: true },
     custom: {
       options: async (value): Promise<void> => {
-        if (!isPlainObject(value)) throw new Error('Parameters must be valid object.');
+        if (!isPlainObject(value)) throw new Error('Parameters must be a valid object.');
         // TODO: add full json validation for each job type
       },
     },

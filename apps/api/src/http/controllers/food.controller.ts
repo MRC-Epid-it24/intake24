@@ -7,7 +7,8 @@ import { InvalidIdError } from '@intake24/api/services/foods';
 const foodController = ({
   foodDataService,
   imagesBaseUrl,
-}: Pick<IoC, 'foodDataService' | 'imagesBaseUrl'>) => {
+  cachedParentCategoriesService,
+}: Pick<IoC, 'foodDataService' | 'imagesBaseUrl' | 'cachedParentCategoriesService'>) => {
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
@@ -25,6 +26,14 @@ const foodController = ({
       if (err instanceof InvalidIdError) throw new NotFoundError(err.message);
       throw err;
     }
+  };
+
+  const categories = async (req: Request, res: Response): Promise<void> => {
+    const categories = await cachedParentCategoriesService.getFoodAllCategories(req.params.code);
+
+    res.json({
+      categories,
+    });
   };
 
   const entryWithSource = async (req: Request, res: Response): Promise<void> => {
@@ -49,6 +58,7 @@ const foodController = ({
 
   return {
     entry,
+    categories,
     entryWithSource,
     brands,
     associatedFoods,

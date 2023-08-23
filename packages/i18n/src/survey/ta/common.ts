@@ -33,11 +33,13 @@ const common: LocaleMessageObject = {
   emailConfirm: 'மின்னஞ்சலை உறுதிப்படுத்தவும்',
   password: 'கடவுச்சொல்',
   phone: 'தொலைபேசி',
+  message: 'Message',
   continue: 'தொடரவும்',
 
   help: {
     _: 'உதவி',
     title: 'உதவி கேட்கவும்',
+    text: 'Please complete the form below and one of our support staff will get in touch as soon as they can.',
     sent: 'உங்கள் உதவிக் கோரிக்கை அனுப்பப்பட்டது.',
   },
 

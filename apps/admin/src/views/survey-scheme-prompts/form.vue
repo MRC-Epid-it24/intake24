@@ -27,7 +27,7 @@
               ></v-text-field>
             </v-col>
             <v-col align="center">
-              <v-btn class="pa-6" color="primary" outlined x-large @click="edit">
+              <v-btn class="pa-6" color="secondary" outlined x-large @click="edit">
                 <v-icon left>$edit</v-icon>{{ $t('survey-scheme-prompts.editTemplate') }}
               </v-btn>
             </v-col>

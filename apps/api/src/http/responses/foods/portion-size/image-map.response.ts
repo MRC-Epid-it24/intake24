@@ -14,17 +14,7 @@ export const imageMapsResponse = (baseUrl: string) => {
    * @returns {ImageMapObjectResponse}
    */
   const objectResponse = (item: ImageMapObject): ImageMapObjectResponse => {
-    const {
-      id,
-      description,
-      label,
-      navigationIndex,
-      outlineCoordinates: outline,
-      overlayImage,
-    } = item;
-
-    if (!overlayImage)
-      throw new InternalServerError('ImageMapObjectResponse: not loaded relationships.');
+    const { id, description, label, navigationIndex, outlineCoordinates: outline } = item;
 
     return {
       id,
@@ -32,7 +22,6 @@ export const imageMapsResponse = (baseUrl: string) => {
       label,
       navigationIndex,
       outline,
-      overlayUrl: `${baseUrl}/${overlayImage.path}`,
     };
   };
 

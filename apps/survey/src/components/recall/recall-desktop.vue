@@ -10,15 +10,11 @@
           v-if="currentPrompt && !hideCurrentPrompt"
           :key="handlerKey"
           :prompt="currentPrompt.prompt"
+          :section="currentPrompt.section"
           @action="action"
         ></component>
       </transition>
     </v-col>
-    <info-alert
-      :info="undo ? 'Undo deletion of ' + undo.type : ''"
-      :status="undo ? true : false"
-      @alert-dismissed="clearUndo"
-    ></info-alert>
   </v-row>
 </template>
 

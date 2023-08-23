@@ -36,7 +36,7 @@
     </v-card>
     <!-- <v-btn
       class="mt-2 mx-auto"
-      color="primary"
+      color="secondary"
       link
       outlined
       :title="$t('feedback.physicalData.recall')"

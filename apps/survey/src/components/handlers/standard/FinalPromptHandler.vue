@@ -5,6 +5,7 @@
     v-bind="{
       showFeedback,
       prompt,
+      section,
       surveyId,
     }"
     @action="action"
@@ -16,6 +17,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { FinalPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -29,6 +31,10 @@ export default defineComponent({
       type: Object as PropType<Prompts['final-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
@@ -38,8 +44,8 @@ export default defineComponent({
 
     const showFeedback = ref(user?.showFeedback);
 
-    const action = (type: string, id?: string) => {
-      emit('action', type, id);
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      emit('action', type, ...args);
     };
 
     return { action, showFeedback };

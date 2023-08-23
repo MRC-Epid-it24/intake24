@@ -11,6 +11,7 @@ import type {
   FoodFlag,
   FoodState,
   FreeTextFood,
+  MealCreationState,
   MealFlag,
   MealState,
   MealTime,
@@ -24,6 +25,7 @@ import type { SurveyEntryResponse, SurveyUserInfoResponse } from '@intake24/comm
 import { sortMeals, toMealTime } from '@intake24/common/surveys';
 import { clearPromptStores, recallLog } from '@intake24/survey/stores';
 import {
+  associatedFoodPromptsComplete,
   findFood,
   findMeal,
   getEntityId,
@@ -99,10 +101,18 @@ export const surveyInitialState = (): CurrentSurveyState => ({
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
   if (parameters && !parameters.storeUserSessionOnServer) return false;
 
-  const { startTime /*, submissionTime */ } = state;
-  if (!startTime /*|| submissionTime*/) return false;
+  const { startTime, submissionTime } = state;
+  if (!startTime) return false;
 
-  // TODO: check old stale data
+  if (submissionTime) return true;
+
+  const now = new Date();
+  const startDt = new Date(startTime);
+
+  const timeDifference = (now.getTime() - startDt.getTime()) / 1000 / 60 / 60;
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+
+  if (timeDifference > 12 || startDt.getTime() < startOfDay.getTime()) return false;
 
   return true;
 };
@@ -248,7 +258,7 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
-      if (this.hasStarted && !this.isSubmitted && !force) {
+      if (this.hasStarted && !force) {
         console.warn('Survey already started, not restarting.');
         return;
       }
@@ -484,24 +494,27 @@ export const useSurvey = defineStore('survey', {
       this.data.meals.splice(data.mealIndex, 0, data.meal);
     },
 
-    addMeal(name: string, locale: string) {
+    addMeal(meal: MealCreationState, locale: string) {
       const id = getEntityId();
       const defaultTime = toMealTime(
-        this.defaultSchemeMeals?.find((meal) => meal.name[locale] === name)?.time ?? '8:00'
+        this.defaultSchemeMeals?.find((item) => item.name[locale] === meal.name[locale])?.time ??
+          '8:00'
       );
 
       this.data.meals.push({
         id,
-        name: { en: name, [locale]: name },
         defaultTime,
         time: undefined,
         duration: null,
         flags: [],
         foods: [],
         customPromptAnswers: {},
+        ...meal,
       });
 
       this.sortMeals();
+
+      this.setSelection({ element: { type: 'meal', mealId: id }, mode: 'manual' });
 
       return id;
     },
@@ -564,7 +577,11 @@ export const useSurvey = defineStore('survey', {
 
       food.flags.push(...flags);
 
-      if (flags.includes('portion-size-method-complete')) this.saveSameAsBefore(foodId);
+      if (
+        flags.includes('portion-size-method-complete') ||
+        flags.includes('associated-foods-complete')
+      )
+        this.saveSameAsBefore(foodId);
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
@@ -608,20 +625,19 @@ export const useSurvey = defineStore('survey', {
       // TODO: check associated foods ?
       if (!this.sameAsBeforeAllowed) return;
 
-      const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
-        this.data.meals,
-        foodId
-      );
-
+      const { foodIndex, mealIndex } = getFoodIndexRequired(this.data.meals, foodId);
       const mainFood = this.data.meals[mealIndex].foods[foodIndex];
 
       if (
+        // 1) food is not encoded
         mainFood.type !== 'encoded-food' ||
+        // 2) food portion size estimation is not finished
         !isPortionSizeComplete(mainFood) ||
-        (linkedFoodIndex !== undefined &&
-          !isPortionSizeComplete(
-            this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex]
-          ))
+        // 3) associated food prompts are not finished
+        !associatedFoodPromptsComplete(mainFood) ||
+        // 4) associated foods portion size estimations are not finished
+        (mainFood.linkedFoods.length &&
+          mainFood.linkedFoods.some((item) => !isPortionSizeComplete(item)))
       )
         return;
 

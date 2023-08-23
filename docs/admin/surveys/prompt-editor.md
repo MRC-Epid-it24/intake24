@@ -61,7 +61,7 @@ Actions tab defines list of actions to be performed when prompt is displayed.
 ### Actions options
 
 - `type` - type of action that should happen when button is clicked
-- `layout` - layout of where the button should be included (`desktop` or `mobile`)
+- `layout` - layout of where the button should be displayed (`desktop` or `mobile`)
 - `variant` - style variant (`elevated`, `outlined`, `text`)
 - `color` - color variant (`primary`, `secondary`, `success`, `warning`, `error`, color hex code)
 - `icon` - icon, [existing alias](https://github.com/MRC-Epid-it24/intake24/blob/master/apps/survey/src/plugins/vuetify.ts) or [FontAwesome](https://fontawesome.com/search?o=r&m=free) icon name
@@ -75,20 +75,40 @@ Conditions tab defines list of conditions that needs to be met to display the pr
 - If conditions is empty, prompt is always displayed.
 - If conditions is not empty, prompt is only displayed once all conditions are met.
 
-### Operations
+### Type
 
-Each condition can be defined by following operations:
+| Type            | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| `Drinks`        | Number of drinks (in `meal` or `survey`)               |
+| `Energy`        | Total energy (`food` / `meal` / `survey`)              |
+| `Flag`          | Whether `food` / `meal` / `survey` has a specific flag |
+| `Food category` | Whether `food` has the category assigned               |
+| `Meals`         | Number of meals in recall                              |
+| `Prompt answer` | `Food` / `meal` / `survey` prompt answer               |
+| `Recall`        | Current recall number                                  |
 
-| Operation | Value type         | Description                                                  |
-| --------- | ------------------ | ------------------------------------------------------------ |
-| `eq`      | string \| string[] | Prompt answer equals to defined value                        |
-| `nt`      | string \| string[] | Prompt answer does not equal to defined value                |
-| `in`      | string \| string[] | One of the prompt answers is included defined value-list     |
-| `notIn`   | string \| string[] | None of the prompt answers is included in defined value-list |
-| `gte`     | number             | Prompt answer is greater than or equals to defined value     |
-| `gt`      | number             | Prompt answer is greater than defined value                  |
-| `lte`     | number             | Prompt answer is lower than or equals to defined value       |
-| `lt`      | number             | Prompt answer is lower than defined value                    |
+### Operation
+
+Each condition can be set with one of the following operations:
+
+| Operation | Value type         | Description                                                    |
+| --------- | ------------------ | -------------------------------------------------------------- |
+| `eq`      | string \| string[] | Condition value equals to defined value                        |
+| `nt`      | string \| string[] | Condition value does not equal to defined value                |
+| `in`      | string \| string[] | One of the condition values is included defined value-list     |
+| `notIn`   | string \| string[] | None of the condition values is included in defined value-list |
+| `gte`     | number             | Condition value is greater than or equals to defined value     |
+| `gt`      | number             | Condition value is greater than defined value                  |
+| `lte`     | number             | Condition value is lower than or equals to defined value       |
+| `lt`      | number             | Condition value is lower than defined value                    |
+
+### Section
+
+Several condition type can define entity-level where to look for the answer:
+
+- `survey` - looks for the answer in the survey state
+- `meal` - looks for the answer in the meal state
+- `food` - looks for the answer in the food state
 
 ## Validation
 
@@ -97,3 +117,7 @@ Validation tab defines validation options, i.e. whether prompt is optional or re
 ## Options
 
 Options tab defines additional per-prompt type options. See [Prompt types](/admin/surveys/prompt-types) for more details.
+
+## JSON
+
+Raw JSON prompt editor. Can be used for manual editing, copy-pasting between prompts / schemes etc.

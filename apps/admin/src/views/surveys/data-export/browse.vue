@@ -30,7 +30,7 @@
                 <v-col>
                   <v-btn
                     block
-                    color="secondary"
+                    color="primary"
                     :disabled="form.errors.any() || isAppLoading"
                     :title="$t('common.action.export')"
                     type="submit"

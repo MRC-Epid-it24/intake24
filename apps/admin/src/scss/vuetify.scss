@@ -1,0 +1,71 @@
+@import "vuetify/src/styles/styles.sass";
+
+$body-font-family: Rubik, sans-serif;
+
+$material-light: (
+  'background': #f5f5f5,
+);
+
+$fab-icon-sizes: (
+  'x-small': 16,
+  'small': 18,
+  'default': 20,
+  'large': 28,
+  'x-large': 32
+);
+
+$btn-font-weight: 600;
+
+$breadcrumbs-item-large-font-size: 20px;
+$breadcrumbs-padding: 18px 6px;
+
+$icon-size: 20px;
+$icon-size-dense: 18px;
+
+$headings: (
+  'h1': (
+    'size': 2rem,
+    'line-height': 2.5rem,
+  ),
+  'h2': (
+    'size': 1.75rem,
+    'line-height': 2rem,
+  ),
+  'h3': (
+    'size': 1.5rem,
+    'line-height': 2rem,
+  ),
+  'h4': (
+    'size': 1.3rem,
+    'line-height': 1.5rem,
+  ),
+  'h5': (
+    'size': 1.2rem,
+    'line-height': 1.5rem,
+  ),
+  'h6': (
+    'size': 1rem,
+    'line-height': 1.5rem,
+  )
+);
+
+$utilities: (
+  "gap": (
+    responsive: true,
+    property: gap,
+    class: ga,
+    values: $spacers
+  ),
+  "gap-column": (
+    responsive: true,
+    property: column-gap,
+    class: gc,
+    values: $spacers
+  ),
+  "gap-row": (
+    responsive: true,
+    property: row-gap,
+    class: gr,
+    values: $spacers
+  )
+);

@@ -1,44 +1,43 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4 pt-4" :class="{ 'pb-4': isMobile }" v-html="description"></div>
+      <div class="px-4 pt-4" :class="{ 'pb-4': isMobile }" v-html="promptI18n.description"></div>
     </template>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         text
+        :title="promptI18n.yes"
         @click.stop="action('addMeal')"
       >
         <v-icon left>$add</v-icon>
-        {{ $t(`prompts.${type}.yes`) }}
+        {{ promptI18n.yes }}
       </v-btn>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        :class="{ 'ml-0': isMobile, 'mb-2': isMobile }"
-        color="secondary"
+        color="primary"
         large
         text
+        :title="promptI18n.no"
         @click.stop="action('next')"
       >
         <v-icon left>$next</v-icon>
-        {{ $t(`prompts.${type}.no`) }}
+        {{ promptI18n.no }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn value="addMeal" @click.stop="action('addMeal')">
+      <v-btn color="primary" text :title="promptI18n.yes" @click.stop="action('addMeal')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.yes`) }}
+          {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn value="next" @click.stop="action('next')">
+      <v-btn color="primary" text :title="promptI18n.no" @click.stop="action('next')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.no`) }}
+          {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -48,11 +47,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import { useMealUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
+import { useMealUtils, usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -68,52 +67,45 @@ export default defineComponent({
     },
   },
 
-  setup() {
-    const { getLocaleContent } = useLocale();
+  setup(props) {
+    const { i18n } = useI18n();
+    const { translatePrompt, type } = usePromptUtils(props);
     const { getMealName, getMealTime } = useMealUtils();
 
-    return { getLocaleContent, getMealName, getMealTime };
-  },
-
-  computed: {
-    description(): string {
-      const [startMeal, endMeal] = this.meals;
+    const description = computed(() => {
+      const [startMeal, endMeal] = props.meals;
 
       if (startMeal && endMeal)
-        return this.getLocaleContent(this.prompt.i18n.both, {
-          path: `prompts.${this.type}.between`,
-          params: {
-            startMeal: this.getMealName(startMeal),
-            startMealTime: this.getMealTime(startMeal) ?? '',
-            endMeal: this.getMealName(endMeal),
-            endMealTime: this.getMealTime(endMeal) ?? '',
-          },
-          sanitize: true,
+        return i18n.t(`prompts.${type.value}.between`, {
+          startMeal: getMealName(startMeal),
+          startMealTime: getMealTime(startMeal) ?? '',
+          endMeal: getMealName(endMeal),
+          endMealTime: getMealTime(endMeal) ?? '',
         });
 
       if (startMeal)
-        return this.getLocaleContent(this.prompt.i18n.before, {
-          path: `prompts.${this.type}.before`,
-          params: {
-            meal: this.getMealName(startMeal),
-            mealTime: this.getMealTime(startMeal) ?? '',
-          },
-          sanitize: true,
+        return i18n.t(`prompts.${type.value}.before`, {
+          meal: getMealName(startMeal),
+          mealTime: getMealTime(startMeal) ?? '',
         });
 
       if (endMeal)
-        return this.getLocaleContent(this.prompt.i18n.after, {
-          path: `prompts.${this.type}.after`,
-          params: { meal: this.getMealName(endMeal), mealTime: this.getMealTime(endMeal) ?? '' },
-          sanitize: true,
+        return i18n.t(`prompts.${type.value}.after`, {
+          meal: getMealName(endMeal),
+          mealTime: getMealTime(endMeal) ?? '',
         });
 
       return '';
-    },
+    });
 
-    isValid(): boolean {
-      return true;
-    },
+    const promptI18n = computed(() => ({
+      ...translatePrompt(['yes', 'no']),
+      description: description.value,
+    }));
+
+    const isValid = computed(() => true);
+
+    return { promptI18n, isValid, getMealName, getMealTime };
   },
 });
 </script>

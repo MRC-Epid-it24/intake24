@@ -1,18 +1,12 @@
 <template>
   <v-card flat tile>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-cloud-meatball</v-icon>
+      <v-icon color="secondary" left>fas fa-cloud-meatball</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.cards.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        color="secondary"
-        fab
-        small
-        :title="$t('feedback-schemes.cards.add')"
-        @click.stop="add"
-      >
+      <v-btn color="primary" fab small :title="$t('feedback-schemes.cards.add')" @click.stop="add">
         <v-icon small>$add</v-icon>
       </v-btn>
       <options-menu>
@@ -26,7 +20,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="cards"></json-editor>
+        <json-editor-dialog v-model="cards"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -54,7 +48,7 @@
                 :title="$t('feedback-schemes.cards.edit')"
                 @click.stop="edit({ card, index })"
               >
-                <v-icon color="primary lighten-1">$edit</v-icon>
+                <v-icon color="secondary lighten-1">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -85,7 +79,7 @@ import draggable from 'vuedraggable';
 import type { Card } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { ConfirmDialog } from '@intake24/ui';
 
 import CardSelector from './card-selector.vue';
@@ -102,7 +96,7 @@ export default defineComponent({
     draggable,
     CardSelector,
     ConfirmDialog,
-    JsonEditor,
+    JsonEditorDialog,
     OptionsMenu,
     SelectResource,
   },

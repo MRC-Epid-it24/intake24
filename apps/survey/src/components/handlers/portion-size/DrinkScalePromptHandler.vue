@@ -7,6 +7,7 @@
       parameters,
       parentFood,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -19,6 +20,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { DrinkScalePrompt } from '@intake24/survey/components/prompts';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
@@ -33,11 +35,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['drink-scale-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
@@ -69,14 +75,12 @@ export default defineComponent({
       countConfirmed: false,
     });
 
-    const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
+    const {
+      state,
+      actionPortionSize: action,
+      update,
+    } = usePromptHandlerStore(props, ctx, getInitialState);
     const { meal } = useMealPromptUtils();
-
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitPortionSize();
-
-      emit('action', type, id);
-    };
 
     return {
       food,

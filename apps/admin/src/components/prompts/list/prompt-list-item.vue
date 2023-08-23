@@ -19,7 +19,7 @@
     </v-list-item-content>
     <v-list-item-action>
       <v-btn icon :title="$t('survey-schemes.prompts.edit')" @click.stop="edit">
-        <v-icon color="primary lighten-1">$edit</v-icon>
+        <v-icon color="secondary lighten-1">$edit</v-icon>
       </v-btn>
     </v-list-item-action>
     <v-list-item-action v-if="!isOverrideMode">
@@ -32,12 +32,18 @@
       >
         <template #activator="{ attrs, on }">
           <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon color="primary lighten-1">$options</v-icon>
+            <v-icon color="secondary lighten-1">$options</v-icon>
           </v-btn>
         </template>
         <v-list>
+          <v-list-item link @click="copy">
+            <v-list-item-title>
+              <v-icon left>fas fa-copy</v-icon>
+              {{ $t('survey-schemes.prompts.copy') }}
+            </v-list-item-title>
+          </v-list-item>
           <confirm-dialog
-            color="primary lighten-1"
+            color="secondary lighten-1"
             :label="$t('survey-schemes.prompts.move').toString()"
             max-width="450px"
             @close="clearMoveToSection"
@@ -60,25 +66,20 @@
             ></v-select>
           </confirm-dialog>
           <save-as-template-dialog
-            v-if="can('survey-schemes-prompts|create')"
-            :disabled="hasTemplate"
+            v-if="can('survey-scheme-prompts|create') && !hasTemplate"
             :prompt="prompt"
           ></save-as-template-dialog>
           <confirm-dialog
-            color="primary lighten-1"
+            v-if="hasTemplate && !isInSyncWithTemplate"
+            color="secondary lighten-1"
             :label="$t('survey-scheme-prompts.sync.synchronize').toString()"
             max-width="450px"
             @confirm="sync"
           >
             <template #activator="{ attrs, on }">
-              <v-list-item
-                v-bind="attrs"
-                :disabled="!hasTemplate || isInSyncWithTemplate"
-                link
-                v-on="on"
-              >
+              <v-list-item v-bind="attrs" link v-on="on">
                 <v-list-item-title>
-                  <v-icon :disabled="!hasTemplate || isInSyncWithTemplate" left>$sync</v-icon>
+                  <v-icon left>$sync</v-icon>
                   {{ $t('survey-scheme-prompts.sync.synchronize') }}
                 </v-list-item-title>
               </v-list-item>
@@ -145,7 +146,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync'],
+  emits: ['prompt:copy', 'prompt:edit', 'prompt:move', 'prompt:remove', 'prompt:sync'],
 
   data() {
     return {
@@ -160,7 +161,9 @@ export default defineComponent({
     },
 
     template(): Prompt | undefined {
-      return this.templates.find((template) => template.id === this.prompt.id);
+      return this.templates.find(
+        (template) => template.id === this.prompt.id && template.name === this.prompt.name
+      );
     },
 
     hasTemplate(): boolean {
@@ -173,6 +176,11 @@ export default defineComponent({
   },
 
   methods: {
+    copy() {
+      const { index, prompt } = this;
+      this.$emit('prompt:copy', { index, prompt });
+    },
+
     edit() {
       const { index, prompt } = this;
       this.$emit('prompt:edit', { index, prompt });

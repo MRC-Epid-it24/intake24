@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-people-arrows</v-icon>
+      <v-icon color="secondary" left>fas fa-people-arrows</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.demographic-groups.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('feedback-schemes.demographic-groups.create')"
@@ -30,7 +30,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="items"></json-editor>
+        <json-editor-dialog v-model="items"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>
@@ -57,7 +57,7 @@
                 :title="$t('feedback-schemes.demographic-groups.edit')"
                 @click.stop="edit(index, group)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -83,7 +83,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
           <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
@@ -101,7 +101,7 @@
           </v-toolbar-items>
           <template #extension>
             <v-container>
-              <v-tabs v-model="tab" background-color="primary" dark>
+              <v-tabs v-model="tab" background-color="secondary" dark>
                 <v-tab v-for="item in ['general', 'sectors']" :key="item">
                   {{ $t(`feedback-schemes.demographic-groups.tabs.${item}`) }}
                 </v-tab>
@@ -214,7 +214,7 @@ import type { DemographicGroup } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/components/lists';
 import { useEntry } from '@intake24/admin/stores';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
@@ -232,7 +232,7 @@ export default defineComponent({
     draggable,
     DemographicGroupRange,
     DemographicGroupSectors,
-    JsonEditor,
+    JsonEditorDialog,
     OptionsMenu,
     SelectResource,
   },

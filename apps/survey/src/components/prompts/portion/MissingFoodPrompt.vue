@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, prompt, isValid }" @action="action">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-model="panel" :tile="isMobile">
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -36,7 +36,7 @@
             </i18n>
             <barcode-input :model-value.sync="info.barcode"></barcode-input>
           </template>
-          <v-btn :block="isMobile" color="secondary" :disabled="!homemadeValid" @click="confirm">
+          <v-btn :block="isMobile" color="primary" :disabled="!homemadeValid" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
@@ -54,12 +54,18 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-textarea v-model="info.portionSize" outlined @input="update"></v-textarea>
-          <v-btn :block="isMobile" color="secondary" :disabled="!info.portionSize" @click="confirm">
+          <v-btn :block="isMobile" color="primary" :disabled="!info.portionSize" @click="confirm">
             {{ $t('common.action.continue') }}
           </v-btn>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <template #actions>
+      <next :disabled="!isValid" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+    </template>
   </base-layout>
 </template>
 

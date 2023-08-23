@@ -7,7 +7,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card v-if="dialog" tile>
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -40,13 +40,13 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle class="mb-1">
-                        <span class="text--primary"
+                        <span class="text--secondary"
                           >{{ $t('survey-schemes.data-export.fields.id') }}:</span
                         >
                         {{ field.id }}
                       </v-list-item-subtitle>
                       <v-list-item-subtitle>
-                        <span class="text--primary">
+                        <span class="text--secondary">
                           {{ $t('survey-schemes.data-export.fields.label') }}:
                         </span>
                         {{ field.label }}
@@ -58,7 +58,7 @@
                         :title="$t('common.action.edit')"
                         @click.stop="editOpen(index, field)"
                       >
-                        <v-icon color="primary lighten-2">$edit</v-icon>
+                        <v-icon color="secondary lighten-2">$edit</v-icon>
                       </v-btn>
                     </v-list-item-action>
                     <v-list-item-action>
@@ -92,13 +92,13 @@
                 >
                   <v-list-item-content>
                     <v-list-item-subtitle class="mb-1">
-                      <span class="text--primary"
+                      <span class="text--secondary"
                         >{{ $t('survey-schemes.data-export.fields.id') }}:</span
                       >
                       {{ field.id }}
                     </v-list-item-subtitle>
                     <v-list-item-subtitle>
-                      <span class="text--primary">
+                      <span class="text--secondary">
                         {{ $t('survey-schemes.data-export.fields.label') }}:
                       </span>
                       {{ field.label }}
@@ -176,7 +176,7 @@ export default defineComponent({
 
   props: {
     section: {
-      type: Object as PropType<ExportSection>,
+      type: Object as PropType<ExportSection | null>,
       default: null,
     },
     refFields: {

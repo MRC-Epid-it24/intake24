@@ -48,7 +48,7 @@
               <v-col cols="12">
                 <v-btn
                   block
-                  color="secondary"
+                  color="primary"
                   :disabled="invalidSurvey"
                   rounded
                   type="submit"

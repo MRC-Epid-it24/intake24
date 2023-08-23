@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar color="primary" :timeout="-1" :value="needRefresh">
+  <v-snackbar color="secondary" :timeout="-1" :value="needRefresh">
     {{ $t('common.sw.check') }}
     <template #action="{ attrs }">
       <v-btn dark text v-bind="attrs" @click="updateServiceWorker">

@@ -3,7 +3,7 @@ import { Worker } from 'node:worker_threads';
 import { Op } from 'sequelize';
 
 import type { RecipeFood } from '@intake24/common/types/foods';
-import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
 import { RecipeFoods, RecipeFoodsSteps, SynonymSet } from '@intake24/db/models';
 
@@ -17,7 +17,14 @@ export class IndexNotReadyError extends Error {}
 interface SearchResponse {
   queryId: number;
   success: boolean;
-  results: FoodHeader[];
+  results: FoodSearchResponse;
+  error: Error;
+}
+
+interface RecipeFoodResponse {
+  specialQueryId: number;
+  success: boolean;
+  result: RecipeFood;
   error: Error;
 }
 
@@ -111,7 +118,7 @@ export default {
             indexWorker.removeListener('message', listener);
 
             if (msg.success) {
-              resolve({ foods: msg.results });
+              resolve(msg.results);
             } else {
               reject(msg.error);
             }

@@ -9,6 +9,7 @@
       parameters,
       parentFood,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -21,6 +22,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { GuideImagePrompt } from '@intake24/survey/components/prompts';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
@@ -35,11 +37,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['guide-image-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const {
       conversionFactor,
       encodedFood: food,
@@ -69,13 +75,11 @@ export default defineComponent({
       linkedQuantityConfirmed: false,
     });
 
-    const { state, update, commitPortionSize } = usePromptHandlerStore(props, getInitialState);
-
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitPortionSize();
-
-      emit('action', type, id);
-    };
+    const {
+      state,
+      actionPortionSize: action,
+      update,
+    } = usePromptHandlerStore(props, ctx, getInitialState);
 
     return {
       conversionFactor,

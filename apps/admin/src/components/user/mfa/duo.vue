@@ -6,7 +6,7 @@
     <v-stepper-content step="1">
       <v-row>
         <v-col cols="12" sm="6">
-          <v-btn block class="my-4" color="primary" rounded @click="challenge">
+          <v-btn block class="my-4" color="secondary" rounded @click="challenge">
             {{ $t('user.mfa.devices.init._') }}
           </v-btn>
         </v-col>
@@ -29,7 +29,7 @@
                 outlined
                 @input="form.errors.clear('name')"
               ></v-text-field>
-              <v-btn block class="my-4" color="primary" rounded type="submit">
+              <v-btn block class="my-4" color="secondary" rounded type="submit">
                 {{ $t('user.mfa.devices.verify') }}
               </v-btn>
             </v-form>

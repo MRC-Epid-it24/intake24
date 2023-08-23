@@ -21,16 +21,17 @@
       <div class="drink-scale-slider mr-6" :style="{ bottom: sliderBottom }">
         <v-slider
           v-model="sliderValue"
+          color="secondary"
           :height="sliderHeight"
           :max="sliderMax"
           :min="sliderMin"
-          thumb-color="primary"
+          thumb-color="secondary"
           vertical
         ></v-slider>
       </div>
       <div class="drink-scale-label">
         <v-chip
-          class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+          class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
         >
           {{ label }}
         </v-chip>
@@ -40,7 +41,7 @@
       <v-col cols="6" sm>
         <v-btn
           block
-          color="secondary"
+          color="primary"
           :disabled="sliderValue <= sliderMin"
           outlined
           @click="updateSlider(-sliderStep)"
@@ -52,7 +53,7 @@
       <v-col cols="6" sm>
         <v-btn
           block
-          color="secondary"
+          color="primary"
           :disabled="sliderValue >= sliderMax"
           outlined
           @click="updateSlider(sliderStep)"
@@ -62,7 +63,7 @@
         </v-btn>
       </v-col>
       <v-col cols="12" sm>
-        <v-btn block color="secondary" @click="confirm">
+        <v-btn block color="primary" @click="confirm">
           <v-icon left>$yes</v-icon>
           {{ $t(`prompts.drinkScale.${type}.confirm`) }}
         </v-btn>
@@ -271,7 +272,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import 'vuetify/src/styles/styles.sass';
+@import 'src/scss/variables';
 
 .drink-scale-wrapper {
   display: flex;
@@ -334,7 +335,7 @@ export default defineComponent({
               left: -6px;
               width: 0;
               height: 0;
-              border-right: 12px solid map-get($blue-grey, 'darken-4');
+              border-right: 12px solid $secondary;
               border-top: 12px solid transparent;
               border-bottom: 12px solid transparent;
             }

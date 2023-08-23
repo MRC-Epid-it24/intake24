@@ -1,5 +1,5 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-slider
@@ -16,33 +16,31 @@
           <template #thumb-label="{ value }">
             <div class="d-flex flex-column align-center">
               <span class="text-h5 font-weight-bold">{{ value }}</span>
-              <span class="text-h6 font-weight-bold">mins</span>
+              <span class="text-h6 font-weight-bold">{{ promptI18n.minutes }}</span>
             </div>
           </template>
         </v-slider>
       </v-form>
     </v-card-text>
     <template #actions>
-      <v-btn :block="isMobile" class="px-4" color="secondary" large @click.stop="action('next')">
-        {{ $t(`prompts.${type}.confirm`) }}
-      </v-btn>
+      <next :disabled="!isValid" @click="action('next')">
+        {{ promptI18n.confirm }}
+      </next>
     </template>
     <template #nav-actions>
-      <v-btn color="secondary" :disabled="!isValid" value="next" @click.stop="action('next')">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.next') }}
-        </span>
-        <v-icon class="pb-1">$next</v-icon>
-      </v-btn>
+      <next-mobile :disabled="!isValid" @click="action('next')">
+        {{ promptI18n.confirm }}
+      </next-mobile>
     </template>
   </card-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -64,16 +62,18 @@ export default defineComponent({
 
   emits: ['update'],
 
-  computed: {
-    isValid(): boolean {
-      return this.initialState !== null;
-    },
-  },
+  setup(props, { emit }) {
+    const { translatePrompt } = usePromptUtils(props);
 
-  methods: {
-    update(duration: string) {
-      this.$emit('update', { state: duration });
-    },
+    const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
+
+    const isValid = computed(() => props.initialState !== null);
+
+    const update = (duration: string) => {
+      emit('update', { state: duration });
+    };
+
+    return { promptI18n, isValid, update };
   },
 });
 </script>

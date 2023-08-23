@@ -3,7 +3,7 @@
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title>
         <v-icon left>{{ mode === 'drinksOnly' ? '$drink' : '$food' }}</v-icon>
-        {{ $t(`prompts.editMeal.${mode}`) }}
+        {{ promptI18n.title }}
       </v-toolbar-title>
     </v-toolbar>
     <v-container>
@@ -17,31 +17,28 @@
                 hide-details
                 :name="`${mode}-food`"
                 outlined
-                :placeholder="$t(`prompts.editMeal.${mode}`)"
+                :placeholder="promptI18n.title"
                 @input="updateFood(foods.length, $event)"
                 @keydown.prevent.stop.enter="moveToList"
               >
                 <template v-if="$vuetify.breakpoint.xs" #append>
-                  <v-icon
-                    class="flip px-2"
-                    :disabled="!newFood.description.length"
-                    @click="moveToList"
-                  >
-                    fas fa-turn-down fa-flip-horizontal
+                  <v-icon class="px-2" :disabled="!newFood.description.length" @click="moveToList">
+                    fas fa-turn-down fa-rotate-90
                   </v-icon>
                 </template>
               </v-text-field>
               <v-btn
                 v-if="$vuetify.breakpoint.smAndUp"
                 class="ml-2"
-                color="secondary"
+                color="primary"
                 :disabled="!newFood.description.length"
                 height="initial"
+                :title="promptI18n.add"
                 x-large
                 @click="moveToList"
               >
-                <v-icon class="flip" left>fas fa-turn-down fa-flip-horizontal</v-icon>
-                {{ $t('prompts.editMeal.add') }}
+                <v-icon left>fas fa-turn-down fa-rotate-90</v-icon>
+                {{ promptI18n.add }}
               </v-btn>
             </div>
           </v-form>
@@ -89,11 +86,13 @@
 import type { PropType } from 'vue';
 import type { VTextField } from 'vuetify/lib';
 import { useDebounceFn } from '@vueuse/core';
-import { defineComponent, nextTick, onMounted, ref } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 
+import type { Prompt } from '@intake24/common/prompts';
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
-import { useFoodUtils } from '@intake24/survey/composables';
+import { useI18n } from '@intake24/i18n';
+import { useFoodUtils, usePromptUtils } from '@intake24/survey/composables';
 import { getEntityId } from '@intake24/survey/util';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -107,13 +106,17 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    value: {
-      type: Array as PropType<FoodState[]>,
-      required: true,
-    },
     mode: {
       type: String as PropType<'foods' | 'foodsOnly' | 'drinksOnly'>,
       default: 'foods',
+    },
+    prompt: {
+      type: Object as PropType<Prompt>,
+      required: true,
+    },
+    value: {
+      type: Array as PropType<FoodState[]>,
+      required: true,
     },
   },
 
@@ -121,6 +124,13 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const { getFoodName } = useFoodUtils();
+    const { i18n } = useI18n();
+    const { type } = usePromptUtils(props);
+
+    const promptI18n = computed(() => ({
+      title: i18n.t(`prompts.${type.value}.${props.mode}`),
+      add: i18n.t(`prompts.${type.value}.add`),
+    }));
 
     const search = ref<InstanceType<typeof VTextField>>();
 
@@ -200,6 +210,7 @@ export default defineComponent({
     return {
       editIndex,
       foods,
+      promptI18n,
       newFood,
       moveToList,
       deleteFood,

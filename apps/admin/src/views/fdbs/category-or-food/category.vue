@@ -88,7 +88,7 @@
       </v-form>
       <v-card-actions class="pa-4">
         <v-spacer></v-spacer>
-        <v-btn color="primary" outlined @click="submit">
+        <v-btn color="secondary" outlined @click="submit">
           <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
       </v-card-actions>
@@ -141,7 +141,7 @@ export default defineComponent({
 
   setup(props) {
     const http = useHttp();
-    const i18n = useI18n();
+    const { i18n } = useI18n();
     const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);

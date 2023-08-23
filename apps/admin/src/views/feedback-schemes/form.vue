@@ -114,7 +114,7 @@
             <v-col cols="12" md="6">
               <v-card outlined>
                 <v-toolbar color="grey lighten-2" flat tile>
-                  <v-icon color="primary" left>fas fa-bars-staggered</v-icon>
+                  <v-icon color="secondary" left>fas fa-bars-staggered</v-icon>
                   <v-toolbar-title class="font-weight-medium">
                     {{ $t('feedback-schemes.sections.title') }}
                   </v-toolbar-title>
@@ -143,7 +143,7 @@
                         <v-list-item-action>
                           <v-checkbox
                             v-model="form.sections"
-                            color="primary"
+                            color="secondary"
                             :value="section.value"
                           ></v-checkbox>
                         </v-list-item-action>
@@ -219,7 +219,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const types = feedbackTypes.map((value) => ({
       value,

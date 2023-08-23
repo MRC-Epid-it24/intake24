@@ -6,11 +6,11 @@
           class="font-weight-medium"
           :color="color(item)"
           label
-          :text-color="item.time ? 'white' : 'secondary'"
+          :text-color="item.time ? 'white' : 'primary'"
         >
           {{ stringTime(item.time) }}
         </v-chip>
-        <span class="text-caption">{{ getLocaleContent(item.name) }}</span>
+        <span class="text-caption">{{ translate(item.name) }}</span>
       </div>
     </v-chip-group>
   </div>
@@ -22,7 +22,7 @@ import { defineComponent } from 'vue';
 
 import type { MealState, MealTime } from '@intake24/common/types';
 import { fromMealTime } from '@intake24/common/surveys';
-import { useLocale } from '@intake24/ui';
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'SurveyProgressBar',
@@ -35,7 +35,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { getLocaleContent } = useLocale();
+    const { translate } = useI18n();
 
     const stringTime = (time: MealTime | undefined): string => {
       if (time === undefined) return '?';
@@ -43,13 +43,13 @@ export default defineComponent({
     };
 
     const color = (item: MealState) => {
-      if (!item.time) return 'primary';
-      if (item.foods.length === 0) return 'secondary';
+      if (!item.time) return 'secondary';
+      if (item.foods.length === 0) return 'primary';
       //   const finishedRecall = item.foods.reduce();
       return 'success';
     };
 
-    return { color, stringTime, getLocaleContent };
+    return { color, stringTime, translate };
   },
 });
 </script>

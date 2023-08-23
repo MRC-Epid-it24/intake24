@@ -8,11 +8,11 @@
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
-              <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(1)">
+              <v-btn color="secondary" :disabled="maxDisabled" icon large @click="update(1)">
                 <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ wholeLabel }}</span>
-              <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-1)">
+              <v-btn color="secondary" :disabled="minDisabled" icon large @click="update(-1)">
                 <v-icon aria-hidden="false">$decrement</v-icon>
               </v-btn>
             </v-card>
@@ -22,11 +22,11 @@
           </div>
           <div v-if="whole" class="d-flex flex-column align-center">
             <v-card class="d-flex flex-column align-center pa-5">
-              <v-btn color="primary" :disabled="maxDisabled" icon large @click="update(0.25)">
+              <v-btn color="secondary" :disabled="maxDisabled" icon large @click="update(0.25)">
                 <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
               <span class="my-4 font-weight-medium text-h5">{{ fractionLabel }}</span>
-              <v-btn color="primary" :disabled="minDisabled" icon large @click="update(-0.25)">
+              <v-btn color="secondary" :disabled="minDisabled" icon large @click="update(-0.25)">
                 <v-icon aria-hidden="false">$decrement</v-icon>
               </v-btn>
             </v-card>
@@ -41,7 +41,7 @@
           </span>
         </div>
         <div class="pa-3">
-          <v-btn block color="secondary" @click="updateConfirm(true)">
+          <v-btn block color="primary" @click="updateConfirm(true)">
             {{ $t('prompts.quantity.confirm') }}
           </v-btn>
         </div>

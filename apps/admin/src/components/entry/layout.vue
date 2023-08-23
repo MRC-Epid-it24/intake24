@@ -8,7 +8,7 @@
         <v-btn
           v-if="editsResource"
           class="ml-3"
-          color="primary"
+          color="secondary"
           :title="$t(`common.action.save`)"
           @click="$emit('save')"
         >
@@ -28,7 +28,7 @@
       </v-toolbar>
     </v-card>
     <v-card :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
-      <v-tabs background-color="secondary" dark>
+      <v-tabs background-color="primary" dark>
         <v-tab
           v-for="tab in tabs"
           :key="tab"

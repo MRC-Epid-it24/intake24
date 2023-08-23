@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
-import colors from 'vuetify/lib/util/colors';
+
+import { colors } from '@intake24/common/theme';
 
 Vue.use(Vuetify);
 
@@ -51,10 +52,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: colors.blueGrey.darken4,
-        secondary: colors.orange.darken3,
-        accent: colors.deepOrange,
-        info: colors.blue.darken3,
+        ...colors,
       },
     },
   },

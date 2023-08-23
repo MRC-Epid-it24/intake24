@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <prompt-validation v-bind.sync="validation"></prompt-validation>
-  </div>
+  <v-tab-item key="options" value="options"></v-tab-item>
 </template>
 
 <script lang="ts">

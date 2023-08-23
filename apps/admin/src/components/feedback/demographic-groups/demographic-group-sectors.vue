@@ -1,6 +1,6 @@
 <template>
   <v-tabs vertical>
-    <v-btn class="my-4" color="primary" @click="add">
+    <v-btn class="my-4" color="secondary" @click="add">
       <v-icon left>$add</v-icon>
       {{ $t(`feedback-schemes.demographic-groups.sectors.add`) }}
     </v-btn>

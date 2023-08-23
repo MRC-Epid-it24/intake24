@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tab-item key="options">
+    <v-tab-item key="options" value="options">
       <v-row class="mb-3">
         <v-col cols="12" md="6">
           <v-switch

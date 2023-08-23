@@ -80,7 +80,7 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
-            color="secondary"
+            color="primary"
             outlined
             rounded
             :title="$t('nutrient-tables.mapping.fields.create')"
@@ -144,7 +144,7 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
-            color="secondary"
+            color="primary"
             outlined
             rounded
             :title="$t('nutrient-tables.mapping.nutrients.create')"

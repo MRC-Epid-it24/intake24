@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-shield-halved</v-icon>
+      <v-icon color="secondary" left>fas fa-shield-halved</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t(`${resource}.securables.title`) }}
       </v-toolbar-title>
@@ -28,7 +28,12 @@
         }}
       </template>
       <template #[`item.action`]="{ item }">
-        <v-btn color="primary" icon :title="$t('common.action.edit')" @click.stop="editUser(item)">
+        <v-btn
+          color="secondary"
+          icon
+          :title="$t('common.action.edit')"
+          @click.stop="editUser(item)"
+        >
           <v-icon dark>$edit</v-icon>
         </v-btn>
         <confirm-dialog

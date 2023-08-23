@@ -8,7 +8,7 @@
     transition="dialog-bottom-transition"
   >
     <v-card tile>
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="secondary" dark>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
           <v-icon>$cancel</v-icon>
         </v-btn>
@@ -22,20 +22,23 @@
           </v-btn>
         </v-toolbar-items>
         <template #extension>
-          <v-container>
-            <v-tabs v-model="tab" background-color="primary" dark>
-              <v-tab v-for="item in promptSettings[dialog.prompt.component].tabs" :key="item">
+          <v-container :fluid="$vuetify.breakpoint.mdAndDown">
+            <v-tabs v-model="tab" background-color="secondary" dark>
+              <v-tab
+                v-for="item in promptSettings[dialog.prompt.component].tabs"
+                :key="item"
+                :tab-value="item"
+              >
                 {{ item }}
               </v-tab>
             </v-tabs>
           </v-container>
         </template>
       </v-toolbar>
-
       <v-form ref="form" @submit.prevent="save">
-        <v-container class="prompt-container">
+        <v-container class="prompt-container" :fluid="$vuetify.breakpoint.mdAndDown">
           <v-tabs-items v-model="tab" class="pt-1 flex-grow-1">
-            <v-tab-item key="general">
+            <v-tab-item key="general" value="general">
               <v-row>
                 <v-col cols="12">
                   <v-card outlined>
@@ -55,8 +58,6 @@
                             :label="$t('survey-schemes.prompts.internal.id._')"
                             :messages="$t('survey-schemes.prompts.internal.id.hint')"
                             outlined
-                            :readonly="dialog.prompt.type !== 'custom'"
-                            :rules="promptIdRules"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" md="6">
@@ -94,7 +95,7 @@
                     </v-toolbar>
                     <v-item-group
                       v-model="dialog.prompt.component"
-                      active-class="secondary"
+                      active-class="primary"
                       @change="updatePromptProps"
                     >
                       <v-tabs-items v-model="promptTypeTab">
@@ -109,14 +110,22 @@
                 </v-col>
               </v-row>
             </v-tab-item>
-            <prompt-content :i18n.sync="dialog.prompt.i18n"></prompt-content>
+            <prompt-content
+              :component="dialog.prompt.component"
+              :i18n.sync="dialog.prompt.i18n"
+            ></prompt-content>
             <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
             <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
+            <prompt-validation
+              v-if="promptSettings[dialog.prompt.component].tabs.includes('validation')"
+              v-bind.sync="dialog.prompt.validation"
+            ></prompt-validation>
             <component
               :is="dialog.prompt.component"
               v-bind.sync="dialog.prompt"
               @validate="validate"
             ></component>
+            <prompt-json v-model="dialog.prompt"></prompt-json>
           </v-tabs-items>
           <v-card-actions>
             <v-btn class="font-weight-bold" color="error" text @click.stop="reset">
@@ -137,7 +146,6 @@
 import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
-import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompt, PromptType } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import {
@@ -153,7 +161,13 @@ import {
 } from '@intake24/common/prompts';
 import { copy, merge } from '@intake24/common/util';
 
-import { PromptActions, PromptConditions, PromptContent } from './partials';
+import {
+  PromptActions,
+  PromptConditions,
+  PromptContent,
+  PromptJson,
+  PromptValidation,
+} from './partials';
 import PromptTypeSelector from './prompt-type-selector.vue';
 
 export type EditPrompt = Prompt & {
@@ -173,7 +187,9 @@ export default defineComponent({
     PromptActions,
     PromptConditions,
     PromptContent,
+    PromptJson,
     PromptTypeSelector,
+    PromptValidation,
     ...customPrompts,
     ...standardPrompts,
     ...portionSizePrompts,
@@ -252,17 +268,6 @@ export default defineComponent({
         {} as Record<PromptType, Prompt[]>
       );
     },
-
-    promptIdRules(): RuleCallback[] {
-      return [
-        (value: string | null): boolean | string => {
-          const { origId } = this.dialog.prompt;
-          const match = this.promptIds.find((id) => id === value && id !== origId);
-
-          return !match || 'Prompt ID is already used.';
-        },
-      ];
-    },
   },
 
   mounted() {
@@ -335,7 +340,7 @@ export default defineComponent({
       this.dialog = {
         show: true,
         index,
-        prompt: { origId: prompt.id, ...merge(promptDefaults, prompt) },
+        prompt: { origId: prompt.id, ...merge<Prompt>(promptDefaults, prompt) },
       };
     },
 
@@ -345,10 +350,14 @@ export default defineComponent({
 
       const {
         index,
-        prompt: { origId, ...rest },
+        prompt: { origId, i18n, ...rest },
       } = this.dialog;
 
-      this.$emit('save', { prompt: rest, index });
+      for (const [key, value] of Object.entries(i18n)) {
+        if (!Object.keys(value).length) delete i18n[key];
+      }
+
+      this.$emit('save', { prompt: { i18n, ...rest }, index });
 
       this.reset();
     },

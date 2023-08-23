@@ -1,9 +1,4 @@
-import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { NutrientType } from '@intake24/common/types/http';
-import { useI18n } from '@intake24/i18n';
-
-export const getLocaleContent = (content: RequiredLocaleTranslation | LocaleTranslation): string =>
-  content[useI18n().locale] ?? content.en;
 
 export const getNutrientUnit = (group: string[], nutrientTypes: NutrientType[]): string => {
   const nt = nutrientTypes.filter((item) => group.includes(item.id));

@@ -21,6 +21,7 @@ export default () => {
 
   // Food data
   router.get('/:localeId/:code', wrapAsync(foodController.entry));
+  router.get('/:localeId/:code/categories', wrapAsync(foodController.categories));
   router.get('/:localeId/:code/sources', wrapAsync(foodController.entryWithSource));
   router.get('/:localeId/:code/brands', wrapAsync(foodController.brands));
   router.get('/:localeId/:code/associated-foods', wrapAsync(foodController.associatedFoods));

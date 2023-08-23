@@ -11,6 +11,7 @@ import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
 
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
+import { colors } from '../../packages/common/src/theme';
 import pkg from './package.json';
 
 // Set build info for application
@@ -20,8 +21,6 @@ process.env.VITE_APP_BUILD_REVISION = childProcess
   .toString()
   .trim();
 process.env.VITE_APP_BUILD_DATE = new Date().toISOString();
-
-const themeColor = '#EF6C00';
 
 export default defineConfig(({ mode }) => {
   const {
@@ -57,7 +56,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         sass: {
           additionalData: [
-            '@import "./src/scss/variables"',
+            '@import "./src/scss/vuetify"',
             '@import "vuetify/src/styles/settings/_variables"',
             '',
           ].join('\n'),
@@ -110,8 +109,8 @@ export default defineConfig(({ mode }) => {
         google: {
           families: [
             {
-              name: 'Open Sans',
-              styles: 'wght@300;400;600;700;900',
+              name: 'Rubik',
+              styles: 'wght@300;400;500;600;700',
               defer: false,
             },
           ],
@@ -121,7 +120,7 @@ export default defineConfig(({ mode }) => {
         inject: {
           data: {
             title: appName,
-            themeColor,
+            themeColor: colors.primary,
             captcha: resolveCaptchaScript(captchaProvider),
           },
         },
@@ -136,7 +135,7 @@ export default defineConfig(({ mode }) => {
           name: appName,
           short_name: appName,
           description: pkg.description,
-          theme_color: themeColor,
+          theme_color: colors.primary,
           icons: [
             {
               src: 'img/icons/pwa-192x192.png',

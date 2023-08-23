@@ -12,7 +12,7 @@
       <v-card :tile="$vuetify.breakpoint.smAndDown">
         <v-toolbar
           class="font-weight-medium text-h3 tell-me-more-title flex-grow-0"
-          color="primary lighten-1"
+          color="secondary lighten-1"
           dark
           flat
         >
@@ -42,7 +42,7 @@
         <v-btn
           block
           class="button-bottom font-weight-bold flex-grow-0 flex-shrink-0"
-          color="primary lighten-2"
+          color="secondary lighten-2"
           large
           :title="$t('common.action.ok')"
           @click.stop="close"

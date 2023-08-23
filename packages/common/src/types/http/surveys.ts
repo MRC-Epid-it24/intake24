@@ -6,6 +6,7 @@ import type {
 } from '@intake24/db';
 
 import type { SearchSortingAlgorithm, SurveyState } from '../../surveys';
+import type { JobParams } from '../jobs';
 
 export type GenerateUserResponse = {
   username: string;
@@ -60,8 +61,7 @@ export type SurveyUserInfoResponse = {
 
 export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 
-export type SurveyRequestHelpInput = {
-  name: string;
-  email: string;
-  phone: string;
-};
+export type SurveyRequestHelpInput = Pick<
+  JobParams['SurveyHelpRequestNotification'],
+  'name' | 'email' | 'phone' | 'message'
+>;

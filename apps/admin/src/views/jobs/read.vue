@@ -4,7 +4,7 @@
       <confirm-dialog
         v-if="can({ action: 'edit' })"
         :activator-class="['ml-2']"
-        color="secondary"
+        color="primary"
         icon-left="fas fa-play"
         :label="$t('jobs.repeat._').toString()"
         @confirm="repeat"

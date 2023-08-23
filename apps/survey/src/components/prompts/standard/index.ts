@@ -1,8 +1,8 @@
 export { default as AssociatedFoodsPrompt } from './AssociatedFoodsPrompt.vue';
-export { default as EditableFoodList } from './EditableFoodList.vue';
 export { default as EditMealPrompt } from './EditMealPrompt.vue';
 export { default as FinalPrompt } from './FinalPrompt.vue';
 export { default as FoodSearchPrompt } from './FoodSearchPrompt.vue';
+export * from './FoodSearchPrompt.vue';
 export { default as MealAddPrompt } from './MealAddPrompt.vue';
 export { default as MealDurationPrompt } from './MealDurationPrompt.vue';
 export { default as MealGapPrompt } from './MealGapPrompt.vue';

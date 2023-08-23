@@ -17,6 +17,7 @@ interface SearchQuery {
   rankingAlgorithm?: SearchSortingAlgorithm;
   matchScoreWeight?: string;
   recipe?: string;
+  category?: string;
 }
 
 interface RecipeFoodQuery {
@@ -30,7 +31,8 @@ const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
 const foodSearchController = ({
   cachedInheritableAttributesService,
-}: Pick<IoC, 'cachedInheritableAttributesService'>) => {
+  cachedParentCategoriesService,
+}: Pick<IoC, 'cachedInheritableAttributesService' | 'cachedParentCategoriesService'>) => {
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -56,6 +58,30 @@ const foodSearchController = ({
       foods: items.foods.filter((header) =>
         acceptForQuery(recipe, attrs[header.code]?.useInRecipes)
       ),
+      categories: items.categories,
+    };
+  }
+
+  async function filterByCategory(
+    categoryCode: string,
+    items: FoodSearchResponse
+  ): Promise<FoodSearchResponse> {
+    const foodCategories = await Promise.all(
+      items.foods.map((header) => cachedParentCategoriesService.getFoodAllCategories(header.code))
+    );
+    const categoryCategories = await Promise.all(
+      items.categories.map((header) =>
+        cachedParentCategoriesService.getCategoryAllCategories(header.code)
+      )
+    );
+
+    return {
+      foods: items.foods.filter((_, index) => {
+        return foodCategories[index].includes(categoryCode);
+      }),
+      categories: items.categories.filter((_, index) => {
+        return categoryCategories[index].includes(categoryCode);
+      }),
     };
   }
 
@@ -74,6 +100,21 @@ const foodSearchController = ({
       req.query.recipe === 'true',
       results
     );
+
+    // Not the best way to filter by category because some potential matches
+    // will be dropped due to the limit on the number of returned matches.
+    //
+    // The category filter should be applied before the limit, but that requires changes
+    // to the food index implementation, not sure if that is worth it.
+    if (req.query.category !== undefined) {
+      const filteredByCategory = await filterByCategory(
+        req.query.category,
+        withFilteredIngredients
+      );
+
+      res.json(filteredByCategory);
+      return;
+    }
 
     res.json(withFilteredIngredients);
   };

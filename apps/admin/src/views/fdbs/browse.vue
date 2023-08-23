@@ -5,7 +5,7 @@
       {{ item.code }}
     </template>
     <template #[`item.action`]="{ item }">
-      <v-btn color="primary" icon :to="{ name: 'fdbs-read', params: { id: item.id } }">
+      <v-btn color="secondary" icon :to="{ name: 'fdbs-read', params: { id: item.id } }">
         <v-icon>far fa-file</v-icon>
       </v-btn>
     </template>

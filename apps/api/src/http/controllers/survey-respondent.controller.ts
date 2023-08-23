@@ -80,20 +80,26 @@ const surveyRespondentController = ({
     // 1) Meals - override whole list
     if (surveySchemeOverrides.meals.length) meals = [...surveySchemeOverrides.meals];
 
-    // 2) Prompts - merge by Prompt ID
+    // 2) Prompts - merge by Prompt ID & Prompt Name
     if (surveySchemeOverrides.prompts.length) {
       const flattenScheme = flattenSchemeWithSection(surveyScheme.prompts);
       for (const prompt of surveySchemeOverrides.prompts) {
-        const match = flattenScheme.find((item) => item.id === prompt.id);
+        const match = flattenScheme.find(
+          (item) => item.id === prompt.id && item.name === prompt.name
+        );
         if (!match) continue;
 
         const { section } = match;
 
         if (isMealSection(section)) {
-          const index = prompts.meals[section].findIndex((item) => item.id === prompt.id);
+          const index = prompts.meals[section].findIndex(
+            (item) => item.id === prompt.id && item.name === prompt.name
+          );
           if (index !== -1) prompts.meals[section].splice(index, 1, merge<Prompt>(match, prompt));
         } else {
-          const index = prompts[section].findIndex((item) => item.id === prompt.id);
+          const index = prompts[section].findIndex(
+            (item) => item.id === prompt.id && item.name === prompt.name
+          );
           if (index !== -1) prompts[section].splice(index, 1, merge<Prompt>(match, prompt));
         }
       }
@@ -173,9 +179,9 @@ const surveyRespondentController = ({
   ): Promise<void> => {
     const { id: userId } = req.user as User;
     const { slug: surveySlug } = req.params;
-    const { name, email, phone } = req.body;
+    const { name, email, phone, message } = req.body;
 
-    await surveyService.requestHelp({ surveySlug, userId, name, email, phone });
+    await surveyService.requestHelp({ surveySlug, userId, name, email, phone, message });
 
     res.json();
   };

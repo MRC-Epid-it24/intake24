@@ -1,9 +1,9 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'survey-home', params: { surveyId } }"
@@ -14,7 +14,7 @@
       <v-btn
         v-if="showFeedback"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -24,12 +24,17 @@
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
+      <v-btn color="primary" text :to="{ name: 'survey-home', params: { surveyId } }">
         <span class="text-overline font-weight-medium">{{ $t('common.home') }}</span>
         <v-icon class="pb-1">$home</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+      <v-btn
+        v-if="showFeedback"
+        color="primary"
+        text
+        :to="{ name: 'feedback-home', params: { surveyId } }"
+      >
         <span class="text-overline font-weight-medium">
           {{ $t('recall.actions.nav.feedback') }}
         </span>

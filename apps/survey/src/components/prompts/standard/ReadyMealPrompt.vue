@@ -1,12 +1,12 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-card v-for="(food, idx) in foods" :key="food.id" class="mb-3" outlined>
         <v-card-text
           class="d-flex flex-column flex-sm-row justify-space-between ready-meal-prompt__item"
         >
           <div class="d-flex align-center">
-            <v-btn class="primary font-weight-medium mr-2" dark icon readonly size="x-small">
+            <v-btn class="secondary font-weight-medium mr-2" dark icon readonly size="x-small">
               {{ idx + 1 }}
             </v-btn>
             <span class="text-subtitle-1 font-weight-medium">{{ food.name }}</span>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
@@ -52,20 +52,20 @@ export default defineComponent({
 
   emits: ['update'],
 
-  data() {
-    return { ...copy(this.initialState) };
-  },
+  setup(props, { emit }) {
+    const foods = ref(copy(props.initialState.foods));
 
-  computed: {
-    isValid(): boolean {
-      return this.foods.every((food) => food.value !== undefined);
-    },
-  },
+    const isValid = computed(() => foods.value.every((food) => food.value !== undefined));
 
-  methods: {
-    update() {
-      this.$emit('update', { state: { foods: this.foods } });
-    },
+    const update = () => {
+      emit('update', { state: { foods: foods.value } });
+    };
+
+    return {
+      foods,
+      isValid,
+      update,
+    };
   },
 });
 </script>

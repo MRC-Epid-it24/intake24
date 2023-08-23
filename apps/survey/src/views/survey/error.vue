@@ -2,7 +2,7 @@
   <v-row align="center" class="pt-2" justify="center">
     <v-col cols="12" md="6">
       <v-card>
-        <v-sheet class="d-flex justify-center" color="deep-orange lighten-5" tile>
+        <v-sheet class="d-flex justify-center" color="ternary" tile>
           <v-card-title>
             <h2>{{ $t('common._') }}</h2>
           </v-card-title>
@@ -24,7 +24,7 @@
         >
           <div v-ripple class="d-flex flex-column flex-sm-row justify-center align-center py-6">
             <v-icon class="py-3 mr-sm-6" size="100">fa-sync-alt</v-icon>
-            <span class="py-3 text-h3 font-weight-bold text--secondary text-uppercase">
+            <span class="py-3 text-h3 font-weight-bold text--primary text-uppercase">
               {{ $t('common.action.reload') }}
             </span>
           </div>

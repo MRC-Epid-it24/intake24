@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-table-list</v-icon>
+      <v-icon color="secondary" left>fas fa-table-list</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.table') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('feedback-schemes.meals.fields.create')"
@@ -60,7 +60,7 @@
                 :title="$t('feedback-schemes.meals.fields.edit')"
                 @click.stop="edit(index, item)"
               >
-                <v-icon color="primary lighten-2">$edit</v-icon>
+                <v-icon color="secondary lighten-2">$edit</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
@@ -86,7 +86,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card tile>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
           <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="reset">
             <v-icon>$cancel</v-icon>
           </v-btn>
@@ -251,7 +251,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const {
       dialog,

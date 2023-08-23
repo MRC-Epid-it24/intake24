@@ -1,11 +1,11 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text class="pt-2">
       <v-card v-if="followUpUrl" class="d-flex flex-column align-center" flat tile>
         <v-progress-circular
           v-if="prompt.timer"
           class="mb-6"
-          color="primary"
+          color="secondary"
           :rotate="-90"
           :size="200"
           :value="timerValue"
@@ -19,22 +19,23 @@
           :block="isMobile"
           class="mb-6"
           :class="{ 'px-10': !isMobile }"
-          color="secondary"
+          color="primary"
+          :title="promptI18n.goTo"
           x-large
           @click="redirect"
         >
           <v-icon left>$redirect</v-icon>
-          {{ $t(`prompts.${type}.goTo`) }}
+          {{ promptI18n.goTo }}
         </v-btn>
       </v-card>
       <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
-        {{ $t(`prompts.${type}.missingUrl`) }}
+        {{ promptI18n.missingUrl }}
       </v-alert>
     </v-card-text>
     <template #actions>
       <v-btn
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'survey-home', params: { surveyId } }"
@@ -45,7 +46,7 @@
       <v-btn
         v-if="showFeedback"
         class="px-4"
-        color="secondary"
+        color="primary"
         large
         outlined
         :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -82,6 +83,8 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
+import { usePromptUtils } from '@intake24/survey/composables';
+
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
@@ -104,12 +107,18 @@ export default defineComponent({
   },
 
   setup(props) {
+    const { translatePrompt } = usePromptUtils(props);
+
     const timerInterval = ref<undefined | number>(undefined);
-    const timerValue = ref<number>(props.prompt.timer ? 100 : 0);
-    const timerTick = ref<number>(props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0);
+    const timerValue = ref(props.prompt.timer ? 100 : 0);
+    const timerTick = computed(() =>
+      props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0
+    );
     const timerSecs = computed(() =>
       props.prompt.timer ? Math.round((timerValue.value / 100) * props.prompt.timer) : 0
     );
+
+    const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
     const redirect = () => {
       if (!props.followUpUrl) return;
@@ -143,6 +152,7 @@ export default defineComponent({
     });
 
     return {
+      promptI18n,
       timerSecs,
       timerValue,
       clearTimer,

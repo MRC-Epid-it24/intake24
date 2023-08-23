@@ -21,19 +21,19 @@
             </v-list-item-content>
             <v-list-item-action v-if="job.downloadUrl">
               <v-btn icon large link :title="$t('common.action.download')" @click="download(job)">
-                <v-icon color="primary">$download</v-icon>
+                <v-icon color="secondary">$download</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
               <v-progress-circular
                 v-if="(job.progress || 0) !== 1"
-                color="orange darken-3"
+                color="info"
                 :rotate="-90"
                 :size="45"
                 :value="Math.ceil((job.progress || 0) * 100)"
                 :width="6"
               >
-                <span class="font-weight-bold text--secondary">
+                <span class="font-weight-bold text--primary">
                   {{ Math.ceil((job.progress || 0) * 100) }}
                 </span>
               </v-progress-circular>

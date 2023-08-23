@@ -1,7 +1,7 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <template #prompt-description>
-      <div class="px-4 pt-4" v-html="localeDescription"></div>
+      <div class="px-4 pt-4" v-html="promptI18n.description"></div>
     </template>
     <v-card-text class="pt-2">
       <v-row>
@@ -13,7 +13,7 @@
             class="meal-add-prompt__combobox"
             clearable
             :items="defaultMeals"
-            :label="$t(`${i18nPrefix}.label`)"
+            :label="promptI18n.label"
             outlined
             @change="update"
           >
@@ -23,47 +23,39 @@
     </v-card-text>
     <template #actions>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        color="secondary"
+        color="primary"
         :disabled="!hasMeals"
         large
         text
-        :title="$t(`prompts.${type}.no`)"
+        :title="promptI18n.no"
         @click.stop="action('cancel')"
       >
         <v-icon left>$cancel</v-icon>
-        {{ $t(`prompts.${type}.no`) }}
+        {{ promptI18n.no }}
       </v-btn>
       <v-btn
-        :block="isMobile"
         class="px-4"
-        color="secondary"
+        color="primary"
         :disabled="!isValid"
         large
-        :title="$t(`prompts.${type}.yes`)"
+        :title="promptI18n.yes"
         @click="action('next')"
       >
         <v-icon left>$add</v-icon>
-        {{ $t(`prompts.${type}.yes`) }}
+        {{ promptI18n.yes }}
       </v-btn>
     </template>
     <template #nav-actions>
-      <v-btn :disabled="!hasMeals" :title="$t(`prompts.${type}.no`)" value="cancel">
+      <v-btn color="primary" :disabled="!hasMeals" text :title="promptI18n.no">
         <span class="text-overline font-weight-medium" @click="action('cancel')">
-          {{ $t(`prompts.${type}.no`) }}
+          {{ promptI18n.no }}
         </span>
         <v-icon class="pb-1">$cancel</v-icon>
       </v-btn>
-      <v-btn
-        color="secondary"
-        :disabled="!isValid"
-        :title="$t(`prompts.${type}.yes`)"
-        value="next"
-        @click="action('next')"
-      >
+      <v-btn color="primary" :disabled="!isValid" :title="promptI18n.yes" @click="action('next')">
         <span class="text-overline font-weight-medium">
-          {{ $t(`prompts.${type}.yes`) }}
+          {{ promptI18n.yes }}
         </span>
         <v-icon class="pb-1">$next</v-icon>
       </v-btn>
@@ -73,8 +65,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { VCombobox, VSelect } from 'vuetify/lib';
+
+import { useI18n } from '@intake24/i18n';
+import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -98,33 +93,30 @@ export default defineComponent({
 
   emits: ['update'],
 
-  data() {
-    return {
-      currentValue: undefined as string | undefined,
+  setup(props, { emit }) {
+    const { i18n, translatePath } = useI18n();
+    const { params, type } = usePromptUtils(props);
+
+    const currentValue = ref<string | undefined>(undefined);
+
+    const i18nPrefix = computed(
+      () => `prompts.${type.value}${props.prompt.custom ? '.custom' : ''}`
+    );
+
+    const promptI18n = computed(() => ({
+      no: i18n.t(`prompts.${type.value}.no`),
+      yes: i18n.t(`prompts.${type.value}.yes`),
+      description: translatePath(`${i18nPrefix.value}.description`, params.value, true),
+      label: i18n.t(`${i18nPrefix.value}.label`),
+    }));
+
+    const isValid = computed(() => !!currentValue.value);
+
+    const update = () => {
+      emit('update', { state: currentValue.value });
     };
-  },
 
-  computed: {
-    i18nPrefix() {
-      return `prompts.${this.type}${this.prompt.custom ? '.custom' : ''}`;
-    },
-
-    localeDescription(): string | undefined {
-      return this.getLocaleContent(this.prompt.i18n.description, {
-        path: `${this.i18nPrefix}.description`,
-        sanitize: true,
-      });
-    },
-
-    isValid() {
-      return !!this.currentValue;
-    },
-  },
-
-  methods: {
-    update() {
-      this.$emit('update', { state: this.currentValue });
-    },
+    return { currentValue, promptI18n, isValid, update };
   },
 });
 </script>

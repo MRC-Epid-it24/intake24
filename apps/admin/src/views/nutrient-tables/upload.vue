@@ -37,7 +37,7 @@
                 <v-col cols="12" lg="6" md="8" sm="10">
                   <v-btn
                     block
-                    color="secondary"
+                    color="primary"
                     :disabled="form.errors.any() || jobInProgress || isAppLoading"
                     :title="$t('common.action.upload')"
                     type="submit"
@@ -79,7 +79,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const jobType: JobType[] = ['NutrientTableIMappingImport', 'NutrientTableDataImport'];
     const jobTypeList = jobType.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }));

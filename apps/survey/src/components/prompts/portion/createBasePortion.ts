@@ -1,14 +1,15 @@
 import type { PropType } from 'vue';
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, MealState, MissingFood, RecipeBuilder } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
-import { useLocale } from '@intake24/ui';
-import { promptType } from '@intake24/ui/util';
+import { promptType } from '@intake24/ui';
 
-import { Next } from '../actions';
+import { Next, NextMobile } from '../actions';
 import { BaseLayout, CardLayout } from '../layouts';
 
 export default <
@@ -18,7 +19,14 @@ export default <
   defineComponent({
     name: 'BasePortion',
 
-    components: { ExpansionPanelActions, Next, BaseLayout, CardLayout, ValidInvalidIcon },
+    components: {
+      ExpansionPanelActions,
+      Next,
+      NextMobile,
+      BaseLayout,
+      CardLayout,
+      ValidInvalidIcon,
+    },
 
     props: {
       food: {
@@ -40,17 +48,19 @@ export default <
         type: Object as PropType<Prompts[P]>,
         required: true,
       },
+      section: {
+        type: String as PropType<PromptSection>,
+        required: true,
+      },
     },
 
     emits: ['action'],
 
     setup(props) {
-      const { food } = toRefs(props);
+      const { translate } = useI18n();
+      const { foodName } = useFoodUtils(props);
 
-      const { getLocaleContent } = useLocale();
-      const { foodName } = useFoodUtils(food);
-
-      return { foodName, getLocaleContent };
+      return { foodName, translate };
     },
 
     data() {

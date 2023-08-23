@@ -84,10 +84,7 @@ const portionSizeService = () => {
   // Common scope to pull image map for guide image & image map queries
   const imageMapScope: Includeable[] = [
     { association: 'baseImage', required: true },
-    {
-      association: 'objects',
-      include: [{ association: 'overlayImage' }],
-    },
+    { association: 'objects' },
   ];
 
   /**

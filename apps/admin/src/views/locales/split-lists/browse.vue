@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <v-btn
         class="ml-3"
-        color="secondary"
+        color="primary"
         fab
         small
         :title="$t('locales.split-lists.add')"

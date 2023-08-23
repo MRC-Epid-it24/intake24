@@ -69,12 +69,21 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
     yes: 'ஆம், என்னிடம் சில இருந்தது',
+    yesAnother: 'Yes, I had another',
     no: 'இல்லை நான் செய்யவில்லை',
-    alreadyEntered: 'ஆம், ஏற்கனவே உள்ளிடப்பட்டுள்ளது',
+    moreFoodsQuestion: 'Did you have any other foods from this category?',
+    databaseLookupTitle: 'What was it?',
+    databaseLookupWithExisting: 'If not, what was it?',
+    existingFoodsTitle: 'Was it something you already entered?',
     select: {
       different: 'வேறு உணவைத் தேர்ந்தெடுக்கவும்',
-      item: 'உங்களிடம் இருந்த உணவைத் தேர்ந்தெடுக்கவும்',
+      remove: 'Remove',
     },
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>Please try browsing the food categories listed above to find your food.</p>
@@ -100,12 +109,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
   },
-  foodBrowser: {
-    browse: 'Browse all foods',
-    search: 'Search for a food',
-    none: 'No food results. Please try refining your search.',
-    back: `Back to '{category}'`,
-  },
   foodSearch: {
     name: 'உணவைத் தேடு',
     text: '',
@@ -114,6 +117,10 @@ const prompts: LocaleMessageObject = {
     empty: 'எங்கள் தரவுத்தளத்தில் "{searchTerm} உடன் பொருந்தக்கூடிய எதுவும் இல்லை".',
     reword: 'உங்கள் விளக்கத்தை மீண்டும் எழுத முயற்சிக்கவும்.',
     browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -146,7 +153,6 @@ const prompts: LocaleMessageObject = {
     },
   },
   mealAdd: {
-    _: 'சாப்பாடு சேர்க்கவும்',
     name: 'சாப்பாடு சேர்க்கவும்',
     text: '',
     description: 'பொருத்தமானதாக இருந்தால் கீழே உள்ள பட்டியலில் இருந்து ஒன்றைத் தேர்ந்தெடுக்கவும்.',
@@ -164,7 +170,8 @@ const prompts: LocaleMessageObject = {
   mealDuration: {
     name: 'நேரத்தை திருத்தவும்',
     text: '',
-    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
+    minutes: 'mins',
     confirm: 'Continue',
   },
   mealGap: {
@@ -190,8 +197,7 @@ const prompts: LocaleMessageObject = {
   readyMeal: {
     name: 'தயார் சாப்பாடு',
     text: '',
-    description: `<p>Was this a ready-made meal or food?</p>
-      <p>இவற்றில் ஏதேனும் ரெடிமேட் சாப்பாடு அல்லது உணவாக இருந்தால் பெட்டியை டிக் செய்யவும் (எ.கா. சமைக்க / சாப்பிட / முன் பேக் செய்யப்பட்ட).</p>`,
+    description: `<p>Was this a ready-made meal or food?</p>`,
   },
   redirect: {
     name: 'வழிமாற்று',

@@ -1,7 +1,7 @@
 <template>
   <v-tab-item :key="type">
     <v-container>
-      <v-alert v-if="prompts.length === 0" color="primary" text type="info">
+      <v-alert v-if="prompts.length === 0" color="secondary" text type="info">
         {{ $t(`survey-schemes.prompts.${type}.noPrompts`) }}
       </v-alert>
       <v-row v-else>

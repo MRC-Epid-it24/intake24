@@ -9,7 +9,7 @@
       <preview :feedback-scheme="currentFeedbackScheme"></preview>
     </template>
     <v-toolbar color="grey lighten-5" flat tile>
-      <v-icon color="primary" left>fas fa-sort-amount-down</v-icon>
+      <v-icon color="secondary" left>fas fa-sort-amount-down</v-icon>
       <v-toolbar-title class="font-weight-medium">
         {{ $t('feedback-schemes.meals.title') }}
       </v-toolbar-title>
@@ -25,13 +25,13 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor v-model="form.meals"></json-editor>
+        <json-editor-dialog v-model="form.meals"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
 
     <v-form @keydown.native="clearError" @submit.prevent="submit">
       <v-toolbar color="grey lighten-5" flat tile>
-        <v-icon color="primary" left>fas fa-chart-pie</v-icon>
+        <v-icon color="secondary" left>fas fa-chart-pie</v-icon>
         <v-toolbar-title class="font-weight-medium">
           {{ $t('feedback-schemes.meals.chart') }}
         </v-toolbar-title>
@@ -40,7 +40,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="primary" left>fa-palette</v-icon>
+              <v-icon color="secondary" left>fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>
@@ -91,12 +91,13 @@ import type { RuleCallback } from '@intake24/admin/types';
 import type { FeedbackMeals } from '@intake24/common/feedback';
 import type { FeedbackSchemeEntry, FeedbackSchemeRefs } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
-import { JsonEditor } from '@intake24/admin/components/editors';
+import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview, TableFieldList } from '@intake24/admin/components/feedback';
 import { ColorList, NutrientList } from '@intake24/admin/components/lists';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultMeals } from '@intake24/common/feedback';
+import { colors } from '@intake24/common/theme';
 import { useI18n } from '@intake24/i18n';
 
 import type { FeedbackSchemeForm } from '../form.vue';
@@ -108,7 +109,7 @@ export default defineComponent({
 
   components: {
     ColorList,
-    JsonEditor,
+    JsonEditorDialog,
     NutrientList,
     OptionsMenu,
     Preview,
@@ -122,7 +123,7 @@ export default defineComponent({
     const menu = ref(false);
     const colorMax = ref(6);
 
-    const i18n = useI18n();
+    const { i18n } = useI18n();
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<
       FeedbackSchemeEntry,
@@ -154,7 +155,7 @@ export default defineComponent({
       } else if (colorMax.value > form.meals.chart.colors.length) {
         const newColors = Array.from<string>({
           length: colorMax.value - form.meals.chart.colors.length,
-        }).fill('#EF6C00');
+        }).fill(colors.primary);
 
         form.meals.chart.colors = [...form.meals.chart.colors, ...newColors];
       }

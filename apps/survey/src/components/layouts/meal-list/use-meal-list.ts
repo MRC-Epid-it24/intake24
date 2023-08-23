@@ -1,0 +1,44 @@
+import type { SetupContext } from 'vue';
+import { computed } from 'vue';
+
+import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
+import type { MealState } from '@intake24/common/types';
+import { useSurvey } from '@intake24/survey/stores';
+import { getFoodIndexRequired } from '@intake24/survey/util';
+
+export type UseMealListProps = {
+  meals: MealState[];
+};
+
+export const useMealList = (props: UseMealListProps, { emit }: SetupContext) => {
+  const { selection } = useSurvey();
+
+  const selectedMealId = computed(() => {
+    if (selection.element?.type !== 'meal') return undefined;
+    return selection.element.mealId;
+  });
+
+  const selectedFoodId = computed(() => {
+    if (selection.element?.type !== 'food') return undefined;
+    return selection.element.foodId;
+  });
+
+  const isSelectedFoodInMeal = (mealId: string) => {
+    if (selection.element?.type !== 'food') return false;
+
+    const foodIndex = getFoodIndexRequired(props.meals, selection.element.foodId);
+
+    return props.meals[foodIndex.mealIndex].id === mealId;
+  };
+
+  const action = (type: FoodActionType | MealActionType, id?: string) => {
+    emit('action', type, id);
+  };
+
+  return {
+    selectedMealId,
+    selectedFoodId,
+    isSelectedFoodInMeal,
+    action,
+  };
+};

@@ -1,6 +1,6 @@
 import type { PhraseMatchResult } from '@intake24/api/food-index/phrase-index';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FoodHeader } from '@intake24/common/types/http';
+import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
 import type { Logger } from '@intake24/common-backend';
 import { getFixedRanking } from '@intake24/api/food-index/ranking/fixed-ranking';
 import { getGlobalPopularityRanking } from '@intake24/api/food-index/ranking/global-popularity';
@@ -15,7 +15,7 @@ export type RankingData = {
 function noAlgorithmRanking(results: PhraseMatchResult<string>[]): FoodHeader[] {
   return results
     .sort((a, b) => a.quality - b.quality)
-    .map((result) => ({ code: result.key, description: result.phrase }));
+    .map((result) => ({ code: result.key, name: result.phrase }));
 }
 
 function mapValues<T1, T2>(obj: { [s: string]: T1 }, fn: (value: T1) => T2): { [s: string]: T2 } {
@@ -85,10 +85,7 @@ function applyRankingData(
         rankingScore * (1 - matchScoreWeight) + result.quality * matchScoreWeight;
 
       return {
-        header: {
-          code: result.key,
-          description: result.phrase,
-        },
+        header: { code: result.key, name: result.phrase },
         rankingScore: combinedScore,
       };
     })
@@ -116,7 +113,7 @@ async function getRankingData(
   }
 }
 
-export async function rankSearchResults(
+export async function rankFoodResults(
   results: PhraseMatchResult<string>[],
   localeId: string,
   algorithm: SearchSortingAlgorithm,
@@ -134,4 +131,10 @@ export async function rankSearchResults(
   } else {
     return recipeFoodsHeaders.concat(noAlgorithmRanking(results));
   }
+}
+
+export function rankCategoryResults(results: PhraseMatchResult<string>[]): CategoryHeader[] {
+  return results
+    .sort((a, b) => a.quality - b.quality)
+    .map((result) => ({ code: result.key, name: result.phrase }));
 }

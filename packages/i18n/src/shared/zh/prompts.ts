@@ -69,12 +69,21 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
     yes: '是的，我有',
+    yesAnother: 'Yes, I had another',
     no: '不是的，我没有吃',
-    alreadyEntered: '是的，已输入',
+    moreFoodsQuestion: 'Did you have any other foods from this category?',
+    databaseLookupTitle: 'What was it?',
+    databaseLookupWithExisting: 'If not, what was it?',
+    existingFoodsTitle: 'Was it something you already entered?',
     select: {
       different: '选择其他食物',
-      item: '选择您的食物',
+      remove: 'Remove',
     },
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>Please try browsing the food categories listed above to find your food.</p>
@@ -99,12 +108,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: '',
   },
-  foodBrowser: {
-    browse: 'Browse all foods',
-    search: 'Search for a food',
-    none: 'No food results. Please try refining your search.',
-    back: `Back to '{category}'`,
-  },
   foodSearch: {
     name: '搜索食物',
     text: '',
@@ -113,6 +116,10 @@ const prompts: LocaleMessageObject = {
     empty: '我们的数据库中没有与“{searchTerm}”匹配的内容。',
     reword: '请尝试重新描述。',
     browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -145,7 +152,6 @@ const prompts: LocaleMessageObject = {
     },
   },
   mealAdd: {
-    _: '添加餐食',
     name: '添加餐食',
     text: '',
     description: '如果合适，请从下面的列表中选择一个。',
@@ -162,7 +168,8 @@ const prompts: LocaleMessageObject = {
   mealDuration: {
     name: '编辑时间',
     text: '',
-    description: '<p>How long did it take you to eat <strong>{meal}</strong>?</p>',
+    description: '<p>How long did it take you to eat <strong>{mealName}</strong>?</p>',
+    minutes: 'mins',
     confirm: 'Continue',
   },
   mealGap: {
@@ -188,8 +195,7 @@ const prompts: LocaleMessageObject = {
   readyMeal: {
     name: '现成食物',
     text: '',
-    description: `<p>Was this a ready-made meal or food?</p>
-      <p>Tick the box if any of these were a ready-made meal or food (e.g. ready to cook / eat / pre-packed).</p>`,
+    description: `<p>Was this a ready-made meal or food?</p>`,
   },
   redirect: {
     name: '重定向',

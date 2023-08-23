@@ -1,9 +1,9 @@
 // import type { Icons } from 'vuetify';
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
-import colors from 'vuetify/lib/util/colors';
 
 import type { Dictionary } from '@intake24/common/types';
+import { colors } from '@intake24/common/theme';
 
 import resources from '../router/resources';
 
@@ -52,10 +52,7 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: colors.blueGrey.darken4,
-        secondary: colors.orange.darken3,
-        accent: colors.deepOrange,
-        info: colors.blue.darken3,
+        ...colors,
       },
     },
   },

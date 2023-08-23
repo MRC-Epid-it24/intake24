@@ -43,7 +43,7 @@
           <slot name="label"></slot>
           <v-chip
             v-if="label"
-            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold primary--text border-primary-1"
+            class="ma-1 ma-md-2 pa-3 pa-md-4 text-h6 font-weight-bold secondary--text border-secondary-1"
           >
             {{ label }}
           </v-chip>
@@ -67,7 +67,7 @@
       </div>
     </v-col>
     <v-col v-if="isMobile" cols="12" sm="auto">
-      <v-btn :block="isMobile" color="secondary" :disabled="isDisabled" @click="confirm">
+      <v-btn :block="isMobile" color="primary" :disabled="isDisabled" @click="confirm">
         {{ $t('common.action.continue') }}
       </v-btn>
     </v-col>
@@ -191,7 +191,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import 'vuetify/src/styles/styles.sass';
+@import 'src/scss/variables';
 
 .guide-drawer {
   position: relative;
@@ -224,7 +224,7 @@ export default defineComponent({
 
       &.active {
         stroke-width: 8;
-        stroke: map-get($blue-grey, 'darken-4');
+        stroke: $secondary;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);
@@ -232,7 +232,7 @@ export default defineComponent({
 
       &:hover {
         stroke-width: 8;
-        stroke: map-get($orange, 'darken-3');
+        stroke: $info;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);

@@ -97,7 +97,7 @@
                   <v-btn
                     block
                     class="px-10"
-                    color="secondary"
+                    color="primary"
                     :disabled="errors.any()"
                     :title="$t('common.action.continue')"
                     type="submit"
