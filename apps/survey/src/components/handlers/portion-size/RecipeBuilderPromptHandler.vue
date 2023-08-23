@@ -7,6 +7,7 @@
       meal,
       initialState: state,
       prompt,
+      section,
     }"
     @action="action"
     @update="update"
@@ -15,9 +16,10 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -33,11 +35,15 @@ export default defineComponent({
       type: Object as PropType<Prompts['recipe-builder-prompt']>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
   },
 
   emits: ['action'],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const survey = useSurvey();
     const { recipeBuilder } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
@@ -52,7 +58,11 @@ export default defineComponent({
     });
 
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const { state, update, clearStoredState } = usePromptHandlerStore(props, getInitialState);
+    const { state, action, update, clearStoredState } = usePromptHandlerStore(
+      props,
+      ctx,
+      getInitialState
+    );
 
     const commitAnswer = () => {
       //const { steps } = state.value;
@@ -66,11 +76,12 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const action = (type: string, id?: string) => {
-      if (type === 'next') commitAnswer();
+    const searchParameters = computed(() => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        survey.parameters ?? {};
 
-      emit('action', type, id);
-    };
+      return { matchScoreWeight, rankingAlgorithm };
+    });
 
     return { recipeBuilder, recipeFood, meal, state, update, action };
   },

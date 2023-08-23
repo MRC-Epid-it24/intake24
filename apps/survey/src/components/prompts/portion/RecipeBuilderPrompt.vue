@@ -4,7 +4,7 @@
       <v-expansion-panel v-for="(step, index) in recipe.steps" :key="index">
         <v-expansion-panel-header
           ><div>
-            <b>{{ step.order }}:</b> {{ getLocaleContent(step.name) }}
+            <b>{{ step.order }}:</b> {{ translate(step.name) }}
           </div>
           <template #actions>
             <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
@@ -12,7 +12,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container class="pl-0">
-            <p>{{ getLocaleContent(step.description) }}</p>
+            <p>{{ translate(step.description) }}</p>
           </v-container>
           <v-expand-transition>
             <v-card flat>
@@ -20,6 +20,7 @@
                 v-bind="{
                   localeId: step.localeId,
                   rootCategory: step.categoryCode,
+                  prompt,
                   type,
                 }"
                 @food-missing="foodMissing(index)"
@@ -40,8 +41,8 @@ import type { PromptStates, RecipeBuilderStepState } from '@intake24/common/prom
 import type { RecipeBuilder, RequiredLocaleTranslation } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
-import { useLocale } from '@intake24/ui';
 
 import createBasePortion from './createBasePortion';
 
@@ -50,7 +51,7 @@ import createBasePortion from './createBasePortion';
 //   (step.confirmed === 'yes' && step.selectedFood !== undefined);
 const isStepValid = (step): boolean => false;
 
-const { getLocaleContent } = useLocale();
+const { translate } = useI18n();
 
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
@@ -75,6 +76,7 @@ export default defineComponent({
         'template',
         'link',
       ] as (keyof RecipeBuilder)[],
+      translate,
     };
   },
 

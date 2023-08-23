@@ -20,6 +20,26 @@
           @focus="openInDialog"
         ></v-text-field>
       </div>
+      <v-card v-if="recipeBuilderToggle" flat>
+        <v-card-text>
+          <v-btn
+            :block="isMobile"
+            :class="{ 'ml-2': !isMobile }"
+            color="primary"
+            :disabled="!recipeBuilderToggle"
+            large
+            outlined
+            :v-model="recipeBuilderFood?.name"
+            @click.stop="recipeBuilder"
+          >
+            {{
+              $t(`prompts.${type}.recipeBuilder.label`, {
+                searchTerm: recipeBuilderFood?.name,
+              })
+            }}
+          </v-btn>
+        </v-card-text>
+      </v-card>
       <v-tabs-items v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab">
         <v-tab-item key="browse">
           <v-card v-if="requestFailed" flat>
@@ -29,26 +49,6 @@
             <v-card-actions>
               <v-btn large @click="browseCategory(retryCode, false)">Try again</v-btn>
             </v-card-actions>
-          </v-card>
-          <v-card v-if="recipeBuilderToggle" flat>
-            <v-card-text>
-              <v-btn
-                :block="isMobile"
-                :class="{ 'ml-2': !isMobile }"
-                color="secondary"
-                :disabled="!recipeBuilderToggle"
-                large
-                outlined
-                :v-model="recipeBuilderFood?.name"
-                @click.stop="recipeBuilder"
-              >
-                {{
-                  $t(`prompts.${type}.recipeBuilder.label`, {
-                    searchTerm: recipeBuilderFood?.name,
-                  })
-                }}
-              </v-btn>
-            </v-card-text>
           </v-card>
           <v-btn v-if="navigationHistory.length > 0" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
@@ -311,12 +311,12 @@ export default defineComponent({
       }
     };
 
-    const recipeBuilderDetected = async (recipeFood: FoodHeader) => {
+    const recipeBuilderDetected = async (food: FoodHeader) => {
       requestInProgress.value = true;
       try {
-        const recipefoodData = await foodsService.getRecipeFood(props.localeId, recipeFood.code);
+        const recipefoodData = await foodsService.getRecipeFood(props.localeId, food.code);
         console.log(`Got some Builder Food ${JSON.stringify(recipefoodData)}`);
-        recipeFood = recipefoodData;
+        recipeFood.value = recipefoodData;
         recipeBuilderToggle.value = true;
       } catch (e) {
         requestFailed.value = true;
@@ -340,6 +340,7 @@ export default defineComponent({
           category: props.rootCategory,
         });
         if (searchResults.value.foods[0].code.charAt(0) === '$') {
+          console.log('Recipe Builder Food Detected');
           recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
           recipeBuilderDetected(recipeBuilderFood.value);
         }
