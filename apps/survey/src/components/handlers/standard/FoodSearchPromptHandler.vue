@@ -150,7 +150,7 @@ export default defineComponent({
 
       this.replaceFood({ foodId: id, food: newState });
 
-      this.$emit('action', 'next');
+      this.action('next');
     },
 
     commitAnswer() {

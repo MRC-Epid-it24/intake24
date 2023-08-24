@@ -368,7 +368,8 @@ export default defineComponent({
 
     const recipeBuilder = () => {
       closeInDialog();
-      emit('recipe-builder', recipeFood);
+      console.log('Recipe builder:', recipeFood.value);
+      ctx.emit('recipe-builder', recipeFood.value);
     };
 
     const navigateBack = () => {

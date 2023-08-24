@@ -21,7 +21,6 @@
                   localeId: step.localeId,
                   rootCategory: step.categoryCode,
                   prompt,
-                  type,
                 }"
                 @food-missing="foodMissing(index)"
                 @food-selected="(food) => foodSelected(food, index)"
@@ -49,7 +48,7 @@ import createBasePortion from './createBasePortion';
 // const isPromptValid = (step: RecipeBuilderStepState): boolean =>
 //   (step.confirmed && ['no'].includes(step.confirmed)) ||
 //   (step.confirmed === 'yes' && step.selectedFood !== undefined);
-const isStepValid = (step): boolean => false;
+const isStepValid = (step: any): boolean => false;
 
 const { translate } = useI18n();
 
