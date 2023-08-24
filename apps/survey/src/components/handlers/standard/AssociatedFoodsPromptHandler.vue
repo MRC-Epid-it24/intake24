@@ -27,7 +27,6 @@ import type {
 import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
-import type { MealFoodIndex } from '@intake24/survey/stores';
 import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
@@ -113,7 +112,21 @@ export default defineComponent({
       });
 
       if (newMainFoods.length === 1) {
-        const newMainFood = newMainFoods[0];
+        // Disable associated food prompts on the new main food, which is a workaround for
+        // the following issues:
+        //
+        // V4-903: Associated food prompts logic assumes that the food has no linked foods and will
+        //    overwrite any existing linked foods.
+        //
+        // V4-904: Associated food prompt on the new main food will not recognise the food that triggered
+        //    the addition in the first place, for example if jam triggered the AFP that added toast,
+        //    and toast becomes new main food, the AFP on toast will not recognise jam and will
+        //    suggest adding another instance.
+
+        const newMainFood = {
+          ...newMainFoods[0],
+          flags: [...newMainFoods[0].flags, 'associated-foods-complete'],
+        };
 
         const foodsUpdate = [...meal.value.foods];
 
@@ -258,12 +271,20 @@ export default defineComponent({
       processLinkAsMain(foodId);
 
       clearStoredState();
+
+      ctx.emit('action', 'next');
     }
 
     const action = async (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') await commitAnswer();
 
-      ctx.emit('action', type, ...args);
+      // The 'next' action is forwarded up the hierarchy by the commitAnswer function instead of here.
+      //
+      // Due to the async nature of the commitAnswer function, it is not guaranteed that the component
+      // hierarchy will remain the same when commitAnswer completes. For instance, the handler component
+      // could be unmounted because of a re-render triggered by a change made in the commitAnswer function
+      // and since in that case the handler component is no longer the child of the RecallDesktop/RecallMobile
+      // component the 'next' event could be lost and the next prompt fail to be triggered.
     };
 
     const searchParameters = computed(() => {
