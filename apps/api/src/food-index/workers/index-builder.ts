@@ -4,28 +4,17 @@ import { parentPort as parentPortNullable, workerData } from 'node:worker_thread
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
-import type { GlobalCategoryData } from '@intake24/api/food-index/workers/food-data';
-import type { CategoryHeader, FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
+import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
-import {
-  fetchGlobalCategoryData,
-  fetchLocalCategories,
-  fetchLocalFoods,
-} from '@intake24/api/food-index/workers/food-data';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
-import {
-  CategoryLocal,
-  databaseLogQuery,
-  FoodLocalList,
-  FoodsLocale,
-  models,
-  SequelizeTS,
-  SynonymSet,
-} from '@intake24/db';
+import { databaseLogQuery, FoodsLocale, models, SequelizeTS, SynonymSet } from '@intake24/db';
+
+import type { GlobalCategoryData } from './food-data';
+import { fetchGlobalCategoryData, fetchLocalCategories, fetchLocalFoods } from './food-data';
 
 if (parentPortNullable === null) throw new Error('This file can only be run as a worker thread');
 
