@@ -8,5 +8,7 @@ export interface SearchQuery {
   limit?: string;
   rankingAlgorithm: SearchSortingAlgorithm;
   matchScoreWeight: number;
+  includeHidden: boolean;
+  limitToCategory?: string;
   exit?: boolean;
 }

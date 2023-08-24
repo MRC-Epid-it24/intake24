@@ -46,7 +46,9 @@ export default {
     description: string,
     localeId: string,
     rankingAlgorithm: string,
-    matchScoreWeight: number
+    matchScoreWeight: number,
+    includeHidden: boolean,
+    limitToCategory?: string
   ): Promise<FoodSearchResponse> {
     if (indexReady) {
       queryIdCounter += 1;
@@ -74,6 +76,8 @@ export default {
           localeId,
           rankingAlgorithm,
           matchScoreWeight: matchScoreWeight / 100.0,
+          includeHidden,
+          limitToCategory,
         });
       });
     }

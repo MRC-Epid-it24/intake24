@@ -4,17 +4,22 @@ import { parentPort as parentPortNullable, workerData } from 'node:worker_thread
 
 import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
-import type { FoodSearchResponse } from '@intake24/common/types/http';
+import type { GlobalCategoryData } from '@intake24/api/food-index/workers/food-data';
+import type { CategoryHeader, FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
+import {
+  fetchGlobalCategoryData,
+  fetchLocalCategories,
+  fetchLocalFoods,
+} from '@intake24/api/food-index/workers/food-data';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
 import {
   CategoryLocal,
   databaseLogQuery,
-  FoodLocal,
   FoodLocalList,
   FoodsLocale,
   models,
@@ -47,6 +52,7 @@ const systemDb = new SequelizeTS({
 });
 
 interface LocalFoodIndex {
+  foodParentCategories: Map<string, Set<string>>;
   foodIndex: PhraseIndex<string>;
   categoryIndex: PhraseIndex<string>;
 }
@@ -56,6 +62,8 @@ interface FoodIndex {
 }
 
 const foodIndex: FoodIndex = {};
+
+let globalCategoryData: GlobalCategoryData;
 
 const logger = servicesLogger.child({ service: 'Food index' });
 
@@ -80,32 +88,9 @@ async function getLanguageBackendId(localeId: string): Promise<string> {
 }
 
 async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
-  const foodList = await FoodLocalList.findAll({ attributes: ['foodCode'], where: { localeId } });
-
-  const foodCodes = foodList.map((row) => row.foodCode);
-
-  // FIXME: requests should be limited to a constant amount of rows (paginated)
-
   const [localFoods, localCategories, synonymSets, languageBackendId] = await Promise.all([
-    FoodLocal.findAll({
-      where: { foodCode: foodCodes, localeId },
-      include: {
-        required: true,
-        association: 'main',
-        attributes: ['code'],
-        include: [{ association: 'parentCategories', where: { isHidden: false } }],
-      },
-    }),
-    CategoryLocal.findAll({
-      where: { localeId },
-      include: {
-        required: true,
-        association: 'main',
-        attributes: ['code'],
-        where: { isHidden: false },
-        include: [{ association: 'parentCategories', where: { isHidden: false } }],
-      },
-    }),
+    fetchLocalFoods(localeId),
+    fetchLocalCategories(localeId),
     getSynonymSets(localeId),
     getLanguageBackendId(localeId),
   ]);
@@ -122,7 +107,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   for (const food of localFoods) {
     if (!food.name) continue;
 
-    foodDescriptions.push({ phrase: food.name, key: food.foodCode });
+    foodDescriptions.push({ phrase: food.name, key: food.code });
   }
 
   const categoryDescriptions = new Array<PhraseWithKey<string>>();
@@ -130,7 +115,7 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
   for (const category of localCategories) {
     if (!category.name) continue;
 
-    categoryDescriptions.push({ phrase: category.name, key: category.categoryCode });
+    categoryDescriptions.push({ phrase: category.name, key: category.code });
   }
 
   const foodIndex = new PhraseIndex<string>(
@@ -145,10 +130,89 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     synonymSets
   );
 
+  const foodParentCategories = new Map(
+    localFoods.map((food) => [food.code, food.parentCategories])
+  );
+
   return {
+    foodParentCategories,
     foodIndex,
     categoryIndex,
   };
+}
+
+function addTransitiveParentCategories(categories: Set<string>): Set<string> {
+  const parentCategories = new Set<string>();
+
+  let currentSet = categories;
+
+  while (currentSet.size > 0) {
+    for (const code of currentSet) {
+      parentCategories.add(code);
+    }
+
+    const nextSet = new Set<string>();
+
+    for (const code of currentSet) {
+      const parentCodes = globalCategoryData.get(code)?.parentCategories ?? [];
+      for (const parentCode of parentCodes) {
+        nextSet.add(parentCode);
+      }
+    }
+
+    currentSet = nextSet;
+  }
+
+  return parentCategories;
+}
+
+function foodAllCategories(index: LocalFoodIndex, foodCode: string): Set<string> {
+  const parentCategories = index.foodParentCategories.get(foodCode);
+
+  if (parentCategories === undefined) {
+    logger.error(`No parent category data for ${foodCode}!`);
+    return new Set();
+  }
+
+  return addTransitiveParentCategories(parentCategories);
+}
+
+function isFoodHidden(index: LocalFoodIndex, foodCode: string): boolean {
+  const parentCategories = index.foodParentCategories.get(foodCode);
+
+  if (parentCategories === undefined) {
+    logger.error(`No parent category data for ${foodCode}!`);
+    return false;
+  }
+
+  for (const categoryCode of parentCategories) {
+    if (!isCategoryHidden(categoryCode)) return false;
+  }
+
+  return true;
+}
+
+function isCategoryHidden(categoryCode: string): boolean {
+  const categoryData = globalCategoryData.get(categoryCode);
+  if (categoryData === undefined) {
+    logger.error(`No global category data for ${categoryCode}!`);
+    return false;
+  }
+  return categoryData.isHidden;
+}
+
+function isFoodInCategory(index: LocalFoodIndex, foodCode: string, categoryCode: string): boolean {
+  return foodAllCategories(index, foodCode).has(categoryCode);
+}
+
+function isSubcategory(categoryCode: string, ofCategoryCode: string): boolean {
+  const categoryData = globalCategoryData.get(categoryCode);
+  if (categoryData === undefined) {
+    logger.error(`No global category data for ${categoryCode}!`);
+    return false;
+  }
+
+  return addTransitiveParentCategories(categoryData.parentCategories).has(ofCategoryCode);
 }
 
 async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
@@ -169,15 +233,29 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 
   const categoryResults = localeIndex.categoryIndex.findMatches(categoryInterpretation, 100, 100);
 
+  const filteredFoods = foodResults.filter((matchResult) => {
+    const acceptHidden = query.includeHidden || !isFoodHidden(localeIndex, matchResult.key);
+    const acceptCategory =
+      query.limitToCategory === undefined ||
+      isFoodInCategory(localeIndex, matchResult.key, query.limitToCategory);
+
+    return acceptHidden && acceptCategory;
+  });
+
   const foods = await rankFoodResults(
-    foodResults,
+    filteredFoods,
     query.localeId,
     query.rankingAlgorithm,
     query.matchScoreWeight,
     logger
   );
 
-  const categories = rankCategoryResults(categoryResults);
+  const filteredCategories = categoryResults.filter(
+    (matchResult) =>
+      query.limitToCategory === undefined || isSubcategory(matchResult.key, query.limitToCategory)
+  );
+
+  const categories = rankCategoryResults(filteredCategories);
 
   return {
     foods,
@@ -196,6 +274,10 @@ async function buildIndex() {
   } else {
     enabledLocales = config.enabledLocales;
   }
+
+  logger.debug('Fetching global category data');
+
+  globalCategoryData = await fetchGlobalCategoryData();
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 

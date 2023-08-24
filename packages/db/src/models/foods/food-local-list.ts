@@ -5,7 +5,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, HasOne, Table } from 'sequelize-typescript';
+
+import { FoodLocal } from '@intake24/db';
 
 import BaseModel from '../model';
 import { FoodsLocale } from '.';
@@ -37,6 +39,9 @@ export default class FoodLocalList extends BaseModel<
 
   @BelongsTo(() => FoodsLocale, 'localeId')
   declare locale?: NonAttribute<FoodsLocale>;
+
+  @HasOne(() => FoodLocal, 'foodCode')
+  declare foodLocal?: NonAttribute<FoodLocal>;
 }
 
 export type FoodLocalListAttributes = Attributes<FoodLocalList>;

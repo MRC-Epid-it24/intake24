@@ -144,6 +144,10 @@ export default defineComponent({
     rootCategory: {
       type: String,
     },
+    includeHidden: {
+      type: Boolean,
+      default: false,
+    },
     prompt: {
       type: Object as PropType<Prompt>,
       required: true,
@@ -303,6 +307,7 @@ export default defineComponent({
           matchScoreWeight,
           recipe: false,
           category: props.rootCategory,
+          hidden: props.includeHidden,
         });
 
         requestFailed.value = false;
