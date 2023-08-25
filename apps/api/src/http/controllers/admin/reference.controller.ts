@@ -186,8 +186,8 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
   ): Promise<void> => {
     const standardUnits = await StandardUnit.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      attributes: ['id', 'estimateIn', 'howMany'],
-      columns: ['id'],
+      attributes: ['id', 'name', 'estimateIn', 'howMany'],
+      columns: ['id', 'name'],
       order: [['id', 'ASC']],
     });
     res.json(standardUnits);

@@ -16,6 +16,16 @@
                 prepend-inner-icon="$standard-units"
               ></v-text-field>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.name"
+                :error-messages="form.errors.get('name')"
+                hide-details="auto"
+                :label="$t('common.name')"
+                name="name"
+                outlined
+              ></v-text-field>
+            </v-col>
             <v-col cols="12">
               <language-selector
                 v-model="form.estimateIn"
@@ -73,6 +83,7 @@ import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composabl
 
 type StandardUnitForm = {
   id: string | null;
+  name: string | null;
   estimateIn: RequiredLocaleTranslation;
   howMany: RequiredLocaleTranslation;
 };
@@ -91,7 +102,7 @@ export default defineComponent({
       StandardUnitForm,
       StandardUnitEntry
     >(props, {
-      data: { id: null, estimateIn: { en: '' }, howMany: { en: '' } },
+      data: { id: null, name: null, estimateIn: { en: '' }, howMany: { en: '' } },
     });
 
     return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
