@@ -21,8 +21,9 @@ export default defineComponent({
           value: 'id',
         },
         {
-          text: this.$t('standard-units.estimateIn'),
-          value: 'estimateIn.en',
+          text: this.$t('common.name'),
+          sortable: true,
+          value: 'name',
         },
         {
           text: this.$t('common.action._'),
