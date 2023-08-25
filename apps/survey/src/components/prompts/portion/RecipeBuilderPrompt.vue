@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, prompt, isValid, fields, recipe }" @action="action">
+  <base-layout v-bind="{ food, prompt, section, fields, recipe }">
     <v-expansion-panels>
       <v-expansion-panel v-for="(step, index) in recipe.steps" :key="index">
         <v-expansion-panel-header
@@ -34,16 +34,18 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
-import type { RecipeBuilder, RequiredLocaleTranslation } from '@intake24/common/types';
+import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
+import { usePromptUtils } from '@intake24/survey/composables';
 
-import createBasePortion from './createBasePortion';
+import createBasePrompt from '../createBasePrompt';
 
 // const isPromptValid = (step: RecipeBuilderStepState): boolean =>
 //   (step.confirmed && ['no'].includes(step.confirmed)) ||
@@ -57,13 +59,28 @@ export default defineComponent({
 
   components: { ExpansionPanelActions, FoodBrowser },
 
-  mixins: [createBasePortion<'recipe-builder-prompt', RecipeBuilder>()],
+  mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
+
+  props: {
+    food: {
+      type: Object as PropType<RecipeBuilder>,
+      required: true,
+    },
+    localeId: {
+      type: String,
+      required: true,
+    },
+    value: {
+      type: Object as PropType<PromptStates['recipe-builder-prompt']>,
+      required: true,
+    },
+  },
 
   emits: ['update'],
 
   data() {
     return {
-      ...copy(this.initialState),
+      ...copy(this.value),
       isStepValid,
       fields: [
         'description',
@@ -88,7 +105,8 @@ export default defineComponent({
 
   methods: {
     confirm() {
-      this.updatePanel();
+      console.log('Update Panel');
+      //this.updatePanel();
     },
 
     update() {

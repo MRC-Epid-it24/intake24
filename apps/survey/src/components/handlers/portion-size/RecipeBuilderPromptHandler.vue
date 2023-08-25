@@ -1,9 +1,9 @@
 <template>
   <recipe-builder-prompt
+    v-model="state"
     v-bind="{
       food: recipeBuilder(),
-      recipeFood,
-      recipeBuilder,
+      localeId,
       meal,
       initialState: state,
       prompt,
@@ -45,7 +45,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const survey = useSurvey();
-    const { recipeBuilder } = useFoodPromptUtils();
+    const { recipeBuilder, localeId } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
     const recipeFood = recipeBuilder().template;
@@ -83,7 +83,7 @@ export default defineComponent({
       return { matchScoreWeight, rankingAlgorithm };
     });
 
-    return { recipeBuilder, recipeFood, meal, state, update, action };
+    return { recipeBuilder, recipeFood, meal, state, localeId, update, action };
   },
 });
 </script>

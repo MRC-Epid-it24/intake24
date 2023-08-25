@@ -400,6 +400,9 @@ const prompts: LocaleMessageObject = {
   },
   recipeBuilder: {
     name: '{food} recipe builder',
+    search: 'Search for Food',
+    browse: 'Browse all relevant categories',
+    root: 'all relevant Food categories',
     text: 'Build your own recipe',
     description: `Please follow the steps below to build your own recipe for {food}.`,
     source: 'Was it homemade?',
