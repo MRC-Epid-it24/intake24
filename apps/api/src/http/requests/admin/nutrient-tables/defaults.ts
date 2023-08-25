@@ -10,9 +10,10 @@ import { validateCsvMappingFields, validateCsvMappingNutrients } from '@intake24
 const defaults: Schema = {
   description: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 512 } },
   },
   'csvMapping.rowOffset': {
     in: ['body'],

@@ -9,9 +9,10 @@ import { Language, Op, SystemLocale } from '@intake24/db';
 
 export const code: ParamSchema = {
   in: ['body'],
-  errorMessage: typeErrorMessage('string._'),
+  errorMessage: typeErrorMessage('string.max', { max: 16 }),
   isString: { bail: true },
   isEmpty: { negated: true, bail: true },
+  isLength: { bail: true, options: { max: 16 } },
   custom: {
     options: async (value, meta): Promise<void> => {
       if (!(await unique({ model: SystemLocale, condition: { field: 'code', value } })))
@@ -23,9 +24,10 @@ export const code: ParamSchema = {
 export const defaults: Schema = {
   englishName: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 64 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 64 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId } = (meta.req as Request).params;
@@ -46,9 +48,10 @@ export const defaults: Schema = {
   },
   localName: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 64 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 64 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId } = (meta.req as Request).params;
@@ -69,9 +72,10 @@ export const defaults: Schema = {
   },
   respondentLanguageId: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 16 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 16 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
@@ -81,9 +85,10 @@ export const defaults: Schema = {
   },
   adminLanguageId: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 16 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 16 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
@@ -98,8 +103,9 @@ export const defaults: Schema = {
   },
   prototypeLocaleId: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 16 }),
     isString: { bail: true },
+    isLength: { bail: true, options: { max: 16 } },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value, meta): Promise<void> => {

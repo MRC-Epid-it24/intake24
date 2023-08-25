@@ -12,8 +12,9 @@ import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake2
 export const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: { bail: true },
+    isLength: { bail: true, options: { max: 512 } },
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
@@ -91,14 +92,16 @@ export const defaults: Schema = {
   },
   authUrlDomainOverride: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: true,
+    isLength: { bail: true, options: { max: 512 } },
     optional: { options: { nullable: true } },
   },
   authUrlTokenCharset: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 128 }),
     isString: { bail: true },
+    isLength: { bail: true, options: { max: 128 } },
     optional: { options: { nullable: true } },
     custom: {
       options: async (value: string, meta): Promise<void> => {
@@ -109,15 +112,16 @@ export const defaults: Schema = {
   },
   authUrlTokenLength: {
     in: ['body'],
-    errorMessage: typeErrorMessage('int.min', { min: 8 }),
-    isInt: { options: { min: 8 } },
+    errorMessage: typeErrorMessage('int.minMax', { min: 8, max: 128 }),
+    isInt: { options: { min: 8, max: 128 } },
     toInt: true,
     optional: { options: { nullable: true } },
   },
   suspensionReason: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: true,
+    isLength: { bail: true, options: { max: 512 } },
     optional: { options: { nullable: true } },
   },
   /* surveyMonkeyUrl: {
@@ -131,6 +135,11 @@ export const defaults: Schema = {
     errorMessage: typeErrorMessage('email._'),
     isEmail: true,
     isEmpty: { negated: true },
+    isLength: {
+      bail: true,
+      options: { max: 512 },
+      errorMessage: typeErrorMessage('string.max', { max: 512 }),
+    },
     toLowerCase: true,
   },
   /* originatingUrl: {
@@ -154,6 +163,11 @@ export const defaults: Schema = {
   submissionNotificationUrl: {
     in: ['body'],
     errorMessage: typeErrorMessage('url._'),
+    isLength: {
+      bail: true,
+      options: { max: 2048 },
+      errorMessage: typeErrorMessage('string.max', { max: 2048 }),
+    },
     isURL: { options: { require_tld: false } },
     optional: { options: { nullable: true } },
   },

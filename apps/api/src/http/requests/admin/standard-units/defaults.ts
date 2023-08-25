@@ -9,7 +9,7 @@ export const defaults: Schema = {
     errorMessage: typeErrorMessage('string.max', { max: 128 }),
     isString: true,
     isEmpty: { negated: true },
-    isLength: { options: { max: 128 } },
+    isLength: { bail: true, options: { max: 128 } },
   },
   estimateIn: {
     in: ['body'],

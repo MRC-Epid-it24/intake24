@@ -11,8 +11,9 @@ import { Op, Task } from '@intake24/db';
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: { bail: true },
+    isLength: { bail: true, options: { max: 512 } },
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {

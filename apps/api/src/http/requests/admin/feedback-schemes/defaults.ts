@@ -17,9 +17,10 @@ import { FeedbackScheme, Op } from '@intake24/db';
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: typeErrorMessage('string._'),
+  errorMessage: typeErrorMessage('string.max', { max: 256 }),
   isString: { bail: true },
   isEmpty: { negated: true, bail: true },
+  isLength: { bail: true, options: { max: 256 } },
   custom: {
     options: async (value, meta): Promise<void> => {
       const { feedbackSchemeId } = (meta.req as Request).params;

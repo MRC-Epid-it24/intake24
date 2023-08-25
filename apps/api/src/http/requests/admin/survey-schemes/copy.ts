@@ -12,8 +12,9 @@ export default validate(
   checkSchema({
     name: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string._'),
+      errorMessage: typeErrorMessage('string.max', { max: 256 }),
       isString: { bail: true },
+      isLength: { bail: true, options: { max: 256 } },
       isEmpty: { negated: true, bail: true },
       custom: {
         options: async (value, meta): Promise<void> => {

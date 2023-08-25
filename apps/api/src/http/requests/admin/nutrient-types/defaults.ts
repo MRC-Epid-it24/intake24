@@ -6,9 +6,10 @@ import { FoodsNutrientUnit, SystemNutrientUnit } from '@intake24/db';
 const defaults: Schema = {
   description: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 512 } },
   },
   unitId: {
     in: ['body'],

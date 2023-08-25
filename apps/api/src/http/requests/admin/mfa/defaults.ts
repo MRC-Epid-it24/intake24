@@ -5,7 +5,7 @@ import { mfaProviders } from '@intake24/common/security';
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: typeErrorMessage('string._'),
+  errorMessage: typeErrorMessage('string.max', { max: 128 }),
   isString: true,
   isEmpty: { negated: true },
   isLength: { options: { max: 128 } },

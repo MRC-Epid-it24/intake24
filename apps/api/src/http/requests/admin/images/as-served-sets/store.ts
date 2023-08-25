@@ -16,8 +16,9 @@ export default validate(
     ...defaults,
     id: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string._'),
+      errorMessage: typeErrorMessage('string.max', { max: 32 }),
       isEmpty: { negated: true, bail: true },
+      isLength: { bail: true, options: { max: 32 } },
       isWhitelisted: {
         options: identifierSafeChars,
         bail: true,

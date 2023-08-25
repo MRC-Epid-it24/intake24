@@ -30,8 +30,9 @@ export const paginate: Schema = {
   },
   search: {
     in: ['query'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 128 }),
     isString: true,
+    isLength: { bail: true, options: { max: 128 } },
     optional: { options: { nullable: true } },
   },
 };

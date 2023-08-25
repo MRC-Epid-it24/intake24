@@ -207,7 +207,7 @@
                 max="100"
                 min="0"
                 name="searchMatchScoreWeight"
-                thumb-label
+                thumb-label="always"
               ></v-slider>
             </v-col>
           </v-row>

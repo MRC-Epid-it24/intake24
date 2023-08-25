@@ -9,8 +9,9 @@ import { Op, Permission } from '@intake24/db';
 const defaults: Schema = {
   name: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 128 }),
     isString: { bail: true },
+    isLength: { bail: true, options: { max: 128 } },
     isEmpty: { negated: true, bail: true },
     isWhitelisted: {
       options: `${identifierSafeChars}|`,
@@ -37,9 +38,10 @@ const defaults: Schema = {
   },
   displayName: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 128 }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 128 } },
   },
   description: {
     in: ['body'],
