@@ -10,7 +10,9 @@ import {
   foodPortionSizeComplete,
   getFoodByIndex,
   getFoodIndexRequired,
+  getMealIndexForSelection,
   mealComplete,
+  mealPortionSizeComplete,
   surveyFreeEntryComplete,
 } from '@intake24/survey/util';
 
@@ -594,6 +596,11 @@ const checkFoodStandardConditions = (
     case 'associated-foods-prompt': {
       if (foodState.type !== 'encoded-food') return false;
       if (!foodPortionSizeComplete(foodState)) return false;
+
+      const mealIndex = getMealIndexForSelection(surveyState.data.meals, selection);
+
+      if (mealIndex !== undefined && !mealPortionSizeComplete(surveyState.data.meals[mealIndex]))
+        return false;
 
       return !!(
         foodState.data.associatedFoodPrompts.length &&

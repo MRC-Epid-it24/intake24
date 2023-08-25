@@ -50,7 +50,7 @@
               <v-btn large @click="browseCategory(retryCode, false)">Try again</v-btn>
             </v-card-actions>
           </v-card>
-          <v-btn v-if="navigationHistory.length > 0" large text @click="navigateBack">
+          <v-btn v-if="navigationHistory.length" large text @click="navigateBack">
             <v-icon left>fas fa-turn-up fa-flip-horizontal</v-icon>
             {{ promptI18n.back }}
           </v-btn>
@@ -78,7 +78,10 @@
           ></category-contents-view>
         </v-tab-item>
       </v-tabs-items>
-      <div v-if="dialog || !showInDialog" class="d-flex flex-column flex-sm-row pa-4 ga-2">
+      <div
+        v-if="type === 'foodSearch' || dialog || !showInDialog"
+        class="d-flex flex-column flex-sm-row pa-4 ga-2"
+      >
         <v-btn
           v-if="type === 'foodSearch' && tab === 1"
           color="primary"
@@ -161,6 +164,10 @@ export default defineComponent({
     },
     rootCategory: {
       type: String,
+    },
+    includeHidden: {
+      type: Boolean,
+      default: false,
     },
     prompt: {
       type: Object as PropType<Prompt>,
@@ -338,6 +345,7 @@ export default defineComponent({
           matchScoreWeight,
           recipe: false,
           category: props.rootCategory,
+          hidden: props.includeHidden,
         });
         if (searchResults.value.foods[0].code.charAt(0) === '$') {
           console.log('Recipe Builder Food Detected');

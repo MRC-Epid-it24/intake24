@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <div class="guide-drawer">
-        <v-img ref="img" v-resize="onImgResize" :src="imageMapData.baseImageUrl">
+        <v-img ref="img" :src="imageMapData.baseImageUrl">
           <template #placeholder>
             <image-placeholder></image-placeholder>
           </template>
@@ -77,7 +77,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
-import debounce from 'lodash/debounce';
+import { useElementSize } from '@vueuse/core';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
 import type { ImageMap } from '@intake24/common/prompts';
@@ -127,34 +127,22 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
-    const height = ref(0);
-    const width = ref(0);
+    //@ts-expect-error should allow vue instance?
+    const { height, width } = useElementSize(img);
+
     const screenHeight = ref(0);
     const screenWidth = ref(0);
 
     const { hoverIndex, label, objects } = useImageMap(props, width);
 
-    const isDisabled = computed(() => props.disabled || props.index === undefined);
+    const isDisabled = computed(() =>
+      typeof props.disabled === 'undefined' ? props.index === undefined : props.disabled
+    );
 
     const getScreenDimensions = () => {
       screenHeight.value = window.screen.height;
       screenWidth.value = window.screen.width;
     };
-
-    const updateSvgDimensions = () => {
-      const el = img.value?.$el;
-      if (!el) {
-        console.warn(`GuideImagePanel: could not update SVG dimensions.`);
-        return;
-      }
-      const rect = el.getBoundingClientRect();
-      width.value = rect.width;
-      height.value = rect.height;
-    };
-
-    const onImgResize = debounce(() => {
-      updateSvgDimensions();
-    }, 500);
 
     const confirm = () => {
       emit('confirm');
@@ -174,7 +162,6 @@ export default defineComponent({
       hoverIndex,
       label,
       objects,
-      onImgResize,
       screenHeight,
       screenWidth,
     };

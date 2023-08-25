@@ -156,6 +156,7 @@
                     prompt,
                     rootCategory: associatedFoodPrompts[index].categoryCode,
                     parameters: searchParameters,
+                    includeHidden: true,
                   }"
                   @food-missing="foodMissing(index)"
                   @food-selected="(food) => foodSelected(food, index)"

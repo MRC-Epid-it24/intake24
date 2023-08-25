@@ -1,6 +1,6 @@
 <template>
   <div class="guides-drawer">
-    <v-img ref="img" v-resize="onImgResize" :src="entry.baseImageUrl"></v-img>
+    <v-img ref="img" :src="entry.baseImageUrl"></v-img>
     <svg
       ref="svg"
       :style="svgCursor"
@@ -130,7 +130,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { VImg } from 'vuetify/lib';
-import { watchDebounced } from '@vueuse/core';
+import { useElementSize, watchDebounced } from '@vueuse/core';
 import chunk from 'lodash/chunk';
 import debounce from 'lodash/debounce';
 import { computed, defineComponent, ref } from 'vue';
@@ -179,11 +179,12 @@ export default defineComponent({
     const img = ref<InstanceType<typeof VImg>>();
     const svg = ref<SVGElement>();
 
+    //@ts-expect-error should allow vue instance?
+    const { height, width } = useElementSize(img);
+
     const objects = ref<Objects[]>([]);
     const coords = ref<PathCoords>([]);
 
-    const width = ref(0);
-    const height = ref(0);
     const selectedObjectIdx = ref<number | null>(null);
     const selectedNodeIdx = ref<number | null>(null);
 
@@ -241,22 +242,6 @@ export default defineComponent({
       updateGuideImageObjects();
     }, 500);
 
-    const updateSvgDimensions = () => {
-      const el = img.value?.$el;
-      if (!el) {
-        console.warn(`GuideDrawer: could not update SVG dimensions.`);
-        return;
-      }
-
-      const rect = el.getBoundingClientRect();
-      width.value = rect.width;
-      height.value = rect.height;
-    };
-
-    const onImgResize = debounce(() => {
-      updateSvgDimensions();
-    }, 500);
-
     watchDebounced(
       imageMapObjects,
       () => {
@@ -281,7 +266,6 @@ export default defineComponent({
       isImageMap,
       nodeCursor,
       objects,
-      onImgResize,
       selectedNodeIdx,
       selectedObjectIdx,
       scaled,

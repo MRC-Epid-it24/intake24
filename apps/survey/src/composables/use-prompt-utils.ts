@@ -55,7 +55,8 @@ export const usePromptUtils = <
     const build: Record<string, string> = {};
 
     if (foodName.value) {
-      build.item = foodName.value;
+      if (isFood.value) build.item = foodName.value;
+
       build.food = foodName.value;
     }
 
@@ -66,10 +67,11 @@ export const usePromptUtils = <
         build.mealTime = mealTime.value;
 
         const meal = `${mealName.value} (${mealTime.value})`;
-        build.item = meal;
+        if (isMeal.value) build.item = meal;
+
         build.meal = meal;
       } else {
-        build.item = mealName.value;
+        if (isMeal.value) build.item = mealName.value;
         build.meal = mealName.value;
       }
     }

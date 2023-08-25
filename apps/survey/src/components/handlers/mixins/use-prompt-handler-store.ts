@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import { merge } from '@intake24/common/util';
 import { getOrCreatePromptStateStore, useSurvey } from '@intake24/survey/stores';
+import { findMeal, mealPortionSizeComplete } from '@intake24/survey/util';
 
 export type UsePromptHandlerStoreProps<P extends keyof PromptStates> = {
   prompt: Prompts[P];
@@ -61,9 +62,21 @@ export const usePromptHandlerStore = <P extends keyof PromptStates, S extends Pr
 
     const { portionSize } = state.value;
     const foodId = getFoodId();
+    const meal = findMeal(survey.meals, getMealId());
+
+    const portionSizeCompleteBefore = mealPortionSizeComplete(meal);
 
     survey.updateFood({ foodId, update: { portionSize } });
     survey.addFoodFlag(foodId, 'portion-size-method-complete');
+
+    const portionSizeCompleteAfter = mealPortionSizeComplete(meal);
+
+    // If this was the last remaining portion size, reset the selection to
+    // the first food of the meal for the associated food prompts second pass
+
+    if (portionSizeCompleteAfter && !portionSizeCompleteBefore) {
+      survey.setSelection({ mode: 'auto', element: { type: 'food', foodId: meal.foods[0].id } });
+    }
   };
 
   const actionPortionSize = (type: string, ...args: [id?: string, params?: object]) => {
