@@ -215,8 +215,8 @@ export default class Survey extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: 'paRules',
-    type: DataType.STRING(10),
+    defaultValue: 'popularity',
+    type: DataType.STRING(32),
   })
   declare searchSortingAlgorithm: CreationOptional<SearchSortingAlgorithm>;
 

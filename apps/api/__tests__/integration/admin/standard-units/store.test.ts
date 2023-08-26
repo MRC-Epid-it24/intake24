@@ -23,17 +23,28 @@ export default () => {
     });
 
     it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'estimateIn', 'howMany']);
+      await suite.sharedTests.assertInvalidInput('post', url, [
+        'id',
+        'name',
+        'estimateIn',
+        'howMany',
+      ]);
     });
 
     it('should return 422 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id', 'estimateIn.en', 'howMany'], {
-        input: {
-          id: { value: 'should be string' },
-          estimateIn: { en: { value: 'test' } },
-          howMany: 'ten',
-        },
-      });
+      await suite.sharedTests.assertInvalidInput(
+        'post',
+        url,
+        ['id', 'name', 'estimateIn.en', 'howMany'],
+        {
+          input: {
+            id: { value: 'should be string' },
+            name: ['should be string'],
+            estimateIn: { en: { value: 'test' } },
+            howMany: 'ten',
+          },
+        }
+      );
     });
 
     it('should return 201 and new resource', async () => {

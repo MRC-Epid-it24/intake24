@@ -122,6 +122,7 @@ const nutrientUnit = (): NutrientUnitRequest => ({
 
 const standardUnit = (): StandardUnitCreationAttributes => ({
   id: toStandardUnitId(faker.word.words(3)),
+  name: faker.word.words(2),
   estimateIn: { en: faker.word.words(5), es: faker.word.words(5) },
   howMany: { en: faker.word.words(5), es: faker.word.words(5) },
 });

@@ -30,7 +30,7 @@
             </v-list-item>
           </template>
         </select-resource>
-        <json-editor-dialog v-model="items"></json-editor-dialog>
+        <json-editor-dialog v-model="items" @input="update"></json-editor-dialog>
       </options-menu>
     </v-toolbar>
     <v-list two-line>

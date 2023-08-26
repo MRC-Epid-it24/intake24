@@ -7,6 +7,10 @@
           <td>{{ entry.id }}</td>
         </tr>
         <tr>
+          <th>{{ $t('common.name') }}</th>
+          <td>{{ entry.name }}</td>
+        </tr>
+        <tr>
           <th>{{ $t('standard-units.estimateIn') }}</th>
           <td>{{ entry.estimateIn.en }}</td>
         </tr>

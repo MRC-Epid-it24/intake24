@@ -33,6 +33,12 @@ export default class StandardUnit extends BaseModel<
 
   @Column({
     allowNull: false,
+    type: DataType.STRING(128),
+  })
+  declare name: string;
+
+  @Column({
+    allowNull: false,
     type: DataType.TEXT({ length: 'long' }),
   })
   get estimateIn(): RequiredLocaleTranslation {

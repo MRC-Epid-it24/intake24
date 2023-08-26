@@ -13,6 +13,11 @@ export const email: ParamSchema = {
   in: ['body'],
   errorMessage: typeErrorMessage('email._'),
   isEmail: { bail: true },
+  isLength: {
+    bail: true,
+    options: { max: 512 },
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
+  },
   custom: {
     options: async (value, meta): Promise<void> => {
       const { userId } = (meta.req as Request).params;
@@ -46,8 +51,9 @@ export const emailConfirm: ParamSchema = {
 
 export const name: ParamSchema = {
   in: ['body'],
-  errorMessage: typeErrorMessage('string._'),
+  errorMessage: typeErrorMessage('string.max', { max: 512 }),
   isString: true,
+  isLength: { options: { max: 512 } },
 };
 
 export const nameOptional: ParamSchema = {
@@ -57,8 +63,9 @@ export const nameOptional: ParamSchema = {
 
 export const phone: ParamSchema = {
   in: ['body'],
-  errorMessage: typeErrorMessage('string._'),
+  errorMessage: typeErrorMessage('string.max', { max: 32 }),
   isString: true,
+  isLength: { options: { max: 32 } },
 };
 
 export const phoneOptional: ParamSchema = {

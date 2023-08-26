@@ -4,6 +4,13 @@ import { isPlainObject } from 'lodash';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 
 export const defaults: Schema = {
+  name: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string.max', { max: 128 }),
+    isString: true,
+    isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 128 } },
+  },
   estimateIn: {
     in: ['body'],
     custom: {

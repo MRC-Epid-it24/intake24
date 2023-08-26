@@ -41,8 +41,4 @@ Current Intake24 ACL system also implements couple of V3-based specific permissi
 
 - `${surveyId}/respondent` - grants user respondent access to specific survey based on the `surveyId`, which is incorporated into permission name. Permission is automatically created when new survey record is created. `Survey Respondent` page allows to assign permission directly selected user. Whenever respondent record is created either using Admin UI or importing CSV file, this permission is attached directly to user.
 
-- `foodsadmin` - grants access to all food databases / food list records
-
-- `fdbm/${localeId}` - grants access to specific food list record based on the `localeId`, which is incorporated into permission name. Permission is automatically created when new survey record is created.
-
 - `globalsupport` - nominates user to receive respondents help request from all surveys.

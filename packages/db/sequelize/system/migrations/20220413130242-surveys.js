@@ -141,8 +141,8 @@ module.exports = {
           },
           search_sorting_algorithm: {
             allowNull: false,
-            type: Sequelize.STRING(10),
-            defaultValue: 'paRules',
+            type: Sequelize.STRING(32),
+            defaultValue: 'popularity',
           },
           search_match_score_weight: {
             allowNull: false,

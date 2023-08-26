@@ -10,9 +10,10 @@ import { Language, Op } from '@intake24/db';
 const defaults: Schema = {
   englishName: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    isLength: { bail: true, options: { max: 512 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const { languageId } = (meta.req as Request).params;
@@ -33,9 +34,10 @@ const defaults: Schema = {
   },
   localName: {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
+    errorMessage: typeErrorMessage('string.max', { max: 512 }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 512 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const { languageId } = (meta.req as Request).params;

@@ -15,9 +15,10 @@ export default validate(
   checkSchema({
     id: {
       in: ['body'],
-      errorMessage: typeErrorMessage('string._'),
+      errorMessage: typeErrorMessage('string.max', { max: 64 }),
       isString: { bail: true },
       isEmpty: { negated: true, bail: true },
+      isLength: { bail: true, options: { max: 64 } },
       custom: {
         options: async (value, meta): Promise<void> => {
           if (

@@ -5,7 +5,7 @@ const prompts: LocaleMessageObject = {
     name: 'Multi-choice list',
     text: '',
     description: '',
-    label: 'Select any of the options',
+    label: '',
     other: 'Other - please specify',
     validation: {
       required: 'At least one of the options requires to be selected.',
@@ -35,7 +35,7 @@ const prompts: LocaleMessageObject = {
     name: 'Single-choice list',
     text: '',
     description: '',
-    label: 'Select one of the options',
+    label: '',
     other: 'Other - please specify',
     validation: {
       required: 'One of the options requires to be selected.',

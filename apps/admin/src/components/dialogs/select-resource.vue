@@ -108,7 +108,7 @@ export default defineComponent({
       default: false,
     },
     value: {
-      type: Object as PropType<Dictionary | string | null>,
+      type: [Object, String] as PropType<Dictionary | string | null>,
     },
   },
 

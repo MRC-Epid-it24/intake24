@@ -104,15 +104,17 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.description': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'description' }),
+    errorMessage: typeErrorMessage('string.max', { max: 256, attributePath: 'description' }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 256 } },
   },
   'portionSizeMethods.*.imageUrl': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'imageUrl' }),
+    errorMessage: typeErrorMessage('string.max', { max: 512, attributePath: 'imageUrl' }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 512 } },
   },
   'portionSizeMethods.*.useForRecipes': {
     in: ['body'],
@@ -143,15 +145,17 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.parameters.*.name': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'name' }),
+    errorMessage: typeErrorMessage('string.max', { max: 32, attributePath: 'name' }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 32 } },
   },
   'portionSizeMethods.*.parameters.*.value': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'value' }),
+    errorMessage: typeErrorMessage('string.max', { max: 128, attributePath: 'value' }),
     isString: true,
     isEmpty: { negated: true },
+    isLength: { bail: true, options: { max: 128 } },
   },
 };
 
@@ -169,7 +173,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedCategoryCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'main.code' }),
+    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
+    isLength: { bail: true, options: { max: 8 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');
@@ -193,7 +198,8 @@ export const associatedFoods: Schema = {
   },
   'associatedFoods.*.associatedFoodCode': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'main.code' }),
+    errorMessage: typeErrorMessage('string.max', { max: 8, attributePath: 'main.code' }),
+    isLength: { bail: true, options: { max: 8 } },
     custom: {
       options: async (value, meta): Promise<void> => {
         const index = Number.parseInt(meta.path.match(/\[(?<index>\d+)\]/)?.groups?.index ?? '');

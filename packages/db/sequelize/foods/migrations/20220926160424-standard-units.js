@@ -9,6 +9,10 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.STRING(64),
           },
+          name: {
+            allowNull: false,
+            type: Sequelize.STRING(128),
+          },
           estimate_in: {
             allowNull: false,
             type: Sequelize.TEXT({ length: 'long' }),
@@ -28,6 +32,12 @@ module.exports = {
         },
         { transaction }
       );
+
+      await queryInterface.addIndex('standard_units', ['name'], {
+        name: 'standard_units_name_idx',
+        indexType: 'btree',
+        transaction,
+      });
     }),
 
   down: (queryInterface, Sequelize) =>

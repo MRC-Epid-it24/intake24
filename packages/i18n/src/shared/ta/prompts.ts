@@ -5,7 +5,7 @@ const prompts: LocaleMessageObject = {
     name: 'பல தேர்வு பட்டியல்',
     text: '',
     description: '',
-    label: 'விருப்பங்களில் ஏதேனும் ஒன்றைத் தேர்ந்தெடுக்கவும்',
+    label: '',
     other: 'தயவுசெய்து குறிப்பிடவும்',
     validation: {
       required: 'குறைந்தபட்சம் ஒரு விருப்பத்தைத் தேர்ந்தெடுக்க வேண்டும்.',
@@ -35,7 +35,7 @@ const prompts: LocaleMessageObject = {
     name: 'ஒற்றைத் தேர்வு பட்டியல்',
     text: '',
     description: '',
-    label: 'விருப்பங்களில் ஒன்றைத் தேர்ந்தெடுக்கவும்',
+    label: '',
     other: 'தயவுசெய்து குறிப்பிடவும்',
     validation: {
       required: 'விருப்பத்தேர்வில் இருந்து ஒன்றைத் தேர்ந்தெடுக்க வேண்டும்.',

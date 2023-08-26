@@ -5,7 +5,7 @@ const prompts: LocaleMessageObject = {
     name: '多选列表',
     text: '',
     description: '',
-    label: '选择任意选项',
+    label: '',
     other: '请指定',
     validation: {
       required: '必须选择至少一个选项。',
@@ -35,7 +35,7 @@ const prompts: LocaleMessageObject = {
     name: '单选列表',
     text: '',
     description: '',
-    label: '选择一个选项',
+    label: '',
     other: '请指定',
     validation: {
       required: '必须选择一个选项。',

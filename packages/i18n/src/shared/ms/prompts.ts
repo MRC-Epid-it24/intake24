@@ -5,7 +5,7 @@ const prompts: LocaleMessageObject = {
     name: 'Senarai pilihan pelbagai',
     text: '',
     description: '',
-    label: 'Pilih antara pelbagai pilihan yang disediakan',
+    label: '',
     other: 'Sila nyatakan',
     validation: {
       required: 'Pilih sekurang-kurangnya satu daripada pelbagai pilihan.',
@@ -35,7 +35,7 @@ const prompts: LocaleMessageObject = {
     name: 'Senarai pilihan tunggal',
     text: '',
     description: '',
-    label: 'Pilih satu sahaja daripada pelbagai pilihan',
+    label: '',
     other: 'Sila nyatakan',
     validation: {
       required: 'Satu pilihan mesti  dipilih.',

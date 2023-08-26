@@ -23,7 +23,6 @@
           <tr v-for="(_, idx) in units" :key="idx">
             <td>
               <select-resource
-                item-name="id"
                 resource="standard-units"
                 :value="getParameter(`unit${idx}-name`)?.value"
                 @input="setParameter(`unit${idx}-name`, $event)"

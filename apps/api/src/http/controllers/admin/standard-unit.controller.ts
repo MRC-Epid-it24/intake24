@@ -35,7 +35,7 @@ const standardUnitController = () => {
   ): Promise<void> => {
     const standardUnits = await StandardUnit.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'estimateIn'],
+      columns: ['id', 'name'],
       order: [['id', 'ASC']],
     });
 
@@ -43,7 +43,7 @@ const standardUnitController = () => {
   };
 
   const store = async (req: Request, res: Response<StandardUnitEntry>): Promise<void> => {
-    const input = pick(req.body, ['id', 'estimateIn', 'howMany']);
+    const input = pick(req.body, ['id', 'name', 'estimateIn', 'howMany']);
 
     const standardUnit = await StandardUnit.create(input);
 
@@ -69,7 +69,7 @@ const standardUnitController = () => {
     const standardUnit = await StandardUnit.findByPk(standardUnitId);
     if (!standardUnit) throw new NotFoundError();
 
-    await standardUnit.update(pick(req.body, ['id', 'estimateIn', 'howMany']));
+    await standardUnit.update(pick(req.body, ['id', 'name', 'estimateIn', 'howMany']));
 
     res.json(standardUnit);
   };
