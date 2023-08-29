@@ -216,7 +216,12 @@ export default class DynamicRecall {
 
     // Then check if a prompt is available for the current selection
     nextPrompt = this.getNextPromptForCurrentSelection();
-    if (nextPrompt) return nextPrompt;
+    if (nextPrompt) {
+      // V4-905: Set selection mode to auto to prevent unwanted triggering of the 'no more informaton'
+      // prompt.
+      this.store.setSelection({ ...this.store.selection, mode: 'auto' });
+      return nextPrompt;
+    }
 
     // If not, try selecting a food or meal that still has some prompts available
     const nextSelection = this.selectionManager.nextSelection();
