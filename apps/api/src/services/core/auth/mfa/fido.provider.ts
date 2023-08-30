@@ -80,12 +80,7 @@ const fidoProvider = ({
 
     return db.system.transaction(async (transaction) => {
       const device = await MFADevice.create(
-        {
-          userId,
-          provider: 'fido',
-          name,
-          secret: randomString(32),
-        },
+        { userId, provider: 'fido', name, secret: randomString(32) },
         { transaction }
       );
 
@@ -118,7 +113,7 @@ const fidoProvider = ({
   const authenticationChallenge = async (device: MFADevice): Promise<FIDOAuthChallenge> => {
     if (!device.authenticator) throw new Error('No FIDO authenticator found.');
 
-    const options = generateAuthenticationOptions({
+    const options = await generateAuthenticationOptions({
       allowCredentials: [device.authenticator].map((authenticator) => ({
         id: authenticator.getIdBuffer(),
         type: 'public-key',
