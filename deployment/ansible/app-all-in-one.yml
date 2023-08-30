@@ -1,0 +1,48 @@
+---
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'shared'
+  roles:
+    - role: app-init
+
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'api'
+  roles:
+    - role: app-api
+    - role: app-service
+      when: apps.api.service.deploy | bool
+
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'portal'
+  roles:
+    - role: app-portal
+    - role: app-service
+      when: apps.portal.service.deploy | bool
+
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'admin'
+  roles:
+    - role: app-spa
+    - role: app-service
+      when: apps.admin.service.deploy | bool
+
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'survey'
+  roles:
+    - role: app-spa
+    - role: app-service
+      when: apps.survey.service.deploy | bool
