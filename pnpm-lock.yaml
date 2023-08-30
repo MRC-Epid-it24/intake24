@@ -452,8 +452,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2
       '@simplewebauthn/typescript-types':
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^8.0.0
+        version: 8.0.0
       '@types/body-parser':
         specifier: ^1.19.2
         version: 1.19.2
@@ -942,8 +942,8 @@ importers:
         version: 8.0.0
     devDependencies:
       '@simplewebauthn/typescript-types':
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^8.0.0
+        version: 8.0.0
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.1
@@ -1031,8 +1031,8 @@ importers:
         version: 2.1.5(@types/node@20.5.7)(@types/validator@13.11.1)(reflect-metadata@0.1.13)(sequelize@6.32.1)
     devDependencies:
       '@simplewebauthn/typescript-types':
-        specifier: ^7.4.0
-        version: 7.4.0
+        specifier: ^8.0.0
+        version: 8.0.0
       '@types/lodash':
         specifier: ^4.14.197
         version: 4.14.197
@@ -4091,6 +4091,11 @@ packages:
 
   /@simplewebauthn/typescript-types@7.4.0:
     resolution: {integrity: sha512-8/ZjHeUPe210Bt5oyaOIGx4h8lHdsQs19BiOT44gi/jBEgK7uBGA0Fy7NRsyh777al3m6WM0mBf0UR7xd4R7WQ==}
+    dev: false
+
+  /@simplewebauthn/typescript-types@8.0.0:
+    resolution: {integrity: sha512-d7Izb2H+LZJteXMkS8DmpAarD6mZdpIOu/av/yH4/u/3Pd6DKFLyBM3j8BMmUvUqpzvJvHARNrRfQYto58mtTQ==}
+    dev: true
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
