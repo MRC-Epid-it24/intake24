@@ -325,7 +325,7 @@ export default defineComponent({
 
       switch (action) {
         case 'addMeal':
-          if (typeof params === 'object' && params !== null) {
+          if (typeof params === 'object' && params !== null && Object.keys(params).length) {
             // TODO: validate params properly
             const { name, time, flags } = params as MealCreationState;
             this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
