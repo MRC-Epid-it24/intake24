@@ -4,7 +4,7 @@
     <v-navigation-drawer v-if="loggedIn && isVerified" v-model="sidebar" app color="secondary" dark>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="my-1 title">{{ $t('common._') }}</v-list-item-title>
+          <v-list-item-title class="my-1">{{ $t('common._') }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>

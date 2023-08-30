@@ -96,10 +96,10 @@ const prompts: LocaleMessageObject = {
   editMeal: {
     name: 'Edit Meal',
     text: '',
-    description: `<p>List everything you had for your <strong>{meal}</strong>, one item per line.</p>
-      For example:<p><ul><li>Weetabix</li><li>Tea</li></ul></p>
-      <p>You can press Enter on your keyboard or click the <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> button to go to the next line.</p>
-      <p><strong>Do not</strong> enter how much you had, just the food names.`,
+    description: `<p>Tell us everything you had for your <strong>{meal}</strong>.</p>
+      <p>Enter each food and drink separately.</p>
+      <p>Press <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> or the Enter key to add each food and drink.</p>
+      <p><strong>Do not</strong> enter how much you had, just the food names.</p>`,
     add: 'Add',
     drinksOnly: 'Drinks',
     foods: 'Foods and drinks',

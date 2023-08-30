@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type {
   FoodDatabaseRefs,
