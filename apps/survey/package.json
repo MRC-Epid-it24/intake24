@@ -14,6 +14,7 @@
     "build": "pnpm build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/favicon.svg",
     "start": "node server/index.js",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path ../../.eslintignore"
@@ -42,6 +43,7 @@
     "@types/lodash": "^4.14.197",
     "@types/node": "^20.5.0",
     "@types/uuid": "^9.0.2",
+    "@vite-pwa/assets-generator": "^0.0.8",
     "@vitejs/plugin-legacy": "^4.1.1",
     "@vitejs/plugin-vue2": "^2.2.0",
     "@vue/eslint-config-prettier": "^8.0.0",
