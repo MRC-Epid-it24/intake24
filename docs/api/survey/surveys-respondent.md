@@ -159,42 +159,36 @@ Content-Type: application/json
 200 OK
 
 {
-   "id" : string,
-   "name": string | null,
-   "submissions": number,
-   "showFeedback": boolean,
-   "maximumTotalSubmissionsReached": boolean,
-   "maximumDailySubmissionsReached": boolean,
-   "followUpUrl": string | null,
+  "userId": string,
+  "name": string | null,
+  "submissions": number,
+  "showFeedback": boolean,
+  "maximumTotalSubmissionsReached": boolean,
+  "maximumDailySubmissionsReached": boolean,
+  "followUpUrl": string | null
 }
 ```
 
-## Request assistance
+## Request help
 
-Notify people having support role for the survey to give the respondent a call to help them complete their recall.
-
-[v3 implementation](https://github.com/MRC-Epid-it24/api-server/blob/master/ApiPlayServer/app/controllers/system/user/HelpController.scala#L68-L138)
+Notify people having survey support role or survey support email to give the respondent a call to help them complete their recall.
 
 ### Request
 
 ```json
-POST /api/surveys/{survey-slug}/request-callback
+POST /api/surveys/{survey-slug}/request-help
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 
 {
   "name": string,
-  "phone": string
+  "email": string,
+  "phone": string,
+  "phoneCountry": string,
+  "message": string
 }
 ```
-
-where:
-
-**slug** is the survey ID,
-
-**name** and **phone** are the respondent's contact details (as entered into the assistance request form by the
-respondent).
 
 ### Response
 

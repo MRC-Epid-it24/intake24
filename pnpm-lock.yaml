@@ -789,6 +789,9 @@ importers:
       '@vueuse/core':
         specifier: ^10.4.1
         version: 10.4.1(vue@2.7.14)
+      awesome-phonenumber:
+        specifier: ^5.10.0
+        version: 5.10.0
       axios:
         specifier: ^1.5.0
         version: 1.5.0(debug@4.3.4)
@@ -804,6 +807,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      flag-icons:
+        specifier: ^6.11.0
+        version: 6.11.0
       helmet:
         specifier: ^7.0.0
         version: 7.0.0

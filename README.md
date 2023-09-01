@@ -1,4 +1,8 @@
 <p align='center'>
+    <img src='./docs/public/favicon.svg' height="192" width="192" alt="Intake24"><br>
+    Intake24 - dietary recall system
+</p>
+<p align='center'>
     <a href="https://github.com/MRC-Epid-it24/intake24/releases">
         <img src="https://img.shields.io/github/package-json/version/MRC-Epid-it24/intake24/master?label=release&color=EE672D" alt="release">
     </a>

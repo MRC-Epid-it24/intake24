@@ -6,7 +6,6 @@ import dashboard from './dashboard';
 import drinkwareSets from './drinkware-sets';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
-import flags from './flags';
 import foodGroups from './food-groups';
 import guideImages from './guide-images';
 import imageMaps from './image-maps';
@@ -34,7 +33,6 @@ const messages: LocaleMessages = {
   fdbs,
   'feedback-schemes': feedbackSchemes,
   'food-groups': foodGroups,
-  flags,
   'as-served-sets': asServedSets,
   'guide-images': guideImages,
   'image-maps': imageMaps,

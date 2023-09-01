@@ -1,6 +1,7 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
 const flags: LocaleMessageObject = {
+  ac: 'Antigua and Barbuda',
   ad: 'Andorra',
   ae: 'United Arab Emirates',
   af: 'Afghanistan',
@@ -214,6 +215,7 @@ const flags: LocaleMessageObject = {
   sx: 'Sint Maarten (Netherlands)',
   sy: 'Syria',
   sz: 'Swaziland',
+  ta: 'Tristan da Cunha',
   tc: 'Turks and Caicos Islands',
   td: 'Chad',
   tf: 'French Southern Territories',
@@ -245,6 +247,7 @@ const flags: LocaleMessageObject = {
   vu: 'Vanuatu',
   wf: 'Wallis and Futuna',
   ws: 'Samoa',
+  xk: 'Kosovo',
   ye: 'Yemen',
   yt: 'Mayotte',
   za: 'South Africa',

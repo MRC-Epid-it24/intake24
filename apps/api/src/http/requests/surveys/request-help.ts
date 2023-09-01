@@ -1,5 +1,5 @@
 import type { Meta } from 'express-validator';
-import { parsePhoneNumber } from 'awesome-phonenumber';
+import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
 import { checkSchema } from 'express-validator';
 
 import {
@@ -45,9 +45,27 @@ export default validate(
               customTypeErrorMessage('either._', meta, { one: 'email', two: 'phone' })
             );
 
-          if (!parsePhoneNumber(value).valid)
+          if (!parsePhoneNumber(value, { regionCode: meta.req.body.phoneCountry }).valid)
             throw new Error(customTypeErrorMessage('phone._', meta));
         },
+      },
+      customSanitizer: {
+        options: (value: string, meta) => {
+          const phoneNumber = parsePhoneNumber(value, { regionCode: meta.req.body.phoneCountry });
+          return phoneNumber.valid ? phoneNumber.number.international : value;
+        },
+      },
+    },
+    phoneCountry: {
+      in: ['body'],
+      isIn: {
+        errorMessage: typeErrorMessage('in.options', { options: [] }),
+        if: (value: any, meta: Meta) => {
+          console.log(meta.req.body);
+          console.log(!!meta.req.body.phone);
+          return !!meta.req.body.phone;
+        },
+        options: [getSupportedRegionCodes()],
       },
     },
     message: {

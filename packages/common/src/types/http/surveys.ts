@@ -63,5 +63,5 @@ export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 
 export type SurveyRequestHelpInput = Pick<
   JobParams['SurveyHelpRequestNotification'],
-  'name' | 'email' | 'phone' | 'message'
+  'name' | 'email' | 'phone' | 'phoneCountry' | 'message'
 >;
