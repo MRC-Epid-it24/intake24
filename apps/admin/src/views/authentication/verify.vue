@@ -1,6 +1,5 @@
 <template>
   <app-entry-screen
-    :logo="logo"
     :subtitle="$t('common.verify.subtitle').toString()"
     :title="$t('common.verify._').toString()"
     width="30rem"
@@ -36,7 +35,6 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineComponent, reactive } from 'vue';
 
-import { logo } from '@intake24/admin/assets';
 import { ErrorList } from '@intake24/admin/components/forms';
 import { useAuth, useMessages, useUser } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
@@ -55,7 +53,6 @@ export default defineComponent({
   setup() {
     return reactive({
       user: useUser(),
-      logo,
       errors: new Errors(),
     });
   },

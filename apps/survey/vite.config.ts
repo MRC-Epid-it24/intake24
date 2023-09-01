@@ -130,7 +130,7 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         disable: disablePwa,
         registerType: 'autoUpdate',
-        includeAssets: [/* 'favicon.svg',*/ 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        includeAssets: ['icon.svg', 'icon.ico', 'robots.txt', 'apple-touch-icon.png'],
         manifest: {
           id: '/',
           start_url: '/',

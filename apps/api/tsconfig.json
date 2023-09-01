@@ -19,5 +19,5 @@
     "types": ["node", "jest", "jest-extended", "webpack-env"]
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "packages/common/src/theme/assets/**/*"]
 }

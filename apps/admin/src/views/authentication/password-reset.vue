@@ -1,6 +1,5 @@
 <template>
   <app-entry-screen
-    :logo="logo"
     :subtitle="$t('common.password.reset.subtitle').toString()"
     :title="$t('common.password.reset._').toString()"
     width="30rem"
@@ -75,7 +74,6 @@
 import { defineComponent } from 'vue';
 
 import type { ValidationError } from '@intake24/common/util';
-import { logo } from '@intake24/admin/assets';
 import { ErrorList } from '@intake24/admin/components/forms';
 import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen } from '@intake24/ui';
@@ -101,7 +99,6 @@ export default defineComponent({
         password: null,
         passwordConfirm: null,
       }),
-      logo,
     };
   },
 

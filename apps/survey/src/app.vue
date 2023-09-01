@@ -126,9 +126,8 @@ import type { TranslateResult } from 'vue-i18n';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
-import { Loader } from '@intake24/survey/components';
 import { Navigation } from '@intake24/survey/components/layouts';
-import { ConfirmDialog, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
+import { ConfirmDialog, Loader, MessageBox, ServiceWorker, setsLanguage } from '@intake24/ui';
 
 import { useAuth, useSurvey } from './stores';
 

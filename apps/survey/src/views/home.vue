@@ -1,7 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
     <app-entry-screen
-      :logo="logo"
       :subtitle="$t('common.welcome.subtitle').toString()"
       :title="$t('common._').toString()"
       width="30rem"
@@ -50,7 +49,6 @@
 import { defineComponent } from 'vue';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import { logo } from '@intake24/survey/assets';
 import { AppEntryScreen } from '@intake24/ui/components';
 
 import { surveyService } from '../services';
@@ -62,7 +60,6 @@ export default defineComponent({
 
   data() {
     return {
-      logo,
       surveys: [] as PublicSurveyEntry[],
     };
   },
