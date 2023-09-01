@@ -2,12 +2,10 @@
 
 :root {
   --vp-font-family-base: Rubik, 'Chinese Quotes', 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --vp-c-accent: #f68623;
-  --vp-c-brand: #EE672D;
-  --vp-c-brand-light: #f3946b;
-  --vp-c-brand-lighter: #f18557;
-  --vp-c-brand-dark: #c4460f;
-  --vp-c-brand-darker: #de4f12;
+  --vp-c-brand-1: #EE672D;
+  --vp-c-brand-2: #020202;
+  --vp-c-brand-3: #4456A6;
+  --vp-c-brand-soft: #FEE8E1;
 }
 
 a {

@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import views from '@intake24/survey/views';
 
 import {
+  authGuard,
   feedbackParametersGuard,
   globalGuard,
   surveyParametersErrorGuard,
@@ -19,6 +20,12 @@ const routes: RouteConfig[] = [
     name: 'home',
     component: views.home,
     meta: { module: 'public', title: 'common._' },
+  },
+  {
+    path: '/a/:token',
+    name: 'authentication',
+    meta: { module: 'public' },
+    beforeEnter: authGuard,
   },
   {
     path: '/:surveyId',

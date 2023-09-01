@@ -72,10 +72,14 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     const fields: FieldInfo<UserSurveyAlias>[] = [
       { label: 'UserID', value: 'userId' },
       { label: 'Username', value: 'username' },
-      { label: 'AuthenticationCode', value: (row: UserSurveyAlias) => row.urlAuthToken },
+      { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
+      {
+        label: 'ShortSurveyAuthenticationURL',
+        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
+      },
       {
         label: 'SurveyAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
+        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken, true),
       },
       {
         label: 'FeedbackAuthenticationURL',

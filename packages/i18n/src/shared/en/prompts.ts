@@ -98,7 +98,7 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: `<p>Tell us everything you had for your <strong>{meal}</strong>.</p>
       <p>Enter each food and drink separately.</p>
-      <p>Press <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> or the Enter/Return key to add each food and drink</p>
+      <p>Press <span class="fas fa-turn-down fa-rotate-90 mx-2"></span> or the Enter/Return key to add each food and drink.</p>
       <p><strong>Do not</strong> enter how much you had, just the food names.</p>`,
     add: 'Add',
     drinksOnly: 'Drinks',
