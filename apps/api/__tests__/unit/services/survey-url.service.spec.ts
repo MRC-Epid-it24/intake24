@@ -22,7 +22,7 @@ describe('Survey Url service', () => {
 
     const url = urlService.getSurveyUrl('surveyAuthToken');
 
-    expect(url).toBe('https://example.com/a/surveyAuthToken');
+    expect(url).toBe('https://example.com/survey/a/surveyAuthToken');
   });
 
   it('should return survey authentication url #long', () => {
