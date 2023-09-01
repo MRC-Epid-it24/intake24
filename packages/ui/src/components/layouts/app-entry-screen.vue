@@ -8,8 +8,8 @@
       >
         <div class="d-flex justify-center align-center py-4">
           <slot name="logo">
-            <v-avatar>
-              <img alt="logo" :src="logo" />
+            <v-avatar v-if="hasIcon" tile>
+              <img alt="logo" :src="iconFile" />
             </v-avatar>
           </slot>
           <slot name="title">
@@ -30,14 +30,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+
+import { iconPrimary } from '@intake24/common/theme/assets';
 
 export default defineComponent({
   name: 'EntryScreen',
 
   props: {
-    logo: {
-      type: String,
+    icon: {
+      type: [Boolean, String],
+      default: true,
     },
     title: {
       type: String,
@@ -48,6 +51,16 @@ export default defineComponent({
     width: {
       type: String,
     },
+  },
+
+  setup(props) {
+    const hasIcon = computed(() => typeof props.icon === 'string' || props.icon);
+    const iconFile = computed(() => (typeof props.icon === 'string' ? props.icon : iconPrimary));
+
+    return {
+      hasIcon,
+      iconFile,
+    };
   },
 });
 </script>

@@ -1,6 +1,5 @@
 <template>
   <app-entry-screen
-    :logo="logo"
     :subtitle="$t('common.password.request.subtitle').toString()"
     :title="$t('common.password.request._').toString()"
     width="30rem"
@@ -49,7 +48,6 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
 
-import { logo } from '@intake24/admin/assets';
 import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
@@ -74,7 +72,6 @@ export default defineComponent({
       }),
       captcha,
       submitted: false,
-      logo,
     });
   },
 

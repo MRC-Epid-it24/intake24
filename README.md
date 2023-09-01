@@ -1,5 +1,5 @@
 <p align='center'>
-    <img src='./docs/public/favicon.svg' height="192" width="192" alt="Intake24"><br>
+    <img src='./docs/public/icon.svg' height="192" width="192" alt="Intake24"><br>
     Intake24 - dietary recall system
 </p>
 <p align='center'>

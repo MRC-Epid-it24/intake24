@@ -1,7 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
     <app-entry-screen
-      :logo="logo"
       :subtitle="$t('common.login.subtitle').toString()"
       :title="$t('common._').toString()"
       width="30rem"
@@ -109,7 +108,6 @@ import { defineComponent } from 'vue';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
-import { logo } from '@intake24/survey/assets';
 import { surveyService } from '@intake24/survey/services';
 import { useAuth } from '@intake24/survey/stores';
 import { AppEntryScreen } from '@intake24/ui';
@@ -134,7 +132,6 @@ export default defineComponent({
       status: null as number | null,
       survey: null as PublicSurveyEntry | null,
       errors: new Errors(),
-      logo,
     };
   },
 
