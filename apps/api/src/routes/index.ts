@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import type { Express, Request, Response } from 'express';
 import express from 'express';
 import helmet from 'helmet';
@@ -80,6 +82,9 @@ export default (app: Express, { config }: Ops): void => {
    * Static sites - include CSP for static sites
    */
   app.use(staticContentHelmet);
+
+  // Register common assets folder
+  app.use(express.static(path.resolve('../../packages/common/src/theme/assets'), { index: false }));
 
   // Register images folder if locally hosted
   if (urls.images.startsWith(urls.base))

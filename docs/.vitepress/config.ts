@@ -20,7 +20,7 @@ export default defineConfig({
   vite: { server: { port: 8400 } },
 
   themeConfig: {
-    logo: '/logo.png' ,
+    logo: '/pwa-512x512.png' ,
     nav,
     search: {
       provider: 'algolia',

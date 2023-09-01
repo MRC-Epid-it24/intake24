@@ -1,6 +1,8 @@
 <p align='center'>
-    <img src='./docs/public/icon.svg' height="192" width="192" alt="Intake24"><br>
-    Intake24 - dietary recall system
+    <img src='./packages/common/src/theme/assets/logo-primary.svg' alt="Intake24">
+    <br>
+    <br>
+    Dietary recall system
 </p>
 <p align='center'>
     <a href="https://github.com/MRC-Epid-it24/intake24/releases">
@@ -21,10 +23,6 @@
 </p>
 <br/>
 
-# 🍔 Intake24
-
-> Intake24 dietary recall system
-
 ## 📖 Documentation
 
 [**Documentation & Guides**](https://docs.intake24.org)
@@ -35,4 +33,4 @@ Fork the repo, make some changes, submit a pull-request.
 
 ## 📄 License
 
-Apache License © 2020-PRESENT
+[Apache](./LICENSE) License © 2020-PRESENT

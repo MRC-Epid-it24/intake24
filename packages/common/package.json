@@ -15,6 +15,7 @@
     "node": ">=16"
   },
   "scripts": {
+    "svgo": "svgo -f ./src/theme/assets -o ./src/theme/assets",
     "validators": "node scripts/validators.js"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "@types/pluralize": "^0.0.30",
     "execa": "^5.1.1",
     "fs-extra": "^11.1.1",
+    "svgo": "^3.0.2",
     "typescript": "^5.2.2",
     "typescript-json-validator": "^2.4.2"
   },
