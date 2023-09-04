@@ -186,13 +186,16 @@ const authenticationService = ({
       throw new UnauthorizedError('Provided credentials do not match our records.');
     }
 
-    if (frontEnd === 'admin' && user.multiFactorAuthentication && user.email)
+    const { id: userId, email, aliases } = user;
+    const surveyId = aliases?.[0]?.survey?.slug;
+
+    if (frontEnd === 'admin' && user.multiFactorAuthentication && email)
       //@ts-expect-error fix type
-      return processMFA({ email: user.email, userId: user.id }, meta);
+      return processMFA({ email, userId }, meta);
 
     await signInService.log({ ...signInAttempt, successful: true });
 
-    return jwtService.issueTokens(user.id, subject, frontEnd);
+    return jwtService.issueTokens({ surveyId, userId }, subject, frontEnd);
   };
 
   /**
@@ -257,7 +260,11 @@ const authenticationService = ({
       include: [
         { association: 'permissions', where: { name: surveyRespondent(slug) } },
         { association: 'password' },
-        { association: 'aliases', where: { username, surveyId: survey.id } },
+        {
+          association: 'aliases',
+          where: { username, surveyId: survey.id },
+          include: [{ association: 'survey', attributes: ['slug'] }],
+        },
       ],
     });
 
@@ -276,7 +283,11 @@ const authenticationService = ({
   const tokenLogin = async ({ token }: TokenLoginRequest, meta: LoginMeta): Promise<Tokens> => {
     const user = await User.findOne({
       include: [
-        { association: 'aliases', where: { urlAuthToken: token } },
+        {
+          association: 'aliases',
+          where: { urlAuthToken: token },
+          include: [{ association: 'survey', attributes: ['slug'] }],
+        },
         { association: 'password' },
       ],
     });
@@ -295,7 +306,12 @@ const authenticationService = ({
    */
   const refresh = async (token: string, frontEnd: FrontEnd): Promise<Tokens> => {
     try {
-      const { userId, sub: subject } = await jwtService.verifyRefreshToken(token, frontEnd);
+      const {
+        userId,
+        sub: subject,
+        // @ts-expect-error - TS does not narrow down surveyId based on above condition
+        surveyId,
+      } = await jwtService.verifyRefreshToken(token, frontEnd);
 
       const user = await User.findByPk(userId);
       if (!user) throw new UnauthorizedError();
@@ -303,7 +319,7 @@ const authenticationService = ({
       const valid = await jwtRotationService.verifyAndRevoke(token);
       if (!valid) throw new UnauthorizedError();
 
-      return await jwtService.issueTokens(userId, subject, frontEnd);
+      return await jwtService.issueTokens({ surveyId, userId }, subject, frontEnd);
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
@@ -373,7 +389,7 @@ const authenticationService = ({
       });
 
       const [tokens] = await Promise.all([
-        jwtService.issueTokens(userId, { provider: 'email', providerKey: email }, 'admin'),
+        jwtService.issueTokens({ userId }, { provider: 'email', providerKey: email }, 'admin'),
         signInService.log({ ...signInAttempt, successful: true }),
       ]);
 

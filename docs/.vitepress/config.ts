@@ -9,16 +9,18 @@ export default defineConfig({
   lang: 'en',
 
   head: [
-    ['meta', { name: 'theme-color', content: '#EF6C00' }],
+    ['meta', { name: 'theme-color', content: '#EE672D' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
-    ['link', { rel: 'icon', href: '/favicon.ico', type: "image/png", sizes: "16x16" }],
+    ['link', { rel: 'icon', href: '/icon.ico', sizes: 'any' }],
+    ['link', { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }],
+    ['link', { rel: 'mask-icon', href: '/icon.svg', type: 'image/svg+xml', color: '#FFFFFF' }],
   ],
 
   vite: { server: { port: 8400 } },
 
   themeConfig: {
-    logo: '/logo.png' ,
+    logo: '/pwa-512x512.png' ,
     nav,
     search: {
       provider: 'algolia',

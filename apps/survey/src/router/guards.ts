@@ -1,7 +1,7 @@
 import type { NavigationGuard } from 'vue-router';
 import { isAxiosError } from 'axios';
 
-import { useAuth, useSurvey } from '../stores';
+import { useAuth, useSurvey, useUser } from '../stores';
 
 export const feedbackParametersGuard: NavigationGuard = async (to, from, next) => {
   const {
@@ -78,32 +78,58 @@ export const surveyParametersErrorGuard: NavigationGuard = async (to, from, next
   next();
 };
 
+export const authGuard: NavigationGuard = async (to, from, next) => {
+  const {
+    params: { token },
+  } = to;
+
+  try {
+    const auth = useAuth();
+    await auth.logout(true);
+    await auth.token({ token });
+
+    const surveyId = useUser().profile?.surveyId;
+
+    next(surveyId ? { name: 'survey-home', params: { surveyId } } : { name: 'home' });
+    return;
+  } catch {
+    next({ name: 'home' });
+    return;
+  }
+};
+
 export const globalGuard: NavigationGuard = async (to, from, next) => {
   const {
     meta: { module } = {},
+    query: { auth: token, ...query },
+  } = to;
+  let {
     params: { surveyId },
-    query: { token, ...restQuery },
   } = to;
 
   const auth = useAuth();
+
+  // Try logging-in if we have authentication token
+  if (typeof token === 'string' && token && !auth.loggedIn) {
+    try {
+      await auth.logout(true);
+      await auth.token({ token });
+
+      surveyId = useUser().profile?.surveyId ?? surveyId;
+      const name = to.meta?.module === 'public' ? 'survey-home' : to.name ?? 'survey-home';
+
+      next({ name, params: { surveyId }, query });
+      return;
+    } catch {
+      next({ name: surveyId ? 'survey-login' : 'home', params: { surveyId } });
+      return;
+    }
+  }
 
   // Public pages
   if (module === 'public') {
     next();
     return;
-  }
-
-  // Try logging-in if we have token
-  if (typeof token === 'string' && token && !auth.loggedIn) {
-    try {
-      await auth.logout(true);
-      await auth.token({ token });
-      next({ name: to.name ?? 'survey-home', params: { surveyId }, query: restQuery });
-      return;
-    } catch {
-      next({ name: 'survey-login', params: { surveyId } });
-      return;
-    }
   }
 
   // Login pages (credentials / token)

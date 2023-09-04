@@ -1,6 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
-    <app-entry-screen :logo="logo" :title="$t('common._').toString()" width="30rem">
+    <app-entry-screen :title="$t('common._').toString()" width="30rem">
       <v-card-text class="pa-6">
         <p>Click on the 'Generate access' button generate new credentials for you.</p>
         <p>
@@ -51,7 +51,6 @@ import { mapActions } from 'pinia';
 import { defineComponent, reactive, ref } from 'vue';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import { logo } from '@intake24/survey/assets';
 import { surveyService } from '@intake24/survey/services';
 import { useAuth, useMessages } from '@intake24/survey/stores';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
@@ -79,7 +78,6 @@ export default defineComponent({
       password: '',
       captcha: null as string | null,
       captchaRef,
-      logo,
     });
   },
 

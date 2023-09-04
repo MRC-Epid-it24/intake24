@@ -53,7 +53,26 @@
                   prepend-inner-icon="fas fa-envelope"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="4">
+                <v-autocomplete
+                  v-model="form.phoneCountry"
+                  hide-details="auto"
+                  :items="regionCodes"
+                  name="phoneCountry"
+                  outlined
+                  single-line
+                >
+                  <template #item="{ item }">
+                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`"></span>
+                    {{ item.text }}
+                  </template>
+                  <template #selection="{ item }">
+                    <span :class="`fi fi-${item.value.toLowerCase()} mr-3`"></span>
+                    {{ item.countryCode }}
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <v-col cols>
                 <v-text-field
                   v-model="form.phone"
                   :error-messages="errors.get('phone')"
@@ -103,11 +122,13 @@
 
 <script lang="ts">
 import type { AxiosError } from 'axios';
+import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-phonenumber';
 import axios from 'axios';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { SurveyRequestHelpInput } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 import { surveyService } from '../services';
 import { useMessages } from '../stores';
@@ -128,57 +149,77 @@ export default defineComponent({
 
   emits: ['cancel'],
 
-  data() {
+  setup(props, { emit }) {
+    const { i18n } = useI18n();
+
+    const regionCodes = getSupportedRegionCodes().map((code) => {
+      const countryCode = `+${getCountryCodeForRegionCode(code)}`;
+
+      return {
+        text: `${i18n.t(`flags.${code.toLowerCase()}`)} (${countryCode})`,
+        value: code,
+        countryCode,
+      };
+    });
+
+    const dialog = ref(false);
+    const errors = ref(new Errors());
+
     const createForm = (): SurveyRequestHelpInput => ({
       name: '',
       email: '',
       phone: '',
+      phoneCountry: window.navigator.language.split('-')[1] ?? 'GB',
       message: '',
     });
 
-    return {
-      dialog: false,
-      createForm,
-      form: createForm(),
-      errors: new Errors(),
+    const form = ref(createForm());
+
+    const reset = () => {
+      form.value = createForm();
     };
-  },
 
-  methods: {
-    reset() {
-      this.form = this.createForm();
-    },
+    const close = () => {
+      dialog.value = false;
+    };
 
-    close() {
-      this.dialog = false;
-    },
+    const cancel = () => {
+      close();
+      emit('cancel');
+    };
 
-    cancel() {
-      this.close();
-      this.$emit('cancel');
-    },
-
-    async requestHelp() {
-      const { form, surveyId } = this;
+    const requestHelp = async () => {
+      const { surveyId } = props;
 
       try {
-        await surveyService.requestHelp(surveyId, form);
-        useMessages().success(this.$t('common.help.sent').toString());
-        this.reset();
-        this.close();
+        await surveyService.requestHelp(surveyId, form.value);
+        useMessages().success(i18n.t('common.help.sent').toString());
+        reset();
+        close();
       } catch (err) {
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err as AxiosError<any>;
 
           if (status === 422 && 'errors' in data) {
-            this.errors.record(data.errors);
+            errors.value.record(data.errors);
             return;
           }
         }
 
         throw err;
       }
-    },
+    };
+
+    return {
+      dialog,
+      createForm,
+      form,
+      errors,
+      cancel,
+      requestHelp,
+      getCountryCodeForRegionCode,
+      regionCodes,
+    };
   },
 });
 </script>

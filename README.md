@@ -1,6 +1,12 @@
 <p align='center'>
+    <img src='./packages/common/src/theme/assets/logo-primary.svg' width="400" alt="Intake24">
+    <br>
+    <br>
+    Dietary recall system
+</p>
+<p align='center'>
     <a href="https://github.com/MRC-Epid-it24/intake24/releases">
-        <img src="https://img.shields.io/github/package-json/version/MRC-Epid-it24/intake24/master?label=release&color=EF6C00" alt="release">
+        <img src="https://img.shields.io/github/package-json/version/MRC-Epid-it24/intake24/master?label=release&color=EE672D" alt="release">
     </a>
     <a href="https://nodejs.org/en/about/releases">
         <img src="https://img.shields.io/badge/node-%3E%3D%2016-success" alt="node compatibility">
@@ -12,14 +18,10 @@
         <img src="https://img.shields.io/github/license/MRC-Epid-it24/intake24" alt="License">
     </a>
     <a href="https://docs.intake24.org" target="__blank">
-        <img src="https://img.shields.io/static/v1?label=web&message=Docs%20%26%20Guides&color=EF6C00" alt="Docs & Guides">
+        <img src="https://img.shields.io/static/v1?label=web&message=Docs%20%26%20Guides&color=EE672D" alt="Docs & Guides">
     </a>
 </p>
 <br/>
-
-# 🍔 Intake24
-
-> Intake24 dietary recall system
 
 ## 📖 Documentation
 
@@ -31,4 +33,4 @@ Fork the repo, make some changes, submit a pull-request.
 
 ## 📄 License
 
-Apache License © 2020-PRESENT
+[Apache](./LICENSE) License © 2020-PRESENT

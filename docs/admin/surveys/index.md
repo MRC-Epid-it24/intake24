@@ -69,9 +69,9 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 ### Authentication URL settings
 
-- `Token character set` - string of characters to be used for authentication tokens (if empty, default is used)
+- `Token character set` - string of characters to be used for authentication tokens (if empty, default set is used)
 
-- `Token length` - Authentication token length
+- `Token length` - Authentication token length (if empty, default length is used)
 
 - `Domain override` - URL used to generate full authentication links in CSV export file. Please note, valid redirect, CNAME or other mechanism to reach the original server needs to be set up.
 
@@ -124,6 +124,33 @@ Survey respondents section allows to:
 2. Bulk import respondents using CSV file. See [`SurveyRespondentsImport`](/admin/system/job-types#surveyimportrespondents) for more details about CSV file structure.
 
 3. Download respondents authentication details in CSV file
+
+### Authentication URLs
+
+Authentication URLs are formed of:
+
+- base URL: `app.domain.com`
+- survey ID: `{surveyId}`
+- authentication token: `{token}`
+
+#### Short URL patterns
+
+- `app.domain.com/a/{token}` - `context` pattern
+- `app.domain.com?auth={token}` - `query` pattern
+
+:::tip
+Short URL patterns can be used to let user land on survey home page
+:::
+
+#### Full URL patterns
+
+- `app.domain.com/{surveyId}?auth={token}` - user is redirected to the survey landing page
+- `app.domain.com/{surveyId}/recall?auth={token}` - user is redirected to the survey recall page
+- `app.domain.com/{surveyId}/feedback?auth={token}` - user is redirected to the survey feedback page
+
+:::tip
+Full URL patterns using `{token}` as `query` parameter can be used in combination with any valid survey app URL to let user land on specific page
+:::
 
 ## Submissions
 

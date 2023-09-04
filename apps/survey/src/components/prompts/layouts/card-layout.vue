@@ -37,6 +37,7 @@
             :title="Object.keys(item.label).length ? translate(item.label) : translate(item.text)"
             @click="action(item.type, foodOrMealId, item.params)"
           >
+            <v-icon v-if="item.icon" left>{{ item.icon }}</v-icon>
             {{ translate(item.text) }}
           </v-btn>
         </template>
@@ -55,8 +56,7 @@
                 :key="item.type"
                 :color="item.color"
                 :disabled="item.type === 'next' && !isValid"
-                :outlined="item.variant === 'outlined'"
-                :text="item.variant === 'text'"
+                :text="['outlined', 'text'].includes(item.variant)"
                 :title="
                   Object.keys(item.label).length ? translate(item.label) : translate(item.text)
                 "

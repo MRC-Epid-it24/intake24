@@ -2,32 +2,19 @@
 
 Intake24 dietary recall system
 
-It is consists of following parts:
+Backend components of Intake24 dietary recall system are:
 
-- [Survey/Recall interface](/survey/)
-- [Admin tool](/admin/)
-- [API Service](/api/)
-- [CLI](/cli/)
-- Databases (system DB and food DB)
+- [API Service](/api/) - serves data from the database for the front end interfaces (admin and survey) and 3rd party applications
 
-## Survey/Recall interface
+- [CLI](/cli/) - command line tool with various useful commands / scripts
 
-Users can access the survey interface to complete their dietary recall. This is generated dependent on the configuration of the survey, which is configured through the the admin tool.
+- Persistent layer - two separate databases:
 
-A demo survey is available, where users can be dynamically generated. Most users will access the survey using a user account (username:password combination) or via an unique authentication link.
+  - `Food DB` - stores food data
+  - `System DB`- stores system data (users, recalls, surveys, schemes)
 
-## Admin tool
+Frontend components of Intake24 dietary recall system are two applications:
 
-Allows for administration of surveys, including user accounts. Surveys are based on schemes, which dictate the question structure and other aspects of the survey. A scheme also uses a specific food list, and is thus used for localisation.
+- [Survey/Recall interface](/survey/) - the main interface for users to complete their dietary recall
 
-## API service
-
-Serves data from the database for the front end interfaces (admin and survey).
-
-## CLI
-
-Command line tool with various useful commands / scripts.
-
-## Database
-
-Built on PostgreSQL, there are two databases: `system` and `foods`, storing the system data (users, recalls, surveys, schemes) and food lists respectively.
+- [Admin tool](/admin/) - Admin tool for system configuration and management

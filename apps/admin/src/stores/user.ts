@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import type { Subject } from '@intake24/common/security';
+import type { AdminTokenPayload, Subject } from '@intake24/common/security';
 import type { AdminUserProfileResponse } from '@intake24/common/types/http/admin';
 import type { Permission } from '@intake24/ui/types';
 import { httpService } from '@intake24/admin/services';
@@ -67,7 +67,10 @@ export const useUser = defineStore('user', {
     },
 
     loadPayload(accessToken: string) {
-      const { userId, sub } = tokenService.decodeAccessToken(accessToken, 'admin');
+      const { userId, sub } = tokenService.decodeAccessToken<AdminTokenPayload>(
+        accessToken,
+        'admin'
+      );
 
       const subject: Subject = JSON.parse(atob(sub));
 

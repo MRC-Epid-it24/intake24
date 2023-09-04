@@ -42,5 +42,12 @@
     },
   ],
   "colorTabs.titleBackground": true,
-  "colorTabs.ignoreCase": true
+  "colorTabs.ignoreCase": true,
+  "workbench.colorCustomizations": {
+    "tab.activeBorder": "#851e3e",
+    "titleBar.activeBackground": "#851e3e",
+    "titleBar.activeForeground": "#000000",
+    "statusBar.background": "#851e3e",
+    "statusBar.foreground": "#000000"
+  }
 }

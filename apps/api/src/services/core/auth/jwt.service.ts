@@ -145,27 +145,25 @@ const jwtService = ({
    * @param {string} token
    * @returns {TokenPayload}
    */
-  const decodeToken = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
+  const decodeToken = <T extends TokenPayload>(token: string): T => jwt.decode(token) as T;
 
   /**
    * Issue JWT tokens and log for rotation
    *
-   * @param {string} userId
+   * @param {SignPayload} payload
    * @param {(Subject | string)} subject
    * @param {FrontEnd} frontEnd
    * @returns {Promise<Tokens>}
    */
   const issueTokens = async (
-    userId: string,
+    payload: SignPayload,
     subject: Subject | string,
     frontEnd: FrontEnd
   ): Promise<Tokens> => {
-    const payload: SignPayload = { userId };
-
     const { accessToken, refreshToken } = await signTokens(payload, frontEnd, {
       subject: typeof subject === 'string' ? subject : btoa(subject),
     });
-    await jwtRotationService.store(refreshToken, userId);
+    await jwtRotationService.store(refreshToken, payload.userId);
 
     return { accessToken, refreshToken };
   };

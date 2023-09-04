@@ -59,5 +59,6 @@ export default async (express: Express, { config }: Ops): Promise<void> => {
       noCache: isDev,
     })
     .addGlobal('app', { name: app.name, year: new Date().getFullYear(), replyTo: mail.replyTo })
+    .addGlobal('asset', (content: string) => path.join(app.urls.base, content))
     .addFilter('inlineCSS', (content: string) => new CleanCSS().minify(content).styles);
 };

@@ -1,6 +1,5 @@
 <template>
   <app-entry-screen
-    :logo="logo"
     :subtitle="$t('common.signup.subtitle').toString()"
     :title="$t('common.signup._').toString()"
     width="800px"
@@ -143,7 +142,6 @@
 import { defineComponent, reactive, ref } from 'vue';
 
 import type { LoginResponse } from '@intake24/common/types/http';
-import { logo } from '@intake24/admin/assets';
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import { createForm } from '@intake24/admin/util';
 import { AppEntryScreen, Captcha } from '@intake24/ui';
@@ -183,7 +181,6 @@ export default defineComponent({
         passwordConfirm: false,
       },
       captcha,
-      logo,
     });
   },
 

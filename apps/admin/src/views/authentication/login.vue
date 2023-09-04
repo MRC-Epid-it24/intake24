@@ -1,6 +1,5 @@
 <template>
   <app-entry-screen
-    :logo="logo"
     :subtitle="$t('common.login.subtitle').toString()"
     :title="$t('common._').toString()"
     width="30rem"
@@ -88,7 +87,6 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineComponent } from 'vue';
 
-import { logo } from '@intake24/admin/assets';
 import { useAuth, useMessages } from '@intake24/admin/stores';
 import { Errors } from '@intake24/common/util';
 import { AppEntryScreen } from '@intake24/ui';
@@ -110,7 +108,6 @@ export default defineComponent({
       showPassword: false,
       errors: new Errors(),
       signupEnabled: import.meta.env.VITE_ACL_SIGNUP_ENABLED === 'true',
-      logo,
     };
   },
 

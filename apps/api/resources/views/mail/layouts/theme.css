@@ -104,7 +104,7 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 570px;
-    background-color: #EF6C00;
+    background-color: #EE672D;
     text-align: center;
     width: 570px;
 }
@@ -245,11 +245,11 @@ table {
 
 .button-orange,
 .button-primary {
-    background-color: #EF6C00;
-    border-bottom: 8px solid #EF6C00;
-    border-left: 18px solid #EF6C00;
-    border-right: 18px solid #EF6C00;
-    border-top: 8px solid #EF6C00;
+    background-color: #EE672D;
+    border-bottom: 8px solid #EE672D;
+    border-left: 18px solid #EE672D;
+    border-right: 18px solid #EE672D;
+    border-top: 8px solid #EE672D;
 }
 
 .button-blue {

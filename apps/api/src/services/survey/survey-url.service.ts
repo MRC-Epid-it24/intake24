@@ -10,10 +10,11 @@ const surveyUrlService = (
 
   const getBaseUrl = () => getFrontEndUrl(base, survey, authUrlDomainOverride);
 
-  const getSurveyUrl = (authToken: string) => `${getBaseUrl()}/${surveySlug}?token=${authToken}`;
+  const getSurveyUrl = (authToken: string, long = false) =>
+    long ? `${getBaseUrl()}/${surveySlug}?auth=${authToken}` : `${getBaseUrl()}/a/${authToken}`;
 
   const getFeedbackUrl = (authToken: string) =>
-    `${getBaseUrl()}/${surveySlug}/feedback?token=${authToken}`;
+    `${getBaseUrl()}/${surveySlug}/feedback?auth=${authToken}`;
 
   return {
     getBaseUrl,

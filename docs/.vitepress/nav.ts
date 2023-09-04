@@ -4,19 +4,20 @@ export const nav = [
     link: '/overview/',
   },
   {
-    text: 'Configuration',
-    link: '/config/',
-  },
-  {
     text: 'Components',
     items: [
+      { text: 'Configuration', link: '/config/' },
       { text: 'API', link: '/api/' },
-      { text: 'Admin', link: '/admin/' },
-      { text: 'Survey', link: '/survey/' },
-      { text: 'Portal', link: '/portal/' },
+      { text: 'Admin Tool', link: '/admin/' },
+      { text: 'Survey App', link: '/survey/' },
       { text: 'CLI', link: '/cli/' },
+      // { text: 'Portal', link: '/portal/' },
       { text: 'Data Dictionary', link: '/data-dictionary/' },
     ],
+  },
+  {
+    text: 'Guides',
+    link: '/guides/',
   },
   {
     text: 'Developer resources',

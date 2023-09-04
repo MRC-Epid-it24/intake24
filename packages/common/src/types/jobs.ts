@@ -71,6 +71,7 @@ export type JobParams = {
     name: string;
     email: string;
     phone: string;
+    phoneCountry: string;
     message: string;
   };
   SurveyFeedbackNotification: {
@@ -154,6 +155,7 @@ export const defaultJobsParams: JobParams = {
     name: '',
     email: '',
     phone: '',
+    phoneCountry: 'GB',
     message: '',
   },
   SurveyFeedbackNotification: {
