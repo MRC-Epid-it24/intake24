@@ -141,7 +141,7 @@ export default defineComponent({
   props: {
     value: {
       type: String,
-      default: 'ok',
+      default: 'next',
     },
   },
 

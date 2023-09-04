@@ -25,7 +25,7 @@ import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils, useMealPromptUtils } from './mixins';
 
-const infoPrompts = ['info-prompt', 'no-more-information-prompt'];
+const infoPrompts = ['info-prompt'];
 
 export default defineComponent({
   name: 'CustomPromptHandler',
@@ -50,7 +50,7 @@ export default defineComponent({
 
     const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
 
-    const state = ref<CustomPromptAnswer | undefined>(isInfoPrompt.value ? 'ok' : undefined);
+    const state = ref<CustomPromptAnswer | undefined>(isInfoPrompt.value ? 'next' : undefined);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next' || isInfoPrompt.value) commitAnswer();
@@ -72,8 +72,7 @@ export default defineComponent({
 
       const promptId = props.prompt.id;
 
-      if (survey.selection !== undefined && survey.selection.element !== null) {
-        // eslint-disable-next-line default-case
+      if (survey.selection.element) {
         switch (survey.selection.element.type) {
           case 'food': {
             const food = foodOptional.value;
@@ -82,37 +81,33 @@ export default defineComponent({
               return;
             }
 
+            if (!isInfoPrompt.value || state.value !== 'next')
+              survey.setFoodCustomPromptAnswer({ foodId: food.id, promptId, answer: state.value });
+
             if (isInfoPrompt.value) survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
-            else
-              survey.setFoodCustomPromptAnswer({
-                foodId: food.id,
-                promptId,
-                answer: state.value,
-              });
+
             break;
           }
           case 'meal': {
-            if (!mealOptional.value) {
+            const meal = mealOptional.value;
+            if (!meal) {
               console.warn('Expected meal to be defined');
               return;
             }
 
-            if (isInfoPrompt.value)
-              survey.addMealFlag(mealOptional.value.id, `${promptId}-acknowledged`);
-            else
-              survey.setMealCustomPromptAnswer({
-                mealId: mealOptional.value.id,
-                promptId,
-                answer: state.value,
-              });
+            if (!isInfoPrompt.value || state.value !== 'next')
+              survey.setMealCustomPromptAnswer({ mealId: meal.id, promptId, answer: state.value });
+
+            if (isInfoPrompt.value) survey.addMealFlag(meal.id, `${promptId}-acknowledged`);
 
             break;
           }
         }
-      } else if (isInfoPrompt.value) {
-        survey.addFlag(`${promptId}-acknowledged`);
       } else {
-        survey.setCustomPromptAnswer({ promptId, answer: state.value });
+        if (!isInfoPrompt.value || state.value !== 'next')
+          survey.setCustomPromptAnswer({ promptId, answer: state.value });
+
+        if (isInfoPrompt.value) survey.addFlag(`${promptId}-acknowledged`);
       }
     };
 

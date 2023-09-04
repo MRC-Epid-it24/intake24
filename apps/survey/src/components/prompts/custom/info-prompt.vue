@@ -1,10 +1,10 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="updateAndAction">
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="updateAndAction('next')"></next>
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="updateAndAction('next')"></next-mobile>
     </template>
   </card-layout>
 </template>
@@ -24,7 +24,7 @@ export default defineComponent({
   props: {
     value: {
       type: String,
-      default: 'ok',
+      default: 'next',
     },
   },
 
@@ -43,10 +43,15 @@ export default defineComponent({
       },
     });
 
+    const updateAndAction = (type: string, ...args: [id?: string, params?: object]) => {
+      state.value = type;
+      action(type, ...args);
+    };
+
     return {
-      action,
       isValid,
       state,
+      updateAndAction,
     };
   },
 });
