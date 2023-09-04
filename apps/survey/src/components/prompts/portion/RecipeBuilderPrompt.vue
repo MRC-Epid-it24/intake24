@@ -16,7 +16,7 @@
             <v-radio-group
               v-if="step.repeat && step.selectedFoods !== undefined"
               v-model="step.confirmed"
-              :disabled="step.selectedFoods !== undefined && step.selectedFoods.length > 0"
+              :disabled="!(step.selectedFoods !== undefined && step.selectedFoods.length > 0)"
               :row="!isMobile"
               @change="onConfirmToggleIngerients(index)"
             >
@@ -199,7 +199,7 @@ export default defineComponent({
       const update = {
         ...step,
         confirmed: step.repeat !== true ? 'yes' : 'no',
-        foods,
+        selectedFoods: foods,
       };
 
       this.recipeSteps.splice(ingredientIndex, 1, update);
