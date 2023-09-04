@@ -109,9 +109,7 @@ Create a new user account with a specific user name and a unique redirect URL if
 Currently used for integration with external survey systems.
 
 :::warning
-This functionality can present possible vulnerability if implemented incorrectly.
-
-Secret for the JWT generation is stored server-side in survey settings. Client implementation should store the secret securely at their end. E.g. if the client implementation is done in frontend javascript done, such secret can then be extracted and misused.
+JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
 ### Request

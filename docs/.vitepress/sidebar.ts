@@ -39,6 +39,22 @@ export const sidebar = {
       ],
     },
   ],
+  '/guides/': [
+    {
+      text: 'Guides',
+      collapsable: false,
+      items: [
+        {
+          text: 'Introduction',
+          link: '/guides/',
+        },
+        {
+          text: 'Integrations',
+          link: '/guides/integrations',
+        },
+      ],
+    },
+  ],
   '/config/': [
     {
       text: 'Configuration',
