@@ -4,6 +4,7 @@ import type {
   PortionSizeStates,
   RecipeBuilder,
   RecipeFood,
+  RequiredLocaleTranslation,
 } from '../types';
 import type { FoodHeader } from '../types/http';
 
@@ -15,9 +16,13 @@ export type AssociatedFoodPromptItemState = {
 
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
-  selectedFood?: FoodHeader;
+  type: 'selected' | 'missing' | undefined;
+  selectedFoods?: FoodHeader[];
   order: number;
-  description: string;
+  description: RequiredLocaleTranslation;
+  name: RequiredLocaleTranslation;
+  categoryCode: string;
+  repeat: boolean;
 };
 
 export type PromptStates = {
@@ -88,9 +93,9 @@ export type PromptStates = {
   };
   'recipe-builder-prompt': {
     recipe: RecipeFood;
-    panel: number;
+    activeStep: number;
     finishedSteps?: number[];
-    steps: RecipeBuilderStepState[];
+    recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];

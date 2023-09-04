@@ -33,4 +33,5 @@ export type RecipeFoodStepsType = {
   description: RequiredLocaleTranslation;
   localeId: string;
   categoryCode: string;
+  repeatable: boolean;
 };

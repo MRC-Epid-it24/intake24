@@ -5,25 +5,39 @@
       food: recipeBuilder(),
       localeId,
       meal,
-      initialState: state,
       prompt,
       section,
     }"
     @action="action"
-    @update="update"
+    @add-food="addLinkedFood"
+    @input="update"
   ></recipe-builder-prompt>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { Prompts, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
+import type { RecipeFoodStepsType } from '@intake24/common/types';
+import type { UserFoodData } from '@intake24/common/types/http';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
+import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+
+const initialPromptState = (step: RecipeFoodStepsType): RecipeBuilderStepState => ({
+  confirmed: undefined,
+  type: undefined,
+  repeat: step.repeatable ? true : false,
+  selectedFoods: [],
+  order: step.order - 1,
+  description: step.description,
+  name: step.name,
+  categoryCode: step.categoryCode,
+});
 
 export default defineComponent({
   name: 'RecipeBuilderPromptHandler',
@@ -45,16 +59,18 @@ export default defineComponent({
 
   setup(props, ctx) {
     const survey = useSurvey();
-    const { recipeBuilder, localeId } = useFoodPromptUtils();
+    const { recipeBuilder, localeId, meals } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
     const recipeFood = recipeBuilder().template;
+    const foodId = recipeBuilder().id;
+    const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
       recipe: recipeFood,
-      panel: 0,
+      activeStep: 0,
       finishedSteps: [],
-      steps: [],
+      recipeSteps: recipeFood.steps.map((step) => initialPromptState(step)),
     });
 
     // eslint-disable-next-line vue/no-setup-props-destructure
@@ -63,6 +79,42 @@ export default defineComponent({
       ctx,
       getInitialState
     );
+
+    const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number }) => {
+      const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
+      const flags = ['recipe-builder-complete'];
+
+      if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
+
+      const id = getEntityId();
+      survey.addFood({
+        mealId: meal.value.id,
+        food: {
+          id: id,
+          type: 'encoded-food',
+          data: data.ingredient,
+          searchTerm: data.ingredient.localName,
+          flags,
+          portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+          portionSize: null,
+          customPromptAnswers: {},
+          linkedFoods: [],
+          link: [{ id: id, linkedTo: [foodId] }],
+        },
+        at: foodIndex + (data.idx + 1),
+      });
+
+      const newComponents = [];
+      const recipeParent = survey.selectedFoodOptional;
+      if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
+        newComponents.push(...recipeParent.components);
+      }
+
+      survey.updateFood({
+        foodId: foodId,
+        update: { components: [...newComponents, { order: data.idx, ingredients: [id] }] },
+      });
+    };
 
     const commitAnswer = () => {
       //const { steps } = state.value;
@@ -76,14 +128,7 @@ export default defineComponent({
       clearStoredState();
     };
 
-    const searchParameters = computed(() => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
-        survey.parameters ?? {};
-
-      return { matchScoreWeight, rankingAlgorithm };
-    });
-
-    return { recipeBuilder, recipeFood, meal, state, localeId, update, action };
+    return { recipeBuilder, recipeFood, meal, state, localeId, update, action, addLinkedFood };
   },
 });
 </script>

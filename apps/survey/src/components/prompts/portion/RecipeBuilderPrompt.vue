@@ -1,10 +1,10 @@
 <template>
-  <base-layout v-bind="{ food, prompt, section, fields, recipe }">
-    <v-expansion-panels>
-      <v-expansion-panel v-for="(step, index) in recipe.steps" :key="index">
+  <base-layout v-bind="{ food, meal, prompt, section, fields, recipe }">
+    <v-expansion-panels v-model="activeStep" :tile="isMobile" @change="updateActiveStep">
+      <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
         <v-expansion-panel-header
           ><div>
-            <b>{{ step.order }}:</b> {{ translate(step.name) }}
+            <b>{{ step.order + 1 }}:</b> {{ translate(step.name) }}
           </div>
           <template #actions>
             <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
@@ -13,12 +13,35 @@
         <v-expansion-panel-content>
           <v-container class="pl-0">
             <p>{{ translate(step.description) }}</p>
+            <v-radio-group
+              v-if="step.repeat"
+              v-model="step.confirmed"
+              :disabled="step.selectedFoods !== undefined && step.selectedFoods.length > 0"
+              :row="!isMobile"
+              @change="onConfirmToggleIngerients(index)"
+            >
+              <v-radio
+                :label="$t('prompts.recipeBuilder.addMore')"
+                off-icon="fa-regular fa-circle"
+                on-icon="$yes"
+                :value="'no'"
+              ></v-radio>
+              <v-radio
+                :label="$t('prompts.recipeBuilder.noMore')"
+                off-icon="fa-regular fa-circle"
+                on-icon="$yes"
+                :value="'yes'"
+              ></v-radio>
+            </v-radio-group>
           </v-container>
           <v-expand-transition>
-            <v-card flat>
+            <v-card
+              v-if="step.confirmed !== 'yes' || (step.confirmed === 'yes' && step.repeat)"
+              flat
+            >
               <food-browser
                 v-bind="{
-                  localeId: step.localeId,
+                  localeId: localeId,
                   rootCategory: step.categoryCode,
                   prompt,
                 }"
@@ -35,7 +58,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, set } from 'vue';
 
 import type { PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/types';
@@ -43,14 +66,15 @@ import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
-import { usePromptUtils } from '@intake24/survey/composables';
+import { foodsService } from '@intake24/survey/services';
 
 import createBasePrompt from '../createBasePrompt';
 
-// const isPromptValid = (step: RecipeBuilderStepState): boolean =>
-//   (step.confirmed && ['no'].includes(step.confirmed)) ||
-//   (step.confirmed === 'yes' && step.selectedFood !== undefined);
-const isStepValid = (step: any): boolean => false;
+const isStepValid = (step: RecipeBuilderStepState): boolean =>
+  step.confirmed !== undefined && step.confirmed === 'yes';
+
+const getNextStep = (steps: RecipeBuilderStepState[]) =>
+  steps.findIndex((step) => !isStepValid(step));
 
 const { translate } = useI18n();
 
@@ -59,7 +83,7 @@ export default defineComponent({
 
   components: { ExpansionPanelActions, FoodBrowser },
 
-  mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
+  mixins: [createBasePrompt<'recipe-builder-prompt'>()],
 
   props: {
     food: {
@@ -76,9 +100,9 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input', 'update', 'add-food'],
 
-  data() {
+  data(props) {
     return {
       ...copy(this.value),
       isStepValid,
@@ -96,12 +120,7 @@ export default defineComponent({
     };
   },
 
-  computed: {
-    // validConditions(): boolean[] {
-    //   // return this.fields.map((item) => !!this.info[item]);
-    //   return [true];
-    // },
-  },
+  computed: {},
 
   methods: {
     confirm() {
@@ -109,10 +128,15 @@ export default defineComponent({
       //this.updatePanel();
     },
 
+    replaceFoodIndex(index: number) {
+      console.log('Replace Food Index', index);
+      // this.food.link.map(() => undefined as number | undefined);
+    },
+
     update() {
       const state: PromptStates['recipe-builder-prompt'] = {
-        steps: this.steps,
-        panel: this.panel,
+        recipeSteps: this.recipeSteps,
+        activeStep: this.activeStep,
         finishedSteps: this.finishedSteps,
         recipe: this.recipe,
       };
@@ -120,12 +144,76 @@ export default defineComponent({
       this.$emit('update', { state });
     },
 
-    foodSelected(food: FoodHeader, promptIndex: number): void {
-      console.log(food, promptIndex);
+    foodSelected(food: FoodHeader, ingredientIndex: number): void {
+      console.log(food, ingredientIndex);
+      const selectedFoods = this.recipeSteps[ingredientIndex].selectedFoods;
+      this.onFoodSelected(
+        {
+          ...this.recipeSteps[ingredientIndex],
+          type: 'selected',
+          selectedFoods: selectedFoods === undefined ? [food] : [...selectedFoods, food],
+        },
+        ingredientIndex,
+        food
+      );
     },
 
-    foodMissing(promptIndex: number): void {
-      console.log(promptIndex);
+    foodMissing(ingredientIndex: number): void {
+      console.log(ingredientIndex);
+    },
+
+    async onFoodSelected(
+      stepFoods: RecipeBuilderStepState,
+      ingredientIndex: number,
+      foodForSearch: FoodHeader
+    ): Promise<void> {
+      if (stepFoods.selectedFoods === undefined) {
+        return;
+      }
+
+      const foodData = await foodsService.getData(this.localeId, foodForSearch.code);
+
+      const step = this.recipeSteps[ingredientIndex];
+      const replaceIndex = this.replaceFoodIndex(ingredientIndex);
+      const data = { ingredient: foodData, idx: ingredientIndex };
+
+      const foods = step.selectedFoods ? step.selectedFoods.slice() : [];
+
+      if (!step.repeat && replaceIndex !== undefined) {
+        foods[replaceIndex] = stepFoods.selectedFoods[replaceIndex];
+        set(this.replaceFoodIndex, ingredientIndex, undefined);
+      } else {
+        foods.push(stepFoods.selectedFoods[ingredientIndex]);
+      }
+
+      const update = {
+        ...step,
+        confirmed: step.repeat !== true ? 'yes' : 'no',
+        foods,
+      };
+
+      this.recipeSteps.splice(ingredientIndex, 1, update);
+
+      this.goToNextIfCan(ingredientIndex);
+      this.updateActiveStep(ingredientIndex);
+
+      this.$emit('add-food', data);
+    },
+
+    goToNextIfCan(index: number) {
+      if (!isStepValid(this.recipeSteps[index])) return;
+
+      this.activeStep = getNextStep(this.recipeSteps);
+    },
+
+    updateActiveStep(index: number) {
+      const { activeStep, recipeSteps } = this;
+      this.$emit('input', { activeStep: index, recipeSteps });
+      this.activeStep = index;
+    },
+
+    onConfirmToggleIngerients(index: number) {
+      this.goToNextIfCan(index);
     },
   },
 });

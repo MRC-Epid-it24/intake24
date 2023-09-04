@@ -132,8 +132,6 @@ export default defineComponent({
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.food();
 
-      console.log('recipeFood', JSON.stringify(recipeFood));
-
       const newState: RecipeBuilder = {
         id,
         type: 'recipe-builder', // TODO: Check if "recipe-builder" is the correct type here or should ity be "template"

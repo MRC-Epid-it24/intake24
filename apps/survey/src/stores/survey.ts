@@ -17,6 +17,7 @@ import type {
   MealTime,
   MissingFood,
   PromptAnswer,
+  RecipeBuilder,
   Selection,
   SurveyFlag,
   SurveyState as CurrentSurveyState,
@@ -664,7 +665,8 @@ export const useSurvey = defineStore('survey', {
       update:
         | Partial<Omit<FreeTextFood, 'type'>>
         | Partial<Omit<EncodedFood, 'type'>>
-        | Partial<Omit<MissingFood, 'type'>>;
+        | Partial<Omit<MissingFood, 'type'>>
+        | Partial<Omit<RecipeBuilder, 'type'>>;
     }) {
       const foodState = findFood(this.meals, data.foodId);
       this.replaceFood({ foodId: data.foodId, food: { ...foodState, ...data.update } });

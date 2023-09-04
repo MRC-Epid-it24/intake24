@@ -416,6 +416,8 @@ const prompts: LocaleMessageObject = {
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
+    addMore: 'Add more ingredients',
+    noMore: 'No more ingredients',
   },
   parentFoodPortion: {
     name: 'Parent food portion',

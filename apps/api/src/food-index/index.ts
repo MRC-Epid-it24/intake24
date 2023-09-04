@@ -79,7 +79,15 @@ export default {
           {
             model: RecipeFoodsSteps,
             as: 'steps',
-            attributes: ['code', 'name', 'description', 'order', 'localeId', 'categoryCode'],
+            attributes: [
+              'code',
+              'name',
+              'description',
+              'order',
+              'localeId',
+              'categoryCode',
+              'repeatable',
+            ],
             required: true,
           },
           {

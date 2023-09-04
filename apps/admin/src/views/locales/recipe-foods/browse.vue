@@ -88,6 +88,7 @@
                   :disabled="form.errors.any() || isAppLoading"
                   :title="$t('locales.recipe-foods.steps')"
                   type="button"
+                  @click.stop="() => openStepsDialog(item.id, item.code, item)"
                 >
                   <v-icon left>fa-light fa-arrow-down-1-9</v-icon
                   >{{ $t('locales.recipe-foods.steps') }}
@@ -103,6 +104,12 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
+    <steps-dialog
+      v-if="form.items"
+      v-bind="{ dialog, activeRecipeFoodId, activeRecipeFoodCode, activeRecipeFood }"
+      ref="stepsDialog"
+      @close="toggleDialog"
+    ></steps-dialog>
   </layout>
 </template>
 
@@ -119,6 +126,8 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 
+import StepsDialog from './stepsDialog.vue';
+
 export type LocaleRecipeFoodsForm = {
   items: LocaleRecipeFoodsInput[];
   synonymsSets: LocaleSynonymSet[];
@@ -127,6 +136,8 @@ export type changedSynonms = { idx: number; item: string };
 
 export default defineComponent({
   name: 'LocaleRecipeFoods',
+
+  components: { StepsDialog },
 
   mixins: [formMixin],
 
@@ -152,6 +163,15 @@ export default defineComponent({
     };
   },
 
+  data() {
+    return {
+      dialog: false,
+      activeRecipeFoodId: '',
+      activeRecipeFoodCode: '',
+      activeRecipeFood: {} as LocaleRecipeFoodsInput,
+    };
+  },
+
   async mounted() {
     const { data: items } = await this.$http.get<LocaleRecipeFoods[]>(
       `admin/locales/${this.id}/recipe-foods`
@@ -164,6 +184,23 @@ export default defineComponent({
   },
 
   methods: {
+    toggleDialog() {
+      this.dialog = !this.dialog;
+    },
+
+    openStepsDialog(
+      recipeFoodId: string | undefined,
+      recipeFoodCode: string,
+      recipeFood: LocaleRecipeFoodsInput
+    ) {
+      if (!recipeFoodId) return;
+      this.toggleDialog();
+      this.activeRecipeFoodId = recipeFoodId;
+      this.activeRecipeFoodCode = recipeFoodCode;
+      this.activeRecipeFood = recipeFood;
+      console.log(recipeFoodId, recipeFoodCode, recipeFood);
+    },
+
     changeSynonyms(changedSynonms: changedSynonms) {
       console.log(changedSynonms);
       if (changedSynonms.item)

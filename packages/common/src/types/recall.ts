@@ -249,6 +249,7 @@ export interface AbstractFoodState {
 export interface FreeTextFood extends AbstractFoodState {
   type: 'free-text';
   description: string;
+  link?: RecipeBuilderLinkedFood[] | null;
 }
 
 export interface EncodedFood extends AbstractFoodState {
@@ -257,6 +258,7 @@ export interface EncodedFood extends AbstractFoodState {
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
+  link?: RecipeBuilderLinkedFood[] | null;
   // brand: string[]; TODO V3?
 }
 
