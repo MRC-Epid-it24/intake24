@@ -127,6 +127,12 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    currentPrompt() {
+      this.$vuetify.goTo(0);
+    },
+  },
+
   created() {
     if (!this.surveyScheme) {
       console.error('Survey scheme must be known at this point');
