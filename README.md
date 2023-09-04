@@ -1,5 +1,5 @@
 <p align='center'>
-    <img src='./packages/common/src/theme/assets/logo-primary.svg' alt="Intake24">
+    <img src='./packages/common/src/theme/assets/logo-primary.svg' width="400" alt="Intake24">
     <br>
     <br>
     Dietary recall system
