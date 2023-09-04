@@ -74,15 +74,11 @@ export default defineComponent({
     });
 
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const { state, action, update, clearStoredState } = usePromptHandlerStore(
-      props,
-      ctx,
-      getInitialState
-    );
+    const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
     const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number }) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
-      const flags = ['recipe-builder-complete'];
+      const flags = ['portion-size-option-complete', ''];
 
       if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
 
@@ -125,7 +121,14 @@ export default defineComponent({
       // survey.updateFood({ foodId: food().id, update: { info } });
       // survey.addFoodFlag(food().id, 'recipe-builder-complete');
 
+      survey.addFoodFlag(foodId, 'portion-size-method-complete');
+      survey.addFoodFlag(foodId, 'recipe-builder-complete');
       clearStoredState();
+      ctx.emit('action', 'next');
+    };
+
+    const action = async (type: string, ...args: [id?: string, params?: object]) => {
+      if (type === 'next') await commitAnswer();
     };
 
     return { recipeBuilder, recipeFood, meal, state, localeId, update, action, addLinkedFood };

@@ -14,7 +14,7 @@
           <v-container class="pl-0">
             <p>{{ translate(step.description) }}</p>
             <v-radio-group
-              v-if="step.repeat"
+              v-if="step.repeat && step.selectedFoods !== undefined"
               v-model="step.confirmed"
               :disabled="step.selectedFoods !== undefined && step.selectedFoods.length > 0"
               :row="!isMobile"
@@ -53,6 +53,12 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <template #actions>
+      <next :disabled="!allStepsFinished" @click="action('next')"></next>
+    </template>
+    <template #nav-actions>
+      <next-mobile :disabled="!allStepsFinished" @click="action('next')"></next-mobile>
+    </template>
   </base-layout>
 </template>
 
@@ -100,7 +106,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update', 'add-food'],
+  emits: ['input', 'update', 'add-food', 'action'],
 
   data(props) {
     return {
@@ -120,7 +126,11 @@ export default defineComponent({
     };
   },
 
-  computed: {},
+  computed: {
+    allStepsFinished(): boolean {
+      return this.allConfirmed();
+    },
+  },
 
   methods: {
     confirm() {
@@ -194,8 +204,8 @@ export default defineComponent({
 
       this.recipeSteps.splice(ingredientIndex, 1, update);
 
-      this.goToNextIfCan(ingredientIndex);
       this.updateActiveStep(ingredientIndex);
+      this.goToNextIfCan(ingredientIndex);
 
       this.$emit('add-food', data);
     },
@@ -214,6 +224,16 @@ export default defineComponent({
 
     onConfirmToggleIngerients(index: number) {
       this.goToNextIfCan(index);
+    },
+
+    allConfirmed(): boolean {
+      return this.recipeSteps.reduce((acc, curr) => {
+        return acc && curr.confirmed === 'yes';
+      }, true);
+    },
+
+    action(type: string, id?: string) {
+      this.$emit('action', type, id);
     },
   },
 });

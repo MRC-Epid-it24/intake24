@@ -651,7 +651,7 @@ const checkFoodStandardConditions = (
         return false;
       }
 
-      recallLog().promptCheck(component, true, `Missing food info not entered yet..`);
+      recallLog().promptCheck(component, true, `Recipe food info not entered yet..`);
       return true;
     }
 

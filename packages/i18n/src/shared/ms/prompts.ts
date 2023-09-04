@@ -399,6 +399,7 @@ const prompts: LocaleMessageObject = {
     portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
   },
   recipeBuilder: {
+    back: 'Back to parent category',
     name: '{food} recipe builder',
     search: 'Search for Food',
     browse: 'Browse all relevant categories',
