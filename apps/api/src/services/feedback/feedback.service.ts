@@ -48,7 +48,7 @@ const feedbackService = ({ appConfig, fsConfig }: Pick<IoC, 'appConfig' | 'fsCon
     const { base, survey } = appConfig.urls;
     const baseUrl = getFrontEndUrl(base, survey);
     const query = new URLSearchParams([
-      ['token', urlAuthToken],
+      ['auth', urlAuthToken],
       ...submissions.map<[string, string]>((submission) => ['submissions', submission]),
     ]).toString();
 
