@@ -20,10 +20,10 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <as-served-selector
+            v-model="portionSize.serving"
             :as-served-set-id="parameters['serving-image-set']"
-            :initial-object="portionSize.serving ?? undefined"
             @confirm="confirmServing"
-            @update="updateServing"
+            @input="updateServing"
           ></as-served-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -56,12 +56,12 @@
               </template>
             </i18n>
             <as-served-selector
+              v-model="portionSize.leftovers"
               :as-served-set-id="parameters['leftovers-image-set']"
-              :initial-object="portionSize.leftovers ?? undefined"
               :max-weight="portionSize.serving?.weight"
               type="leftovers"
               @confirm="confirmLeftovers"
-              @update="updateLeftovers"
+              @input="updateLeftovers"
             ></as-served-selector>
           </template>
         </v-expansion-panel-content>
@@ -170,8 +170,7 @@ export default defineComponent({
   },
 
   methods: {
-    updateServing(update: SelectedAsServedImage | null) {
-      this.portionSize.serving = update;
+    updateServing() {
       this.servingImageConfirmed = false;
       this.clearLeftovers();
 
@@ -192,8 +191,7 @@ export default defineComponent({
       this.leftoversPrompt = undefined;
     },
 
-    updateLeftovers(update: SelectedAsServedImage | null) {
-      this.portionSize.leftovers = update;
+    updateLeftovers() {
       this.leftoversImageConfirmed = false;
 
       if (this.isValid) this.clearErrors();
