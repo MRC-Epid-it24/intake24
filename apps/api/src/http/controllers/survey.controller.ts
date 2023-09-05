@@ -48,12 +48,12 @@ const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   };
 
   const createUser = async (
-    req: Request<{ slug: string }, any, any, { token: string }>,
+    req: Request<{ slug: string }>,
     res: Response<CreateUserResponse>
   ): Promise<void> => {
     const {
       params: { slug },
-      query: { token },
+      body: { token },
     } = req;
 
     const data = await surveyService.createRespondentWithJWT(slug, token);

@@ -114,20 +114,24 @@ JWT secret should be treated as a `shared secret for machine-to-machine communic
 ### Request
 
 ```json
-POST /api/surveys/{survey-slug}/create-user?token={token}
+POST /api/surveys/{survey-slug}/create-user
 
 Content-Type: application/json
+
+{
+    "token": string
+}
 ```
 
-Specifications of `token` query parameter:
+#### Specifications of `token`
 
-- `token` must be a valid JWT token signed with the `JWT secret` set in [survey user settings](/admin/surveys/#users-settings).
+- `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings).
 - `HS256` and `HS512` algorithms are supported.
 - expected claims / payload shape:
   - `username` - Unique respondent username within the survey
   - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 
-JWT Payload object
+#### JWT payload
 
 ```json
 {

@@ -16,10 +16,27 @@ Survey can be enabled with respondent account generation using shared secret. To
 
 - tick `allow user generation`
 - set up `jwt secret` - opaque string to sign JWT for secure communication between Intake24 and 3rd party system
-- use [create user endpoint](/api/survey/surveys-public.html#create-user) to create respondent accounts
 
 ::: warning
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
+:::
+
+Once enabled, two options listed below can be used to create respondent accounts. Regardless of the option, [JWT token](/api/survey/surveys-public.html#create-user) with payload must be created.
+
+#### A) API endpoint
+
+- use [create user API endpoint](/api/survey/surveys-public.html#create-user)
+- create JWT token with desired payload according the specification
+- form authentication URL with response details [authentication URL patterns](/admin/surveys/#authentication-urls)
+- redirect respondent to the URL
+
+#### B) Frontend app URL
+
+- route: `app.domain.com/{surveyId}/create-user/{token}`
+- under the hood same API endpoint is used as in `option A` and user is directly authenticated
+
+::: tip
+Pick suitable option based on integration use case, depending whether you need to process API response (`A`) or not (`B`).
 :::
 
 ### Admin API

@@ -26,33 +26,34 @@ export default () => {
   });
 
   it(`should return 422 for malformed JWT in query token`, async () => {
-    await suite.sharedTests.assertInvalidInput(
-      'post',
-      `${url}?token=this-is-not-a-jwt-token`,
-      ['token'],
-      { bearer: null }
-    );
+    await suite.sharedTests.assertInvalidInput('post', url, ['token'], {
+      bearer: null,
+      input: { token: 'this-is-not-a-jwt-token' },
+    });
   });
 
   it(`should return 404 when record doesn't exist`, async () => {
-    await suite.sharedTests.assertMissingRecord('post', `${invalidUrl}?token=${token}`, {
+    await suite.sharedTests.assertMissingRecord('post', invalidUrl, {
       bearer: null,
+      input: { token },
     });
   });
 
   it(`should return 403 when user generation disabled`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: false, genUserKey: null });
 
-    await suite.sharedTests.assertMissingAuthorization('post', `${url}?token=${token}`, {
+    await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
+      input: { token },
     });
   });
 
   it(`should return 403 when JWT secret is not set in survey settings`, async () => {
     await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: null });
 
-    await suite.sharedTests.assertMissingAuthorization('post', `${url}?token=${token}`, {
+    await suite.sharedTests.assertMissingAuthorization('post', url, {
       bearer: null,
+      input: { token },
     });
   });
 
@@ -64,8 +65,9 @@ export default () => {
     it(`should return 403 for invalid JWT secret`, async () => {
       const invalidToken = jwt.sign(payload, 'invalidSecret', { expiresIn: '5m' });
 
-      await suite.sharedTests.assertMissingAuthorization('post', `${url}?token=${invalidToken}`, {
+      await suite.sharedTests.assertMissingAuthorization('post', url, {
         bearer: null,
+        input: { token: invalidToken },
       });
     });
 
@@ -73,9 +75,9 @@ export default () => {
       const nonObjectToken = jwt.sign('notAnObjectPayload', secret);
 
       const { status } = await request(suite.app)
-        .post(`${url}?token=${nonObjectToken}`)
+        .post(url)
         .set('Accept', 'application/json')
-        .send();
+        .send({ token: nonObjectToken });
 
       expect(status).toBe(400);
     });
@@ -85,9 +87,9 @@ export default () => {
       const missingClaimToken = jwt.sign(rest, secret, { expiresIn: '5m' });
 
       const { status } = await request(suite.app)
-        .post(`${url}?token=${missingClaimToken}`)
+        .post(url)
         .set('Accept', 'application/json')
-        .send();
+        .send({ token: missingClaimToken });
 
       expect(status).toBe(400);
     });
@@ -96,9 +98,9 @@ export default () => {
       await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: secret });
 
       const { status, body } = await request(suite.app)
-        .post(`${url}?token=${token}`)
+        .post(url)
         .set('Accept', 'application/json')
-        .send();
+        .send({ token });
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);
@@ -108,9 +110,9 @@ export default () => {
       await suite.data.system.survey.update({ allowGenUsers: true, genUserKey: secret });
 
       const { status, body } = await request(suite.app)
-        .post(`${url}?token=${token}`)
+        .post(url)
         .set('Accept', 'application/json')
-        .send();
+        .send({ token });
 
       expect(status).toBe(200);
       expect(body).toContainAllKeys(['userId', 'username', 'authToken', 'redirectUrl']);

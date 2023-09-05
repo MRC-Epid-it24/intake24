@@ -17,11 +17,9 @@ export type GenerateUserPayload = {
 
 export default {
   createUser: async (surveyId: string, token: string): Promise<CreateUserResponse> => {
-    const { data } = await http.post<CreateUserResponse>(
-      `surveys/${surveyId}/create-user`,
-      {},
-      { params: { token } }
-    );
+    const { data } = await http.post<CreateUserResponse>(`surveys/${surveyId}/create-user`, {
+      token,
+    });
 
     return data;
   },
