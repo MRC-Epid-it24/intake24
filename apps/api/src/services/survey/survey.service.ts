@@ -64,12 +64,12 @@ const surveyService = ({
    * Generate respondent based on supplied JWT payload
    *
    * @param {string} slug
-   * @param {string} params
+   * @param {string} token
    * @returns {Promise<CreateUserResponse>}
    */
   const createRespondentWithJWT = async (
     slug: string,
-    params: string
+    token: string
   ): Promise<CreateUserResponse> => {
     const survey = await Survey.findOne({ where: { slug } });
     if (!survey) throw new NotFoundError();
@@ -82,7 +82,7 @@ const surveyService = ({
     let decoded;
 
     try {
-      decoded = await jwt.verify(params, genUserKey, { algorithms: ['HS256', 'HS512'] });
+      decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
     } catch (err) {
       throw new ForbiddenError(err instanceof Error ? err.message : undefined);
     }
@@ -90,17 +90,17 @@ const surveyService = ({
     if (!decoded || Object.prototype.toString.call(decoded) !== '[object Object]')
       throw new ApplicationError('Malformed token payload');
 
-    const { user: username, redirect } = decoded;
+    const { username, redirectUrl } = decoded;
     if (!username || typeof username !== 'string')
-      throw new ApplicationError('Missing claim: user');
-    if (!redirect || typeof redirect !== 'string')
-      throw new ApplicationError('Missing claim: redirect');
+      throw new ApplicationError('Invalid claim: missing username');
+    if (typeof redirectUrl !== 'undefined' && typeof redirectUrl !== 'string')
+      throw new ApplicationError('Invalid claim: redirectUrl must a string');
 
     const alias = await UserSurveyAlias.findOne({ where: { surveyId, username } });
     if (alias) {
       const { userId, urlAuthToken: authToken } = alias;
 
-      return { userId, redirect, authToken };
+      return { userId, username, authToken, redirectUrl };
     }
 
     const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
@@ -108,7 +108,7 @@ const surveyService = ({
       password: randomString(12),
     });
 
-    return { userId, redirect, authToken };
+    return { userId, username, authToken, redirectUrl };
   };
 
   /**

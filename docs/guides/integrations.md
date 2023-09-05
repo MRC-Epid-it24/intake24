@@ -22,6 +22,10 @@ Survey can be enabled with respondent account generation using shared secret. To
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
+### Admin API
+
+[Admin API](/api/admin/surveys/respondents) can be used to create respondent accounts. This requires admin access to Intake24 and going through admin authentication flow.
+
 ## Survey completion notifications
 
 Intake24 can notify 3rd party system about survey completion using registered webhook. To enable this feature, read [survey submission webhooks](/admin/surveys/#submission-webhooks) section.
@@ -30,10 +34,6 @@ Intake24 can notify 3rd party system about survey completion using registered we
 - upon each survey submission, system dispatches [survey submission notification](/admin/system/job-types.html#surveysubmissionnotification) job with described request.
 
 Request payload contains submission data. If `JWT secret` is set in [survey user settings](/admin/surveys/#users-settings) section, Authorization header is attached with signed JWT token.
-
-### Admin API
-
-[Admin API](/api/admin/surveys/respondents) can be used to create respondent accounts. This requires admin access to Intake24 and going through admin authentication flow.
 
 ## Redirecting to 3rd party system
 
