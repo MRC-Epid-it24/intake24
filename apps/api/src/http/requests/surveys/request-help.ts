@@ -60,11 +60,7 @@ export default validate(
       in: ['body'],
       isIn: {
         errorMessage: typeErrorMessage('in.options', { options: [] }),
-        if: (value: any, meta: Meta) => {
-          console.log(meta.req.body);
-          console.log(!!meta.req.body.phone);
-          return !!meta.req.body.phone;
-        },
+        if: (value: any, meta: Meta) => !!meta.req.body.phone,
         options: [getSupportedRegionCodes()],
       },
     },

@@ -6,6 +6,7 @@ import views from '@intake24/survey/views';
 
 import {
   authGuard,
+  createUserGuard,
   feedbackParametersGuard,
   globalGuard,
   surveyParametersErrorGuard,
@@ -40,6 +41,12 @@ const routes: RouteConfig[] = [
     component: views.survey.generateUser,
     meta: { module: 'public', title: 'common.login._' },
     props: true,
+  },
+  {
+    path: '/:surveyId/create-user/:token',
+    name: 'survey-create-user',
+    meta: { module: 'public' },
+    beforeEnter: createUserGuard,
   },
   {
     path: '/:surveyId/home',

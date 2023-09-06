@@ -120,7 +120,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['update'],
+  emits: ['input'],
 
   setup(props) {
     const { translate } = useI18n();
@@ -223,7 +223,7 @@ export default defineComponent({
         linkedQuantityConfirmed: this.linkedQuantityConfirmed,
       };
 
-      this.$emit('update', state);
+      this.$emit('input', state);
     },
   },
 });

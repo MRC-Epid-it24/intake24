@@ -1,6 +1,7 @@
 import type { NavigationGuard } from 'vue-router';
 import { isAxiosError } from 'axios';
 
+import { surveyService } from '../services';
 import { useAuth, useSurvey, useUser } from '../stores';
 
 export const feedbackParametersGuard: NavigationGuard = async (to, from, next) => {
@@ -91,6 +92,25 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
     const surveyId = useUser().profile?.surveyId;
 
     next(surveyId ? { name: 'survey-home', params: { surveyId } } : { name: 'home' });
+  } catch {
+    next({ name: 'home' });
+  }
+};
+
+export const createUserGuard: NavigationGuard = async (to, from, next) => {
+  const {
+    params: { surveyId, token },
+  } = to;
+
+  try {
+    const { authToken } = await surveyService.createUser(surveyId, token);
+    const auth = useAuth();
+    await auth.logout(true);
+    await auth.token({ token: authToken });
+
+    // TODO: set redirectUrl if supplied to survey state
+
+    next({ name: 'survey-home', params: { surveyId } });
     return;
   } catch {
     next({ name: 'home' });

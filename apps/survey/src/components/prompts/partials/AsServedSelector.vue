@@ -87,9 +87,6 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    initialObject: {
-      type: Object as PropType<SelectedAsServedImage>,
-    },
     maxWeight: {
       type: Number,
     },
@@ -97,9 +94,13 @@ export default defineComponent({
       type: String as PropType<'serving' | 'leftovers'>,
       default: 'serving',
     },
+    value: {
+      type: Object as PropType<SelectedAsServedImage | null>,
+      default: null,
+    },
   },
 
-  emits: ['confirm', 'update'],
+  emits: ['confirm', 'input'],
 
   setup(props) {
     const denominator = 4;
@@ -255,14 +256,13 @@ export default defineComponent({
         );
       }
 
-      if (this.initialObject?.index !== undefined)
-        this.setSelection(this.initialObject.index, true);
+      if (this.value?.index !== undefined) this.setSelection(this.value.index, true);
       else this.setSelection(Math.floor(this.asServedData.images.length / 2));
     },
 
     initWeightFactor(asServedData: AsServedSetResponse, objectIdx: number) {
       const objectWeight = asServedData.images[objectIdx].weight;
-      const initWeight = this.initialObject?.weight;
+      const initWeight = this.value?.weight;
 
       if (initWeight === undefined) return;
 
@@ -344,7 +344,7 @@ export default defineComponent({
         imageUrl: asServedData.images[objectIdx].mainImageUrl,
       };
 
-      this.$emit('update', state);
+      this.$emit('input', state);
     },
 
     confirm() {

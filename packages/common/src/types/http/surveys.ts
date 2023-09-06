@@ -15,8 +15,9 @@ export type GenerateUserResponse = {
 
 export type CreateUserResponse = {
   userId: string;
-  redirect: string;
+  username: string;
   authToken: string;
+  redirectUrl?: string;
 };
 
 export type PublicSurveyEntry = {

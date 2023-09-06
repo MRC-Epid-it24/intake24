@@ -105,8 +105,7 @@ Content-Type: application/json
 
 Publicly accessible API end-point.
 
-Create a new user account with a specific user name and a unique redirect URL if allowed by the survey settings.
-Currently used for integration with external survey systems.
+Create a new user account with a specific user name and a redirect URL if allowed by the survey settings. User generation must be allowed in survey settings and JWT secret must be set.
 
 :::warning
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
@@ -115,24 +114,29 @@ JWT secret should be treated as a `shared secret for machine-to-machine communic
 ### Request
 
 ```json
-POST /api/surveys/{survey-slug}/create-user?params={token}
+POST /api/surveys/{survey-slug}/create-user
 
 Content-Type: application/json
+
+{
+    "token": string
+}
 ```
 
-`token` is the request parameters encoded as a signed JWT token. The signing key is set up in the survey parameters.
+#### Specifications of `token`
 
-JWT payload expects following claims:
+- `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings).
+- `HS256` and `HS512` algorithms are supported.
+- expected claims / payload shape:
+  - `username` - Unique respondent username within the survey
+  - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 
-- `user` - Unique respondent username within the survey
-- `redirect` - Unique respondent username within the survey
-
-JWT Payload object
+#### JWT payload
 
 ```json
 {
-  "user": string,
-  "redirect": string,
+  "username": string,
+  "redirectUrl"?: string
 }
 ```
 
@@ -142,14 +146,17 @@ JWT Payload object
 200 OK
 
 {
-  "userId": number,
-  "redirect": string,
-  "authToken": string
+  "userId": string,
+  "username": string,
+  "authToken": string,
+  "redirectUrl"?: string
 }
 ```
 
-- `userId` - Internal Intake24 user ID
+- `userId` - Sequential internal Intake24 user ID
 
-- `redirect` - Redirect URL decoded from the input token
+- `username` - Survey-unique username supplied in JWT payload
 
 - `authToken` - Authentication token for the new user
+
+- `redirectUrl` - optional redirect URL supplied in JWT payload
