@@ -76,7 +76,11 @@
 import type { PropType } from 'vue';
 import { defineComponent, set } from 'vue';
 
-import type { PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
+import type {
+  PromptStates,
+  RecipeBuilderStepState,
+  SelectedFoodRecipeBuilderItemState,
+} from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
@@ -87,6 +91,7 @@ import {
   SelectedFoodList,
 } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
+import { getEntityId } from '@intake24/survey/util';
 
 import createBasePrompt from '../createBasePrompt';
 
@@ -157,8 +162,8 @@ export default defineComponent({
       // this.food.link.map(() => undefined as number | undefined);
     },
 
-    removeSelectedFood(data: { foodIndex: number; stepIndex: number }) {
-      console.log('Remove Selected Food From the Step: ', data.stepIndex, data.foodIndex);
+    removeSelectedFood(data: { foodIndex: number; index: number }) {
+      console.log('Remove Selected Food From the Step: ', data.index, data.foodIndex);
     },
 
     update() {
@@ -172,7 +177,7 @@ export default defineComponent({
       this.$emit('update', { state });
     },
 
-    foodSelected(food: FoodHeader, ingredientIndex: number): void {
+    foodSelected(food: SelectedFoodRecipeBuilderItemState, ingredientIndex: number): void {
       console.log(food, ingredientIndex);
       const selectedFoods = this.recipeSteps[ingredientIndex].selectedFoods;
       this.onFoodSelected(
@@ -193,7 +198,7 @@ export default defineComponent({
     async onFoodSelected(
       stepFoods: RecipeBuilderStepState,
       ingredientIndex: number,
-      foodForSearch: FoodHeader
+      foodForSearch: SelectedFoodRecipeBuilderItemState
     ): Promise<void> {
       if (stepFoods.selectedFoods === undefined) {
         return;
@@ -203,7 +208,8 @@ export default defineComponent({
 
       const step = this.recipeSteps[ingredientIndex];
       const replaceIndex = this.replaceFoodIndex(ingredientIndex);
-      const data = { ingredient: foodData, idx: ingredientIndex };
+      const id = getEntityId();
+      const data = { ingredient: foodData, idx: ingredientIndex, id: id };
 
       const foods = step.selectedFoods ? step.selectedFoods.slice() : [];
 
@@ -211,7 +217,11 @@ export default defineComponent({
         foods[replaceIndex] = stepFoods.selectedFoods[replaceIndex];
         set(this.replaceFoodIndex, ingredientIndex, undefined);
       } else {
-        foods.push({ code: data.ingredient.code, name: data.ingredient.localName });
+        foods.push({
+          code: data.ingredient.code,
+          name: data.ingredient.localName,
+          id: data.id ?? '',
+        });
       }
 
       const update = {

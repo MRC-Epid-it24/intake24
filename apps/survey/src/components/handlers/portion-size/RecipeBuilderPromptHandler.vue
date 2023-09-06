@@ -76,13 +76,13 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-setup-props-destructure
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
-    const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number }) => {
+    const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number; id: string }) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
       const flags = ['portion-size-option-complete', ''];
 
       const id = getEntityId();
       const ingredientToAdd: EncodedFood = {
-        id: id,
+        id: data.id ?? id,
         type: 'encoded-food',
         data: data.ingredient,
         searchTerm: 'recipe builder prompt',

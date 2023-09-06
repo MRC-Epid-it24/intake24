@@ -14,10 +14,16 @@ export type AssociatedFoodPromptItemState = {
   existingFoodId?: string;
 };
 
+export type SelectedFoodRecipeBuilderItemState = {
+  code: string;
+  name: string;
+  id: string;
+};
+
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
   type: 'selected' | 'missing' | undefined;
-  selectedFoods?: FoodHeader[];
+  selectedFoods?: SelectedFoodRecipeBuilderItemState[];
   order: number;
   description: RequiredLocaleTranslation;
   name: RequiredLocaleTranslation;

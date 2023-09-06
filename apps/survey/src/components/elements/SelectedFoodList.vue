@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import { Console } from 'console';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
@@ -102,6 +103,7 @@ export default defineComponent({
     },
 
     actionClick(index: number, foodIndex: number) {
+      console.log('Action Click: ', index, foodIndex);
       this.$emit('button-click', { index, foodIndex });
     },
   },
