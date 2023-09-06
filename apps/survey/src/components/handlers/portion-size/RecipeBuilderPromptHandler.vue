@@ -20,7 +20,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompts, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { RecipeFoodStepsType } from '@intake24/common/types';
+import type { EncodedFood, RecipeFoodStepsType } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
@@ -80,35 +80,34 @@ export default defineComponent({
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
       const flags = ['portion-size-option-complete', ''];
 
-      if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
-
       const id = getEntityId();
-      survey.addFood({
-        mealId: meal.value.id,
-        food: {
-          id: id,
-          type: 'encoded-food',
-          data: data.ingredient,
-          searchTerm: data.ingredient.localName,
-          flags,
-          portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-          portionSize: null,
-          customPromptAnswers: {},
-          linkedFoods: [],
-          link: [{ id: id, linkedTo: [foodId] }],
-        },
-        at: foodIndex + (data.idx + 1),
-      });
+      const ingredientToAdd: EncodedFood = {
+        id: id,
+        type: 'encoded-food',
+        data: data.ingredient,
+        searchTerm: 'recipe builder prompt',
+        flags,
+        portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+        portionSize: null,
+        customPromptAnswers: {},
+        linkedFoods: [],
+        link: [{ id: id, linkedTo: [foodId] }],
+      };
 
       const newComponents = [];
+      const linkedFood = [];
       const recipeParent = survey.selectedFoodOptional;
       if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
         newComponents.push(...recipeParent.components);
+        linkedFood.push(...recipeParent.linkedFoods);
       }
 
       survey.updateFood({
         foodId: foodId,
-        update: { components: [...newComponents, { order: data.idx, ingredients: [id] }] },
+        update: {
+          linkedFoods: [...linkedFood, ingredientToAdd],
+          components: [...newComponents, { order: data.idx, ingredients: [id] }],
+        },
       });
     };
 
@@ -123,6 +122,7 @@ export default defineComponent({
 
       survey.addFoodFlag(foodId, 'portion-size-method-complete');
       survey.addFoodFlag(foodId, 'recipe-builder-complete');
+      survey.addFoodFlag(foodId, 'associated-foods-complete');
       clearStoredState();
       ctx.emit('action', 'next');
     };

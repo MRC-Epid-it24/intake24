@@ -410,6 +410,7 @@ const prompts: LocaleMessageObject = {
   },
   recipeBuilder: {
     back: 'Back to parent category',
+    remove: 'remove',
     name: '{food} recipe builder',
     search: 'Search for Food',
     browse: 'Browse all relevant categories',

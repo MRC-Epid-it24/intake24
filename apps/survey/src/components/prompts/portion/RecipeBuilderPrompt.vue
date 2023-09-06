@@ -35,6 +35,16 @@
             </v-radio-group>
           </v-container>
           <v-expand-transition>
+            <selected-food-list
+              :entries="step"
+              :index="index"
+              :meal="meal"
+              :prompt="prompt"
+              :show="step.selectedFoods !== undefined && step.selectedFoods.length > 0"
+              @button-click="removeSelectedFood"
+            ></selected-food-list>
+          </v-expand-transition>
+          <v-expand-transition>
             <v-card
               v-if="step.confirmed !== 'yes' || (step.confirmed === 'yes' && step.repeat)"
               flat
@@ -71,7 +81,11 @@ import type { RecipeBuilder } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
-import { ExpansionPanelActions, FoodBrowser } from '@intake24/survey/components/elements';
+import {
+  ExpansionPanelActions,
+  FoodBrowser,
+  SelectedFoodList,
+} from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
 
 import createBasePrompt from '../createBasePrompt';
@@ -87,7 +101,7 @@ const { translate } = useI18n();
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser },
+  components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList },
 
   mixins: [createBasePrompt<'recipe-builder-prompt'>()],
 
@@ -143,6 +157,10 @@ export default defineComponent({
       // this.food.link.map(() => undefined as number | undefined);
     },
 
+    removeSelectedFood(data: { foodIndex: number; stepIndex: number }) {
+      console.log('Remove Selected Food From the Step: ', data.stepIndex, data.foodIndex);
+    },
+
     update() {
       const state: PromptStates['recipe-builder-prompt'] = {
         recipeSteps: this.recipeSteps,
@@ -193,11 +211,12 @@ export default defineComponent({
         foods[replaceIndex] = stepFoods.selectedFoods[replaceIndex];
         set(this.replaceFoodIndex, ingredientIndex, undefined);
       } else {
-        foods.push(stepFoods.selectedFoods[ingredientIndex]);
+        foods.push({ code: data.ingredient.code, name: data.ingredient.localName });
       }
 
       const update = {
         ...step,
+        type: stepFoods.type,
         confirmed: step.repeat !== true ? 'yes' : 'no',
         selectedFoods: foods,
       };

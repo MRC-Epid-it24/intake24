@@ -25,7 +25,10 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     const food = survey.selectedParentFood;
     if (!food) return undefined;
 
-    if (food.type !== 'encoded-food') throw new Error('This selected food must be an encoded food');
+    if (food.type !== 'encoded-food' && food.type !== 'recipe-builder') {
+      console.log(food);
+      throw new Error('This selected food must be an encoded food or recipe builder');
+    }
 
     return food;
   });
@@ -46,8 +49,10 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const encodedFood = (): EncodedFood => {
     const foodEntry = food();
 
-    if (foodEntry.type !== 'encoded-food')
+    if (foodEntry.type !== 'encoded-food') {
+      console.log(foodEntry);
       throw new Error('This selected food must be an encoded food');
+    }
 
     return foodEntry;
   };
