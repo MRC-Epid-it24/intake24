@@ -19,43 +19,20 @@
               <v-card
                 border-color="secondary"
                 class="d-flex flex-column justify-space-between"
+                :elevation="active ? '4' : undefined"
                 height="100%"
                 hover
                 outlined
                 @click="click(toggle)"
               >
-                <div
-                  v-if="availableMethod.method === 'standard-portion'"
-                  class="d-flex justify-center flex-grow-1"
-                >
-                  <v-radio-group
-                    v-if="Object.keys(standardUnitRefs).length"
-                    hide-details="auto"
-                    :value="standardUnitSelected"
-                  >
-                    <v-radio v-for="unit in standardUnits.slice(0, 4)" :key="unit" :value="unit">
-                      <template #label>
-                        <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
-                          <template #unit>
-                            {{ translate(standardUnitRefs[unit].estimateIn) }}
-                          </template>
-                        </i18n>
-                      </template>
-                    </v-radio>
-                  </v-radio-group>
-                </div>
-                <v-img v-else :aspect-ratio="3 / 2" :src="availableMethod.imageUrl">
-                  <template #placeholder>
-                    <image-placeholder></image-placeholder>
-                  </template>
-                </v-img>
+                <component :is="availableMethod.method" :method="availableMethod"></component>
                 <v-card-actions
                   class="d-flex justify-end"
-                  :class="{ 'grey lighten-5': !active, ternary: active }"
+                  :class="{ 'grey lighten-4': !active, ternary: active }"
                 >
                   <v-chip
                     class="font-weight-medium px-4"
-                    :color="option === index ? 'primary' : 'ternary'"
+                    :color="option === index ? 'info' : 'primary'"
                   >
                     {{ $t(`prompts.${type}.selections.${availableMethod.description}`) }}
                   </v-chip>
@@ -74,20 +51,18 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
-import { useI18n } from '@intake24/i18n';
 
-import { ImagePlaceholder } from '../../elements';
-import { useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
+import options from './options';
 
 export default defineComponent({
   name: 'PortionSizeOptionPrompt',
 
-  components: { ImagePlaceholder },
+  components: { ...options },
 
   mixins: [createBasePortion<'portion-size-option-prompt'>()],
 
@@ -99,65 +74,6 @@ export default defineComponent({
   },
 
   emits: ['input'],
-
-  setup(props) {
-    const { translate } = useI18n();
-    const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
-
-    const standardUnits = computed(() => {
-      const standardPortionMethod = props.availableMethods.find(
-        ({ method }) => method === 'standard-portion'
-      );
-
-      if (!standardPortionMethod) return [];
-
-      return Object.entries(standardPortionMethod.parameters).reduce<string[]>(
-        (acc, [key, value]) => {
-          if (key.endsWith('-name')) acc.push(value);
-          return acc;
-        },
-        []
-      );
-    });
-
-    const selectNextStandardUnit = () => {
-      const keys = Object.keys(standardUnitRefs.value);
-      if (!keys.length) {
-        clearStandardUnitTimer();
-        return;
-      }
-
-      const index = keys.findIndex((key) => key === standardUnitSelected.value);
-
-      standardUnitSelected.value = index === keys.length - 1 ? keys[0] : keys[index + 1];
-    };
-
-    const standardUnitInterval = ref<undefined | number>(undefined);
-    const standardUnitSelected = ref('');
-    const startStandardUnitTimer = () => {
-      standardUnitInterval.value = setInterval(() => {
-        selectNextStandardUnit();
-      }, 1500);
-    };
-
-    const clearStandardUnitTimer = () => {
-      clearInterval(standardUnitInterval.value);
-    };
-
-    onMounted(async () => {
-      if (!standardUnits.value.length) return;
-
-      await fetchStandardUnits(standardUnits.value);
-      selectNextStandardUnit();
-      startStandardUnitTimer();
-    });
-
-    onBeforeUnmount(() => {
-      clearStandardUnitTimer();
-    });
-
-    return { translate, standardUnits, standardUnitRefs, standardUnitSelected };
-  },
 
   data() {
     return {
