@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.2",
-    "@types/lodash": "^4.14.197",
+    "@types/lodash": "^4.14.198",
     "typescript": "^5.2.2"
   },
   "bundledDependencies": [
