@@ -102,11 +102,21 @@ export default defineComponent({
         linkedFood.push(...recipeParent.linkedFoods);
       }
 
+      //ading the new ingredient to exisitng component or creating a new one.
+      const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
+      if (componentIndex !== -1 && newComponents.length > 0) {
+        console.log('Existing componentIndex: ', componentIndex, 'order & idx: ', data.idx);
+        newComponents[componentIndex].ingredients.push(id);
+      } else {
+        console.log('New componentIndex: ', componentIndex);
+        newComponents.push({ order: data.idx, ingredients: [id] });
+      }
+
       survey.updateFood({
         foodId: foodId,
         update: {
           linkedFoods: [...linkedFood, ingredientToAdd],
-          components: [...newComponents, { order: data.idx, ingredients: [id] }],
+          components: [...newComponents],
         },
       });
     };

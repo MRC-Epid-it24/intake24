@@ -13,7 +13,7 @@
           </template>
           <span>{{ $t('recall.menu.food.notMatched') }}</span>
         </v-tooltip>
-        <v-tooltip v-if="food.type === 'encoded-food'" bottom>
+        <v-tooltip v-if="food.type === 'encoded-food' || food.type === 'recipe-builder'" bottom>
           <template #activator="{ on, attrs }">
             <v-icon v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
               $ok
@@ -64,6 +64,31 @@
           <span>
             {{
               $t(`recall.menu.food.${food.info ? 'missingInfoComplete' : 'missingInfoIncomplete'}`)
+            }}
+          </span>
+        </v-tooltip>
+        <v-tooltip v-else-if="food.type === 'recipe-builder'" bottom>
+          <template #activator="{ on, attrs }">
+            <v-icon
+              v-bind="attrs"
+              :color="
+                food.components.length === food.template.steps.length ? 'green darken-2' : undefined
+              "
+              small
+              v-on="on"
+            >
+              {{ food.components.length === food.template.steps.length ? '$ok' : '$question' }}
+            </v-icon>
+          </template>
+          <span>
+            {{
+              $t(
+                `recall.menu.food.${
+                  food.components.length === food.template.steps.length
+                    ? 'recipeFoodStepsComplete'
+                    : 'recipeFoodStepsIncomplete'
+                }`
+              )
             }}
           </span>
         </v-tooltip>
