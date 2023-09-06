@@ -39,7 +39,7 @@ const attributes: LocaleMessageObject = {
   feedbackSchemeId: 'Feedback scheme ID',
   file: 'File',
   genericName: 'Generic name',
-  genUserKey: 'Generate user key',
+  genUserKey: 'JWT secret',
   guideImageId: 'Guide image ID',
   heightCm: 'Height',
   henryCoefficients: 'Henry coefficients',

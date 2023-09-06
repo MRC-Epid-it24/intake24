@@ -29,10 +29,14 @@ const surveys: LocaleMessageObject = {
     tokenCharset: 'Token character set',
     tokenLength: 'Token length',
   },
+  externalComm: {
+    _: 'External communication',
+    allowGenUsers: 'Allow user generation',
+    genUserKey: 'JWT secret for M2M communication',
+    submissionNotificationUrl: 'Submission notification URL',
+  },
   users: {
     _: 'Users settings',
-    allowGenUsers: 'Allow user generation',
-    genUserKey: 'JWT secret for user generation',
     personalIdentifiers: 'Allow user personal identifiers',
     customFields: 'Allow user custom fields',
   },
@@ -55,7 +59,6 @@ const surveys: LocaleMessageObject = {
   },
   suspensionReason: 'Suspension reason',
   storeUserSessionOnServer: 'Store user session on server',
-  submissionNotificationUrl: 'Submission notification URL',
   feedback: {
     _: 'Feedback settings',
     enabled: 'Feedback enabled',

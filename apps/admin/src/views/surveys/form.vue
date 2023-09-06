@@ -123,25 +123,40 @@
                 @change="form.errors.clear('storeUserSessionOnServer')"
               ></v-switch>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.submissionNotificationUrl"
-                autocomplete="off"
-                :error-messages="form.errors.get('submissionNotificationUrl')"
-                hide-details="auto"
-                :label="$t('surveys.submissionNotificationUrl')"
-                name="submissionNotificationUrl"
-                outlined
-              ></v-text-field>
-            </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
-          <div class="text-h5 mb-4">{{ $t('surveys.users._') }}</div>
           <v-row>
-            <v-col v-if="isEdit && can({ action: 'edit' })" cols="12" md="6">
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">{{ $t('surveys.search._') }}</div>
+              <v-select
+                v-model="form.searchSortingAlgorithm"
+                :error-messages="form.errors.get('searchSortingAlgorithm')"
+                hide-details="auto"
+                :items="searchSortingAlgorithms"
+                :label="$t('surveys.search.sortingAlgorithm')"
+                name="searchSortingAlgorithm"
+                outlined
+                @change="form.errors.clear('searchSortingAlgorithm')"
+              ></v-select>
+              <v-slider
+                v-model.number="form.searchMatchScoreWeight"
+                class="mt-10"
+                :error-messages="form.errors.get('searchMatchScoreWeight')"
+                hide-details="auto"
+                :label="$t('surveys.search.matchScoreWeight')"
+                max="100"
+                min="0"
+                name="searchMatchScoreWeight"
+                thumb-label="always"
+              ></v-slider>
+            </v-col>
+            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
+            </v-col>
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">{{ $t('surveys.users._') }}</div>
               <v-switch
                 v-model="form.userPersonalIdentifiers"
-                class="mt-0"
                 :error-messages="form.errors.get('userPersonalIdentifiers')"
                 hide-details="auto"
                 :label="$t('surveys.users.personalIdentifiers')"
@@ -157,13 +172,49 @@
                 @change="form.errors.clear('userCustomFields')"
               ></v-switch>
             </v-col>
-            <v-col cols="12" md="6">
+          </v-row>
+          <v-divider class="my-6"></v-divider>
+          <v-row>
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">{{ $t('surveys.authUrl._') }}</div>
+              <v-text-field
+                v-model="form.authUrlTokenCharset"
+                class="mb-4"
+                :error-messages="form.errors.get('authUrlTokenCharset')"
+                hide-details="auto"
+                :label="$t('surveys.authUrl.tokenCharset')"
+                name="authUrlTokenCharset"
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model.number="form.authUrlTokenLength"
+                class="mb-4"
+                :error-messages="form.errors.get('authUrlTokenLength')"
+                hide-details="auto"
+                :label="$t('surveys.authUrl.tokenLength')"
+                name="authUrlTokenLength"
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model="form.authUrlDomainOverride"
+                :error-messages="form.errors.get('authUrlDomainOverride')"
+                hide-details="auto"
+                :label="$t('surveys.authUrl.domainOverride')"
+                name="authUrlDomainOverride"
+                outlined
+              ></v-text-field>
+            </v-col>
+            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
+            </v-col>
+            <v-col cols="12" md>
+              <div class="text-h5">{{ $t('surveys.externalComm._') }}</div>
               <v-switch
                 v-model="form.allowGenUsers"
-                class="mt-0"
+                class="mt-7 mb-8"
                 :error-messages="form.errors.get('allowGenUsers')"
                 hide-details="auto"
-                :label="$t('surveys.users.allowGenUsers')"
+                :label="$t('surveys.externalComm.allowGenUsers')"
                 name="allowGenUsers"
                 @change="form.errors.clear('allowGenUsers')"
               ></v-switch>
@@ -171,76 +222,22 @@
                 v-model="form.genUserKey"
                 :append-icon="showGenUserKey ? 'fas fa-eye' : 'fas fa-eye-slash'"
                 autocomplete="new-password"
-                class="mt-4"
-                :disabled="!form.allowGenUsers"
+                class="mb-4"
                 :error-messages="form.errors.get('genUserKey')"
                 hide-details="auto"
-                :label="$t('surveys.users.genUserKey')"
+                :label="$t('surveys.externalComm.genUserKey')"
                 name="genUserKey"
                 outlined
                 :type="showGenUserKey ? 'text' : 'password'"
                 @click:append="showGenUserKey = !showGenUserKey"
               ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h5 mb-4">{{ $t('surveys.search._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="form.searchSortingAlgorithm"
-                :error-messages="form.errors.get('searchSortingAlgorithm')"
-                hide-details="auto"
-                :items="searchSortingAlgorithms"
-                :label="$t('surveys.search.sortingAlgorithm')"
-                name="searchSortingAlgorithm"
-                outlined
-                @change="form.errors.clear('searchSortingAlgorithm')"
-              ></v-select>
-            </v-col>
-            <v-col align-self="center" cols="12" md="6">
-              <v-slider
-                v-model.number="form.searchMatchScoreWeight"
-                :error-messages="form.errors.get('searchMatchScoreWeight')"
-                hide-details="auto"
-                :label="$t('surveys.search.matchScoreWeight')"
-                max="100"
-                min="0"
-                name="searchMatchScoreWeight"
-                thumb-label="always"
-              ></v-slider>
-            </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h5 mb-4">{{ $t('surveys.authUrl._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
               <v-text-field
-                v-model="form.authUrlTokenCharset"
-                :error-messages="form.errors.get('authUrlTokenCharset')"
+                v-model="form.submissionNotificationUrl"
+                autocomplete="off"
+                :error-messages="form.errors.get('submissionNotificationUrl')"
                 hide-details="auto"
-                :label="$t('surveys.authUrl.tokenCharset')"
-                name="authUrlTokenCharset"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.authUrlTokenLength"
-                :error-messages="form.errors.get('authUrlTokenLength')"
-                hide-details="auto"
-                :label="$t('surveys.authUrl.tokenLength')"
-                name="authUrlTokenLength"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model="form.authUrlDomainOverride"
-                :error-messages="form.errors.get('authUrlDomainOverride')"
-                hide-details="auto"
-                :label="$t('surveys.authUrl.domainOverride')"
-                name="authUrlDomainOverride"
+                :label="$t('surveys.externalComm.submissionNotificationUrl')"
+                name="submissionNotificationUrl"
                 outlined
               ></v-text-field>
             </v-col>

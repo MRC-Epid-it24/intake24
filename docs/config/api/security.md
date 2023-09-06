@@ -303,7 +303,7 @@ Size of the tokens - string's length.
 - object-path: `authTokens.size`
 - dotenv var: `AUTH_TOKENS_SIZE`
 - type: `number`
-- default: `21`
+- default: `32`
 
 ### Alphabet
 

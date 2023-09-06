@@ -32,7 +32,7 @@ const surveys: LocaleMessageObject = {
   users: {
     _: 'Users settings',
     allowGenUsers: 'Allow user generation',
-    genUserKey: 'JWT secret for user generation',
+    genUserKey: 'JWT secret for M2M communication',
     personalIdentifiers: 'Allow user personal identifiers',
     customFields: 'Allow user custom fields',
   },

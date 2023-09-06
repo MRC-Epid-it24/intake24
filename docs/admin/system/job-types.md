@@ -107,7 +107,7 @@ Any additional column not listed above, will get stored as `UserCustomField` rec
 
 When valid `Submission notification URL` is set in survey settings, webhook is automatically called with each successful submission. Submission data are attached in request body.
 
-If survey settings specify JWT secret, signed JWT token is attached as Bearer in `Authorization` header of the request.
+If [survey external communication](/admin/surveys/#external-communication) specifies JWT secret, signed JWT token is attached as Bearer in `Authorization` header of the request.
 
 Request
 

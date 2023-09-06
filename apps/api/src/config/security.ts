@@ -136,7 +136,7 @@ const securityConfig: SecurityConfig = {
     expiresIn: process.env.PASSWORDS_EXPIRES_IN || '1h',
   },
   authTokens: {
-    size: parseInt(process.env.AUTH_TOKENS_SIZE || '21', 10),
+    size: parseInt(process.env.AUTH_TOKENS_SIZE || '32', 10),
     alphabet: process.env.AUTH_TOKENS_ALPHABET || null,
   },
   signInLog: {
