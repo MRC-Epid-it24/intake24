@@ -72,21 +72,27 @@
             <v-icon
               v-bind="attrs"
               :color="
-                food.components.length === food.template.steps.length ? 'green darken-2' : undefined
+                food.components.find((component) => component.ingredients.length === 0)
+                  ? undefined
+                  : 'green darken-2'
               "
               small
               v-on="on"
             >
-              {{ food.components.length === food.template.steps.length ? '$ok' : '$question' }}
+              {{
+                food.components.find((component) => component.ingredients.length === 0)
+                  ? '$question'
+                  : '$ok'
+              }}
             </v-icon>
           </template>
           <span>
             {{
               $t(
                 `recall.menu.food.${
-                  food.components.length === food.template.steps.length
-                    ? 'recipeFoodStepsComplete'
-                    : 'recipeFoodStepsIncomplete'
+                  food.components.find((component) => component.ingredients.length === 0)
+                    ? 'recipeFoodStepsIncomplete'
+                    : 'recipeFoodStepsComplete'
                 }`
               )
             }}
@@ -120,6 +126,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import { component } from 'vue/types/umd';
 
 import type { FoodState } from '@intake24/common/types';
 

@@ -125,6 +125,13 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
   });
 
+  const initializeRecipeComponents = (steps: number[]) => {
+    return steps.map((step) => ({
+      ingredients: [],
+      order: step,
+    }));
+  };
+
   return {
     food,
     foodIndex,
@@ -139,6 +146,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     encodedFoodOptional,
     freeTextFood,
     foodName,
+    initializeRecipeComponents,
     missingFood,
     portionSize,
     recipeBuilder,

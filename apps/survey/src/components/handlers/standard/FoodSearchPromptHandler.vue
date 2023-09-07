@@ -61,7 +61,7 @@ export default defineComponent({
       }
     }
 
-    const { food, localeId } = useFoodPromptUtils();
+    const { food, localeId, initializeRecipeComponents } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
     const parameters = computed(() => {
       const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
@@ -96,7 +96,17 @@ export default defineComponent({
       emit('action', type, ...args);
     };
 
-    return { action, food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
+    return {
+      action,
+      food,
+      meal,
+      localeId,
+      foodData,
+      parameters,
+      searchTerm,
+      discardedFoodName,
+      initializeRecipeComponents,
+    };
   },
 
   methods: {
@@ -128,9 +138,11 @@ export default defineComponent({
     },
 
     recipeBuilder(recipeFood: RecipeFood) {
-      console.log('\nRecieved a request for the recipeFood Prompt\n: ', JSON.stringify(recipeFood));
       const { searchTerm } = this;
       const { id, customPromptAnswers, flags } = this.food();
+      const components = this.initializeRecipeComponents(
+        recipeFood.steps.map((step) => step.order - 1)
+      );
 
       const newState: RecipeBuilder = {
         id,
@@ -143,7 +155,7 @@ export default defineComponent({
         template_id: recipeFood.name,
         template: recipeFood,
         markedAsComplete: [],
-        components: [],
+        components,
         link: [],
       };
 

@@ -103,7 +103,6 @@ export default defineComponent({
     },
 
     actionClick(index: number, foodIndex: number) {
-      console.log('Action Click: ', index, foodIndex);
       this.$emit('button-click', { index, foodIndex });
     },
   },

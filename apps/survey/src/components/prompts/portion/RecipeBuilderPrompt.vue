@@ -163,7 +163,15 @@ export default defineComponent({
     },
 
     removeSelectedFood(data: { foodIndex: number; index: number }) {
-      console.log('Remove Selected Food From the Step: ', data.index, data.foodIndex);
+      const foodToRemove = this.recipeSteps[data.index].selectedFoods?.[data.foodIndex];
+      console.log('Food to remove: ', foodToRemove);
+      if (foodToRemove !== undefined) {
+        this.recipeSteps[data.index].selectedFoods?.splice(data.foodIndex, 1);
+        if (this.recipeSteps[data.index].selectedFoods?.length === 0) {
+          this.recipeSteps[data.index].confirmed = undefined;
+        }
+        this.action('remove', foodToRemove.id, data.index);
+      }
     },
 
     update() {
@@ -178,7 +186,6 @@ export default defineComponent({
     },
 
     foodSelected(food: SelectedFoodRecipeBuilderItemState, ingredientIndex: number): void {
-      console.log(food, ingredientIndex);
       const selectedFoods = this.recipeSteps[ingredientIndex].selectedFoods;
       this.onFoodSelected(
         {
@@ -191,9 +198,7 @@ export default defineComponent({
       );
     },
 
-    foodMissing(ingredientIndex: number): void {
-      console.log(ingredientIndex);
-    },
+    foodMissing(ingredientIndex: number): void {},
 
     async onFoodSelected(
       stepFoods: RecipeBuilderStepState,
@@ -261,8 +266,8 @@ export default defineComponent({
       }, true);
     },
 
-    action(type: string, id?: string) {
-      this.$emit('action', type, id);
+    action(type: string, id?: string, stepId?: number) {
+      this.$emit('action', type, id, stepId);
     },
   },
 });

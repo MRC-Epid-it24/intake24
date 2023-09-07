@@ -80,9 +80,8 @@ export default defineComponent({
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
       const flags = ['portion-size-option-complete', ''];
 
-      const id = getEntityId();
       const ingredientToAdd: EncodedFood = {
-        id: data.id ?? id,
+        id: data.id,
         type: 'encoded-food',
         data: data.ingredient,
         searchTerm: 'recipe builder prompt',
@@ -91,7 +90,7 @@ export default defineComponent({
         portionSize: null,
         customPromptAnswers: {},
         linkedFoods: [],
-        link: [{ id: id, linkedTo: [foodId] }],
+        link: [{ id: data.id, linkedTo: [foodId] }],
       };
 
       const newComponents = [];
@@ -105,9 +104,9 @@ export default defineComponent({
       //ading the new ingredient to exisitng component or creating a new one.
       const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
       if (componentIndex !== -1 && newComponents.length > 0) {
-        newComponents[componentIndex].ingredients.push(id);
+        newComponents[componentIndex].ingredients.push(data.id);
       } else {
-        newComponents.push({ order: data.idx, ingredients: [id] });
+        newComponents.push({ order: data.idx, ingredients: [data.id] });
       }
 
       survey.updateFood({
@@ -120,14 +119,6 @@ export default defineComponent({
     };
 
     const commitAnswer = () => {
-      //const { steps } = state.value;
-
-      // if (['name', 'description', 'portionSize'].some((key) => !info[key as keyof typeof info]))
-      //   throw new Error('Recipe Builder food prompt: missing data');
-
-      // survey.updateFood({ foodId: food().id, update: { info } });
-      // survey.addFoodFlag(food().id, 'recipe-builder-complete');
-
       survey.addFoodFlag(foodId, 'portion-size-method-complete');
       survey.addFoodFlag(foodId, 'recipe-builder-complete');
       survey.addFoodFlag(foodId, 'associated-foods-complete');
@@ -135,8 +126,35 @@ export default defineComponent({
       ctx.emit('action', 'next');
     };
 
-    const action = async (type: string, ...args: [id?: string, params?: object]) => {
+    const deleteComponent = (id: string, stepId: number) => {
+      console.warn('deleteComponent', id, stepId);
+      const recipeParent = survey.selectedFoodOptional;
+      if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
+        const updatedComponents = [...recipeParent.components];
+        if (updatedComponents[stepId] === undefined) return;
+        updatedComponents[stepId].ingredients = updatedComponents[stepId].ingredients.filter(
+          (i) => i !== id
+        );
+        survey.updateFood({
+          foodId: foodId,
+          update: {
+            components: updatedComponents,
+          },
+        });
+      }
+    };
+
+    const transitAction = (type: string, id: string, stepId: number) => {
+      if (type === 'deleteFood') deleteComponent(id, stepId);
+      ctx.emit('action', type, id);
+    };
+
+    const action = async (
+      type: string,
+      ...args: [id?: string, stepId?: number, params?: object]
+    ) => {
       if (type === 'next') await commitAnswer();
+      if (type === 'remove') transitAction('deleteFood', args[0] as string, args[1] as number);
     };
 
     return { recipeBuilder, recipeFood, meal, state, localeId, update, action, addLinkedFood };
