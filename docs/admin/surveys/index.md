@@ -39,9 +39,13 @@ Edit tab allows to modify selected survey.
 
 - `Allow user custom fields` - `on` / `off` control to allow persistance of `user custom fields`
 
+### External communication
+
 - `Allow user generation` - `on` / `off` control to allow automatic user generation
 
-- `JWT secret` - string to be used to generate / verify JWT token validity.
+- `JWT secret for M2M communication` - string to sign JWT token.
+
+- `Submission notification URL` - Webhook to be called when recall data submitted. Internally it dispatches [SurveySubmissionNotification](/admin/system/job-types#surveysubmissionnotification) job.
 
 If automatic user generation is enabled, it provides two ways to generate accounts.
 
@@ -56,10 +60,6 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 #### `2. JWT secret is set`
 
 - API endpoint can be used to create new respondent accounts. See [API docs](/api/survey/surveys-public#create-user) for more details.
-
-### Submission webhooks
-
-- `Submission notification URL` - Webhook to be called when recall data submitted. Internally it dispatches [SurveySubmissionNotification](/admin/system/job-types#surveysubmissionnotification) job.
 
 ### Search options
 

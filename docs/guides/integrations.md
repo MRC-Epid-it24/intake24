@@ -45,12 +45,12 @@ Pick suitable option based on integration use case, depending whether you need t
 
 ## Survey completion notifications
 
-Intake24 can notify 3rd party system about survey completion using registered webhook. To enable this feature, read [survey submission webhooks](/admin/surveys/#submission-webhooks) section.
+Intake24 can notify 3rd party system about survey completion using registered webhook. To enable this feature, read [survey external communication](/admin/surveys/#external-communication) section.
 
 - set up `webhook url` - URL to be called when survey recall is submitted
 - upon each survey submission, system dispatches [survey submission notification](/admin/system/job-types.html#surveysubmissionnotification) job with described request.
 
-Request payload contains submission data. If `JWT secret` is set in [survey user settings](/admin/surveys/#users-settings) section, Authorization header is attached with signed JWT token.
+Request payload contains submission data. If `JWT secret` is set in [survey external communication](/admin/surveys/#external-communication) section, Authorization header is attached with signed JWT token.
 
 ## Redirecting to 3rd party system
 

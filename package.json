@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@8.7.0",
+  "packageManager": "pnpm@8.7.4",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
@@ -63,10 +63,10 @@
   "devDependencies": {
     "@jest/types": "^29.6.3",
     "@types/jest": "^29.5.4",
-    "@types/node": "^20.5.7",
+    "@types/node": "^20.5.9",
     "@types/prompts": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
@@ -90,7 +90,7 @@
     "simple-git-hooks": "^2.9.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "tsx": "^3.12.7",
+    "tsx": "^3.12.8",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vitepress": "1.0.0-rc.10"

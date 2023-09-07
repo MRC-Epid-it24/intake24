@@ -36,8 +36,8 @@
     "vuetify": "^2.7.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.197",
-    "@types/node": "^20.5.7",
+    "@types/lodash": "^4.14.198",
+    "@types/node": "^20.5.9",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-pwa": "^0.16.4",
