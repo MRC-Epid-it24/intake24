@@ -126,7 +126,7 @@ export default defineComponent({
       ctx.emit('action', 'next');
     };
 
-    const deleteComponent = (id: string, stepId: number) => {
+    const deleteComponentAndThenFood = (type: string, id: string, stepId: number) => {
       console.warn('deleteComponent', id, stepId);
       const recipeParent = survey.selectedFoodOptional;
       if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
@@ -142,10 +142,6 @@ export default defineComponent({
           },
         });
       }
-    };
-
-    const transitAction = (type: string, id: string, stepId: number) => {
-      if (type === 'deleteFood') deleteComponent(id, stepId);
       ctx.emit('action', type, id);
     };
 
@@ -154,7 +150,8 @@ export default defineComponent({
       ...args: [id?: string, stepId?: number, params?: object]
     ) => {
       if (type === 'next') await commitAnswer();
-      if (type === 'remove') transitAction('deleteFood', args[0] as string, args[1] as number);
+      if (type === 'remove')
+        deleteComponentAndThenFood('deleteFood', args[0] as string, args[1] as number);
     };
 
     return { recipeBuilder, recipeFood, meal, state, localeId, update, action, addLinkedFood };

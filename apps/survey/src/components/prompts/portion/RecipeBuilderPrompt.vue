@@ -163,15 +163,14 @@ export default defineComponent({
     },
 
     removeSelectedFood(data: { foodIndex: number; index: number }) {
-      const foodToRemove = this.recipeSteps[data.index].selectedFoods?.[data.foodIndex];
-      console.log('Food to remove: ', foodToRemove);
-      if (foodToRemove !== undefined) {
-        this.recipeSteps[data.index].selectedFoods?.splice(data.foodIndex, 1);
-        if (this.recipeSteps[data.index].selectedFoods?.length === 0) {
-          this.recipeSteps[data.index].confirmed = undefined;
-        }
-        this.action('remove', foodToRemove.id, data.index);
+      const foodToRemove = this.recipeSteps[data.index].selectedFoods?.splice(data.foodIndex, 1);
+      if (this.recipeSteps[data.index].selectedFoods?.length === 0) {
+        this.recipeSteps[data.index].confirmed = undefined;
       }
+      this.$nextTick(() => {
+        if (foodToRemove === undefined) return;
+        this.action('remove', foodToRemove[0].id, data.index);
+      });
     },
 
     update() {

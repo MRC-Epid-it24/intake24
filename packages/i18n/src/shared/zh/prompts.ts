@@ -422,6 +422,7 @@ const prompts: LocaleMessageObject = {
     },
     addMore: 'Add more ingredients',
     noMore: 'No more ingredients',
+    none: 'No food results. Please try refining your search.',
   },
   parentFoodPortion: {
     name: 'Parent food portion',
