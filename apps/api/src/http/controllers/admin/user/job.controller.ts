@@ -18,11 +18,7 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     const user = req.user as User;
     const { type } = req.query;
 
-    const where: WhereOptions<JobAttributes> = {
-      userId: user.id,
-      downloadUrlExpiresAt: { [Op.or]: [null, { [Op.gt]: new Date() }] },
-    };
-
+    const where: WhereOptions<JobAttributes> = { userId: user.id };
     if (type) where.type = type;
 
     const jobs = await Job.paginate({
