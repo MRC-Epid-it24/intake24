@@ -11,7 +11,7 @@
         <csv-upload
           :dialog-title="$t('locales.food-ranking.upload').toString()"
           :endpoint="endpoint"
-          job-type="FoodRankingCsvUpload"
+          job-type="LocaleFoodRankingUpload"
           :label="$t('locales.food-ranking.upload').toString()"
           :survey-id="id"
         ></csv-upload>

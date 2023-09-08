@@ -171,30 +171,31 @@ Content-Type: application/json
 }
 ```
 
-## Upload nutrient data
+## Queue task
 
-Endpoint accepts two types of CSV files.
+Submits job to the queue.
 
-- NDB mapping
-- NDB nutrient data
-
-Upload is submitted as job and response returns `JobResponse` entry
+Specific jobs can be submitted to the queue. Each job type has its own parameters. See [job types](/admin/system/job-types) for more information.
 
 ### Request
 
 ```json
-POST /api/admin/nutrient-tables/:nutrientTableId/upload
+POST /api/admin/nutrient-tables/:nutrientTableId/tasks
 
 Authorization: Bearer {accessToken}
-Content-Type: multipart/form-data
+Content-Type: application/json | multipart/form-data
 
 {
-    "type": 'NutrientTableDataImport' | 'NutrientTableIMappingImport',
-    "file": File
+    "type": string,
+    "params": {
+        ...
+    }
 }
 ```
 
 ### Response
+
+Returns job resource entry.
 
 ```json
 200 OK

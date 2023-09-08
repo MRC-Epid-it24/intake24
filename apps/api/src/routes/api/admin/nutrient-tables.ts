@@ -45,11 +45,11 @@ export default () => {
   );
 
   router.post(
-    '/:nutrientTableId/upload',
-    upload.single('file'),
-    permission('nutrient-tables|upload'),
-    validation.upload,
-    wrapAsync(nutrientTableController.upload)
+    '/:nutrientTableId/tasks',
+    upload.single('params.file'),
+    permission('nutrient-tables|tasks'),
+    validation.tasks,
+    wrapAsync(nutrientTableController.tasks)
   );
 
   // TODO: review permissions, this should be available for FDB viewers/editors

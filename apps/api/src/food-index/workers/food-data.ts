@@ -1,4 +1,4 @@
-import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import type { CategoryHeader } from '@intake24/common/types/http';
 import { Category, CategoryLocal, FoodLocalList } from '@intake24/db';
 
 export type LocalFoodData = {

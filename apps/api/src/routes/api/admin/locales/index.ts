@@ -34,20 +34,16 @@ export default () => {
     .delete(wrapAsync(localeController.destroy));
 
   router.get('/:localeId/edit', wrapAsync(localeController.edit));
-  router.post('/:localeId/copy', validation.copy, wrapAsync(localeController.copy));
-  router.post('/:localeId/tasks', validation.tasks, wrapAsync(localeController.tasks));
+  router.post(
+    '/:localeId/tasks',
+    upload.single('params.file'),
+    validation.tasks,
+    wrapAsync(localeController.tasks)
+  );
 
   router.use('/:localeId/split-lists', splitLists());
   router.use('/:localeId/split-words', splitWords());
   router.use('/:localeId/synonym-sets', synonymSets());
-
-  router.post(
-    '/:localeId/food-ranking',
-    upload.single('file'),
-    validation.fixedFoodRanking,
-    wrapAsync(localeController.uploadFoodRanking)
-  );
-
   router.use('/:localeId/securables', securables('Locale', localeController.securables));
 
   return router;

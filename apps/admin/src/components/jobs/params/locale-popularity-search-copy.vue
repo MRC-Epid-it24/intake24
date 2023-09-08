@@ -3,19 +3,38 @@
     <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col v-if="!disabled.localeId" cols="12">
+          <select-resource v-model="params.localeId" item-name="englishName" resource="locales">
+            <template #activator="{ attrs, on }">
+              <v-text-field
+                :disabled="disabled.localeId"
+                v-bind="attrs"
+                :error-messages="errors.get('params.localeId')"
+                hide-details="auto"
+                :label="$t('jobs.types.LocalePopularitySearchCopy.localeId')"
+                name="localeId"
+                outlined
+                prepend-inner-icon="$locales"
+                readonly
+                :value="value.localeId"
+                v-on="on"
+              ></v-text-field>
+            </template>
+          </select-resource>
+        </v-col>
+        <v-col cols="12">
           <select-resource
+            v-model="params.sourceLocaleId"
             item-name="englishName"
             resource="locales"
-            :value="value.sourceLocaleId"
-            @input="input('sourceLocaleId', $event)"
           >
             <template #activator="{ attrs, on }">
               <v-text-field
                 :disabled="disabled.sourceLocaleId"
                 v-bind="attrs"
+                :error-messages="errors.get('params.sourceLocaleId')"
                 hide-details="auto"
-                :label="$t('jobs.types.PairwiseSearchCopyAssociations.sourceLocaleId')"
+                :label="$t('jobs.types.LocalePopularitySearchCopy.sourceLocaleId')"
                 name="sourceLocaleId"
                 outlined
                 prepend-inner-icon="$locales"
@@ -25,21 +44,6 @@
               ></v-text-field>
             </template>
           </select-resource>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field
-            :disabled="disabled.targetLocaleId"
-            hide-details="auto"
-            :label="$t('jobs.types.PairwiseSearchCopyAssociations.targetLocaleId')"
-            name="targetLocaleId"
-            outlined
-            prepend-inner-icon="$locales"
-            :value="value.targetLocaleId"
-            @input="input('targetLocaleId', $event)"
-          ></v-text-field>
-        </v-col>
-        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
-          <v-alert text type="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
     </v-card-text>
@@ -55,11 +59,11 @@ import { SelectResource } from '@intake24/admin/components/dialogs';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'PairwiseSearchCopyAssociations',
+  name: 'LocalePopularitySearchCopy',
 
   components: { SelectResource },
 
-  mixins: [jobParams<JobParams['PairwiseSearchCopyAssociations']>()],
+  mixins: [jobParams<JobParams['LocalePopularitySearchCopy']>()],
 });
 </script>
 

@@ -3,15 +3,12 @@
     <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="6">
-          <select-resource
-            resource="surveys"
-            :value="value.surveyId"
-            @input="input('surveyId', $event)"
-          >
+        <v-col v-if="!disabled.surveyId" cols="12">
+          <select-resource v-model="params.surveyId" resource="surveys">
             <template #activator="{ attrs, on }">
               <v-text-field
                 v-bind="attrs"
+                :error-messages="errors.get('params.surveyId')"
                 hide-details="auto"
                 :label="$t('surveys.id')"
                 name="surveyId"
@@ -24,20 +21,17 @@
             </template>
           </select-resource>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <v-file-input
+            v-model="params.file"
+            :error-messages="errors.get('params.file')"
             hide-details="auto"
             :label="$t('common.file.csv')"
             name="file"
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
-            :value="value.file"
-            @input="input('file', $event)"
           ></v-file-input>
-        </v-col>
-        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
-          <v-alert text type="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
     </v-card-text>

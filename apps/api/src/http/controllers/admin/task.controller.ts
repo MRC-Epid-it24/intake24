@@ -3,7 +3,12 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType } from '@intake24/common/types';
-import type { TaskEntry, TaskRefs, TasksResponse } from '@intake24/common/types/http/admin';
+import type {
+  JobEntry,
+  TaskEntry,
+  TaskRefs,
+  TasksResponse,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { jobTypes } from '@intake24/common/types';
@@ -90,7 +95,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     res.json({ jobs });
   };
 
-  const run = async (req: Request<{ taskId: string }>, res: Response): Promise<void> => {
+  const run = async (req: Request<{ taskId: string }>, res: Response<JobEntry>): Promise<void> => {
     const { taskId } = req.params;
     const { id: userId } = req.user as User;
 
@@ -99,9 +104,9 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
 
     const { job, params } = task;
 
-    await scheduler.jobs.addJob({ userId, type: job, params }, { delay: 500 });
+    const jobEntry = await scheduler.jobs.addJob({ userId, type: job, params }, { delay: 500 });
 
-    res.json();
+    res.json(jobEntry);
   };
 
   return {

@@ -293,10 +293,6 @@ export const sidebar = {
           link: '/api/admin/surveys/submissions',
         },
         {
-          text: 'Survey data export',
-          link: '/api/admin/surveys/data-export',
-        },
-        {
           text: 'Tasks',
           link: '/api/admin/tasks',
         },

@@ -1,12 +1,12 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { JobType } from '@intake24/common/types';
+import type { JobType, QueueJob } from '@intake24/common/types';
 import type {
   NutrientTableCsvMappingFieldInput,
   NutrientTableCsvMappingNutrientInput,
   NutrientTableEntry,
   NutrientTableInput,
 } from '@intake24/common/types/http/admin';
-import type { Job, Transaction } from '@intake24/db';
+import type { Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   NutrientTable,
@@ -17,7 +17,7 @@ import {
 } from '@intake24/db';
 
 export type UploadCsvFileInput = {
-  type: Extract<JobType, 'NutrientTableDataImport' | 'NutrientTableIMappingImport'>;
+  type: Extract<JobType, 'NutrientTableDataImport' | 'NutrientTableMappingImport'>;
   file: string;
   userId?: string;
 };
@@ -240,21 +240,20 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
     await nutrientTable.destroy();
   };
 
-  const uploadCsvFile = async (
-    nutrientTableId: string,
-    input: UploadCsvFileInput
-  ): Promise<Job> => {
-    const { type, file, userId } = input;
-
-    return scheduler.jobs.addJob({ type, userId, params: { nutrientTableId, file } });
-  };
+  /**
+   * Queue nutrient table tasks
+   *
+   * @param {QueueJob} input
+   * @returns
+   */
+  const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
   return {
     getTable,
     createTable,
     updateTable,
     deleteTable,
-    uploadCsvFile,
+    queueTask,
   };
 };
 

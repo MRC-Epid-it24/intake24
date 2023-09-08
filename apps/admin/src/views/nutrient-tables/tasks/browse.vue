@@ -4,13 +4,13 @@
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="6">
-            <v-card-title>{{ $t('locales.tasks.title') }}</v-card-title>
+            <v-card-title>{{ $t('nutrient-tables.tasks.title') }}</v-card-title>
             <v-card-text>
               <v-select
                 v-model="form.type"
                 hide-details="auto"
                 :items="jobTypeList"
-                :label="$t('locales.tasks._')"
+                :label="$t('nutrient-tables.tasks._')"
                 name="job"
                 outlined
                 prepend-inner-icon="$jobs"
@@ -54,21 +54,25 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
-import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+import type { GetJobParams, JobParams, NutrientTableJob } from '@intake24/common/types';
+import type {
+  JobEntry,
+  NutrientTableEntry,
+  NutrientTableRefs,
+} from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { localeJobs } from '@intake24/common/types';
+import { nutrientTableJobs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
-type LocaleTasksForm = {
-  type: LocaleJob;
-  params: GetJobParams<LocaleJob>;
+type NutrientTableTasksForm = {
+  type: NutrientTableJob;
+  params: GetJobParams<NutrientTableJob>;
 };
 
 export default defineComponent({
-  name: 'LocaleTasks',
+  name: 'NutrientTableTasks',
 
   components: { ...jobParams, PollsJobList },
 
@@ -78,30 +82,29 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      localeJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+      nutrientTableJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
 
-    const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
-      LocaleFoods: { localeId: props.id },
-      LocaleFoodRankingUpload: { localeId: props.id, file: '' },
-      LocaleFoodNutrientMapping: { localeId: props.id },
-      LocalePopularitySearchCopy: { sourceLocaleId: '', localeId: props.id },
+    const defaultJobsParams = computed<Pick<JobParams, NutrientTableJob>>(() => ({
+      NutrientTableMappingImport: { nutrientTableId: props.id, file: '' },
+      NutrientTableDataImport: { nutrientTableId: props.id, file: '' },
     }));
 
     const disabledJobParams = {
-      LocaleFoods: { localeId: true },
-      LocaleFoodRankingUpload: { localeId: true },
-      LocaleFoodNutrientMapping: { localeId: true },
-      LocalePopularitySearchCopy: { localeId: true },
+      NutrientTableMappingImport: { nutrientTableId: true },
+      NutrientTableDataImport: { nutrientTableId: true },
     };
 
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<
+      NutrientTableEntry,
+      NutrientTableRefs
+    >(props);
     useEntryFetch(props);
-    const { clearError, form } = useForm<LocaleTasksForm>({
-      data: { type: localeJobs[0], params: defaultJobsParams.value[localeJobs[0]] },
+    const { clearError, form } = useForm<NutrientTableTasksForm>({
+      data: { type: nutrientTableJobs[0], params: defaultJobsParams.value[nutrientTableJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(nutrientTableJobs);
 
     const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
 
@@ -117,7 +120,7 @@ export default defineComponent({
     const submit = async () => {
       if (jobInProgress.value) return;
 
-      const job = await form.post<JobEntry>(`admin/locales/${props.id}/tasks`);
+      const job = await form.post<JobEntry>(`admin/nutrient-tables/${props.id}/tasks`);
 
       jobs.value.unshift(job);
       await startPolling();

@@ -1,21 +1,25 @@
 <template>
-  <div>
+  <div v-if="!disabled.localeId">
     <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <v-text-field
-            :disabled="disabled.localeId"
-            hide-details="auto"
-            :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
-            name="localeId"
-            outlined
-            :value="value.localeId"
-            @input="input('localeId', $event)"
-          ></v-text-field>
-        </v-col>
-        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
-          <v-alert text type="error">{{ error }}</v-alert>
+          <select-resource v-model="params.localeId" item-name="englishName" resource="locales">
+            <template #activator="{ attrs, on }">
+              <v-text-field
+                v-bind="attrs"
+                :error-messages="errors.get('params.localeId')"
+                hide-details="auto"
+                :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
+                name="localeId"
+                outlined
+                prepend-inner-icon="$locales"
+                readonly
+                :value="value.localeId"
+                v-on="on"
+              ></v-text-field>
+            </template>
+          </select-resource>
         </v-col>
       </v-row>
     </v-card-text>
@@ -26,11 +30,14 @@
 import { defineComponent } from 'vue';
 
 import type { JobParams } from '@intake24/common/types';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 
 import jobParams from './job-params';
 
 export default defineComponent({
   name: 'LocaleFoodNutrientMapping',
+
+  components: { SelectResource },
 
   mixins: [jobParams<JobParams['LocaleFoodNutrientMapping']>()],
 });

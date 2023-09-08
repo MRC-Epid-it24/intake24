@@ -33,11 +33,10 @@ const nutrientTables: LocaleMessageObject = {
     },
   },
 
-  upload: {
-    _: 'Uploads',
-    title: 'Nutrient table uploads',
-    tab: 'Uploads',
-    type: 'Data type upload',
+  tasks: {
+    _: 'Tasks',
+    title: 'Nutrient table Tasks',
+    tab: 'Tasks',
   },
 };
 
