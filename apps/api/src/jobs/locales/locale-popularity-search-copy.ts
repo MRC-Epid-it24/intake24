@@ -4,8 +4,8 @@ import type { IoC } from '@intake24/api/ioc';
 
 import BaseJob from '../job';
 
-export default class PairwiseSearchCopyAssociations extends BaseJob<'PairwiseSearchCopyAssociations'> {
-  readonly name = 'PairwiseSearchCopyAssociations';
+export default class LocalePopularitySearchCopy extends BaseJob<'LocalePopularitySearchCopy'> {
+  readonly name = 'LocalePopularitySearchCopy';
 
   private readonly pairwiseSearchService;
 
@@ -20,7 +20,7 @@ export default class PairwiseSearchCopyAssociations extends BaseJob<'PairwiseSea
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof PairwiseSearchCopyAssociations
+   * @memberof LocalePopularitySearchCopy
    */
   public async run(job: Job): Promise<void> {
     this.init(job);

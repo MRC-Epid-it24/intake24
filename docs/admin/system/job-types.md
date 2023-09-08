@@ -6,17 +6,20 @@ Jobs types available in system.
   - [CleanRedisStore](#cleanredisstore)
   - [CleanStorageFiles](#cleanstoragefiles)
   - [LanguageTranslationsSync](#languagetranslationssync)
+  - [LocaleFoods](#localefoods)
   - [LocaleFoodNutrientMapping](#localefoodnutrientmapping)
+  - [LocaleFoodRankingUpload](#localefoodrankingupload)
+  - [LocalePopularitySearchCopy](#localepopularitysearchcopy)
   - [NutrientTableDataImport](#nutrienttabledataimport)
-  - [NutrientTableIMappingImport](#nutrienttableimappingimport)
-  - [PairwiseSearchCopyAssociations](#pairwisesearchcopyassociations)
+  - [NutrientTableMappingImport](#nutrienttablemappingimport)
   - [PopularitySearchUpdateCounters](#popularitysearchupdatecounters)
   - [PurgeRefreshTokens](#purgerefreshtokens)
-  - [SurveyDataExport](#surveydataexport)
   - [SurveyAuthUrlsExport](#surveyauthurlsexport)
+  - [SurveyDataExport](#surveydataexport)
   - [SurveyFeedbackNotification](#surveyfeedbacknotification)
-  - [SurveyRespondentsImport](#surveyrespondentsimport)
   - [SurveyHelpRequestNotification](#surveyhelprequestnotification)
+  - [SurveyNutrientsRecalculation](#surveynutrientsrecalculation)
+  - [SurveyRespondentsImport](#surveyrespondentsimport)
   - [SurveySubmission](#surveysubmission)
   - [SurveySubmissionNotification](#surveysubmissionnotification)
   - [UserPasswordResetNotification](#userpasswordresetnotification)
@@ -26,9 +29,19 @@ Jobs types available in system.
 
 `CleanRedisStore` wipes the specific redis stores. e.g. `cache` or `session`
 
+```json
+{
+  "store": "cache" | "session"
+}
+```
+
 ## CleanStorageFiles
 
 `CleanStorageFiles` wipes temporary storage files, e.g. `downloads` and `uploads` folders.
+
+```json
+{}
+```
 
 ## LanguageTranslationsSync
 
@@ -38,45 +51,168 @@ Jobs types available in system.
 This needs to be run if object structure changes, so all database records are synced to use same structure.
 :::
 
+```json
+{}
+```
+
+## LocaleFoods
+
+`LocaleFoods` exports foods data for selected locale.
+
+```json
+{
+  "localeId": string,
+}
+```
+
 ## LocaleFoodNutrientMapping
 
-`LocaleFoodNutrientMapping` export food nutrient mapping data for selected locale.
+`LocaleFoodNutrientMapping` exports food nutrient mapping data for selected locale.
+
+```json
+{
+  "localeId": string,
+}
+```
+
+## LocaleFoodRankingUpload
+
+`LocaleFoodRankingUpload` uploads food ranking data for selected locale.
+
+```json
+{
+  "localeId": string,
+  "file": File
+}
+```
+
+## LocalePopularitySearchCopy
+
+`LocalePopularitySearchCopy` copies pairwise associations data from source locale to target locale.
+
+```json
+{
+  "localeId": string,
+  "sourceLocaleId": string
+}
+```
 
 ## NutrientTableDataImport
 
 `NutrientTableDataImport` imports data from CSV file containing nutrient data.
 
-## NutrientTableIMappingImport
+```json
+{
+  "nutrientTableId": string,
+  "file": File
+}
+```
 
-`NutrientTableIMappingImport` imports Excel-based nutrient mappings from CSV file.
+## NutrientTableMappingImport
 
-## PairwiseSearchCopyAssociations
+`NutrientTableMappingImport` imports Excel-based nutrient mappings from CSV file.
 
-`PairwiseSearchCopyAssociations` copies pairwise associations data from source locale to target locale.
+```json
+{
+  "nutrientTableId": string,
+  "file": File
+}
+```
 
 ## PopularitySearchUpdateCounters
 
 `PopularitySearchUpdateCounters` increments popularity search counters based on provided food codes from survey submission.
 
+```json
+{
+  "localeCode": string,
+  "foodCodes": string[]
+}
+```
+
 ## PurgeRefreshTokens
 
-`PurgeRefreshTokens` clean expired refresh tokens, that don't need to be hold in database store anymore.
+`PurgeRefreshTokens` cleans expired refresh tokens, that don't need to be hold in database store anymore.
 
-## SurveyDataExport
-
-`SurveyDataExport` survey submission data to CSV file based on scheme-defined export columns.
+```json
+{}
+```
 
 ## SurveyAuthUrlsExport
 
-`SurveyAuthUrlsExport` survey respondent authentication details (usernames and authentication URLs).
+`SurveyAuthUrlsExport` exports survey respondent authentication details (usernames and authentication URLs).
+
+```json
+{
+  "surveyId": string
+}
+```
+
+## SurveyDataExport
+
+`SurveyDataExport` exports survey submission data to CSV file based on scheme-defined export columns.
+
+```json
+{
+  "id"?: string | string[],
+  "surveyId": string,
+  "startDate"?: string,
+  "endDate"?: string,
+  "userId"?: string
+}
+```
 
 ## SurveyFeedbackNotification
 
 `SurveyFeedbackNotification` sends email with attached survey feedback PDF file to provided email address.
 
+```json
+{
+  "surveyId": string,
+  "userId": string,
+  "submissions"?: string[],
+  "to": string,
+  "cc"?: string,
+  "bcc"?: string
+}
+```
+
+## SurveyHelpRequestNotification
+
+`SurveyHelpRequestNotification` sends request help email to study support users.
+
+```json
+{
+  "surveySlug": string,
+  "userId": string,
+  "name": string,
+  "email": string,
+  "phone": string,
+  "phoneCountry": string,
+  "message": string
+}
+```
+
+## SurveyNutrientsRecalculation
+
+`SurveyNutrientsRecalculation` recalculates survey submission nutrients. This is useful when nutrient table data changes and need to recalculate all survey submissions.
+
+```json
+{
+  "surveyId": string
+}
+```
+
 ## SurveyRespondentsImport
 
 `SurveyRespondentsImport` imports survey respondent records from provided CSV file.
+
+```json
+{
+  "surveyId": string,
+  "file": File
+}
+```
 
 **Available columns**
 
@@ -93,17 +229,28 @@ This needs to be run if object structure changes, so all database records are sy
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.
 :::
 
-## SurveyHelpRequestNotification
-
-`SurveyHelpRequestNotification` sends request help email to study support users.
-
 ## SurveySubmission
 
-`SurveySubmission` processes submission state and saves to data.
+`SurveySubmission` processes submission state and saves data.
+
+```json
+{
+  "surveyId": string,
+  "userId": string,
+  "state": SurveyState
+}
+```
 
 ## SurveySubmissionNotification
 
 `SurveySubmissionNotification` is used with webhook to dispatch survey submission notification.
+
+```json
+{
+  "surveyId": string,
+  "submissionId": string
+}
+```
 
 When valid `Submission notification URL` is set in survey settings, webhook is automatically called with each successful submission. Submission data are attached in request body.
 
@@ -126,6 +273,20 @@ Content-Type: application/json
 
 `UserPasswordResetNotification` is triggered when user requests password reset.
 
+```json
+{
+  "email": string,
+  "userAgent"?: string
+}
+```
+
 ## UserEmailVerificationNotification
 
 `UserEmailVerificationNotification` is triggered when new user signs up.
+
+```json
+{
+  "email": string,
+  "userAgent"?: string
+}
+```

@@ -1,10 +1,10 @@
 import CleanRedisStore from './clean-redis-store.vue';
-import FoodRankingCsvUpload from './food-ranking-csv-upload.vue';
 import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping.vue';
+import LocaleFoodRankingUpload from './locale-food-ranking-upload.vue';
 import LocaleFoods from './locale-foods.vue';
+import LocalePopularitySearchCopy from './locale-popularity-search-copy.vue';
 import NutrientTableDataImport from './nutrient-table-data-import.vue';
-import NutrientTableIMappingImport from './nutrient-table-mapping-import.vue';
-import PairwiseSearchCopyAssociations from './pairwise-search-copy-associations.vue';
+import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
 import SurveyDataExport from './survey-data-export.vue';
 import SurveyRespondentsImport from './survey-respondents-import.vue';
@@ -12,12 +12,12 @@ import SurveySubmissionNotification from './survey-submission-notification.vue';
 
 export default {
   CleanRedisStore,
-  FoodRankingCsvUpload,
-  LocaleFoods,
   LocaleFoodNutrientMapping,
+  LocaleFoodRankingUpload,
+  LocaleFoods,
+  LocalePopularitySearchCopy,
   NutrientTableDataImport,
-  NutrientTableIMappingImport,
-  PairwiseSearchCopyAssociations,
+  NutrientTableMappingImport,
   SurveyAuthUrlsExport,
   SurveyDataExport,
   SurveyRespondentsImport,

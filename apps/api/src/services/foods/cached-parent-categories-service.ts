@@ -1,5 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
-import { Category, Food, getAllChildCategories, QueryTypes } from '@intake24/db';
+import { Category, Food } from '@intake24/db';
 
 // FIXME: get from config file
 const ATTR_CACHE_LIFETIME = 300;

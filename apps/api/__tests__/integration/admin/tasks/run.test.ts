@@ -34,7 +34,7 @@ export default () => {
     });
 
     it('should return 200 and data', async () => {
-      await suite.sharedTests.assertAcknowledged('post', url);
+      await suite.sharedTests.assertAcknowledged('post', url, { result: true });
     });
   });
 };

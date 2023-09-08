@@ -385,7 +385,7 @@ export const surveyForm: SurveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
-  searchSortingAlgorithm: 'paRules',
+  searchSortingAlgorithm: 'popularity',
   searchMatchScoreWeight: 20,
   surveySchemeOverrides: defaultOverrides,
   userPersonalIdentifiers: false,

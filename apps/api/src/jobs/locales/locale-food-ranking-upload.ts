@@ -7,7 +7,8 @@ import fs from 'fs-extra';
 import { camelCase } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import { FixedFoodRanking, FoodLocalList } from '@intake24/db';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { FixedFoodRanking, FoodLocalList, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -24,12 +25,14 @@ function camelCaseHeaders(headers: (string | undefined | null)[]): string[] {
   });
 }
 
-export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'> {
-  readonly name = 'FoodRankingCsvUpload';
+export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingUpload'> {
+  readonly name = 'LocaleFoodRankingUpload';
 
   private readonly db;
 
   private file!: string;
+
+  private localeCode!: string;
 
   constructor({ logger, db }: Pick<IoC, 'logger' | 'db'>) {
     super({ logger });
@@ -47,6 +50,12 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
+    const locale = await SystemLocale.findByPk(this.params.localeId);
+    if (!locale)
+      throw new NotFoundError(`Job ${this.name}: Locale not found (${this.params.localeId}).`);
+
+    this.localeCode = locale.code;
+
     await this.db.system.transaction(async (tx) => {
       await this.deleteRows(tx);
       await this.uploadImpl(tx);
@@ -55,11 +64,8 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
     this.logger.debug('Job finished.');
   }
 
-  private async deleteRows(tx: Transaction) {
-    await FixedFoodRanking.destroy({
-      where: { localeId: this.params.localeCode },
-      transaction: tx,
-    });
+  private async deleteRows(transaction: Transaction) {
+    await FixedFoodRanking.destroy({ where: { localeId: this.localeCode }, transaction });
   }
 
   private async uploadImpl(tx: Transaction, chunk = 100): Promise<void> {
@@ -98,7 +104,7 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
             }
           }
         })
-        .on('end', async (records: number) => {
+        .on('end', async () => {
           try {
             await this.validateChunk(parsedRows);
             await this.importChunk(parsedRows, tx);
@@ -127,11 +133,11 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
       throw new Error(`Missing some of the required fields (${requiredFields.join(',')}).`);
 
     const foodCodes = chunk.map((item) => item.foodCode);
-    const { localeId, localeCode } = this.params;
+    const { localeId } = this.params;
 
     const validFoodCodes = (
       await FoodLocalList.findAll({
-        where: { localeId: localeCode, foodCode: foodCodes },
+        where: { localeId: this.localeCode, foodCode: foodCodes },
       })
     ).map((row) => row.foodCode);
 
@@ -139,22 +145,22 @@ export default class FoodRankingCsvUpload extends BaseJob<'FoodRankingCsvUpload'
 
     if (invalidFoodCodes.length > 0) {
       throw new Error(
-        `Following food codes are not valid for locale ${localeId} (${localeCode}): ${invalidFoodCodes.join(
-          ', '
-        )} `
+        `Following food codes are not valid for locale ${localeId} (${
+          this.localeCode
+        }): ${invalidFoodCodes.join(', ')} `
       );
     }
   }
 
-  private async importChunk(rows: CSVRow[], tx: Transaction): Promise<void> {
+  private async importChunk(rows: CSVRow[], transaction: Transaction): Promise<void> {
     if (!rows.length) return;
 
     const records = rows.map((row) => ({
-      localeId: this.params.localeCode,
+      localeId: this.localeCode,
       foodCode: row.foodCode,
       rank: row.sortingPriority,
     }));
 
-    await FixedFoodRanking.bulkCreate(records, { transaction: tx });
+    await FixedFoodRanking.bulkCreate(records, { transaction });
   }
 }

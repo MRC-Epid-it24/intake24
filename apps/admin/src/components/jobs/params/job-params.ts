@@ -2,6 +2,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { TaskRefs } from '@intake24/common/types/http/admin';
+import type { Errors } from '@intake24/common/util';
 
 export default <T>() =>
   defineComponent({
@@ -9,7 +10,8 @@ export default <T>() =>
 
     props: {
       errors: {
-        type: Array as PropType<string[]>,
+        type: Object as PropType<Errors>,
+        required: true,
       },
       refs: {
         type: Object as PropType<TaskRefs>,
@@ -27,9 +29,14 @@ export default <T>() =>
 
     emits: ['input'],
 
-    methods: {
-      input(key: string, value: any) {
-        this.$emit('input', { ...this.value, [key]: value });
+    computed: {
+      params: {
+        get() {
+          return this.value;
+        },
+        set(value: T) {
+          this.$emit('input', value);
+        },
       },
     },
   });

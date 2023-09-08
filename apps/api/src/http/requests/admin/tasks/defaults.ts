@@ -1,12 +1,18 @@
 import type { Request } from 'express';
-import type { Schema } from 'express-validator';
+import type { Meta, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
 import type { TaskAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { cron, unique } from '@intake24/api/http/rules';
-import { jobTypes } from '@intake24/common/types';
-import { Op, Task } from '@intake24/db';
+import {
+  jobTypes,
+  localeJobs,
+  nutrientTableJobs,
+  pickJobParams,
+  surveyJobs,
+} from '@intake24/common/types';
+import { NutrientTable, Op, Survey, SystemLocale, Task } from '@intake24/db';
 
 const defaults: Schema = {
   name: {
@@ -32,7 +38,10 @@ const defaults: Schema = {
     errorMessage: typeErrorMessage('string._'),
     isEmpty: { negated: true },
     isString: true,
-    isIn: { options: [jobTypes], errorMessage: typeErrorMessage('in._') },
+    isIn: {
+      options: [jobTypes],
+      errorMessage: typeErrorMessage('in.options', { options: jobTypes }),
+    },
   },
   cron: {
     in: ['body'],
@@ -55,12 +64,53 @@ const defaults: Schema = {
   },
   params: {
     in: ['body'],
-    errorMessage: 'Parameters must be a valid object.',
-    isEmpty: { negated: true },
     custom: {
-      options: async (value): Promise<void> => {
-        if (!isPlainObject(value)) throw new Error('Parameters must be a valid object.');
-        // TODO: add full json validation for each job type
+      options: async (value, meta): Promise<void> => {
+        if (!isPlainObject(value) || !meta.req.body.job || !jobTypes.includes(meta.req.body.job))
+          throw new Error('Parameters must be a valid object.');
+      },
+      bail: true,
+    },
+    customSanitizer: {
+      options: (value, { req }) => pickJobParams(value, req.body.job),
+    },
+  },
+  'params.nutrientTableId': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    custom: {
+      if: (value: any, { req }: Meta) => req.body.job && nutrientTableJobs.includes(req.body.job),
+      options: async (value, meta): Promise<void> => {
+        if (!value || typeof value !== 'string') throw new Error();
+
+        const table = await NutrientTable.findByPk(value);
+        if (!table) throw new Error(customTypeErrorMessage('exists._', meta));
+      },
+    },
+  },
+  'params.localeId': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    custom: {
+      if: (value: any, { req }: Meta) => req.body.job && localeJobs.includes(req.body.job),
+      options: async (value, meta): Promise<void> => {
+        if (!value || typeof value !== 'string') throw new Error();
+
+        const locale = await SystemLocale.findByPk(value);
+        if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
+      },
+    },
+  },
+  'params.surveyId': {
+    in: ['body'],
+    errorMessage: typeErrorMessage('string._'),
+    custom: {
+      if: (value: any, { req }: Meta) => req.body.job && surveyJobs.includes(req.body.job),
+      options: async (value, meta): Promise<void> => {
+        if (!value || typeof value !== 'string') throw new Error();
+
+        const survey = await Survey.findByPk(value);
+        if (!survey) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
   },

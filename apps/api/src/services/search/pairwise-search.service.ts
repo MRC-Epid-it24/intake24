@@ -9,7 +9,7 @@ import {
   SystemLocale,
 } from '@intake24/db';
 
-export type CopyAssociationsOps = JobParams['PairwiseSearchCopyAssociations'];
+export type CopyAssociationsOps = JobParams['LocalePopularitySearchCopy'];
 
 const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
   /**
@@ -18,36 +18,30 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
    * @param {CopyAssociationsOps} options
    */
   const copyAssociations = async (options: CopyAssociationsOps) => {
-    const { sourceLocaleId, targetLocaleId } = options;
+    const { localeId, sourceLocaleId } = options;
 
-    const [sourceLocale, targetLocale] = await Promise.all([
+    const [locale, sourceLocale] = await Promise.all([
+      SystemLocale.findByPk(localeId),
       SystemLocale.findByPk(sourceLocaleId),
-      SystemLocale.findByPk(targetLocaleId),
     ]);
 
-    if (!sourceLocale || !targetLocale) throw new NotFoundError();
+    if (!sourceLocale || !locale) throw new NotFoundError();
 
+    const { code: localeCode } = locale;
     const { code: sourceLocaleCode } = sourceLocale;
-    const { code: targetLocaleCode } = targetLocale;
 
     await db.system.transaction(async (transaction) => {
       await Promise.all([
-        PAOccurrence.destroy({ where: { localeId: targetLocaleCode }, transaction }),
-        PACoOccurrence.destroy({ where: { localeId: targetLocaleCode }, transaction }),
-        PAOccurrenceTransactionCount.destroy({
-          where: { localeId: targetLocaleCode },
-          transaction,
-        }),
+        PAOccurrence.destroy({ where: { localeId: localeCode }, transaction }),
+        PACoOccurrence.destroy({ where: { localeId: localeCode }, transaction }),
+        PAOccurrenceTransactionCount.destroy({ where: { localeId: localeCode }, transaction }),
       ]);
 
       const { occurrences, coOccurrences, transactionsCount } = copyPairwiseAssociationsQueries();
 
       await Promise.all(
         [occurrences, coOccurrences, transactionsCount].map((query) =>
-          db.system.query(query, {
-            replacements: { sourceLocaleCode, targetLocaleCode },
-            transaction,
-          })
+          db.system.query(query, { replacements: { localeCode, sourceLocaleCode }, transaction })
         )
       );
     });

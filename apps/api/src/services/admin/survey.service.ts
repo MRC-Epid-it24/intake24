@@ -1,4 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
+import type { QueueJob } from '@intake24/common/types';
 import type {
   CreateRespondentInput,
   UpdateRespondentInput,
@@ -311,6 +312,14 @@ const adminSurveyService = ({
     });
   };
 
+  /**
+   * Queue locale tasks
+   *
+   * @param {QueueJob} input
+   * @returns
+   */
+  const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
+
   return {
     getSurveyRespondentPermission,
     getSurveyResourcePermissions,
@@ -320,6 +329,7 @@ const adminSurveyService = ({
     deleteRespondent,
     importRespondents,
     exportAuthenticationUrls,
+    queueTask,
   };
 };
 

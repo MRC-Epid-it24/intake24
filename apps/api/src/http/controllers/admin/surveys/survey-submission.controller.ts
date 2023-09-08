@@ -36,7 +36,15 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     const submissions = await SurveySubmission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       where,
+      include: [
+        { association: 'user', include: [{ association: 'aliases', where: { surveyId } }] },
+      ],
       order: [['submissionTime', 'DESC']],
+      transform: (submission) => {
+        const { user, ...rest } = submission.get();
+
+        return { ...rest, username: user!.aliases![0].username };
+      },
     });
 
     res.json(submissions);

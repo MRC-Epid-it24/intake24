@@ -32,7 +32,7 @@ import { useI18n } from '@intake24/i18n';
 import { AssociatedFoodsPrompt } from '@intake24/survey/components/prompts/standard';
 import foodSearchService from '@intake24/survey/services/foods.service';
 import { useSurvey } from '@intake24/survey/stores';
-import { findFood, getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
+import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 

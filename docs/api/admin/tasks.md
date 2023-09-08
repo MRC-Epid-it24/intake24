@@ -148,6 +148,10 @@ Content-Type: application/json
 
 ```json
 200 OK
+
+{
+    ...
+}
 ```
 
 ## Task references

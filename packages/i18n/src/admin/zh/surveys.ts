@@ -61,10 +61,10 @@ const surveys: LocaleMessageObject = {
     enabled: 'Feedback enabled',
     numberOfSubmissions: 'Number of submissions for feedback',
   },
-  'data-export': {
-    _: 'Data export',
-    tab: 'Data export',
-    title: 'Data Export options',
+  tasks: {
+    _: 'Survey task',
+    title: 'Survey tasks',
+    tab: 'tasks',
   },
   overrides: {
     _: 'Scheme overrides',

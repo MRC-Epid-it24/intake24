@@ -9,8 +9,7 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { jobRequiresFile, localeJobs, pickJobParams } from '@intake24/common/types';
-import { SystemLocale } from '@intake24/db';
+import { jobRequiresFile, pickJobParams, surveyJobs } from '@intake24/common/types';
 
 export default validate(
   checkSchema({
@@ -19,32 +18,32 @@ export default validate(
       errorMessage: typeErrorMessage('string._'),
       isString: true,
       isIn: {
-        options: [localeJobs],
-        errorMessage: typeErrorMessage('in.options', { options: localeJobs }),
+        options: [surveyJobs],
+        errorMessage: typeErrorMessage('in.options', { options: surveyJobs }),
       },
     },
     params: {
       in: ['body'],
       customSanitizer: {
         options: (value, { req }) =>
-          isPlainObject(value) && req.body.type && localeJobs.includes(req.body.type)
+          isPlainObject(value) && req.body.type && surveyJobs.includes(req.body.type)
             ? pickJobParams(value, req.body.type)
             : {},
       },
     },
-    'params.sourceLocaleId': {
+    'params.startDate': {
       in: ['body'],
-      errorMessage: typeErrorMessage('string._'),
-      custom: {
-        if: (value: any, { req }: Meta) =>
-          req.body.type && req.body.type === 'LocalePopularitySearchCopy',
-        options: async (value, meta): Promise<void> => {
-          if (!value || typeof value !== 'string') throw new Error();
-
-          const locale = await SystemLocale.findByPk(value);
-          if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
-        },
-      },
+      errorMessage: typeErrorMessage('date._'),
+      isDate: true,
+      toDate: true,
+      optional: true,
+    },
+    'params.endDate': {
+      in: ['body'],
+      errorMessage: typeErrorMessage('date._'),
+      isDate: true,
+      toDate: true,
+      optional: true,
     },
     'params.file': {
       in: ['body'],

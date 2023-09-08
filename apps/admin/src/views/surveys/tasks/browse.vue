@@ -4,13 +4,13 @@
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-row>
           <v-col cols="12" md="6">
-            <v-card-title>{{ $t('locales.tasks.title') }}</v-card-title>
+            <v-card-title>{{ $t('surveys.tasks.title') }}</v-card-title>
             <v-card-text>
               <v-select
                 v-model="form.type"
                 hide-details="auto"
                 :items="jobTypeList"
-                :label="$t('locales.tasks._')"
+                :label="$t('surveys.tasks._')"
                 name="job"
                 outlined
                 prepend-inner-icon="$jobs"
@@ -54,21 +54,21 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
-import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+import type { GetJobParams, JobParams, SurveyJob } from '@intake24/common/types';
+import type { JobEntry, SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
-import { localeJobs } from '@intake24/common/types';
+import { surveyJobs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
-type LocaleTasksForm = {
-  type: LocaleJob;
-  params: GetJobParams<LocaleJob>;
+type SurveyTasksForm = {
+  type: SurveyJob;
+  params: GetJobParams<SurveyJob>;
 };
 
 export default defineComponent({
-  name: 'LocaleTasks',
+  name: 'SurveyTasks',
 
   components: { ...jobParams, PollsJobList },
 
@@ -78,30 +78,30 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const jobTypeList = computed(() =>
-      localeJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+      surveyJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
 
-    const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
-      LocaleFoods: { localeId: props.id },
-      LocaleFoodRankingUpload: { localeId: props.id, file: '' },
-      LocaleFoodNutrientMapping: { localeId: props.id },
-      LocalePopularitySearchCopy: { sourceLocaleId: '', localeId: props.id },
+    const defaultJobsParams = computed<Pick<JobParams, SurveyJob>>(() => ({
+      SurveyAuthUrlsExport: { surveyId: props.id },
+      SurveyDataExport: { surveyId: props.id, startDate: undefined, endDate: undefined },
+      SurveyNutrientsRecalculation: { surveyId: props.id },
+      SurveyRespondentsImport: { surveyId: props.id, file: '' },
     }));
 
     const disabledJobParams = {
-      LocaleFoods: { localeId: true },
-      LocaleFoodRankingUpload: { localeId: true },
-      LocaleFoodNutrientMapping: { localeId: true },
-      LocalePopularitySearchCopy: { localeId: true },
+      SurveyAuthUrlsExport: { surveyId: true },
+      SurveyDataExport: { surveyId: true },
+      SurveyNutrientsRecalculation: { surveyId: true },
+      SurveyRespondentsImport: { surveyId: true },
     };
 
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(props);
     useEntryFetch(props);
-    const { clearError, form } = useForm<LocaleTasksForm>({
-      data: { type: localeJobs[0], params: defaultJobsParams.value[localeJobs[0]] },
+    const { clearError, form } = useForm<SurveyTasksForm>({
+      data: { type: surveyJobs[0], params: defaultJobsParams.value[surveyJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(surveyJobs);
 
     const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
 
@@ -112,12 +112,19 @@ export default defineComponent({
     const updateJob = () => {
       form.errors.clear();
       form.params = defaultJobsParams.value[form.type];
+
+      if (form.type === 'SurveyDataExport') {
+        //@ts-expect-error TS does not narrow the type of form.params
+        form.params.startDate = entry.value.startDate;
+        //@ts-expect-error TS does not narrow the type of form.params
+        form.params.endDate = entry.value.endDate;
+      }
     };
 
     const submit = async () => {
       if (jobInProgress.value) return;
 
-      const job = await form.post<JobEntry>(`admin/locales/${props.id}/tasks`);
+      const job = await form.post<JobEntry>(`admin/surveys/${props.id}/tasks`);
 
       jobs.value.unshift(job);
       await startPolling();
