@@ -278,4 +278,32 @@ import{_ as s,o as n,c as a,Q as l}from"./chunks/framework.b637c96f.js";const F=
 <span class="line"><span style="color:#24292E;">    ],</span></span>
 <span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;feedbackSchemes&quot;</span><span style="color:#24292E;">: [{</span><span style="color:#B31D28;font-style:italic;">...</span><span style="color:#24292E;">}],</span></span>
 <span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;surveySchemes&quot;</span><span style="color:#24292E;">: [{</span><span style="color:#B31D28;font-style:italic;">...</span><span style="color:#24292E;">}]</span></span>
-<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div>`,43),t=[p];function e(c,r,y,E,i,u){return n(),a("div",null,t)}const q=s(o,[["render",e]]);export{F as __pageData,q as default};
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h2 id="queue-task" tabindex="-1">Queue task <a class="header-anchor" href="#queue-task" aria-label="Permalink to &quot;Queue task&quot;">​</a></h2><p>Submits job to the queue.</p><p>Specific jobs can be submitted to the queue. Each job type has its own parameters. See <a href="/admin/system/job-types.html">job types</a> for more information.</p><h3 id="request-7" tabindex="-1">Request <a class="header-anchor" href="#request-7" aria-label="Permalink to &quot;Request&quot;">​</a></h3><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#E1E4E8;">POST /api/admin/surveys/:surveyId/tasks</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8;">Authorization: Bearer {</span><span style="color:#FDAEB7;font-style:italic;">accessToken</span><span style="color:#E1E4E8;">}</span></span>
+<span class="line"><span style="color:#E1E4E8;">Content-Type: application/json | multipart/form-data</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8;">{</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;type&quot;</span><span style="color:#E1E4E8;">: </span><span style="color:#FDAEB7;font-style:italic;">string</span><span style="color:#E1E4E8;">,</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;params&quot;</span><span style="color:#E1E4E8;">: {</span></span>
+<span class="line"><span style="color:#E1E4E8;">        </span><span style="color:#FDAEB7;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#E1E4E8;">    }</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#24292E;">POST /api/admin/surveys/:surveyId/tasks</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;">Authorization: Bearer {</span><span style="color:#B31D28;font-style:italic;">accessToken</span><span style="color:#24292E;">}</span></span>
+<span class="line"><span style="color:#24292E;">Content-Type: application/json | multipart/form-data</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;">{</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;type&quot;</span><span style="color:#24292E;">: </span><span style="color:#B31D28;font-style:italic;">string</span><span style="color:#24292E;">,</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;params&quot;</span><span style="color:#24292E;">: {</span></span>
+<span class="line"><span style="color:#24292E;">        </span><span style="color:#B31D28;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#24292E;">    }</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h3 id="response-7" tabindex="-1">Response <a class="header-anchor" href="#response-7" aria-label="Permalink to &quot;Response&quot;">​</a></h3><p>Returns job resource entry.</p><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#79B8FF;">200</span><span style="color:#E1E4E8;"> OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8;">{</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#FDAEB7;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#005CC5;">200</span><span style="color:#24292E;"> OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E;">{</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#B31D28;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div>`,51),t=[p];function e(c,r,y,E,i,u){return n(),a("div",null,t)}const q=s(o,[["render",e]]);export{F as __pageData,q as default};

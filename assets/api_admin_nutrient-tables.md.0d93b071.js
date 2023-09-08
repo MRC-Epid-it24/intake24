@@ -148,23 +148,27 @@ import{_ as s,o as n,c as a,Q as l}from"./chunks/framework.b637c96f.js";const h=
 <span class="line"><span style="color:#24292E;">        },</span></span>
 <span class="line"><span style="color:#24292E;">        </span><span style="color:#B31D28;font-style:italic;">...</span></span>
 <span class="line"><span style="color:#24292E;">    ]</span></span>
-<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h2 id="upload-nutrient-data" tabindex="-1">Upload nutrient data <a class="header-anchor" href="#upload-nutrient-data" aria-label="Permalink to &quot;Upload nutrient data&quot;">​</a></h2><p>Endpoint accepts two types of CSV files.</p><ul><li>NDB mapping</li><li>NDB nutrient data</li></ul><p>Upload is submitted as job and response returns <code>JobResponse</code> entry</p><h3 id="request-6" tabindex="-1">Request <a class="header-anchor" href="#request-6" aria-label="Permalink to &quot;Request&quot;">​</a></h3><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#E1E4E8;">POST /api/admin/nutrient-tables/:nutrientTableId/upload</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h2 id="queue-task" tabindex="-1">Queue task <a class="header-anchor" href="#queue-task" aria-label="Permalink to &quot;Queue task&quot;">​</a></h2><p>Submits job to the queue.</p><p>Specific jobs can be submitted to the queue. Each job type has its own parameters. See <a href="/admin/system/job-types.html">job types</a> for more information.</p><h3 id="request-6" tabindex="-1">Request <a class="header-anchor" href="#request-6" aria-label="Permalink to &quot;Request&quot;">​</a></h3><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#E1E4E8;">POST /api/admin/nutrient-tables/:nutrientTableId/tasks</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#E1E4E8;">Authorization: Bearer {</span><span style="color:#FDAEB7;font-style:italic;">accessToken</span><span style="color:#E1E4E8;">}</span></span>
-<span class="line"><span style="color:#E1E4E8;">Content-Type: multipart/form-data</span></span>
+<span class="line"><span style="color:#E1E4E8;">Content-Type: application/json | multipart/form-data</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#E1E4E8;">{</span></span>
-<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;type&quot;</span><span style="color:#E1E4E8;">: </span><span style="color:#FDAEB7;font-style:italic;">&#39;NutrientTableDataImport&#39;</span><span style="color:#E1E4E8;"> </span><span style="color:#FDAEB7;font-style:italic;">|</span><span style="color:#E1E4E8;"> </span><span style="color:#FDAEB7;font-style:italic;">&#39;NutrientTableIMappingImport&#39;</span><span style="color:#E1E4E8;">,</span></span>
-<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;file&quot;</span><span style="color:#E1E4E8;">: </span><span style="color:#FDAEB7;font-style:italic;">File</span></span>
-<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#24292E;">POST /api/admin/nutrient-tables/:nutrientTableId/upload</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;type&quot;</span><span style="color:#E1E4E8;">: </span><span style="color:#FDAEB7;font-style:italic;">string</span><span style="color:#E1E4E8;">,</span></span>
+<span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#79B8FF;">&quot;params&quot;</span><span style="color:#E1E4E8;">: {</span></span>
+<span class="line"><span style="color:#E1E4E8;">        </span><span style="color:#FDAEB7;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#E1E4E8;">    }</span></span>
+<span class="line"><span style="color:#E1E4E8;">}</span></span></code></pre><pre class="shiki github-light vp-code-light"><code><span class="line"><span style="color:#24292E;">POST /api/admin/nutrient-tables/:nutrientTableId/tasks</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#24292E;">Authorization: Bearer {</span><span style="color:#B31D28;font-style:italic;">accessToken</span><span style="color:#24292E;">}</span></span>
-<span class="line"><span style="color:#24292E;">Content-Type: multipart/form-data</span></span>
+<span class="line"><span style="color:#24292E;">Content-Type: application/json | multipart/form-data</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#24292E;">{</span></span>
-<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;type&quot;</span><span style="color:#24292E;">: </span><span style="color:#B31D28;font-style:italic;">&#39;NutrientTableDataImport&#39;</span><span style="color:#24292E;"> </span><span style="color:#B31D28;font-style:italic;">|</span><span style="color:#24292E;"> </span><span style="color:#B31D28;font-style:italic;">&#39;NutrientTableIMappingImport&#39;</span><span style="color:#24292E;">,</span></span>
-<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;file&quot;</span><span style="color:#24292E;">: </span><span style="color:#B31D28;font-style:italic;">File</span></span>
-<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h3 id="response-6" tabindex="-1">Response <a class="header-anchor" href="#response-6" aria-label="Permalink to &quot;Response&quot;">​</a></h3><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#79B8FF;">200</span><span style="color:#E1E4E8;"> OK</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;type&quot;</span><span style="color:#24292E;">: </span><span style="color:#B31D28;font-style:italic;">string</span><span style="color:#24292E;">,</span></span>
+<span class="line"><span style="color:#24292E;">    </span><span style="color:#005CC5;">&quot;params&quot;</span><span style="color:#24292E;">: {</span></span>
+<span class="line"><span style="color:#24292E;">        </span><span style="color:#B31D28;font-style:italic;">...</span></span>
+<span class="line"><span style="color:#24292E;">    }</span></span>
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div><h3 id="response-6" tabindex="-1">Response <a class="header-anchor" href="#response-6" aria-label="Permalink to &quot;Response&quot;">​</a></h3><p>Returns job resource entry.</p><div class="language-json vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">json</span><pre class="shiki github-dark vp-code-dark"><code><span class="line"><span style="color:#79B8FF;">200</span><span style="color:#E1E4E8;"> OK</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#E1E4E8;">{</span></span>
 <span class="line"><span style="color:#E1E4E8;">    </span><span style="color:#FDAEB7;font-style:italic;">...</span></span>
@@ -172,4 +176,4 @@ import{_ as s,o as n,c as a,Q as l}from"./chunks/framework.b637c96f.js";const h=
 <span class="line"></span>
 <span class="line"><span style="color:#24292E;">{</span></span>
 <span class="line"><span style="color:#24292E;">    </span><span style="color:#B31D28;font-style:italic;">...</span></span>
-<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div>`,45),o=[e];function t(c,r,i,E,y,u){return n(),a("div",null,o)}const f=s(p,[["render",t]]);export{h as __pageData,f as default};
+<span class="line"><span style="color:#24292E;">}</span></span></code></pre></div>`,45),o=[e];function t(c,r,i,E,y,u){return n(),a("div",null,o)}const b=s(p,[["render",t]]);export{h as __pageData,b as default};
