@@ -12,12 +12,7 @@ const cachedParentCategoriesService = ({ cache }: Pick<IoC, 'cache'>) => {
       async () => {
         const row = await Food.findOne({
           where: { code: foodCode },
-          include: [
-            {
-              association: 'parentCategories',
-              attributes: ['code'],
-            },
-          ],
+          include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
         if (row === null || row.parentCategories === undefined) return [];
@@ -33,12 +28,7 @@ const cachedParentCategoriesService = ({ cache }: Pick<IoC, 'cache'>) => {
       async () => {
         const row = await Category.findOne({
           where: { code: categoryCode },
-          include: [
-            {
-              association: 'parentCategories',
-              attributes: ['code'],
-            },
-          ],
+          include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
         if (row === null || row.parentCategories === undefined) return [];
