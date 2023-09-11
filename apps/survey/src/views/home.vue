@@ -46,26 +46,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router/composables';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import { AppEntryScreen } from '@intake24/ui/components';
 
 import { surveyService } from '../services';
+import { useAuth, useUser } from '../stores';
 
 export default defineComponent({
   name: 'AppHome',
 
   components: { AppEntryScreen },
 
-  data() {
-    return {
-      surveys: [] as PublicSurveyEntry[],
-    };
-  },
+  setup() {
+    const surveys = ref<PublicSurveyEntry[]>([]);
+    const auth = useAuth();
+    const router = useRouter();
 
-  async mounted() {
-    this.surveys = await surveyService.surveyPublicList();
+    const fetchSurveyPublicInfo = async () => {
+      surveys.value = await surveyService.surveyPublicList();
+    };
+
+    const tryLoggingIn = async () => {
+      if (!auth.loggedIn) await auth.refresh(false);
+      if (!auth.loggedIn) return;
+
+      const surveyId = useUser().profile?.surveyId;
+      if (!surveyId) return;
+
+      await router.push({ name: 'survey-home', params: { surveyId } });
+    };
+
+    onMounted(async () => {
+      await tryLoggingIn();
+      await fetchSurveyPublicInfo();
+    });
+
+    return { surveys };
   },
 });
 </script>

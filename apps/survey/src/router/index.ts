@@ -20,12 +20,12 @@ const routes: RouteConfig[] = [
     path: '/',
     name: 'home',
     component: views.home,
-    meta: { module: 'public', title: 'common._' },
+    meta: { module: 'login', title: 'common._' },
   },
   {
     path: '/a/:token',
     name: 'authentication',
-    meta: { module: 'public' },
+    meta: { module: 'login' },
     beforeEnter: authGuard,
   },
   {
