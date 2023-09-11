@@ -4,7 +4,11 @@ import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type {
+  LinkedQuantityCategory,
+  PortionSizeComponentType,
+  Prompts,
+} from '@intake24/common/prompts';
 import type {
   CustomPromptAnswer,
   EncodedFood,
@@ -39,7 +43,7 @@ import { useLoading } from '@intake24/ui/stores';
 
 import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
-import { promptStores } from './prompt';
+import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
 
 export type MealUndo = {
@@ -166,21 +170,26 @@ export const useSurvey = defineStore('survey', {
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
-    registeredPortionSizeMethods: (state) =>
-      state.parameters?.surveyScheme.prompts.meals.foods
-        .filter((item) => item.type === 'portion-size')
-        .map((item) => item.component.replace('-prompt', '')) ?? [],
-    linkedQuantityCategories: (state) => {
-      const prompt = state.parameters?.surveyScheme.prompts.meals.foods.find(
+    surveySchemeFoodPrompts: (state) => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
+    registeredPortionSizeMethods(): string[] {
+      return (
+        this.surveySchemeFoodPrompts
+          .filter((item) => item.type === 'portion-size')
+          .map((item) => item.component.replace('-prompt', '')) ?? []
+      );
+    },
+    linkedQuantityCategories(): LinkedQuantityCategory[] {
+      const prompt = this.surveySchemeFoodPrompts.find(
         (prompt) => prompt.component === 'guide-image-prompt'
       ) as Prompts['guide-image-prompt'] | undefined;
 
       return prompt?.linkedQuantityCategories ?? [];
     },
-    sameAsBeforeAllowed: (state) =>
-      !!state.parameters?.surveyScheme.prompts.meals.foods.find(
+    sameAsBeforeAllowed(): boolean {
+      return !!this.surveySchemeFoodPrompts.find(
         (item) => item.component === 'same-as-before-prompt'
-      ),
+      );
+    },
     selection: (state) => state.data.selection,
     freeEntryComplete: (state) =>
       !!state.data.meals.length &&
@@ -653,6 +662,14 @@ export const useSurvey = defineStore('survey', {
         flags.push('portion-size-method-complete');
 
         if (food.data.portionSizeMethods.length > 1) flags.push('portion-size-option-complete');
+
+        if (food.portionSize) {
+          const component: PortionSizeComponentType = `${food.portionSize.method}-prompt`;
+          const store = getOrCreatePromptStateStore(component)();
+          const prompt = this.surveySchemeFoodPrompts.find((item) => item.component === component);
+
+          if (store && prompt) store.clearState(food.id, prompt.id);
+        }
       }
       if (food.type === 'missing-food') flags.push('missing-food-complete');
 
