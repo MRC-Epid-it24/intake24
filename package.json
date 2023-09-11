@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@8.7.4",
+  "packageManager": "pnpm@8.7.5",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
@@ -63,15 +63,15 @@
   "devDependencies": {
     "@jest/types": "^29.6.3",
     "@types/jest": "^29.5.4",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@types/prompts": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^6.6.0",
-    "@typescript-eslint/parser": "^6.6.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "calver": "^22.9.1",
-    "conventional-changelog-cli": "^4.0.0",
-    "eslint": "^8.48.0",
+    "conventional-changelog-cli": "^4.1.0",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-define-config": "^1.23.0",
     "eslint-plugin-import": "^2.28.1",
@@ -93,7 +93,7 @@
     "tsx": "^3.12.8",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vitepress": "1.0.0-rc.10"
+    "vitepress": "1.0.0-rc.12"
   },
   "pnpm": {
     "peerDependencyRules": {
