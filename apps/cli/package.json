@@ -36,14 +36,14 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.32.1",
+    "sequelize": "^6.33.0",
     "sequelize-typescript": "^2.1.5",
     "web-push": "^3.6.5"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.198",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@types/validator": "^13.11.1",
     "@types/web-push": "^3.6.0",
     "@types/webpack-env": "^1.18.1",
