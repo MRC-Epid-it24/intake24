@@ -39,7 +39,8 @@ const recall: LocaleMessageObject = {
       'Hidangan ini dicadangkan oleh sistem tetapi anda masih belum mengesahkan bahawa anda telah mengambilnya',
     food: {
       delete: 'Delete food',
-      edit: 'Edit food',
+      edit: 'Change food',
+      editPortionSize: 'Edit portion size',
       encoded: 'Makanan ini telah dipadankan dengan makanan daripada pangkalan data kami.',
       missing: 'This food has been marked as missing in our database.',
       notMatched: 'Makanan ini masih belum dipadankan dengan makanan daripada pangkalan data kami.',

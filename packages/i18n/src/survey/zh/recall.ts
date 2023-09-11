@@ -38,7 +38,8 @@ const recall: LocaleMessageObject = {
     mealSuggested: '此餐点是由系统建议的，但您尚未确认您已食用。',
     food: {
       delete: 'Delete food',
-      edit: 'Edit food',
+      edit: 'Change food',
+      editPortionSize: 'Edit portion size',
       encoded: '该食物已与我们数据库中的食物匹配。',
       missing: 'This food has been marked as missing in our database.',
       notMatched: '该食物尚未与我们数据库中的食物匹配。',

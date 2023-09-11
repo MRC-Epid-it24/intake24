@@ -39,7 +39,8 @@ const recall: LocaleMessageObject = {
       'இந்த உணவு முறையால் பரிந்துரைக்கப்படுகிறது, ஆனால் நீங்கள் அதை சாப்பிட்டுள்ளீர்கள் என்பதை இன்னும் உறுதிப்படுத்தவில்லை',
     food: {
       delete: 'Delete food',
-      edit: 'Edit food',
+      edit: 'Change food',
+      editPortionSize: 'Edit portion size',
       encoded: 'இந்த உணவு எங்கள் தரவுத்தளத்தில் உள்ள உணவுடன் பொருத்தப்பட்டது.',
       missing: 'This food has been marked as missing in our database.',
       notMatched: 'இந்த உணவு எங்கள் தரவுத்தளத்தில் உள்ள உணவுடன் இன்னும் பொருந்தவில்லை.',

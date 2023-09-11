@@ -2,7 +2,7 @@
   <div>
     <v-list-item
       :class="{ selected: isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
-      @click="mealSelected"
+      @click="action('selectMeal', meal.id)"
     >
       <v-list-item-title class="font-weight-bold text-wrap">
         {{ mealName }}
@@ -19,12 +19,7 @@
         </v-tooltip>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu
-          :entity="meal"
-          :entity-name="mealName"
-          v-bind="{ menu }"
-          @action="action"
-        ></context-menu>
+        <context-menu v-bind="{ meal, menu }" @action="action"></context-menu>
       </v-list-item-action>
     </v-list-item>
     <v-divider></v-divider>
@@ -32,7 +27,7 @@
       <food-item
         v-for="food in meal.foods"
         :key="food.id"
-        v-bind="{ food, selectedFoodId }"
+        v-bind="{ food, meal, selectedFoodId }"
         @action="action"
       ></food-item>
       <v-divider></v-divider>
@@ -73,7 +68,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
+    const { action, isSelected, menu, mealName, mealTime } = useMealItem(props, ctx);
 
     return {
       action,
@@ -81,7 +76,6 @@ export default defineComponent({
       menu,
       mealName,
       mealTime,
-      mealSelected,
     };
   },
 });

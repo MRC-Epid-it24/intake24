@@ -79,14 +79,11 @@
         </v-tooltip>
       </v-list-item-action>
     </v-list-item>
-    <context-menu
-      v-bind="{ contextId, entity: food, entityName: foodName, menu }"
-      @action="action"
-    ></context-menu>
+    <context-menu v-bind="{ contextId, food, meal, menu }" @action="action"></context-menu>
     <food-item
       v-for="linkedFood in food.linkedFoods"
       :key="linkedFood.id"
-      v-bind="{ contextId, food: linkedFood, linked: true, selectedFoodId }"
+      v-bind="{ contextId, food: linkedFood, linked: true, meal, selectedFoodId }"
       @action="action"
       @update:context-id="updateContextId"
     ></food-item>
@@ -97,7 +94,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/types';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';
@@ -118,6 +115,10 @@ export default defineComponent({
     linked: {
       type: Boolean,
       default: false,
+    },
+    meal: {
+      type: Object as PropType<MealState>,
+      required: true,
     },
     selectedFoodId: {
       type: String,

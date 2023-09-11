@@ -39,7 +39,8 @@ const recall: LocaleMessageObject = {
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
     food: {
       delete: 'Delete food',
-      edit: 'Edit food',
+      edit: 'Change food',
+      editPortionSize: 'Edit portion size',
       encoded: 'This food has been matched with a food from our database.',
       missing: 'This food has been marked as missing in our database.',
       notMatched: 'This food has not yet been matched with a food from our database.',

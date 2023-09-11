@@ -2,7 +2,8 @@ import type { SetupContext } from 'vue';
 import { ref } from 'vue';
 
 import type { FoodActionType, MealActionType } from '@intake24/common/prompts';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/types';
+import { mealActionTypes } from '@intake24/common/prompts';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
 
@@ -15,6 +16,7 @@ export type MenuItem = {
 
 export type UseFoodItemProps = {
   food: FoodState;
+  meal: MealState;
 };
 
 export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => {
@@ -24,6 +26,11 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
   const menu = ref<MenuItem[]>([
     {
       name: i18n.t('recall.menu.food.edit').toString(),
+      action: 'editMeal',
+      icon: '$meal',
+    },
+    {
+      name: i18n.t('recall.menu.food.editPortionSize').toString(),
       action: 'editFood',
       icon: '$food',
     },
@@ -35,7 +42,7 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
     },
   ]);
 
-  const action = (type: FoodActionType, id?: string) => {
+  const action = (type: FoodActionType | MealActionType, id?: string) => {
     emit('action', type, id);
   };
 

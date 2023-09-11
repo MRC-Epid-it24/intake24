@@ -25,7 +25,7 @@ export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => 
     {
       name: i18n.t('recall.menu.meal.editFoods').toString(),
       action: 'editMeal',
-      icon: '$food',
+      icon: '$meal',
     },
     {
       name: i18n.t('recall.menu.meal.editTime').toString(),
@@ -40,13 +40,9 @@ export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => 
     },
   ]);
 
-  const mealSelected = () => {
-    action('selectMeal', props.meal.id);
-  };
-
   const action = (type: FoodActionType | MealActionType, id?: string) => {
     emit('action', type, id);
   };
 
-  return { action, isSelected, translate, menu, mealName, mealTime, mealSelected };
+  return { action, isSelected, translate, menu, mealName, mealTime };
 };
