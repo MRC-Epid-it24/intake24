@@ -16,7 +16,7 @@
         </v-btn>
       </div>
       <v-card-text class="pa-0">
-        <v-list class="meal-list__list" dense subheader>
+        <v-list class="meal-list__list" subheader>
           <meal-item
             v-for="meal in meals"
             :key="meal.id"
@@ -27,6 +27,9 @@
           ></meal-item>
         </v-list>
       </v-card-text>
+      <v-btn block color="info" large tile @click="closeNavigation">
+        <v-icon left>$close</v-icon>{{ $t('common.action.close') }}
+      </v-btn>
     </v-card>
   </v-bottom-sheet>
 </template>
@@ -64,6 +67,10 @@ export default defineComponent({
     const contextId = ref<string | undefined>(undefined);
     const navigation = ref<boolean>(false);
 
+    const closeNavigation = () => {
+      navigation.value = false;
+    };
+
     const updateContextId = (id: string) => {
       contextId.value = id === contextId.value ? undefined : id;
     };
@@ -75,6 +82,7 @@ export default defineComponent({
     });
 
     return {
+      closeNavigation,
       contextId,
       navigation,
       updateContextId,
