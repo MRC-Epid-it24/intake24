@@ -13,6 +13,7 @@ import {
   getMealIndexForSelection,
   mealComplete,
   mealPortionSizeComplete,
+  missingFoodComplete,
   surveyFreeEntryComplete,
 } from '@intake24/survey/util';
 
@@ -25,7 +26,6 @@ import {
   guideImageComplete,
   milkInAHotDrinkComplete,
   milkOnCerealComplete,
-  missingFoodComplete,
   parentFoodPortionComplete,
   pizzaComplete,
   portionSizeMethodSelected,

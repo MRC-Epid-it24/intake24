@@ -41,7 +41,7 @@ import {
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
-import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
+import { portionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
 import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
@@ -641,12 +641,12 @@ export const useSurvey = defineStore('survey', {
         // 1) food is not encoded
         mainFood.type !== 'encoded-food' ||
         // 2) food portion size estimation is not finished
-        !isPortionSizeComplete(mainFood) ||
+        !portionSizeComplete(mainFood) ||
         // 3) associated food prompts are not finished
         !associatedFoodPromptsComplete(mainFood) ||
         // 4) associated foods portion size estimations are not finished
         (mainFood.linkedFoods.length &&
-          mainFood.linkedFoods.some((item) => !isPortionSizeComplete(item)))
+          mainFood.linkedFoods.some((item) => !portionSizeComplete(item)))
       )
         return;
 

@@ -1,4 +1,4 @@
-import type { FoodState, MissingFood, PortionSizeMethodId } from '@intake24/common/types';
+import type { FoodState, PortionSizeMethodId } from '@intake24/common/types';
 
 export function portionSizeMethodSelected(food: FoodState, method: PortionSizeMethodId): boolean {
   if (food.type !== 'encoded-food') return false;
@@ -184,7 +184,7 @@ export function standardPortionComplete(food: FoodState): boolean {
   return food.portionSize.servingWeight !== null;
 }
 
-export function weightComplete(food: FoodState): boolean {
+export function directWeightComplete(food: FoodState): boolean {
   if (
     food.type !== 'encoded-food' ||
     !food.portionSize ||
@@ -192,7 +192,7 @@ export function weightComplete(food: FoodState): boolean {
   )
     return false;
 
-  if (food.portionSize.method !== 'standard-portion') {
+  if (food.portionSize.method !== 'direct-weight') {
     console.warn(
       `Selected portion size method is "standard-portion" but portion size data is for ${food.portionSize.method}`
     );
@@ -205,6 +205,7 @@ export function weightComplete(food: FoodState): boolean {
 export const portionSizeCompleteChecks = {
   'as-served': asServedComplete,
   cereal: cerealComplete,
+  'direct-weight': directWeightComplete,
   'drink-scale': drinkScaleComplete,
   'guide-image': guideImageComplete,
   'milk-in-a-hot-drink': milkInAHotDrinkComplete,
@@ -212,14 +213,10 @@ export const portionSizeCompleteChecks = {
   'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
   'standard-portion': standardPortionComplete,
-  weight: weightComplete,
 };
 
-export const isPortionSizeComplete = (food: FoodState): boolean => {
+export const portionSizeComplete = (food: FoodState): boolean => {
   if (food.type !== 'encoded-food' || !food.portionSize) return false;
 
   return portionSizeCompleteChecks[food.portionSize.method](food);
 };
-
-export const missingFoodComplete = (food: MissingFood): boolean =>
-  !!(food.info && food.flags.includes('missing-food-complete'));

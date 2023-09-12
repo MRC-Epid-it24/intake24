@@ -33,18 +33,18 @@
           <template #activator="{ on, attrs }">
             <v-icon
               v-bind="attrs"
-              :color="food.portionSize ? 'green darken-2' : undefined"
+              :color="isPortionSizeComplete ? 'green darken-2' : undefined"
               small
               v-on="on"
             >
-              {{ food.portionSize ? '$ok' : '$question' }}
+              {{ isPortionSizeComplete ? '$ok' : '$question' }}
             </v-icon>
           </template>
           <span>
             {{
               $t(
                 `recall.menu.food.${
-                  food.portionSize ? 'portionSizeComplete' : 'portionSizeIncomplete'
+                  isPortionSizeComplete ? 'portionSizeComplete' : 'portionSizeIncomplete'
                 }`
               )
             }}
@@ -54,16 +54,20 @@
           <template #activator="{ on, attrs }">
             <v-icon
               v-bind="attrs"
-              :color="food.info ? 'green darken-2' : undefined"
+              :color="isMissingFoodComplete ? 'green darken-2' : undefined"
               small
               v-on="on"
             >
-              {{ food.info ? '$ok' : '$question' }}
+              {{ isMissingFoodComplete ? '$ok' : '$question' }}
             </v-icon>
           </template>
           <span>
             {{
-              $t(`recall.menu.food.${food.info ? 'missingInfoComplete' : 'missingInfoIncomplete'}`)
+              $t(
+                `recall.menu.food.${
+                  isMissingFoodComplete ? 'missingInfoComplete' : 'missingInfoIncomplete'
+                }`
+              )
             }}
           </span>
         </v-tooltip>
@@ -121,9 +125,12 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, foodName, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isMissingFoodComplete, isPortionSizeComplete, menu } = useFoodItem(
+      props,
+      ctx
+    );
 
-    return { action, foodName, menu };
+    return { action, foodName, isMissingFoodComplete, isPortionSizeComplete, menu };
   },
 });
 </script>
