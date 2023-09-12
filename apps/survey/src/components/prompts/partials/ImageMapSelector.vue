@@ -104,6 +104,7 @@ export default defineComponent({
     },
     disabled: {
       type: Boolean,
+      default: undefined,
     },
     id: {
       type: String,
