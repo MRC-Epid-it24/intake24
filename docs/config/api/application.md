@@ -20,6 +20,24 @@ Application name.
 - type: `string`
 - default: `'Intake24'`
 
+## Icon 🍴
+
+Application icon - unicode character.
+
+- object-path: `env`
+- dotenv var: `APP_ICON`
+- type: `string | undefined`
+- default: undefined
+
+## Powered by
+
+Powered by text (e.g. local team running the instance).
+
+- object-path: `env`
+- dotenv var: `APP_POWERED_BY`
+- type: `string | undefined`
+- default: undefined
+
 ## Host
 
 Internal hostname application listens on.

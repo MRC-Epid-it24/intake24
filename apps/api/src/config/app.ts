@@ -5,7 +5,12 @@ export type SiteUrls = Record<Site, string>;
 
 export type AppConfig = {
   env: Environment;
+
   name: string;
+  icon?: string;
+  fullName: string;
+  poweredBy?: string;
+
   host: string;
   port: number;
   https: boolean;
@@ -30,9 +35,18 @@ function parseLocaleList(list: string | undefined): string[] | null {
   return JSON.parse(list) as string[];
 }
 
+const name = process.env.APP_NAME || 'Intake24';
+const icon = process.env.APP_ICON;
+const fullName = [icon, name].filter((item) => item).join(' ');
+
 const appConfig: AppConfig = {
   env: (process.env.NODE_ENV || 'development') as Environment,
-  name: process.env.APP_NAME || 'Intake24',
+
+  name,
+  icon,
+  fullName,
+  poweredBy: process.env.APP_POWERED_BY,
+
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,
   https,

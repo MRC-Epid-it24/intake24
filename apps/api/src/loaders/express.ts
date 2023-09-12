@@ -6,6 +6,7 @@ import CleanCSS from 'clean-css';
 import RedisStore from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
+import { pick } from 'lodash';
 import morgan from 'morgan';
 import nunjucks from 'nunjucks';
 
@@ -58,7 +59,11 @@ export default async (express: Express, { config }: Ops): Promise<void> => {
       express,
       noCache: isDev,
     })
-    .addGlobal('app', { name: app.name, year: new Date().getFullYear(), replyTo: mail.replyTo })
+    .addGlobal('app', {
+      ...pick(app, ['name', 'icon', 'fullName', 'poweredBy']),
+      year: new Date().getFullYear(),
+      replyTo: mail.replyTo,
+    })
     .addGlobal('asset', (content: string) => path.join(app.urls.base, content))
     .addFilter('inlineCSS', (content: string) => new CleanCSS().minify(content).styles);
 };
