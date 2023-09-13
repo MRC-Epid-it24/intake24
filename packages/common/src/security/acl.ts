@@ -5,7 +5,8 @@ export const respondentSuffix = '/respondent';
 
 export const globalSupport = 'globalsupport';
 
-export const surveyRespondent = (surveySlug: string): string => `${surveySlug}${respondentSuffix}`;
+export const surveyRespondent = (surveySlug: string): string =>
+  `${surveySlug.toLowerCase()}${respondentSuffix}`;
 
 export const surveyPermissions = (surveySlug: string): string[] => [surveyRespondent(surveySlug)];
 

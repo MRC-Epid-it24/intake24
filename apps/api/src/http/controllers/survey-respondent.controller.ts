@@ -26,8 +26,7 @@ const surveyRespondentController = ({
   ): Promise<void> => {
     const { slug } = req.params;
 
-    const survey = await Survey.findOne({
-      where: { slug },
+    const survey = await Survey.findBySlug(slug, {
       include: [
         { association: 'surveyScheme', attributes: ['id', 'type', 'meals', 'prompts'] },
         {

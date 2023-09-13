@@ -71,7 +71,7 @@ const surveyService = ({
     slug: string,
     token: string
   ): Promise<CreateUserResponse> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
@@ -126,7 +126,7 @@ const surveyService = ({
     tzOffset: number,
     increment = 0
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = typeof slug === 'string' ? await Survey.findOne({ where: { slug } }) : slug;
+    const survey = typeof slug === 'string' ? await Survey.findBySlug(slug) : slug;
     if (!survey) throw new NotFoundError();
 
     const {
@@ -178,7 +178,7 @@ const surveyService = ({
    * @returns {Promise<UserSurveySession>}
    */
   const getSession = async (slug: string, userId: string): Promise<UserSurveySession> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
@@ -211,7 +211,7 @@ const surveyService = ({
     userId: string,
     sessionData: SurveyState
   ): Promise<UserSurveySession> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
@@ -234,7 +234,7 @@ const surveyService = ({
    * @returns {Promise<void>}
    */
   const clearSession = async (slug: string, userId: string): Promise<void> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     await UserSurveySession.destroy({ where: { surveyId: survey.id, userId } });
@@ -312,8 +312,7 @@ const surveyService = ({
     user: User,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = await Survey.findOne({
-      where: { slug },
+    const survey = await Survey.findBySlug(slug, {
       include: [{ association: 'surveyScheme', required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();

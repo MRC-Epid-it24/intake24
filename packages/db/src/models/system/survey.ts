@@ -2,10 +2,12 @@ import type {
   Attributes,
   CreationAttributes,
   CreationOptional,
+  FindOptions,
   InferAttributes,
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
+import { Op } from 'sequelize';
 import {
   AfterCreate,
   AfterDestroy,
@@ -334,6 +336,16 @@ export default class Survey extends BaseModel<
   @AfterDestroy
   static async destroySurveyPermissions(instance: Survey): Promise<void> {
     await Permission.destroy({ where: { name: surveyPermissions(instance.slug) } });
+  }
+
+  public static async findBySlug(
+    slug: string,
+    options: FindOptions<SurveyAttributes> = {}
+  ): Promise<Survey | null> {
+    const { where, ...rest } = options;
+    const op = Survey.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
+
+    return Survey.findOne({ where: { ...where, slug: { [op]: slug } }, ...rest });
   }
 
   // TODO: add BulkAfterCreate & BulkAfterDestroy if/when implemented in system
