@@ -23,7 +23,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
     cors({
       origin,
       credentials: true,
-      exposedHeaders: ['RateLimit-Limit', 'RateLimit-Remaining', 'RateLimit-Reset'],
+      exposedHeaders: ['RateLimit', 'RateLimit-Policy', 'Retry-After'],
     })
   );
 };

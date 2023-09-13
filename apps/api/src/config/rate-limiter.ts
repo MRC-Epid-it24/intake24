@@ -4,7 +4,7 @@ import ms from 'ms';
 
 export type RateLimit = {
   windowMs: number;
-  max: number;
+  limit: number;
 };
 
 export type RateLimits = Record<
@@ -24,23 +24,23 @@ const rateLimiterConfig: RateLimiterConfig = {
   },
   generic: {
     windowMs: ms(process.env.RATE_LIMITER_GENERIC_WINDOW || '5m'),
-    max: parseInt(process.env.RATE_LIMITER_GENERIC_MAX || '300', 10),
+    limit: parseInt(process.env.RATE_LIMITER_GENERIC_LIMIT || '300', 10),
   },
   login: {
     windowMs: ms(process.env.RATE_LIMITER_LOGIN_WINDOW || '15m'),
-    max: parseInt(process.env.RATE_LIMITER_LOGIN_MAX || '5', 10),
+    limit: parseInt(process.env.RATE_LIMITER_LOGIN_LIMIT || '5', 10),
   },
   password: {
     windowMs: ms(process.env.RATE_LIMITER_PASSWORD_WINDOW || '5m'),
-    max: parseInt(process.env.RATE_LIMITER_PASSWORD_MAX || '1', 10),
+    limit: parseInt(process.env.RATE_LIMITER_PASSWORD_LIMIT || '1', 10),
   },
   generateUser: {
     windowMs: ms(process.env.RATE_LIMITER_GEN_USER_WINDOW || '5m'),
-    max: parseInt(process.env.RATE_LIMITER_GEN_USER_MAX || '1', 10),
+    limit: parseInt(process.env.RATE_LIMITER_GEN_USER_LIMIT || '1', 10),
   },
   feedback: {
     windowMs: ms(process.env.RATE_LIMITER_FEEDBACK_WINDOW || '1m'),
-    max: parseInt(process.env.RATE_LIMITER_FEEDBACK_MAX || '1', 10),
+    limit: parseInt(process.env.RATE_LIMITER_FEEDBACK_LIMIT || '1', 10),
   },
 };
 

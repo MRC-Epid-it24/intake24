@@ -48,12 +48,12 @@ Time window to track the requests.
 - type: `string`
 - default: `'5m'`
 
-### Max
+### Limit
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `generic.max`
-- dotenv var: `RATE_LIMITER_GENERIC_MAX`
+- object-path: `generic.limit`
+- dotenv var: `RATE_LIMITER_GENERIC_LIMIT`
 - type: `number`
 - default: `300`
 
@@ -70,12 +70,12 @@ Time window to track the requests.
 - type: `string`
 - default: `'15m'`
 
-### Max
+### Limit
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `login.max`
-- dotenv var: `RATE_LIMITER_LOGIN_MAX`
+- object-path: `login.limit`
+- dotenv var: `RATE_LIMITER_LOGIN_LIMIT`
 - type: `number`
 - default: `5`
 
@@ -92,12 +92,12 @@ Time window to track the requests.
 - type: `string`
 - default: `'5m'`
 
-### Max
+### Limit
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `password.max`
-- dotenv var: `RATE_LIMITER_PASSWORD_MAX`
+- object-path: `password.limit`
+- dotenv var: `RATE_LIMITER_PASSWORD_LIMIT`
 - type: `number`
 - default: `1`
 
@@ -114,12 +114,12 @@ Time window to track the requests.
 - type: `string`
 - default: `'5m'`
 
-### Max
+### Limit
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `generateUser.max`
-- dotenv var: `RATE_LIMITER_GEN_USER_MAX`
+- object-path: `generateUser.limit`
+- dotenv var: `RATE_LIMITER_GEN_USER_LIMIT`
 - type: `number`
 - default: `1`
 
@@ -136,11 +136,11 @@ Time window to track the requests.
 - type: `string`
 - default: `'1m'`
 
-### Max
+### Limit
 
 Maximum number of requests that can be made within the specified time window.
 
-- object-path: `feedback.max`
-- dotenv var: `RATE_LIMITER_FEEDBACK_MAX`
+- object-path: `feedback.limit`
+- dotenv var: `RATE_LIMITER_FEEDBACK_LIMIT`
 - type: `number`
 - default: `1`

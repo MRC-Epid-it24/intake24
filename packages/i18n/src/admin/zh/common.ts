@@ -27,7 +27,7 @@ const common: LocaleMessageObject = {
   verify: {
     _: 'Account verification',
     subtitle: 'Verify your account using the link we sent you to your inbox.',
-    text: 'If you did not receive the email, check your spam folder or click the button below to request a new one.',
+    text: 'If you did not receive the email, check your spam folder or press the button below to request a new one.',
     resend: 'Resent verification email',
     resent: 'Verification email was sent to your inbox',
   },
@@ -56,7 +56,7 @@ const common: LocaleMessageObject = {
   email: 'Email',
   emailConfirm: 'Confirm email',
   phone: 'Phone',
-  spam: 'If you did not receive the email, check your spam / junk folder or click the button below to request a new one.',
+  spam: 'If you did not receive the email, check your spam / junk folder or press the button below to request a new one.',
   terms: {
     _: 'Terms',
     text: 'I agree with Intake24 {privacy} and {tos}.',

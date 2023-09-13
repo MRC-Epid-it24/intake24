@@ -87,7 +87,7 @@ export type PortionSizeParameters = {
     StandardUnitTranslations & {
       'units-count': number;
     };
-  weight: never;
+  'direct-weight': never;
 };
 
 // Portion size states
