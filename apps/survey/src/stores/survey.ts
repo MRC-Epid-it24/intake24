@@ -427,6 +427,7 @@ export const useSurvey = defineStore('survey', {
 
     removeFlag(flag: SurveyFlag | SurveyFlag[]) {
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
 
       this.data.flags = this.data.flags.filter((flag) => !flags.includes(flag as SurveyFlag));
     },
@@ -545,8 +546,10 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
-      const meal = findMeal(this.data.meals, mealId);
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
+
+      const meal = findMeal(this.data.meals, mealId);
 
       meal.flags = meal.flags.filter((flag) => !flags.includes(flag as MealFlag));
     },
@@ -594,8 +597,10 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
-      const food = findFood(this.data.meals, foodId);
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
+
+      const food = findFood(this.data.meals, foodId);
 
       food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
     },
@@ -658,7 +663,10 @@ export const useSurvey = defineStore('survey', {
       if (food.type === 'free-text') return;
 
       const flags: FoodFlag[] = [];
+
       if (food.type === 'encoded-food') {
+        if (!food.flags.includes('portion-size-option-complete')) return;
+
         flags.push('portion-size-method-complete');
 
         if (food.data.portionSizeMethods.length > 1) flags.push('portion-size-option-complete');
@@ -671,7 +679,14 @@ export const useSurvey = defineStore('survey', {
           if (store && prompt) store.clearState(food.id, prompt.id);
         }
       }
-      if (food.type === 'missing-food') flags.push('missing-food-complete');
+
+      if (food.type === 'missing-food') {
+        if (!food.flags.includes('missing-food-complete')) return;
+
+        flags.push('missing-food-complete');
+      }
+
+      if (!flags.length) return;
 
       this.removeFoodFlag(foodId, flags);
     },

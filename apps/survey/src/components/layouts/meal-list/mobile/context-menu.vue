@@ -6,7 +6,6 @@
           v-for="(item, idx) in menu"
           :key="idx"
           class="rounded-xl"
-          :disabled="item.action === 'editFood' && isFood && food?.type === 'free-text'"
           link
           tile
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
@@ -62,17 +61,13 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, dialog, entity, entityName, isFood, isMeal, openDialog } = useContextMenu(
-      props,
-      ctx
-    );
+    const { action, dialog, entity, entityName, isMeal, openDialog } = useContextMenu(props, ctx);
 
     return {
       action,
       dialog,
       entity,
       entityName,
-      isFood,
       isMeal,
       openDialog,
     };

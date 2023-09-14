@@ -10,7 +10,6 @@
         <template v-for="(item, idx) in menu">
           <v-list-item
             :key="item.name"
-            :disabled="item.action === 'editFood' && isFood && food?.type === 'free-text'"
             @click="item.dialog ? openDialog(item.action) : action(item.action)"
           >
             <v-list-item-icon v-if="item.icon">
@@ -65,17 +64,13 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, dialog, entity, entityName, isFood, isMeal, openDialog } = useContextMenu(
-      props,
-      ctx
-    );
+    const { action, dialog, entity, entityName, isMeal, openDialog } = useContextMenu(props, ctx);
 
     return {
       action,
       dialog,
       entity,
       entityName,
-      isFood,
       isMeal,
       openDialog,
     };
