@@ -433,7 +433,7 @@ export default defineComponent({
 
     async restart() {
       this.currentPrompt = null;
-      useSurvey().cancelRecall();
+      await this.survey.cancelRecall();
       await this.$router.push({
         name: 'survey-home',
         params: { surveyId: this.$route.params.surveyId },

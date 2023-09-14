@@ -124,7 +124,7 @@ export const useSurvey = defineStore('survey', {
   },
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
-    paths: ['data'],
+    paths: ['data', 'user'],
     afterRestore(context) {
       context.store.reCreateStoreAfterDeserialization();
 
@@ -280,9 +280,10 @@ export const useSurvey = defineStore('survey', {
       this.setState(initialState);
     },
 
-    cancelRecall() {
+    async cancelRecall() {
       this.clearState();
-      this.setState(surveyInitialState());
+
+      await this.clearUserSession();
     },
 
     setState(payload: CurrentSurveyState) {
@@ -352,6 +353,17 @@ export const useSurvey = defineStore('survey', {
       if (!canUseUserSession(state, this.parameters)) return;
 
       this.loadState(state);
+    },
+
+    async clearUserSession() {
+      if (!this.parameters) {
+        console.error(`Survey parameters not loaded. Cannot clear user session.`);
+        return;
+      }
+
+      if (!this.parameters.storeUserSessionOnServer) return;
+
+      await surveyService.clearUserSession(this.parameters.slug);
     },
 
     async storeUserSession() {
