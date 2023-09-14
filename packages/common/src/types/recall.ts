@@ -22,6 +22,8 @@ export type MealFlag =
   | `${string}-acknowledged`;
 
 export type FoodFlag =
+  | 'is-drink'
+  | 'link-as-main'
   | 'ready-meal'
   | 'same-as-before-complete'
   | 'split-food-complete'
@@ -225,7 +227,7 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
 
 export interface AbstractFoodState {
   id: string;
-  flags: string[];
+  flags: FoodFlag[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   type: 'free-text' | 'encoded-food' | 'missing-food';
@@ -272,9 +274,8 @@ export interface MealState {
   defaultTime: MealTime;
   time: MealTime | undefined;
   duration: number | null;
-  flags: string[];
+  flags: MealFlag[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-
   foods: FoodState[];
 }
 
@@ -325,9 +326,8 @@ export type SurveyState = {
   submissionTime: Date | null;
   uxSessionId: string;
   userAgent?: string | null;
-  flags: string[];
+  flags: SurveyFlag[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
 };

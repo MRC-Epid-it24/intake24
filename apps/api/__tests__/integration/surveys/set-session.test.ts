@@ -23,7 +23,7 @@ export default () => {
       endTime: new Date(),
       submissionTime: null,
       uxSessionId: randomUUID(),
-      flags: ['flag-1', 'flag-2'],
+      flags: ['prompt-1-acknowledged', 'prompt-2-acknowledged'],
       customPromptAnswers: {},
       selection: {
         element: null,

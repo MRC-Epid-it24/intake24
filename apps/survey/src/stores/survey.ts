@@ -20,7 +20,6 @@ import type {
   MealState,
   MealTime,
   MissingFood,
-  PromptAnswer,
   Selection,
   SurveyFlag,
   SurveyState as CurrentSurveyState,
@@ -86,15 +85,6 @@ export const surveyInitialState = (): CurrentSurveyState => ({
   uxSessionId: v4(),
   flags: [],
   customPromptAnswers: {},
-  tempPromptAnswer: {
-    response: null,
-    modified: false,
-    new: true,
-    finished: false,
-    mealIndex: undefined,
-    foodIndex: undefined,
-    prompt: undefined,
-  },
   selection: {
     element: null,
     mode: 'auto',
@@ -194,9 +184,6 @@ export const useSurvey = defineStore('survey', {
     freeEntryComplete: (state) =>
       !!state.data.meals.length &&
       state.data.meals.every((meal) => meal.flags.includes('free-entry-complete')),
-    currentTempPromptAnswer: (state): PromptAnswer | undefined => {
-      return state.data.tempPromptAnswer;
-    },
     selectedMealIndex(): number | undefined {
       const { element } = this.data.selection;
 

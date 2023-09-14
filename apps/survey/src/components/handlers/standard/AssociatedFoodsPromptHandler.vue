@@ -25,7 +25,7 @@ import type {
   PromptStates,
 } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, FoodFlag, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
 import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
@@ -123,7 +123,7 @@ export default defineComponent({
         //    and toast becomes new main food, the AFP on toast will not recognise jam and will
         //    suggest adding another instance.
 
-        const newMainFood = {
+        const newMainFood: FoodState = {
           ...newMainFoods[0],
           flags: [...newMainFoods[0].flags, 'associated-foods-complete'],
         };
@@ -222,7 +222,7 @@ export default defineComponent({
       const linkedFoods: FoodState[] = foodData.map((data, index) => {
         const hasOnePortionSizeMethod = data.portionSizeMethods.length === 1;
 
-        const flags = [];
+        const flags: FoodFlag[] = [];
         if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
         if (newFoods[index].linkAsMain) flags.push('link-as-main');
 
@@ -253,7 +253,7 @@ export default defineComponent({
         // potential circular associations.
         const linkedFoodsWithoutPrompts = linkedFoods.map((food) => ({
           ...food,
-          flags: [...new Set([...food.flags, 'associated-foods-complete'])],
+          flags: [...new Set([...food.flags, 'associated-foods-complete'])] as FoodFlag[],
         }));
 
         const parentFood = meals.value[foodIndex.mealIndex].foods[foodIndex.foodIndex];
