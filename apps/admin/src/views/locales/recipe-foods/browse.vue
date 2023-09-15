@@ -102,14 +102,20 @@
             <v-icon color="error">$delete</v-icon>
           </v-btn>
         </v-list-item-action>
+        <steps-dialog
+          v-if="dialog && item.id === activeRecipeFoodId"
+          v-bind="{
+            dialog,
+            activeRecipeFoodId,
+            activeRecipeFoodCode,
+            locale: { id: parseInt(id), code: item.localeId },
+            items: activeRecipeFood.steps,
+          }"
+          ref="stepsDialog"
+          @close="toggleDialog"
+        ></steps-dialog>
       </v-list-item>
     </v-list>
-    <steps-dialog
-      v-if="form.items"
-      v-bind="{ dialog, activeRecipeFoodId, activeRecipeFoodCode, activeRecipeFood }"
-      ref="stepsDialog"
-      @close="toggleDialog"
-    ></steps-dialog>
   </layout>
 </template>
 
@@ -194,10 +200,10 @@ export default defineComponent({
       recipeFood: LocaleRecipeFoodsInput
     ) {
       if (!recipeFoodId) return;
-      this.toggleDialog();
       this.activeRecipeFoodId = recipeFoodId;
       this.activeRecipeFoodCode = recipeFoodCode;
       this.activeRecipeFood = recipeFood;
+      this.toggleDialog();
       console.log(recipeFoodId, recipeFoodCode, recipeFood);
     },
 
@@ -230,16 +236,6 @@ export default defineComponent({
 
       useStoreEntry().setEntry({ items, synonymsSets });
     },
-
-    // async saveSpecific(id: string) {
-    //   const itemToSave = this.form.items.filter((item) => item.id === id && item.name.length > 0);
-
-    //   const items = await this.form.post<LocaleRecipeFoods[]>(
-    //     `admin/locales/${this.id}/recipe-foods`
-    //   );
-
-    //   useStoreEntry().setEntry({ items });
-    // },
   },
 });
 </script>

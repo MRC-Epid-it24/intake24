@@ -56,9 +56,14 @@ const locales: LocaleMessageObject = {
     add: 'Add recipe food',
     remove: 'Remove recipe food',
     special: 'Trigger word',
-    code: 'Food code (start with $ symbol)',
+    code: 'Step code (assigned automatically)',
     synonyms_id: 'Synonyms (space-delimited)',
     steps: 'Recipe Builder Steps',
+    name: 'Step Name',
+    description: 'Step Description',
+    ingredientsCategory: 'Step Ingredients Category',
+    order: 'Step Order',
+    repeat: 'Option to add many ingredients to this step',
   },
 
   'food-ranking': {

@@ -2,6 +2,7 @@ import { browse, entry } from '../generic';
 import copy from './copy';
 import fixedFoodRanking from './fixed-food-ranking';
 import recipeFoods from './recipe-foods';
+import recipeFoodsSteps from './recipe-foods-steps';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import store from './store';
@@ -16,6 +17,7 @@ export default {
   update,
   copy,
   recipeFoods,
+  recipeFoodsSteps,
   splitLists,
   splitWords,
   synonymLists,

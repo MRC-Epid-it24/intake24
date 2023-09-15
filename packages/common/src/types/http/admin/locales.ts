@@ -3,6 +3,7 @@ import type {
   Pagination,
   RecipeFoodsAttributes,
   RecipeFoodsCreationAttributes,
+  RecipeFoodsStepsCreationAttributes,
   SplitListAttributes,
   SplitListCreationAttributes,
   SplitWordAttributes,
@@ -66,4 +67,11 @@ export type LocaleSynonymSet = SynonymSetAttributes;
 export interface LocaleRecipeFoodsInput extends RecipeFoodsCreationAttributes {
   id?: string;
 }
+
+export interface LocaleRecipeFoodStepsInput extends RecipeFoodsStepsCreationAttributes {
+  id?: string;
+}
+
 export type LocaleRecipeFoods = RecipeFoodsAttributes;
+
+export type LocaleRecipeFoodSteps = RecipeFoodsStepsCreationAttributes;
