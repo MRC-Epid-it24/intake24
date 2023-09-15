@@ -7,49 +7,49 @@ const recipeFoods = [
     recipe_food_steps: [
       {
         code: 'SND_1',
-        name: '{ "en": "Bread and Base", }',
-        description: '{ "en": "What bread did you have in your sandwich?", }',
+        name: '{ "en": "Bread and Base" }',
+        description: '{ "en": "What bread did you have in your sandwich?" }',
         order: 1,
         repeatable: false,
         category_code: 'SW01',
       },
       {
         code: 'SND_2',
-        name: '{ "en": "Spread", }',
-        description: '{ "en": "What spread did you have in your sandwich?", }',
+        name: '{ "en": "Spread" }',
+        description: '{ "en": "What spread did you have in your sandwich?" }',
         order: 2,
         repeatable: false,
         category_code: 'SW02',
       },
       {
         code: 'SND_3',
-        name: '{ "en": "Meat, Fish or Other Protein Source", }',
+        name: '{ "en": "Meat, Fish or Other Protein Source" }',
         description:
-          '{ "en": "What meat, fish or other protein source did you have in your sandwich?", }',
+          '{ "en": "What meat, fish or other protein source did you have in your sandwich?" }',
         order: 3,
         repeatable: false,
         category_code: 'SW03',
       },
       {
         code: 'SND_4',
-        name: '{ "en": "Cheese", }',
-        description: '{ "en": "What cheese did you have in your sandwich?", }',
+        name: '{ "en": "Cheese" }',
+        description: '{ "en": "What cheese did you have in your sandwich?" }',
         order: 4,
         repeatable: false,
         category_code: 'SW04',
       },
       {
         code: 'SND_5',
-        name: '{ "en": "Extra Filling", }',
-        description: '{ "en": "What extra filling did you have in your sandwich?", }',
+        name: '{ "en": "Extra Filling" }',
+        description: '{ "en": "What extra filling did you have in your sandwich?" }',
         order: 5,
         repeatable: true,
         category_code: 'SW05',
       },
       {
         code: 'SND_6',
-        name: '{ "en": "Sauce and Dressing", }',
-        description: '{ "en": "What sauce or dressing did you have in your sandwich?", }',
+        name: '{ "en": "Sauce and Dressing" }',
+        description: '{ "en": "What sauce or dressing did you have in your sandwich?" }',
         order: 6,
         repeatable: true,
         category_code: 'SW06',
@@ -61,16 +61,16 @@ const recipeFoods = [
     recipe_food_steps: [
       {
         code: 'SLD_1',
-        name: '{ "en": "Salad Ingridients", }',
-        description: '{ "en": "What ingridients did you have in your salad?", }',
+        name: '{ "en": "Salad Ingridients" }',
+        description: '{ "en": "What ingridients did you have in your salad?" }',
         order: 1,
         repeatable: true,
         category_code: 'SLW1',
       },
       {
         code: 'SLD_2',
-        name: '{ "en": "Salad Dressing", }',
-        description: '{ "en": "What dressing did you have in your salad?", }',
+        name: '{ "en": "Salad Dressing" }',
+        description: '{ "en": "What dressing did you have in your salad?" }',
         order: 2,
         repeatable: true,
         category_code: 'SLW2',
@@ -115,10 +115,18 @@ module.exports = {
         });
       }
 
+      const created_at = new Date();
+      const updated_at = created_at;
+      const timestamps = { created_at, updated_at };
+
       // Creating recipe foods
-      const recipeFoodsRes = await queryInterface.bulkInsert('recipe_foods', recipeFoodsEntries, {
-        transaction,
-      });
+      await queryInterface.bulkInsert(
+        'recipe_foods',
+        recipeFoodsEntries.map((recipeFoodEntry) => ({ ...recipeFoodEntry, ...timestamps })),
+        {
+          transaction,
+        }
+      );
 
       // Getting all the recipe foods created
       const recipeFoodsCreated = await queryInterface.sequelize.query(
@@ -142,6 +150,7 @@ module.exports = {
               recipe_foods_id: recipeFoodCreated.id,
               locale_id: recipeFoodCreated.locale_id,
               code: `${recipeFoodCreated.locale_id}_${recipeFoodCreated.id}${recipeFoodStep.code}`,
+              ...timestamps,
             }))
           );
         }

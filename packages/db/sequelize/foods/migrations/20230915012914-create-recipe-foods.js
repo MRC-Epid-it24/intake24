@@ -105,16 +105,16 @@ module.exports = {
         { transaction }
       );
 
-      // Add Defaults for timestamps
-      await queryInterface.sequelize.query(
-        `ALTER TABLE recipe_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
-        { transaction }
-      );
+      // // Add Defaults for timestamps
+      // await queryInterface.sequelize.query(
+      //   `ALTER TABLE recipe_foods ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+      //   { transaction }
+      // );
 
-      await queryInterface.sequelize.query(
-        `ALTER TABLE recipe_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
-        { transaction }
-      );
+      // await queryInterface.sequelize.query(
+      //   `ALTER TABLE recipe_foods_steps ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP(3), ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP(3);`,
+      //   { transaction }
+      // );
 
       // Add Indexes and FKs
       await queryInterface.addConstraint('recipe_foods', {
