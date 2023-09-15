@@ -1,14 +1,15 @@
 import type { LocaleMessageObject } from 'vue-i18n';
 
 const feedback: LocaleMessageObject = {
-  _: 'Feedback',
-  info: 'Feedback information',
+  _: 'Dietary feedback',
+  info: 'Dietary feedback information',
   status: {
-    available: 'Feedback is available',
-    lowRecalls: 'Feedback will be available once you submitted at least {minRecalls} recalls.',
-    notAvailable: 'Feedback is not available for this survey.',
+    available: 'Dietary Feedback is available',
+    lowRecalls:
+      'Dietary feedback will be available once you submitted at least {minRecalls} recalls.',
+    notAvailable: 'Dietary feedback is not available for this survey.',
   },
-  title: 'Feedback from {name} recalls',
+  title: 'Dietary feedback from {name} recalls',
   missingFoods: 'Any foods reported as missing will not be included in dietary feedback',
 
   physicalData: {
@@ -46,17 +47,17 @@ const feedback: LocaleMessageObject = {
       _: 'Download',
       title: 'Download as PDF',
       subtitle:
-        'Download a copy of your feedback as PDF file. It will take a couple of seconds, bear with us.',
+        'Download a copy of your dietary feedback as PDF file. It will take a couple of seconds, bear with us.',
       send: 'Submit request',
-      sent: 'Feedback PDF file has been saved.',
+      sent: 'Dietary feedback PDF file has been saved.',
     },
     email: {
       _: 'Email',
       title: 'Send to email',
       send: 'Submit request',
-      sent: 'We have sent your feedback to provided email address.',
+      sent: 'We have sent your dietary feedback to provided email address.',
     },
-    retry: 'Feedback output has been recently requested, try again in {secs} s.',
+    retry: 'Dietary feedback output has been recently requested, try again in {secs} s.',
     print: 'Print',
   },
 
@@ -80,13 +81,13 @@ const feedback: LocaleMessageObject = {
 
   unitDescription: {
     percentage_of_energy:
-      'Feedback is based on the contribution of this nutrient to your energy intake and how it compares with recommendations.',
+      'Dietary feedback is based on the contribution of this nutrient to your energy intake and how it compares with recommendations.',
     energy_divided_by_bmr:
-      'Feedback is based on your energy intake divided by BMR and how this compares to recommendations.',
+      'Dietary feedback is based on your energy intake divided by BMR and how this compares to recommendations.',
     per_unit_of_weight:
-      'Feedback is based on your intake of this nutrient per kg of your body weight and how this compares with recommendations.',
+      'Dietary feedback is based on your intake of this nutrient per kg of your body weight and how this compares with recommendations.',
     range:
-      'Feedback is based on your intake of this nutrient and how it compares with recommendations.',
+      'Dietary feedback is based on your intake of this nutrient and how it compares with recommendations.',
   },
 };
 
