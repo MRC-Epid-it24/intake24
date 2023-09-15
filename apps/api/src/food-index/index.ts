@@ -62,7 +62,7 @@ export default {
   },
 
   /**
-   * get special food and its steps by given locale and code
+   * get recipe food and its steps by given locale and code
    * @param localeId - locale Code of the food index
    * @param code - code of the special food
    * @returns { RecipeFood }
@@ -103,10 +103,10 @@ export default {
       if (result) {
         return result;
       } else {
-        return Promise.reject(new Error('Special food not found'));
+        throw new Error('Recipe food not found');
       }
     }
-    return Promise.reject(new IndexNotReadyError());
+    throw new IndexNotReadyError();
   },
 
   async search(

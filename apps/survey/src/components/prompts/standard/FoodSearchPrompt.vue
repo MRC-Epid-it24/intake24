@@ -6,7 +6,7 @@
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @input="$emit('input', $event)"
-        @recipe-builder="(recipeFood) => recipeBuilder(recipeFood)"
+        @recipe-builder="recipeBuilder"
       ></food-browser>
     </v-card-text>
   </card-layout>

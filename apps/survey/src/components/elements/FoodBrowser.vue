@@ -322,7 +322,6 @@ export default defineComponent({
       requestInProgress.value = true;
       try {
         const recipefoodData = await foodsService.getRecipeFood(props.localeId, food.code);
-        console.log(`Got some Builder Food ${JSON.stringify(recipefoodData)}`);
         recipeFood.value = recipefoodData;
         recipeBuilderToggle.value = true;
       } catch (e) {
@@ -348,7 +347,6 @@ export default defineComponent({
           hidden: props.includeHidden,
         });
         if (searchResults.value.foods[0].code.charAt(0) === '$') {
-          console.log('Recipe Builder Food Detected');
           recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
           recipeBuilderDetected(recipeBuilderFood.value);
         }
@@ -376,7 +374,6 @@ export default defineComponent({
 
     const recipeBuilder = () => {
       closeInDialog();
-      console.log('Recipe builder:', recipeFood.value);
       ctx.emit('recipe-builder', recipeFood.value);
     };
 

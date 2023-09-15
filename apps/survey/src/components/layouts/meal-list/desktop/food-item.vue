@@ -126,7 +126,6 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
-import { component } from 'vue/types/umd';
 
 import type { FoodState } from '@intake24/common/types';
 

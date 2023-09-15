@@ -146,9 +146,9 @@ export default defineComponent({
 
       const newState: RecipeBuilder = {
         id,
-        type: 'recipe-builder', // TODO: Check if "recipe-builder" is the correct type here or should ity be "template"
+        type: 'recipe-builder',
         description: recipeFood.recipeWord,
-        searchTerm: searchTerm ? searchTerm : '',
+        searchTerm: searchTerm,
         customPromptAnswers,
         flags,
         linkedFoods: [],

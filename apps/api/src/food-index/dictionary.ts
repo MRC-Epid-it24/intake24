@@ -79,15 +79,6 @@ export class RichDictionary {
         this.synonymMap.set(lowerCaseWord, synList);
       }
     }
-
-    // Add special foods for the locale
-    // this.recipeFoodsMap = new Map<string, Set<string>>();
-
-    // for (const recipeFoodsSynSet of recipeFoodsSynSets) {
-    //   if (recipeFoodsSynSet.size === 0) continue;
-    //   if (this.recipeFoodsMap.has([...recipeFoodsSynSet][0].toLocaleLowerCase())) continue;
-    //   this.recipeFoodsMap.set([...recipeFoodsSynSet][0].toLocaleLowerCase(), recipeFoodsSynSet);
-    // }
   }
 
   exactMatch(lowerCaseWord: string): boolean {
