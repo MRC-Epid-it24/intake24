@@ -1,7 +1,7 @@
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/references/nutrient-tables';
+  const url = '/api/admin/references/food-groups';
   const permissions = ['locales'];
 
   test('missing authentication / authorization', async () => {

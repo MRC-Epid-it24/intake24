@@ -25,6 +25,7 @@ import {
   DrinkwareSet,
   FeedbackScheme,
   Food,
+  FoodGroup,
   GuideImage,
   ImageMap,
   Language,
@@ -92,6 +93,20 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       order: [['name', 'ASC']],
     });
     res.json(feedbackSchemes);
+  };
+
+  const foodGroups = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<FoodReferences>
+  ): Promise<void> => {
+    const foods = await FoodGroup.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'name'],
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(foods);
   };
 
   const foods = async (
@@ -223,6 +238,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     categories,
     drinkwareSets,
     feedbackSchemes,
+    foodGroups,
     foods,
     guideImages,
     imageMaps,

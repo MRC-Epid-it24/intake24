@@ -2,6 +2,7 @@ import asServedSets from './as-served-sets.test';
 import categories from './categories.test';
 import drinkwareSets from './drinkware-sets.test';
 import feedbackSchemes from './feedback-schemes.test';
+import foodGroups from './food-groups.test';
 import foods from './foods.test';
 import guideImages from './guide-images.test';
 import imageMaps from './image-maps.test';
@@ -17,6 +18,7 @@ export default () => {
   describe('GET /api/admin/references/categories', categories);
   describe('GET /api/admin/references/drinkware-sets', drinkwareSets);
   describe('GET /api/admin/references/feedback-schemes', feedbackSchemes);
+  describe('GET /api/admin/references/food-groups', foodGroups);
   describe('GET /api/admin/references/foods', foods);
   describe('GET /api/admin/references/guide-images', guideImages);
   describe('GET /api/admin/references/image-maps', imageMaps);

@@ -31,16 +31,30 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <auto-complete
-                  v-model="form.main.foodGroupId"
-                  api="admin/food-groups"
-                  :error-messages="form.errors.get('main.foodGroupId')"
-                  :label="$t('fdbs.foods.global.foodGroup').toString()"
-                  name="main.foodGroup"
-                  response-object="data"
-                  :selected="entry?.main?.foodGroup"
-                  @input="form.errors.clear('main.foodGroupId')"
-                ></auto-complete>
+                <select-resource
+                  resource="food-groups"
+                  return-object
+                  :value="form.main.foodGroupId"
+                  @input="updateFoodGroup"
+                >
+                  <template #activator="{ attrs, on }">
+                    <v-text-field
+                      v-bind="attrs"
+                      class="mb-2"
+                      clearable
+                      hide-details="auto"
+                      :label="$t('fdbs.foods.global.foodGroup')"
+                      name="main.foodGroup"
+                      outlined
+                      prepend-inner-icon="$food-groups"
+                      readonly
+                      :value="foodGroup?.name"
+                      v-on="on"
+                      @click:clear="updateFoodGroup()"
+                      @input="form.errors.clear('main.foodGroupId')"
+                    ></v-text-field>
+                  </template>
+                </select-resource>
               </v-col>
             </v-row>
           </v-card-text>
@@ -127,6 +141,7 @@ import type {
   FoodLocalEntry,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AssociatedFoodList,
@@ -135,7 +150,6 @@ import {
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
-import { AutoComplete } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useUser } from '@intake24/admin/stores';
@@ -147,12 +161,12 @@ export default defineComponent({
 
   components: {
     AssociatedFoodList,
-    AutoComplete,
     AttributeList,
     CategoryList,
     ConfirmLeaveDialog,
     NutrientList,
     PortionSizeMethodList,
+    SelectResource,
   },
 
   props: {
@@ -186,6 +200,16 @@ export default defineComponent({
     const type = 'foods';
     const entry = ref<FoodLocalEntry | null>(null);
     const isEntryLoaded = computed(() => !!entry.value);
+
+    const foodGroup = ref(entry.value?.main?.foodGroup);
+
+    const updateFoodGroup = (value?: { id: string; name: string }) => {
+      console.log(value);
+      form.errors.clear('main.foodGroupId');
+
+      form.main.foodGroupId = value?.id ?? null;
+      foodGroup.value = value;
+    };
 
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
@@ -226,6 +250,7 @@ export default defineComponent({
 
         toForm(data);
         entry.value = data;
+        foodGroup.value = data.main?.foodGroup;
       } finally {
         loading.value = false;
       }
@@ -266,6 +291,8 @@ export default defineComponent({
       toForm,
       disabled,
       isEntryLoaded,
+      foodGroup,
+      updateFoodGroup,
       submit,
     };
   },
