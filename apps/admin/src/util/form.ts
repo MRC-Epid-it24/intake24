@@ -130,7 +130,7 @@ export default <T extends object = Dictionary>(
 
     onFail(err): void {
       if (axios.isAxiosError(err)) {
-        const { response: { status, data = {} } = {} } = err as AxiosError<any>;
+        const { response: { status, data = {} } = {} } = err;
         if (status === 422 && 'errors' in data) this.errors.record(data.errors);
       }
     },

@@ -1,11 +1,9 @@
 <template>
   <div class="d-flex img-placeholder">
     <v-progress-circular
+      v-bind="{ color, size, width }"
       class="ma-auto"
-      color="secondary"
       indeterminate
-      :size="size"
-      :width="width"
     ></v-progress-circular>
   </div>
 </template>
@@ -17,6 +15,10 @@ export default defineComponent({
   name: 'ImagePlaceholder',
 
   props: {
+    color: {
+      type: String,
+      default: 'secondary',
+    },
     size: {
       type: Number,
       default: 100,

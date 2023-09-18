@@ -8,7 +8,7 @@
           </v-card-title>
         </v-sheet>
         <v-card-text class="d-flex flex-column flex-sm-row justify-center align-center pa-6">
-          <v-icon class="mr-sm-6" color="warning" large>fa-exclamation-triangle</v-icon>
+          <v-icon class="mr-sm-6" color="warning" large>fas fa-exclamation-triangle</v-icon>
           <span class="text-subtitle-1">
             Oops ... Something went wrong. Survey could not be loaded.
           </span>
@@ -23,7 +23,7 @@
           :to="{ name: 'survey-home', params: { surveyId } }"
         >
           <div v-ripple class="d-flex flex-column flex-sm-row justify-center align-center py-6">
-            <v-icon class="py-3 mr-sm-6" size="100">fa-sync-alt</v-icon>
+            <v-icon class="py-3 mr-sm-6" size="100">fas fa-sync-alt</v-icon>
             <span class="py-3 text-h3 font-weight-bold text--primary text-uppercase">
               {{ $t('common.action.reload') }}
             </span>

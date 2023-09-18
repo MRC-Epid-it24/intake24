@@ -24,7 +24,7 @@
       </v-card-title>
       <v-card-text class="px-6 py-4">
         <div class="text-subtitle-1 d-flex justify-center">
-          <v-icon left>fa-hand-point-right</v-icon>
+          <v-icon left>fas fa-hand-point-right</v-icon>
           <slot></slot>
         </div>
       </v-card-text>

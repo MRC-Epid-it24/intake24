@@ -1,4 +1,3 @@
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineStore } from 'pinia';
 
@@ -22,9 +21,13 @@ export const useErrors = defineStore('errors', {
 
     processError(err: Error, vm: Vue, info: string) {
       if (axios.isAxiosError(err)) {
-        const { response } = err as AxiosError<any>;
+        const { response } = err;
         if (response) {
           if ([401, 422].includes(response.status)) return;
+
+          /* if (response.status === 429) {
+            const retryAfter = parseInt(response.headers['retry-after']?.toString() ?? '60', 10);
+          } */
 
           const { data: { message } = {} } = response;
           useMessages().error(message ?? err.message);

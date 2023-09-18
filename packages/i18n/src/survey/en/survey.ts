@@ -14,7 +14,7 @@ const survey: LocaleMessageObject = {
     _: 'Open access studies',
     none: {
       _: 'No open access studies',
-      subtitle: 'There are not open access studies available at the moment.',
+      subtitle: 'There are no open access studies available at the moment.',
     },
   },
   generateUser: {

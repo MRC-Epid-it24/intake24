@@ -175,7 +175,6 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
 import type { PropType } from 'vue';
 import axios from 'axios';
 import { defineComponent } from 'vue';
@@ -282,7 +281,7 @@ export default defineComponent({
         this.message = null;
 
         if (axios.isAxiosError(err)) {
-          const { response: { status, data = {}, headers = {} } = {} } = err as AxiosError<any>;
+          const { response: { status, data = {}, headers = {} } = {} } = err;
 
           if (status === 422 && 'errors' in data) this.email.errors.record(data.errors);
 

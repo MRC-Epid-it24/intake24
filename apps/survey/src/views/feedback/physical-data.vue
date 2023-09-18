@@ -116,7 +116,6 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
@@ -230,12 +229,13 @@ export default defineComponent({
         await userService.savePhysicalData(surveyId, this.form);
         this.$router.push({ name: 'feedback-home', params: { surveyId } });
       } catch (err) {
-        if (axios.isAxiosError(err)) {
-          const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
-          if (status === 422 && 'errors' in data) {
-            this.errors.record(data.errors);
-            return;
-          }
+        if (
+          axios.isAxiosError(err) &&
+          err.response?.status === 422 &&
+          'errors' in err.response.data
+        ) {
+          this.errors.record(err.response.data.errors);
+          return;
         }
 
         throw err;

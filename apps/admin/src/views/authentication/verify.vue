@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { defineComponent, reactive } from 'vue';
 
@@ -80,7 +79,7 @@ export default defineComponent({
         } else await this.$router.push({ name: 'login' });
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const { response: { status, data = {} } = {} } = err as AxiosError<any>;
+          const { response: { status, data = {} } = {} } = err;
 
           if (status === 422 && 'errors' in data) {
             this.errors.record(data.errors);

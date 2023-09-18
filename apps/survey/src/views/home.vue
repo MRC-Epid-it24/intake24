@@ -9,15 +9,16 @@
       <v-card-title class="font-weight-medium">
         {{ $t('survey.openAccess._') }}
       </v-card-title>
-      <v-list v-if="surveys.length">
+      <image-placeholder v-if="isLoading" class="pa-8"></image-placeholder>
+      <v-list v-else-if="surveys.length">
         <template v-for="(survey, idx) in surveys">
           <v-list-item
             :key="survey.id"
             :to="{ name: 'survey-login', params: { surveyId: survey.slug } }"
           >
-            <v-list-item-icon>
+            <v-list-item-avatar>
               <v-icon>fas fa-square-poll-vertical</v-icon>
-            </v-list-item-icon>
+            </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{ survey.name }}</v-list-item-title>
             </v-list-item-content>
@@ -50,6 +51,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
+import { ImagePlaceholder } from '@intake24/survey/components/elements';
 import { AppEntryScreen } from '@intake24/ui/components';
 
 import { surveyService } from '../services';
@@ -58,15 +60,22 @@ import { useAuth, useUser } from '../stores';
 export default defineComponent({
   name: 'AppHome',
 
-  components: { AppEntryScreen },
+  components: { AppEntryScreen, ImagePlaceholder },
 
   setup() {
+    const isLoading = ref(false);
     const surveys = ref<PublicSurveyEntry[]>([]);
     const auth = useAuth();
     const router = useRouter();
 
     const fetchSurveyPublicInfo = async () => {
-      surveys.value = await surveyService.surveyPublicList();
+      isLoading.value = true;
+
+      try {
+        surveys.value = await surveyService.surveyPublicList();
+      } finally {
+        isLoading.value = false;
+      }
     };
 
     const tryLoggingIn = async () => {
@@ -84,7 +93,7 @@ export default defineComponent({
       await fetchSurveyPublicInfo();
     });
 
-    return { surveys };
+    return { isLoading, surveys };
   },
 });
 </script>

@@ -121,7 +121,6 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
 import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-phonenumber';
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
@@ -197,13 +196,13 @@ export default defineComponent({
         reset();
         close();
       } catch (err) {
-        if (axios.isAxiosError(err)) {
-          const { response: { status, data = {} } = {} } = err as AxiosError<any>;
-
-          if (status === 422 && 'errors' in data) {
-            errors.value.record(data.errors);
-            return;
-          }
+        if (
+          axios.isAxiosError(err) &&
+          err.response?.status === 422 &&
+          'errors' in err.response.data
+        ) {
+          errors.value.record(err.response.data.errors);
+          return;
         }
 
         throw err;

@@ -17,7 +17,7 @@ const recall: LocaleMessageObject = {
     title: 'Recall days',
     all: 'all',
     past: 'Past recalls',
-    none: 'You do not have any past recalls yet.',
+    none: `You don't have any past recalls yet.`,
     count: 'Recall number: {count}',
   },
   start: {
