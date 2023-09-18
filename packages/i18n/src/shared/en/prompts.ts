@@ -28,8 +28,8 @@ const prompts: LocaleMessageObject = {
     name: 'No more information needed',
     text: '',
     description: `<p>We have all the information that we need regarding your <strong>{item}</strong> at this time.</p>
-        <p>To continue with the survey, click the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
-        <p>Alternatively, click on a meal or food on the left if you would like to focus on a particular item.</p>`,
+        <p>To continue with the survey, select the "Continue" button below and we will automatically select the next food or meal that we still need some information about.</p>
+        <p>Alternatively, select a meal or food on the left if you would like to focus on a particular item.</p>`,
   },
   radioList: {
     name: 'Single-choice list',
@@ -86,8 +86,8 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>Please try browsing the food categories listed above to find your food.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>`,
+      description: `<p>Try browsing the food categories listed above to find your food.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
       placeholder: 'Missing food',
@@ -124,9 +124,9 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>
-      <p>If you still can't find your food, click 'Report a missing food'.</p>`,
+      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p>
+      <p>Or select 'Browse all foods' and explore the food categories.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
@@ -219,11 +219,10 @@ const prompts: LocaleMessageObject = {
     description: 'It looks like you entered more than one food item on the line.',
     searchTerm: 'Search term: {food}',
     split: 'Are these separate foods?',
-    singleSuggestion:
-      'Click on "keep as single food" if you meant a single food such as chicken and vegetable soup.',
-    singleSuggestionEx: 'Click on "keep as single food" if you meant a single food such as {food}.',
-    separateSuggestion: 'Click on "separate foods" for items such as fish and chips.',
-    separateSuggestionEx: 'Click on "separate foods" for items such as {food}.',
+    singleSuggestion: `Select 'keep as single food' if you meant a single food such as chicken and vegetable soup.`,
+    singleSuggestionEx: `Select 'keep as single food' if you meant a single food such as {food}.`,
+    separateSuggestion: `Select 'separate foods' for items such as fish and chips.`,
+    separateSuggestionEx: `Select 'separate foods' for items such as {food}.`,
     separate: 'Separate foods',
     single: 'Keep as single food',
   },
