@@ -41,7 +41,7 @@ const surveyService = ({
    * @returns {Promise<RespondentWithPassword>}
    */
   const generateRespondent = async (slug: string): Promise<RespondentWithPassword> => {
-    const survey = await Survey.scope('counter').findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug, { include: [{ association: 'counter' }] });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
