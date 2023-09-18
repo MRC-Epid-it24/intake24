@@ -34,7 +34,7 @@ const recall: LocaleMessageObject = {
     recall: 'Recall: {number}',
   },
   menu: {
-    title: 'Your food and drink intake',
+    title: 'Review panel',
     mealSuggested:
       'Hidangan ini dicadangkan oleh sistem tetapi anda masih belum mengesahkan bahawa anda telah mengambilnya',
     food: {

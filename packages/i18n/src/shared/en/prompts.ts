@@ -342,7 +342,7 @@ const prompts: LocaleMessageObject = {
     container: 'Select the cup or glass that looks most like the one you used for your {food}.',
     serving: {
       header:
-        'Use the slider on the right or click on the cup or glass to indicate how full your cup or glass was.',
+        'Use the slider on the right or tap on the cup or glass to indicate how full your cup or glass was.',
       hint: 'Slide this to indicate how full your cup or glass was.',
       less: 'I had less',
       more: 'I had more',
