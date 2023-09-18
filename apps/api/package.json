@@ -15,6 +15,7 @@
     "node": ">=16"
   },
   "scripts": {
+    "postinstall": "pnpm tsx scripts/clean-puppeteer-cache.ts",
     "build": "pnpm build:clean && webpack --env NODE_ENV=production",
     "build:clean": "rimraf dist",
     "dev": "webpack --env NODE_ENV=development",
