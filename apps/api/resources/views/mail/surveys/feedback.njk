@@ -1,9 +1,13 @@
 {% import "mail/layouts/elements.njk" as elements %}
 
 {% extends "mail/layouts/layout.njk" %}
+{% block preview %}
+Dietary feedback based on the recalls
+{% endblock %}
+
 {% block body %}
 <p>Hello,</p>
-<p>Please find attached your feedback based on the recalls you have completed using Intake24.</p>
+<p>Please find attached your dietary feedback based on the recalls you have completed using Intake24.</p>
 <p>You can revisit your feedback here.</p>
 {{ elements.button(action.url, action.text) }}
 <p>
