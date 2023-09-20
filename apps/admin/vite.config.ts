@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
     DISABLE_PWA,
     EMPTY_OUT_DIR = 'true',
     DEV_HTTPS,
+    DEV_MKCERT_PATH,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
@@ -104,7 +105,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [VuetifyResolver()],
         directoryAsNamespace: true,
       }),
-      https ? mkcert() : undefined,
+      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       unFonts({
         google: {
           families: [

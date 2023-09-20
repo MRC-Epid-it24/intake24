@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => {
     DISABLE_PWA,
     EMPTY_OUT_DIR = 'true',
     DEV_HTTPS,
+    DEV_MKCERT_PATH,
     LEGACY,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
@@ -106,7 +107,7 @@ export default defineConfig(({ mode }) => {
         directoryAsNamespace: true,
       }),
       legacy ? viteLegacy() : undefined,
-      https ? mkcert() : undefined,
+      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       unFonts({
         google: {
           families: [

@@ -14,6 +14,7 @@ export type AppConfig = {
   host: string;
   port: number;
   https: boolean;
+  certPath?: string;
 
   secret: string;
 
@@ -24,7 +25,8 @@ export type AppConfig = {
 
 const host = 'localhost';
 const port = 3100;
-const https = !!(process.env.APP_HTTPS === 'true');
+const https = !!(process.env.DEV_HTTPS === 'true');
+const certPath = process.env.DEV_MKCERT_PATH;
 const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
 
 // null stands for "all locales"
@@ -50,6 +52,7 @@ const appConfig: AppConfig = {
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,
   https,
+  certPath,
 
   secret: process.env.APP_SECRET || '',
 
