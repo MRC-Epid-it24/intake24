@@ -61,6 +61,7 @@
   },
   "bundledDependencies": [
     "@intake24/common",
-    "@intake24/common-backend"
+    "@intake24/common-backend",
+    "@intake24/api-client-v3"
   ]
 }

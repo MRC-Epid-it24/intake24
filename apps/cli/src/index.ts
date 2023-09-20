@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import { Command } from 'commander';
+import { Argument, Command, Option } from 'commander';
 
 import pkg from '../package.json';
 import {
@@ -9,6 +9,7 @@ import {
   generateKey,
   generateVapidKeys,
   hashPassword,
+  packageExportV3,
 } from './commands';
 
 const run = async () => {
@@ -59,6 +60,37 @@ const run = async () => {
     .requiredOption('-o, --output [path]', 'output file path')
     .action(async (pwd) => {
       await findPortionImages(pwd);
+    });
+
+  const asServedOption = new Option(
+    '-as, --as-served [set-ids...]',
+    'Export as served portion size images for given set identifiers'
+  );
+
+  asServedOption.required = true;
+
+  const localeOption = new Option(
+    '-l, --locale [locale-ids...]',
+    'Export all data for the given locale ids'
+  );
+
+  localeOption.required = true;
+
+  program
+    .command('export-package')
+    .description('Export food data into a portable format')
+    .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
+    .addOption(asServedOption)
+    .addOption(localeOption)
+    .action(async (version, options) => {
+      switch (version) {
+        case 'v3':
+          return await packageExportV3(version, options);
+        case 'v4':
+          throw new Error('Not implemented');
+        default:
+          throw new Error(`Unexpected version option: ${version}`);
+      }
     });
 
   await program.parseAsync(process.argv);
