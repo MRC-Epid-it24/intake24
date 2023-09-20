@@ -4,21 +4,13 @@
     <v-card-text>
       <v-row>
         <v-col v-if="!disabled.surveyId" cols="12">
-          <select-resource v-model="params.surveyId" resource="surveys">
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                v-bind="attrs"
-                :error-messages="errors.get('params.surveyId')"
-                hide-details="auto"
-                :label="$t('surveys.id')"
-                name="surveyId"
-                outlined
-                prepend-inner-icon="$surveys"
-                readonly
-                :value="value.surveyId"
-                v-on="on"
-              ></v-text-field>
-            </template>
+          <select-resource
+            v-model="params.surveyId"
+            :error-messages="errors.get('params.surveyId')"
+            :label="$t('surveys.id')"
+            name="surveyId"
+            resource="surveys"
+          >
           </select-resource>
         </v-col>
         <v-col cols="12">

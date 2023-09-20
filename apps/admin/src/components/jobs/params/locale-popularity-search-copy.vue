@@ -4,45 +4,26 @@
     <v-card-text>
       <v-row>
         <v-col v-if="!disabled.localeId" cols="12">
-          <select-resource v-model="params.localeId" item-name="englishName" resource="locales">
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                :disabled="disabled.localeId"
-                v-bind="attrs"
-                :error-messages="errors.get('params.localeId')"
-                hide-details="auto"
-                :label="$t('jobs.types.LocalePopularitySearchCopy.localeId')"
-                name="localeId"
-                outlined
-                prepend-inner-icon="$locales"
-                readonly
-                :value="value.localeId"
-                v-on="on"
-              ></v-text-field>
-            </template>
+          <select-resource
+            v-model="params.localeId"
+            :error-messages="errors.get('params.localeId')"
+            item-name="englishName"
+            :label="$t('jobs.types.LocalePopularitySearchCopy.localeId')"
+            name="localeId"
+            resource="locales"
+          >
           </select-resource>
         </v-col>
         <v-col cols="12">
           <select-resource
             v-model="params.sourceLocaleId"
+            :disabled="disabled.sourceLocaleId"
+            :error-messages="errors.get('params.sourceLocaleId')"
             item-name="englishName"
+            :label="$t('jobs.types.LocalePopularitySearchCopy.sourceLocaleId')"
+            name="sourceLocaleId"
             resource="locales"
           >
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                :disabled="disabled.sourceLocaleId"
-                v-bind="attrs"
-                :error-messages="errors.get('params.sourceLocaleId')"
-                hide-details="auto"
-                :label="$t('jobs.types.LocalePopularitySearchCopy.sourceLocaleId')"
-                name="sourceLocaleId"
-                outlined
-                prepend-inner-icon="$locales"
-                readonly
-                :value="value.sourceLocaleId"
-                v-on="on"
-              ></v-text-field>
-            </template>
           </select-resource>
         </v-col>
       </v-row>

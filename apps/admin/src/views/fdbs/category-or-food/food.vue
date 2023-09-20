@@ -32,28 +32,15 @@
               </v-col>
               <v-col cols="12">
                 <select-resource
+                  v-model="form.main.foodGroupId"
+                  clearable
+                  :error-messages="form.errors.get('main.foodGroupId')"
+                  :initial-item="entry?.main?.foodGroup"
+                  :label="$t('fdbs.foods.global.foodGroup')"
+                  name="main.foodGroup"
                   resource="food-groups"
-                  return-object
-                  :value="form.main.foodGroupId"
-                  @input="updateFoodGroup"
+                  @input="form.errors.clear('main.foodGroupId')"
                 >
-                  <template #activator="{ attrs, on }">
-                    <v-text-field
-                      v-bind="attrs"
-                      class="mb-2"
-                      clearable
-                      hide-details="auto"
-                      :label="$t('fdbs.foods.global.foodGroup')"
-                      name="main.foodGroup"
-                      outlined
-                      prepend-inner-icon="$food-groups"
-                      readonly
-                      :value="foodGroup?.name"
-                      v-on="on"
-                      @click:clear="updateFoodGroup()"
-                      @input="form.errors.clear('main.foodGroupId')"
-                    ></v-text-field>
-                  </template>
                 </select-resource>
               </v-col>
             </v-row>
@@ -201,16 +188,6 @@ export default defineComponent({
     const entry = ref<FoodLocalEntry | null>(null);
     const isEntryLoaded = computed(() => !!entry.value);
 
-    const foodGroup = ref(entry.value?.main?.foodGroup);
-
-    const updateFoodGroup = (value?: { id: string; name: string }) => {
-      console.log(value);
-      form.errors.clear('main.foodGroupId');
-
-      form.main.foodGroupId = value?.id ?? null;
-      foodGroup.value = value;
-    };
-
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
       any,
@@ -250,7 +227,6 @@ export default defineComponent({
 
         toForm(data);
         entry.value = data;
-        foodGroup.value = data.main?.foodGroup;
       } finally {
         loading.value = false;
       }
@@ -291,8 +267,6 @@ export default defineComponent({
       toForm,
       disabled,
       isEntryLoaded,
-      foodGroup,
-      updateFoodGroup,
       submit,
     };
   },

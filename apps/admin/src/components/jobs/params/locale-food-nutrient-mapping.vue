@@ -4,21 +4,14 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <select-resource v-model="params.localeId" item-name="englishName" resource="locales">
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                v-bind="attrs"
-                :error-messages="errors.get('params.localeId')"
-                hide-details="auto"
-                :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
-                name="localeId"
-                outlined
-                prepend-inner-icon="$locales"
-                readonly
-                :value="value.localeId"
-                v-on="on"
-              ></v-text-field>
-            </template>
+          <select-resource
+            v-model="params.localeId"
+            :error-messages="errors.get('params.localeId')"
+            item-name="englishName"
+            :label="$t('jobs.types.LocaleFoodNutrientMapping.localeId')"
+            name="localeId"
+            resource="locales"
+          >
           </select-resource>
         </v-col>
       </v-row>

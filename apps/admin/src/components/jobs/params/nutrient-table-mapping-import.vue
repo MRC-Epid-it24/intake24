@@ -6,23 +6,12 @@
         <v-col v-if="!disabled.nutrientTableId" cols="12">
           <select-resource
             v-model="params.nutrientTableId"
+            :error-messages="errors.get('params.nutrientTableId')"
             item-name="description"
+            :label="$t('nutrient-tables.id')"
+            name="nutrientTableId"
             resource="nutrient-tables"
           >
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                v-bind="attrs"
-                :error-messages="errors.get('params.nutrientTableId')"
-                hide-details="auto"
-                :label="$t('nutrient-tables.id')"
-                name="nutrientTableId"
-                outlined
-                prepend-inner-icon="$nutrient-tables"
-                readonly
-                :value="value.nutrientTableId"
-                v-on="on"
-              ></v-text-field>
-            </template>
           </select-resource>
         </v-col>
         <v-col cols="12">
