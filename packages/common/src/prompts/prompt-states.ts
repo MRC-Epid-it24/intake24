@@ -22,7 +22,7 @@ export type SelectedFoodRecipeBuilderItemState = {
 
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
-  type: 'selected' | 'missing' | undefined;
+  type?: 'selected' | 'missing';
   selectedFoods?: SelectedFoodRecipeBuilderItemState[];
   order: number;
   description: RequiredLocaleTranslation;

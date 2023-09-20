@@ -167,10 +167,9 @@ export default defineComponent({
       if (this.recipeSteps[data.index].selectedFoods?.length === 0) {
         this.recipeSteps[data.index].confirmed = undefined;
       }
-      this.$nextTick(() => {
-        if (foodToRemove === undefined) return;
-        this.action('remove', foodToRemove[0].id, data.index);
-      });
+      if (foodToRemove === undefined) return;
+      this.update();
+      this.action('remove', foodToRemove[0].id, data.index);
     },
 
     update() {
@@ -231,7 +230,7 @@ export default defineComponent({
       const update = {
         ...step,
         type: stepFoods.type,
-        confirmed: step.repeat !== true ? 'yes' : 'no',
+        confirmed: step.repeat !== true ? 'yes' : ('no' as RecipeBuilderStepState['confirmed']),
         selectedFoods: foods,
       };
 
