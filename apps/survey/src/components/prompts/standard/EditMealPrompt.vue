@@ -44,7 +44,11 @@
             {{ $t('recall.actions.nav.deleteMeal') }}
           </v-btn>
         </template>
-        {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
+        <i18n path="recall.menu.meal.deleteConfirm">
+          <template #item>
+            <span class="font-weight-medium">{{ mealName }}</span>
+          </template>
+        </i18n>
       </confirm-dialog>
       <next :disabled="!isValid" @click="action('next')"></next>
     </template>
@@ -72,7 +76,11 @@
             <v-icon class="pb-1">$delete</v-icon>
           </v-btn>
         </template>
-        {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
+        <i18n path="recall.menu.meal.deleteConfirm">
+          <template #item>
+            <span class="font-weight-medium">{{ mealName }}</span>
+          </template>
+        </i18n>
       </confirm-dialog>
       <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>

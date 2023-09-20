@@ -82,11 +82,13 @@
                               {{ promptI18n['select.remove'] }}
                             </v-btn>
                           </template>
-                          {{
-                            $t(`recall.menu.confirmDelete`, {
-                              item: associatedFoodDescription(food),
-                            })
-                          }}
+                          <i18n path="recall.menu.food.deleteConfirm">
+                            <template #item>
+                              <span class="font-weight-medium">{{
+                                associatedFoodDescription(food)
+                              }}</span>
+                            </template>
+                          </i18n>
                         </confirm-dialog>
                       </template>
                     </v-alert>

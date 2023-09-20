@@ -338,7 +338,6 @@ const prompts: LocaleMessageObject = {
     container: '选择外观与您用来盛放{food}的杯子或玻璃杯最相似的一个。',
     serving: {
       header: '第1步。请选择您的饮料份量。',
-      hint: '滑动此处表示您的杯子或玻璃杯有多满。',
       less: '少了一些',
       more: '多了一些',
       confirm: '就是那么多',

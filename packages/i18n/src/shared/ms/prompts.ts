@@ -344,7 +344,6 @@ const prompts: LocaleMessageObject = {
     serving: {
       header:
         'Gunakan slider di sebelah kanan atau klik pada cawan atau gelas untuk menunjukkan tahap kepenuhan cawan atau gelas anda.',
-      hint: 'Gerakkan penanda ini untuk menunjukkan tahap kepenuhan cawan atau gelas anda.',
       less: 'Ia kurang penuh',
       more: 'Ia lebih penuh',
       confirm: 'Ia penuh sebanyak itu',

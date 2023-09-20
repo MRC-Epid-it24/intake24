@@ -38,6 +38,7 @@ const recall: LocaleMessageObject = {
     mealSuggested: '此餐点是由系统建议的，但您尚未确认您已食用。',
     food: {
       delete: 'Delete food',
+      deleteConfirm: 'Do you want to delete {item}?',
       edit: 'Change food',
       editPortionSize: 'Edit portion size',
       encoded: '该食物已与我们数据库中的食物匹配。',
@@ -51,10 +52,10 @@ const recall: LocaleMessageObject = {
     meal: {
       add: 'Add meal',
       delete: '删除餐点',
+      deleteConfirm: `You are about to delete everything you had for {item}.`,
       editFoods: '编辑/更改食物',
       editTime: '编辑/更改时间',
     },
-    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: '关闭',

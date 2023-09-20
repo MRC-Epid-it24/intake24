@@ -71,7 +71,11 @@
                       <v-icon>$delete</v-icon>
                     </v-btn>
                   </template>
-                  {{ $t(`recall.menu.confirmDelete`, { item: getFoodName(food) }) }}
+                  <i18n path="recall.menu.food.deleteConfirm">
+                    <template #item>
+                      <span class="font-weight-medium">{{ getFoodName(food) }}</span>
+                    </template>
+                  </i18n>
                 </confirm-dialog>
               </v-list-item-icon>
             </v-list-item>

@@ -39,6 +39,7 @@ const recall: LocaleMessageObject = {
       'Hidangan ini dicadangkan oleh sistem tetapi anda masih belum mengesahkan bahawa anda telah mengambilnya',
     food: {
       delete: 'Delete food',
+      deleteConfirm: 'Do you want to delete {item}?',
       edit: 'Change food',
       editPortionSize: 'Edit portion size',
       encoded: 'Makanan ini telah dipadankan dengan makanan daripada pangkalan data kami.',
@@ -52,10 +53,10 @@ const recall: LocaleMessageObject = {
     meal: {
       add: 'Add meal',
       delete: 'Padam hidangan',
+      deleteConfirm: `You are about to delete everything you had for {item}.`,
       editFoods: 'Sunting/ubah makanan',
       editTime: 'Sunting/ubah masa',
     },
-    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: 'Tutup',

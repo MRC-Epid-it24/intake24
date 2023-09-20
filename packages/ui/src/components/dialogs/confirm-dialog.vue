@@ -20,18 +20,19 @@
     </template>
     <v-card>
       <v-card-title class="h2 d-flex justify-center">
-        <slot name="title">{{ titleLabel }}</slot>
+        <slot name="title">
+          {{ titleLabel }}
+        </slot>
       </v-card-title>
       <v-card-text class="px-6 py-4">
         <div class="text-subtitle-1 d-flex justify-center">
-          <v-icon left>fas fa-hand-point-right</v-icon>
           <slot></slot>
         </div>
       </v-card-text>
       <v-container class="pa-6">
         <v-btn
           block
-          class="mb-2"
+          class="mb-3"
           :color="color"
           dark
           large

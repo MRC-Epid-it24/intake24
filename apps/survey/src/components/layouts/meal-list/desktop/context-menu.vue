@@ -29,7 +29,11 @@
       :label="$t(`recall.menu.${isMeal ? 'meal' : 'food'}.delete`).toString()"
       @confirm="action(isMeal ? 'deleteMeal' : 'deleteFood')"
     >
-      {{ $t('recall.menu.confirmDelete', { item: entityName }) }}
+      <i18n :path="`recall.menu.${isMeal ? 'meal' : 'food'}.deleteConfirm`">
+        <template #item>
+          <span class="font-weight-medium">{{ entityName }}</span>
+        </template>
+      </i18n>
     </confirm-dialog>
   </div>
 </template>

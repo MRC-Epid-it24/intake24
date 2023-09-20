@@ -39,6 +39,7 @@ const recall: LocaleMessageObject = {
       'இந்த உணவு முறையால் பரிந்துரைக்கப்படுகிறது, ஆனால் நீங்கள் அதை சாப்பிட்டுள்ளீர்கள் என்பதை இன்னும் உறுதிப்படுத்தவில்லை',
     food: {
       delete: 'Delete food',
+      deleteConfirm: 'Do you want to delete {item}?',
       edit: 'Change food',
       editPortionSize: 'Edit portion size',
       encoded: 'இந்த உணவு எங்கள் தரவுத்தளத்தில் உள்ள உணவுடன் பொருத்தப்பட்டது.',
@@ -52,10 +53,10 @@ const recall: LocaleMessageObject = {
     meal: {
       add: 'சாப்பாடு சேர்க்கவும்',
       delete: 'உணவை நீக்கு',
+      deleteConfirm: `You are about to delete everything you had for {item}.`,
       editFoods: 'உணவுகளைத் திருத்தவும்/மாற்றவும்',
       editTime: 'நேரத்தை திருத்து/மாற்று',
     },
-    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: 'மூடு',

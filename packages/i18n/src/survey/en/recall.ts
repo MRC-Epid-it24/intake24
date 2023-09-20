@@ -39,6 +39,7 @@ const recall: LocaleMessageObject = {
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
     food: {
       delete: 'Delete food',
+      deleteConfirm: 'Do you want to delete {item}?',
       edit: 'Change food',
       editPortionSize: 'Edit portion size',
       encoded: 'This food has been matched with a food from our database.',
@@ -52,10 +53,10 @@ const recall: LocaleMessageObject = {
     meal: {
       add: 'Add meal',
       delete: 'Delete meal',
+      deleteConfirm: `You are about to delete everything you had for {item}.`,
       editFoods: 'Change / Add foods',
       editTime: 'Change time',
     },
-    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: 'Close',
