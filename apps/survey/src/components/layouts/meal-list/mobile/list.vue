@@ -11,8 +11,8 @@
     <v-card class="meal-list-mobile__card">
       <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
         <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
-        <v-btn color="primary" icon @click="action('addMeal')">
-          <v-icon large>$add</v-icon>
+        <v-btn color="primary" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">
+          <v-icon x-large>$add</v-icon>
         </v-btn>
       </div>
       <v-card-text class="pa-0">
