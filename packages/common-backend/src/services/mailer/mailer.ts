@@ -51,8 +51,12 @@ export class Mailer {
 
   async sendMail(options: SendMailOptions): Promise<void> {
     try {
-      const { from } = this.mailConfig;
-      const defaults: SendMailOptions = { from };
+      const { from, replyTo } = this.mailConfig;
+      const defaults: SendMailOptions = {
+        from,
+        replyTo,
+        headers: { 'X-Auto-Response-Suppress': 'All' },
+      };
 
       let { html } = options;
       let text: string | undefined = undefined;
