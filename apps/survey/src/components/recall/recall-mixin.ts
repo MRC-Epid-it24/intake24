@@ -102,7 +102,8 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
-      if (this.hasFinished) return false;
+      // if (this.hasFinished) return false;
+      if (this.currentPrompt?.section === 'submission') return false;
 
       // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
       return (

@@ -26,6 +26,26 @@
   .v-list-group__header__append-icon {
     display: none !important;
   }
+
+  .v-checkbox {
+    padding-left: 12px !important; // Existing padding change
+
+    // New: Change the font size of the label
+    ::v-deep .v-label {
+      font-size: 18px; // Change as needed
+    }
+
+    // New: Change the style of the label
+    ::v-deep .v-label {
+      font-weight: bold; // Example: making the text bold
+      text-decoration: underline; // Example: underlining the text
+    }
+
+    // New: Change the padding of the checkbox
+    ::v-deep .v-input--checkbox .v-input__slot {
+      padding: 10px; // Change as needed
+    }
+  }
 }
 
 .meal-list-mobile__sheet {

@@ -4,7 +4,6 @@
       {{ $t('recall.menu.title') }}
     </v-card-title>
     <v-divider></v-divider>
-    <p>{{ reviewed }}</p>
     <v-list class="meal-list__list pt-0" dense flat tile>
       <div v-for="meal in meals" :key="meal.id">
         <component
@@ -35,7 +34,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 
@@ -66,6 +65,10 @@ export default defineComponent({
       props,
       ctx
     );
+
+    watch(reviewed, (newVal) => {
+      ctx.emit('update-reviewed', newVal);
+    });
 
     return {
       reviewed,

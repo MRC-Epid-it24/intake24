@@ -1,8 +1,12 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <review-meal-list v-bind="{ meals }"></review-meal-list>
+  <submit-card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+    <review-meal-list
+      v-if="$vuetify.breakpoint.lgAndUp"
+      v-bind="{ meals }"
+      @update-reviewed="updateReviewed"
+    ></review-meal-list>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')">
+      <next :disabled="isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
       </next>
     </template>
@@ -13,17 +17,13 @@
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
-      <v-divider vertical></v-divider>
-      <next-mobile :disabled="!isValid" @click="action('next')">
-        {{ $t('recall.actions.nav.submit') }}
-      </next-mobile>
     </template>
-  </card-layout>
+  </submit-card-layout>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import { ReviewMealList } from '@intake24/survey/components/layouts';
@@ -48,9 +48,15 @@ export default defineComponent({
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);
 
-    const isValid = true;
+    const reviewed = ref<string[]>([]);
 
-    return { action, isValid };
+    const updateReviewed = (newReviewed: string[]) => {
+      reviewed.value = newReviewed;
+    };
+
+    const isValid = computed(() => props.meals.length != reviewed.value.length);
+
+    return { action, isValid, updateReviewed };
   },
 });
 </script>
