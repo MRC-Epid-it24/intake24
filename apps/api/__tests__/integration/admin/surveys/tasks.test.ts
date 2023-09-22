@@ -55,7 +55,7 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('post', invalidUrl, { input });
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type'], {
         input: {
           type: 'invalidType',

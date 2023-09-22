@@ -1,5 +1,5 @@
 import type { NavigationGuard } from 'vue-router';
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 
 import { surveyService } from '../services';
 import { useAuth, useSurvey, useUser } from '../stores';
@@ -16,7 +16,7 @@ export const feedbackParametersGuard: NavigationGuard = async (to, from, next) =
   try {
     if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 403) {
+    if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
       return;
@@ -49,7 +49,7 @@ export const surveyParametersGuard: NavigationGuard = async (to, from, next) => 
   try {
     if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 403) {
+    if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
       return;

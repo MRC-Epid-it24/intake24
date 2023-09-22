@@ -62,14 +62,14 @@ const sharedTests = (suite: typeof Suite) => {
     fields: string[],
     ops?: Options
   ) => {
-    const { bearer, code = 422, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 400, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { status, body } = await call.send(input);
 
-    expect(body).toContainAllKeys(['errors', 'success']);
+    expect(body).toContainAllKeys(['errors', 'message']);
     expect(body.errors).toContainAllKeys(fields);
     expect(status).toBe(code);
   };

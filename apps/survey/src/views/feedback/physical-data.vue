@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
@@ -231,7 +231,7 @@ export default defineComponent({
       } catch (err) {
         if (
           axios.isAxiosError(err) &&
-          err.response?.status === 422 &&
+          err.response?.status === HttpStatusCode.BadRequest &&
           'errors' in err.response.data
         ) {
           this.errors.record(err.response.data.errors);

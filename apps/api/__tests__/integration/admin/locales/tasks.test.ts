@@ -43,17 +43,17 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type']);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['type'], {
         input: { type: 'invalidJobType', params: { surveyId: 'demo', nonValidKey: false } },
       });
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['params.sourceLocaleId'], {
         input: { type: 'LocalePopularitySearchCopy', params: { nonValidKey: false } },
       });

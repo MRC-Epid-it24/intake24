@@ -8,5 +8,5 @@ export default (req: Request, res: Response, next: NextFunction): void => {
     return;
   }
 
-  res.status(422).json({ success: false, errors: errors.mapped() });
+  res.status(400).json({ errors: errors.mapped(), message: 'Invalid input' });
 };

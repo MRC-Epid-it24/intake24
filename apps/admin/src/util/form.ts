@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
 
@@ -131,7 +131,8 @@ export default <T extends object = Dictionary>(
     onFail(err): void {
       if (axios.isAxiosError(err)) {
         const { response: { status, data = {} } = {} } = err;
-        if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+        if (status === HttpStatusCode.BadRequest && 'errors' in data)
+          this.errors.record(data.errors);
       }
     },
   };

@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineComponent } from 'vue';
 
 import { useAuth, useMessages } from '@intake24/admin/stores';
@@ -125,7 +125,7 @@ export default defineComponent({
       await this.auth.verify({ challengeId, token, provider: 'duo' });
       await this.finalizeLogin();
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
+      if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.Unauthorized) {
         useMessages().error('Invalid MFA authentication.');
         return;
       }
@@ -157,12 +157,12 @@ export default defineComponent({
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {} } = {} } = err;
 
-          if (status === 422 && 'errors' in data) {
+          if (status === HttpStatusCode.BadRequest && 'errors' in data) {
             this.errors.record(data.errors);
             return;
           }
 
-          if (status === 401) {
+          if (status === HttpStatusCode.Unauthorized) {
             useMessages().error('Invalid authentication credentials provided.');
             return;
           }

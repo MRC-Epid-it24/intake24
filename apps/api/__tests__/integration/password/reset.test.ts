@@ -43,7 +43,7 @@ export default () => {
     token = reset.token;
   });
 
-  it('should return 422 for missing input data', async () => {
+  it('should return 400 for missing input data', async () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
@@ -52,7 +52,7 @@ export default () => {
     );
   });
 
-  it(`should return 422 for invalid input data`, async () => {
+  it(`should return 400 for invalid input data`, async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -63,12 +63,12 @@ export default () => {
         passwordConfirm: 'notMatching',
       });
 
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
+    expect(status).toBe(400);
+    expect(body).toContainAllKeys(['errors', 'message']);
     expect(body.errors).toContainAllKeys(['email', 'token', 'password', 'passwordConfirm']);
   });
 
-  it('should return 422 for invalid token', async () => {
+  it('should return 400 for invalid token', async () => {
     const { status, body } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
@@ -79,8 +79,8 @@ export default () => {
         passwordConfirm: 'newPassword123',
       });
 
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
+    expect(status).toBe(400);
+    expect(body).toContainAllKeys(['errors', 'message']);
     expect(body.errors).toContainAllKeys(['token']);
   });
 
@@ -90,7 +90,7 @@ export default () => {
       dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => timeShift);
     });
 
-    it('should return 422 for expired token ', async () => {
+    it('should return 400 for expired token ', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -101,8 +101,8 @@ export default () => {
           passwordConfirm: 'newPassword123',
         });
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['token']);
     });
 

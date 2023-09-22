@@ -57,7 +57,7 @@ export default () => {
       await suite.util.setPermission(['surveys|edit', 'surveyadmin']);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, [
         'name',
         'state',
@@ -72,7 +72,7 @@ export default () => {
       ]);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       const invalidInput = {
         name: { name: 'survey name' },
         state: 10,

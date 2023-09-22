@@ -176,7 +176,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineComponent } from 'vue';
 
 import type { FeedbackOutput } from '@intake24/common/feedback';
@@ -283,9 +283,10 @@ export default defineComponent({
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {}, headers = {} } = {} } = err;
 
-          if (status === 422 && 'errors' in data) this.email.errors.record(data.errors);
+          if (status === HttpStatusCode.BadRequest && 'errors' in data)
+            this.email.errors.record(data.errors);
 
-          if (status === 429)
+          if (status === HttpStatusCode.TooManyRequests)
             this.setFeedbackInterval(parseInt(headers['retry-after']?.toString() ?? '60', 10));
         }
       } finally {

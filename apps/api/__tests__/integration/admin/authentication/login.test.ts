@@ -7,11 +7,11 @@ import { User } from '@intake24/db';
 export default () => {
   const url = '/api/admin/auth/login';
 
-  it('Missing credentials should return 422 with errors', async () => {
+  it('Missing credentials should return 400 with errors', async () => {
     const { status, body } = await request(suite.app).post(url).set('Accept', 'application/json');
 
-    expect(status).toBe(422);
-    expect(body).toContainAllKeys(['errors', 'success']);
+    expect(status).toBe(400);
+    expect(body).toContainAllKeys(['errors', 'message']);
     expect(body.errors).toContainAllKeys(['email', 'password']);
   });
 

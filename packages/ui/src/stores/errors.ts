@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
 
 import { useMessages } from './messages';
@@ -23,7 +23,8 @@ export const useErrors = defineStore('errors', {
       if (axios.isAxiosError(err)) {
         const { response } = err;
         if (response) {
-          if ([401, 422].includes(response.status)) return;
+          if ([HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized].includes(response.status))
+            return;
 
           /* if (response.status === 429) {
             const retryAfter = parseInt(response.headers['retry-after']?.toString() ?? '60', 10);

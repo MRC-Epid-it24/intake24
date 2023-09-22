@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -65,7 +65,7 @@ export const useEntry = defineStore('entry', {
         const { data } = await httpService.get(`${api}/refs`, { withLoading: true });
         this.setRefs(data);
       } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status !== 404) throw err;
+        if (axios.isAxiosError(err) && err.response?.status !== HttpStatusCode.NotFound) throw err;
       }
     },
 

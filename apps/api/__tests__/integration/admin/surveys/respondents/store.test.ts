@@ -87,7 +87,7 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('post', invalidSurveyUrl, { input });
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'username',
         'password',
@@ -95,7 +95,7 @@ export default () => {
       ]);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
@@ -118,7 +118,7 @@ export default () => {
       await assertRespondentResponse(url, input, output);
     });
 
-    it('should return 422 for duplicate username', async () => {
+    it('should return 400 for duplicate username', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['username'], {
         input: { ...mocker.system.respondent(), username: input.username },
       });

@@ -30,7 +30,7 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'slug',
         'name',
@@ -46,7 +46,7 @@ export default () => {
       ]);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       const invalidInput = {
         slug: null,
         name: [2, 0],
@@ -107,13 +107,13 @@ export default () => {
       expect(status).toBe(201);
     });
 
-    it('should return 422 for duplicate slug', async () => {
+    it('should return 400 for duplicate slug', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['slug'], {
         input: { ...mocker.system.survey(), slug: input.slug },
       });
     });
 
-    it('should return 422 for duplicate name', async () => {
+    it('should return 400 for duplicate name', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['name'], {
         input: { ...mocker.system.survey(), name: input.name },
       });

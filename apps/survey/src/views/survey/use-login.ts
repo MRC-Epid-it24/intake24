@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
@@ -30,7 +30,7 @@ export const useLogin = (props: UseLoginProps) => {
     try {
       survey.value = await surveyService.surveyPublicInfo(props.surveyId);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.status === 404) {
+      if (axios.isAxiosError(err) && err.response?.status === HttpStatusCode.NotFound) {
         status.value = err.response?.status;
         return;
       }
@@ -50,14 +50,18 @@ export const useLogin = (props: UseLoginProps) => {
       password.value = '';
       await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
     } catch (err) {
-      if (axios.isAxiosError(err) && [401, 422].includes(err.response?.status ?? 0)) {
+      if (
+        axios.isAxiosError(err) &&
+        [HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized].includes(err.response?.status ?? 0)
+      ) {
         const { response: { status: statusCode = 0, data = {} } = {} } = err;
 
         status.value = statusCode;
 
-        if (statusCode === 422 && 'errors' in data) errors.value.record(data.errors);
+        if (statusCode === HttpStatusCode.BadRequest && 'errors' in data)
+          errors.value.record(data.errors);
 
-        if (statusCode === 401)
+        if (statusCode === HttpStatusCode.Unauthorized)
           useMessages().error(i18n.t('common.login.err.invalidCredentials').toString());
 
         return;

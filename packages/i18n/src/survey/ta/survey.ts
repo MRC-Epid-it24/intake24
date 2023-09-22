@@ -20,9 +20,9 @@ const survey: LocaleMessageObject = {
   generateUser: {
     _: 'Generate access',
     subtitle: 'This is open access study, you can get free access.',
+    400: 'Invalid captcha provided.',
     403: `Survey {surveyId} doesn't allow user generation.`,
     404: `Survey {surveyId} hasn't been recognized.`,
-    422: 'Invalid captcha provided.',
     429: 'New user has just been generated, try again later.',
   },
 };

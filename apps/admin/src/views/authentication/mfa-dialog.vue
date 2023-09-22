@@ -94,7 +94,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { startAuthentication } from '@simplewebauthn/browser';
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { defineComponent } from 'vue';
 
 import type { LoginResponse, MFAAuthResponse } from '@intake24/common/types/http';
@@ -235,7 +235,7 @@ export default defineComponent({
         await this.auth.successfulLogin(accessToken);
         await this.finalizeLogin();
       } catch (err) {
-        if (isAxiosError(err) && err.response?.status !== 422) this.fail();
+        if (isAxiosError(err) && err.response?.status !== HttpStatusCode.BadRequest) this.fail();
       }
     },
 

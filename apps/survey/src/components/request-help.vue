@@ -122,7 +122,7 @@
 
 <script lang="ts">
 import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-phonenumber';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineComponent, ref } from 'vue';
 
 import type { SurveyRequestHelpInput } from '@intake24/common/types/http';
@@ -198,7 +198,7 @@ export default defineComponent({
       } catch (err) {
         if (
           axios.isAxiosError(err) &&
-          err.response?.status === 422 &&
+          err.response?.status === HttpStatusCode.BadRequest &&
           'errors' in err.response.data
         ) {
           errors.value.record(err.response.data.errors);
