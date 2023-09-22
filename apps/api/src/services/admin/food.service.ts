@@ -15,6 +15,7 @@ import {
   AssociatedFood,
   Food,
   FoodLocal,
+  FoodLocalList,
   FoodPortionSizeMethod,
   FoodPortionSizeMethodParameter,
   Op,
@@ -53,12 +54,13 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
           required: true,
           include: [
             { association: 'attributes' },
-            { association: 'foodGroup' },
             { association: 'brands', where, required: false, separate: true },
+            { association: 'foodGroup' },
+            { association: 'locales', through: { attributes: [] } },
             {
               association: 'parentCategories',
               through: { attributes: [] },
-              include: [{ association: 'locals', attributes: ['name'], where }],
+              include: [{ association: 'locals', attributes: ['id', 'name'], where }],
             },
           ],
         },
@@ -292,10 +294,21 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     return getFood(foodLocalId, localeCode);
   };
 
+  const deleteFood = async (foodLocalId: string, localeCode: string) => {
+    const foodLocal = await FoodLocal.findOne({ where: { id: foodLocalId, localeId: localeCode } });
+    if (!foodLocal) throw new NotFoundError();
+
+    await Promise.all([
+      foodLocal.destroy(),
+      FoodLocalList.destroy({ where: { foodCode: foodLocal.foodCode, localeId: localeCode } }),
+    ]);
+  };
+
   return {
     browseFoods,
     getFood,
     updateFood,
+    deleteFood,
   };
 };
 

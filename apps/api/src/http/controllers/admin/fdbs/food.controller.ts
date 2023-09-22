@@ -70,12 +70,9 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
     const { foodId } = req.params;
 
-    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId: code } });
-    if (!foodLocal) throw new NotFoundError();
+    await adminFoodService.deleteFood(foodId, code);
 
-    await foodLocal.destroy();
-
-    res.json();
+    res.status(204).json();
   };
 
   return {

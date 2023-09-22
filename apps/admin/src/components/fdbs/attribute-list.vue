@@ -35,7 +35,7 @@
           <v-switch
             v-model="attributes.readyMealOption"
             class="mt-0"
-            :disabled="isInherited('readyMealOption')"
+            :disabled="disabled || isInherited('readyMealOption')"
             :error-messages="errors.get('main.attributes.readyMealOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.readyMealOption')"
@@ -54,7 +54,7 @@
           <v-text-field
             v-model.number="attributes.reasonableAmount"
             dense
-            :disabled="isInherited('reasonableAmount')"
+            :disabled="disabled || isInherited('reasonableAmount')"
             :error-messages="errors.get('main.attributes.reasonableAmount')"
             hide-details="auto"
             :label="$t('fdbs.attributes.reasonableAmount')"
@@ -74,7 +74,7 @@
           <v-select
             v-model="attributes.useInRecipes"
             dense
-            :disabled="isInherited('useInRecipes')"
+            :disabled="disabled || isInherited('useInRecipes')"
             :error-messages="errors.get('main.attributes.useInRecipes')"
             hide-details="auto"
             :items="useInRecipeTypes"

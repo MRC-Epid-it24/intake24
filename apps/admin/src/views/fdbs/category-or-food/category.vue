@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card v-if="isEntryLoaded" flat>
-      <v-form :disabled="disabled" @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
@@ -13,6 +13,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.main.code"
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.code')"
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.code')"
@@ -23,6 +24,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.main.name"
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.name')"
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.name')"
@@ -34,6 +36,7 @@
                 <v-switch
                   v-model="form.main.isHidden"
                   class="mt-0"
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.isHidden')"
                   hide-details="auto"
                   :label="$t('fdbs.categories.global.isHidden')"
@@ -68,29 +71,28 @@
         <attribute-list
           v-model="form.main.attributes"
           class="mb-6"
-          :disabled="disabled"
+          :disabled="!globalEdit"
           :errors="form.errors"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
           class="mb-6"
-          :disabled="disabled"
+          :disabled="!globalEdit"
           :errors="form.errors"
           :locale-id="id"
         ></category-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           class="mb-6"
-          :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
         ></portion-size-method-list>
       </v-form>
       <v-card-actions class="pa-4">
-        <v-spacer></v-spacer>
         <v-btn color="secondary" outlined @click="submit">
           <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
+        <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
     <v-skeleton-loader
@@ -145,19 +147,11 @@ export default defineComponent({
     const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
-    const disabled = computed(
-      () =>
-        !user.can({
-          resource: 'locales',
-          action: 'food-list',
-          securables: localeEntry.value.securables,
-          ownerId: localeEntry.value.ownerId,
-        })
-    );
 
     const loading = ref(false);
     const type = 'categories';
     const entry = ref<CategoryLocalEntry | null>(null);
+    const globalEdit = computed(() => user.can('locales|food-list'));
     const isEntryLoaded = computed(() => !!entry.value);
 
     useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
@@ -226,13 +220,15 @@ export default defineComponent({
     });
 
     return {
+      localeEntry,
+      entry,
       clearError,
       form,
       nonInputErrors,
       originalEntry,
       routeLeave,
       toForm,
-      disabled,
+      globalEdit,
       isEntryLoaded,
       submit,
     };
