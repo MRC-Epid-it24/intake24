@@ -11,6 +11,7 @@ import type {
   GuideImagesResponse,
   ImageMapsResponse,
   LanguageReferences,
+  NutrientTableRecordReferences,
   NutrientTableReferences,
   SurveyReferences,
   SurveySchemeReferences,
@@ -30,6 +31,7 @@ import {
   ImageMap,
   Language,
   NutrientTable,
+  NutrientTableRecord,
   StandardUnit,
   Survey,
   SurveyScheme,
@@ -195,6 +197,24 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(nutrientTables);
   };
 
+  const nutrientTableRecords = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<NutrientTableRecordReferences>
+  ): Promise<void> => {
+    const {
+      params: { nutrientTableId },
+    } = req;
+
+    const nutrientTableRecords = await NutrientTableRecord.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'localName', 'nutrientTableRecordId'],
+      where: { nutrientTableId },
+      order: [['id', 'ASC']],
+    });
+
+    res.json(nutrientTableRecords);
+  };
+
   const standardUnits = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -245,6 +265,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     languages,
     locales,
     nutrientTables,
+    nutrientTableRecords,
     standardUnits,
     surveys,
     surveySchemes,

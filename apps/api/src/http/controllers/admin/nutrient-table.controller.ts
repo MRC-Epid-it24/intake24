@@ -6,14 +6,13 @@ import type {
   JobEntry,
   NutrientTableEntry,
   NutrientTableInput,
-  NutrientTableRecordsResponse,
   NutrientTableRefs,
   NutrientTablesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
-import { FoodsNutrientType, NutrientTable, NutrientTableRecord } from '@intake24/db';
+import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
 const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTableService'>) => {
   const entry = async (
@@ -87,24 +86,6 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     res.json({ nutrientTypes });
   };
 
-  const records = async (
-    req: Request<{ nutrientTableId: string }, any, any, PaginateQuery>,
-    res: Response<NutrientTableRecordsResponse>
-  ): Promise<void> => {
-    const {
-      params: { nutrientTableId },
-    } = req;
-
-    const nutrientTableRecords = await NutrientTableRecord.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name', 'localName', 'nutrientTableRecordId'],
-      where: { nutrientTableId },
-      order: [['id', 'ASC']],
-    });
-
-    res.json(nutrientTableRecords);
-  };
-
   const tasks = async (
     req: Request<{ nutrientTableId: string }>,
     res: Response<JobEntry>
@@ -139,7 +120,6 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     update,
     destroy,
     refs,
-    records,
     tasks,
   };
 };

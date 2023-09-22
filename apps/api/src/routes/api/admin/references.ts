@@ -82,6 +82,13 @@ export default () => {
   );
 
   router.get(
+    '/nutrient-tables/:nutrientTableId/records',
+    anyPermission(['locales']),
+    browse,
+    wrapAsync(referenceController.nutrientTableRecords)
+  );
+
+  router.get(
     '/standard-units',
     anyPermission(['survey-schemes']),
     browse,

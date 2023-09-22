@@ -133,7 +133,7 @@ export default defineComponent({
 
     const { dialog, loading, page, lastPage, search, items, fetch, clear } = useFetchList<
       NutrientTableRecordsResponse['data'][number]
-    >('admin/nutrient-tables/:id/records', selectedTableId);
+    >('admin/references/nutrient-tables/:id/records', selectedTableId);
 
     return {
       dialog,

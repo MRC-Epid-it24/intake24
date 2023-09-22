@@ -52,13 +52,5 @@ export default () => {
     wrapAsync(nutrientTableController.tasks)
   );
 
-  // TODO: review permissions, this should be available for FDB viewers/editors
-  router.get(
-    '/:nutrientTableId/records',
-    permission('nutrient-tables|browse'),
-    validation.browse,
-    wrapAsync(nutrientTableController.records)
-  );
-
   return router;
 };

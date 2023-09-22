@@ -8,6 +8,7 @@ import guideImages from './guide-images.test';
 import imageMaps from './image-maps.test';
 import languages from './languages.test';
 import locales from './locales.test';
+import nutrientTableRecords from './nutrient-table-records.test';
 import nutrientTables from './nutrient-tables.test';
 import standardUnits from './standard-units.test';
 import surveySchemes from './survey-schemes.test';
@@ -25,6 +26,10 @@ export default () => {
   describe('GET /api/admin/references/languages', languages);
   describe('GET /api/admin/references/locales', locales);
   describe('GET /api/admin/references/nutrient-tables', nutrientTables);
+  describe(
+    'GET /api/admin/references/nutrient-tables/:nutrientTableId/records',
+    nutrientTableRecords
+  );
   describe('GET /api/admin/references/standard-units', standardUnits);
   describe('GET /api/admin/references/survey-schemes', surveySchemes);
   describe('GET /api/admin/references/surveys', surveys);
