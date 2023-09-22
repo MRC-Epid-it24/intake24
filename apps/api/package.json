@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@duosecurity/duo_universal": "^2.0.2",
-    "@json2csv/node": "^6.1.3",
+    "@json2csv/node": "^7.0.3",
     "@simplewebauthn/server": "^8.1.1",
     "awesome-phonenumber": "^5.10.0",
     "awilix": "^8.0.1",
