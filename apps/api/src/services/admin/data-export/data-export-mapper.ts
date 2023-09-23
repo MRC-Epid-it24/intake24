@@ -1,10 +1,11 @@
-import type { FieldInfo } from '@json2csv/node';
-
 import type { IoC } from '@intake24/api/ioc';
 
-import type { ExportField, ExportFieldTransform, ExportRow } from './data-export-fields';
-
-export type ExportFieldInfo = FieldInfo<ExportRow>;
+import type {
+  ExportField,
+  ExportFieldInfo,
+  ExportFieldTransform,
+  ExportRow,
+} from './data-export-fields';
 
 export type ExportFieldTransformCallback<T = ExportRow> = (
   field: ExportField
@@ -192,7 +193,7 @@ const dataExportMapper = ({ dataExportFields }: Pick<IoC, 'dataExportFields'>) =
   const portionSizes = async (fields: ExportField[]): Promise<ExportFieldInfo[]> => {
     const portionSizeFields = await dataExportFields.portionSizes();
 
-    const psfMap = portionSizeFields.reduce<Record<string, string | ExportFieldTransform>>(
+    const psfMap = portionSizeFields.reduce<Record<string, ExportField['value']>>(
       (acc, { id, value }) => {
         if (value) acc[id] = value;
         return acc;

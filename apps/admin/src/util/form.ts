@@ -1,4 +1,3 @@
-import type { AxiosError } from 'axios';
 import axios, { HttpStatusCode } from 'axios';
 import pick from 'lodash/pick';
 import { serialize } from 'object-to-formdata';
