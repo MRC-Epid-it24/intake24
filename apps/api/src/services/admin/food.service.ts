@@ -198,10 +198,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
       newMethods.push(newMethod);
 
       if (parameters.length) {
-        const records = parameters.map((item) => ({
-          ...item,
-          portionSizeMethodId: newMethod.id,
-        }));
+        const records = parameters.map((item) => ({ ...item, portionSizeMethodId: newMethod.id }));
         await FoodPortionSizeMethodParameter.bulkCreate(records, { transaction });
       }
     }
@@ -261,23 +258,11 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
 
-    const categories = (input.main.parentCategories ?? []).map(({ code }) => code);
-    const nutrientRecords = (input.nutrientRecords ?? []).map(({ id }) => id);
-
     await db.foods.transaction(async (transaction) => {
-      await Promise.all([
+      const nutrientRecords = input.nutrientRecords.map(({ id }) => id);
+
+      const promises: Promise<any>[] = [
         foodLocal.update(pick(input, ['name']), { transaction }),
-        main.update(pick(input.main, ['name', 'foodGroupId']), { transaction }),
-        attributes.update(
-          pick(input.main.attributes, [
-            'sameAsBeforeOption',
-            'readyMealOption',
-            'reasonableAmount',
-            'useInRecipes',
-          ]),
-          { transaction }
-        ),
-        main.$set('parentCategories', categories, { transaction }),
         foodLocal.$set('nutrientRecords', nutrientRecords, { transaction }),
         updatePortionSizeMethods(foodLocalId, portionSizeMethods, input.portionSizeMethods, {
           transaction,
@@ -285,9 +270,34 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
         updateAssociatedFoods(main.code, localeCode, associatedFoods, input.associatedFoods, {
           transaction,
         }),
-      ]);
+      ];
 
-      if (main.code !== input.main.code)
+      if (input.main) {
+        promises.push(main.update(pick(input.main, ['name', 'foodGroupId']), { transaction }));
+
+        if (input.main.parentCategories) {
+          const categories = input.main.parentCategories.map(({ code }) => code);
+          promises.push(main.$set('parentCategories', categories, { transaction }));
+        }
+
+        if (input.main.attributes) {
+          promises.push(
+            attributes.update(
+              pick(input.main.attributes, [
+                'sameAsBeforeOption',
+                'readyMealOption',
+                'reasonableAmount',
+                'useInRecipes',
+              ]),
+              { transaction }
+            )
+          );
+        }
+      }
+
+      await Promise.all(promises);
+
+      if (input.main?.code && input.main.code !== main.code)
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
     });
 

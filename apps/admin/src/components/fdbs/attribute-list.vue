@@ -16,7 +16,7 @@
           <v-switch
             v-model="attributes.sameAsBeforeOption"
             class="mt-0"
-            :disabled="isInherited('sameAsBeforeOption')"
+            :disabled="disabled || isInherited('sameAsBeforeOption')"
             :error-messages="errors.get('main.attributes.sameAsBeforeOption')"
             hide-details="auto"
             :label="$t('fdbs.attributes.sameAsBeforeOption')"
@@ -77,7 +77,7 @@
             :disabled="disabled || isInherited('useInRecipes')"
             :error-messages="errors.get('main.attributes.useInRecipes')"
             hide-details="auto"
-            :items="useInRecipeTypes"
+            :items="useInRecipeTypeItems"
             :label="$t('fdbs.attributes.useInRecipes._')"
             name="attributes.useInRecipes"
             outlined
@@ -92,13 +92,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Nullable } from '@intake24/common/types';
 import type { Errors } from '@intake24/common/util';
 import type { AttributeDefaultsAttributes } from '@intake24/db';
 import { useInRecipeTypes } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 
 type Attributes = Pick<
   AttributeDefaultsAttributes,
@@ -134,29 +134,30 @@ export default defineComponent({
 
   emits: ['input'],
 
-  data() {
-    return {
-      defaultAttributes,
-      attributes: { ...this.value } as Nullable<Attributes>,
-      useInRecipeTypes: Object.values(useInRecipeTypes).map((value) => ({
-        value,
-        text: this.$t(`fdbs.attributes.useInRecipes.${value}`),
-      })),
-    };
-  },
+  setup(props, { emit }) {
+    const { i18n } = useI18n();
 
-  watch: {
-    value(val: Attributes) {
-      this.attributes = { ...val };
-    },
-    attributes: {
-      handler(val: Attributes, oldVal: Attributes) {
-        if (deepEqual(oldVal, val)) return;
-
-        this.$emit('input', { ...val });
+    const attributes = computed({
+      get() {
+        return props.value;
       },
-      deep: true,
-    },
+      set(val) {
+        emit('input', val);
+      },
+    });
+
+    const useInRecipeTypeItems = computed(() =>
+      Object.values(useInRecipeTypes).map((value) => ({
+        value,
+        text: i18n.t(`fdbs.attributes.useInRecipes.${value}`),
+      }))
+    );
+
+    return {
+      attributes,
+      defaultAttributes,
+      useInRecipeTypeItems,
+    };
   },
 
   methods: {

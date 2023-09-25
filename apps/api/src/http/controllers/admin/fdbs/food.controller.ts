@@ -2,10 +2,10 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { FoodLocalEntry, FoodsResponse } from '@intake24/common/types/http/admin';
+import type { FoodInput, FoodLocalEntry, FoodsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { SystemLocale } from '@intake24/db';
+import { FoodLocal, SystemLocale } from '@intake24/db';
 
 import { getAndCheckAccess } from '../securable.controller';
 
@@ -51,13 +51,25 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
   };
 
   const update = async (
-    req: Request<{ foodId: string; localeId: string }>,
+    req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
     const { foodId } = req.params;
 
-    const foodLocal = await adminFoodService.updateFood(foodId, code, req.body);
+    const { aclService } = req.scope.cradle;
+    const { main, ...rest } = req.body;
+
+    const canUpdateMain =
+      main?.code &&
+      ((await aclService.hasPermission('locales|food-list')) ||
+        (await FoodLocal.count({ where: { foodCode: main.code } })) === 1);
+
+    const foodLocal = await adminFoodService.updateFood(
+      foodId,
+      code,
+      canUpdateMain ? req.body : rest
+    );
     if (!foodLocal) throw new NotFoundError();
 
     res.json(foodLocal);

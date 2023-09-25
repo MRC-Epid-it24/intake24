@@ -13,12 +13,12 @@ import type {
 
 export type FoodInput = {
   name: string;
-  main: {
-    code: string;
-    name: string;
-    foodGroupId: string;
-    attributes: FoodAttributeAttributes;
-    parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
+  main?: {
+    code?: string;
+    name?: string;
+    foodGroupId?: string;
+    attributes?: FoodAttributeAttributes;
+    parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
   portionSizeMethods: (FoodPortionSizeMethodCreationAttributes & {

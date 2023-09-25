@@ -40,6 +40,7 @@ export const categories: Schema = {
     in: ['body'],
     errorMessage: typeErrorMessage('array._'),
     isArray: { bail: true },
+    optional: true,
     custom: {
       options: async (value: any[], meta): Promise<void> => {
         if (value.some(({ code }) => !code || typeof code !== 'string'))
