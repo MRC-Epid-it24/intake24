@@ -26,7 +26,6 @@ import type {
   PkgMilkOnCerealPsm,
   PkgPizzaPsm,
   PkgPortionSizeMethod,
-  PkgPortionSizeMethodBase,
   PkgPortionSizeMethodType,
   PkgStandardPortionPsm,
   PkgStandardUnit,

@@ -1,15 +1,20 @@
 import type { AxiosResponse } from 'axios';
 import type { Logger } from 'winston';
 import axios, { Axios, HttpStatusCode } from 'axios';
+import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
 import fs from 'fs';
 import pLimit from 'p-limit';
 
-import type { CredentialsV3, RefreshResponseV3, SignInRequestV3, SignInResponseV3 } from './types';
+import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
 
-export class BaseClientV3 {
+import type { CredentialsV4 } from './credentials';
+
+const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
+
+export class BaseClientV4 {
   private apiBaseUrl: string;
 
-  private credentials?: CredentialsV3;
+  private credentials?: CredentialsV4;
   private refreshToken?: string;
   private accessToken?: string;
 
@@ -19,15 +24,15 @@ export class BaseClientV3 {
 
   private readonly requestLimit;
 
-  private signInRequest?: Promise<void>;
-  private refreshRequest?: Promise<RefreshResponseV3>;
+  private loginRequest?: Promise<void>;
+  private refreshRequest?: Promise<void>;
 
   public constructor(
     apiBaseUrl: string,
     logger: Logger,
     maxConcurrentRequests: number,
     refreshToken?: string,
-    credentials?: CredentialsV3
+    credentials?: CredentialsV4
   ) {
     this.apiBaseUrl = apiBaseUrl;
     this.credentials = credentials;
@@ -35,7 +40,7 @@ export class BaseClientV3 {
 
     this.requestLimit = pLimit(maxConcurrentRequests);
 
-    this.logger = logger.child({ service: 'V3 API' });
+    this.logger = logger.child({ service: 'V4 API' });
 
     this.rawClient = new Axios({
       ...axios.defaults,
@@ -60,7 +65,7 @@ export class BaseClientV3 {
           await this.refresh();
         }
 
-        config.headers.set('X-Auth-Token', this.accessToken);
+        config.headers.set('Authorization', `Bearer ${this.accessToken}`);
         return config;
       },
       (error) => {
@@ -80,7 +85,7 @@ export class BaseClientV3 {
           const response2 = await this.requestLimit(() =>
             this.rawClient.request({
               ...response.config,
-              headers: { ...response.config.headers, 'X-Auth-Token': this.accessToken },
+              headers: { ...response.config.headers, Authorization: `Bearer ${this.accessToken}` },
             })
           );
 
@@ -97,80 +102,79 @@ export class BaseClientV3 {
     );
   }
 
-  private async refreshImpl(): Promise<RefreshResponseV3> {
+  private async refreshImpl(): Promise<void> {
     this.logger.debug('Refreshing access token');
 
     if (this.refreshToken === undefined) {
       this.logger.debug('Refresh token is undefined');
 
-      await this.signIn();
-    }
-
-    const response = await this.rawClient.post<RefreshResponseV3>('/refresh', undefined, {
-      headers: { 'X-Auth-Token': this.refreshToken },
-    });
-
-    if (response.status === HttpStatusCode.Ok) {
-      this.accessToken = response.data.accessToken;
-    } else if (response.status === HttpStatusCode.Unauthorized) {
-      this.logger.debug(
-        'Refresh token rejected by the API server. Trying to sign in to get a new one.'
-      );
-
-      await this.signIn();
-
-      const response2 = await this.requestLimit(() =>
-        this.rawClient.post<RefreshResponseV3>('/refresh', undefined, {
-          headers: { 'X-Auth-Token': this.refreshToken },
-        })
-      );
-
-      if (response2.status === HttpStatusCode.Ok) {
-        this.accessToken = response2.data.accessToken;
-      } else if (response2.status === HttpStatusCode.Unauthorized) {
-        throw new Error('Received a new refresh token, but the API server still rejected it.');
-      } else {
-        throw new Error(`Unexpected status code: ${response2.status}`);
-      }
+      return this.login();
     } else {
-      throw new Error(`Unexpected status code: ${response.status}`);
-    }
+      const response = await this.rawClient.post<RefreshResponse>('/api/auth/refresh', undefined, {
+        headers: {
+          Cookie: serializeCookie(REFRESH_TOKEN_COOKIE_NAME, this.refreshToken ?? ''),
+        },
+      });
 
-    return response.data;
+      if (response.status === HttpStatusCode.Ok) {
+        this.accessToken = response.data.accessToken;
+      } else if (response.status === HttpStatusCode.Unauthorized) {
+        this.logger.debug('Cached refresh token rejected by the API server. Trying to login.');
+
+        return this.login();
+      } else {
+        throw new Error(`Unexpected status code: ${response.status} (${response.config.url})`);
+      }
+    }
   }
 
-  private async refresh(): Promise<RefreshResponseV3> {
+  private async refresh(): Promise<void> {
     if (this.refreshRequest === undefined) {
       this.refreshRequest = this.refreshImpl();
-      const response = await this.refreshRequest;
+      await this.refreshRequest;
       this.refreshRequest = undefined;
-      return response;
     } else {
       return this.refreshRequest;
     }
   }
 
-  private async signInImpl(): Promise<void> {
+  private setRefreshTokenFromResponse(response: AxiosResponse): void {
+    const cookies = response.headers['set-cookie'];
+
+    if (cookies === undefined)
+      throw new Error(
+        `Missing Set-Cookie header: ${response.config.method} ${response.config.url}`
+      );
+
+    const refreshToken = cookies
+      .map((str) => parseCookie(str)[REFRESH_TOKEN_COOKIE_NAME])
+      .find((value) => value !== undefined);
+
+    if (refreshToken === undefined)
+      throw new Error(
+        `Expected cookie "${REFRESH_TOKEN_COOKIE_NAME}" missing in response: ${response.config.method} ${response.config.url}`
+      );
+
+    this.refreshToken = refreshToken;
+  }
+
+  private async loginImpl(): Promise<void> {
     if (this.credentials === undefined) {
       throw new Error(
-        'Cannot sign in because the Intake24 user name or password is not defined. Check for missing environment or configuration variables.'
+        'Cannot sign in because the Intake24 user email or password is not defined. Check for missing environment or configuration variables.'
       );
     }
 
-    const requestData: SignInRequestV3 = {
-      email: this.credentials.username,
-      password: this.credentials.password,
-    };
+    this.logger.debug('Signing in with email and password');
 
-    this.logger.debug('Signing in with user name and password');
-
-    const response = await this.rawClient.post<SignInResponseV3>('/signin', requestData, {
+    const response = await this.rawClient.post<LoginResponse>('/api/auth/login', this.credentials, {
       headers: { 'Content-Type': 'application/json' },
     });
 
     switch (response.status) {
       case HttpStatusCode.Ok:
-        this.refreshToken = response.data.refreshToken;
+        this.setRefreshTokenFromResponse(response);
+        this.accessToken = response.data.accessToken;
         break;
       case HttpStatusCode.Unauthorized:
         throw new Error(
@@ -181,13 +185,13 @@ export class BaseClientV3 {
     }
   }
 
-  private async signIn(): Promise<void> {
-    if (this.signInRequest === undefined) {
-      this.signInRequest = this.signInImpl();
-      await this.signInRequest;
-      this.signInRequest = undefined;
+  private async login() {
+    if (this.loginRequest === undefined) {
+      this.loginRequest = this.loginImpl();
+      await this.loginRequest;
+      this.loginRequest = undefined;
     } else {
-      return this.signInRequest;
+      return this.loginRequest;
     }
   }
 
@@ -221,10 +225,24 @@ export class BaseClientV3 {
   public async get<Res, Req = any>(
     endpoint: string,
     body?: Req,
+    params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok]
   ): Promise<Res> {
     const response = await this.requestLimit(() =>
-      this.accessClient.get<Res>(endpoint, { data: body })
+      this.accessClient.get<Res>(endpoint, { data: body, params })
+    );
+    this.checkStatus(response, expectedStatus);
+    return response.data;
+  }
+
+  public async post<Res, Req = any>(
+    endpoint: string,
+    body?: Req,
+    params?: Record<string, any>,
+    expectedStatus: number[] = [HttpStatusCode.Ok]
+  ): Promise<Res> {
+    const response = await this.requestLimit(() =>
+      this.accessClient.post<Res>(endpoint, body, { params })
     );
     this.checkStatus(response, expectedStatus);
     return response.data;

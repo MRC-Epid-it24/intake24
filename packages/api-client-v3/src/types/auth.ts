@@ -10,3 +10,8 @@ export interface SignInResponseV3 {
 export interface RefreshResponseV3 {
   accessToken?: string;
 }
+
+export interface CredentialsV3 {
+  username: string;
+  password: string;
+}

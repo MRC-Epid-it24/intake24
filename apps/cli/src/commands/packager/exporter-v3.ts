@@ -9,7 +9,8 @@ import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/package
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
-import typeHelpers from '@intake24/cli/commands/packager/types/type-helpers';
+import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import typeConverters from '@intake24/cli/commands/packager/types/v3-type-conversions';
 import logger from '@intake24/common-backend/services/logger/logger';
 
 export type Logger = typeof logger;
@@ -39,28 +40,6 @@ interface FoodData {
 }
 
 export class ExporterV3 {
-  private static readonly IMAGE_DIRECTORY_NAME = 'images';
-  private static readonly PORTION_SIZE_DIRECTORY_NAME = 'portion-size';
-  private static readonly GLOBAL_FOODS_FILE_NAME = 'global-foods.json';
-  private static readonly LOCALES_FILE_NAME = 'locales.json';
-  private static readonly LOCAL_FOODS_FILE_NAME = 'local-foods.json';
-  private static readonly ENABLED_LOCAL_FOODS_FILE_NAME = 'enabled-local-foods.json';
-  private static readonly AS_SERVED_FILE_NAME = 'as-served.json';
-  private static readonly GUIDE_IMAGE_FILE_NAME = 'guide-images.json';
-  private static readonly IMAGE_MAP_FILE_NAME = 'image-maps.json';
-  private static readonly DRINKWARE_FILE_NAME = 'drinkware.json';
-
-  private static readonly CEREAL_BOWL_IMAGE_MAP = 'gbowl';
-  private static readonly CEREAL_AS_SERVED_PREFIX = 'cereal_';
-  private static readonly CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX = 'milkbowl';
-  private static readonly CEREAL_AS_SERVED_LEFTOVERS_SUFFIX = '_leftovers';
-  private static readonly CEREAL_BOWL_TYPES = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
-
-  private static readonly PIZZA_IMAGE_MAP = 'gpizza';
-  private static readonly PIZZA_THICKNESS_IMAGE_MAP = 'gpthick';
-  private static readonly PIZZA_SLICE_IMAGE_MAP_PREFIX = 'gpiz';
-  private static readonly PIZZA_TYPES_COUNT = 9;
-
   private readonly workingDir: string;
   private readonly apiClient: ApiClientV3;
   private readonly logger: Logger;
@@ -85,7 +64,7 @@ export class ExporterV3 {
     this.apiClient = apiClient;
     this.logger = logger;
     this.workingDir = workingDir;
-    this.imageDirPath = path.join(this.workingDir, ExporterV3.IMAGE_DIRECTORY_NAME);
+    this.imageDirPath = path.join(this.workingDir, PkgConstants.IMAGE_DIRECTORY_NAME);
     this.options = {
       ...defaultOptions,
       ...options,
@@ -99,7 +78,7 @@ export class ExporterV3 {
 
     if (set === null) throw new Error(`Invalid as served set id: ${asServedSetId} (Not Found)`);
 
-    return typeHelpers.packageAsServedSet(set);
+    return typeConverters.packageAsServedSet(set);
   }
 
   async addAsServedSets(setIds: string[]): Promise<void> {
@@ -151,7 +130,7 @@ export class ExporterV3 {
     if (drinkwareSet === null) {
       throw new Error(`Invalid drinkware set id: ${drinkwareSetId} (Not Found)`);
     } else {
-      return typeHelpers.packageDrinkwareSet(drinkwareSet);
+      return typeConverters.packageDrinkwareSet(drinkwareSet);
     }
   }
 
@@ -163,8 +142,8 @@ export class ExporterV3 {
     if (foodRecord === null) throw new Error(`Food record not found: (${localeId}, ${foodCode})`);
 
     return {
-      localFood: typeHelpers.packageLocalFood(foodRecord.main.code, foodRecord.local),
-      globalFood: typeHelpers.packageGlobalFood(foodRecord.main),
+      localFood: typeConverters.packageLocalFood(foodRecord.main.code, foodRecord.local),
+      globalFood: typeConverters.packageGlobalFood(foodRecord.main),
     };
   }
 
@@ -197,7 +176,7 @@ export class ExporterV3 {
     );
 
     return {
-      properties: typeHelpers.packageLocale(properties),
+      properties: typeConverters.packageLocale(properties),
       localFoods: sortedLocalFoods,
       globalFoods: sortedGlobalFoods,
       enabledLocalFoods: sortedEnabledCodes,
@@ -257,24 +236,24 @@ export class ExporterV3 {
           case 'standard-portion':
             break;
           case 'cereal':
-            this.imageMapIds.add(ExporterV3.CEREAL_BOWL_IMAGE_MAP);
+            this.imageMapIds.add(PkgConstants.CEREAL_BOWL_IMAGE_MAP);
 
-            ExporterV3.CEREAL_BOWL_TYPES.flatMap((bowlType) => [
-              `${ExporterV3.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}`,
-              `${ExporterV3.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}${ExporterV3.CEREAL_AS_SERVED_LEFTOVERS_SUFFIX}`,
+            PkgConstants.CEREAL_BOWL_TYPES.flatMap((bowlType) => [
+              `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}`,
+              `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}${PkgConstants.CEREAL_AS_SERVED_LEFTOVERS_SUFFIX}`,
             ]).forEach((id) => this.asServedSetIds.add(id));
 
             break;
           case 'milk-on-cereal':
-            ExporterV3.CEREAL_BOWL_TYPES.map(
-              (bowlType) => `${ExporterV3.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`
+            PkgConstants.CEREAL_BOWL_TYPES.map(
+              (bowlType) => `${PkgConstants.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`
             ).flatMap((id) => this.imageMapIds.add(id));
             break;
           case 'pizza':
-            this.imageMapIds.add(ExporterV3.PIZZA_IMAGE_MAP);
-            this.imageMapIds.add(ExporterV3.PIZZA_THICKNESS_IMAGE_MAP);
-            for (let i = 0; i < ExporterV3.PIZZA_TYPES_COUNT; ++i)
-              this.imageMapIds.add(`${ExporterV3.PIZZA_SLICE_IMAGE_MAP_PREFIX}${i + 1}`);
+            this.imageMapIds.add(PkgConstants.PIZZA_IMAGE_MAP);
+            this.imageMapIds.add(PkgConstants.PIZZA_THICKNESS_IMAGE_MAP);
+            for (let i = 0; i < PkgConstants.PIZZA_TYPES_COUNT; ++i)
+              this.imageMapIds.add(`${PkgConstants.PIZZA_SLICE_IMAGE_MAP_PREFIX}${i + 1}`);
             break;
           case 'milk-in-a-hot-drink':
             break;
@@ -363,7 +342,7 @@ export class ExporterV3 {
     await Promise.all([
       this.writeJSON(
         uniqueGlobalFoods,
-        path.join(this.workingDir, ExporterV3.GLOBAL_FOODS_FILE_NAME)
+        path.join(this.workingDir, PkgConstants.GLOBAL_FOODS_FILE_NAME)
       ),
       this.writeJSON(
         Object.fromEntries(
@@ -372,7 +351,7 @@ export class ExporterV3 {
             localeData.map((data) => data.properties)
           )
         ),
-        path.join(this.workingDir, ExporterV3.LOCALES_FILE_NAME)
+        path.join(this.workingDir, PkgConstants.LOCALES_FILE_NAME)
       ),
       this.writeJSON(
         Object.fromEntries(
@@ -381,7 +360,7 @@ export class ExporterV3 {
             localeData.map((data) => data.localFoods)
           )
         ),
-        path.join(this.workingDir, ExporterV3.LOCAL_FOODS_FILE_NAME)
+        path.join(this.workingDir, PkgConstants.LOCAL_FOODS_FILE_NAME)
       ),
       this.writeJSON(
         Object.fromEntries(
@@ -390,38 +369,38 @@ export class ExporterV3 {
             localeData.map((data) => data.enabledLocalFoods)
           )
         ),
-        path.join(this.workingDir, ExporterV3.ENABLED_LOCAL_FOODS_FILE_NAME)
+        path.join(this.workingDir, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME)
       ),
       this.writeJSON(
         Object.fromEntries(zip(sortedDrinkwareIds, drinkwareData)),
         path.join(
           this.workingDir,
-          ExporterV3.PORTION_SIZE_DIRECTORY_NAME,
-          ExporterV3.DRINKWARE_FILE_NAME
+          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+          PkgConstants.DRINKWARE_FILE_NAME
         )
       ),
       this.writeJSON(
         Object.fromEntries(zip(sortedGuideImageIds, guideImageData)),
         path.join(
           this.workingDir,
-          ExporterV3.PORTION_SIZE_DIRECTORY_NAME,
-          ExporterV3.GUIDE_IMAGE_FILE_NAME
+          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+          PkgConstants.GUIDE_IMAGE_FILE_NAME
         )
       ),
       this.writeJSON(
         Object.fromEntries(zip(sortedImageMapIds, imageMapData)),
         path.join(
           this.workingDir,
-          ExporterV3.PORTION_SIZE_DIRECTORY_NAME,
-          ExporterV3.IMAGE_MAP_FILE_NAME
+          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+          PkgConstants.IMAGE_MAP_FILE_NAME
         )
       ),
       this.writeJSON(
         Object.fromEntries(zip(sortedAsServedIds, asServedData)),
         path.join(
           this.workingDir,
-          ExporterV3.PORTION_SIZE_DIRECTORY_NAME,
-          ExporterV3.AS_SERVED_FILE_NAME
+          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+          PkgConstants.AS_SERVED_FILE_NAME
         )
       ),
     ]);

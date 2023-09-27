@@ -1,13 +1,11 @@
 import type { Logger } from 'winston';
 
-import type { Credentials } from './base-client-v3';
+import type { CredentialsV3 } from './types';
 import { BaseClientV3 } from './base-client-v3';
 import { FoodsApiV3 } from './foods';
 import { ImageApiV3 } from './images';
 import { LocalesApiV3 } from './locales';
 import { PortionSizeApiV3 } from './portion-size';
-
-export { Credentials };
 
 export * from './types';
 
@@ -23,7 +21,7 @@ export class ApiClientV3 {
     logger: Logger,
     maxConcurrentRequests: number,
     refreshToken?: string,
-    credentials?: Credentials
+    credentials?: CredentialsV3
   ) {
     this.baseClient = new BaseClientV3(
       apiBaseUrl,

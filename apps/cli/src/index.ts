@@ -1,6 +1,7 @@
 import './bootstrap';
 
 import { Argument, Command, Option } from 'commander';
+import * as process from 'process';
 
 import pkg from '../package.json';
 import {
@@ -10,6 +11,7 @@ import {
   generateVapidKeys,
   hashPassword,
   packageExportV3,
+  packageImportV4,
 } from './commands';
 
 const run = async () => {
@@ -70,7 +72,7 @@ const run = async () => {
   asServedOption.required = true;
 
   const localeOption = new Option(
-    '-l, --locale [locale-ids...]',
+    '-l, --locale <locale-ids...>',
     'Export all data for the given locale ids'
   );
 
@@ -93,6 +95,22 @@ const run = async () => {
       }
     });
 
+  program
+    .command('import-package')
+    .description('Import food data from a portable format')
+    .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
+    .addArgument(new Argument('<package-file>', 'Input package file path'))
+    .action(async (version, inputFilePath, options) => {
+      switch (version) {
+        case 'v3':
+          throw new Error('Not implemented');
+        case 'v4':
+          return await packageImportV4(version, inputFilePath, options);
+        default:
+          throw new Error(`Unexpected version option: ${version}`);
+      }
+    });
+
   await program.parseAsync(process.argv);
 };
 
@@ -100,10 +118,8 @@ run()
   .catch((err) => {
     console.error(err instanceof Error ? err.stack : err);
 
-    process.exitCode = process.exitCode ?? 1;
-    process.exit();
+    process.exit(process.exitCode ?? 1);
   })
   .finally(() => {
-    process.exitCode = process.exitCode ?? 0;
-    process.exit();
+    process.exit(process.exitCode ?? 0);
   });

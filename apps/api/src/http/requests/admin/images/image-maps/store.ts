@@ -30,6 +30,11 @@ export default validate(
         },
       },
     },
+    // TODO: validate objects JSON schema
+    objects: {
+      in: ['body'],
+      isJSON: true,
+    },
     baseImage: imageFile,
   })
 );

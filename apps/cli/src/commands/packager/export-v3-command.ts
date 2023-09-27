@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import * as process from 'process';
 
-import type { Credentials } from '@intake24/api-client-v3';
+import type { CredentialsV3 } from '@intake24/api-client-v3';
 import { ApiClientV3 } from '@intake24/api-client-v3';
 import { ExporterV3 } from '@intake24/cli/commands/packager/exporter-v3';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
@@ -28,7 +28,7 @@ function getRequiredEnv(key: string): string {
 }
 
 export default async (version: string, options: PackageExportOptions): Promise<void> => {
-  let credentials: Credentials | undefined;
+  let credentials: CredentialsV3 | undefined;
 
   const username = process.env['V3_API_USERNAME'];
   const password = process.env['V3_API_PASSWORD'];
