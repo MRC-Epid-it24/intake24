@@ -220,7 +220,12 @@ export type Prompts = {
   'review-confirm-prompt': BasePrompt & { component: 'review-confirm-prompt' };
   'same-as-before-prompt': BasePrompt & { component: 'same-as-before-prompt' };
   'split-food-prompt': BasePrompt & { component: 'split-food-prompt' };
-  'submit-prompt': BasePrompt & { component: 'submit-prompt' };
+  'submit-prompt': BasePrompt & {
+    component: 'submit-prompt';
+    desktopReview: false | 'scroll' | 'checkbox';
+    mobileReview: false | 'scroll' | 'checkbox';
+    // review: Record<'desktop' | 'mobile', false | 'scroll' | 'checkbox'>;
+  };
 };
 
 export type Prompt = Prompts[keyof Prompts];

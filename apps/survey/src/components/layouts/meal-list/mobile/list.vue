@@ -16,7 +16,7 @@
         </v-btn>
       </div>
       <v-card-text class="pa-0">
-        <v-list class="meal-list__list" subheader>
+        <v-list class="meal-list__list" dense subheader>
           <meal-item
             v-for="meal in meals"
             :key="meal.id"

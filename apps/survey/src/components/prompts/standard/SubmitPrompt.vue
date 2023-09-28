@@ -1,8 +1,8 @@
 <template>
-  <submit-card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <review-meal-list
-      v-if="$vuetify.breakpoint.lgAndUp"
       v-bind="{ meals }"
+      @action="action"
       @update-reviewed="updateReviewed"
     ></review-meal-list>
     <template #actions>
@@ -17,8 +17,12 @@
         </span>
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
+      <v-divider vertical></v-divider>
+      <next-mobile :disabled="isValid" @click="action('next')">
+        {{ $t('recall.actions.nav.submit') }}
+      </next-mobile>
     </template>
-  </submit-card-layout>
+  </card-layout>
 </template>
 
 <script lang="ts">

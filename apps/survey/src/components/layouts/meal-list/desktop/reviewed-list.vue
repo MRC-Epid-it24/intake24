@@ -12,7 +12,12 @@
           :selected-food-in-meal="isSelectedFoodInMeal(meal.id)"
           @action="action"
         ></component>
-        <v-checkbox v-model="reviewed" label="Reviewed" :value="meal.id"></v-checkbox>
+        <v-checkbox
+          v-model="reviewed"
+          class="review-checkbox__checkbox pl-3"
+          label="Reviewed"
+          :value="meal.id"
+        ></v-checkbox>
       </div>
     </v-list>
     <v-card-actions>
@@ -81,4 +86,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.review-checkbox__checkbox .v-label {
+  font-size: 0.8125rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+</style>

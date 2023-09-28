@@ -2,7 +2,7 @@ import type { PropType } from 'vue';
 import set from 'lodash/set';
 import { computed, defineComponent, onBeforeMount } from 'vue';
 
-import type { ActionItem, Prompt } from '@intake24/common/prompts';
+import type { ActionItem, Prompt, Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { FoodState, MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
@@ -36,6 +36,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    mobileReview: {
+      type: [Boolean, String] as PropType<Prompts['submit-prompt']['mobileReview']>,
+    },
   },
 
   emits: ['action'],
@@ -48,6 +51,9 @@ export default defineComponent({
     const survey = useSurvey();
 
     const showSummary = computed(() => {
+      console.log(props.mobileReview);
+      if (props.prompt.component === 'submit-prompt' && props.mobileReview === false) return true;
+
       if (survey.hasFinished) return false;
 
       return !['preMeals'].includes(props.section);
