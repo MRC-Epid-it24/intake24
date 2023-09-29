@@ -21,6 +21,7 @@
           color="error"
           icon-left="$delete"
           :label="$t('common.action.delete').toString()"
+          :typed-confirm="['surveys'].includes(resource.name) ? entry.name : undefined"
           @confirm="remove"
         >
           {{ $t('common.action.confirm.delete', { name: entry.name ? entry.name : entry.id }) }}

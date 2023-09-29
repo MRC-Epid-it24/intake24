@@ -152,11 +152,12 @@ const common: LocaleMessageObject = {
       _: 'Confirm',
       title: 'Do you want to continue?',
       msg: `You're about leave the page with unsaved changes. Do you want to continue?`,
-      delete: `Do you want to delete {name}?`,
-      remove: `Do you want to remove {name}?`,
+      delete: `You're about to permanently delete {name}.`,
+      remove: `You're about to permanently remove {name}.`,
       multi: {
         delete: 'Do you want to delete selected items: {count}',
       },
+      typed: `Please type {name} to confirm.`,
     },
   },
 
