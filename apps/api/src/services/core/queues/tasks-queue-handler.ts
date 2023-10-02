@@ -109,7 +109,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   async getRepeatableJobById(id: string): Promise<RepeatableBullJob | undefined> {
     const jobs = await this.queue.getRepeatableJobs();
 
-    return jobs.find((job) => job.id === id);
+    return jobs.find((job) => job.id.replace('db-', '') === id);
   }
 
   /**
@@ -123,7 +123,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     const repeatableJobs = await this.queue.getRepeatableJobs();
 
     for (const job of repeatableJobs) {
-      if (id && job.id !== id) continue;
+      if (id && job.id.replace('db-', '') !== id) continue;
 
       await this.queue.removeRepeatableByKey(job.key);
     }
@@ -154,7 +154,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
   private async queueJob(task: Task): Promise<void> {
     const { id, job, cron, params } = task;
 
-    await this.queue.add(job, { params }, { repeat: { pattern: cron }, jobId: `db:${id}` });
+    await this.queue.add(job, { params }, { repeat: { pattern: cron }, jobId: `db-${id}` });
   }
 
   /**

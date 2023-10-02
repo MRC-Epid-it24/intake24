@@ -135,7 +135,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private registerQueueEvents(): void {
     this.queueEvents
       .on('progress', async ({ jobId, data }) => {
-        const dbId = jobId.replace('db:', '');
+        const dbId = jobId.replace('db-', '');
 
         const job = await DbJob.findByPk(dbId);
         if (!job) {
@@ -146,7 +146,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         if (typeof data === 'number' && data < 1) await job.update({ progress: data });
       })
       .on('completed', async ({ jobId }) => {
-        const dbId = jobId.replace('db:', '');
+        const dbId = jobId.replace('db-', '');
 
         const job = await DbJob.findByPk(dbId);
         if (!job) {
@@ -159,7 +159,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
         await this.notify(job.userId, { jobId: dbId, status: 'success' });
       })
       .on('failed', async ({ jobId, failedReason }) => {
-        const dbId = jobId.replace('db:', '');
+        const dbId = jobId.replace('db-', '');
 
         const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
         if (!bullJob) {
@@ -206,7 +206,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       return;
     }
 
-    const dbId = id.replace('db:', '');
+    const dbId = id.replace('db-', '');
     const dbJob = await DbJob.findByPk(dbId);
     if (!dbJob) {
       this.logger.error(`Queue ${this.name}: Job entry not found (${dbId}).`);
@@ -231,7 +231,7 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private async queueJob(job: DbJob, options: JobsOptions = {}): Promise<void> {
     const { id, type, params } = job;
 
-    await this.queue.add(type, { params }, { ...options, jobId: `db:${id}` });
+    await this.queue.add(type, { params }, { ...options, jobId: `db-${id}` });
 
     this.logger.debug(`Queue ${this.name}: Job ${id} | ${type} queued.`);
   }
