@@ -2,6 +2,7 @@ import browse from './browse.test';
 import destroy from './destroy.test';
 import edit from './edit.test';
 import read from './read.test';
+import recipeFoods from './recipe-foods/index.test';
 import refs from './refs.test';
 import splitLists from './split-lists/index.test';
 import splitWords from './split-words/index.test';
@@ -21,6 +22,7 @@ export default () => {
 
   describe('POST /api/admin/locales/:localeId/tasks', tasks);
 
+  describe('GET /api/admin/locales/:localeId/recipe-foods', recipeFoods.get);
   describe('GET /api/admin/locales/:localeId/split-lists', splitLists.get);
   describe('POST /api/admin/locales/:localeId/split-lists', splitLists.set);
   describe('GET /api/admin/locales/:localeId/split-words', splitWords.get);

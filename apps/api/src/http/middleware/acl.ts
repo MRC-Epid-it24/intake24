@@ -63,7 +63,7 @@ export const permission = (permission: string | string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasPermission(permission)
-      .then((result) => (result ? next() : next(new ForbiddenError('Perrmission denied'))))
+      .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
 };
@@ -72,7 +72,7 @@ export const anyPermission = (permission: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasAnyPermission(permission)
-      .then((result) => (result ? next() : next(new ForbiddenError('Overal permission denied'))))
+      .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
 };
@@ -81,7 +81,7 @@ export const role = (role: string | string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
       .hasRole(role)
-      .then((result) => (result ? next() : next(new ForbiddenError('Role Permission denied'))))
+      .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
 };
@@ -92,9 +92,7 @@ export const isSurveyRespondent = () => {
 
     req.scope.cradle.aclService
       .hasPermission(surveyRespondent(slug))
-      .then((result) =>
-        result ? next() : next(new ForbiddenError('Respondent permission denied'))
-      )
+      .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };
 };

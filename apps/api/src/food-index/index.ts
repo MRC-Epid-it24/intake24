@@ -5,7 +5,7 @@ import { Op } from 'sequelize';
 import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
-import { RecipeFoods, RecipeFoodsSteps, SynonymSet } from '@intake24/db/models';
+import { RecipeFoods } from '@intake24/db/models';
 
 let indexReady = false;
 let queryIdCounter = 0;
@@ -67,6 +67,7 @@ export default {
    * @param code - code of the special food
    * @returns { RecipeFood }
    */
+  // TODO: shouldn't be here in index.ts
   async getRecipeFood(localeId: string, code: string): Promise<RecipeFoods> {
     if (indexReady) {
       specialQueryIdCounter++;
@@ -77,8 +78,8 @@ export default {
         attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id'],
         include: [
           {
-            model: RecipeFoodsSteps,
-            as: 'steps',
+            required: true,
+            association: 'steps',
             attributes: [
               'code',
               'name',
@@ -88,16 +89,14 @@ export default {
               'categoryCode',
               'repeatable',
             ],
-            required: true,
           },
           {
-            model: SynonymSet,
-            as: 'synonyms',
-            attributes: ['synonyms'],
             required: true,
+            association: 'synonyms',
+            attributes: ['synonyms'],
           },
         ],
-        order: [[{ model: RecipeFoodsSteps, as: 'steps' }, 'order', 'ASC']],
+        order: [['steps', 'order', 'ASC']],
       });
 
       if (result) {

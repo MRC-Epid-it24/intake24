@@ -126,7 +126,7 @@ export default defineComponent({
         id,
         type: 'missing-food',
         info: null,
-        searchTerm: searchTerm ? searchTerm : '',
+        searchTerm: searchTerm,
         customPromptAnswers,
         flags,
         linkedFoods: [],
