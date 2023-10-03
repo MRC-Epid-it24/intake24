@@ -177,7 +177,6 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const { code } = await resolveLocale(localeId);
     // To distinguish between the locale code and the special food code
     const localeCode = code;
-    console.log(`\n\n setRecipeFoods - Recieved saving request: ${recipeFoods} - ${localeId}\n\n`);
 
     const ids = recipeFoods.map(({ id }) => id) as string[];
     await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
