@@ -5,11 +5,7 @@
       :title="$t('common._').toString()"
       width="30rem"
     >
-      <v-form
-        :disabled="invalidSurvey"
-        @keydown.native="errors.clear($event.target.name)"
-        @submit.prevent="login"
-      >
+      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
         <v-card-text>
           <v-container>
             <v-row>
@@ -40,19 +36,13 @@
                   prepend-inner-icon="fas fa-key"
                   required
                   :type="showPassword ? 'text' : 'password'"
+                  @click:append="showPassword = !showPassword"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row justify="center">
               <v-col cols="12">
-                <v-btn
-                  block
-                  color="primary"
-                  :disabled="invalidSurvey"
-                  rounded
-                  type="submit"
-                  x-large
-                >
+                <v-btn block color="primary" rounded type="submit" x-large>
                   {{ $t('common.login._') }}
                 </v-btn>
               </v-col>
@@ -60,15 +50,6 @@
           </v-container>
         </v-card-text>
       </v-form>
-      <v-card-text v-if="status" class="px-6">
-        <v-alert v-if="invalidCredentials" border="left" outlined type="error">
-          {{ $t('common.login.err.invalidCredentials') }}
-        </v-alert>
-        <v-alert v-if="invalidSurvey" border="left" outlined type="error">
-          <p>{{ $t('common.login.err.invalidSurvey', { surveyId }) }}</p>
-          <p class="mb-0">{{ $t('common.login.err.checkCredentials') }}</p>
-        </v-alert>
-      </v-card-text>
       <template v-if="isOpenAccess">
         <v-divider class="mx-6"></v-divider>
         <v-card-title class="text-h3 font-weight-medium justify-center">
@@ -101,16 +82,13 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
-import axios from 'axios';
-import { mapActions, mapState } from 'pinia';
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted } from 'vue';
+import { useRouter } from 'vue-router/composables';
 
-import type { PublicSurveyEntry } from '@intake24/common/types/http';
-import { Errors } from '@intake24/common/util';
-import { surveyService } from '@intake24/survey/services';
 import { useAuth } from '@intake24/survey/stores';
 import { AppEntryScreen } from '@intake24/ui';
+
+import { useLogin } from './use-login';
 
 export default defineComponent({
   name: 'SurveyLogin',
@@ -124,77 +102,50 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      username: '',
-      password: '',
-      showPassword: false,
-      status: null as number | null,
-      survey: null as PublicSurveyEntry | null,
-      errors: new Errors(),
-    };
-  },
+  setup(props) {
+    const router = useRouter();
+    const {
+      errors,
+      fetchSurveyPublicInfo,
+      isOpenAccess,
+      login,
+      password,
+      showPassword,
+      status,
+      survey,
+      username,
+    } = useLogin(props);
 
-  computed: {
-    ...mapState(useAuth, ['loggedIn']),
-
-    invalidCredentials(): boolean {
-      return this.status === 401;
-    },
-
-    invalidSurvey(): boolean {
-      return this.status === 404;
-    },
-
-    isOpenAccess(): boolean {
-      return !!this.survey?.openAccess;
-    },
-  },
-
-  async mounted() {
-    const { surveyId } = this;
-
-    await this.fetchSurveyPublicInfo();
-
-    if (this.invalidSurvey) return;
-
-    if (!this.loggedIn) {
-      try {
-        await this.refresh();
-        await this.$router.push({ name: 'survey-home', params: { surveyId } });
-      } catch (err) {
-        // continue
+    onMounted(async () => {
+      await fetchSurveyPublicInfo();
+      if (!survey.value) {
+        await router.push({ name: 'home' });
+        return;
       }
-    }
-  },
 
-  methods: {
-    ...mapActions(useAuth, { userPassLogin: 'login', refresh: 'refresh' }),
+      const auth = useAuth();
 
-    async fetchSurveyPublicInfo() {
-      try {
-        this.survey = await surveyService.surveyPublicInfo(this.surveyId);
-      } catch (err) {
-        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
-      }
-    },
-
-    async login() {
-      const { username, password, surveyId } = this;
-      try {
-        await this.userPassLogin({ username, password, survey: surveyId });
-        this.username = '';
-        this.password = '';
-        await this.$router.push({ name: 'survey-home', params: { surveyId } });
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          const { response: { status = 0, data = {} } = {} } = err as AxiosError<any>;
-          this.status = status;
-
-          if (status === 422 && 'errors' in data) this.errors.record(data.errors);
+      if (!auth.loggedIn) {
+        try {
+          await auth.refresh();
+          await router.push({ name: 'survey-home', params: { surveyId: props.surveyId } });
+        } catch (err) {
+          // continue
         }
       }
-    },
+    });
+
+    return {
+      errors,
+      fetchSurveyPublicInfo,
+      isOpenAccess,
+      login,
+      password,
+      showPassword,
+      status,
+      survey,
+      username,
+    };
   },
 });
 </script>

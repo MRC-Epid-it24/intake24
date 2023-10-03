@@ -37,56 +37,62 @@ const jobs: LocaleMessageObject = {
     LanguageTranslationsSync: {
       _: 'Language - Synchronize translations',
     },
-    LocaleFoods: {
-      _: 'Locale - Export foods',
-      localeId: 'Locale ID',
-    },
     LocaleFoodNutrientMapping: {
       _: 'Locale - Export food nutrient mapping',
       localeId: 'Locale ID',
     },
-    FoodRankingCsvUpload: {
+    LocaleFoodRankingUpload: {
       _: 'Locale - food ranking CSV upload',
       file: 'CSV file',
     },
-    NutrientTableIMappingImport: {
-      _: 'Nutrient table - import NDB mapping',
+    LocaleFoods: {
+      _: 'Locale - Export foods',
+      localeId: 'Locale ID',
+    },
+    LocalePopularitySearchCopy: {
+      _: 'Locale - Copy popularity search',
+      localeId: 'Locale ID',
+      sourceLocaleId: 'Source Locale ID',
+    },
+    NutrientTableMappingImport: {
+      _: 'Nutrient table - Import NDB mapping',
       file: 'CSV file',
     },
     NutrientTableDataImport: {
-      _: 'Nutrient table - import NDB data',
+      _: 'Nutrient table - Import NDB data',
       file: 'CSV file',
-    },
-    PairwiseSearchCopyAssociations: {
-      _: 'Search - Copy pairwise associations',
-      sourceLocaleId: 'Source Locale ID',
-      targetLocaleId: 'Target Locale ID',
     },
     PopularitySearchUpdateCounters: {
       _: 'Search - Update popularity counters',
       foodCodes: 'Food codes',
     },
-    SurveyFeedbackNotification: {
-      _: 'Survey - send respondent feedback',
+    SurveyAuthUrlsExport: {
+      _: 'Survey - Export authentication URLs',
+      surveyId: 'Survey ID',
     },
     SurveyDataExport: {
-      _: 'Survey - data export',
+      _: 'Survey - Submission data export',
+      surveyId: 'Survey ID',
     },
-    SurveyAuthUrlsExport: {
-      _: 'Survey - export respondent authentication URLs',
+    SurveyFeedbackNotification: {
+      _: 'Survey - Send respondent feedback',
     },
     SurveyHelpRequestNotification: {
       _: 'Survey - Help Request Notification ',
     },
+    SurveyNutrientsRecalculation: {
+      _: 'Survey - Nutrients recalculation',
+      surveyId: 'Survey ID',
+    },
     SurveyRespondentsImport: {
-      _: 'Survey - import respondents',
+      _: 'Survey - Import respondents',
       file: 'CSV file',
     },
     SurveySubmission: {
-      _: 'Survey - process submission',
+      _: 'Survey - Process submission',
     },
     SurveySubmissionNotification: {
-      _: 'Survey - submission notification',
+      _: 'Survey - Submission notification',
     },
     UserEmailVerificationNotification: {
       _: 'User - EmailVerificationNotification',

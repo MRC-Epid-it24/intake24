@@ -11,21 +11,21 @@ export default () => {
 
   router.get(
     '/as-served-sets',
-    anyPermission(['fdbs']),
+    anyPermission(['locales']),
     browse,
     wrapAsync(referenceController.asServedSets)
   );
 
   router.get(
     '/categories',
-    anyPermission(['fdbs']),
+    anyPermission(['locales']),
     browse,
     wrapAsync(referenceController.categories)
   );
 
   router.get(
     '/drinkware-sets',
-    anyPermission(['fdbs']),
+    anyPermission(['locales']),
     browse,
     wrapAsync(referenceController.drinkwareSets)
   );
@@ -37,18 +37,25 @@ export default () => {
     wrapAsync(referenceController.feedbackSchemes)
   );
 
-  router.get('/foods', anyPermission(['fdbs']), browse, wrapAsync(referenceController.foods));
+  router.get(
+    '/food-groups',
+    anyPermission(['locales']),
+    browse,
+    wrapAsync(referenceController.foodGroups)
+  );
+
+  router.get('/foods', anyPermission(['locales']), browse, wrapAsync(referenceController.foods));
 
   router.get(
     '/guide-images',
-    anyPermission(['fdbs']),
+    anyPermission(['locales']),
     browse,
     wrapAsync(referenceController.guideImages)
   );
 
   router.get(
     '/image-maps',
-    anyPermission(['fdbs', 'guide-images']),
+    anyPermission(['locales', 'guide-images']),
     browse,
     wrapAsync(referenceController.imageMaps)
   );
@@ -69,9 +76,16 @@ export default () => {
 
   router.get(
     '/nutrient-tables',
-    anyPermission(['fdbs']),
+    anyPermission(['locales']),
     browse,
     wrapAsync(referenceController.nutrientTables)
+  );
+
+  router.get(
+    '/nutrient-tables/:nutrientTableId/records',
+    anyPermission(['locales']),
+    browse,
+    wrapAsync(referenceController.nutrientTableRecords)
   );
 
   router.get(

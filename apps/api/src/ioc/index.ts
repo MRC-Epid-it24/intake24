@@ -10,7 +10,6 @@ import type {
   AdminFoodGroupController,
   AdminSignupController,
   AdminSurveyController,
-  AdminSurveyDataExportController,
   AdminSurveyRespondentController,
   AdminSurveySubmissionController,
   AdminUserController,
@@ -215,7 +214,6 @@ export interface IoC extends Jobs {
 
   // Survey MGMT
   adminSurveyController: AdminSurveyController;
-  adminSurveyDataExportController: AdminSurveyDataExportController;
   adminSurveyRespondentController: AdminSurveyRespondentController;
   adminSurveySubmissionController: AdminSurveySubmissionController;
 

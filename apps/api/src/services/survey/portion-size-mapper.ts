@@ -254,7 +254,7 @@ export const portionSizeMappers: Record<
   'parent-food-portion': parentFoodPortionMapper,
   pizza: pizzaPortionMapper,
   'standard-portion': standardPortionMapper,
-  weight: genericMapper,
+  'direct-weight': genericMapper,
 };
 
 export type PortionSizeMappers = typeof portionSizeMappers;

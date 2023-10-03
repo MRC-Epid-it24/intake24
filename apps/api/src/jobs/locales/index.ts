@@ -1,9 +1,11 @@
 import LocaleFoodNutrientMapping from './locale-food-nutrient-mapping';
-import FoodRankingCsvUpload from './locale-food-ranking-csv-upload';
+import LocaleFoodRankingUpload from './locale-food-ranking-upload';
 import LocaleFoods from './locale-foods';
+import LocalePopularitySearchCopy from './locale-popularity-search-copy';
 
 export default {
   LocaleFoods,
   LocaleFoodNutrientMapping,
-  FoodRankingCsvUpload,
+  LocaleFoodRankingUpload,
+  LocalePopularitySearchCopy,
 };

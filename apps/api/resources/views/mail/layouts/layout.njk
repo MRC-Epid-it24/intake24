@@ -12,8 +12,6 @@
 <style type="text/css">
     {{ themeCSS | inlineCSS | safe }}
 </style>
-</head>
-<body>
 <style>
 @media only screen and (max-width: 600px) {
 .header {
@@ -39,34 +37,39 @@ width: 100% !important;
 }
 }
 </style>
+</head>
+<div class="preview">
+{% block preview %}
+{% endblock %}
+</div>
+<body>
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
         <td align="center">
             <table class="content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                <!-- Email Header -->
                 <tr>
                     <td class="header">
                         <table class="inner-header" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
                                 <td class="content-cell">
                                     <img src="{{ asset('logo-white.svg') }}" alt="{{ app.name }}"></img>
+                                    {% if app.poweredBy %}
+                                        <div class="subheader">{{ app.poweredBy }}</div>
+                                    {% endif %}
                                 </td>
+                            </tr>
+                            <tr>
                             </tr>
                         </table>
                     </td>
                 </tr>
-
-                <!-- Email body -->
                 <tr>
                     <td class="body" width="100%" cellpadding="0" cellspacing="0" style="border: hidden !important;">
                         <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
-                        <!-- Body content -->
                             <tr>
                                 <td class="content-cell">
                                 {% block body %}
                                 {% endblock %}
-
-                                    <!-- Subcopy content -->
                                     <table class="subcopy" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                                         <tr>
                                             <td>
@@ -85,14 +88,12 @@ width: 100% !important;
                         </table>
                     </td>
                 </tr>
-
-                <!-- Footer content -->
                 <tr>
                     <td>
                         <table class="footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
                                 <td class="content-cell" align="center">
-                                © {{ app.year }} {{ app.name }}. All rights reserved. 🍔
+                                © {{ app.year }} {{ app.fullName }}{% if app.poweredBy %} ({{ app.poweredBy }}){% endif %}. All rights reserved.
                                 </td>
                             </tr>
                         </table>

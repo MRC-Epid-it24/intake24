@@ -84,7 +84,7 @@ const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'schedule
 
   const repeat = async (
     req: Request<{ jobId: string }>,
-    res: Response<undefined>
+    res: Response<JobEntry>
   ): Promise<void> => {
     const { jobId } = req.params;
 
@@ -93,9 +93,9 @@ const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'schedule
 
     const { type, userId, params } = job;
 
-    await scheduler.jobs.addJob({ type, userId, params });
+    const jobEntry = await scheduler.jobs.addJob({ type, userId, params });
 
-    res.json();
+    res.json(jobEntry);
   };
 
   return {

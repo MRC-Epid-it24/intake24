@@ -11,6 +11,7 @@ import type {
   GuideImagesResponse,
   ImageMapsResponse,
   LanguageReferences,
+  NutrientTableRecordReferences,
   NutrientTableReferences,
   SurveyReferences,
   SurveySchemeReferences,
@@ -25,10 +26,12 @@ import {
   DrinkwareSet,
   FeedbackScheme,
   Food,
+  FoodGroup,
   GuideImage,
   ImageMap,
   Language,
   NutrientTable,
+  NutrientTableRecord,
   StandardUnit,
   Survey,
   SurveyScheme,
@@ -92,6 +95,20 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       order: [['name', 'ASC']],
     });
     res.json(feedbackSchemes);
+  };
+
+  const foodGroups = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<FoodReferences>
+  ): Promise<void> => {
+    const foods = await FoodGroup.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'name'],
+      columns: ['name'],
+      order: [['name', 'ASC']],
+    });
+
+    res.json(foods);
   };
 
   const foods = async (
@@ -180,6 +197,24 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(nutrientTables);
   };
 
+  const nutrientTableRecords = async (
+    req: Request<any, any, any, PaginateQuery>,
+    res: Response<NutrientTableRecordReferences>
+  ): Promise<void> => {
+    const {
+      params: { nutrientTableId },
+    } = req;
+
+    const nutrientTableRecords = await NutrientTableRecord.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'localName', 'nutrientTableRecordId'],
+      where: { nutrientTableId },
+      order: [['id', 'ASC']],
+    });
+
+    res.json(nutrientTableRecords);
+  };
+
   const standardUnits = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -223,12 +258,14 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     categories,
     drinkwareSets,
     feedbackSchemes,
+    foodGroups,
     foods,
     guideImages,
     imageMaps,
     languages,
     locales,
     nutrientTables,
+    nutrientTableRecords,
     standardUnits,
     surveys,
     surveySchemes,

@@ -11,10 +11,10 @@ hero:
     Multiple-pass 24-hour recall
   image:
     light:
-      src: /pwa-512x512.png
+      src: /icons/pwa-512x512.png
       alt: Intake24
     dark:
-      src: /pwa-512x512.png
+      src: /icons/pwa-512x512.png
       alt: Intake24
   actions:
     - theme: brand

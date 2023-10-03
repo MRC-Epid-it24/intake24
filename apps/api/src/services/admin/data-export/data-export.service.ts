@@ -24,7 +24,7 @@ import {
   SurveySubmissionMissingFood,
 } from '@intake24/db';
 
-import type { ExportFieldInfo } from './data-export-mapper';
+import type { ExportFieldInfo, ExportRow } from './data-export-fields';
 
 export type DataExportInput = JobParams['SurveyDataExport'];
 
@@ -39,7 +39,7 @@ export type DataExportOptions = {
 
 export type SyncStreamOutput = {
   filename: string;
-  stream: Transform<SurveySubmissionFood>;
+  stream: Transform<SurveySubmissionFood, ExportRow>;
 };
 
 const dataExportService = ({
@@ -259,7 +259,7 @@ const dataExportService = ({
 
     const fields = await getExportFields(surveyScheme.dataExport);
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `intake24-data-export-${slug}-${timestamp}.csv`;
+    const filename = `intake24-survey-data-export-${slug}-${timestamp}.csv`;
 
     const [totalFoods, totalMissingFoods] = await Promise.all([
       SurveySubmissionFood.count(options.foods),
@@ -291,7 +291,7 @@ const dataExportService = ({
     const { options, fields, filename } = await prepareExportInfo(input);
 
     const foods = SurveySubmissionFood.findAllWithStream(options.foods);
-    const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
+    const transform = new Transform({ fields, withBOM: true }, {}, { objectMode: true });
 
     foods.on('error', (err) => {
       throw err;

@@ -17,7 +17,7 @@ const recall: LocaleMessageObject = {
     title: 'Recall days',
     all: 'all',
     past: 'Past recalls',
-    none: 'You do not have any past recalls yet.',
+    none: `You don't have any past recalls yet.`,
     count: 'Recall number: {count}',
   },
   start: {
@@ -34,12 +34,14 @@ const recall: LocaleMessageObject = {
     recall: 'Recall: {number}',
   },
   menu: {
-    title: 'Your food and drink intake',
+    title: 'Review panel',
     mealSuggested:
       'This meal is suggested by the system but you have not yet confirmed that you have had it',
     food: {
       delete: 'Delete food',
-      edit: 'Edit food',
+      deleteConfirm: 'Do you want to delete {item}?',
+      edit: 'Change food',
+      editPortionSize: 'Edit portion size',
       encoded: 'This food has been matched with a food from our database.',
       missing: 'This food has been marked as missing in our database.',
       notMatched: 'This food has not yet been matched with a food from our database.',
@@ -53,10 +55,10 @@ const recall: LocaleMessageObject = {
     meal: {
       add: 'Add meal',
       delete: 'Delete meal',
+      deleteConfirm: `You are about to delete everything you had for {item}.`,
       editFoods: 'Change / Add foods',
       editTime: 'Change time',
     },
-    confirmDelete: 'Do you want to delete {item}?',
   },
   contextMenu: {
     close: 'Close',
@@ -68,7 +70,7 @@ const recall: LocaleMessageObject = {
     changeTime: 'Change time',
   },
   actions: {
-    feedback: 'Feedback',
+    feedback: 'Dietary feedback',
     next: 'Continue',
     submit: 'Submit the recall',
     addMeal: 'Add meal',
@@ -80,7 +82,7 @@ const recall: LocaleMessageObject = {
     nav: {
       cancel: 'Cancel',
       confirm: 'Confirm',
-      feedback: 'Feedback',
+      feedback: 'Dietary feedback',
       next: 'Continue',
       redirect: 'Continue',
       remove: 'Remove',

@@ -4,7 +4,6 @@ import type { Job } from 'bullmq';
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 import fs from 'fs-extra';
-import slugify from 'slugify';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -57,7 +56,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     const { code: localeCode } = locale;
 
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `${slugify(this.name)}-${localeCode}-${timestamp}.csv`;
+    const filename = `intake24-${this.name}-${localeCode}-${timestamp}.csv`;
 
     const [nutrients, total] = await Promise.all([
       FoodsNutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
@@ -80,38 +79,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
     const fields = [...foodFields, ...nutrientFields];
 
-    const transforms = [
-      (item: FoodLocal) => {
-        const {
-          foodCode,
-          name,
-          localeId,
-          main: { name: englishName } = {},
-          nutrientRecords,
-        } = item;
-
-        if (!nutrientRecords?.length) return { foodCode, name, englishName, localeId };
-
-        const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
-
-        const nutrientData = nutrients.reduce<Record<string, number>>((acc, nutrient) => {
-          acc[`nt-${nutrient.nutrientTypeId}`] = nutrient.unitsPer100g;
-          return acc;
-        }, {});
-
-        return {
-          foodCode,
-          name,
-          englishName,
-          localeId,
-          nutrientTableId,
-          nutrientTableRecordId,
-          ...nutrientData,
-        };
-      },
-    ];
-
-    return { localeCode, filename, fields, total, transforms };
+    return { localeCode, filename, fields, total };
   }
 
   /**
@@ -122,7 +90,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
    * @memberof LocaleFoodNutrientMapping
    */
   private async exportData(): Promise<void> {
-    const { localeCode, fields, filename, total, transforms } = await this.prepareExportInfo();
+    const { localeCode, fields, filename, total } = await this.prepareExportInfo();
 
     this.initProgress(total);
 
@@ -144,8 +112,42 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
         order: [['foodCode', 'asc']],
       });
 
-      const transform = new Transform<FoodLocal>(
-        { fields, withBOM: true, transforms },
+      const transform = new Transform(
+        {
+          fields,
+          withBOM: true,
+          transforms: [
+            (item: FoodLocal) => {
+              const {
+                foodCode,
+                name,
+                localeId,
+                main: { name: englishName } = {},
+                nutrientRecords,
+              } = item;
+
+              if (!nutrientRecords?.length) return { foodCode, name, englishName, localeId };
+
+              const { nutrientTableId, nutrientTableRecordId, nutrients = [] } = nutrientRecords[0];
+
+              const nutrientData = nutrients.reduce<Record<string, number>>((acc, nutrient) => {
+                acc[`nt-${nutrient.nutrientTypeId}`] = nutrient.unitsPer100g;
+                return acc;
+              }, {});
+
+              return {
+                foodCode,
+                name,
+                englishName,
+                localeId,
+                nutrientTableId,
+                nutrientTableRecordId,
+                ...nutrientData,
+              };
+            },
+          ],
+        },
+        {},
         { objectMode: true }
       );
 

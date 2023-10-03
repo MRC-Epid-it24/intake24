@@ -6,13 +6,13 @@ import type {
   JobEntry,
   NutrientTableEntry,
   NutrientTableInput,
-  NutrientTableRecordsResponse,
   NutrientTableRefs,
   NutrientTablesResponse,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, User } from '@intake24/db';
-import { ValidationError } from '@intake24/api/http/errors';
-import { FoodsNutrientType, NutrientTable, NutrientTableRecord } from '@intake24/db';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
+import { FoodsNutrientType, NutrientTable } from '@intake24/db';
 
 const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTableService'>) => {
   const entry = async (
@@ -86,7 +86,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     res.json({ nutrientTypes });
   };
 
-  const upload = async (
+  const tasks = async (
     req: Request<{ nutrientTableId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
@@ -97,33 +97,19 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     } = req;
     const { id: userId } = req.user as User;
 
-    if (!file) throw new ValidationError('Missing file.', { path: 'file' });
+    const nutrientTable = await NutrientTable.findByPk(nutrientTableId);
+    if (!nutrientTable) throw new NotFoundError();
 
-    const job = await nutrientTableService.uploadCsvFile(nutrientTableId, {
-      type,
-      file: file.path,
-      userId,
-    });
+    const params = { ...pickJobParams(req.body.params, type), nutrientTableId };
+    if (jobRequiresFile(type)) {
+      if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
+
+      params.file = file.path;
+    }
+
+    const job = await nutrientTableService.queueTask({ userId, type, params });
 
     res.json(job);
-  };
-
-  const records = async (
-    req: Request<{ nutrientTableId: string }, any, any, PaginateQuery>,
-    res: Response<NutrientTableRecordsResponse>
-  ): Promise<void> => {
-    const {
-      params: { nutrientTableId },
-    } = req;
-
-    const nutrientTableRecords = await NutrientTableRecord.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['name', 'localName', 'nutrientTableRecordId'],
-      where: { nutrientTableId },
-      order: [['id', 'ASC']],
-    });
-
-    res.json(nutrientTableRecords);
   };
 
   return {
@@ -134,8 +120,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     update,
     destroy,
     refs,
-    upload,
-    records,
+    tasks,
   };
 };
 

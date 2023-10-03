@@ -1,3 +1,4 @@
+import type { FieldInfo } from '@json2csv/plainjs';
 import { differenceInMinutes } from 'date-fns';
 import { orderBy } from 'lodash';
 import stringify from 'safe-stable-stringify';
@@ -21,9 +22,12 @@ export type ExportRow = {
 
 export type ExportFieldTransform<T = ExportRow> = (row: T) => string | number | null | undefined;
 
-export interface ExportField<T = ExportRow> extends BaseExportField {
-  value?: string | ExportFieldTransform<T>;
-}
+export type ExportFieldInfo = FieldInfo<
+  ExportRow,
+  /* string | number | null | undefined */ unknown
+>;
+
+export type ExportField = BaseExportField & Partial<Pick<ExportFieldInfo, 'value'>>;
 
 export const EMPTY = 'N/A';
 
@@ -56,27 +60,27 @@ const dataExportFields = () => {
     {
       id: 'userId',
       label: 'User ID',
-      value: ({ food }) => food.meal?.submission?.user?.id,
+      value: ({ food }: ExportRow) => food.meal?.submission?.user?.id,
     },
     {
       id: 'email',
       label: 'User Email',
-      value: ({ food }) => food.meal?.submission?.user?.email,
+      value: ({ food }: ExportRow) => food.meal?.submission?.user?.email,
     },
     {
       id: 'phone',
       label: 'User Phone',
-      value: ({ food }) => food.meal?.submission?.user?.phone,
+      value: ({ food }: ExportRow) => food.meal?.submission?.user?.phone,
     },
     {
       id: 'name',
       label: 'User Name',
-      value: ({ food }) => food.meal?.submission?.user?.name,
+      value: ({ food }: ExportRow) => food.meal?.submission?.user?.name,
     },
     {
       id: 'simpleName',
       label: 'User Simple Name',
-      value: ({ food }) => food.meal?.submission?.user?.simpleName,
+      value: ({ food }: ExportRow) => food.meal?.submission?.user?.simpleName,
     },
   ];
 
@@ -106,12 +110,12 @@ const dataExportFields = () => {
     {
       id: 'surveyId',
       label: 'Survey ID',
-      value: ({ food }) => food.meal?.submission?.surveyId,
+      value: ({ food }: ExportRow) => food.meal?.submission?.surveyId,
     },
     {
       id: 'username',
       label: 'Survey Alias / username',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const aliases = food.meal?.submission?.user?.aliases;
         return aliases && aliases.length ? aliases[0].username : undefined;
       },
@@ -127,22 +131,22 @@ const dataExportFields = () => {
     {
       id: 'submissionId',
       label: 'Submission ID',
-      value: ({ food }) => food.meal?.submission?.id,
+      value: ({ food }: ExportRow) => food.meal?.submission?.id,
     },
     {
       id: 'startTime',
       label: 'Start DateTime',
-      value: ({ food }) => food.meal?.submission?.startTime?.toISOString(),
+      value: ({ food }: ExportRow) => food.meal?.submission?.startTime?.toISOString(),
     },
     {
       id: 'endTime',
       label: 'End DateTime',
-      value: ({ food }) => food.meal?.submission?.endTime?.toISOString(),
+      value: ({ food }: ExportRow) => food.meal?.submission?.endTime?.toISOString(),
     },
     {
       id: 'recallDuration',
       label: 'Recall Duration (mins)',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const { startTime, endTime } = food.meal?.submission ?? {};
         if (!startTime || !endTime) return undefined;
 
@@ -152,17 +156,17 @@ const dataExportFields = () => {
     {
       id: 'submissionTime',
       label: 'Submission DateTime',
-      value: ({ food }) => food.meal?.submission?.submissionTime?.toISOString(),
+      value: ({ food }: ExportRow) => food.meal?.submission?.submissionTime?.toISOString(),
     },
     {
       id: 'userAgent',
       label: 'User Agent',
-      value: ({ food }) => uaParser(food.meal?.submission?.userAgent ?? undefined).ua,
+      value: ({ food }: ExportRow) => uaParser(food.meal?.submission?.userAgent ?? undefined).ua,
     },
     {
       id: 'browser',
       label: 'Browser',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.browser.name, uaInfo.browser.version].filter(Boolean).join(' | ');
       },
@@ -170,7 +174,7 @@ const dataExportFields = () => {
     {
       id: 'engine',
       label: 'Engine',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.engine.name, uaInfo.engine.version].filter(Boolean).join(' | ');
       },
@@ -178,7 +182,7 @@ const dataExportFields = () => {
     {
       id: 'device',
       label: 'Device',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.device.model, uaInfo.device.type, uaInfo.device.vendor]
           .filter(Boolean)
@@ -188,7 +192,7 @@ const dataExportFields = () => {
     {
       id: 'os',
       label: 'OS',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         const uaInfo = uaParser(food.meal?.submission?.userAgent ?? undefined);
         return [uaInfo.os.name, uaInfo.os.version].filter(Boolean).join(' | ');
       },
@@ -196,7 +200,8 @@ const dataExportFields = () => {
     {
       id: 'cpu',
       label: 'CPU',
-      value: ({ food }) => uaParser(food.meal?.submission?.userAgent ?? undefined).cpu.architecture,
+      value: ({ food }: ExportRow) =>
+        uaParser(food.meal?.submission?.userAgent ?? undefined).cpu.architecture,
     },
   ];
 
@@ -218,18 +223,18 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const meal = async (): Promise<ExportField[]> => [
-    { id: 'mealIndex', label: 'Meal index', value: ({ custom }) => custom.mealIndex },
-    { id: 'mealId', label: 'Meal ID', value: ({ food }) => food.meal?.id },
-    { id: 'name', label: 'Meal name', value: ({ food }) => food.meal?.name },
+    { id: 'mealIndex', label: 'Meal index', value: ({ custom }: ExportRow) => custom.mealIndex },
+    { id: 'mealId', label: 'Meal ID', value: ({ food }: ExportRow) => food.meal?.id },
+    { id: 'name', label: 'Meal name', value: ({ food }: ExportRow) => food.meal?.name },
     {
       id: 'time',
       label: 'Meal time',
-      value: ({ food }) =>
+      value: ({ food }: ExportRow) =>
         food.meal
           ? fromMealTime({ hours: food.meal.hours, minutes: food.meal.minutes })
           : undefined,
     },
-    { id: 'duration', label: 'Meal duration', value: ({ food }) => food.meal?.duration },
+    { id: 'duration', label: 'Meal duration', value: ({ food }: ExportRow) => food.meal?.duration },
   ];
 
   /**
@@ -263,7 +268,7 @@ const dataExportFields = () => {
     {
       id: 'foodId',
       label: 'Food ID',
-      value: ({ food }) => (food instanceof SurveySubmissionFood ? food.id : undefined),
+      value: ({ food }: ExportRow) => (food instanceof SurveySubmissionFood ? food.id : undefined),
     },
     { id: 'code', label: 'Food code', value: 'food.code' },
     { id: 'englishName', label: 'Name (en)', value: 'food.englishName' },
@@ -285,12 +290,14 @@ const dataExportFields = () => {
     {
       id: 'barcode',
       label: 'Barcode',
-      value: ({ food }) => (food instanceof SurveySubmissionFood ? food.barcode : undefined),
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionFood ? food.barcode : undefined,
     },
     {
       id: 'brand',
       label: 'Brand',
-      value: ({ food }) => (food instanceof SurveySubmissionFood ? food.brand : undefined),
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionFood ? food.brand : undefined,
     },
     { id: 'nutrientTableId', label: 'Nutrient table name', value: 'food.nutrientTableId' },
     { id: 'nutrientTableCode', label: 'Nutrient table code', value: 'food.nutrientTableCode' },
@@ -299,18 +306,21 @@ const dataExportFields = () => {
     {
       id: 'missingId',
       label: 'Missing ID',
-      value: ({ food }) => (food instanceof SurveySubmissionMissingFood ? food.id : undefined),
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.id : undefined,
     },
     { id: 'missingName', label: 'Missing name', value: 'food.name' },
     {
       id: 'missingBarcode',
       label: 'Missing barcode',
-      value: ({ food }) => (food instanceof SurveySubmissionMissingFood ? food.barcode : undefined),
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.barcode : undefined,
     },
     {
       id: 'missingBrand',
       label: 'Missing brand',
-      value: ({ food }) => (food instanceof SurveySubmissionMissingFood ? food.brand : undefined),
+      value: ({ food }: ExportRow) =>
+        food instanceof SurveySubmissionMissingFood ? food.brand : undefined,
     },
     { id: 'missingDescription', label: 'Missing description', value: 'food.description' },
     { id: 'missingPortionSize', label: 'Missing portion size', value: 'food.portionSize' },
@@ -361,7 +371,7 @@ const dataExportFields = () => {
     {
       id: 'portion',
       label: 'Portion',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         if (!('portionSizes' in food)) return undefined;
 
         return stringify(
@@ -379,7 +389,7 @@ const dataExportFields = () => {
     {
       id: 'portionWeight',
       label: 'Portion Weight',
-      value: ({ food }) => {
+      value: ({ food }: ExportRow) => {
         if (!('portionSizes' in food)) return undefined;
 
         const servingWeightVal = food.portionSizes?.find((item) => item.name === 'servingWeight')

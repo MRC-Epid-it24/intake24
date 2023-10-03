@@ -103,7 +103,7 @@
                     </v-btn>
                     <confirm-dialog
                       :label="$t('recall.abort.label').toString()"
-                      @confirm="abortRecall"
+                      @confirm="cancelRecall"
                     >
                       <template #activator="{ on, attrs }">
                         <v-btn
@@ -125,7 +125,7 @@
                 <v-list-item v-if="isMobile">
                   <confirm-dialog
                     :label="$t('recall.abort.label').toString()"
-                    @confirm="abortRecall"
+                    @confirm="cancelRecall"
                   >
                     <template #activator="{ on, attrs }">
                       <v-btn
@@ -352,8 +352,8 @@ export default defineComponent({
       await this.$router.push({ name: 'survey-recall', params: { surveyId: this.surveyId } });
     },
 
-    abortRecall() {
-      this.survey.cancelRecall();
+    async cancelRecall() {
+      await this.survey.cancelRecall();
     },
   },
 });

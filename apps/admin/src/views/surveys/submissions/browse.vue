@@ -90,6 +90,12 @@ export default defineComponent({
           align: 'start',
         },
         {
+          text: this.$t('users.aliases.username'),
+          sortable: true,
+          value: 'username',
+          align: 'start',
+        },
+        {
           text: this.$t('surveys.submissions.userId'),
           sortable: true,
           value: 'userId',

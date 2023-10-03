@@ -10,17 +10,21 @@ import BaseJob from '../job';
 export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRequestNotification'> {
   readonly name = 'SurveyHelpRequestNotification';
 
+  private readonly appConfig;
+
   private readonly adminUserService;
 
   private readonly mailer;
 
   constructor({
+    appConfig,
     adminUserService,
     logger,
     mailer,
-  }: Pick<IoC, 'adminUserService' | 'logger' | 'mailer'>) {
+  }: Pick<IoC, 'appConfig' | 'adminUserService' | 'logger' | 'mailer'>) {
     super({ logger });
 
+    this.appConfig = appConfig;
     this.adminUserService = adminUserService;
     this.mailer = mailer;
   }
@@ -96,7 +100,7 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
   }
 
   private async sendEmail(surveyName: string, username: string, to: string[]) {
-    const subject = `🍔 Intake24: Help request (${surveyName})`;
+    const subject = `${this.appConfig.fullName}: Help request (${surveyName})`;
 
     const html = nunjucks.render('mail/surveys/help-request.njk', {
       ...this.params,

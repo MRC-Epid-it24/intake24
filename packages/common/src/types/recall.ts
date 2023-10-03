@@ -27,6 +27,8 @@ export type MealFlag =
   | `${string}-acknowledged`;
 
 export type FoodFlag =
+  | 'is-drink'
+  | 'link-as-main'
   | 'ready-meal'
   | 'same-as-before-complete'
   | 'split-food-complete'
@@ -93,7 +95,7 @@ export type PortionSizeParameters = {
     StandardUnitTranslations & {
       'units-count': number;
     };
-  weight: never;
+  'direct-weight': never;
 };
 
 // Portion size states
@@ -208,7 +210,7 @@ export type PortionSizeStates = {
     quantity: number;
     linkedQuantity: number;
   };
-  weight: PortionSizeStateBase & { method: 'weight' };
+  'direct-weight': PortionSizeStateBase & { method: 'direct-weight' };
 };
 
 export type PortionSizeMethodId = keyof PortionSizeStates;
@@ -235,12 +237,12 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
   'parent-food-portion',
   'pizza',
   'milk-in-a-hot-drink',
-  'weight',
+  'direct-weight',
 ];
 
 export interface AbstractFoodState {
   id: string;
-  flags: string[];
+  flags: FoodFlag[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
   type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
@@ -300,9 +302,8 @@ export interface MealState {
   defaultTime: MealTime;
   time: MealTime | undefined;
   duration: number | null;
-  flags: string[];
+  flags: MealFlag[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-
   foods: FoodState[];
 }
 
@@ -353,9 +354,8 @@ export type SurveyState = {
   submissionTime: Date | null;
   uxSessionId: string;
   userAgent?: string | null;
-  flags: string[];
+  flags: SurveyFlag[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  tempPromptAnswer?: PromptAnswer;
   selection: Selection;
   meals: MealState[];
 };

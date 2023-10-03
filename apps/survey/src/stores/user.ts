@@ -3,6 +3,8 @@ import { defineStore } from 'pinia';
 import type { Subject, SurveyTokenPayload } from '@intake24/common/security';
 import { tokenService } from '@intake24/ui/services';
 
+import { useSurvey } from './survey';
+
 export type UserState = {
   profile: {
     surveyId: string;
@@ -26,9 +28,10 @@ export const useUser = defineStore('user', {
         'survey'
       );
 
-      const subject: Subject = JSON.parse(atob(sub));
+      this.profile = { surveyId, userId, subject: JSON.parse(atob(sub)) };
 
-      this.profile = { surveyId, userId, subject };
+      const survey = useSurvey();
+      if (userId !== survey.user?.userId) survey.clearState();
     },
   },
 });

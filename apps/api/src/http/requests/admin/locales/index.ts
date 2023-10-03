@@ -1,6 +1,4 @@
 import { browse, entry } from '../generic';
-import copy from './copy';
-import fixedFoodRanking from './fixed-food-ranking';
 import recipeFoods from './recipe-foods';
 import recipeFoodsSteps from './recipe-foods-steps';
 import splitLists from './split-lists';
@@ -15,12 +13,10 @@ export default {
   entry,
   store,
   update,
-  copy,
   recipeFoods,
   recipeFoodsSteps,
   splitLists,
   splitWords,
   synonymLists,
   tasks,
-  fixedFoodRanking,
 };

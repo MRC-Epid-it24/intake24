@@ -2,16 +2,11 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type {
-  JobEntry,
-  LocaleEntry,
-  LocaleRefs,
-  LocalesResponse,
-} from '@intake24/common/types/http/admin';
+import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
 import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { localeResponse } from '@intake24/api/http/responses/admin';
-import { pickJobParams } from '@intake24/common/types';
+import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { FoodIndexBackend, FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
 import { getAndCheckAccess, securableController } from '../securable.controller';
@@ -142,48 +137,28 @@ const localeController = (ioc: IoC) => {
     res.json({ locales, foodIndexLanguageBackends });
   };
 
-  const copy = async (
-    req: Request<{ localeId: string }>,
-    res: Response<LocaleEntry>
-  ): Promise<void> => {
-    await getAndCheckAccess(SystemLocale, 'copy', req);
-
-    // TODO: implement locale copying
-  };
-
-  const uploadFoodRanking = async (
-    req: Request<{ surveyId: string }>,
-    res: Response<JobEntry>
-  ): Promise<void> => {
-    const { id, code } = await getAndCheckAccess(SystemLocale, 'food-ranking', req);
-
-    const { file } = req;
-    const { id: userId } = req.user as User;
-
-    if (!file) throw new ValidationError('File not found.', { path: 'file' });
-
-    // FIXME: change id field type to number in Locale model rather than parsing
-    const job = await localeService.uploadFoodRanking(parseInt(id), code, userId, file);
-
-    res.json(job);
-  };
-
   const tasks = async (req: Request<{ localeId: string }>, res: Response<Job>): Promise<void> => {
     const {
-      body: { job, params },
+      body: { type },
+      file,
       params: { localeId },
     } = req;
     const { id: userId } = req.user as User;
 
     await getAndCheckAccess(SystemLocale, 'tasks', req);
 
-    const jobEntry = await localeService.queueLocaleTask({
-      userId,
-      job,
-      params: { ...pickJobParams(params, job), sourceLocaleId: localeId },
-    });
+    const params = { ...pickJobParams(req.body.params, type), localeId };
+    if (jobRequiresFile(type)) {
+      if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
 
-    res.json(jobEntry);
+      params.file = file.path;
+    }
+
+    const job = await localeService.queueTask({ userId, type, params });
+
+    // TODO: implement locale copying as a job
+
+    res.json(job);
   };
 
   return {
@@ -194,8 +169,6 @@ const localeController = (ioc: IoC) => {
     update,
     destroy,
     refs,
-    copy,
-    uploadFoodRanking,
     tasks,
     securables: securableController({ ioc, securable: SystemLocale }),
   };

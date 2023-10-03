@@ -103,7 +103,7 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('patch', invalidRespondentUrl);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput(
         'patch',
         url,

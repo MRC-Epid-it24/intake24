@@ -20,9 +20,9 @@ const survey: LocaleMessageObject = {
   generateUser: {
     _: 'Jana akses',
     subtitle: 'Ini adalah kajian open access, anda boleh mengakses secara percuma.',
+    400: 'Imej keselamatan captcha yang diberikan tidak sah.',
     403: `Survei {surveyId} tidak membenarkan penjanaan pengguna.`,
     404: `Survei {surveyId} tidak dapat dikesan.`,
-    422: 'Imej keselamatan captcha yang diberikan tidak sah.',
     429: 'Pengguna Baharu baru sahaja dijana, sila cuba semula sebentar lagi.',
   },
 };

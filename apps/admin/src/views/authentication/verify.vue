@@ -31,8 +31,7 @@
 </template>
 
 <script lang="ts">
-import type { AxiosError } from 'axios';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { defineComponent, reactive } from 'vue';
 
 import { ErrorList } from '@intake24/admin/components/forms';
@@ -80,9 +79,9 @@ export default defineComponent({
         } else await this.$router.push({ name: 'login' });
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const { response: { status, data = {} } = {} } = err as AxiosError<any>;
+          const { response: { status, data = {} } = {} } = err;
 
-          if (status === 422 && 'errors' in data) {
+          if (status === HttpStatusCode.BadRequest && 'errors' in data) {
             this.errors.record(data.errors);
             return;
           }

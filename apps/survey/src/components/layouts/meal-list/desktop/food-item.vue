@@ -33,18 +33,18 @@
           <template #activator="{ on, attrs }">
             <v-icon
               v-bind="attrs"
-              :color="food.portionSize ? 'green darken-2' : undefined"
+              :color="isPortionSizeComplete ? 'green darken-2' : undefined"
               small
               v-on="on"
             >
-              {{ food.portionSize ? '$ok' : '$question' }}
+              {{ isPortionSizeComplete ? '$ok' : '$question' }}
             </v-icon>
           </template>
           <span>
             {{
               $t(
                 `recall.menu.food.${
-                  food.portionSize ? 'portionSizeComplete' : 'portionSizeIncomplete'
+                  isPortionSizeComplete ? 'portionSizeComplete' : 'portionSizeIncomplete'
                 }`
               )
             }}
@@ -54,16 +54,20 @@
           <template #activator="{ on, attrs }">
             <v-icon
               v-bind="attrs"
-              :color="food.info ? 'green darken-2' : undefined"
+              :color="isMissingFoodComplete ? 'green darken-2' : undefined"
               small
               v-on="on"
             >
-              {{ food.info ? '$ok' : '$question' }}
+              {{ isMissingFoodComplete ? '$ok' : '$question' }}
             </v-icon>
           </template>
           <span>
             {{
-              $t(`recall.menu.food.${food.info ? 'missingInfoComplete' : 'missingInfoIncomplete'}`)
+              $t(
+                `recall.menu.food.${
+                  isMissingFoodComplete ? 'missingInfoComplete' : 'missingInfoIncomplete'
+                }`
+              )
             }}
           </span>
         </v-tooltip>
@@ -106,18 +110,13 @@
         </v-tooltip>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu
-          :entity="food"
-          :entity-name="foodName"
-          v-bind="{ menu }"
-          @action="action"
-        ></context-menu>
+        <context-menu v-bind="{ food, meal, menu }" @action="action"></context-menu>
       </v-list-item-action>
     </v-list-item>
     <food-item
       v-for="linkedFood in food.linkedFoods"
       :key="linkedFood.id"
-      v-bind="{ food: linkedFood, linked: true, selectedFoodId }"
+      v-bind="{ food: linkedFood, linked: true, meal, selectedFoodId }"
       @action="action"
     ></food-item>
   </div>
@@ -127,7 +126,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, MealState } from '@intake24/common/types';
 
 import { useFoodItem } from '../use-food-item';
 import ContextMenu from './context-menu.vue';
@@ -146,6 +145,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    meal: {
+      type: Object as PropType<MealState>,
+      required: true,
+    },
     selectedFoodId: {
       type: String,
       required: false,
@@ -153,9 +156,12 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, foodName, menu } = useFoodItem(props, ctx);
+    const { action, foodName, isMissingFoodComplete, isPortionSizeComplete, menu } = useFoodItem(
+      props,
+      ctx
+    );
 
-    return { action, foodName, menu };
+    return { action, foodName, isMissingFoodComplete, isPortionSizeComplete, menu };
   },
 });
 </script>

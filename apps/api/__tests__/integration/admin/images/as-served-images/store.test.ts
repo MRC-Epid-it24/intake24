@@ -42,11 +42,11 @@ export default () => {
       expect(status).toBe(404);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['image', 'weight']);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -54,8 +54,8 @@ export default () => {
         .field('weight', 'notANumber')
         .field('image', 'notAFile');
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['image', 'weight']);
     });
 

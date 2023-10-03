@@ -74,7 +74,7 @@ export default class UserEmailVerificationNotification extends BaseJob<'UserEmai
     const { token, expiresIn } = await this.adminSignupService.createVerificationToken(userId);
     const domain = getFrontEndUrl(base, admin);
     const url = `${domain}/verify?token=${token}`;
-    const subject = '🍔 Intake24: Verify email';
+    const subject = `${this.appConfig.fullName}: Verify email`;
 
     const html = nunjucks.render('mail/user/email-verification.njk', {
       title: subject,

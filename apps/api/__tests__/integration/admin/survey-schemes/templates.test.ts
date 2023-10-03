@@ -31,36 +31,36 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for invalid query input data (#1)', async () => {
+    it('should return 400 for invalid query input data (#1)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=not-a-number`)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['limit']);
     });
 
-    it('should return 422 for invalid query input data (#2)', async () => {
+    it('should return 400 for invalid query input data (#2)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=-1`)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['limit']);
     });
 
-    it('should return 422 for invalid query input data (#3)', async () => {
+    it('should return 400 for invalid query input data (#3)', async () => {
       const { status, body } = await request(suite.app)
         .get(`${url}?limit=9999`)
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user);
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['limit']);
     });
 

@@ -1,4 +1,5 @@
 import type { SendMailOptions, Transporter } from 'nodemailer';
+import { convert } from 'html-to-text';
 import nodemailer from 'nodemailer';
 
 import type { Environment } from '@intake24/common/types';
@@ -50,13 +51,27 @@ export class Mailer {
 
   async sendMail(options: SendMailOptions): Promise<void> {
     try {
-      const { from } = this.mailConfig;
-      const defaults: SendMailOptions = { from };
+      const { from, replyTo } = this.mailConfig;
+      const defaults: SendMailOptions = {
+        from,
+        replyTo,
+        headers: { 'X-Auto-Response-Suppress': 'All' },
+      };
 
       let { html } = options;
-      if (html && typeof html === 'string') html = replaceCssAsInlineStyle(html);
+      let text: string | undefined = undefined;
 
-      const info = await this.transporter.sendMail({ ...defaults, ...options, html });
+      if (html && typeof html === 'string') {
+        html = replaceCssAsInlineStyle(html);
+        text = convert(html, {
+          selectors: [
+            { selector: '.header', format: 'skip' },
+            { selector: 'img', format: 'skip' },
+          ],
+        });
+      }
+
+      const info = await this.transporter.sendMail({ ...defaults, ...options, html, text });
 
       this.logger.info(info.messageId);
 

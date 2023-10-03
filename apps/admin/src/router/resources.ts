@@ -27,7 +27,7 @@ export const resources: Resource[] = [
     icon: 'fas fa-table-cells',
     api: 'admin/nutrient-tables',
     generateRoutes: true,
-    routes: [...routes, 'upload'],
+    routes: [...routes, 'tasks'],
   },
   {
     group: 'fdb',
@@ -76,7 +76,6 @@ export const resources: Resource[] = [
       'split-words',
       'synonym-sets',
       'recipe-foods',
-      'food-ranking',
       'tasks',
       'securables',
     ],
@@ -123,7 +122,7 @@ export const resources: Resource[] = [
     api: 'admin/surveys',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'overrides', 'respondents', 'submissions', 'data-export', 'securables'],
+    routes: [...routes, 'overrides', 'respondents', 'submissions', 'tasks', 'securables'],
   },
   // Images
   {

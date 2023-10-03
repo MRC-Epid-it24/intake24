@@ -19,13 +19,13 @@ export default () => {
     invalidUrl = `/api/surveys/invalid-survey/create-user`;
   });
 
-  it(`should return 422 for missing JWT in query token`, async () => {
+  it(`should return 400 for missing JWT in query token`, async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['token'], {
       bearer: null,
     });
   });
 
-  it(`should return 422 for malformed JWT in query token`, async () => {
+  it(`should return 400 for malformed JWT in query token`, async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['token'], {
       bearer: null,
       input: { token: 'this-is-not-a-jwt-token' },

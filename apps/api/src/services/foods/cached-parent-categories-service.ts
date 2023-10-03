@@ -1,5 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
-import { Category, Food, getAllChildCategories, QueryTypes } from '@intake24/db';
+import { Category, Food } from '@intake24/db';
 
 // FIXME: get from config file
 const ATTR_CACHE_LIFETIME = 300;
@@ -12,12 +12,7 @@ const cachedParentCategoriesService = ({ cache }: Pick<IoC, 'cache'>) => {
       async () => {
         const row = await Food.findOne({
           where: { code: foodCode },
-          include: [
-            {
-              association: 'parentCategories',
-              attributes: ['code'],
-            },
-          ],
+          include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
         if (row === null || row.parentCategories === undefined) return [];
@@ -33,12 +28,7 @@ const cachedParentCategoriesService = ({ cache }: Pick<IoC, 'cache'>) => {
       async () => {
         const row = await Category.findOne({
           where: { code: categoryCode },
-          include: [
-            {
-              association: 'parentCategories',
-              attributes: ['code'],
-            },
-          ],
+          include: [{ association: 'parentCategories', attributes: ['code'] }],
         });
 
         if (row === null || row.parentCategories === undefined) return [];

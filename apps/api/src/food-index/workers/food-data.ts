@@ -1,4 +1,4 @@
-import type { CategoryHeader, FoodHeader } from '@intake24/common/types/http';
+import type { CategoryHeader } from '@intake24/common/types/http';
 import { Category, CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';
 
 import type { RecipeFoodTuple } from '../phrase-index';

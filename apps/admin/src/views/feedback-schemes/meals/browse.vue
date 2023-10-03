@@ -40,7 +40,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-toolbar color="grey lighten-2" flat tile>
-              <v-icon color="secondary" left>fa-palette</v-icon>
+              <v-icon color="secondary" left>fas fa-palette</v-icon>
               <v-toolbar-title class="font-weight-medium">
                 {{ $t('feedback-schemes.meals.colors.title') }}
               </v-toolbar-title>

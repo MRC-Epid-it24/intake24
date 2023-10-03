@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { defineComponent, ref } from 'vue';
 
 import type { MFADeviceEntry, MFADevicesResponse } from '@intake24/common/types/http/admin';
@@ -183,7 +183,7 @@ export default defineComponent({
       try {
         await this.$http.post('admin/user/mfa/toggle', { status: this.status });
       } catch (err) {
-        if (isAxiosError(err) && err.response?.status === 403) {
+        if (isAxiosError(err) && err.response?.status === HttpStatusCode.Forbidden) {
           useMessages().info(this.$t('user.mfa.devices.none').toString());
           return;
         }

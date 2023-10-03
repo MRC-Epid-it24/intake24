@@ -7,7 +7,7 @@
             <v-card-title>{{ $t('locales.tasks.title') }}</v-card-title>
             <v-card-text>
               <v-select
-                v-model="form.job"
+                v-model="form.type"
                 hide-details="auto"
                 :items="jobTypeList"
                 :label="$t('locales.tasks._')"
@@ -20,19 +20,19 @@
           </v-col>
           <v-col cols="12" md="6">
             <component
-              :is="form.job"
+              :is="form.type"
               v-if="Object.keys(form.params).length"
               v-model="form.params"
-              :disabled="disabledJobParams[form.job]"
-              :errors="form.errors.get('params')"
+              :disabled="disabledJobParams[form.type]"
+              :errors="form.errors"
               name="params"
               :refs="refs"
-              @input="form.errors.clear('params')"
+              @input="form.errors.clear(paramErrors)"
             ></component>
           </v-col>
         </v-row>
-        <v-row justify="center">
-          <v-col cols="12" md="4" sm="6">
+        <v-row>
+          <v-col class="px-6" cols="6">
             <v-btn
               block
               color="primary"
@@ -41,7 +41,7 @@
               type="submit"
               x-large
             >
-              <v-icon left>fa-play</v-icon>{{ $t('common.action.submit') }}
+              <v-icon left>fas fa-play</v-icon>{{ $t('common.action.submit') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -52,23 +52,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 
-import type { JobParams, JobType, JobTypeParams } from '@intake24/common/types';
+import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
 import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
+import { localeJobs } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
-type LocaleJobType = Extract<
-  JobType,
-  'LocaleFoods' | 'LocaleFoodNutrientMapping' | 'PairwiseSearchCopyAssociations'
->;
-
 type LocaleTasksForm = {
-  job: LocaleJobType;
-  params: JobTypeParams;
+  type: LocaleJob;
+  params: GetJobParams<LocaleJob>;
 };
 
 export default defineComponent({
@@ -81,70 +77,69 @@ export default defineComponent({
   setup(props) {
     const { i18n } = useI18n();
 
-    const jobType = ref<LocaleJobType[]>([
-      'LocaleFoods',
-      'LocaleFoodNutrientMapping',
-      'PairwiseSearchCopyAssociations',
-    ]);
-    const jobTypeList = ref(
-      jobType.value.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
+    const jobTypeList = computed(() =>
+      localeJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
 
-    const defaultJobsParams = computed<Pick<JobParams, LocaleJobType>>(() => ({
+    const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
       LocaleFoods: { localeId: props.id },
+      LocaleFoodRankingUpload: { localeId: props.id, file: '' },
       LocaleFoodNutrientMapping: { localeId: props.id },
-      PairwiseSearchCopyAssociations: { sourceLocaleId: '', targetLocaleId: props.id },
+      LocalePopularitySearchCopy: { sourceLocaleId: '', localeId: props.id },
     }));
 
     const disabledJobParams = {
       LocaleFoods: { localeId: true },
+      LocaleFoodRankingUpload: { localeId: true },
       LocaleFoodNutrientMapping: { localeId: true },
-      PairwiseSearchCopyAssociations: { targetLocaleId: true },
+      LocalePopularitySearchCopy: { localeId: true },
     };
 
     const { entry, entryLoaded, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(props);
     useEntryFetch(props);
     const { clearError, form } = useForm<LocaleTasksForm>({
-      data: { job: jobType.value[0], params: defaultJobsParams.value.LocaleFoodNutrientMapping },
-      config: { resetOnSubmit: false },
+      data: { type: localeJobs[0], params: defaultJobsParams.value[localeJobs[0]] },
+      config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(jobType.value);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs);
+
+    const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
+
+    onMounted(async () => {
+      await startPolling(true);
+    });
+
+    const updateJob = () => {
+      form.errors.clear();
+      form.params = defaultJobsParams.value[form.type];
+    };
+
+    const submit = async () => {
+      if (jobInProgress.value) return;
+
+      const job = await form.post<JobEntry>(`admin/locales/${props.id}/tasks`);
+
+      jobs.value.unshift(job);
+      await startPolling();
+    };
 
     return {
       defaultJobsParams,
       disabledJobParams,
-      jobType,
       jobTypeList,
       entry,
       entryLoaded,
       refs,
       refsLoaded,
       clearError,
+      paramErrors,
       form,
       jobs,
       jobInProgress,
       startPolling,
+      submit,
+      updateJob,
     };
-  },
-
-  async mounted() {
-    await this.startPolling(true);
-  },
-
-  methods: {
-    updateJob() {
-      this.form.errors.clear();
-      this.form.params = this.defaultJobsParams[this.form.job];
-    },
-
-    async submit() {
-      if (this.jobInProgress) return;
-
-      const job = await this.form.post<JobEntry>(`admin/locales/${this.id}/tasks`);
-
-      this.jobs.unshift(job);
-      await this.startPolling();
-    },
   },
 });
 </script>

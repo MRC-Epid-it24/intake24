@@ -37,7 +37,7 @@ export default abstract class Job<T extends JobType> {
     if (!id) throw new Error('Job ID missing.');
 
     this.id = id;
-    this.dbId = id.replace('db:', '');
+    this.dbId = id.replace('db-', '');
     this.job = job;
     this.params = params;
     this.isRepeatable = id.startsWith('repeat:');

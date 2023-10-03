@@ -11,12 +11,12 @@
     <v-card class="meal-list-mobile__card">
       <div class="py-4 pl-4 pr-3 d-flex flex-row justify-space-between align-center">
         <div class="text-h6 font-weight-medium">{{ $t('recall.menu.title') }}</div>
-        <v-btn color="primary" icon @click="action('addMeal')">
-          <v-icon large>$add</v-icon>
+        <v-btn color="primary" icon :title="$t('recall.menu.meal.add')" @click="action('addMeal')">
+          <v-icon x-large>$add</v-icon>
         </v-btn>
       </div>
       <v-card-text class="pa-0">
-        <v-list class="meal-list__list" dense subheader>
+        <v-list class="meal-list__list" subheader>
           <meal-item
             v-for="meal in meals"
             :key="meal.id"
@@ -27,6 +27,9 @@
           ></meal-item>
         </v-list>
       </v-card-text>
+      <v-btn block color="info" large tile @click="closeNavigation">
+        <v-icon left>$close</v-icon>{{ $t('common.action.close') }}
+      </v-btn>
     </v-card>
   </v-bottom-sheet>
 </template>
@@ -64,6 +67,10 @@ export default defineComponent({
     const contextId = ref<string | undefined>(undefined);
     const navigation = ref<boolean>(false);
 
+    const closeNavigation = () => {
+      navigation.value = false;
+    };
+
     const updateContextId = (id: string) => {
       contextId.value = id === contextId.value ? undefined : id;
     };
@@ -75,6 +82,7 @@ export default defineComponent({
     });
 
     return {
+      closeNavigation,
       contextId,
       navigation,
       updateContextId,

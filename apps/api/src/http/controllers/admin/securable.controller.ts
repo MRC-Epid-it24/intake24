@@ -113,10 +113,13 @@ export const securableController = ({
       body: { email, name, phone, actions },
     } = req;
 
-    const user = await adminUserService.create(
-      { email, name, phone, password: randomString(12) },
-      { notify: true }
-    );
+    const user = await adminUserService.create({
+      email,
+      name,
+      phone,
+      password: randomString(12),
+      verifiedAt: new Date(),
+    });
 
     if (actions.length) {
       const records = actions.map((action) => ({

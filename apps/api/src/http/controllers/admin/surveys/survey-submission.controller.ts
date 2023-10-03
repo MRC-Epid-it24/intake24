@@ -9,7 +9,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, SurveySubmissionAttributes, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { submissionScope, Survey, SurveySubmission } from '@intake24/db';
+import { Op, submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
 import { getAndCheckAccess } from '../securable.controller';
 
@@ -30,13 +30,27 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
       if (validator.isUUID(search)) where.id = search;
-      else where.userId = search;
+      else
+        where['$user.aliases.username$'] = {
+          [SurveySubmission.sequelize?.getDialect() === 'postgres'
+            ? Op.iLike
+            : Op.substring]: `%${search}%`,
+        };
     }
 
     const submissions = await SurveySubmission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       where,
+      include: [
+        { association: 'user', include: [{ association: 'aliases', where: { surveyId } }] },
+      ],
       order: [['submissionTime', 'DESC']],
+      subQuery: false,
+      transform: (submission) => {
+        const { user, ...rest } = submission.get();
+
+        return { ...rest, username: user!.aliases![0].username };
+      },
     });
 
     res.json(submissions);

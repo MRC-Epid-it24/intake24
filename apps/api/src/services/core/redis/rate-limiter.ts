@@ -24,7 +24,7 @@ export default class RateLimiter extends HasRedisClient {
       },
       keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
       legacyHeaders: false,
-      standardHeaders: true,
+      standardHeaders: 'draft-7',
       ...this.rateLimiters[type],
       ...options,
 

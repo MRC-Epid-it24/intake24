@@ -77,7 +77,7 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
       const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
 
       const foods = this.dataExportService.getSubmissionsWithStream(options);
-      const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
+      const transform = new Transform({ fields, withBOM: true }, {}, { objectMode: true });
 
       foods.on('error', (err) => {
         clearInterval(progressInterval);

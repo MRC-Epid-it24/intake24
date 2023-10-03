@@ -2,7 +2,7 @@ import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/references/categories';
-  const permissions = ['fdbs'];
+  const permissions = ['locales'];
 
   test('missing authentication / authorization', async () => {
     await suite.sharedTests.assert401and403('get', url);

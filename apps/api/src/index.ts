@@ -16,16 +16,17 @@ const appOps = { config: ioc.cradle.config, logger: ioc.cradle.logger };
 
 const startApp = async (ops: Ops): Promise<void> => {
   const { config, logger } = ops;
-  const { name, host, port, https } = config.app;
+  const { name, host, port, https, certPath } = config.app;
 
   let server: Express | Server = await app(ops);
 
   if (https) {
     const home = homedir();
     const [cert, key, ca] = await Promise.all(
-      ['cert.pem', 'dev.pem', 'rootCA.pem'].map((file) =>
-        readFile(join(home, '.vite-plugin-mkcert', file))
-      )
+      ['cert.pem', 'dev.pem', 'rootCA.pem'].map((file) => {
+        const path = certPath ? join(certPath, file) : join(home, '.vite-plugin-mkcert', file);
+        return readFile(path);
+      })
     );
 
     server = createServer({ key, cert, ca }, server);

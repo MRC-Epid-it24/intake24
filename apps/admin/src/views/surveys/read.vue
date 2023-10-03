@@ -27,9 +27,9 @@
           <td>{{ $t(`surveys.states.${entry.state}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.users.allowGenUsers') }}</th>
+          <th>{{ $t('surveys.externalComm.allowGenUsers') }}</th>
           <td>{{ $t(`common.${entry.allowGenUsers}`) }}</td>
-          <th>{{ $t('surveys.users.genUserKey') }}</th>
+          <th>{{ $t('surveys.externalComm.genUserKey') }}</th>
           <td>{{ entry.genUserKey }}</td>
         </tr>
         <tr>
@@ -39,7 +39,7 @@
           <td>{{ $t(`common.${entry.userCustomFields}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.submissionNotificationUrl') }}</th>
+          <th>{{ $t('surveys.externalComm.submissionNotificationUrl') }}</th>
           <td>{{ entry.submissionNotificationUrl }}</td>
           <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
           <td>{{ $t(`common.${entry.storeUserSessionOnServer}`) }}</td>

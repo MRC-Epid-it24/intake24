@@ -135,7 +135,7 @@
                         link
                       >
                         <v-list-item-avatar class="drag-and-drop__handle">
-                          <v-icon>fa-grip-vertical</v-icon>
+                          <v-icon>fas fa-grip-vertical</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title>{{ section.text }}</v-list-item-title>
