@@ -208,15 +208,13 @@ export default defineComponent({
     async remove(deviceId: string) {
       await this.$http.delete(`admin/user/mfa/${deviceId}`);
       this.devices = this.devices.filter((device) => device.id !== deviceId);
+      if (!this.devices.length || this.devices.find((device) => device.preferred)) return;
 
-      const preferred = this.devices.length && this.devices.find((device) => device.preferred);
-      if (!preferred) {
-        const { data } = await this.$http.patch<MFADeviceEntry>(
-          `admin/user/mfa/${this.devices[0].id}`,
-          { preferred: true }
-        );
-        this.devices.splice(0, 1, data);
-      }
+      const { data } = await this.$http.patch<MFADeviceEntry>(
+        `admin/user/mfa/${this.devices[0].id}`,
+        { preferred: true }
+      );
+      this.devices.splice(0, 1, data);
     },
 
     clear() {

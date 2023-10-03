@@ -16,6 +16,7 @@ export type OTPRegistrationVerificationOps = {
 };
 
 export type OTPAuthenticationVerificationOps = {
+  email: string;
   token: string;
   secret: string;
 };
@@ -65,9 +66,9 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
    * @returns
    */
   const authenticationVerification = async (ops: OTPAuthenticationVerificationOps) => {
-    const { secret, token } = ops;
+    const { email, secret, token } = ops;
 
-    const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
+    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
 
     const delta = totp.validate({ token });
     if (delta === null) throw new Error('Invalid OTP token');
