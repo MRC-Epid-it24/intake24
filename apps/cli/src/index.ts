@@ -3,9 +3,6 @@ import './bootstrap';
 import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
-import { conflictResolutionOptions } from '@intake24/cli/commands/packager/importer-v4';
-import { runTest } from '@intake24/cli/commands/ptest';
-
 import pkg from '../package.json';
 import {
   findPortionImages,
@@ -16,6 +13,7 @@ import {
   packageExportV3,
   packageImportV4,
 } from './commands';
+import { conflictResolutionOptions } from './commands/packager/importer-v4';
 
 const run = async () => {
   const program = new Command();
