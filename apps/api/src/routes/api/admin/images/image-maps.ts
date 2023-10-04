@@ -37,5 +37,12 @@ export default () => {
     wrapAsync(imageMapController.edit)
   );
 
+  router.put(
+    '/:imageMapId/base-image',
+    permission('image-maps|edit'),
+    upload.single('baseImage'),
+    wrapAsync(imageMapController.updateImage)
+  );
+
   return router;
 };

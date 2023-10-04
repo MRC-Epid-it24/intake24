@@ -34,6 +34,7 @@ export default validate(
     objects: {
       in: ['body'],
       isJSON: true,
+      optional: true,
     },
     baseImage: imageFile,
   })

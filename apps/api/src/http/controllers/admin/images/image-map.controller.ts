@@ -45,13 +45,20 @@ const imageMapController = ({
   const store = async (req: Request, res: Response<ImageMapEntry>): Promise<void> => {
     const {
       file,
-      body: { id, description },
+      body: { id, description, objects },
     } = req;
     const user = req.user as User;
 
     if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
 
-    let imageMap = await imageMapService.create({ id, description, file, uploader: user.id });
+    let imageMap = await imageMapService.create({
+      id,
+      description,
+      objects: objects === undefined ? [] : JSON.parse(objects),
+      baseImage: file,
+      uploader: user.id,
+    });
+
     imageMap = await portionSizeService.getImageMap(imageMap.id);
 
     res.status(201).json(responseCollection.mapEntryResponse(imageMap));
@@ -79,6 +86,23 @@ const imageMapController = ({
     res.json(responseCollection.mapEntryResponse(image));
   };
 
+  const updateImage = async (
+    req: Request<{ imageMapId: string }>,
+    res: Response<ImageMapEntry>
+  ): Promise<void> => {
+    const { file } = req;
+    const { imageMapId } = req.params;
+    const user = req.user as User;
+
+    if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
+
+    await imageMapService.updateImage(imageMapId, file, user.id);
+
+    const imageMap = await portionSizeService.getImageMap(imageMapId);
+
+    res.status(200).json(responseCollection.mapEntryResponse(imageMap));
+  };
+
   const destroy = async (
     req: Request<{ imageMapId: string }>,
     res: Response<undefined>
@@ -100,6 +124,7 @@ const imageMapController = ({
     read,
     edit,
     update,
+    updateImage,
     destroy,
     refs,
   };
