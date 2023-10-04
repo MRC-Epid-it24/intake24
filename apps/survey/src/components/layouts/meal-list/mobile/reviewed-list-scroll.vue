@@ -13,12 +13,6 @@
               @action="action"
               @update:context-id="updateContextId"
             ></meal-item>
-            <v-checkbox
-              v-model="reviewed"
-              class="review-checkbox__checkbox pl-3"
-              label="Reviewed"
-              :value="meal.id"
-            ></v-checkbox>
           </div>
         </v-list>
       </v-card-text>
@@ -28,7 +22,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import { useMealUtils } from '@intake24/survey/composables';
@@ -37,7 +31,7 @@ import { useMealList } from '../use-meal-list';
 import MealItem from './meal-item.vue';
 
 export default defineComponent({
-  name: 'MealListMobile',
+  name: 'ReviewMealListMobileScroll',
 
   components: { MealItem },
 
@@ -49,8 +43,6 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const reviewed = ref([]);
-
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
       ctx
@@ -64,8 +56,36 @@ export default defineComponent({
       contextId.value = id === contextId.value ? undefined : id;
     };
 
-    watch(reviewed, (newVal) => {
-      ctx.emit('update-reviewed', newVal);
+    const checkScroll = (entries: IntersectionObserverEntry[]) => {
+      const el = entries[0].target as HTMLElement;
+      const isBottom = entries[0].isIntersecting;
+      if (isBottom) {
+        ctx.emit('reached-bottom-mobile', true);
+      }
+      const isScrollable = el.scrollHeight > el.clientHeight;
+      if (isBottom && (!isScrollable || el.scrollHeight === el.clientHeight)) {
+        ctx.emit('reached-bottom-mobile', true);
+      }
+    };
+
+    const observer = new IntersectionObserver(checkScroll, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0,
+    });
+
+    onMounted(() => {
+      const el = document.querySelector('.meal-list__list');
+      if (el) {
+        observer.observe(el);
+      }
+    });
+
+    onBeforeUnmount(() => {
+      const el = document.querySelector('.meal-list__list');
+      if (el) {
+        observer.unobserve(el);
+      }
     });
 
     return {
@@ -74,10 +94,10 @@ export default defineComponent({
       getMealName,
       getMealTime,
       selectedMealId,
-      reviewed,
       selectedFoodId,
       isSelectedFoodInMeal,
       action,
+      checkScroll,
     };
   },
 });

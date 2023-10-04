@@ -104,7 +104,8 @@ export default defineComponent({
     showMealList(): boolean {
       if (
         this.currentPrompt?.section === 'submission' &&
-        this.currentPrompt.prompt?.desktopReview !== false
+        this.currentPrompt.prompt.component === 'submit-prompt' &&
+        this.currentPrompt.prompt.review['desktop'] !== false
       )
         return false;
 
