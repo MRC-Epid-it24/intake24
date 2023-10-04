@@ -378,13 +378,18 @@ export const useSurvey = defineStore('survey', {
     },
 
     async submitRecall() {
+      if (this.isSubmitting || this.isSubmitted) {
+        console.warn('Survey is already being submitted, not submitting again.');
+        return;
+      }
+
       if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot submit the survey.`);
         return;
       }
 
-      this.data.endTime = new Date();
       this.isSubmitting = true;
+      this.data.endTime = new Date();
 
       try {
         this.user = await surveyService.submit(this.parameters.slug, this.data);
