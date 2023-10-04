@@ -50,3 +50,17 @@ Synonym sets entries management
 Entry has following fields:
 
 - `Synonyms` - space delimited list of synonyms
+
+## Tasks
+
+Tasks section allows to submit resource specific tasks into the job queue with additional parameters. See [job types](/admin/system/job-types) for more information.
+
+Jobs that can be submitted:
+
+- [Export foods](/admin/system/job-types.html#localefoods)
+
+- [Export foods nutrients mapping](/admin/system/job-types.html#localefoodnutrientmapping)
+
+- [Food ranking upload](/admin/system/job-types.html#localefoodrankingupload)
+
+- [Copy popularity search data](/admin/system/job-types.html#localepopularitysearchcopy)

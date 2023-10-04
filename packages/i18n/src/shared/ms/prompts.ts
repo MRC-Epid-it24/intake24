@@ -86,8 +86,8 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>Please try browsing the food categories listed above to find your food.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>`,
+      description: `<p>Try browsing the food categories listed above to find your food.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
@@ -121,9 +121,9 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>
-      <p>If you still can't find your food, click 'Report a missing food'.</p>`,
+      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p>
+      <p>Or select 'Browse all foods' and explore the food categories.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
@@ -350,7 +350,6 @@ const prompts: LocaleMessageObject = {
     serving: {
       header:
         'Gunakan slider di sebelah kanan atau klik pada cawan atau gelas untuk menunjukkan tahap kepenuhan cawan atau gelas anda.',
-      hint: 'Gerakkan penanda ini untuk menunjukkan tahap kepenuhan cawan atau gelas anda.',
       less: 'Ia kurang penuh',
       more: 'Ia lebih penuh',
       confirm: 'Ia penuh sebanyak itu',

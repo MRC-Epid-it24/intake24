@@ -21,13 +21,13 @@ export default () => {
     });
   });
 
-  it('should return 422 for missing timezone offset', async () => {
+  it('should return 400 for missing timezone offset', async () => {
     await suite.sharedTests.assertInvalidInput('get', url, ['tzOffset'], {
       bearer: 'respondent',
     });
   });
 
-  it('should return 422 for invalid timezone offset', async () => {
+  it('should return 400 for invalid timezone offset', async () => {
     await suite.sharedTests.assertInvalidInput(
       'get',
       `${url}?tzOffset=invalidTzOffset`,

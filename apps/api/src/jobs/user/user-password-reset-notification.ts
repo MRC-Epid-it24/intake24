@@ -76,7 +76,7 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
 
     const url = `${domain}/password/reset/${token}`;
     const { expiresIn } = this.securityConfig.passwords;
-    const subject = '🍔 Intake24: Password reset';
+    const subject = `${this.appConfig.fullName}: Password reset`;
 
     await UserPasswordReset.create({ userId, token });
 

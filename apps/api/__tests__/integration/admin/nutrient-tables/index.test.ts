@@ -4,6 +4,7 @@ import edit from './edit.test';
 import read from './read.test';
 import refs from './refs.test';
 import store from './store.test';
+import tasks from './tasks.test';
 import update from './update.test';
 
 export default () => {
@@ -14,4 +15,5 @@ export default () => {
   describe('GET /api/admin/nutrient-tables/:nutrientTableId/edit', edit);
   describe('PUT /api/admin/nutrient-tables/:nutrientTableId', update);
   describe('DELETE /api/admin/nutrient-tables/:nutrientTableId', destroy);
+  describe('POST /api/admin/nutrient-tables/:nutrientTableId/tasks', tasks);
 };

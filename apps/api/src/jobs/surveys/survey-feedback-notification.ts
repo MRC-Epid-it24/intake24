@@ -9,17 +9,21 @@ import BaseJob from '../job';
 export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackNotification'> {
   readonly name = 'SurveyFeedbackNotification';
 
+  private readonly appConfig;
+
   private readonly feedbackService;
 
   private readonly mailer;
 
   constructor({
+    appConfig,
     feedbackService,
     logger,
     mailer,
-  }: Pick<IoC, 'feedbackService' | 'logger' | 'mailer'>) {
+  }: Pick<IoC, 'appConfig' | 'feedbackService' | 'logger' | 'mailer'>) {
     super({ logger });
 
+    this.appConfig = appConfig;
     this.feedbackService = feedbackService;
     this.mailer = mailer;
   }
@@ -37,7 +41,7 @@ export default class SurveyFeedbackNotification extends BaseJob<'SurveyFeedbackN
     this.logger.debug('Job started.');
 
     const { surveyId, userId, submissions, to, cc, bcc } = this.params;
-    const subject = '🍔 Intake24: My dietary feedback';
+    const subject = `${this.appConfig.fullName}: My dietary feedback`;
     const filename = `Intake24-MyFeedback-${new Date().toISOString().substring(0, 10)}.pdf`;
     const { path, url } = await this.feedbackService.getFeedbackFile(surveyId, userId, submissions);
     const html = nunjucks.render('mail/surveys/feedback.njk', {

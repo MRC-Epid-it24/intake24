@@ -18,26 +18,14 @@
             <v-col cols="12" md="6">
               <select-resource
                 v-model="form.imageMapId"
-                item-name="id"
+                clearable
+                :error-messages="form.errors.get('imageMapId')"
+                item-name="description"
+                :label="$t('image-maps.id')"
+                name="imageMapId"
                 resource="image-maps"
                 @input="form.errors.clear('imageMapId')"
               >
-                <template #activator="{ attrs, on }">
-                  <v-text-field
-                    v-bind="attrs"
-                    clearable
-                    :error-messages="form.errors.get('imageMapId')"
-                    hide-details="auto"
-                    :label="$t('image-maps.id')"
-                    name="imageMapId"
-                    outlined
-                    prepend-inner-icon="$image-maps"
-                    readonly
-                    :value="form.imageMapId"
-                    v-on="on"
-                  >
-                  </v-text-field>
-                </template>
               </select-resource>
             </v-col>
             <v-col cols="12" md="6">

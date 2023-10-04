@@ -4,7 +4,6 @@ import type { Job } from 'bullmq';
 import { Transform } from '@json2csv/node';
 import { format } from 'date-fns';
 import fs from 'fs-extra';
-import slugify from 'slugify';
 
 import type { IoC } from '@intake24/api/ioc';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -63,7 +62,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
     const { code: localeCode } = locale;
 
     const timestamp = format(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `${slugify(this.name)}-${localeCode}-${timestamp}.csv`;
+    const filename = `intake24-${this.name}-${localeCode}-${timestamp}.csv`;
 
     const total = await FoodLocal.count({
       where: { localeId: localeCode },
@@ -86,55 +85,11 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
       { label: 'Portion Size methods', value: 'portionSizeMethods' },
     ];
 
-    const transforms = [
-      (item: FoodLocal) => {
-        const {
-          foodCode,
-          name,
-          localeId,
-          main: { name: englishName, attributes, brands = [] } = {},
-          associatedFoods = [],
-          nutrientRecords: [{ nutrientTableId, nutrientTableRecordId }] = [],
-          portionSizeMethods = [],
-        } = item;
-
-        return {
-          localeId,
-          foodCode,
-          name,
-          englishName,
-          nutrientTableId,
-          nutrientTableRecordId,
-          readyMealOption: attributes?.readyMealOption ?? 'Inherited',
-          sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
-          reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
-          useInRecipes: attributes?.useInRecipes
-            ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
-            : 'Inherited',
-          brands: brands.map(({ name }) => name).join(', '),
-          associatedFoods: associatedFoods
-            .map(
-              ({ associatedFoodCode, associatedCategoryCode }) =>
-                associatedFoodCode ?? associatedCategoryCode
-            )
-            .join(', '),
-          portionSizeMethods: portionSizeMethods
-            .map(
-              ({ method, conversionFactor, parameters = [] }) =>
-                `Method: ${method}, conversion: ${conversionFactor}, ${parameters
-                  .map(({ name, value }) => `${name}: ${value}`)
-                  .join(', ')}`
-            )
-            .join('\n'),
-        };
-      },
-    ];
-
-    return { localeCode, filename, fields, total, transforms };
+    return { localeCode, filename, fields, total };
   }
 
   private async exportData(): Promise<void> {
-    const { localeCode, fields, filename, total, transforms } = await this.prepareExportInfo();
+    const { localeCode, fields, filename, total } = await this.prepareExportInfo();
 
     this.initProgress(total);
 
@@ -170,8 +125,55 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
         order: [['foodCode', 'asc']],
       });
 
-      const transform = new Transform<FoodLocal>(
-        { fields, withBOM: true, transforms },
+      const transform = new Transform(
+        {
+          fields,
+          withBOM: true,
+          transforms: [
+            (item: FoodLocal) => {
+              const {
+                foodCode,
+                name,
+                localeId,
+                main: { name: englishName, attributes, brands = [] } = {},
+                associatedFoods = [],
+                nutrientRecords: [{ nutrientTableId, nutrientTableRecordId }] = [],
+                portionSizeMethods = [],
+              } = item;
+
+              return {
+                localeId,
+                foodCode,
+                name,
+                englishName,
+                nutrientTableId,
+                nutrientTableRecordId,
+                readyMealOption: attributes?.readyMealOption ?? 'Inherited',
+                sameAsBeforeOption: attributes?.sameAsBeforeOption ?? 'Inherited',
+                reasonableAmount: attributes?.reasonableAmount ?? 'Inherited',
+                useInRecipes: attributes?.useInRecipes
+                  ? ['Anywhere', 'RegularFoodsOnly', 'RecipesOnly'][attributes.useInRecipes]
+                  : 'Inherited',
+                brands: brands.map(({ name }) => name).join(', '),
+                associatedFoods: associatedFoods
+                  .map(
+                    ({ associatedFoodCode, associatedCategoryCode }) =>
+                      associatedFoodCode ?? associatedCategoryCode
+                  )
+                  .join(', '),
+                portionSizeMethods: portionSizeMethods
+                  .map(
+                    ({ method, conversionFactor, parameters = [] }) =>
+                      `Method: ${method}, conversion: ${conversionFactor}, ${parameters
+                        .map(({ name, value }) => `${name}: ${value}`)
+                        .join(', ')}`
+                  )
+                  .join('\n'),
+              };
+            },
+          ],
+        },
+        {},
         { objectMode: true }
       );
 

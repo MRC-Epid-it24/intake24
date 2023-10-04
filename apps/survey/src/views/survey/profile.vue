@@ -18,7 +18,7 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fa-id-badge</v-icon>
+                <v-icon class="secondary" dark>fas fa-id-badge</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.provider') }}</v-list-item-title>
@@ -29,7 +29,7 @@
             </v-list-item>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fa-key</v-icon>
+                <v-icon class="secondary" dark>fas fa-key</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.providerId') }}</v-list-item-title>
@@ -44,7 +44,7 @@
             <v-subheader>{{ $t('profile.settings') }}</v-subheader>
             <v-list-item>
               <v-list-item-avatar>
-                <v-icon class="secondary" dark>fa-language</v-icon>
+                <v-icon class="secondary" dark>fas fa-language</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-select

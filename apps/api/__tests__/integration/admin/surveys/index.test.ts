@@ -1,5 +1,4 @@
 import browse from './browse.test';
-import dataExport from './data-export/index.test';
 // import put from './put.test';
 import destroy from './destroy.test';
 import edit from './edit.test';
@@ -9,6 +8,7 @@ import refs from './refs.test';
 import respondents from './respondents/index.test';
 import store from './store.test';
 import submissions from './submissions/index.test';
+import tasks from './tasks.test';
 
 export default () => {
   describe('GET /api/admin/surveys', browse);
@@ -40,7 +40,6 @@ export default () => {
   describe('GET /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.read);
   describe('DELETE /api/admin/surveys/:surveyId/submissions/:submissionId', submissions.destroy);
 
-  // Surveys data-export
-  describe('POST /api/admin/surveys/:surveyId/data-export', dataExport.queue);
-  describe('POST /api/admin/surveys/:surveyId/data-export/sync', dataExport.sync);
+  // Surveys tasks
+  describe('POST /api/admin/surveys/:surveyId/tasks', tasks);
 };

@@ -4,6 +4,7 @@ import type {
   FoodAttributes,
   LanguageAttributes,
   NutrientTableAttributes,
+  NutrientTableRecordAttributes,
   Pagination,
   StandardUnitAttributes,
   SurveyAttributes,
@@ -32,6 +33,8 @@ export type StandardUnitReferences = Pagination<
 export type NutrientTableReferences = Pagination<
   Pick<NutrientTableAttributes, 'id' | 'description'>
 >;
+
+export type NutrientTableRecordReferences = Pagination<NutrientTableRecordAttributes>;
 
 export type SurveySchemeReferences = Pagination<SurveySchemeAttributes>;
 

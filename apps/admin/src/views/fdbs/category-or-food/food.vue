@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card v-if="isEntryLoaded" flat>
-      <v-form :disabled="disabled" @keydown.native="clearError" @submit.prevent="submit">
+      <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
             <v-toolbar-title class="font-weight-medium">
@@ -13,6 +13,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.main.code"
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.code')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.code')"
@@ -23,6 +24,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.main.name"
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.name')"
                   hide-details="auto"
                   :label="$t('fdbs.foods.global.name')"
@@ -31,16 +33,18 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <auto-complete
+                <select-resource
                   v-model="form.main.foodGroupId"
-                  api="admin/food-groups"
+                  clearable
+                  :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.foodGroupId')"
-                  :label="$t('fdbs.foods.global.foodGroup').toString()"
+                  :initial-item="entry?.main?.foodGroup"
+                  :label="$t('fdbs.foods.global.foodGroup')"
                   name="main.foodGroup"
-                  response-object="data"
-                  :selected="entry?.main?.foodGroup"
+                  resource="food-groups"
                   @input="form.errors.clear('main.foodGroupId')"
-                ></auto-complete>
+                >
+                </select-resource>
               </v-col>
             </v-row>
           </v-card-text>
@@ -69,44 +73,49 @@
         <attribute-list
           v-model="form.main.attributes"
           class="mb-6"
-          :disabled="disabled"
+          :disabled="!globalEdit"
           :errors="form.errors"
         ></attribute-list>
         <category-list
           v-model="form.main.parentCategories"
           class="mb-6"
-          :disabled="disabled"
+          :disabled="!globalEdit"
           :errors="form.errors"
           :locale-id="id"
         ></category-list>
         <nutrient-list
           v-model="form.nutrientRecords"
           class="mb-6"
-          :disabled="disabled"
           :errors="form.errors"
           :nutrient-tables="refs?.nutrientTables ?? []"
         ></nutrient-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"
           class="mb-6"
-          :disabled="disabled"
           :errors="form.errors"
           :locale-id="id"
         ></portion-size-method-list>
         <associated-food-list
           v-model="form.associatedFoods"
           class="mb-6"
-          :disabled="disabled"
           :errors="form.errors"
           :food-code="form.main.code"
           :locale-id="id"
         ></associated-food-list>
       </v-form>
       <v-card-actions class="pa-4">
-        <v-spacer></v-spacer>
         <v-btn color="secondary" outlined type="submit" @click="submit">
           <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
+        <v-spacer></v-spacer>
+        <confirm-dialog
+          color="error"
+          icon-left="$delete"
+          :label="$t('common.action.delete').toString()"
+          @confirm="remove"
+        >
+          {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
+        </confirm-dialog>
       </v-card-actions>
     </v-card>
     <v-skeleton-loader
@@ -119,7 +128,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { onBeforeRouteUpdate } from 'vue-router/composables';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router/composables';
 
 import type {
   FoodDatabaseEntry,
@@ -127,6 +136,7 @@ import type {
   FoodLocalEntry,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AssociatedFoodList,
@@ -135,11 +145,11 @@ import {
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
-import { AutoComplete } from '@intake24/admin/components/forms';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
 import { useHttp } from '@intake24/admin/services';
 import { useUser } from '@intake24/admin/stores';
 import { useI18n } from '@intake24/i18n';
+import { ConfirmDialog } from '@intake24/ui/components';
 import { useMessages } from '@intake24/ui/stores';
 
 export default defineComponent({
@@ -147,12 +157,13 @@ export default defineComponent({
 
   components: {
     AssociatedFoodList,
-    AutoComplete,
     AttributeList,
     CategoryList,
+    ConfirmDialog,
     ConfirmLeaveDialog,
     NutrientList,
     PortionSizeMethodList,
+    SelectResource,
   },
 
   props: {
@@ -168,23 +179,16 @@ export default defineComponent({
 
   setup(props) {
     const http = useHttp();
+    const router = useRouter();
     const { i18n } = useI18n();
     const user = useUser();
 
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
-    const disabled = computed(
-      () =>
-        !user.can({
-          resource: 'locales',
-          action: 'food-list',
-          securables: localeEntry.value.securables,
-          ownerId: localeEntry.value.ownerId,
-        })
-    );
 
     const loading = ref(false);
     const type = 'foods';
     const entry = ref<FoodLocalEntry | null>(null);
+    const globalEdit = computed(() => user.can('locales|food-list'));
     const isEntryLoaded = computed(() => !!entry.value);
 
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
@@ -242,6 +246,23 @@ export default defineComponent({
       useMessages().success(i18n.t('common.msg.updated', { name: name ?? englishName }).toString());
     };
 
+    const remove = async () => {
+      await http.delete(`admin/fdbs/${props.id}/${type}/${props.entryId}`);
+
+      useMessages().success(
+        i18n.t('common.msg.deleted', { name: entry.value?.main?.name }).toString()
+      );
+
+      await router.push({
+        name: `fdbs-categories`,
+        params: {
+          id: props.id,
+          //@ts-expect-error missing typed locals
+          entryId: entry.value?.main?.parentCategories?.at(0)?.locals?.at(0)?.id ?? 'no-category',
+        },
+      });
+    };
+
     onMounted(async () => {
       await fetchCategoryOrFood(props.entryId);
     });
@@ -264,8 +285,9 @@ export default defineComponent({
       originalEntry,
       routeLeave,
       toForm,
-      disabled,
+      globalEdit,
       isEntryLoaded,
+      remove,
       submit,
     };
   },

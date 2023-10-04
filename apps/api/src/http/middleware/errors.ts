@@ -53,8 +53,8 @@ export default (app: Express, { logger }: Ops): void => {
 
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof ValidationError) {
-      const { errors } = err;
-      res.status(422).json({ success: false, errors });
+      const { errors, message } = err;
+      res.status(400).json({ errors, message });
       return;
     }
     next(err);
@@ -64,9 +64,9 @@ export default (app: Express, { logger }: Ops): void => {
     if (err instanceof MulterError) {
       const { field = 'file', message } = err;
 
-      res.status(422).json({
-        success: false,
+      res.status(400).json({
         errors: { [field]: { param: field, msg: message, location: 'body', value: null } },
+        message,
       });
       return;
     }

@@ -17,8 +17,7 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
     const { id: userId } = req.user as User;
 
     if (slug) {
-      const survey = await Survey.findOne({
-        where: { slug },
+      const survey = await Survey.findBySlug(slug, {
         include: [{ association: 'feedbackScheme' }],
       });
       if (!survey) throw new NotFoundError();
@@ -39,8 +38,7 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
     const { id: userId } = req.user as User;
 
     if (slug) {
-      const survey = await Survey.findOne({
-        where: { slug },
+      const survey = await Survey.findBySlug(slug, {
         include: [{ association: 'feedbackScheme' }],
       });
       if (!survey) throw new NotFoundError();

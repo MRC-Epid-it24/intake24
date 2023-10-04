@@ -50,7 +50,7 @@ export default () => {
     await suite.sharedTests.assertMissingAuthentication('post', url, { bearer: 'respondent' });
   });
 
-  it('should return 422 for invalid input data', async () => {
+  it('should return 400 for invalid input data', async () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       `${url}?survey=${survey.slug}`,
@@ -83,7 +83,7 @@ export default () => {
     });
   });
 
-  it('should return 422 when feedback scheme specifies physicalDataFields and they are missing', async () => {
+  it('should return 400 when feedback scheme specifies physicalDataFields and they are missing', async () => {
     await Promise.all([
       survey.update({ feedbackSchemeId: feedbackScheme.id }),
       feedbackScheme.update({ physicalDataFields: [...feedbackPhysicalDataFields] }),

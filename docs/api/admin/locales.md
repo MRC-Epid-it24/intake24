@@ -136,6 +136,40 @@ Content-Type: application/json
 204 No Content
 ```
 
+## Queue task
+
+Submits job to the queue.
+
+Specific jobs can be submitted to the queue. Each job type has its own parameters. See [job types](/admin/system/job-types) for more information.
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/tasks
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json | multipart/form-data
+
+{
+    "type": string,
+    "params": {
+        ...
+    }
+}
+```
+
+### Response
+
+Returns job resource entry.
+
+```json
+200 OK
+
+{
+    ...
+}
+```
+
 ## Locale references
 
 Get locale references

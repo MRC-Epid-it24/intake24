@@ -7,7 +7,7 @@ export default () => {
     await suite.sharedTests.assertMissingAuthentication('post', url, { bearer: 'respondent' });
   });
 
-  it('should return 422 for missing input data', async () => {
+  it('should return 400 for missing input data', async () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
@@ -16,7 +16,7 @@ export default () => {
     );
   });
 
-  it('should return 422 for weak new passwords', async () => {
+  it('should return 400 for weak new passwords', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['password', 'passwordConfirm'], {
       bearer: 'respondent',
       input: {
@@ -27,7 +27,7 @@ export default () => {
     });
   });
 
-  it('should return 422 for not matching new passwords', async () => {
+  it('should return 400 for not matching new passwords', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['passwordConfirm'], {
       bearer: 'respondent',
       input: {
@@ -38,7 +38,7 @@ export default () => {
     });
   });
 
-  it('should return 422 for invalid current password', async () => {
+  it('should return 400 for invalid current password', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['passwordCurrent'], {
       bearer: 'respondent',
       input: {

@@ -30,20 +30,20 @@ export default () => {
     });
   });
 
-  it('should return 422 for missing input data', async () => {
+  it('should return 400 for missing input data', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
       bearer: 'respondent',
     });
   });
 
-  it('should return 422 when both email and phone empty', async () => {
+  it('should return 400 when both email and phone empty', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
       bearer: 'respondent',
       input: { email: null, phone: null },
     });
   });
 
-  it('should return 422 for invalid input data', async () => {
+  it('should return 400 for invalid input data', async () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,

@@ -20,9 +20,9 @@ const survey: LocaleMessageObject = {
   generateUser: {
     _: '生成访问权限',
     subtitle: '这是开放获取研究，您可以免费访问。',
+    400: '提供的验证码无效。',
     403: `调查 {surveyId} 不允许生成用户。`,
     404: `调查 {surveyId} 尚未被识别。`,
-    422: '提供的验证码无效。',
     429: '刚刚生成新用户，请稍后重试。',
   },
 };

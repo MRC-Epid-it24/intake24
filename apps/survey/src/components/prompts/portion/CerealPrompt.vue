@@ -105,7 +105,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters, SelectedAsServedImage } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';

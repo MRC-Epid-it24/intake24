@@ -14,8 +14,14 @@ const otpDeviceController = ({ otpProvider }: Pick<IoC, 'otpProvider'>) => {
     req: Request,
     res: Response<OTPRegistrationChallenge>
   ): Promise<void> => {
+    const {
+      currentUser: { email },
+    } = req.scope.cradle;
+
+    if (!email) throw new ApplicationError('Invalid user - missing email.');
+
     const challengeId = randomString(32);
-    const { secret, ...rest } = await otpProvider.registrationChallenge();
+    const { secret, ...rest } = await otpProvider.registrationChallenge(email);
 
     req.session.otpRegChallenge = { challengeId, secret };
 
@@ -26,7 +32,12 @@ const otpDeviceController = ({ otpProvider }: Pick<IoC, 'otpProvider'>) => {
     req: Request<any, any, OTPRegistrationVerificationRequest>,
     res: Response<MFADeviceEntry>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const {
+      userId,
+      currentUser: { email },
+    } = req.scope.cradle;
+
+    if (!email) throw new ApplicationError('Invalid user - missing email.');
     const { challengeId, name, token } = req.body;
 
     if (req.session.otpRegChallenge?.challengeId !== challengeId) {
@@ -35,7 +46,13 @@ const otpDeviceController = ({ otpProvider }: Pick<IoC, 'otpProvider'>) => {
     }
 
     const { secret } = req.session.otpRegChallenge;
-    const device = await otpProvider.registrationVerification({ userId, name, token, secret });
+    const device = await otpProvider.registrationVerification({
+      userId,
+      email,
+      name,
+      token,
+      secret,
+    });
 
     delete req.session.otpRegChallenge;
 

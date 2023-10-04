@@ -10,18 +10,20 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: { startDate: string; endDate: string };
   let job: JobEntry;
 
   beforeAll(async () => {
     const { startDate, endDate } = suite.data.system.survey;
-    input = {
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0],
+    const input = {
+      type: 'SurveyDataExport',
+      params: {
+        startDate: startDate.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
+      },
     };
 
     const { body } = await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);

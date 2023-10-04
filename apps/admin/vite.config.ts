@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
     DISABLE_PWA,
     EMPTY_OUT_DIR = 'true',
     DEV_HTTPS,
+    DEV_MKCERT_PATH,
     VITE_APP_NAME: appName,
     VITE_CAPTCHA_PROVIDER: captchaProvider,
   } = loadEnv(mode, process.cwd(), '');
@@ -104,7 +105,7 @@ export default defineConfig(({ mode }) => {
         resolvers: [VuetifyResolver()],
         directoryAsNamespace: true,
       }),
-      https ? mkcert() : undefined,
+      https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       unFonts({
         google: {
           families: [
@@ -128,7 +129,12 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         disable: disablePwa,
         registerType: 'autoUpdate',
-        includeAssets: ['icon.svg', 'icon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        includeAssets: [
+          'icons/icon.svg',
+          'icons/icon.ico',
+          'icons/apple-touch-icon-180x180.png',
+          'robots.txt',
+        ],
         manifest: {
           id: '/',
           start_url: '/',
@@ -138,23 +144,23 @@ export default defineConfig(({ mode }) => {
           theme_color: colors.primary,
           icons: [
             {
-              src: 'pwa-64x64.png',
+              src: 'icons/pwa-64x64.png',
               sizes: '64x64',
               type: 'image/png',
             },
             {
-              src: 'pwa-192x192.png',
+              src: 'icons/pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png',
             },
             {
-              src: 'pwa-512x512.png',
+              src: 'icons/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: 'maskable-icon-512x512.png',
+              src: 'icons/maskable-icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',

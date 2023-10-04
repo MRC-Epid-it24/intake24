@@ -1,7 +1,24 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ attrs, on }">
-      <slot name="activator" v-bind="{ on, attrs }"></slot>
+      <slot name="activator" v-bind="{ on, attrs }">
+        <v-text-field
+          v-bind="attrs"
+          :class="activatorClass"
+          :clearable="clearable"
+          :disabled="disabled"
+          :error-messages="errorMessages"
+          hide-details="auto"
+          :label="label"
+          :name="name"
+          outlined
+          :prepend-inner-icon="itemIcon"
+          readonly
+          :value="selectedItem ? selectedItem[itemName] : value"
+          v-on="on"
+          @click:clear="clearInput"
+        ></v-text-field>
+      </slot>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="secondary" dark flat>
@@ -79,6 +96,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { TranslateResult } from 'vue-i18n';
 import { defineComponent, ref, toRefs } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -91,6 +109,21 @@ export default defineComponent({
   name: 'SelectResourceDialog',
 
   props: {
+    activatorClass: {
+      type: String,
+    },
+    clearable: {
+      type: Boolean,
+    },
+    disabled: {
+      type: Boolean,
+    },
+    errorMessages: {
+      type: Array as PropType<string[]>,
+    },
+    initialItem: {
+      type: [Object] as PropType<Dictionary | null>,
+    },
     itemId: {
       type: String,
       default: 'id',
@@ -98,6 +131,12 @@ export default defineComponent({
     itemName: {
       type: String,
       default: 'name',
+    },
+    label: {
+      type: String as PropType<string | TranslateResult>,
+    },
+    name: {
+      type: String,
     },
     resource: {
       type: String,
@@ -112,15 +151,19 @@ export default defineComponent({
     },
   },
 
-  emits: ['input'],
+  emits: ['clear', 'input'],
 
   setup(props) {
     const { resource } = toRefs(props);
-    const selectedItemId = ref<string | null>(null);
+    const selectedItemId = ref<string | null>(
+      props.initialItem ? props.initialItem[props.itemId] : null
+    );
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<Dictionary>(
       `/admin/references/${resource.value}`
     );
+
+    if (props.initialItem) items.value.push(props.initialItem);
 
     return {
       dialog,
@@ -148,22 +191,33 @@ export default defineComponent({
 
   methods: {
     close() {
-      this.selectedItemId = null;
       this.dialog = false;
     },
 
-    confirm() {
-      if (!this.selectedItem) return;
-
-      const { returnObject } = this;
+    input() {
+      if (!this.selectedItem) {
+        this.$emit('input', null);
+        return;
+      }
 
       let returnValue: Dictionary | string | null = this.selectedItemId;
+      const { returnObject } = this;
 
       if (typeof returnObject === 'boolean')
         returnValue = returnObject ? copy(this.selectedItem) : this.selectedItemId;
       else returnValue = this.selectedItem[returnObject];
 
       this.$emit('input', returnValue);
+    },
+
+    clearInput() {
+      this.selectedItemId = null;
+      this.input();
+      this.$emit('clear');
+    },
+
+    confirm() {
+      this.input();
       this.close();
     },
   },

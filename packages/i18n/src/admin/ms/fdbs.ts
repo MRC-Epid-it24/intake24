@@ -129,6 +129,9 @@ const fdbs: LocaleMessageObject = {
       cereal: {
         _: 'Cereal',
       },
+      'direct-weight': {
+        _: 'Weight',
+      },
       'drink-scale': {
         _: 'Drink scale',
         drinkwareSet: 'Drinkware set',
@@ -162,9 +165,6 @@ const fdbs: LocaleMessageObject = {
         unit: 'Unit',
         weight: 'Weight (g)',
         omitFoodDescription: 'Omit food description',
-      },
-      weight: {
-        _: 'Weight',
       },
     },
   },

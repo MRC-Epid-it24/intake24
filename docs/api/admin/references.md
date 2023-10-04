@@ -270,6 +270,33 @@ Content-Type: application/json
 }
 ```
 
+## Nutrient table records
+
+Paginated `nutrient table record` reference list
+
+### Request
+
+```json
+GET /api/admin/references/nutrient-tables/:nutrientTableId/records
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
 ## Survey schemes
 
 Paginated `survey scheme` reference list

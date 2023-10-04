@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { QueueLocaleTaskInput } from '@intake24/api/services';
+import type { QueueJob } from '@intake24/common/types';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { FoodsLocale, SystemLocale } from '@intake24/db';
 
@@ -12,7 +12,7 @@ export default () => {
   let invalidUrl: string;
   let sourceLocaleId: string;
 
-  let input: Omit<QueueLocaleTaskInput, 'userId'>;
+  let input: Omit<QueueJob, 'userId'>;
 
   beforeAll(async () => {
     sourceLocaleId = suite.data.system.locale.id;
@@ -26,14 +26,11 @@ export default () => {
     ]);
 
     input = {
-      job: 'PairwiseSearchCopyAssociations',
-      params: {
-        sourceLocaleId,
-        targetLocaleId: locale.id,
-      },
+      type: 'LocalePopularitySearchCopy',
+      params: { localeId: locale.id, sourceLocaleId },
     };
 
-    url = `${baseUrl}/${sourceLocaleId}/tasks`;
+    url = `${baseUrl}/${locale.id}/tasks`;
     invalidUrl = `${baseUrl}/999999/tasks`;
   });
 
@@ -46,13 +43,19 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['job', 'params']);
+    it('should return 400 for missing input data', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['type']);
     });
 
-    it('should return 422 for invalid input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['job', 'params'], {
-        input: [{ job: 'invalidJobType', params: { surveyId: 'demo', nonValidKey: false } }],
+    it('should return 400 for invalid input data', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['type'], {
+        input: { type: 'invalidJobType', params: { surveyId: 'demo', nonValidKey: false } },
+      });
+    });
+
+    it('should return 400 for invalid input data', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['params.sourceLocaleId'], {
+        input: { type: 'LocalePopularitySearchCopy', params: { nonValidKey: false } },
       });
     });
 
@@ -70,7 +73,7 @@ export default () => {
         .send(input);
 
       expect(status).toBe(200);
-      expect(body.type).toBe(input.job);
+      expect(body.type).toBe(input.type);
     });
   });
 };

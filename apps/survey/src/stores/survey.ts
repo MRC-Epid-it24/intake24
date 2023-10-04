@@ -4,7 +4,11 @@ import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
 
-import type { Prompts } from '@intake24/common/prompts';
+import type {
+  LinkedQuantityCategory,
+  PortionSizeComponentType,
+  Prompts,
+} from '@intake24/common/prompts';
 import type {
   CustomPromptAnswer,
   EncodedFood,
@@ -38,9 +42,9 @@ import {
 } from '@intake24/survey/util';
 import { useLoading } from '@intake24/ui/stores';
 
-import { isPortionSizeComplete } from '../dynamic-recall/portion-size-checks';
+import { portionSizeComplete } from '../dynamic-recall/portion-size-checks';
 import { surveyService } from '../services';
-import { promptStores } from './prompt';
+import { getOrCreatePromptStateStore, promptStores } from './prompt';
 import { useSameAsBefore } from './same-as-before';
 
 export type MealUndo = {
@@ -83,15 +87,6 @@ export const surveyInitialState = (): CurrentSurveyState => ({
   uxSessionId: v4(),
   flags: [],
   customPromptAnswers: {},
-  tempPromptAnswer: {
-    response: null,
-    modified: false,
-    new: true,
-    finished: false,
-    mealIndex: undefined,
-    foodIndex: undefined,
-    prompt: undefined,
-  },
   selection: {
     element: null,
     mode: 'auto',
@@ -131,7 +126,7 @@ export const useSurvey = defineStore('survey', {
   },
   persist: {
     key: `${import.meta.env.VITE_APP_PREFIX ?? ''}survey`,
-    paths: ['data'],
+    paths: ['data', 'user'],
     afterRestore(context) {
       context.store.reCreateStoreAfterDeserialization();
 
@@ -167,28 +162,30 @@ export const useSurvey = defineStore('survey', {
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
-    registeredPortionSizeMethods: (state) =>
-      state.parameters?.surveyScheme.prompts.meals.foods
-        .filter((item) => item.type === 'portion-size')
-        .map((item) => item.component.replace('-prompt', '')) ?? [],
-    linkedQuantityCategories: (state) => {
-      const prompt = state.parameters?.surveyScheme.prompts.meals.foods.find(
+    surveySchemeFoodPrompts: (state) => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
+    registeredPortionSizeMethods(): string[] {
+      return (
+        this.surveySchemeFoodPrompts
+          .filter((item) => item.type === 'portion-size')
+          .map((item) => item.component.replace('-prompt', '')) ?? []
+      );
+    },
+    linkedQuantityCategories(): LinkedQuantityCategory[] {
+      const prompt = this.surveySchemeFoodPrompts.find(
         (prompt) => prompt.component === 'guide-image-prompt'
       ) as Prompts['guide-image-prompt'] | undefined;
 
       return prompt?.linkedQuantityCategories ?? [];
     },
-    sameAsBeforeAllowed: (state) =>
-      !!state.parameters?.surveyScheme.prompts.meals.foods.find(
+    sameAsBeforeAllowed(): boolean {
+      return !!this.surveySchemeFoodPrompts.find(
         (item) => item.component === 'same-as-before-prompt'
-      ),
+      );
+    },
     selection: (state) => state.data.selection,
     freeEntryComplete: (state) =>
       !!state.data.meals.length &&
       state.data.meals.every((meal) => meal.flags.includes('free-entry-complete')),
-    currentTempPromptAnswer: (state): PromptAnswer | undefined => {
-      return state.data.tempPromptAnswer;
-    },
     selectedMealIndex(): number | undefined {
       const { element } = this.data.selection;
 
@@ -285,9 +282,10 @@ export const useSurvey = defineStore('survey', {
       this.setState(initialState);
     },
 
-    cancelRecall() {
+    async cancelRecall() {
       this.clearState();
-      this.setState(surveyInitialState());
+
+      await this.clearUserSession();
     },
 
     setState(payload: CurrentSurveyState) {
@@ -359,6 +357,17 @@ export const useSurvey = defineStore('survey', {
       this.loadState(state);
     },
 
+    async clearUserSession() {
+      if (!this.parameters) {
+        console.error(`Survey parameters not loaded. Cannot clear user session.`);
+        return;
+      }
+
+      if (!this.parameters.storeUserSessionOnServer) return;
+
+      await surveyService.clearUserSession(this.parameters.slug);
+    },
+
     async storeUserSession() {
       if (!this.parameters) {
         console.error(`Survey parameters not loaded. Cannot store user session.`);
@@ -419,6 +428,7 @@ export const useSurvey = defineStore('survey', {
 
     removeFlag(flag: SurveyFlag | SurveyFlag[]) {
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
 
       this.data.flags = this.data.flags.filter((flag) => !flags.includes(flag as SurveyFlag));
     },
@@ -537,8 +547,10 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeMealFlag(mealId: string, flag: MealFlag | MealFlag[]) {
-      const meal = findMeal(this.data.meals, mealId);
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
+
+      const meal = findMeal(this.data.meals, mealId);
 
       meal.flags = meal.flags.filter((flag) => !flags.includes(flag as MealFlag));
     },
@@ -586,8 +598,10 @@ export const useSurvey = defineStore('survey', {
     },
 
     removeFoodFlag(foodId: string, flag: FoodFlag | FoodFlag[]) {
-      const food = findFood(this.data.meals, foodId);
       const flags = Array.isArray(flag) ? flag : [flag];
+      if (!flags.length) return;
+
+      const food = findFood(this.data.meals, foodId);
 
       food.flags = food.flags.filter((flag) => !flags.includes(flag as FoodFlag));
     },
@@ -633,12 +647,12 @@ export const useSurvey = defineStore('survey', {
         // 1) food is not encoded
         mainFood.type !== 'encoded-food' ||
         // 2) food portion size estimation is not finished
-        !isPortionSizeComplete(mainFood) ||
+        !portionSizeComplete(mainFood) ||
         // 3) associated food prompts are not finished
         !associatedFoodPromptsComplete(mainFood) ||
         // 4) associated foods portion size estimations are not finished
         (mainFood.linkedFoods.length &&
-          mainFood.linkedFoods.some((item) => !isPortionSizeComplete(item)))
+          mainFood.linkedFoods.some((item) => !portionSizeComplete(item)))
       )
         return;
 
@@ -650,12 +664,30 @@ export const useSurvey = defineStore('survey', {
       if (food.type === 'free-text') return;
 
       const flags: FoodFlag[] = [];
+
       if (food.type === 'encoded-food') {
+        if (!food.flags.includes('portion-size-option-complete')) return;
+
         flags.push('portion-size-method-complete');
 
         if (food.data.portionSizeMethods.length > 1) flags.push('portion-size-option-complete');
+
+        if (food.portionSize) {
+          const component: PortionSizeComponentType = `${food.portionSize.method}-prompt`;
+          const store = getOrCreatePromptStateStore(component)();
+          const prompt = this.surveySchemeFoodPrompts.find((item) => item.component === component);
+
+          if (store && prompt) store.clearState(food.id, prompt.id);
+        }
       }
-      if (food.type === 'missing-food') flags.push('missing-food-complete');
+
+      if (food.type === 'missing-food') {
+        if (!food.flags.includes('missing-food-complete')) return;
+
+        flags.push('missing-food-complete');
+      }
+
+      if (!flags.length) return;
 
       this.removeFoodFlag(foodId, flags);
     },

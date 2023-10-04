@@ -156,8 +156,16 @@ Full URL patterns using `{token}` as `query` parameter can be used in combinatio
 
 Survey submissions with limited ability to search / view / delete submissions. To be expanded in future.
 
-## Data export
+## Tasks
 
-Data export allows to export survey submission data into the flattened CSV file. Structure is defined in [schemes](/admin/surveys/schemes#data-export-tab).
+Tasks section allows to submit resource specific tasks into the job queue with additional parameters. See [job types](/admin/system/job-types) for more information.
 
-`Start date` / `End date` can be specified for export. Export is submitted as background job and progress will appear below once export job is submitted.
+Jobs that can be submitted:
+
+- [Export authentication URLs](/admin/system/job-types.html#surveyauthurlsexport)
+
+- [Submission data export](/admin/system/job-types.html#surveydataexport)
+
+- [Nutrient recalculation](/admin/system/job-types.html#surveynutrientsrecalculation)
+
+- [Import respondents](/admin/system/job-types.html#surveyrespondentsimport)

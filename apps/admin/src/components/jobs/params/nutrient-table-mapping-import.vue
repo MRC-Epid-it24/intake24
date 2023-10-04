@@ -3,42 +3,28 @@
     <v-card-title>{{ $t('jobs.params') }}</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col v-if="!disabled.nutrientTableId" cols="12">
           <select-resource
+            v-model="params.nutrientTableId"
+            :error-messages="errors.get('params.nutrientTableId')"
             item-name="description"
+            :label="$t('nutrient-tables.id')"
+            name="nutrientTableId"
             resource="nutrient-tables"
-            :value="value.nutrientTableId"
-            @input="input('nutrientTableId', $event)"
           >
-            <template #activator="{ attrs, on }">
-              <v-text-field
-                v-bind="attrs"
-                hide-details="auto"
-                :label="$t('nutrient-tables.id')"
-                name="nutrientTableId"
-                outlined
-                prepend-inner-icon="$nutrient-tables"
-                readonly
-                :value="value.nutrientTableId"
-                v-on="on"
-              ></v-text-field>
-            </template>
           </select-resource>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <v-file-input
+            v-model="params.file"
+            :error-messages="errors.get('params.file')"
             hide-details="auto"
             :label="$t('common.file.csv')"
             name="file"
             outlined
             prepend-icon=""
             prepend-inner-icon="fas fa-paperclip"
-            :value="value.file"
-            @input="input('file', $event)"
           ></v-file-input>
-        </v-col>
-        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
-          <v-alert text type="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
     </v-card-text>
@@ -54,11 +40,11 @@ import { SelectResource } from '@intake24/admin/components/dialogs';
 import jobParams from './job-params';
 
 export default defineComponent({
-  name: 'NutrientTableIMappingImport',
+  name: 'NutrientTableMappingImport',
 
   components: { SelectResource },
 
-  mixins: [jobParams<JobParams['NutrientTableIMappingImport']>()],
+  mixins: [jobParams<JobParams['NutrientTableMappingImport']>()],
 });
 </script>
 

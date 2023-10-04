@@ -1,5 +1,11 @@
+import sequelize from 'sequelize-typescript';
+
 import type { IoC } from '@intake24/api/ioc';
-import type { CreateImageMapInput, UpdateImageMapInput } from '@intake24/common/types/http/admin';
+import type {
+  CreateImageMapInput,
+  SourceFileInput,
+  UpdateImageMapInput,
+} from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { GuideImage, GuideImageObject, ImageMap, ImageMapObject, Op } from '@intake24/db';
 
@@ -7,14 +13,38 @@ const imageMapService = ({
   portionSizeService,
   processedImageService,
   sourceImageService,
-}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService'>) => {
+  db,
+}: Pick<IoC, 'portionSizeService' | 'processedImageService' | 'sourceImageService' | 'db'>) => {
   const create = async (input: CreateImageMapInput): Promise<ImageMap> => {
-    const { id, description } = input;
+    const { id, baseImage, description, objects, uploader } = input;
 
-    const sourceImage = await sourceImageService.uploadSourceImage(input, 'image_maps');
-    const baseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
+    const sourceImage = await sourceImageService.uploadSourceImage(
+      { id, uploader, file: baseImage },
+      'image_maps'
+    );
 
-    return ImageMap.create({ id, description, baseImageId: baseImage.id });
+    const processedBaseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
+
+    return db.foods.transaction(async (transaction) => {
+      const imageMap = await ImageMap.create(
+        {
+          id,
+          description,
+          baseImageId: processedBaseImage.id,
+        },
+        { transaction }
+      );
+
+      await ImageMapObject.bulkCreate(
+        objects.map((object) => ({
+          ...object,
+          imageMapId: imageMap.id,
+        })),
+        { transaction }
+      );
+
+      return imageMap;
+    });
   };
 
   const update = async (imageMapId: string, input: UpdateImageMapInput): Promise<ImageMap> => {
@@ -84,9 +114,32 @@ const imageMapService = ({
     await processedImageService.destroy(imageMap.baseImageId, { includeSources: true });
   };
 
+  const updateImage = async (
+    id: string,
+    baseImage: SourceFileInput,
+    uploader: string
+  ): Promise<void> => {
+    const sourceImage = await sourceImageService.uploadSourceImage(
+      { id, uploader, file: baseImage },
+      'image_maps'
+    );
+
+    const processedBaseImage = await processedImageService.createImageMapBaseImage(id, sourceImage);
+
+    const affected = await ImageMap.update(
+      {
+        baseImageId: processedBaseImage.id,
+      },
+      { where: { id } }
+    );
+
+    if (affected[0] !== 1) throw new NotFoundError();
+  };
+
   return {
     create,
     update,
+    updateImage,
     destroy,
   };
 };

@@ -19,28 +19,50 @@
       </slot>
     </template>
     <v-card>
-      <v-card-title class="h2 d-flex justify-center">
-        <slot name="title">{{ titleLabel }}</slot>
+      <v-card-title class="text-h4 d-flex justify-center">
+        <slot name="title">
+          {{ titleLabel }}
+        </slot>
       </v-card-title>
       <v-card-text class="px-6 py-4">
         <div class="text-subtitle-1 d-flex justify-center">
-          <v-icon left>fa-hand-point-right</v-icon>
           <slot></slot>
         </div>
       </v-card-text>
+      <template v-if="typedConfirm">
+        <v-divider></v-divider>
+        <v-card-text class="px-6 py-4">
+          <i18n class="text-subtitle-1 mb-2" path="common.action.confirm.typed" tag="p">
+            <template #name>
+              <span class="font-weight-bold error--text">{{ `DELETE ${typedConfirm}` }}</span>
+            </template>
+          </i18n>
+          <v-text-field
+            v-model="confirmInput"
+            class="error--text"
+            color="error"
+            hide-details="auto"
+            outlined
+          >
+          </v-text-field>
+        </v-card-text>
+      </template>
       <v-container class="pa-6">
-        <v-btn
-          block
-          class="mb-2"
-          :color="color"
-          dark
-          large
-          :title="confirmLabel"
-          @click.stop="confirm"
-        >
-          <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon
-          >{{ confirmLabel }}
-        </v-btn>
+        <v-expand-transition>
+          <v-btn
+            v-if="canConfirm"
+            block
+            class="mb-3"
+            :color="color"
+            large
+            :title="confirmLabel"
+            @click.stop="confirm"
+          >
+            <v-icon v-if="confirmIcon" left>{{ confirmIcon }}</v-icon
+            >{{ confirmLabel }}
+          </v-btn>
+        </v-expand-transition>
+
         <v-btn block :color="color" large outlined :title="cancelLabel" @click.stop="cancel">
           <v-icon v-if="cancelIcon" left>{{ cancelIcon }}</v-icon
           >{{ cancelLabel }}
@@ -52,7 +74,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
+
+import { useI18n } from '@intake24/i18n';
 
 export default defineComponent({
   name: 'ConfirmDialog',
@@ -92,16 +116,16 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    confirmText: {
-      type: String,
-    },
     confirmIcon: {
       type: String,
     },
-    cancelText: {
+    confirmText: {
       type: String,
     },
     cancelIcon: {
+      type: String,
+    },
+    cancelText: {
       type: String,
     },
     maxWidth: {
@@ -119,6 +143,9 @@ export default defineComponent({
     titleText: {
       type: String,
     },
+    typedConfirm: {
+      type: String,
+    },
     value: {
       type: Boolean,
       default: false,
@@ -127,55 +154,59 @@ export default defineComponent({
 
   emits: ['cancel', 'close', 'confirm', 'input'],
 
-  data() {
-    return {
-      dialog: this.value,
+  setup(props, { emit }) {
+    const { i18n } = useI18n();
+
+    const dialog = ref(props.value);
+
+    const cancelLabel = computed(
+      () => props.cancelText ?? i18n.t('common.action.cancel').toString()
+    );
+    const confirmLabel = computed(() => props.confirmText ?? props.label);
+    const titleLabel = computed(
+      () => props.titleText ?? i18n.t('common.action.confirm.title').toString()
+    );
+
+    const confirmInput = ref('');
+    const canConfirm = computed(
+      () => !props.typedConfirm || `DELETE ${props.typedConfirm}` === confirmInput.value
+    );
+
+    const close = () => {
+      dialog.value = false;
     };
-  },
 
-  computed: {
-    confirmLabel(): string {
-      return this.confirmText ?? this.label;
-    },
-    cancelLabel(): string {
-      return this.cancelText ?? this.$t('common.action.cancel').toString();
-    },
-    titleLabel(): string {
-      return this.titleText ?? this.$t('common.action.confirm.title').toString();
-    },
-  },
+    const cancel = () => {
+      close();
+      emit('cancel');
+    };
 
-  watch: {
-    value(val) {
-      if (val === this.dialog) return;
+    const confirm = () => {
+      close();
+      emit('confirm');
+    };
 
-      this.dialog = val;
-    },
-    dialog(val) {
-      if (val === false) this.$emit('close');
+    watch(
+      () => props.value,
+      (val) => {
+        dialog.value = val;
+      }
+    );
 
-      this.$emit('input', val);
-    },
-  },
+    watch(dialog, (val) => {
+      if (!val) emit('close');
+    });
 
-  methods: {
-    close() {
-      this.dialog = false;
-    },
-
-    cancel() {
-      this.close();
-      this.$emit('cancel');
-    },
-
-    confirm() {
-      this.close();
-      this.$emit('confirm');
-    },
-
-    open() {
-      this.dialog = true;
-    },
+    return {
+      canConfirm,
+      confirm,
+      confirmInput,
+      cancel,
+      dialog,
+      cancelLabel,
+      confirmLabel,
+      titleLabel,
+    };
   },
 });
 </script>

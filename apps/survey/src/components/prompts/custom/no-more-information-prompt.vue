@@ -20,7 +20,11 @@
               {{ $t('recall.actions.deleteFood') }}
             </v-btn>
           </template>
-          {{ $t('recall.menu.confirmDelete', { item: foodName }) }}
+          <i18n path="recall.menu.food.deleteConfirm">
+            <template #item>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
         </confirm-dialog>
         <v-btn
           class="px-4"
@@ -53,7 +57,11 @@
               {{ $t('recall.actions.deleteMeal') }}
             </v-btn>
           </template>
-          {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
+          <i18n path="recall.menu.meal.deleteConfirm">
+            <template #item>
+              <span class="font-weight-medium">{{ mealName }}</span>
+            </template>
+          </i18n>
         </confirm-dialog>
         <v-btn
           class="px-4"
@@ -83,7 +91,11 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('recall.menu.confirmDelete', { item: foodName }) }}
+          <i18n path="recall.menu.food.deleteConfirm">
+            <template #item>
+              <span class="font-weight-medium">{{ foodName }}</span>
+            </template>
+          </i18n>
         </confirm-dialog>
         <v-divider vertical></v-divider>
         <v-btn color="primary" text @click.stop="action('editFood', food?.id)">
@@ -107,7 +119,11 @@
               <v-icon class="pb-1">$delete</v-icon>
             </v-btn>
           </template>
-          {{ $t('recall.menu.confirmDelete', { item: mealName }) }}
+          <i18n path="recall.menu.meal.deleteConfirm">
+            <template #item>
+              <span class="font-weight-medium">{{ mealName }}</span>
+            </template>
+          </i18n>
         </confirm-dialog>
         <v-divider vertical></v-divider>
         <v-btn color="primary" text @click.stop="action('editMeal', meal?.id)">

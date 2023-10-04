@@ -17,7 +17,7 @@ export default () => {
     terms: true,
   };
 
-  it('should return 422 for missing input data', async () => {
+  it('should return 400 for missing input data', async () => {
     await suite.sharedTests.assertInvalidInput('post', url, [
       'name',
       'email',
@@ -28,7 +28,7 @@ export default () => {
     ]);
   });
 
-  it('should return 422 for invalid input data', async () => {
+  it('should return 400 for invalid input data', async () => {
     const invalidInput = {
       name: ['name should be string'],
       phone: { value: 'phone should be string' },

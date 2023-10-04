@@ -8,7 +8,9 @@
       matchPackageNames: [
         // Breaking changes
         'execa', // ESM-only since 6.x.x
+        'formdata-node', // ESM-only since 5.x.x
         'nanoid', // ESM-only since 4.x.x
+        'p-limit', // ESM-only since 4.x.x
 
         // Bump after Vue.js v3 upgrade
         '@tinymce/tinymce-vue',

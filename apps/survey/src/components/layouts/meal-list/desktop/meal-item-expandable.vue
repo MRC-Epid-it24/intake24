@@ -3,7 +3,7 @@
     :class="{ selected: isSelected || selectedFoodInMeal, 'selected-food': selectedFoodInMeal }"
     :sub-group="true"
     :value="true"
-    @click="mealSelected"
+    @click="action('selectMeal', meal.id)"
   >
     <template #prependIcon>
       <v-icon :class="{ rotate: isSelected || selectedFoodInMeal }">$expand</v-icon>
@@ -19,12 +19,7 @@
         <v-icon v-else small>$question</v-icon>
       </v-list-item-action>
       <v-list-item-action class="my-auto">
-        <context-menu
-          :entity="meal"
-          :entity-name="mealName"
-          v-bind="{ menu }"
-          @action="action"
-        ></context-menu>
+        <context-menu v-bind="{ meal, menu }" @action="action"></context-menu>
       </v-list-item-action>
     </template>
     <v-divider></v-divider>
@@ -32,7 +27,7 @@
       <food-item
         v-for="food in meal.foods"
         :key="food.id"
-        v-bind="{ food, selectedFoodId }"
+        v-bind="{ food, meal, selectedFoodId }"
         @action="action"
       ></food-item>
       <v-divider></v-divider>
@@ -73,7 +68,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
+    const { action, isSelected, menu, mealName, mealTime } = useMealItem(props, ctx);
 
     return {
       action,
@@ -81,7 +76,6 @@ export default defineComponent({
       menu,
       mealName,
       mealTime,
-      mealSelected,
     };
   },
 });

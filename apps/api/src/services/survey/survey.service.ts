@@ -41,7 +41,7 @@ const surveyService = ({
    * @returns {Promise<RespondentWithPassword>}
    */
   const generateRespondent = async (slug: string): Promise<RespondentWithPassword> => {
-    const survey = await Survey.scope('counter').findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug, { include: [{ association: 'counter' }] });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
@@ -71,7 +71,7 @@ const surveyService = ({
     slug: string,
     token: string
   ): Promise<CreateUserResponse> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
@@ -90,9 +90,13 @@ const surveyService = ({
     if (!decoded || Object.prototype.toString.call(decoded) !== '[object Object]')
       throw new ApplicationError('Malformed token payload');
 
-    const { username, redirectUrl } = decoded;
+    const { username, password, redirectUrl } = decoded;
     if (!username || typeof username !== 'string')
       throw new ApplicationError('Invalid claim: missing username');
+
+    if (typeof password !== 'undefined' && typeof password !== 'string')
+      throw new ApplicationError('Invalid claim: password must a string');
+
     if (typeof redirectUrl !== 'undefined' && typeof redirectUrl !== 'string')
       throw new ApplicationError('Invalid claim: redirectUrl must a string');
 
@@ -105,7 +109,7 @@ const surveyService = ({
 
     const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
       username,
-      password: randomString(12),
+      password: password || randomString(12),
     });
 
     return { userId, username, authToken, redirectUrl };
@@ -126,7 +130,7 @@ const surveyService = ({
     tzOffset: number,
     increment = 0
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = typeof slug === 'string' ? await Survey.findOne({ where: { slug } }) : slug;
+    const survey = typeof slug === 'string' ? await Survey.findBySlug(slug) : slug;
     if (!survey) throw new NotFoundError();
 
     const {
@@ -178,7 +182,7 @@ const surveyService = ({
    * @returns {Promise<UserSurveySession>}
    */
   const getSession = async (slug: string, userId: string): Promise<UserSurveySession> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
@@ -211,7 +215,7 @@ const surveyService = ({
     userId: string,
     sessionData: SurveyState
   ): Promise<UserSurveySession> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
@@ -234,7 +238,7 @@ const surveyService = ({
    * @returns {Promise<void>}
    */
   const clearSession = async (slug: string, userId: string): Promise<void> => {
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new NotFoundError();
 
     await UserSurveySession.destroy({ where: { surveyId: survey.id, userId } });
@@ -312,8 +316,7 @@ const surveyService = ({
     user: User,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = await Survey.findOne({
-      where: { slug },
+    const survey = await Survey.findBySlug(slug, {
       include: [{ association: 'surveyScheme', required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();

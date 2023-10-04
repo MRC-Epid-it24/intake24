@@ -9,12 +9,14 @@ import { MFADevice } from '@intake24/db';
 
 export type OTPRegistrationVerificationOps = {
   userId: string;
+  email: string;
   name: string;
   token: string;
   secret: string;
 };
 
 export type OTPAuthenticationVerificationOps = {
+  email: string;
   token: string;
   secret: string;
 };
@@ -24,10 +26,10 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
   const { issuer } = securityConfig.mfa.providers[provider];
   const algorithm = 'SHA1';
 
-  const registrationChallenge = async () => {
+  const registrationChallenge = async (email: string) => {
     const secret = randomString(20, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567');
 
-    const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
+    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
     const url = totp.toString();
     const qrCode = await QRCode.toDataURL(url);
 
@@ -35,9 +37,9 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
   };
 
   const registrationVerification = async (ops: OTPRegistrationVerificationOps) => {
-    const { userId, name, token, secret } = ops;
+    const { userId, email, name, token, secret } = ops;
 
-    const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
+    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
 
     const delta = totp.validate({ token });
     if (delta === null) throw new ValidationError('Invalid OTP token.', { path: 'token' });
@@ -64,9 +66,9 @@ const optProvider = ({ securityConfig }: Pick<IoC, 'securityConfig'>) => {
    * @returns
    */
   const authenticationVerification = async (ops: OTPAuthenticationVerificationOps) => {
-    const { secret, token } = ops;
+    const { email, secret, token } = ops;
 
-    const totp = new TOTP({ issuer, label: issuer, algorithm, secret });
+    const totp = new TOTP({ issuer, label: `${issuer}:${email}`, algorithm, secret });
 
     const delta = totp.validate({ token });
     if (delta === null) throw new Error('Invalid OTP token');

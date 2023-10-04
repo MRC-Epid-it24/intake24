@@ -87,10 +87,10 @@
             :is="form.job"
             v-if="Object.keys(form.params).length"
             v-model="form.params"
-            :errors="form.errors.get('params')"
+            :errors="form.errors"
             name="params"
             :refs="refs"
-            @input="form.errors.clear('params')"
+            @input="form.errors.clear(paramErrors)"
           ></component>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
@@ -101,7 +101,7 @@
 
 <script lang="ts">
 import cronstrue from 'cronstrue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
 import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
@@ -109,12 +109,13 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { defaultJobsParams } from '@intake24/common/types';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 type TaskForm = {
   id: string | null;
   name: string | null;
-  job: JobType | null;
+  job: JobType;
   cron: string | null;
   active: boolean;
   description: string | null;
@@ -129,6 +130,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { i18n } = useI18n();
+
     const loadCallback = (data: TaskEntry) => {
       const { params, ...rest } = data;
       return { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
@@ -141,11 +144,21 @@ export default defineComponent({
       TaskRefs
     >(props);
     useEntryFetch(props);
+
+    const jobs = computed(() => {
+      if (!refsLoaded.value) return [];
+
+      return refs.value.jobs.map((value) => ({
+        value,
+        text: i18n.t(`jobs.types.${value}._`).toString(),
+      }));
+    });
+
     const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskEntry>(props, {
       data: {
         id: null,
         name: null,
-        job: null,
+        job: 'CleanRedisStore',
         cron: null,
         active: false,
         description: null,
@@ -154,6 +167,8 @@ export default defineComponent({
       loadCallback,
     });
 
+    const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
+
     return {
       defaultJobsParams,
       entry,
@@ -161,8 +176,10 @@ export default defineComponent({
       formatDate,
       isCreate,
       isEdit,
+      jobs,
       refs,
       refsLoaded,
+      paramErrors,
       clearError,
       form,
       routeLeave,
@@ -179,15 +196,6 @@ export default defineComponent({
       } catch (err) {
         return this.$t('tasks.invalidCron').toString();
       }
-    },
-
-    jobs(): { text: string; value: string }[] {
-      if (!this.refsLoaded) return [];
-
-      return this.refs.jobs.map((value) => ({
-        value,
-        text: this.$t(`jobs.types.${value}._`).toString(),
-      }));
     },
   },
 

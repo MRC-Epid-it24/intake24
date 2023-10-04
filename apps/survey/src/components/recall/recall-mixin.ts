@@ -8,10 +8,9 @@ import type {
   MealActionType,
 } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
-import type { FoodState, MealCreationState, MealState, Selection } from '@intake24/common/types';
+import type { MealCreationState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
 import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-recall';
-import type { FoodUndo, MealUndo } from '@intake24/survey/stores';
 import { isSelectionEqual } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import {
@@ -24,11 +23,6 @@ import { useSurvey } from '@intake24/survey/stores';
 import { getFoodIndex, getMealIndex } from '@intake24/survey/util';
 
 import { InfoAlert } from '../elements';
-
-interface SavedState {
-  prompt: PromptInstance | null;
-  selection: Selection;
-}
 
 export default defineComponent({
   name: 'RecallMixin',
@@ -49,7 +43,6 @@ export default defineComponent({
       survey,
       currentPrompt: null as PromptInstance | null,
       recallController: null as DynamicRecall | null,
-      savedState: null as SavedState | null,
       hideCurrentPrompt: false,
       // This is only required to discern between back and forward history events
       currentPromptTimestamp: 0,
@@ -108,10 +101,6 @@ export default defineComponent({
       return this.survey.parameters?.name;
     },
 
-    undo(): MealUndo | FoodUndo | null {
-      return this.survey.undo;
-    },
-
     showMealList(): boolean {
       if (this.hasFinished) return false;
 
@@ -120,10 +109,6 @@ export default defineComponent({
         this.currentPrompt?.section !== 'preMeals' ||
         this.currentPrompt.prompt.component === 'meal-add-prompt'
       );
-    },
-
-    foods(): FoodState[] {
-      return this.selectedMealOptional?.foods ?? [];
     },
   },
 
@@ -202,11 +187,6 @@ export default defineComponent({
       this.survey.setSelection(newSelection);
     },
 
-    clearUndo() {
-      // FIXME: Stop components from re-rendering after clearing objects in vuex store.
-      this.survey.clearUndo();
-    },
-
     showMealPrompt(mealId: string, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({ element: { type: 'meal', mealId }, mode: 'manual' });
 
@@ -221,17 +201,6 @@ export default defineComponent({
         );
 
       this.currentPrompt = { section: promptSection, prompt };
-    },
-
-    saveCurrentState() {
-      // Don't save state if switching between special prompts
-      if (this.savedState !== null) return;
-
-      this.savedState = { selection: this.survey.selection, prompt: this.currentPrompt };
-    },
-
-    clearSavedState() {
-      this.savedState = null;
     },
 
     showSurveyPrompt(promptSection: SurveyPromptSection, promptType: ComponentType) {
@@ -257,7 +226,6 @@ export default defineComponent({
           await this[type]();
           break;
         case 'addMeal':
-        case 'review':
           await this.recallAction(type, params);
           break;
         case 'editMeal':
@@ -338,77 +306,35 @@ export default defineComponent({
             await this.nextPrompt();
           } else this.showSurveyPrompt('preMeals', 'meal-add-prompt');
           break;
-        case 'review':
-          this.saveCurrentState();
-          this.showSurveyPrompt('submission', 'review-confirm-prompt');
-          break;
-        // TODO: is this needed?
-        case 'no-more-information':
-          this.saveCurrentState();
-          this.showMealPrompt('0', 'postFoods', 'no-more-information-prompt');
-          break;
       }
     },
 
-    isSavedStateValid(): boolean {
-      if (this.savedState == null) return false;
-
-      const selection = this.savedState.selection;
-
-      // No element selected means only survey prompts are applicable
-      // that are always valid
-      if (selection.element == null) return true;
-
-      // Otherwise, make sure selected element id is still valid (it could have been
-      // deleted since the state was saved)
-      if (selection.element.type == 'food')
-        return getFoodIndex(this.survey.meals, selection.element.foodId) !== undefined;
-      else return getMealIndex(this.survey.meals, selection.element.mealId) !== undefined;
-    },
-
     async nextPrompt() {
-      // Special-case prompts like the mobile review save the current state when they are triggered
-      // by user actions.
+      const nextPrompt = this.recallController ? this.recallController.getNextPrompt() : undefined;
 
-      // If a saved state exists, then use it as the next prompt (i.e., go back to the prompt that
-      // was active before.
-
-      if (this.savedState != null && this.isSavedStateValid()) {
-        console.debug(`Using saved state ${this.savedState.prompt?.prompt.component}`);
-        this.setSelection(this.savedState.selection);
-        this.currentPrompt = this.savedState.prompt;
-        this.savedState = null;
-      } else {
-        this.savedState = null;
-
-        const nextPrompt = this.recallController
-          ? this.recallController.getNextPrompt()
-          : undefined;
-
-        if (nextPrompt === undefined) {
-          // TODO: handle completion
-          console.log('No prompts remaining');
-          if (this.hasMeals) {
-            await this.recallAction('addMeal');
-          } else {
-            this.currentPrompt = null;
-          }
+      if (nextPrompt === undefined) {
+        // TODO: handle completion
+        console.log('No prompts remaining');
+        if (this.hasMeals) {
+          await this.recallAction('addMeal');
         } else {
-          console.debug(
-            `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`
-          );
+          this.currentPrompt = null;
+        }
+      } else {
+        console.debug(
+          `Switching prompt to: ${nextPrompt.prompt.id} (${nextPrompt.prompt.component})`
+        );
 
-          this.currentPrompt = nextPrompt;
-          this.currentPromptTimestamp = Date.now();
+        this.currentPrompt = nextPrompt;
+        this.currentPromptTimestamp = Date.now();
 
-          // Strip Vue reactivity wrappers
-          const promptInstance = JSON.parse(JSON.stringify(this.currentPrompt));
-          const selection = JSON.parse(JSON.stringify(this.selection));
-          const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
+        // Strip Vue reactivity wrappers
+        const promptInstance = JSON.parse(JSON.stringify(this.currentPrompt));
+        const selection = JSON.parse(JSON.stringify(this.selection));
+        const timeStamp = JSON.parse(JSON.stringify(this.currentPromptTimestamp));
 
-          if (selection && promptInstance) {
-            history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
-          }
+        if (selection && promptInstance) {
+          history.pushState({ promptInstance, selection, timeStamp }, '', window.location.href);
         }
       }
     },
@@ -433,7 +359,7 @@ export default defineComponent({
 
     async restart() {
       this.currentPrompt = null;
-      useSurvey().cancelRecall();
+      await this.survey.cancelRecall();
       await this.$router.push({
         name: 'survey-home',
         params: { surveyId: this.$route.params.surveyId },

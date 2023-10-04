@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { defineComponent, ref } from 'vue';
 
 import type { MFADeviceEntry, MFADevicesResponse } from '@intake24/common/types/http/admin';
@@ -183,7 +183,7 @@ export default defineComponent({
       try {
         await this.$http.post('admin/user/mfa/toggle', { status: this.status });
       } catch (err) {
-        if (isAxiosError(err) && err.response?.status === 403) {
+        if (isAxiosError(err) && err.response?.status === HttpStatusCode.Forbidden) {
           useMessages().info(this.$t('user.mfa.devices.none').toString());
           return;
         }
@@ -208,15 +208,13 @@ export default defineComponent({
     async remove(deviceId: string) {
       await this.$http.delete(`admin/user/mfa/${deviceId}`);
       this.devices = this.devices.filter((device) => device.id !== deviceId);
+      if (!this.devices.length || this.devices.find((device) => device.preferred)) return;
 
-      const preferred = this.devices.length && this.devices.find((device) => device.preferred);
-      if (!preferred) {
-        const { data } = await this.$http.patch<MFADeviceEntry>(
-          `admin/user/mfa/${this.devices[0].id}`,
-          { preferred: true }
-        );
-        this.devices.splice(0, 1, data);
-      }
+      const { data } = await this.$http.patch<MFADeviceEntry>(
+        `admin/user/mfa/${this.devices[0].id}`,
+        { preferred: true }
+      );
+      this.devices.splice(0, 1, data);
     },
 
     clear() {

@@ -1,10 +1,12 @@
 <template>
   <v-row class="pt-2" justify="center" :no-gutters="isMobile">
-    <v-col v-if="showMealList" cols="3">
-      <meal-list v-bind="{ meals }" @action="action"></meal-list>
-    </v-col>
+    <v-slide-x-transition mode="out-in">
+      <v-col v-if="showMealList" cols="3">
+        <meal-list v-bind="{ meals }" @action="action"></meal-list>
+      </v-col>
+    </v-slide-x-transition>
     <v-col :cols="showMealList ? 8 : 9">
-      <transition mode="out-in" name="component-fade">
+      <v-slide-y-transition hide-on-leave mode="out-in">
         <component
           :is="handlerComponent"
           v-if="currentPrompt && !hideCurrentPrompt"
@@ -13,7 +15,7 @@
           :section="currentPrompt.section"
           @action="action"
         ></component>
-      </transition>
+      </v-slide-y-transition>
     </v-col>
   </v-row>
 </template>

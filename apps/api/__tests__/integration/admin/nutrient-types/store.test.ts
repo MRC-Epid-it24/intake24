@@ -22,11 +22,11 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'unitId']);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
@@ -46,7 +46,7 @@ export default () => {
       await suite.sharedTests.assertRecordInserted('post', url, output, { input });
     });
 
-    it('should return 422 for duplicate id', async () => {
+    it('should return 400 for duplicate id', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input });
     });
   });

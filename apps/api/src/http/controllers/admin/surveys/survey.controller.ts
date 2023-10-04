@@ -3,9 +3,10 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { SurveyEntry, SurveyRefs, SurveysResponse } from '@intake24/common/types/http/admin';
-import type { PaginateOptions, PaginateQuery } from '@intake24/db';
+import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
+import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { kebabCase } from '@intake24/common/util';
 import {
   createSurveyFields,
@@ -29,6 +30,8 @@ const actionToFieldsMap: Record<'overrides', readonly string[]> = {
 };
 
 const adminSurveyController = (ioc: IoC) => {
+  const { adminSurveyService } = ioc;
+
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveysResponse>
@@ -198,6 +201,27 @@ const adminSurveyController = (ioc: IoC) => {
     res.json({ locales, surveySchemes, feedbackSchemes });
   };
 
+  const tasks = async (req: Request<{ surveyId: string }>, res: Response<Job>): Promise<void> => {
+    const {
+      body: { type },
+      file,
+    } = req;
+    const { id: userId } = req.user as User;
+
+    const { id: surveyId } = await getAndCheckAccess(Survey, 'tasks', req);
+
+    const params = { ...pickJobParams(req.body.params, type), surveyId };
+    if (jobRequiresFile(type)) {
+      if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
+
+      params.file = file.path;
+    }
+
+    const job = await adminSurveyService.queueTask({ userId, type, params });
+
+    res.json(job);
+  };
+
   return {
     browse,
     store,
@@ -208,6 +232,7 @@ const adminSurveyController = (ioc: IoC) => {
     put,
     destroy,
     refs,
+    tasks,
     securables: securableController({ ioc, securable: Survey }),
   };
 };

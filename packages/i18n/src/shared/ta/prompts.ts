@@ -86,8 +86,8 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>Please try browsing the food categories listed above to find your food.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>`,
+      description: `<p>Try browsing the food categories listed above to find your food.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
@@ -123,9 +123,9 @@ const prompts: LocaleMessageObject = {
     none: 'No food results. Please try refining your search.',
     missing: {
       label: `I can't find my food`,
-      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
-      <p>Or click 'Browse all foods' and explore the food categories.</p>
-      <p>If you still can't find your food, click 'Report a missing food'.</p>`,
+      description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p>
+      <p>Or select 'Browse all foods' and explore the food categories.</p>
+      <p>If you still can't find your food select 'Report a missing food'.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
     },
@@ -360,7 +360,6 @@ const prompts: LocaleMessageObject = {
     serving: {
       header:
         'வலதுபுறத்தில் உள்ள ஸ்லைடரைப் பயன்படுத்தவும் அல்லது உங்கள் கோப்பை அல்லது கண்ணாடி எவ்வளவு நிரம்பியது என்பதைக் குறிக்க கோப்பை அல்லது கண்ணாடி மீது கிளிக் செய்யவும்.',
-      hint: 'உங்கள் கோப்பை அல்லது கண்ணாடி எவ்வளவு நிரம்பியிருந்தது என்பதைக் குறிக்க இதை ஸ்லைடு செய்யவும்.',
       less: 'அவை குறைவாக நிரம்பியது',
       more: 'அவை மேலும் நிரம்பியிருந்தது',
       confirm: 'அவை அவ்வளவு நிரம்பியிருந்தது',

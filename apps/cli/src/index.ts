@@ -1,6 +1,7 @@
 import './bootstrap';
 
-import { Command } from 'commander';
+import { Argument, Command, Option } from 'commander';
+import * as process from 'process';
 
 import pkg from '../package.json';
 import {
@@ -9,7 +10,10 @@ import {
   generateKey,
   generateVapidKeys,
   hashPassword,
+  packageExportV3,
+  packageImportV4,
 } from './commands';
+import { conflictResolutionOptions } from './commands/packager/importer-v4';
 
 const run = async () => {
   const program = new Command();
@@ -61,6 +65,50 @@ const run = async () => {
       await findPortionImages(pwd);
     });
 
+  program
+    .command('export-package')
+    .description('Export food data into a portable format')
+    .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
+    .requiredOption(
+      '-as, --as-served [set-ids...]',
+      'Export as served portion size images for given set identifiers'
+    )
+    .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
+    .action(async (version, options) => {
+      switch (version) {
+        case 'v3':
+          return await packageExportV3(version, options);
+        case 'v4':
+          throw new Error('Not implemented');
+        default:
+          throw new Error(`Unexpected version option: ${version}`);
+      }
+    });
+
+  const conflictResolutionOption = new Option(
+    '-c, --on-conflict [on-conflict-option]',
+    'Conflict resolution strategy'
+  ).choices(conflictResolutionOptions);
+
+  conflictResolutionOption.required = true;
+
+  program
+    .command('import-package')
+    .description('Import food data from a portable format')
+    .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
+    .addArgument(new Argument('<package-file>', 'Input package file path'))
+    .addOption(conflictResolutionOption)
+    .action(async (version, inputFilePath, options) => {
+      switch (version) {
+        case 'v3':
+          throw new Error('Not implemented');
+        case 'v4':
+          return await packageImportV4(version, inputFilePath, options);
+        default:
+          throw new Error(`Unexpected version option: ${version}`);
+      }
+    });
+
   await program.parseAsync(process.argv);
 };
 
@@ -68,10 +116,8 @@ run()
   .catch((err) => {
     console.error(err instanceof Error ? err.stack : err);
 
-    process.exitCode = process.exitCode ?? 1;
-    process.exit();
+    process.exit(process.exitCode ?? 1);
   })
   .finally(() => {
-    process.exitCode = process.exitCode ?? 0;
-    process.exit();
+    process.exit(process.exitCode ?? 0);
   });

@@ -6,7 +6,7 @@ import type { ComponentType } from '@intake24/common/prompts';
 
 interface FoodOrMealPromptsState<T> {
   prompts: {
-    [key: number]: { [key: string]: T };
+    [key: string]: { [key: string]: T };
   };
 }
 
@@ -40,16 +40,13 @@ export function getOrCreatePromptStateStore<T extends object>(
         key: storageKey,
       },
       actions: {
-        updateState(foodOrMealId: number, promptId: string, data: T) {
+        updateState(foodOrMealId: string, promptId: string, data: T) {
           this.prompts = {
             ...this.prompts,
-            [foodOrMealId]: {
-              ...this.prompts[foodOrMealId],
-              [promptId]: data,
-            },
+            [foodOrMealId]: { ...this.prompts[foodOrMealId], [promptId]: data },
           };
         },
-        clearState(foodOrMealId: number, promptId: string) {
+        clearState(foodOrMealId: string, promptId: string) {
           if (this.prompts[foodOrMealId]?.[promptId])
             Vue.delete(this.prompts[foodOrMealId], promptId);
 

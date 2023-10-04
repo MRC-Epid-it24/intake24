@@ -1,5 +1,5 @@
 import type { NavigationGuard } from 'vue-router';
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 
 import { surveyService } from '../services';
 import { useAuth, useSurvey, useUser } from '../stores';
@@ -16,7 +16,7 @@ export const feedbackParametersGuard: NavigationGuard = async (to, from, next) =
   try {
     if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 403) {
+    if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
       return;
@@ -49,7 +49,7 @@ export const surveyParametersGuard: NavigationGuard = async (to, from, next) => 
   try {
     if (!survey.parametersLoaded) await survey.loadParameters(surveyId);
   } catch (error) {
-    if (isAxiosError(error) && error.response?.status === 403) {
+    if (isAxiosError(error) && error.response?.status === HttpStatusCode.Forbidden) {
       await auth.logout(true);
       next({ name: 'survey-login', params: { surveyId } });
       return;
@@ -129,6 +129,12 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
 
   const auth = useAuth();
 
+  // Public pages
+  if (module === 'public') {
+    next();
+    return;
+  }
+
   // Try logging-in if we have authentication token
   if (typeof token === 'string' && token && !auth.loggedIn) {
     try {
@@ -136,9 +142,8 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
       await auth.token({ token });
 
       surveyId = useUser().profile?.surveyId ?? surveyId;
-      const name = to.meta?.module === 'public' ? 'survey-home' : to.name ?? 'survey-home';
 
-      next({ name, params: { surveyId }, query });
+      next({ name: to.name ?? 'survey-home', params: { surveyId }, query });
       return;
     } catch {
       next({ name: surveyId ? 'survey-login' : 'home', params: { surveyId } });
@@ -146,15 +151,10 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
     }
   }
 
-  // Public pages
-  if (module === 'public') {
-    next();
-    return;
-  }
-
   // Login pages (credentials / token)
   if (module === 'login') {
-    if (auth.loggedIn) next({ name: 'survey-home', params: { surveyId } });
+    if (auth.loggedIn)
+      next({ name: 'survey-home', params: { surveyId: useUser().profile?.surveyId ?? surveyId } });
     else next();
     return;
   }

@@ -82,6 +82,7 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.supportEmail"
+                autocomplete="off"
                 :error-messages="form.errors.get('supportEmail')"
                 hide-details="auto"
                 :label="$t('surveys.supportEmail')"
@@ -385,7 +386,7 @@ export const surveyForm: SurveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
-  searchSortingAlgorithm: 'paRules',
+  searchSortingAlgorithm: 'popularity',
   searchMatchScoreWeight: 20,
   surveySchemeOverrides: defaultOverrides,
   userPersonalIdentifiers: false,

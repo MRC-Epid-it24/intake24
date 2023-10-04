@@ -23,7 +23,7 @@ export default () => {
       endTime: new Date(),
       submissionTime: null,
       uxSessionId: randomUUID(),
-      flags: ['flag-1', 'flag-2'],
+      flags: ['prompt-1-acknowledged', 'prompt-2-acknowledged'],
       customPromptAnswers: {},
       selection: {
         element: null,
@@ -59,13 +59,13 @@ export default () => {
       await suite.data.system.survey.update({ storeUserSessionOnServer: true });
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['sessionData'], {
         bearer: 'respondent',
       });
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['sessionData'], {
         bearer: 'respondent',
         input: { sessionData: 'InvalidSurveyState' },

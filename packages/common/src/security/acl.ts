@@ -5,7 +5,8 @@ export const respondentSuffix = '/respondent';
 
 export const globalSupport = 'globalsupport';
 
-export const surveyRespondent = (surveySlug: string): string => `${surveySlug}${respondentSuffix}`;
+export const surveyRespondent = (surveySlug: string): string =>
+  `${surveySlug.toLowerCase()}${respondentSuffix}`;
 
 export const surveyPermissions = (surveySlug: string): string[] => [surveyRespondent(surveySlug)];
 
@@ -30,7 +31,6 @@ export const securableDefs = {
     'recipe-foods',
     'split-words',
     'synonym-sets',
-    'food-ranking',
     'tasks',
   ] as const,
   SurveyScheme: [...standardSecurableActions, 'copy', 'prompts', 'data-export'] as const,
@@ -39,8 +39,8 @@ export const securableDefs = {
     'overrides',
     'respondents',
     'submissions',
-    'data-export',
     'support',
+    'tasks',
   ] as const,
 };
 

@@ -25,7 +25,7 @@ export default () => {
     await suite.sharedTests.assertMissingAuthentication('get', url, { bearer: 'respondent' });
   });
 
-  it('should return 422 for missing surveyId query parameter', async () => {
+  it('should return 400 for missing surveyId query parameter', async () => {
     await suite.sharedTests.assertInvalidInput('get', url, ['survey'], { bearer: 'respondent' });
   });
 

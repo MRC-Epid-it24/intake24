@@ -31,11 +31,11 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('post', url, ['id', 'description', 'baseImage']);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -44,8 +44,8 @@ export default () => {
         .field('description', [])
         .field('baseImage', 'notAFile');
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['id', 'description', 'baseImage']);
     });
 
@@ -62,7 +62,7 @@ export default () => {
       expect(pick(body, Object.keys(output))).toEqual(output);
     });
 
-    it('should return 422 for duplicate id', async () => {
+    it('should return 400 for duplicate id', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -71,8 +71,8 @@ export default () => {
         .field('description', description)
         .attach('baseImage', fs.createReadStream(filePath), fileName);
 
-      expect(status).toBe(422);
-      expect(body).toContainAllKeys(['errors', 'success']);
+      expect(status).toBe(400);
+      expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['id']);
     });
   });

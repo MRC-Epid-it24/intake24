@@ -3,7 +3,7 @@
     <template #activator="{ attrs, on }">
       <v-btn large v-bind="attrs" v-on="on">
         <v-list-item-title>
-          <v-icon left>fa-upload</v-icon>
+          <v-icon left>fas fa-upload</v-icon>
           {{ label }}
         </v-list-item-title>
       </v-btn>

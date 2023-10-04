@@ -36,11 +36,11 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it('should return 422 for missing input data', async () => {
+    it('should return 400 for missing input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, ['name', 'estimateIn', 'howMany']);
     });
 
-    it('should return 422 for invalid input data', async () => {
+    it('should return 400 for invalid input data', async () => {
       await suite.sharedTests.assertInvalidInput('put', url, ['name', 'estimateIn.en', 'howMany'], {
         input: { name: null, estimateIn: { en: ['text'] }, howMany: 10 },
       });

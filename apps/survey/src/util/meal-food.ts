@@ -69,22 +69,38 @@ export function findMeal(meals: MealState[], id: string): MealState {
 }
 
 export const foodPortionSizeComplete = (food: FoodState) =>
-  food.type === 'encoded-food' && food.portionSize;
+  !!(
+    food.type === 'encoded-food' &&
+    food.portionSize &&
+    food.flags.includes('portion-size-method-complete')
+  );
 
-export const associatedFoodPromptsComplete = (food: FoodState) =>
-  food.type === 'encoded-food' &&
-  (food.flags.includes('associated-foods-complete') || !food.data.associatedFoodPrompts.length);
+export function associatedFoodPromptsComplete(food: FoodState) {
+  return (
+    food.type === 'encoded-food' &&
+    (food.flags.includes('associated-foods-complete') || !food.data.associatedFoodPrompts.length)
+  );
+}
 
-export const encodedFoodComplete = (food: FoodState) =>
-  foodPortionSizeComplete(food) && associatedFoodPromptsComplete(food);
+export function encodedFoodComplete(food: FoodState) {
+  return foodPortionSizeComplete(food) && associatedFoodPromptsComplete(food);
+}
 
-export const missingFoodComplete = (food: FoodState) => food.type === 'missing-food' && food.info;
+export function missingFoodComplete(food: FoodState) {
+  return !!(
+    food.type === 'missing-food' &&
+    food.info &&
+    food.flags.includes('missing-food-complete')
+  );
+}
 
-export const foodComplete = (food: FoodState) =>
-  encodedFoodComplete(food) || missingFoodComplete(food);
+export function foodComplete(food: FoodState) {
+  return encodedFoodComplete(food) || missingFoodComplete(food);
+}
 
-export const mealComplete = (meal: MealState) =>
-  !!meal.foods.length && meal.foods.every(foodComplete);
+export function mealComplete(meal: MealState) {
+  return !!meal.foods.length && meal.foods.every(foodComplete);
+}
 
 export function mealPortionSizeComplete(meal: MealState) {
   return !!meal.foods.length && meal.foods.every(foodPortionSizeComplete);

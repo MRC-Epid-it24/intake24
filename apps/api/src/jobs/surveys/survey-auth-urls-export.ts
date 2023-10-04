@@ -1,6 +1,5 @@
 import path from 'node:path';
 
-import type { FieldInfo } from '@json2csv/node';
 import type { Job } from 'bullmq';
 import { Transform } from '@json2csv/node';
 import { format as formatDate } from 'date-fns';
@@ -69,26 +68,8 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     const { slug, authUrlDomainOverride } = survey;
     const urlService = surveyUrlService(this.appConfig.urls, slug, authUrlDomainOverride);
 
-    const fields: FieldInfo<UserSurveyAlias>[] = [
-      { label: 'UserID', value: 'userId' },
-      { label: 'Username', value: 'username' },
-      { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
-      {
-        label: 'ShortSurveyAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
-      },
-      {
-        label: 'SurveyAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken, true),
-      },
-      {
-        label: 'FeedbackAuthenticationURL',
-        value: (row: UserSurveyAlias) => urlService.getFeedbackUrl(row.urlAuthToken),
-      },
-    ];
-
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
-    const filename = `intake24-${slug}-auth-urls-${timestamp}.csv`;
+    const filename = `intake24-${this.name}-${slug}-${timestamp}.csv`;
 
     const total = await UserSurveyAlias.count({ where: { surveyId } });
     const aliases = UserSurveyAlias.findAllWithStream({ where: { surveyId } });
@@ -101,7 +82,30 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
     }, 1000);
 
     return new Promise((resolve, reject) => {
-      const transform = new Transform({ fields, withBOM: true }, { objectMode: true });
+      const transform = new Transform(
+        {
+          fields: [
+            { label: 'UserID', value: 'userId' },
+            { label: 'Username', value: 'username' },
+            { label: 'AuthenticationToken', value: (row: UserSurveyAlias) => row.urlAuthToken },
+            {
+              label: 'ShortSurveyAuthenticationURL',
+              value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken),
+            },
+            {
+              label: 'SurveyAuthenticationURL',
+              value: (row: UserSurveyAlias) => urlService.getSurveyUrl(row.urlAuthToken, true),
+            },
+            {
+              label: 'FeedbackAuthenticationURL',
+              value: (row: UserSurveyAlias) => urlService.getFeedbackUrl(row.urlAuthToken),
+            },
+          ],
+          withBOM: true,
+        },
+        {},
+        { objectMode: true }
+      );
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
         encoding: 'utf8',
         flags: 'w+',

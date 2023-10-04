@@ -10,9 +10,10 @@ type Options = {
   code?: number;
   permissions?: string[];
   input?: any;
+  result?: boolean;
 };
 
-interface PaginatedOptions extends Options {
+interface PaginatedOptions extends Omit<Options, 'result'> {
   result?: boolean | string;
 }
 
@@ -61,14 +62,14 @@ const sharedTests = (suite: typeof Suite) => {
     fields: string[],
     ops?: Options
   ) => {
-    const { bearer, code = 422, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 400, input } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { status, body } = await call.send(input);
 
-    expect(body).toContainAllKeys(['errors', 'success']);
+    expect(body).toContainAllKeys(['errors', 'message']);
     expect(body.errors).toContainAllKeys(fields);
     expect(status).toBe(code);
   };
@@ -128,14 +129,16 @@ const sharedTests = (suite: typeof Suite) => {
   };
 
   const assertAcknowledged = async (method: Method, url: string, ops?: Options) => {
-    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+    const { bearer, code = 200, input, result = false } = { ...defaultOptions, ...ops };
 
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
     const { body, status } = await call.send(input);
 
-    expect(body).toBeEmpty();
+    if (result) expect(body).not.toBeEmpty();
+    else expect(body).toBeEmpty();
+
     expect(status).toBe(code);
   };
 

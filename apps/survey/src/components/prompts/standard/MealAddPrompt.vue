@@ -15,6 +15,7 @@
             :items="defaultMeals"
             :label="promptI18n.label"
             outlined
+            :search-input.sync="state"
           >
           </component>
         </v-col>

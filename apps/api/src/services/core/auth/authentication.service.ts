@@ -253,7 +253,7 @@ const authenticationService = ({
   const aliasLogin = async (credentials: AliasLoginRequest, meta: LoginMeta): Promise<Tokens> => {
     const { username, password, survey: slug } = credentials;
 
-    const survey = await Survey.findOne({ where: { slug } });
+    const survey = await Survey.findBySlug(slug);
     if (!survey) throw new UnauthorizedError('Invalid survey for provided credentials.');
 
     const user = await User.findOne({

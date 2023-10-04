@@ -20,6 +20,7 @@ const defaults: Schema = {
     isString: true,
     isEmpty: { negated: true },
     isLength: { options: { min: 3, max: 128 } },
+    optional: true,
   },
   'main.code': {
     in: ['body'],
@@ -27,6 +28,7 @@ const defaults: Schema = {
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
     isLength: { options: { min: 1, max: 8 }, bail: true },
+    optional: true,
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId, foodId } = (meta.req as Request).params;
@@ -49,6 +51,7 @@ const defaults: Schema = {
     errorMessage: typeErrorMessage('string._'),
     isString: { bail: true },
     isEmpty: { negated: true, bail: true },
+    optional: true,
     custom: {
       options: async (value, meta): Promise<void> => {
         const foodGroup = await FoodGroup.findByPk(value);

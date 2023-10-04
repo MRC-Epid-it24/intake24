@@ -29,28 +29,30 @@ export type JobParams = {
   LocaleFoodNutrientMapping: {
     localeId: string;
   };
-  FoodRankingCsvUpload: {
-    localeId: number;
-    localeCode: string;
+  LocaleFoodRankingUpload: {
+    localeId: string;
     file: string;
+  };
+  LocalePopularitySearchCopy: {
+    localeId: string;
+    sourceLocaleId: string;
   };
   NutrientTableDataImport: {
     nutrientTableId: string;
     file: string;
   };
-  NutrientTableIMappingImport: {
+  NutrientTableMappingImport: {
     nutrientTableId: string;
     file: string;
-  };
-  PairwiseSearchCopyAssociations: {
-    sourceLocaleId: string;
-    targetLocaleId: string;
   };
   PopularitySearchUpdateCounters: {
     localeCode: string;
     foodCodes: string[];
   };
   PurgeRefreshTokens: EmptyJobParams;
+  SurveyAuthUrlsExport: {
+    surveyId: string;
+  };
   SurveyDataExport: {
     id?: string | string[];
     surveyId: string;
@@ -58,12 +60,13 @@ export type JobParams = {
     endDate?: Date;
     userId?: string;
   };
-  SurveyAuthUrlsExport: {
+  SurveyFeedbackNotification: {
     surveyId: string;
-  };
-  SurveyRespondentsImport: {
-    surveyId: string;
-    file: string;
+    userId: string;
+    submissions?: string[];
+    to: string;
+    cc?: string;
+    bcc?: string;
   };
   SurveyHelpRequestNotification: {
     surveySlug: string;
@@ -74,13 +77,12 @@ export type JobParams = {
     phoneCountry: string;
     message: string;
   };
-  SurveyFeedbackNotification: {
+  SurveyNutrientsRecalculation: {
     surveyId: string;
-    userId: string;
-    submissions?: string[];
-    to: string;
-    cc?: string;
-    bcc?: string;
+  };
+  SurveyRespondentsImport: {
+    surveyId: string;
+    file: string;
   };
   SurveySubmission: {
     surveyId: string;
@@ -107,6 +109,12 @@ export type JobTypeParams = JobParams[keyof JobParams];
 
 export type GetJobParams<P extends keyof JobParams> = JobParams[P];
 
+export type QueueJob = {
+  userId: string;
+  type: JobType;
+  params: GetJobParams<JobType>;
+};
+
 export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
@@ -117,32 +125,34 @@ export const defaultJobsParams: JobParams = {
   LocaleFoodNutrientMapping: {
     localeId: '',
   },
-  FoodRankingCsvUpload: {
-    localeId: 0,
-    localeCode: '',
+  LocaleFoodRankingUpload: {
+    localeId: '',
     file: '',
   },
   NutrientTableDataImport: {
     nutrientTableId: '',
     file: '',
   },
-  NutrientTableIMappingImport: {
+  NutrientTableMappingImport: {
     nutrientTableId: '',
     file: '',
   },
-  PairwiseSearchCopyAssociations: {
+  LocalePopularitySearchCopy: {
+    localeId: '',
     sourceLocaleId: '',
-    targetLocaleId: '',
   },
   PopularitySearchUpdateCounters: {
     localeCode: '',
     foodCodes: [],
   },
   PurgeRefreshTokens: {},
+  SurveyAuthUrlsExport: {
+    surveyId: '',
+  },
   SurveyDataExport: {
     surveyId: '',
   },
-  SurveyAuthUrlsExport: {
+  SurveyNutrientsRecalculation: {
     surveyId: '',
   },
   SurveyRespondentsImport: {
@@ -186,3 +196,46 @@ export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
 export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] =>
   pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
+
+export const jobRequiresFile = <T extends keyof JobParams>(job: T) =>
+  Object.keys(defaultJobsParams[job]).includes('file');
+
+export type LocaleJob = Extract<
+  JobType,
+  | 'LocaleFoods'
+  | 'LocaleFoodNutrientMapping'
+  | 'LocaleFoodRankingUpload'
+  | 'LocalePopularitySearchCopy'
+>;
+
+export const localeJobs = [
+  'LocaleFoods',
+  'LocaleFoodNutrientMapping',
+  'LocaleFoodRankingUpload',
+  'LocalePopularitySearchCopy',
+] as unknown as LocaleJob[];
+
+export type NutrientTableJob = Extract<
+  JobType,
+  'NutrientTableMappingImport' | 'NutrientTableDataImport'
+>;
+
+export const nutrientTableJobs = [
+  'NutrientTableMappingImport',
+  'NutrientTableDataImport',
+] as unknown as NutrientTableJob[];
+
+export type SurveyJob = Extract<
+  JobType,
+  | 'SurveyAuthUrlsExport'
+  | 'SurveyDataExport'
+  | 'SurveyNutrientsRecalculation'
+  | 'SurveyRespondentsImport'
+>;
+
+export const surveyJobs = [
+  'SurveyAuthUrlsExport',
+  'SurveyDataExport',
+  'SurveyNutrientsRecalculation',
+  'SurveyRespondentsImport',
+] as unknown as SurveyJob[];

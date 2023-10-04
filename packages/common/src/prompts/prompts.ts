@@ -1,7 +1,7 @@
 import type { PromptSection } from '../surveys';
-import type { LocaleTranslation } from '../types';
 import type { Actions } from './actions';
 import type { Condition } from './conditions';
+import { type LocaleTranslation, type PortionSizeMethodId, portionSizeMethods } from '../types';
 
 export type ListOption<T = string> = {
   id?: number;
@@ -51,23 +51,16 @@ export const standardComponentTypes = [
 
 export type StandardComponentType = (typeof standardComponentTypes)[number];
 
-export const portionSizeComponentTypes = [
-  'as-served-prompt',
-  'cereal-prompt',
-  'direct-weight-prompt',
-  'drink-scale-prompt',
-  'guide-image-prompt',
-  'milk-in-a-hot-drink-prompt',
-  'milk-on-cereal-prompt',
-  'missing-food-prompt',
-  'parent-food-portion-prompt',
-  'pizza-prompt',
-  'portion-size-option-prompt',
-  'recipe-builder-prompt',
-  'standard-portion-prompt',
-] as const;
+export type PortionSizeComponentType =
+  | `${PortionSizeMethodId}-prompt`
+  | 'missing-food-prompt'
+  | 'portion-size-option-prompt';
 
-export type PortionSizeComponentType = (typeof portionSizeComponentTypes)[number];
+export const portionSizeComponentTypes = [
+  ...portionSizeMethods,
+  'missing-food',
+  'portion-size-option',
+].map((type) => `${type}-prompt`) as PortionSizeComponentType[];
 
 export type ComponentType = CustomComponentType | StandardComponentType | PortionSizeComponentType;
 
@@ -98,6 +91,11 @@ export interface PromptWithSection extends BasePrompt {
 export type ImageMap = {
   labels: boolean;
   pinchZoom: boolean;
+};
+
+export type LinkedQuantityCategory = {
+  code: string;
+  unit?: string;
 };
 
 export type Slider = {
@@ -154,7 +152,7 @@ export type Prompts = {
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
     imageMap: ImageMap;
-    linkedQuantityCategories: { code: string; unit?: string }[];
+    linkedQuantityCategories: LinkedQuantityCategory[];
   };
   'milk-in-a-hot-drink-prompt': BasePortionPrompt & {
     component: 'milk-in-a-hot-drink-prompt';

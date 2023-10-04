@@ -361,8 +361,7 @@ const surveySubmissionService = ({
     state: SurveyState,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = await Survey.findOne({
-      where: { slug },
+    const survey = await Survey.findBySlug(slug, {
       include: [{ association: 'surveyScheme', required: true }],
     });
     if (!survey) throw new NotFoundError();

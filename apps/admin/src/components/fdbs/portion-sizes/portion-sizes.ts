@@ -139,9 +139,9 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     imageUrl: portionSizeSelectionImages.use_an_image,
   },
   {
-    method: 'weight',
+    method: 'direct-weight',
     ...psmDefaultAttributes,
-    description: 'weight',
+    description: 'direct weight',
     imageUrl: portionSizeSelectionImages.weight,
   },
 ];

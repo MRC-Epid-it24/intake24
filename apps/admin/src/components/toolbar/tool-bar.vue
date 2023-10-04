@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-5" outlined>
+  <v-card v-if="currentActions.length" class="mb-5" outlined>
     <v-toolbar>
       <template v-for="action in ['create', 'read', 'edit']">
         <component

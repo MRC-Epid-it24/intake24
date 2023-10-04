@@ -1,5 +1,5 @@
 import type { AxiosError, AxiosResponse } from 'axios';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import axiosRetry from 'axios-retry';
 import trim from 'lodash/trim';
 
@@ -91,7 +91,11 @@ const httpClient: HttpClient = {
         const { config, response: { status } = {} } = err;
 
         // Exclude non-401s and sign-in 401s (/login)
-        if (!config?.url || status !== 401 || config.url?.match(/auth\/(login|fido|duo|otp)$/))
+        if (
+          !config?.url ||
+          status !== HttpStatusCode.Unauthorized ||
+          config.url?.match(/auth\/(login|fido|duo|otp)$/)
+        )
           return Promise.reject(err);
 
         // Refresh token has failed. Logout the user

@@ -5,16 +5,13 @@
       <v-row>
         <v-col cols="12">
           <v-select
+            v-model="params.store"
+            :error-messages="errors.get('params.store')"
             :items="stores"
             :label="$t('jobs.types.CleanRedisStore.stores._')"
             name="store"
             outlined
-            :value="value.store"
-            @change="input('store', $event)"
           ></v-select>
-        </v-col>
-        <v-col v-for="(error, idx) in errors" :key="idx" cols="12">
-          <v-alert text type="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
     </v-card-text>

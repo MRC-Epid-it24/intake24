@@ -1,17 +1,23 @@
 import request from 'supertest';
 
+import type { QueueJob } from '@intake24/common/types';
 import type { Job } from '@intake24/db';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/user/jobs';
-  let input: { startDate: string; endDate: string };
+  let input: Omit<QueueJob, 'userId' | 'params'> & {
+    params: { startDate: string; endDate: string };
+  };
 
   beforeAll(async () => {
     const { startDate, endDate } = suite.data.system.survey;
     input = {
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0],
+      type: 'SurveyDataExport',
+      params: {
+        startDate: startDate.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
+      },
     };
   });
 
@@ -22,15 +28,15 @@ export default () => {
   it('should return 200 and data list', async () => {
     // Admin user job
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.superuser)
       .send(input);
 
     // Test user job
-    await suite.util.setPermission(['surveys', 'surveys|data-export']);
+    await suite.util.setPermission(['surveys', 'surveys|tasks']);
     await request(suite.app)
-      .post(`/api/admin/surveys/${suite.data.system.survey.id}/data-export`)
+      .post(`/api/admin/surveys/${suite.data.system.survey.id}/tasks`)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
       .send(input);

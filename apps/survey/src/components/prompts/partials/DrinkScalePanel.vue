@@ -274,7 +274,16 @@ export default defineComponent({
 
         .v-slider__track-container {
           cursor: pointer;
-          width: 20px;
+          width: 10px;
+
+          .v-slider__track-background {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+          }
+          .v-slider__track-fill {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+          }
         }
 
         .v-slider__thumb-container {
@@ -282,54 +291,30 @@ export default defineComponent({
 
           .v-slider__thumb {
             width: 30px;
-            height: 24px;
+            height: 14px;
             position: absolute;
-            left: -15px;
+            left: -14px;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
-            border-top-right-radius: 0px;
-            border-bottom-right-radius: 0px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
 
             &::after {
               content: '';
               position: absolute;
               top: 50%;
-              left: -6px;
+              left: -3.5px;
               width: 0;
               height: 0;
-              border-right: 12px solid $secondary;
-              border-top: 12px solid transparent;
-              border-bottom: 12px solid transparent;
+              border-right: 7px solid $secondary;
+              border-top: 7px solid transparent;
+              border-bottom: 7px solid transparent;
             }
 
             &::before {
               content: unset;
             }
           }
-
-          /* .v-slider__thumb {
-          height: 36px;
-          width: 36px;
-          left: -18px;
-        }
-
-        .v-slider__thumb::before {
-          height: 50px;
-          width: 50px;
-          top: -8px;
-          left: -8px;
-        }
-
-        &:hover,
-        &.v-slider__thumb-container--active,
-        &.v-slider__thumb-container--focused {
-          .v-slider__thumb::before {
-            height: 60px;
-            width: 60px;
-            top: -12px;
-            left: -12px;
-          }
-        } */
         }
       }
 

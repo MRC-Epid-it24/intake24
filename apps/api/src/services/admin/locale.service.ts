@@ -1,5 +1,5 @@
 import type { IoC } from '@intake24/api/ioc';
-import type { GetJobParams, JobType } from '@intake24/common/types';
+import type { QueueJob } from '@intake24/common/types';
 import type {
   LocaleRecipeFoodsInput,
   LocaleRecipeFoodStepsInput,
@@ -7,7 +7,6 @@ import type {
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
-import type { Job } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   Op,
@@ -18,12 +17,6 @@ import {
   SynonymSet,
   SystemLocale,
 } from '@intake24/db';
-
-export type QueueLocaleTaskInput = {
-  userId: string;
-  job: JobType;
-  params: GetJobParams<JobType>;
-};
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
@@ -279,33 +272,13 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     return [...records, ...newRecords];
   };
 
-  const uploadFoodRanking = async (
-    localeId: number,
-    localeCode: string,
-    userId: string,
-    file: Express.Multer.File
-  ): Promise<Job> => {
-    const locale = await SystemLocale.findByPk(localeId);
-    if (!locale) throw new NotFoundError();
-
-    return scheduler.jobs.addJob({
-      type: 'FoodRankingCsvUpload',
-      userId,
-      params: { localeId, localeCode, file: file.path },
-    });
-  };
-
   /**
    * Queue locale tasks
    *
-   * @param {QueueLocaleTaskInput} input
+   * @param {QueueJob} input
    * @returns
    */
-  const queueLocaleTask = async (input: QueueLocaleTaskInput) => {
-    const { userId, job, params } = input;
-
-    return scheduler.jobs.addJob({ type: job, userId, params });
-  };
+  const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
   return {
     getRecipeFoods,
@@ -318,8 +291,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     setSplitWords,
     getSynonymSets,
     setSynonymSets,
-    uploadFoodRanking,
-    queueLocaleTask,
+    queueTask,
   };
 };
 

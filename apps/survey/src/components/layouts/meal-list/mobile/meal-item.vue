@@ -22,16 +22,13 @@
         <v-icon :class="{ 'fa-rotate-180': meal.id === contextId }">$expand</v-icon>
       </v-list-item-action>
     </v-list-item>
-    <context-menu
-      v-bind="{ contextId, entity: meal, entityName: mealName, menu }"
-      @action="action"
-    ></context-menu>
+    <context-menu v-bind="{ contextId, meal, menu }" @action="action"></context-menu>
     <v-divider></v-divider>
     <template v-if="meal.foods.length">
       <food-item
         v-for="food in meal.foods"
         :key="food.id"
-        v-bind="{ contextId, food, selectedFoodId }"
+        v-bind="{ contextId, food, meal, selectedFoodId }"
         @action="action"
         @update:context-id="updateContextId"
       ></food-item>
@@ -76,7 +73,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, isSelected, menu, mealName, mealTime, mealSelected } = useMealItem(props, ctx);
+    const { action, isSelected, menu, mealName, mealTime } = useMealItem(props, ctx);
 
     const updateContextId = (id: string) => {
       ctx.emit('update:context-id', id);
@@ -88,7 +85,6 @@ export default defineComponent({
       menu,
       mealName,
       mealTime,
-      mealSelected,
       updateContextId,
     };
   },

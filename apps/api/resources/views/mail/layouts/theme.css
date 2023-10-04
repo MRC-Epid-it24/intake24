@@ -75,6 +75,15 @@ img {
 
 /* Layout */
 
+.preview {
+    display: none;
+    overflow: hidden;
+    line-height: 1px;
+    opacity: 0;
+    max-height: 0;
+    max-width: 0;
+}
+
 .wrapper {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
@@ -115,6 +124,15 @@ img {
     letter-spacing: 1px;
     font-weight: bold;
     text-decoration: none;
+}
+
+.subheader {
+    color: #ffffff;
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: right;
 }
 
 /* Logo */
