@@ -129,6 +129,7 @@ Content-Type: application/json
 - `HS256` and `HS512` algorithms are supported.
 - expected claims / payload shape:
   - `username` - Unique respondent username within the survey
+  - `password` (optional) - password for username:password login
   - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
 
 #### JWT payload
@@ -136,6 +137,7 @@ Content-Type: application/json
 ```json
 {
   "username": string,
+  "password"?: string
   "redirectUrl"?: string
 }
 ```

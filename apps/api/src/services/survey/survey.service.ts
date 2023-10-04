@@ -90,9 +90,13 @@ const surveyService = ({
     if (!decoded || Object.prototype.toString.call(decoded) !== '[object Object]')
       throw new ApplicationError('Malformed token payload');
 
-    const { username, redirectUrl } = decoded;
+    const { username, password, redirectUrl } = decoded;
     if (!username || typeof username !== 'string')
       throw new ApplicationError('Invalid claim: missing username');
+
+    if (typeof password !== 'undefined' && typeof password !== 'string')
+      throw new ApplicationError('Invalid claim: password must a string');
+
     if (typeof redirectUrl !== 'undefined' && typeof redirectUrl !== 'string')
       throw new ApplicationError('Invalid claim: redirectUrl must a string');
 
@@ -105,7 +109,7 @@ const surveyService = ({
 
     const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
       username,
-      password: randomString(12),
+      password: password || randomString(12),
     });
 
     return { userId, username, authToken, redirectUrl };
