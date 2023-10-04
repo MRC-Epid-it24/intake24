@@ -13,7 +13,7 @@
     "cookie": "^0.5.0",
     "formdata-node": "4.4.1",
     "mime-types": "^2.1.35",
-    "p-limit": "^4.0.0",
+    "p-limit": "^3.0.0",
     "winston": "^3.10.0"
   },
   "devDependencies": {
