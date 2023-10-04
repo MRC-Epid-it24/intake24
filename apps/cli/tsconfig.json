@@ -11,7 +11,7 @@
 
       "@intake24/*": ["../../packages/*/src"]
     },
-    "types": ["node", "jest", "jest-extended", "webpack-env"]
+    "types": ["node", "jest", "jest-extended", "webpack-env"],
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
   "exclude": ["node_modules"]

@@ -91,6 +91,7 @@ export default defineComponent({
       const device = await this.form.post<MFADeviceEntry>(this.url);
 
       this.$emit('registered', device);
+      this.$router.replace({ query: {} });
 
       this.progress = 3;
     },

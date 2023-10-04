@@ -13,7 +13,7 @@ export const ajv = new Ajv({
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
 
-export { Config };
+export type { Config };
 export const ConfigSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   properties: {

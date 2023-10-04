@@ -136,9 +136,9 @@ const imageResponseCollection = (baseUrl: string) => {
    */
   const mapObjects = (objects: ImageMapObject[]): ImageMapEntryObject[] =>
     objects.map((object) => {
-      const { id, description, label, outlineCoordinates } = object;
+      const { id, description, label, outlineCoordinates, navigationIndex } = object;
 
-      return { id, description, label, outlineCoordinates };
+      return { id, description, label, outlineCoordinates, navigationIndex };
     });
 
   /**
@@ -153,10 +153,10 @@ const imageResponseCollection = (baseUrl: string) => {
     guideObjects: GuideObjects
   ): GuideImageEntryObject[] =>
     mapObjects.map((object) => {
-      const { id, description, outlineCoordinates } = object;
+      const { id, description, outlineCoordinates, navigationIndex } = object;
       const { label, weight } = guideObjects[id];
 
-      return { id, description, outlineCoordinates, label, weight };
+      return { id, description, outlineCoordinates, label, weight, navigationIndex };
     });
 
   /**

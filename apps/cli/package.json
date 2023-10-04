@@ -43,8 +43,8 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.2",
     "@types/lodash": "^4.14.199",
-    "@types/node": "^20.7.0",
-    "@types/validator": "^13.11.1",
+    "@types/node": "^20.8.2",
+    "@types/validator": "^13.11.2",
     "@types/web-push": "^3.6.1",
     "@types/webpack-env": "^1.18.2",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
@@ -61,6 +61,8 @@
   },
   "bundledDependencies": [
     "@intake24/common",
-    "@intake24/common-backend"
+    "@intake24/common-backend",
+    "@intake24/api-client-v3",
+    "@intake24/api-client-v4"
   ]
 }
