@@ -286,7 +286,13 @@ export default defineComponent({
     addObject() {
       const nextId = this.objects.reduce((acc, { id }) => (acc < id ? id : acc), -1);
       this.coords.push([]);
-      this.objects.push({ id: nextId + 1, description: '', label: {}, weight: 0 });
+      this.objects.push({
+        id: nextId + 1,
+        description: '',
+        label: {},
+        navigationIndex: nextId + 1,
+        weight: 0,
+      });
     },
 
     removeObject(index: number) {

@@ -69,7 +69,7 @@ const imageMapService = ({
           id: object.id,
           imageMapId,
           description: object.description,
-          navigationIndex: parseInt(object.id, 10),
+          navigationIndex: object.navigationIndex,
           outlineCoordinates: object.outlineCoordinates,
           label: object.label,
         });
@@ -91,7 +91,7 @@ const imageMapService = ({
       await match.update({
         description: object.description,
         label: object.label,
-        navigationIndex: parseInt(object.id, 10),
+        navigationIndex: object.navigationIndex,
         outlineCoordinates: object.outlineCoordinates,
       });
     }
