@@ -3,6 +3,9 @@ import './bootstrap';
 import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
+import { conflictResolutionOptions } from '@intake24/cli/commands/packager/importer-v4';
+import { runTest } from '@intake24/cli/commands/ptest';
+
 import pkg from '../package.json';
 import {
   findPortionImages,
@@ -64,26 +67,15 @@ const run = async () => {
       await findPortionImages(pwd);
     });
 
-  const asServedOption = new Option(
-    '-as, --as-served [set-ids...]',
-    'Export as served portion size images for given set identifiers'
-  );
-
-  asServedOption.required = true;
-
-  const localeOption = new Option(
-    '-l, --locale <locale-ids...>',
-    'Export all data for the given locale ids'
-  );
-
-  localeOption.required = true;
-
   program
     .command('export-package')
     .description('Export food data into a portable format')
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
-    .addOption(asServedOption)
-    .addOption(localeOption)
+    .requiredOption(
+      '-as, --as-served [set-ids...]',
+      'Export as served portion size images for given set identifiers'
+    )
+    .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
     .action(async (version, options) => {
       switch (version) {
         case 'v3':
@@ -95,11 +87,19 @@ const run = async () => {
       }
     });
 
+  const conflictResolutionOption = new Option(
+    '-c, --on-conflict [on-conflict-option]',
+    'Conflict resolution strategy'
+  ).choices(conflictResolutionOptions);
+
+  conflictResolutionOption.required = true;
+
   program
     .command('import-package')
     .description('Import food data from a portable format')
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
     .addArgument(new Argument('<package-file>', 'Input package file path'))
+    .addOption(conflictResolutionOption)
     .action(async (version, inputFilePath, options) => {
       switch (version) {
         case 'v3':

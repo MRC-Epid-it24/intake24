@@ -115,7 +115,11 @@ export class ExporterV3 {
         objects: Object.fromEntries(
           imageMap.objects.map((obj) => [
             obj.id,
-            { description: obj.description, outlineCoordinates: obj.outlineCoordinates },
+            {
+              description: obj.description,
+              outlineCoordinates: obj.outlineCoordinates,
+              navigationIndex: obj.navigationIndex,
+            },
           ])
         ),
       };

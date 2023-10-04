@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import * as process from 'process';
 
 import type { CredentialsV4 } from '@intake24/api-client-v4';
+import type { ConflictResolutionStrategy } from '@intake24/cli/commands/packager/importer-v4';
 import { ApiClientV4 } from '@intake24/api-client-v4';
 import { ImporterV4 } from '@intake24/cli/commands/packager/importer-v4';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
@@ -9,6 +10,7 @@ import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 export interface PackageImportOptions {
   asServed?: string[];
   locale?: string[];
+  onConflict?: ConflictResolutionStrategy;
 }
 
 type Logger = typeof mainLogger;
@@ -60,7 +62,9 @@ export default async (
     credentials
   );
 
-  const importer = new ImporterV4(apiClient, logger, inputFilePath, {});
+  const importer = new ImporterV4(apiClient, logger, inputFilePath, {
+    onConflict: options.onConflict,
+  });
 
   await importer.import();
 };

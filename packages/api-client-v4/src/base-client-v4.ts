@@ -239,10 +239,36 @@ export class BaseClientV4 {
     endpoint: string,
     body?: Req,
     params?: Record<string, any>,
-    expectedStatus: number[] = [HttpStatusCode.Ok]
+    expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Created, HttpStatusCode.Accepted]
   ): Promise<Res> {
     const response = await this.requestLimit(() =>
       this.accessClient.post<Res>(endpoint, body, { params })
+    );
+    this.checkStatus(response, expectedStatus);
+    return response.data;
+  }
+
+  public async put<Res, Req = any>(
+    endpoint: string,
+    body?: Req,
+    params?: Record<string, any>,
+    expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Accepted]
+  ): Promise<Res> {
+    const response = await this.requestLimit(() =>
+      this.accessClient.put<Res>(endpoint, body, { params })
+    );
+    this.checkStatus(response, expectedStatus);
+    return response.data;
+  }
+
+  public async patch<Res, Req = any>(
+    endpoint: string,
+    body?: Req,
+    params?: Record<string, any>,
+    expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Accepted]
+  ): Promise<Res> {
+    const response = await this.requestLimit(() =>
+      this.accessClient.patch<Res>(endpoint, body, { params })
     );
     this.checkStatus(response, expectedStatus);
     return response.data;

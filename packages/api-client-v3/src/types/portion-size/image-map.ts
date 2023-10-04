@@ -1,6 +1,7 @@
 export interface ImageMapObjectV3 {
   id: number;
   description: string;
+  navigationIndex: number;
   outlineCoordinates: number[];
 }
 

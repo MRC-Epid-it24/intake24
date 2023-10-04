@@ -1,5 +1,6 @@
 export interface PkgImageMapObject {
   description: string;
+  navigationIndex: number;
   outlineCoordinates: number[];
 }
 
