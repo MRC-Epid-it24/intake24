@@ -131,7 +131,11 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   id: 'submit-prompt',
   name: 'Submit prompt',
   desktopReview: false,
-  mobileReview: false,
+  mobileReview: 'checkbox',
+  review: {
+    desktop: false,
+    mobile: false,
+  },
 });
 
 export const standardPrompts: Prompt[] = [

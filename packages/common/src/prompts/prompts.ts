@@ -224,7 +224,7 @@ export type Prompts = {
     component: 'submit-prompt';
     desktopReview: false | 'scroll' | 'checkbox';
     mobileReview: false | 'scroll' | 'checkbox';
-    // review: Record<'desktop' | 'mobile', false | 'scroll' | 'checkbox'>;
+    review: Record<'desktop' | 'mobile', false | 'scroll' | 'checkbox'>;
   };
 };
 
