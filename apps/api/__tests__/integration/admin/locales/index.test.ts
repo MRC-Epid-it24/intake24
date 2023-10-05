@@ -2,7 +2,7 @@ import browse from './browse.test';
 import destroy from './destroy.test';
 import edit from './edit.test';
 import read from './read.test';
-import recipeFoods from './recipe-foods/index.test';
+// import recipeFoods from './recipe-foods/index.test';
 import refs from './refs.test';
 import splitLists from './split-lists/index.test';
 import splitWords from './split-words/index.test';

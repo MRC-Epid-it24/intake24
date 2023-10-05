@@ -1,7 +1,5 @@
 import { Worker } from 'node:worker_threads';
 
-import { Op } from 'sequelize';
-
 import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
@@ -18,13 +16,6 @@ interface SearchResponse {
   queryId: number;
   success: boolean;
   results: FoodSearchResponse;
-  error: Error;
-}
-
-interface RecipeFoodResponse {
-  specialQueryId: number;
-  success: boolean;
-  result: RecipeFood;
   error: Error;
 }
 

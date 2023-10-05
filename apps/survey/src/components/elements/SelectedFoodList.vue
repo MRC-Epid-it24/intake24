@@ -34,16 +34,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { Console } from 'console';
 import { computed, defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
-import { getFoodDescription, RecipeBuilder } from '@intake24/common/types';
-import { UserFoodData } from '@intake24/common/types/http';
+import { getFoodDescription } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
-import { usePromptUtils } from '@intake24/survey/composables';
 import { promptType } from '@intake24/ui';
 
 export type SelectedFoodParentType = {

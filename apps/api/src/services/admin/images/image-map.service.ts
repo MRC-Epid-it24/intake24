@@ -1,5 +1,3 @@
-import sequelize from 'sequelize-typescript';
-
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CreateImageMapInput,

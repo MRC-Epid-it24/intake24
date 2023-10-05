@@ -1,5 +1,4 @@
 import type { BaseClientV3 } from './base-client-v3';
-import type { ApiClientV3 } from './index';
 
 export class ImageApiV3 {
   private readonly baseClient: BaseClientV3;

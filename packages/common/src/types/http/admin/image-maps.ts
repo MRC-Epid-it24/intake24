@@ -1,6 +1,6 @@
 import type { ImageMapAttributes, ImageMapObjectAttributes, Pagination } from '@intake24/db';
 
-import type { SourceFileInput, UploadSourceImageInput } from './source-images';
+import type { SourceFileInput } from './source-images';
 
 export type ImageMapEntryObject = Pick<
   ImageMapObjectAttributes,

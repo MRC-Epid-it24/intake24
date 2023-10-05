@@ -2,7 +2,6 @@ import type {
   FoodState,
   MissingFood,
   PortionSizeStates,
-  RecipeBuilder,
   RecipeFood,
   RequiredLocaleTranslation,
 } from '../types';

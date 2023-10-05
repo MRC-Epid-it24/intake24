@@ -134,7 +134,6 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 
-import user from '../../user';
 import StepsDialog from './steps-dialog.vue';
 
 export type LocaleRecipeFoodsForm = {

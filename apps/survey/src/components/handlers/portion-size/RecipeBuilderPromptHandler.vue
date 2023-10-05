@@ -24,7 +24,6 @@ import type { EncodedFood, RecipeFoodStepsType } from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
-import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
@@ -59,12 +58,11 @@ export default defineComponent({
 
   setup(props, ctx) {
     const survey = useSurvey();
-    const { recipeBuilder, localeId, meals } = useFoodPromptUtils();
+    const { recipeBuilder, localeId } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
 
     const recipeFood = recipeBuilder().template;
     const foodId = recipeBuilder().id;
-    const { foodIndex } = getFoodIndexRequired(meals.value, foodId);
 
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
       recipe: recipeFood,
@@ -73,19 +71,17 @@ export default defineComponent({
       recipeSteps: recipeFood.steps.map((step) => initialPromptState(step)),
     });
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
     const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number; id: string }) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
-      const flags = ['portion-size-option-complete', ''];
 
       const ingredientToAdd: EncodedFood = {
         id: data.id,
         type: 'encoded-food',
         data: data.ingredient,
         searchTerm: 'recipe builder prompt',
-        flags,
+        flags: ['portion-size-option-complete'],
         portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
         portionSize: null,
         customPromptAnswers: {},
@@ -101,7 +97,7 @@ export default defineComponent({
         linkedFood.push(...recipeParent.linkedFoods);
       }
 
-      //ading the new ingredient to exisitng component or creating a new one.
+      //adding the new ingredient to existing component or creating a new one.
       const componentIndex = newComponents[data.idx] !== undefined ? data.idx : -1;
       if (componentIndex !== -1 && newComponents.length > 0) {
         newComponents[componentIndex].ingredients.push(data.id);

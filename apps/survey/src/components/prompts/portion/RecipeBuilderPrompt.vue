@@ -1,5 +1,5 @@
 <template>
-  <base-layout v-bind="{ food, meal, prompt, section, fields, recipe }">
+  <base-layout v-bind="{ food, meal, prompt, section, isValid }">
     <v-expansion-panels v-model="activeStep" :tile="isMobile" @change="updateActiveStep">
       <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
         <v-expansion-panel-header
@@ -18,7 +18,7 @@
               v-model="step.confirmed"
               :disabled="!(step.selectedFoods !== undefined && step.selectedFoods.length > 0)"
               :row="!isMobile"
-              @change="onConfirmToggleIngerients(index)"
+              @change="onConfirmToggleIngredients(index)"
             >
               <v-radio
                 :label="$t('prompts.recipeBuilder.addMore')"
@@ -64,10 +64,10 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!allStepsFinished" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="action('next')"></next>
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!allStepsFinished" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
   </base-layout>
 </template>
@@ -82,7 +82,6 @@ import type {
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/types';
-import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import {
@@ -101,20 +100,14 @@ const isStepValid = (step: RecipeBuilderStepState): boolean =>
 const getNextStep = (steps: RecipeBuilderStepState[]) =>
   steps.findIndex((step) => !isStepValid(step));
 
-const { translate } = useI18n();
-
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
   components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList },
 
-  mixins: [createBasePrompt<'recipe-builder-prompt'>()],
+  mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
 
   props: {
-    food: {
-      type: Object as PropType<RecipeBuilder>,
-      required: true,
-    },
     localeId: {
       type: String,
       required: true,
@@ -125,28 +118,25 @@ export default defineComponent({
     },
   },
 
-  emits: ['input', 'update', 'add-food', 'action'],
+  emits: ['input', 'add-food', 'action'],
 
-  data(props) {
+  setup() {
+    const { translate } = useI18n();
+
     return {
-      ...copy(this.value),
       isStepValid,
-      fields: [
-        'description',
-        'components',
-        'customPromptAnswers',
-        'searchTerm',
-        'markedAsComplete',
-        'template_id',
-        'template',
-        'link',
-      ] as (keyof RecipeBuilder)[],
       translate,
     };
   },
 
+  data() {
+    return {
+      ...copy(this.value),
+    };
+  },
+
   computed: {
-    allStepsFinished(): boolean {
+    isValid(): boolean {
       return this.allConfirmed();
     },
   },
@@ -180,7 +170,7 @@ export default defineComponent({
         recipe: this.recipe,
       };
 
-      this.$emit('update', { state });
+      this.$emit('input', state);
     },
 
     foodSelected(food: SelectedFoodRecipeBuilderItemState, ingredientIndex: number): void {
@@ -249,12 +239,12 @@ export default defineComponent({
     },
 
     updateActiveStep(index: number) {
-      const { activeStep, recipeSteps } = this;
+      const { recipeSteps } = this;
       this.$emit('input', { activeStep: index, recipeSteps });
       this.activeStep = index;
     },
 
-    onConfirmToggleIngerients(index: number) {
+    onConfirmToggleIngredients(index: number) {
       this.goToNextIfCan(index);
     },
 

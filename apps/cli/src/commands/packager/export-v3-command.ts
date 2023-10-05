@@ -11,8 +11,6 @@ export interface PackageExportOptions {
   locale?: string[];
 }
 
-type Logger = typeof mainLogger;
-
 const TEMP_DIR_PREFIX = 'i24pkg-';
 
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;

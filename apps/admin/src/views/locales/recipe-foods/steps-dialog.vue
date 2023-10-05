@@ -154,7 +154,6 @@ import type {
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 import { useI18n } from '@intake24/i18n';
 
 export type LocaleRecipeFoodStepsForm = {

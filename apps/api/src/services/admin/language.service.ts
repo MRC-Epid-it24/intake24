@@ -47,7 +47,7 @@ const languageService = ({
           survey: survey[language.code],
         };
       }
-      const [languageCode, dialect] = language.code.toLowerCase().split(/[-_]/);
+      const [languageCode] = language.code.toLowerCase().split(/[-_]/);
       // 2.: check if the language exists in the code (without the dialect)
       if (i18nStore.hasExactLanguage(languageCode)) {
         return {

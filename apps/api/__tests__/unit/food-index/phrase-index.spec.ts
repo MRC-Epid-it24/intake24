@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
-import type { RecipeFoodsHeader } from '@intake24/common/types';
 import EnglishLanguageBackend from '@intake24/api/food-index/english-language-backend';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
