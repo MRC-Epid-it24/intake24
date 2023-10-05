@@ -335,6 +335,198 @@ Content-Type: application/json
 ]
 ```
 
+## Get recipe foods
+
+Get recipe foods entries
+
+### Request
+
+```json
+GET /api/admin/locales/:localeId/recipe-foods
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "code": string,
+        "name": string,
+        "localeId": string,
+        "recipeWord": string,
+        "synonyms_id": number|null,
+        "steps": [
+            {
+              "code": string,
+              "name": string,
+              "description": string,
+              "order": number,
+              "localeId": string,
+              "categoryCode": string,
+              "repeatable": boolean,
+            }
+
+        ]
+    },
+    ...
+]
+```
+
+## Set recipe foods
+
+Set recipe foods entries
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/recipe-foods
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+    {
+        "id": string,
+        "code": string,
+        "name": string,
+        "localeId": string,
+        "recipeWord": string,
+        "synonyms_id": number|null,
+        "steps": [
+            {
+              "code": string,
+              "name": string,
+              "description": string,
+              "order": number,
+              "localeId": string,
+              "categoryCode": string,
+              "repeatable": boolean,
+            } | undefined
+
+        ]
+    },
+    ...
+]
+
+```
+
+### Response
+
+```json
+200 OK
+
+[
+    {
+        "id": string,
+        "code": string,
+        "name": string,
+        "localeId": string,
+        "recipeWord": string,
+        "synonyms_id": number|null,
+        "steps": [
+            {
+              "code": string,
+              "name": string,
+              "description": string,
+              "order": number,
+              "localeId": string,
+              "categoryCode": string,
+              "repeatable": boolean,
+            }
+
+        ]
+    },
+    ...
+]
+```
+
+## Get recipe food steps
+
+Get recipe food steps entries
+
+### Request
+
+```json
+GET /api/admin/locales/:localeId/recipe-foods/:recipeFoodId/steps
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+[
+
+    {
+        "code": string,
+        "name": string,
+        "description": string,
+        "order": number,
+        "localeId": string,
+        "categoryCode": string,
+        "repeatable": boolean,
+    }
+    ...
+]
+```
+
+## Set recipe food steps
+
+Set recipe foods entries
+
+### Request
+
+```json
+POST /api/admin/locales/:localeId/recipe-foods/:recipeFoodId/steps
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+[
+
+    {
+        "code": string,
+        "name": string,
+        "description": string,
+        "order": number,
+        "localeId": string,
+        "categoryCode": string,
+        "repeatable": boolean,
+    }
+    ...
+]
+
+```
+
+### Response
+
+```json
+200 OK
+
+[
+
+    {
+        "code": string,
+        "name": string,
+        "description": string,
+        "order": number,
+        "localeId": string,
+        "categoryCode": string,
+        "repeatable": boolean,
+    }
+    ...
+]
+```
+
 ## Get synonym sets
 
 Get synonym sets entries
