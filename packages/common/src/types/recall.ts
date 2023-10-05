@@ -1,4 +1,9 @@
-import type { Dictionary, Optional, RequiredLocaleTranslation } from '@intake24/common/types';
+import type {
+  Dictionary,
+  Optional,
+  RecipeFood,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
 import type { ComponentType, LocaleOptionList } from '../prompts';
@@ -30,6 +35,7 @@ export type FoodFlag =
   | 'missing-food-complete'
   | 'portion-size-option-complete'
   | 'portion-size-method-complete'
+  | 'recipe-builder-complete'
   | 'associated-foods-complete'
   | `${string}-acknowledged`;
 
@@ -209,6 +215,15 @@ export type PortionSizeStates = {
 
 export type PortionSizeMethodId = keyof PortionSizeStates;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
+export type RecipeBuilderComponent = {
+  order: number;
+  ingredients: string[];
+};
+
+export type RecipeBuilderLinkedFood = {
+  id: string;
+  linkedTo: string[] | null;
+};
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
 
@@ -230,12 +245,13 @@ export interface AbstractFoodState {
   flags: FoodFlag[];
   linkedFoods: FoodState[];
   customPromptAnswers: Dictionary<CustomPromptAnswer>;
-  type: 'free-text' | 'encoded-food' | 'missing-food';
+  type: 'free-text' | 'encoded-food' | 'missing-food' | 'recipe-builder';
 }
 
 export interface FreeTextFood extends AbstractFoodState {
   type: 'free-text';
   description: string;
+  link?: RecipeBuilderLinkedFood[] | null;
 }
 
 export interface EncodedFood extends AbstractFoodState {
@@ -244,6 +260,7 @@ export interface EncodedFood extends AbstractFoodState {
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
+  link?: RecipeBuilderLinkedFood[] | null;
   // brand: string[]; TODO V3?
 }
 
@@ -256,7 +273,18 @@ export interface MissingFood extends AbstractFoodState {
   > | null;
 }
 
-export type FoodState = FreeTextFood | EncodedFood | MissingFood;
+export interface RecipeBuilder extends AbstractFoodState {
+  type: 'recipe-builder';
+  searchTerm: string | null;
+  components: RecipeBuilderComponent[];
+  description: string;
+  template_id: string;
+  template: RecipeFood;
+  link: RecipeBuilderLinkedFood[];
+  markedAsComplete: number[];
+}
+
+export type FoodState = FreeTextFood | EncodedFood | MissingFood | RecipeBuilder;
 
 export interface FoodEntry {
   text: string;

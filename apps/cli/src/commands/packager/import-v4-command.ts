@@ -1,4 +1,3 @@
-import fs from 'fs/promises';
 import * as process from 'process';
 
 import type { CredentialsV4 } from '@intake24/api-client-v4';
@@ -12,8 +11,6 @@ export interface PackageImportOptions {
   locale?: string[];
   onConflict?: ConflictResolutionStrategy;
 }
-
-type Logger = typeof mainLogger;
 
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 

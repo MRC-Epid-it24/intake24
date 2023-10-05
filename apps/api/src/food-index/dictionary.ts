@@ -9,6 +9,8 @@ import { LevenshteinTransducer } from '@intake24/api/food-index/levenshtein';
 
 export type MatchStrategy = 'match-fewer' | 'match-more';
 
+export type DictionaryType = 'foods' | 'recipes' | 'categories';
+
 export interface PhoneticEncoder {
   encode(input: string): Array<string>;
 }
@@ -31,11 +33,11 @@ export class RichDictionary {
   ) {
     this.words = new Set<string>();
 
-    //Merging all the words and synSets into one set
     for (const word of words) this.words.add(word.toLocaleLowerCase());
-    synSets.forEach((synSet) => {
-      for (const synWord of synSet) this.words.add(synWord.toLocaleLowerCase());
-    });
+    if (synSets.length > 0)
+      synSets.forEach((synSet) => {
+        for (const synWord of synSet) this.words.add(synWord.toLocaleLowerCase());
+      });
 
     this.phoneticEncoder = phoneticEncoder;
 
@@ -85,7 +87,6 @@ export class RichDictionary {
 
   synonyms(lowerCaseWord: string): Array<string> {
     const result = this.synonymMap.get(lowerCaseWord);
-
     if (!result) return new Array<string>();
     return new Array(...result);
   }

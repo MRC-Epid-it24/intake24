@@ -38,6 +38,7 @@ const securables: LocaleMessageObject = {
     'food-list': 'Food list',
     'food-ranking': 'Food ranking',
     'split-lists': 'Split lists',
+    'recipe-foods': 'Recipe foods',
     'split-words': 'Split words',
     'synonym-sets': 'Synonym sets',
     tasks: 'Tasks',

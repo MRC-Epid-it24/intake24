@@ -1,4 +1,6 @@
 import { browse, entry } from '../generic';
+import recipeFoods from './recipe-foods';
+import recipeFoodsSteps from './recipe-foods-steps';
 import splitLists from './split-lists';
 import splitWords from './split-words';
 import store from './store';
@@ -11,6 +13,8 @@ export default {
   entry,
   store,
   update,
+  recipeFoods,
+  recipeFoodsSteps,
   splitLists,
   splitWords,
   synonymLists,

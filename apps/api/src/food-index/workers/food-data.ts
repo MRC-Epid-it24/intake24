@@ -1,5 +1,7 @@
 import type { CategoryHeader } from '@intake24/common/types/http';
-import { Category, CategoryLocal, FoodLocalList } from '@intake24/db';
+import { Category, CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';
+
+import type { RecipeFoodTuple } from '../phrase-index';
 
 export type LocalFoodData = {
   code: string;
@@ -82,4 +84,37 @@ export async function fetchLocalCategories(localeId: string): Promise<CategoryHe
     code: row.categoryCode,
     name: row.name,
   }));
+}
+
+/**
+ * Build special foods list for a given locale
+ * @param {string} localeId - food Locale
+ * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
+ */
+export async function fetchRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
+  const recipeFoods = await RecipeFoods.findAll({
+    attributes: ['code', 'name', 'recipeWord'],
+    where: { localeId },
+    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
+  });
+
+  const recipeFoodsList: RecipeFoodTuple[] = [];
+  recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
+    recipeFoodsList.push([
+      recipeFoodEntry.name.toLowerCase(),
+      {
+        code: recipeFoodEntry.code,
+        name: recipeFoodEntry.name.toLowerCase(),
+        recipeWord: recipeFoodEntry.recipeWord,
+        synonyms: new Set<string>(
+          recipeFoodEntry.recipeWord
+            .concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
+            .trim()
+            .split(/\s+/)
+        ),
+        description: recipeFoodEntry.name.toLocaleLowerCase(),
+      },
+    ])
+  );
+  return recipeFoodsList;
 }

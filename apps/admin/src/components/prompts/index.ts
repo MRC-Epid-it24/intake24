@@ -171,6 +171,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: ['foods'],
   },
+  'recipe-builder-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
   'standard-portion-prompt': {
     tabs: [...tabs],
     sections: ['foods'],

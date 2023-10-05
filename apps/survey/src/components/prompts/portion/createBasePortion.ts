@@ -3,7 +3,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, MealState, MissingFood } from '@intake24/common/types';
+import type { EncodedFood, MealState, MissingFood, RecipeBuilder } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { ExpansionPanelActions, ValidInvalidIcon } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
@@ -14,7 +14,7 @@ import { BaseLayout, CardLayout } from '../layouts';
 
 export default <
   P extends keyof Prompts & keyof PromptStates,
-  F extends EncodedFood | MissingFood = EncodedFood,
+  F extends EncodedFood | MissingFood | RecipeBuilder = EncodedFood,
 >() =>
   defineComponent({
     name: 'BasePortion',

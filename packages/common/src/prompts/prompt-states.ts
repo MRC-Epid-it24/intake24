@@ -1,16 +1,33 @@
-import type { FoodState, MissingFood, PortionSizeStates } from '../types';
+import type {
+  FoodState,
+  MissingFood,
+  PortionSizeStates,
+  RecipeFood,
+  RequiredLocaleTranslation,
+} from '../types';
 import type { FoodHeader } from '../types/http';
 
-export type AssociatedFood = {
-  type: 'selected' | 'existing' | 'missing';
+export type AssociatedFoodPromptItemState = {
+  confirmed?: 'yes' | 'no' | 'existing' | 'missing';
   selectedFood?: FoodHeader;
   existingFoodId?: string;
 };
 
-export type AssociatedFoodPromptItemState = {
-  mainFoodConfirmed?: boolean;
-  additionalFoodConfirmed?: boolean;
-  foods: AssociatedFood[];
+export type SelectedFoodRecipeBuilderItemState = {
+  code: string;
+  name: string;
+  id: string;
+};
+
+export type RecipeBuilderStepState = {
+  confirmed?: 'yes' | 'no';
+  type?: 'selected' | 'missing';
+  selectedFoods?: SelectedFoodRecipeBuilderItemState[];
+  order: number;
+  description: RequiredLocaleTranslation;
+  name: RequiredLocaleTranslation;
+  categoryCode: string;
+  repeat: boolean;
 };
 
 export type PromptStates = {
@@ -78,6 +95,12 @@ export type PromptStates = {
   };
   'portion-size-option-prompt': {
     option: number | null;
+  };
+  'recipe-builder-prompt': {
+    recipe: RecipeFood;
+    activeStep: number;
+    finishedSteps?: number[];
+    recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {
     portionSize: PortionSizeStates['standard-portion'];

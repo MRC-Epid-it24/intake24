@@ -4,6 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import foodIndex from '@intake24/api/food-index';
+import { logger } from '@intake24/common-backend/services';
 
 interface SearchParams {
   localeId: string;
@@ -18,6 +19,10 @@ interface SearchQuery {
   recipe?: string;
   category?: string;
   hidden?: string;
+}
+
+interface RecipeFoodQuery {
+  code: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,12 +91,25 @@ const foodSearchController = ({
   const category = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     const { code } = req.query;
-
-    res.json();
   };
 
   const splitDescription = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
+    const { code } = req.query;
+    res.json();
+  };
+
+  const recipeFood = async (
+    req: Request<SearchParams, unknown, unknown, RecipeFoodQuery>,
+    res: Response
+  ): Promise<void> => {
+    const { localeId } = req.params;
+    const { code } = req.query;
+    // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
+    const result = await foodIndex.getRecipeFood(localeId, code);
+
+    logger.debug('Recipe food result', JSON.stringify(result.steps));
+    res.json(result);
     res.json();
   };
 
@@ -100,6 +118,7 @@ const foodSearchController = ({
     recipe,
     category,
     splitDescription,
+    recipeFood,
   };
 };
 

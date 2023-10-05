@@ -32,6 +32,7 @@ import type {
   LanguageController,
   LanguageTranslationController,
   LocaleController,
+  LocaleRecipeFoodsController,
   LocaleSplitListController,
   LocaleSplitWordController,
   LocaleSynonymSetController,
@@ -197,6 +198,7 @@ export interface IoC extends Jobs {
   languageController: LanguageController;
   languageTranslationController: LanguageTranslationController;
   localeController: LocaleController;
+  localeRecipeFoodsController: LocaleRecipeFoodsController;
   localeSplitListController: LocaleSplitListController;
   localeSplitWordController: LocaleSplitWordController;
   localeSynonymSetController: LocaleSynonymSetController;

@@ -48,6 +48,8 @@ const recall: LocaleMessageObject = {
       portionSizeIncomplete: '该食物的份量尚未确定。',
       missingInfoComplete: 'Missing information for this food is complete.',
       missingInfoIncomplete: 'Missing information for this food is not yet known.',
+      recipeFoodStepsComplete: 'Recipe Steps for this food are complete.',
+      recipeFoodStepsIncomplete: 'Recipe Steps for this food are not yet finished.',
     },
     meal: {
       add: 'Add meal',

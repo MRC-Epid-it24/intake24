@@ -475,6 +475,10 @@ const surveySchemes: LocaleMessageObject = {
       subtitle:
         'Choose which portion size method to use in case more than one is available for the food',
     },
+    'recipe-builder-prompt': {
+      title: 'Build your own dish',
+      subtitle: 'Build your own dish from the ingredients',
+    },
     'standard-portion-prompt': {
       title: 'Standard portion',
       subtitle: 'Use the "standard portion" method to estimate the portion size',

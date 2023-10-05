@@ -9,6 +9,7 @@ import type {
   PortionSizeMethodId,
   PortionSizeParameters,
   PortionSizeStates,
+  RecipeBuilder,
 } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
@@ -24,7 +25,10 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     const food = survey.selectedParentFood;
     if (!food) return undefined;
 
-    if (food.type !== 'encoded-food') throw new Error('This selected food must be an encoded food');
+    if (food.type !== 'encoded-food' && food.type !== 'recipe-builder') {
+      console.log(food);
+      throw new Error('This selected food must be an encoded food or recipe builder');
+    }
 
     return food;
   });
@@ -45,8 +49,10 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   const encodedFood = (): EncodedFood => {
     const foodEntry = food();
 
-    if (foodEntry.type !== 'encoded-food')
+    if (foodEntry.type !== 'encoded-food') {
+      console.log(foodEntry);
       throw new Error('This selected food must be an encoded food');
+    }
 
     return foodEntry;
   };
@@ -83,6 +89,15 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return foodEntry;
   };
 
+  const recipeBuilder = (): RecipeBuilder => {
+    const foodEntry = food();
+
+    if (foodEntry.type !== 'recipe-builder')
+      throw new Error('This selected food must be an Recipe Builder food');
+
+    return foodEntry;
+  };
+
   const foodName = (): LocaleTranslation => ({ en: encodedFood().data.localName });
 
   const portionSize = (): UserPortionSizeMethod => {
@@ -110,6 +125,13 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     return survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
   });
 
+  const initializeRecipeComponents = (steps: number[]) => {
+    return steps.map((step) => ({
+      ingredients: [],
+      order: step,
+    }));
+  };
+
   return {
     food,
     foodIndex,
@@ -124,8 +146,10 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     encodedFoodOptional,
     freeTextFood,
     foodName,
+    initializeRecipeComponents,
     missingFood,
     portionSize,
+    recipeBuilder,
     conversionFactor,
     parameters,
   };

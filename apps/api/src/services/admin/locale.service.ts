@@ -1,12 +1,23 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
+  LocaleRecipeFoodsInput,
+  LocaleRecipeFoodStepsInput,
   LocaleSplitListInput,
   LocaleSplitWordInput,
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { Op, SplitList, SplitWord, SynonymSet, SystemLocale } from '@intake24/db';
+import { addDollarSign } from '@intake24/api/util';
+import {
+  Op,
+  RecipeFoods,
+  RecipeFoodsSteps,
+  SplitList,
+  SplitWord,
+  SynonymSet,
+  SystemLocale,
+} from '@intake24/db';
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
@@ -129,6 +140,138 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     return [...records, ...newRecords];
   };
 
+  // Get existing recipe foods for the specified Locale ID
+  const getRecipeFoods = async (localeId: string | SystemLocale) => {
+    const { code } = await resolveLocale(localeId);
+
+    return RecipeFoods.findAll({
+      where: { localeId: code },
+      include: [
+        { model: RecipeFoodsSteps, as: 'steps' },
+        { model: SynonymSet, as: 'synonyms' },
+      ],
+      order: [
+        ['id', 'ASC'],
+        [{ model: RecipeFoodsSteps, as: 'steps' }, 'order', 'ASC'],
+      ],
+    });
+  };
+
+  // Get existing recipe food steps for the specific recipe food for the specified Locale ID
+  const getRecipeFoodSteps = async (
+    localeId: string | SystemLocale,
+    recipeFoodId: string
+  ): Promise<RecipeFoodsSteps[]> => {
+    const { code } = await resolveLocale(localeId);
+
+    return RecipeFoodsSteps.findAll({
+      where: { localeId: code, recipeFoodsId: recipeFoodId },
+      order: [['order', 'ASC']],
+    });
+  };
+
+  // Add/modify/delete new or existing recipe foods for the specified Locale ID
+  const setRecipeFoods = async (
+    localeId: string | SystemLocale,
+    recipeFoods: LocaleRecipeFoodsInput[]
+  ) => {
+    const { code } = await resolveLocale(localeId);
+    // To distinguish between the locale code and the special food code
+    const localeCode = code;
+
+    const ids = recipeFoods.map(({ id }) => id) as string[];
+    await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
+
+    if (!recipeFoods.length) return [];
+
+    const records = await RecipeFoods.findAll({
+      where: { localeId: localeCode },
+      order: [['id', 'ASC']],
+    });
+    const newRecords: RecipeFoods[] = [];
+
+    for (const recipeFood of recipeFoods) {
+      const { id, code, name, recipeWord, synonyms_id } = recipeFood;
+      // To distinguish between the locale code and the special food code
+      const recipeFoodCode = addDollarSign(code);
+
+      if (id) {
+        const match = records.find((record) => record.id === id);
+        if (match) {
+          await match.update({ code: recipeFoodCode, name, recipeWord, synonyms_id });
+          continue;
+        }
+      }
+
+      const newRecord = await RecipeFoods.create({
+        localeId: localeCode,
+        code: recipeFoodCode,
+        name,
+        recipeWord,
+        synonyms_id,
+      });
+      newRecords.push(newRecord);
+    }
+
+    return [...records, ...newRecords];
+  };
+
+  // Add/modify/delete new or existing recipe food steps for the specific recipe food for the specified Locale ID
+  const setRecipeFoodSteps = async (
+    localeId: string | SystemLocale,
+    recipeFoodId: string,
+    recipeFoodSteps: LocaleRecipeFoodStepsInput[]
+  ) => {
+    const locale = await resolveLocale(localeId);
+    const localeCode = locale.code;
+    const ids = recipeFoodSteps.map(({ id }) => id) as string[];
+    await RecipeFoodsSteps.destroy({
+      where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },
+    });
+
+    if (!recipeFoodSteps.length) return [];
+
+    const records = await RecipeFoodsSteps.findAll({
+      where: { localeId: localeCode, recipeFoodsId: recipeFoodId },
+      order: [['order', 'ASC']],
+    });
+    const newRecords: RecipeFoodsSteps[] = [];
+
+    for (const recipeFoodStep of recipeFoodSteps) {
+      const { id, code, name, description, categoryCode, order, repeatable } = recipeFoodStep;
+
+      if (id) {
+        const match = records.find((record) => record.id === id);
+        if (match) {
+          await match.update({
+            code,
+            name,
+            description,
+            categoryCode,
+            localeId: localeCode,
+            order,
+            repeatable,
+          });
+          continue;
+        }
+      }
+
+      const newRecord = await RecipeFoodsSteps.create({
+        localeId: localeCode,
+        recipeFoodsId: parseInt(recipeFoodId),
+        code,
+        name,
+        description,
+        categoryCode,
+        order,
+        repeatable,
+      });
+      newRecords.push(newRecord);
+    }
+
+    return [...records, ...newRecords];
+  };
+
   /**
    * Queue locale tasks
    *
@@ -138,6 +281,10 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
   return {
+    getRecipeFoods,
+    setRecipeFoods,
+    getRecipeFoodSteps,
+    setRecipeFoodSteps,
     getSplitLists,
     setSplitLists,
     getSplitWords,

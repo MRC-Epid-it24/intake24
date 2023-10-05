@@ -100,6 +100,14 @@ export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = co
   name: 'Choose portion size method',
 });
 
+export const recipeBuilderPrompt: Prompts['recipe-builder-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'recipe-builder-prompt',
+  type: 'portion-size',
+  id: 'recipe-builder-prompt',
+  name: 'Recipe Builder',
+});
+
 export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
   ...basePortionPrompt,
   component: 'standard-portion-prompt',
@@ -128,5 +136,6 @@ export const portionSizePrompts: Prompt[] = [
   parentFoodPortionPrompt,
   pizzaPrompt,
   portionSizeOptionPrompt,
+  recipeBuilderPrompt,
   standardPortionPrompt,
 ];

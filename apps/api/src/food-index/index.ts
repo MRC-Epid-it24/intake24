@@ -1,10 +1,13 @@
 import { Worker } from 'node:worker_threads';
 
+import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
+import { RecipeFoods } from '@intake24/db/models';
 
 let indexReady = false;
 let queryIdCounter = 0;
+let specialQueryIdCounter = 0;
 let indexWorker: Worker;
 
 export class IndexNotReadyError extends Error {}
@@ -13,6 +16,13 @@ interface SearchResponse {
   queryId: number;
   success: boolean;
   results: FoodSearchResponse;
+  error: Error;
+}
+
+interface RecipeFoodResponse {
+  specialQueryId: number;
+  success: boolean;
+  result: RecipeFood;
   error: Error;
 }
 
@@ -40,6 +50,53 @@ export default {
 
   close() {
     indexWorker.postMessage({ exit: true });
+  },
+
+  /**
+   * get recipe food and its steps by given locale and code
+   * @param localeId - locale Code of the food index
+   * @param code - code of the special food
+   * @returns { RecipeFood }
+   */
+  // TODO: shouldn't be here in index.ts
+  async getRecipeFood(localeId: string, code: string): Promise<RecipeFoods> {
+    if (indexReady) {
+      specialQueryIdCounter++;
+
+      // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
+      const result = await RecipeFoods.findOne({
+        where: { localeId, code },
+        attributes: ['code', 'name', 'localeId', 'recipeWord', 'synonyms_id'],
+        include: [
+          {
+            required: true,
+            association: 'steps',
+            attributes: [
+              'code',
+              'name',
+              'description',
+              'order',
+              'localeId',
+              'categoryCode',
+              'repeatable',
+            ],
+          },
+          {
+            required: true,
+            association: 'synonyms',
+            attributes: ['synonyms'],
+          },
+        ],
+        order: [['steps', 'order', 'ASC']],
+      });
+
+      if (result) {
+        return result;
+      } else {
+        throw new Error('Recipe food not found');
+      }
+    }
+    throw new IndexNotReadyError();
   },
 
   async search(

@@ -1,10 +1,17 @@
-import type { MatchStrategy, PhoneticEncoder } from '@intake24/api/food-index/dictionary';
+import type {
+  DictionaryType,
+  MatchStrategy,
+  PhoneticEncoder,
+} from '@intake24/api/food-index/dictionary';
+import type { RecipeFoodsHeader } from '@intake24/common/types';
 import { RichDictionary } from '@intake24/api/food-index/dictionary';
 import InterpretedPhrase from '@intake24/api/food-index/interpreted-phrase';
 import {
   countDistanceViolations,
   countOrderViolations,
 } from '@intake24/api/food-index/match-quality-helpers';
+
+import type { InterpretedWord } from './interpreted-word';
 
 const MAX_WORDS_PER_PHRASE = 10;
 const MAX_WORD_INTERPRETATIONS = 4;
@@ -19,6 +26,8 @@ export interface PhraseWithKey<K> {
   phrase: string;
   key: K;
 }
+
+export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
 
 export interface LanguageBackend {
   indexIgnore: string[];
@@ -68,6 +77,10 @@ export class PhraseIndex<K> {
 
   readonly wordIndex: Map<string, Array<[number, number]>>;
 
+  readonly recipeFoodsList: RecipeFoodTuple[];
+
+  readonly recipeFoodsDictionary: RichDictionary;
+
   getWordList(phrase: string): Array<string> {
     const sanitised = this.languageBackend.sanitiseDescription(phrase.toLocaleLowerCase());
 
@@ -82,15 +95,32 @@ export class PhraseIndex<K> {
     );
   }
 
-  interpretPhrase(phrase: string, strategy: MatchStrategy): InterpretedPhrase {
+  interpretPhrase(
+    phrase: string,
+    strategy: MatchStrategy,
+    dictionaryType: DictionaryType = 'foods'
+  ): InterpretedPhrase {
     const words = this.getWordList(phrase).slice(0, MAX_WORDS_PER_PHRASE);
-
+    let interpretedWords: Array<InterpretedWord>;
     // FIXME: Not sure if unmatched words are being completely ignored?
     //        Check that the unmatched word penalty is correctly applied
-    const interpretedWords = words
-      .map((w) => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
-      .filter((w) => w.interpretations.length > 0);
-
+    switch (dictionaryType) {
+      case 'foods':
+      case 'categories':
+        interpretedWords = words
+          .map((w) => this.dictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy))
+          .filter((w) => w.interpretations.length > 0);
+        break;
+      case 'recipes':
+        interpretedWords = words
+          .map((w) =>
+            this.recipeFoodsDictionary.interpretWord(w, MAX_WORD_INTERPRETATIONS, strategy)
+          )
+          .filter((w) => w.interpretations.length > 0);
+        break;
+      default:
+        throw new Error(`Unknown dictionary type: ${dictionaryType}`);
+    }
     return new InterpretedPhrase(phrase, interpretedWords);
   }
 
@@ -286,11 +316,14 @@ export class PhraseIndex<K> {
   constructor(
     phrases: Array<PhraseWithKey<K>>,
     wordOps: LanguageBackend,
-    synonymSets: Array<Set<string>>
+    synonymSets: Array<Set<string>>,
+    recipeFoodsSynonymsSet: Array<Set<string>> = [],
+    recipeFoodsList: RecipeFoodTuple[] = []
   ) {
     this.languageBackend = wordOps;
     this.phraseIndex = new Array<DictionaryPhrase<K>>(phrases.length);
     this.wordIndex = new Map<string, Array<[number, number]>>();
+    this.recipeFoodsList = recipeFoodsList;
 
     const dictionaryWords = new Set<string>();
 
@@ -306,6 +339,22 @@ export class PhraseIndex<K> {
       }
     }
 
+    // Creatinf a dictionary for Locale Indexing with all the synonym sets and dictionary words
     this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, synonymSets);
+
+    //Falten Array of recipe Foods int othe Set of string
+    const recipeDictionaryWords = new Set<string>();
+    for (const recipeFoodSet of recipeFoodsSynonymsSet) {
+      for (const recipeFood of recipeFoodSet) {
+        recipeDictionaryWords.add(recipeFood);
+      }
+    }
+
+    // Create a dictionary for Recipe Foods Indexing with all the synonym sets and recipe foods
+    this.recipeFoodsDictionary = new RichDictionary(
+      recipeDictionaryWords,
+      wordOps.phoneticEncoder,
+      recipeFoodsSynonymsSet
+    );
   }
 }

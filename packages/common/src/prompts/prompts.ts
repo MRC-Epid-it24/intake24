@@ -54,11 +54,13 @@ export type StandardComponentType = (typeof standardComponentTypes)[number];
 export type PortionSizeComponentType =
   | `${PortionSizeMethodId}-prompt`
   | 'missing-food-prompt'
+  | 'recipe-builder-prompt'
   | 'portion-size-option-prompt';
 
 export const portionSizeComponentTypes = [
   ...portionSizeMethods,
   'missing-food',
+  'recipe-builder-prompt',
   'portion-size-option',
 ].map((type) => `${type}-prompt`) as PortionSizeComponentType[];
 
@@ -174,6 +176,9 @@ export type Prompts = {
     imageMap: ImageMap;
   };
   'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
+  'recipe-builder-prompt': BasePortionPrompt & {
+    component: 'recipe-builder-prompt';
+  };
   'standard-portion-prompt': BasePortionPrompt & { component: 'standard-portion-prompt' };
   // Standard
   'associated-foods-prompt': BasePrompt & {

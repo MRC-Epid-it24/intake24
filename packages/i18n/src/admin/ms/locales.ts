@@ -50,6 +50,24 @@ const locales: LocaleMessageObject = {
     synonyms: 'Synonyms (space-delimited)',
   },
 
+  'recipe-foods': {
+    _: 'Recipe food sets',
+    title: 'Recipe foods set',
+    tab: 'Recipe foods',
+    add: 'Add recipe food',
+    remove: 'Remove recipe food',
+    special: 'Trigger word',
+    code: 'Recipe Food Code',
+    step_code: 'Step Code (assigned automatically)',
+    synonyms_id: 'Synonyms (space-delimited)',
+    steps: 'Recipe Builder Steps',
+    name: 'Step Name',
+    description: 'Step Description',
+    ingredientsCategory: 'Step Ingredients Category',
+    order: 'Step Order',
+    repeat: 'Option to add many ingredients to this step',
+  },
+
   'food-ranking': {
     _: 'Food ranking',
     title: 'Food ranking',

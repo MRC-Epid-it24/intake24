@@ -5,6 +5,7 @@
     @action="action"
     @food-missing="foodMissing"
     @food-selected="foodSelected"
+    @recipe-builder="recipeBuilder"
   ></food-search-prompt>
 </template>
 
@@ -15,7 +16,13 @@ import { computed, defineComponent, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, FoodState, MissingFood } from '@intake24/common/types';
+import type {
+  EncodedFood,
+  FoodState,
+  MissingFood,
+  RecipeBuilder,
+  RecipeFood,
+} from '@intake24/common/types';
 import type { UserFoodData } from '@intake24/common/types/http';
 import { FoodSearchPrompt } from '@intake24/survey/components/prompts/standard';
 import { useSurvey } from '@intake24/survey/stores';
@@ -49,10 +56,12 @@ export default defineComponent({
           return foodEntry.description;
         case 'missing-food':
           return foodEntry.searchTerm;
+        case 'recipe-builder':
+          return foodEntry.searchTerm;
       }
     }
 
-    const { food, localeId } = useFoodPromptUtils();
+    const { food, localeId, initializeRecipeComponents } = useFoodPromptUtils();
     const { meal } = useMealPromptUtils();
     const parameters = computed(() => {
       const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
@@ -87,7 +96,17 @@ export default defineComponent({
       emit('action', type, ...args);
     };
 
-    return { action, food, meal, localeId, foodData, parameters, searchTerm, discardedFoodName };
+    return {
+      action,
+      food,
+      meal,
+      localeId,
+      foodData,
+      parameters,
+      searchTerm,
+      discardedFoodName,
+      initializeRecipeComponents,
+    };
   },
 
   methods: {
@@ -107,10 +126,37 @@ export default defineComponent({
         id,
         type: 'missing-food',
         info: null,
-        searchTerm,
+        searchTerm: searchTerm,
         customPromptAnswers,
         flags,
         linkedFoods: [],
+      };
+
+      this.replaceFood({ foodId: id, food: newState });
+
+      this.action('next');
+    },
+
+    recipeBuilder(recipeFood: RecipeFood) {
+      const { searchTerm } = this;
+      const { id, customPromptAnswers, flags } = this.food();
+      const components = this.initializeRecipeComponents(
+        recipeFood.steps.map((step) => step.order - 1)
+      );
+
+      const newState: RecipeBuilder = {
+        id,
+        type: 'recipe-builder',
+        description: recipeFood.recipeWord,
+        searchTerm: searchTerm,
+        customPromptAnswers,
+        flags,
+        linkedFoods: [],
+        template_id: recipeFood.name,
+        template: recipeFood,
+        markedAsComplete: [],
+        components,
+        link: [],
       };
 
       this.replaceFood({ foodId: id, food: newState });
@@ -136,7 +182,7 @@ export default defineComponent({
         id,
         type: 'encoded-food',
         data: foodData,
-        searchTerm,
+        searchTerm: searchTerm ? searchTerm : '',
         portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
         portionSize: null,
         customPromptAnswers,

@@ -1,18 +1,21 @@
 import { computed } from 'vue';
 
-import type { EncodedFood, FoodState } from '@intake24/common/types';
+import type { EncodedFood, FoodState, RecipeBuilder } from '@intake24/common/types';
 import { capitalize } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
 export type UseFoodUtilsProps<
   F extends FoodState | undefined,
-  FP extends EncodedFood | undefined,
+  FP extends EncodedFood | RecipeBuilder | undefined,
 > = {
   food?: F;
   parentFood?: FP;
 };
 
-export const useFoodUtils = <F extends FoodState | undefined, FP extends EncodedFood | undefined>(
+export const useFoodUtils = <
+  F extends FoodState | undefined,
+  FP extends EncodedFood | RecipeBuilder | undefined,
+>(
   props: UseFoodUtilsProps<F, FP> = {}
 ) => {
   const { translate } = useI18n();
@@ -21,6 +24,7 @@ export const useFoodUtils = <F extends FoodState | undefined, FP extends Encoded
     if (foodState.type === 'encoded-food') return translate(foodState.data.localName);
     if (foodState.type === 'missing-food')
       return capitalize(foodState.info?.name ?? foodState.searchTerm ?? '??');
+    if (foodState.type === 'recipe-builder') return capitalize(foodState.description);
 
     return capitalize(foodState.description);
   };

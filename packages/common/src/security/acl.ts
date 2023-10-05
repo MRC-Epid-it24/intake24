@@ -28,6 +28,7 @@ export const securableDefs = {
     'copy',
     'food-list',
     'split-lists',
+    'recipe-foods',
     'split-words',
     'synonym-sets',
     'tasks',

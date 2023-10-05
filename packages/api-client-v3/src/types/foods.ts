@@ -1,5 +1,3 @@
-import { LocaleV3 } from '@intake24/api-client-v3';
-
 export interface FoodHeaderV3 {
   code: string;
   englishDescription: string;

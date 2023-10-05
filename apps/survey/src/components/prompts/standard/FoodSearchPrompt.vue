@@ -6,6 +6,7 @@
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @input="$emit('input', $event)"
+        @recipe-builder="recipeBuilder"
       ></food-browser>
     </v-card-text>
   </card-layout>
@@ -16,7 +17,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent } from 'vue';
 
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
-import type { FoodState } from '@intake24/common/types';
+import type { FoodState, RecipeFood } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 import { FoodBrowser } from '@intake24/survey/components/elements';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -51,7 +52,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-missing', 'food-selected', 'input'],
+  emits: ['food-missing', 'food-selected', 'input', 'recipe-builder'],
 
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);
@@ -78,10 +79,15 @@ export default defineComponent({
       ctx.emit('food-missing');
     };
 
+    const recipeBuilder = (recipeFood: RecipeFood) => {
+      ctx.emit('recipe-builder', recipeFood);
+    };
+
     return {
       action,
       foodSelected,
       foodMissing,
+      recipeBuilder,
       isValid,
       rootCategory,
     };

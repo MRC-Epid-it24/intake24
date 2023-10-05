@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, FoodState, PartialRecord } from '@intake24/common/types';
+import type { EncodedFood, FoodState, PartialRecord, RecipeBuilder } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
 import { promptType } from '@intake24/ui';
@@ -21,13 +21,13 @@ export type UsePromptPropsBase<P extends keyof Prompts> = {
 export type UsePromptProps<
   P extends keyof Prompts,
   F extends FoodState | undefined,
-  FP extends EncodedFood | undefined,
+  FP extends EncodedFood | RecipeBuilder | undefined,
 > = UsePromptPropsBase<P> & UseFoodUtilsProps<F, FP> & UseMealUtilsProps;
 
 export const usePromptUtils = <
   P extends keyof Prompts,
   F extends FoodState | undefined,
-  FP extends EncodedFood | undefined,
+  FP extends EncodedFood | RecipeBuilder | undefined,
 >(
   props: UsePromptProps<P, F, FP>,
   { emit }: SetupContext<any>,

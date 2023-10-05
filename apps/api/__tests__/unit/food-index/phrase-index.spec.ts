@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
+import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
 import EnglishLanguageBackend from '@intake24/api/food-index/english-language-backend';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
@@ -24,8 +24,16 @@ describe('Phrase index', () => {
   const indexFilter: Array<string> = ['with'];
 
   const synonyms: Array<Set<string>> = [];
+  const specialFoodsSynonyms: Array<Set<string>> = [];
+  const specialFoodsList: RecipeFoodTuple[] = [];
 
-  const index = new PhraseIndex(phrases, EnglishLanguageBackend, synonyms);
+  const index = new PhraseIndex(
+    phrases,
+    EnglishLanguageBackend,
+    synonyms,
+    specialFoodsSynonyms,
+    specialFoodsList
+  );
 
   describe('Interpretation combinations', () => {
     it('Empty interpretations list', () => {

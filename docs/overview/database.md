@@ -84,6 +84,16 @@ cd packages/db
 pnpm sequelize db:seed --seed v3-standard-units.js --options-path sequelize/foods/options.js
 ```
 
+#### Recipe foods
+
+Recipe foods are being moved from V3 translation files to database. To seed the database with V3-like data, run the following command:
+
+```sh
+cd packages/db
+
+pnpm sequelize db:seed --seed v3-recipe-foods.js --options-path sequelize/foods/options.js
+```
+
 ## System database clean-up
 
 ### Truncate all tables except `sequelize_meta`

@@ -20,6 +20,26 @@
           @focus="openInDialog"
         ></v-text-field>
       </div>
+      <v-card v-if="recipeBuilderToggle" flat>
+        <v-card-text>
+          <v-btn
+            :block="isMobile"
+            :class="{ 'ml-2': !isMobile }"
+            color="primary"
+            :disabled="!recipeBuilderToggle"
+            large
+            outlined
+            :v-model="recipeBuilderFood?.name"
+            @click.stop="recipeBuilder"
+          >
+            {{
+              $t(`prompts.${type}.recipeBuilder.label`, {
+                searchTerm: recipeBuilderFood?.name,
+              })
+            }}
+          </v-btn>
+        </v-card-text>
+      </v-card>
       <v-tabs-items v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab">
         <v-tab-item key="browse">
           <v-card v-if="requestFailed" flat>
@@ -103,6 +123,7 @@ import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
 import type { Prompt } from '@intake24/common/prompts';
+import type { RecipeFood } from '@intake24/common/types';
 import type {
   CategoryContents,
   CategoryHeader,
@@ -158,7 +179,7 @@ export default defineComponent({
     },
   },
 
-  emits: ['food-selected', 'food-missing', 'input'],
+  emits: ['food-selected', 'food-missing', 'recipe-builder', 'input'],
 
   setup(props, ctx) {
     const { translatePrompt, type } = usePromptUtils(props, ctx);
@@ -260,6 +281,9 @@ export default defineComponent({
 
     const requestInProgress = ref(true);
     const requestFailed = ref(false);
+    const recipeBuilderFood = ref<FoodHeader | null>(null);
+    const recipeFood = ref<RecipeFood | null>(null);
+    const recipeBuilderToggle = ref(false);
     const tab = ref(0);
 
     const browseRootCategory = () => {
@@ -294,10 +318,23 @@ export default defineComponent({
       }
     };
 
+    const recipeBuilderDetected = async (food: FoodHeader) => {
+      requestInProgress.value = true;
+      try {
+        const recipefoodData = await foodsService.getRecipeFood(props.localeId, food.code);
+        recipeFood.value = recipefoodData;
+        recipeBuilderToggle.value = true;
+      } catch (e) {
+        requestFailed.value = true;
+      }
+      requestInProgress.value = false;
+    };
+
     const search = async () => {
       if (!props.parameters || !searchTerm.value) return;
 
       requestInProgress.value = true;
+      recipeBuilderToggle.value = false;
       searchResults.value = { foods: [], categories: [] };
       const { matchScoreWeight, rankingAlgorithm } = props.parameters;
 
@@ -309,7 +346,10 @@ export default defineComponent({
           category: props.rootCategory,
           hidden: props.includeHidden,
         });
-
+        if (searchResults.value.foods[0].code.charAt(0) === '$') {
+          recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
+          recipeBuilderDetected(recipeBuilderFood.value);
+        }
         requestFailed.value = false;
       } catch (e) {
         requestFailed.value = true;
@@ -330,6 +370,11 @@ export default defineComponent({
     const foodMissing = (food: FoodHeader) => {
       closeInDialog();
       ctx.emit('food-missing', food);
+    };
+
+    const recipeBuilder = () => {
+      closeInDialog();
+      ctx.emit('recipe-builder', recipeFood.value);
     };
 
     const navigateBack = () => {
@@ -399,6 +444,9 @@ export default defineComponent({
       promptI18n,
       requestInProgress,
       requestFailed,
+      recipeBuilderFood,
+      recipeFood,
+      recipeBuilderToggle,
       tab,
       type,
       browseRootCategory,
@@ -407,6 +455,7 @@ export default defineComponent({
       foodMissing,
       foodSelected,
       navigateBack,
+      recipeBuilder,
       searchTerm,
       searchContents,
       searchRef,
