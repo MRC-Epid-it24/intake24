@@ -8,6 +8,7 @@ import type {
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { addDollarSign } from '@intake24/api/util';
 import {
   Op,
   RecipeFoods,
@@ -192,12 +193,12 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     for (const recipeFood of recipeFoods) {
       const { id, code, name, recipeWord, synonyms_id } = recipeFood;
       // To distinguish between the locale code and the special food code
-      const recipeFoodCode = code;
+      const recipeFoodCode = addDollarSign(code);
 
       if (id) {
         const match = records.find((record) => record.id === id);
         if (match) {
-          await match.update({ code, name, recipeWord, synonyms_id });
+          await match.update({ code: recipeFoodCode, name, recipeWord, synonyms_id });
           continue;
         }
       }

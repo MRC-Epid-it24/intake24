@@ -35,9 +35,10 @@
                     v-model.trim="item.code"
                     class="ma-5"
                     hide-details="auto"
-                    :label="$t('locales.recipe-foods.code')"
+                    :label="$t('locales.recipe-foods.step_code')"
                     name="special"
                     outlined
+                    readonly
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
@@ -48,6 +49,7 @@
                     :label="$t('locales.recipe-foods.order')"
                     name="code"
                     outlined
+                    readonly
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
@@ -225,22 +227,27 @@ export default defineComponent({
 
   methods: {
     async saveSteps() {
-      this.form.items = this.form.items.filter(({ name }) => name);
+      this.form.items = this.form.items
+        .filter(({ name }) => name)
+        .map((item, idx) => {
+          item.order = idx + 1;
+          return item;
+        });
       const items = await this.form.post<LocaleRecipeFoodSteps[]>(
         `admin/locales/${this.locale.id}/recipe-foods/${this.$props.activeRecipeFoodId}/steps`
       );
 
-      useStoreEntry().updateEntry({ steps: items });
+      this.$emit('update-steps', items);
     },
 
     addStep() {
       this.form.items.push({
         id: undefined,
-        code: '',
+        code: `${this.activeRecipeFoodCode.substring(1)}_STP-${this.form.items.length + 1}`,
         recipeFoodsId: parseInt(this.$props.activeRecipeFoodId),
         name: { en: 'Name' } as LocaleTranslation,
         description: { en: 'Description' } as LocaleTranslation,
-        order: 0,
+        order: this.form.items.length + 1,
         localeId: this.locale.code,
         categoryCode: '',
         repeatable: false,

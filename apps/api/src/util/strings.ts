@@ -82,3 +82,10 @@ export const getUAInfo = (userAgent?: string): string | undefined => {
   const { browser, os } = uaParser(userAgent);
   return [browser, os].map(getAgentInfo).filter(Boolean).join(', ');
 };
+
+export const addDollarSign = (str: string): string => {
+  if (str.charAt(0) !== '$') {
+    return '$' + str;
+  }
+  return str;
+};

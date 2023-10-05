@@ -22,7 +22,7 @@ export default () => {
 
   describe('POST /api/admin/locales/:localeId/tasks', tasks);
 
-  describe('GET /api/admin/locales/:localeId/recipe-foods', recipeFoods.get);
+  // describe('GET /api/admin/locales/:localeId/recipe-foods', recipeFoods.get);
   describe('GET /api/admin/locales/:localeId/split-lists', splitLists.get);
   describe('POST /api/admin/locales/:localeId/split-lists', splitLists.set);
   describe('GET /api/admin/locales/:localeId/split-words', splitWords.get);

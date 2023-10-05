@@ -59,6 +59,7 @@
                   :label="$t('locales.recipe-foods.code')"
                   name="code"
                   outlined
+                  prepend-inner-icon="fa-sharp fa-regular fa-dollar-sign"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -85,7 +86,7 @@
                 <v-btn
                   block
                   color="primary"
-                  :disabled="form.errors.any() || isAppLoading"
+                  :disabled="form.errors.any() || isAppLoading || !item.id"
                   :title="$t('locales.recipe-foods.steps')"
                   type="button"
                   @click.stop="() => openStepsDialog(item.id, item.code, item)"
@@ -113,6 +114,7 @@
           }"
           ref="stepsDialog"
           @close="toggleDialog"
+          @update-steps="updateItemSteps(idx, item.id, $event)"
         ></steps-dialog>
       </v-list-item>
     </v-list>
@@ -132,6 +134,7 @@ import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
 
+import user from '../../user';
 import StepsDialog from './steps-dialog.vue';
 
 export type LocaleRecipeFoodsForm = {
@@ -190,6 +193,11 @@ export default defineComponent({
   },
 
   methods: {
+    dollarSignAdd(value: string) {
+      if (value[0] === '$') return value;
+      return `$${value}`;
+    },
+
     toggleDialog() {
       this.dialog = !this.dialog;
     },
@@ -227,8 +235,22 @@ export default defineComponent({
       this.form.items.splice(index, 1);
     },
 
+    async updateItemSteps(idx: number, id: string, steps: LocaleRecipeFoodsInput['steps']) {
+      this.toggleDialog();
+      const item = this.form.items.find((item) => item.id === id);
+      if (!item) return;
+      item.steps = steps;
+      this.form.items.splice(idx, 1, item);
+      useStoreEntry().setEntry({ items: this.form.items });
+    },
+
     async save() {
-      this.form.items = this.form.items.filter(({ name }) => name);
+      this.form.items = this.form.items
+        .filter(({ name }) => name)
+        .map((item) => {
+          item.code = this.dollarSignAdd(item.code);
+          return item;
+        });
       const synonymsSets = this.form.synonymsSets;
       const items = await this.form.post<LocaleRecipeFoods[]>(
         `admin/locales/${this.id}/recipe-foods`
