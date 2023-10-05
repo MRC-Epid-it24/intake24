@@ -161,6 +161,12 @@ export const useSurvey = defineStore('survey', {
     meals: (state) => state.data.meals,
     hasMeals: (state) => !!state.data.meals.length,
     defaultSchemeMeals: (state) => state.parameters?.surveyScheme.meals,
+    searchParameters: (state) => {
+      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
+        state.parameters ?? {};
+
+      return { matchScoreWeight, rankingAlgorithm };
+    },
     surveySchemeFoodPrompts: (state) => state.parameters?.surveyScheme.prompts.meals.foods ?? [],
     registeredPortionSizeMethods(): string[] {
       return (

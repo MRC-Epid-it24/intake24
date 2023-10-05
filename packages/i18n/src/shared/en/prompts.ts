@@ -115,8 +115,6 @@ const prompts: LocaleMessageObject = {
     text: '',
     description: `<p>Below is the list of foods from our database that look like "<strong>{food}</strong>".</p>
       <p>Choose the item you had or the closest match.</p>`,
-    empty: 'There is nothing in our database that matches "{searchTerm}".',
-    reword: 'Try re-wording your description.',
     browse: 'Browse all foods',
     search: 'Search for a food',
     root: 'all food categories',
@@ -394,19 +392,15 @@ const prompts: LocaleMessageObject = {
     portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
   },
   recipeBuilder: {
-    back: 'Back to parent category',
-    remove: 'remove',
     name: '{food} recipe builder',
-    search: 'Search for Food',
-    browse: 'Browse all relevant categories',
-    root: 'all relevant Food categories',
-    text: 'Build your own recipe',
+    text: '',
     description: `Please follow the steps below to build your own recipe for {food}.`,
-    source: 'Was it homemade?',
-    homemade: 'Provide further details e.g. description of dish or ingredients.',
-    purchased: 'Tell us where was it purchased from? Does it have a brand name?',
-    barcode: 'Can you provide the barcode?',
-    portionSize: 'How much did you eat? E.g. 1 pack, 2 teaspoons, 1 handful, 125 grams, ½ cup etc.',
+    browse: 'Browse all foods',
+    search: 'Search for a food',
+    root: 'all food categories',
+    back: `Back to '{category}'`,
+    none: 'No food results. Please try refining your search.',
+    remove: 'Remove',
     missing: {
       label: `I can't find my food`,
       description: `<p>If you can't find your food in the list, try rephrasing your description in the search text box above and click 'search again'.</p>
@@ -417,7 +411,6 @@ const prompts: LocaleMessageObject = {
     },
     addMore: 'Add more ingredients',
     noMore: 'No more ingredients',
-    none: 'No food results. Please try refining your search.',
   },
   parentFoodPortion: {
     name: 'Parent food portion',

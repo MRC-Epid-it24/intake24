@@ -157,7 +157,7 @@
                     localeId,
                     prompt,
                     rootCategory: associatedFoodPrompts[index].categoryCode,
-                    parameters: searchParameters,
+                    searchParameters,
                     includeHidden: true,
                   }"
                   @food-missing="foodMissing(index)"

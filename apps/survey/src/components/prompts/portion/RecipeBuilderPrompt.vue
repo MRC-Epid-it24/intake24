@@ -2,9 +2,9 @@
   <base-layout v-bind="{ food, meal, prompt, section, isValid }">
     <v-expansion-panels v-model="activeStep" :tile="isMobile" @change="updateActiveStep">
       <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
-        <v-expansion-panel-header
-          ><div>
-            <b>{{ step.order + 1 }}:</b> {{ translate(step.name) }}
+        <v-expansion-panel-header>
+          <div>
+            <span class="font-weight-bold">{{ step.order + 1 }}:</span> {{ translate(step.name) }}
           </div>
           <template #actions>
             <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
@@ -52,6 +52,7 @@
               <food-browser
                 v-bind="{
                   localeId: localeId,
+                  searchParameters,
                   rootCategory: step.categoryCode,
                   prompt,
                 }"
@@ -92,6 +93,7 @@ import {
 import { foodsService } from '@intake24/survey/services';
 import { getEntityId } from '@intake24/survey/util';
 
+import type { FoodSearchPromptParameters } from '../standard';
 import createBasePrompt from '../createBasePrompt';
 
 const isStepValid = (step: RecipeBuilderStepState): boolean =>
@@ -110,6 +112,10 @@ export default defineComponent({
   props: {
     localeId: {
       type: String,
+      required: true,
+    },
+    searchParameters: {
+      type: Object as PropType<FoodSearchPromptParameters>,
       required: true,
     },
     value: {

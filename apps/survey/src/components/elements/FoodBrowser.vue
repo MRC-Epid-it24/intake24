@@ -24,7 +24,6 @@
         <v-card-text>
           <v-btn
             :block="isMobile"
-            :class="{ 'ml-2': !isMobile }"
             color="primary"
             :disabled="!recipeBuilderToggle"
             large
@@ -159,7 +158,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    parameters: {
+    searchParameters: {
       type: Object as PropType<FoodSearchPromptParameters>,
     },
     rootCategory: {
@@ -331,12 +330,12 @@ export default defineComponent({
     };
 
     const search = async () => {
-      if (!props.parameters || !searchTerm.value) return;
+      if (!searchTerm.value) return;
 
       requestInProgress.value = true;
       recipeBuilderToggle.value = false;
       searchResults.value = { foods: [], categories: [] };
-      const { matchScoreWeight, rankingAlgorithm } = props.parameters;
+      const { matchScoreWeight, rankingAlgorithm } = props.searchParameters ?? {};
 
       try {
         searchResults.value = await foodsService.search(props.localeId, searchTerm.value, {

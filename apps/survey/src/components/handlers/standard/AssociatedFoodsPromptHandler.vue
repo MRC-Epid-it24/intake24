@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 import type {
   AssociatedFoodPromptItemState,
@@ -287,13 +287,6 @@ export default defineComponent({
       // component the 'next' event could be lost and the next prompt fail to be triggered.
     };
 
-    const searchParameters = computed(() => {
-      const { searchSortingAlgorithm: rankingAlgorithm, searchMatchScoreWeight: matchScoreWeight } =
-        survey.parameters ?? {};
-
-      return { matchScoreWeight, rankingAlgorithm };
-    });
-
     return {
       food,
       translate,
@@ -303,7 +296,7 @@ export default defineComponent({
       state,
       action,
       update,
-      searchParameters,
+      searchParameters: survey.searchParameters,
     };
   },
 });

@@ -6,6 +6,7 @@
       localeId,
       meal,
       prompt,
+      searchParameters,
       section,
     }"
     @action="action"
@@ -123,7 +124,6 @@ export default defineComponent({
     };
 
     const deleteComponentAndThenFood = (type: string, id: string, stepId: number) => {
-      console.warn('deleteComponent', id, stepId);
       const recipeParent = survey.selectedFoodOptional;
       if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
         const updatedComponents = [...recipeParent.components];
@@ -133,9 +133,7 @@ export default defineComponent({
         );
         survey.updateFood({
           foodId: foodId,
-          update: {
-            components: updatedComponents,
-          },
+          update: { components: updatedComponents },
         });
       }
       ctx.emit('action', type, id);
@@ -145,12 +143,22 @@ export default defineComponent({
       type: string,
       ...args: [id?: string, stepId?: number, params?: object]
     ) => {
-      if (type === 'next') await commitAnswer();
+      if (type === 'next') commitAnswer();
       if (type === 'remove')
         deleteComponentAndThenFood('deleteFood', args[0] as string, args[1] as number);
     };
 
-    return { recipeBuilder, recipeFood, meal, state, localeId, update, action, addLinkedFood };
+    return {
+      recipeBuilder,
+      recipeFood,
+      meal,
+      state,
+      localeId,
+      searchParameters: survey.searchParameters,
+      update,
+      action,
+      addLinkedFood,
+    };
   },
 });
 </script>

@@ -2,7 +2,7 @@
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-card-text>
       <food-browser
-        v-bind="{ localeId, parameters, prompt, rootCategory, value }"
+        v-bind="{ localeId, searchParameters, prompt, rootCategory, value }"
         @food-missing="foodMissing"
         @food-selected="foodSelected"
         @input="$emit('input', $event)"
@@ -42,7 +42,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    parameters: {
+    searchParameters: {
       type: Object as PropType<FoodSearchPromptParameters>,
       required: true,
     },
