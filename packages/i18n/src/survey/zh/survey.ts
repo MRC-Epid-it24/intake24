@@ -20,6 +20,10 @@ const survey: LocaleMessageObject = {
   generateUser: {
     _: '生成访问权限',
     subtitle: '这是开放获取研究，您可以免费访问。',
+    link: 'link',
+    info1: `Select 'Generate access' to generate new credentials. Note down these credentials if you would like to resume later.`,
+    info2: `This survey will take approximately 20 minutes.`,
+    info3: `If you close your browser window you can come back using this {action}.`,
     400: '提供的验证码无效。',
     403: `调查 {surveyId} 不允许生成用户。`,
     404: `调查 {surveyId} 尚未被识别。`,

@@ -20,6 +20,10 @@ const survey: LocaleMessageObject = {
   generateUser: {
     _: 'Jana akses',
     subtitle: 'Ini adalah kajian open access, anda boleh mengakses secara percuma.',
+    link: 'link',
+    info1: `Select 'Generate access' to generate new credentials. Note down these credentials if you would like to resume later.`,
+    info2: `This survey will take approximately 20 minutes.`,
+    info3: `If you close your browser window you can come back using this {action}.`,
     400: 'Imej keselamatan captcha yang diberikan tidak sah.',
     403: `Survei {surveyId} tidak membenarkan penjanaan pengguna.`,
     404: `Survei {surveyId} tidak dapat dikesan.`,

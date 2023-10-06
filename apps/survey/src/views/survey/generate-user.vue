@@ -3,12 +3,8 @@
     <app-entry-screen :title="$t('common._').toString()" width="30rem">
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
         <v-card-text class="pa-6">
-          <p>Click on the 'Generate access' button generate new credentials for you.</p>
-          <p>
-            This survey will take approximately 30 minutes to complete. If you would like to be able
-            to stop filling out the survey and resume at a later time, write down generated
-            credentials.
-          </p>
+          <p>{{ $t('survey.generateUser.info1') }}</p>
+          <p>{{ $t('survey.generateUser.info2') }}</p>
           <v-btn v-if="!status" block class="my-5" color="primary" rounded x-large @click="submit">
             {{ $t('survey.generateUser._') }}
           </v-btn>
@@ -48,14 +44,13 @@
               {{ $t(`survey.generateUser.${status}`, { surveyId: survey?.name ?? surveyId }) }}
             </v-alert>
           </template>
-          <p>
-            If you close your browser window you can get back to your survey using the following
-            <router-link :to="{ name: 'survey-login', params: { surveyId } }">link</router-link>.
-          </p>
-          <p>
-            If you think you will be able to complete the survey in one sitting, ignore this and
-            continue.
-          </p>
+          <i18n path="survey.generateUser.info3" tag="p">
+            <template #action>
+              <router-link :to="{ name: 'survey-login', params: { surveyId } }">
+                {{ $t('survey.generateUser.link') }}
+              </router-link>
+            </template>
+          </i18n>
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
           <v-btn block color="primary" :disabled="!canContinue" rounded type="submit" x-large>

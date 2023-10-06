@@ -127,7 +127,7 @@ const prompts: LocaleMessageObject = {
       tryAgain: 'OK, let me try again',
     },
     recipeBuilder: {
-      label: `Add your own {searchTerm} recipe`,
+      label: `Add your own {searchTerm}`,
       description: `<p>Build your own recipe.</p>`,
       report: 'Report a missing food',
       tryAgain: 'OK, let me try again',
