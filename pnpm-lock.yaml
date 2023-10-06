@@ -292,8 +292,8 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       awesome-phonenumber:
-        specifier: ^5.11.0
-        version: 5.11.0
+        specifier: ^6.0.0
+        version: 6.0.0
       awilix:
         specifier: ^8.0.1
         version: 8.0.1
@@ -793,8 +793,8 @@ importers:
         specifier: ^10.4.1
         version: 10.4.1(vue@2.7.14)
       awesome-phonenumber:
-        specifier: ^5.11.0
-        version: 5.11.0
+        specifier: ^6.0.0
+        version: 6.0.0
       axios:
         specifier: ^1.5.1
         version: 1.5.1(debug@4.3.4)
@@ -5609,9 +5609,9 @@ packages:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
 
-  /awesome-phonenumber@5.11.0:
-    resolution: {integrity: sha512-25GfikMIo6CBQIqvjoewo4uiu5Ai7WqEC8gxesH3LDwCY43oEdkLaT15a+8adC7uWIJCGh+YQiBY5bjmDpoQcg==}
-    engines: {node: '>=14'}
+  /awesome-phonenumber@6.0.0:
+    resolution: {integrity: sha512-9OzZgUuUjrfRB3hIBN0M7eDoSwr+dTQfNcGGAKeU/kcD5/3msbo+14CdmySXtP+kWTz7olvYZOSs1KjrnnRU+g==}
+    engines: {node: '>=18'}
     dev: false
 
   /awilix@8.0.1:
