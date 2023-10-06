@@ -1,20 +1,11 @@
-# Overview
+# Introduction
 
-Intake24 dietary recall system
+This resource is intended to provide guidance for developers and researchers on how to build, use and adapt Intake24. The resource is structured into specific Intake24 system components, with relevant technical details and non-specialist guides in each section.
 
-Backend components of Intake24 dietary recall system are:
+It's important to note that guidance will be continually updated and may not be entirely exhaustive in some sections.
 
-- [API Service](/api/) - serves data from the database for the front end interfaces (admin and survey) and 3rd party applications
+Contributions by system users to the [Guides](/guides/) section is welcome.
 
-- [CLI](/cli/) - command line tool with various useful commands / scripts
-
-- Persistent layer - two separate databases:
-
-  - `Food DB` - stores food data
-  - `System DB`- stores system data (users, recalls, surveys, schemes)
-
-Frontend components of Intake24 dietary recall system are two applications:
-
-- [Survey/Recall interface](/survey/) - the main interface for users to complete their dietary recall
-
-- [Admin tool](/admin/) - Admin tool for system configuration and management
+:::tip
+The whole content of documentation is a part of the actual source code, therefore, when the source code changes, this resource is updated accordingly.
+:::

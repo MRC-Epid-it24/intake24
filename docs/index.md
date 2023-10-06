@@ -25,19 +25,16 @@ hero:
       link: https://github.com/MRC-Epid-it24/intake24
 
 features:
-  - icon: 🌏
-    title: Overview
-    details: Intro / Requirements / Guides
-  - icon: 🌏
-    title: API Server
-    details: API Server
-  - icon: 🌏
-    title: Admin tool
-    details: Admin tool
-  - icon: 🌏
-    title: Recall & feedback
-    details: Recall & feedback
-  - icon: 🌏
-    title: CLI
-    details: Command line interface
+  - icon: 🎯
+    title: As accurate as face-to-face recall
+    details: 'With comparable accuracy to a traditional face-to-face dietary recall interview, Intake24 offers a convenient, user-friendly, and low-cost alternative to collecting dietary data on a large scale.'
+  - icon: 🌍
+    title: Online, convenient, and accessible
+    details: 'No need to travel for face-to-face visit 15-20 minutes to complete with nutrient data available upon submission. Accessible on mobile phones, tablets or computer WCAG 2.0 compliant (AA level).'
+  - icon: ⚖
+    title: Estimation made easy
+    details: 'The tool includes validated food and drink photographs to estimate the amount of food or drink consumed'
+  - icon: 🧠
+    title: Built with brains
+    details: Includes custom search algorithms, synonyms and metadata to help users find their food easily
 ---
