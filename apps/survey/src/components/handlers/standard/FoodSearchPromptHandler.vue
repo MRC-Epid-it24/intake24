@@ -147,11 +147,10 @@ export default defineComponent({
         customPromptAnswers,
         flags,
         linkedFoods: [],
-        template_id: recipeFood.name,
+        templateId: recipeFood.name,
         template: recipeFood,
         markedAsComplete: [],
         components,
-        link: [],
       };
 
       this.replaceFood({ foodId: id, food: newState });

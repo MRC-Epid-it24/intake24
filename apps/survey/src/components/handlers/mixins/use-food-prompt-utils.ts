@@ -32,9 +32,17 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
 
     return food;
   });
+
   const parentFood = computed(() => {
     if (parentFoodOptional.value === undefined)
       throw new Error('This prompt requires parent food to be selected');
+
+    return parentFoodOptional.value;
+  });
+
+  const parentEncodedFood = computed(() => {
+    if (parentFoodOptional.value?.type !== 'encoded-food')
+      throw new Error('This prompt requires parent encoded food to be selected');
 
     return parentFoodOptional.value;
   });
@@ -116,7 +124,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   );
 
   const linkedQuantityCategories = computed(() => {
-    if (parentFoodOptional.value === undefined) return [];
+    if (parentFoodOptional.value?.type !== 'encoded-food') return [];
 
     const { data, portionSize } = parentFoodOptional.value;
     if (!portionSize || portionSize.method !== 'guide-image' || portionSize.quantity <= 1)
@@ -139,6 +147,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     linkedQuantityCategories,
     localeId,
     meals,
+    parentEncodedFood,
     parentFood,
     parentFoodOptional,
     encodedFood,

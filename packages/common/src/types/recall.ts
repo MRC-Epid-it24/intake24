@@ -222,7 +222,7 @@ export type RecipeBuilderComponent = {
 
 export type RecipeBuilderLinkedFood = {
   id: string;
-  linkedTo: string[] | null;
+  linkedTo: string[];
 };
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
@@ -251,7 +251,6 @@ export interface AbstractFoodState {
 export interface FreeTextFood extends AbstractFoodState {
   type: 'free-text';
   description: string;
-  link?: RecipeBuilderLinkedFood[] | null;
 }
 
 export interface EncodedFood extends AbstractFoodState {
@@ -260,7 +259,6 @@ export interface EncodedFood extends AbstractFoodState {
   searchTerm: string | null;
   portionSizeMethodIndex: number | null;
   portionSize: PortionSizeState | null;
-  link?: RecipeBuilderLinkedFood[] | null;
   // brand: string[]; TODO V3?
 }
 
@@ -278,9 +276,8 @@ export interface RecipeBuilder extends AbstractFoodState {
   searchTerm: string | null;
   components: RecipeBuilderComponent[];
   description: string;
-  template_id: string;
+  templateId: string;
   template: RecipeFood;
-  link: RecipeBuilderLinkedFood[];
   markedAsComplete: number[];
 }
 

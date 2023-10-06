@@ -15,6 +15,7 @@ import { BaseLayout, CardLayout } from '../layouts';
 export default <
   P extends keyof Prompts & keyof PromptStates,
   F extends EncodedFood | MissingFood | RecipeBuilder = EncodedFood,
+  PF extends EncodedFood | RecipeBuilder = EncodedFood | RecipeBuilder,
 >() =>
   defineComponent({
     name: 'BasePortion',
@@ -34,7 +35,7 @@ export default <
         required: true,
       },
       parentFood: {
-        type: Object as PropType<EncodedFood>,
+        type: Object as PropType<PF>,
       },
       meal: {
         type: Object as PropType<MealState>,

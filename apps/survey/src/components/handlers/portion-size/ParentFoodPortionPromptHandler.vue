@@ -48,7 +48,7 @@ export default defineComponent({
       encodedFood: food,
       encodedFoodPortionSizeData,
       parameters,
-      parentFood,
+      parentEncodedFood: parentFood,
       portionSize,
     } = useFoodPromptUtils<'parent-food-portion'>();
     const { meal } = useMealPromptUtils();

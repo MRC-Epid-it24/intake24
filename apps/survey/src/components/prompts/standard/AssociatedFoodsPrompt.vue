@@ -183,8 +183,8 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref, set, watch } from 'vue';
 
 import type {
-  AssociatedFood,
-  AssociatedFoodPromptItemState,
+  AssociatedFoodPrompt,
+  AssociatedFoodPromptItem,
   PromptStates,
 } from '@intake24/common/prompts';
 import type { EncodedFood } from '@intake24/common/types';
@@ -199,13 +199,13 @@ import { ConfirmDialog } from '@intake24/ui';
 import type { FoodSearchPromptParameters } from './FoodSearchPrompt.vue';
 import createBasePrompt from '../createBasePrompt';
 
-const isPromptValid = (prompt: AssociatedFoodPromptItemState): boolean =>
+const isPromptValid = (prompt: AssociatedFoodPrompt): boolean =>
   prompt.mainFoodConfirmed === false ||
   (prompt.mainFoodConfirmed === true &&
     prompt.foods.length > 0 &&
     prompt.additionalFoodConfirmed === false);
 
-const getNextPrompt = (prompts: AssociatedFoodPromptItemState[]) =>
+const getNextPrompt = (prompts: AssociatedFoodPrompt[]) =>
   prompts.findIndex((prompt) => !isPromptValid(prompt));
 
 export default defineComponent({
@@ -379,7 +379,7 @@ export default defineComponent({
       );
     },
 
-    associatedFoodDescription(food: AssociatedFood): string {
+    associatedFoodDescription(food: AssociatedFoodPromptItem): string {
       if (food.type === 'selected' && food.selectedFood !== undefined)
         return food.selectedFood.name;
       if (food.type === 'existing' && food.existingFoodId !== undefined)
@@ -423,7 +423,7 @@ export default defineComponent({
       this.onFoodSelected({ type: 'missing' }, promptIndex);
     },
 
-    onFoodSelected(selectedFood: AssociatedFood, promptIndex: number): void {
+    onFoodSelected(selectedFood: AssociatedFoodPromptItem, promptIndex: number): void {
       const prompt = this.prompts[promptIndex];
       const replaceIndex = this.replaceFoodIndex[promptIndex];
 

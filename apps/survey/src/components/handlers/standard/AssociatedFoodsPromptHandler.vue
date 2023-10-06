@@ -19,11 +19,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type {
-  AssociatedFoodPromptItemState,
-  Prompts,
-  PromptStates,
-} from '@intake24/common/prompts';
+import type { AssociatedFoodPrompt, Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodFlag, FoodState, MissingFood } from '@intake24/common/types';
 import type { FoodHeader, UserFoodData } from '@intake24/common/types/http';
@@ -36,7 +32,7 @@ import { getEntityId, getFoodIndexRequired } from '@intake24/survey/util';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
 
-const initialPromptState = (allowMultiple: boolean): AssociatedFoodPromptItemState => ({
+const initialPromptState = (allowMultiple: boolean): AssociatedFoodPrompt => ({
   mainFoodConfirmed: undefined,
   additionalFoodConfirmed: allowMultiple ? undefined : false,
   foods: [],

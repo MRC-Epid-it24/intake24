@@ -7,10 +7,17 @@ import type {
 } from '../types';
 import type { FoodHeader } from '../types/http';
 
-export type AssociatedFoodPromptItemState = {
-  confirmed?: 'yes' | 'no' | 'existing' | 'missing';
+export type AssociatedFoodPromptItem = {
+  confirmed?: 'yes' | 'no';
+  type?: 'selected' | 'missing' | 'existing';
   selectedFood?: FoodHeader;
   existingFoodId?: string;
+};
+
+export type AssociatedFoodPrompt = {
+  mainFoodConfirmed?: boolean;
+  additionalFoodConfirmed?: boolean;
+  foods: AssociatedFoodPromptItem[];
 };
 
 export type SelectedFoodRecipeBuilderItemState = {
@@ -112,7 +119,7 @@ export type PromptStates = {
   'edit-meal-prompt': FoodState[];
   'associated-foods-prompt': {
     activePrompt: number;
-    prompts: AssociatedFoodPromptItemState[];
+    prompts: AssociatedFoodPrompt[];
   };
   'ready-meal-prompt': { id: string; name: string; value: boolean | undefined }[];
 };

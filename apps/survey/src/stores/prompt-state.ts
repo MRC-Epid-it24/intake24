@@ -10,14 +10,14 @@ import { defineStore } from 'pinia';
 import type { FoodState } from '@intake24/common/types';
 import type { FoodHeader } from '@intake24/common/types/http';
 
-export interface AssociatedFoodPromptState {
+export interface AssociatedFoodPrompt {
   confirmed: boolean | undefined;
   selectedFood: FoodHeader | undefined;
 }
 
 export interface MealAssociatedFoodsState {
   activePrompt: number;
-  prompts: AssociatedFoodPromptState[];
+  prompts: AssociatedFoodPrompt[];
 }
 
 type R1 = Record<'edit-meal-prompt', { [key: string]: FoodState[] }>;
@@ -26,7 +26,7 @@ type R2 = Record<'associated-foods-prompt', { [key: string]: MealAssociatedFoods
 type MealPromptState = Partial<R1 & R2>;
 
 type FoodPromptState = Partial<
-  Record<'associated-foods-prompt', { [key: string]: AssociatedFoodPromptState }>
+  Record<'associated-foods-prompt', { [key: string]: AssociatedFoodPrompt }>
 >;
 
 export interface PromptState {

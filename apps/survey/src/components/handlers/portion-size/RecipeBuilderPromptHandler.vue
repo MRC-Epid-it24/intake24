@@ -87,7 +87,6 @@ export default defineComponent({
         portionSize: null,
         customPromptAnswers: {},
         linkedFoods: [],
-        link: [{ id: data.id, linkedTo: [foodId] }],
       };
 
       const newComponents = [];
@@ -116,16 +115,18 @@ export default defineComponent({
     };
 
     const commitAnswer = () => {
-      survey.addFoodFlag(foodId, 'portion-size-method-complete');
-      survey.addFoodFlag(foodId, 'recipe-builder-complete');
-      survey.addFoodFlag(foodId, 'associated-foods-complete');
+      survey.addFoodFlag(foodId, [
+        'portion-size-method-complete',
+        'recipe-builder-complete',
+        'associated-foods-complete',
+      ]);
       clearStoredState();
       ctx.emit('action', 'next');
     };
 
     const deleteComponentAndThenFood = (type: string, id: string, stepId: number) => {
       const recipeParent = survey.selectedFoodOptional;
-      if (recipeParent !== undefined && recipeParent.type === 'recipe-builder') {
+      if (recipeParent?.type === 'recipe-builder') {
         const updatedComponents = [...recipeParent.components];
         if (updatedComponents[stepId] === undefined) return;
         updatedComponents[stepId].ingredients = updatedComponents[stepId].ingredients.filter(
