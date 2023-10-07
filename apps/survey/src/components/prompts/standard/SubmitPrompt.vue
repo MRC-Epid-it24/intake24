@@ -52,7 +52,6 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { Prompt, Prompts } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import {
   ReviewMealList,
@@ -81,13 +80,6 @@ export default defineComponent({
       type: Array as PropType<MealState[]>,
       required: true,
     },
-    prompt: {
-      type: Object as PropType<Prompt>,
-      required: true,
-    },
-    review: {
-      type: Object as PropType<Prompts['submit-prompt']['review']>,
-    },
   },
 
   setup(props, ctx) {
@@ -97,19 +89,12 @@ export default defineComponent({
 
     const reviewedMobile = ref<string[]>([]);
 
-    const isValid = ref<boolean>(false);
-
-    const isValidMobile = ref<boolean>(false);
-
     const reachedBottom = ref<boolean>(false);
 
     const reachedBottomMobile = ref<boolean>(false);
 
     const showReviewMealListCheckbox = computed(() => {
-      if (
-        props.prompt.component === 'submit-prompt' &&
-        props.prompt.review['desktop'] === 'checkbox'
-      ) {
+      if (props.prompt.review['desktop'] === 'checkbox') {
         return true;
       } else {
         return false;
@@ -117,10 +102,7 @@ export default defineComponent({
     });
 
     const showReviewMealListMobileCheckbox = computed(() => {
-      if (
-        props.prompt.component === 'submit-prompt' &&
-        props.prompt.review['mobile'] === 'checkbox'
-      ) {
+      if (props.prompt.review['mobile'] === 'checkbox') {
         return true;
       } else {
         return false;
@@ -128,10 +110,7 @@ export default defineComponent({
     });
 
     const showReviewMealListScroll = computed(() => {
-      if (
-        props.prompt.component === 'submit-prompt' &&
-        props.prompt.review['desktop'] === 'scroll'
-      ) {
+      if (props.prompt.review['desktop'] === 'scroll') {
         return true;
       } else {
         return false;
@@ -139,10 +118,7 @@ export default defineComponent({
     });
 
     const showReviewMealListMobileScroll = computed(() => {
-      if (
-        props.prompt.component === 'submit-prompt' &&
-        props.prompt.review['mobile'] === 'scroll'
-      ) {
+      if (props.prompt.review['mobile'] === 'scroll') {
         return true;
       } else {
         return false;
@@ -165,53 +141,43 @@ export default defineComponent({
       reachedBottomMobile.value = status;
     };
 
-    watch(
-      [
-        reviewed,
-        reviewedMobile,
-        props.meals,
-        showReviewMealListCheckbox,
-        showReviewMealListMobileCheckbox,
-        showReviewMealListScroll,
-        showReviewMealListMobileScroll,
-        reachedBottom,
-        reachedBottomMobile,
-      ],
-      () => {
-        if (showReviewMealListScroll.value) {
-          if (!reachedBottom.value) {
-            isValid.value = true;
-          } else {
-            isValid.value = false;
-          }
+    const isValid = computed(() => {
+      if (showReviewMealListScroll.value) {
+        if (!reachedBottom.value) {
+          return true;
+        } else {
+          return false;
         }
+      }
 
-        if (showReviewMealListCheckbox.value) {
-          if (props.meals.length !== reviewed.value.length) {
-            isValid.value = true;
-          } else {
-            isValid.value = false;
-          }
+      if (showReviewMealListCheckbox.value) {
+        if (props.meals.length !== reviewed.value.length) {
+          return true;
+        } else {
+          return false;
         }
+      }
+      return false;
+    });
 
-        if (showReviewMealListMobileScroll.value) {
-          if (!reachedBottomMobile.value) {
-            isValidMobile.value = true;
-          } else {
-            isValidMobile.value = false;
-          }
+    const isValidMobile = computed(() => {
+      if (showReviewMealListMobileScroll.value) {
+        if (!reachedBottomMobile.value) {
+          return true;
+        } else {
+          return false;
         }
+      }
 
-        if (showReviewMealListMobileCheckbox.value) {
-          if (props.meals.length !== reviewedMobile.value.length) {
-            isValidMobile.value = true;
-          } else {
-            isValidMobile.value = false;
-          }
+      if (showReviewMealListMobileCheckbox.value) {
+        if (props.meals.length !== reviewedMobile.value.length) {
+          return true;
+        } else {
+          return false;
         }
-      },
-      { immediate: true }
-    );
+      }
+      return false;
+    });
 
     return {
       action,
