@@ -47,7 +47,7 @@
     "@types/validator": "^13.11.2",
     "@types/web-push": "^3.6.1",
     "@types/webpack-env": "^1.18.2",
-    "fork-ts-checker-webpack-plugin": "^8.0.0",
+    "fork-ts-checker-webpack-plugin": "^9.0.0",
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
