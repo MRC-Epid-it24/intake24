@@ -33,10 +33,11 @@ import { PieChart } from 'echarts/charts';
 import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { SVGRenderer } from 'echarts/renderers';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import Chart from 'vue-echarts';
 
 import { round } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n';
 
 import type { TopFoodData } from '../top-foods';
 
@@ -54,11 +55,13 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    charts() {
-      const { colors } = this.topFoods;
+  setup(props) {
+    const { i18n } = useI18n();
 
-      const chartOptions: EChartsOption[] = this.topFoods.chartData.map((nutrient) => {
+    const charts = computed(() => {
+      const { colors } = props.topFoods;
+
+      const chartOptions: EChartsOption[] = props.topFoods.chartData.map((nutrient) => {
         const { name, unit, data } = nutrient;
         const id = nutrient.id.join(':');
 
@@ -68,7 +71,7 @@ export default defineComponent({
           },
           id,
           title: {
-            text: this.$t('feedback.topFoods.chart', { nutrient: name }).toString(),
+            text: i18n.t('feedback.topFoods.chart', { nutrient: name }).toString(),
             left: 'center',
             textStyle: {
               fontWeight: 'bolder',
@@ -78,9 +81,10 @@ export default defineComponent({
           left: 'center',
           tooltip: {
             trigger: 'item',
-            position: (point, params, dom, rect, { contentSize, viewSize }) => {
-              return [viewSize[0] / 2 - contentSize[0] / 2, '40%'];
-            },
+            position: (point, params, dom, rect, { contentSize, viewSize }) => [
+              viewSize[0] / 2 - contentSize[0] / 2,
+              '40%',
+            ],
             formatter: ({ seriesName, name: itemName, value, percent }: any) =>
               `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
                 value
@@ -133,7 +137,11 @@ export default defineComponent({
       });
 
       return chartOptions;
-    },
+    });
+
+    return {
+      charts,
+    };
   },
 });
 </script>

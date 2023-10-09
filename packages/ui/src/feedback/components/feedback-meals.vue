@@ -149,6 +149,10 @@ export default defineComponent({
           left: 'center',
           tooltip: {
             trigger: 'item',
+            position: (point, params, dom, rect, { contentSize, viewSize }) => [
+              viewSize[0] / 2 - contentSize[0] / 2,
+              '40%',
+            ],
             formatter: ({ seriesName, name: itemName, value, percent }: any) =>
               `<strong>${seriesName}</strong> <br/> ${itemName}: ${round(
                 value
