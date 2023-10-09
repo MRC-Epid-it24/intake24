@@ -23,13 +23,7 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-container>
-            <v-row justify="center">
-              <v-col>
-                <v-subheader>
-                  {{ item.name }}
-                </v-subheader>
-              </v-col>
-            </v-row>
+            <v-subheader>{{ item.name }}</v-subheader>
             <v-row col="12">
               <v-col cols="12" md="4">
                 <v-text-field
@@ -99,9 +93,15 @@
           </v-container>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn icon :title="$t('locales.recipe-foods.remove')" @click.stop="remove(idx)">
-            <v-icon color="error">$delete</v-icon>
-          </v-btn>
+          <confirm-dialog
+            color="error"
+            icon
+            icon-left="$delete"
+            :label="$t('locales.recipe-foods.remove').toString()"
+            @confirm="remove(idx)"
+          >
+            {{ $t('common.action.confirm.delete', { name: item.recipeWord }) }}
+          </confirm-dialog>
         </v-list-item-action>
         <steps-dialog
           v-if="dialog && item.id === activeRecipeFoodId"
@@ -133,6 +133,7 @@ import type {
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 import StepsDialog from './steps-dialog.vue';
 
@@ -145,7 +146,7 @@ export type changedSynonms = { idx: number; item: string };
 export default defineComponent({
   name: 'LocaleRecipeFoods',
 
-  components: { StepsDialog },
+  components: { ConfirmDialog, StepsDialog },
 
   mixins: [formMixin],
 

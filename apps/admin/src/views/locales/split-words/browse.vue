@@ -31,9 +31,15 @@
           ></v-text-field>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn icon :title="$t('locales.split-words.remove')" @click.stop="remove(idx)">
-            <v-icon color="error">$delete</v-icon>
-          </v-btn>
+          <confirm-dialog
+            color="error"
+            icon
+            icon-left="$delete"
+            :label="$t('locales.split-words.remove').toString()"
+            @confirm="remove(idx)"
+          >
+            {{ $t('common.action.confirm.delete', { name: item.words }) }}
+          </confirm-dialog>
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -51,11 +57,14 @@ import type {
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type LocaleSplitWordsForm = { items: LocaleSplitWordInput[] };
 
 export default defineComponent({
   name: 'LocaleSplitWords',
+
+  components: { ConfirmDialog },
 
   mixins: [formMixin],
 

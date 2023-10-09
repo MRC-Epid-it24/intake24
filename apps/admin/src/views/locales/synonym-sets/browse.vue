@@ -31,9 +31,15 @@
           ></v-text-field>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn icon :title="$t('locales.synonym-sets.remove')" @click.stop="remove(idx)">
-            <v-icon color="error">$delete</v-icon>
-          </v-btn>
+          <confirm-dialog
+            color="error"
+            icon
+            icon-left="$delete"
+            :label="$t('locales.synonym-sets.remove').toString()"
+            @confirm="remove(idx)"
+          >
+            {{ $t('common.action.confirm.delete', { name: item.synonyms }) }}
+          </confirm-dialog>
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -51,11 +57,14 @@ import type {
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 import { useEntry as useStoreEntry } from '@intake24/admin/stores';
+import { ConfirmDialog } from '@intake24/ui';
 
 export type LocaleSynonymSetsForm = { items: LocaleSynonymSetInput[] };
 
 export default defineComponent({
   name: 'LocaleSynonymSets',
+
+  components: { ConfirmDialog },
 
   mixins: [formMixin],
 
