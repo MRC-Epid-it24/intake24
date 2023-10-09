@@ -19,36 +19,24 @@
     <v-list>
       <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
         <v-list-item-avatar>
-          <v-icon>fa-light fa-bowl-food</v-icon>
+          <v-icon>fas fa-bowl-food</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-container>
-            <v-subheader>{{ item.name }}</v-subheader>
+          <v-container class="px-0">
+            <div class="text-h4 font-weight-medium mb-4">{{ item.name }}</div>
             <v-row col="12">
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model.trim="item.name"
-                  class="ma-5"
                   hide-details="auto"
                   :label="$t('locales.recipe-foods.title')"
                   name="special"
                   outlined
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="4">
-                <v-text-field
-                  v-model.trim="item.recipeWord"
-                  class="ma-5"
-                  hide-details="auto"
-                  :label="$t('locales.recipe-foods.special')"
-                  name="special"
-                  outlined
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-text-field
                   v-model.trim="item.code"
-                  class="ma-5"
                   hide-details="auto"
                   :label="$t('locales.recipe-foods.code')"
                   name="code"
@@ -58,10 +46,20 @@
               </v-col>
             </v-row>
             <v-row justify="center">
+              <v-col cols="12" md="4">
+                <v-text-field
+                  v-model.trim="item.recipeWord"
+                  hide-details="auto"
+                  :label="$t('locales.recipe-foods.special')"
+                  name="special"
+                  outlined
+                ></v-text-field>
+              </v-col>
               <v-col cols="12" md="8">
                 <v-select
                   v-if="form.synonymsSets"
                   v-model="item.synonyms"
+                  hide-details="auto"
                   :hint="`${item.synonyms?.synonyms}, ${item.synonyms?.id}`"
                   item-text="synonyms"
                   item-value="id"
@@ -85,8 +83,7 @@
                   type="button"
                   @click.stop="() => openStepsDialog(item.id, item.code, item)"
                 >
-                  <v-icon left>fa-light fa-arrow-down-1-9</v-icon
-                  >{{ $t('locales.recipe-foods.steps') }}
+                  <v-icon left>fas fa-arrow-down-1-9</v-icon>{{ $t('locales.recipe-foods.steps') }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -141,7 +138,7 @@ export type LocaleRecipeFoodsForm = {
   items: LocaleRecipeFoodsInput[];
   synonymsSets: LocaleSynonymSet[];
 };
-export type changedSynonms = { idx: number; item: string };
+export type ChangedSynonyms = { idx: number; item: string };
 
 export default defineComponent({
   name: 'LocaleRecipeFoods',
@@ -215,10 +212,10 @@ export default defineComponent({
       console.log(recipeFoodId, recipeFoodCode, recipeFood);
     },
 
-    changeSynonyms(changedSynonms: changedSynonms) {
-      console.log(changedSynonms);
-      if (changedSynonms.item)
-        this.form.items[changedSynonms.idx].synonyms_id = parseInt(changedSynonms.item);
+    changeSynonyms(changedSynonyms: ChangedSynonyms) {
+      console.log(changedSynonyms);
+      if (changedSynonyms.item)
+        this.form.items[changedSynonyms.idx].synonyms_id = parseInt(changedSynonyms.item);
     },
 
     add() {

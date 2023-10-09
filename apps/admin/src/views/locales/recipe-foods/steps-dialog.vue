@@ -5,7 +5,7 @@
     :fullscreen="$vuetify.breakpoint.smAndDown"
     max-width="700px"
   >
-    <v-card class="dialog-card" :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
+    <v-card class="dialog-card" :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar class="sticky-toolbar" color="secondary" dark flat>
         <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="$emit('close')">
           <v-icon>$cancel</v-icon>
@@ -21,19 +21,17 @@
       <v-list>
         <v-list-item v-for="(item, idx) in form.items" :key="idx" class="list-item-border">
           <v-list-item-content class="v-list-item-content">
-            <v-container>
-              <v-row justify="center">
-                <v-col>
-                  <v-subheader class="headline">
-                    {{ item.order + ': ' + translate(item.name) }}
-                  </v-subheader>
-                </v-col>
-              </v-row>
+            <v-container class="px-2">
+              <v-subheader class="text-h4 font-weight-medium mb-4 px-0">
+                <v-avatar class="mr-3" color="primary" size="28">
+                  <span class="white--text font-weight-medium text-h6">{{ item.order }}</span>
+                </v-avatar>
+                {{ translate(item.name) }}
+              </v-subheader>
               <v-row col="12">
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.trim="item.code"
-                    class="ma-5"
                     hide-details="auto"
                     :label="$t('locales.recipe-foods.step_code')"
                     name="special"
@@ -44,7 +42,6 @@
                 <v-col cols="12" md="6">
                   <v-text-field
                     v-model.trim="item.order"
-                    class="ma-5"
                     hide-details="auto"
                     :label="$t('locales.recipe-foods.order')"
                     name="code"
@@ -97,18 +94,24 @@
                     v-model="item.repeatable"
                     hide-details="auto"
                     :label="$t('locales.recipe-foods.repeat')"
-                    name="Repeatable"
+                    name="repeatable"
                   ></v-switch>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field
+                  <select-resource
                     v-model.trim="item.categoryCode"
-                    class="ma-5"
-                    hide-details="auto"
+                    activator-class="mb-2"
+                    item-id="code"
                     :label="$t('locales.recipe-foods.ingredientsCategory')"
                     name="ingredientsCategoryCode"
-                    outlined
-                  ></v-text-field>
+                    resource="categories"
+                  >
+                    <template #title>{{ $t(`fdbs.categories.title`) }}</template>
+                    <template #item="{ item: resItem }">
+                      <v-list-item-title>{{ resItem.code }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ resItem.name }}</v-list-item-subtitle>
+                    </template>
+                  </select-resource>
                 </v-col>
               </v-row>
             </v-container>
@@ -143,17 +146,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
-import type { LocaleTranslation } from '@intake24/common/types';
 import type {
-  LocaleEntry,
   LocaleRecipeFoodSteps,
   LocaleRecipeFoodStepsInput,
 } from '@intake24/common/types/http/admin';
-import { formMixin } from '@intake24/admin/components/entry';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { createForm } from '@intake24/admin/util';
 import { useI18n } from '@intake24/i18n';
 
 export type LocaleRecipeFoodStepsForm = {
@@ -168,9 +170,7 @@ export type Locale = {
 export default defineComponent({
   name: 'StepsDialog',
 
-  components: { LanguageSelector },
-
-  mixins: [formMixin],
+  components: { LanguageSelector, SelectResource },
 
   props: {
     dialog: {
@@ -186,76 +186,60 @@ export default defineComponent({
       required: true,
     },
     locale: {
-      type: Object as () => Locale,
+      type: Object as PropType<Locale>,
       required: true,
     },
     items: {
-      type: Array as () => LocaleRecipeFoodStepsInput[],
+      type: Array as PropType<LocaleRecipeFoodStepsInput[]>,
+      default: () => [],
     },
   },
-  setup(props) {
-    const isLoading = ref(false);
-    const { entry, entryLoaded } = useEntry<LocaleEntry>(props);
-    useEntryFetch(props);
+  setup(props, { emit }) {
     const { translate } = useI18n();
-    const { clearError, form, routeLeave, submit, toForm } = useEntryForm<
-      LocaleRecipeFoodStepsForm,
-      LocaleEntry
-    >(props, {
-      data: { items: [] },
-      config: { transform: ({ items }) => items },
-    });
 
-    return {
-      isLoading,
-      entry,
-      entryLoaded,
-      clearError,
-      form,
-      routeLeave,
-      submit,
-      toForm,
-      translate,
-    };
-  },
+    const form = reactive(createForm<LocaleRecipeFoodStepsForm>({ items: props.items }));
 
-  mounted() {
-    if (this.$props.items) this.toForm({ items: this.$props.items });
-    else console.error('No items');
-  },
-
-  methods: {
-    async saveSteps() {
-      this.form.items = this.form.items
+    const saveSteps = async () => {
+      form.items = form.items
         .filter(({ name }) => name)
         .map((item, idx) => {
           item.order = idx + 1;
           return item;
         });
-      const items = await this.form.post<LocaleRecipeFoodSteps[]>(
-        `admin/locales/${this.locale.id}/recipe-foods/${this.$props.activeRecipeFoodId}/steps`
+
+      const items = await form.post<LocaleRecipeFoodSteps[]>(
+        `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`
       );
 
-      this.$emit('update-steps', items);
-    },
+      emit('update-steps', items);
+    };
 
-    addStep() {
-      this.form.items.push({
+    const addStep = () => {
+      form.items.push({
         id: undefined,
-        code: `${this.activeRecipeFoodCode.substring(1)}_STP-${this.form.items.length + 1}`,
-        recipeFoodsId: parseInt(this.$props.activeRecipeFoodId),
-        name: { en: 'Name' } as LocaleTranslation,
-        description: { en: 'Description' } as LocaleTranslation,
-        order: this.form.items.length + 1,
-        localeId: this.locale.code,
+        code: `${props.activeRecipeFoodCode.substring(1)}_STP-${form.items.length + 1}`,
+        recipeFoodsId: parseInt(props.activeRecipeFoodId),
+        name: { en: 'Name' },
+        description: { en: 'Description' },
+        order: form.items.length + 1,
+        localeId: props.locale.code,
         categoryCode: '',
         repeatable: false,
       });
-    },
+    };
 
-    removeStep(index: number) {
-      this.form.items.splice(index, 1);
-    },
+    const removeStep = (index: number) => {
+      console.log(index);
+      form.items.splice(index, 1);
+    };
+
+    return {
+      form,
+      addStep,
+      removeStep,
+      saveSteps,
+      translate,
+    };
   },
 });
 </script>

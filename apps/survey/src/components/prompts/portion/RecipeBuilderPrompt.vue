@@ -4,7 +4,10 @@
       <v-expansion-panel v-for="(step, index) in recipeSteps" :key="index">
         <v-expansion-panel-header>
           <div>
-            <span class="font-weight-bold">{{ step.order + 1 }}:</span> {{ translate(step.name) }}
+            <v-avatar class="mr-2" color="primary" size="28">
+              <span class="white--text font-weight-medium">{{ step.order + 1 }}</span>
+            </v-avatar>
+            {{ translate(step.name) }}
           </div>
           <template #actions>
             <expansion-panel-actions :valid="isStepValid(step)"></expansion-panel-actions>
@@ -36,11 +39,9 @@
           </v-container>
           <v-expand-transition>
             <selected-food-list
+              v-bind="{ index, meal, prompt }"
               :entries="step"
-              :index="index"
-              :meal="meal"
-              :prompt="prompt"
-              :show="step.selectedFoods !== undefined && step.selectedFoods.length > 0"
+              :show="!!step.selectedFoods?.length"
               @button-click="removeSelectedFood"
             ></selected-food-list>
           </v-expand-transition>
@@ -51,7 +52,7 @@
             >
               <food-browser
                 v-bind="{
-                  localeId: localeId,
+                  localeId,
                   searchParameters,
                   rootCategory: step.categoryCode,
                   prompt,
@@ -142,8 +143,12 @@ export default defineComponent({
   },
 
   computed: {
+    allConfirmed(): boolean {
+      return this.recipeSteps.reduce((acc, curr) => acc && curr.confirmed === 'yes', true);
+    },
+
     isValid(): boolean {
-      return this.allConfirmed();
+      return this.allConfirmed;
     },
   },
 
@@ -185,7 +190,7 @@ export default defineComponent({
         {
           ...this.recipeSteps[ingredientIndex],
           type: 'selected',
-          selectedFoods: selectedFoods === undefined ? [food] : [...selectedFoods, food],
+          selectedFoods: selectedFoods ? [...selectedFoods, food] : [food],
         },
         ingredientIndex,
         food
@@ -199,9 +204,7 @@ export default defineComponent({
       ingredientIndex: number,
       foodForSearch: SelectedFoodRecipeBuilderItemState
     ): Promise<void> {
-      if (stepFoods.selectedFoods === undefined) {
-        return;
-      }
+      if (!stepFoods.selectedFoods) return;
 
       const foodData = await foodsService.getData(this.localeId, foodForSearch.code);
 
@@ -252,12 +255,6 @@ export default defineComponent({
 
     onConfirmToggleIngredients(index: number) {
       this.goToNextIfCan(index);
-    },
-
-    allConfirmed(): boolean {
-      return this.recipeSteps.reduce((acc, curr) => {
-        return acc && curr.confirmed === 'yes';
-      }, true);
     },
 
     action(type: string, id?: string, stepId?: number) {
