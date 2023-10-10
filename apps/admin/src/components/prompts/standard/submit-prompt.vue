@@ -1,7 +1,9 @@
 <template>
   <v-tab-item key="options" value="options">
-    <v-card-title>"Final Review Options"</v-card-title>
-    <v-card-subtitle> "Choose the option you want for the final review page." </v-card-subtitle>
+    <v-card-title>{{ $t('survey-schemes.prompts.submit-prompt.optionTitle') }}</v-card-title>
+    <v-card-subtitle>{{
+      $t('survey-schemes.prompts.submit-prompt.optionSubtitle')
+    }}</v-card-subtitle>
     <v-card-text>
       <v-combobox
         v-for="key in Object.keys(review)"
