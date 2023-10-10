@@ -1,8 +1,7 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
 import type { DataOptions } from 'vuetify';
-import { deepEqual } from 'fast-equals';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 import type { Pagination, PaginationMeta } from '@intake24/db';
@@ -59,17 +58,7 @@ export const useDataTable = (
     meta.value = { ...data.meta };
   };
 
-  watch(
-    () => options,
-    async (val, oldVal) => {
-      if (deepEqual(val, oldVal)) return;
-
-      await fetch();
-    },
-    { deep: true }
-  );
-
-  onMounted(async () => {
+  watch(options, async () => {
     await fetch();
   });
 
