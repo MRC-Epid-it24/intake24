@@ -1,33 +1,24 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <review-meal-list
-      v-if="!$vuetify.breakpoint.mobile && showReviewMealListCheckbox"
-      v-bind="{ meals }"
+      v-if="!$vuetify.breakpoint.mobile && (showReviewMealListCheckbox || showReviewMealListScroll)"
+      v-bind="{ meals, showReviewMealListCheckbox, showReviewMealListScroll }"
       @action="action"
+      @reached-bottom="setReachedBottom"
       @update-reviewed="updateReviewed"
     >
     </review-meal-list>
-    <review-meal-list-scroll
-      v-if="!$vuetify.breakpoint.mobile && showReviewMealListScroll"
-      v-bind="{ meals }"
-      @action="action"
-      @reached-bottom="setReachedBottom"
-    >
-    </review-meal-list-scroll>
     <review-meal-list-mobile
-      v-if="$vuetify.breakpoint.mobile && showReviewMealListMobileCheckbox"
-      v-bind="{ meals }"
+      v-if="
+        $vuetify.breakpoint.mobile &&
+        (showReviewMealListMobileCheckbox || showReviewMealListMobileScroll)
+      "
+      v-bind="{ meals, showReviewMealListMobileCheckbox, showReviewMealListMobileScroll }"
       @action="action"
+      @reached-bottom-mobile="setReachedBottomMobile"
       @update-reviewed="updateReviewedMobile"
     >
     </review-meal-list-mobile>
-    <review-meal-list-mobile-scroll
-      v-if="$vuetify.breakpoint.mobile && showReviewMealListMobileScroll"
-      v-bind="{ meals }"
-      @action="action"
-      @reached-bottom-mobile="setReachedBottomMobile"
-    >
-    </review-meal-list-mobile-scroll>
     <template #actions>
       <next :disabled="isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
@@ -53,12 +44,7 @@ import type { PropType } from 'vue';
 import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
-import {
-  ReviewMealList,
-  ReviewMealListMobile,
-  ReviewMealListMobileScroll,
-  ReviewMealListScroll,
-} from '@intake24/survey/components/layouts';
+import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
@@ -69,8 +55,6 @@ export default defineComponent({
   components: {
     ReviewMealList,
     ReviewMealListMobile,
-    ReviewMealListScroll,
-    ReviewMealListMobileScroll,
   },
 
   mixins: [createBasePrompt<'submit-prompt'>()],
@@ -93,37 +77,19 @@ export default defineComponent({
 
     const reachedBottomMobile = ref<boolean>(false);
 
-    const showReviewMealListCheckbox = computed(() => {
-      if (props.prompt.review['desktop'] === 'checkbox') {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const showReviewMealListCheckbox = computed(
+      () => props.prompt.review['desktop'] === 'checkbox'
+    );
 
-    const showReviewMealListMobileCheckbox = computed(() => {
-      if (props.prompt.review['mobile'] === 'checkbox') {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const showReviewMealListMobileCheckbox = computed(
+      () => props.prompt.review['mobile'] === 'checkbox'
+    );
 
-    const showReviewMealListScroll = computed(() => {
-      if (props.prompt.review['desktop'] === 'scroll') {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const showReviewMealListScroll = computed(() => props.prompt.review['desktop'] === 'scroll');
 
-    const showReviewMealListMobileScroll = computed(() => {
-      if (props.prompt.review['mobile'] === 'scroll') {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    const showReviewMealListMobileScroll = computed(
+      () => props.prompt.review['mobile'] === 'scroll'
+    );
 
     const updateReviewed = (newReviewed: string[]) => {
       reviewed.value = newReviewed;

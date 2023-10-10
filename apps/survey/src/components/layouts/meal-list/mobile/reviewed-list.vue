@@ -14,6 +14,7 @@
               @update:context-id="updateContextId"
             ></meal-item>
             <v-checkbox
+              v-if="showReviewMealListMobileCheckbox"
               v-model="reviewed"
               class="review-checkbox__checkbox pl-3"
               label="Reviewed"
@@ -28,7 +29,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import type { MealState } from '@intake24/common/types';
 import { useMealUtils } from '@intake24/survey/composables';
@@ -45,6 +46,14 @@ export default defineComponent({
     meals: {
       type: Array as PropType<MealState[]>,
       required: true,
+    },
+    showReviewMealListMobileCheckbox: {
+      type: Boolean,
+      default: false,
+    },
+    showReviewMealListMobileScroll: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -64,6 +73,35 @@ export default defineComponent({
       contextId.value = id === contextId.value ? undefined : id;
     };
 
+    const checkScroll = (entries: IntersectionObserverEntry[]) => {
+      const el = entries[0].target as HTMLElement;
+      const isBottom = entries[0].isIntersecting;
+      const isScrollable = el.scrollHeight > el.clientHeight;
+      if (isBottom && (!isScrollable || el.scrollHeight === el.clientHeight)) {
+        ctx.emit('reached-bottom-mobile', true);
+      }
+    };
+
+    let observer: IntersectionObserver | null = null;
+
+    onMounted(() => {
+      const el = document.querySelector('.meal-list__list');
+      if (el && props.showReviewMealListMobileScroll) {
+        observer = new IntersectionObserver(checkScroll, {
+          root: null,
+          rootMargin: '0px',
+          threshold: 1.0,
+        });
+        observer.observe(el);
+      }
+    });
+
+    onBeforeUnmount(() => {
+      if (observer) {
+        observer.unobserve(document.querySelector('.meal-list__list')!);
+      }
+    });
+
     watch(reviewed, (newVal) => {
       ctx.emit('update-reviewed', newVal);
     });
@@ -78,6 +116,7 @@ export default defineComponent({
       selectedFoodId,
       isSelectedFoodInMeal,
       action,
+      checkScroll,
     };
   },
 });
