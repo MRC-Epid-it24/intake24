@@ -5,6 +5,7 @@ export { default as DrinkScalePanel } from './DrinkScalePanel.vue';
 export { default as EditableFoodList } from './EditableFoodList.vue';
 export { default as ImageMapSelector } from './ImageMapSelector.vue';
 export { default as LinkedQuantity } from './LinkedQuantity.vue';
+export * from './LinkedQuantity.vue';
 export { default as PinchZoomImageMapSelector } from './PinchZoomImageMapSelector.vue';
 export { default as QuantityBadge } from './QuantityBadge.vue';
 export { default as QuantityCard } from './QuantityCard.vue';

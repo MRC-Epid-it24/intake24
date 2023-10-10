@@ -18,7 +18,7 @@
       <quantity-card
         :confirm="confirm"
         :max="parentQuantity"
-        :show-all="!!linkedQuantityCategories.length"
+        :show-all="!!linkedQuantity.categories.length"
         :value="value"
         @input="updateQuantity"
         @update:confirm="updateConfirm"
@@ -40,6 +40,11 @@ import { useFoodUtils } from '@intake24/survey/composables';
 import QuantityCard from './QuantityCard.vue';
 import { useStandardUnits } from './use-standard-units';
 
+export type LinkedQuantityFood = {
+  food: EncodedFood;
+  categories: Prompts['guide-image-prompt']['linkedQuantityCategories'];
+};
+
 export default defineComponent({
   name: 'LinkedQuantity',
 
@@ -54,12 +59,9 @@ export default defineComponent({
       type: Object as PropType<EncodedFood | MissingFood>,
       required: true,
     },
-    linkedQuantityCategories: {
-      type: Array as PropType<Prompts['guide-image-prompt']['linkedQuantityCategories']>,
+    linkedQuantity: {
+      type: Object as PropType<LinkedQuantity>,
       required: true,
-    },
-    parentFood: {
-      type: Object as PropType<EncodedFood>,
     },
     prompt: {
       type: Object as PropType<Prompt>,
@@ -79,7 +81,7 @@ export default defineComponent({
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const linkedQuantityUnit = computed(() => {
-      const unit = props.linkedQuantityCategories[0]?.unit;
+      const unit = props.linkedQuantity.categories[0]?.unit;
       if (!unit || !standardUnitRefs.value[unit]) return i18n.t('prompts.linkedAmount.unit');
 
       return translate(standardUnitRefs.value[unit].howMany, {
@@ -88,8 +90,8 @@ export default defineComponent({
     });
 
     const parentQuantity = computed(() =>
-      props.parentFood?.portionSize?.method === 'guide-image'
-        ? props.parentFood.portionSize.quantity
+      props.linkedQuantity.food?.portionSize?.method === 'guide-image'
+        ? props.linkedQuantity.food.portionSize.quantity
         : 0
     );
 
@@ -102,9 +104,9 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      if (!props.linkedQuantityCategories.length) return;
+      if (!props.linkedQuantity.categories.length) return;
 
-      const names = props.linkedQuantityCategories.map(({ unit }) => unit).filter(Boolean);
+      const names = props.linkedQuantity.categories.map(({ unit }) => unit).filter(Boolean);
       if (names.length) await fetchStandardUnits(names as string[]);
 
       if (!props.confirm) updateQuantity(parentQuantity.value);

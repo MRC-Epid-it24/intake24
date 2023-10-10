@@ -67,11 +67,10 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
-        v-if="linkedQuantityCategories.length"
-        v-bind="{ food, linkedQuantityCategories, parentFood, prompt }"
+        v-if="linkedQuantity"
+        v-bind="{ disabled: !quantityValid, food, linkedQuantity, prompt }"
         v-model="portionSize.linkedQuantity"
         :confirm.sync="linkedQuantityConfirmed"
-        :disabled="!quantityValid"
         @input="selectLinkedQuantity"
         @update:confirm="confirmLinkedQuantity"
       ></linked-quantity>
@@ -89,12 +88,13 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Prompts, PromptStates } from '@intake24/common/prompts';
+import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
 
+import type { LinkedQuantityFood } from '../partials';
 import { LinkedQuantity, QuantityBadge, QuantityCard, useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
 
@@ -110,8 +110,8 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    linkedQuantityCategories: {
-      type: Array as PropType<Prompts['guide-image-prompt']['linkedQuantityCategories']>,
+    linkedQuantity: {
+      type: Object as PropType<LinkedQuantityFood>,
       required: true,
     },
     parameters: {
@@ -166,7 +166,7 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.unitValid, this.quantityValid];
 
-      if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedQuantity.categories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },

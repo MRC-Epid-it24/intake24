@@ -11,7 +11,7 @@ import type {
   PortionSizeStates,
   RecipeBuilder,
 } from '@intake24/common/types';
-import type { UserPortionSizeMethod } from '@intake24/common/types/http';
+import type { UserFoodData, UserPortionSizeMethod } from '@intake24/common/types/http';
 import { useSurvey } from '@intake24/survey/stores';
 
 export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
@@ -123,28 +123,43 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     () => portionSize().parameters as unknown as PortionSizeParameters[T]
   );
 
-  const linkedQuantityCategories = computed(() => {
-    if (parentFoodOptional.value?.type !== 'encoded-food') return [];
+  const linkedQuantityCategories = (data: UserFoodData) =>
+    survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
 
-    const { data, portionSize } = parentFoodOptional.value;
-    if (!portionSize || portionSize.method !== 'guide-image' || portionSize.quantity <= 1)
-      return [];
+  const linkedQuantity = computed(() => {
+    if (
+      parentFoodOptional.value?.type === 'encoded-food' &&
+      parentFoodOptional.value.portionSize?.method === 'guide-image' &&
+      parentFoodOptional.value.portionSize.quantity > 1
+    ) {
+      return {
+        food: parentFoodOptional.value,
+        categories: linkedQuantityCategories(parentFoodOptional.value.data),
+      };
+    }
 
-    return survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
+    if (parentFoodOptional.value?.type === 'recipe-builder') {
+      const food = parentFoodOptional.value.linkedFoods.find(
+        (food) =>
+          food.type === 'encoded-food' &&
+          food.portionSize?.method === 'guide-image' &&
+          food.portionSize.quantity > 1
+      ) as EncodedFood | undefined;
+
+      if (food) return { food, categories: linkedQuantityCategories(food.data) };
+    }
+
+    return undefined;
   });
 
-  const initializeRecipeComponents = (steps: number[]) => {
-    return steps.map((step) => ({
-      ingredients: [],
-      order: step,
-    }));
-  };
+  const initializeRecipeComponents = (steps: number[]) =>
+    steps.map((step) => ({ ingredients: [], order: step }));
 
   return {
     food,
     foodIndex,
     foodOptional,
-    linkedQuantityCategories,
+    linkedQuantity,
     localeId,
     meals,
     parentEncodedFood,
