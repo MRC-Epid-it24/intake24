@@ -78,7 +78,7 @@ export default () => {
       await suite.sharedTests.assertRecordInserted('post', url, output, { input });
     });
 
-    it('should return 400 for duplicate id', async () => {
+    it('should return 409 for duplicate id', async () => {
       const { code } = suite.data.system.language;
 
       await suite.sharedTests.assertInvalidInput('post', url, ['code'], {
@@ -92,6 +92,7 @@ export default () => {
           prototypeLocaleId: null,
           textDirection: 'ltr',
         },
+        code: 409,
       });
     });
   });
