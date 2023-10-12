@@ -1,8 +1,8 @@
 <template>
-  <v-tab-item key="review" value="options">
-    <v-card-title>{{ $t('survey-schemes.prompts.submit-prompt.optionTitle') }}</v-card-title>
+  <v-tab-item key="options" value="options">
+    <v-card-title>{{ $t('survey-schemes.prompts.submit-prompt.review.title') }}</v-card-title>
     <v-card-subtitle>{{
-      $t('survey-schemes.prompts.submit-prompt.optionSubtitle')
+      $t('survey-schemes.prompts.submit-prompt.review.subtitle')
     }}</v-card-subtitle>
     <v-card-text>
       <v-combobox

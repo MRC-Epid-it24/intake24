@@ -393,8 +393,10 @@ const surveySchemes: LocaleMessageObject = {
     'submit-prompt': {
       title: 'Submit',
       subtitle: 'Confirm completion and submit recall',
-      optionTitle: 'Final Review Options',
-      optionSubtitle: 'Choose the option you want for the final review page.',
+      review: {
+        title: 'Final Review Options',
+        subtitle: 'Choose the option you want for the final review page.',
+      },
     },
     // Custom
     'info-prompt': {
