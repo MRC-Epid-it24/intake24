@@ -60,7 +60,7 @@ export default defineComponent({
       required: true,
     },
     linkedQuantity: {
-      type: Object as PropType<LinkedQuantity>,
+      type: Object as PropType<LinkedQuantityFood>,
       required: true,
     },
     prompt: {

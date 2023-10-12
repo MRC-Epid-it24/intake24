@@ -114,7 +114,6 @@ export default defineComponent({
   props: {
     linkedQuantity: {
       type: Object as PropType<LinkedQuantityFood>,
-      required: true,
     },
     parameters: {
       type: Object as PropType<PortionSizeParameters['as-served']>,
@@ -159,7 +158,7 @@ export default defineComponent({
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.linkedQuantity.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedQuantity?.categories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },

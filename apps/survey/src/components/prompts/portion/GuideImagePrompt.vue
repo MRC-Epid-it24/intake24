@@ -102,7 +102,6 @@ export default defineComponent({
     },
     linkedQuantity: {
       type: Object as PropType<LinkedQuantityFood>,
-      required: true,
     },
     parameters: {
       type: Object as PropType<PortionSizeParameters['guide-image']>,
@@ -167,7 +166,7 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.objectValid, this.quantityValid];
 
-      if (this.linkedQuantityCategories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedQuantity?.categories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },
