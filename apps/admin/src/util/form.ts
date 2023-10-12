@@ -40,6 +40,8 @@ export type FormFields<T = Dictionary> = { [P in keyof T]: T[P] };
 
 export type Form<T = Dictionary> = FormDef<T> & FormFields<T>;
 
+const expectedFailStatusCodes = [HttpStatusCode.BadRequest, HttpStatusCode.Conflict] as const;
+
 export default <T extends object = Dictionary>(
   initData: T,
   formConfig: FormConfig<T> = {}
@@ -130,7 +132,7 @@ export default <T extends object = Dictionary>(
     onFail(err): void {
       if (axios.isAxiosError(err)) {
         const { response: { status, data = {} } = {} } = err;
-        if (status === HttpStatusCode.BadRequest && 'errors' in data)
+        if (status !== undefined && expectedFailStatusCodes.includes(status) && 'errors' in data)
           this.errors.record(data.errors);
       }
     },

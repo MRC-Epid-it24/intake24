@@ -16,7 +16,7 @@ export const code: ParamSchema = {
   custom: {
     options: async (value, meta): Promise<void> => {
       if (!(await unique({ model: SystemLocale, condition: { field: 'code', value } })))
-        throw new Error(customTypeErrorMessage('unique._', meta));
+        throw new Error('$unique');
     },
   },
 };
@@ -42,7 +42,7 @@ export const defaults: Schema = {
             options: { where },
           }))
         )
-          throw new Error(customTypeErrorMessage('unique._', meta));
+          throw new Error('$unique');
       },
     },
   },
@@ -66,7 +66,7 @@ export const defaults: Schema = {
             options: { where },
           }))
         )
-          throw new Error(customTypeErrorMessage('unique._', meta));
+          throw new Error('$unique');
       },
     },
   },
@@ -79,7 +79,7 @@ export const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
-        if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
+        if (!language) throw new Error('$exists');
       },
     },
   },
@@ -92,7 +92,7 @@ export const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
-        if (!language) throw new Error(customTypeErrorMessage('exists._', meta));
+        if (!language) throw new Error('$exists');
       },
     },
   },
