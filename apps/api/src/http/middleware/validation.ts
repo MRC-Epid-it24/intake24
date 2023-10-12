@@ -2,21 +2,23 @@ import type { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
 import {
-  formatCustomValidationError,
-  validationErrorStatusCode,
+  createExtendedValidationError,
+  getValidationHttpStatus,
 } from '@intake24/api/http/middleware/validation-errors';
 
 export default (req: Request, res: Response, next: NextFunction): void => {
   const { i18nService } = req.scope.cradle;
 
   const result = validationResult(req);
-  const status = validationErrorStatusCode(result.array());
-  const errors = result.formatWith((error) => formatCustomValidationError(error, i18nService));
+  const errors = result.formatWith((error) => createExtendedValidationError(error, i18nService));
 
   if (errors.isEmpty()) {
     next();
     return;
   }
 
-  res.status(status).json({ errors: errors.mapped(), message: 'Invalid input' });
+  const firstError = errors.array()[0];
+  const status = getValidationHttpStatus(firstError);
+
+  res.status(status).json({ errors: errors.mapped(), message: firstError.msg });
 };
