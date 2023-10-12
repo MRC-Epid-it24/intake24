@@ -26,46 +26,9 @@ export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
         type: Object as PropType<Prompts[P]>,
         required: true,
       },
-      commonPrompt: {
-        type: Object as PropType<Prompt>,
-        required: false,
-      },
       section: {
         type: String as PropType<PromptSection>,
         required: true,
       },
-    },
-
-    setup(props) {
-      const showReviewMealListCheckbox = computed(() => {
-        if (
-          props.commonPrompt &&
-          props.commonPrompt.component === 'submit-prompt' &&
-          props.commonPrompt.review &&
-          props.commonPrompt.review['desktop'] === 'checkbox'
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      const showReviewMealListMobileCheckbox = computed(() => {
-        if (
-          props.commonPrompt &&
-          props.commonPrompt.component === 'submit-prompt' &&
-          props.commonPrompt.review &&
-          props.commonPrompt.review['mobile'] === 'checkbox'
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      return {
-        showReviewMealListCheckbox,
-        showReviewMealListMobileCheckbox,
-      };
     },
   });

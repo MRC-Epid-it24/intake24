@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item key="options" value="options">
+  <v-tab-item key="review" value="options">
     <v-card-title>{{ $t('survey-schemes.prompts.submit-prompt.optionTitle') }}</v-card-title>
     <v-card-subtitle>{{
       $t('survey-schemes.prompts.submit-prompt.optionSubtitle')
@@ -9,7 +9,7 @@
         v-for="key in Object.keys(review)"
         :key="key"
         :items="[false, 'checkbox', 'scroll']"
-        :label="key"
+        :label="$t(`survey-schemes.actions.layouts.${key}`)"
         :value="review[key]"
         @change="update('review', { ...review, [key]: $event })"
       >
