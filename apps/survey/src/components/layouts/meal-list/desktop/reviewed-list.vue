@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-title>
       {{ $t('recall.menu.title') }}
     </v-card-title>
@@ -13,7 +13,7 @@
           @action="action"
         ></component>
         <v-checkbox
-          v-if="showReviewMealListCheckbox"
+          v-if="review === 'checkbox'"
           v-model="reviewed"
           class="review-checkbox__checkbox pl-3"
           label="Reviewed"
@@ -21,7 +21,7 @@
         ></v-checkbox>
       </div>
     </v-list>
-    <v-card-actions>
+    <v-card-actions v-if="!bottomReached" v-intersect="bottomIntersect">
       <v-hover v-slot="{ hover }">
         <v-btn
           block
@@ -40,11 +40,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 
+import type { ReviewOptions } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 
 import { useMealList } from '../use-meal-list';
+import { useReviewList } from '../use-review-list';
 import MealItem from './meal-item.vue';
 import MealItemExpandable from './meal-item-expandable.vue';
 
@@ -62,64 +64,27 @@ export default defineComponent({
       type: Array as PropType<MealState[]>,
       required: true,
     },
-    showReviewMealListCheckbox: {
-      type: Boolean,
-      default: false,
-    },
-    showReviewMealListScroll: {
-      type: Boolean,
+    review: {
+      type: [String, Boolean] as PropType<ReviewOptions>,
       default: false,
     },
   },
 
   setup(props, ctx) {
-    const reviewed = ref([]);
-
+    const { bottomIntersect, bottomReached, reviewed } = useReviewList(props, ctx);
     const { selectedMealId, selectedFoodId, isSelectedFoodInMeal, action } = useMealList(
       props,
       ctx
     );
 
-    const checkScroll = (entries: IntersectionObserverEntry[]) => {
-      const el = entries[0].target as HTMLElement;
-      const isBottom = entries[0].isIntersecting;
-      const isScrollable = el.scrollHeight > el.clientHeight;
-      if (isBottom && (!isScrollable || el.scrollHeight === el.clientHeight)) {
-        ctx.emit('reached-bottom', true);
-      }
-    };
-
-    let observer: IntersectionObserver | null = null;
-
-    onMounted(() => {
-      const el = document.querySelector('.meal-list__list');
-      if (el && props.showReviewMealListScroll) {
-        observer = new IntersectionObserver(checkScroll, {
-          root: null,
-          rootMargin: '0px',
-          threshold: 1.0,
-        });
-        observer.observe(el);
-      }
-    });
-
-    onBeforeUnmount(() => {
-      if (observer) {
-        observer.unobserve(document.querySelector('.meal-list__list')!);
-      }
-    });
-
-    watch(reviewed, (newVal) => {
-      ctx.emit('update-reviewed', newVal);
-    });
-
     return {
+      bottomIntersect,
+      bottomReached,
       reviewed,
       selectedMealId,
       selectedFoodId,
       isSelectedFoodInMeal,
       action,
-      checkScroll,
     };
   },
 });

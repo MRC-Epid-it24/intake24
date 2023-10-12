@@ -1,26 +1,23 @@
 <template>
   <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <review-meal-list
-      v-if="!$vuetify.breakpoint.mobile && (showReviewMealListCheckbox || showReviewMealListScroll)"
-      v-bind="{ meals, showReviewMealListCheckbox, showReviewMealListScroll }"
+      v-if="!$vuetify.breakpoint.mobile && prompt.review['desktop']"
+      v-bind="{ meals, review: prompt.review['desktop'] }"
       @action="action"
-      @reached-bottom="setReachedBottom"
-      @update-reviewed="updateReviewed"
+      @bottom-reached="updateBottomReached('desktop', $event)"
+      @reviewed="updateReviewed('desktop', $event)"
     >
     </review-meal-list>
     <review-meal-list-mobile
-      v-if="
-        $vuetify.breakpoint.mobile &&
-        (showReviewMealListMobileCheckbox || showReviewMealListMobileScroll)
-      "
-      v-bind="{ meals, showReviewMealListMobileCheckbox, showReviewMealListMobileScroll }"
+      v-if="$vuetify.breakpoint.mobile && prompt.review['mobile']"
+      v-bind="{ meals, review: prompt.review['mobile'] }"
       @action="action"
-      @reached-bottom-mobile="setReachedBottomMobile"
-      @update-reviewed="updateReviewedMobile"
+      @bottom-reached="updateBottomReached('mobile', $event)"
+      @reviewed="updateReviewed('mobile', $event)"
     >
     </review-meal-list-mobile>
     <template #actions>
-      <next :disabled="isValid" @click="action('next')">
+      <next :disabled="!isValid" @click="action('next')">
         {{ $t('recall.actions.submit') }}
       </next>
     </template>
@@ -32,7 +29,7 @@
         <v-icon class="pb-1">$add</v-icon>
       </v-btn>
       <v-divider vertical></v-divider>
-      <next-mobile :disabled="isValidMobile" @click="action('next')">
+      <next-mobile :disabled="!isValidMobile" @click="action('next')">
         {{ $t('recall.actions.nav.submit') }}
       </next-mobile>
     </template>
@@ -41,8 +38,9 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 
+import type { PromptLayout } from '@intake24/common/prompts';
 import type { MealState } from '@intake24/common/types';
 import { ReviewMealList, ReviewMealListMobile } from '@intake24/survey/components/layouts';
 import { usePromptUtils } from '@intake24/survey/composables';
@@ -69,96 +67,42 @@ export default defineComponent({
   setup(props, ctx) {
     const { action } = usePromptUtils(props, ctx);
 
-    const reviewed = ref<string[]>([]);
+    const bottomReached = ref<Record<PromptLayout, boolean>>({ desktop: false, mobile: false });
+    const reviewed = ref<Record<PromptLayout, string[]>>({ desktop: [], mobile: [] });
 
-    const reviewedMobile = ref<string[]>([]);
-
-    const reachedBottom = ref<boolean>(false);
-
-    const reachedBottomMobile = ref<boolean>(false);
-
-    const showReviewMealListCheckbox = computed(
-      () => props.prompt.review['desktop'] === 'checkbox'
-    );
-
-    const showReviewMealListMobileCheckbox = computed(
-      () => props.prompt.review['mobile'] === 'checkbox'
-    );
-
-    const showReviewMealListScroll = computed(() => props.prompt.review['desktop'] === 'scroll');
-
-    const showReviewMealListMobileScroll = computed(
-      () => props.prompt.review['mobile'] === 'scroll'
-    );
-
-    const updateReviewed = (newReviewed: string[]) => {
-      reviewed.value = newReviewed;
+    const updateBottomReached = (layout: PromptLayout, value: boolean) => {
+      bottomReached.value[layout] = value;
     };
 
-    const updateReviewedMobile = (newReviewed: string[]) => {
-      reviewedMobile.value = newReviewed;
-    };
-
-    const setReachedBottom = (status: boolean) => {
-      reachedBottom.value = status;
-    };
-
-    const setReachedBottomMobile = (status: boolean) => {
-      reachedBottomMobile.value = status;
+    const updateReviewed = (layout: PromptLayout, value: string[]) => {
+      reviewed.value[layout] = value;
     };
 
     const isValid = computed(() => {
-      if (showReviewMealListScroll.value) {
-        if (!reachedBottom.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+      if (props.prompt.review.desktop === 'scroll') return bottomReached.value.desktop;
 
-      if (showReviewMealListCheckbox.value) {
-        if (props.meals.length !== reviewed.value.length) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
+      if (props.prompt.review.desktop === 'checkbox')
+        return props.meals.length === reviewed.value.desktop.length;
+
+      return true;
     });
 
     const isValidMobile = computed(() => {
-      if (showReviewMealListMobileScroll.value) {
-        if (!reachedBottomMobile.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+      if (props.prompt.review.mobile === 'scroll') return bottomReached.value.mobile;
 
-      if (showReviewMealListMobileCheckbox.value) {
-        if (props.meals.length !== reviewedMobile.value.length) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
+      if (props.prompt.review.mobile === 'checkbox')
+        return props.meals.length === reviewed.value.mobile.length;
+
+      return true;
     });
 
     return {
       action,
       isValid,
       isValidMobile,
+      updateBottomReached,
       updateReviewed,
-      updateReviewedMobile,
-      showReviewMealListCheckbox,
-      showReviewMealListMobileCheckbox,
-      showReviewMealListScroll,
-      showReviewMealListMobileScroll,
-      setReachedBottom,
-      setReachedBottomMobile,
-      reachedBottom,
-      reachedBottomMobile,
+      bottomReached,
     };
   },
 });

@@ -1,5 +1,5 @@
 import type { PromptSection } from '../surveys';
-import type { Actions } from './actions';
+import type { Actions, PromptLayout } from './actions';
 import type { Condition } from './conditions';
 import { type LocaleTranslation, type PortionSizeMethodId, portionSizeMethods } from '../types';
 
@@ -99,6 +99,8 @@ export type LinkedQuantityCategory = {
   code: string;
   unit?: string;
 };
+
+export type ReviewOptions = false | 'scroll' | 'checkbox';
 
 export type Slider = {
   initial: number;
@@ -222,7 +224,7 @@ export type Prompts = {
   'split-food-prompt': BasePrompt & { component: 'split-food-prompt' };
   'submit-prompt': BasePrompt & {
     component: 'submit-prompt';
-    review: Record<'desktop' | 'mobile', false | 'scroll' | 'checkbox'>;
+    review: Record<PromptLayout, ReviewOptions>;
   };
 };
 
