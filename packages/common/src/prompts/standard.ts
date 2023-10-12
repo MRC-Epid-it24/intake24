@@ -130,6 +130,10 @@ export const submitPrompt: Prompts['submit-prompt'] = copy({
   type: 'standard',
   id: 'submit-prompt',
   name: 'Submit prompt',
+  review: {
+    desktop: false,
+    mobile: false,
+  },
 });
 
 export const standardPrompts: Prompt[] = [

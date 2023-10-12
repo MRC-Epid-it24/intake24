@@ -48,6 +48,9 @@ export default defineComponent({
     const survey = useSurvey();
 
     const showSummary = computed(() => {
+      if (props.prompt.component === 'submit-prompt' && props.prompt.review['mobile'] !== false)
+        return false;
+
       if (survey.hasFinished) return false;
 
       return !['preMeals'].includes(props.section);

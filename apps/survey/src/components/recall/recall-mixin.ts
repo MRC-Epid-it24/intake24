@@ -102,7 +102,12 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
-      if (this.hasFinished) return false;
+      if (
+        this.currentPrompt?.section === 'submission' &&
+        this.currentPrompt.prompt.component === 'submit-prompt' &&
+        this.currentPrompt.prompt.review['desktop'] !== false
+      )
+        return false;
 
       // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
       return (

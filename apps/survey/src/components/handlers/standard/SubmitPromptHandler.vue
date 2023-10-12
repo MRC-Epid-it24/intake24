@@ -2,14 +2,13 @@
   <component
     :is="prompt.component"
     :key="prompt.id"
-    v-bind="{ prompt, section }"
+    v-bind="{ meals, prompt, section }"
     @action="action"
   ></component>
 </template>
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
@@ -35,18 +34,16 @@ export default defineComponent({
 
   emits: ['action'],
 
-  methods: {
-    ...mapActions(useSurvey, ['submitRecall']),
+  setup(props, { emit }) {
+    const survey = useSurvey();
 
-    async action(type: string, ...args: [id?: string, params?: object]) {
-      if (type === 'next') await this.submit();
+    const action = async (type: string, ...args: [id?: string, params?: object]) => {
+      if (type === 'next') await survey.submitRecall();
 
-      this.$emit('action', type, ...args);
-    },
+      emit('action', type, ...args);
+    };
 
-    async submit() {
-      await this.submitRecall();
-    },
+    return { action, meals: survey.meals };
   },
 });
 </script>
