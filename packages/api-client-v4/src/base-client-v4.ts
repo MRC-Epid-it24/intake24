@@ -8,8 +8,10 @@ import pLimit from 'p-limit';
 import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
 
 import type { CredentialsV4 } from './credentials';
+import type { ApiClientOptionsV4 } from './options';
 
 const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
+const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 
 export class BaseClientV4 {
   private apiBaseUrl: string;
@@ -27,18 +29,12 @@ export class BaseClientV4 {
   private loginRequest?: Promise<void>;
   private refreshRequest?: Promise<void>;
 
-  public constructor(
-    apiBaseUrl: string,
-    logger: Logger,
-    maxConcurrentRequests: number,
-    refreshToken?: string,
-    credentials?: CredentialsV4
-  ) {
-    this.apiBaseUrl = apiBaseUrl;
-    this.credentials = credentials;
-    this.refreshToken = refreshToken;
+  public constructor(logger: Logger, options: ApiClientOptionsV4) {
+    this.apiBaseUrl = options.apiBaseUrl;
+    this.credentials = options.credentials;
+    this.refreshToken = options.refreshToken;
 
-    this.requestLimit = pLimit(maxConcurrentRequests);
+    this.requestLimit = pLimit(options.maxConcurrentRequests ?? DEFAULT_MAX_CONCURRENT_REQUESTS);
 
     this.logger = logger.child({ service: 'V4 API' });
 
@@ -46,14 +42,14 @@ export class BaseClientV4 {
       ...axios.defaults,
       headers: {},
       validateStatus: null,
-      baseURL: apiBaseUrl,
+      baseURL: this.apiBaseUrl,
     });
 
     this.accessClient = new Axios({
       ...axios.defaults,
       headers: {},
       validateStatus: null,
-      baseURL: apiBaseUrl,
+      baseURL: this.apiBaseUrl,
     });
 
     this.accessClient.interceptors.request.use(

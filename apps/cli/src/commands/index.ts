@@ -1,3 +1,4 @@
+export { default as extractCategories } from './category-extract';
 export { default as findPortionImages } from './find-portion-images';
 export { default as generateEnv } from './generate-env';
 export { default as generateKey } from './generate-key';
