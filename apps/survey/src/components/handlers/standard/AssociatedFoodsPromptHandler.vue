@@ -272,8 +272,6 @@ export default defineComponent({
     }
 
     const action = async (type: string, ...args: [id?: string, params?: object]) => {
-      if (type === 'next') await commitAnswer();
-
       // The 'next' action is forwarded up the hierarchy by the commitAnswer function instead of here.
       //
       // Due to the async nature of the commitAnswer function, it is not guaranteed that the component
@@ -281,6 +279,12 @@ export default defineComponent({
       // could be unmounted because of a re-render triggered by a change made in the commitAnswer function
       // and since in that case the handler component is no longer the child of the RecallDesktop/RecallMobile
       // component the 'next' event could be lost and the next prompt fail to be triggered.
+      if (type === 'next') {
+        await commitAnswer();
+        return;
+      }
+
+      ctx.emit('action', type, ...args);
     };
 
     return {
