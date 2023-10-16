@@ -5,6 +5,7 @@ import * as process from 'process';
 
 import pkg from '../package.json';
 import {
+  extractCategories,
   findPortionImages,
   generateEnv,
   generateKey,
@@ -103,10 +104,20 @@ const run = async () => {
         case 'v3':
           throw new Error('Not implemented');
         case 'v4':
-          return await packageImportV4(version, inputFilePath, options);
+          await packageImportV4(version, inputFilePath, options);
+          return;
         default:
           throw new Error(`Unexpected version option: ${version}`);
       }
+    });
+
+  program
+    .command('extract-categories')
+    .description('Generate a global category list')
+    .argument('<locale>', 'Locale ID')
+    .requiredOption('-o, --output-path [output path]', 'Output file path')
+    .action(async (localeId, options) => {
+      await extractCategories(localeId, options);
     });
 
   await program.parseAsync(process.argv);

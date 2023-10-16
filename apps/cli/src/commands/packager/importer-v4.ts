@@ -3,6 +3,7 @@ import path from 'path';
 
 import type { ApiClientV4 } from '@intake24/api-client-v4';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
+import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import logger from '@intake24/common-backend/services/logger/logger';
 
@@ -112,9 +113,25 @@ export class ImporterV4 {
     await Promise.all(createOps);*/
   }
 
-  public async import(): Promise<void> {
-    logger.warn(`ON CONFLICT: ${this.options.onConflict}`);
+  private async importLocale(localeId: string, locale: PkgLocale): Promise<void> {
+    //const existing = await this.apiClient.imageMaps.get(imageMapId);
 
-    await this.importImageMaps();
+    await this.apiClient.locales.create(localeId, typeConverters.fromPackageLocale(locale));
+  }
+
+  private async importLocales(): Promise<void> {
+    const filePath = path.join(this.workingDir, PkgConstants.LOCALES_FILE_NAME);
+
+    const locales = JSON.parse(await fs.readFile(filePath, 'utf-8')) as Record<string, PkgLocale>;
+
+    const ops = Object.entries(locales).map(([id, locale]) => this.importLocale(id, locale));
+
+    await Promise.all(ops);
+  }
+
+  public async import(): Promise<void> {
+    await this.importLocales();
+
+    //await this.importImageMaps();
   }
 }
