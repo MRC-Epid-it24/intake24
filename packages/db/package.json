@@ -23,7 +23,7 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "lodash": "^4.17.21",
-    "mariadb": "^3.2.1",
+    "mariadb": "^3.2.2",
     "mssql": "^10.0.1",
     "nanoid": "^3.3.6",
     "pg": "^8.11.3",
@@ -34,10 +34,10 @@
   },
   "devDependencies": {
     "@simplewebauthn/typescript-types": "^8.0.0",
-    "@types/lodash": "^4.14.199",
-    "@types/node": "^20.8.3",
-    "@types/pg": "^8.10.3",
-    "@types/validator": "^13.11.2",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^20.8.7",
+    "@types/pg": "^8.10.6",
+    "@types/validator": "^13.11.3",
     "sequelize-cli": "^6.6.1",
     "typescript": "^5.2.2"
   },

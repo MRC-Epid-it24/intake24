@@ -22,8 +22,8 @@
     "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
-    "@types/dompurify": "^3.0.3",
-    "@types/lodash": "^4.14.199",
+    "@types/dompurify": "^3.0.4",
+    "@types/lodash": "^4.14.200",
     "typescript": "^5.2.2"
   },
   "bundledDependencies": [

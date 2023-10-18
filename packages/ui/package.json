@@ -25,7 +25,7 @@
     "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "pinia": "^2.1.6",
+    "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.0",
     "svg-gauge": "^1.0.7",
     "vue": "^2.7.14",
@@ -36,10 +36,10 @@
     "vuetify": "^2.7.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.199",
-    "@types/node": "^20.8.3",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^20.8.7",
     "typescript": "^5.2.2",
-    "vite": "^4.4.11",
+    "vite": "^4.5.0",
     "vite-plugin-pwa": "^0.16.5",
     "workbox-window": "^7.0.0"
   },
