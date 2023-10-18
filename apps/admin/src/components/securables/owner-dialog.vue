@@ -12,12 +12,10 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`${resource}.securables.owner.title`) }}
+          {{ $t('securables.owner.title') }}
         </v-toolbar-title>
         <template #extension>
-          <div class="mx-auto">
-            <v-icon left>$search</v-icon>{{ $t(`${resource}.securables.search`) }}
-          </div>
+          <div class="mx-auto"><v-icon left>$search</v-icon>{{ $t('securables.search') }}</div>
         </template>
       </v-toolbar>
       <v-form @submit.prevent="save">

@@ -1,30 +1,31 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import asServedSets from './as-served-sets';
-import common from './common';
-import dashboard from './dashboard';
-import drinkwareSets from './drinkware-sets';
-import fdbs from './fdbs';
-import feedbackSchemes from './feedback-schemes';
-import foodGroups from './food-groups';
-import guideImages from './guide-images';
-import imageMaps from './image-maps';
-import jobs from './jobs';
-import languages from './languages';
-import locales from './locales';
-import nutrientTables from './nutrient-tables';
-import nutrientTypes from './nutrient-types';
-import nutrientUnits from './nutrient-units';
-import permissions from './permissions';
-import roles from './roles';
-import signInLogs from './sign-in-logs';
-import standardUnits from './standard-units';
-import surveySchemePrompts from './survey-scheme-prompts';
-import surveySchemes from './survey-schemes';
-import surveys from './surveys';
-import tasks from './tasks';
-import user from './user';
-import users from './users';
+import asServedSets from './as-served-sets.json';
+import common from './common.json';
+import dashboard from './dashboard.json';
+import drinkwareSets from './drinkware-sets.json';
+import fdbs from './fdbs.json';
+import feedbackSchemes from './feedback-schemes.json';
+import foodGroups from './food-groups.json';
+import guideImages from './guide-images.json';
+import imageMaps from './image-maps.json';
+import jobs from './jobs.json';
+import languages from './languages.json';
+import locales from './locales.json';
+import nutrientTables from './nutrient-tables.json';
+import nutrientTypes from './nutrient-types.json';
+import nutrientUnits from './nutrient-units.json';
+import permissions from './permissions.json';
+import roles from './roles.json';
+import securables from './securables.json';
+import signInLogs from './sign-in-logs.json';
+import standardUnits from './standard-units.json';
+import surveySchemePrompts from './survey-scheme-prompts.json';
+import surveySchemes from './survey-schemes.json';
+import surveys from './surveys.json';
+import tasks from './tasks.json';
+import user from './user.json';
+import users from './users.json';
 
 const messages: LocaleMessages = {
   common,
@@ -44,6 +45,7 @@ const messages: LocaleMessages = {
   'nutrient-units': nutrientUnits,
   permissions,
   roles,
+  securables,
   'sign-in-logs': signInLogs,
   'standard-units': standardUnits,
   'survey-schemes': surveySchemes,

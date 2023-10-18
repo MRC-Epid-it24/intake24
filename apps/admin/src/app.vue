@@ -217,7 +217,7 @@ export default defineComponent({
       if (parent) items.push(...this.buildBreadCrumb(parent, action, currentParams));
 
       const name = parent ? `${parent}-${module}` : module;
-      const title = parent ? `${parent}.${module}` : module;
+      const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
       const identifier = parent ? `${pluralize.singular(module)}Id` : 'id';
       const { [identifier]: currentId, id } = currentParams;
 

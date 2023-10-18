@@ -1,0 +1,286 @@
+{
+  "_": "Feedback scheme",
+  "title": "Feedback schemes",
+  "read": "Feedback scheme detail",
+  "create": "Add feedback scheme",
+  "edit": "Edit feedback scheme",
+  "delete": "Delete feedback scheme",
+  "load": "Load from scheme",
+  "none": "No feedback scheme found",
+
+  "types": {
+    "_": "Feedback type",
+    "title": "Feedback types",
+    "default": "Default",
+    "playful": "Playful"
+  },
+
+  "outputs": {
+    "_": "Output",
+    "title": "Outputs",
+    "print": "Print",
+    "email": "Email",
+    "download": "Download"
+  },
+
+  "physicalDataFields": {
+    "_": "Physical data fields",
+    "title": "Physical data fields",
+    "required": "Field {field} is needed to calculate feedback.",
+    "notRequired": "Field {field} is not needed, it can be removed.",
+    "sex": "Sex",
+    "weightKg": "Weight",
+    "heightCm": "Height",
+    "physicalActivityLevelId": "Physical activity level",
+    "birthdate": "Birth date",
+    "weightTarget": "Weight target"
+  },
+
+  "sections": {
+    "_": "Section",
+    "title": "Sections"
+  },
+
+  "copy": {
+    "_": "Copy",
+    "title": "Copy feedback scheme",
+    "name": "New feedback scheme name"
+  },
+
+  "preview": {
+    "_": "Preview",
+    "title": "Feedback preview"
+  },
+
+  "ranges": {
+    "_": "Range",
+    "start": "Start",
+    "end": "End"
+  },
+
+  "age": {
+    "_": "Age",
+    "range": "Age range interval",
+    "start": "Age range start",
+    "end": "Age range end"
+  },
+
+  "height": {
+    "_": "Height"
+  },
+
+  "weight": {
+    "_": "Weight"
+  },
+
+  "sexes": {
+    "_": "Sex",
+    "m": "Male",
+    "f": "Female"
+  },
+
+  "sentiments": {
+    "_": "Sentiment",
+    "title": "Sentiments",
+    "add": "Add sentiment",
+    "remove": "Remove sentiment",
+    "too_low": "Too low",
+    "low": "Low",
+    "bit_low": "Bit low",
+    "good": "Good",
+    "excellent": "Excellent",
+    "high": "High",
+    "bit_high": "Bit high",
+    "too_high": "Too high"
+  },
+
+  "characterTypes": {
+    "_": "Character type",
+    "battery": "Battery",
+    "bread": "Bread",
+    "candy": "Candy",
+    "salmon": "Salmon",
+    "sausage": "Sausage",
+    "egg": "Egg",
+    "apple": "Apple",
+    "strawberry": "Strawberry",
+    "burger": "Burger",
+    "fries": "Fries",
+    "milk": "Milk",
+    "iron": "Iron",
+    "folate": "Folate",
+    "co2": "CO2"
+  },
+
+  "characterSentimentTypes": {
+    "_": "Character sentiment type",
+    "title": "Character sentiment types",
+    "danger": "Danger",
+    "warning": "Warning",
+    "happy": "Happy",
+    "exciting": "Exciting"
+  },
+
+  "nutrientRuleTypes": {
+    "_": "Nutrient rule type",
+    "title": "Nutrient rule types",
+    "energy_divided_by_bmr": "Energy divided by BMR",
+    "percentage_of_energy": "Percentage of energy",
+    "per_unit_of_weight": "Per unit of weight",
+    "range": "Range"
+  },
+
+  "colors": {
+    "_": "Color",
+    "title": "Color list",
+    "edit": "Edit color",
+    "max": {
+      "_": "Number of colors",
+      "title": "Number of colors",
+      "required": "Value must be an integer"
+    }
+  },
+
+  "physicalActivityLevels": {
+    "_": "Physical activity level",
+    "title": "Physical activity levels"
+  },
+
+  "top-foods": {
+    "_": "Top food",
+    "title": "Top foods",
+    "tab": "Top foods",
+    "max": {
+      "_": "Foods number",
+      "title": "Number of foods"
+    },
+    "other": "Other food"
+  },
+
+  "meals": {
+    "_": "Meals",
+    "title": "Meals",
+    "tab": "Meals",
+    "chart": "Meal breakdown chart",
+    "table": "Meal summary table",
+    "colors": {
+      "_": "Meal color",
+      "title": "Meal colors"
+    },
+    "fields": {
+      "_": "Meal field",
+      "title": "Meal fields",
+      "create": "Add field",
+      "edit": "Edit field",
+      "remove": "Remove field",
+      "reset": {
+        "_": "Reset meal fields",
+        "text": "Reset meal fields to default list"
+      },
+      "id": "Field ID",
+      "header": "Field header",
+      "value": "Field value",
+      "types": {
+        "_": "Field type",
+        "title": "Field types",
+        "standard": "Standard field",
+        "custom": "Custom prompt",
+        "nutrient": "Nutrients",
+        "name": "Meal name",
+        "time": "Meal time",
+        "hours": "Meal time hours",
+        "minutes": "Meal time minutes",
+        "duration": "Meal duration"
+      },
+      "validation": {
+        "required": "Field must be filled in.",
+        "unique": "Field already exists in current list."
+      }
+    }
+  },
+
+  "cards": {
+    "_": "Card",
+    "title": "Cards",
+    "tab": "Cards",
+    "add": "Add card",
+    "edit": "Edit card",
+    "remove": "Remove card",
+    "type": "Card type",
+    "options": "Card options",
+    "name": "Card name",
+    "required": "Card name is required.",
+    "description": "Description",
+    "showRecommendations": "Show feedback recommendations",
+
+    "tabs": {
+      "general": "General",
+      "content": "Content",
+      "unit": "Unit",
+      "thresholds": "Thresholds",
+      "nutrients": "Nutrients"
+    },
+
+    "character": {
+      "title": "Character",
+      "subtitle": "Character / Nutrient"
+    },
+    "nutrient-group": {
+      "title": "Nutrient group",
+      "subtitle": "Feedback grouping intake based on nutrient list"
+    },
+    "five-a-day": {
+      "title": "Five A Day",
+      "subtitle": "Five A Day feedback"
+    },
+
+    "thresholds": {
+      "_": "Threshold",
+      "title": "Thresholds",
+      "low": "Lower threshold limit",
+      "high": "Upper threshold limit",
+      "enabled": "Enable threshold",
+      "message": "Warning message"
+    },
+
+    "unit": {
+      "name": "Unit name",
+      "description": "Unit description",
+      "required": "Unit name is required."
+    }
+  },
+
+  "demographic-groups": {
+    "_": "Demographic group",
+    "title": "Demographic groups",
+    "tab": "Demographic groups",
+    "create": "New demographic group",
+    "edit": "Edit demographic group",
+    "remove": "Remove demographic group",
+
+    "tabs": {
+      "general": "General",
+      "sectors": "Scale sectors"
+    },
+
+    "sectors": {
+      "_": "Scale sector",
+      "title": "Scale sectors",
+      "add": "Add scale sector",
+      "remove": "Remove scale sector"
+    }
+  },
+
+  "henry-coefficients": {
+    "_": "Henry coefficient",
+    "title": "Henry coefficients",
+    "tab": "Henry coefficients",
+    "create": "New henry coefficient",
+    "edit": "Edit henry coefficient",
+    "remove": "Remove henry coefficient",
+
+    "constant": "Constant",
+    "weightCoefficient": "Weight coefficient",
+    "heightCoefficient": "Height coefficient"
+  }
+}

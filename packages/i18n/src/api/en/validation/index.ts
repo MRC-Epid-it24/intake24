@@ -1,15 +1,11 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import admin from './admin';
-import attributes from './attributes';
-import surveys from './surveys';
-import types from './types';
+import attributes from './attributes.json';
+import types from './types.json';
 
 const messages: LocaleMessages = {
-  admin,
   attributes,
   types,
-  surveys,
 };
 
 export default messages;

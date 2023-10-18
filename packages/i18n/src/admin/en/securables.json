@@ -1,0 +1,49 @@
+{
+  "_": "Security",
+  "title": "Security",
+  "tab": "Security",
+
+  "add": "Add user access",
+  "edit": "Edit user access",
+  "search": "Search for user",
+  "create": "Create new user",
+
+  "owner": {
+    "_": "Owner",
+    "title": "Ownership"
+  },
+
+  "actions": {
+    "_": "Resource action",
+    "title": "Resource actions",
+    "read": "Read record",
+    "edit": "Edit record",
+    "delete": "Delete record",
+    "copy": "Copy record",
+    "securables": "Security",
+
+    "cards": "Cards",
+    "top-foods": "Top foods",
+    "meals": "Meals",
+    "demographic-groups": "Demographic groups",
+    "henry-coefficients": "Henry coefficients",
+
+    "translations": "Translations",
+
+    "food-list": "Food list",
+    "food-ranking": "Food ranking",
+    "split-lists": "Split lists",
+    "recipe-foods": "Recipe foods",
+    "split-words": "Split words",
+    "synonym-sets": "Synonym sets",
+    "tasks": "Tasks",
+
+    "prompts": "Prompts",
+    "data-export": "Data export",
+
+    "overrides": "Overrides",
+    "respondents": "Respondents",
+    "submissions": "Submissions",
+    "support": "Support"
+  }
+}

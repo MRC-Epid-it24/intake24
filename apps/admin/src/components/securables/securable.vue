@@ -3,11 +3,11 @@
     <v-toolbar color="grey lighten-5" flat tile>
       <v-icon color="secondary" left>fas fa-shield-halved</v-icon>
       <v-toolbar-title class="font-weight-medium">
-        {{ $t(`${resource}.securables.title`) }}
+        {{ $t('securables.title') }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="d-flex align-center font-weight-medium text-button">
-        {{ $t(`${resource}.securables.owner._`) }}:
+        {{ $t('securables.owner._') }}:
         <owner-dialog v-bind="{ api, owner, resource }" ref="ownerDialog"></owner-dialog>
       </div>
     </v-toolbar>
@@ -113,7 +113,7 @@ export default defineComponent({
           align: 'start',
         },
         {
-          text: this.$t(`${resource}.securables.actions._`),
+          text: this.$t('securables.actions._'),
           sortable: false,
           value: 'securables',
           align: 'start',

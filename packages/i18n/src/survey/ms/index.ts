@@ -1,9 +1,9 @@
 import type { LocaleMessages } from 'vue-i18n';
 
-import common from './common';
-import profile from './profile';
-import recall from './recall';
-import survey from './survey';
+import common from './common.json';
+import profile from './profile.json';
+import recall from './recall.json';
+import survey from './survey.json';
 
 const messages: LocaleMessages = {
   common,

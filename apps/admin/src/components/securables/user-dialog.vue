@@ -9,7 +9,7 @@
         v-on="on"
         @click.stop="add"
       >
-        <v-icon left>fas fa-user-plus</v-icon>{{ $t(`${resource}.securables.add`) }}
+        <v-icon left>fas fa-user-plus</v-icon>{{ $t('securables.add') }}
       </v-btn>
     </template>
     <v-card :loading="isLoading" :tile="$vuetify.breakpoint.smAndDown">
@@ -18,17 +18,17 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`${resource}.securables.${isEdit ? 'edit' : 'add'}`) }}
+          {{ $t(`securables.${isEdit ? 'edit' : 'add'}`) }}
         </v-toolbar-title>
         <template v-if="!isEdit" #extension>
           <v-tabs v-model="tab" grow>
             <v-tab key="search">
               <v-icon left>$search</v-icon>
-              {{ $t(`${resource}.securables.search`) }}
+              {{ $t('securables.search') }}
             </v-tab>
             <v-tab key="create">
               <v-icon left>fas fa-user-plus</v-icon>
-              {{ $t(`${resource}.securables.create`) }}
+              {{ $t('securables.create') }}
             </v-tab>
           </v-tabs>
         </template>
@@ -114,13 +114,13 @@
           </v-tab-item>
         </v-tabs-items>
         <v-card-text>
-          <v-card-title>{{ $t(`${resource}.securables.actions.title`) }}</v-card-title>
+          <v-card-title>{{ $t('securables.actions.title') }}</v-card-title>
           <v-row no-gutters>
             <v-col v-for="action in actions" :key="action" cols="12" sm="6">
               <v-checkbox
                 v-model="form.actions"
                 dense
-                :label="$t(`${resource}.securables.actions.${action}`)"
+                :label="$t(`securables.actions.${action}`)"
                 :prepend-inner-icon="
                   form.actions.includes(action) ? `fas fa-unlock` : `fas fa-lock`
                 "
