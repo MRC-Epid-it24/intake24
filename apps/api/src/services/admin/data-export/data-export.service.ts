@@ -16,6 +16,7 @@ import type {
   WhereOptions,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { logger } from '@intake24/common-backend/services';
 import {
   Op,
   Survey,
@@ -256,7 +257,6 @@ const dataExportService = ({
 
     const { slug, surveyScheme } = survey;
     const options = getSubmissionOptions(input);
-
     const fields = await getExportFields(surveyScheme.dataExport);
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-survey-data-export-${slug}-${timestamp}.csv`;
