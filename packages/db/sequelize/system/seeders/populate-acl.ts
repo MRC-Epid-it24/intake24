@@ -32,6 +32,14 @@ const permissions = [
   { name: 'feedback-schemes|edit', displayName: 'Edit feedback schemes' },
   { name: 'feedback-schemes|delete', displayName: 'Delete feedback schemes' },
   { name: 'feedback-schemes|cards', displayName: 'Feedback scheme cards' },
+  {
+    name: 'feedback-schemes|demographic-groups',
+    displayName: 'Feedback scheme demographic groups',
+  },
+  {
+    name: 'feedback-schemes|henry-coefficients',
+    displayName: 'Feedback scheme henry coefficients',
+  },
   { name: 'feedback-schemes|top-foods', displayName: 'Feedback scheme top foods' },
   { name: 'feedback-schemes|meals', displayName: 'Feedback scheme meals' },
   { name: 'feedback-schemes|copy', displayName: 'Copy feedback schemes' },
