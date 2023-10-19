@@ -16,7 +16,6 @@ import type {
   WhereOptions,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { logger } from '@intake24/common-backend/services';
 import {
   Op,
   Survey,
