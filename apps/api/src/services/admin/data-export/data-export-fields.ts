@@ -120,6 +120,11 @@ const dataExportFields = () => {
         return aliases && aliases.length ? aliases[0].username : undefined;
       },
     },
+    {
+      id: 'slug',
+      label: 'Survey Slug',
+      value: ({ food }: ExportRow) => food.meal?.submission?.survey?.slug,
+    },
   ];
 
   /**

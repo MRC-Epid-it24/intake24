@@ -98,6 +98,7 @@ User custom fields are key-value pairs, set up during respondent account creatio
 
 - `surveyId` - unique survey identifier, sequence number
 - `username` - survey-unique respondent identifier attached to both user and survey record (aka `user survey alias`)
+- `slug` - unique survey slug(name) used as part of the survey URL (aka `https://intake24.org/{SLUG}/recall`)
 
 #### Submission record fields
 

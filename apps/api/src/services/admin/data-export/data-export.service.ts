@@ -256,7 +256,6 @@ const dataExportService = ({
 
     const { slug, surveyScheme } = survey;
     const options = getSubmissionOptions(input);
-
     const fields = await getExportFields(surveyScheme.dataExport);
     const timestamp = formatDate(new Date(), 'yyyyMMdd-HHmmss');
     const filename = `intake24-survey-data-export-${slug}-${timestamp}.csv`;

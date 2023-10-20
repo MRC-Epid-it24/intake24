@@ -49,6 +49,7 @@ export const submissionScope = (
           { association: 'missingFoods', separate: true },
         ],
       },
+      { association: 'survey', attributes: ['id', 'slug'] },
     ],
     order: [
       ['submissionTime', 'ASC'],
