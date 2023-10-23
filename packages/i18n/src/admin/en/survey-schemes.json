@@ -386,7 +386,10 @@
       "subtitle": "Confirm completion and submit recall",
       "review": {
         "title": "Final Review Options",
-        "subtitle": "Choose the option you want for the final review page."
+        "subtitle": "Choose the option you want for the final review page.",
+        "false": "Do not review",
+        "scroll": "Scroll to bottom to pass review",
+        "checkbox": "Tick meal check to pass review"
       }
     },
 
