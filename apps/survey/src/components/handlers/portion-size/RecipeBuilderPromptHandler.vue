@@ -10,7 +10,7 @@
       section,
     }"
     @action="action"
-    @add-food="addLinkedFood"
+    @add-food="addingIngredientsAsALinkedFood"
     @input="update"
   ></recipe-builder-prompt>
 </template>
@@ -19,10 +19,14 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Prompts, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
+import type {
+  Prompts,
+  PromptStates,
+  RecipeBuilderStepIngredietData,
+  RecipeBuilderStepState,
+} from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, RecipeFoodStepsType } from '@intake24/common/types';
-import type { UserFoodData } from '@intake24/common/types/http';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -74,7 +78,18 @@ export default defineComponent({
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
-    const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number; id: string }) => {
+    const addingIngredientsAsALinkedFood = async (
+      ingredients: RecipeBuilderStepIngredietData[][]
+    ) => {
+      ingredients.forEach(async (stepIngredients) => {
+        stepIngredients.forEach(async (ingredient) => {
+          await addLinkedFood(ingredient);
+        });
+      });
+      commitAnswer();
+    };
+
+    const addLinkedFood = async (data: RecipeBuilderStepIngredietData) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
 
       const ingredientToAdd: EncodedFood = {
@@ -159,6 +174,7 @@ export default defineComponent({
       update,
       action,
       addLinkedFood,
+      addingIngredientsAsALinkedFood,
     };
   },
 });
