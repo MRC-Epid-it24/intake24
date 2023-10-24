@@ -66,10 +66,10 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')"></next>
+      <next :disabled="!isValid" @click="updateStepsIngredients"></next>
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
+      <next-mobile :disabled="!isValid" @click="updateStepsIngredients"></next-mobile>
     </template>
   </base-layout>
 </template>
@@ -170,7 +170,6 @@ export default defineComponent({
       }
       if (foodToRemove === undefined) return;
       this.update();
-      this.action('remove', foodToRemove[0].id, data.index);
     },
 
     update() {
@@ -223,6 +222,7 @@ export default defineComponent({
           code: data.ingredient.code,
           name: data.ingredient.localName,
           id: data.id ?? '',
+          data: data,
         });
       }
 
@@ -237,8 +237,6 @@ export default defineComponent({
 
       this.updateActiveStep(ingredientIndex);
       this.goToNextIfCan(ingredientIndex);
-
-      this.$emit('add-food', data);
     },
 
     goToNextIfCan(index: number) {
@@ -255,6 +253,14 @@ export default defineComponent({
 
     onConfirmToggleIngredients(index: number) {
       this.goToNextIfCan(index);
+    },
+
+    updateStepsIngredients() {
+      console.log('Updating Steps Ingredients');
+      const chosenIngredients = this.recipeSteps.map(
+        (step) => step.selectedFoods?.map((food) => food.data)
+      );
+      this.$emit('add-food', chosenIngredients);
     },
 
     action(type: string, id?: string, stepId?: number) {

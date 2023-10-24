@@ -10,7 +10,7 @@
       section,
     }"
     @action="action"
-    @add-food="addLinkedFood"
+    @add-food="addingIngredientsAsALinkedFood"
     @input="update"
   ></recipe-builder-prompt>
 </template>
@@ -19,10 +19,14 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { Prompts, PromptStates, RecipeBuilderStepState } from '@intake24/common/prompts';
+import type {
+  Prompts,
+  PromptStates,
+  RecipeBuilderStepIngredietData,
+  RecipeBuilderStepState,
+} from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, RecipeFoodStepsType } from '@intake24/common/types';
-import type { UserFoodData } from '@intake24/common/types/http';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -74,7 +78,18 @@ export default defineComponent({
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
-    const addLinkedFood = async (data: { ingredient: UserFoodData; idx: number; id: string }) => {
+    const addingIngredientsAsALinkedFood = async (
+      ingredients: RecipeBuilderStepIngredietData[][]
+    ) => {
+      ingredients.forEach(async (stepIngredients) => {
+        stepIngredients.forEach(async (ingredient) => {
+          await addLinkedFood(ingredient);
+        });
+      });
+      commitAnswer();
+    };
+
+    const addLinkedFood = async (data: RecipeBuilderStepIngredietData) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
 
       const ingredientToAdd: EncodedFood = {
@@ -124,29 +139,9 @@ export default defineComponent({
       ctx.emit('action', 'next');
     };
 
-    const deleteComponentAndThenFood = (type: string, id: string, stepId: number) => {
-      const recipeParent = survey.selectedFoodOptional;
-      if (recipeParent?.type === 'recipe-builder') {
-        const updatedComponents = [...recipeParent.components];
-        if (updatedComponents[stepId] === undefined) return;
-        updatedComponents[stepId].ingredients = updatedComponents[stepId].ingredients.filter(
-          (i) => i !== id
-        );
-        survey.updateFood({
-          foodId: foodId,
-          update: { components: updatedComponents },
-        });
-      }
-      ctx.emit('action', type, id);
-    };
-
-    const action = async (
-      type: string,
-      ...args: [id?: string, stepId?: number, params?: object]
-    ) => {
+    const action = async (type: string) => {
       if (type === 'next') commitAnswer();
-      if (type === 'remove')
-        deleteComponentAndThenFood('deleteFood', args[0] as string, args[1] as number);
+      else console.log('Unhandled action', type);
     };
 
     return {
@@ -159,6 +154,7 @@ export default defineComponent({
       update,
       action,
       addLinkedFood,
+      addingIngredientsAsALinkedFood,
     };
   },
 });

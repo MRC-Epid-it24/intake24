@@ -5,7 +5,7 @@ import type {
   RecipeFood,
   RequiredLocaleTranslation,
 } from '../types';
-import type { FoodHeader } from '../types/http';
+import type { FoodHeader, UserFoodData } from '../types/http';
 
 export type AssociatedFoodPromptItem = {
   confirmed?: 'yes' | 'no';
@@ -20,10 +20,13 @@ export type AssociatedFoodPrompt = {
   foods: AssociatedFoodPromptItem[];
 };
 
+export type RecipeBuilderStepIngredietData = { ingredient: UserFoodData; idx: number; id: string };
+
 export type SelectedFoodRecipeBuilderItemState = {
   code: string;
   name: string;
   id: string;
+  data: RecipeBuilderStepIngredietData;
 };
 
 export type RecipeBuilderStepState = {
