@@ -139,29 +139,9 @@ export default defineComponent({
       ctx.emit('action', 'next');
     };
 
-    const deleteComponentAndThenFood = (type: string, id: string, stepId: number) => {
-      const recipeParent = survey.selectedFoodOptional;
-      if (recipeParent?.type === 'recipe-builder') {
-        const updatedComponents = [...recipeParent.components];
-        if (updatedComponents[stepId] === undefined) return;
-        updatedComponents[stepId].ingredients = updatedComponents[stepId].ingredients.filter(
-          (i) => i !== id
-        );
-        survey.updateFood({
-          foodId: foodId,
-          update: { components: updatedComponents },
-        });
-      }
-      ctx.emit('action', type, id);
-    };
-
-    const action = async (
-      type: string,
-      ...args: [id?: string, stepId?: number, params?: object]
-    ) => {
+    const action = async (type: string) => {
       if (type === 'next') commitAnswer();
-      if (type === 'remove')
-        deleteComponentAndThenFood('deleteFood', args[0] as string, args[1] as number);
+      else console.log('Unhandled action', type);
     };
 
     return {

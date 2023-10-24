@@ -170,7 +170,6 @@ export default defineComponent({
       }
       if (foodToRemove === undefined) return;
       this.update();
-      //this.action('remove', foodToRemove[0].id, data.index);
     },
 
     update() {
@@ -238,8 +237,6 @@ export default defineComponent({
 
       this.updateActiveStep(ingredientIndex);
       this.goToNextIfCan(ingredientIndex);
-
-      //this.$emit('add-food', data);
     },
 
     goToNextIfCan(index: number) {
