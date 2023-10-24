@@ -18,19 +18,21 @@ Deployable applications are in `apps` folder. Shared components are in `packages
 .
 ├─ .github -> Github actions / workflows
 ├─ apps -> Applications
-│  └─ api -> API Server
-│  └─ admin -> Admin tool
-│  └─ cli -> Command line interface
-│  └─ portal -> Portal website
+│  ├─ api -> API Server
+│  ├─ admin -> Admin tool
+│  ├─ cli -> Command line interface
+│  ├─ portal -> Portal website
 │  └─ survey -> Survey application
 ├─ deployment - Ansible playbooks / scripts for deployment
 ├─ docker - Docker files for development
 ├─ docs -> Documentation
 └─ packages
-   └─ common -> repository-wide shared code
-   └─ common-backend -> backend shared code, e.g. services
-   └─ db -> database layer (models, migrations, etc.)
-   └─ i18n -> translation files for all applications
+   ├─ api-client-v3 -> API Client (Intake23 V3)
+   ├─ api-client-v4 -> API Client (Intake23 V4 - current)
+   ├─ common -> repository-wide shared code
+   ├─ common-backend -> backend shared code, e.g. services
+   ├─ db -> database layer (models, migrations, etc.)
+   ├─ i18n -> translation files for all applications
    └─ ui -> frontend shared code (admin / survey)
 ```
 

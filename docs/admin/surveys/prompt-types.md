@@ -93,6 +93,13 @@ Prompt to identify foods that can potentially be split into separate foods.
 
 Prompt with recap of the recall and submit button.
 
+#### Options
+
+- `review` - defines rules (per layout, `desktop | mobile`) how review step is enforced before submission
+  - `false` - no review step, submit button is always enabled
+  - `scroll` - button is enabled when scrolled through the meal list to the end
+  - `checkbox` - button is enabled when all meal checkboxes are ticked
+
 ## Portion-size prompts
 
 Prompts for food portion-size estimation. Only one can be used per scheme and functionality is tied `foods` scheme section.
