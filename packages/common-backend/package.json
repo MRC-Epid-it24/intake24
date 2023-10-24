@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "html-to-text": "^9.0.5",
     "jsdom": "^22.1.0",
-    "nodemailer": "^6.9.6",
+    "nodemailer": "^6.9.7",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
@@ -26,7 +26,7 @@
     "@types/bcryptjs": "^2.4.5",
     "@types/html-to-text": "^9.0.3",
     "@types/jsdom": "^21.1.4",
-    "@types/nodemailer": "^6.4.12",
+    "@types/nodemailer": "^6.4.13",
     "typescript": "^5.2.2"
   }
 }

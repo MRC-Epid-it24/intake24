@@ -9,7 +9,7 @@
         <img src="https://img.shields.io/github/package-json/version/MRC-Epid-it24/intake24/master?label=release&color=EE672D" alt="release">
     </a>
     <a href="https://nodejs.org/en/about/releases">
-        <img src="https://img.shields.io/badge/node-%3E%3D%2016-success" alt="node compatibility">
+        <img src="https://img.shields.io/badge/node-%3E%3D%2018-success" alt="node compatibility">
     </a>
     <a href='https://github.com/MRC-Epid-it24/intake24/actions' target="__blank">
         <img src='https://github.com/MRC-Epid-it24/intake24/workflows/CI/badge.svg' alt="Build Status">
