@@ -34,13 +34,14 @@
         <v-card-text class="px-6 py-4">
           <i18n class="text-subtitle-1 mb-2" path="common.action.confirm.typed" tag="p">
             <template #name>
-              <span class="font-weight-bold error--text">{{ `DELETE ${typedConfirm}` }}</span>
+              <code class="font-weight-bold error--text">{{ `DELETE ${typedConfirm}` }}</code>
             </template>
           </i18n>
           <v-text-field
             v-model="confirmInput"
             class="error--text"
             color="error"
+            dense
             hide-details="auto"
             outlined
           >

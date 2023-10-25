@@ -151,8 +151,8 @@
       "_": "Confirm",
       "title": "Do you want to continue?",
       "msg": "You're about leave the page with unsaved changes. Do you want to continue?",
-      "delete": "You're about to permanently delete {name}.",
-      "remove": "You're about to permanently remove {name}.",
+      "delete": "You're about to delete {name}.",
+      "remove": "You're about to remove {name}.",
       "multi": {
         "delete": "Do you want to delete selected items: {count}"
       },
