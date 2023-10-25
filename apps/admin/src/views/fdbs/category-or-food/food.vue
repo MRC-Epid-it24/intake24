@@ -188,7 +188,9 @@ export default defineComponent({
     const loading = ref(false);
     const type = 'foods';
     const entry = ref<FoodLocalEntry | null>(null);
-    const globalEdit = computed(() => user.can('locales|food-list'));
+    const globalEdit = computed(
+      () => user.can('locales|food-list') || entry.value?.main?.locales?.length === 1
+    );
     const isEntryLoaded = computed(() => !!entry.value);
 
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);

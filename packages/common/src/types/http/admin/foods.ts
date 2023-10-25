@@ -7,6 +7,7 @@ import type {
   FoodLocalAttributes,
   FoodPortionSizeMethodCreationAttributes,
   FoodPortionSizeMethodParameterCreationAttributes,
+  FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
   Pagination,
 } from '@intake24/db';
@@ -41,6 +42,7 @@ export type FoodEntry = FoodAttributes & {
   attributes?: FoodAttributeAttributes;
   foodGroup?: FoodGroupAttributes;
   parentCategories?: CategoryAttributes[];
+  locales?: FoodsLocaleAttributes[];
 };
 
 export interface FoodLocalEntry extends FoodLocalAttributes {
