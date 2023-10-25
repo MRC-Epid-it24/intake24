@@ -80,6 +80,7 @@ export default defineComponent({
           },
           left: 'center',
           tooltip: {
+            className: 'text-wrap',
             trigger: 'item',
             position: (point, params, dom, rect, { contentSize, viewSize }) => [
               viewSize[0] / 2 - contentSize[0] / 2,
