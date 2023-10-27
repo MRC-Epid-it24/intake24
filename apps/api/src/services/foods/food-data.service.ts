@@ -196,7 +196,7 @@ const foodDataService = () => {
       resolveAssociatedFoodPrompts(localeId, foodCode),
       getBrands(localeId, foodCode),
       getNutrientKCalPer100G(localeId, foodCode),
-      portionSizeMethodsImpl.resolvePortionSizeMethods(localeId, foodCode),
+      portionSizeMethodsImpl.resolveUserPortionSizeMethods(localeId, foodCode),
       inheritableAttributesImpl.resolveInheritableAttributes(foodCode),
       getAllCategories(foodCode),
     ]);

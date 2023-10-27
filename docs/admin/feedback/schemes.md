@@ -80,7 +80,7 @@ List of columns to be displayed in meal per-day breakdown table. List can be re-
 
    - `value` - localized field value
      :::tip Value formatting
-     If field value is empty, then field value is displayed as is. If additional formatting is needed, use {value} placeholder to display field value.
+     If field value is empty, then field value is displayed as is. If additional formatting is needed, use `{value}` placeholder to display field value.
      :::
 
    - `type` - field type, possible values standard, custom or nutrient

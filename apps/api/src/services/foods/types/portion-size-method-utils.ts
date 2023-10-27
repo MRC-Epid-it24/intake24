@@ -5,10 +5,7 @@ import type {
 } from '@intake24/common/types/http/foods/user-food-data';
 import type { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
 
-import {
-  toUserCategoryPortionSizeMethodParameters,
-  toUserPortionSizeMethodParameters,
-} from './portion-size-method-parameter-utils';
+import { toUserPortionSizeMethodParameters } from './portion-size-method-parameter-utils';
 
 export interface DatabasePortionSizeMethod {
   method: PortionSizeMethodId;
@@ -20,7 +17,9 @@ export interface DatabasePortionSizeMethod {
   parameters: { name: string; value: string }[];
 }
 
-export function toUserPortionSizeMethod(psm: FoodPortionSizeMethod): UserPortionSizeMethod {
+export function toUserPortionSizeMethod(
+  psm: CategoryPortionSizeMethod | FoodPortionSizeMethod
+): UserPortionSizeMethod {
   const [parameters, imageUrl] = psm.parameters
     ? toUserPortionSizeMethodParameters(psm.parameters)
     : [{}, undefined];
@@ -49,24 +48,6 @@ export function toDatabasePortionSizeMethod(psm: UserPortionSizeMethod): Databas
     imageUrl: psm.imageUrl,
     method: psm.method,
     parameters: toDatabasePortionSizeMethodParameters(psm.parameters),
-    useForRecipes: psm.useForRecipes,
-    orderBy: psm.orderBy,
-  };
-}
-
-export function toUserCategoryPortionSizeMethod(
-  psm: CategoryPortionSizeMethod
-): UserPortionSizeMethod {
-  const [parameters, imageUrl] = psm.parameters
-    ? toUserCategoryPortionSizeMethodParameters(psm.parameters)
-    : [{}, undefined];
-
-  return {
-    conversionFactor: psm.conversionFactor,
-    description: psm.description,
-    imageUrl: imageUrl ?? psm.imageUrl,
-    method: psm.method,
-    parameters,
     useForRecipes: psm.useForRecipes,
     orderBy: psm.orderBy,
   };

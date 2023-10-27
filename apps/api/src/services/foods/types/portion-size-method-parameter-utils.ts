@@ -34,9 +34,6 @@ const transformPortionSizeMethodParameters = (
   return acc;
 };
 
-export const toUserPortionSizeMethodParameters = (parameters: FoodPortionSizeMethodParameter[]) =>
-  parameters.reduce(transformPortionSizeMethodParameters, [{}, undefined]);
-
-export const toUserCategoryPortionSizeMethodParameters = (
-  parameters: CategoryPortionSizeMethodParameter[]
+export const toUserPortionSizeMethodParameters = (
+  parameters: (CategoryPortionSizeMethodParameter | FoodPortionSizeMethodParameter)[]
 ) => parameters.reduce(transformPortionSizeMethodParameters, [{}, undefined]);

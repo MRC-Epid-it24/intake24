@@ -186,10 +186,7 @@ const dataExportService = ({
 
         const [foods, missingFoods] = await Promise.all([
           SurveySubmissionFood.findAll({ ...options.foods, where: { mealId } }),
-          SurveySubmissionMissingFood.findAll({
-            ...options.missingFoods,
-            where: { mealId },
-          }),
+          SurveySubmissionMissingFood.findAll({ ...options.missingFoods, where: { mealId } }),
         ]);
 
         const groupedFoods = groupBy(foods, 'mealId');

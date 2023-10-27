@@ -49,6 +49,7 @@ export interface BaseFindOptions<TAttributes = any> extends FindOptions<TAttribu
 
 export interface StreamFindOptions<TAttributes = any> extends FindOptions<TAttributes> {
   batchSize?: number;
+  transform?: (item: any) => any;
 }
 
 export type BaseModelCtor<M extends Model = Model> = typeof Model & { new (): M };
@@ -144,7 +145,14 @@ export default class Model<
     inputStream: Readable,
     options: StreamFindOptions<M['_attributes']>
   ): Promise<void> {
-    const { batchSize = 100, limit, offset: startOffset = 0, include, ...params } = options;
+    const {
+      batchSize = 100,
+      limit,
+      offset: startOffset = 0,
+      include,
+      transform,
+      ...params
+    } = options;
 
     try {
       const max = limit ?? (await this.count(params));
@@ -165,7 +173,13 @@ export default class Model<
           offset,
           limit: difference > 0 ? batchSize - difference : batchSize,
         });
-        items.forEach((item) => inputStream.push(item));
+
+        if (transform) {
+          for (const item of items) {
+            const transformedItem = await transform(item);
+            inputStream.push(transformedItem);
+          }
+        } else items.forEach((item) => inputStream.push(item));
       }
 
       inputStream.push(null);

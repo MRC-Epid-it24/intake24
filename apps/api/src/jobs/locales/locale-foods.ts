@@ -6,11 +6,19 @@ import { format } from 'date-fns';
 import fs from 'fs-extra';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { CategoryPortionSizeMethod, FoodPortionSizeMethod } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addTime } from '@intake24/api/util';
 import { FoodLocal, Job as DbJob, SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
+
+export type ItemTransform = {
+  food: FoodLocal;
+  dat: {
+    portionSizeMethods?: (CategoryPortionSizeMethod | FoodPortionSizeMethod)[];
+  };
+};
 
 export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
   readonly name = 'LocaleFoods';
@@ -123,6 +131,16 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           },
         ],
         order: [['foodCode', 'asc']],
+        transform: async (food: FoodLocal) => {
+          if (food.portionSizeMethods?.length) return { food, dat: {} };
+
+          const portionSizeMethods = await this.portionSizeMethodsService.resolvePortionSizeMethods(
+            food.localeId,
+            food.foodCode
+          );
+
+          return { food, dat: { portionSizeMethods } };
+        },
       });
 
       const transform = new Transform(
@@ -130,16 +148,17 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           fields,
           withBOM: true,
           transforms: [
-            (item: FoodLocal) => {
+            ({ food, dat }: ItemTransform) => {
               const {
                 foodCode,
                 name,
                 localeId,
                 main: { name: englishName, attributes, brands = [] } = {},
                 associatedFoods = [],
-                nutrientRecords: [{ nutrientTableId, nutrientTableRecordId }] = [],
-                portionSizeMethods = [],
-              } = item;
+                nutrientRecords: [{ nutrientTableId, nutrientTableRecordId }] = [{}],
+                portionSizeMethods: foodPSMs = [],
+              } = food;
+              const { portionSizeMethods: datPSMs = [] } = dat;
 
               return {
                 localeId,
@@ -161,7 +180,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                       associatedFoodCode ?? associatedCategoryCode
                   )
                   .join(', '),
-                portionSizeMethods: portionSizeMethods
+                portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
                   .map(
                     ({ method, conversionFactor, parameters = [] }) =>
                       `Method: ${method}, conversion: ${conversionFactor}, ${parameters
