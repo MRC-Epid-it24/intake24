@@ -208,6 +208,20 @@ export default defineComponent({
       this.currentPrompt = { section: promptSection, prompt };
     },
 
+    showFoodPrompt(foodId: string, promptSection: MealSection, promptType: ComponentType) {
+      this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
+
+      const prompt = this.recallController?.promptManager.findMealPromptOfType(
+        promptType,
+        promptSection
+      );
+
+      if (!prompt)
+        throw new Error(`Survey scheme is missing required food prompt of type ${promptType}`);
+
+      this.currentPrompt = { section: promptSection, prompt };
+    },
+
     showSurveyPrompt(promptSection: SurveyPromptSection, promptType: ComponentType) {
       this.setSelection({ element: null, mode: 'manual' });
 
@@ -282,6 +296,9 @@ export default defineComponent({
 
     async foodAction(type: FoodActionType, foodId: string) {
       switch (type) {
+        case 'changeFood':
+          this.showFoodPrompt(foodId, 'foods', 'food-search-prompt');
+          break;
         case 'editFood':
           this.survey.editFood(foodId);
           await this.nextPrompt();
