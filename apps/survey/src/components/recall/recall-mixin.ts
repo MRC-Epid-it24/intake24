@@ -259,6 +259,7 @@ export default defineComponent({
           await this.mealAction(type, id);
           break;
         case 'deleteFood':
+        case 'changeFood':
         case 'editFood':
         case 'selectFood':
           if (id === undefined) {
