@@ -31,7 +31,7 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
     [
       {
         name: i18n.t('recall.menu.food.edit').toString(),
-        action: 'editMeal',
+        action: 'changeFood',
         icon: '$meal',
       },
       {
