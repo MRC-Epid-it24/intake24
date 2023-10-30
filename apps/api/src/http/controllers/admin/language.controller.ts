@@ -21,8 +21,8 @@ const languageController = (ioc: IoC) => {
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'englishName', 'localName'],
-      order: [['id', 'ASC']],
+      columns: ['code', 'englishName', 'localName'],
+      order: [['code', 'ASC']],
     };
 
     if (await aclService.hasPermission('languages|browse')) {
