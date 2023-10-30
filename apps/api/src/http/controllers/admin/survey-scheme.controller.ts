@@ -2,20 +2,15 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { Prompt } from '@intake24/common/prompts';
 import type { ExportField, ExportSectionId } from '@intake24/common/surveys';
 import type {
   SurveySchemeEntry,
   SurveySchemeExportRefsResponse,
   SurveySchemeRefs,
   SurveySchemesResponse,
+  SurveySchemeTemplates,
 } from '@intake24/common/types/http/admin';
-import type {
-  FindOptions,
-  PaginateOptions,
-  PaginateQuery,
-  SurveySchemeCreationAttributes,
-} from '@intake24/db';
+import type { PaginateOptions, PaginateQuery, SurveySchemeCreationAttributes } from '@intake24/db';
 import { ForbiddenError, ValidationError } from '@intake24/api/http/errors';
 import { surveySchemeResponse } from '@intake24/api/http/responses/admin';
 import { kebabCase } from '@intake24/common/util';
@@ -193,30 +188,18 @@ const surveySchemeController = (ioc: IoC) => {
 
   const templates = async (
     req: Request<{ surveySchemeId: string }, any, any, PaginateQuery>,
-    res: Response<Prompt[]>
+    res: Response<SurveySchemeTemplates>
   ): Promise<void> => {
-    const {
-      query: { search, limit },
-    } = req;
-
     await getAndCheckAccess(SurveyScheme, 'prompts', req as Request<{ surveySchemeId: string }>);
 
-    const options: FindOptions = { limit };
+    const surveySchemePrompts = await SurveySchemePrompt.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['name', 'promptId'],
+      order: [['promptId', 'ASC']],
+      transform: ({ prompt }) => prompt,
+    });
 
-    if (search) {
-      const op =
-        SurveySchemePrompt.sequelize?.getDialect() === 'postgres'
-          ? { [Op.iLike]: `%${search}%` }
-          : { [Op.substring]: search };
-
-      const ops = ['promptId', 'name'].map((column) => ({ [column]: op }));
-      options.where = { [Op.or]: ops };
-    }
-
-    const surveySchemePrompts = await SurveySchemePrompt.findAll(options);
-    const prompts = surveySchemePrompts.map(({ prompt }) => prompt);
-
-    res.json(prompts);
+    res.json(surveySchemePrompts);
   };
 
   const dataExportRefs = async (

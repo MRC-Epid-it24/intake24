@@ -56,6 +56,7 @@ export const useFetchList = <T = any>(url: string, id?: string | Ref<string>) =>
   watchDebounced(
     search,
     async () => {
+      page.value = 1;
       await fetch();
     },
     { debounce: 500, maxWait: 1000 }

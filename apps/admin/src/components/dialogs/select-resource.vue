@@ -34,13 +34,13 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          append-icon="$search"
           class="mb-4"
           clearable
           hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
           outlined
+          prepend-inner-icon="$search"
           @click:clear="clear"
         >
         </v-text-field>

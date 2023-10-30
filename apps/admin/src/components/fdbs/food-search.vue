@@ -17,18 +17,19 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          append-icon="$search"
           class="mb-4"
           clearable
           hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
           outlined
+          prepend-inner-icon="$search"
           @click:clear="clear"
         >
         </v-text-field>
         <v-data-table
           :headers="headers"
+          item-key="_id"
           :items="items"
           :items-per-page="25"
           @click:row="selectItem"
@@ -127,8 +128,8 @@ const fetchItems = async () => {
 
     //@ts-expect-error volar issue ?
     items.value = [
-      ...categories.map((cat) => ({ ...cat, resource: 'categories' })),
-      ...foods.map((food) => ({ ...food, resource: 'foods' })),
+      ...categories.map((cat) => ({ ...cat, resource: 'categories', _id: `cat:${cat.id}` })),
+      ...foods.map((food) => ({ ...food, resource: 'foods', _id: `food:${food.id}` })),
     ].sort((a, b) => a.name.localeCompare(b.name));
   } finally {
     loading.value = false;
@@ -160,7 +161,7 @@ watchDebounced(
 
 <script lang="ts">
 export default defineComponent({
-  name: 'FoodExplorer',
+  name: 'FoodExplorerSearch',
 });
 </script>
 
@@ -169,4 +170,3 @@ export default defineComponent({
   cursor: pointer;
 }
 </style>
-```

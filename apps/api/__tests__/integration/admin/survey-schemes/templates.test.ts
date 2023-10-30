@@ -68,14 +68,8 @@ export default () => {
       await suite.sharedTests.assertMissingRecord('get', invalidUrl);
     });
 
-    it('should return 200 and data', async () => {
-      const { status, body } = await request(suite.app)
-        .get(url)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user);
-
-      expect(status).toBe(200);
-      expect(body).toBeArray();
+    it('should return 200 and empty paginated results', async () => {
+      await suite.sharedTests.assertPaginatedResult('get', url, { result: false });
     });
   });
 };

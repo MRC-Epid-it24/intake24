@@ -22,13 +22,13 @@
       <v-card-text class="pa-6">
         <v-text-field
           v-model="search"
-          append-icon="$search"
           class="mb-4"
           clearable
           hide-details="auto"
           :label="$t('common.search._')"
           :loading="loading"
           outlined
+          prepend-inner-icon="$search"
           @click:append="fetch"
           @click:clear="clear"
           @keyup.enter="fetch"
@@ -37,33 +37,38 @@
         <v-alert v-if="promptAlreadyExists" text type="error">
           {{
             $t('survey-schemes.prompts.templates.alreadyExists', {
-              promptId: selectedPrompt.promptId,
+              promptId: selectedPrompt?.id,
             })
           }}
         </v-alert>
-        <v-list v-if="prompts.length" min-height="350px" two-line>
-          <v-list-item-group v-model="selectedId">
-            <template v-for="(prompt, idx) in prompts">
-              <v-list-item :key="prompt.id" :value="prompt.id">
-                <template #default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-avatar>
-                    <v-icon>fas fa-question-circle</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ prompt.name }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-              <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`"></v-divider>
-            </template>
-          </v-list-item-group>
-        </v-list>
+        <template v-if="prompts.length">
+          <v-list min-height="350px" two-line>
+            <v-list-item-group v-model="selectedId">
+              <template v-for="(prompt, idx) in prompts">
+                <v-list-item :key="prompt.id" :value="prompt.id">
+                  <template #default="{ active }">
+                    <v-list-item-action>
+                      <v-checkbox :input-value="active"></v-checkbox>
+                    </v-list-item-action>
+                    <v-list-item-avatar>
+                      <v-icon>fas fa-question-circle</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ prompt.name }}</v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ `ID: ${prompt.id} | Type: ${prompt.component}` }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                </v-list-item>
+                <v-divider v-if="idx + 1 < prompts.length" :key="`div-${prompt.id}`"></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+          <div class="text-center">
+            <v-pagination v-model="page" circle :length="lastPage"></v-pagination>
+          </div>
+        </template>
         <v-alert v-else color="secondary" text type="info">
           {{ $t('survey-schemes.prompts.templates.none') }}
         </v-alert>
@@ -89,10 +94,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import debounce from 'lodash/debounce';
-import { defineComponent } from 'vue';
+import { watchDebounced } from '@vueuse/core';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
+import type { SurveySchemeTemplates } from '@intake24/common/types/http/admin';
+import { useHttp } from '@intake24/admin/services';
 import { copy } from '@intake24/common/util';
 
 export default defineComponent({
@@ -114,44 +121,107 @@ export default defineComponent({
 
   emits: ['load'],
 
-  data() {
-    return {
-      dialog: false,
-      loading: false,
-      search: null as string | null,
-      prompts: [] as Prompt[],
-      selectedId: undefined as string | undefined,
-    };
-  },
+  setup(props) {
+    const http = useHttp();
 
-  computed: {
-    selectedPrompt(): Prompt | undefined {
-      const { selectedId } = this;
-      if (!selectedId) return undefined;
+    const dialog = ref(false);
+    const loading = ref(false);
 
-      return this.prompts.find((prompt) => prompt.id === selectedId);
-    },
-    promptAlreadyExists(): boolean {
-      const match = this.promptIds.find((id) => id === this.selectedPrompt?.id);
+    const page = ref<number>(1);
+    const lastPage = ref<number | undefined>();
+    const search = ref<string | null>(null);
+
+    const prompts = ref<Prompt[]>([]);
+    const selectedId = ref<string | undefined>();
+
+    const selectedPrompt = computed(() => {
+      if (!selectedId.value) return undefined;
+
+      return prompts.value.find((prompt) => prompt.id === selectedId.value);
+    });
+
+    const promptAlreadyExists = computed(() => {
+      const match = props.promptIds.find((id) => id === selectedPrompt.value?.id);
       return !!match;
-    },
-  },
+    });
 
-  watch: {
-    async dialog(val) {
-      if (val && !this.prompts.length) await this.fetch();
-    },
-    search() {
-      //@ts-expect-error debounced
-      this.debouncedFetch();
-    },
-  },
+    const fetchLocally = async (search: string | null, page: number, limit = 5) => {
+      const currentPage = page - 1;
 
-  created() {
-    //@ts-expect-error fix debounced types
-    this.debouncedFetch = debounce(() => {
-      this.fetch();
-    }, 500);
+      const filtered = (props.items ?? []).filter((currentItem) =>
+        search ? currentItem.name.match(new RegExp(search, 'i')) : true
+      );
+
+      const items = filtered.slice(currentPage * limit, currentPage * limit + limit);
+      const lastPage = Math.floor(filtered.length / limit) + 1;
+
+      return { items, lastPage };
+    };
+
+    const fetchFromApi = async (search: string | null, page: number, limit = 5) => {
+      const {
+        data: {
+          data: items,
+          meta: { lastPage },
+        },
+      } = await http.get<SurveySchemeTemplates>(
+        `admin/survey-schemes/${props.schemeId}/templates`,
+        { params: { search, page, limit } }
+      );
+
+      return { items, lastPage };
+    };
+
+    const fetch = async () => {
+      loading.value = true;
+
+      try {
+        const result = props.items
+          ? await fetchLocally(search.value, page.value)
+          : await fetchFromApi(search.value, page.value);
+
+        prompts.value = result.items;
+        lastPage.value = result.lastPage;
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const clear = async () => {
+      search.value = null;
+      await fetch();
+    };
+
+    watch(dialog, async (val) => {
+      if (val && !prompts.value.length) await fetch();
+    });
+
+    watch(page, async () => {
+      await fetch();
+    });
+
+    watchDebounced(
+      search,
+      () => {
+        page.value = 1;
+        fetch();
+      },
+      { debounce: 500, maxWait: 2000 }
+    );
+
+    return {
+      dialog,
+      loading,
+      prompts,
+      selectedId,
+      page,
+      lastPage,
+      search,
+      promptAlreadyExists,
+      selectedPrompt,
+      fetch,
+      clear,
+    };
   },
 
   methods: {
@@ -169,43 +239,6 @@ export default defineComponent({
 
       this.$emit('load', copy(this.selectedPrompt));
       this.close();
-    },
-
-    async fetch() {
-      this.loading = true;
-
-      try {
-        this.prompts = this.items ? this.fetchLocally() : await this.fetchFromApi();
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    fetchLocally() {
-      const { search } = this;
-      const items = this.items ?? [];
-
-      const filtered = items.filter((item) => {
-        return search ? item.name.match(new RegExp(search, 'i')) : true;
-      });
-
-      return filtered.slice(0, 5);
-    },
-
-    async fetchFromApi() {
-      const { search } = this;
-
-      const { data } = await this.$http.get<Prompt[]>(
-        `admin/survey-schemes/${this.schemeId}/templates`,
-        { params: { search, limit: 5 } }
-      );
-
-      return data;
-    },
-
-    async clear() {
-      this.search = null;
-      await this.fetch();
     },
   },
 });

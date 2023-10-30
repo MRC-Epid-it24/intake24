@@ -8,12 +8,12 @@
         <v-col cols="12" sm>
           <v-text-field
             v-model="filter.search"
-            append-icon="$search"
             clearable
             dense
             hide-details="auto"
             :label="$t('common.search._')"
             outlined
+            prepend-inner-icon="$search"
             @click:append="setFilter"
             @click:clear="resetFilter"
             @keyup.enter="setFilter"

@@ -30,4 +30,6 @@ export type SurveySchemeRefs = {
   templates: Prompt[];
 };
 
+export type SurveySchemeTemplates = Pagination<Prompt>;
+
 export type SurveySchemeExportRefsResponse = Record<ExportSectionId, ExportField[]>;
