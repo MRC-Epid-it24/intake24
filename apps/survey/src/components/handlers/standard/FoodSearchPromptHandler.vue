@@ -51,13 +51,11 @@ export default defineComponent({
     function getSearchTerm(foodEntry: FoodState) {
       switch (foodEntry.type) {
         case 'encoded-food':
+        case 'missing-food':
+        case 'recipe-builder':
           return foodEntry.searchTerm;
         case 'free-text':
           return foodEntry.description;
-        case 'missing-food':
-          return foodEntry.searchTerm;
-        case 'recipe-builder':
-          return foodEntry.searchTerm;
       }
     }
 
@@ -87,6 +85,27 @@ export default defineComponent({
       discardedFoodName.value = null;
     }
 
+    const getFoodToReplace = () => {
+      const { id, customPromptAnswers, flags } = food();
+
+      // Remove appropriate flags if replacing existing not a "free-entry" food
+      return {
+        id,
+        customPromptAnswers,
+        flags: flags.filter(
+          (flag) =>
+            ![
+              'associated-foods-complete',
+              'missing-food-complete',
+              'portion-size-method-complete',
+              'portion-size-option-complete',
+              'recipe-builder-complete',
+              'same-as-before-complete',
+            ].includes(flag)
+        ),
+      };
+    };
+
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       emit('action', type, ...args);
     };
@@ -100,6 +119,7 @@ export default defineComponent({
       searchParameters: survey.searchParameters,
       searchTerm,
       discardedFoodName,
+      getFoodToReplace,
       initializeRecipeComponents,
     };
   },
@@ -115,7 +135,7 @@ export default defineComponent({
 
     foodMissing() {
       const { searchTerm } = this;
-      const { id, customPromptAnswers, flags } = this.food();
+      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
 
       const newState: MissingFood = {
         id,
@@ -134,7 +154,7 @@ export default defineComponent({
 
     recipeBuilder(recipeFood: RecipeFood) {
       const { searchTerm } = this;
-      const { id, customPromptAnswers, flags } = this.food();
+      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
       const components = this.initializeRecipeComponents(
         recipeFood.steps.map((step) => step.order - 1)
       );
@@ -165,10 +185,9 @@ export default defineComponent({
         return;
       }
 
-      const { id, customPromptAnswers, flags } = this.food();
+      const { id, customPromptAnswers, flags } = this.getFoodToReplace();
 
-      // Automatically select the only portion size method available to avoid triggering
-      // redundant portion size option prompt
+      // Assign portion size method if only one is available
       const hasOnePortionSizeMethod = foodData.portionSizeMethods.length === 1;
       if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
 
