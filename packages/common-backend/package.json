@@ -1,6 +1,6 @@
 {
   "name": "@intake24/common-backend",
-  "version": "2022.0.0-beta.2",
+  "version": "2023.1.0",
   "private": true,
   "description": "Intake24 common code for backend apps",
   "author": "",
