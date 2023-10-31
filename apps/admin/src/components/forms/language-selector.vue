@@ -135,7 +135,7 @@ export default defineComponent({
     const add = async (code: string) => {
       emit('input', { ...props.value, [code]: props.default });
       selected.value = languages.value.length - 1;
-      emit('lang-add');
+      emit('lang-add', code);
     };
 
     const remove = () => {
@@ -144,7 +144,7 @@ export default defineComponent({
       const code = languages.value[selected.value];
       const { [code]: remove, ...rest } = props.value;
       emit('input', { ...rest });
-      emit('lang-remove');
+      emit('lang-remove', code);
     };
 
     return {

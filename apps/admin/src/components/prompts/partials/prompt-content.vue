@@ -47,6 +47,7 @@
               :label="$t(`survey-schemes.i18n.custom`, { key }).toString()"
               :outlined="false"
               tile
+              @lang-add="loadLanguage"
               @lang-remove="removeKey(key)"
             >
               <template v-for="lang in Object.keys(items[key])" #[`lang.${lang}`]>
@@ -123,10 +124,12 @@ export default defineComponent({
       getObjectNestedKeys(get(i18n.messages.en, `prompts.${promptType.value}`) as object)
     );
 
+    const loadLanguage = async (code: string) => {
+      await loadAdminLanguage(code);
+    };
+
     const addKey = async (key: string) => {
       items.value = { ...items.value, [key]: {} };
-
-      await loadAdminLanguage('ms');
     };
 
     const removeKey = (key: string) => {
@@ -147,6 +150,7 @@ export default defineComponent({
       getAvailableLanguages,
       items,
       keys,
+      loadLanguage,
       promptType,
       removeKey,
       richTextOnly,

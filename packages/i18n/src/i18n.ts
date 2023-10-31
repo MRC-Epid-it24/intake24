@@ -13,11 +13,14 @@ export const i18n = new VueI18n({
 export const loadAppLanguage = async (app: Application, lang: string) => {
   if (i18n.locale === lang || i18n.availableLocales.includes(lang)) return;
 
-  await Promise.all([
+  await Promise.allSettled([
     import(`./${app}/${lang}/index.ts`),
     import(`./shared/${lang}/index.ts`),
-  ]).then(([{ default: app }, { default: shared }]) => {
-    i18n.setLocaleMessage(lang, { ...app, ...shared });
+  ]).then(([app, shared]) => {
+    i18n.setLocaleMessage(lang, {
+      ...(app.status === 'fulfilled' ? app.value.default : {}),
+      ...(shared.status === 'fulfilled' ? shared.value.default : {}),
+    });
   });
 };
 
