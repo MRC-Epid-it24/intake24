@@ -25,6 +25,7 @@ export default () => {
     .get(validation.browse, wrapAsync(localeController.browse));
 
   router.get('/refs', wrapAsync(localeController.refs));
+  router.get('/by-code/:code', validation.code('code'), wrapAsync(localeController.getByCode));
 
   router.use('/:localeId', validation.entry('localeId'));
 

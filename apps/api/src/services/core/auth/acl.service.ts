@@ -1,4 +1,5 @@
 import type { Request } from 'express';
+import type { Attributes, FindOptions } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
@@ -240,6 +241,28 @@ const aclService = ({
     throw new ForbiddenError();
   };
 
+  const findAndCheckRecordAccess = async <T extends Securable>(
+    securable: ModelStatic<T>,
+    action: string,
+    findOptions: FindOptions<Attributes<T>>,
+    scope?: string | string[]
+  ): Promise<T> => {
+    const record = await securable
+      .scope(scope)
+      .findOne({ ...findOptions, ...securableScope(userId) });
+
+    // FIXME: This should probably return Forbidden unless the user has resource access,
+    // otherwise leaking of secured information (record ids) is possible
+
+    if (!record) throw new NotFoundError();
+
+    if (await hasResourceAccess(record.constructor.name, action)) return record;
+
+    if (await hasSecurableAccess(record, action)) return record;
+
+    throw new ForbiddenError();
+  };
+
   /**
    * Get user's list of resource-based access actions
    *
@@ -289,6 +312,7 @@ const aclService = ({
     hasAnyRole,
     checkAccess,
     getAndCheckRecordAccess,
+    findAndCheckRecordAccess,
     getResourceAccessActions,
     getSecurableAccessActions,
     getAccessActions,

@@ -7,6 +7,7 @@ import { wrapAsync } from '@intake24/api/util';
 
 import categories from './categories';
 import foods from './foods';
+import globalFoods from './global-foods';
 
 export default () => {
   const { adminFoodDatabaseController } = ioc.cradle;
@@ -18,6 +19,7 @@ export default () => {
   router.get('/refs', wrapAsync(adminFoodDatabaseController.refs));
   router.get('/:localeId', wrapAsync(adminFoodDatabaseController.read));
 
+  router.use('/foods', globalFoods());
   router.use('/:localeId/categories', categories());
   router.use('/:localeId/foods', foods());
 

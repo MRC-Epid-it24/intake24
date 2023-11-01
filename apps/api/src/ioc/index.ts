@@ -8,6 +8,7 @@ import type {
   AdminFoodController,
   AdminFoodDatabaseController,
   AdminFoodGroupController,
+  AdminGlobalFoodsController,
   AdminSignupController,
   AdminSurveyController,
   AdminSurveyRespondentController,
@@ -186,6 +187,7 @@ export interface IoC extends Jobs {
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
   adminFoodGroupController: AdminFoodGroupController;
+  adminGlobalFoodsController: AdminGlobalFoodsController;
 
   // Images
   asServedSetController: AsServedSetController;

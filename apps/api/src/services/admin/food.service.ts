@@ -1,7 +1,13 @@
+import { randomUUID } from 'node:crypto';
+
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { FoodInput } from '@intake24/common/types/http/admin';
+import type {
+  CreateGlobalFoodRequest,
+  FoodEntry,
+  FoodInput,
+} from '@intake24/common/types/http/admin';
 import type {
   FindOptions,
   FoodLocalAttributes,
@@ -314,11 +320,26 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     ]);
   };
 
+  const createGlobalFood = async (
+    input: CreateGlobalFoodRequest
+  ): Promise<FoodEntry | 'conflict'> => {
+    try {
+      return await Food.create({
+        version: randomUUID(),
+        ...input,
+      });
+    } catch (error: any) {
+      if (error.name === 'SequelizeUniqueConstraintError') return 'conflict';
+      throw error;
+    }
+  };
+
   return {
     browseFoods,
     getFood,
     updateFood,
     deleteFood,
+    createGlobalFood,
   };
 };
 

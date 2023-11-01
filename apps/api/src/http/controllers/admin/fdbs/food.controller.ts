@@ -87,6 +87,15 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     res.status(204).json();
   };
 
+  const createGlobalFood = async (req: Request<any>, res: Response<undefined>): Promise<void> => {
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { foodId } = req.params;
+
+    await adminFoodService.deleteFood(foodId, code);
+
+    res.status(204).json();
+  };
+
   return {
     browse,
     store,
