@@ -170,7 +170,16 @@ export class ImporterV4 {
           throw new Error(message);
         }
         case 'overwrite': {
-          await this.apiClient.foods.updateGlobalFood(food.code, omit(foodEntry, 'code'));
+          // This looks terribly inefficient, maybe give create an on conflict option instead?
+          const existing = await this.apiClient.foods.findGlobalFood(food.code);
+
+          if (existing !== null) {
+            await this.apiClient.foods.updateGlobalFood(
+              food.code,
+              existing.version,
+              omit(foodEntry, 'code')
+            );
+          }
         }
       }
     }
@@ -203,7 +212,7 @@ export class ImporterV4 {
   public async import(): Promise<void> {
     await this.readPackage();
 
-    await this.importLocales();
+    // await this.importLocales();
 
     await this.importGlobalFoods();
 

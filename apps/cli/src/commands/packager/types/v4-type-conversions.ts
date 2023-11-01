@@ -47,6 +47,7 @@ function fromPackageGlobalFood(globalFood: PkgGlobalFood): CreateGlobalFoodReque
     code: globalFood.code,
     name: globalFood.englishDescription,
     foodGroupId: globalFood.groupCode.toString(),
+    parentCategories: globalFood.parentCategories,
     attributes: {
       readyMealOption: globalFood.attributes.readyMealOption,
       reasonableAmount: globalFood.attributes.reasonableAmount,

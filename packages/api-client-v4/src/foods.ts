@@ -29,10 +29,18 @@ export class FoodsApiV4 {
     return parseCreateResponse(response, this.baseClient.logger);
   }
 
+  public async findGlobalFood(code: string): Promise<FoodEntry | null> {
+    return await this.baseClient.getOptional<FoodEntry>(`${FoodsApiV4.globalApiPath}/${code}`);
+  }
+
   public async updateGlobalFood(
     code: string,
+    version: string,
     updateRequest: UpdateGlobalFoodRequest
   ): Promise<FoodEntry> {
-    return await this.baseClient.put(`${FoodsApiV4.globalApiPath}/${code}`, updateRequest);
+    return await this.baseClient.put(
+      `${FoodsApiV4.globalApiPath}/${code}?version=${version}`,
+      updateRequest
+    );
   }
 }
