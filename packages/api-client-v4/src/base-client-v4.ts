@@ -244,6 +244,14 @@ export class BaseClientV4 {
     return response.data;
   }
 
+  public async postResponse<Res, Req = any>(
+    endpoint: string,
+    body?: Req,
+    params?: Record<string, any>
+  ): Promise<AxiosResponse<Res>> {
+    return await this.requestLimit(() => this.accessClient.post<Res>(endpoint, body, { params }));
+  }
+
   public async put<Res, Req = any>(
     endpoint: string,
     body?: Req,

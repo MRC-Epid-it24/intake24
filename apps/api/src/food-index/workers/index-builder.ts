@@ -266,6 +266,11 @@ function isFoodHidden(index: LocalFoodIndex, foodCode: string): boolean {
     return false;
   }
 
+  if (parentCategories.size === 0) {
+    logger.warn(`${foodCode} is not assigned to any category`);
+    return false;
+  }
+
   for (const categoryCode of parentCategories) {
     if (!isCategoryHidden(categoryCode)) return false;
   }

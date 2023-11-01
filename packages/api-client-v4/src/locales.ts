@@ -1,11 +1,16 @@
+import { HttpStatusCode } from 'axios';
+
 import type {
   CreateLocaleRequest,
   LocaleEntry,
   LocalesResponse,
+  UpdateLocaleRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 
 import type { BaseClientV4 } from './base-client-v4';
+import type { CreateResult } from './create-response';
+import { parseCreateResponse } from './create-response';
 
 export class LocalesApiV4 {
   private static readonly apiPath = '/api/admin/locales';
@@ -24,7 +29,26 @@ export class LocalesApiV4 {
     return this.baseClient.getOptional<LocaleEntry>(`${LocalesApiV4.apiPath}/${localeId}`);
   }
 
-  public async create(localeId: string, locale: CreateLocaleRequest): Promise<LocaleEntry> {
-    return this.baseClient.post<LocaleEntry>(`${LocalesApiV4.apiPath}`, locale);
+  public async findByCode(localeCode: string): Promise<LocaleEntry | null> {
+    return this.baseClient.getOptional<LocaleEntry>(
+      `${LocalesApiV4.apiPath}/by-code/${localeCode}`
+    );
+  }
+
+  public async create(
+    localeId: string,
+    locale: CreateLocaleRequest
+  ): Promise<CreateResult<LocaleEntry>> {
+    const response = await this.baseClient.postResponse<LocaleEntry>(
+      `${LocalesApiV4.apiPath}`,
+      locale,
+      {}
+    );
+
+    return parseCreateResponse(response, this.baseClient.logger);
+  }
+
+  public async update(localeId: string, locale: UpdateLocaleRequest): Promise<LocaleEntry> {
+    return this.baseClient.put<LocaleEntry>(`${LocalesApiV4.apiPath}/${localeId}`, locale);
   }
 }

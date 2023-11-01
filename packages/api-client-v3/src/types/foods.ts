@@ -1,14 +1,9 @@
+import type { CategoryHeaderV3 } from './categories';
+
 export interface FoodHeaderV3 {
   code: string;
   englishDescription: string;
   localDescription: string | null;
-}
-
-export interface CategoryHeaderV3 {
-  code: string;
-  englishDescription: string;
-  localDescription: string | null;
-  isHidden: boolean;
 }
 
 export interface AssociatedFoodWithHeaderV3 {
@@ -50,7 +45,7 @@ export interface MainFoodRecordV3 {
 
 export interface LocalFoodRecordV3 {
   version: string | null;
-  localDescription: string | null;
+  localDescription: string[];
   nutrientTableCodes: Record<string, string>;
   portionSize: PortionSizeMethodV3[];
   associatedFoods: AssociatedFoodWithHeaderV3[];

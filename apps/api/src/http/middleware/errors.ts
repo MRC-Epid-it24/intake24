@@ -3,6 +3,7 @@ import { MulterError } from 'multer';
 
 import type { Ops } from '@intake24/api/app';
 import { IndexNotReadyError } from '@intake24/api/food-index';
+import ConflictError from '@intake24/api/http/errors/conflict.error';
 import { DatabaseError } from '@intake24/db';
 
 import {
@@ -46,6 +47,15 @@ export default (app: Express, { logger }: Ops): void => {
     if (err instanceof NotFoundError) {
       const { message } = err;
       res.status(404).json({ message });
+      return;
+    }
+    next(err);
+  });
+
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof ConflictError) {
+      const { message } = err;
+      res.status(409).json({ message });
       return;
     }
     next(err);

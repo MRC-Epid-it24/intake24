@@ -1,3 +1,6 @@
+import type { CreationAttributes } from 'sequelize';
+import { pick } from 'lodash';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';
 import type {
@@ -5,6 +8,7 @@ import type {
   NutrientTableCsvMappingNutrientInput,
   NutrientTableEntry,
   NutrientTableInput,
+  NutrientTableRecord as ApiNutrientTableRecord,
 } from '@intake24/common/types/http/admin';
 import type { Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -13,6 +17,9 @@ import {
   NutrientTableCsvMapping,
   NutrientTableCsvMappingField,
   NutrientTableCsvMappingNutrient,
+  NutrientTableRecord,
+  NutrientTableRecordField,
+  NutrientTableRecordNutrient,
   Op,
 } from '@intake24/db';
 
@@ -248,12 +255,90 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    */
   const queueTask = async (input: QueueJob) => scheduler.jobs.addJob(input);
 
+  const updateRecords = async (nutrientTableId: string, records: ApiNutrientTableRecord[]) => {
+    await db.foods.transaction(async (transaction) => {
+      const recordIds = records.map((record) => record.recordId);
+
+      // Find existing records ids matching nutrientTableId/nutrientTableRecordId
+      const existingRecords = await NutrientTableRecord.findAll({
+        where: {
+          nutrientTableId,
+          nutrientTableRecordId: recordIds,
+        },
+      });
+
+      const recordCreateAttribs: CreationAttributes<NutrientTableRecord>[] = records.map(
+        (record) => ({
+          id: existingRecords.find(
+            (existing) =>
+              existing.nutrientTableId === nutrientTableId &&
+              existing.nutrientTableRecordId === record.recordId
+          )?.id,
+          nutrientTableId,
+          nutrientTableRecordId: record.recordId,
+          name: record.name,
+          localName: record.localName,
+        })
+      );
+
+      await NutrientTableRecord.bulkCreate(recordCreateAttribs, {
+        updateOnDuplicate: ['name', 'localName'],
+        transaction,
+      });
+
+      // Bulk create is not guaranteed to return the new record ids so query for them again
+      const affectedRecords = await NutrientTableRecord.findAll({
+        where: { nutrientTableId, nutrientTableRecordId: recordIds },
+        transaction,
+      });
+
+      const recordIdList = affectedRecords.map((record) => record.id);
+
+      const recordIdMap = Object.fromEntries(
+        affectedRecords.map((record) => [record.nutrientTableRecordId, record.id])
+      );
+
+      const recordNutrientCreateAttribs: CreationAttributes<NutrientTableRecordNutrient>[] =
+        records.flatMap((record) =>
+          record.nutrients.map((nutrientRow) => ({
+            nutrientTableRecordId: recordIdMap[record.recordId],
+            nutrientTypeId: nutrientRow[0],
+            unitsPer100g: nutrientRow[1],
+          }))
+        );
+
+      const recordFieldCreateAttribs: CreationAttributes<NutrientTableRecordField>[] =
+        records.flatMap((record) =>
+          record.fields.map((fieldRow) => ({
+            nutrientTableRecordId: recordIdMap[record.recordId],
+            name: fieldRow[0],
+            value: fieldRow[1],
+          }))
+        );
+
+      await NutrientTableRecordField.destroy({
+        where: { nutrientTableRecordId: recordIdList },
+        transaction,
+      });
+
+      await NutrientTableRecordField.bulkCreate(recordFieldCreateAttribs, { transaction });
+
+      await NutrientTableRecordNutrient.destroy({
+        where: { nutrientTableRecordId: recordIdList },
+        transaction,
+      });
+
+      await NutrientTableRecordNutrient.bulkCreate(recordNutrientCreateAttribs, { transaction });
+    });
+  };
+
   return {
     getTable,
     createTable,
     updateTable,
     deleteTable,
     queueTask,
+    updateRecords,
   };
 };
 

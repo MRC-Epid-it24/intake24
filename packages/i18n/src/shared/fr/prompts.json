@@ -1,0 +1,441 @@
+{
+  "checkboxList": {
+    "name": "Liste à choix multiples",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Autre - veuillez préciser",
+    "validation": {
+      "required": "Au moins une des options doit être sélectionnée."
+    }
+  },
+  "datePicker": {
+    "name": "Sélectionner la date",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Ce champ doit être rempli."
+    }
+  },
+  "info": {
+    "name": "Info / confirmation",
+    "text": "",
+    "description": ""
+  },
+  "noMoreInformation": {
+    "name": "Aucune information supplémentaire n'est nécessaire",
+    "text": "",
+    "description": "<p>Nous disposons de toutes les informations nécessaires concernant votre <strong>{item}</strong> pour l'instant.</p><p>Pour poursuivre l'enquête, cliquez sur le bouton \"Continuer\" ci-dessous et nous sélectionnerons automatiquement l'aliment ou le repas suivant pour lequel nous avons encore besoin d'informations.</p><p>Vous pouvez également sélectionner un repas ou une denrée alimentaire sur la gauche si vous souhaitez vous concentrer sur un élément particulier.</p>"
+  },
+  "radioList": {
+    "name": "Liste à choix unique",
+    "text": "",
+    "description": "",
+    "label": "",
+    "other": "Autre - veuillez préciser",
+    "validation": {
+      "required": "L'une des options doit être sélectionnée."
+    }
+  },
+  "textarea": {
+    "name": "Texte libre",
+    "text": "",
+    "description": "",
+    "label": "Saisissez votre réponse dans la zone de texte",
+    "validation": {
+      "required": "Ce champ doit être rempli."
+    }
+  },
+  "timePicker": {
+    "name": "Sélectionner l'heure",
+    "text": "",
+    "description": "",
+    "validation": {
+      "required": "Ce champ doit être rempli."
+    }
+  },
+  "yesNo": {
+    "name": "Oui / Non confirmation",
+    "text": "",
+    "description": ""
+  },
+  "associatedFoods": {
+    "name": "Aliments associés",
+    "text": "",
+    "description": "",
+    "yes": "Oui, j'ai eu quelques",
+    "yesAnother": "Oui, j'ai eu un autre",
+    "no": "Non, je ne l'ai pas fait",
+    "moreFoodsQuestion": "Avez-vous consommé d'autres aliments de cette catégorie ?",
+    "databaseLookupTitle": "Qu'est-ce que c'était ?",
+    "databaseLookupWithExisting": "Si ce n'est pas le cas, de quoi s'agit-il ?",
+    "existingFoodsTitle": "S'agit-il d'un sujet que vous avez déjà abordé ?",
+    "select": {
+      "different": "Changer",
+      "remove": "Retirer"
+    },
+    "browse": "Parcourir tous les aliments",
+    "search": "Recherche d'un aliment",
+    "root": "toutes les catégories d'aliments",
+    "back": "Retour à '{category}'",
+    "none": "Aucun résultat concernant les aliments. Veuillez affiner votre recherche.",
+    "missing": {
+      "label": "Je ne trouve pas ma nourriture",
+      "description": "<p>Essayez de parcourir les catégories d'aliments énumérées ci-dessus pour trouver votre aliment.</p><p>Si vous ne trouvez toujours pas votre aliment, sélectionnez \"Signaler un aliment manquant\".</p>",
+      "report": "Signaler un aliment manquant",
+      "tryAgain": "D'accord, je réessaie",
+      "placeholder": "Nourriture manquante"
+    }
+  },
+  "editMeal": {
+    "name": "Editer le repas",
+    "text": "",
+    "description": "<p>Racontez-nous tout ce que vous avez eu pour votre <strong>{meal}</strong>.</p><p>Saisissez chaque aliment et chaque boisson séparément.</p><p>Appuyez sur <span class=\"fas fa-turn-down fa-rotate-90 mx-2\"></span> ou sur la touche Entrée/Retour pour ajouter chaque aliment et chaque boisson.</p><p>N'indiquez<strong>pas</strong> la quantité consommée, mais seulement le nom des aliments.</p>",
+    "add": "Ajouter",
+    "drinksOnly": "Boissons",
+    "foods": "Aliments et boissons",
+    "foodsOnly": "Aliments"
+  },
+  "final": {
+    "name": "Page finale",
+    "text": "",
+    "description": ""
+  },
+  "foodSearch": {
+    "name": "Recherche d'aliments",
+    "text": "",
+    "description": "<p>Vous trouverez ci-dessous la liste des aliments de notre base de données qui ressemblent à \"<strong>{food}</strong>\".</p><p>Choisissez l'aliment que vous aviez ou celui qui s'en rapproche le plus.</p>",
+    "browse": "Parcourir tous les aliments",
+    "search": "Recherche d'un aliment",
+    "root": "toutes les catégories d'aliments",
+    "back": "Retour à '{category}'",
+    "none": "Aucun résultat concernant les aliments. Veuillez affiner votre recherche.",
+    "missing": {
+      "label": "Je ne trouve pas ma nourriture",
+      "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans le champ de recherche ci-dessus.</p><p>Ou sélectionnez \"Parcourir tous les aliments\" et explorez les catégories d'aliments.</p><p>Si vous ne trouvez toujours pas votre aliment, sélectionnez \"Signaler un aliment manquant\".</p>",
+      "report": "Signaler un aliment manquant",
+      "tryAgain": "D'accord, je réessaie"
+    },
+    "recipeBuilder": {
+      "label": "Ajoutez vos propres données {searchTerm}",
+      "description": "<p>Créez votre propre recette.</p>",
+      "report": "Signaler un aliment manquant",
+      "tryAgain": "D'accord, je réessaie"
+    },
+    "confirmDiscardFood": {
+      "label": "Oui",
+      "messageUnsafe": "<p>Vous avez déjà répondu à certaines questions concernant <strong>\"{discardedFoodName}</strong>\" !</p><p>Si vous le remplacez maintenant par <strong>\"{selectedFoodName}</strong> \", vous devrez peut-être répondre à nouveau à certaines de ces questions.</p><p>Êtes-vous sûr de vouloir remplacer cet aliment ?</p>",
+      "message": "Vous avez déjà répondu à certaines questions concernant \"{discardedFoodName}\" ! Si vous le remplacez maintenant par \"{selectedFoodName}\", vous devrez peut-être répondre à nouveau à certaines de ces questions. Êtes-vous sûr de vouloir remplacer cet aliment ?"
+    }
+  },
+  "mealAdd": {
+    "name": "Ajouter un repas",
+    "text": "",
+    "description": "<p>Sélectionnez l'un des éléments de la liste ci-dessous s'il est approprié.</p>",
+    "label": "Sélectionner un repas prédéfini",
+    "custom": {
+      "text": "",
+      "description": "<p>Saisissez le nom de ce repas. Vous pouvez taper votre propre nom ou en sélectionner un dans la liste ci-dessous s'il est approprié.</p>",
+      "label": "Sélectionner un nom prédéfini ou saisir un nom de repas"
+    },
+    "yes": "Ajouter ce repas",
+    "no": "Annuler",
+    "noMeal": "Il ne reste plus de repas, ajouter au moins un"
+  },
+  "mealDuration": {
+    "name": "Durée du repas",
+    "text": "",
+    "description": "<p>Combien de temps vous a-t-il fallu pour manger <strong>{mealName}</strong>?</p>",
+    "minutes": "minuscules",
+    "confirm": "Continuer"
+  },
+  "mealGap": {
+    "name": "Lacune dans les repas",
+    "text": "",
+    "description": "",
+    "before": "<p>Avez-vous pris des repas, des en-cas ou des boissons avant votre <strong>{meal}</strong> à {mealTime}?</p>",
+    "after": "<p>Avez-vous pris des repas, des collations ou des boissons après votre <strong>{meal}</strong> à {mealTime}?</p>",
+    "between": "<p>Avez-vous pris des repas, des en-cas ou des boissons entre votre <strong>{startMeal}</strong> (à {startMealTime}) et votre <strong>{endMeal}</strong> (à {endMealTime}) ?</p>",
+    "yes": "Oui, ajouter un repas",
+    "no": "Non, je ne l'ai pas fait"
+  },
+  "mealTime": {
+    "name": "Modifier l'heure",
+    "text": "",
+    "description": "<p>Avez-vous <strong>{meal}</strong>? Si oui, à quelle heure ?</p>",
+    "yes": "À cette heur",
+    "no": "N'a pas eu"
+  },
+  "readyMeal": {
+    "name": "Plats préparés",
+    "text": "",
+    "description": "<p>S'agit-il d'un plat préparé ou d'un aliment ?</p>"
+  },
+  "redirect": {
+    "name": "Redirection",
+    "text": "",
+    "description": "",
+    "missingUrl": "URL de redirection manquant",
+    "goTo": "Aller au questionnaire"
+  },
+  "reviewConfirm": {
+    "name": "Réviser et confirmer",
+    "text": "",
+    "description": ""
+  },
+  "sameAsBefore": {
+    "name": "Idem que précédemment",
+    "text": "",
+    "description": "<p>S'agit-il <strong>{food}</strong> le même que celui que vous aviez auparavant ?</p>",
+    "serving": "{amount} taille de la portion",
+    "leftovers": "A gauche, à peu près {amount}",
+    "noLeftovers": {
+      "drink": "Tout a été bu",
+      "food": "Tout manger"
+    },
+    "hadWith": "L'a eu avec :",
+    "noAddedFoods": "Sans ajouts (lait, sucre, sauces, etc.)",
+    "same": "Oui, j'ai eu la même",
+    "notSame": "Non, j'en avais une autre"
+  },
+  "splitFood": {
+    "name": "Aliments fractionnés",
+    "text": "",
+    "description": "Il semble que vous ayez inscrit plus d'un aliment sur la ligne.",
+    "searchTerm": "Terme de recherche : {food}",
+    "split": "S'agit-il d'aliments distincts ?",
+    "singleSuggestion": "Sélectionnez \"conserver comme aliment unique\" si vous vouliez un aliment unique tel qu'une soupe de poulet et de légumes.",
+    "singleSuggestionEx": "Sélectionnez \"conserver comme aliment unique\" si vous voulez un aliment unique tel que {food}.",
+    "separateSuggestion": "Sélectionnez \"aliments séparés\" pour des produits tels que le poisson et les frites.",
+    "separateSuggestionEx": "Sélectionnez \"aliments séparés\" pour des produits tels que {food}.",
+    "separate": "Séparer les aliments",
+    "single": "Conserver comme aliment unique"
+  },
+  "submit": {
+    "name": "Soumettre une page",
+    "text": "",
+    "description": ""
+  },
+  "quantity": {
+    "_": "Quantité",
+    "whole": "Entier",
+    "fraction": "Fraction",
+    "and": "et",
+    "confirm": "J'en ai eu autant",
+    "more": "Plus d'informations",
+    "less": "Moins"
+  },
+  "portionSizeOption": {
+    "name": "Méthode des portions",
+    "text": "",
+    "description": "Comment voulez-vous estimer votre part ?",
+    "selections": {
+      "grated": "Râpé",
+      "in_a_bag": "Dans un sac",
+      "in_a_bottle": "En bouteille",
+      "in_a_bowl": "Dans un bol",
+      "in_a_can": "En boîte",
+      "in_a_carton": "En carton",
+      "in_a_glass": "Dans un verre",
+      "in_a_mug": "Dans une tasse",
+      "in_a_pot": "Dans un pot",
+      "in_a_takeaway_cup": "Dans un gobelet à emporter",
+      "in_baby_carrots": "Dans les carottes miniatures",
+      "in_bars": "Dans les bars",
+      "in_batons": "En matraques",
+      "in_berries": "Dans les baies",
+      "in_burgers": "Dans les hamburgers",
+      "in_chopped_fruit": "En fruits coupés",
+      "in_crinkle_cut_chips": "En chips croustillantes",
+      "in_cubes": "En cubes",
+      "in_curly_fries": "En frites",
+      "in_dollops": "En cuillerées",
+      "in_french_fries": "Dans les frites",
+      "in_individual_cakes": "En gâteaux individuels",
+      "in_individual_packs": "En emballages individuels",
+      "in_individual_puddings": "En puddings individuels",
+      "in_individual_sweets": "En bonbons individuels",
+      "in_slices": "En tranches",
+      "in_spoonfuls": "En cuillerées",
+      "in_straight_cut_chips": "En copeaux à coupe droite",
+      "in_thick_cut_chips": "En frites épaisses",
+      "in_unwrapped_bars": "En barres non emballées",
+      "in_whole_fruit_vegetables": "Dans les fruits et légumes entiers",
+      "in_wrapped_bars": "En barres emballées",
+      "milk_on_cereal": "Lait sur céréales",
+      "on_a_knife": "Sur un couteau",
+      "on_a_plate": "Sur une assiette",
+      "slice_from_a_large_cake": "Tranche d'un grand gâteau",
+      "slice_from_a_large_pudding": "Tranche d'un grand pudding",
+      "spread_on_a_cracker": "Tartiner sur un cracker",
+      "spread_on_a_scone": "Tartiner sur un scone",
+      "spread_on_bread": "Tartiner sur du pain",
+      "use_a_standard_measure": "Utiliser une mesure standard",
+      "use_a_standard_portion": "Utiliser une portion standard",
+      "use_an_image": "Utiliser une image",
+      "use_these_crisps_in_a_bag": "Utilisez ces chips en sachet",
+      "use_tortilla_chips_in_a_bowl": "Utiliser des chips de tortilla dans un bol",
+      "weight": "Saisir le poids/volume"
+    }
+  },
+  "linkedAmount": {
+    "label": "{unit} (hors {quantity}) aviez-vous {food} sur vous ?",
+    "unit": "Combien de tranches",
+    "all": "Sur l'ensemble d'entre eux"
+  },
+  "asServed": {
+    "name": "Tel que servi",
+    "text": "",
+    "description": "",
+    "serving": {
+      "header": "À l'aide de ces images, choisissez la quantité de {food} que vous avez eue.",
+      "less": "J'avais moins",
+      "more": "J'ai eu plus de",
+      "confirm": "J'ai eu autant de"
+    },
+    "leftovers": {
+      "header": "Avez-vous laissé une partie de votre {food}?",
+      "label": "À l'aide de ces images, choisissez la quantité de {food} que vous avez laissée.",
+      "less": "J'ai laissé moins",
+      "more": "J'ai laissé plus de",
+      "confirm": "J'ai laissé autant"
+    },
+    "weightFactor": {
+      "serving": {
+        "more": "J'avais {whole} et {fraction}",
+        "less": "J'avais {fraction}"
+      },
+      "leftovers": {
+        "more": "J'ai quitté {whole} et {fraction}",
+        "less": "J'ai quitté {fraction}"
+      },
+      "less": "de la plus petite partie",
+      "more": "de la plus grande partie"
+    }
+  },
+  "cereal": {
+    "name": "Céréales",
+    "text": "",
+    "description": "",
+    "container": "Sélectionnez le bol qui ressemble le plus à celui que vous avez utilisé pour votre {food}."
+  },
+  "drinkScale": {
+    "name": "Balance à boissons",
+    "text": "",
+    "description": "",
+    "container": "Sélectionnez la tasse ou le verre qui ressemble le plus à celui que vous avez utilisé pour votre {food}.",
+    "serving": {
+      "header": "Utilisez le curseur ou tapez sur la tasse ou le verre pour indiquer la quantité que vous avez consommée.",
+      "less": "J'avais moins",
+      "more": "J'ai eu plus de",
+      "confirm": "J'avais autant de"
+    },
+    "leftovers": {
+      "header": "Avez-vous laissé une partie de votre {food}?",
+      "label": "Utilisez le curseur à droite pour choisir le montant qu'il vous reste.",
+      "less": "J'ai laissé moins",
+      "more": "J'ai laissé plus de",
+      "confirm": "J'ai laissé autant"
+    },
+    "count": "Combien de ces boissons avez-vous consommées à ce moment-là ?"
+  },
+  "guideImage": {
+    "name": "Image guide",
+    "text": "",
+    "description": "",
+    "label": "Sélectionnez l'image qui correspond le mieux à la taille de {food} que vous avez eue.",
+    "quantity": "Choisissez le nombre de {food} que vous aviez.",
+    "confirm": "J'en ai eu autant",
+    "expand": "Agrandir l'image"
+  },
+  "milkInAHotDrink": {
+    "name": "Lait dans une boisson chaude",
+    "text": "",
+    "description": "",
+    "label": "Quelle est la quantité de {food} dans votre thé ou votre café ?",
+    "confirm": "J'avais autant de"
+  },
+  "milkOnCereal": {
+    "name": "Lait sur céréales",
+    "text": "",
+    "description": "",
+    "container": "Sélectionnez le bol qui ressemble le plus à celui que vous avez utilisé pour votre {food}.",
+    "milk": "Choisissez le niveau auquel votre lait est monté (sans céréales)."
+  },
+  "missingFood": {
+    "name": "Nourriture manquante",
+    "text": "",
+    "description": "Vous avez dit que vous ne trouviez pas de correspondance pour \"{food}\". Veuillez répondre le plus précisément possible aux questions suivantes, afin de nous aider à identifier votre aliment ou votre boisson.",
+    "source": "Était-il fait à la maison ?",
+    "homemade": "Fournissez des détails supplémentaires, par exemple une description du plat ou des ingrédients.",
+    "purchased": "Dites-nous où il a été acheté. A-t-il un nom de marque ?",
+    "barcode": "Pouvez-vous fournir le code-barres ?",
+    "portionSize": "Quelle quantité avez-vous mangée ? Par exemple, 1 paquet, 2 cuillères à café, 1 poignée, 125 grammes, ½ tasse, etc."
+  },
+  "recipeBuilder": {
+    "name": "{food} créateur de recettes",
+    "text": "",
+    "description": "Veuillez suivre les étapes ci-dessous pour créer votre propre recette pour {food}.",
+    "browse": "Parcourir tous les aliments",
+    "search": "Recherche d'un aliment",
+    "root": "toutes les catégories d'aliments",
+    "back": "Retour à '{category}'",
+    "none": "Aucun résultat concernant les aliments. Veuillez affiner votre recherche.",
+    "remove": "Retirer",
+    "missing": {
+      "label": "Je ne trouve pas ma nourriture",
+      "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans le champ de recherche ci-dessus et cliquez sur \"Chercher à nouveau\".</p><p>Vous pouvez également cliquer sur \"Parcourir tous les aliments\" et explorer les catégories d'aliments.</p><p>Si vous ne trouvez toujours pas votre aliment, cliquez sur \"Signaler un aliment manquant\".</p>",
+      "report": "Signaler un aliment manquant",
+      "tryAgain": "D'accord, je réessaie",
+      "irrelevantIngredient": "Je n'avais pas de {ingredient}"
+    },
+    "addMore": "Ajouter d'autres ingrédients",
+    "noMore": "Plus d'ingrédients"
+  },
+  "parentFoodPortion": {
+    "name": "Portion de nourriture pour les parents",
+    "text": "",
+    "description": "",
+    "label": "Quelle quantité de {food} avez-vous dans votre {parentFood}?",
+    "confirm": "J'ai eu autant de"
+  },
+  "pizza": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "typeLabel": "Sélectionnez la pizza qui se rapproche le plus de la taille que vous aviez.",
+    "thicknessLabel": "Quelle était l'épaisseur de votre pizza ?",
+    "sizeLabel": "Quelle est la taille de la (des) tranche(s) que vous avez eue(s) ?",
+    "whole": {
+      "label": "Combien de ces pizzas avez-vous mangées ?",
+      "confirm": "J'ai mangé toute la pizza"
+    },
+    "slices": {
+      "label": "Combien de ces tranches avez-vous eues ?"
+    },
+    "confirm": "J'en ai eu autant"
+  },
+  "standardPortion": {
+    "name": "Portion standard",
+    "text": "",
+    "description": "",
+    "label": "Comment voulez-vous estimer la taille des portions de votre site {food}?",
+    "estimateIn": "En {unit}",
+    "howMany": {
+      "_": "{unit} avez-vous eu ?",
+      "placeholder": "Combien en avez-vous eu ?",
+      "withFood": "{unit} de {food} avez-vous eu ?"
+    },
+    "confirm": "J'en ai eu autant"
+  },
+  "unknown": {
+    "name": "Inconnu",
+    "text": "",
+    "description": "Il n'existe actuellement aucune méthode d'estimation de la taille des portions pour {food}."
+  },
+  "weight": {
+    "name": "Poids",
+    "text": "",
+    "description": "Indiquez le montant dont vous disposiez."
+  }
+}

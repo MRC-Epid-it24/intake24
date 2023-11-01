@@ -46,4 +46,16 @@ export type NutrientTableRefs = {
   nutrientTypes: NutrientTypeEntry[];
 };
 
+export type NutrientTableRecord = {
+  recordId: string;
+  name: string;
+  localName?: string;
+  nutrients: [string, number][];
+  fields: [string, string][];
+};
+
+export type UpdateNutrientTableRecordsRequest = {
+  records: NutrientTableRecord[];
+};
+
 export type NutrientTableRecordsResponse = Pagination<NutrientTableRecordAttributes>;

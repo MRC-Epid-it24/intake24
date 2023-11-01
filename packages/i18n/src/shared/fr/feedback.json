@@ -1,0 +1,77 @@
+{
+  "_": "Retour d'information sur l'alimentation",
+  "info": "Informations sur le retour d'information diététique",
+  "status": {
+    "available": "Un retour d'information diététique est disponible",
+    "lowRecalls": "Le retour d'information diététique sera disponible une fois que vous aurez soumis au moins {minRecalls} recalls.",
+    "notAvailable": "Le retour d'information sur l'alimentation n'est pas disponible pour cette enquête."
+  },
+  "title": "Retour d'information sur l'alimentation à partir de {name} recalls",
+  "missingFoods": "Tout aliment signalé comme manquant ne sera pas pris en compte dans le retour d'information sur l'alimentation.",
+  "physicalData": {
+    "title": "À propos de vous",
+    "subtitle": "Afin que nous puissions présenter vos commentaires de manière appropriée, veuillez saisir les informations suivantes.",
+    "change": "Modifier mes informations",
+    "recall": "Enregistrer un autre jour",
+    "sexes": {
+      "_": "Le sexe",
+      "m": "Homme",
+      "f": "Femme"
+    },
+    "sex": "Le sexe : {sex}",
+    "age": "L'âge : {age}",
+    "birthdate": "Année de naissance",
+    "height": "Hauteur : {height} cm",
+    "heightCm": "Taille en centimètres",
+    "weight": "Poids : {weight} kg",
+    "weightKg": "Poids en kilogrammes",
+    "physicalActivityLevelId": "Niveau d'activité physique",
+    "weightTarget": "Cible : {target}",
+    "weightTargets": {
+      "_": "Objectif de poids",
+      "title": "Objectifs de poids",
+      "keep_weight": "Maintenir le poids",
+      "lose_weight": "Perdre du poids",
+      "gain_weight": "Prendre du poids"
+    }
+  },
+  "outputs": {
+    "title": "Sorties",
+    "download": {
+      "_": "Télécharger",
+      "title": "Télécharger en PDF",
+      "subtitle": "Téléchargez une copie de vos commentaires alimentaires sous forme de fichier PDF. Cela prendra quelques secondes, soyez patients.",
+      "send": "Soumettre une demande",
+      "sent": "Le fichier PDF du feedback diététique a été sauvegardé."
+    },
+    "email": {
+      "_": "Courriel",
+      "title": "Envoyer par courriel",
+      "send": "Soumettre une demande",
+      "sent": "Nous avons envoyé vos commentaires sur l'alimentation à l'adresse électronique fournie."
+    },
+    "retry": "La sortie du retour d'information diététique a été récemment demandée, réessayez dans {secs} s.",
+    "print": "Imprimer"
+  },
+  "topFoods": {
+    "title": "Aliments contribuant le plus à vos apports en nutriments",
+    "chart": "Le plus élevé en {nutrient}"
+  },
+  "meals": {
+    "title": "Répartition des repas par jour",
+    "chart": "{nutrient}"
+  },
+  "intake": {
+    "your": "Votre consommation {nutrient} est {amount}",
+    "estimated": "Estimation de la consommation",
+    "recommended": "Apports recommandés",
+    "tellMeMore": "En savoir plus",
+    "gotIt": "Je l'ai !"
+  },
+  "unitDescription": {
+    "percentage_of_energy": "Le retour d'information sur l'alimentation est basé sur la contribution de ce nutriment à votre apport énergétique et sur la comparaison avec les recommandations.",
+    "energy_divided_by_bmr": "Le retour d'information sur l'alimentation est basé sur l'apport énergétique divisé par le BMR et sur la comparaison avec les recommandations.",
+    "per_unit_of_weight": "Le retour d'information sur l'alimentation est basé sur l'apport de ce nutriment par kg de poids corporel et sur la comparaison avec les recommandations.",
+    "range": "Le retour d'information sur l'alimentation est basé sur votre consommation de ce nutriment et sur sa comparaison avec les recommandations."
+  }
+}

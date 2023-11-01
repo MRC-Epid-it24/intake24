@@ -1,4 +1,4 @@
-import { browse, entry } from '../generic';
+import { browse, code, entry } from '../generic';
 import recipeFoods from './recipe-foods';
 import recipeFoodsSteps from './recipe-foods-steps';
 import splitLists from './split-lists';
@@ -10,6 +10,7 @@ import update from './update';
 
 export default {
   browse,
+  code,
   entry,
   store,
   update,

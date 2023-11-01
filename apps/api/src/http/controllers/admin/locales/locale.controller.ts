@@ -77,6 +77,19 @@ const localeController = (ioc: IoC) => {
     res.json(localeResponse(locale));
   };
 
+  const getByCode = async (
+    req: Request<{ code: string }>,
+    res: Response<LocaleEntry>
+  ): Promise<void> => {
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'read', {
+      where: { code: req.params.code },
+    });
+
+    res.json(localeResponse(locale));
+  };
+
   const edit = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
@@ -165,6 +178,7 @@ const localeController = (ioc: IoC) => {
     browse,
     store,
     read,
+    getByCode,
     edit,
     update,
     destroy,

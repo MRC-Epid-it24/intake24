@@ -1,0 +1,77 @@
+{
+  "_": "Intake24",
+  "home": "Accueil",
+  "dashboard": "Tableau de bord",
+  "navigation": "Navigation",
+  "welcome": {
+    "_": "Bienvenue à Intake24",
+    "subtitle": "Intake24 est un système informatisé de rappel alimentaire à code source ouvert, basé sur un rappel de 24 heures à passages multiples."
+  },
+  "login": {
+    "_": "S'inscrire",
+    "subtitle": "Connectez-vous avec votre nom d'utilisateur et votre mot de passe",
+    "back": "Retour au login",
+    "err": {
+      "invalidCredentials": "Les informations d'identification fournies pour le nom d'utilisateur et le mot de passe ne sont pas valides.",
+      "invalidToken": "Le jeton d'accès fourni n'est pas valide.",
+      "invalidSurvey": "Cette enquête ({surveyId}) ne semble pas être une URL de connexion valide.",
+      "checkCredentials": "Vérifiez les identifiants de connexion qui vous ont été fournis."
+    }
+  },
+  "logout": {
+    "_": "S'inscrire",
+    "text": "Se déconnecter de l'application"
+  },
+  "username": "Nom d'utilisateur",
+  "name": "Nom",
+  "email": "Courriel",
+  "emailConfirm": "Confirmer l'email",
+  "password": "Mot de passe",
+  "phone": "Téléphone",
+  "message": "Message",
+  "continue": "Continuer",
+  "help": {
+    "_": "Aide",
+    "title": "Demande d'aide",
+    "text": "Veuillez remplir le formulaire ci-dessous et l'un de nos collaborateurs vous contactera dès que possible.",
+    "sent": "Votre demande d'aide a été envoyée."
+  },
+  "app": {
+    "_": "Application",
+    "info": "Informations sur la demande",
+    "build": "Construire"
+  },
+  "clipboard": {
+    "_": "Copier dans le presse-papiers",
+    "copied": "Données copiées dans le presse-papiers"
+  },
+  "sw": {
+    "check": "La mise à jour du contenu est disponible",
+    "update": "Mise à jour"
+  },
+  "action": {
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "confirm": {
+      "_": "Confirmer",
+      "title": "Voulez-vous continuer ?",
+      "delete": "Voulez-vous supprimer {name}?"
+    },
+    "ok": "OK",
+    "reload": "Recharge",
+    "remove": "Retirer",
+    "reset": "Remise à zéro",
+    "start": "Démarrage",
+    "submit": "Soumettre",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "not": {
+    "provided": "Non communiqué",
+    "selected": "Non sélectionné"
+  },
+  "errors": {
+    "expansionIncomplete": "Remplir toutes les sections marquées d'un astérisque !"
+  }
+}

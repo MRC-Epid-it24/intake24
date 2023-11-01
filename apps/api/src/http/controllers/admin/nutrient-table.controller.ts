@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { HttpStatusCode } from 'axios';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
@@ -8,6 +9,7 @@ import type {
   NutrientTableInput,
   NutrientTableRefs,
   NutrientTablesResponse,
+  UpdateNutrientTableRecordsRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
@@ -112,6 +114,21 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     res.json(job);
   };
 
+  const updateRecords = async (
+    req: Request<{ nutrientTableId: string }, any, UpdateNutrientTableRecordsRequest>,
+    res: Response
+  ) => {
+    const {
+      params: { nutrientTableId },
+      body,
+    } = req;
+
+    await nutrientTableService.updateRecords(nutrientTableId, body.records);
+
+    res.status(HttpStatusCode.Ok);
+    res.end();
+  };
+
   return {
     browse,
     store,
@@ -119,6 +136,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     edit,
     update,
     destroy,
+    updateRecords,
     refs,
     tasks,
   };

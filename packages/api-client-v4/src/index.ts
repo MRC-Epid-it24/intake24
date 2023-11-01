@@ -7,6 +7,7 @@ import { CategoriesApiV4 } from './categories';
 import { FoodsApiV4 } from './foods';
 import { ImageMapApiV4 } from './image-maps';
 import { LocalesApiV4 } from './locales';
+import { NutrientTablesApiV4 } from './nutrient-tables';
 import { getApiClientV4EnvOptions } from './options';
 import { PortionSizeApiV4 } from './portion-size';
 
@@ -21,6 +22,7 @@ export class ApiClientV4 {
   public readonly portionSize: PortionSizeApiV4;
   public readonly foods: FoodsApiV4;
   public readonly categories: CategoriesApiV4;
+  public readonly nutrientTables: NutrientTablesApiV4;
 
   public constructor(logger: Logger, options: ApiClientOptionsV4) {
     this.baseClient = new BaseClientV4(logger, options);
@@ -29,5 +31,6 @@ export class ApiClientV4 {
     this.portionSize = new PortionSizeApiV4(this.baseClient);
     this.foods = new FoodsApiV4(this.baseClient);
     this.categories = new CategoriesApiV4(this.baseClient);
+    this.nutrientTables = new NutrientTablesApiV4(this.baseClient);
   }
 }

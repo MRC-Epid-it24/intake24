@@ -3,6 +3,8 @@ import './bootstrap';
 import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
+import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+
 import pkg from '../package.json';
 import {
   extractCategories,
@@ -66,14 +68,22 @@ const run = async () => {
       await findPortionImages(pwd);
     });
 
+  const skipFoodsOption = new Option(
+    '-sf, --skip-foods [food-ids...]',
+    'Skip foods having these codes (typically for debug purposes)'
+  );
+
+  skipFoodsOption.required = true;
+
   program
     .command('export-package')
     .description('Export food data into a portable format')
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
-    .requiredOption(
+    .option(
       '-as, --as-served [set-ids...]',
       'Export as served portion size images for given set identifiers'
     )
+    .addOption(skipFoodsOption)
     .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
     .action(async (version, options) => {
       switch (version) {
@@ -118,6 +128,15 @@ const run = async () => {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (localeId, options) => {
       await extractCategories(localeId, options);
+    });
+
+  program
+    .command('build-fr-locale')
+    .description('Build French locale')
+    .requiredOption('-i, --input-path [input path]', 'Source file path')
+    .requiredOption('-o, --output-path [output path]', 'Output file path')
+    .action(async (options) => {
+      await buildFrLocaleCommand(options);
     });
 
   await program.parseAsync(process.argv);

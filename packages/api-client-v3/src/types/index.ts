@@ -1,4 +1,5 @@
 export * from './auth';
+export * from './categories';
 export * from './foods';
 export * from './locales';
 export * from './portion-size/as-served';

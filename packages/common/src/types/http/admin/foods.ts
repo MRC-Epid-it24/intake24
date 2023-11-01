@@ -1,3 +1,6 @@
+import type { UseInRecipeType } from '@intake24/common/types';
+import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
+import type { PortionSizeMethod } from '@intake24/common/types/http/admin/portion-size';
 import type {
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
@@ -11,6 +14,38 @@ import type {
   NutrientTableRecordAttributes,
   Pagination,
 } from '@intake24/db';
+
+export type InheritableAttributes = {
+  readyMealOption?: boolean;
+  sameAsBeforeOption?: boolean;
+  reasonableAmount?: number;
+  useInRecipes?: UseInRecipeType;
+};
+
+export type CreateGlobalFoodRequest = {
+  code: string;
+  name: string;
+  foodGroupId: string;
+  attributes: InheritableAttributes;
+  parentCategories?: string[];
+};
+
+export type UpdateGlobalFoodRequest = Omit<CreateGlobalFoodRequest, 'code'>;
+
+export type CreateLocalFoodRequest = {
+  code: string;
+  name: string;
+  nutrientTableCodes: Record<string, string>;
+  portionSizeMethods: PortionSizeMethod[];
+  associatedFoods: AssociatedFood[];
+};
+
+export type CreateLocalFoodRequestOptions = {
+  update: boolean;
+  return: boolean;
+};
+
+export type UpdateLocalFoodRequest = Omit<CreateLocalFoodRequest, 'code'>;
 
 export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
   parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];

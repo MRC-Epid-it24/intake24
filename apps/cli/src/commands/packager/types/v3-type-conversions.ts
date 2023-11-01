@@ -4,8 +4,10 @@ import type {
   AssociatedFoodWithHeaderV3,
   CategoryHeaderV3,
   FoodHeaderV3,
+  LocalCategoryRecordV3,
   LocaleV3,
   LocalFoodRecordV3,
+  MainCategoryRecordV3,
   MainFoodRecordV3,
   PortableAsServedSetV3,
   PortableDrinkwareSetV3,
@@ -13,6 +15,10 @@ import type {
   PortionSizeMethodV3,
 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
+import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
 import type {
   PkgAsServedPsm,
@@ -282,7 +288,8 @@ function packageLocalFood(code: string, localFood: LocalFoodRecordV3): PkgLocalF
   return {
     code,
     version: localFood.version ?? undefined,
-    localDescription: localFood.localDescription ?? undefined,
+    localDescription:
+      localFood.localDescription.length === 1 ? localFood.localDescription[0] : undefined,
     associatedFoods: localFood.associatedFoods.map(packageAssociatedFood),
     brandNames: localFood.brandNames,
     nutrientTableCodes: localFood.nutrientTableCodes,
@@ -306,6 +313,35 @@ function packageGlobalFood(mainFood: MainFoodRecordV3): PkgGlobalFood {
   };
 }
 
+function packageLocalCategory(
+  code: string,
+  localCategory: LocalCategoryRecordV3
+): PkgLocalCategory {
+  return {
+    code,
+    version: localCategory.version ?? undefined,
+    localDescription:
+      localCategory.localDescription.length === 1 ? localCategory.localDescription[0] : undefined,
+    portionSize: localCategory.portionSize.map(packagePortionSize),
+  };
+}
+
+function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCategory {
+  return {
+    code: mainCategory.code,
+    englishDescription: mainCategory.englishDescription,
+    version: mainCategory.version,
+    isHidden: mainCategory.isHidden,
+    parentCategories: mainCategory.parentCategories.map((header) => header.code),
+    attributes: {
+      readyMealOption: parseOption(mainCategory.attributes.readyMealOption) ?? undefined,
+      reasonableAmount: parseOption(mainCategory.attributes.reasonableAmount) ?? undefined,
+      sameAsBeforeOption: parseOption(mainCategory.attributes.sameAsBeforeOption) ?? undefined,
+      useInRecipes: parseOption(mainCategory.attributes.useInRecipes) ?? undefined,
+    },
+  };
+}
+
 function packageDrinkwareSet(drinkwareSet: PortableDrinkwareSetV3): PkgDrinkwareSet {
   return {
     description: drinkwareSet.description,
@@ -317,6 +353,8 @@ function packageDrinkwareSet(drinkwareSet: PortableDrinkwareSetV3): PkgDrinkware
 export default {
   packageLocalFood,
   packageGlobalFood,
+  packageLocalCategory,
+  packageGlobalCategory,
   packageLocale,
   packageAsServedSet,
   packageDrinkwareSet,

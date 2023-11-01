@@ -38,6 +38,10 @@ export default () => {
     )
     .delete(permission('nutrient-tables|delete'), wrapAsync(nutrientTableController.destroy));
 
+  router
+    .route('/:nutrientTableId/records')
+    .put(permission('nutrient-tables|edit'), wrapAsync(nutrientTableController.updateRecords));
+
   router.get(
     '/:nutrientTableId/edit',
     permission('nutrient-tables|edit'),
