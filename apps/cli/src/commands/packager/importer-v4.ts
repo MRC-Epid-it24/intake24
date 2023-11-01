@@ -1,7 +1,9 @@
 import fs from 'fs/promises';
+import { omit } from 'lodash';
 import path from 'path';
 
 import type { ApiClientV4 } from '@intake24/api-client-v4';
+import type { PkgGlobalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
@@ -30,6 +32,9 @@ export class ImporterV4 {
   private readonly apiClient: ApiClientV4;
   private readonly logger: Logger;
   private readonly options: ImporterOptions;
+
+  private locales: Record<string, PkgLocale> | undefined;
+  private globalFoods: PkgGlobalFood[] | undefined;
 
   constructor(
     apiClient: ApiClientV4,
@@ -114,23 +119,93 @@ export class ImporterV4 {
   }
 
   private async importLocale(localeId: string, locale: PkgLocale): Promise<void> {
-    //const existing = await this.apiClient.imageMaps.get(imageMapId);
+    const localeEntry = typeConverters.fromPackageLocale(locale);
 
-    await this.apiClient.locales.create(localeId, typeConverters.fromPackageLocale(locale));
+    const result = await this.apiClient.locales.create(localeId, localeEntry);
+
+    if (result.type === 'conflict') {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`Skipping locale "${localeId}" due to a conflict`);
+          return;
+        case 'abort': {
+          const message = `Failed to import locale "${localeId}" due to a conflict`;
+          logger.error(message);
+          logger.error(JSON.stringify(result.details, null, 2));
+          throw new Error(message);
+        }
+        case 'overwrite': {
+          const existing = await this.apiClient.locales.findByCode(localeId);
+
+          if (existing === null)
+            throw new Error(`Failed to fetch existing locale data: ${localeId}`);
+
+          await this.apiClient.locales.update(existing.id, localeEntry);
+        }
+      }
+    }
   }
 
   private async importLocales(): Promise<void> {
-    const filePath = path.join(this.workingDir, PkgConstants.LOCALES_FILE_NAME);
+    if (this.locales !== undefined) {
+      const ops = Object.entries(this.locales).map(([id, locale]) => this.importLocale(id, locale));
+      await Promise.all(ops);
+    }
+  }
 
-    const locales = JSON.parse(await fs.readFile(filePath, 'utf-8')) as Record<string, PkgLocale>;
+  private async importGlobalFood(food: PkgGlobalFood): Promise<void> {
+    const foodEntry = typeConverters.fromPackageGlobalFood(food);
 
-    const ops = Object.entries(locales).map(([id, locale]) => this.importLocale(id, locale));
+    const result = await this.apiClient.foods.createGlobalFood(foodEntry);
 
-    await Promise.all(ops);
+    if (result.type === 'conflict') {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`Skipping food "${food.code}" due to a conflict`);
+          return;
+        case 'abort': {
+          const message = `Failed to import food "${food.code}" due to a conflict`;
+          logger.error(message);
+          logger.error(JSON.stringify(result.details, null, 2));
+          throw new Error(message);
+        }
+        case 'overwrite': {
+          await this.apiClient.foods.updateGlobalFood(food.code, omit(foodEntry, 'code'));
+        }
+      }
+    }
+  }
+
+  private async importGlobalFoods(): Promise<void> {
+    if (this.globalFoods !== undefined) {
+      const ops = this.globalFoods.map((food) => this.importGlobalFood(food));
+      await Promise.all(ops);
+    }
+  }
+
+  private async readJSON<T>(relativePath: string): Promise<T> {
+    const filePath = path.join(this.workingDir, relativePath);
+    return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
+  }
+
+  private async readLocales(): Promise<void> {
+    this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
+  }
+
+  private async readGlobalFoods(): Promise<void> {
+    this.globalFoods = await this.readJSON(PkgConstants.GLOBAL_FOODS_FILE_NAME);
+  }
+
+  public async readPackage(): Promise<void> {
+    await Promise.all([this.readLocales(), this.readGlobalFoods()]);
   }
 
   public async import(): Promise<void> {
+    await this.readPackage();
+
     await this.importLocales();
+
+    await this.importGlobalFoods();
 
     //await this.importImageMaps();
   }
