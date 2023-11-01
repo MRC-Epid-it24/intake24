@@ -1,12 +1,15 @@
 import { randomUUID } from 'node:crypto';
 
+import { gl } from 'date-fns/locale';
 import { pick } from 'lodash';
+import { where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
   CreateGlobalFoodRequest,
   FoodEntry,
   FoodInput,
+  UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
 import type {
   FindOptions,
@@ -19,7 +22,10 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import {
   AssociatedFood,
+  Category,
   Food,
+  FoodAttribute,
+  FoodCategory,
   FoodLocal,
   FoodLocalList,
   FoodPortionSizeMethod,
@@ -320,18 +326,63 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     ]);
   };
 
-  const createGlobalFood = async (
-    input: CreateGlobalFoodRequest
-  ): Promise<FoodEntry | 'conflict'> => {
-    try {
-      return await Food.create({
-        version: randomUUID(),
-        ...input,
+  const createGlobalFood = async (input: CreateGlobalFoodRequest): Promise<FoodEntry> => {
+    return await Food.create({
+      version: randomUUID(),
+      ...input,
+    });
+  };
+
+  const updateGlobalFood = async (
+    globalFoodId: string,
+    version: string,
+    input: UpdateGlobalFoodRequest
+  ): Promise<FoodEntry | null> => {
+    return await db.foods.transaction(async (t) => {
+      const affectedRows = await Food.update(
+        {
+          name: input.name,
+          foodGroupId: input.foodGroupId,
+          version: randomUUID(),
+        },
+        { where: { code: globalFoodId, version: version }, transaction: t }
+      );
+
+      // Record with matching food code/version does not exist
+      if (affectedRows[0] !== 1) return null;
+
+      // Record exists, update associations
+      //
+      // What is even the point of an ORM layer if you have to do this sort of thing
+      // manually?
+      await FoodAttribute.update(
+        {
+          ...input.attributes,
+        },
+        { where: { foodCode: globalFoodId }, transaction: t }
+      );
+
+      await FoodCategory.destroy({ where: { foodCode: globalFoodId }, transaction: t });
+
+      const categoryEntries =
+        input.parentCategories === undefined
+          ? []
+          : input.parentCategories.map((categoryId) => ({
+              foodCode: globalFoodId,
+              categoryCode: categoryId,
+            }));
+
+      await FoodCategory.bulkCreate(categoryEntries, { transaction: t });
+
+      return await Food.findOne({
+        where: { code: globalFoodId },
+        include: [FoodAttribute, Category],
       });
-    } catch (error: any) {
-      if (error.name === 'SequelizeUniqueConstraintError') return 'conflict';
-      throw error;
-    }
+    });
+  };
+
+  const getGlobalFood = async (foodId: string): Promise<FoodEntry | null> => {
+    return await Food.findOne({ where: { code: foodId }, include: [FoodAttribute, Category] });
   };
 
   return {
@@ -340,6 +391,8 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     updateFood,
     deleteFood,
     createGlobalFood,
+    updateGlobalFood,
+    getGlobalFood,
   };
 };
 
