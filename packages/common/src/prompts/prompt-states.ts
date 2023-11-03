@@ -20,13 +20,13 @@ export type AssociatedFoodPrompt = {
   foods: AssociatedFoodPromptItem[];
 };
 
-export type RecipeBuilderStepIngredietData = { ingredient: UserFoodData; idx: number; id: string };
+export type RecipeBuilderStepIngredientData = { ingredient: UserFoodData; idx: number; id: string };
 
 export type SelectedFoodRecipeBuilderItemState = {
   code: string;
   name: string;
   id: string;
-  data: RecipeBuilderStepIngredietData;
+  data: RecipeBuilderStepIngredientData;
 };
 
 export type RecipeBuilderStepState = {

@@ -84,6 +84,7 @@ export type JobParams = {
     surveyId: string;
     file: string;
   };
+  SurveySchemesSync: EmptyJobParams;
   SurveySubmission: {
     surveyId: string;
     userId: string;
@@ -173,6 +174,7 @@ export const defaultJobsParams: JobParams = {
     userId: '',
     to: '',
   },
+  SurveySchemesSync: {},
   SurveySubmission: {
     surveyId: '',
     userId: '',

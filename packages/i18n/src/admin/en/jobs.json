@@ -89,6 +89,9 @@
     "SurveySubmission": {
       "_": "Survey - Process submission"
     },
+    "SurveySchemesSync": {
+      "_": "Survey - Synchronize schemes"
+    },
     "SurveySubmissionNotification": {
       "_": "Survey - Submission notification"
     },

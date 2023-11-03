@@ -20,6 +20,7 @@ Jobs types available in system.
   - [SurveyHelpRequestNotification](#surveyhelprequestnotification)
   - [SurveyNutrientsRecalculation](#surveynutrientsrecalculation)
   - [SurveyRespondentsImport](#surveyrespondentsimport)
+  - [SurveySchemesSync](#surveyschemessync)
   - [SurveySubmission](#surveysubmission)
   - [SurveySubmissionNotification](#surveysubmissionnotification)
   - [UserPasswordResetNotification](#userpasswordresetnotification)
@@ -228,6 +229,18 @@ This needs to be run if object structure changes, so all database records are sy
 :::tip User custom fields
 Any additional column not listed above, will get stored as `UserCustomField` record, which is `key` -> `value` record in database table.
 :::
+
+## SurveySchemesSync
+
+`SurveySchemesSync` synchronizes existing survey scheme prompts with default values.
+
+:::tip
+This needs to be run if prompt object structure changes, e.g. new non-optional properties are added, so all database records are synced to use same structure.
+:::
+
+```json
+{}
+```
 
 ## SurveySubmission
 

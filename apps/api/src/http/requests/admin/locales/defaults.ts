@@ -14,7 +14,7 @@ export const code: ParamSchema = {
   isEmpty: { negated: true, bail: true },
   isLength: { bail: true, options: { max: 16 } },
   custom: {
-    options: async (value, meta): Promise<void> => {
+    options: async (value): Promise<void> => {
       if (!(await unique({ model: SystemLocale, condition: { field: 'code', value } })))
         throw new Error('$unique');
     },
@@ -77,7 +77,7 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     isLength: { bail: true, options: { max: 16 } },
     custom: {
-      options: async (value, meta): Promise<void> => {
+      options: async (value): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
         if (!language) throw new Error('$exists');
       },
@@ -90,7 +90,7 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     isLength: { bail: true, options: { max: 16 } },
     custom: {
-      options: async (value, meta): Promise<void> => {
+      options: async (value): Promise<void> => {
         const language = await Language.findOne({ where: { code: value } });
         if (!language) throw new Error('$exists');
       },

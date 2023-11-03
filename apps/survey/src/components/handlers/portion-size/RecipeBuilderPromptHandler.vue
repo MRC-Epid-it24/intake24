@@ -22,7 +22,7 @@ import { defineComponent } from 'vue';
 import type {
   Prompts,
   PromptStates,
-  RecipeBuilderStepIngredietData,
+  RecipeBuilderStepIngredientData,
   RecipeBuilderStepState,
 } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -79,7 +79,7 @@ export default defineComponent({
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
     const addingIngredientsAsALinkedFood = async (
-      ingredients: RecipeBuilderStepIngredietData[][]
+      ingredients: RecipeBuilderStepIngredientData[][]
     ) => {
       ingredients.forEach(async (stepIngredients) => {
         stepIngredients.forEach(async (ingredient) => {
@@ -89,7 +89,7 @@ export default defineComponent({
       commitAnswer();
     };
 
-    const addLinkedFood = async (data: RecipeBuilderStepIngredietData) => {
+    const addLinkedFood = async (data: RecipeBuilderStepIngredientData) => {
       const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
 
       const ingredientToAdd: EncodedFood = {
