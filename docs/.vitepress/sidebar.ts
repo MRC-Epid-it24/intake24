@@ -350,6 +350,10 @@ export const sidebar = {
           text: 'Introduction',
           link: '/admin/',
         },
+        {
+          text: 'Profile',
+          link: '/admin/profile',
+        },
       ],
     },
     {
