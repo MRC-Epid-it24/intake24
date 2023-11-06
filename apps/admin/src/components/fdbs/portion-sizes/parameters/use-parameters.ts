@@ -61,9 +61,14 @@ export const useParameters = (props: UserParametersProps, { emit }: SetupContext
     });
 
   const createObjectParameter = <T extends object>(name: string, defaultValue = {}) =>
-    computed<T>(() => {
-      const parameter = getParameter(name)?.value;
-      return parameter ? JSON.parse(parameter) : defaultValue;
+    computed<T>({
+      get(): T {
+        const parameter = getParameter(name)?.value;
+        return parameter ? JSON.parse(parameter) : defaultValue;
+      },
+      set(value: T) {
+        setParameter(name, JSON.stringify(value));
+      },
     });
 
   return {

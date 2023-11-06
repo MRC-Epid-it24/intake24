@@ -52,7 +52,7 @@ export default class CategoryPortionSizeMethodParameter extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(128),
+    type: DataType.STRING(1024),
   })
   declare value: string;
 

@@ -51,11 +51,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { LocaleOptionList } from '@intake24/common/prompts';
 import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
 import { useApp } from '@intake24/admin/stores';
+
+const english = { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' };
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -99,16 +101,18 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const selected = ref<number | undefined>(undefined);
-    const doNotRemove = computed(() => (props.required ? ['en'] : []));
+    const doNotRemove = computed(() => (props.required ? [english.code] : []));
 
     const languages = computed(() => Object.keys(props.value));
 
-    const allLanguages = computed(
-      () =>
-        useApp().langs ?? [
-          { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' },
-        ]
+    watch(
+      () => languages.value.length,
+      (val) => {
+        selected.value = val - 1;
+      }
     );
+
+    const allLanguages = computed(() => useApp().langs ?? [english]);
 
     const availableLanguages = computed(() =>
       allLanguages.value.filter((lang) => !languages.value.includes(lang.code))
@@ -120,21 +124,15 @@ export default defineComponent({
       return doNotRemove.value.includes(languages.value[selected.value]);
     });
 
-    const getLanguageFlag = (code: string) => {
-      const language = allLanguages.value.find((lang) => lang.code === code);
+    const getLanguageFlag = (code: string) =>
+      allLanguages.value.find((lang) => lang.code === code)?.countryFlagCode ??
+      english.countryFlagCode;
 
-      return language?.countryFlagCode ?? 'gb';
-    };
-
-    const getLanguageName = (code: string) => {
-      const language = allLanguages.value.find((lang) => lang.code === code);
-
-      return language?.englishName ?? 'English';
-    };
+    const getLanguageName = (code: string) =>
+      allLanguages.value.find((lang) => lang.code === code)?.englishName ?? english.englishName;
 
     const add = async (code: string) => {
       emit('input', { ...props.value, [code]: props.default });
-      selected.value = languages.value.length - 1;
       emit('lang-add', code);
     };
 

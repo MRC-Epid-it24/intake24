@@ -63,6 +63,7 @@ export default defineComponent({
         ...item,
         value: Number.parseFloat(item.value),
       }));
+      // TODO: does not run a setter on deep object change
       setParameter('options', JSON.stringify(options.value));
     };
 

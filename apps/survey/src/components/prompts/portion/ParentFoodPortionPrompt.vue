@@ -96,8 +96,19 @@ export default defineComponent({
   },
 
   computed: {
+    category() {
+      const categories = Object.keys(this.parameters.options);
+      return (
+        this.parentFood.data.categories.find((category) => categories.includes(category)) ??
+        '_default'
+      );
+    },
+
     localeOptions() {
-      return (this.parameters.options[this.$i18n.locale] ?? this.parameters.options.en)
+      return (
+        this.parameters.options[this.category][this.$i18n.locale] ??
+        this.parameters.options[this.category].en
+      )
         .map((item) => ({ ...item, value: Number(item.value) }))
         .filter(({ value }) => !Number.isNaN(value));
     },

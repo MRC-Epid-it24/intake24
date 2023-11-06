@@ -6,7 +6,7 @@ import type {
 } from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { ComponentType, LocaleOptionList } from '../prompts';
+import type { CategoryLocaleOptionList, ComponentType, LocaleOptionList } from '../prompts';
 import type { UserFoodData } from './http';
 
 /*
@@ -86,7 +86,7 @@ export type PortionSizeParameters = {
     'image-map-labels': boolean;
   };
   'parent-food-portion': {
-    options: LocaleOptionList<number>;
+    options: CategoryLocaleOptionList;
   };
   pizza: {
     'image-map-labels': boolean;

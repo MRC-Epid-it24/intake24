@@ -20,7 +20,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
-import type { LocaleOptionList } from '@intake24/common/prompts';
+import type { CategoryLocaleOptionList, LocaleOptionList } from '@intake24/common/prompts';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { useI18n } from '@intake24/i18n';
 
@@ -47,10 +47,12 @@ export default defineComponent({
 
     const interval = ref<undefined | number>(undefined);
     const selected = ref(0);
-    const options = computed<LocaleOptionList<number>>(
-      () =>
-        (props.method.parameters['options'] ?? { en: [] }) as unknown as LocaleOptionList<number>
-    );
+    const options = computed<LocaleOptionList<number>>(() => {
+      const { method, parameters } = props.method;
+      return ((method === 'parent-food-portion'
+        ? (parameters['options'] as unknown as CategoryLocaleOptionList)._default
+        : parameters['options']) ?? { en: [] }) as unknown as LocaleOptionList<number>;
+    });
     const localeOptions = computed(() =>
       (options.value[i18n.locale] ?? options.value.en).slice(0, props.max)
     );

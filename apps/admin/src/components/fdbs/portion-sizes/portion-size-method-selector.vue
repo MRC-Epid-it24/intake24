@@ -24,7 +24,7 @@
       <v-form ref="form" @submit.prevent="save">
         <v-container>
           <v-row class="mt-2">
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes._`) }} {{ $t('fdbs.portionSizes.parameters') }}
               </v-card-title>
@@ -86,7 +86,7 @@
               </v-row>
             </v-col>
             <v-divider vertical></v-divider>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md>
               <v-card-title class="px-0">
                 {{ $t(`fdbs.portionSizes.methods.${dialog.item.method}._`) }}
                 {{ $t('fdbs.portionSizes.parameters') }}

@@ -14,6 +14,8 @@ export type LocaleOptionList<T = string> = {
   [locale: string]: ListOption<T>[];
 };
 
+export type CategoryLocaleOptionList<T = number> = Record<'_default' | string, LocaleOptionList<T>>;
+
 export type RadioOrientation = 'column' | 'row';
 
 export const promptTypes = ['custom', 'standard', 'portion-size'] as const;
