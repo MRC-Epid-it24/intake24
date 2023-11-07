@@ -3,6 +3,8 @@ import './bootstrap';
 import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
+import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+
 import pkg from '../package.json';
 import {
   extractCategories,
@@ -118,6 +120,15 @@ const run = async () => {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (localeId, options) => {
       await extractCategories(localeId, options);
+    });
+
+  program
+    .command('build-fr-locale')
+    .description('Build French locale')
+    .requiredOption('-i, --input-path [input path]', 'Source file path')
+    .requiredOption('-o, --output-path [output path]', 'Output file path')
+    .action(async (options) => {
+      await buildFrLocaleCommand(options);
     });
 
   await program.parseAsync(process.argv);
