@@ -25,20 +25,20 @@
     "lodash": "^4.17.21",
     "mariadb": "^3.2.2",
     "mssql": "^10.0.1",
-    "nanoid": "^3.3.6",
+    "nanoid": "^3.3.7",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.33.0",
+    "sequelize": "^6.34.0",
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@simplewebauthn/typescript-types": "^8.3.4",
     "@types/lodash": "^4.14.200",
-    "@types/node": "^20.8.9",
-    "@types/pg": "^8.10.7",
+    "@types/node": "^20.8.10",
+    "@types/pg": "^8.10.8",
     "@types/validator": "^13.11.5",
-    "sequelize-cli": "^6.6.1",
+    "sequelize-cli": "^6.6.2",
     "typescript": "^5.2.2"
   },
   "bundledDependencies": [
