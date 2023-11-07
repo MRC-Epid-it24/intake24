@@ -55,7 +55,7 @@ export function compareMessageKeys<
 }
 
 /**
- * Check that input is either string of object of strings
+ * Check that input is either string | null | object
  *
  * @param {(string | Record<string, any>)} translation
  * @returns {boolean}
@@ -68,7 +68,10 @@ export function validateTranslations(translation: string | Record<string, any>):
     return true;
   }
 
-  return typeof translation === 'string';
+  if (typeof translation !== 'string')
+    console.log(typeof translation, Object.prototype.toString.call(translation), translation);
+
+  return typeof translation === 'string' || translation === null;
 }
 
 export type I18nParams = Record<

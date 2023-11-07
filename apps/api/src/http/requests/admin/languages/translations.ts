@@ -15,13 +15,13 @@ export default validate(
         options: async (value: any[], meta): Promise<void> => {
           value.forEach((translation) => {
             const { id, application, section, messages } = translation;
-            const base = 'validation.admin.languages.translations';
+            const base = 'validation.attributes.i18n';
 
             if ([id, application, section].some((item) => !item || typeof item !== 'string'))
-              throw new Error(customErrorMessage(`${base}.structure`, meta));
+              throw new Error(customErrorMessage('validation.attributes.structure', meta));
 
             if (!isApplication(application))
-              throw new Error(customErrorMessage(`${base}.application`, meta));
+              throw new Error(customErrorMessage('validation.attributes.application', meta));
 
             if (!messages || Object.prototype.toString.call(messages) !== '[object Object]')
               throw new Error(customErrorMessage(`${base}.messages`, meta));

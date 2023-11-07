@@ -20,7 +20,7 @@ describe('validate translations', () => {
   });
 
   it('should pass for object of string', () => {
-    const result = validateTranslations({ a: 'a1', b: 'b1', c: { ca: 'ca1' } });
+    const result = validateTranslations({ a: 'a1', b: 'b1', c: { ca: 'ca1', cb: '', cc: null } });
 
     expect(result).toBe(true);
   });

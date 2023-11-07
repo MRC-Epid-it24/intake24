@@ -42,6 +42,11 @@
   "heightCm": "Height",
   "henryCoefficients": "Henry coefficients",
   "howMany": "How many",
+  "i18n": {
+    "defaults": "Missing default translations",
+    "keys": "Not matching translation keys",
+    "messages": "Invalid translations"
+  },
   "id": "ID",
   "imageMapId": "Image map ID",
   "images": "Images",
