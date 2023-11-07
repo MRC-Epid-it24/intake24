@@ -19,12 +19,12 @@ Release command run following actions:
 
 - asks for target release type confirmation
 - updates `package.json` files with
-- generates changelog and saved to [`CHANGELOG.md`](https://github.com/MRC-Epid-it24/intake24/blob/master/CHANGELOG.md)
-- asks for changelog review and verification
-- commits changes to `package.json` and `CHANGELOG.md` files
+- generates changelog from git commits to CLI
+- asks for confirmation
+- commits changes to `package.json` files
 - creates a `tag` with target version
 - pushes both `master` and `tag` to github
 
 ## Github release
 
-Once release has been pushed to github, github release needs to be created. Copy & paste previous release text with reference to `CHANGELOG.md`.
+Once release has been pushed to github, github release needs to be created. Copy & paste generated changelog to github release description.

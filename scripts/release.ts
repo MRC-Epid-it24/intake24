@@ -31,11 +31,20 @@ const main = async () => {
   let targetVersion: string;
 
   const calVerFormat = 'yyyy.minor.patch';
-  const targetVersions = ['calendar', 'minor', 'patch', 'rc', 'beta'].map((item) => {
-    const value = calver.inc(calVerFormat, pkg.version, item);
+  const targetVersions = ['calendar', 'minor', 'patch', 'rc', 'beta'].reduce<
+    { title: string; value: string }[]
+  >((acc, item) => {
+    try {
+      const value = calver.inc(calVerFormat, pkg.version, item);
 
-    return { title: `${item} | ${value}`, value };
-  });
+      acc.push({ title: `${item} | ${value}`, value });
+    } catch (error) {
+      //
+    }
+
+    return acc;
+  }, []);
+
   targetVersions.push({
     title: 'Custom release type',
     value: 'custom',
@@ -72,19 +81,17 @@ const main = async () => {
 
   step('\nGenerating the changelog...');
   await run('pnpm', ['changelog']);
-  await run('pnpm', ['prettier', '--write', 'CHANGELOG.md']);
 
-  const { yes: isChangelogCorrect } = await prompts({
+  const { yes: allGood } = await prompts({
     type: 'confirm',
     name: 'yes',
-    message: 'Is the changelog correct?',
+    message: 'Is everything correct for push?',
   });
 
-  if (!isChangelogCorrect) return;
+  if (!allGood) return;
 
   // Commit changes to the Git and create a tag.
   step('\nCommitting changes...');
-  await run('git', ['add', 'CHANGELOG.md', '*package.json']);
   await run('git', ['commit', '-m', `release: v${targetVersion}`]);
   await run('git', ['tag', `v${targetVersion}`]);
 

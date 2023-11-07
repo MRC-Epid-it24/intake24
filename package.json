@@ -29,7 +29,7 @@
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "docs:lint": "prettier --write docs/**/*.md",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog": "conventional-changelog -p angular",
     "release": "pnpm tsx scripts/release.ts",
     "lint:md": "prettier --write **/*.md",
     "lint:ts": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
