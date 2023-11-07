@@ -10,6 +10,7 @@ import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import { PkgConstants } from '@intake24/cli/commands/packager/constants';
+import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import typeConverters from '@intake24/cli/commands/packager/types/v3-type-conversions';
 import logger from '@intake24/common-backend/services/logger/logger';
 
@@ -343,70 +344,31 @@ export class ExporterV3 {
     const asServedData = await Promise.all(sortedAsServedIds.map((id) => this.getAsServedData(id)));
     this.collectAsServedDependencies(asServedData);
 
+    const writer = new PackageWriter(logger, this.workingDir, this.options);
+
     await Promise.all([
-      this.writeJSON(
-        uniqueGlobalFoods,
-        path.join(this.workingDir, PkgConstants.GLOBAL_FOODS_FILE_NAME)
-      ),
-      this.writeJSON(
-        Object.fromEntries(
-          zip(
-            sortedLocaleIds,
-            localeData.map((data) => data.properties)
-          )
-        ),
-        path.join(this.workingDir, PkgConstants.LOCALES_FILE_NAME)
-      ),
-      this.writeJSON(
+      writer.writeGlobalFoods(uniqueGlobalFoods),
+      writer.writeLocales(localeData.map((data) => data.properties)),
+      writer.writeLocalFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
             localeData.map((data) => data.localFoods)
           )
-        ),
-        path.join(this.workingDir, PkgConstants.LOCAL_FOODS_FILE_NAME)
+        )
       ),
-      this.writeJSON(
+      writer.writeEnabledLocalFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
             localeData.map((data) => data.enabledLocalFoods)
           )
-        ),
-        path.join(this.workingDir, PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME)
-      ),
-      this.writeJSON(
-        Object.fromEntries(zip(sortedDrinkwareIds, drinkwareData)),
-        path.join(
-          this.workingDir,
-          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-          PkgConstants.DRINKWARE_FILE_NAME
         )
       ),
-      this.writeJSON(
-        Object.fromEntries(zip(sortedGuideImageIds, guideImageData)),
-        path.join(
-          this.workingDir,
-          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-          PkgConstants.GUIDE_IMAGE_FILE_NAME
-        )
-      ),
-      this.writeJSON(
-        Object.fromEntries(zip(sortedImageMapIds, imageMapData)),
-        path.join(
-          this.workingDir,
-          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-          PkgConstants.IMAGE_MAP_FILE_NAME
-        )
-      ),
-      this.writeJSON(
-        Object.fromEntries(zip(sortedAsServedIds, asServedData)),
-        path.join(
-          this.workingDir,
-          PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-          PkgConstants.AS_SERVED_FILE_NAME
-        )
-      ),
+      writer.writeDrinkwareSets(Object.fromEntries(zip(sortedDrinkwareIds, drinkwareData))),
+      writer.writeGuideImages(Object.fromEntries(zip(sortedGuideImageIds, guideImageData))),
+      writer.writeImageMaps(Object.fromEntries(zip(sortedImageMapIds, imageMapData))),
+      writer.writeAsServedSets(Object.fromEntries(zip(sortedAsServedIds, asServedData))),
     ]);
 
     await this.downloadImages();

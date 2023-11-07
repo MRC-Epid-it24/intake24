@@ -148,8 +148,10 @@ export class ImporterV4 {
 
   private async importLocales(): Promise<void> {
     if (this.locales !== undefined) {
+      logger.info(`Importing locale records`);
       const ops = Object.entries(this.locales).map(([id, locale]) => this.importLocale(id, locale));
       await Promise.all(ops);
+      logger.info(`Finished importing locales`);
     }
   }
 
@@ -187,21 +189,40 @@ export class ImporterV4 {
 
   private async importGlobalFoods(): Promise<void> {
     if (this.globalFoods !== undefined) {
-      const ops = this.globalFoods.map((food) => this.importGlobalFood(food));
-      await Promise.all(ops);
+      const globalFoodsCount = this.globalFoods.length;
+
+      logger.info(`Importing ${globalFoodsCount} global food records`);
+
+      const batchSize = 50;
+      let importedCount = 0;
+
+      for (let i = 0; i < globalFoodsCount; i += batchSize) {
+        const batch = this.globalFoods.slice(i, i + batchSize);
+        const ops = batch.map((food) => this.importGlobalFood(food));
+
+        await Promise.all(ops);
+
+        importedCount += batch.length;
+        logger.info(`${importedCount}/${globalFoodsCount}...`);
+      }
+
+      logger.info('Finished importing global food records');
     }
   }
 
   private async readJSON<T>(relativePath: string): Promise<T> {
     const filePath = path.join(this.workingDir, relativePath);
+    logger.debug(`Reading JSON file: ${filePath}`);
     return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
   }
 
   private async readLocales(): Promise<void> {
+    logger.debug('Loading locales');
     this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
   }
 
   private async readGlobalFoods(): Promise<void> {
+    logger.debug('Loading global foods');
     this.globalFoods = await this.readJSON(PkgConstants.GLOBAL_FOODS_FILE_NAME);
   }
 
@@ -212,7 +233,7 @@ export class ImporterV4 {
   public async import(): Promise<void> {
     await this.readPackage();
 
-    // await this.importLocales();
+    await this.importLocales();
 
     await this.importGlobalFoods();
 
