@@ -37,10 +37,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.200",
-    "@types/node": "^20.8.9",
+    "@types/node": "^20.8.10",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
-    "vite-plugin-pwa": "^0.16.6",
+    "vite-plugin-pwa": "^0.16.7",
     "workbox-window": "^7.0.0"
   },
   "bundledDependencies": [
