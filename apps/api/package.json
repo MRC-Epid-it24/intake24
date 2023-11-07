@@ -84,6 +84,7 @@
     "sequelize-typescript": "^2.1.5",
     "sharp": "^0.32.6",
     "slugify": "^1.6.6",
+    "talisman": "^1.1.4",
     "ua-parser-js": "^1.0.37",
     "validator": "^13.11.0",
     "web-push": "^3.6.6"
