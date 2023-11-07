@@ -377,6 +377,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
       return await Food.findOne({
         where: { code: globalFoodId },
         include: [FoodAttribute, Category],
+        transaction: t,
       });
     });
   };
