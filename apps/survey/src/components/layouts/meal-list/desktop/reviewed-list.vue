@@ -7,6 +7,7 @@
     <v-card-actions>
       <v-hover v-slot="{ hover }">
         <v-btn
+          class="ma-2"
           :color="hover ? 'primary' : 'inherit'"
           :title="$t('recall.menu.meal.add')"
           @click="action('addMeal')"
@@ -29,20 +30,23 @@
             <v-checkbox
               v-if="review === 'checkbox'"
               v-model="reviewed"
-              block
               class="review-checkbox__checkbox"
               label="Reviewed, nothing to add/change"
               :value="meal.id"
             ></v-checkbox>
-            <v-btn
-              class="edit-meal-button"
-              :color="hover ? 'primary' : 'inherit'"
-              :size="x - small"
-              :title="$t('recall.menu.meal.editFoods')"
-              @click="action('editMeal', meal.id)"
-            >
-              {{ $t('recall.menu.meal.editFoods') }}
-            </v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-hover v-slot="{ hover }">
+              <v-btn
+                class="ma-4"
+                :color="hover ? 'primary' : 'inherit'"
+                small
+                :title="$t('recall.menu.meal.editFoods')"
+                @click="action('editMeal', meal.id)"
+              >
+                {{ $t('recall.menu.meal.editFoods') }}
+              </v-btn>
+            </v-hover>
           </v-col>
         </v-row>
       </div>
@@ -121,10 +125,5 @@ export default defineComponent({
   font-size: 0.8125rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
-}
-
-::v-deep.edit-meal-button {
-  padding: 0px 0px;
-  font-size: 0.8125rem;
 }
 </style>
