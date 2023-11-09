@@ -25,12 +25,13 @@
           @action="action"
         ></component>
         <v-row class="pl-3">
-          <v-col cols="2">
+          <v-col cols="auto">
             <v-checkbox
               v-if="review === 'checkbox'"
               v-model="reviewed"
+              block
               class="review-checkbox__checkbox"
-              label="Reviewed"
+              label="Reviewed, nothing to add/change"
               :value="meal.id"
             ></v-checkbox>
             <v-btn
@@ -115,15 +116,15 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .review-checkbox__checkbox .v-label {
   font-size: 0.8125rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
 }
 
-.edit-meal-button {
-  padding: 2px 5px;
+::v-deep.edit-meal-button {
+  padding: 0px 0px;
   font-size: 0.8125rem;
 }
 </style>
