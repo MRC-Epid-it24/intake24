@@ -26,9 +26,8 @@
           @action="action"
         ></component>
         <v-row class="pl-3">
-          <v-col cols="auto">
+          <v-col v-if="review === 'checkbox'" cols="auto">
             <v-checkbox
-              v-if="review === 'checkbox'"
               v-model="reviewed"
               class="review-checkbox__checkbox"
               label="Reviewed, nothing to add/change"
@@ -38,7 +37,7 @@
           <v-col cols="auto">
             <v-hover v-slot="{ hover }">
               <v-btn
-                class="ma-4"
+                :class="review === 'checkbox' ? 'ma-4' : 'my-2 mx-1'"
                 :color="hover ? 'primary' : 'inherit'"
                 small
                 :title="$t('recall.menu.meal.editFoods')"
@@ -50,6 +49,12 @@
           </v-col>
         </v-row>
       </div>
+      <v-checkbox
+        v-if="review === 'onecheckbox'"
+        v-model="reviewed"
+        class="pl-3 review-checkbox__checkbox"
+        label="Reviewed, nothing to add/change"
+      ></v-checkbox>
     </v-list>
     <v-card-actions v-if="!bottomReached" v-intersect="bottomIntersect">
       <v-hover v-slot="{ hover }">
