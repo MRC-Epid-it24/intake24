@@ -13,13 +13,25 @@
               @action="action"
               @update:context-id="updateContextId"
             ></meal-item>
-            <v-checkbox
-              v-if="review === 'checkbox'"
-              v-model="reviewed"
-              class="review-checkbox__checkbox pl-3"
-              label="Reviewed"
-              :value="meal.id"
-            ></v-checkbox>
+            <v-row class="pl-3">
+              <v-col cols="2">
+                <v-checkbox
+                  v-if="review === 'checkbox'"
+                  v-model="reviewed"
+                  class="review-checkbox__checkbox pl-3"
+                  label="Reviewed"
+                  :value="meal.id"
+                ></v-checkbox>
+                <v-btn
+                  class="edit-meal-button"
+                  :color="hover ? 'primary' : 'inherit'"
+                  :size="x - small"
+                  :title="$t('recall.menu.meal.editFoods')"
+                  @click="action('editMeal', meal.id)"
+                  >{{ $t('recall.menu.meal.editFoods') }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </div>
         </v-list>
       </v-card-text>
@@ -93,5 +105,10 @@ export default defineComponent({
   font-size: 0.8125rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
+}
+
+.edit-meal-button {
+  padding: 2px 5px;
+  font-size: 0.8125rem;
 }
 </style>
