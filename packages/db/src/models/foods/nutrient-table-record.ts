@@ -43,12 +43,14 @@ export default class NutrientTableRecord extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
+    unique: 'nutrient_table_records_unique',
   })
   declare nutrientTableId: ForeignKey<NutrientTable['id']>;
 
   @Column({
     allowNull: false,
     type: DataType.STRING(32),
+    unique: 'nutrient_table_records_unique',
   })
   declare nutrientTableRecordId: string;
 

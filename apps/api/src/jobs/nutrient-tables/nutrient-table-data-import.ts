@@ -132,12 +132,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
    * @returns {Promise<void>}
    * @memberof NutrientTableDataImport
    */
-  private async import(chunk = 10): Promise<void> {
-    const { nutrientTableId } = this.params;
-
-    // Clean old data
-    await NutrientTableRecord.destroy({ where: { nutrientTableId } });
-
+  private async import(chunk = 100): Promise<void> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(this.file).pipe(
         parse({
@@ -204,7 +199,12 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
         localName: localDescriptionColumnOffset ? record[localDescriptionColumnOffset] : null,
       };
 
-      const { id: nutrientTableRecordId } = await NutrientTableRecord.create(nutrientRecordInput);
+      const [{ id: nutrientTableRecordId }] = await NutrientTableRecord.upsert(nutrientRecordInput);
+
+      await Promise.all([
+        NutrientTableRecordField.destroy({ where: { nutrientTableRecordId } }),
+        NutrientTableRecordNutrient.destroy({ where: { nutrientTableRecordId } }),
+      ]);
 
       if (fields.length) {
         const fieldRecords = fields.map((field) => ({
