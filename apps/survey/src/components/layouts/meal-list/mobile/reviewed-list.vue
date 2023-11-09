@@ -22,14 +22,19 @@
                   label="Reviewed, nothing to add/change"
                   :value="meal.id"
                 ></v-checkbox>
-                <v-btn
-                  class="edit-meal-button"
-                  :color="hover ? 'primary' : 'inherit'"
-                  :size="x - small"
-                  :title="$t('recall.menu.meal.editFoods')"
-                  @click="action('editMeal', meal.id)"
-                  >{{ $t('recall.menu.meal.editFoods') }}
-                </v-btn>
+              </v-col>
+              <v-col cols="auto">
+                <v-hover v-slot="{ hover }">
+                  <v-btn
+                    class="ma-4"
+                    :color="hover ? 'primary' : 'inherit'"
+                    small
+                    :title="$t('recall.menu.meal.editFoods')"
+                    @click="action('editMeal', meal.id)"
+                  >
+                    {{ $t('recall.menu.meal.editFoods') }}
+                  </v-btn>
+                </v-hover>
               </v-col>
             </v-row>
           </div>
@@ -105,10 +110,5 @@ export default defineComponent({
   font-size: 0.8125rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
-}
-
-.edit-meal-button {
-  padding: 2px 5px;
-  font-size: 0.8125rem;
 }
 </style>
