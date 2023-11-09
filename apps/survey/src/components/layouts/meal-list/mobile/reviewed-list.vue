@@ -14,12 +14,12 @@
               @update:context-id="updateContextId"
             ></meal-item>
             <v-row class="pl-3">
-              <v-col cols="2">
+              <v-col cols="auto">
                 <v-checkbox
                   v-if="review === 'checkbox'"
                   v-model="reviewed"
-                  class="review-checkbox__checkbox pl-3"
-                  label="Reviewed"
+                  class="review-checkbox__checkbox"
+                  label="Reviewed, nothing to add/change"
                   :value="meal.id"
                 ></v-checkbox>
                 <v-btn
