@@ -20,7 +20,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path ../../.eslintignore"
   },
   "dependencies": {
-    "@coddicat/vue-pinch-scroll-zoom": "^3.3.4",
+    "@coddicat/vue-pinch-scroll-zoom": "^4.2.4",
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@vueuse/core": "^10.5.0",
     "awesome-phonenumber": "^6.2.0",
