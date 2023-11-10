@@ -4,6 +4,7 @@ import path from 'path';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
+import type { PkgGlobalCategory } from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
@@ -25,6 +26,11 @@ const defaultOptions: PackageWriterOptions = {
   outputEncoding: 'utf-8',
 };
 
+export interface PackageInfo {
+  version: string;
+  date: string;
+}
+
 interface LocaleData {
   properties: PkgLocale;
   localFoods: PkgLocalFood[];
@@ -38,6 +44,8 @@ interface FoodData {
 }
 
 export class PackageWriter {
+  private static readonly version = '1.0';
+
   private readonly outputDir: string;
   private readonly options: PackageWriterOptions;
   private readonly logger: Logger;
@@ -57,12 +65,26 @@ export class PackageWriter {
     );
   }
 
+  public async writeGlobalCategories(globalCategories: PkgGlobalCategory[]) {
+    await this.writeJSON(
+      globalCategories,
+      path.join(this.outputDir, PkgConstants.GLOBAL_CATEGORIES_FILE_NAME)
+    );
+  }
+
   public async writeLocales(locales: PkgLocale[]) {
     await this.writeJSON(locales, path.join(this.outputDir, PkgConstants.LOCALES_FILE_NAME));
   }
 
   public async writeLocalFoods(localFoods: Record<string, PkgLocalFood[]>) {
     await this.writeJSON(localFoods, path.join(this.outputDir, PkgConstants.LOCAL_FOODS_FILE_NAME));
+  }
+
+  public async writeLocalCategories(localCategories: Record<string, PkgLocalFood[]>) {
+    await this.writeJSON(
+      localCategories,
+      path.join(this.outputDir, PkgConstants.LOCAL_CATEGORIES_FILE_NAME)
+    );
   }
 
   public async writeEnabledLocalFoods(enabledFoods: Record<string, string[]>) {
@@ -113,6 +135,16 @@ export class PackageWriter {
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
         PkgConstants.AS_SERVED_FILE_NAME
       )
+    );
+  }
+
+  public async writePackageInfo() {
+    await this.writeJSON(
+      {
+        version: PackageWriter.version,
+        date: new Date().toISOString(),
+      },
+      path.join(this.outputDir, PkgConstants.PACKAGE_INFO_FILE_NAME)
     );
   }
 

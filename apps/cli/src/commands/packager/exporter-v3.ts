@@ -4,8 +4,16 @@ import path from 'path';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
+import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
-import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
+import type {
+  PkgGlobalFood,
+  PkgLocalFood,
+  PkgPortionSizeMethod,
+} from '@intake24/cli/commands/packager/types/foods';
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
@@ -33,11 +41,18 @@ interface LocaleData {
   localFoods: PkgLocalFood[];
   enabledLocalFoods: string[];
   globalFoods: PkgGlobalFood[];
+  localCategories: PkgLocalCategory[];
+  globalCategories: PkgGlobalCategory[];
 }
 
 interface FoodData {
   localFood: PkgLocalFood;
   globalFood: PkgGlobalFood;
+}
+
+interface CategoryData {
+  localCategory: PkgLocalCategory;
+  globalCategory: PkgGlobalCategory;
 }
 
 export class ExporterV3 {
@@ -55,6 +70,8 @@ export class ExporterV3 {
   private imageMapIds = new Set<string>();
   private drinkwareIds = new Set<string>();
   private images: Set<string> = new Set<string>();
+
+  private skipFoodCodes: Set<string> = new Set<string>();
 
   constructor(
     apiClient: ApiClientV3,
@@ -132,6 +149,9 @@ export class ExporterV3 {
 
     const drinkwareSet = await this.apiClient.portionSize.exportDrinkwareSet(drinkwareSetId);
 
+    logger.debug(`Drinkware set id ${drinkwareSetId}`);
+    logger.debug(`${JSON.stringify(drinkwareSet, null, 2)}`);
+
     if (drinkwareSet === null) {
       throw new Error(`Invalid drinkware set id: ${drinkwareSetId} (Not Found)`);
     } else {
@@ -152,6 +172,26 @@ export class ExporterV3 {
     };
   }
 
+  async getLocalCategoryData(localeId: string, categoryCode: string): Promise<CategoryData> {
+    logger.info(`Fetching data for category (${localeId}, ${categoryCode})`);
+
+    const categoryRecord = await this.apiClient.categories.getCategoryRecord(
+      localeId,
+      categoryCode
+    );
+
+    if (categoryRecord === null)
+      throw new Error(`Category record not found: (${localeId}, ${categoryCode})`);
+
+    return {
+      localCategory: typeConverters.packageLocalCategory(
+        categoryRecord.main.code,
+        categoryRecord.local
+      ),
+      globalCategory: typeConverters.packageGlobalCategory(categoryRecord.main),
+    };
+  }
+
   async getLocaleData(localeId: string): Promise<LocaleData> {
     logger.info(`Fetching data for locale '${localeId}'`);
 
@@ -159,15 +199,22 @@ export class ExporterV3 {
 
     if (properties === null) throw new Error(`Invalid locale id: ${localeId} (Not Found)`);
 
-    const [localFoodRecordCodes, enabledLocalFoods] = await Promise.all([
+    const [localFoodRecordCodes, enabledLocalFoods, categoryCodes] = await Promise.all([
       this.apiClient.foods.getLocalFoodCodes(localeId),
       this.apiClient.foods.getEnabledLocalFoodCodes(localeId),
+      this.apiClient.categories.getAllCategoryCodes(),
     ]);
 
     const sortedEnabledCodes = enabledLocalFoods.sort();
 
     const foodData = await Promise.all(
-      localFoodRecordCodes.map((foodCode) => this.getLocalFoodData(localeId, foodCode))
+      localFoodRecordCodes
+        .filter((code) => !this.skipFoodCodes.has(code))
+        .map((foodCode) => this.getLocalFoodData(localeId, foodCode))
+    );
+
+    const categoryData = await Promise.all(
+      categoryCodes.map((categoryCode) => this.getLocalCategoryData(localeId, categoryCode))
     );
 
     const sortedLocalFoods = sortBy(
@@ -180,12 +227,30 @@ export class ExporterV3 {
       (globalFood) => globalFood.code
     );
 
+    const sortedLocalCategories = sortBy(
+      categoryData.map((data) => data.localCategory),
+      (localData) => localData.code
+    );
+
+    const sortedGlobalCategories = sortBy(
+      categoryData.map((data) => data.globalCategory),
+      (globalData) => globalData.code
+    );
+
     return {
       properties: typeConverters.packageLocale(properties),
       localFoods: sortedLocalFoods,
       globalFoods: sortedGlobalFoods,
       enabledLocalFoods: sortedEnabledCodes,
+      localCategories: sortedLocalCategories,
+      globalCategories: sortedGlobalCategories,
     };
+  }
+
+  public skipFoods(foodCodes: string[]) {
+    logger.debug(JSON.stringify(foodCodes));
+
+    foodCodes.forEach((code) => this.skipFoodCodes.add(code));
   }
 
   async addLocales(localeIds: string[]): Promise<void> {
@@ -223,46 +288,58 @@ export class ExporterV3 {
     }
   }
 
-  private collectPortionSizeDependencies(localFoods: PkgLocalFood[]): void {
+  private addPortionSizeDependencies(portionSize: PkgPortionSizeMethod) {
+    switch (portionSize.method) {
+      case 'as-served':
+        this.asServedSetIds.add(portionSize.servingImageSet);
+        if (portionSize.leftoversImageSet !== undefined)
+          this.asServedSetIds.add(portionSize.leftoversImageSet);
+        break;
+      case 'guide-image':
+        this.guideImageIds.add(portionSize.guideImageId);
+        break;
+      case 'drink-scale':
+        this.drinkwareIds.add(portionSize.drinkwareId);
+        break;
+      case 'standard-portion':
+        break;
+      case 'cereal':
+        this.imageMapIds.add(PkgConstants.CEREAL_BOWL_IMAGE_MAP);
+
+        PkgConstants.CEREAL_BOWL_TYPES.flatMap((bowlType) => [
+          `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}`,
+          `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}${PkgConstants.CEREAL_AS_SERVED_LEFTOVERS_SUFFIX}`,
+        ]).forEach((id) => this.asServedSetIds.add(id));
+
+        break;
+      case 'milk-on-cereal':
+        PkgConstants.CEREAL_BOWL_TYPES.map(
+          (bowlType) => `${PkgConstants.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`
+        ).flatMap((id) => this.imageMapIds.add(id));
+        break;
+      case 'pizza':
+        this.imageMapIds.add(PkgConstants.PIZZA_IMAGE_MAP);
+        this.imageMapIds.add(PkgConstants.PIZZA_THICKNESS_IMAGE_MAP);
+        for (let i = 0; i < PkgConstants.PIZZA_TYPES_COUNT; ++i)
+          this.imageMapIds.add(`${PkgConstants.PIZZA_SLICE_IMAGE_MAP_PREFIX}${i + 1}`);
+        break;
+      case 'milk-in-a-hot-drink':
+        break;
+    }
+  }
+
+  private collectFoodPortionSizeDependencies(localFoods: PkgLocalFood[]): void {
     for (const localFood of localFoods) {
       for (const portionSize of localFood.portionSize) {
-        switch (portionSize.method) {
-          case 'as-served':
-            this.asServedSetIds.add(portionSize.servingImageSet);
-            if (portionSize.leftoversImageSet !== undefined)
-              this.asServedSetIds.add(portionSize.leftoversImageSet);
-            break;
-          case 'guide-image':
-            this.guideImageIds.add(portionSize.guideImageId);
-            break;
-          case 'drink-scale':
-            this.drinkwareIds.add(portionSize.drinkwareId);
-            break;
-          case 'standard-portion':
-            break;
-          case 'cereal':
-            this.imageMapIds.add(PkgConstants.CEREAL_BOWL_IMAGE_MAP);
+        this.addPortionSizeDependencies(portionSize);
+      }
+    }
+  }
 
-            PkgConstants.CEREAL_BOWL_TYPES.flatMap((bowlType) => [
-              `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}`,
-              `${PkgConstants.CEREAL_AS_SERVED_PREFIX}${portionSize.type}${bowlType}${PkgConstants.CEREAL_AS_SERVED_LEFTOVERS_SUFFIX}`,
-            ]).forEach((id) => this.asServedSetIds.add(id));
-
-            break;
-          case 'milk-on-cereal':
-            PkgConstants.CEREAL_BOWL_TYPES.map(
-              (bowlType) => `${PkgConstants.CEREAL_MILK_LEVEL_IMAGE_MAP_PREFIX}${bowlType}`
-            ).flatMap((id) => this.imageMapIds.add(id));
-            break;
-          case 'pizza':
-            this.imageMapIds.add(PkgConstants.PIZZA_IMAGE_MAP);
-            this.imageMapIds.add(PkgConstants.PIZZA_THICKNESS_IMAGE_MAP);
-            for (let i = 0; i < PkgConstants.PIZZA_TYPES_COUNT; ++i)
-              this.imageMapIds.add(`${PkgConstants.PIZZA_SLICE_IMAGE_MAP_PREFIX}${i + 1}`);
-            break;
-          case 'milk-in-a-hot-drink':
-            break;
-        }
+  private collectCategoryPortionSizeDependencies(localCategories: PkgLocalCategory[]): void {
+    for (const localCategory of localCategories) {
+      for (const portionSize of localCategory.portionSize) {
+        this.addPortionSizeDependencies(portionSize);
       }
     }
   }
@@ -313,11 +390,17 @@ export class ExporterV3 {
     const localeData = await Promise.all(sortedLocaleIds.map((id) => this.getLocaleData(id)));
 
     localeData.forEach((data) => {
-      this.collectPortionSizeDependencies(data.localFoods);
+      this.collectFoodPortionSizeDependencies(data.localFoods);
+      this.collectCategoryPortionSizeDependencies(data.localCategories);
     });
 
     const uniqueGlobalFoods = uniqBy(
       localeData.flatMap((data) => data.globalFoods),
+      (globalFood) => globalFood.code
+    );
+
+    const uniqueGlobalCategories = uniqBy(
+      localeData.flatMap((data) => data.globalCategories),
       (globalFood) => globalFood.code
     );
 
@@ -348,12 +431,21 @@ export class ExporterV3 {
 
     await Promise.all([
       writer.writeGlobalFoods(uniqueGlobalFoods),
+      writer.writeGlobalCategories(uniqueGlobalCategories),
       writer.writeLocales(localeData.map((data) => data.properties)),
       writer.writeLocalFoods(
         Object.fromEntries(
           zip(
             sortedLocaleIds,
             localeData.map((data) => data.localFoods)
+          )
+        )
+      ),
+      writer.writeLocalCategories(
+        Object.fromEntries(
+          zip(
+            sortedLocaleIds,
+            localeData.map((data) => data.localCategories)
           )
         )
       ),
@@ -369,6 +461,7 @@ export class ExporterV3 {
       writer.writeGuideImages(Object.fromEntries(zip(sortedGuideImageIds, guideImageData))),
       writer.writeImageMaps(Object.fromEntries(zip(sortedImageMapIds, imageMapData))),
       writer.writeAsServedSets(Object.fromEntries(zip(sortedAsServedIds, asServedData))),
+      writer.writePackageInfo(),
     ]);
 
     await this.downloadImages();

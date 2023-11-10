@@ -2,6 +2,7 @@ import type { Logger } from 'winston';
 
 import type { CredentialsV3 } from './types';
 import { BaseClientV3 } from './base-client-v3';
+import { CategoriesApiV3 } from './categories';
 import { FoodsApiV3 } from './foods';
 import { ImageApiV3 } from './images';
 import { LocalesApiV3 } from './locales';
@@ -15,6 +16,7 @@ export class ApiClientV3 {
   public readonly images: ImageApiV3;
   public readonly portionSize: PortionSizeApiV3;
   public readonly foods: FoodsApiV3;
+  public readonly categories: CategoriesApiV3;
 
   public constructor(
     apiBaseUrl: string,
@@ -34,5 +36,6 @@ export class ApiClientV3 {
     this.images = new ImageApiV3(this.baseClient);
     this.portionSize = new PortionSizeApiV3(this.baseClient);
     this.foods = new FoodsApiV3(this.baseClient);
+    this.categories = new CategoriesApiV3(this.baseClient);
   }
 }

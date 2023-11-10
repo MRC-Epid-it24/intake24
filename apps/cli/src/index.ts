@@ -68,14 +68,22 @@ const run = async () => {
       await findPortionImages(pwd);
     });
 
+  const skipFoodsOption = new Option(
+    '-sf, --skip-foods [food-ids...]',
+    'Skip foods having these codes (typically for debug purposes)'
+  );
+
+  skipFoodsOption.required = true;
+
   program
     .command('export-package')
     .description('Export food data into a portable format')
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
-    .requiredOption(
+    .option(
       '-as, --as-served [set-ids...]',
       'Export as served portion size images for given set identifiers'
     )
+    .addOption(skipFoodsOption)
     .requiredOption('-l, --locale <locale-ids...>', 'Export all data for the given locale ids')
     .action(async (version, options) => {
       switch (version) {

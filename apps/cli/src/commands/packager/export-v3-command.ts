@@ -9,6 +9,7 @@ import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 export interface PackageExportOptions {
   asServed?: string[];
   locale?: string[];
+  skipFoods?: string[];
 }
 
 const TEMP_DIR_PREFIX = 'i24pkg-';
@@ -61,6 +62,10 @@ export default async (version: string, options: PackageExportOptions): Promise<v
   logger.debug(`Using temporary directory: ${tempDirPath}`);
 
   const exporter = new ExporterV3(apiClient, logger, tempDirPath);
+
+  if (options.skipFoods !== undefined) {
+    exporter.skipFoods(options.skipFoods);
+  }
 
   if (options.locale !== undefined) {
     await exporter.addLocales(options.locale);
