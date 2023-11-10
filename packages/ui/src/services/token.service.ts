@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import type { TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
