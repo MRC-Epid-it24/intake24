@@ -129,6 +129,6 @@ export default defineComponent({
 .review-checkbox__checkbox .v-label {
   font-size: 0.8125rem;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
+  color: #ee672d;
 }
 </style>
