@@ -389,7 +389,8 @@
         "subtitle": "Choose the option you want for the final review page.",
         "false": "Do not review",
         "scroll": "Scroll to bottom to pass review",
-        "checkbox": "Tick meal check to pass review"
+        "checkbox": "Tick meal check to pass review",
+        "onecheckbox": "Tick one survey check to pass review"
       }
     },
 

@@ -102,7 +102,7 @@ export type LinkedQuantityCategory = {
   unit?: string;
 };
 
-export const reviewOptions = [false, 'scroll', 'checkbox'] as const;
+export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
 
 export type ReviewOptions = (typeof reviewOptions)[number];
 

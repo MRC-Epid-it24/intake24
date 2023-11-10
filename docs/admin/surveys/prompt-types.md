@@ -99,6 +99,7 @@ Prompt with recap of the recall and submit button.
   - `false` - no review step, submit button is always enabled
   - `scroll` - button is enabled when scrolled through the meal list to the end
   - `checkbox` - button is enabled when all meal checkboxes are ticked
+  - `onecheckbox` - button is enabled when one survey level checkbox is ticked
 
 ## Portion-size prompts
 
