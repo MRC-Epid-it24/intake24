@@ -18,7 +18,7 @@
                 <v-checkbox
                   v-model="reviewed"
                   class="review-checkbox__checkbox"
-                  label="Reviewed, nothing to add/change"
+                  :label="$t('recall.actions.reviewCheckBox')"
                   :value="meal.id"
                 ></v-checkbox>
               </v-col>
@@ -41,7 +41,7 @@
             v-if="review === 'onecheckbox'"
             v-model="reviewed"
             class="pl-3 review-checkbox__checkbox"
-            label="Reviewed, nothing to add/change"
+            :label="$t('recall.actions.reviewCheckBox')"
           ></v-checkbox>
         </v-list>
       </v-card-text>
