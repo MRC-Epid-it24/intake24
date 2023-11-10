@@ -84,6 +84,8 @@ export default defineComponent({
       if (props.prompt.review.desktop === 'checkbox')
         return props.meals.length === reviewed.value.desktop.length;
 
+      if (props.prompt.review.desktop === 'onecheckbox') return reviewed.value.desktop.length === 1;
+
       return true;
     });
 
@@ -92,6 +94,8 @@ export default defineComponent({
 
       if (props.prompt.review.mobile === 'checkbox')
         return props.meals.length === reviewed.value.mobile.length;
+
+      if (props.prompt.review.desktop === 'onecheckbox') return reviewed.value.mobile.length === 1;
 
       return true;
     });

@@ -13,14 +13,36 @@
               @action="action"
               @update:context-id="updateContextId"
             ></meal-item>
-            <v-checkbox
-              v-if="review === 'checkbox'"
-              v-model="reviewed"
-              class="review-checkbox__checkbox pl-3"
-              label="Reviewed"
-              :value="meal.id"
-            ></v-checkbox>
+            <v-row class="pl-3">
+              <v-col v-if="review === 'checkbox'" cols="auto">
+                <v-checkbox
+                  v-model="reviewed"
+                  class="review-checkbox__checkbox"
+                  :label="$t('recall.actions.reviewCheckBox')"
+                  :value="meal.id"
+                ></v-checkbox>
+              </v-col>
+              <v-col cols="auto">
+                <v-hover v-slot="{ hover }">
+                  <v-btn
+                    :class="review === 'checkbox' ? 'ma-4' : 'my-2 mx-1'"
+                    :color="hover ? 'primary' : 'inherit'"
+                    small
+                    :title="$t('recall.menu.meal.editFoods')"
+                    @click="action('editMeal', meal.id)"
+                  >
+                    {{ $t('recall.menu.meal.editFoods') }}
+                  </v-btn>
+                </v-hover>
+              </v-col>
+            </v-row>
           </div>
+          <v-checkbox
+            v-if="review === 'onecheckbox'"
+            v-model="reviewed"
+            class="pl-3 review-checkbox__checkbox"
+            :label="$t('recall.actions.reviewCheckBox')"
+          ></v-checkbox>
         </v-list>
       </v-card-text>
       <div v-if="!bottomReached" v-intersect="bottomIntersect" class="d-hidden"></div>
