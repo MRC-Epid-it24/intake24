@@ -37,7 +37,7 @@
           <v-col cols="auto">
             <v-hover v-slot="{ hover }">
               <v-btn
-                :class="review === 'checkbox' ? 'ma-4' : 'my-2 mx-1'"
+                :class="review === 'checkbox' ? 'ma-5' : 'my-2 mx-1'"
                 :color="hover ? 'primary' : 'inherit'"
                 small
                 :title="$t('recall.menu.meal.editFoods')"
@@ -127,7 +127,7 @@ export default defineComponent({
 
 <style lang="scss">
 .review-checkbox__checkbox .v-label {
-  font-size: 0.8125rem;
+  font-size: 0.95rem;
   font-weight: bold;
   color: #ee672d;
 }
