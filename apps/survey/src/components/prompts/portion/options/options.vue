@@ -88,8 +88,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import 'vuetify/src/styles/styles.sass';
-
 .portion-options {
   height: 100%;
   min-height: 180px;

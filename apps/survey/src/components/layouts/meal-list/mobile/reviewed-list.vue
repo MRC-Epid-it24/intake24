@@ -13,36 +13,36 @@
               @action="action"
               @update:context-id="updateContextId"
             ></meal-item>
-            <v-row class="pl-3">
-              <v-col v-if="review === 'checkbox'" cols="auto">
-                <v-checkbox
-                  v-model="reviewed"
-                  class="review-checkbox__checkbox"
-                  :label="$t('recall.actions.reviewCheckBox')"
-                  :value="meal.id"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="auto">
-                <v-hover v-slot="{ hover }">
-                  <v-btn
-                    :class="review === 'checkbox' ? 'ma-4' : 'my-2 mx-1'"
-                    :color="hover ? 'primary' : 'inherit'"
-                    small
-                    :title="$t('recall.menu.meal.editFoods')"
-                    @click="action('editMeal', meal.id)"
-                  >
-                    {{ $t('recall.menu.meal.editFoods') }}
-                  </v-btn>
-                </v-hover>
-              </v-col>
-            </v-row>
+            <div class="d-flex flex-column pa-4 ga-4">
+              <v-checkbox
+                v-if="review === 'checkbox'"
+                v-model="reviewed"
+                class="review-checkbox__checkbox font-weight-medium mt-0"
+                hide-details
+                :label="$t('recall.actions.reviewCheckBox')"
+                :value="meal.id"
+              ></v-checkbox>
+              <v-hover v-slot="{ hover }">
+                <v-btn
+                  :color="hover ? 'primary' : 'inherit'"
+                  depressed
+                  small
+                  :title="$t('recall.menu.meal.editFoods')"
+                  @click="action('editMeal', meal.id)"
+                >
+                  {{ $t('recall.menu.meal.editFoods') }}
+                </v-btn>
+              </v-hover>
+            </div>
           </div>
-          <v-checkbox
-            v-if="review === 'onecheckbox'"
-            v-model="reviewed"
-            class="pl-3 review-checkbox__checkbox"
-            :label="$t('recall.actions.reviewCheckBox')"
-          ></v-checkbox>
+          <v-card-text v-if="review === 'onecheckbox'">
+            <v-checkbox
+              v-model="reviewed"
+              class="review-checkbox__checkbox font-weight-medium mt-0"
+              hide-details
+              :label="$t('recall.actions.reviewCheckBox')"
+            ></v-checkbox>
+          </v-card-text>
         </v-list>
       </v-card-text>
       <div v-if="!bottomReached" v-intersect="bottomIntersect" class="d-hidden"></div>
@@ -110,10 +110,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.review-checkbox__checkbox .v-label {
-  font-size: 0.8125rem;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-}
-</style>
+<style lang="scss"></style>
