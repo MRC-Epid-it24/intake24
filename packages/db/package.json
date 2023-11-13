@@ -29,15 +29,15 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.34.0",
+    "sequelize": "^6.35.0",
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@simplewebauthn/typescript-types": "^8.3.4",
-    "@types/lodash": "^4.14.200",
-    "@types/node": "^20.8.10",
-    "@types/pg": "^8.10.8",
-    "@types/validator": "^13.11.5",
+    "@types/lodash": "^4.14.201",
+    "@types/node": "^20.9.0",
+    "@types/pg": "^8.10.9",
+    "@types/validator": "^13.11.6",
     "sequelize-cli": "^6.6.2",
     "typescript": "^5.2.2"
   },
