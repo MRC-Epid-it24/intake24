@@ -54,11 +54,13 @@
                 v-bind="{
                   localeId,
                   searchParameters,
+                  stepName: translate(step.name),
                   rootCategory: step.categoryCode,
                   prompt,
                 }"
                 @food-missing="foodMissing(index)"
                 @food-selected="(food) => foodSelected(food, index)"
+                @food-skipped="foodSkipped(index)"
               ></food-browser>
             </v-card>
           </v-expand-transition>
@@ -147,8 +149,12 @@ export default defineComponent({
       return this.recipeSteps.reduce((acc, curr) => acc && curr.confirmed === 'yes', true);
     },
 
+    atLeastOneFoodSelected(): boolean {
+      return this.recipeSteps.reduce((acc, curr) => acc || !!curr.selectedFoods?.length, false);
+    },
+
     isValid(): boolean {
-      return this.allConfirmed;
+      return this.allConfirmed && this.atLeastOneFoodSelected;
     },
   },
 
@@ -197,6 +203,13 @@ export default defineComponent({
     },
 
     foodMissing(ingredientIndex: number): void {},
+
+    foodSkipped(index: number): void {
+      console.log('Food Skipped', index);
+      this.activeStep = index + 1;
+      this.recipeSteps[index].confirmed = 'yes';
+      this.update();
+    },
 
     async onFoodSelected(
       stepFoods: RecipeBuilderStepState,

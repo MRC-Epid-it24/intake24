@@ -102,6 +102,21 @@
         >
           {{ promptI18n['missing.label'] }}
         </v-btn>
+        <v-btn
+          v-if="type === 'recipeBuilder'"
+          color="primary"
+          :disabled="missingDialog"
+          large
+          outlined
+          :title="promptI18n.browse"
+          @click.stop="skipTheStep"
+        >
+          {{
+            $t(`prompts.${type}.missing.irrelevantIngredient`, {
+              ingredient: stepName,
+            })
+          }}
+        </v-btn>
       </div>
     </component>
     <missing-food-panel
@@ -176,9 +191,14 @@ export default defineComponent({
       type: String as PropType<string | null>,
       default: '',
     },
+    stepName: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
 
-  emits: ['food-selected', 'food-missing', 'recipe-builder', 'input'],
+  emits: ['food-selected', 'food-missing', 'recipe-builder', 'input', 'food-skipped'],
 
   setup(props, ctx) {
     const { translatePrompt, type } = usePromptUtils(props, ctx);
@@ -206,6 +226,7 @@ export default defineComponent({
             'missing.description',
             'missing.report',
             'missing.tryAgain',
+            'missing.irrelevantIngredient',
           ],
           {
             back: {
@@ -371,6 +392,11 @@ export default defineComponent({
       ctx.emit('food-missing', food);
     };
 
+    const skipTheStep = () => {
+      closeInDialog();
+      ctx.emit('food-skipped', null);
+    };
+
     const recipeBuilder = () => {
       closeInDialog();
       ctx.emit('recipe-builder', recipeFood.value);
@@ -453,6 +479,7 @@ export default defineComponent({
       categorySelected,
       foodMissing,
       foodSelected,
+      skipTheStep,
       navigateBack,
       recipeBuilder,
       searchTerm,
