@@ -90,7 +90,7 @@
     "simple-git-hooks": "^2.9.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "tsx": "^3.14.0",
+    "tsx": "^4.1.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vitepress": "1.0.0-rc.25"
