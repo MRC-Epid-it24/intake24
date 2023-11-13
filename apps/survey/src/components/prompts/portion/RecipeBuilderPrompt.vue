@@ -150,10 +150,7 @@ export default defineComponent({
     },
 
     atLeastOneFoodSelected(): boolean {
-      return this.recipeSteps.reduce(
-        (acc, curr) => acc || (curr.selectedFoods !== undefined && curr.selectedFoods.length > 0),
-        false
-      );
+      return this.recipeSteps.reduce((acc, curr) => acc || !!curr.selectedFoods?.length, false);
     },
 
     isValid(): boolean {
