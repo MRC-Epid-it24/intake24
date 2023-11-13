@@ -153,10 +153,9 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.parameters.*.value': {
     in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 1024, attributePath: 'value' }),
+    errorMessage: typeErrorMessage('string._'),
     isString: true,
     isEmpty: { negated: true },
-    isLength: { bail: true, options: { max: 1024 } },
   },
 };
 
