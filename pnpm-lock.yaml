@@ -182,6 +182,9 @@ importers:
       vue:
         specifier: ^2.7.15
         version: 2.7.15
+      vue-gtag:
+        specifier: ^1.16.1
+        version: 1.16.1(vue@2.7.15)
       vue-i18n:
         specifier: ^8.28.2
         version: 8.28.2(vue@2.7.15)
@@ -828,6 +831,9 @@ importers:
       vue:
         specifier: ^2.7.15
         version: 2.7.15
+      vue-gtag:
+        specifier: ^1.16.1
+        version: 1.16.1(vue@2.7.15)
       vue-i18n:
         specifier: ^8.28.2
         version: 8.28.2(vue@2.7.15)
@@ -14145,6 +14151,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-gtag@1.16.1(vue@2.7.15):
+    resolution: {integrity: sha512-5vs0pSGxdqrfXqN1Qwt0ZFXG0iTYjRMu/saddc7QIC5yp+DKgjWQRpGYVa7Pq+KbThxwzzMfo0sGi7ISa6NowA==}
+    peerDependencies:
+      vue: ^2.0.0
+    dependencies:
+      vue: 2.7.15
+    dev: false
 
   /vue-i18n@8.28.2(vue@2.7.15):
     resolution: {integrity: sha512-C5GZjs1tYlAqjwymaaCPDjCyGo10ajUphiwA922jKt9n7KPpqR7oM1PCwYzhB/E7+nT3wfdG3oRre5raIT1rKA==}

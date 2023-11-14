@@ -124,6 +124,10 @@ Captcha provider. Possible values `g-captcha` or `re-captcha`.
 
 Captcha provider sitekey. Please refer to your provider, how to obtain the key.
 
+### VITE_GOOGLE_ANALYTICS_ID
+
+Google Analytics ID. Disabled if not set.
+
 ### VITE_WEBPUSH_PUBLIC_KEY
 
 Webpush public key for we-push notifications.

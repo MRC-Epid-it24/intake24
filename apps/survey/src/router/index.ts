@@ -25,7 +25,7 @@ const routes: RouteConfig[] = [
   {
     path: '/a/:token',
     name: 'authentication',
-    meta: { module: 'login' },
+    meta: { module: 'login', title: 'common.login._' },
     beforeEnter: authGuard,
   },
   {

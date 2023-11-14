@@ -6,6 +6,7 @@ export type SiteConfig = {
     email: string;
     phone: string;
   };
+  googleAnalyticsId?: string;
 };
 
 const siteConfig: SiteConfig = {
@@ -16,6 +17,7 @@ const siteConfig: SiteConfig = {
     email: process.env.SITE_EMAIL || '',
     phone: process.env.SITE_PHONE || '',
   },
+  googleAnalyticsId: process.env.SITE_GOOGLE_ANALYTICS_ID,
 };
 
 export default siteConfig;

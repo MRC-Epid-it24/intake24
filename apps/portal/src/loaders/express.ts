@@ -13,6 +13,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   const {
     app: { env },
     filesystem: { local },
+    site,
   } = config;
   const isDev = env === 'development';
 
@@ -31,7 +32,7 @@ export default async (app: Express, { config }: Ops): Promise<void> => {
   });
 
   nunjucksEnv.express(app);
-  nunjucksEnv.addGlobal('vite', vite);
+  nunjucksEnv.addGlobal('vite', vite).addGlobal('site', site);
 
   app.engine('njk', nunjucksEnv.render);
   app.set('view engine', 'njk');

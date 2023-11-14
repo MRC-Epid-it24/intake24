@@ -71,7 +71,7 @@ const generateResourceRoutes = (
           .join('/'),
         name: `${name}-${action}`,
         component: viewsPath[action],
-        meta: { ...meta, action, perm },
+        meta: { ...meta, action, title: `${title}.${action}`, perm },
         props: true,
       });
       return;
