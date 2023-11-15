@@ -18,6 +18,8 @@ router.get('/validation', (req, res) => res.render('validation'));
 router.get('/privacy', (req, res) => res.render(`${site.content}/privacy`));
 router.get('/terms', (req, res) => res.render(`${site.content}/terms`));
 
+router.get('/info/:section', (req, res) => res.redirect(301, `/${req.params.section}`));
+
 // Catch Not Found (404)
 router.get('*', (req, res) => res.status(404).render('errors/404'));
 
