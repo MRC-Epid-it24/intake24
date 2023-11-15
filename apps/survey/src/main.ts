@@ -21,6 +21,7 @@ Vue.use(
   VueGtag,
   {
     enabled: !!import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
+    bootstrap: !!import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
     appName: import.meta.env.VITE_APP_NAME,
     config: {
       id: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
