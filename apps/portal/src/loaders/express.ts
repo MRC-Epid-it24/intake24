@@ -9,7 +9,7 @@ import { httpLogger as stream } from '@intake24/common-backend';
 import type { Ops } from '../app';
 import { vite } from '../util';
 
-export default async (app: Express, { config }: Ops): Promise<void> => {
+export default (app: Express, { config }: Ops) => {
   const {
     app: { env },
     filesystem: { local },

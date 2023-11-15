@@ -1,4 +1,3 @@
-import type { Express } from 'express';
 import express from 'express';
 
 import type { Logger } from '@intake24/common-backend';
@@ -11,12 +10,12 @@ export interface Ops {
   logger: Logger;
 }
 
-export default async (ops: Ops): Promise<Express> => {
+export default (ops: Ops) => {
   // Init express
   const app = express();
 
   // Load dependencies
-  await loaders(app, ops);
+  loaders(app, ops);
 
   return app;
 };

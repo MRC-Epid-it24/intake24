@@ -4,7 +4,7 @@ import type { Ops } from '../app';
 import routes from '../routes';
 import errors from '../routes/errors';
 
-export default async (app: Express, ops: Ops): Promise<void> => {
+export default (app: Express, ops: Ops) => {
   // Mount routes
   routes(app, ops);
 

@@ -10,15 +10,15 @@ import servicesLoader from './services';
 export default async (app: Express, ops: Ops): Promise<void> => {
   const logger = ops.logger.child({ service: 'Application' });
 
-  await securityLoader(app, ops);
+  securityLoader(app, ops);
   logger.info('Security settings loaded.');
 
-  await expressLoader(app, ops);
+  expressLoader(app, ops);
   logger.info('Express defaults loaded.');
 
   await servicesLoader();
   logger.info('Services loaded.');
 
-  await routesLoader(app, ops);
+  routesLoader(app, ops);
   logger.info('Routes loaded.');
 };

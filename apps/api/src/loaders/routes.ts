@@ -8,7 +8,7 @@ import routes from '@intake24/api/routes';
 
 import authentication from './authentication';
 
-export default async (app: Express, ops: Ops): Promise<void> => {
+export default (app: Express, ops: Ops) => {
   // Request sanitizers
   app.use(body('*').customSanitizer(createSanitizer({ allowHtml: true, emptyStringToNull: true })));
   app.use(query('*').customSanitizer(createSanitizer({ emptyStringToNull: true })));

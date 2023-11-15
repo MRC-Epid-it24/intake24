@@ -6,7 +6,7 @@ import type { Ops } from './app';
 import app from './app';
 import config from './config';
 
-const startApp = async (ops: Ops): Promise<void> => {
+const startApp = (ops: Ops) => {
   const {
     config: {
       app: { name, host, port },
@@ -14,7 +14,7 @@ const startApp = async (ops: Ops): Promise<void> => {
     logger: globalLogger,
   } = ops;
 
-  const server = await app(ops);
+  const server = app(ops);
 
   // Start listening
   server.listen(port, host, () => {
@@ -22,6 +22,6 @@ const startApp = async (ops: Ops): Promise<void> => {
   });
 };
 
-(async () => {
-  await startApp({ config, logger });
+(() => {
+  startApp({ config, logger });
 })();

@@ -3,7 +3,7 @@ import cors from 'cors';
 
 import type { Ops } from '@intake24/api/app';
 
-export default async (app: Express, { config }: Ops): Promise<void> => {
+export default (app: Express, { config }: Ops) => {
   const {
     cors: { origin },
     proxy,
