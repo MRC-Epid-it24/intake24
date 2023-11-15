@@ -26,7 +26,7 @@
   git:
     dest: '{{ env.directory }}'
     repo: '{{ git.repository }}'
-    version: '{{ git.branch }}'
+    version: '{{ version | default (git.branch, true) }}'
     force: yes
     accept_hostkey: true
 
