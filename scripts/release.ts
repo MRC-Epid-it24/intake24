@@ -92,6 +92,7 @@ const main = async () => {
 
   // Commit changes to the Git and create a tag.
   step('\nCommitting changes...');
+  await run('git', ['add', '*package.json']);
   await run('git', ['commit', '-m', `release: v${targetVersion}`]);
   await run('git', ['tag', `v${targetVersion}`]);
 
