@@ -172,7 +172,7 @@ const surveySubmissionService = ({
       }
 
       const {
-        data: { code, groupCode, reasonableAmount, brandNames },
+        data: { code, groupCode, reasonableAmount },
         flags,
         linkedFoods,
         portionSize,
@@ -234,7 +234,7 @@ const surveySubmissionService = ({
         foodGroupId,
         foodGroupEnglishName,
         foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
-        brand: brandNames.join(' ').trim() || null,
+        brand: null,
         barcode: null,
         nutrientTableId: nutrientTableRecord.nutrientTableId,
         nutrientTableCode: nutrientTableRecord.nutrientTableRecordId,
