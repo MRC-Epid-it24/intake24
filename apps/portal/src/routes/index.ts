@@ -12,16 +12,30 @@ export default (app: Express, { config }: Ops): void => {
         contentSecurityPolicy: {
           directives: {
             defaultSrc: ["'self'"],
-            fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+            connectSrc: [
+              "'self'",
+              'https://*.google-analytics.com',
+              'https://*.analytics.google.com',
+              'https://*.googletagmanager.com',
+            ],
             frameSrc: [
               "'self'",
               'https://www.google.com',
               'https://youtube.com',
               'https://www.youtube.com',
             ],
-            imgSrc: ["'self'", 'blob:', 'data:'],
-            scriptSrc: ["'self'", 'https://storage.googleapis.com'],
-            styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+            imgSrc: [
+              "'self'",
+              'blob:',
+              'data:',
+              'https://*.google-analytics.com',
+              'https://*.googletagmanager.com',
+            ],
+            scriptSrc: [
+              "'self'",
+              'https://storage.googleapis.com',
+              'https://*.googletagmanager.com',
+            ],
           },
         },
         crossOriginEmbedderPolicy: false,

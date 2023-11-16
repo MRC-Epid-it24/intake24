@@ -68,12 +68,12 @@
     "prettier": "^3.1.0",
     "sass": "~1.32.13",
     "typescript": "^5.2.2",
-    "unplugin-fonts": "^1.0.3",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-mkcert": "^1.16.0",
     "vite-plugin-pwa": "^0.16.7",
+    "vite-plugin-webfont-dl": "^3.9.0",
     "vitest": "^0.34.6",
     "vue-tsc": "^1.8.22",
     "workbox-window": "^7.0.0"

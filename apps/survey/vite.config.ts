@@ -3,13 +3,13 @@ import { fileURLToPath, URL } from 'node:url';
 
 import viteLegacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue2';
-import unFonts from 'unplugin-fonts/vite';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import mkcert from 'vite-plugin-mkcert';
 import { VitePWA } from 'vite-plugin-pwa';
+import webfontDownload from 'vite-plugin-webfont-dl';
 
 import { isCaptchaProvider, resolveCaptchaScript } from '../../packages/common/src/security';
 import { colors } from '../../packages/common/src/theme';
@@ -108,17 +108,9 @@ export default defineConfig(({ mode }) => {
       }),
       legacy ? viteLegacy() : undefined,
       https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
-      unFonts({
-        google: {
-          families: [
-            {
-              name: 'Rubik',
-              styles: 'wght@300;400;500;600;700',
-              defer: false,
-            },
-          ],
-        },
-      }),
+      webfontDownload([
+        'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
+      ]),
       createHtmlPlugin({
         inject: {
           data: {

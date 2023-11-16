@@ -22,8 +22,14 @@ const staticContentHelmet = helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com'],
-      fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+      connectSrc: [
+        "'self'",
+        'https://hcaptcha.com',
+        'https://*.hcaptcha.com',
+        'https://*.google-analytics.com',
+        'https://*.analytics.google.com',
+        'https://*.googletagmanager.com',
+      ],
       frameSrc: [
         "'self'",
         'https://hcaptcha.com',
@@ -33,7 +39,13 @@ const staticContentHelmet = helmet({
         'https://youtube.com',
         'https://www.youtube.com',
       ],
-      imgSrc: ["'self'", 'blob:', 'data:'],
+      imgSrc: [
+        "'self'",
+        'blob:',
+        'data:',
+        'https://*.google-analytics.com',
+        'https://*.googletagmanager.com',
+      ],
       scriptSrc: [
         "'self'",
         'https://hcaptcha.com',
@@ -41,12 +53,12 @@ const staticContentHelmet = helmet({
         'https://www.google.com/recaptcha/',
         'https://www.gstatic.com/recaptcha/',
         'https://storage.googleapis.com',
+        'https://*.googletagmanager.com',
       ],
       styleSrc: [
         "'self'",
         'https://hcaptcha.com',
         'https://*.hcaptcha.com',
-        'https://fonts.googleapis.com',
         "'unsafe-inline'", // TODO: review for Vuetify theming
       ],
     },

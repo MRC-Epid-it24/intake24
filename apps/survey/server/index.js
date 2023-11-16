@@ -23,8 +23,15 @@ const startApp = async () => {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          connectSrc: ["'self'", 'https://hcaptcha.com', 'https://*.hcaptcha.com', config.api.host],
-          fontSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+          connectSrc: [
+            "'self'",
+            'https://hcaptcha.com',
+            'https://*.hcaptcha.com',
+            'https://*.google-analytics.com',
+            'https://*.analytics.google.com',
+            'https://*.googletagmanager.com',
+            config.api.host,
+          ],
           frameSrc: [
             "'self'",
             'https://hcaptcha.com',
@@ -34,7 +41,15 @@ const startApp = async () => {
             'https://youtube.com',
             'https://www.youtube.com',
           ],
-          imgSrc: ["'self'", 'blob:', 'data:', config.api.host, config.api.cdn],
+          imgSrc: [
+            "'self'",
+            'blob:',
+            'data:',
+            'https://*.google-analytics.com',
+            'https://*.googletagmanager.com',
+            config.api.host,
+            config.api.cdn,
+          ],
           scriptSrc: [
             "'self'",
             'https://hcaptcha.com',
@@ -42,13 +57,13 @@ const startApp = async () => {
             'https://www.google.com/recaptcha/',
             'https://www.gstatic.com/recaptcha/',
             'https://storage.googleapis.com',
+            'https://*.googletagmanager.com',
             ...cspHashes.map((hash) => `'sha256-${hash}'`),
           ],
           styleSrc: [
             "'self'",
             'https://hcaptcha.com',
             'https://*.hcaptcha.com',
-            'https://fonts.googleapis.com',
             "'unsafe-inline'", // TODO: review for Vuetify theming
           ],
         },
