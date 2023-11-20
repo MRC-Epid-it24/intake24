@@ -50,7 +50,7 @@ export default defineComponent({
     },
 
     clean(value: boolean, id: string) {
-      if (value) true;
+      if (value) return;
 
       this.store.remove(id);
     },

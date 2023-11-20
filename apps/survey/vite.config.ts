@@ -164,14 +164,7 @@ export default defineConfig(({ mode }) => {
         workbox: {
           cleanupOutdatedCaches: true,
           maximumFileSizeToCacheInBytes: 3000000,
-          /* globIgnores: ['index.html'],
-          runtimeCaching: [
-            {
-              urlPattern: ({ request }) => request.destination === 'document',
-              handler: 'NetworkFirst',
-              options: { cacheName: 'index' },
-            },
-          ], */
+          globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
         },
       }),
     ].filter(Boolean),

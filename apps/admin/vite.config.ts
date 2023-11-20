@@ -161,16 +161,9 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           cleanupOutdatedCaches: true,
+          globPatterns: ['**/*.{css,js,html,svg,png,ico,txt,woff2}'],
           importScripts: ['js/web-push.js'],
           maximumFileSizeToCacheInBytes: 3000000,
-          /* globIgnores: ['index.html'],
-          runtimeCaching: [
-            {
-              urlPattern: ({ request }) => request.destination === 'document',
-              handler: 'NetworkFirst',
-              options: { cacheName: 'index' },
-            },
-          ], */
         },
       }),
     ].filter(Boolean),
