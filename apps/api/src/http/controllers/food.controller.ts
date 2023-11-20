@@ -16,9 +16,8 @@ const foodController = ({
       const response = await foodDataService.getFoodData(localeId, code);
 
       for (let i = 0; i < response.portionSizeMethods.length; ++i) {
-        response.portionSizeMethods[
-          i
-        ].imageUrl = `${imagesBaseUrl}/${response.portionSizeMethods[i].imageUrl}`;
+        response.portionSizeMethods[i].imageUrl =
+          `${imagesBaseUrl}/${response.portionSizeMethods[i].imageUrl}`;
       }
 
       res.json(response);

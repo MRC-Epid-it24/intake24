@@ -32,9 +32,8 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
       if (validator.isUUID(search)) where.id = search;
       else
         where['$user.aliases.username$'] = {
-          [SurveySubmission.sequelize?.getDialect() === 'postgres'
-            ? Op.iLike
-            : Op.substring]: `%${search}%`,
+          [SurveySubmission.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
+            `%${search}%`,
         };
     }
 

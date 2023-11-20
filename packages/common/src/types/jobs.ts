@@ -1,5 +1,3 @@
-import pick from 'lodash/pick';
-
 import type { SurveyState } from './recall';
 
 // Not defined in bull-mq
@@ -151,7 +149,11 @@ export const defaultJobsParams: JobParams = {
     surveyId: '',
   },
   SurveyDataExport: {
+    id: undefined,
     surveyId: '',
+    startDate: undefined,
+    endDate: undefined,
+    userId: undefined,
   },
   SurveyNutrientsRecalculation: {
     surveyId: '',
@@ -196,8 +198,16 @@ export const jobTypes = Object.keys(defaultJobsParams) as JobType[];
 
 export const isValidJob = (job: any): boolean => jobTypes.includes(job);
 
-export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] =>
-  pick(object, Object.keys(defaultJobsParams[job])) as JobParams[T];
+export const pickJobParams = <T extends keyof JobParams>(object: object, job: T): JobParams[T] => {
+  const paramKeys = Object.keys(defaultJobsParams[job]);
+  return Object.entries(object).reduce<Record<string, any>>((acc, [key, value]) => {
+    if (!key.startsWith('params.')) return acc;
+
+    const paramKey = key.replace('params.', '');
+    if (paramKeys.includes(paramKey)) acc[paramKey] = value;
+    return acc;
+  }, {}) as JobParams[T];
+};
 
 export const jobRequiresFile = <T extends keyof JobParams>(job: T) =>
   Object.keys(defaultJobsParams[job]).includes('file');

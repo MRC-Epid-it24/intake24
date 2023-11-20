@@ -147,7 +147,7 @@ const localeController = (ioc: IoC) => {
 
     await getAndCheckAccess(SystemLocale, 'tasks', req);
 
-    const params = { ...pickJobParams(req.body.params, type), localeId };
+    const params = { ...pickJobParams(req.body, type), localeId };
     if (jobRequiresFile(type)) {
       if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
 

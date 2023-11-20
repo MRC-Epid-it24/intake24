@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import type { Meta } from 'express-validator';
+import { endOfDay, startOfDay } from 'date-fns';
 import { checkSchema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
@@ -35,15 +36,15 @@ export default validate(
       in: ['body'],
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
-      toDate: true,
       optional: true,
+      customSanitizer: { options: (value) => startOfDay(new Date(value)) },
     },
     'params.endDate': {
       in: ['body'],
       errorMessage: typeErrorMessage('date._'),
       isDate: true,
-      toDate: true,
       optional: true,
+      customSanitizer: { options: (value) => endOfDay(new Date(value)) },
     },
     'params.file': {
       in: ['body'],
