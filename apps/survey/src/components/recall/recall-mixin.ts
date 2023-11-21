@@ -102,18 +102,17 @@ export default defineComponent({
     },
 
     showMealList(): boolean {
-      if (
-        this.currentPrompt?.section === 'submission' &&
-        this.currentPrompt.prompt.component === 'submit-prompt' &&
-        this.currentPrompt.prompt.review['desktop'] !== false
-      )
-        return false;
+      if (!this.currentPrompt) return false;
 
-      // FIXME: decide on where to put prompts that are not connected to the main flow or refactor this.
-      return (
-        this.currentPrompt?.section !== 'preMeals' ||
-        this.currentPrompt.prompt.component === 'meal-add-prompt'
-      );
+      const { section, prompt } = this.currentPrompt;
+
+      if (section === 'submission') {
+        if (prompt.component === 'submit-prompt' && !prompt.review['desktop']) return true;
+
+        return false;
+      }
+
+      return section !== 'preMeals' || prompt.component === 'meal-add-prompt';
     },
   },
 
