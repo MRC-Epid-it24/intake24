@@ -37,7 +37,7 @@ export default () => {
   router.get('/:localeId/edit', wrapAsync(localeController.edit));
   router.post(
     '/:localeId/tasks',
-    upload.single('params.file'),
+    upload.single('params[file]'),
     validation.tasks,
     wrapAsync(localeController.tasks)
   );

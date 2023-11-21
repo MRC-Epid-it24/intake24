@@ -46,7 +46,7 @@ export default () => {
 
   router.post(
     '/:nutrientTableId/tasks',
-    upload.single('params.file'),
+    upload.single('params[file]'),
     permission('nutrient-tables|tasks'),
     validation.tasks,
     wrapAsync(nutrientTableController.tasks)

@@ -39,7 +39,7 @@ export default () => {
   router.use('/:surveyId/submissions', surveySubmissions());
   router.post(
     '/:surveyId/tasks',
-    upload.single('params.file'),
+    upload.single('params[file]'),
     validation.tasks,
     wrapAsync(adminSurveyController.tasks)
   );

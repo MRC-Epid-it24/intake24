@@ -83,9 +83,7 @@ export default <T extends object = Dictionary>(
     getData(object = false): T | FormData {
       if (object) return this.data;
 
-      return this.config.multipart
-        ? serialize<T>(this.data, { dotsForObjectNotation: true })
-        : this.data;
+      return this.config.multipart ? serialize<T>(this.data) : this.data;
     },
 
     async submit<R>(config: HttpRequestConfig): Promise<R> {

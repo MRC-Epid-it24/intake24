@@ -1,4 +1,4 @@
-import { pickJobParams } from '@intake24/common//types/jobs';
+import { pickJobParams } from '@intake24/common/types/jobs';
 
 describe('pickJobParams', () => {
   it('should pick correct job parameters', () => {

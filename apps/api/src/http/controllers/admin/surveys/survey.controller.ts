@@ -210,7 +210,8 @@ const adminSurveyController = (ioc: IoC) => {
 
     const { id: surveyId } = await getAndCheckAccess(Survey, 'tasks', req);
 
-    const params = { ...pickJobParams(req.body, type), surveyId };
+    const params = { ...pickJobParams(req.body.params, type), surveyId };
+
     if (jobRequiresFile(type)) {
       if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
 

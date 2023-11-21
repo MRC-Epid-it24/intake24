@@ -100,7 +100,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId);
     if (!nutrientTable) throw new NotFoundError();
 
-    const params = { ...pickJobParams(req.body, type), nutrientTableId };
+    const params = { ...pickJobParams(req.body.params, type), nutrientTableId };
     if (jobRequiresFile(type)) {
       if (!file) throw new ValidationError('Missing file.', { path: 'params.file' });
 
