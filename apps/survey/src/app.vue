@@ -64,7 +64,8 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app color="primary" dark flat hide-on-scroll>
-      <v-app-bar-nav-icon @click.stop="toggleSidebar"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon :title="$t('common.navigation')" @click.stop="toggleSidebar">
+      </v-app-bar-nav-icon>
       <template v-if="loggedIn">
         <div v-if="surveyName" class="app-bar-survey-info">
           <i18n path="recall.survey" tag="span">
@@ -85,6 +86,7 @@
           :icon="isMobile"
           :large="isMobile"
           :text="!isMobile"
+          :title="$t('profile._')"
           :to="{ name: 'survey-profile', params: { surveyId } }"
         >
           <span v-if="!isMobile" class="mr-2">{{ $t('profile._') }}</span>

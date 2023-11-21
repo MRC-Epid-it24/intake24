@@ -27,7 +27,14 @@
           ></meal-item>
         </v-list>
       </v-card-text>
-      <v-btn block color="info" large tile @click="closeNavigation">
+      <v-btn
+        block
+        color="info"
+        large
+        tile
+        :title="$t('common.action.close')"
+        @click="closeNavigation"
+      >
         <v-icon left>$close</v-icon>{{ $t('common.action.close') }}
       </v-btn>
     </v-card>

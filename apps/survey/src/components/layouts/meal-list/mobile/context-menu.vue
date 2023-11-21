@@ -8,6 +8,7 @@
           class="rounded-xl"
           link
           tile
+          :title="item.name"
           @click="item.dialog ? openDialog(item.action) : action(item.action)"
         >
           <v-card-text class="d-flex flex-column justify-center align-center ga-2">

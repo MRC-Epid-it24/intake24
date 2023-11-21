@@ -3,7 +3,8 @@
     <v-slider
       class="drink-scale-count-slider align-center mb-4 px-2 px-sm-4"
       color="grey darken-1"
-      hide-details="auto"
+      hide-details
+      :label="$t('prompts.quantity._')"
       thumb-label="always"
       :thumb-size="50"
       v-bind="{
@@ -15,10 +16,14 @@
       @input="updateValue($event)"
     >
       <template #prepend>
-        <v-icon large @click="decrement">fas fa-circle-minus</v-icon>
+        <v-icon large :title="$t('prompts.quantity.less')" @click="decrement"
+          >fas fa-circle-minus</v-icon
+        >
       </template>
       <template #append>
-        <v-icon large @click="increment">fas fa-circle-plus</v-icon>
+        <v-icon large :title="$t('prompts.quantity.more')" @click="increment"
+          >fas fa-circle-plus</v-icon
+        >
       </template>
       <template #thumb-label="{ value: thumbValue }">
         <div class="d-flex flex-column align-center">
@@ -90,8 +95,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .drink-scale-count-slider {
   padding-top: 85px;
+
+  // Only for WCAG - vuetify should be able to do this
+  label {
+    display: none;
+  }
 }
 </style>

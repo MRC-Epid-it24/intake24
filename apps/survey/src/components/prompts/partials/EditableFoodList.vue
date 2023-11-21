@@ -22,7 +22,12 @@
                 @keydown.prevent.stop.enter="moveToList"
               >
                 <template v-if="$vuetify.breakpoint.xs" #append>
-                  <v-icon class="px-2" :disabled="!newFood.description.length" @click="moveToList">
+                  <v-icon
+                    class="px-2"
+                    :disabled="!newFood.description.length"
+                    :title="promptI18n.add"
+                    @click="moveToList"
+                  >
                     fas fa-turn-down fa-rotate-90
                   </v-icon>
                 </template>

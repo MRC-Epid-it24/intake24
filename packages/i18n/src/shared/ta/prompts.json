@@ -225,10 +225,13 @@
   },
 
   "quantity": {
+    "_": "Quantity",
     "whole": "முழுமையாக ",
     "fraction": "பின்னம்",
     "and": "மற்றும்",
-    "confirm": "நான் நிறைய இருந்தன"
+    "confirm": "நான் நிறைய இருந்தன",
+    "more": "More",
+    "less": "Less"
   },
   "portionSizeOption": {
     "name": "பகுதி முறை",

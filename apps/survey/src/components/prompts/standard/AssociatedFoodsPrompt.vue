@@ -9,93 +9,86 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-container class="pa-0">
-            <v-radio-group
-              v-model="assocPrompt.mainFoodConfirmed"
-              :row="!isMobile"
-              @change="onConfirmStateChanged(index)"
-            >
-              <v-radio
-                :label="promptI18n.no"
-                off-icon="fa-regular fa-circle"
-                on-icon="$yes"
-                :value="false"
-              ></v-radio>
-              <v-radio
-                :label="promptI18n.yes"
-                off-icon="fa-regular fa-circle"
-                on-icon="$yes"
-                :value="true"
-              ></v-radio>
-            </v-radio-group>
-          </v-container>
+          <v-radio-group
+            v-model="assocPrompt.mainFoodConfirmed"
+            :row="!isMobile"
+            @change="onConfirmStateChanged(index)"
+          >
+            <v-radio
+              :label="promptI18n.no"
+              off-icon="fa-regular fa-circle"
+              on-icon="$yes"
+              :value="false"
+            ></v-radio>
+            <v-radio
+              :label="promptI18n.yes"
+              off-icon="fa-regular fa-circle"
+              on-icon="$yes"
+              :value="true"
+            ></v-radio>
+          </v-radio-group>
 
           <!-- Selected foods list -->
           <v-expand-transition>
-            <v-card
+            <div
               v-if="
                 assocPrompt.mainFoodConfirmed &&
                 assocPrompt.foods.length > 0 &&
                 !showFoodChooser(index)
               "
-              class="pa-0"
-              flat
             >
-              <v-card-text class="d-flex flex-column flex-md-row pa-0 ga-2">
-                <v-container>
-                  <v-row
-                    v-for="(food, foodIndex) in assocPrompt.foods"
-                    :key="foodIndex"
-                    align="baseline"
-                    class="pa-0"
-                  >
-                    <v-alert class="flex-md-grow-1 mr-1" color="grey lighten-4" dense icon="$food">
-                      {{ associatedFoodDescription(food) }}
-                      <template #prepend>
-                        <v-icon left>$food</v-icon>
-                      </template>
-                      <template #append>
+              <v-card
+                v-for="(foodItem, foodIndex) in assocPrompt.foods"
+                :key="foodIndex"
+                class="mb-3"
+                color="grey lighten-4"
+                flat
+              >
+                <div class="d-flex flex-column flex-sm-row justify-space-between px-3 py-2 ga-3">
+                  <div class="align-self-start align-self-sm-center font-weight-medium">
+                    <v-icon left>$food</v-icon>
+                    {{ associatedFoodDescription(foodItem) }}
+                  </div>
+                  <div class="align-self-end align-self-sm-center">
+                    <v-btn
+                      color="primary lighten-1"
+                      depressed
+                      :title="promptI18n['select.different']"
+                      @click="replaceFood(index, foodIndex)"
+                    >
+                      <v-icon left>$edit</v-icon>
+                      {{ promptI18n['select.different'] }}
+                    </v-btn>
+                    <confirm-dialog
+                      v-if="allowMultiple && associatedFoodPrompts[index].multiple"
+                      :label="promptI18n['select.remove']"
+                      @confirm="removeFood(index, foodIndex)"
+                    >
+                      <template #activator="{ on, attrs }">
                         <v-btn
+                          v-bind="attrs"
+                          class="ml-2"
                           color="primary lighten-1"
                           depressed
-                          :title="promptI18n['select.different']"
-                          @click="replaceFood(index, foodIndex)"
+                          :title="promptI18n['select.remove']"
+                          v-on="on"
                         >
-                          <v-icon left>$edit</v-icon>
-                          {{ promptI18n['select.different'] }}
+                          <v-icon left>$delete</v-icon>
+                          {{ promptI18n['select.remove'] }}
                         </v-btn>
-                        <confirm-dialog
-                          v-if="allowMultiple && associatedFoodPrompts[index].multiple"
-                          :label="promptI18n['select.remove']"
-                          @confirm="removeFood(index, foodIndex)"
-                        >
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              v-bind="attrs"
-                              class="ml-2"
-                              color="primary lighten-1"
-                              depressed
-                              :title="promptI18n['select.remove']"
-                              v-on="on"
-                            >
-                              <v-icon left>$delete</v-icon>
-                              {{ promptI18n['select.remove'] }}
-                            </v-btn>
-                          </template>
-                          <i18n path="recall.menu.food.deleteConfirm">
-                            <template #item>
-                              <span class="font-weight-medium">{{
-                                associatedFoodDescription(food)
-                              }}</span>
-                            </template>
-                          </i18n>
-                        </confirm-dialog>
                       </template>
-                    </v-alert>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-            </v-card>
+                      <i18n path="recall.menu.food.deleteConfirm">
+                        <template #item>
+                          <span class="font-weight-medium">
+                            {{ associatedFoodDescription(foodItem) }}
+                          </span>
+                        </template>
+                      </i18n>
+                    </confirm-dialog>
+                  </div>
+                </div>
+              </v-card>
+            </div>
           </v-expand-transition>
 
           <!-- Additional food confirmation -->

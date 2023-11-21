@@ -17,6 +17,8 @@
           v-model="sliderValue"
           color="secondary"
           :height="sliderHeight"
+          hide-details
+          :label="$t('prompts.quantity._')"
           :max="sliderMax"
           :min="sliderMin"
           thumb-color="secondary"
@@ -268,6 +270,11 @@ export default defineComponent({
       position: absolute;
       right: 0;
       z-index: 1;
+
+      // Only for WCAG - vuetify should be able to do this
+      label {
+        display: none;
+      }
 
       .v-slider {
         height: 100%;

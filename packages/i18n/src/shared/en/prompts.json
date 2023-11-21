@@ -217,10 +217,13 @@
     "description": ""
   },
   "quantity": {
+    "_": "Quantity",
     "whole": "Whole",
     "fraction": "Fraction",
     "and": "and",
-    "confirm": "I had that many"
+    "confirm": "I had that many",
+    "more": "More",
+    "less": "Less"
   },
   "portionSizeOption": {
     "name": "Portion method",

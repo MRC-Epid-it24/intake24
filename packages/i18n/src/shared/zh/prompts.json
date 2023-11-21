@@ -224,10 +224,13 @@
   },
 
   "quantity": {
+    "_": "Quantity",
     "whole": "整个",
     "fraction": "分数",
     "and": "和",
-    "confirm": "我吃了那么多"
+    "confirm": "我吃了那么多",
+    "more": "More",
+    "less": "Less"
   },
   "portionSizeOption": {
     "name": "分量方法",

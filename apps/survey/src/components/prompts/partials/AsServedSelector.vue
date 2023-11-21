@@ -25,7 +25,12 @@
         <v-card :disabled="isLessWeightFactorActive" @click="updateSelection(-1)">
           <v-img :src="firstThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn :disabled="isLessWeightFactorActive" icon x-large>
+            <v-btn
+              :disabled="isLessWeightFactorActive"
+              icon
+              :title="$t(`prompts.asServed.${type}.less`)"
+              x-large
+            >
               <v-icon>$decrement</v-icon>
             </v-btn>
           </v-overlay>
@@ -49,7 +54,12 @@
         <v-card :disabled="isMoreWeightFactorActive" @click="updateSelection(1)">
           <v-img :src="lastThumbnail"></v-img>
           <v-overlay absolute>
-            <v-btn :disabled="isMoreWeightFactorActive" icon x-large>
+            <v-btn
+              :disabled="isMoreWeightFactorActive"
+              icon
+              :title="$t(`prompts.asServed.${type}.more`)"
+              x-large
+            >
               <v-icon>$increment</v-icon>
             </v-btn>
           </v-overlay>

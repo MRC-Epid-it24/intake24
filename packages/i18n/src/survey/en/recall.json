@@ -19,8 +19,8 @@
     "count": "Recall number: {count}"
   },
   "start": {
-    "_": "Start",
-    "another": "Start another"
+    "_": "Start recall",
+    "another": "Start another recall"
   },
   "continue": "Continue",
   "abort": {
