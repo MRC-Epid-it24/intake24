@@ -46,12 +46,20 @@ export function getOrCreatePromptStateStore<T extends object>(
             [foodOrMealId]: { ...this.prompts[foodOrMealId], [promptId]: data },
           };
         },
-        clearState(foodOrMealId: string, promptId: string) {
-          if (this.prompts[foodOrMealId]?.[promptId])
-            Vue.delete(this.prompts[foodOrMealId], promptId);
+        clearState(foodOrMealId: string | string[], promptId?: string) {
+          const ids = Array.isArray(foodOrMealId) ? foodOrMealId : [foodOrMealId];
+          if (!promptId) {
+            ids.forEach((id) => {
+              delete this.prompts[id];
+            });
+          } else {
+            ids.forEach((id) => {
+              if (this.prompts[id]?.[promptId]) Vue.delete(this.prompts[id], promptId);
+            });
+          }
 
           this.prompts = Object.fromEntries(
-            Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length !== 0)
+            Object.entries(this.prompts).filter((e) => Object.keys(e[1]).length)
           );
 
           // Dispose store if it is empty

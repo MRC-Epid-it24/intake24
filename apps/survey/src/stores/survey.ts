@@ -298,21 +298,14 @@ export const useSurvey = defineStore('survey', {
       this.undo = null;
     },
 
+    clearEntityPromptStores(entityId: string | string[]) {
+      promptStores.forEach((store) => {
+        store().clearState(entityId);
+      });
+    },
+
     clearState() {
-      promptStores.forEach((store) => store().$reset());
-
-      /*
-       * Prompt stores are created dynamically so we need to clear local storage manually
-       * which can be out of sync if store is not created and stale data are in local storage
-       */
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        // TODO: prompt store should probably be prefixed with something as 'prompt-state' relies on ComponentType naming convention
-        if (!key || !key.endsWith('prompt-state')) continue;
-
-        localStorage.removeItem(key);
-      }
-
+      clearPromptStores();
       this.setState(surveyInitialState());
     },
 
@@ -507,8 +500,18 @@ export const useSurvey = defineStore('survey', {
         this.data.selection = getAlternativeMealSelection(this.data.meals, mealIndex);
       }
 
+      const collectEntityIdCallback = (acc: string[], { id, linkedFoods }: FoodState) => {
+        acc.push(id);
+
+        if (linkedFoods.length) linkedFoods.reduce(collectEntityIdCallback, acc);
+
+        return acc;
+      };
+      const entityIds = this.data.meals[mealIndex].foods.reduce(collectEntityIdCallback, [mealId]);
+
       Vue.delete(this.data.meals, mealIndex);
       this.sortMeals();
+      this.clearEntityPromptStores(entityIds);
     },
 
     undoDeleteMeal(data: { mealIndex: number; meal: MealState }) {
@@ -625,20 +628,31 @@ export const useSurvey = defineStore('survey', {
       this.removeFoodFlag(foodId, flag);
     },
 
-    replaceFood(data: { foodId: string; food: FoodState }) {
+    replaceFood({ foodId, food }: { foodId: string; food: FoodState }) {
       const { foodIndex, mealIndex, linkedFoodIndex } = getFoodIndexRequired(
         this.data.meals,
-        data.foodId
+        foodId
       );
 
+      const originalFood =
+        linkedFoodIndex === undefined
+          ? this.data.meals[mealIndex].foods[foodIndex]
+          : this.data.meals[mealIndex].foods[foodIndex].linkedFoods[linkedFoodIndex];
+
       if (linkedFoodIndex === undefined) {
-        this.data.meals[mealIndex].foods.splice(foodIndex, 1, data.food);
+        this.data.meals[mealIndex].foods.splice(foodIndex, 1, food);
       } else {
-        this.data.meals[mealIndex].foods[foodIndex].linkedFoods.splice(
-          linkedFoodIndex,
-          1,
-          data.food
-        );
+        this.data.meals[mealIndex].foods[foodIndex].linkedFoods.splice(linkedFoodIndex, 1, food);
+      }
+
+      // Clear food prompt stores if replacing food with different type or different code
+      if (
+        originalFood.type !== food.type ||
+        (originalFood.type === 'encoded-food' &&
+          food.type === 'encoded-food' &&
+          originalFood.data.code !== food.data.code)
+      ) {
+        this.clearEntityPromptStores(foodId);
       }
     },
 
@@ -741,6 +755,8 @@ export const useSurvey = defineStore('survey', {
 
       // FIXME: update selection
       this.data.selection = { mode: 'auto', element: null };
+
+      this.clearEntityPromptStores(foodId);
     },
 
     addFood({ mealId, food, at }: { mealId: string; food: FoodState; at?: number }) {
