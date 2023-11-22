@@ -174,8 +174,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       tinymce:
-        specifier: ^6.7.2
-        version: 6.7.2
+        specifier: ^6.7.3
+        version: 6.7.3
       vanilla-jsoneditor:
         specifier: ^0.18.12
         version: 0.18.12
@@ -4298,8 +4298,8 @@ packages:
       '@types/node': 20.9.0
     dev: true
 
-  /@types/nodemon@1.19.5:
-    resolution: {integrity: sha512-jUKYdrnwLp4jMztMdQEJnF4lBhthCfqE7P6cYCIy0txMJrSFtKqs2HjmyEsyQueLjZjve0IjJ1S+20DtgJpUjA==}
+  /@types/nodemon@1.19.6:
+    resolution: {integrity: sha512-vjKuaQOLUA5EY2zkUmWG1ipXbKt9Wd+H/0SiIuHVeH4cHtt6509iRUGH9ZR0iqgUrtj3BrP9KqoTuV3ZCbQcYA==}
     dependencies:
       '@types/node': 20.9.0
     dev: true
@@ -10748,7 +10748,7 @@ packages:
     peerDependencies:
       webpack: 4 || 5
     dependencies:
-      '@types/nodemon': 1.19.5
+      '@types/nodemon': 1.19.6
       nodemon: 3.0.1
       webpack: 5.89.0(webpack-cli@5.1.4)
     dev: true
@@ -13119,8 +13119,8 @@ packages:
     resolution: {integrity: sha512-65NKvSuAVDP/n4CqH+a9w2kTlLReS9vhsAP06MWx+/89nMinJyB2icyl58RIcqCmIggpojIGeuJGhjU1aGMBSg==}
     dev: true
 
-  /tinymce@6.7.2:
-    resolution: {integrity: sha512-6h/02jHmXyghekFzmzccZxUUEFtlPEKHxOd+gd49bjno3ybavZInPIaDd/pp2GeEwsFm20oGgJCL7UiebXm9dw==}
+  /tinymce@6.7.3:
+    resolution: {integrity: sha512-J7WmYIi/gt1RvZ6Ap2oQiUjzAoiS9pfV+d4GnKuZuPu8agmlAEAInNmMvMjfCNBzHv4JnZXY7qlHUAI0IuYQVA==}
     dev: false
 
   /tinypool@0.7.0:
