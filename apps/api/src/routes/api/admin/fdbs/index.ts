@@ -10,7 +10,7 @@ import foods from './foods';
 import globalFoods from './global-foods';
 
 export default () => {
-  const { adminFoodDatabaseController } = ioc.cradle;
+  const { adminFoodDatabaseController, adminLocalFoodsController } = ioc.cradle;
   const router = Router();
 
   router.use(permission('locales'));
@@ -22,6 +22,8 @@ export default () => {
   router.use('/foods', globalFoods());
   router.use('/:localeId/categories', categories());
   router.use('/:localeId/foods', foods());
+
+  router.post('/:localeId/enabled-foods', wrapAsync(adminLocalFoodsController.updateEnabledFoods));
 
   return router;
 };

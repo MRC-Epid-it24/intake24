@@ -36,6 +36,7 @@ export class ImporterV4 {
   private locales: Record<string, PkgLocale> | undefined;
   private globalFoods: PkgGlobalFood[] | undefined;
   private localFoods: Record<string, PkgLocalFood[]> | undefined;
+  private enabledLocalFoods: Record<string, string[]> | undefined;
 
   constructor(
     apiClient: ApiClientV4,
@@ -212,35 +213,37 @@ export class ImporterV4 {
   }
 
   private async importLocalFood(localeId: string, food: PkgLocalFood): Promise<void> {
-    const foodEntry = typeConverters.fromPackageLocalFood(food);
+    const createRequest = typeConverters.fromPackageLocalFood(food);
 
-    /* const result = await this.apiClient.foods.createLocalFood(localeId, food)
+    if (this.options.onConflict === 'skip' || this.options.onConflict === 'abort') {
+      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+        update: false,
+        return: false,
+      });
 
-    if (result.type === 'conflict') {
-      switch (this.options.onConflict) {
-        case 'skip':
-          logger.info(`Skipping food "${food.code}" due to a conflict`);
-          return;
-        case 'abort': {
-          const message = `Failed to import food "${food.code}" due to a conflict`;
+      if (result.type === 'conflict') {
+        if (this.options.onConflict === 'skip') {
+          logger.info(`Skipping local food "${food.code}" due to a conflict`);
+        } else {
+          const message = `Failed to import local food "${food.code}" due to a conflict`;
           logger.error(message);
           logger.error(JSON.stringify(result.details, null, 2));
           throw new Error(message);
         }
-        case 'overwrite': {
-          // This looks terribly inefficient, maybe give create an on conflict option instead?
-          const existing = await this.apiClient.foods.findGlobalFood(food.code);
-
-          if (existing !== null) {
-            await this.apiClient.foods.updateGlobalFood(
-              food.code,
-              existing.version,
-              omit(foodEntry, 'code')
-            );
-          }
-        }
       }
-    }*/
+    } else {
+      const result = await this.apiClient.foods.createLocalFood(localeId, createRequest, {
+        update: true,
+        return: false,
+      });
+
+      if (result.type === 'conflict') {
+        const message = `Failed to import local food "${food.code}" due to a conflict`;
+        logger.error(message);
+        logger.error(JSON.stringify(result.details, null, 2));
+        throw new Error(message);
+      }
+    }
   }
 
   private async importLocalFoods(): Promise<void> {
@@ -255,22 +258,38 @@ export class ImporterV4 {
 
         for (let i = 0; i < localFoodsCount; i += batchSize) {
           const batch = localFoods.slice(i, i + batchSize);
-          //const ops = batch.map((food) => this.importLocalFood(food));
-
-          //await Promise.all(ops);
-
+          const ops = batch.map((food) => this.importLocalFood(localeId, food));
+          await Promise.all(ops);
           importedCount += batch.length;
           logger.info(`${importedCount}/$localFoodsCount}...`);
         }
       }
 
-      logger.info('Finished importing global food records');
+      logger.info('Finished importing local food records');
     }
   }
 
-  private async readJSON<T>(relativePath: string): Promise<T> {
+  private async importEnabledLocalFoods(): Promise<void> {
+    if (this.enabledLocalFoods !== undefined) {
+      for (const [localeId, enabledFoods] of Object.entries(this.enabledLocalFoods)) {
+        logger.info(`Updating enabled food codes for locale ${localeId}`);
+
+        await this.apiClient.foods.updateEnabledFoods(localeId, enabledFoods);
+      }
+    }
+  }
+
+  private async readJSON<T>(relativePath: string): Promise<T | undefined> {
     const filePath = path.join(this.workingDir, relativePath);
     logger.debug(`Reading JSON file: ${filePath}`);
+
+    try {
+      await fs.access(filePath);
+    } catch (e) {
+      logger.debug(`File does not exist or is not accessible, skipping`);
+      return undefined;
+    }
+
     return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
   }
 
@@ -289,8 +308,18 @@ export class ImporterV4 {
     this.localFoods = await this.readJSON(PkgConstants.LOCAL_FOODS_FILE_NAME);
   }
 
+  private async readEnabledLocalFoods(): Promise<void> {
+    logger.debug('Loading enabled local foods');
+    this.enabledLocalFoods = await this.readJSON(PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME);
+  }
+
   public async readPackage(): Promise<void> {
-    await Promise.all([this.readLocales(), this.readGlobalFoods(), this.readLocalFoods()]);
+    await Promise.all([
+      this.readLocales(),
+      this.readGlobalFoods(),
+      this.readLocalFoods(),
+      this.readEnabledLocalFoods(),
+    ]);
   }
 
   public async import(): Promise<void> {
@@ -301,6 +330,8 @@ export class ImporterV4 {
     // await this.importGlobalFoods();
 
     await this.importLocalFoods();
+
+    await this.importEnabledLocalFoods();
 
     //await this.importImageMaps();
   }

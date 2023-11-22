@@ -9,6 +9,7 @@ import type {
   AdminFoodDatabaseController,
   AdminFoodGroupController,
   AdminGlobalFoodsController,
+  AdminLocalFoodsController,
   AdminSignupController,
   AdminSurveyController,
   AdminSurveyRespondentController,
@@ -92,6 +93,7 @@ import type {
   JwtService,
   LanguageService,
   LocaleService,
+  LocalFoodsService,
   NutrientTableService,
   NutrientTypeService,
   NutrientUnitService,
@@ -188,6 +190,7 @@ export interface IoC extends Jobs {
   adminFoodController: AdminFoodController;
   adminFoodGroupController: AdminFoodGroupController;
   adminGlobalFoodsController: AdminGlobalFoodsController;
+  adminLocalFoodsController: AdminLocalFoodsController;
 
   // Images
   asServedSetController: AsServedSetController;
@@ -265,6 +268,7 @@ export interface IoC extends Jobs {
 
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
+  localFoodsService: LocalFoodsService;
   languageService: LanguageService;
   localeService: LocaleService;
   nutrientTableService: NutrientTableService;

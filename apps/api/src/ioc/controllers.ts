@@ -42,6 +42,7 @@ export default (container: AwilixContainer): void => {
     adminFoodController: asFunction(controllers.admin.fdbs.food),
     adminFoodGroupController: asFunction(controllers.admin.fdbs.foodGroup),
     adminGlobalFoodsController: asFunction(controllers.admin.fdbs.globalFoods),
+    adminLocalFoodsController: asFunction(controllers.admin.fdbs.localFoods),
 
     // Images
     asServedSetController: asFunction(controllers.admin.images.asServedSet),

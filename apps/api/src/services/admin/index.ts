@@ -6,6 +6,8 @@ export { default as adminFoodService } from './food.service';
 export * from './images';
 export * from './language.service';
 export { default as languageService } from './language.service';
+export * from './local-foods.service';
+export { default as localFoodsService } from './local-foods.service';
 export * from './locale.service';
 export { default as localeService } from './locale.service';
 export * from './nutrient-table.service';

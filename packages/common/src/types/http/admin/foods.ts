@@ -1,4 +1,6 @@
 import type { UseInRecipeType } from '@intake24/common/types';
+import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
+import type { PortionSizeMethod } from '@intake24/common/types/http/admin/portion-size';
 import type {
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
@@ -29,6 +31,21 @@ export type CreateGlobalFoodRequest = {
 };
 
 export type UpdateGlobalFoodRequest = Omit<CreateGlobalFoodRequest, 'code'>;
+
+export type CreateLocalFoodRequest = {
+  code: string;
+  name: string;
+  nutrientTableCodes: Record<string, string>;
+  portionSizeMethods: PortionSizeMethod[];
+  associatedFoods: AssociatedFood[];
+};
+
+export type CreateLocalFoodRequestOptions = {
+  update: boolean;
+  return: boolean;
+};
+
+export type UpdateLocalFoodRequest = Omit<CreateLocalFoodRequest, 'code'>;
 
 export type FoodInput = {
   name: string;

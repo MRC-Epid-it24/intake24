@@ -1,5 +1,7 @@
 import type {
   CreateGlobalFoodRequest,
+  CreateLocalFoodRequest,
+  CreateLocalFoodRequestOptions,
   FoodEntry,
   UpdateGlobalFoodRequest,
 } from '@intake24/common/types/http/admin';
@@ -10,6 +12,7 @@ import { parseCreateResponse } from './create-response';
 
 export class FoodsApiV4 {
   private static readonly globalApiPath = '/api/admin/fdbs/foods';
+  private static readonly localApiPath = '/api/admin/fdbs';
 
   private readonly baseClient: BaseClientV4;
 
@@ -42,5 +45,25 @@ export class FoodsApiV4 {
       `${FoodsApiV4.globalApiPath}/${code}?version=${version}`,
       updateRequest
     );
+  }
+
+  public async createLocalFood(
+    localeId: string,
+    createRequest: CreateLocalFoodRequest,
+    options: CreateLocalFoodRequestOptions
+  ): Promise<CreateResult<FoodEntry>> {
+    const response = await this.baseClient.postResponse<FoodEntry>(
+      `${FoodsApiV4.localApiPath}/${localeId}/foods`,
+      createRequest,
+      options
+    );
+
+    return parseCreateResponse(response, this.baseClient.logger);
+  }
+
+  public async updateEnabledFoods(localeId: string, enabledFoods: string[]) {
+    await this.baseClient.post<FoodEntry>(`${FoodsApiV4.localApiPath}/${localeId}/enabled-foods`, {
+      enabledFoods,
+    });
   }
 }

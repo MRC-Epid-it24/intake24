@@ -28,6 +28,7 @@ import {
   jwtService,
   languageService,
   localeService,
+  localFoodsService,
   nutrientTableService,
   nutrientTypeService,
   nutrientUnitService,
@@ -87,6 +88,7 @@ export default (container: AwilixContainer): void => {
 
     adminCategoryService: asFunction(adminCategoryService),
     adminFoodService: asFunction(adminFoodService),
+    localFoodsService: asFunction(localFoodsService),
     languageService: asFunction(languageService),
     localeService: asFunction(localeService),
     nutrientTableService: asFunction(nutrientTableService),
