@@ -1,6 +1,6 @@
 {
   "name": "@intake24/db",
-  "version": "2023.2.0",
+  "version": "2023.2.1",
   "private": true,
   "description": "Intake24 database layer",
   "author": "",
