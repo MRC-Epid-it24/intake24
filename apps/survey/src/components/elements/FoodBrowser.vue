@@ -31,11 +31,7 @@
             :v-model="recipeBuilderFood?.name"
             @click.stop="recipeBuilder"
           >
-            {{
-              $t(`prompts.${type}.recipeBuilder.label`, {
-                searchTerm: recipeBuilderFood?.name,
-              })
-            }}
+            {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
           </v-btn>
         </v-card-text>
       </v-card>
@@ -108,14 +104,10 @@
           :disabled="missingDialog"
           large
           outlined
-          :title="promptI18n.browse"
+          :title="promptI18n['missing.irrelevantIngredient']"
           @click.stop="skipTheStep"
         >
-          {{
-            $t(`prompts.${type}.missing.irrelevantIngredient`, {
-              ingredient: stepName,
-            })
-          }}
+          {{ promptI18n['missing.irrelevantIngredient'] }}
         </v-btn>
       </div>
     </component>
@@ -201,7 +193,7 @@ export default defineComponent({
   emits: ['food-selected', 'food-missing', 'recipe-builder', 'input', 'food-skipped'],
 
   setup(props, ctx) {
-    const { translatePrompt, type } = usePromptUtils(props, ctx);
+    const { recipeBuilderEnabled, translatePrompt, type } = usePromptUtils(props, ctx);
 
     const promptI18n = computed(() => {
       function backCategoryLabel(): string {
@@ -226,12 +218,11 @@ export default defineComponent({
             'missing.description',
             'missing.report',
             'missing.tryAgain',
-            'missing.irrelevantIngredient',
-          ],
+            type.value === 'recipeBuilder' ? 'missing.irrelevantIngredient' : undefined,
+          ].filter(Boolean) as string[],
           {
-            back: {
-              category: backCategoryLabel(),
-            },
+            back: { category: backCategoryLabel() },
+            'missing.irrelevantIngredient': { ingredient: props.stepName },
           }
         ),
       };
@@ -339,15 +330,8 @@ export default defineComponent({
     };
 
     const recipeBuilderDetected = async (food: FoodHeader) => {
-      requestInProgress.value = true;
-      try {
-        const recipefoodData = await foodsService.getRecipeFood(props.localeId, food.code);
-        recipeFood.value = recipefoodData;
-        recipeBuilderToggle.value = true;
-      } catch (e) {
-        requestFailed.value = true;
-      }
-      requestInProgress.value = false;
+      recipeFood.value = await foodsService.getRecipeFood(props.localeId, food.code);
+      recipeBuilderToggle.value = true;
     };
 
     const search = async () => {
@@ -368,7 +352,8 @@ export default defineComponent({
         });
         if (searchResults.value.foods[0].code.charAt(0) === '$') {
           recipeBuilderFood.value = searchResults.value.foods.splice(0, 1)[0];
-          recipeBuilderDetected(recipeBuilderFood.value);
+
+          if (recipeBuilderEnabled.value) await recipeBuilderDetected(recipeBuilderFood.value);
         }
         requestFailed.value = false;
       } catch (e) {

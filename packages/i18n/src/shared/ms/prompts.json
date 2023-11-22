@@ -116,12 +116,6 @@
       "report": "Report a missing food",
       "tryAgain": "OK, let me try again"
     },
-    "recipeBuilder": {
-      "label": "Add your own {searchTerm}",
-      "description": "<p>Build your own recipe.</p>",
-      "report": "Report a missing food",
-      "tryAgain": "OK, let me try again"
-    },
     "confirmDiscardFood": {
       "label": "Yes",
       "messageUnsafe": "<p>You have already answered some questions about <strong>\"{discardedFoodName}\"</strong>!</p><p>If you change it to <strong>\"{selectedFoodName}\"</strong> now, you might have to answer some of those questions again.</p><p>Are you sure you would like to replace this food?</p>",
@@ -377,10 +371,13 @@
     "name": "{food} recipe builder",
     "text": "",
     "description": "Please follow the steps below to build your own recipe for {food}.",
+    "label": "Add your own {searchTerm}",
     "browse": "Browse all foods",
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
+    "addMore": "Add more ingredients",
+    "noMore": "No more ingredients",
     "none": "No food results. Please try refining your search.",
     "remove": "Remove",
     "missing": {
@@ -389,9 +386,7 @@
       "report": "Report a missing food",
       "tryAgain": "OK, let me try again",
       "irrelevantIngredient": "I didn't have any {ingredient}"
-    },
-    "addMore": "Add more ingredients",
-    "noMore": "No more ingredients"
+    }
   },
   "parentFoodPortion": {
     "name": "Parent food portion",

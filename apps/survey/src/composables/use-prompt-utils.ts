@@ -6,6 +6,7 @@ import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, PartialRecord, RecipeBuilder } from '@intake24/common/types';
 import type { LocaleContentOptions } from '@intake24/i18n';
 import { useI18n } from '@intake24/i18n';
+import { useSurvey } from '@intake24/survey/stores';
 import { promptType } from '@intake24/ui';
 
 import type { UseFoodUtilsProps } from './use-food-utils';
@@ -34,6 +35,7 @@ export const usePromptUtils = <
   confirmCallback?: () => boolean
 ) => {
   const { i18n } = useI18n();
+  const survey = useSurvey();
   const { mealName, mealTime } = useMealUtils(props);
   const { foodName } = useFoodUtils(props);
 
@@ -50,6 +52,10 @@ export const usePromptUtils = <
   };
 
   const type = computed(() => promptType(props.prompt.component));
+
+  const recipeBuilderEnabled = computed(() =>
+    survey.registeredPortionSizeMethods.includes('recipe-builder-prompt')
+  );
 
   const params = computed(() => {
     const build: Record<string, string> = {};
@@ -114,6 +120,7 @@ export const usePromptUtils = <
     isMeal,
     mealName,
     params,
+    recipeBuilderEnabled,
     translatePrompt,
     type,
   };
