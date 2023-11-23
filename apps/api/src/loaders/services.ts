@@ -1,12 +1,14 @@
+import type { Ops } from '@intake24/api/app';
 import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
 
-export default async (): Promise<void> => {
+export default async (ops: Ops): Promise<void> => {
   // Cache
   ioc.cradle.cache.init();
 
   // Databases
-  await ioc.cradle.db.init();
+  ioc.cradle.db.init();
+  if (ops.config.app.env === 'test') await ioc.cradle.db.sync(true);
 
   // Local filesystem
   await ioc.cradle.filesystem.init();

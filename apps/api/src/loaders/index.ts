@@ -16,7 +16,7 @@ export default async (app: Express, ops: Ops): Promise<void> => {
   expressLoader(app, ops);
   logger.info('Express defaults loaded.');
 
-  await servicesLoader();
+  await servicesLoader(ops);
   logger.info('Services loaded.');
 
   routesLoader(app, ops);

@@ -19,7 +19,8 @@ export async function initDatabases(): Promise<DatabasesInterface> {
     logger,
   });
 
-  await databases.init();
+  databases.init();
+  await databases.sync(true);
 
   return databases;
 }

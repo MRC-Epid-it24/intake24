@@ -31,7 +31,8 @@ export default {
     // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
       workerData: {
-        dbConnectionInfo: config.database[config.app.env],
+        env: config.app.env,
+        dbConnectionInfo: config.database,
       },
     });
 

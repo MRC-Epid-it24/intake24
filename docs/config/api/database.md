@@ -9,11 +9,26 @@ System consists of two databases:
 - `Foods` - food-related information, mostly static content
 - `System` - users / surveys related information, system configuration etc
 
-Environments:
+**Environments**:
 
 - `development` - local development environment
 - `test` - local tests and CI environment
 - `production` - production environment
+
+**Connection types**
+
+1. Connection URL - use `url` property
+2. Connection credentials - use `host`, `port`, `database`, `username` and `password` properties
+
+## URL
+
+- object-path: `[environment][database].url`
+- dotenv vars:
+  - `development`: `DB_DEV_FOODS_URL` and `DB_DEV_SYSTEM_URL`
+  - `test`: `DB_TEST_FOODS_URL` and `DB_TEST_SYSTEM_URL`
+  - `production`: `DB_FOODS_URL` and `DB_SYSTEM_URL`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Host
 
@@ -22,8 +37,8 @@ Environments:
   - `development`: `DB_DEV_FOODS_HOST` and `DB_DEV_SYSTEM_HOST`
   - `test`: `DB_TEST_FOODS_HOST` and `DB_TEST_SYSTEM_HOST`
   - `production`: `DB_FOODS_HOST` and `DB_SYSTEM_HOST`
-- type: `string`
-- default: `'localhost'`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Port
 
@@ -32,8 +47,8 @@ Environments:
   - `development`: `DB_DEV_FOODS_PORT` and `DB_DEV_SYSTEM_PORT`
   - `test`: `DB_TEST_FOODS_PORT` and `DB_TEST_SYSTEM_PORT`
   - `production`: `DB_FOODS_PORT` and `DB_SYSTEM_PORT`
-- type: `number`
-- default: `5432`
+- type: `number | undefined`
+- default: `undefined`
 
 ## Database
 
@@ -42,8 +57,8 @@ Environments:
   - `development`: `DB_DEV_FOODS_DATABASE` and `DB_DEV_SYSTEM_DATABASE`
   - `test`: `DB_TEST_FOODS_DATABASE` and `DB_TEST_SYSTEM_DATABASE`
   - `production`: `DB_FOODS_DATABASE` and `DB_SYSTEM_DATABASE`
-- type: `string`
-- default: `'intake24_foods'` and `'intake24_system'`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Username
 
@@ -52,8 +67,8 @@ Environments:
   - `development`: `DB_DEV_FOODS_USERNAME` and `DB_DEV_SYSTEM_USERNAME`
   - `test`: `DB_TEST_FOODS_USERNAME` and `DB_TEST_SYSTEM_USERNAME`
   - `production`: `DB_FOODS_USERNAME` and `DB_SYSTEM_USERNAME`
-- type: `string`
-- default: `'intake24'`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Password
 
@@ -62,8 +77,8 @@ Environments:
   - `development`: `DB_DEV_FOODS_PASSWORD` and `DB_DEV_SYSTEM_PASSWORD`
   - `test`: `DB_TEST_FOODS_PASSWORD` and `DB_TEST_SYSTEM_PASSWORD`
   - `production`: `DB_FOODS_PASSWORD` and `DB_SYSTEM_PASSWORD`
-- type: `string`
-- default: `''`
+- type: `string | undefined`
+- default: `undefined`
 
 ## Dialect
 

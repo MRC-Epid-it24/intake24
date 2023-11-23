@@ -11,8 +11,9 @@ export const models = { foods, system };
 export type BaseDatabasesInterface = Record<DatabaseType, Sequelize>;
 
 export interface DatabasesInterface extends BaseDatabasesInterface {
-  init(): Promise<void>;
+  init(): void;
   close(): Promise<void>;
+  sync(force: boolean): Promise<void>;
 }
 
 export type DatabaseOptions = {
@@ -46,26 +47,29 @@ export class Database implements DatabasesInterface {
     this.logger = logger.child({ service: 'Database' });
   }
 
-  async init(): Promise<void> {
+  init() {
     const isDev = this.env === 'development';
 
     for (const database of Object.keys(this.config[this.env]) as DatabaseType[]) {
-      const dbConf = this.config[this.env][database];
+      const { debugQueryLimit, url, ...rest } = this.config[this.env][database];
 
-      this[database] = new Sequelize({
-        ...dbConf,
+      const config = {
+        ...rest,
         models: Object.values(models[database]),
         logging: isDev
-          ? (sql) => databaseLogQuery(sql, this.logger, dbConf.debugQueryLimit)
+          ? (sql: string) => databaseLogQuery(sql, this.logger, debugQueryLimit)
           : false,
-      });
+      };
 
-      // Force sync for TEST environment
-      if (this.env === 'test') await this[database].sync({ force: true });
+      this[database] = url ? new Sequelize(url, config) : new Sequelize(config);
     }
   }
 
-  async close(): Promise<void> {
+  async sync(force = false) {
+    await Promise.all([this.foods.sync({ force }), this.system.sync({ force })]);
+  }
+
+  async close() {
     await Promise.all([this.foods.close(), this.system.close()]);
   }
 }

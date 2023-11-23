@@ -11,14 +11,7 @@ import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { logger as servicesLogger } from '@intake24/common-backend';
-import {
-  databaseLogQuery,
-  FoodsLocale,
-  models,
-  RecipeFoods,
-  SequelizeTS,
-  SynonymSet,
-} from '@intake24/db';
+import { Database, FoodsLocale, RecipeFoods, SynonymSet } from '@intake24/db';
 
 import type InterpretedPhrase from '../interpreted-phrase';
 import type { GlobalCategoryData } from './food-data';
@@ -33,25 +26,12 @@ if (parentPortNullable === null) throw new Error('This file can only be run as a
 
 const parentPort = parentPortNullable;
 
-const dbLogger = servicesLogger.child({ service: 'Database (food index)' });
-
-const foodsDb = new SequelizeTS({
-  ...workerData.dbConnectionInfo.foods,
-  models: Object.values(models.foods),
-  logging:
-    config.env === 'development'
-      ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.foods.debugQueryLimit)
-      : false,
+const databases = new Database({
+  environment: workerData.env,
+  databaseConfig: workerData.dbConnectionInfo,
+  logger: servicesLogger,
 });
-
-const systemDb = new SequelizeTS({
-  ...workerData.dbConnectionInfo.system,
-  models: Object.values(models.system),
-  logging:
-    config.env === 'development'
-      ? (sql) => databaseLogQuery(sql, dbLogger, workerData.dbConnectionInfo.system.debugQueryLimit)
-      : false,
-});
+databases.init();
 
 interface LocalFoodIndex {
   foodParentCategories: Map<string, Set<string>>;
@@ -376,7 +356,7 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
   };
 }
 
-const cleanUpIndexBuilder = async () => Promise.all([foodsDb.close(), systemDb.close()]);
+const cleanUpIndexBuilder = async () => databases.close();
 
 async function buildIndex() {
   let enabledLocales: string[];

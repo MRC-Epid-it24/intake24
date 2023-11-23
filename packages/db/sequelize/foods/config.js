@@ -20,6 +20,7 @@ const dialectOptions = {
 
 module.exports = {
   development: {
+    url: process.env.DB_DEV_FOODS_URL,
     host: process.env.DB_DEV_FOODS_HOST,
     port: process.env.DB_DEV_FOODS_PORT,
     database: process.env.DB_DEV_FOODS_DATABASE,
@@ -31,6 +32,7 @@ module.exports = {
     migrationStorageTableName: 'sequelize_meta',
   },
   test: {
+    url: process.env.DB_TEST_FOODS_URL,
     host: process.env.DB_TEST_FOODS_HOST,
     port: process.env.DB_TEST_FOODS_PORT,
     database: process.env.DB_TEST_FOODS_DATABASE,
@@ -42,6 +44,7 @@ module.exports = {
     migrationStorageTableName: 'sequelize_meta',
   },
   production: {
+    url: process.env.DB_FOODS_URL,
     host: process.env.DB_FOODS_HOST,
     port: process.env.DB_FOODS_PORT,
     database: process.env.DB_FOODS_DATABASE,
