@@ -47,7 +47,7 @@
     "@types/node": "^20.9.0",
     "@types/uuid": "^9.0.7",
     "@vite-pwa/assets-generator": "^0.0.10",
-    "@vitejs/plugin-legacy": "^4.1.1",
+    "@vitejs/plugin-legacy": "^5.2.0",
     "@vitejs/plugin-vue2": "^2.2.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
