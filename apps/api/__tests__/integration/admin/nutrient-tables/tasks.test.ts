@@ -45,7 +45,7 @@ export default () => {
       .post(url)
       .set('Accept', 'application/json')
       .set('Authorization', suite.bearer.user)
-      .attach('params.file', fs.createReadStream(filePath), fileName);
+      .attach('params[file]', fs.createReadStream(filePath), fileName);
 
     expect(status).toBe(403);
   });
@@ -61,7 +61,7 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('type', 'NutrientTableMappingImport')
-        .attach('params.file', fs.createReadStream(filePath), fileName);
+        .attach('params[file]', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(404);
     });
@@ -76,7 +76,7 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('type', 'NutrientTableMappingImport')
-        .field('params.file', '../../invalid_001');
+        .field('params[file]', '../../invalid_001');
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
@@ -89,7 +89,7 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('type', 'NutrientTableMappingImport')
-        .attach('params.file', fs.createReadStream(filePath), fileName);
+        .attach('params[file]', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(200);
       expect(body).not.toBeEmpty();
