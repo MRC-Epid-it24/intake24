@@ -12,19 +12,33 @@ Prompts with standardized behavior tied to specific functionality. Usually only 
 
 ### Associated foods prompt
 
+- `multiple` - allow multiple foods to be selected
+
+#### Food browser settings
+
+- **Show categories first**
+  - `food browse list` - Show categories first in the browse list
+  - `food search list` - Show categories first in the search list
+
 ### Edit meal prompt
 
 Edit meal prompt allows initial entry of food and drink before portion-size estimation.
 
 #### Options
 
-- `separateDrinks` - true/false whether to show drinks separately
+- `separateDrinks` - show drinks separately
 
 ### Final prompt
 
 Terminal prompt that is shown at the end of the recall. It offers home button It can offer feedback is applicable (feedback enabled and submission threshold reached).
 
 ### Food search prompt
+
+#### Food browser settings
+
+- **Show categories first**
+  - `food browse list` - Show categories first in the browse list
+  - `food search list` - Show categories first in the search list
 
 ### Meal add prompt
 
@@ -56,6 +70,14 @@ Prompt to collect meal time information using standard time picker.
 ### Ready meal prompt
 
 Prompt to collect ready meal information. Multi-select list of options, for each food within the meal that has `ready-meal` attribute set to `true`.
+
+### Recipe builder prompt
+
+#### Food browser settings
+
+- **Show categories first**
+  - `food browse list` - Show categories first in the browse list
+  - `food search list` - Show categories first in the search list
 
 ### Redirect prompt
 
@@ -109,9 +131,9 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
-- `leftovers` - true/false whether to show leftovers option
+- `leftovers` - show leftovers option
 
 - `linked quantity categories`
   - Category list of that parent food should have (at least one) to trigger quantity selection based on parent food quantity
@@ -121,14 +143,14 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
-- `leftovers` - true/false whether to show leftovers option
+- `leftovers` - show leftovers option
 
 - `image map settings` - image map settings
 
-  - `image map labels` - true/false whether to show image map labels
-  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Direct weight prompt
 
@@ -136,11 +158,11 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
-- `leftovers` - true/false whether to show leftovers option
+- `leftovers` - show leftovers option
 
-- `multiple` - true/false whether to allow multiple item to be selected. When enabled, additional slider options are available:
+- `multiple` - allow multiple item to be selected. When enabled, additional slider options are available:
 
   - `initial` - initial value
   - `min` - minimum value
@@ -149,25 +171,25 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `image map settings` - image map settings
 
-  - `image map labels` - true/false whether to show image map labels
-  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Guide image prompt
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
 
-  - `image map labels` - true/false whether to show image map labels
-  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Milk in a hot drink prompt
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header and option labels
+- `badges` - show quantity badge on expansion panel header and option labels
 
 - `orientation` - orientation of radio buttons (column/row)
 
@@ -175,12 +197,12 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
 
-  - `image map labels` - true/false whether to show image map labels
-  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Parent food portion prompt
 
@@ -188,7 +210,7 @@ Calculates portion size based on parent food portion size.
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header and option labels
+- `badges` - show quantity badge on expansion panel header and option labels
 
 - `orientation` - orientation of radio buttons (column/row)
 
@@ -196,12 +218,12 @@ Calculates portion size based on parent food portion size.
 
 #### Options
 
-- `badges` - true/false whether to show quantity badge on expansion panel header
+- `badges` - show quantity badge on expansion panel header
 
 - `image map settings` - image map settings
 
-  - `image map labels` - true/false whether to show image map labels
-  - `image map pinchZoom` - true/false whether to show PinchZoom control for mobile UI labels
+  - `image map labels` - show image map labels
+  - `image map pinchZoom` - show PinchZoom control for mobile UI labels
 
 ### Portion size option prompt
 

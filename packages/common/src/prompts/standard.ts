@@ -9,6 +9,7 @@ export const associatedFoodsPrompt: Prompts['associated-foods-prompt'] = copy({
   type: 'standard',
   id: 'associated-foods-prompt',
   name: 'Associated foods prompt',
+  categoriesFirst: { browse: false, search: false },
   multiple: false,
 });
 
@@ -36,6 +37,7 @@ export const foodSearchPrompt: Prompts['food-search-prompt'] = copy({
   id: 'food-search-prompt',
   name: 'Food search prompt',
   allowBrowsing: true,
+  categoriesFirst: { browse: false, search: false },
   dualLanguage: false,
 });
 

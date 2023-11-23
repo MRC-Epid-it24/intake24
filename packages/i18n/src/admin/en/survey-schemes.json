@@ -249,6 +249,14 @@
       "noPrompts": "No portion size prompts available for this section"
     },
     "badges": "Show quantity badges",
+    "foodBrowser": {
+      "_": "Food browser settings",
+      "categoriesFirst": {
+        "_": "Show categories first in the list",
+        "browse": "Food browse list",
+        "search": "Food search list"
+      }
+    },
     "imageMap": {
       "_": "Image map settings",
       "labels": "Show labels",

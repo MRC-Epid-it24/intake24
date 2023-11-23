@@ -92,6 +92,10 @@ export interface PromptWithSection extends BasePrompt {
   section: PromptSection;
 }
 
+export type FoodBrowser = {
+  categoriesFirst: Record<'browse' | 'search', boolean>;
+};
+
 export type ImageMap = {
   labels: boolean;
   pinchZoom: boolean;
@@ -182,22 +186,25 @@ export type Prompts = {
     imageMap: ImageMap;
   };
   'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
-  'recipe-builder-prompt': BasePortionPrompt & {
-    component: 'recipe-builder-prompt';
-  };
+  'recipe-builder-prompt': BasePortionPrompt &
+    FoodBrowser & {
+      component: 'recipe-builder-prompt';
+    };
   'standard-portion-prompt': BasePortionPrompt & { component: 'standard-portion-prompt' };
   // Standard
-  'associated-foods-prompt': BasePrompt & {
-    component: 'associated-foods-prompt';
-    multiple: boolean;
-  };
+  'associated-foods-prompt': BasePrompt &
+    FoodBrowser & {
+      component: 'associated-foods-prompt';
+      multiple: boolean;
+    };
   'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt'; separateDrinks: boolean };
   'final-prompt': BasePrompt & { component: 'final-prompt' };
-  'food-search-prompt': BasePrompt & {
-    component: 'food-search-prompt';
-    allowBrowsing: boolean;
-    dualLanguage: boolean;
-  };
+  'food-search-prompt': BasePrompt &
+    FoodBrowser & {
+      component: 'food-search-prompt';
+      allowBrowsing: boolean;
+      dualLanguage: boolean;
+    };
   'meal-add-prompt': BasePrompt & {
     component: 'meal-add-prompt';
     custom: boolean;

@@ -55,6 +55,7 @@
           <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
+            :categories-first="prompt.categoriesFirst.browse"
             :contents="currentCategoryContents"
             :i18n="promptI18n"
             @category-selected="categorySelected"
@@ -65,7 +66,7 @@
           <image-placeholder v-if="requestInProgress" class="my-6"></image-placeholder>
           <category-contents-view
             v-if="!requestInProgress"
-            :categories-first="false"
+            :categories-first="prompt.categoriesFirst.search"
             :contents="searchContents"
             :i18n="promptI18n"
             @category-selected="categorySelected"
@@ -128,7 +129,7 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 import { VCard } from 'vuetify/lib';
 
-import type { Prompt } from '@intake24/common/prompts';
+import type { Prompts } from '@intake24/common/prompts';
 import type { RecipeFood } from '@intake24/common/types';
 import type {
   CategoryContents,
@@ -176,7 +177,9 @@ export default defineComponent({
       default: false,
     },
     prompt: {
-      type: Object as PropType<Prompt>,
+      type: Object as PropType<
+        Prompts['associated-foods-prompt' | 'food-search-prompt' | 'recipe-builder-prompt']
+      >,
       required: true,
     },
     value: {

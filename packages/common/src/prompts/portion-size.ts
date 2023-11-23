@@ -106,6 +106,7 @@ export const recipeBuilderPrompt: Prompts['recipe-builder-prompt'] = copy({
   type: 'portion-size',
   id: 'recipe-builder-prompt',
   name: 'Recipe Builder',
+  categoriesFirst: { browse: false, search: false },
 });
 
 export const standardPortionPrompt: Prompts['standard-portion-prompt'] = copy({
