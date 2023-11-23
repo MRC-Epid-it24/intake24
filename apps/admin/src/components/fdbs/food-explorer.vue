@@ -1,9 +1,27 @@
 <template>
   <div>
-    <div class="d-flex justify-space-between align-center">
-      <v-switch v-model="showGlobalName" class="my-0" :label="$t('fdbs.showGlobalName')"></v-switch>
-      <food-search v-bind="{ localeId }"></food-search>
+    <div class="d-flex flex-row justify-space-between">
+      <div class="d-flex ga-2">
+        <food-search v-bind="{ localeId }"></food-search>
+        <add-food-dialog v-bind="{ localeId }"></add-food-dialog>
+      </div>
+      <v-menu bottom :close-on-content-click="false" left :nudge-width="200" offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn color="primary" fab small v-bind="attrs" v-on="on">
+            <v-icon>$options</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-action>
+              <v-switch v-model="showGlobalName"></v-switch>
+            </v-list-item-action>
+            <v-list-item-title>{{ $t('fdbs.showGlobalName') }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
+    <v-divider class="my-3"></v-divider>
     <v-treeview
       activatable
       :active.sync="active"
@@ -42,6 +60,7 @@ import type {
   RootCategoriesResponse,
 } from '@intake24/common/types/http/admin';
 
+import AddFoodDialog from './add-food-dialog.vue';
 import FoodSearch from './food-search.vue';
 
 export interface CategoryListEntryItem extends CategoryListEntry {
@@ -51,7 +70,7 @@ export interface CategoryListEntryItem extends CategoryListEntry {
 export default defineComponent({
   name: 'FoodExplorer',
 
-  components: { FoodSearch },
+  components: { AddFoodDialog, FoodSearch },
 
   props: {
     localeId: {

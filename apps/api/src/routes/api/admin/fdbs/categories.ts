@@ -10,7 +10,7 @@ export default () => {
 
   router
     .route('')
-    .post(wrapAsync(adminCategoryController.store))
+    .post(validation.store, wrapAsync(adminCategoryController.store))
     .get(validation.browse, wrapAsync(adminCategoryController.browse));
 
   router.get('/root', wrapAsync(adminCategoryController.root));

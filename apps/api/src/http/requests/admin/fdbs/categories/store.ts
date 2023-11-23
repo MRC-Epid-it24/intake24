@@ -6,5 +6,10 @@ import { attributes, categories, portionSizeMethods } from '../common';
 import defaults from './defaults';
 
 export default validate(
-  checkSchema({ ...defaults, ...attributes, ...categories, ...portionSizeMethods })
+  checkSchema({
+    ...defaults,
+    ...attributes,
+    'main.parentCategories': categories,
+    ...portionSizeMethods,
+  })
 );

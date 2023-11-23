@@ -12,7 +12,11 @@ import type {
   Pagination,
 } from '@intake24/db';
 
-export type FoodInput = {
+export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
+  parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
+};
+
+export type FoodLocalInput = {
   name: string;
   main?: {
     code?: string;

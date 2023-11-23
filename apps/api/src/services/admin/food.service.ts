@@ -1,7 +1,9 @@
+import { randomUUID } from 'node:crypto';
+
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { FoodInput } from '@intake24/common/types/http/admin';
+import type { FoodInput, FoodLocalInput } from '@intake24/common/types/http/admin';
 import type {
   FindOptions,
   FoodLocalAttributes,
@@ -11,9 +13,11 @@ import type {
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
+import { toSimpleName } from '@intake24/api/util';
 import {
   AssociatedFood,
   Food,
+  FoodAttribute,
   FoodLocal,
   FoodLocalList,
   FoodPortionSizeMethod,
@@ -162,7 +166,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   const updatePortionSizeMethods = async (
     foodLocalId: string,
     methods: FoodPortionSizeMethod[],
-    inputs: FoodInput['portionSizeMethods'],
+    inputs: FoodLocalInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
@@ -210,7 +214,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     foodCode: string,
     localeId: string,
     foods: AssociatedFood[],
-    inputs: FoodInput['associatedFoods'],
+    inputs: FoodLocalInput['associatedFoods'],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
@@ -242,7 +246,40 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
     return [...foods, ...newFoods];
   };
 
-  const updateFood = async (foodLocalId: string, localeCode: string, input: FoodInput) => {
+  const createFood = async (localeCode: string, input: FoodInput): Promise<FoodLocal> => {
+    const foodLocal = await db.foods.transaction(async (transaction) => {
+      let main = await Food.findByPk(input.code, { transaction });
+      if (!main) {
+        main = await Food.create({ ...input, version: randomUUID() }, { transaction });
+        await FoodAttribute.create({ foodCode: main.code }, { transaction });
+
+        if (input.parentCategories) {
+          const categories = input.parentCategories.map(({ code }) => code);
+          await main.$set('parentCategories', categories, { transaction });
+        }
+      }
+
+      const [foodLocal] = await Promise.all([
+        FoodLocal.create(
+          {
+            foodCode: main.code,
+            localeId: localeCode,
+            name: main.name,
+            simpleName: toSimpleName(main.name),
+            version: randomUUID(),
+          },
+          { transaction }
+        ),
+        FoodLocalList.create({ foodCode: main.code, localeId: localeCode }, { transaction }),
+      ]);
+
+      return foodLocal;
+    });
+
+    return (await getFood(foodLocal.id, localeCode))!;
+  };
+
+  const updateFood = async (foodLocalId: string, localeCode: string, input: FoodLocalInput) => {
     const foodLocal = await getFood(foodLocalId, localeCode);
     if (!foodLocal) throw new NotFoundError();
 
@@ -317,6 +354,7 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
   return {
     browseFoods,
     getFood,
+    createFood,
     updateFood,
     deleteFood,
   };

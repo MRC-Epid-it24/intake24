@@ -4,7 +4,7 @@ import type { Schema } from 'express-validator';
 import type { FindOptions, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
-import { CategoryLocal, Op } from '@intake24/db';
+import { CategoryLocal, Op, SystemLocale } from '@intake24/db';
 
 const defaults: Schema = {
   name: {
@@ -30,9 +30,13 @@ const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const { localeId, categoryId } = (meta.req as Request).params;
+
+        const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
+        if (!locale) throw new Error(customTypeErrorMessage('unique._', meta));
+
         const where: WhereOptions<CategoryLocal> = categoryId
-          ? { localeId, id: { [Op.ne]: categoryId } }
-          : { localeId };
+          ? { localeId: locale.code, id: { [Op.ne]: categoryId } }
+          : { localeId: locale.code };
 
         const options: FindOptions<CategoryLocal> = {
           where,

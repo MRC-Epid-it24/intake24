@@ -1,4 +1,4 @@
-import type { Schema } from 'express-validator';
+import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
@@ -35,25 +35,23 @@ export const attributes: Schema = {
   },
 };
 
-export const categories: Schema = {
-  'main.parentCategories': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('array._'),
-    isArray: { bail: true },
-    optional: true,
-    custom: {
-      options: async (value: any[], meta): Promise<void> => {
-        if (value.some(({ code }) => !code || typeof code !== 'string'))
-          throw new Error(customTypeErrorMessage('array.string', meta));
+export const categories: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('array._'),
+  isArray: { bail: true },
+  optional: true,
+  custom: {
+    options: async (value: any[], meta): Promise<void> => {
+      if (value.some(({ code }) => !code || typeof code !== 'string'))
+        throw new Error(customTypeErrorMessage('array.string', meta));
 
-        if (!value.length) return;
+      if (!value.length) return;
 
-        const code = value.map((item) => item.code);
+      const code = value.map((item) => item.code);
 
-        const availableCategories = await Category.count({ where: { code } });
-        if (availableCategories !== value.length)
-          throw new Error(customTypeErrorMessage('exists._', meta));
-      },
+      const availableCategories = await Category.count({ where: { code } });
+      if (availableCategories !== value.length)
+        throw new Error(customTypeErrorMessage('exists._', meta));
     },
   },
 };

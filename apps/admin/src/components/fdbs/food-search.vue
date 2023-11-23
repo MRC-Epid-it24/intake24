@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="1000px">
     <template #activator="{ attrs, on }">
-      <v-btn v-bind="attrs" color="primary" fab small :title="$t('fdbs.search._')" v-on="on">
-        <v-icon>$search</v-icon>
+      <v-btn v-bind="attrs" color="primary" rounded :title="$t('fdbs.search._')" v-on="on">
+        <v-icon left>$search</v-icon> {{ $t('fdbs.search._') }}
       </v-btn>
     </template>
     <v-card :loading="loading" :tile="$vuetify.breakpoint.smAndDown">

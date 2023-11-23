@@ -10,7 +10,7 @@ export default () => {
 
   router
     .route('')
-    .post(wrapAsync(adminFoodController.store))
+    .post(validation.store, wrapAsync(adminFoodController.store))
     .get(validation.browse, wrapAsync(adminFoodController.browse));
 
   router

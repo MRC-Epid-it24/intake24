@@ -9,7 +9,7 @@ export default validate(
   checkSchema({
     ...defaults,
     ...attributes,
-    ...categories,
+    'main.parentCategories': categories,
     ...nutrients,
     ...portionSizeMethods,
     ...associatedFoods,

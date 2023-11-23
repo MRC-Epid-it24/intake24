@@ -2,7 +2,11 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { FoodInput, FoodLocalEntry, FoodsResponse } from '@intake24/common/types/http/admin';
+import type {
+  FoodLocalEntry,
+  FoodLocalInput,
+  FoodsResponse,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, SystemLocale } from '@intake24/db';
@@ -32,9 +36,11 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     req: Request<{ foodId: string; localeId: string }>,
     res: Response
   ): Promise<void> => {
-    await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
 
-    res.json();
+    const foodLocal = await adminFoodService.createFood(code, req.body);
+
+    res.json(foodLocal);
   };
 
   const read = async (
@@ -51,7 +57,7 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
   };
 
   const update = async (
-    req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
+    req: Request<{ foodId: string; localeId: string }, any, FoodLocalInput>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
