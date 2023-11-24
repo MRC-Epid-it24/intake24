@@ -7,6 +7,7 @@ import categories from './categories';
 import fdbs from './fdbs';
 import feedbackSchemes from './feedback-schemes';
 import foodGroups from './food-groups';
+import foods from './foods';
 import images from './images';
 import jobs from './jobs';
 import languages from './languages';
@@ -45,6 +46,7 @@ export default () => {
 
   router.use('/categories', categories());
   router.use('/fdbs', fdbs());
+  router.use('/foods', foods());
   router.use('/feedback-schemes', feedbackSchemes());
   router.use('/food-groups', foodGroups());
   router.use('/images', images());

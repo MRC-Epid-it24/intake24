@@ -321,7 +321,7 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
     }
   };
 
-  const find = async (localeId: string, foodCode: string, transaction?: Transaction) => {};
+  const read = async (localeId: string, foodCode: string, transaction?: Transaction) => {};
 
   const updateEnabledFoods = async (localeId: string, enabledFoods: string[]) => {
     return await db.foods.transaction(async (transaction) => {
@@ -333,7 +333,7 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
 
   return {
     create,
-    find,
+    read,
     updatePortionSizeMethods,
     updateEnabledFoods,
   };

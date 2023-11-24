@@ -3,6 +3,8 @@ export { default as adminCategoryService } from './category.service';
 export * from './data-export';
 export * from './food.service';
 export { default as adminFoodService } from './food.service';
+export * from './global-foods.service';
+export { default as globalFoodsService } from './global-foods.service';
 export * from './images';
 export * from './language.service';
 export { default as languageService } from './language.service';

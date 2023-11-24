@@ -5,14 +5,14 @@ import type { IoC } from '@intake24/api/ioc';
 import type { FoodEntry, UpdateGlobalFoodRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError } from '@intake24/api/http/errors';
 
-const globalFoodsController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>) => {
+const globalFoodsController = ({ globalFoodsService }: Pick<IoC, 'globalFoodsService'>) => {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
     // FIXME: add separate permissions for Foods
     if (!(await aclService.hasPermission('fdbs|create'))) throw new ForbiddenError();
 
-    const entry = await adminFoodService.createGlobalFood(req.body);
+    const entry = await globalFoodsService.create(req.body);
     res.json(entry);
   };
 
@@ -29,7 +29,7 @@ const globalFoodsController = ({ adminFoodService }: Pick<IoC, 'adminFoodService
     const { version } = req.query;
     const request = req.body;
 
-    const entry = await adminFoodService.updateGlobalFood(foodId, version as string, request);
+    const entry = await globalFoodsService.update(foodId, version as string, request);
 
     if (entry === null) {
       res.status(HttpStatusCode.NotFound);
@@ -51,7 +51,7 @@ const globalFoodsController = ({ adminFoodService }: Pick<IoC, 'adminFoodService
 
     const { foodId } = req.params;
 
-    const entry = await adminFoodService.getGlobalFood(foodId);
+    const entry = await globalFoodsService.read(foodId);
 
     if (entry === null) {
       res.status(HttpStatusCode.NotFound);

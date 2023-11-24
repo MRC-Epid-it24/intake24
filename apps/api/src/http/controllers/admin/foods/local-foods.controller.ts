@@ -4,12 +4,7 @@ import { HttpStatusCode } from 'axios';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
 
-const localFoodsController = ({
-  adminFoodService,
-  localFoodsService,
-  logger,
-  db,
-}: Pick<IoC, 'adminFoodService' | 'localFoodsService' | 'logger' | 'db'>) => {
+const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsService'>) => {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
@@ -30,11 +25,25 @@ const localFoodsController = ({
     res.status(created ? HttpStatusCode.Created : HttpStatusCode.Ok);
 
     if (_return) {
-      const instance = await localFoodsService.find(localeId, req.body.code);
+      const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
     } else {
       res.end();
     }
+  };
+
+  const read = async (req: Request, res: Response): Promise<void> => {
+    const { aclService } = req.scope.cradle;
+
+    const { localeId, foodId } = req.params;
+
+    // FIXME: check correct permission
+    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+
+    const instance = await localFoodsService.read(localeId, foodId);
+
+    res.status(HttpStatusCode.Ok);
+    res.json(instance);
   };
 
   const updateEnabledFoods = async (req: Request, res: Response): Promise<void> => {
@@ -49,6 +58,7 @@ const localFoodsController = ({
   };
 
   return {
+    read,
     store,
     updateEnabledFoods,
   };

@@ -85,6 +85,7 @@ import type {
   FIDOProvider,
   Filesystem,
   FoodDataService,
+  GlobalFoodsService,
   GuideImageService,
   I18nService,
   I18nStore,
@@ -269,6 +270,7 @@ export interface IoC extends Jobs {
   adminCategoryService: AdminCategoryService;
   adminFoodService: AdminFoodService;
   localFoodsService: LocalFoodsService;
+  globalFoodsService: GlobalFoodsService;
   languageService: LanguageService;
   localeService: LocaleService;
   nutrientTableService: NutrientTableService;

@@ -11,8 +11,8 @@ import type { CreateResult } from './create-response';
 import { parseCreateResponse } from './create-response';
 
 export class FoodsApiV4 {
-  private static readonly globalApiPath = '/api/admin/fdbs/foods';
-  private static readonly localApiPath = '/api/admin/fdbs';
+  private static readonly globalApiPath = '/api/admin/foods/global';
+  private static readonly localApiPath = '/api/admin/foods/local';
 
   private readonly baseClient: BaseClientV4;
 
@@ -53,7 +53,7 @@ export class FoodsApiV4 {
     options: CreateLocalFoodRequestOptions
   ): Promise<CreateResult<FoodEntry>> {
     const response = await this.baseClient.postResponse<FoodEntry>(
-      `${FoodsApiV4.localApiPath}/${localeId}/foods`,
+      `${FoodsApiV4.localApiPath}/${localeId}`,
       createRequest,
       options
     );

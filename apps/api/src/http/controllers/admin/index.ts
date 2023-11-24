@@ -2,6 +2,7 @@ import acl from './acl';
 import authentication from './authentication.controller';
 import fdbs from './fdbs';
 import feedbackScheme from './feedback-scheme.controller';
+import foods from './foods';
 import images from './images';
 import job from './job.controller';
 import language from './language.controller';
@@ -24,6 +25,7 @@ export * from './acl';
 export * from './authentication.controller';
 export * from './fdbs';
 export * from './feedback-scheme.controller';
+export * from './foods';
 export * from './images';
 export * from './job.controller';
 export * from './language.controller';
@@ -48,6 +50,7 @@ export default {
   authentication,
   user,
   fdbs,
+  foods,
   images,
   surveys,
   feedbackScheme,
