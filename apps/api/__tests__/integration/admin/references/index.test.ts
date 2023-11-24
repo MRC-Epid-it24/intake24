@@ -10,6 +10,7 @@ import languages from './languages.test';
 import locales from './locales.test';
 import nutrientTableRecords from './nutrient-table-records.test';
 import nutrientTables from './nutrient-tables.test';
+import nutrientTypes from './nutrient-types.test';
 import standardUnits from './standard-units.test';
 import surveySchemes from './survey-schemes.test';
 import surveys from './surveys.test';
@@ -30,6 +31,7 @@ export default () => {
     'GET /api/admin/references/nutrient-tables/:nutrientTableId/records',
     nutrientTableRecords
   );
+  describe('GET /api/admin/references/nutrient-types', nutrientTypes);
   describe('GET /api/admin/references/standard-units', standardUnits);
   describe('GET /api/admin/references/survey-schemes', surveySchemes);
   describe('GET /api/admin/references/surveys', surveys);

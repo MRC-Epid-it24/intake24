@@ -8,7 +8,7 @@ import type {
 import { BelongsTo, Column, DataType, HasOne, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { FoodsNutrientUnit, NutrientTypeInKcal } from '.';
+import { FoodsNutrientUnit, NutrientTableRecordNutrient, NutrientTypeInKcal } from '.';
 
 @Scopes(() => ({
   unit: { include: [{ model: FoodsNutrientUnit }] },
@@ -49,6 +49,9 @@ export default class NutrientType extends BaseModel<
 
   @HasOne(() => NutrientTypeInKcal, 'nutrientTypeId')
   declare inKcal?: NonAttribute<NutrientTypeInKcal>;
+
+  @HasOne(() => NutrientTableRecordNutrient, 'nutrientTypeId')
+  declare nutrientTableRecordNutrient?: NonAttribute<NutrientTableRecordNutrient>;
 }
 
 export type FoodsNutrientTypeAttributes = Attributes<NutrientType>;

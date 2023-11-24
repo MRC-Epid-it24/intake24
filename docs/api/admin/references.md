@@ -286,6 +286,35 @@ Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
+## Nutrient types
+
+Paginated `nutrient types` reference list.
+
+**Filters** - `nutrientTableId` - optional nutrient table id
+
+### Request
+
+```json
+GET /api/admin/references/nutrient-types?nutrientTableId={nutrientTableId}
+    ?search={searchText}
+    &page={page}
+    &limit={limit}
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+```
+
+### Response
+
+```json
+200 OK
+
+{
+    "data": [{...}],
+    "meta": {...}
+}
+```
+
 ### Response
 
 ```json

@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { literal } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -13,6 +14,7 @@ import type {
   LanguageReferences,
   NutrientTableRecordReferences,
   NutrientTableReferences,
+  NutrientTypesResponse,
   SurveyReferences,
   SurveySchemeReferences,
   SurveySchemesResponse,
@@ -27,11 +29,13 @@ import {
   FeedbackScheme,
   Food,
   FoodGroup,
+  FoodsNutrientType,
   GuideImage,
   ImageMap,
   Language,
   NutrientTable,
   NutrientTableRecord,
+  Op,
   StandardUnit,
   Survey,
   SurveyScheme,
@@ -215,6 +219,45 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     res.json(nutrientTableRecords);
   };
 
+  const nutrientTypes = async (
+    req: Request<any, any, any, PaginateQuery & { nutrientTableId: string | string[] }>,
+    res: Response<NutrientTypesResponse>
+  ): Promise<void> => {
+    const {
+      query: { nutrientTableId },
+    } = req;
+
+    if (nutrientTableId) {
+      const nutrientTypes = await FoodsNutrientType.paginate({
+        query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+        attributes: ['id', 'description', 'unitId'],
+        columns: ['description'],
+        where: {
+          id: {
+            [Op.in]: literal(`(
+              SELECT DISTINCT nutrient_type_id
+              FROM nutrient_table_record_nutrients ntrn
+              JOIN nutrient_table_records ntr ON ntr.id = ntrn.nutrient_table_record_id
+              WHERE ntr.nutrient_table_id = '${nutrientTableId}')`),
+          },
+        },
+        order: [['id', 'ASC']],
+      });
+
+      res.json(nutrientTypes);
+      return;
+    }
+
+    const nutrientTypes = await FoodsNutrientType.paginate({
+      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      attributes: ['id', 'description', 'unitId'],
+      columns: ['description'],
+      order: [['id', 'ASC']],
+    });
+
+    res.json(nutrientTypes);
+  };
+
   const standardUnits = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
@@ -266,6 +309,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     locales,
     nutrientTables,
     nutrientTableRecords,
+    nutrientTypes,
     standardUnits,
     surveys,
     surveySchemes,

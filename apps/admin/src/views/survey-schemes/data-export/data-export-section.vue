@@ -12,7 +12,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t(`survey-schemes.data-export.sections.${section.id}`) }}
+          {{ $t(`survey-schemes.data-export.sections.${section?.id}`) }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -74,6 +74,10 @@
           <v-divider vertical></v-divider>
           <v-col cols="12" md="6">
             <v-card-title>{{ $t('survey-schemes.data-export.available') }}</v-card-title>
+            <data-export-nutrients
+              v-if="section?.id === 'foodNutrients'"
+              v-model="fetchedRefFields"
+            ></data-export-nutrients>
             <v-text-field
               v-model="search"
               clearable
@@ -164,15 +168,16 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { watchDebounced } from '@vueuse/core';
-import { computed, defineComponent, ref, toRefs, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { ExportField, ExportSection } from '@intake24/common/surveys';
+import { DataExportNutrients } from '@intake24/admin/components/schemes';
 
 export default defineComponent({
   name: 'DataExportSection',
 
-  components: { draggable },
+  components: { draggable, DataExportNutrients },
 
   props: {
     section: {
@@ -188,8 +193,6 @@ export default defineComponent({
   emits: ['close', 'update'],
 
   setup(props) {
-    const { refFields } = toRefs(props);
-
     const newEditDialog = () => ({ show: false, index: -1, field: { id: '', label: '' } });
     const editDialog = ref(newEditDialog());
 
@@ -198,10 +201,13 @@ export default defineComponent({
     const fields = ref<ExportField[]>([]);
     const filteredFields = ref<ExportField[]>([]);
     const visibleFields = ref<ExportField[]>([]);
+    const fetchedRefFields = ref<ExportField[]>([]);
 
     const availableFields = computed(() => {
       const fieldIds = fields.value.map((field) => field.id);
-      return refFields.value.filter((field) => !fieldIds.includes(field.id));
+      return (
+        props.section?.id === 'foodNutrients' ? fetchedRefFields.value : props.refFields
+      ).filter((field) => !fieldIds.includes(field.id));
     });
 
     const loadFilteredFields = () => {
@@ -254,6 +260,7 @@ export default defineComponent({
       dialog,
       editDialog,
       newEditDialog,
+      fetchedRefFields,
       fields,
       availableFields,
       fieldsAvailableToLoad,
