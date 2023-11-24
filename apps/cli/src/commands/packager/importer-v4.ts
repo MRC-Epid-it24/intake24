@@ -1,3 +1,6 @@
+import os from 'node:os';
+
+import decompress from 'decompress';
 import fs from 'fs/promises';
 import { omit } from 'lodash';
 import path from 'path';
@@ -28,11 +31,15 @@ const defaultOptions: ImporterOptions = {
 
 export class ImporterV4 {
   private readonly inputFilePath: string;
-  private readonly workingDir: string;
-  private readonly imageDirPath: string;
+
   private readonly apiClient: ApiClientV4;
   private readonly logger: Logger;
   private readonly options: ImporterOptions;
+
+  private packageDirPath: string | undefined;
+  private imageDirPath: string | undefined;
+
+  private compressedPackage: boolean = false;
 
   private locales: PkgLocale[] | undefined;
   private globalFoods: PkgGlobalFood[] | undefined;
@@ -49,8 +56,6 @@ export class ImporterV4 {
     this.apiClient = apiClient;
     this.logger = logger;
     this.inputFilePath = inputFilePath;
-    this.workingDir = this.inputFilePath;
-    this.imageDirPath = path.join(this.workingDir, PkgConstants.IMAGE_DIRECTORY_NAME);
     this.options = {
       onConflict: options?.onConflict ?? defaultOptions.onConflict,
     };
@@ -77,7 +82,7 @@ export class ImporterV4 {
 
           await this.apiClient.imageMaps.updateImage(
             imageMapId,
-            path.join(this.imageDirPath, imageMap.baseImagePath)
+            path.join(this.imageDirPath!, imageMap.baseImagePath)
           );
 
           break;
@@ -90,7 +95,7 @@ export class ImporterV4 {
       await this.apiClient.imageMaps.create(
         imageMapId,
         imageMap.description,
-        path.join(this.imageDirPath, imageMap.baseImagePath),
+        path.join(this.imageDirPath!, imageMap.baseImagePath),
         objects
       );
     }
@@ -98,7 +103,7 @@ export class ImporterV4 {
 
   private async importImageMaps(): Promise<void> {
     const filePath = path.join(
-      this.workingDir,
+      this.packageDirPath!,
       PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
       PkgConstants.IMAGE_MAP_FILE_NAME
     );
@@ -317,7 +322,7 @@ export class ImporterV4 {
   }
 
   private async readJSON<T>(relativePath: string): Promise<T | undefined> {
-    const filePath = path.join(this.workingDir, relativePath);
+    const filePath = path.join(this.packageDirPath!, relativePath);
     logger.debug(`Reading JSON file: ${filePath}`);
 
     try {
@@ -365,13 +370,40 @@ export class ImporterV4 {
     ]);
   }
 
+  public async cleanUpPackage(): Promise<void> {
+    if (this.compressedPackage) {
+      logger.info(`Cleaning up temporary files`);
+      await fs.rm(this.packageDirPath!, { recursive: true });
+    }
+  }
+
+  public async unzipPackage(): Promise<void> {
+    const stat = await fs.stat(this.inputFilePath);
+
+    if (stat.isDirectory()) {
+      this.packageDirPath = this.inputFilePath;
+    } else {
+      this.packageDirPath = await fs.mkdtemp(path.join(os.tmpdir(), 'i24pkg-'));
+      this.compressedPackage = true;
+      logger.info(`Extracting package: ${this.inputFilePath}`);
+      logger.debug(`Temporary package directory: ${this.packageDirPath}`);
+      await decompress(this.inputFilePath, this.packageDirPath);
+    }
+
+    this.imageDirPath = path.join(this.packageDirPath, PkgConstants.IMAGE_DIRECTORY_NAME);
+  }
+
   public async import(): Promise<void> {
+    await this.unzipPackage();
     await this.readPackage();
+    await this.cleanUpPackage();
     await this.importLocales();
     await this.importNutrientTables();
     await this.importGlobalFoods();
     await this.importLocalFoods();
     await this.importEnabledLocalFoods();
+
+    logger.info('Done!');
 
     // await this.importImageMaps();
   }

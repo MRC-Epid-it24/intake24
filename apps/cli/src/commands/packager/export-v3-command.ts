@@ -1,4 +1,7 @@
+import os from 'node:os';
+
 import fs from 'fs/promises';
+import path from 'path';
 import * as process from 'process';
 
 import type { CredentialsV3 } from '@intake24/api-client-v3';
@@ -57,7 +60,7 @@ export default async (version: string, options: PackageExportOptions): Promise<v
     credentials
   );
 
-  const tempDirPath = await fs.mkdtemp(TEMP_DIR_PREFIX);
+  const tempDirPath = await fs.mkdtemp(path.join(os.tmpdir(), TEMP_DIR_PREFIX));
 
   logger.debug(`Using temporary directory: ${tempDirPath}`);
 
