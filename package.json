@@ -13,7 +13,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@8.10.3",
+  "packageManager": "pnpm@8.10.5",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "pnpm simple-git-hooks",
@@ -62,18 +62,18 @@
   ],
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@types/jest": "^29.5.8",
-    "@types/node": "^20.9.0",
-    "@types/prompts": "^2.4.8",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+    "@types/jest": "^29.5.10",
+    "@types/node": "^20.10.0",
+    "@types/prompts": "^2.4.9",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^4.1.0",
-    "eslint": "^8.53.0",
+    "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-define-config": "^1.24.1",
+    "eslint-define-config": "^2.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
@@ -90,10 +90,10 @@
     "simple-git-hooks": "^2.9.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "tsx": "^4.1.1",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vitepress": "1.0.0-rc.25"
+    "tsx": "^4.4.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.2",
+    "vitepress": "1.0.0-rc.30"
   },
   "pnpm": {
     "peerDependencyRules": {
