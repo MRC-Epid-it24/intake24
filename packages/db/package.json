@@ -30,7 +30,7 @@
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.35.1",
-    "sequelize-typescript": "^2.1.5"
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@simplewebauthn/typescript-types": "^8.3.4",
