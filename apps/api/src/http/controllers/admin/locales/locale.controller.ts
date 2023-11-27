@@ -4,10 +4,11 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
 import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
+import languageBackends from '@intake24/api/food-index/language-backends';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
-import { FoodIndexBackend, FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
+import { FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
 import { getAndCheckAccess, securableController } from '../securable.controller';
 
@@ -55,6 +56,7 @@ const localeController = (ioc: IoC) => {
       'prototypeLocaleId',
       'textDirection',
       'foodIndexLanguageBackendId',
+      'foodIndexEnabled',
     ]);
 
     const { code, ...rest } = input;
@@ -116,6 +118,7 @@ const localeController = (ioc: IoC) => {
       'prototypeLocaleId',
       'textDirection',
       'foodIndexLanguageBackendId',
+      'foodIndexEnabled',
     ]);
 
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
@@ -142,10 +145,12 @@ const localeController = (ioc: IoC) => {
   };
 
   const refs = async (req: Request, res: Response<LocaleRefs>): Promise<void> => {
-    const [locales, foodIndexLanguageBackends] = await Promise.all([
-      SystemLocale.scope('list').findAll(),
-      FoodIndexBackend.scope('list').findAll(),
-    ]);
+    const foodIndexLanguageBackends = Object.entries(languageBackends).map(([id, { name }]) => ({
+      id,
+      name,
+    }));
+
+    const locales = await SystemLocale.scope('list').findAll();
 
     res.json({ locales, foodIndexLanguageBackends });
   };

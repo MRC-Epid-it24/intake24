@@ -25,6 +25,7 @@ export default () => {
       countryFlagCode: 'en-ie',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
     };
     updateInput = {
@@ -36,6 +37,7 @@ export default () => {
       countryFlagCode: 'en-jm',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexEnabled: false,
       foodIndexLanguageBackendId: 'en',
     };
 
@@ -81,6 +83,8 @@ export default () => {
           'countryFlagCode',
           'prototypeLocaleId',
           'textDirection',
+          'foodIndexEnabled',
+          'foodIndexLanguageBackendId',
         ],
         {
           input: {
@@ -91,6 +95,8 @@ export default () => {
             countryFlagCode: 'notWellFormedLocale',
             prototypeLocaleId: 'nonExistingLocale',
             textDirection: 'wrongDirection',
+            foodIndexEnabled: 123456,
+            foodIndexLanguageBackendId: 'nonExistingLocale',
           },
         }
       );

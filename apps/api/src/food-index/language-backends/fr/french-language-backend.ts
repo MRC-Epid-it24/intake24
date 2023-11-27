@@ -1,13 +1,14 @@
 import porter from 'talisman/stemmers/french/porter';
 
 import type { LanguageBackend } from '@intake24/api/food-index/phrase-index';
-import FrenchPhoneticEncoder from '@intake24/api/food-index/fr/phonetic';
+
+import FrenchPhoneticEncoder from './phonetic';
 
 const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.'s/g);
 
 export default {
+  name: 'French',
   indexIgnore: ['de', 'au', 'aux', 'pour'],
-
   phoneticEncoder: new FrenchPhoneticEncoder(),
 
   splitCompound(word: string): Array<string> {
@@ -21,4 +22,4 @@ export default {
   sanitiseDescription(description: string): string {
     return description.replace(sanitiseRegexp, ' ');
   },
-} as LanguageBackend;
+} satisfies LanguageBackend;

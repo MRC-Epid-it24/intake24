@@ -24,6 +24,7 @@ export default () => {
       countryFlagCode: 'af',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
     };
 

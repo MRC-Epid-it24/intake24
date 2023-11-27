@@ -13,7 +13,6 @@ import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/su
 import { permissions } from '@intake24/common-backend';
 import {
   FeedbackScheme,
-  FoodIndexBackend,
   FoodsLocale,
   FoodsNutrientType,
   FoodsNutrientUnit,
@@ -61,8 +60,6 @@ export const setupPermissions = async (): Promise<void> => {
 };
 
 export const initDatabase = async (): Promise<MockData> => {
-  await FoodIndexBackend.create({ id: 'en', flag: 'gb', description: 'English' });
-
   const language = await Language.create({
     code: 'en',
     englishName: 'United Kingdom',
@@ -79,6 +76,7 @@ export const initDatabase = async (): Promise<MockData> => {
     countryFlagCode: 'gb',
     prototypeLocaleId: null,
     textDirection: 'ltr',
+    foodIndexEnabled: true,
     foodIndexLanguageBackendId: 'en',
   };
 

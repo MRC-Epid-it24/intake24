@@ -10,6 +10,7 @@ export default async () => {
     prototypeLocaleId: undefined,
     respondentLanguageId: 'en',
     textDirection: 'ltr',
+    foodIndexEnabled: true,
     foodIndexLanguageBackendId: 'en',
   });
 
@@ -22,6 +23,7 @@ export default async () => {
     prototypeLocaleId: 'en_GB',
     respondentLanguageId: 'en',
     textDirection: 'ltr',
+    foodIndexEnabled: true,
     foodIndexLanguageBackendId: 'en',
   });
 };

@@ -110,7 +110,6 @@ const foodSearchController = ({
 
     logger.debug('Recipe food result', JSON.stringify(result.steps));
     res.json(result);
-    res.json();
   };
 
   return {

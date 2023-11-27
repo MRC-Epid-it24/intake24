@@ -2,10 +2,13 @@ import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 
 import type { SystemLocaleAttributes, WhereOptions } from '@intake24/db';
+import languageBackends from '@intake24/api/food-index/language-backends';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { textDirections } from '@intake24/common/types';
 import { Language, Op, SystemLocale } from '@intake24/db';
+
+const languageBackendCodes = Object.keys(languageBackends);
 
 export const code: ParamSchema = {
   in: ['body'],
@@ -123,5 +126,17 @@ export const defaults: Schema = {
       options: [textDirections],
       errorMessage: typeErrorMessage('in.options', { options: textDirections }),
     },
+  },
+  foodIndexEnabled: {
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
+  foodIndexLanguageBackendId: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('in.options', { options: languageBackendCodes }),
+    isString: true,
+    isIn: { options: [languageBackendCodes] },
+    optional: true,
   },
 };

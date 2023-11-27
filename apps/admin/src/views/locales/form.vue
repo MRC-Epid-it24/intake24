@@ -150,12 +150,20 @@
               </v-select>
             </v-col>
             <v-col cols="12" md="6">
+              <div class="text-h5 mb-4">{{ $t('locales.foodIndex._') }}</div>
+              <v-switch
+                v-model="form.foodIndexEnabled"
+                class="mb-4"
+                hide-details="auto"
+                :label="$t('locales.foodIndex.enabled')"
+                name="foodIndexEnabled"
+              ></v-switch>
               <v-select
                 v-model="form.foodIndexLanguageBackendId"
                 :error-messages="form.errors.get('foodIndexLanguageBackendId')"
                 hide-details="auto"
                 :items="foodIndexLanguageBackends"
-                :label="$t('languages.foodIndexLanguageBackend')"
+                :label="$t('locales.foodIndex.languageBackend')"
                 name="textDirection"
                 outlined
                 @change="form.errors.clear('foodIndexLanguageBackendId')"
@@ -198,6 +206,7 @@ type LocaleForm = {
   adminLanguageId: string;
   countryFlagCode: string | null;
   textDirection: string;
+  foodIndexEnabled: boolean;
   foodIndexLanguageBackendId: string;
 };
 
@@ -222,6 +231,7 @@ export default defineComponent({
         adminLanguageId: 'en',
         countryFlagCode: null,
         textDirection: 'ltr',
+        foodIndexEnabled: false,
         foodIndexLanguageBackendId: 'en',
       },
     });
@@ -276,8 +286,8 @@ export default defineComponent({
 
       return this.refs.foodIndexLanguageBackends.map((backend) => ({
         value: backend.id,
-        text: backend.description,
-        icon: backend.flag,
+        text: backend.name,
+        icon: backend.id === 'en' ? 'gb' : backend.id,
       }));
     },
   },

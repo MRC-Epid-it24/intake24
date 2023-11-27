@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import { keyBy } from 'lodash';
 import path from 'path';
 import { v4 as randomUUID } from 'uuid';
 

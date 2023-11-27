@@ -73,6 +73,13 @@ export default class Locale extends BaseModel<
 
   @Column({
     allowNull: false,
+    defaultValue: false,
+    type: DataType.BOOLEAN,
+  })
+  declare foodIndexEnabled: CreationOptional<boolean>;
+
+  @Column({
+    allowNull: false,
     defaultValue: 'en',
     type: DataType.STRING(16),
   })

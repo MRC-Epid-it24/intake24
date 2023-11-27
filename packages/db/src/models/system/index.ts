@@ -1,7 +1,6 @@
 import ClientErrorReport from './client-error-report';
 import FeedbackScheme from './feedback-scheme';
 import FixedFoodRanking from './fixed-food-ranking';
-import FoodIndexBackend from './food-index-backend';
 import GenUserCounter from './gen-user-counter';
 import Job from './job';
 import Language from './language';
@@ -52,8 +51,6 @@ export { default as FeedbackScheme } from './feedback-scheme';
 export * from './feedback-scheme';
 export { default as FixedFoodRanking } from './fixed-food-ranking';
 export * from './fixed-food-ranking';
-export { default as FoodIndexBackend } from './food-index-backend';
-export * from './food-index-backend';
 export { default as GenUserCounter } from './gen-user-counter';
 export * from './gen-user-counter';
 export { default as Job } from './job';
@@ -145,7 +142,6 @@ export const system = {
   ClientErrorReport,
   FeedbackScheme,
   FixedFoodRanking,
-  FoodIndexBackend,
   GenUserCounter,
   Job,
   Language,

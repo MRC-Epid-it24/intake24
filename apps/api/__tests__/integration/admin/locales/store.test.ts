@@ -19,6 +19,7 @@ export default () => {
       countryFlagCode: 'en-cb',
       prototypeLocaleId: null,
       textDirection: 'ltr',
+      foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
     };
     output = { ...input };
@@ -58,6 +59,8 @@ export default () => {
           'countryFlagCode',
           'prototypeLocaleId',
           'textDirection',
+          'foodIndexEnabled',
+          'foodIndexLanguageBackendId',
         ],
         {
           input: {
@@ -69,6 +72,8 @@ export default () => {
             countryFlagCode: 5,
             prototypeLocaleId: 'nonExistingLocale',
             textDirection: 'wrongDirection',
+            foodIndexEnabled: 'notABoolean',
+            foodIndexLanguageBackendId: 5,
           },
         }
       );

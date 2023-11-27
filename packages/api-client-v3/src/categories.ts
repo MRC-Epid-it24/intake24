@@ -1,5 +1,5 @@
 import type { BaseClientV3 } from './base-client-v3';
-import type { CategoryRecordV3, FoodRecordV3 } from './types';
+import type { CategoryRecordV3 } from './types';
 
 export class CategoriesApiV3 {
   private readonly baseClient: BaseClientV3;

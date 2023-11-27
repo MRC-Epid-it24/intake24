@@ -30,8 +30,8 @@ export interface PhraseWithKey<K> {
 export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
 
 export interface LanguageBackend {
+  name: string;
   indexIgnore: string[];
-
   phoneticEncoder: PhoneticEncoder | undefined;
 
   sanitiseDescription(description: string): string;

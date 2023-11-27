@@ -1,5 +1,3 @@
-import { HttpStatusCode } from 'axios';
-
 import type {
   CreateLocaleRequest,
   LocaleEntry,

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createPermissions } = require('../../utils.js');
 
 /*
@@ -19,12 +20,6 @@ const permissions = [
   { name: 'drinkware-sets|create', displayName: 'Create drinkware sets' },
   { name: 'drinkware-sets|edit', displayName: 'Edit drinkware sets' },
   { name: 'drinkware-sets|delete', displayName: 'Delete drinkware sets' },
-  { name: 'fdbs', displayName: 'Food databases resource access' },
-  { name: 'fdbs|browse', displayName: 'Browse food databases' },
-  { name: 'fdbs|read', displayName: 'Read food databases' },
-  { name: 'fdbs|create', displayName: 'Create food databases' },
-  { name: 'fdbs|edit', displayName: 'Edit food databases' },
-  { name: 'fdbs|delete', displayName: 'Delete food databases' },
   { name: 'feedback-schemes', displayName: 'Feedback schemes resource access' },
   { name: 'feedback-schemes|browse', displayName: 'Browse feedback schemes' },
   { name: 'feedback-schemes|read', displayName: 'Read feedback schemes' },

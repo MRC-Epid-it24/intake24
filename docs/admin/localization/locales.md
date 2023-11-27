@@ -22,6 +22,10 @@ Edit tab allows to modify selected locale.
 
 - `Text direction` - Read / write direction of text. Valid options are `ltr` or `rlt` (`DEPRECATED - moved to language settings`)
 
+- `Food index enabled` - Enable food index for this locale
+
+- `Food index language backend` - Language backend for food index
+
 ## Deletion
 
 Locale deletion won't be permitted if there are surveys using it. User firstly needs to update the surveys to use different locale.

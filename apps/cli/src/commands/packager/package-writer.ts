@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { keys, merge, sortBy, uniqBy, zip } from 'lodash';
+import { merge } from 'lodash';
 import path from 'path';
 
 import type { ApiClientV3 } from '@intake24/api-client-v3';

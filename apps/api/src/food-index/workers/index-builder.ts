@@ -364,14 +364,11 @@ async function queryIndex(query: SearchQuery): Promise<FoodSearchResponse> {
 const cleanUpIndexBuilder = async () => databases.close();
 
 async function buildIndex() {
-  let enabledLocales: string[];
-
-  if (config.enabledLocales === null) {
-    const allLocales = await FoodsLocale.findAll({ attributes: ['id'] });
-    enabledLocales = allLocales.map((l) => l.id);
-  } else {
-    enabledLocales = config.enabledLocales;
-  }
+  const locales = await FoodsLocale.findAll({
+    attributes: ['id'],
+    where: { foodIndexEnabled: true },
+  });
+  const enabledLocales = locales.map(({ id }) => id);
 
   logger.debug('Fetching global category data');
 

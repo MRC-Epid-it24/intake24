@@ -184,6 +184,7 @@ const locale = (
   const countryFlagCode = faker.location.countryCode();
   const prototypeLocaleId = null;
   const textDirection = 'ltr';
+  const foodIndexEnabled = faker.datatype.boolean();
   const foodIndexLanguageBackendId = 'en';
 
   return {
@@ -195,6 +196,7 @@ const locale = (
     countryFlagCode,
     prototypeLocaleId,
     textDirection,
+    foodIndexEnabled,
     foodIndexLanguageBackendId,
   };
 };

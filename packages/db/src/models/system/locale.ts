@@ -21,7 +21,6 @@ import {
 import type { Securable } from '..';
 import BaseModel from '../model';
 import { Language, Survey, User, UserSecurable } from '.';
-import FoodIndexBackend from './food-index-backend';
 
 @Scopes(() => ({
   list: {
@@ -101,6 +100,13 @@ export default class SystemLocale
 
   @Column({
     allowNull: false,
+    defaultValue: false,
+    type: DataType.BOOLEAN,
+  })
+  declare foodIndexEnabled: CreationOptional<boolean>;
+
+  @Column({
+    allowNull: false,
     defaultValue: 'en',
     type: DataType.STRING(16),
   })
@@ -129,9 +135,6 @@ export default class SystemLocale
     targetKey: 'code',
   })
   declare surveyLanguage?: NonAttribute<Language>;
-
-  @BelongsTo(() => FoodIndexBackend, 'foodIndexLanguageBackendId')
-  declare foodIndexLanguageBackend?: NonAttribute<FoodIndexBackend>;
 
   @BelongsTo(() => SystemLocale, {
     foreignKey: 'prototypeLocaleId',

@@ -1,5 +1,6 @@
 import type { PhoneticEncoder } from '@intake24/api/food-index/dictionary';
-import { Metaphone3 } from '@intake24/api/food-index/metaphone3';
+
+import { Metaphone3 } from './metaphone3';
 
 export default class Metaphone3Encoder implements PhoneticEncoder {
   private readonly metaphone3: Metaphone3;

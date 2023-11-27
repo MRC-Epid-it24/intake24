@@ -19,8 +19,6 @@ export type AppConfig = {
   secret: string;
 
   urls: SiteUrls;
-
-  enabledLocales: string[] | null;
 };
 
 const host = 'localhost';
@@ -28,14 +26,6 @@ const port = 3100;
 const https = !!(process.env.DEV_HTTPS === 'true');
 const certPath = process.env.DEV_MKCERT_PATH;
 const domain = `${https ? 'https' : 'http'}://${host}:${port}`;
-
-// null stands for "all locales"
-function parseLocaleList(list: string | undefined): string[] | null {
-  if (list === undefined)
-    throw new Error('Missing required configuration setting: APP_ENABLED_LOCALES');
-  if (list.trim() === '*') return null;
-  return JSON.parse(list) as string[];
-}
 
 const name = process.env.APP_NAME || 'Intake24';
 const icon = process.env.APP_ICON;
@@ -63,8 +53,6 @@ const appConfig: AppConfig = {
     images: process.env.APP_URL_IMAGES || `${domain}/images`,
     docs: process.env.APP_URL_DOCS || '/docs',
   },
-
-  enabledLocales: parseLocaleList(process.env.APP_ENABLED_LOCALES),
 };
 
 export default appConfig;

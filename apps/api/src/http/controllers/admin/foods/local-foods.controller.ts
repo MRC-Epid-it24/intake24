@@ -14,8 +14,7 @@ const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsServic
 
     const _return = req.query.return;
 
-    // FIXME: check correct permission
-    if (!(await aclService.hasPermission('fdbs|create'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
 
     const created = await localFoodsService.create(localeId, req.body, {
       update: update ? true : false,
@@ -37,8 +36,7 @@ const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsServic
 
     const { localeId, foodId } = req.params;
 
-    // FIXME: check correct permission
-    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
 
     const instance = await localFoodsService.read(localeId, foodId);
 
@@ -49,8 +47,7 @@ const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsServic
   const updateEnabledFoods = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    // FIXME: check correct permission
-    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
 
     await localFoodsService.updateEnabledFoods(req.params.localeId, req.body.enabledFoods);
     res.status(HttpStatusCode.Ok);

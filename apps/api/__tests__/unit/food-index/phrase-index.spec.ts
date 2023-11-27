@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
 import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
-import EnglishLanguageBackend from '@intake24/api/food-index/english-language-backend';
 import InterpretedPhrase, { cutCombinations } from '@intake24/api/food-index/interpreted-phrase';
 import { InterpretedWord } from '@intake24/api/food-index/interpreted-word';
+import EnglishLanguageBackend from '@intake24/api/food-index/language-backends/en/english-language-backend';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 
 describe('Phrase index', () => {

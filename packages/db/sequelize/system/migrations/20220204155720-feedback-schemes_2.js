@@ -577,7 +577,8 @@ module.exports = {
       const { QueryTypes } = queryInterface.sequelize;
 
       const env = process.env.NODE_ENV;
-      const foods = new Sequelize(foodDbConfig[env]);
+      const { url, ...config } = foodDbConfig[env];
+      const foods = url ? new Sequelize(url, foodDbConfig[env]) : new Sequelize(config);
 
       const dgExists = await queryInterface.tableExists('demographic_groups');
       const dgTable = dgExists ? 'demographic_groups' : 'demographic_group';

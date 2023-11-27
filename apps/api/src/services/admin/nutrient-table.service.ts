@@ -1,5 +1,4 @@
 import type { CreationAttributes } from 'sequelize';
-import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';

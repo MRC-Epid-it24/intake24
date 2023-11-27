@@ -62,6 +62,7 @@ export default () => {
         countryFlagCode: code,
         prototypeLocaleId: null,
         textDirection: 'ltr',
+        foodIndexEnabled: true,
         foodIndexLanguageBackendId: 'en',
       });
 
