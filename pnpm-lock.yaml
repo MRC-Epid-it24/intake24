@@ -105,8 +105,8 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/node@20.10.0)(sass@1.32.13)(terser@5.24.0)
       vitepress:
-        specifier: 1.0.0-rc.30
-        version: 1.0.0-rc.30(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2)
+        specifier: 1.0.0-rc.31
+        version: 1.0.0-rc.31(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2)
 
   apps/admin:
     dependencies:
@@ -978,8 +978,8 @@ importers:
         version: 3.11.0
     devDependencies:
       '@types/cookie':
-        specifier: ^0.5.4
-        version: 0.5.4
+        specifier: ^0.6.0
+        version: 0.6.0
       '@types/mime-types':
         specifier: ^2.1.4
         version: 2.1.4
@@ -4353,8 +4353,8 @@ packages:
       '@types/express': 4.17.21
     dev: true
 
-  /@types/cookie@0.5.4:
-    resolution: {integrity: sha512-7z/eR6O859gyWIAjuvBWFzNURmf2oPBmJlfVWkwehU5nzIyjwBsTh7WMmEEV4JFnHuQ3ex4oyTvfKzcyJVDBNA==}
+  /@types/cookie@0.6.0:
+    resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
     dev: true
 
   /@types/cookiejar@2.1.5:
@@ -14576,8 +14576,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitepress@1.0.0-rc.30(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2):
-    resolution: {integrity: sha512-OolAbFU2hjs0KuIpPq0wRd4vJlTMvrFgHSh/hB+XQid7U31KtB6F1NxWihMwKkwncpxu9mt2Somet5AGiyTgPA==}
+  /vitepress@1.0.0-rc.31(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2):
+    resolution: {integrity: sha512-ikH9pIjOOAbyoYAGBVfTz8TzuXp+UoWaIRMU4bw/oiTg8R65SbAaGKY84xx6TuL+f4VqUJ8lhzW82YyxSLvstA==}
     hasBin: true
     peerDependencies:
       markdown-it-mathjax3: ^4.3.2
