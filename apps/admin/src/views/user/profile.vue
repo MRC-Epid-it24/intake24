@@ -95,21 +95,11 @@
                   @change="updateLanguage"
                 >
                   <template #item="{ item }">
-                    <span
-                      :class="`fi fi-${
-                        item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
-                      } mr-3`"
-                    >
-                    </span>
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
                     {{ item.englishName }}
                   </template>
                   <template #selection="{ item }">
-                    <span
-                      :class="`fi fi-${
-                        item.countryFlagCode === 'en' ? 'gb' : item.countryFlagCode
-                      } mr-3`"
-                    >
-                    </span>
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
                     {{ item.englishName }}
                   </template>
                 </v-select>

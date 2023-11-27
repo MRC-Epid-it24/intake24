@@ -169,11 +169,11 @@
                 @change="form.errors.clear('foodIndexLanguageBackendId')"
               >
                 <template #item="{ item }">
-                  <span :class="`fi fi-${item.icon} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
                 <template #selection="{ item }">
-                  <span :class="`fi fi-${item.icon} mr-3`"></span>
+                  <span :class="`fi fi-${item.value} mr-3`"></span>
                   {{ item.text }}
                 </template>
               </v-select>
@@ -282,12 +282,11 @@ export default defineComponent({
 
     foodIndexLanguageBackends() {
       if (!this.refs.foodIndexLanguageBackends)
-        return [{ value: 'en', icon: 'gb', text: this.$t('common.none').toString() }];
+        return [{ value: 'en', text: this.$t('common.none').toString() }];
 
       return this.refs.foodIndexLanguageBackends.map((backend) => ({
         value: backend.id,
         text: backend.name,
-        icon: backend.id === 'en' ? 'gb' : backend.id,
       }));
     },
   },

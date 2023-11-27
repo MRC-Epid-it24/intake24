@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue';
 
 import type { I18nLanguageEntry, I18nLanguageListEntry } from '@intake24/common/types/http';
+import { loadAppLanguage } from '@intake24/i18n';
 
 import { useApp } from '../stores';
 
@@ -12,7 +13,7 @@ export default defineComponent({
     };
   },
 
-  async mounted() {
+  async created() {
     const { data } = await this.$http.get<I18nLanguageListEntry[]>('i18n');
     this.languages = data;
     useApp().setLanguages(data);
@@ -62,6 +63,8 @@ export default defineComponent({
       }
 
       for (const lang of this.getLanguages(language)) {
+        await loadAppLanguage(app, lang);
+
         if (this.hasLanguage(lang)) {
           this.updateAppWithLanguage(lang, isRrlLanguage);
           break;

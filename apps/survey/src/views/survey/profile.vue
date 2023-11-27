@@ -56,7 +56,16 @@
                   :label="$t('profile.languages._')"
                   outlined
                   @change="updateLanguage"
-                ></v-select>
+                >
+                  <template #item="{ item }">
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
+                    {{ item.englishName }}
+                  </template>
+                  <template #selection="{ item }">
+                    <span :class="`fi fi-${item.countryFlagCode} mr-3`"> </span>
+                    {{ item.englishName }}
+                  </template>
+                </v-select>
               </v-list-item-content>
             </v-list-item>
           </v-list>

@@ -17,10 +17,9 @@ export const loadAppLanguage = async (app: Application, lang: string) => {
     import(`./${app}/${lang}/index.ts`),
     import(`./shared/${lang}/index.ts`),
   ]).then(([app, shared]) => {
-    i18n.setLocaleMessage(lang, {
-      ...(app.status === 'fulfilled' ? app.value.default : {}),
-      ...(shared.status === 'fulfilled' ? shared.value.default : {}),
-    });
+    if (app.status !== 'fulfilled' || shared.status !== 'fulfilled') return;
+
+    i18n.setLocaleMessage(lang, { ...app.value.default, ...shared.value.default });
   });
 };
 
