@@ -46,6 +46,7 @@ export class ImporterV4 {
   private localFoods: Record<string, PkgLocalFood[]> | undefined;
   private enabledLocalFoods: Record<string, string[]> | undefined;
   private nutrientTables: PkgNutrientTable[] | undefined;
+  private imageMaps: Record<string, PkgImageMap> | undefined;
 
   constructor(
     apiClient: ApiClientV4,
@@ -102,29 +103,21 @@ export class ImporterV4 {
   }
 
   private async importImageMaps(): Promise<void> {
-    const filePath = path.join(
-      this.packageDirPath!,
-      PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
-      PkgConstants.IMAGE_MAP_FILE_NAME
-    );
+    if (this.imageMaps !== undefined) {
+      logger.info(`Importing ${Object.keys(this.imageMaps).length} image map(s)`);
 
-    const imageMaps = JSON.parse(await fs.readFile(filePath, 'utf-8')) as Record<
-      string,
-      PkgImageMap
-    >;
+      /*
+      const [imageMapId, imageMap] = Object.entries(this.imageMaps)[0];
 
-    logger.info(`Importing ${Object.keys(imageMaps).length} image map(s)`);
+      await this.importImageMap(imageMapId, imageMap);
 
-    const [imageMapId, imageMap] = Object.entries(imageMaps)[0];
+      const createOps = Object.entries(imageMaps).map(([imageMapId, imageMap]) =>
+        this.apiClient.imageMaps.create()),
+        })
+      );
 
-    await this.importImageMap(imageMapId, imageMap);
-
-    /*const createOps = Object.entries(imageMaps).map(([imageMapId, imageMap]) =>
-      this.apiClient.imageMaps.create()),
-      })
-    );
-
-    await Promise.all(createOps);*/
+      await Promise.all(createOps);*/
+    }
   }
 
   private async importLocale(locale: PkgLocale): Promise<void> {
@@ -201,7 +194,7 @@ export class ImporterV4 {
     if (this.globalFoods !== undefined) {
       const globalFoodsCount = this.globalFoods.length;
 
-      logger.info(`Importing ${globalFoodsCount} global food records`);
+      logger.info(`Importing ${globalFoodsCount} global food record(s)`);
 
       const batchSize = 50;
       let importedCount = 0;
@@ -261,7 +254,7 @@ export class ImporterV4 {
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
         const localFoodsCount = localFoods.length;
 
-        logger.info(`Importing ${localFoodsCount} local food records for locale ${localeId}`);
+        logger.info(`Importing ${localFoodsCount} local food record(s) for locale ${localeId}`);
 
         const batchSize = 50;
         let importedCount = 0;
@@ -311,12 +304,13 @@ export class ImporterV4 {
             case 'overwrite':
               await this.apiClient.nutrientTables.update(nutrientTable.id, record);
           }
-
-          await this.apiClient.nutrientTables.updateRecords(
-            nutrientTable.id,
-            typeConverters.fromPackageNutrientTableRecords(nutrientTable)
-          );
         }
+
+        const nutrientRecords = typeConverters.fromPackageNutrientTableRecords(nutrientTable);
+        logger.info(
+          `Updating ${nutrientRecords.length} nutrient record(s) in table ${nutrientTable.id}`
+        );
+        await this.apiClient.nutrientTables.updateRecords(nutrientTable.id, nutrientRecords);
       }
     }
   }
@@ -328,7 +322,7 @@ export class ImporterV4 {
     try {
       await fs.access(filePath);
     } catch (e) {
-      logger.debug(`File does not exist or is not accessible, skipping`);
+      logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
       return undefined;
     }
 
@@ -360,6 +354,13 @@ export class ImporterV4 {
     this.nutrientTables = await this.readJSON(PkgConstants.NUTRIENT_TABLES_FILE_NAME);
   }
 
+  private async readImageMaps(): Promise<void> {
+    logger.debug('Loading image maps');
+    this.imageMaps = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.IMAGE_MAP_FILE_NAME)
+    );
+  }
+
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),
@@ -367,6 +368,7 @@ export class ImporterV4 {
       this.readLocalFoods(),
       this.readEnabledLocalFoods(),
       this.readNutrientTables(),
+      this.readImageMaps(),
     ]);
   }
 
