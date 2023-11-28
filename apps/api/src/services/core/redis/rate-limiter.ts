@@ -23,6 +23,7 @@ export default class RateLimiter extends HasRedisClient {
         res.status(statusCode).json({ message });
       },
       keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
+      skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
       ...this.rateLimiters[type],
