@@ -1,6 +1,6 @@
 import type { IoC } from '@intake24/api/ioc';
 import type { I18nParams } from '@intake24/i18n';
-import { api, replaceParams } from '@intake24/i18n';
+import { api, replaceParams, shared } from '@intake24/i18n';
 
 export type TranslationObject = { [key: string]: TranslationObject } | string;
 
@@ -13,7 +13,7 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
   const logger = globalLogger.child({ service: 'I18nStore' });
 
   let store = api as TranslationStore;
-  let availableLanguages = Object.keys(store);
+  let availableLanguages = Object.keys(shared);
 
   /**
    * Initialize i18n store
@@ -31,22 +31,26 @@ const i18nStore = ({ logger: globalLogger, models }: Pick<IoC, 'logger' | 'model
    */
   const reload = async () => {
     const translations = await models.system.LanguageTranslation.findAll({
+      include: [{ association: 'language', attributes: ['code'], required: true }],
       where: { application: 'api' },
     });
 
     const dbStore = translations.reduce<{ [key: string]: any }>((acc, item) => {
-      const { languageId, section, messages } = item;
-      if (!acc[languageId]) acc[languageId] = {};
+      const { section, messages, language } = item;
+      if (!language) return acc;
+      const code = language.code;
 
-      if (!acc[languageId][section]) acc[languageId][section] = {};
+      if (!acc[code]) acc[code] = {};
 
-      acc[languageId][section] = messages;
+      if (!acc[code][section]) acc[code][section] = {};
+
+      acc[code][section] = messages;
 
       return acc;
     }, {});
 
     store = { ...store, ...dbStore };
-    availableLanguages = Object.keys(store);
+    availableLanguages = [...new Set([...Object.keys(dbStore), ...Object.keys(shared)])];
   };
 
   const getAvailableLanguages = () => availableLanguages;

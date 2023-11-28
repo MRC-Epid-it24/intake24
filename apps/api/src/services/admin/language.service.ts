@@ -21,6 +21,13 @@ export const defaultI18nMessages: Record<Application, LocaleMessages> = {
   survey: survey.en,
 };
 
+export const createMessages = (language: string) => ({
+  admin: admin[language] ?? admin.en,
+  api: api[language] ?? api.en,
+  shared: shared[language] ?? shared.en,
+  survey: survey[language] ?? survey.en,
+});
+
 const languageService = ({
   i18nStore,
   logger: globalLogger,
@@ -39,35 +46,18 @@ const languageService = ({
     const language = await Language.findByPk(languageId);
     if (language?.code) {
       // 1.: check if the exact match for the language exists in the code (without the dialect)
-      if (i18nStore.hasExactLanguage(language.code.toLowerCase())) {
-        return {
-          admin: admin[language.code],
-          api: api[language.code],
-          shared: shared[language.code],
-          survey: survey[language.code],
-        };
-      }
+      if (i18nStore.hasExactLanguage(language.code.toLowerCase()))
+        return createMessages(language.code);
+
       const [languageCode] = language.code.toLowerCase().split(/[-_]/);
       // 2.: check if the language exists in the code (without the dialect)
-      if (i18nStore.hasExactLanguage(languageCode)) {
-        return {
-          admin: admin[languageCode],
-          api: api[languageCode],
-          shared: shared[languageCode],
-          survey: survey[languageCode],
-        };
-      }
+      if (i18nStore.hasExactLanguage(languageCode)) return createMessages(languageCode);
+
       // 3.: check if the language exists in the code (with some other dialect). Picking the first one
       const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
-      if (languageWithDialect) {
-        return {
-          admin: admin[languageWithDialect],
-          api: api[languageWithDialect],
-          shared: shared[languageWithDialect],
-          survey: survey[languageWithDialect],
-        };
-      }
+      if (languageWithDialect) return createMessages(languageWithDialect);
     }
+
     return defaultI18nMessages;
   };
 

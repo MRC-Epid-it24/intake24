@@ -12,7 +12,7 @@ module.exports = {
         { transaction }
       );
 
-      queryInterface.sequelize.query(
+      await queryInterface.sequelize.query(
         `UPDATE locales SET food_index_enabled = true WHERE id IN (SELECT locale_id FROM surveys WHERE state = 'active')`,
         { transaction }
       );

@@ -73,7 +73,7 @@ export default class LanguageTranslation extends BaseModel<
   declare readonly updatedAt: CreationOptional<Date>;
 
   @BelongsTo(() => Language, 'languageId')
-  declare language?: NonAttribute<Language[]>;
+  declare language?: NonAttribute<Language>;
 }
 
 export type LanguageTranslationAttributes = Attributes<LanguageTranslation>;
