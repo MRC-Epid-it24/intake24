@@ -66,7 +66,7 @@ export default () => {
       expect(pick(body, Object.keys(output))).toEqual(output);
     });
 
-    it('should return 400 for duplicate id', async () => {
+    it('should return 409 for duplicate id', async () => {
       const { status, body } = await request(suite.app)
         .post(url)
         .set('Accept', 'application/json')
@@ -75,7 +75,7 @@ export default () => {
         .field('description', description)
         .attach('selectionImage', fs.createReadStream(filePath), fileName);
 
-      expect(status).toBe(400);
+      expect(status).toBe(409);
       expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['id']);
     });
