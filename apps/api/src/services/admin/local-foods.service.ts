@@ -27,10 +27,16 @@ import {
 const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
   // TODO: This should be done when getting portion size methods data instead and the image_url
   // field in food_portion_size_methods should be dropped
-  async function getPortionSizeImageUrl(psm: PortionSizeMethod): Promise<string> {
+  async function getPortionSizeImageUrl(
+    psm: PortionSizeMethod,
+    transaction: Transaction
+  ): Promise<string> {
     switch (psm.method) {
       case 'as-served': {
-        const set = await AsServedSet.findByPk(psm.servingImageSet, { include: [ProcessedImage] });
+        const set = await AsServedSet.findByPk(psm.servingImageSet, {
+          include: [ProcessedImage],
+          transaction,
+        });
 
         if (set === null) throw new NotFoundError(`As served set ${psm.servingImageSet} not found`);
 
@@ -45,6 +51,7 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
       case 'guide-image': {
         const guideImage = await GuideImage.findByPk(psm.guideImageId, {
           include: [ProcessedImage],
+          transaction,
         });
 
         if (guideImage === null)
@@ -61,6 +68,7 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
       case 'drink-scale': {
         const set = await DrinkwareSet.findByPk(psm.drinkwareId, {
           include: [{ model: ImageMap, include: [ProcessedImage] }],
+          transaction,
         });
 
         if (set === null) throw new NotFoundError(`Drinkware set ${psm.drinkwareId} not found`);
@@ -150,13 +158,14 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
 
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
-    psm: PortionSizeMethod
+    psm: PortionSizeMethod,
+    transaction: Transaction
   ): Promise<
     CreationAttributes<FoodPortionSizeMethod> & {
       parameters: CreationAttributes<FoodPortionSizeMethodParameter>[];
     }
   > {
-    const imageUrl = await getPortionSizeImageUrl(psm);
+    const imageUrl = await getPortionSizeImageUrl(psm, transaction);
 
     return {
       foodLocalId,
@@ -176,7 +185,7 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
     transaction: Transaction
   ) {
     const creationAttributes = await Promise.all(
-      methods.map((psm) => toPortionSizeMethodAttrs(foodLocalId, psm))
+      methods.map((psm) => toPortionSizeMethodAttrs(foodLocalId, psm, transaction))
     );
 
     await FoodPortionSizeMethod.destroy({ where: { foodLocalId }, transaction });
