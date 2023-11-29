@@ -23,7 +23,8 @@ export default () => {
       permission('as-served-sets|browse'),
       validation.browse,
       wrapAsync(asServedImageController.browse)
-    );
+    )
+    .delete(permission('as-served-sets|delete'), wrapAsync(asServedImageController.destroyAll));
 
   router
     .route('/:asServedImageId')

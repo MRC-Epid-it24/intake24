@@ -92,11 +92,23 @@ const asServedImageController = ({
     res.status(204).json();
   };
 
+  const destroyAll = async (
+    req: Request<{ asServedSetId: string }>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const { asServedSetId } = req.params;
+
+    await asServedService.destroyImage(asServedSetId);
+
+    res.status(204).json();
+  };
+
   return {
     browse,
     store,
     read,
     destroy,
+    destroyAll,
   };
 };
 
