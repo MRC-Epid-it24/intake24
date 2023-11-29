@@ -305,4 +305,16 @@ export class BaseClientV4 {
       writer.on('error', reject);
     });
   }
+
+  public async delete<Res, Req = any>(
+    endpoint: string,
+    params?: Record<string, any>,
+    expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.NoContent]
+  ): Promise<Res> {
+    const response = await this.requestLimit(() =>
+      this.accessClient.delete<Res>(endpoint, { params })
+    );
+    this.checkStatus(response, expectedStatus);
+    return response.data;
+  }
 }

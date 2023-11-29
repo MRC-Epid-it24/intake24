@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { groupBy, mapValues } from 'lodash';
 import path from 'path';
 import { v4 as randomUUID } from 'uuid';
 
@@ -7,12 +8,20 @@ import type {
   INCA3EnglishDescription,
   INCA3FoodListRow,
 } from '@intake24/cli/commands/fr-inca3/types/food-list';
-import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
+import type { INCA3FoodQuantRow } from '@intake24/cli/commands/fr-inca3/types/food-quant';
+import type { INCA3PortionSizeImage } from '@intake24/cli/commands/fr-inca3/types/portion-size-images';
+import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
+import type {
+  PkgAsServedPsm,
+  PkgGlobalFood,
+  PkgLocalFood,
+  PkgPortionSizeMethod,
+} from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
-import type logger from '@intake24/common-backend/services/logger/logger';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import { capitalize } from '@intake24/common/util';
+import logger from '@intake24/common-backend/services/logger/logger';
 
 export type Logger = typeof logger;
 
@@ -63,7 +72,9 @@ export class FrenchAnsesLocaleBuilder {
 
   private sourceRecords: INCA3FoodListRow[] | undefined;
   private sourceFoodRecords: INCA3FoodListRow[] | undefined;
+  private portionSizeRecords: Record<string, INCA3FoodQuantRow> | undefined;
   private englishDescriptions: Record<string, string> | undefined;
+  private portionSizeImages: INCA3PortionSizeImage[] | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -104,6 +115,16 @@ export class FrenchAnsesLocaleBuilder {
     this.englishDescriptions = Object.fromEntries(
       englishDescriptionRecords.map((r) => [r.code, r.englishDescription])
     );
+
+    const fdQuantRows = await this.readJSON<INCA3FoodQuantRow[]>('ALIMENTS_FDQUANT.json');
+
+    this.portionSizeRecords = Object.fromEntries(fdQuantRows.map((row) => [row.A_CODE, row]));
+  }
+
+  private async readPortionSizeImages(): Promise<void> {
+    this.portionSizeImages = await this.readJSON<INCA3PortionSizeImage[]>(
+      path.join('portion-size', 'images.json')
+    );
   }
 
   private async buildGlobalFoods(): Promise<PkgGlobalFood[]> {
@@ -119,6 +140,54 @@ export class FrenchAnsesLocaleBuilder {
     return globalFoods;
   }
 
+  private getPortionSizeMethods(foodCode: string): PkgPortionSizeMethod[] {
+    if (this.portionSizeRecords === undefined) {
+      throw new Error('Portion size data not loaded');
+    }
+
+    const portionSizeMethods: PkgPortionSizeMethod[] = [];
+
+    const portionSizeRow = this.portionSizeRecords[foodCode];
+
+    if (portionSizeRow !== undefined) {
+      if (portionSizeRow.LISTE_PHOTOS !== undefined && portionSizeRow.LISTE_PHOTOS.length > 0) {
+        portionSizeRow.LISTE_PHOTOS.trim()
+          .split(',')
+          .forEach((pictureId) => {
+            portionSizeMethods.push({
+              method: 'as-served',
+              description: 'use_an_image',
+              useForRecipes: true,
+              conversionFactor: 1.0,
+              servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
+            });
+          });
+      }
+    } else {
+      logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
+    }
+
+    if (portionSizeMethods.length === 0) {
+      // Temporary fallback method, shouldn't be there in the final version
+
+      portionSizeMethods.push({
+        method: 'standard-portion',
+        description: 'use_a_standard_portion',
+        useForRecipes: true,
+        conversionFactor: 1.0,
+        units: [
+          {
+            name: 'pieces',
+            omitFoodDescription: false,
+            weight: 100,
+          },
+        ],
+      });
+    }
+
+    return portionSizeMethods;
+  }
+
   private async buildLocalFoods(): Promise<PkgLocalFood[]> {
     const localFoods: PkgLocalFood[] = this.sourceFoodRecords!.map((row) => ({
       version: randomUUID(),
@@ -128,29 +197,33 @@ export class FrenchAnsesLocaleBuilder {
         FR_TEMP: 'FRPH1',
       },
       associatedFoods: [],
-      portionSize: [
-        {
-          method: 'standard-portion',
-          description: 'use_a_standard_portion',
-          useForRecipes: true,
-          conversionFactor: 1.0,
-          units: [
-            {
-              name: 'pieces',
-              omitFoodDescription: false,
-              weight: 100,
-            },
-          ],
-        },
-      ],
+      portionSize: this.getPortionSizeMethods(row.A_CODE),
       brandNames: [],
     }));
 
     return localFoods;
   }
 
+  private buildAsServed(): PkgAsServedSet[] {
+    const imagesById = groupBy(this.portionSizeImages, (record) => record.pictureId);
+
+    return Object.entries(imagesById).map(([imageId, images]) => {
+      return {
+        id: `INCA3_${imageId}`,
+        description: images[0].name,
+        selectionImagePath: '',
+        images: images.map((image) => ({
+          imagePath: `INCA3/${image.fileName}`,
+          weight: parseFloat(image.weight),
+          imageKeywords: [],
+        })),
+      };
+    });
+  }
+
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
+    await this.readPortionSizeImages();
 
     const globalFoods = await this.buildGlobalFoods();
     const localFoods = await this.buildLocalFoods();
@@ -163,6 +236,8 @@ export class FrenchAnsesLocaleBuilder {
       [locale.id]: localFoods.map((f) => f.code),
     };
 
+    const asServedSets = this.buildAsServed();
+
     const writer = new PackageWriter(this.logger, this.outputDirPath);
 
     await writer.writeLocales([locale]);
@@ -170,5 +245,6 @@ export class FrenchAnsesLocaleBuilder {
     await writer.writeLocalFoods(localFoodsRecord);
     await writer.writeEnabledLocalFoods(enabledLocalFoods);
     await writer.writeNutrientTables([dummyNutrientTable]);
+    await writer.writeAsServedSets(asServedSets);
   }
 }

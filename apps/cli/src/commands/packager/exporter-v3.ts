@@ -460,7 +460,7 @@ export class ExporterV3 {
       writer.writeDrinkwareSets(Object.fromEntries(zip(sortedDrinkwareIds, drinkwareData))),
       writer.writeGuideImages(Object.fromEntries(zip(sortedGuideImageIds, guideImageData))),
       writer.writeImageMaps(Object.fromEntries(zip(sortedImageMapIds, imageMapData))),
-      writer.writeAsServedSets(Object.fromEntries(zip(sortedAsServedIds, asServedData))),
+      writer.writeAsServedSets(asServedData),
       writer.writePackageInfo(),
     ]);
 

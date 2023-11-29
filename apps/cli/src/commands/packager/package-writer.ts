@@ -44,7 +44,7 @@ interface FoodData {
 }
 
 export class PackageWriter {
-  private static readonly version = '1.0';
+  private static readonly version = '1.1';
 
   private readonly outputDir: string;
   private readonly options: PackageWriterOptions;
@@ -127,7 +127,7 @@ export class PackageWriter {
     );
   }
 
-  public async writeAsServedSets(asServedSets: Record<string, PkgAsServedSet>) {
+  public async writeAsServedSets(asServedSets: PkgAsServedSet[]) {
     await this.writeJSON(
       asServedSets,
       path.join(

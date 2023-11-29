@@ -6,6 +6,10 @@ import { omit } from 'lodash';
 import path from 'path';
 
 import type { ApiClientV4 } from '@intake24/api-client-v4';
+import type {
+  PkgAsServedImage,
+  PkgAsServedSet,
+} from '@intake24/cli/commands/packager/types/as-served';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
@@ -46,6 +50,7 @@ export class ImporterV4 {
   private localFoods: Record<string, PkgLocalFood[]> | undefined;
   private enabledLocalFoods: Record<string, string[]> | undefined;
   private nutrientTables: PkgNutrientTable[] | undefined;
+  private asServedSets: PkgAsServedSet[] | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
 
   constructor(
@@ -63,7 +68,7 @@ export class ImporterV4 {
   }
 
   private async importImageMap(imageMapId: string, imageMap: PkgImageMap): Promise<void> {
-    const existing = await this.apiClient.imageMaps.get(imageMapId);
+    const existing = await this.apiClient.portionSize.imageMaps.get(imageMapId);
 
     if (existing !== null) {
       switch (this.options.onConflict) {
@@ -79,9 +84,13 @@ export class ImporterV4 {
           logger.info(`Updating existing image map: ${imageMapId}`);
           const objects = typeConverters.fromPackageImageMapObjects(imageMap.objects);
 
-          await this.apiClient.imageMaps.update(imageMapId, imageMap.description, objects);
+          await this.apiClient.portionSize.imageMaps.update(
+            imageMapId,
+            imageMap.description,
+            objects
+          );
 
-          await this.apiClient.imageMaps.updateImage(
+          await this.apiClient.portionSize.imageMaps.updateImage(
             imageMapId,
             path.join(this.imageDirPath!, imageMap.baseImagePath)
           );
@@ -93,7 +102,7 @@ export class ImporterV4 {
       logger.info(`Creating new image map: ${imageMapId}`);
       const objects = typeConverters.fromPackageImageMapObjects(imageMap.objects);
 
-      await this.apiClient.imageMaps.create(
+      await this.apiClient.portionSize.imageMaps.create(
         imageMapId,
         imageMap.description,
         path.join(this.imageDirPath!, imageMap.baseImagePath),
@@ -117,6 +126,81 @@ export class ImporterV4 {
       );
 
       await Promise.all(createOps);*/
+    }
+  }
+
+  private async updateAsServedSetImages(setId: string, images: PkgAsServedImage[]): Promise<void> {
+    logger.info(`Updating images for as served set ${setId}`);
+
+    logger.debug('Deleting existing images');
+    await this.apiClient.portionSize.asServed.deleteAllImages(setId);
+
+    logger.debug(`Uploading ${images.length} new images`);
+
+    const ops = images.map((image) =>
+      this.apiClient.portionSize.asServed.uploadImage(
+        setId,
+        image.weight,
+        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, image.imagePath)
+      )
+    );
+
+    await Promise.all(ops);
+  }
+
+  private async importAsServedSet(pkgSet: PkgAsServedSet): Promise<void> {
+    const setId = pkgSet.id;
+
+    if (pkgSet.images.length === 0) {
+      logger.warn(`As served set ${setId} has no images, skipping`);
+      return;
+    }
+
+    const existingSet = await this.apiClient.portionSize.asServed.get(setId);
+
+    if (existingSet === null) {
+      logger.info(`Creating new as served set: ${setId}`);
+
+      const middleImageIndex = Math.floor(pkgSet.images.length / 2);
+      const selectionImagePath = pkgSet.images[middleImageIndex].imagePath;
+
+      const createResult = await this.apiClient.portionSize.asServed.create(
+        setId,
+        pkgSet.description,
+        path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, selectionImagePath)
+      );
+
+      switch (createResult.type) {
+        case 'success':
+          break;
+        case 'conflict':
+          throw new Error(`Failed to create as served set ${setId} due to a race condition`);
+      }
+    } else {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`As served set already exists, skipping: ${setId}`);
+          return Promise.resolve();
+        case 'abort': {
+          const message = `As served set already exists: ${setId}`;
+          logger.error(message);
+          return Promise.reject(new Error(message));
+        }
+        case 'overwrite': {
+          logger.info(`Updating existing as served set: ${setId}`);
+          logger.warn(`Update operation not implemented`);
+          break;
+        }
+      }
+    }
+
+    await this.updateAsServedSetImages(setId, pkgSet.images);
+  }
+
+  private async importAsServedSets(): Promise<void> {
+    if (this.asServedSets !== undefined) {
+      const ops = this.asServedSets.map((set) => this.importAsServedSet(set));
+      await Promise.all(ops);
     }
   }
 
@@ -330,34 +414,41 @@ export class ImporterV4 {
   }
 
   private async readLocales(): Promise<void> {
-    logger.debug('Loading locales');
+    logger.info('Loading locales');
     this.locales = await this.readJSON(PkgConstants.LOCALES_FILE_NAME);
   }
 
   private async readGlobalFoods(): Promise<void> {
-    logger.debug('Loading global foods');
+    logger.info('Loading global foods');
     this.globalFoods = await this.readJSON(PkgConstants.GLOBAL_FOODS_FILE_NAME);
   }
 
   private async readLocalFoods(): Promise<void> {
-    logger.debug('Loading local foods');
+    logger.info('Loading local foods');
     this.localFoods = await this.readJSON(PkgConstants.LOCAL_FOODS_FILE_NAME);
   }
 
   private async readEnabledLocalFoods(): Promise<void> {
-    logger.debug('Loading enabled local foods');
+    logger.info('Loading enabled local foods');
     this.enabledLocalFoods = await this.readJSON(PkgConstants.ENABLED_LOCAL_FOODS_FILE_NAME);
   }
 
   private async readNutrientTables(): Promise<void> {
-    logger.debug('Loading nutrient tables');
+    logger.info('Loading nutrient tables');
     this.nutrientTables = await this.readJSON(PkgConstants.NUTRIENT_TABLES_FILE_NAME);
   }
 
   private async readImageMaps(): Promise<void> {
-    logger.debug('Loading image maps');
+    logger.info('Loading image maps');
     this.imageMaps = await this.readJSON(
       path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.IMAGE_MAP_FILE_NAME)
+    );
+  }
+
+  private async readAsServedSets(): Promise<void> {
+    logger.info('Loading as served sets');
+    this.asServedSets = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.AS_SERVED_FILE_NAME)
     );
   }
 
@@ -369,6 +460,7 @@ export class ImporterV4 {
       this.readEnabledLocalFoods(),
       this.readNutrientTables(),
       this.readImageMaps(),
+      this.readAsServedSets(),
     ]);
   }
 
@@ -398,12 +490,17 @@ export class ImporterV4 {
   public async import(): Promise<void> {
     await this.unzipPackage();
     await this.readPackage();
-    await this.cleanUpPackage();
-    await this.importLocales();
-    await this.importNutrientTables();
-    await this.importGlobalFoods();
-    await this.importLocalFoods();
-    await this.importEnabledLocalFoods();
+
+    try {
+      await this.importLocales();
+      await this.importNutrientTables();
+      await this.importAsServedSets();
+      await this.importGlobalFoods();
+      await this.importLocalFoods();
+      await this.importEnabledLocalFoods();
+    } finally {
+      await this.cleanUpPackage();
+    }
 
     logger.info('Done!');
 
