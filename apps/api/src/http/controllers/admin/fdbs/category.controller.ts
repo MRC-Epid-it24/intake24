@@ -5,6 +5,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type {
   CategoriesResponse,
   CategoryContentsResponse,
+  CategoryInput,
   CategoryLocalEntry,
   MainCategoriesResponse,
   RootCategoriesResponse,
@@ -46,10 +47,15 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     res.json(categories);
   };
 
-  const store = async (req: Request<{ localeId: string }>, res: Response): Promise<void> => {
-    await getAndCheckAccess(SystemLocale, 'food-list', req);
+  const store = async (
+    req: Request<{ localeId: string }, any, CategoryInput>,
+    res: Response<CategoryLocalEntry>
+  ): Promise<void> => {
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
 
-    res.json();
+    const categoryLocal = await adminCategoryService.createCategory(code, req.body);
+
+    res.json(categoryLocal);
   };
 
   const read = async (
@@ -72,7 +78,20 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
     const { categoryId } = req.params;
 
-    const categoryLocal = await adminCategoryService.updateCategory(categoryId, code, req.body);
+    const { aclService } = req.scope.cradle;
+    const { main, ...rest } = req.body;
+
+    const canUpdateMain = !!(
+      main?.code &&
+      ((await aclService.hasPermission('locales|food-list')) ||
+        (await CategoryLocal.count({ where: { categoryCode: main.code } })) === 1)
+    );
+
+    const categoryLocal = await adminCategoryService.updateCategory(
+      categoryId,
+      code,
+      canUpdateMain ? req.body : rest
+    );
     if (!categoryLocal) throw new NotFoundError();
 
     res.json(categoryLocal);
@@ -129,6 +148,18 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     res.json(categoryContentsResponse(data));
   };
 
+  const copy = async (
+    req: Request<{ categoryId: string; localeId: string }>,
+    res: Response
+  ): Promise<void> => {
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { categoryId } = req.params;
+
+    const categoryLocal = await adminCategoryService.copyCategory(categoryId, code, req.body);
+
+    res.json(categoryLocal);
+  };
+
   return {
     browse,
     browseMain,
@@ -138,6 +169,7 @@ const adminCategoryController = ({ adminCategoryService }: Pick<IoC, 'adminCateg
     destroy,
     root,
     contents,
+    copy,
   };
 };
 

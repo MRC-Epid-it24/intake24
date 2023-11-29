@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import { useSelects } from '../';
+import { useSelects } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SectionProps',

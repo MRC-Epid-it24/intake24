@@ -171,10 +171,9 @@ import draggable from 'vuedraggable';
 import type { ActionItem, Actions } from '@intake24/common/prompts';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { useSelects } from '@intake24/admin/composables';
 import { withIdList } from '@intake24/admin/util';
 import { copy, randomString } from '@intake24/common/util';
-
-import { useSelects } from './use-selects';
 
 export const defaultAction: ActionItem = {
   type: 'next',

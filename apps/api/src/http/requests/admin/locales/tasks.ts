@@ -41,7 +41,7 @@ export default validate(
         options: async (value, meta): Promise<void> => {
           if (!value || typeof value !== 'string') throw new Error();
 
-          const locale = await SystemLocale.findByPk(value);
+          const locale = await SystemLocale.findByPk(value, { attributes: ['code'] });
           if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },

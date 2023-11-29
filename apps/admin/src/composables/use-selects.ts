@@ -1,7 +1,9 @@
+import orderBy from 'lodash/orderBy';
 import { computed } from 'vue';
 
 import { actionTypes, actionVariants, promptLayouts } from '@intake24/common/prompts';
 import { colors as themeColors } from '@intake24/common/theme';
+import { textDirections } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 
 export const useSelects = () => {
@@ -29,6 +31,16 @@ export const useSelects = () => {
     }))
   );
 
+  const flags = computed(() =>
+    orderBy(
+      Object.entries(i18n.messages[i18n.locale].flags).map(([key, value]) => ({
+        value: key,
+        text: value,
+      })),
+      'text'
+    )
+  );
+
   const layoutList = computed(() =>
     promptLayouts.map((value) => ({
       value,
@@ -49,5 +61,22 @@ export const useSelects = () => {
     }))
   );
 
-  return { actionList, actionVariantsList, colors, layoutList, orientations, sections };
+  const textDirectionList = computed(() =>
+    textDirections.map((value) => ({
+      value,
+      text: i18n.t(`languages.textDirections.${value}`).toString(),
+      icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
+    }))
+  );
+
+  return {
+    actionList,
+    actionVariantsList,
+    colors,
+    flags,
+    layoutList,
+    orientations,
+    sections,
+    textDirectionList,
+  };
 };

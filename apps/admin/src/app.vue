@@ -88,7 +88,7 @@
 
     <v-main>
       <v-container :class="{ 'pa-0': isMobile }" fluid>
-        <v-breadcrumbs v-if="breadcrumbs.length" :items="breadcrumbs" large>
+        <v-breadcrumbs v-if="breadcrumbs.length" class="px-1 py-2" :items="breadcrumbs" large>
           <template #divider>
             <v-icon>fas fa-caret-right</v-icon>
           </template>

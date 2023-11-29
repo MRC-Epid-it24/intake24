@@ -22,6 +22,7 @@
     "noCategory": "Uncategorized",
     "alreadyIncluded": "Category '{code}' is already included in current list.",
     "none": "No category found for provided search.",
+    "copy": "Copy category",
     "global": {
       "_": "Global category settings",
       "code": "Category code",
@@ -45,6 +46,7 @@
     "_": "Food",
     "title": "Foods",
     "add": "Add food",
+    "copy": "Copy food",
     "global": {
       "_": "Global food settings",
       "code": "Food code",

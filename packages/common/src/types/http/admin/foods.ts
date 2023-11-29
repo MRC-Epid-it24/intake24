@@ -67,6 +67,11 @@ export type FoodLocalInput = {
   associatedFoods: AssociatedFoodCreationAttributes[];
 };
 
+export type FoodLocalCopyInput = {
+  code: string;
+  name: string;
+};
+
 export type FoodListEntry = {
   id: string;
   code: string;

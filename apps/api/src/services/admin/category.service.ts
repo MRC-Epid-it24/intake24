@@ -1,7 +1,13 @@
+import { randomUUID } from 'crypto';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { CategoryInput, CategoryListEntry } from '@intake24/common/types/http/admin';
+import type {
+  CategoryInput,
+  CategoryListEntry,
+  CategoryLocalCopyInput,
+  CategoryLocalInput,
+} from '@intake24/common/types/http/admin';
 import type {
   CategoryAttributes,
   CategoryLocalAttributes,
@@ -12,8 +18,10 @@ import type {
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryResponse } from '@intake24/api/http/responses/admin';
+import { toSimpleName } from '@intake24/api/util';
 import {
   Category,
+  CategoryAttribute,
   CategoryLocal,
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
@@ -69,7 +77,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const getRootCategories = async (localeId: string) => {
     // TODO: verify for other dialects
     const query = `SELECT DISTINCT
-      c.code, c.name as "englishName", c.is_hidden as "isHidden", cl.id, cl.locale_id as "localeId", cl.name  
+      c.code, c.name as "englishName", c.is_hidden as "isHidden", cl.id, cl.locale_id as "localeId", cl.name
       FROM categories c
       LEFT JOIN categories_categories cc ON c.code = cc.subcategory_code
       LEFT JOIN category_locals cl ON c.code = cl.category_code
@@ -272,7 +280,7 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
   const updatePortionSizeMethods = async (
     categoryLocalId: string,
     methods: CategoryPortionSizeMethod[],
-    inputs: CategoryInput['portionSizeMethods'],
+    inputs: CategoryLocalInput['portionSizeMethods'],
     { transaction }: { transaction: Transaction }
   ) => {
     const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
@@ -295,8 +303,10 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
           if (!match.parameters) await match.reload({ include: [{ association: 'parameters' }] });
           if (!match.parameters) throw new NotFoundError();
 
-          await match.update(rest, { transaction });
-          await updateParameters(match.id, match.parameters, parameters, { transaction });
+          await Promise.all([
+            match.update(rest, { transaction }),
+            updateParameters(match.id, match.parameters, parameters, { transaction }),
+          ]);
           continue;
         }
       }
@@ -319,10 +329,40 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     return [...methods, ...newMethods];
   };
 
+  const createCategory = async (localeCode: string, input: CategoryInput) => {
+    const categoryLocal = await db.foods.transaction(async (transaction) => {
+      let main = await Category.findByPk(input.code, { transaction });
+      if (!main) {
+        main = await Category.create({ ...input, version: randomUUID() }, { transaction });
+        await CategoryAttribute.create({ categoryCode: main.code }, { transaction });
+
+        if (input.parentCategories?.length) {
+          const categories = input.parentCategories.map(({ code }) => code);
+          await main.$set('parentCategories', categories, { transaction });
+        }
+      }
+
+      const categoryLocal = await CategoryLocal.create(
+        {
+          categoryCode: main.code,
+          localeId: localeCode,
+          name: main.name,
+          simpleName: toSimpleName(main.name)!,
+          version: randomUUID(),
+        },
+        { transaction }
+      );
+
+      return categoryLocal;
+    });
+
+    return (await getCategory(categoryLocal.id, localeCode))!;
+  };
+
   const updateCategory = async (
     categoryLocalId: string,
     localeId: string,
-    input: CategoryInput
+    input: CategoryLocalInput
   ) => {
     const categoryLocal = await getCategory(categoryLocalId, localeId);
     if (!categoryLocal) throw new NotFoundError();
@@ -369,9 +409,94 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
     return getCategory(categoryLocalId, localeId);
   };
 
+  const copyCategory = async (
+    categoryLocalId: string,
+    localeCode: string,
+    input: CategoryLocalCopyInput
+  ) => {
+    const sourceCategoryLocal = await getCategory(categoryLocalId, localeCode);
+    if (!sourceCategoryLocal) throw new NotFoundError();
+
+    const categoryLocal = await db.foods.transaction(async (transaction) => {
+      const category = await Category.create(
+        {
+          ...pick(sourceCategoryLocal.main!, ['code', 'name']),
+          ...input,
+          version: randomUUID(),
+        },
+        { transaction }
+      );
+      const categoryLocal = await CategoryLocal.create(
+        {
+          ...pick(sourceCategoryLocal, ['localeId', 'name', 'simpleName']),
+          categoryCode: category.code,
+          name: input.name,
+          version: randomUUID(),
+        },
+        { transaction }
+      );
+
+      const promises: Promise<any>[] = [
+        CategoryAttribute.create(
+          {
+            ...pick(sourceCategoryLocal.main!.attributes!, [
+              'sameAsBeforeOption',
+              'readyMealOption',
+              'reasonableAmount',
+              'useInRecipes',
+            ]),
+            categoryCode: category.code,
+          },
+          { transaction }
+        ),
+      ];
+
+      if (sourceCategoryLocal.main?.parentCategories?.length) {
+        const categories = sourceCategoryLocal.main.parentCategories.map(({ code }) => code);
+        promises.push(category.$set('parentCategories', categories, { transaction }));
+      }
+
+      if (sourceCategoryLocal.portionSizeMethods?.length) {
+        for (const psm of sourceCategoryLocal.portionSizeMethods) {
+          const method = await CategoryPortionSizeMethod.create(
+            {
+              ...pick(psm, [
+                'method',
+                'description',
+                'imageUrl',
+                'useForRecipes',
+                'conversionFactor',
+                'orderBy',
+              ]),
+              categoryLocalId: categoryLocal.id,
+            },
+            { transaction }
+          );
+
+          if (!psm.parameters?.length) continue;
+
+          const parameters = psm.parameters.map((parameter) => ({
+            ...pick(parameter, ['name', 'value']),
+            portionSizeMethodId: method.id,
+          }));
+
+          promises.push(CategoryPortionSizeMethodParameter.bulkCreate(parameters, { transaction }));
+        }
+      }
+
+      await Promise.all(promises);
+
+      return categoryLocal;
+    });
+
+    return (await getCategory(categoryLocal.id, localeCode))!;
+  };
+
   return {
     browseCategories,
     browseMainCategories,
+    copyCategory,
+    createCategory,
     getRootCategories,
     getNoCategoryContents,
     getCategoryContents,

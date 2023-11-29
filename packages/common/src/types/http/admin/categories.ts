@@ -9,7 +9,11 @@ import type {
 
 import type { FoodListEntry } from './foods';
 
-export type CategoryInput = {
+export type CategoryInput = Pick<CategoryAttributes, 'code' | 'name'> & {
+  parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
+};
+
+export type CategoryLocalInput = {
   name: string;
   main: {
     code: string;
@@ -21,6 +25,11 @@ export type CategoryInput = {
   portionSizeMethods: (CategoryPortionSizeMethodCreationAttributes & {
     parameters: CategoryPortionSizeMethodParameterCreationAttributes[];
   })[];
+};
+
+export type CategoryLocalCopyInput = {
+  code: string;
+  name: string;
 };
 
 export type CategoryListEntry = {

@@ -10,8 +10,6 @@ import {
 import { unique } from '@intake24/api/http/rules';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
-import { categories } from '../common';
-
 export default validate(
   checkSchema({
     name: {
@@ -50,6 +48,5 @@ export default validate(
         },
       },
     },
-    parentCategories: categories,
   })
 );

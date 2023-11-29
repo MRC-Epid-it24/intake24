@@ -62,7 +62,7 @@
                 v-model="form.textDirection"
                 :error-messages="form.errors.get('textDirection')"
                 hide-details="auto"
-                :items="textDirections"
+                :items="textDirectionList"
                 :label="$t('languages.textDirections._')"
                 name="textDirection"
                 outlined
@@ -87,13 +87,11 @@
 </template>
 
 <script lang="ts">
-import orderBy from 'lodash/orderBy';
 import { defineComponent } from 'vue';
 
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { textDirections } from '@intake24/common/types';
+import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 
 type LanguageForm = {
   id: string | null;
@@ -110,6 +108,8 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
+    const { flags, textDirectionList } = useSelects();
+
     const { entry, entryLoaded, isEdit } = useEntry<LanguageEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<LanguageForm, LanguageEntry>(
@@ -126,23 +126,16 @@ export default defineComponent({
       }
     );
 
-    return { entry, entryLoaded, isEdit, clearError, form, routeLeave, submit };
-  },
-
-  data() {
     return {
-      flags: orderBy(
-        Object.entries(this.$i18n.messages[this.$i18n.locale].flags).map(([key, value]) => ({
-          value: key,
-          text: value,
-        })),
-        'text'
-      ),
-      textDirections: textDirections.map((value) => ({
-        value,
-        text: this.$t(`languages.textDirections.${value}`),
-        icon: value === 'ltr' ? 'fas fa-right-long' : 'fas fa-left-long',
-      })),
+      entry,
+      entryLoaded,
+      flags,
+      isEdit,
+      clearError,
+      form,
+      routeLeave,
+      submit,
+      textDirectionList,
     };
   },
 });

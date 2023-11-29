@@ -13,7 +13,7 @@
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
       <v-toolbar color="secondary" dark flat>
-        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="cancel">
+        <v-btn dark icon :title="$t('common.action.cancel')" @click.stop="close">
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
@@ -38,11 +38,17 @@
         </v-row>
       </v-card-text>
       <v-card-actions class="pb-4">
-        <v-btn class="font-weight-bold" color="error" text @click.stop="cancel">
+        <v-btn class="font-weight-bold" color="error" text @click.stop="close">
           <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn class="font-weight-bold" color="info" text @click.stop="confirm">
+        <v-btn
+          class="font-weight-bold"
+          color="info"
+          :disabled="form.errors.any()"
+          text
+          @click.stop="confirm"
+        >
           <v-icon left>$success</v-icon>{{ $t(`${resource}.copy._`) }}
         </v-btn>
       </v-card-actions>
@@ -51,10 +57,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router/composables';
 
 import type { SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { createForm } from '@intake24/admin/util';
+import { useI18n } from '@intake24/i18n';
+import { useMessages } from '@intake24/ui/stores';
 
 export type CopySchemeForm = {
   name: string | null;
@@ -74,33 +83,37 @@ export default defineComponent({
     },
   },
 
-  data() {
-    return {
-      form: createForm<CopySchemeForm>({ name: null }),
-      dialog: false,
-      redirect: true,
+  setup(props) {
+    const { i18n } = useI18n();
+    const router = useRouter();
+    const route = useRoute();
+
+    const form = createForm<CopySchemeForm>({ name: null });
+    const dialog = ref(false);
+    const redirect = ref(true);
+
+    const close = () => {
+      dialog.value = false;
     };
-  },
 
-  methods: {
-    close() {
-      this.dialog = false;
-    },
+    const confirm = async () => {
+      const { resource, schemeId } = props;
+      const { name } = route;
+      const { id } = await form.post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
 
-    cancel() {
-      this.close();
-    },
+      close();
+      useMessages().success(i18n.t('common.msg.created', { name }).toString());
 
-    async confirm() {
-      const { resource, schemeId } = this;
-      const { name } = this.$route;
-      const { id } = await this.form.post<SurveySchemeEntry>(`admin/${resource}/${schemeId}/copy`);
+      if (redirect.value) await router.push({ name: name ?? `${resource}-read`, params: { id } });
+    };
 
-      this.close();
-
-      if (this.redirect)
-        await this.$router.push({ name: name ?? `${resource}-read`, params: { id } });
-    },
+    return {
+      close,
+      confirm,
+      form,
+      dialog,
+      redirect,
+    };
   },
 });
 </script>

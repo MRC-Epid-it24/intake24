@@ -43,8 +43,9 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import { useSelects } from '@intake24/admin/composables';
 
-import { selectListPrompt, useSelects } from '../partials';
+import { selectListPrompt } from '../partials';
 
 export default defineComponent({
   name: 'RadioListPrompt',

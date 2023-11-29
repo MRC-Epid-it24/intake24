@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
+  FoodInput,
   FoodLocalEntry,
   FoodLocalInput,
   FoodsResponse,
@@ -33,7 +34,7 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
   };
 
   const store = async (
-    req: Request<{ foodId: string; localeId: string }>,
+    req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
     res: Response
   ): Promise<void> => {
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
@@ -66,10 +67,11 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     const { aclService } = req.scope.cradle;
     const { main, ...rest } = req.body;
 
-    const canUpdateMain =
+    const canUpdateMain = !!(
       main?.code &&
       ((await aclService.hasPermission('locales|food-list')) ||
-        (await FoodLocal.count({ where: { foodCode: main.code } })) === 1);
+        (await FoodLocal.count({ where: { foodCode: main.code } })) === 1)
+    );
 
     const foodLocal = await adminFoodService.updateFood(
       foodId,
@@ -93,13 +95,16 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     res.status(204).json();
   };
 
-  const createGlobalFood = async (req: Request<any>, res: Response<undefined>): Promise<void> => {
+  const copy = async (
+    req: Request<{ foodId: string; localeId: string }>,
+    res: Response<FoodLocalEntry>
+  ): Promise<void> => {
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
     const { foodId } = req.params;
 
-    await adminFoodService.deleteFood(foodId, code);
+    const foodLocal = await adminFoodService.copyFood(foodId, code, req.body);
 
-    res.status(204).json();
+    res.json(foodLocal);
   };
 
   return {
@@ -108,6 +113,7 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     read,
     update,
     destroy,
+    copy,
   };
 };
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="isEntryLoaded" flat>
+    <div v-if="isEntryLoaded">
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
@@ -103,10 +103,11 @@
           :locale-id="id"
         ></associated-food-list>
       </v-form>
-      <v-card-actions class="pa-4">
+      <div class="d-flex">
         <v-btn color="secondary" outlined type="submit" @click="submit">
           <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
+        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }"></copy-entry-dialog>
         <v-spacer></v-spacer>
         <confirm-dialog
           color="error"
@@ -116,8 +117,8 @@
         >
           {{ $t('common.action.confirm.delete', { name: entry?.name }) }}
         </confirm-dialog>
-      </v-card-actions>
-    </v-card>
+      </div>
+    </div>
     <v-skeleton-loader
       v-else
       type="card-heading, list-item-three-line@3, actions"
@@ -142,6 +143,7 @@ import {
   AssociatedFoodList,
   AttributeList,
   CategoryList,
+  CopyEntryDialog,
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
@@ -161,6 +163,7 @@ export default defineComponent({
     CategoryList,
     ConfirmDialog,
     ConfirmLeaveDialog,
+    CopyEntryDialog,
     NutrientList,
     PortionSizeMethodList,
     SelectResource,
@@ -186,7 +189,7 @@ export default defineComponent({
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
-    const type = 'foods';
+    const type = 'foods' as const;
     const entry = ref<FoodLocalEntry | null>(null);
     const globalEdit = computed(
       () => user.can('locales|food-list') || entry.value?.main?.locales?.length === 1
@@ -291,6 +294,7 @@ export default defineComponent({
       isEntryLoaded,
       remove,
       submit,
+      type,
     };
   },
 });

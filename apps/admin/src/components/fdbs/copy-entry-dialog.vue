@@ -1,8 +1,15 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ attrs, on }">
-      <v-btn v-bind="attrs" color="primary" rounded :title="$t('fdbs.foods.add')" v-on="on">
-        <v-icon left>$add</v-icon> {{ $t('fdbs.foods.add') }}
+      <v-btn
+        v-bind="attrs"
+        class="ml-3"
+        color="secondary"
+        outlined
+        :title="$t(`fdbs.${type}.copy`)"
+        v-on="on"
+      >
+        <v-icon left>fas fa-copy</v-icon>{{ $t(`fdbs.${type}.copy`) }}
       </v-btn>
     </template>
     <v-card :tile="$vuetify.breakpoint.smAndDown">
@@ -11,7 +18,7 @@
           <v-icon>$cancel</v-icon>
         </v-btn>
         <v-toolbar-title>
-          {{ $t('fdbs.foods.add') }}
+          {{ $t(`fdbs.${type}.copy`) }}
         </v-toolbar-title>
       </v-toolbar>
       <v-form @keydown.native="clearError" @submit.prevent="confirm">
@@ -22,7 +29,7 @@
                 v-model="form.code"
                 :error-messages="form.errors.get('code')"
                 hide-details="auto"
-                :label="$t('fdbs.foods.global.code')"
+                :label="$t(`fdbs.${type}.global.code`)"
                 name="code"
                 outlined
               ></v-text-field>
@@ -32,35 +39,15 @@
                 v-model="form.name"
                 :error-messages="form.errors.get('name')"
                 hide-details="auto"
-                :label="$t('fdbs.foods.global.name')"
+                :label="$t(`fdbs.${type}.global.name`)"
                 name="name"
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col cols="12">
-              <select-resource
-                v-model="form.foodGroupId"
-                clearable
-                :error-messages="form.errors.get('foodGroupId')"
-                :label="$t('fdbs.foods.global.foodGroup')"
-                name="foodGroupId"
-                resource="food-groups"
-                @input="form.errors.clear('foodGroupId')"
-              >
-              </select-resource>
-            </v-col>
-            <v-col cols="12">
-              <category-list
-                v-model="form.parentCategories"
-                class="mb-6"
-                :errors="form.errors"
-                :locale-id="localeId"
-              ></category-list>
-            </v-col>
           </v-row>
         </v-card-text>
       </v-form>
-      <v-card-actions>
+      <v-card-actions class="pb-4">
         <v-btn class="font-weight-bold" color="error" text @click.stop="close">
           <v-icon left>$cancel</v-icon>{{ $t('common.action.cancel') }}
         </v-btn>
@@ -72,7 +59,7 @@
           text
           @click.stop="confirm"
         >
-          <v-icon left>$success</v-icon>{{ $t('common.action.ok') }}
+          <v-icon left>$success</v-icon>{{ $t('common.action.confirm._') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -83,55 +70,58 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
-import type { FoodInput, FoodLocalEntry } from '@intake24/common/types/http/admin';
-import { SelectResource } from '@intake24/admin/components/dialogs';
+import type { FoodLocalCopyInput, SurveySchemeEntry } from '@intake24/common/types/http/admin';
 import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
-import CategoryList from './category-list.vue';
-
-export type CreateFoodForm = Required<FoodInput>;
+export type CopyEntityForm = FoodLocalCopyInput;
 
 export default defineComponent({
-  name: 'AddFoodDialog',
-
-  components: { CategoryList, SelectResource },
+  name: 'CopyEntryDialog',
 
   props: {
+    type: {
+      type: String as () => 'categories' | 'foods',
+      required: true,
+    },
     localeId: {
+      type: String,
+      required: true,
+    },
+    entryId: {
       type: String,
       required: true,
     },
   },
 
-  emits: ['add'],
-
   setup(props) {
     const { i18n } = useI18n();
     const router = useRouter();
-    const dialog = ref(false);
 
-    const { clearError, form } = useForm<CreateFoodForm>({
-      data: { code: '', name: '', foodGroupId: '0', parentCategories: [] },
+    const { clearError, form } = useForm<CopyEntityForm>({
+      data: { code: '', name: '' },
     });
+
+    const dialog = ref(false);
 
     const close = () => {
       dialog.value = false;
     };
 
     const confirm = async () => {
-      const { localeId } = props;
-      const data = await form.post<FoodLocalEntry>(`admin/fdbs/${localeId}/foods`);
-
-      const { id, name, main: { name: englishName = 'record' } = {} } = data;
+      const { type, localeId, entryId } = props;
+      const { name } = form;
+      const { id } = await form.post<SurveySchemeEntry>(
+        `admin/fdbs/${localeId}/${type}/${entryId}/copy`
+      );
 
       close();
-      useMessages().success(i18n.t('common.msg.created', { name: name ?? englishName }).toString());
-      await router.push({ name: `fdbs-foods`, params: { id: localeId, entryId: id } });
+      useMessages().success(i18n.t('common.msg.created', { name }).toString());
+      await router.push({ name: `fdbs-${type}`, params: { id: localeId, entryId: id } });
     };
 
-    return { clearError, close, confirm, dialog, form };
+    return { clearError, close, confirm, form, dialog };
   },
 });
 </script>

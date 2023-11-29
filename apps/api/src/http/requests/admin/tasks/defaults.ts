@@ -83,7 +83,7 @@ const defaults: Schema = {
       options: async (value, meta): Promise<void> => {
         if (!value || typeof value !== 'string') throw new Error();
 
-        const table = await NutrientTable.findByPk(value);
+        const table = await NutrientTable.findByPk(value, { attributes: ['id'] });
         if (!table) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
@@ -96,7 +96,7 @@ const defaults: Schema = {
       options: async (value, meta): Promise<void> => {
         if (!value || typeof value !== 'string') throw new Error();
 
-        const locale = await SystemLocale.findByPk(value);
+        const locale = await SystemLocale.findByPk(value, { attributes: ['code'] });
         if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },
@@ -109,7 +109,7 @@ const defaults: Schema = {
       options: async (value, meta): Promise<void> => {
         if (!value || typeof value !== 'string') throw new Error();
 
-        const survey = await Survey.findByPk(value);
+        const survey = await Survey.findByPk(value, { attributes: ['id'] });
         if (!survey) throw new Error(customTypeErrorMessage('exists._', meta));
       },
     },

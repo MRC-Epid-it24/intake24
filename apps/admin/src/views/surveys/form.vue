@@ -100,6 +100,7 @@
                 :label="$t('surveys.states._')"
                 name="state"
                 outlined
+                prepend-inner-icon="fas fa-spinner"
                 @change="form.errors.clear('state')"
               ></v-select>
             </v-col>
@@ -137,6 +138,7 @@
                 :label="$t('surveys.search.sortingAlgorithm')"
                 name="searchSortingAlgorithm"
                 outlined
+                prepend-inner-icon="fas fa-arrow-up-wide-short"
                 @change="form.errors.clear('searchSortingAlgorithm')"
               ></v-select>
               <v-slider
@@ -203,6 +205,7 @@
                 :label="$t('surveys.authUrl.domainOverride')"
                 name="authUrlDomainOverride"
                 outlined
+                prepend-inner-icon="fas fa-up-right-from-square"
               ></v-text-field>
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
@@ -240,6 +243,7 @@
                 :label="$t('surveys.externalComm.submissionNotificationUrl')"
                 name="submissionNotificationUrl"
                 outlined
+                prepend-inner-icon="fas fa-up-right-from-square"
               ></v-text-field>
             </v-col>
           </v-row>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="isEntryLoaded" flat>
+    <div v-if="isEntryLoaded" flat>
       <v-form @keydown.native="clearError" @submit.prevent="submit">
         <v-card class="mb-6" outlined>
           <v-toolbar color="grey lighten-4" flat>
@@ -88,13 +88,14 @@
           :locale-id="id"
         ></portion-size-method-list>
       </v-form>
-      <v-card-actions class="pa-4">
+      <div class="d-flex">
         <v-btn color="secondary" outlined @click="submit">
           <v-icon left>$save</v-icon>{{ $t(`common.action.save`) }}
         </v-btn>
+        <copy-entry-dialog v-bind="{ entryId, localeId: id, type }"></copy-entry-dialog>
         <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
+      </div>
+    </div>
     <v-skeleton-loader
       v-else
       type="card-heading, list-item-three-line@3, actions"
@@ -117,6 +118,7 @@ import { ConfirmLeaveDialog } from '@intake24/admin/components/entry';
 import {
   AttributeList,
   CategoryList,
+  CopyEntryDialog,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
 import { useEntry, useEntryForm } from '@intake24/admin/composables';
@@ -128,7 +130,13 @@ import { useMessages } from '@intake24/ui/stores';
 export default defineComponent({
   name: 'CategoryEntry',
 
-  components: { AttributeList, CategoryList, ConfirmLeaveDialog, PortionSizeMethodList },
+  components: {
+    AttributeList,
+    CategoryList,
+    ConfirmLeaveDialog,
+    CopyEntryDialog,
+    PortionSizeMethodList,
+  },
 
   props: {
     id: {
@@ -149,7 +157,7 @@ export default defineComponent({
     const { entry: localeEntry } = useEntry<LocaleEntry>(props);
 
     const loading = ref(false);
-    const type = 'categories';
+    const type = 'categories' as const;
     const entry = ref<CategoryLocalEntry | null>(null);
     const globalEdit = computed(() => user.can('locales|food-list'));
     const isEntryLoaded = computed(() => !!entry.value);
@@ -231,6 +239,7 @@ export default defineComponent({
       globalEdit,
       isEntryLoaded,
       submit,
+      type,
     };
   },
 });

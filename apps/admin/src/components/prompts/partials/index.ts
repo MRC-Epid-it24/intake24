@@ -8,4 +8,3 @@ export { default as PromptJson } from './prompt-json.vue';
 export { default as PromptValidation } from './prompt-validation.vue';
 export { default as selectListPrompt } from './select-list-prompt';
 export { default as SliderSettings } from './slider-settings.vue';
-export * from './use-selects';

@@ -22,6 +22,7 @@ export default () => {
     .delete(wrapAsync(adminCategoryController.destroy));
 
   router.get('/:categoryId/contents', wrapAsync(adminCategoryController.contents));
+  router.post('/:categoryId/copy', validation.copy, wrapAsync(adminCategoryController.copy));
 
   return router;
 };

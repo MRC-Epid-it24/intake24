@@ -18,8 +18,8 @@ const defaults: Schema = {
     custom: {
       options: async (value, meta): Promise<void> => {
         const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
-          FoodsNutrientUnit.findByPk(value),
-          SystemNutrientUnit.findByPk(value),
+          FoodsNutrientUnit.findByPk(value, { attributes: ['id'] }),
+          SystemNutrientUnit.findByPk(value, { attributes: ['id'] }),
         ]);
 
         if (!foodsNutrientUnit || !systemNutrientUnit)
