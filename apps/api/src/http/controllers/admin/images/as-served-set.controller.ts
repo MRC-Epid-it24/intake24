@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { AsServedSetEntry, AsServedSetsResponse } from '@intake24/common/types/http/admin';
@@ -34,7 +35,7 @@ const asServedSetController = ({
     const asServedSets = await AsServedSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('AsServedSet.id')), 'ASC']],
       include: ['selectionImage'],
       transform: responseCollection.asServedSetListResponse,
     });

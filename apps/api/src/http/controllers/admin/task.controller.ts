@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType } from '@intake24/common/types';
@@ -36,7 +37,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const tasks = await Task.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'job'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('name')), 'ASC']],
     });
 
     res.json(tasks);

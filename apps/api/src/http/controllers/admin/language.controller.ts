@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { LanguageEntry, LanguagesResponse } from '@intake24/common/types/http/admin';
@@ -22,7 +23,7 @@ const languageController = (ioc: IoC) => {
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['code', 'englishName', 'localName'],
-      order: [['code', 'ASC']],
+      order: [[fn('lower', col('Language.code')), 'ASC']],
     };
 
     if (await aclService.hasPermission('languages|browse')) {

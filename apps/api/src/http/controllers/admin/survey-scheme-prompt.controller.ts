@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type {
@@ -32,7 +33,7 @@ const SurveySchemePromptController = () => {
     const schemePrompts = await SurveySchemePrompt.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['promptId', 'name'],
-      order: [['promptId', 'ASC']],
+      order: [[fn('lower', col('prompt_id')), 'ASC']],
     });
 
     res.json(schemePrompts);

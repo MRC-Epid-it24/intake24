@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ExportField, ExportSectionId } from '@intake24/common/surveys';
@@ -39,7 +40,7 @@ const surveySchemeController = (ioc: IoC) => {
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
     };
 
     if (await aclService.hasPermission('survey-schemes|browse')) {

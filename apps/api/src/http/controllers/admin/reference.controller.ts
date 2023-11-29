@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { literal } from 'sequelize';
+import { col, fn, literal } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -52,7 +52,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const asServedSets = await AsServedSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('AsServedSet.id')), 'ASC']],
       include: ['selectionImage'],
       transform: responseCollection.asServedSetListResponse,
     });
@@ -68,7 +68,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['code', 'name'],
       columns: ['code', 'name'],
-      order: [['code', 'ASC']],
+      order: [[fn('lower', col('code')), 'ASC']],
     });
 
     res.json(categories);
@@ -81,7 +81,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const tasks = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('DrinkwareSet.id')), 'ASC']],
       include: [{ association: 'imageMap', include: [{ association: 'baseImage' }] }],
       transform: responseCollection.drinkwareListResponse,
     });
@@ -123,7 +123,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['code', 'name'],
       columns: ['code', 'name'],
-      order: [['code', 'ASC']],
+      order: [[fn('lower', col('code')), 'ASC']],
     });
 
     res.json(foods);
@@ -136,7 +136,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const guideImages = await GuideImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('GuideImage.id')), 'ASC']],
       include: ['selectionImage'],
       transform: responseCollection.guideListResponse,
     });
@@ -151,7 +151,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const images = await ImageMap.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('ImageMap.id')), 'ASC']],
       include: ['baseImage'],
       transform: responseCollection.mapListResponse,
     });
@@ -166,8 +166,8 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const languages = await Language.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'code', 'englishName', 'localName'],
-      columns: ['id', 'englishName', 'localName'],
-      order: [['id', 'ASC']],
+      columns: ['code', 'englishName', 'localName'],
+      order: [[fn('lower', col('code')), 'ASC']],
     });
 
     res.json(languages);
@@ -181,7 +181,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'code', 'englishName', 'localName'],
       columns: ['code', 'englishName', 'localName'],
-      order: [['code', 'ASC']],
+      order: [[fn('lower', col('code')), 'ASC']],
     });
 
     res.json(locales);
@@ -195,7 +195,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'description'],
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('id')), 'ASC']],
     });
 
     res.json(nutrientTables);
@@ -213,7 +213,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'localName', 'nutrientTableRecordId'],
       where: { nutrientTableId },
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('NutrientTableRecord.name')), 'ASC']],
     });
 
     res.json(nutrientTableRecords);
@@ -266,7 +266,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'name', 'estimateIn', 'howMany'],
       columns: ['id', 'name'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('id')), 'ASC']],
     });
     res.json(standardUnits);
   };
@@ -279,7 +279,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'slug', 'name'],
       columns: ['name'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('name')), 'ASC']],
     });
     res.json(surveys);
   };
@@ -291,7 +291,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     const surveySchemes = await SurveyScheme.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('name')), 'ASC']],
     });
     res.json(surveySchemes);
   };

@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { DrinkwareSetEntry, DrinkwareSetsResponse } from '@intake24/common/types/http/admin';
@@ -33,7 +34,7 @@ const drinkwareSetController = ({
     const drinkwareSets = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('DrinkwareSet.id')), 'ASC']],
       include: [{ association: 'imageMap', include: [{ association: 'baseImage' }] }],
       transform: responseCollection.drinkwareListResponse,
     });

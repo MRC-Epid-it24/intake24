@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -35,7 +36,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     const nutrientTables = await NutrientTable.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('id')), 'ASC']],
     });
 
     res.json(nutrientTables);

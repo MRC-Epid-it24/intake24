@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -37,7 +38,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'email', 'simpleName'],
       include: [{ association: 'roles' }],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('User.name')), 'ASC']],
     });
 
     res.json(users);

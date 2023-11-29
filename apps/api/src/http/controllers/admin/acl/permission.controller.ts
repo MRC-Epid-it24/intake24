@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -32,7 +33,7 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
     const permissions = await Permission.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name', 'displayName'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('name')), 'ASC']],
     });
 
     res.json(permissions);

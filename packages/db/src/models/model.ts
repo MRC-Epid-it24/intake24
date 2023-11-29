@@ -2,7 +2,8 @@
 import { Readable } from 'node:stream';
 
 import type { CountOptions, FindOptions } from 'sequelize';
-import { Op } from 'sequelize';
+import { snakeCase } from 'lodash';
+import { col, fn, Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -103,7 +104,8 @@ export default class Model<
 
     if (sort && typeof sort === 'string') {
       const [column, order] = sort.split('|');
-      options.order = [[column, order]];
+      if (Object.keys(model.getAttributes()).includes(column))
+        options.order = [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]];
     }
 
     const records = await model.findAll(options);

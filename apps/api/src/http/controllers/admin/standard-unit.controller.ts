@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { StandardUnitEntry, StandardUnitsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
@@ -36,7 +37,7 @@ const standardUnitController = () => {
     const standardUnits = await StandardUnit.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'name'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('id')), 'ASC']],
     });
 
     res.json(standardUnits);

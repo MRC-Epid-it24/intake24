@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { GuideImageEntry, GuideImagesResponse } from '@intake24/common/types/http/admin';
@@ -34,7 +35,7 @@ const guideImageController = ({
     const guideImages = await GuideImage.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
-      order: [['id', 'ASC']],
+      order: [[fn('lower', col('GuideImage.id')), 'ASC']],
       include: ['selectionImage'],
       transform: responseCollection.guideListResponse,
     });

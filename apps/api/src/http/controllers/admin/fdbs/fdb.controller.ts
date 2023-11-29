@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
+import { col, fn } from 'sequelize';
 
 import type {
   FoodDatabaseEntry,
@@ -22,7 +23,7 @@ const adminFoodDatabaseController = () => {
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['code', 'englishName', 'localName'],
-      order: [['code', 'ASC']],
+      order: [[fn('lower', col('code')), 'ASC']],
     };
 
     if (await aclService.hasPermission('locales|food-list')) {
