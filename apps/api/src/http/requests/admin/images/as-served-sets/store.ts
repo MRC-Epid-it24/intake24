@@ -27,7 +27,7 @@ export default validate(
       custom: {
         options: async (value, meta): Promise<void> => {
           if (!(await unique({ model: AsServedSet, condition: { field: 'id', value } })))
-            throw new Error(customTypeErrorMessage('unique._', meta));
+            throw new Error('$unique');
         },
       },
     },
