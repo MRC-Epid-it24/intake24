@@ -40,6 +40,8 @@ export interface StandardUnit {
   name: string;
   weight: number;
   omitFoodDescription: boolean;
+  inlineEstimateIn?: string;
+  inlineHowMany?: string;
 }
 
 export interface StandardPortionPsm extends PortionSizeMethodBase {

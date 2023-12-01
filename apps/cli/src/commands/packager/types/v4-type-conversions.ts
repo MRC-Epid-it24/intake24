@@ -118,6 +118,8 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMet
           name: pkgUnit.name,
           weight: pkgUnit.weight,
           omitFoodDescription: pkgUnit.omitFoodDescription,
+          inlineEstimateIn: pkgUnit.inlineEstimateIn,
+          inlineHowMany: pkgUnit.inlineHowMany,
         })),
       };
     case 'cereal':

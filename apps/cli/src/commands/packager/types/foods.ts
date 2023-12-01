@@ -56,6 +56,8 @@ export interface PkgStandardUnit {
   name: string;
   weight: number;
   omitFoodDescription: boolean;
+  inlineEstimateIn?: string;
+  inlineHowMany?: string;
 }
 
 export interface PkgStandardPortionPsm extends PkgPortionSizeMethodBase {

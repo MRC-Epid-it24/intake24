@@ -24,7 +24,7 @@ import {
   ProcessedImage,
 } from '@intake24/db';
 
-const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
+const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   // TODO: This should be done when getting portion size methods data instead and the image_url
   // field in food_portion_size_methods should be dropped
   async function getPortionSizeImageUrl(
@@ -131,6 +131,18 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
             value: psm.units[i].omitFoodDescription.toString(),
           });
           params.push({ name: `unit${i}-weight`, value: psm.units[i].weight.toString() });
+
+          const inlineEstimateIn = psm.units[i].inlineEstimateIn;
+
+          if (inlineEstimateIn !== undefined) {
+            params.push({ name: `unit${i}-inline-estimate-in`, value: inlineEstimateIn });
+          }
+
+          const inlineHowMany = psm.units[i].inlineHowMany;
+
+          if (inlineHowMany !== undefined) {
+            params.push({ name: `unit${i}-inline-how-many`, value: inlineHowMany });
+          }
         }
         break;
 
@@ -330,13 +342,14 @@ const localFoodsService = ({ db, logger }: Pick<IoC, 'db' | 'logger'>) => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const read = async (localeId: string, foodCode: string, transaction?: Transaction) => {};
 
   const updateEnabledFoods = async (localeId: string, enabledFoods: string[]) => {
     return await db.foods.transaction(async (transaction) => {
-      await FoodLocalList.destroy({ where: { localeId } });
+      await FoodLocalList.destroy({ where: { localeId }, transaction });
       const records = enabledFoods.map((foodCode) => ({ localeId, foodCode }));
-      await FoodLocalList.bulkCreate(records);
+      await FoodLocalList.bulkCreate(records, { transaction });
     });
   };
 

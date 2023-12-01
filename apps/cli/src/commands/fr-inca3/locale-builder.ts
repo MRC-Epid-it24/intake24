@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { groupBy, mapValues } from 'lodash';
+import { groupBy } from 'lodash';
 import path from 'path';
 import { v4 as randomUUID } from 'uuid';
 
@@ -9,13 +9,14 @@ import type {
   INCA3FoodListRow,
 } from '@intake24/cli/commands/fr-inca3/types/food-list';
 import type { INCA3FoodQuantRow } from '@intake24/cli/commands/fr-inca3/types/food-quant';
+import type { INCA3FoodStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/food-standard-portions';
 import type { INCA3PortionSizeImage } from '@intake24/cli/commands/fr-inca3/types/portion-size-images';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
-  PkgAsServedPsm,
   PkgGlobalFood,
   PkgLocalFood,
   PkgPortionSizeMethod,
+  PkgStandardUnit,
 } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
@@ -75,6 +76,7 @@ export class FrenchAnsesLocaleBuilder {
   private portionSizeRecords: Record<string, INCA3FoodQuantRow> | undefined;
   private englishDescriptions: Record<string, string> | undefined;
   private portionSizeImages: INCA3PortionSizeImage[] | undefined;
+  private foodStandardUnits: Record<string, INCA3FoodStandardUnitRow[]> | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -87,6 +89,7 @@ export class FrenchAnsesLocaleBuilder {
     return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
   }
 
+  // eslint-disable @typescript-eslint/no-unused-vars
   private getIntake24Categories(
     gpe: string,
     sgpe: string | undefined,
@@ -127,6 +130,11 @@ export class FrenchAnsesLocaleBuilder {
     );
   }
 
+  private async readFoodStandardUnits(): Promise<void> {
+    const rows = await this.readJSON<INCA3FoodStandardUnitRow[]>('ALIMENTS_FDSTD.json');
+    this.foodStandardUnits = groupBy(rows, (row) => row.A_CODE);
+  }
+
   private async buildGlobalFoods(): Promise<PkgGlobalFood[]> {
     const globalFoods: PkgGlobalFood[] = this.sourceFoodRecords!.map((row) => ({
       version: randomUUID(),
@@ -162,6 +170,43 @@ export class FrenchAnsesLocaleBuilder {
               servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
             });
           });
+      }
+
+      if (
+        portionSizeRow.METHODE_unite_standard !== undefined &&
+        portionSizeRow.METHODE_unite_standard !== '.'
+      ) {
+        const standardUnitRows = this.foodStandardUnits![foodCode];
+
+        if (standardUnitRows !== undefined) {
+          const units: PkgStandardUnit[] = standardUnitRows.map((row) => {
+            const description = row.A_US_LIBELLE.replace(/^1\s+/, '');
+
+            if (row.A_US_UNITE !== 'G' && row.A_US_UNITE !== 'V') {
+              logger.warn(
+                `Unexpected weight unit for a standard unit option: "${row.A_US_UNITE}", for food id ${foodCode}, standard unit number ${row.A_US_NUM} `
+              );
+            }
+
+            return {
+              name: `INCA3_${foodCode}_${row.A_US_NUM}`,
+              weight: row.A_US_POIDS,
+              omitFoodDescription: true,
+              inlineEstimateIn: description,
+              inlineHowMany: `Combien de ${description}`,
+            };
+          });
+
+          portionSizeMethods.push({
+            method: 'standard-portion',
+            description: 'use_a_standard_portion',
+            useForRecipes: true,
+            conversionFactor: 1,
+            units,
+          });
+        } else {
+          logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDSTD table`);
+        }
       }
     } else {
       logger.warn(`Food ${foodCode} has no corresponding record in the ALIMENTS_FDQUANT table`);
@@ -224,6 +269,7 @@ export class FrenchAnsesLocaleBuilder {
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
     await this.readPortionSizeImages();
+    await this.readFoodStandardUnits();
 
     const globalFoods = await this.buildGlobalFoods();
     const localFoods = await this.buildLocalFoods();
