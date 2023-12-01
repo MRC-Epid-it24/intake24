@@ -32,6 +32,7 @@ export const permissions = [
   { name: 'feedback-schemes|meals', displayName: 'Feedback scheme meals' },
   { name: 'feedback-schemes|copy', displayName: 'Copy feedback schemes' },
   { name: 'feedback-schemes|securables', displayName: 'Feedback schemes security' },
+  { name: 'feedback-schemes|use', displayName: 'Feedback schemes use' },
   { name: 'food-groups', displayName: 'Food groups resource access' },
   { name: 'food-groups|browse', displayName: 'Browse food groups' },
   { name: 'food-groups|read', displayName: 'Read food groups' },
@@ -64,6 +65,7 @@ export const permissions = [
   { name: 'languages|delete', displayName: 'Delete languages' },
   { name: 'languages|securables', displayName: 'Languages security' },
   { name: 'languages|translations', displayName: 'Language translations' },
+  { name: 'languages|use', displayName: 'Languages use' },
   { name: 'locales', displayName: 'Locales resource access' },
   { name: 'locales|browse', displayName: 'Browse locales' },
   { name: 'locales|read', displayName: 'Read locales' },
@@ -78,6 +80,7 @@ export const permissions = [
   { name: 'locales|split-words', displayName: 'Locale split words' },
   { name: 'locales|synonym-sets', displayName: 'Locale synonym sets' },
   { name: 'locales|tasks', displayName: 'Locale tasks' },
+  { name: 'locales|use', displayName: 'Locales use' },
   { name: 'nutrient-tables', displayName: 'Nutrient tables resource access' },
   { name: 'nutrient-tables|browse', displayName: 'Browse nutrient tables' },
   { name: 'nutrient-tables|read', displayName: 'Read nutrient tables' },
@@ -135,6 +138,7 @@ export const permissions = [
   { name: 'survey-schemes|prompts', displayName: 'Survey scheme prompts' },
   { name: 'survey-schemes|copy', displayName: 'Copy survey schemes' },
   { name: 'survey-schemes|securables', displayName: 'Survey schemes security' },
+  { name: 'survey-schemes|use', displayName: 'Survey schemes use' },
   { name: 'survey-scheme-prompts', displayName: 'Survey scheme prompts resource access' },
   { name: 'survey-scheme-prompts|browse', displayName: 'Browse survey scheme prompts' },
   { name: 'survey-scheme-prompts|read', displayName: 'Read survey scheme prompts' },
@@ -167,4 +171,6 @@ export const permissions = [
   { name: 'users|delete', displayName: 'Delete users' },
   { name: 'users|permissions', displayName: 'User permissions' },
   { name: 'users|roles', displayName: 'User roles' },
-];
+] as const;
+
+export type PermissionName = (typeof permissions)[number]['name'];

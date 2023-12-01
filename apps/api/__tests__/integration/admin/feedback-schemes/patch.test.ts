@@ -44,6 +44,7 @@ export default () => {
       const invalidInput = {
         name: [],
         type: 'invalidType',
+        visibility: 'invalidVisibility',
         outputs: 'not an array of outputs',
         physicalDataFields: true,
         sections: [{ id: 'invalidId' }],
@@ -66,6 +67,7 @@ export default () => {
       const fields = [
         'name',
         'type',
+        'visibility',
         'outputs',
         'physicalDataFields',
         'sections',

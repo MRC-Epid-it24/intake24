@@ -108,8 +108,8 @@ const standardUnitController = () => {
     res.status(204).json();
   };
 
-  const refs = async (req: Request, res: Response): Promise<void> => {
-    res.json({});
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
   };
 
   const categories = async (

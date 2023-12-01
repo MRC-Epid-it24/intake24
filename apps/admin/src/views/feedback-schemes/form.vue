@@ -112,8 +112,28 @@
               </template>
             </v-col>
             <v-col cols="12" md="6">
+              <v-select
+                v-model="form.visibility"
+                class="mb-4"
+                :error-messages="form.errors.get('visibility')"
+                hide-details="auto"
+                :items="visibilityList"
+                :label="$t('securables.visibility._')"
+                name="visibility"
+                outlined
+                @change="form.errors.clear('visibility')"
+              >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+              </v-select>
               <v-card outlined>
-                <v-toolbar color="grey lighten-2" flat tile>
+                <v-toolbar color="grey lighten-3" dense flat tile>
                   <v-icon color="secondary" left>fas fa-bars-staggered</v-icon>
                   <v-toolbar-title class="font-weight-medium">
                     {{ $t('feedback-schemes.sections.title') }}
@@ -178,11 +198,12 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
+import type { RecordVisibility } from '@intake24/common/security';
 import type { FeedbackSchemeEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { Preview } from '@intake24/admin/components/feedback';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import {
   feedbackOutputs,
   feedbackPhysicalDataFields,
@@ -204,11 +225,12 @@ export type FeedbackSchemeForm = {
   cards: Card[];
   demographicGroups: DemographicGroup[];
   henryCoefficients: HenryCoefficient[];
+  visibility: RecordVisibility;
 };
 
 export type PatchFeedbackSchemeForm = Pick<
   FeedbackSchemeForm,
-  'name' | 'type' | 'outputs' | 'physicalDataFields' | 'sections'
+  'name' | 'type' | 'outputs' | 'physicalDataFields' | 'sections' | 'visibility'
 >;
 
 export default defineComponent({
@@ -220,6 +242,7 @@ export default defineComponent({
 
   setup(props) {
     const { i18n } = useI18n();
+    const { visibilityList } = useSelects();
 
     const types = feedbackTypes.map((value) => ({
       value,
@@ -256,6 +279,7 @@ export default defineComponent({
         outputs: [...feedbackOutputs],
         sections: [...feedbackSections],
         physicalDataFields: [...feedbackPhysicalDataFields],
+        visibility: 'public',
       },
       editMethod: 'patch',
       loadCallback: (entry: FeedbackSchemeEntry) => {
@@ -332,6 +356,7 @@ export default defineComponent({
       routeLeave,
       submit,
       requiredPhysicalDataFields,
+      visibilityList,
     };
   },
 });

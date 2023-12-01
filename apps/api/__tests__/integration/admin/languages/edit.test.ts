@@ -20,6 +20,7 @@ export default () => {
       localName: 'Spanish - Colombia',
       countryFlagCode: 'es-co',
       textDirection: 'ltr',
+      visibility: 'public',
     };
     language = await Language.create(input);
     output = { ...input };

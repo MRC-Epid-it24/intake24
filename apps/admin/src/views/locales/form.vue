@@ -17,29 +17,19 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.prototypeLocaleId"
+                clearable
                 :error-messages="form.errors.get('prototypeLocaleId')"
-                hide-details="auto"
-                item-text="englishName"
-                item-value="code"
-                :items="locales"
+                :initial-item="entry.parent"
+                item-id="code"
+                item-name="englishName"
                 :label="$t('locales.prototypeLocaleId')"
-                name="locale"
-                outlined
-                @change="form.errors.clear('prototypeLocaleId')"
+                name="prototypeLocaleId"
+                resource="locales"
+                @input="form.errors.clear('prototypeLocaleId')"
               >
-                <template #item="{ item }">
-                  <span v-if="item.id" :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  <v-icon v-else left>fas fa-flag</v-icon>
-                  {{ item.englishName }}
-                </template>
-                <template #selection="{ item }">
-                  <span v-if="item.id" :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  <v-icon v-else left>fas fa-flag</v-icon>
-                  {{ item.englishName }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -62,50 +52,32 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.respondentLanguageId"
                 :error-messages="form.errors.get('respondentLanguageId')"
-                hide-details="auto"
-                item-text="englishName"
-                item-value="code"
-                :items="languages"
+                :initial-item="entry.respondentLanguage"
+                item-id="code"
+                item-name="englishName"
                 :label="$t('locales.respondentLanguageId')"
                 name="respondentLanguageId"
-                outlined
-                @change="form.errors.clear('respondentLanguageId')"
+                resource="languages"
+                @input="form.errors.clear('respondentLanguageId')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.adminLanguageId"
                 :error-messages="form.errors.get('adminLanguageId')"
-                hide-details="auto"
-                item-text="englishName"
-                item-value="code"
-                :items="languages"
+                :initial-item="entry.adminLanguage"
+                item-id="code"
+                item-name="englishName"
                 :label="$t('locales.adminLanguageId')"
                 name="adminLanguageId"
-                outlined
-                @change="form.errors.clear('adminLanguageId')"
+                resource="languages"
+                @input="form.errors.clear('adminLanguageId')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <v-select
@@ -138,6 +110,27 @@
                 name="textDirection"
                 outlined
                 @change="form.errors.clear('textDirection')"
+              >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.visibility"
+                :error-messages="form.errors.get('visibility')"
+                hide-details="auto"
+                :items="visibilityList"
+                :label="$t('securables.visibility._')"
+                name="visibility"
+                outlined
+                @change="form.errors.clear('visibility')"
               >
                 <template #item="{ item }">
                   <v-icon left>{{ item.icon }}</v-icon>
@@ -189,10 +182,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import type { RecordVisibility } from '@intake24/common/security';
 import type { LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
-import { useApp } from '@intake24/admin/stores';
 
 type LocaleForm = {
   id: string | null;
@@ -206,15 +200,18 @@ type LocaleForm = {
   textDirection: string;
   foodIndexEnabled: boolean;
   foodIndexLanguageBackendId: string;
+  visibility: RecordVisibility;
 };
 
 export default defineComponent({
   name: 'LocaleForm',
 
+  components: { SelectResource },
+
   mixins: [formMixin],
 
   setup(props) {
-    const { flags, textDirectionList } = useSelects();
+    const { flags, textDirectionList, visibilityList } = useSelects();
 
     const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<LocaleEntry, LocaleRefs>(
       props
@@ -233,6 +230,7 @@ export default defineComponent({
         textDirection: 'ltr',
         foodIndexEnabled: false,
         foodIndexLanguageBackendId: 'en',
+        visibility: 'public',
       },
     });
 
@@ -248,23 +246,11 @@ export default defineComponent({
       routeLeave,
       submit,
       textDirectionList,
+      visibilityList,
     };
   },
 
   computed: {
-    languages() {
-      return useApp().langs;
-    },
-    locales() {
-      const locales = [{ code: null, englishName: this.$t('common.none').toString() }];
-
-      if (!this.refs.locales) return locales;
-
-      const availableLocales = this.refs.locales.filter((locale) => locale.id !== this.id);
-
-      return [...locales, ...availableLocales];
-    },
-
     foodIndexLanguageBackends() {
       if (!this.refs.foodIndexLanguageBackends)
         return [{ value: 'en', text: this.$t('common.none').toString() }];

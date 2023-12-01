@@ -42,6 +42,7 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
+    "visibility": 'public' | 'restricted',
     "outputs": ['download', 'email', 'print'],
     "topFoods": {
         max: 2,
@@ -105,6 +106,7 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
+    "visibility": 'public' | 'restricted',
     "outputs": ['download', 'email', 'print'],
     "topFoods": {
         max: 2,

@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { col, fn } from 'sequelize';
+import { col, fn, Op } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { SurveyEntry, SurveyRefs, SurveysResponse } from '@intake24/common/types/http/admin';
+import type { SurveyEntry, SurveysResponse } from '@intake24/common/types/http/admin';
 import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
@@ -11,15 +11,11 @@ import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { kebabCase } from '@intake24/common/util';
 import {
   createSurveyFields,
-  FeedbackScheme,
   guardedSurveyFields,
-  Op,
   overridesFields,
   securableIncludes,
   securableScope,
   Survey,
-  SurveyScheme,
-  SystemLocale,
   updateSurveyFields,
   UserSecurable,
 } from '@intake24/db';
@@ -189,17 +185,8 @@ const adminSurveyController = (ioc: IoC) => {
     res.status(204).json();
   };
 
-  const refs = async (
-    req: Request<{ surveyId: string }>,
-    res: Response<SurveyRefs>
-  ): Promise<void> => {
-    const [locales, surveySchemes, feedbackSchemes] = await Promise.all([
-      SystemLocale.scope('list').findAll(),
-      SurveyScheme.findAll({ order: [['name', 'ASC']] }),
-      FeedbackScheme.findAll({ order: [['name', 'ASC']] }),
-    ]);
-
-    res.json({ locales, surveySchemes, feedbackSchemes });
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
   };
 
   const tasks = async (req: Request<{ surveyId: string }>, res: Response<Job>): Promise<void> => {

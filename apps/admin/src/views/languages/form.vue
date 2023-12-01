@@ -78,6 +78,27 @@
                 </template>
               </v-select>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.visibility"
+                :error-messages="form.errors.get('visibility')"
+                hide-details="auto"
+                :items="visibilityList"
+                :label="$t('securables.visibility._')"
+                name="visibility"
+                outlined
+                @change="form.errors.clear('visibility')"
+              >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+              </v-select>
+            </v-col>
           </v-row>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
         </v-card-text>
@@ -89,6 +110,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import type { RecordVisibility } from '@intake24/common/security';
 import type { LanguageEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
@@ -100,6 +122,7 @@ type LanguageForm = {
   localName: string | null;
   countryFlagCode: string;
   textDirection: string;
+  visibility: RecordVisibility;
 };
 
 export default defineComponent({
@@ -108,7 +131,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { flags, textDirectionList } = useSelects();
+    const { flags, textDirectionList, visibilityList } = useSelects();
 
     const { entry, entryLoaded, isEdit } = useEntry<LanguageEntry>(props);
     useEntryFetch(props);
@@ -122,6 +145,7 @@ export default defineComponent({
           localName: null,
           countryFlagCode: 'gb',
           textDirection: 'ltr',
+          visibility: 'public',
         },
       }
     );
@@ -136,6 +160,7 @@ export default defineComponent({
       routeLeave,
       submit,
       textDirectionList,
+      visibilityList,
     };
   },
 });

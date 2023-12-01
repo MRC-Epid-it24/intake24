@@ -42,6 +42,7 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
+    "visibility": 'public' | 'restricted',
     "meals": [{...}],
     "prompts": {...},
     "dataExport": [{...}]
@@ -96,6 +97,7 @@ Content-Type: application/json
 {
     "name": string,
     "type": 'default',
+    "visibility": 'public' | 'restricted',
     "meals": [{...}],
     "prompts": {...},
     "dataExport": [{...}]

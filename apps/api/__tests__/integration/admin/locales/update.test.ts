@@ -27,6 +27,7 @@ export default () => {
       textDirection: 'ltr',
       foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
+      visibility: 'restricted',
     };
     updateInput = {
       code: 'en-jm',
@@ -39,6 +40,7 @@ export default () => {
       textDirection: 'ltr',
       foodIndexEnabled: false,
       foodIndexLanguageBackendId: 'en',
+      visibility: 'public',
     };
 
     const { code } = input;
@@ -85,6 +87,7 @@ export default () => {
           'textDirection',
           'foodIndexEnabled',
           'foodIndexLanguageBackendId',
+          'visibility',
         ],
         {
           input: {
@@ -97,6 +100,7 @@ export default () => {
             textDirection: 'wrongDirection',
             foodIndexEnabled: 123456,
             foodIndexLanguageBackendId: 'nonExistingLocale',
+            visibility: ['public', 'restricted'],
           },
         }
       );

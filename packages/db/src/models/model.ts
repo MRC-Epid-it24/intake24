@@ -90,7 +90,8 @@ export default class Model<
           : { [Op.substring]: search };
 
       const operations = columns.map((column) => ({ [column]: operation }));
-      options.where = { ...options.where, [Op.or]: operations };
+      //@ts-expect-error where merge types (watch out what is being merged, might not cover all permutations)
+      options.where = { [Op.and]: [options.where, { [Op.or]: operations }] };
     }
 
     const countOptions = Object.keys(options).reduce<BaseCountOptions>((acc, key) => {

@@ -1,7 +1,6 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { TaskRefs } from '@intake24/common/types/http/admin';
 import type { Errors } from '@intake24/common/util';
 
 export default <T>() =>
@@ -11,10 +10,6 @@ export default <T>() =>
     props: {
       errors: {
         type: Object as PropType<Errors>,
-        required: true,
-      },
-      refs: {
-        type: Object as PropType<TaskRefs>,
         required: true,
       },
       value: {

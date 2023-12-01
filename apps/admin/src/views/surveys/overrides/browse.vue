@@ -29,7 +29,7 @@ import { defineComponent } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
 import type { SchemeOverrides } from '@intake24/common/surveys';
-import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import PromptList from '@intake24/admin/components/prompts/list/prompt-list.vue';
@@ -46,7 +46,7 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(props);
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyOverridesForm, SurveyEntry>(
       props,
@@ -56,8 +56,6 @@ export default defineComponent({
     return {
       entry,
       entryLoaded,
-      refs,
-      refsLoaded,
       clearError,
       form,
       routeLeave,
@@ -67,12 +65,9 @@ export default defineComponent({
 
   computed: {
     prompts(): Prompt[] {
-      if (!this.entryLoaded || !this.refsLoaded) return [];
+      if (!this.entryLoaded) return [];
 
-      const scheme = this.refs.surveySchemes.find((item) => item.id === this.entry.surveySchemeId);
-      if (!scheme) return [];
-
-      return flattenScheme(scheme.prompts);
+      return flattenScheme(this.entry.surveyScheme.prompts);
     },
 
     promptIds(): string[] {

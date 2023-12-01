@@ -71,6 +71,9 @@
   "regEx": {
     "_": "\"{attribute}\" is invalid."
   },
+  "restricted": {
+    "_": "\"{attribute}\" is restricted to allowed values."
+  },
   "safeChars": {
     "_": "\"{attribute}\" must be unique code (charset [a-zA-Z0-9-_])."
   },

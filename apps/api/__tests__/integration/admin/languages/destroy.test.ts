@@ -21,6 +21,7 @@ export default () => {
       localName: 'Spanish - Argentina',
       countryFlagCode: 'es-ar',
       textDirection: 'ltr',
+      visibility: 'public',
     };
     language = await Language.create(input);
 

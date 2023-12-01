@@ -26,42 +26,29 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.localeId"
                 :error-messages="form.errors.get('localeId')"
-                hide-details="auto"
-                item-text="englishName"
-                item-value="id"
-                :items="refs.locales"
+                :initial-item="entry.locale"
+                item-name="englishName"
                 :label="$t('locales._')"
                 name="localeId"
-                outlined
-                @change="form.errors.clear('localeId')"
+                resource="locales"
+                @input="form.errors.clear('localeId')"
               >
-                <template #item="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-                <template #selection="{ item }">
-                  <span :class="`fi fi-${item.countryFlagCode} mr-3`"></span>
-                  {{ item.englishName }}
-                </template>
-              </v-select>
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.surveySchemeId"
                 :error-messages="form.errors.get('surveySchemeId')"
-                hide-details="auto"
-                item-text="name"
-                item-value="id"
-                :items="refs.surveySchemes"
+                :initial-item="entry.surveyScheme"
                 :label="$t('survey-schemes._')"
                 name="surveySchemeId"
-                outlined
-                prepend-inner-icon="$survey-schemes"
-                @change="form.errors.clear('surveySchemeId')"
-              ></v-select>
+                resource="survey-schemes"
+                @input="form.errors.clear('surveySchemeId')"
+              >
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <date-picker
@@ -285,18 +272,17 @@
           <div class="text-h5 mb-4">{{ $t('surveys.feedback._') }}</div>
           <v-row>
             <v-col cols="12" md="6">
-              <v-select
+              <select-resource
                 v-model="form.feedbackSchemeId"
+                clearable
                 :error-messages="form.errors.get('feedbackSchemeId')"
-                hide-details="auto"
-                item-text="name"
-                item-value="id"
-                :items="availableFeedbackSchemes"
+                :initial-item="entry.feedbackScheme"
                 :label="$t('feedback-schemes._')"
                 name="feedbackSchemeId"
-                outlined
-                @change="form.errors.clear('feedbackSchemeId')"
-              ></v-select>
+                resource="feedback-schemes"
+                @input="form.errors.clear('feedbackSchemeId')"
+              >
+              </select-resource>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
@@ -325,7 +311,8 @@ import type {
   SearchSortingAlgorithm,
   SurveyState,
 } from '@intake24/common/surveys';
-import type { SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import type { SurveyEntry } from '@intake24/common/types/http/admin';
+import { SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -397,19 +384,15 @@ export const surveyForm: SurveyForm = {
   userCustomFields: false,
 };
 
-type FeedbackSchemeListEntry = { id: string | null; name: string };
-
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { DatePicker },
+  components: { DatePicker, SelectResource },
 
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(
-      props
-    );
+    const { entry, entryLoaded, isEdit } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<SurveyForm, SurveyEntry>(props, {
       data: surveyForm,
@@ -420,8 +403,6 @@ export default defineComponent({
       entry,
       entryLoaded,
       isEdit,
-      refs,
-      refsLoaded,
       clearError,
       form,
       routeLeave,
@@ -441,14 +422,6 @@ export default defineComponent({
         text: this.$t(`surveys.search.algorithms.${value}`),
       })),
     };
-  },
-
-  computed: {
-    availableFeedbackSchemes(): FeedbackSchemeListEntry[] {
-      if (!this.refsLoaded) return [];
-
-      return [{ id: null, name: 'None' }, ...this.refs.feedbackSchemes];
-    },
   },
 
   watch: {

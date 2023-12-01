@@ -17,13 +17,17 @@
         <tr>
           <th>{{ $t('languages.countryFlagCode') }}</th>
           <td>
-            <span :class="`fi fi-${entry.countryFlagCode} mr-3`"></span>
+            <span :class="`fi fi-${entry.countryFlagCode} mr-2`"></span>
             {{ entry.countryFlagCode }}
           </td>
         </tr>
         <tr>
           <th>{{ $t('languages.textDirections._') }}</th>
           <td>{{ entry.textDirection }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('securables.visibility._') }}</th>
+          <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
         </tr>
       </tbody>
     </v-simple-table>

@@ -14,7 +14,7 @@
           outlined
           :prepend-inner-icon="itemIcon"
           readonly
-          :value="selectedItem ? selectedItem[itemName] : value"
+          :value="selectedItemName"
           v-on="on"
           @click:clear="clearInput"
         ></v-text-field>
@@ -186,6 +186,13 @@ export default defineComponent({
       if (!selectedItemId) return null;
 
       return this.items.find((item) => item[this.itemId] === selectedItemId) ?? null;
+    },
+    selectedItemName() {
+      if (this.selectedItem) return this.selectedItem[this.itemName];
+
+      if (this.initialItem) return this.initialItem[this.itemName];
+
+      return this.value;
     },
   },
 

@@ -220,38 +220,6 @@ Content-Type: application/json
 204 No Content
 ```
 
-## Survey references
-
-Get survey references
-
-### Request
-
-```json
-GET /api/admin/surveys/refs
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    "locales": [
-        {
-            "id": string,
-            "englishName": string,
-            "localName": string
-        },
-        ...
-    ],
-    "feedbackSchemes": [{...}],
-    "surveySchemes": [{...}]
-}
-```
-
 ## Queue task
 
 Submits job to the queue.

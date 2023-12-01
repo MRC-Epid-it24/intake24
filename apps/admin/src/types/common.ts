@@ -11,6 +11,7 @@ export interface Resource {
   securable?: boolean;
   generateRoutes: boolean;
   routes: string[];
+  refs?: boolean;
 }
 
 export type RouteLeave = {

@@ -14,6 +14,4 @@ export interface TaskEntry extends TaskAttributes {
   bullJob?: RepeatableBullJob;
 }
 
-export type TaskRefs = {
-  jobs: string[];
-};
+export type TaskRefs = {};

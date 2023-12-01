@@ -8,6 +8,7 @@ import {
 import { unique } from '@intake24/api/http/rules';
 import { Language } from '@intake24/db';
 
+import { visibility } from '../generic';
 import defaults from './defaults';
 
 export default validate(
@@ -24,5 +25,6 @@ export default validate(
         },
       },
     },
+    visibility,
   })
 );

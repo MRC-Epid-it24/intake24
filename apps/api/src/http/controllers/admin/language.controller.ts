@@ -46,7 +46,14 @@ const languageController = (ioc: IoC) => {
     const { userId } = req.scope.cradle;
 
     const language = await languageService.createLanguage({
-      ...pick(req.body, ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection']),
+      ...pick(req.body, [
+        'code',
+        'englishName',
+        'localName',
+        'countryFlagCode',
+        'textDirection',
+        'visibility',
+      ]),
       ownerId: userId,
     });
 
@@ -79,7 +86,7 @@ const languageController = (ioc: IoC) => {
 
     await languageService.updateLanguage(
       language,
-      pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection'])
+      pick(req.body, ['englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility'])
     );
 
     res.json(languageResponse(language));

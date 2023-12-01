@@ -34,6 +34,10 @@
             {{ entry.outputs.map((output) => $t(`feedback-schemes.outputs.${output}`)).join(', ') }}
           </td>
         </tr>
+        <tr>
+          <th>{{ $t('securables.visibility._') }}</th>
+          <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
+        </tr>
       </tbody>
     </v-simple-table>
   </layout>

@@ -21,6 +21,7 @@ export default () => {
       localName: 'Spanish - Ecuador',
       countryFlagCode: 'es-ec',
       textDirection: 'ltr',
+      visibility: 'public',
     };
     updateInput = {
       code: 'es-sv',
@@ -28,6 +29,7 @@ export default () => {
       localName: 'Spanish - El Salvador',
       countryFlagCode: 'es-sv',
       textDirection: 'ltr',
+      visibility: 'restricted',
     };
 
     const { code } = input;
@@ -61,13 +63,14 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'put',
         url,
-        ['englishName', 'localName', 'countryFlagCode', 'textDirection'],
+        ['englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility'],
         {
           input: {
             englishName: { name: 'United Kingdom' },
             localName: ['United Kingdom'],
             countryFlagCode: 'notWellFormedLocale',
             textDirection: 'wrongDirection',
+            visibility: 'wrongVisibility',
           },
         }
       );

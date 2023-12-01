@@ -7,7 +7,7 @@ import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/req
 import { unique } from '@intake24/api/http/rules';
 import { Op, User } from '@intake24/db';
 
-import { permissions, roles } from '../acl';
+import { permissions, roles } from '../generic';
 
 export const email: ParamSchema = {
   in: ['body'],

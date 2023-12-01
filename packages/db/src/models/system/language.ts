@@ -18,9 +18,10 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
+import type { RecordVisibility } from '@intake24/common/security';
 import type { TextDirection } from '@intake24/common/types';
 
-import type { Securable } from '..';
+import type { HasVisibility } from '..';
 import BaseModel from '../model';
 import { LanguageTranslation, User, UserSecurable } from '.';
 import SystemLocale from './locale';
@@ -45,7 +46,7 @@ import SystemLocale from './locale';
 })
 export default class Language
   extends BaseModel<InferAttributes<Language>, InferCreationAttributes<Language>>
-  implements Securable
+  implements HasVisibility
 {
   @Column({
     autoIncrement: true,
@@ -91,6 +92,13 @@ export default class Language
     type: DataType.BIGINT,
   })
   declare ownerId: CreationOptional<string | null>;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 'public',
+    type: DataType.STRING(32),
+  })
+  declare visibility: CreationOptional<RecordVisibility>;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

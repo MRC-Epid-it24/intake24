@@ -2,6 +2,7 @@ import orderBy from 'lodash/orderBy';
 import { computed } from 'vue';
 
 import { actionTypes, actionVariants, promptLayouts } from '@intake24/common/prompts';
+import { recordVisibilities } from '@intake24/common/security';
 import { colors as themeColors } from '@intake24/common/theme';
 import { textDirections } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
@@ -69,6 +70,14 @@ export const useSelects = () => {
     }))
   );
 
+  const visibilityList = computed(() =>
+    recordVisibilities.map((value) => ({
+      value,
+      text: i18n.t(`securables.visibility.${value}`).toString(),
+      icon: value === 'restricted' ? 'fas fa-eye-slash' : 'fas fa-eye',
+    }))
+  );
+
   return {
     actionList,
     actionVariantsList,
@@ -78,5 +87,6 @@ export const useSelects = () => {
     orientations,
     sections,
     textDirectionList,
+    visibilityList,
   };
 };

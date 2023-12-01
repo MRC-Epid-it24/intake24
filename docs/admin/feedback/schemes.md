@@ -19,6 +19,8 @@ Edit tab allows modification of selected feedback scheme.
 
 - `Type` - Placeholder to allow different types of feedback schemes in the future
 
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+
 - `Outputs` - List of outputs that are allowed / offered to user. Possible outputs are `print`, `download` and `email`.
 
 - Physical data fields - List of physical data inputs / identifiers, which are required to be collected for feedback calculation for some outputs:

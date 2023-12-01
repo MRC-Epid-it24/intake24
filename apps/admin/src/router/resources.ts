@@ -12,6 +12,7 @@ export const resources: Resource[] = [
     api: 'admin/fdbs',
     generateRoutes: false,
     routes: ['read'],
+    refs: true,
   },
   {
     group: 'fdb',
@@ -28,6 +29,7 @@ export const resources: Resource[] = [
     api: 'admin/nutrient-tables',
     generateRoutes: true,
     routes: [...routes, 'tasks'],
+    refs: true,
   },
   {
     group: 'fdb',
@@ -36,6 +38,7 @@ export const resources: Resource[] = [
     api: 'admin/nutrient-types',
     generateRoutes: true,
     routes: [...routes],
+    refs: true,
   },
   {
     group: 'fdb',
@@ -79,6 +82,7 @@ export const resources: Resource[] = [
       'tasks',
       'securables',
     ],
+    refs: true,
   },
   // Surveys
   {
@@ -97,6 +101,7 @@ export const resources: Resource[] = [
       'henry-coefficients',
       'securables',
     ],
+    refs: true,
   },
   {
     group: 'surveyMgmt',
@@ -106,6 +111,7 @@ export const resources: Resource[] = [
     securable: true,
     generateRoutes: true,
     routes: [...routes, 'prompts', 'data-export', 'securables'],
+    refs: true,
   },
   {
     group: 'surveyMgmt',
@@ -114,6 +120,7 @@ export const resources: Resource[] = [
     api: 'admin/survey-scheme-prompts',
     generateRoutes: true,
     routes: [...routes, 'sync'],
+    refs: true,
   },
   {
     group: 'surveyMgmt',
@@ -194,6 +201,7 @@ export const resources: Resource[] = [
     api: 'admin/users',
     generateRoutes: true,
     routes: [...routes, 'permissions', 'roles'],
+    refs: true,
   },
   {
     group: 'acl',
@@ -202,6 +210,7 @@ export const resources: Resource[] = [
     api: 'admin/roles',
     generateRoutes: true,
     routes: [...routes, 'permissions', 'users'],
+    refs: true,
   },
   {
     group: 'acl',

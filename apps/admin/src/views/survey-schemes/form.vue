@@ -33,6 +33,28 @@
                 @change="form.errors.clear('type')"
               ></v-select>
             </v-col>
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="form.visibility"
+                class="mb-4"
+                :error-messages="form.errors.get('visibility')"
+                hide-details="auto"
+                :items="visibilityList"
+                :label="$t('securables.visibility._')"
+                name="visibility"
+                outlined
+                @change="form.errors.clear('visibility')"
+              >
+                <template #item="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+                <template #selection="{ item }">
+                  <v-icon left>{{ item.icon }}</v-icon>
+                  {{ item.text }}
+                </template>
+              </v-select>
+            </v-col>
           </v-row>
         </v-card-text>
       </v-container>
@@ -48,13 +70,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
+import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
 import type { SurveySchemeEntry, SurveySchemeRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { MealList } from '@intake24/admin/components/lists';
 import { CopySchemeDialog } from '@intake24/admin/components/schemes';
-import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
+import { useEntry, useEntryFetch, useEntryForm, useSelects } from '@intake24/admin/composables';
 import { defaultMeals, schemeTypes } from '@intake24/common/surveys';
 import { useI18n } from '@intake24/i18n';
 
@@ -65,9 +88,13 @@ export type SurveySchemeForm = {
   prompts: RecallPrompts;
   meals: Meal[];
   dataExport: ExportSection[];
+  visibility: RecordVisibility;
 };
 
-export type PatchSurveySchemeForm = Pick<SurveySchemeForm, 'name' | 'type' | 'meals'>;
+export type PatchSurveySchemeForm = Pick<
+  SurveySchemeForm,
+  'name' | 'type' | 'meals' | 'visibility'
+>;
 
 export default defineComponent({
   name: 'SurveySchemeForm',
@@ -78,6 +105,7 @@ export default defineComponent({
 
   setup(props) {
     const { i18n } = useI18n();
+    const { visibilityList } = useSelects();
 
     const schemeTypeItems = ref(
       schemeTypes.map((value) => ({
@@ -95,7 +123,7 @@ export default defineComponent({
       PatchSurveySchemeForm,
       SurveySchemeEntry
     >(props, {
-      data: { name: null, type: 'default', meals: defaultMeals },
+      data: { name: null, type: 'default', meals: defaultMeals, visibility: 'public' },
       editMethod: 'patch',
     });
 
@@ -110,6 +138,7 @@ export default defineComponent({
       form,
       routeLeave,
       submit,
+      visibilityList,
     };
   },
 });

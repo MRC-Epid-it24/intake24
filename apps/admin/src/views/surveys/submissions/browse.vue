@@ -65,7 +65,7 @@ export default defineComponent({
   setup(props) {
     const { formatDate } = useDateTime();
 
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry>(props);
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
@@ -74,8 +74,6 @@ export default defineComponent({
       formatDate,
       entry,
       entryLoaded,
-      refs,
-      refsLoaded,
       table,
     };
   },

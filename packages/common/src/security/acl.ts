@@ -21,8 +21,9 @@ export const securableDefs = {
     'cards',
     'demographic-groups',
     'henry-coefficients',
+    'use',
   ] as const,
-  Language: [...standardSecurableActions, 'translations'] as const,
+  Language: [...standardSecurableActions, 'translations', 'use'] as const,
   Locale: [
     ...standardSecurableActions,
     'copy',
@@ -32,8 +33,9 @@ export const securableDefs = {
     'split-words',
     'synonym-sets',
     'tasks',
+    'use',
   ] as const,
-  SurveyScheme: [...standardSecurableActions, 'copy', 'prompts', 'data-export'] as const,
+  SurveyScheme: [...standardSecurableActions, 'copy', 'prompts', 'data-export', 'use'] as const,
   Survey: [
     ...standardSecurableActions,
     'overrides',
@@ -55,3 +57,7 @@ export type SurveySchemeSecurableActions = (typeof securableDefs.SurveyScheme)[n
 export type SurveySecurableActions = (typeof securableDefs.Survey)[number];
 
 export const isSecurableType = (type: any): type is SecurableType => securableTypes.includes(type);
+
+export const recordVisibilities = ['public', 'restricted'] as const;
+
+export type RecordVisibility = (typeof recordVisibilities)[number];

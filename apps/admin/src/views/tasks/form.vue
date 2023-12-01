@@ -89,7 +89,6 @@
             v-model="form.params"
             :errors="form.errors"
             name="params"
-            :refs="refs"
             @input="form.errors.clear(paramErrors)"
           ></component>
           <submit-footer :disabled="form.errors.any()"></submit-footer>
@@ -104,11 +103,11 @@ import cronstrue from 'cronstrue';
 import { computed, defineComponent } from 'vue';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
-import type { TaskEntry, TaskRefs } from '@intake24/common/types/http/admin';
+import type { TaskEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
-import { defaultJobsParams } from '@intake24/common/types';
+import { defaultJobsParams, jobTypes } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -139,20 +138,12 @@ export default defineComponent({
 
     const { formatDate } = useDateTime();
 
-    const { entry, entryLoaded, isCreate, isEdit, refs, refsLoaded } = useEntry<
-      TaskEntry,
-      TaskRefs
-    >(props);
+    const { entry, entryLoaded, isCreate, isEdit } = useEntry<TaskEntry>(props);
     useEntryFetch(props);
 
-    const jobs = computed(() => {
-      if (!refsLoaded.value) return [];
-
-      return refs.value.jobs.map((value) => ({
-        value,
-        text: i18n.t(`jobs.types.${value}._`).toString(),
-      }));
-    });
+    const jobs = computed(() =>
+      jobTypes.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`).toString() }))
+    );
 
     const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskEntry>(props, {
       data: {
@@ -177,8 +168,6 @@ export default defineComponent({
       isCreate,
       isEdit,
       jobs,
-      refs,
-      refsLoaded,
       paramErrors,
       clearError,
       form,

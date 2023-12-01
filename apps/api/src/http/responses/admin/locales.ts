@@ -7,5 +7,5 @@ export const localeResponse = (locale: SystemLocale): LocaleEntry => {
   return {
     ...locale.get(),
     owner: owner ? { id: owner.id, name: owner.name, email: owner.email } : undefined,
-  };
+  } as LocaleEntry;
 };

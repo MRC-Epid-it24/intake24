@@ -1,7 +1,8 @@
 import type { ParamSchema } from 'express-validator';
 import { isNaN, toNumber } from 'lodash';
 
-import { customTypeErrorMessage } from '@intake24/api/http/requests/util';
+import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
+import { recordVisibilities } from '@intake24/common/security';
 import { Permission, Role } from '@intake24/db';
 
 export const permissions: ParamSchema = {
@@ -33,4 +34,12 @@ export const roles: ParamSchema = {
       if (availableRoles !== value.length) throw new Error(customTypeErrorMessage('exists', meta));
     },
   },
+};
+
+export const visibility: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('in.options', { options: recordVisibilities }),
+  isString: true,
+  isIn: { options: [recordVisibilities] },
+  optional: true,
 };

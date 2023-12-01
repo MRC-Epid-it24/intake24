@@ -62,8 +62,20 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const scheme = await SurveyScheme.findOne({ where: { id: value } });
-        if (!scheme) throw new Error(customTypeErrorMessage('exists._', meta));
+        const { surveyId } = (meta.req as Request).params;
+
+        const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'surveySchemeId'] });
+        if (survey?.surveySchemeId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            SurveyScheme,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },
@@ -74,8 +86,20 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const locale = await SystemLocale.findOne({ where: { id: value } });
-        if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
+        const { surveyId } = (meta.req as Request).params;
+
+        const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'localeId'] });
+        if (survey?.localeId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            SystemLocale,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },
@@ -155,8 +179,20 @@ export const defaults: Schema = {
     optional: { options: { nullable: true } },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const feedbackScheme = await FeedbackScheme.findOne({ where: { id: value } });
-        if (!feedbackScheme) throw new Error(customTypeErrorMessage('exists._', meta));
+        const { surveyId } = (meta.req as Request).params;
+
+        const survey = await Survey.findByPk(surveyId, { attributes: ['id', 'feedbackSchemeId'] });
+        if (survey?.feedbackSchemeId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            FeedbackScheme,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { id: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },

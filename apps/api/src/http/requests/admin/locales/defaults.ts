@@ -3,7 +3,7 @@ import type { ParamSchema, Schema } from 'express-validator';
 
 import type { SystemLocaleAttributes, WhereOptions } from '@intake24/db';
 import languageBackends from '@intake24/api/food-index/language-backends';
-import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
+import { typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { textDirections } from '@intake24/common/types';
 import { Language, Op, SystemLocale } from '@intake24/db';
@@ -80,9 +80,23 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     isLength: { bail: true, options: { max: 16 } },
     custom: {
-      options: async (value): Promise<void> => {
-        const language = await Language.findOne({ where: { code: value } });
-        if (!language) throw new Error('$exists');
+      options: async (value, meta): Promise<void> => {
+        const { localeId } = (meta.req as Request).params;
+
+        const locale = await SystemLocale.findByPk(localeId, {
+          attributes: ['id', 'respondentLanguageId'],
+        });
+        if (locale?.respondentLanguageId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            Language,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },
@@ -93,9 +107,23 @@ export const defaults: Schema = {
     isEmpty: { negated: true, bail: true },
     isLength: { bail: true, options: { max: 16 } },
     custom: {
-      options: async (value): Promise<void> => {
-        const language = await Language.findOne({ where: { code: value } });
-        if (!language) throw new Error('$exists');
+      options: async (value, meta): Promise<void> => {
+        const { localeId } = (meta.req as Request).params;
+
+        const locale = await SystemLocale.findByPk(localeId, {
+          attributes: ['id', 'adminLanguageId'],
+        });
+        if (locale?.adminLanguageId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            Language,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },
@@ -112,8 +140,22 @@ export const defaults: Schema = {
     optional: { options: { nullable: true } },
     custom: {
       options: async (value, meta): Promise<void> => {
-        const locale = await SystemLocale.findOne({ where: { code: value } });
-        if (!locale) throw new Error(customTypeErrorMessage('exists._', meta));
+        const { localeId } = (meta.req as Request).params;
+
+        const locale = await SystemLocale.findByPk(localeId, {
+          attributes: ['id', 'prototypeLocaleId'],
+        });
+        if (locale?.prototypeLocaleId === value) return;
+
+        try {
+          await (meta.req as Request).scope.cradle.aclService.findAndCheckVisibility(
+            SystemLocale,
+            'use',
+            { attributes: ['id', 'ownerId', 'visibility'], where: { code: value } }
+          );
+        } catch (err) {
+          throw new Error('$restricted');
+        }
       },
     },
   },

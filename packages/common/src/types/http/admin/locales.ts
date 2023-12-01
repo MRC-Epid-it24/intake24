@@ -1,4 +1,5 @@
 import type {
+  LanguageAttributes,
   Pagination,
   RecipeFoodsAttributes,
   RecipeFoodsCreationAttributes,
@@ -10,6 +11,7 @@ import type {
   SynonymSetAttributes,
   SynonymSetCreationAttributes,
   SystemLocaleAttributes,
+  SystemLocaleCreationAttributes,
   UserSecurableAttributes,
 } from '@intake24/db';
 
@@ -28,13 +30,16 @@ export type LocaleRequest = {
   foodIndexEnabled?: boolean;
 };
 
-export type CreateLocaleRequest = LocaleRequest;
+export type CreateLocaleRequest = SystemLocaleCreationAttributes;
 
 export type UpdateLocaleRequest = Omit<LocaleRequest, 'code'>;
 
 export type LocalesResponse = Pagination<SystemLocaleAttributes>;
 
 export interface LocaleEntry extends SystemLocaleAttributes {
+  parent?: SystemLocaleAttributes;
+  adminLanguage: LanguageAttributes;
+  respondentLanguage: LanguageAttributes;
   owner?: Owner;
   securables?: UserSecurableAttributes[];
 }

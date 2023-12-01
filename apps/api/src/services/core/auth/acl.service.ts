@@ -3,7 +3,7 @@ import type { Attributes, FindOptions } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
-import type { ModelStatic, Permission, Role, Securable } from '@intake24/db';
+import type { HasVisibility, ModelStatic, Permission, Role, Securable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
@@ -151,16 +151,6 @@ const aclService = ({
 
   /**
    * Check is user can access record based on
-   * - resource permissions
-   * - securable actions
-   * - ownership
-   *
-   * @param {Securable} record
-   * @param {string} action
-   * @returns {Promise<boolean>}
-   */
-  /**
-   * Check is user can access record based on
    * - securable actions
    * - ownership
    *
@@ -215,10 +205,44 @@ const aclService = ({
     const record = await securable.findByPk(securableId, securableScope(userId));
     if (!record) throw new NotFoundError();
 
-    const casAccessRecord = await hasSecurableAccess(record, action);
-    if (!casAccessRecord) throw new ForbiddenError();
+    const canAccessRecord = await hasSecurableAccess(record, action);
+    if (!canAccessRecord) throw new ForbiddenError();
   };
 
+  /**
+   * Helper for `getAndCheckRecordAccess` and `findAndCheckRecordAccess`
+   *
+   * @template T
+   * @param {ModelStatic<T>} securable
+   * @param {string} action
+   * @param {(T | null)} record
+   * @returns {Promise<T>}
+   */
+  const checkRecordAccess = async <T extends Securable>(
+    securable: ModelStatic<T>,
+    action: string,
+    record: T | null
+  ): Promise<T> => {
+    if (await hasResourceAccess(securable.name, action)) {
+      if (!record) throw new NotFoundError();
+
+      return record;
+    }
+
+    if (!record || !(await hasSecurableAccess(record, action))) throw new ForbiddenError();
+
+    return record;
+  };
+
+  /**
+   * Route-based record access check
+   *
+   * @template T
+   * @param {ModelStatic<T>} securable
+   * @param {string} action
+   * @param {CheckAccessOptions} options
+   * @returns {Promise<T>}
+   */
   const getAndCheckRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
@@ -232,35 +256,46 @@ const aclService = ({
     } = options;
 
     const record = await securable.scope(scope).findByPk(securableId, securableScope(userId));
-    if (!record) throw new NotFoundError();
 
-    if (await hasResourceAccess(record.constructor.name, action)) return record;
-
-    if (await hasSecurableAccess(record, action)) return record;
-
-    throw new ForbiddenError();
+    return checkRecordAccess(securable, action, record);
   };
 
   const findAndCheckRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
-    findOptions: FindOptions<Attributes<T>>,
-    scope?: string | string[]
+    findOptions: FindOptions<Attributes<T>>
   ): Promise<T> => {
-    const record = await securable
-      .scope(scope)
-      .findOne({ ...findOptions, ...securableScope(userId) });
+    const record = await securable.findOne({ ...findOptions, ...securableScope(userId) });
 
-    // FIXME: This should probably return Forbidden unless the user has resource access,
-    // otherwise leaking of secured information (record ids) is possible
+    return checkRecordAccess(securable, action, record);
+  };
 
-    if (!record) throw new NotFoundError();
+  /**
+   * Find record and check visibility
+   *
+   * @template T
+   * @param {ModelStatic<T>} securable
+   * @param {string} action
+   * @param {FindOptions<Attributes<T>>} findOptions
+   * @returns {Promise<T>}
+   */
+  const findAndCheckVisibility = async <T extends HasVisibility>(
+    securable: ModelStatic<T>,
+    action: string,
+    findOptions: FindOptions<Attributes<T>>
+  ): Promise<T> => {
+    const record = await securable.findOne({ ...findOptions, ...securableScope(userId) });
 
-    if (await hasResourceAccess(record.constructor.name, action)) return record;
+    if (await hasResourceAccess(securable.name, action)) {
+      if (!record) throw new NotFoundError();
 
-    if (await hasSecurableAccess(record, action)) return record;
+      return record;
+    }
 
-    throw new ForbiddenError();
+    if (!record || (record.visibility !== 'public' && !(await hasSecurableAccess(record, action))))
+      throw new ForbiddenError();
+
+    return record;
   };
 
   /**
@@ -313,6 +348,7 @@ const aclService = ({
     checkAccess,
     getAndCheckRecordAccess,
     findAndCheckRecordAccess,
+    findAndCheckVisibility,
     getResourceAccessActions,
     getSecurableAccessActions,
     getAccessActions,

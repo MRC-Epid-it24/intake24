@@ -16,6 +16,10 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 - [Securables](#securables)
   - [Securable permissions](#securable-permissions)
   - [Record ownership](#record-ownership)
+  - [Record visibility](#record-visibility)
+    - [Visibility types](#visibility-types)
+      - [Public](#public)
+      - [Restricted](#restricted)
 
 ## Securable permissions
 
@@ -26,6 +30,7 @@ Securable permissions can be granted / revoked for any specific record in `Secur
 | edit       | Edit record                     |
 | delete     | Delete record                   |
 | securables | Control `securable` permissions |
+| use        | Control record `visibility`     |
 | [action]   | Specific record action          |
 
 ## Record ownership
@@ -37,3 +42,33 @@ If user `creates new record` or `copies existing record`, user automatically bec
 
 Owner of the record has full access to the record, without the need to grant additional permissions from above table.
 :::
+
+## Record visibility
+
+`Security` also allows to manage visibility of the record. Visibility can be added / modified / removed.
+
+It is possible to set record visibility on following resources:
+
+- [Languages](/admin/localization/languages)
+- [Locales](/admin/localization/locales)
+- [Feedback schemes](/admin/feedback/schemes)
+- [Survey schemes](/admin/surveys/schemes)
+
+### Visibility types
+
+Visibility defines if record can be used, i.e. assigned to other records. For example:
+
+- `Language` can be assigned to `Locale`
+- `Locale` can be assigned to `Survey`
+- `Feedback or survey scheme` can be assigned to `Survey`
+
+#### Public
+
+Public visibility means that record is visible for the use to all users.
+
+#### Restricted
+
+Restricted visibility means that record is visible for the use to users
+
+1. with `resource|use` permission granted
+2. with `resource|securables` securable granted

@@ -26,6 +26,7 @@ export default () => {
       textDirection: 'ltr',
       foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
+      visibility: 'public',
     };
 
     await FoodsLocale.create({ id: input.code, ...input });

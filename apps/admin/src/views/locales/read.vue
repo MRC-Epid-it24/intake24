@@ -20,22 +20,43 @@
         </tr>
         <tr>
           <th>{{ $t('locales.respondentLanguageId') }}</th>
-          <td>{{ entry.respondentLanguageId }}</td>
+          <td>
+            <span :class="`fi fi-${entry.respondentLanguageId} mr-2`"></span>
+            {{ entry.respondentLanguageId }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('locales.adminLanguageId') }}</th>
-          <td>{{ entry.adminLanguageId }}</td>
+          <td>
+            <span :class="`fi fi-${entry.adminLanguageId} mr-2`"></span>
+            {{ entry.adminLanguageId }}
+          </td>
         </tr>
         <tr>
           <th>{{ $t('locales.countryFlagCode') }}</th>
           <td>
-            <span :class="`fi fi-${entry.countryFlagCode} mr-3`"></span>
+            <span :class="`fi fi-${entry.countryFlagCode} mr-2`"></span>
             {{ entry.countryFlagCode }}
           </td>
         </tr>
         <tr>
           <th>{{ $t('languages.textDirections._') }}</th>
           <td>{{ entry.textDirection }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('locales.foodIndex.enabled') }}</th>
+          <td>{{ entry.foodIndexEnabled }}</td>
+        </tr>
+        <tr>
+          <th>{{ $t('locales.foodIndex.languageBackend') }}</th>
+          <td>
+            <span :class="`fi fi-${entry.foodIndexLanguageBackendId} mr-2`"></span>
+            {{ entry.foodIndexLanguageBackendId }}
+          </td>
+        </tr>
+        <tr>
+          <th>{{ $t('securables.visibility._') }}</th>
+          <td>{{ $t(`securables.visibility.${entry.visibility}`) }}</td>
         </tr>
       </tbody>
     </v-simple-table>

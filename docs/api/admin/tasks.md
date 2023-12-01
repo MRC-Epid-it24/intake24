@@ -153,26 +153,3 @@ Content-Type: application/json
     ...
 }
 ```
-
-## Task references
-
-Get task references
-
-### Request
-
-```json
-GET /api/admin/tasks/refs
-
-Authorization: Bearer {accessToken}
-Content-Type: application/json
-```
-
-### Response
-
-```json
-200 OK
-
-{
-    "jobs": string[]
-}
-```

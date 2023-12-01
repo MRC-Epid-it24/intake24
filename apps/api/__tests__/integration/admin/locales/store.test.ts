@@ -21,6 +21,7 @@ export default () => {
       textDirection: 'ltr',
       foodIndexEnabled: true,
       foodIndexLanguageBackendId: 'en',
+      visibility: 'public',
     };
     output = { ...input };
   });
@@ -61,6 +62,7 @@ export default () => {
           'textDirection',
           'foodIndexEnabled',
           'foodIndexLanguageBackendId',
+          'visibility',
         ],
         {
           input: {
@@ -74,6 +76,7 @@ export default () => {
             textDirection: 'wrongDirection',
             foodIndexEnabled: 'notABoolean',
             foodIndexLanguageBackendId: 5,
+            visibility: 10,
           },
         }
       );
@@ -96,6 +99,7 @@ export default () => {
           countryFlagCode: 'en-in',
           prototypeLocaleId: null,
           textDirection: 'ltr',
+          visibility: 'public',
         },
         code: 409,
       });

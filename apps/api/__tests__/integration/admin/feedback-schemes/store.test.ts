@@ -33,6 +33,7 @@ export default () => {
       const invalidInput = {
         name: [],
         type: 'invalidType',
+        visibility: 1,
         outputs: ['print', 'invalid', 'download'],
         physicalDataFields: ['sex', 'invalid', 'weightKg'],
         sections: ['not a valid sections'],
@@ -65,6 +66,7 @@ export default () => {
       const fields = [
         'name',
         'type',
+        'visibility',
         'outputs',
         'physicalDataFields',
         'sections',

@@ -66,6 +66,7 @@ export const initDatabase = async (): Promise<MockData> => {
     localName: 'United Kingdom',
     countryFlagCode: 'gb',
     textDirection: 'ltr',
+    visibility: 'public',
   });
 
   const localeInput = {
@@ -82,7 +83,7 @@ export const initDatabase = async (): Promise<MockData> => {
 
   const [foodsLocale, systemLocale] = await Promise.all([
     FoodsLocale.create({ id: 'en_GB', ...localeInput }),
-    SystemLocale.create({ code: 'en_GB', ...localeInput }),
+    SystemLocale.create({ code: 'en_GB', ...localeInput, visibility: 'public' }),
   ]);
 
   const nutrientUnits = [
@@ -147,6 +148,7 @@ export const initDatabase = async (): Promise<MockData> => {
     FeedbackScheme.create({
       name: 'Default',
       type: 'default',
+      visibility: 'public',
       outputs: [...defaultFeedbackOutputs],
       physicalDataFields: [...feedbackPhysicalDataFields],
       sections: [...defaultFeedbackSections],
@@ -159,6 +161,7 @@ export const initDatabase = async (): Promise<MockData> => {
     SurveyScheme.create({
       name: 'Default',
       type: 'default',
+      visibility: 'public',
       prompts: defaultPrompts,
       meals: [...defaultMeals],
       dataExport: defaultExport,

@@ -20,7 +20,7 @@ import type {
   SurveySchemesResponse,
   SystemLocaleReferences,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { PaginateOptions, PaginateQuery } from '@intake24/db';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import {
   AsServedSet,
@@ -40,6 +40,7 @@ import {
   Survey,
   SurveyScheme,
   SystemLocale,
+  visibilityScope,
 } from '@intake24/db';
 
 const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
@@ -93,11 +94,26 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemeReferences>
   ): Promise<void> => {
-    const feedbackSchemes = await FeedbackScheme.paginate({
+    const { aclService, userId } = req.scope.cradle;
+
+    const paginateOptions: PaginateOptions<FeedbackScheme> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name'],
-      order: [['name', 'ASC']],
+      order: [[fn('lower', col('FeedbackScheme.name')), 'ASC']],
+    };
+
+    if (await aclService.hasPermission('feedback-schemes|use')) {
+      const feedbackSchemes = await FeedbackScheme.paginate(paginateOptions);
+      res.json(feedbackSchemes);
+      return;
+    }
+
+    const feedbackSchemes = await FeedbackScheme.paginate({
+      ...paginateOptions,
+      ...visibilityScope(userId),
+      subQuery: false,
     });
+
     res.json(feedbackSchemes);
   };
 
@@ -163,11 +179,25 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LanguageReferences>
   ): Promise<void> => {
-    const languages = await Language.paginate({
+    const { aclService, userId } = req.scope.cradle;
+
+    const paginateOptions: PaginateOptions<Language> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'code', 'englishName', 'localName'],
       columns: ['code', 'englishName', 'localName'],
-      order: [[fn('lower', col('code')), 'ASC']],
+      order: [[fn('lower', col('Language.code')), 'ASC']],
+    };
+
+    if (await aclService.hasPermission('languages|use')) {
+      const languages = await Language.paginate(paginateOptions);
+      res.json(languages);
+      return;
+    }
+
+    const languages = await Language.paginate({
+      ...paginateOptions,
+      ...visibilityScope(userId),
+      subQuery: false,
     });
 
     res.json(languages);
@@ -177,11 +207,25 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SystemLocaleReferences>
   ): Promise<void> => {
-    const locales = await SystemLocale.paginate({
+    const { aclService, userId } = req.scope.cradle;
+
+    const paginateOptions: PaginateOptions<SystemLocale> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       attributes: ['id', 'code', 'englishName', 'localName'],
       columns: ['code', 'englishName', 'localName'],
-      order: [[fn('lower', col('code')), 'ASC']],
+      order: [[fn('lower', col('Locale.code')), 'ASC']],
+    };
+
+    if (await aclService.hasPermission('locales|use')) {
+      const locales = await SystemLocale.paginate(paginateOptions);
+      res.json(locales);
+      return;
+    }
+
+    const locales = await SystemLocale.paginate({
+      ...paginateOptions,
+      ...visibilityScope(userId),
+      subQuery: false,
     });
 
     res.json(locales);
@@ -288,11 +332,26 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemeReferences>
   ): Promise<void> => {
-    const surveySchemes = await SurveyScheme.paginate({
+    const { aclService, userId } = req.scope.cradle;
+
+    const paginateOptions: PaginateOptions<SurveyScheme> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['name'],
-      order: [[fn('lower', col('name')), 'ASC']],
+      order: [[fn('lower', col('SurveyScheme.name')), 'ASC']],
+    };
+
+    if (await aclService.hasPermission('survey-schemes|use')) {
+      const surveySchemes = await SurveyScheme.paginate(paginateOptions);
+      res.json(surveySchemes);
+      return;
+    }
+
+    const surveySchemes = await SurveyScheme.paginate({
+      ...paginateOptions,
+      ...visibilityScope(userId),
+      subQuery: false,
     });
+
     res.json(surveySchemes);
   };
 

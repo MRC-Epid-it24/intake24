@@ -26,6 +26,8 @@ Edit tab allows to modify selected locale.
 
 - `Food index language backend` - Language backend for food index
 
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+
 ## Deletion
 
 Locale deletion won't be permitted if there are surveys using it. User firstly needs to update the surveys to use different locale.

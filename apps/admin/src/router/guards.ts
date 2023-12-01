@@ -51,6 +51,6 @@ export default (router: Router): void => {
     const resourceStore = useResource();
 
     if (!resourceStore.name !== name)
-      resourceStore.update({ name, api: resource?.api ?? `admin/${name}` });
+      resourceStore.update({ name, api: resource?.api ?? `admin/${name}`, refs: resource?.refs });
   });
 };

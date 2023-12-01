@@ -68,9 +68,6 @@ export function validateTranslations(translation: string | Record<string, any>):
     return true;
   }
 
-  if (typeof translation !== 'string')
-    console.log(typeof translation, Object.prototype.toString.call(translation), translation);
-
   return typeof translation === 'string' || translation === null;
 }
 

@@ -3,16 +3,9 @@ import { pick } from 'lodash';
 import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { JobType } from '@intake24/common/types';
-import type {
-  JobEntry,
-  TaskEntry,
-  TaskRefs,
-  TasksResponse,
-} from '@intake24/common/types/http/admin';
+import type { JobEntry, TaskEntry, TasksResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { jobTypes } from '@intake24/common/types';
 import { Task } from '@intake24/db';
 
 const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
@@ -91,9 +84,8 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     res.status(204).json();
   };
 
-  const refs = async (req: Request, res: Response<TaskRefs>): Promise<void> => {
-    const jobs: JobType[] = [...jobTypes];
-    res.json({ jobs });
+  const refs = async (): Promise<void> => {
+    throw new NotFoundError();
   };
 
   const run = async (req: Request<{ taskId: string }>, res: Response<JobEntry>): Promise<void> => {

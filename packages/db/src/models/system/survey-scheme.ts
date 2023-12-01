@@ -18,11 +18,12 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
+import type { RecordVisibility } from '@intake24/common/security';
 import type { ExportSection, RecallPrompts, SchemeType } from '@intake24/common/surveys';
 import type { Meal } from '@intake24/common/types';
 import { defaultExport, defaultMeals, defaultPrompts } from '@intake24/common/surveys';
 
-import type { Securable } from '..';
+import type { HasVisibility } from '..';
 import { BaseModel } from '..';
 import { Survey, User, UserSecurable } from '.';
 
@@ -38,7 +39,7 @@ import { Survey, User, UserSecurable } from '.';
 })
 export default class SurveyScheme
   extends BaseModel<InferAttributes<SurveyScheme>, InferCreationAttributes<SurveyScheme>>
-  implements Securable
+  implements HasVisibility
 {
   @Column({
     autoIncrement: true,
@@ -112,6 +113,13 @@ export default class SurveyScheme
   })
   declare ownerId: CreationOptional<string | null>;
 
+  @Column({
+    allowNull: false,
+    defaultValue: 'public',
+    type: DataType.STRING(32),
+  })
+  declare visibility: CreationOptional<RecordVisibility>;
+
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
 
@@ -149,7 +157,7 @@ export default class SurveyScheme
 export type SurveySchemeAttributes = Attributes<SurveyScheme>;
 export type SurveySchemeCreationAttributes = CreationAttributes<SurveyScheme>;
 
-export const updateSurveySchemeFields = ['name', 'type', 'meals'] as const;
+export const updateSurveySchemeFields = ['name', 'type', 'meals', 'visibility'] as const;
 
 export type UpdateSurveySchemeField = (typeof updateSurveySchemeFields)[number];
 

@@ -15,6 +15,7 @@ export default () => {
       localName: 'Spanish - Costa Rica',
       countryFlagCode: 'es-cr',
       textDirection: 'ltr',
+      visibility: 'public',
     };
     output = { ...input };
   });
@@ -42,7 +43,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'post',
         url,
-        ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection'],
+        ['code', 'englishName', 'localName', 'countryFlagCode', 'textDirection', 'visibility'],
         {
           input: {
             id: null,
@@ -50,6 +51,7 @@ export default () => {
             localName: ['dddsds', 'dffd'],
             countryFlagCode: 10,
             textDirection: 'wrongDirection',
+            visibility: false,
           },
         }
       );

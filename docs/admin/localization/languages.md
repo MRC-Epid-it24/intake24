@@ -22,6 +22,8 @@ Edit tab allows to modify selected language.
 
 - `Text direction` - Read / write direction of text. Valid options are `ltr` or `rlt`
 
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+
 ## Translations
 
 When new language record is created, language will be included in in both `admin` and `survey` profile language selection. However, translation needs to be provided firstly.

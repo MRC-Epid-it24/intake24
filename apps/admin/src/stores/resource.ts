@@ -2,9 +2,12 @@ import { defineStore } from 'pinia';
 
 import type { Dictionary } from '@intake24/common/types';
 
+import type { Resource } from '../types';
+
 export type ListState = {
   name: string;
   api: string;
+  refs: boolean;
   filter: Dictionary;
 };
 
@@ -12,6 +15,7 @@ export const useResource = defineStore('resource', {
   state: (): ListState => ({
     name: 'dashboard',
     api: 'admin/dashboard',
+    refs: false,
     filter: {},
   }),
   persist: {
@@ -25,9 +29,10 @@ export const useResource = defineStore('resource', {
     },
   },
   actions: {
-    update({ name, api }: { name: string; api: string }) {
+    update({ name, api, refs }: Pick<Resource, 'name' | 'api' | 'refs'>) {
       this.name = name;
       this.api = api;
+      this.refs = !!refs;
     },
 
     async setFilter(filter: Dictionary) {

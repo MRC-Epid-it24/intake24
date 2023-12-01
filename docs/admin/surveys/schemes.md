@@ -14,6 +14,8 @@ Edit tab allows to modify selected survey scheme.
 
 - `Type` - Placeholder at the moment for future to allow to define various types of survey schemes
 
+- `Visibility` - Record visibility, valid options are `public` or `restricted` ([record visibility](/admin/acl/securables.html#record-visibility)).
+
 - `Default meals` - List of predefined meals that will appear at the start of the recall.
 
   - It allows to:

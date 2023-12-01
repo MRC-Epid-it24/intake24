@@ -26,6 +26,7 @@ import {
   feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
 import { customPrompts } from '@intake24/common/prompts';
+import { recordVisibilities } from '@intake24/common/security';
 import {
   defaultExport,
   defaultMeals,
@@ -114,6 +115,7 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
   return {
     name,
     type,
+    visibility: 'public',
     outputs: [...defaultFeedbackOutputs],
     physicalDataFields: [...feedbackPhysicalDataFields],
     sections: [...defaultFeedbackSections],
@@ -162,6 +164,7 @@ const language = (): CreateLanguageRequest => {
   const localName = faker.location.country();
   const countryFlagCode = faker.location.countryCode();
   const textDirection = 'ltr';
+  const visibility = recordVisibilities[faker.number.int({ min: 0, max: 1 })];
 
   return {
     code,
@@ -169,6 +172,7 @@ const language = (): CreateLanguageRequest => {
     localName,
     countryFlagCode,
     textDirection,
+    visibility,
   };
 };
 
@@ -186,6 +190,7 @@ const locale = (
   const textDirection = 'ltr';
   const foodIndexEnabled = faker.datatype.boolean();
   const foodIndexLanguageBackendId = 'en';
+  const visibility = recordVisibilities[faker.number.int({ min: 0, max: 1 })];
 
   return {
     code,
@@ -198,16 +203,19 @@ const locale = (
     textDirection,
     foodIndexEnabled,
     foodIndexLanguageBackendId,
+    visibility,
   };
 };
 
 const surveyScheme = (): SurveySchemeCreationAttributes => {
   const name = faker.word.words(3);
   const type = 'default';
+  const visibility = recordVisibilities[faker.number.int({ min: 0, max: 1 })];
 
   return {
     name,
     type,
+    visibility,
     prompts: defaultPrompts,
     meals: defaultMeals,
     dataExport: defaultExport,

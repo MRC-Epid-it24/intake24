@@ -23,6 +23,7 @@ export default () => {
       localName: 'Spanish - Chile',
       countryFlagCode: 'es-cl',
       textDirection: 'ltr',
+      visibility: 'public',
     };
     language = await Language.create(input);
     output = { ...input };

@@ -44,7 +44,8 @@ Content-Type: application/json
     "englishName": string,
     "localName": string,
     "countryFlagCode": string,
-    "textDirection": string
+    "textDirection": string,
+    "visibility": 'public' | 'restricted'
 }
 ```
 
@@ -97,7 +98,8 @@ Content-Type: application/json
     "englishName": string,
     "localName": string,
     "countryFlagCode": string,
-    "textDirection": string
+    "textDirection": string,
+    "visibility": 'public' | 'restricted'
 }
 ```
 

@@ -8,7 +8,7 @@ import type {
 import type { I18nService } from '@intake24/api/services';
 import type { I18nParams } from '@intake24/i18n';
 
-export const standardErrorCodes = ['$unique', '$exists'] as const;
+export const standardErrorCodes = ['$unique', '$exists', '$restricted'] as const;
 
 export type StandardErrorCode = (typeof standardErrorCodes)[number];
 
@@ -39,17 +39,17 @@ function createExtendedFieldValidationError(
   i18nService: I18nService
 ): ExtendedFieldValidationError {
   switch (error.msg) {
+    case '$exists':
+    case '$restricted':
     case '$unique':
       return {
         ...error,
         code: error.msg,
-        msg: getLocalisedTypeErrorMessage('unique._', error.path, i18nService),
-      };
-    case '$exists':
-      return {
-        ...error,
-        code: error.msg,
-        msg: getLocalisedTypeErrorMessage('exists._', error.path, i18nService),
+        msg: getLocalisedTypeErrorMessage(
+          `${error.msg.replace('$', '')}._`,
+          error.path,
+          i18nService
+        ),
       };
     default:
       return {

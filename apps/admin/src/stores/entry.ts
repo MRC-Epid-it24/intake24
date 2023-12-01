@@ -57,7 +57,8 @@ export const useEntry = defineStore('entry', {
     },
 
     async requestRefs() {
-      const { api } = useResource();
+      const { api, refs } = useResource();
+      if (!refs) return;
 
       this.clearRefs();
 

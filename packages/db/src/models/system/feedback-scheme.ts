@@ -29,6 +29,7 @@ import type {
   HenryCoefficient,
   TopFoods,
 } from '@intake24/common/feedback';
+import type { RecordVisibility } from '@intake24/common/security';
 import { defaultMeals, defaultTopFoods } from '@intake24/common/feedback';
 
 import type { Securable } from '..';
@@ -195,6 +196,13 @@ export default class FeedbackScheme
   })
   declare ownerId: string | null;
 
+  @Column({
+    allowNull: false,
+    defaultValue: 'public',
+    type: DataType.STRING(32),
+  })
+  declare visibility: CreationOptional<RecordVisibility>;
+
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
 
@@ -238,6 +246,7 @@ export const updateFeedbackSchemeFields = [
   'outputs',
   'physicalDataFields',
   'sections',
+  'visibility',
 ] as const;
 
 export type UpdateFeedbackSchemeField = (typeof updateFeedbackSchemeFields)[number];

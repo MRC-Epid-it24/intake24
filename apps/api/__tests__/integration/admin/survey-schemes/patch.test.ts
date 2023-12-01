@@ -44,11 +44,12 @@ export default () => {
       await suite.sharedTests.assertInvalidInput(
         'patch',
         url,
-        ['name', 'type', 'meals', 'prompts', 'dataExport'],
+        ['name', 'type', 'visibility', 'meals', 'prompts', 'dataExport'],
         {
           input: {
             name: [],
             type: {},
+            visibility: { one: 'two' },
             meals: 10,
             prompts: 'invalidPrompts',
             dataExport: 5,

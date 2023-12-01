@@ -26,7 +26,6 @@
               :disabled="disabledJobParams[form.type]"
               :errors="form.errors"
               name="params"
-              :refs="refs"
               @input="form.errors.clear(paramErrors)"
             ></component>
           </v-col>
@@ -55,7 +54,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { GetJobParams, JobParams, SurveyJob } from '@intake24/common/types';
-import type { JobEntry, SurveyEntry, SurveyRefs } from '@intake24/common/types/http/admin';
+import type { JobEntry, SurveyEntry } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
@@ -95,7 +94,7 @@ export default defineComponent({
       SurveyRespondentsImport: { surveyId: true },
     };
 
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<SurveyEntry, SurveyRefs>(props);
+    const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
     const { clearError, form } = useForm<SurveyTasksForm>({
       data: { type: surveyJobs[0], params: defaultJobsParams.value[surveyJobs[0]] },
@@ -136,8 +135,6 @@ export default defineComponent({
       jobTypeList,
       entry,
       entryLoaded,
-      refs,
-      refsLoaded,
       clearError,
       paramErrors,
       form,

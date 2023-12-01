@@ -47,7 +47,10 @@ Content-Type: application/json
     "adminLanguageId": string,
     "countryFlagCode": string,
     "prototypeLocaleId": string | null,
-    "textDirection": string
+    "textDirection": string,
+    "foodIndexEnabled": boolean,
+    "foodIndexLanguageBackendId": string,
+    "visibility": 'public' | 'restricted'
 }
 ```
 
@@ -103,7 +106,10 @@ Content-Type: application/json
     "adminLanguageId": string,
     "countryFlagCode": string,
     "prototypeLocaleId": string | null,
-    "textDirection": string
+    "textDirection": string,
+    "foodIndexEnabled": boolean,
+    "foodIndexLanguageBackendId": string,
+    "visibility": 'public' | 'restricted'
 }
 ```
 

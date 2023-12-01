@@ -18,7 +18,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 
-import type { Securable } from '..';
+import type { RecordVisibility } from '@intake24/common/security';
+
+import type { HasVisibility } from '..';
 import BaseModel from '../model';
 import { Language, Survey, User, UserSecurable } from '.';
 
@@ -27,8 +29,9 @@ import { Language, Survey, User, UserSecurable } from '.';
     attributes: ['id', 'code', 'englishName', 'localName', 'countryFlagCode'],
     order: [['englishName', 'ASC']],
   },
-  adminLanguage: { include: [{ model: Language, as: 'adminLanguage' }] },
-  surveyLanguage: { include: [{ model: Language, as: 'surveyLanguage' }] },
+  adminLanguage: { include: [{ association: 'adminLanguage' }] },
+  respondentLanguage: { include: [{ association: 'respondentLanguage' }] },
+  parent: { include: [{ association: 'parent' }] },
   surveys: { include: [{ model: Survey }] },
 }))
 @Table({
@@ -39,7 +42,7 @@ import { Language, Survey, User, UserSecurable } from '.';
 })
 export default class SystemLocale
   extends BaseModel<InferAttributes<SystemLocale>, InferCreationAttributes<SystemLocale>>
-  implements Securable
+  implements HasVisibility
 {
   @Column({
     autoIncrement: true,
@@ -118,6 +121,13 @@ export default class SystemLocale
   })
   declare ownerId: CreationOptional<string | null>;
 
+  @Column({
+    allowNull: false,
+    defaultValue: 'public',
+    type: DataType.STRING(32),
+  })
+  declare visibility: CreationOptional<RecordVisibility>;
+
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
 
@@ -134,7 +144,7 @@ export default class SystemLocale
     foreignKey: 'respondentLanguageId',
     targetKey: 'code',
   })
-  declare surveyLanguage?: NonAttribute<Language>;
+  declare respondentLanguage?: NonAttribute<Language>;
 
   @BelongsTo(() => SystemLocale, {
     foreignKey: 'prototypeLocaleId',

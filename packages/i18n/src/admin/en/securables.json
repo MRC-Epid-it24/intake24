@@ -21,6 +21,7 @@
     "delete": "Delete record",
     "copy": "Copy record",
     "securables": "Security",
+    "use": "Use record",
 
     "cards": "Cards",
     "top-foods": "Top foods",
@@ -45,5 +46,12 @@
     "respondents": "Respondents",
     "submissions": "Submissions",
     "support": "Support"
+  },
+
+  "visibility": {
+    "_": "Visibility",
+    "title": "Record visibility",
+    "public": "Public",
+    "restricted": "Restricted"
   }
 }

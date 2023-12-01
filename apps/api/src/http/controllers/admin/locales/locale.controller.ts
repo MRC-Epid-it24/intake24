@@ -58,6 +58,7 @@ const localeController = (ioc: IoC) => {
       'textDirection',
       'foodIndexLanguageBackendId',
       'foodIndexEnabled',
+      'visibility',
     ]);
 
     const { code, ...rest } = input;
@@ -75,7 +76,11 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'read', req);
+    const locale = await getAndCheckAccess(SystemLocale, 'read', req, [
+      'adminLanguage',
+      'respondentLanguage',
+      'parent',
+    ]);
 
     res.json(localeResponse(locale));
   };
@@ -97,7 +102,11 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'edit', req);
+    const locale = await getAndCheckAccess(SystemLocale, 'edit', req, [
+      'adminLanguage',
+      'respondentLanguage',
+      'parent',
+    ]);
 
     res.json(localeResponse(locale));
   };
@@ -106,7 +115,11 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const systemLocale = await getAndCheckAccess(SystemLocale, 'edit', req);
+    const systemLocale = await getAndCheckAccess(SystemLocale, 'edit', req, [
+      'adminLanguage',
+      'respondentLanguage',
+      'parent',
+    ]);
     const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
     if (!foodsLocale) throw new NotFoundError();
 
@@ -120,9 +133,11 @@ const localeController = (ioc: IoC) => {
       'textDirection',
       'foodIndexLanguageBackendId',
       'foodIndexEnabled',
+      'visibility',
     ]);
 
     await Promise.all([systemLocale.update(input), foodsLocale.update(input)]);
+    await systemLocale.reload();
 
     res.json(localeResponse(systemLocale));
   };

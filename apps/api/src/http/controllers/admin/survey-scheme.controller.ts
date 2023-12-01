@@ -165,11 +165,12 @@ const surveySchemeController = (ioc: IoC) => {
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;
-    const { type, prompts, meals, dataExport } = surveyScheme;
+    const { type, visibility, prompts, meals, dataExport } = surveyScheme;
 
     const surveySchemeCopy = await SurveyScheme.create({
       name,
       type,
+      visibility,
       prompts,
       meals,
       dataExport,

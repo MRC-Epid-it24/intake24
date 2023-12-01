@@ -169,6 +169,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     const { userId } = req.scope.cradle;
     const {
       type,
+      visibility,
       outputs,
       physicalDataFields,
       sections,
@@ -182,6 +183,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     const feedbackSchemeCopy = await FeedbackScheme.create({
       name,
       type,
+      visibility,
       outputs,
       physicalDataFields,
       sections,
