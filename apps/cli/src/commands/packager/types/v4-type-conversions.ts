@@ -10,9 +10,9 @@ import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nut
 import type { UseInRecipeType } from '@intake24/common/types';
 import type {
   CreateGlobalFoodRequest,
-  CreateLocaleRequest,
   CreateLocalFoodRequest,
   ImageMapEntryObject,
+  LocaleRequest,
   NutrientTableInput,
   NutrientTableRecord,
 } from '@intake24/common/types/http/admin';
@@ -32,7 +32,7 @@ function fromPackageImageMapObjects(
   }));
 }
 
-function fromPackageLocale(locale: PkgLocale): CreateLocaleRequest {
+function fromPackageLocale(locale: PkgLocale): LocaleRequest {
   return {
     code: locale.id,
     localName: locale.localName,
