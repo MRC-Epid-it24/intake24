@@ -49,14 +49,16 @@ export type StandardUnitString = `unit${number}-name`;
 export type StandardUnitNumber = `unit${number}-weight`;
 export type StandardUnitBoolean = `unit${number}-omit-food-description`;
 
-export type StandardUnitTranslation = `unit${number}-howMany` | `unit${number}-estimateIn`;
+export type StandardUnitInlineTranslation =
+  | `unit${number}-inline-how-many`
+  | `unit${number}-inline-estimate-in`;
 
 export type StandardUnitTexts = Record<StandardUnitBoolean, boolean> &
   Record<StandardUnitNumber, number> &
   Record<StandardUnitString, string>;
 
 export type StandardUnitTranslations = {
-  [standardUnitTranslation in StandardUnitTranslation]: RequiredLocaleTranslation;
+  [inlineTranslation in StandardUnitInlineTranslation]?: string;
 };
 
 export type PortionSizeParameters = {
@@ -93,7 +95,7 @@ export type PortionSizeParameters = {
   };
   'standard-portion': StandardUnitTexts &
     StandardUnitTranslations & {
-      'units-count': number;
+      'units-count': string;
     };
   'direct-weight': never;
 };
@@ -123,6 +125,8 @@ export interface StandardPortionUnit {
   name: string;
   weight: number;
   omitFoodDescription: boolean;
+  inlineHowMany?: string;
+  inlineEstimateIn?: string;
 }
 
 export type PortionSizeStates = {

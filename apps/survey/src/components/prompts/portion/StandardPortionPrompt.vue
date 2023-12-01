@@ -1,10 +1,6 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-expansion-panels
-      v-if="Object.keys(standardUnitRefs).length"
-      v-model="panel"
-      :tile="isMobile"
-    >
+    <v-expansion-panels v-if="translationsLoaded" v-model="panel" :tile="isMobile">
       <v-expansion-panel v-show="standardUnits.length !== 1">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
@@ -22,7 +18,7 @@
               <template #label>
                 <i18n :path="`prompts.${type}.estimateIn`">
                   <template #unit>
-                    {{ translate(standardUnitRefs[unit.name].estimateIn) }}
+                    {{ translate(unit.inlineEstimateIn ?? standardUnitRefs[unit.name].estimateIn) }}
                   </template>
                 </i18n>
               </template>
@@ -39,7 +35,11 @@
             }`"
           >
             <template #unit>
-              {{ translate(standardUnitRefs[portionSize.unit.name].howMany) }}
+              {{
+                translate(
+                  portionSize.unit.inlineHowMany ?? standardUnitRefs[portionSize.unit.name].howMany
+                )
+              }}
             </template>
             <template #food>
               <span class="font-weight-medium">{{ foodName }}</span>
@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
@@ -126,7 +126,9 @@ export default defineComponent({
     const { foodName } = useFoodUtils(props);
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
-    return { standardUnitRefs, fetchStandardUnits, translate, foodName };
+    const usingStandardTranslations = ref<boolean>(true);
+
+    return { standardUnitRefs, fetchStandardUnits, translate, foodName, usingStandardTranslations };
   },
 
   data() {
@@ -141,17 +143,23 @@ export default defineComponent({
 
       const units: StandardPortionUnit[] = [];
 
-      const unitsCount = Math.floor(Object.keys(parameters).length / 3);
+      const unitsCount = parseInt(parameters['units-count']);
 
       for (let i = 0; i < unitsCount; ++i) {
         units.push({
           name: parameters[`unit${i}-name`],
           weight: parameters[`unit${i}-weight`],
           omitFoodDescription: parameters[`unit${i}-omit-food-description`],
+          inlineHowMany: parameters[`unit${i}-inline-how-many`],
+          inlineEstimateIn: parameters[`unit${i}-inline-estimate-in`],
         });
       }
 
       return units;
+    },
+
+    translationsLoaded(): boolean {
+      return this.usingStandardTranslations ? Object.keys(this.standardUnitRefs).length > 0 : true;
     },
 
     unitValid() {
@@ -172,8 +180,15 @@ export default defineComponent({
   },
 
   async mounted() {
-    const names = this.standardUnits.map(({ name }) => name);
-    await this.fetchStandardUnits(names);
+    const names = this.standardUnits
+      .filter((unit) => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
+      .map(({ name }) => name);
+
+    if (names.length > 0) {
+      await this.fetchStandardUnits(names);
+    } else {
+      this.usingStandardTranslations = false;
+    }
 
     if (!this.portionSize.unit && this.standardUnits.length === 1) {
       this.portionSize.unit = this.standardUnits[0];

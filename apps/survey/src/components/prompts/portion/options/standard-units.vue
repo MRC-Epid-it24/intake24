@@ -1,23 +1,23 @@
 <template>
   <v-sheet
-    v-if="Object.keys(standardUnitRefs).length"
+    v-if="translationsLoaded"
     class="d-flex flex-column gr-3 pa-3 standard-portion"
     color="grey lighten-5"
   >
     <v-chip
-      v-for="unit in standardUnits"
-      :key="unit"
+      v-for="(unit, index) in standardUnits"
+      :key="unit.name"
       class="d-flex flex-grow-1 px-6"
       color="ternary"
-      :input-value="unit === selected"
+      :input-value="index === selectedIndex"
       pill
     >
       <v-icon color="primary" left>
-        {{ unit === selected ? 'far fa-circle-dot' : 'far fa-circle' }}
+        {{ index === selectedIndex ? 'far fa-circle-dot' : 'far fa-circle' }}
       </v-icon>
       <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
         <template #unit>
-          {{ translate(standardUnitRefs[unit].estimateIn) }}
+          {{ translate(unit.inlineEstimateIn ?? standardUnitRefs[unit.name].estimateIn) }}
         </template>
       </i18n>
     </v-chip>
@@ -32,6 +32,11 @@ import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods';
 import { useI18n } from '@intake24/i18n';
 
 import { useStandardUnits } from '../../partials';
+
+type UnitData = {
+  name: string;
+  inlineEstimateIn?: string;
+};
 
 export default defineComponent({
   name: 'PortionStandardUnits',
@@ -56,27 +61,32 @@ export default defineComponent({
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const interval = ref<undefined | number>(undefined);
-    const selected = ref('');
+    const selectedIndex = ref(0);
+    const usingStandardTranslations = ref(true);
 
-    const standardUnits = computed(() =>
-      Object.entries(props.method.parameters)
-        .reduce<string[]>((acc, [key, value]) => {
-          if (key.endsWith('-name')) acc.push(value);
-          return acc;
-        }, [])
-        .slice(0, props.max)
-    );
+    const translationsLoaded = computed(() => {
+      return usingStandardTranslations.value
+        ? Object.keys(standardUnitRefs.value).length > 0
+        : true;
+    });
 
-    const selectNextStandardUnit = () => {
-      const keys = Object.keys(standardUnitRefs.value);
-      if (!keys.length) {
-        clearTimer();
-        return;
+    const standardUnits = computed(() => {
+      const units: UnitData[] = [];
+
+      const count = parseInt(props.method.parameters['units-count']);
+
+      for (let i = 0; i < count; ++i) {
+        units.push({
+          name: props.method.parameters[`unit${i}-name`],
+          inlineEstimateIn: props.method.parameters[`unit${i}-inline-estimate-in`],
+        });
       }
 
-      const index = keys.findIndex((key) => key === selected.value);
+      return units.slice(0, props.max);
+    });
 
-      selected.value = index === keys.length - 1 ? keys[0] : keys[index + 1];
+    const selectNextStandardUnit = () => {
+      selectedIndex.value = (selectedIndex.value + 1) % standardUnits.value.length;
     };
 
     const startTimer = () => {
@@ -92,7 +102,16 @@ export default defineComponent({
     onMounted(async () => {
       if (!standardUnits.value.length) return;
 
-      await fetchStandardUnits(standardUnits.value);
+      const namesToTranslate = standardUnits.value
+        .filter((unit) => unit.inlineEstimateIn === undefined)
+        .map((unit) => unit.name);
+
+      if (namesToTranslate.length > 0) {
+        await fetchStandardUnits(namesToTranslate);
+      } else {
+        usingStandardTranslations.value = false;
+      }
+
       selectNextStandardUnit();
       startTimer();
     });
@@ -101,7 +120,7 @@ export default defineComponent({
       clearTimer();
     });
 
-    return { translate, standardUnits, standardUnitRefs, selected };
+    return { translate, standardUnits, standardUnitRefs, selectedIndex, translationsLoaded };
   },
 });
 </script>
