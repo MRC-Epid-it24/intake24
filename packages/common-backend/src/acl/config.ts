@@ -1,7 +1,7 @@
 export type ACLConfig = {
   cache: {
     enabled: boolean;
-    expiresIn: number | string;
+    ttl: number | string;
   };
   roles: {
     superuser: string;
@@ -16,7 +16,7 @@ export type ACLConfig = {
 export const aclConfig: ACLConfig = {
   cache: {
     enabled: process.env.ACL_CACHE_ENABLED === 'true',
-    expiresIn: process.env.ACL_CACHE_EXPIRES_IN || '7d',
+    ttl: process.env.ACL_CACHE_TTL || '7d',
   },
   roles: {
     superuser: 'superuser',

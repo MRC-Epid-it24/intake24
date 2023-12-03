@@ -22,7 +22,7 @@ Enables / disables caching for permissions / roles.
 Sets time the cache data expires at. Defined as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
 
 - object-path: `cache.expiresIn`
-- dotenv var: `ACL_CACHE_EXPIRES_IN`
+- dotenv var: `ACL_CACHE_TTL`
 - type: `number | string`
 - default: `'7d'`
 

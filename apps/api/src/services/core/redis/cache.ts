@@ -60,12 +60,12 @@ export default class Cache extends HasRedisClient {
    *
    * @param {string} key
    * @param {CacheValue} value
-   * @param {(number | string)} [expiresIn]
+   * @param {(number | string)} [ttl] expiration time in seconds or 'ms' string format
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async set(key: string, value: CacheValue, expiresIn?: number | string): Promise<boolean> {
-    if (!expiresIn) {
+  async set(key: string, value: CacheValue, ttl?: number | string): Promise<boolean> {
+    if (!ttl) {
       const result = await this.redis.set(key, stringify(value));
       return !!result;
     }
@@ -74,7 +74,7 @@ export default class Cache extends HasRedisClient {
       key,
       stringify(value),
       'PX',
-      typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn * 1000
+      typeof ttl === 'string' ? ms(ttl) : ttl * 1000
     );
 
     return !!result;
@@ -86,13 +86,15 @@ export default class Cache extends HasRedisClient {
    * Uses Redis' mset feature unless an expiration time is provided, in which case
    * sets every item individually in a transaction (MULTI).
    *
-   * @param keyValues a record/object with key/value pairs
-   * @param expiresIn expiration time in seconds or 'ms' string format
+   * @param {Record<string, CacheValue>} keyValues a record/object with key/value pairs
+   * @param {(number | string)} [ttl] expiration time in seconds or 'ms' string format
+   * @returns {Promise<boolean>}
+   * @memberof Cache
    */
-  async mset(keyValues: Record<string, CacheValue>, expiresIn?: number | string): Promise<boolean> {
+  async mset(keyValues: Record<string, CacheValue>, ttl?: number | string): Promise<boolean> {
     const serialised = mapValues(keyValues, (v) => stringify(v));
 
-    if (!expiresIn) {
+    if (!ttl) {
       const result = await this.redis.mset(keyValues);
       return !!result;
     }
@@ -100,7 +102,7 @@ export default class Cache extends HasRedisClient {
     const tx = this.redis.multi();
 
     for (const kv of Object.entries(serialised)) {
-      tx.set(kv[0], kv[1], 'PX', typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn * 1000);
+      tx.set(kv[0], kv[1], 'PX', typeof ttl === 'string' ? ms(ttl) : ttl * 1000);
     }
 
     const result = await tx.exec();
@@ -125,45 +127,44 @@ export default class Cache extends HasRedisClient {
    * Get data from cache if available
    * If not in cache, fresh data are fetched by provided callback stored in cache
    *
+   *
    * @template T
    * @param {string} key
-   * @param {(number | string)} expiresIn ('ms' string format or seconds)
+   * @param {(number | string)} ttl expiration time in seconds or 'ms' string format
    * @param {() => Promise<T>} getData
    * @returns {Promise<T>}
    * @memberof Cache
    */
   async remember<T extends {}>(
     key: string,
-    expiresIn: number | string,
+    ttl: number | string,
     getData: () => Promise<T>
   ): Promise<T> {
     const cachedData = await this.get<T>(key);
     if (cachedData !== null) return cachedData;
 
     const freshData = await getData();
-    await this.set(key, freshData, expiresIn);
+    await this.set(key, freshData, ttl);
 
     return freshData;
   }
 
   /**
    * Get multiple items from cache if available.
-   *
    * If not in cache, getData callback is called for missing keys and the result it cached.
    *
    * @template T
-   * @param {string[]} item keys
-   * @param {cacheKeyPrefix} a string prefix to append to item keys to form internal cache keys
-   * @param {(number | string)} expiresIn ('ms' string format or seconds)
-   * @param {(keys: string[]) => Promise<Record<string, T | null>>} callback to retrieve missing
-   * or expired data
-   * @returns {Promise<Record<string, T | null>>}
+   * @param {string[]} keys
+   * @param {string} cacheKeyPrefix
+   * @param {(number | string)} ttl expiration time in seconds or 'ms' string format
+   * @param {((keys: string[]) => Promise<Record<string, T | null>>)} getData
+   * @returns {(Promise<Record<string, T | null>>)}
    * @memberof Cache
    */
   async rememberMany<T extends {}>(
     keys: string[],
     cacheKeyPrefix: string,
-    expiresIn: number | string,
+    ttl: number | string,
     getData: (keys: string[]) => Promise<Record<string, T | null>>
   ): Promise<Record<string, T | null>> {
     if (!keys.length) return {};
@@ -178,7 +179,7 @@ export default class Cache extends HasRedisClient {
 
     await this.mset(
       mapKeys(data, (k) => `${cacheKeyPrefix}:${k}`),
-      expiresIn
+      ttl
     );
 
     return Object.fromEntries(keys.map((k, i) => [k, cached[i] ?? data[k]]));

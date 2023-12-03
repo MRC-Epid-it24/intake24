@@ -19,7 +19,7 @@ const aclService = ({
   cache,
   currentUser,
 }: Pick<RequestIoC, 'aclConfig' | 'cache' | 'currentUser'>) => {
-  const { enabled, expiresIn } = aclConfig.cache;
+  const { enabled, ttl } = aclConfig.cache;
   const { id: userId } = currentUser;
 
   let cachedPermissions: Permission[] | null = null;
@@ -63,7 +63,7 @@ const aclService = ({
 
     cachedPermissions = await cache.remember<Permission[]>(
       `${ACL_PERMISSIONS_KEY}:${userId}`,
-      expiresIn,
+      ttl,
       fetchPermissions
     );
 
@@ -82,7 +82,7 @@ const aclService = ({
 
     if (cachedRoles) return cachedRoles;
 
-    cachedRoles = await cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, expiresIn, fetchRoles);
+    cachedRoles = await cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, ttl, fetchRoles);
 
     return cachedRoles;
   };

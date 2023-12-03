@@ -30,3 +30,12 @@ Prefix string which is pre-pended to each key to identify cache data.
 - dotenv var: `CACHE_REDIS_PREFIX`
 - type: `string`
 - default: `'it24:cache:'`
+
+### Time to live (TTL)
+
+Time to live (expiration time) as `ms-formatted` string (see [ms](https://github.com/vercel/ms) for more information) or number in seconds.
+
+- object-path: `ttl`
+- dotenv var: `CACHE_TTL`
+- type: `string | number`
+- default: `'7d'`
