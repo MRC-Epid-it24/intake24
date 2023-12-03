@@ -21,6 +21,7 @@ export default () => {
     .put(validation.update, wrapAsync(adminCategoryController.update))
     .delete(wrapAsync(adminCategoryController.destroy));
 
+  router.get('/:categoryId/categories', wrapAsync(adminCategoryController.categories));
   router.get('/:categoryId/contents', wrapAsync(adminCategoryController.contents));
   router.post('/:categoryId/copy', validation.copy, wrapAsync(adminCategoryController.copy));
 

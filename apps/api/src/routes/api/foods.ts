@@ -14,18 +14,18 @@ export default () => {
 
   // Food search
   router.get('/:localeId', validation.search, wrapAsync(foodSearchController.search));
-  router.get('/:localeId/recipes', wrapAsync(foodSearchController.recipe));
+  /* router.get('/:localeId/recipes', wrapAsync(foodSearchController.recipe));
   router.get('/:localeId/category', wrapAsync(foodSearchController.category));
-  router.get('/:localeId/split-description', wrapAsync(foodSearchController.splitDescription));
+  router.get('/:localeId/split-description', wrapAsync(foodSearchController.splitDescription)); */
   router.get('/:localeId/recipe-food', wrapAsync(foodSearchController.recipeFood));
 
   // Food data
   router.get('/:localeId/:code', wrapAsync(foodController.entry));
   router.get('/:localeId/:code/categories', wrapAsync(foodController.categories));
-  router.get('/:localeId/:code/sources', wrapAsync(foodController.entryWithSource));
+  /* router.get('/:localeId/:code/sources', wrapAsync(foodController.entryWithSource));
   router.get('/:localeId/:code/brands', wrapAsync(foodController.brands));
   router.get('/:localeId/:code/associated-foods', wrapAsync(foodController.associatedFoods));
-  router.get('/:localeId/:code/composition', wrapAsync(foodController.composition));
+  router.get('/:localeId/:code/composition', wrapAsync(foodController.composition)); */
 
   return router;
 };

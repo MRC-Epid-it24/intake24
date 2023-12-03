@@ -14,7 +14,10 @@ import { FoodLocal, SystemLocale } from '@intake24/db';
 
 import { getAndCheckAccess } from '../securable.controller';
 
-const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>) => {
+const adminFoodController = ({
+  adminFoodService,
+  cachedParentCategoriesService,
+}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>
@@ -107,6 +110,21 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     res.json(foodLocal);
   };
 
+  const categories = async (
+    req: Request,
+    res: Response<{ categories: string[] }>
+  ): Promise<void> => {
+    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { foodId } = req.params;
+
+    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId: code } });
+    if (!foodLocal) throw new NotFoundError();
+
+    const categories = await cachedParentCategoriesService.getFoodAllCategories(foodLocal.foodCode);
+
+    res.json({ categories });
+  };
+
   return {
     browse,
     store,
@@ -114,6 +132,7 @@ const adminFoodController = ({ adminFoodService }: Pick<IoC, 'adminFoodService'>
     update,
     destroy,
     copy,
+    categories,
   };
 };
 

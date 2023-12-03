@@ -83,7 +83,7 @@ const foodSearchController = ({
     res.json(withFilteredIngredients);
   };
 
-  const recipe = async (req: Request, res: Response): Promise<void> => {
+  /* const recipe = async (req: Request, res: Response): Promise<void> => {
     const { localeId } = req.params;
     res.json();
   };
@@ -97,7 +97,7 @@ const foodSearchController = ({
     const { localeId } = req.params;
     const { code } = req.query;
     res.json();
-  };
+  }; */
 
   const recipeFood = async (
     req: Request<SearchParams, unknown, unknown, RecipeFoodQuery>,
@@ -114,9 +114,9 @@ const foodSearchController = ({
 
   return {
     search,
-    recipe,
+    /* recipe,
     category,
-    splitDescription,
+    splitDescription, */
     recipeFood,
   };
 };

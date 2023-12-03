@@ -35,7 +35,7 @@ const foodController = ({
     });
   };
 
-  const entryWithSource = async (req: Request, res: Response): Promise<void> => {
+  /* const entryWithSource = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
   };
@@ -53,15 +53,15 @@ const foodController = ({
   const composition = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
     res.json();
-  };
+  }; */
 
   return {
     entry,
     categories,
-    entryWithSource,
+    /* entryWithSource,
     brands,
     associatedFoods,
-    composition,
+    composition, */
   };
 };
 

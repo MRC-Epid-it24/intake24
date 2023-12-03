@@ -19,6 +19,7 @@ export default () => {
     .put(validation.update, wrapAsync(adminFoodController.update))
     .delete(wrapAsync(adminFoodController.destroy));
 
+  router.get('/:foodId/categories', wrapAsync(adminFoodController.categories));
   router.post('/:foodId/copy', validation.copy, wrapAsync(adminFoodController.copy));
 
   return router;
