@@ -1162,8 +1162,8 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(vue@2.7.15)
       '@pinia/plugin-debounce':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^1.0.0
+        version: 1.0.0
       '@vueuse/core':
         specifier: ^10.6.1
         version: 10.6.1(vue@2.7.15)
@@ -3958,8 +3958,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@pinia/plugin-debounce@0.1.0:
-    resolution: {integrity: sha512-iaeu2Vj99ARCCk47zrc33VBuurSl0i7TR/jsZR8w2SL3WyM1sw+UcmeSji+5JIzuN85pwe05uJsUe+1zbnii+g==}
+  /@pinia/plugin-debounce@1.0.0:
+    resolution: {integrity: sha512-6yexJxoquOQtPfhSdXJG6X/aok8/EWcae5QN+MnfAKgg7SogSEMlZe+yVq5RRNSEnoPqwggLQpLsEoUGU+b6SQ==}
     dev: false
 
   /@pkgjs/parseargs@0.11.0:
