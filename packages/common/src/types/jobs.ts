@@ -6,9 +6,9 @@ import type { SurveyState } from './recall';
 export type RepeatableBullJob = {
   key: string;
   name: string;
-  id: string;
-  endDate: number;
-  tz: string;
+  id: string | null;
+  endDate: number | null;
+  tz: string | null;
   pattern: string;
   next: number;
 };

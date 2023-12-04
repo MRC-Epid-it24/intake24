@@ -3,7 +3,7 @@ import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
-import type { JobData, RepeatableBullJob } from '@intake24/common/types';
+import type { JobData } from '@intake24/common/types';
 import ioc from '@intake24/api/ioc';
 import { sleep } from '@intake24/api/util';
 import { Task } from '@intake24/db';
@@ -106,10 +106,10 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     await newJob.run(job);
   }
 
-  async getRepeatableJobById(id: string): Promise<RepeatableBullJob | undefined> {
+  async getRepeatableJobById(id: string) {
     const jobs = await this.queue.getRepeatableJobs();
 
-    return jobs.find((job) => job.id.replace('db-', '') === id);
+    return jobs.find((job) => job.id?.replace('db-', '') === id);
   }
 
   /**
@@ -123,7 +123,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     const repeatableJobs = await this.queue.getRepeatableJobs();
 
     for (const job of repeatableJobs) {
-      if (id && job.id.replace('db-', '') !== id) continue;
+      if (id && job.id?.replace('db-', '') !== id) continue;
 
       await this.queue.removeRepeatableByKey(job.key);
     }
