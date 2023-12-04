@@ -73,7 +73,9 @@ export default defineComponent({
     const standardUnits = computed(() => {
       const units: UnitData[] = [];
 
-      const count = parseInt(props.method.parameters['units-count']);
+      const count = Object.keys(props.method.parameters).filter((item) =>
+        item.endsWith('-name')
+      ).length;
 
       for (let i = 0; i < count; ++i) {
         units.push({
