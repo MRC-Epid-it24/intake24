@@ -5,20 +5,33 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { InvalidIdError } from '@intake24/api/services/foods';
 
 const foodController = ({
+  cache,
+  cacheConfig,
+  cachedParentCategoriesService,
   foodDataService,
   imagesBaseUrl,
-  cachedParentCategoriesService,
-}: Pick<IoC, 'foodDataService' | 'imagesBaseUrl' | 'cachedParentCategoriesService'>) => {
+}: Pick<
+  IoC,
+  'cache' | 'cacheConfig' | 'foodDataService' | 'imagesBaseUrl' | 'cachedParentCategoriesService'
+>) => {
   const entry = async (req: Request, res: Response): Promise<void> => {
     const { code, localeId } = req.params;
 
     try {
-      const response = await foodDataService.getFoodData(localeId, code);
+      const response = await cache.remember(
+        `food-entry:${localeId}:${code}`,
+        cacheConfig.ttl,
+        async () => {
+          const data = await foodDataService.getFoodData(localeId, code);
 
-      for (let i = 0; i < response.portionSizeMethods.length; ++i) {
-        response.portionSizeMethods[i].imageUrl =
-          `${imagesBaseUrl}/${response.portionSizeMethods[i].imageUrl}`;
-      }
+          for (let i = 0; i < data.portionSizeMethods.length; ++i) {
+            data.portionSizeMethods[i].imageUrl =
+              `${imagesBaseUrl}/${data.portionSizeMethods[i].imageUrl}`;
+          }
+
+          return data;
+        }
+      );
 
       res.json(response);
     } catch (err) {

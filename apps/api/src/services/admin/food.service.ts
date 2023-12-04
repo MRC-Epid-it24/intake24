@@ -346,6 +346,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
 
     await cache.forget([
       `food-attributes:${input.main?.code}`,
+      `food-entry:${localeCode}:${input.main?.code}`,
       `food-all-categories:${input.main?.code}`,
       `food-parent-categories:${input.main?.code}`,
     ]);

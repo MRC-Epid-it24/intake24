@@ -14,10 +14,15 @@ export type CacheKeyPrefix =
   | 'category-all-categories'
   | 'category-parent-categories'
   | 'food-attributes'
+  | 'food-entry'
   | 'food-all-categories'
   | 'food-parent-categories'
   | 'user-submissions';
-export type CacheKey = `${CacheKeyPrefix}:${string}` | 'feedback-data';
+export type CacheKeyDoublePrefix = 'food-entry';
+export type CacheKey =
+  | `${CacheKeyPrefix}:${string}`
+  | `${CacheKeyPrefix}:${string}:${string}`
+  | 'feedback-data';
 export type CacheValue = string | number | unknown[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {
