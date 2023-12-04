@@ -81,7 +81,6 @@ const adminFoodController = ({
       code,
       canUpdateMain ? req.body : rest
     );
-    if (!foodLocal) throw new NotFoundError();
 
     res.json(foodLocal);
   };

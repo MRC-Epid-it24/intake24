@@ -17,7 +17,7 @@ const cachedInheritableAttributesService = ({
   async function getInheritableAttributes(
     foodCodes: string[]
   ): Promise<Record<string, InheritableAttributes | null>> {
-    return cache.rememberMany(foodCodes, 'attr', cacheConfig.ttl, getData);
+    return cache.rememberMany(foodCodes, 'food-attributes', cacheConfig.ttl, getData);
   }
 
   return {

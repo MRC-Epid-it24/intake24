@@ -10,7 +10,7 @@ const feedbackController = ({
 }: Pick<IoC, 'cache' | 'cacheConfig' | 'feedbackService'>) => {
   const data = async (req: Request, res: Response<FeedbackData>): Promise<void> => {
     const [nutrientTypes, physicalActivityLevels, weightTargets] = await cache.remember(
-      'feedback:data',
+      'feedback-data',
       cacheConfig.ttl,
       async () =>
         Promise.all([

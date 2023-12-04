@@ -95,7 +95,6 @@ const adminCategoryController = ({
       code,
       canUpdateMain ? req.body : rest
     );
-    if (!categoryLocal) throw new NotFoundError();
 
     res.json(categoryLocal);
   };

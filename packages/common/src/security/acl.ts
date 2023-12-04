@@ -1,5 +1,5 @@
-export const ACL_PERMISSIONS_KEY = 'acl:permissions';
-export const ACL_ROLES_KEY = 'acl:roles';
+export const ACL_PERMISSIONS_KEY = 'acl-permissions';
+export const ACL_ROLES_KEY = 'acl-roles';
 
 export const respondentSuffix = '/respondent';
 

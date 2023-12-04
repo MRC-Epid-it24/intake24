@@ -33,8 +33,7 @@ const adminUserService = ({
    * @returns {Promise<void>}
    */
   const flushACLCacheByUserId = async (userId: string): Promise<void> => {
-    const keys = [`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`];
-    await cache.forget(keys);
+    await cache.forget([`${ACL_PERMISSIONS_KEY}:${userId}`, `${ACL_ROLES_KEY}:${userId}`]);
   };
 
   /**

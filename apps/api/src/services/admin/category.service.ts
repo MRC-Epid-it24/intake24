@@ -30,7 +30,7 @@ import {
   QueryTypes,
 } from '@intake24/db';
 
-const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
+const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
   const browseCategories = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<CategoryLocalAttributes> = {
       where: { localeId },
@@ -361,10 +361,10 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
 
   const updateCategory = async (
     categoryLocalId: string,
-    localeId: string,
+    localeCode: string,
     input: CategoryLocalInput
   ) => {
-    const categoryLocal = await getCategory(categoryLocalId, localeId);
+    const categoryLocal = await getCategory(categoryLocalId, localeCode);
     if (!categoryLocal) throw new NotFoundError();
 
     const { main, portionSizeMethods } = categoryLocal;
@@ -406,7 +406,12 @@ const adminCategoryService = ({ db }: Pick<IoC, 'db'>) => {
         );
     });
 
-    return getCategory(categoryLocalId, localeId);
+    await cache.forget([
+      `category-all-categories:${input.main.code}`,
+      `category-parent-categories:${input.main.code}`,
+    ]);
+
+    return (await getCategory(categoryLocalId, localeCode))!;
   };
 
   const copyCategory = async (

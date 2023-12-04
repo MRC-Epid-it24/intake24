@@ -3,10 +3,21 @@ import ms from 'ms';
 import stringify from 'safe-stable-stringify';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { mapKeys } from '@intake24/common/util';
 
 import HasRedisClient from './redis-store';
 
+export type CacheKeyPrefix =
+  | typeof ACL_PERMISSIONS_KEY
+  | typeof ACL_ROLES_KEY
+  | 'category-all-categories'
+  | 'category-parent-categories'
+  | 'food-attributes'
+  | 'food-all-categories'
+  | 'food-parent-categories'
+  | 'user-submissions';
+export type CacheKey = `${CacheKeyPrefix}:${string}` | 'feedback-data';
 export type CacheValue = string | number | unknown[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {
@@ -18,11 +29,11 @@ export default class Cache extends HasRedisClient {
    * Retrieve item from cache by given key
    *
    * @template T
-   * @param {string} key
+   * @param {CacheKey} key
    * @returns {(Promise<T | null>)}
    * @memberof Cache
    */
-  async get<T>(key: string): Promise<T | null> {
+  async get<T>(key: CacheKey): Promise<T | null> {
     const data = await this.redis.get(key);
 
     return data ? (JSON.parse(data) as T) : null;
@@ -37,7 +48,7 @@ export default class Cache extends HasRedisClient {
    * null if key is not set
    * @memberof Cache
    */
-  async mget<T>(keys: string[]): Promise<(T | null)[]> {
+  async mget<T>(keys: CacheKey[]): Promise<(T | null)[]> {
     if (!keys.length) return [];
 
     const cached = await this.redis.mget(keys);
@@ -47,24 +58,24 @@ export default class Cache extends HasRedisClient {
   /**
    * Check if item exists in cache
    *
-   * @param {string} key
+   * @param {CacheKey} key
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async has(key: string): Promise<boolean> {
+  async has(key: CacheKey): Promise<boolean> {
     return !!(await this.redis.exists(key));
   }
 
   /**
    * Store item in cache, for given time optionally
    *
-   * @param {string} key
+   * @param {CacheKey} key
    * @param {CacheValue} value
    * @param {(number | string)} [ttl] expiration time in seconds or 'ms' string format
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async set(key: string, value: CacheValue, ttl?: number | string): Promise<boolean> {
+  async set(key: CacheKey, value: CacheValue, ttl?: number | string): Promise<boolean> {
     if (!ttl) {
       const result = await this.redis.set(key, stringify(value));
       return !!result;
@@ -116,7 +127,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<boolean>}
    * @memberof Cache
    */
-  async forget(key: string | string[]): Promise<boolean> {
+  async forget(key: CacheKey | CacheKey[]): Promise<boolean> {
     const keysToDelete = Array.isArray(key) ? key : [key];
     const result = await this.redis.del(keysToDelete);
 
@@ -129,14 +140,14 @@ export default class Cache extends HasRedisClient {
    *
    *
    * @template T
-   * @param {string} key
+   * @param {CacheKey} key
    * @param {(number | string)} ttl expiration time in seconds or 'ms' string format
    * @param {() => Promise<T>} getData
    * @returns {Promise<T>}
    * @memberof Cache
    */
   async remember<T extends {}>(
-    key: string,
+    key: CacheKey,
     ttl: number | string,
     getData: () => Promise<T>
   ): Promise<T> {
@@ -163,13 +174,13 @@ export default class Cache extends HasRedisClient {
    */
   async rememberMany<T extends {}>(
     keys: string[],
-    cacheKeyPrefix: string,
+    cacheKeyPrefix: CacheKeyPrefix,
     ttl: number | string,
     getData: (keys: string[]) => Promise<Record<string, T | null>>
   ): Promise<Record<string, T | null>> {
     if (!keys.length) return {};
 
-    const cacheKeys = keys.map((k) => `${cacheKeyPrefix}:${k}`);
+    const cacheKeys = keys.map((k) => `${cacheKeyPrefix}:${k}`) as CacheKey[];
 
     const cached = await this.mget<T>(cacheKeys);
 
@@ -178,7 +189,7 @@ export default class Cache extends HasRedisClient {
     const data = await getData(keysToFetch);
 
     await this.mset(
-      mapKeys(data, (k) => `${cacheKeyPrefix}:${k}`),
+      mapKeys(data, (k) => `${cacheKeyPrefix}:${k}`) as Record<CacheKey, CacheValue>,
       ttl
     );
 
@@ -195,7 +206,7 @@ export default class Cache extends HasRedisClient {
    * @returns {Promise<T>}
    * @memberof Cache
    */
-  async rememberForever<T extends {}>(key: string, getData: () => Promise<T>): Promise<T> {
+  async rememberForever<T extends {}>(key: CacheKey, getData: () => Promise<T>): Promise<T> {
     const cachedData = await this.get<T>(key);
     if (cachedData !== null) return cachedData;
 

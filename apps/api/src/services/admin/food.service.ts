@@ -29,7 +29,7 @@ import {
   Op,
 } from '@intake24/db';
 
-const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
+const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
   const browseFoods = async (localeId: string, query: PaginateQuery) => {
     const options: FindOptions<FoodLocalAttributes> = {
       where: { localeId },
@@ -344,7 +344,13 @@ const adminFoodService = ({ db }: Pick<IoC, 'db'>) => {
         await Food.update({ code: input.main.code }, { where: { code: main.code }, transaction });
     });
 
-    return getFood(foodLocalId, localeCode);
+    await cache.forget([
+      `food-attributes:${input.main?.code}`,
+      `food-all-categories:${input.main?.code}`,
+      `food-parent-categories:${input.main?.code}`,
+    ]);
+
+    return (await getFood(foodLocalId, localeCode))!;
   };
 
   const copyFood = async (foodLocalId: string, localeCode: string, input: FoodLocalCopyInput) => {

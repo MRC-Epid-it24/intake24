@@ -613,7 +613,7 @@ const surveySubmissionService = ({
       // Clean user submissions cache and dispatch submission webhook if any
       await Promise.all(
         [
-          cache.forget(`user:submissions:${userId}`),
+          cache.forget(`user-submissions:${userId}`),
           submissionNotificationUrl
             ? scheduler.jobs.addJob({
                 type: 'SurveySubmissionNotification',

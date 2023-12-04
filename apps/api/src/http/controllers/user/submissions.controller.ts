@@ -23,7 +23,7 @@ const userSubmissionsController = ({
       : Survey.findOne({ where: { slug } }));
     if (!survey) throw new NotFoundError();
 
-    const data = await cache.remember(`user:submissions:${userId}`, cacheConfig.ttl, async () =>
+    const data = await cache.remember(`user-submissions:${userId}`, cacheConfig.ttl, async () =>
       surveyService.getSubmissions({ userId, surveyId: survey.id })
     );
 

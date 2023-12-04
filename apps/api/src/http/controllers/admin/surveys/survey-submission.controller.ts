@@ -84,7 +84,7 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
 
     await Promise.all([
       submission.destroy(),
-      cache.forget(`user:submissions:${submission.userId}`),
+      cache.forget(`user-submissions:${submission.userId}`),
     ]);
 
     res.status(204).json();
