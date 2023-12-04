@@ -126,8 +126,8 @@ importers:
         specifier: ^1.6.2
         version: 1.6.2(debug@4.3.4)
       axios-retry:
-        specifier: ^3.9.1
-        version: 3.9.1
+        specifier: ^4.0.0
+        version: 4.0.0(axios@1.6.2)
       cronstrue:
         specifier: ^2.44.0
         version: 2.44.0
@@ -5820,13 +5820,6 @@ packages:
 
   /aws4@1.12.0:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
-    dev: false
-
-  /axios-retry@3.9.1:
-    resolution: {integrity: sha512-8PJDLJv7qTTMMwdnbMvrLYuvB47M81wRtxQmEdV5w4rgbTXTt+vtPkXwajOfOdSyv/wZICJOC+/UhXH4aQ/R+w==}
-    dependencies:
-      '@babel/runtime': 7.23.4
-      is-retry-allowed: 2.2.0
     dev: false
 
   /axios-retry@4.0.0(axios@1.6.2):
