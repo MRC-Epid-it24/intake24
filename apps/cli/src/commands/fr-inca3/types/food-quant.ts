@@ -5,4 +5,6 @@ export interface INCA3FoodQuantRow {
   METHODE_mesure_menagere: string;
   METHODE_unite_standard: string;
   METHODE_portion_standard: string;
+  METHODE_forme?: string;
+  LISTE_FORMES?: string;
 }

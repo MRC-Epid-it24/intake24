@@ -4,13 +4,14 @@ import path from 'path';
 import { v4 as randomUUID } from 'uuid';
 
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
-import type {
-  INCA3EnglishDescription,
-  INCA3FoodListRow,
-} from '@intake24/cli/commands/fr-inca3/types/food-list';
+import type { INCA3EnglishDescription } from '@intake24/cli/commands/fr-inca3/types/english-description';
+import type { INCA3FoodListRow } from '@intake24/cli/commands/fr-inca3/types/food-list';
 import type { INCA3FoodQuantRow } from '@intake24/cli/commands/fr-inca3/types/food-quant';
 import type { INCA3FoodStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/food-standard-portions';
 import type { INCA3PortionSizeImage } from '@intake24/cli/commands/fr-inca3/types/portion-size-images';
+import type { INCA3RecipeListRow } from '@intake24/cli/commands/fr-inca3/types/recipe-list';
+import type { INCA3RecipeQuantRow } from '@intake24/cli/commands/fr-inca3/types/recipe-quant';
+import type { INCA3RecipeStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/recipe-standard-portions';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
   PkgGlobalFood,
@@ -62,8 +63,12 @@ function isFoodCode(code: string): boolean {
   return !code.includes('-');
 }
 
-function getIntake24Code(foodCode: string): string {
+function getIntake24FoodCode(foodCode: string): string {
   return `23FR${foodCode}`;
+}
+
+function getIntake24RecipeCode(foodCode: string): string {
+  return `23FRR${foodCode}`;
 }
 
 export class FrenchAnsesLocaleBuilder {
@@ -73,10 +78,16 @@ export class FrenchAnsesLocaleBuilder {
 
   private sourceRecords: INCA3FoodListRow[] | undefined;
   private sourceFoodRecords: INCA3FoodListRow[] | undefined;
-  private portionSizeRecords: Record<string, INCA3FoodQuantRow> | undefined;
-  private englishDescriptions: Record<string, string> | undefined;
-  private portionSizeImages: INCA3PortionSizeImage[] | undefined;
+  private foodPortionSizeRecords: Record<string, INCA3FoodQuantRow> | undefined;
+  private foodEnglishDescriptions: Record<string, string> | undefined;
   private foodStandardUnits: Record<string, INCA3FoodStandardUnitRow[]> | undefined;
+
+  private sourceRecipeRecords: INCA3RecipeListRow[] | undefined;
+  private recipeEnglishDescriptions: Record<string, string> | undefined;
+  private recipePortionSizeRecords: Record<string, INCA3RecipeQuantRow> | undefined;
+  private recipeStandardUnits: Record<string, INCA3RecipeStandardUnitRow[]> | undefined;
+
+  private portionSizeImages: INCA3PortionSizeImage[] | undefined;
 
   constructor(logger: Logger, options: FrenchLocaleOptions) {
     this.sourceDirPath = options.inputPath;
@@ -98,11 +109,30 @@ export class FrenchAnsesLocaleBuilder {
     return [];
   }
 
-  private getEnglishDescription(code: string): string {
-    const description = this.englishDescriptions![code];
+  // eslint-disable @typescript-eslint/no-unused-vars
+  private getRecipeIntake24Categories(
+    gpe: string,
+    sgpe: string | undefined,
+    ssgpe: string | undefined
+  ): string[] {
+    return [];
+  }
+
+  private getFoodEnglishDescription(code: string): string {
+    const description = this.foodEnglishDescriptions![code];
 
     if (description === undefined) {
       throw new Error(`Missing English description for food ${code}`);
+    }
+
+    return description;
+  }
+
+  private getRecipeEnglishDescription(code: string): string {
+    const description = this.recipeEnglishDescriptions![code];
+
+    if (description === undefined) {
+      throw new Error(`Missing English description for recipe ${code}`);
     }
 
     return description;
@@ -115,13 +145,30 @@ export class FrenchAnsesLocaleBuilder {
     const englishDescriptionRecords =
       await this.readJSON<INCA3EnglishDescription[]>('EN_DESC.json');
 
-    this.englishDescriptions = Object.fromEntries(
+    this.foodEnglishDescriptions = Object.fromEntries(
       englishDescriptionRecords.map((r) => [r.code, r.englishDescription])
     );
 
+    this.sourceRecipeRecords = await this.readJSON<INCA3RecipeListRow[]>('RECETTES_RCPLIST.json');
+
+    const recipeDescriptionsRecords =
+      await this.readJSON<INCA3EnglishDescription[]>('EN_DESC_RCP.json');
+
+    this.recipeEnglishDescriptions = Object.fromEntries(
+      recipeDescriptionsRecords.map((r) => [r.code, r.englishDescription])
+    );
+  }
+
+  private async readQuantificationData(): Promise<void> {
     const fdQuantRows = await this.readJSON<INCA3FoodQuantRow[]>('ALIMENTS_FDQUANT.json');
 
-    this.portionSizeRecords = Object.fromEntries(fdQuantRows.map((row) => [row.A_CODE, row]));
+    this.foodPortionSizeRecords = Object.fromEntries(fdQuantRows.map((row) => [row.A_CODE, row]));
+
+    const rcpQuantRows = await this.readJSON<INCA3RecipeQuantRow[]>('RECETTES_RCPQUANT.json');
+
+    this.recipePortionSizeRecords = Object.fromEntries(
+      rcpQuantRows.map((row) => [row.R_CODE, row])
+    );
   }
 
   private async readPortionSizeImages(): Promise<void> {
@@ -135,41 +182,74 @@ export class FrenchAnsesLocaleBuilder {
     this.foodStandardUnits = groupBy(rows, (row) => row.A_CODE);
   }
 
-  private async buildGlobalFoods(): Promise<PkgGlobalFood[]> {
-    const globalFoods: PkgGlobalFood[] = this.sourceFoodRecords!.map((row) => ({
-      version: randomUUID(),
-      code: getIntake24Code(row.A_CODE),
-      parentCategories: this.getIntake24Categories(row.A_GPE, row.A_SGPE, row.AS_SSGPE),
-      attributes: {},
-      groupCode: 1,
-      englishDescription: capitalize(this.getEnglishDescription(row.A_CODE)),
-    }));
+  private async readRecipeStandardUnits(): Promise<void> {
+    const rows = await this.readJSON<INCA3RecipeStandardUnitRow[]>('RECETTES_RCPSTD.json');
+    this.recipeStandardUnits = groupBy(rows, (row) => row.R_CODE);
+  }
+
+  private buildGlobalFoods(): PkgGlobalFood[] {
+    const globalFoods: PkgGlobalFood[] = [];
+
+    for (const row of this.sourceFoodRecords!) {
+      globalFoods.push({
+        version: randomUUID(),
+        code: getIntake24FoodCode(row.A_CODE),
+        parentCategories: this.getIntake24Categories(row.A_GPE, row.A_SGPE, row.AS_SSGPE),
+        attributes: {},
+        groupCode: 1,
+        englishDescription: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
+      });
+    }
+
+    for (const row of this.sourceRecipeRecords!) {
+      globalFoods.push({
+        version: randomUUID(),
+        code: getIntake24RecipeCode(row.R_CODE),
+        parentCategories: this.getRecipeIntake24Categories(row.R_GPE, row.R_SGPE, row.R_groupe),
+        attributes: {},
+        groupCode: 1,
+        englishDescription: capitalize(this.getRecipeEnglishDescription(row.R_CODE)),
+      });
+    }
 
     return globalFoods;
   }
 
-  private getPortionSizeMethods(foodCode: string): PkgPortionSizeMethod[] {
-    if (this.portionSizeRecords === undefined) {
+  private photoListToAsServed(photoList: string): PkgPortionSizeMethod[] {
+    const portionSizeMethods: PkgPortionSizeMethod[] = [];
+
+    photoList
+      .trim()
+      .split(',')
+      .forEach((pictureId) => {
+        portionSizeMethods.push({
+          method: 'as-served',
+          description: 'use_an_image',
+          useForRecipes: true,
+          conversionFactor: 1.0,
+          servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
+        });
+      });
+
+    return portionSizeMethods;
+  }
+
+  private getFoodPortionSizeMethods(foodCode: string): PkgPortionSizeMethod[] {
+    if (this.foodPortionSizeRecords === undefined) {
       throw new Error('Portion size data not loaded');
     }
 
     const portionSizeMethods: PkgPortionSizeMethod[] = [];
 
-    const portionSizeRow = this.portionSizeRecords[foodCode];
+    const portionSizeRow = this.foodPortionSizeRecords[foodCode];
 
     if (portionSizeRow !== undefined) {
-      if (portionSizeRow.LISTE_PHOTOS !== undefined && portionSizeRow.LISTE_PHOTOS.length > 0) {
-        portionSizeRow.LISTE_PHOTOS.trim()
-          .split(',')
-          .forEach((pictureId) => {
-            portionSizeMethods.push({
-              method: 'as-served',
-              description: 'use_an_image',
-              useForRecipes: true,
-              conversionFactor: 1.0,
-              servingImageSet: `INCA3_${pictureId.padStart(3, '0')}`,
-            });
-          });
+      if (
+        portionSizeRow.LISTE_PHOTOS !== undefined &&
+        portionSizeRow.LISTE_PHOTOS.length > 0 &&
+        portionSizeRow.LISTE_PHOTOS !== '.'
+      ) {
+        portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
       }
 
       if (
@@ -233,18 +313,113 @@ export class FrenchAnsesLocaleBuilder {
     return portionSizeMethods;
   }
 
-  private async buildLocalFoods(): Promise<PkgLocalFood[]> {
-    const localFoods: PkgLocalFood[] = this.sourceFoodRecords!.map((row) => ({
-      version: randomUUID(),
-      code: getIntake24Code(row.A_CODE),
-      localDescription: capitalize(row.A_LIBELLE),
-      nutrientTableCodes: {
-        FR_TEMP: 'FRPH1',
-      },
-      associatedFoods: [],
-      portionSize: this.getPortionSizeMethods(row.A_CODE),
-      brandNames: [],
-    }));
+  private getRecipePortionSizeMethods(recipeCode: string): PkgPortionSizeMethod[] {
+    if (this.recipePortionSizeRecords === undefined) {
+      throw new Error('Recipe portion size data not loaded');
+    }
+
+    const portionSizeMethods: PkgPortionSizeMethod[] = [];
+
+    const portionSizeRow = this.recipePortionSizeRecords[recipeCode];
+
+    if (portionSizeRow !== undefined) {
+      if (
+        portionSizeRow.LISTE_PHOTOS !== undefined &&
+        portionSizeRow.LISTE_PHOTOS.length > 0 &&
+        portionSizeRow.LISTE_PHOTOS !== '.'
+      ) {
+        portionSizeMethods.push(...this.photoListToAsServed(portionSizeRow.LISTE_PHOTOS));
+      }
+
+      if (
+        portionSizeRow.METHODE_unite_standard !== undefined &&
+        portionSizeRow.METHODE_unite_standard !== '.'
+      ) {
+        const standardUnitRows = this.recipeStandardUnits![recipeCode];
+
+        if (standardUnitRows !== undefined) {
+          const units: PkgStandardUnit[] = standardUnitRows.map((row) => {
+            const description = row.R_US_LIBELLE.replace(/^1\s+/, '');
+
+            return {
+              name: `INCA3_R${recipeCode}_${row.R_US_NUM}`,
+              weight: row.R_US_POIDS,
+              omitFoodDescription: true,
+              inlineEstimateIn: description,
+              inlineHowMany: `Combien de ${description}`,
+            };
+          });
+
+          portionSizeMethods.push({
+            method: 'standard-portion',
+            description: 'use_a_standard_portion',
+            useForRecipes: true,
+            conversionFactor: 1,
+            units,
+          });
+        } else {
+          logger.warn(
+            `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPSTD table`
+          );
+        }
+      }
+    } else {
+      logger.warn(
+        `Recipe ${recipeCode} has no corresponding record in the RECETTES_RCPQUANT table`
+      );
+    }
+
+    if (portionSizeMethods.length === 0) {
+      // Temporary fallback method, shouldn't be there in the final version
+
+      portionSizeMethods.push({
+        method: 'standard-portion',
+        description: 'use_a_standard_portion',
+        useForRecipes: true,
+        conversionFactor: 1.0,
+        units: [
+          {
+            name: 'pieces',
+            omitFoodDescription: false,
+            weight: 100,
+          },
+        ],
+      });
+    }
+
+    return portionSizeMethods;
+  }
+
+  private buildLocalFoods(): PkgLocalFood[] {
+    const localFoods: PkgLocalFood[] = [];
+
+    for (const row of this.sourceFoodRecords!) {
+      localFoods.push({
+        version: randomUUID(),
+        code: getIntake24FoodCode(row.A_CODE),
+        localDescription: capitalize(row.A_LIBELLE),
+        nutrientTableCodes: {
+          FR_TEMP: 'FRPH1',
+        },
+        associatedFoods: [],
+        portionSize: this.getFoodPortionSizeMethods(row.A_CODE),
+        brandNames: [],
+      });
+    }
+
+    for (const row of this.sourceRecipeRecords!) {
+      localFoods.push({
+        version: randomUUID(),
+        code: getIntake24RecipeCode(row.R_CODE),
+        localDescription: capitalize(row.R_LIBELLE),
+        nutrientTableCodes: {
+          FR_TEMP: 'FRPH1',
+        },
+        associatedFoods: [],
+        portionSize: this.getRecipePortionSizeMethods(row.R_CODE),
+        brandNames: [],
+      });
+    }
 
     return localFoods;
   }
@@ -268,11 +443,13 @@ export class FrenchAnsesLocaleBuilder {
 
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
+    await this.readQuantificationData();
     await this.readPortionSizeImages();
     await this.readFoodStandardUnits();
+    await this.readRecipeStandardUnits();
 
-    const globalFoods = await this.buildGlobalFoods();
-    const localFoods = await this.buildLocalFoods();
+    const globalFoods = this.buildGlobalFoods();
+    const localFoods = this.buildLocalFoods();
 
     const localFoodsRecord = {
       [locale.id]: localFoods,

@@ -5,8 +5,3 @@ export interface INCA3FoodListRow {
   A_SGPE?: string;
   AS_SSGPE?: string;
 }
-
-export interface INCA3EnglishDescription {
-  code: string;
-  englishDescription: string;
-}
