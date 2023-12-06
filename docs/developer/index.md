@@ -14,8 +14,10 @@ Node.js ships with `npm` as default package manager. However, it does have some 
 
 Intake24 is set up with `pnpm` as it provides better install speeds / monorepo setup support etc.
 
-Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
+Install `pnpm` using corepack or see [pnpm docs](https://pnpm.io) for further installation options.
 
 ```sh
-npm install -g pnpm
+corepack enable
+
+corepack prepare pnpm@latest --activate
 ```

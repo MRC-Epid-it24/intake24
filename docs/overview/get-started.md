@@ -14,10 +14,12 @@ Repository is set as mono-repository with [workspaces](https://docs.npmjs.com/cl
 
 Shared components are in `packages` folder. Applications are in `apps` folder.
 
-Install `pnpm` using built-in `npm` (see [pnpm docs](https://pnpm.io) for further options).
+Install `pnpm` using corepack (see [pnpm docs](https://pnpm.io) for further options).
 
 ```sh
-npm install -g pnpm
+corepack enable
+
+corepack prepare pnpm@latest --activate
 ```
 
 Install project dependencies

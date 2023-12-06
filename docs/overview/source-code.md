@@ -40,10 +40,12 @@ Deployable applications are in `apps` folder. Shared components are in `packages
 
 Project is using [pnpm](https://pnpm.io) as a package manager.
 
-Install `pnpm` using built-in `npm` or see [pnpm docs](https://pnpm.io) for further installation options.
+Install `pnpm` using corepack or see [pnpm docs](https://pnpm.io) for further installation options.
 
 ```sh
-npm install -g pnpm
+corepack enable
+
+corepack prepare pnpm@latest --activate
 ```
 
 Install all dependencies from root-level

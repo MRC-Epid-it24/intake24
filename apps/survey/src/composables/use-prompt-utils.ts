@@ -54,7 +54,7 @@ export const usePromptUtils = <
   const type = computed(() => promptType(props.prompt.component));
 
   const recipeBuilderEnabled = computed(() =>
-    survey.registeredPortionSizeMethods.includes('recipe-builder-prompt')
+    survey.registeredPortionSizeMethods.includes('recipe-builder')
   );
 
   const params = computed(() => {
