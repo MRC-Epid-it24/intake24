@@ -7,6 +7,8 @@ export interface ApiClientOptionsV4 {
   credentials?: CredentialsV4 | undefined;
   refreshToken?: string | undefined;
   maxConcurrentRequests?: number | undefined;
+  requestRateLimit?: number | undefined;
+  requestRateLimitWindow?: number | undefined;
 }
 
 function getRequiredEnv(key: string): string {
@@ -34,14 +36,25 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
 
   const apiBaseUrl = getRequiredEnv('V4_API_BASE_URL');
   const refreshToken = process.env['V4_API_REFRESH_TOKEN'];
+
   const maxConcurrentRequestsEnv = process.env['V4_API_MAX_CONCURRENT_REQUESTS'];
   const maxConcurrentRequests =
     maxConcurrentRequestsEnv !== undefined ? parseInt(maxConcurrentRequestsEnv) : undefined;
+
+  const requestRateLimitEnv = process.env['V4_API_REQUEST_RATE_LIMIT'];
+  const requestRateLimit =
+    requestRateLimitEnv !== undefined ? parseInt(requestRateLimitEnv) : undefined;
+
+  const requestRateLimitWindowEnv = process.env['V4_API_REQUEST_RATE_LIMIT_WINDOW'];
+  const requestRateLimitWindow =
+    requestRateLimitWindowEnv !== undefined ? parseInt(requestRateLimitWindowEnv) : undefined;
 
   return {
     apiBaseUrl,
     credentials,
     refreshToken,
     maxConcurrentRequests,
+    requestRateLimit,
+    requestRateLimitWindow,
   };
 }

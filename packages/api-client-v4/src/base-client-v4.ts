@@ -3,7 +3,7 @@ import type { Logger } from 'winston';
 import axios, { Axios, HttpStatusCode } from 'axios';
 import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
 import fs from 'fs';
-import pLimit from 'p-limit';
+import pQueue from 'p-queue';
 
 import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
 
@@ -12,6 +12,8 @@ import type { ApiClientOptionsV4 } from './options';
 
 const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
+const DEFAULT_REQUEST_RATE_LIMIT = 300;
+const DEFAULT_REQUEST_RATE_LIMIT_WINDOW = 5 * 60 * 1000;
 
 export class BaseClientV4 {
   private apiBaseUrl: string;
@@ -24,7 +26,7 @@ export class BaseClientV4 {
   public readonly rawClient: Axios;
   public readonly accessClient: Axios;
 
-  private readonly requestLimit;
+  private readonly requestQueue;
 
   private loginRequest?: Promise<void>;
   private refreshRequest?: Promise<void>;
@@ -34,7 +36,11 @@ export class BaseClientV4 {
     this.credentials = options.credentials;
     this.refreshToken = options.refreshToken;
 
-    this.requestLimit = pLimit(options.maxConcurrentRequests ?? DEFAULT_MAX_CONCURRENT_REQUESTS);
+    this.requestQueue = new pQueue({
+      concurrency: options.maxConcurrentRequests ?? DEFAULT_MAX_CONCURRENT_REQUESTS,
+      interval: options.requestRateLimitWindow ?? DEFAULT_REQUEST_RATE_LIMIT_WINDOW,
+      intervalCap: options.requestRateLimit ?? DEFAULT_REQUEST_RATE_LIMIT,
+    });
 
     this.logger = logger.child({ service: 'V4 API' });
 
@@ -78,12 +84,12 @@ export class BaseClientV4 {
 
           await this.refresh();
 
-          const response2 = await this.requestLimit(() =>
+          const response2 = (await this.requestQueue.add(async () =>
             this.rawClient.request({
               ...response.config,
               headers: { ...response.config.headers, Authorization: `Bearer ${this.accessToken}` },
             })
-          );
+          )) as AxiosResponse;
 
           if (response2.status === HttpStatusCode.Unauthorized) {
             throw new Error('Access token rejected by the API server again after refreshing.');
@@ -191,6 +197,12 @@ export class BaseClientV4 {
     }
   }
 
+  private async rateLimitRequest<Res = any>(
+    req: () => Promise<AxiosResponse<Res>>
+  ): Promise<AxiosResponse<Res>> {
+    return (await this.requestQueue.add(req)) as AxiosResponse<Res>;
+  }
+
   private onUnexpectedStatus(response: AxiosResponse<any>): Error {
     const message = `Unexpected status code ${response.status} for request: ${response.config.method} ${response.config.url}`;
 
@@ -224,7 +236,7 @@ export class BaseClientV4 {
     params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok]
   ): Promise<Res> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.get<Res>(endpoint, { data: body, params })
     );
     this.checkStatus(response, expectedStatus);
@@ -237,7 +249,7 @@ export class BaseClientV4 {
     params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Created, HttpStatusCode.Accepted]
   ): Promise<Res> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.post<Res>(endpoint, body, { params })
     );
     this.checkStatus(response, expectedStatus);
@@ -249,7 +261,9 @@ export class BaseClientV4 {
     body?: Req,
     params?: Record<string, any>
   ): Promise<AxiosResponse<Res>> {
-    return await this.requestLimit(() => this.accessClient.post<Res>(endpoint, body, { params }));
+    return await this.rateLimitRequest(() =>
+      this.accessClient.post<Res>(endpoint, body, { params })
+    );
   }
 
   public async put<Res, Req = any>(
@@ -258,7 +272,7 @@ export class BaseClientV4 {
     params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Accepted]
   ): Promise<Res> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.put<Res>(endpoint, body, { params })
     );
     this.checkStatus(response, expectedStatus);
@@ -271,7 +285,7 @@ export class BaseClientV4 {
     params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.Accepted]
   ): Promise<Res> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.patch<Res>(endpoint, body, { params })
     );
     this.checkStatus(response, expectedStatus);
@@ -279,7 +293,7 @@ export class BaseClientV4 {
   }
 
   public async getOptional<Res, Req = any>(endpoint: string, body?: Req): Promise<Res | null> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.get<Res>(endpoint, { data: body })
     );
     this.checkStatus(response, [HttpStatusCode.Ok, HttpStatusCode.NotFound]);
@@ -288,7 +302,7 @@ export class BaseClientV4 {
   }
 
   public async getFile<Req = any>(endpoint: string, destPath: string, body?: Req): Promise<void> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.get(endpoint, {
         responseType: 'stream',
       })
@@ -311,7 +325,7 @@ export class BaseClientV4 {
     params?: Record<string, any>,
     expectedStatus: number[] = [HttpStatusCode.Ok, HttpStatusCode.NoContent]
   ): Promise<Res> {
-    const response = await this.requestLimit(() =>
+    const response = await this.rateLimitRequest(() =>
       this.accessClient.delete<Res>(endpoint, { params })
     );
     this.checkStatus(response, expectedStatus);

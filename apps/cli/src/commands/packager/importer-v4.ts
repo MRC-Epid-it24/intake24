@@ -67,6 +67,32 @@ export class ImporterV4 {
     };
   }
 
+  private async batchImport<T>(
+    objects: T[],
+    objectName: string,
+    batchSize: number,
+    importFn: (object: T) => Promise<void>
+  ) {
+    const objectCount = objects.length;
+
+    logger.info(`Importing ${objectCount} ${objectName}(s)...`);
+
+    let importedCount = 0;
+
+    for (let i = 0; i < objectCount; i += batchSize) {
+      const batch = objects.slice(i, i + batchSize);
+      const ops = batch.map((obj) => importFn(obj));
+
+      await Promise.all(ops);
+
+      importedCount += batch.length;
+
+      if (importedCount < objectCount) logger.info(`  ${importedCount}/${objectCount} imported...`);
+    }
+
+    logger.info(`Finished importing ${objectName}(s).`);
+  }
+
   private async importImageMap(imageMapId: string, imageMap: PkgImageMap): Promise<void> {
     const existing = await this.apiClient.portionSize.imageMaps.get(imageMapId);
 
@@ -81,7 +107,7 @@ export class ImporterV4 {
           return Promise.reject(new Error(message));
         }
         case 'overwrite': {
-          logger.info(`Updating existing image map: ${imageMapId}`);
+          logger.debug(`Updating existing image map: ${imageMapId}`);
           const objects = typeConverters.fromPackageImageMapObjects(imageMap.objects);
 
           await this.apiClient.portionSize.imageMaps.update(
@@ -130,7 +156,7 @@ export class ImporterV4 {
   }
 
   private async updateAsServedSetImages(setId: string, images: PkgAsServedImage[]): Promise<void> {
-    logger.info(`Updating images for as served set ${setId}`);
+    logger.debug(`Updating images for as served set ${setId}`);
 
     logger.debug('Deleting existing images');
     await this.apiClient.portionSize.asServed.deleteAllImages(setId);
@@ -159,7 +185,7 @@ export class ImporterV4 {
     const existingSet = await this.apiClient.portionSize.asServed.get(setId);
 
     if (existingSet === null) {
-      logger.info(`Creating new as served set: ${setId}`);
+      logger.debug(`Creating new as served set: ${setId}`);
 
       const middleImageIndex = Math.floor(pkgSet.images.length / 2);
       const selectionImagePath = pkgSet.images[middleImageIndex].imagePath;
@@ -179,7 +205,7 @@ export class ImporterV4 {
     } else {
       switch (this.options.onConflict) {
         case 'skip':
-          logger.info(`As served set already exists, skipping: ${setId}`);
+          logger.debug(`As served set already exists, skipping: ${setId}`);
           return Promise.resolve();
         case 'abort': {
           const message = `As served set already exists: ${setId}`;
@@ -187,8 +213,8 @@ export class ImporterV4 {
           return Promise.reject(new Error(message));
         }
         case 'overwrite': {
-          logger.info(`Updating existing as served set: ${setId}`);
-          logger.warn(`Update operation not implemented`);
+          logger.debug(`Updating existing as served set: ${setId}`);
+          logger.debug(`Update operation not implemented`);
           break;
         }
       }
@@ -199,8 +225,9 @@ export class ImporterV4 {
 
   private async importAsServedSets(): Promise<void> {
     if (this.asServedSets !== undefined) {
-      const ops = this.asServedSets.map((set) => this.importAsServedSet(set));
-      await Promise.all(ops);
+      await this.batchImport(this.asServedSets, 'as served image set', 10, (obj) =>
+        this.importAsServedSet(obj)
+      );
     }
   }
 
@@ -235,10 +262,9 @@ export class ImporterV4 {
 
   private async importLocales(): Promise<void> {
     if (this.locales !== undefined) {
-      logger.info(`Importing locale records`);
-      const ops = this.locales.map((locale) => this.importLocale(locale));
-      await Promise.all(ops);
-      logger.info(`Finished importing locales`);
+      await this.batchImport(this.locales, 'locale record', 50, (locale) =>
+        this.importLocale(locale)
+      );
     }
   }
 
@@ -276,24 +302,9 @@ export class ImporterV4 {
 
   private async importGlobalFoods(): Promise<void> {
     if (this.globalFoods !== undefined) {
-      const globalFoodsCount = this.globalFoods.length;
-
-      logger.info(`Importing ${globalFoodsCount} global food record(s)`);
-
-      const batchSize = 50;
-      let importedCount = 0;
-
-      for (let i = 0; i < globalFoodsCount; i += batchSize) {
-        const batch = this.globalFoods.slice(i, i + batchSize);
-        const ops = batch.map((food) => this.importGlobalFood(food));
-
-        await Promise.all(ops);
-
-        importedCount += batch.length;
-        logger.info(`${importedCount}/${globalFoodsCount}...`);
-      }
-
-      logger.info('Finished importing global food records');
+      await this.batchImport(this.globalFoods, 'global food record', 50, (food) =>
+        this.importGlobalFood(food)
+      );
     }
   }
 
@@ -333,26 +344,12 @@ export class ImporterV4 {
 
   private async importLocalFoods(): Promise<void> {
     if (this.localFoods !== undefined) {
-      logger.info(`Importing local food records`);
-
       for (const [localeId, localFoods] of Object.entries(this.localFoods)) {
-        const localFoodsCount = localFoods.length;
-
-        logger.info(`Importing ${localFoodsCount} local food record(s) for locale ${localeId}`);
-
-        const batchSize = 50;
-        let importedCount = 0;
-
-        for (let i = 0; i < localFoodsCount; i += batchSize) {
-          const batch = localFoods.slice(i, i + batchSize);
-          const ops = batch.map((food) => this.importLocalFood(localeId, food));
-          await Promise.all(ops);
-          importedCount += batch.length;
-          logger.info(`${importedCount}/${localFoodsCount}...`);
-        }
+        logger.info(`Importing local food record(s) for locale ${localeId}...`);
+        await this.batchImport(localFoods, 'local food record', 50, (food) =>
+          this.importLocalFood(localeId, food)
+        );
       }
-
-      logger.info('Finished importing local food records');
     }
   }
 
@@ -360,7 +357,6 @@ export class ImporterV4 {
     if (this.enabledLocalFoods !== undefined) {
       for (const [localeId, enabledFoods] of Object.entries(this.enabledLocalFoods)) {
         logger.info(`Updating enabled food codes for locale ${localeId}`);
-
         await this.apiClient.foods.updateEnabledFoods(localeId, enabledFoods);
       }
     }
