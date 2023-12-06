@@ -970,9 +970,6 @@ importers:
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
-      p-limit:
-        specifier: ^3.1.0
-        version: 3.1.0
       p-queue:
         specifier: ^7.4.1
         version: 7.4.1
