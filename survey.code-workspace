@@ -7,7 +7,7 @@
   ],
   "settings": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     },
     "eslint.validate": ["vue", "vue-html", "html", "javascript", "javascriptreact", "typescript"],
     "eslint.workingDirectories": [
