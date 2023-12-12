@@ -40,7 +40,6 @@
             <v-col cols="12">
               <select-resource
                 v-model="form.foodGroupId"
-                clearable
                 :error-messages="form.errors.get('foodGroupId')"
                 :label="$t('fdbs.foods.global.foodGroup')"
                 name="foodGroupId"
@@ -89,7 +88,7 @@ import { useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
 import { useMessages } from '@intake24/ui/stores';
 
-import CategoryList from './category-list.vue';
+import CategoryList from './categories/category-list.vue';
 
 export type CreateFoodForm = Required<FoodInput>;
 

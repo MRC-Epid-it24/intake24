@@ -107,9 +107,8 @@ import type {
   NutrientTableRecordsResponse,
 } from '@intake24/common/types/http/admin';
 import type { NutrientTableRecordAttributes } from '@intake24/db';
+import { useFetchList } from '@intake24/admin/composables';
 import { copy } from '@intake24/common/util';
-
-import { useFetchList } from '../lists';
 
 export default defineComponent({
   name: 'AddNutrientDialog',

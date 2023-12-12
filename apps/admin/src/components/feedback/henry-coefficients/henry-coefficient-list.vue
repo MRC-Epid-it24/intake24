@@ -193,7 +193,7 @@ import draggable from 'vuedraggable';
 import type { HenryCoefficient, Sex } from '@intake24/common/feedback';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';
 

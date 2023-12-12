@@ -137,9 +137,10 @@ import draggable from 'vuedraggable';
 
 import type { Nutrient } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
-import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
+
+import { LanguageSelector } from '../forms';
 
 export default defineComponent({
   name: 'NutrientTypeList',

@@ -14,11 +14,11 @@
         @add="add"
       ></add-category-dialog>
     </v-toolbar>
-    <v-list>
+    <v-list class="py-0">
       <template v-for="(item, idx) in items">
         <v-list-item :key="item.code" link>
           <v-list-item-avatar>
-            <v-icon>fas fa-list</v-icon>
+            <v-icon>$categories</v-icon>
           </v-list-item-avatar>
           <slot name="item.content" v-bind="{ item }">
             <v-list-item-content>
@@ -34,7 +34,7 @@
               :label="$t('fdbs.categories.remove').toString()"
               @confirm="remove(item.code)"
             >
-              {{ $t('common.action.confirm.delete', { name: item.name }) }}
+              {{ $t('common.action.confirm.remove', { name: item.name }) }}
             </confirm-dialog>
           </v-list-item-action>
         </v-list-item>
@@ -52,14 +52,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { Errors } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
 
-import type { CategoryListItem } from '.';
-import { AddCategoryDialog } from '.';
+import type { CategoryListItem } from './categories';
+import AddCategoryDialog from './add-category-dialog.vue';
 
 export default defineComponent({
   name: 'CategoryList',
@@ -86,34 +85,25 @@ export default defineComponent({
 
   emits: ['input'],
 
-  data() {
-    return {
-      items: [...this.value],
+  setup(props, { emit }) {
+    const items = computed({
+      get() {
+        return props.value;
+      },
+      set(val) {
+        emit('input', val);
+      },
+    });
+
+    const add = (categories: CategoryListItem[]) => {
+      items.value.push(...categories);
     };
-  },
 
-  watch: {
-    value(val: CategoryListItem[]) {
-      if (deepEqual(val, this.items)) return;
+    const remove = (code: string) => {
+      items.value = items.value.filter((item) => item.code !== code);
+    };
 
-      this.items = [...val];
-    },
-  },
-
-  methods: {
-    add(items: CategoryListItem[]) {
-      this.items.push(...items);
-      this.update();
-    },
-
-    remove(code: string) {
-      this.items = this.items.filter((item) => item.code !== code);
-      this.update();
-    },
-
-    update() {
-      this.$emit('input', this.items);
-    },
+    return { add, items, remove };
   },
 });
 </script>

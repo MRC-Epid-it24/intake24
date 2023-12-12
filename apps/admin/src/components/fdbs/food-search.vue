@@ -16,6 +16,7 @@
       </v-toolbar>
       <v-card-text class="pa-6">
         <v-text-field
+          ref="searchRef"
           v-model="search"
           class="mb-4"
           clearable
@@ -45,8 +46,9 @@
 
 <script lang="ts" setup>
 import { watchDebounced } from '@vueuse/core';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router/composables';
+import { VTextField } from 'vuetify/lib';
 
 import type {
   CategoriesResponse,
@@ -76,6 +78,7 @@ const router = useRouter();
 const dialog = ref(false);
 const loading = ref(false);
 const search = ref('');
+const searchRef = ref<InstanceType<typeof VTextField>>();
 
 const categories = ref<CategoriesResponse['data']>([]);
 const foods = ref<FoodsResponse['data']>([]);
@@ -157,6 +160,14 @@ watchDebounced(
   },
   { debounce: 500, maxWait: 2000 }
 );
+
+watch(dialog, async (val) => {
+  if (!val) return;
+
+  await nextTick();
+  //@ts-expect-error - vuetify types
+  searchRef.value?.focus();
+});
 </script>
 
 <script lang="ts">

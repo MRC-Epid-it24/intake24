@@ -95,7 +95,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { colors } from '@intake24/common/theme';
 import { randomString } from '@intake24/common/util';
 

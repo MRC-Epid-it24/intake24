@@ -100,10 +100,9 @@ import type { TranslateResult } from 'vue-i18n';
 import { defineComponent, ref, toRefs } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
+import { useFetchList } from '@intake24/admin/composables';
 import { getResource } from '@intake24/admin/router/resources';
 import { copy } from '@intake24/common/util';
-
-import { useFetchList } from '../lists';
 
 export default defineComponent({
   name: 'SelectResourceDialog',

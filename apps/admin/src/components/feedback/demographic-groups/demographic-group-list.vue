@@ -215,7 +215,7 @@ import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import type { PhysicalActivityLevelAttributes } from '@intake24/db';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
 import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
 import { ConfirmDialog } from '@intake24/ui';

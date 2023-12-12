@@ -276,7 +276,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
           },
           { transaction }
         ),
-        FoodLocalList.create({ foodCode: main.code, localeId: localeCode }, { transaction }),
+        main.$add('locales', localeCode, { transaction }),
       ]);
 
       return foodLocal;
@@ -318,6 +318,10 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       if (input.main) {
         promises.push(main.update(pick(input.main, ['name', 'foodGroupId']), { transaction }));
 
+        if (input.main.locales) {
+          const locales = input.main.locales.map(({ id }) => id);
+          promises.push(main.$set('locales', locales, { transaction }));
+        }
         if (input.main.parentCategories) {
           const categories = input.main.parentCategories.map(({ code }) => code);
           promises.push(main.$set('parentCategories', categories, { transaction }));

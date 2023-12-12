@@ -223,7 +223,7 @@ import draggable from 'vuedraggable';
 import type { MealTableField } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { mealTableFieldStandardIds, mealTableFieldTypes } from '@intake24/common/feedback';
 import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';

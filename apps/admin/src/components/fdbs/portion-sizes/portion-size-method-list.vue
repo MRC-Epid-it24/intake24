@@ -16,7 +16,7 @@
         <v-icon small>$add</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-list two-line>
+    <v-list class="py-0" two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
@@ -53,7 +53,7 @@
                 :label="$t('fdbs.portionSizes.remove').toString()"
                 @confirm="remove(index)"
               >
-                {{ $t('common.action.confirm.delete', { name: item.description }) }}
+                {{ $t('common.action.confirm.remove', { name: item.description }) }}
               </confirm-dialog>
             </v-list-item-action>
           </v-list-item>

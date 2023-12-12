@@ -58,6 +58,7 @@ export type FoodLocalInput = {
     name?: string;
     foodGroupId?: string;
     attributes?: FoodAttributeAttributes;
+    locales?: FoodsLocaleAttributes[];
     parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];

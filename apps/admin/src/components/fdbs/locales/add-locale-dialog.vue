@@ -34,20 +34,22 @@
           <v-list dense min-height="350px">
             <v-list-item-group v-model="selected" multiple>
               <template v-for="(item, idx) in items">
-                <v-list-item :key="item.code" :value="item.code">
+                <v-list-item :key="item.id" :value="item.id">
                   <template #default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
                     </v-list-item-action>
                     <v-list-item-avatar>
-                      <v-icon>fas fa-list</v-icon>
+                      <v-icon>$locales</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title>{{ item.code }} | {{ item.name }}</v-list-item-title>
+                      <v-list-item-title
+                        >{{ item.code }} | {{ item.englishName }}</v-list-item-title
+                      >
                     </v-list-item-content>
                   </template>
                 </v-list-item>
-                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.code}`"></v-divider>
+                <v-divider v-if="idx + 1 < items.length" :key="`div-${item.id}`"></v-divider>
               </template>
             </v-list-item-group>
           </v-list>
@@ -80,40 +82,30 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-import type { CategoriesResponse, MainCategoriesResponse } from '@intake24/common/types/http/admin';
-import type { CategoryAttributes } from '@intake24/db';
-import { copy } from '@intake24/common/util';
-
-import { useFetchList } from '../lists';
-
-export interface CategoryListItem extends Pick<CategoryAttributes, 'code' | 'name'> {
-  [key: string]: any;
-}
+import type { SystemLocaleReferences } from '@intake24/common/types/http/admin';
+import type { FoodsLocaleAttributes } from '@intake24/db';
+import { useFetchList } from '@intake24/admin/composables';
 
 export default defineComponent({
-  name: 'AddCategoryDialog',
+  name: 'AddLocaleDialog',
 
   props: {
     currentItems: {
-      type: Array as PropType<CategoryListItem[]>,
+      type: Array as PropType<FoodsLocaleAttributes[]>,
       required: true,
-    },
-    localeId: {
-      type: String,
     },
   },
 
   emits: ['add'],
 
-  setup(props) {
-    const { localeId } = toRefs(props);
+  setup() {
     const selected = ref<string[]>([]);
 
     const { dialog, loading, page, lastPage, search, items, clear } = useFetchList<
-      (CategoriesResponse | MainCategoriesResponse)['data'][number]
-    >(localeId.value ? 'admin/fdbs/:id/categories' : 'admin/categories', localeId.value);
+      SystemLocaleReferences['data'][number]
+    >('admin/references/locales');
 
     return { dialog, loading, items, page, lastPage, search, selected, clear };
   },
@@ -123,11 +115,11 @@ export default defineComponent({
       const { selected } = this;
       if (!selected.length) return [];
 
-      return this.items.filter((item) => selected.includes(item.code));
+      return this.items.filter((item) => selected.includes(item.id));
     },
     isAlreadyIncluded() {
       if (!this.currentItems.length || !this.selectedItems.length) return false;
-      const codes = this.currentItems.map((item) => item.code);
+      const codes = this.currentItems.map(({ id }) => id);
 
       return this.selectedItems.some((item) => codes.includes(item.code));
     },
@@ -142,7 +134,10 @@ export default defineComponent({
     confirm() {
       if (!this.selectedItems.length) return;
 
-      this.$emit('add', copy(this.selectedItems));
+      this.$emit(
+        'add',
+        this.selectedItems.map(({ id, code, ...rest }) => ({ id: code, ...rest }))
+      );
       this.close();
     },
   },

@@ -12,7 +12,7 @@
         @add="add"
       ></add-nutrient-dialog>
     </v-toolbar>
-    <v-list two-line>
+    <v-list class="py-0" two-line>
       <template v-for="(item, idx) in items">
         <v-list-item :key="item.id" link>
           <v-list-item-avatar>
@@ -35,7 +35,7 @@
               :label="$t('fdbs.nutrients.remove').toString()"
               @confirm="remove(item.id)"
             >
-              {{ $t('common.action.confirm.delete', { name: item.name }) }}
+              {{ $t('common.action.confirm.remove', { name: item.name }) }}
             </confirm-dialog>
           </v-list-item-action>
         </v-list-item>
@@ -53,15 +53,15 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { deepEqual } from 'fast-equals';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FoodDatabaseRefs } from '@intake24/common/types/http/admin';
 import type { Errors } from '@intake24/common/util';
 import type { NutrientTableRecordAttributes } from '@intake24/db';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
-import { AddNutrientDialog } from '.';
+import AddNutrientDialog from './add-nutrient-dialog.vue';
 
 export default defineComponent({
   name: 'FoodCompositionList',
@@ -89,39 +89,33 @@ export default defineComponent({
 
   emits: ['input'],
 
-  data() {
-    return {
-      items: [...this.value],
+  setup(props, { emit }) {
+    const { i18n } = useI18n();
+
+    const items = computed({
+      get() {
+        return props.value;
+      },
+      set(val) {
+        emit('input', val);
+      },
+    });
+
+    const add = (item: NutrientTableRecordAttributes) => {
+      items.value.push(item);
     };
-  },
 
-  watch: {
-    value(val: NutrientTableRecordAttributes[]) {
-      if (deepEqual(val, this.items)) return;
+    const remove = (id: string) => {
+      items.value = items.value.filter((item) => item.id !== id);
+    };
 
-      this.items = [...val];
-    },
-    items(val: NutrientTableRecordAttributes[]) {
-      if (deepEqual(val, this.value)) return;
+    const getNutrientTableName = (id: string) => {
+      const table = props.nutrientTables.find((item) => item.id === id);
 
-      this.$emit('input', [...val]);
-    },
-  },
+      return table?.description ?? i18n.t('common.not.found').toString();
+    };
 
-  methods: {
-    add(item: NutrientTableRecordAttributes) {
-      this.items.push(item);
-    },
-
-    remove(id: string) {
-      this.items = this.items.filter((item) => item.id !== id);
-    },
-
-    getNutrientTableName(id: string) {
-      const table = this.nutrientTables.find((item) => item.id === id);
-
-      return table?.description ?? this.$t('common.not.found');
-    },
+    return { add, getNutrientTableName, items, remove };
   },
 });
 </script>

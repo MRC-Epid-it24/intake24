@@ -6,7 +6,7 @@ import {
   portionSizeMethods as portionSizeMethodIds,
   useInRecipeTypes,
 } from '@intake24/common/types';
-import { Category, Food, NutrientTableRecord } from '@intake24/db';
+import { Category, Food, FoodsLocale, NutrientTableRecord } from '@intake24/db';
 
 export const attributes: Schema = {
   'main.attributes.readyMealOption': {
@@ -47,10 +47,31 @@ export const categories: ParamSchema = {
 
       if (!value.length) return;
 
-      const code = value.map((item) => item.code);
+      const code = value.map(({ code }) => code);
 
       const availableCategories = await Category.count({ where: { code } });
       if (availableCategories !== value.length)
+        throw new Error(customTypeErrorMessage('exists._', meta));
+    },
+  },
+};
+
+export const locales: ParamSchema = {
+  in: ['body'],
+  errorMessage: typeErrorMessage('array._'),
+  isArray: { bail: true },
+  optional: true,
+  custom: {
+    options: async (value: any[], meta): Promise<void> => {
+      if (value.some(({ id }) => !id || typeof id !== 'string'))
+        throw new Error(customTypeErrorMessage('array.string', meta));
+
+      if (!value.length) return;
+
+      const id = value.map(({ id }) => id);
+
+      const availableLocales = await FoodsLocale.count({ where: { id } });
+      if (availableLocales !== value.length)
         throw new Error(customTypeErrorMessage('exists._', meta));
     },
   },
@@ -68,7 +89,7 @@ export const nutrients: Schema = {
 
         if (!value.length) return;
 
-        const id = value.map((item) => item.id);
+        const id = value.map(({ id }) => id);
 
         const availableRecords = await NutrientTableRecord.count({ where: { id } });
         if (availableRecords !== value.length)

@@ -33,10 +33,8 @@
       :open.sync="open"
       transition
     >
-      <template #prepend="{ item }">
-        <v-icon v-if="!item.children">$foods</v-icon>
-      </template>
       <template #label="{ item }">
+        <v-icon v-if="!item.children" left>$foods</v-icon>
         <a @click="openItem(item)">{{ item[itemText] }}</a>
       </template>
     </v-treeview>

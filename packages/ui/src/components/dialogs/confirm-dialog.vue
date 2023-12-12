@@ -10,6 +10,7 @@
           :disabled="disabled"
           :fab="fab"
           :icon="icon"
+          :small="small"
           :title="label"
           v-on="on"
         >
@@ -140,6 +141,9 @@ export default defineComponent({
     show: {
       type: Boolean,
       default: true,
+    },
+    small: {
+      type: Boolean,
     },
     titleText: {
       type: String,

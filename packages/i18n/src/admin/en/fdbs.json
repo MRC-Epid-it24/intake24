@@ -66,6 +66,14 @@
     }
   },
 
+  "locales": {
+    "_": "Use in locales",
+    "title": "Use in locales",
+    "description": "Food is included in {count} locales.",
+    "add": "Add locale",
+    "remove": "Remove locale"
+  },
+
   "attributes": {
     "_": "Attributes",
     "title": "Attributes",

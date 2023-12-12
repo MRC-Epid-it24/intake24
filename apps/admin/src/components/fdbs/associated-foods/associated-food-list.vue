@@ -16,7 +16,7 @@
         <v-icon small>$add</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-list two-line>
+    <v-list class="py-0" two-line>
       <draggable v-model="items" handle=".drag-and-drop__handle">
         <transition-group name="drag-and-drop" type="transition">
           <v-list-item
@@ -51,7 +51,7 @@
                 :label="$t('fdbs.associatedFoods.remove').toString()"
                 @confirm="remove(index)"
               >
-                {{ $t('common.action.confirm.delete', { name: item.genericName }) }}
+                {{ $t('common.action.confirm.remove', { name: item.genericName }) }}
               </confirm-dialog>
             </v-list-item-action>
           </v-list-item>
@@ -195,7 +195,7 @@ import draggable from 'vuedraggable';
 import type { Errors } from '@intake24/common/util';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { useListWithDialog } from '@intake24/admin/components/lists';
+import { useListWithDialog } from '@intake24/admin/composables';
 import { withIdAndOrder, withoutIdAndOrder } from '@intake24/admin/util';
 import { randomString } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';

@@ -35,7 +35,6 @@
               <v-col cols="12">
                 <select-resource
                   v-model="form.main.foodGroupId"
-                  clearable
                   :disabled="!globalEdit"
                   :error-messages="form.errors.get('main.foodGroupId')"
                   :initial-item="entry?.main?.foodGroup"
@@ -70,6 +69,12 @@
             </v-row>
           </v-card-text>
         </v-card>
+        <locale-list
+          v-model="form.main.locales"
+          class="mb-6"
+          :disabled="!globalEdit"
+          :errors="form.errors"
+        ></locale-list>
         <attribute-list
           v-model="form.main.attributes"
           class="mb-6"
@@ -135,6 +140,7 @@ import type {
   FoodDatabaseEntry,
   FoodDatabaseRefs,
   FoodLocalEntry,
+  FoodLocalInput,
   LocaleEntry,
 } from '@intake24/common/types/http/admin';
 import { SelectResource } from '@intake24/admin/components/dialogs';
@@ -144,6 +150,7 @@ import {
   AttributeList,
   CategoryList,
   CopyEntryDialog,
+  LocaleList,
   NutrientList,
   PortionSizeMethodList,
 } from '@intake24/admin/components/fdbs';
@@ -164,6 +171,7 @@ export default defineComponent({
     ConfirmDialog,
     ConfirmLeaveDialog,
     CopyEntryDialog,
+    LocaleList,
     NutrientList,
     PortionSizeMethodList,
     SelectResource,
@@ -198,7 +206,7 @@ export default defineComponent({
 
     const { refs } = useEntry<FoodDatabaseEntry, FoodDatabaseRefs>(props);
     const { clearError, form, nonInputErrors, originalEntry, routeLeave, toForm } = useEntryForm<
-      any,
+      FoodLocalInput,
       FoodDatabaseEntry
     >(props, {
       data: {
@@ -206,13 +214,14 @@ export default defineComponent({
         main: {
           name: '',
           code: '',
-          foodGroupId: null,
+          foodGroupId: '0',
           attributes: {
             readyMealOption: null,
             reasonableAmount: null,
             sameAsBeforeOption: null,
             useInRecipes: null,
           },
+          locales: [],
           parentCategories: [],
         },
         nutrientRecords: [],
