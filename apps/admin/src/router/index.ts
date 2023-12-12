@@ -145,9 +145,9 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/fdbs/:id',
-    name: 'fdbs-read',
+    name: 'fdbs-food-list',
     component: views.fdbs.read,
-    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'read', perm: 'locales' },
+    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'food-list', perm: 'locales' },
     props: true,
     children: [
       {
@@ -157,7 +157,7 @@ const routes: RouteConfig[] = [
         meta: {
           module: { current: 'categories', parent: 'fdbs' },
           title: 'fdbs.read',
-          action: 'read',
+          action: 'food-list',
           perm: 'locales',
         },
         props: true,
@@ -169,7 +169,7 @@ const routes: RouteConfig[] = [
         meta: {
           module: { current: 'foods', parent: 'fdbs' },
           title: 'fdbs.read',
-          action: 'read',
+          action: 'food-list',
           perm: 'locales',
         },
         props: true,

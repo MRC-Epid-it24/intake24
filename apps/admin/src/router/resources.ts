@@ -11,7 +11,7 @@ export const resources: Resource[] = [
     icon: 'fas fa-drumstick-bite',
     api: 'admin/fdbs',
     generateRoutes: false,
-    routes: ['read'],
+    routes: ['food-list'],
     refs: true,
   },
   {

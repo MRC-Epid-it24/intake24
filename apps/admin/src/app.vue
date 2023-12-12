@@ -214,7 +214,10 @@ export default defineComponent({
       const defaults = { disabled: false, exact: true, link: true };
       const items: Breadcrumbs[] = [];
 
-      if (parent) items.push(...this.buildBreadCrumb(parent, action, currentParams));
+      if (parent)
+        items.push(
+          ...this.buildBreadCrumb(parent, parent === 'fdbs' ? action : 'read', currentParams)
+        );
 
       const name = parent ? `${parent}-${module}` : module;
       const title = parent && module !== 'securables' ? `${parent}.${module}` : module;
@@ -238,24 +241,13 @@ export default defineComponent({
       }
 
       // TODO: we should resole breadcrumb name in better way based on entry field
-      const {
-        id: entryId,
-        name: entryName,
-        englishName,
-        description,
-        securables = [],
-      } = this.entry;
+      const { id: entryId, name: entryName, englishName, description } = this.entry;
       const text = entryName ?? englishName ?? description ?? entryId ?? this.$t(`${title}.read`);
-
-      const itemAction =
-        this.can(`${module}|read`) || securables.find((item) => item.action === 'read')
-          ? 'read'
-          : 'edit';
 
       items.push({
         ...defaults,
-        text: parent ? this.$t(`${title}.${itemAction}`) : text,
-        to: { name: `${name}-${itemAction}`, params },
+        text: parent ? this.$t(`${title}.${action}`) : text,
+        to: { name: `${name}-${action === 'edit' ? 'read' : action}`, params },
       });
 
       if (['edit'].includes(action)) {

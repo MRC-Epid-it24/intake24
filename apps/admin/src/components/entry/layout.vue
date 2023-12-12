@@ -102,9 +102,12 @@ export default defineComponent({
       if (this.isCreate) return ['create'];
 
       const { securables, ownerId } = this.entry;
+      const { name, module } = this.resource;
 
       return this.resource.routes.filter(
-        (item) => item !== 'create' && this.can({ action: item, securables, ownerId })
+        (item) =>
+          item !== 'create' &&
+          this.can({ resource: module ?? name, action: item, securables, ownerId })
       );
     },
   },
