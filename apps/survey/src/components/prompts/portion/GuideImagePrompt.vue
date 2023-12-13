@@ -32,7 +32,7 @@
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.quantity`">
             <template #food>
-              <span class="font-weight-medium">{{ foodName }}</span>
+              <span class="font-weight-medium">{{ selectedFoodLabel }}</span>
             </template>
           </i18n>
           <template #actions>
@@ -145,10 +145,16 @@ export default defineComponent({
         const { label, weight } = guideImageData.objects[object.id];
 
         return (
-          this.translate(label, { params: { weight } }) ||
-          this.translate(object.label, { params: { weight } })
+          this.translate(label, { params: { food: this.foodName, weight } }) ||
+          this.translate(object.label, { params: { food: this.foodName, weight } })
         );
       });
+    },
+
+    selectedFoodLabel() {
+      if (!this.labels.length || this.portionSize.objectIndex === undefined) return this.foodName;
+
+      return this.labels[this.portionSize.objectIndex] || this.foodName;
     },
 
     objectValid() {
