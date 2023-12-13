@@ -33,7 +33,8 @@ const generateResourceRoutes = (
 
   const resourceRoutes = Object.keys(viewsPath);
   const name = parent ? `${parent}-${resourceName}` : resourceName;
-  const title = parent ? `${parent}.${resourceName}` : resourceName;
+  const title =
+    parent && resourceName !== 'securables' ? `${parent}.${resourceName}` : resourceName;
   const identifier = parent ? `${singular(resourceName)}Id` : 'id';
 
   const meta = { module: { current: resourceName, parent } };
@@ -147,7 +148,12 @@ const routes: RouteConfig[] = [
     path: '/fdbs/:id',
     name: 'fdbs-food-list',
     component: views.fdbs.read,
-    meta: { module: { current: 'fdbs' }, title: 'fdbs.read', action: 'food-list', perm: 'locales' },
+    meta: {
+      module: { current: 'fdbs' },
+      title: 'fdbs.food-list.title',
+      action: 'food-list',
+      perm: 'locales',
+    },
     props: true,
     children: [
       {
@@ -156,7 +162,7 @@ const routes: RouteConfig[] = [
         component: views.fdbs.category,
         meta: {
           module: { current: 'categories', parent: 'fdbs' },
-          title: 'fdbs.read',
+          title: 'fdbs.food-list.title',
           action: 'food-list',
           perm: 'locales',
         },
@@ -168,7 +174,7 @@ const routes: RouteConfig[] = [
         component: views.fdbs.food,
         meta: {
           module: { current: 'foods', parent: 'fdbs' },
-          title: 'fdbs.read',
+          title: 'fdbs.food-list.title',
           action: 'food-list',
           perm: 'locales',
         },
