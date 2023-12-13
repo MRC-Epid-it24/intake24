@@ -46,3 +46,11 @@
     - role: app-spa
     - role: app-service
       when: apps.survey.service.deploy | bool
+
+- hosts: all_in_one
+  remote_user: deploy
+  become: true
+  vars:
+    app: 'shared'
+  roles:
+    - role: app-end

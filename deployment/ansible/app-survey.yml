@@ -9,3 +9,4 @@
     - role: app-spa
     - role: app-service
       when: apps.survey.service.deploy | bool
+    - role: app-end

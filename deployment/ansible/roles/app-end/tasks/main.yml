@@ -1,0 +1,5 @@
+- name: '{{ app|upper }} | Deployment finished | Instance: {{ instance }} | Version: {{ git_version }}'
+  community.general.slack:
+    channel: '{{ slack.channel }}'
+    token: '{{ slack.token }}'
+    msg: '🏁 Deployment finished | *Instance:* {{ instance }}, *Version (branch/tag):* <https://github.com/MRC-Epid-it24/intake24/tree/{{ git_version }}|{{ git_version }}>'

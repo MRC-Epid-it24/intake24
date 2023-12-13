@@ -9,6 +9,10 @@
     "group": "intake24",
     "prefix": "intake24"
   },
+  "slack": {
+    "token": "token",
+    "channel": "channel"
+  },
   "apps": {
     "api": {
       "path": "apps/api",

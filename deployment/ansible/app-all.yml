@@ -9,6 +9,7 @@
     - role: app-api
     - role: app-service
       when: apps.api.service.deploy | bool
+    - role: app-end
 
 - hosts: portal
   remote_user: deploy
@@ -20,6 +21,7 @@
     - role: app-portal
     - role: app-service
       when: apps.portal.service.deploy | bool
+    - role: app-end
 
 - hosts: admin
   remote_user: deploy
@@ -31,6 +33,7 @@
     - role: app-spa
     - role: app-service
       when: apps.admin.service.deploy | bool
+    - role: app-end
 
 - hosts: survey
   remote_user: deploy
@@ -42,3 +45,4 @@
     - role: app-spa
     - role: app-service
       when: apps.survey.service.deploy | bool
+    - role: app-end

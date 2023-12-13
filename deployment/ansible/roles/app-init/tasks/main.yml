@@ -1,6 +1,16 @@
 - name: '{{ app|upper }} | Include shared vars'
   include_vars: '../instances/{{ instance }}/shared/config.json'
 
+- name: '{{ app|upper }} | Settings init facts'
+  set_fact:
+    git_version: '{{ version | default (git.branch, true) }}'
+
+- name: '{{ app|upper }} | Deployment started | Instance: {{ instance }} | Version: {{ git_version }}'
+  community.general.slack:
+    channel: '{{ slack.channel }}'
+    token: '{{ slack.token }}'
+    msg: '🚀 Deployment started | *Instance:* {{ instance }}, *Version (branch/tag):* <https://github.com/MRC-Epid-it24/intake24/tree/{{ git_version }}|{{ git_version }}>'
+
 - name: '{{ app|upper }} | Create / check group'
   group:
     name: '{{ env.group }}'
@@ -26,7 +36,7 @@
   git:
     dest: '{{ env.directory }}'
     repo: '{{ git.repository }}'
-    version: '{{ version | default (git.branch, true) }}'
+    version: '{{ git_version }}'
     force: yes
     accept_hostkey: true
 
