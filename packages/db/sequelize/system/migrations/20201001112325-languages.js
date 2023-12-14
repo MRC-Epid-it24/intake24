@@ -99,7 +99,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint('locales', 'locales_admin_language_id_fk', {
         transaction,

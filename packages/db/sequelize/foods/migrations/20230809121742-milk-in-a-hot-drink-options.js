@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const value = {
         en: [
@@ -27,7 +27,7 @@ module.exports = {
   down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
-        `DELETE FROM category_portion_size_method_params 
+        `DELETE FROM category_portion_size_method_params
           USING category_portion_size_methods
           WHERE category_portion_size_method_params.portion_size_method_id = category_portion_size_methods.id
           and category_portion_size_method_params."name" = 'options'
@@ -37,7 +37,7 @@ module.exports = {
       );
 
       await queryInterface.sequelize.query(
-        `DELETE FROM food_portion_size_method_params 
+        `DELETE FROM food_portion_size_method_params
           USING food_portion_size_methods
           WHERE food_portion_size_method_params.portion_size_method_id = food_portion_size_methods.id
           and food_portion_size_method_params."name" = 'options'

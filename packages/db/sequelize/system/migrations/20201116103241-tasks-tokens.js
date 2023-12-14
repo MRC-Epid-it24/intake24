@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `INSERT INTO tasks("name", "job", "cron", "active", "description", "created_at", "updated_at")
@@ -8,7 +8,7 @@ module.exports = {
       );
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `DELETE FROM tasks WHERE "name" = 'Purge refresh tokens'`,

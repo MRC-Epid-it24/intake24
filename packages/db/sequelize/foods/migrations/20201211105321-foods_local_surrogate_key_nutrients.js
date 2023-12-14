@@ -77,7 +77,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: () => {
     throw new Error('This migration cannot be undone');
   },
 };

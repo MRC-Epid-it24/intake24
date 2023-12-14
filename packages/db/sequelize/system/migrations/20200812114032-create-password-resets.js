@@ -42,7 +42,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('user_password_resets', { transaction });
     });

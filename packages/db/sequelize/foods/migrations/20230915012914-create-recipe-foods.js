@@ -185,7 +185,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('recipe_foods_steps', { transaction });
       await queryInterface.dropTable('recipe_foods', { transaction });

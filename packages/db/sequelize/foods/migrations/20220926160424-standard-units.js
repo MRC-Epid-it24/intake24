@@ -40,7 +40,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('standard_units', { transaction });
     }),

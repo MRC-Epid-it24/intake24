@@ -163,7 +163,7 @@ module.exports = {
       });
     }),
 
-  down: async (queryInterface, Sequelize) =>
+  down: async (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const code = recipeFoods.map((recipeFood) => recipeFood.recipe_food.code);
       await queryInterface.sequelize.query(`DELETE FROM recipe_foods WHERE code IN (:code);`, {

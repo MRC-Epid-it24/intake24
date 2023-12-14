@@ -115,7 +115,7 @@ module.exports = {
       );
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `UPDATE permissions SET "name" = replace("name", 'survey-schemes|', 'schemes|') where "name" like 'survey-schemes|%';`,

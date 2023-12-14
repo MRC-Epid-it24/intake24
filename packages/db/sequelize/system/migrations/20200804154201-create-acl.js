@@ -246,7 +246,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('users', 'created_at', { transaction });
       await queryInterface.removeColumn('users', 'updated_at', { transaction });

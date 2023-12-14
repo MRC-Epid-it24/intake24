@@ -24,7 +24,7 @@ const resources = [
 ];
 
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       for (const item of resources) {
         await queryInterface.sequelize.query(

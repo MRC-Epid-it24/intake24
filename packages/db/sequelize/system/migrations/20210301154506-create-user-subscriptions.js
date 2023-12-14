@@ -47,7 +47,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('user_subscriptions', { transaction });
     }),

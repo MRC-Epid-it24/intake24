@@ -10,9 +10,9 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "packages/ui"
   },
-  "main": "src/index.ts",
+  "type": "module",
   "engines": {
-    "node": ">=16"
+    "node": ">=18.17.0"
   },
   "scripts": {},
   "dependencies": {

@@ -8,7 +8,7 @@ public
 storage
 tmp
 
-.eslintrc.js
+.eslintrc.cjs
 *.config.js
 
 # unplugin-vue-components *.d.ts files (generated with different code-style)

@@ -9,6 +9,7 @@
     "url": "https://github.com/MRC-Epid-it24/intake24.git",
     "directory": "apps/admin"
   },
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "pnpm build-only",
