@@ -1,7 +1,6 @@
 import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import type { ValidationError } from 'express-validator';
-import type { ValidationError as SequelizeValidationError } from 'sequelize/types/errors';
-import type { ValidationErrorItem } from 'sequelize/types/errors/validation-error';
+import type { ValidationError as SequelizeValidationError, ValidationErrorItem } from 'sequelize';
 import { HttpStatusCode } from 'axios';
 
 function toExpressValidationError(item: ValidationErrorItem): ValidationError {

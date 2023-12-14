@@ -141,7 +141,7 @@ export const psmDefaults: PortionSizeMethodItem[] = [
   {
     method: 'direct-weight',
     ...psmDefaultAttributes,
-    description: 'direct weight',
+    description: 'weight',
     imageUrl: portionSizeSelectionImages.weight,
   },
 ];
@@ -161,5 +161,7 @@ export const usePortionSizeMethods = () => {
     }))
     .sort((a, b) => a.text.localeCompare(b.text));
 
-  return { estimationMethods, selections };
+  const getImageUrl = (selection: string) => portionSizeSelectionImages[selection];
+
+  return { estimationMethods, getImageUrl, selections };
 };

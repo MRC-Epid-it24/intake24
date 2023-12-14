@@ -31,12 +31,25 @@
               <v-row>
                 <v-col cols="12">
                   <v-select
+                    v-model="dialog.item.method"
+                    hide-details="auto"
+                    :items="estimationMethods"
+                    :label="$t('fdbs.portionSizes.methods._')"
+                    name="method"
+                    outlined
+                    @change="updateItemProps"
+                  >
+                  </v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-select
                     v-model="dialog.item.description"
                     hide-details="auto"
                     :items="selections"
                     :label="$t('fdbs.portionSizes.description')"
                     name="description"
                     outlined
+                    @change="updateImageUrl"
                   >
                   </v-select>
                 </v-col>
@@ -70,18 +83,6 @@
                     :step="0.1"
                     thumb-label="always"
                   ></v-slider>
-                </v-col>
-                <v-col cols="12">
-                  <v-select
-                    v-model="dialog.item.method"
-                    hide-details="auto"
-                    :items="estimationMethods"
-                    :label="$t('fdbs.portionSizes.methods._')"
-                    name="method"
-                    outlined
-                    @change="updateItemProps"
-                  >
-                  </v-select>
                 </v-col>
               </v-row>
             </v-col>
@@ -130,7 +131,7 @@ export default defineComponent({
   emits: ['save'],
 
   setup() {
-    const { estimationMethods, selections } = usePortionSizeMethods();
+    const { estimationMethods, selections, getImageUrl } = usePortionSizeMethods();
 
     const newDialog = (show = false): PortionSizeMethodDialog => ({
       show,
@@ -141,6 +142,10 @@ export default defineComponent({
     const dialog = ref(newDialog());
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
+    const updateImageUrl = (selection: string) => {
+      dialog.value.item.imageUrl = getImageUrl(selection);
+    };
+
     return {
       dialog,
       newDialog,
@@ -149,6 +154,7 @@ export default defineComponent({
       estimationMethods,
       psmDefaults,
       portionSizeSelectionImages,
+      updateImageUrl,
     };
   },
 
