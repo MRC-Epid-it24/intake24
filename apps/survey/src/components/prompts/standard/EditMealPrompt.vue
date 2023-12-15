@@ -3,17 +3,24 @@
     <template v-if="prompt.separateDrinks">
       <editable-food-list
         v-model="foodsOnly"
-        v-bind="{ prompt }"
+        v-bind="{ prompt, section }"
         focus
         mode="foodsOnly"
+        @delete="deleteFood"
       ></editable-food-list>
       <editable-food-list
-        v-bind="{ prompt }"
+        v-bind="{ prompt, section }"
         v-model="drinksOnly"
         mode="drinksOnly"
+        @delete="deleteFood"
       ></editable-food-list>
     </template>
-    <editable-food-list v-else v-bind="{ prompt }" v-model="state" focus></editable-food-list>
+    <editable-food-list
+      v-else
+      v-bind="{ prompt, section }"
+      v-model="state"
+      focus
+    ></editable-food-list>
     <template #actions>
       <v-btn
         class="px-4"
@@ -151,7 +158,14 @@ export default defineComponent({
       },
     });
 
-    return { action, drinksOnly, foodsOnly, isValid, mealName, state, translate };
+    const deleteFood = (foodId: string) => {
+      const food = props.meal.foods.find((food) => food.id === foodId);
+      if (!food) return;
+
+      action('deleteFood', foodId);
+    };
+
+    return { action, drinksOnly, foodsOnly, isValid, mealName, state, deleteFood, translate };
   },
 });
 </script>

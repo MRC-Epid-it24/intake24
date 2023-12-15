@@ -98,6 +98,7 @@ import { useDebounceFn } from '@vueuse/core';
 import { computed, defineComponent, nextTick, onMounted, ref } from 'vue';
 
 import type { Prompt } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { FoodState, FreeTextFood } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
@@ -123,13 +124,17 @@ export default defineComponent({
       type: Object as PropType<Prompt>,
       required: true,
     },
+    section: {
+      type: String as PropType<PromptSection>,
+      required: true,
+    },
     value: {
       type: Array as PropType<FoodState[]>,
       required: true,
     },
   },
 
-  emits: ['input'],
+  emits: ['input', 'delete'],
 
   setup(props, ctx) {
     const { getFoodName } = useFoodUtils();
@@ -197,8 +202,9 @@ export default defineComponent({
     const deleteFood = (index: number) => {
       if (editIndex.value === index) editIndex.value = null;
 
-      foods.value.splice(index, 1);
+      const [food] = foods.value.splice(index, 1);
       updateFoods();
+      ctx.emit('delete', food.id);
     };
 
     const focusOut = (index: number) => {
