@@ -33,7 +33,7 @@ const asServedImageController = ({
   ): Promise<void> => {
     const { asServedSetId } = req.params;
 
-    const asServedSet = await AsServedSet.findByPk(asServedSetId);
+    const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
     if (!asServedSet) throw new NotFoundError();
 
     const asServedImages = await AsServedImage.paginate({
@@ -61,7 +61,7 @@ const asServedImageController = ({
 
     if (!file) throw new ValidationError('File not found.', { path: 'image' });
 
-    const asServedSet = await AsServedSet.findByPk(asServedSetId);
+    const asServedSet = await AsServedSet.findByPk(asServedSetId, { attributes: ['id'] });
     if (!asServedSet) throw new NotFoundError();
 
     let asServedImage = await asServedService.createImage({

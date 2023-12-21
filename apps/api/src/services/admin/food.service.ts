@@ -460,7 +460,10 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
   };
 
   const deleteFood = async (foodLocalId: string, localeCode: string) => {
-    const foodLocal = await FoodLocal.findOne({ where: { id: foodLocalId, localeId: localeCode } });
+    const foodLocal = await FoodLocal.findOne({
+      attributes: ['id', 'foodCode'],
+      where: { id: foodLocalId, localeId: localeCode },
+    });
     if (!foodLocal) throw new NotFoundError();
 
     await Promise.all([

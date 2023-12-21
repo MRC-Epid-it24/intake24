@@ -134,7 +134,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
   ): Promise<void> => {
     const { userId } = req.params;
 
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, { attributes: ['id'] });
     if (!user) throw new NotFoundError();
 
     const permissions = await Permission.paginate({
@@ -153,7 +153,7 @@ const adminUserController = ({ adminUserService }: Pick<IoC, 'adminUserService'>
   ): Promise<void> => {
     const { userId } = req.params;
 
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, { attributes: ['id'] });
     if (!user) throw new NotFoundError();
 
     const roles = await Role.paginate({

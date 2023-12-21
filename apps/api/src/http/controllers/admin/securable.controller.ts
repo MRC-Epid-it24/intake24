@@ -71,6 +71,7 @@ export const securableController = ({
   ) => {
     const { userId, securableType, securableId } = securable;
     const otherSecurables = await UserSecurable.findAll({
+      attributes: ['userId'],
       where: { userId, securableType, securableId: { [Op.ne]: securableId } },
     });
 
@@ -147,6 +148,7 @@ export const securableController = ({
     const [, user] = await Promise.all([
       getAndCheckAccess(securable, 'securables', req),
       User.findOne({
+        attributes: ['id'],
         where: { id: userId, email: { [Op.ne]: null } },
         include: [
           { association: 'securables', required: false, where: { securableType, securableId } },
@@ -181,7 +183,7 @@ export const securableController = ({
 
     const [, user] = await Promise.all([
       getAndCheckAccess(securable, 'securables', req),
-      User.findOne({ where: { id: userId, email: { [Op.ne]: null } } }),
+      User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } }),
     ]);
     if (!user) throw new NotFoundError();
 

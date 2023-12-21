@@ -82,8 +82,8 @@ const nutrientTypeService = () => {
    */
   const deleteNutrientType = async (nutrientTypeId: string) => {
     const [foodsNutrientType, systemNutrientType] = await Promise.all([
-      FoodsNutrientType.findByPk(nutrientTypeId),
-      SystemNutrientType.findByPk(nutrientTypeId),
+      FoodsNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
+      SystemNutrientType.findByPk(nutrientTypeId, { attributes: ['id'] }),
     ]);
     if (!foodsNutrientType || !systemNutrientType) throw new NotFoundError();
 

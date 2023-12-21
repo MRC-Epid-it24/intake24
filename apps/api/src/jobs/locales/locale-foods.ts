@@ -80,7 +80,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
 
   private async prepareExportInfo() {
     const { localeId } = this.params;
-    const locale = await SystemLocale.findByPk(localeId);
+    const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
     if (!locale) throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
     const { code: localeCode } = locale;

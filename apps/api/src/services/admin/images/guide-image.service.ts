@@ -73,7 +73,9 @@ const guideImageService = ({
   };
 
   const destroy = async (guideImageId: string): Promise<void> => {
-    const guideImage = await GuideImage.findByPk(guideImageId);
+    const guideImage = await GuideImage.findByPk(guideImageId, {
+      attributes: ['id', 'selectionImageId'],
+    });
     if (!guideImage) throw new NotFoundError();
 
     await guideImage.destroy();

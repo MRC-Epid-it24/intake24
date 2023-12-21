@@ -58,6 +58,7 @@ export default class NutrientTableDataImport extends StreamLockJob<'NutrientTabl
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
     const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId, {
+      attributes: ['id'],
       include: [
         { association: 'csvMapping', required: true },
         { association: 'csvMappingFields', separate: true },

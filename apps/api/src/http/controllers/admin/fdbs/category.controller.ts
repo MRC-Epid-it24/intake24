@@ -107,6 +107,7 @@ const adminCategoryController = ({
     const { categoryId } = req.params;
 
     const categoryLocal = await CategoryLocal.findOne({
+      attributes: ['id'],
       where: { id: categoryId, localeId: code },
     });
     if (!categoryLocal) throw new NotFoundError();
@@ -141,6 +142,7 @@ const adminCategoryController = ({
     }
 
     const categoryLocal = await CategoryLocal.findOne({
+      attributes: ['id', 'categoryCode'],
       where: { id: categoryId, localeId: code },
     });
     if (!categoryLocal) throw new NotFoundError();
@@ -170,6 +172,7 @@ const adminCategoryController = ({
     const { categoryId } = req.params;
 
     const categoryLocal = await CategoryLocal.findOne({
+      attributes: ['id', 'categoryCode'],
       where: { id: categoryId, localeId: code },
     });
     if (!categoryLocal) throw new NotFoundError();

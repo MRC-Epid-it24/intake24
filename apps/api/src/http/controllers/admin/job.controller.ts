@@ -43,7 +43,7 @@ const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'schedule
   ): Promise<void> => {
     const { jobId } = req.params;
 
-    const job = await Job.findByPk(jobId);
+    const job = await Job.findByPk(jobId, { attributes: ['id'] });
     if (!job) throw new NotFoundError();
 
     await job.destroy();
@@ -61,6 +61,7 @@ const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'schedule
     const { jobId: id } = req.params;
 
     const job = await Job.findOne({
+      attributes: ['id', 'downloadUrl'],
       where: {
         id,
         downloadUrl: { [Op.ne]: null },
@@ -88,7 +89,7 @@ const jobController = ({ fsConfig, scheduler }: Pick<IoC, 'fsConfig' | 'schedule
   ): Promise<void> => {
     const { jobId } = req.params;
 
-    const job = await Job.findByPk(jobId);
+    const job = await Job.findByPk(jobId, { attributes: ['id', 'type', 'userId', 'params'] });
     if (!job) throw new NotFoundError();
 
     const { type, userId, params } = job;

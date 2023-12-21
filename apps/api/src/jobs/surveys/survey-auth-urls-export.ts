@@ -61,7 +61,9 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
   private async download(): Promise<void> {
     const { surveyId } = this.params;
 
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      attributes: ['id', 'slug', 'authUrlDomainOverride'],
+    });
     if (!survey)
       throw new NotFoundError(`Job ${this.name}: Survey record not found (${surveyId}).`);
 

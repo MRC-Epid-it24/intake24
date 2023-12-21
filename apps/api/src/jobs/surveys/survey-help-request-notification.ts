@@ -63,7 +63,13 @@ export default class SurveyHelpRequestNotification extends BaseJob<'SurveyHelpRe
 
     const alias = await UserSurveyAlias.findOne({
       where: { userId },
-      include: [{ association: 'survey', where: { slug: surveySlug }, required: true }],
+      include: [
+        {
+          association: 'survey',
+          attributes: ['id', 'slug', 'name', 'supportEmail'],
+          where: { slug: surveySlug },
+        },
+      ],
     });
 
     if (!alias || !alias.survey) {

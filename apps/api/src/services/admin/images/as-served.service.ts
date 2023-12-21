@@ -31,6 +31,7 @@ const asServedService = ({
 
   const destroyImage = async (asServedSetId: string, id?: string): Promise<boolean> => {
     const asServedImages = await AsServedImage.findAll({
+      attributes: ['id', 'imageId', 'thumbnailImageId'],
       where: id ? { asServedSetId, id } : { asServedSetId },
     });
 
@@ -80,7 +81,9 @@ const asServedService = ({
   };
 
   const destroySet = async (asServedSetId: string): Promise<void> => {
-    const asServedSet = await AsServedSet.findByPk(asServedSetId);
+    const asServedSet = await AsServedSet.findByPk(asServedSetId, {
+      attributes: ['id', 'selectionImageId'],
+    });
     if (!asServedSet) throw new NotFoundError();
 
     await destroyImage(asServedSetId);

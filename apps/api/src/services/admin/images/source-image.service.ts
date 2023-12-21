@@ -49,7 +49,10 @@ const sourceImageService = ({
   };
 
   const destroy = async (sourceImageId: string | string[]): Promise<void> => {
-    const sourceImages = await SourceImage.findAll({ where: { id: sourceImageId } });
+    const sourceImages = await SourceImage.findAll({
+      attributes: ['id', 'path', 'thumbnailPath'],
+      where: { id: sourceImageId },
+    });
 
     for (const sourceImage of sourceImages) {
       await sourceImage.destroy();

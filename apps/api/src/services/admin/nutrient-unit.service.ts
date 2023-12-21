@@ -60,8 +60,14 @@ const nutrientUnitService = () => {
    */
   const deleteNutrientUnit = async (nutrientUnitId: string) => {
     const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
-      FoodsNutrientUnit.findByPk(nutrientUnitId, { include: [{ association: 'nutrientTypes' }] }),
-      SystemNutrientUnit.findByPk(nutrientUnitId, { include: [{ association: 'nutrientTypes' }] }),
+      FoodsNutrientUnit.findByPk(nutrientUnitId, {
+        attributes: ['id'],
+        include: [{ association: 'nutrientTypes' }],
+      }),
+      SystemNutrientUnit.findByPk(nutrientUnitId, {
+        attributes: ['id'],
+        include: [{ association: 'nutrientTypes' }],
+      }),
     ]);
 
     if (

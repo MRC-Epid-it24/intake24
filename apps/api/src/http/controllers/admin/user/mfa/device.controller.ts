@@ -14,7 +14,7 @@ const mfaDeviceController = () => {
     const { userId } = req.scope.cradle;
     const { status } = req.body;
 
-    const devices = await MFADevice.findAll({ where: { userId } });
+    const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
     if (!devices.length) throw new ForbiddenError();
 
     await User.update({ multiFactorAuthentication: status }, { where: { id: userId } });
@@ -81,12 +81,12 @@ const mfaDeviceController = () => {
     const { userId } = req.scope.cradle;
     const { deviceId } = req.params;
 
-    const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
+    const device = await MFADevice.findOne({ attributes: ['id'], where: { id: deviceId, userId } });
     if (!device) throw new NotFoundError();
 
     await device.destroy();
 
-    const devices = await MFADevice.findAll({ where: { userId } });
+    const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
     if (!devices.length)
       await User.update({ multiFactorAuthentication: false }, { where: { id: userId } });
 

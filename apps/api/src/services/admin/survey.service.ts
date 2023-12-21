@@ -130,7 +130,16 @@ const adminSurveyService = ({
     surveyId: string,
     inputs: CreateRespondentInput[]
   ): Promise<UserSurveyAlias[]> => {
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      attributes: [
+        'id',
+        'slug',
+        'userCustomFields',
+        'userPersonalIdentifiers',
+        'authUrlTokenCharset',
+        'authUrlTokenLength',
+      ],
+    });
     if (!survey) throw new NotFoundError();
 
     const { id: permissionId } = await getSurveyRespondentPermission(survey.slug);
@@ -197,7 +206,9 @@ const adminSurveyService = ({
     input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
     const [survey, user] = await Promise.all([
-      Survey.findByPk(surveyId),
+      Survey.findByPk(surveyId, {
+        attributes: ['id', 'userCustomFields', 'userPersonalIdentifiers'],
+      }),
       User.scope('customFields').findOne({
         include: [{ association: 'aliases', where: { userId, surveyId } }],
       }),
@@ -240,7 +251,7 @@ const adminSurveyService = ({
    */
   const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
     const [survey, user] = await Promise.all([
-      Survey.findByPk(surveyId),
+      Survey.findByPk(surveyId, { attributes: ['id', 'slug'] }),
       User.scope('submissions').findOne({
         where: { id: userId },
         include: [{ association: 'aliases', where: { surveyId } }],
@@ -283,7 +294,7 @@ const adminSurveyService = ({
     userId: string,
     file: Express.Multer.File
   ): Promise<Job> => {
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob({
@@ -302,7 +313,7 @@ const adminSurveyService = ({
    * @returns {Promise<Job>}
    */
   const exportAuthenticationUrls = async (surveyId: string, userId: string): Promise<Job> => {
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, { attributes: ['id'] });
     if (!survey) throw new NotFoundError();
 
     return scheduler.jobs.addJob({

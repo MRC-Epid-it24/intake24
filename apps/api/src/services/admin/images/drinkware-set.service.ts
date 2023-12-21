@@ -63,7 +63,7 @@ const drinkwareSetService = ({ portionSizeService }: Pick<IoC, 'portionSizeServi
   };
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
+    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
     if (!drinkwareSet) throw new NotFoundError();
 
     await drinkwareSet.destroy();

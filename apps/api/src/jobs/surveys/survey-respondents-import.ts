@@ -129,7 +129,10 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
     const { surveyId } = this.params;
 
     // Check for unique aliases within survey
-    const aliases = await UserSurveyAlias.findAll({ where: { surveyId, username } });
+    const aliases = await UserSurveyAlias.findAll({
+      attributes: ['username'],
+      where: { surveyId, username },
+    });
     if (aliases.length) {
       const existingAliases = aliases.map((alias) => alias.username);
       throw new Error(`Following usernames already exist in survey: ${existingAliases.join(', ')}`);
@@ -138,7 +141,7 @@ export default class SurveyRespondentsImport extends StreamLockJob<'SurveyRespon
     // Check for unique emails within system
     const email = this.content.filter((item) => item.email).map((item) => item.email) as string[];
     if (email.length) {
-      const users = await User.findAll({ where: { email } });
+      const users = await User.findAll({ attributes: ['email'], where: { email } });
 
       if (users.length) {
         const existingUsers = users.map((user) => user.email);

@@ -116,7 +116,10 @@ const adminFoodController = ({
     const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
     const { foodId } = req.params;
 
-    const foodLocal = await FoodLocal.findOne({ where: { id: foodId, localeId: code } });
+    const foodLocal = await FoodLocal.findOne({
+      attributes: ['id', 'foodCode'],
+      where: { id: foodId, localeId: code },
+    });
     if (!foodLocal) throw new NotFoundError();
 
     const categories = await cachedParentCategoriesService.getFoodAllCategories(foodLocal.foodCode);

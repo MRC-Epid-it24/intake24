@@ -346,9 +346,9 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const foodFields = async (): Promise<ExportField[]> => {
-    const fields = await NutrientTableCsvMappingField.findAll();
+    const fields = await NutrientTableCsvMappingField.findAll({ attributes: ['fieldName'] });
 
-    const fieldNames = fields.map((field) => field.fieldName);
+    const fieldNames = fields.map(({ fieldName }) => fieldName);
 
     return [...new Set(fieldNames)].map((name) => ({ id: name, label: name }));
   };
@@ -359,9 +359,9 @@ const dataExportFields = () => {
    * @returns {Promise<ExportField[]>}
    */
   const foodNutrients = async (): Promise<ExportField[]> => {
-    const types = await SystemNutrientType.findAll();
+    const types = await SystemNutrientType.findAll({ attributes: ['id', 'description'] });
 
-    return types.map((type) => ({ id: type.id, label: type.description }));
+    return types.map(({ id, description }) => ({ id, label: description }));
   };
 
   /**

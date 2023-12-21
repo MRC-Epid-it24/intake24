@@ -21,8 +21,8 @@ const pairwiseSearchService = ({ db }: Pick<IoC, 'db'>) => {
     const { localeId, sourceLocaleId } = options;
 
     const [locale, sourceLocale] = await Promise.all([
-      SystemLocale.findByPk(localeId),
-      SystemLocale.findByPk(sourceLocaleId),
+      SystemLocale.findByPk(localeId, { attributes: ['id', 'code'] }),
+      SystemLocale.findByPk(sourceLocaleId, { attributes: ['id', 'code'] }),
     ]);
 
     if (!sourceLocale || !locale) throw new NotFoundError();

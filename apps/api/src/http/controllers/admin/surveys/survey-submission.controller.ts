@@ -79,7 +79,10 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     const { id: surveyId } = await getAndCheckAccess(Survey, 'submissions', req);
     const { submissionId } = req.params;
 
-    const submission = await SurveySubmission.findOne({ where: { id: submissionId, surveyId } });
+    const submission = await SurveySubmission.findOne({
+      attributes: ['id', 'userId'],
+      where: { id: submissionId, surveyId },
+    });
     if (!submission) throw new NotFoundError();
 
     await Promise.all([

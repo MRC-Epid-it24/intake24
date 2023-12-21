@@ -51,7 +51,7 @@ const imageMapService = ({
     const imageMap = await portionSizeService.getImageMap(imageMapId);
     if (!imageMap.objects) throw new NotFoundError();
 
-    const guideImages = await GuideImage.findAll({ where: { imageMapId } });
+    const guideImages = await GuideImage.findAll({ attributes: ['id'], where: { imageMapId } });
     const guideImageIds = guideImages.map(({ id }) => id);
 
     await imageMap.update({ description });
@@ -99,7 +99,8 @@ const imageMapService = ({
 
   const destroy = async (imageMapId: string): Promise<void> => {
     const imageMap = await ImageMap.findByPk(imageMapId, {
-      include: [{ association: 'guideImages' }],
+      attributes: ['id', 'baseImageId'],
+      include: [{ association: 'guideImages', attributes: ['id'] }],
     });
     if (!imageMap || !imageMap.guideImages) throw new NotFoundError();
 

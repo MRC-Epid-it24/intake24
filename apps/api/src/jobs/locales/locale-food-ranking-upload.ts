@@ -50,7 +50,7 @@ export default class LocaleFoodRankingUpload extends BaseJob<'LocaleFoodRankingU
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
-    const locale = await SystemLocale.findByPk(this.params.localeId);
+    const locale = await SystemLocale.findByPk(this.params.localeId, { attributes: ['code'] });
     if (!locale)
       throw new NotFoundError(`Job ${this.name}: Locale not found (${this.params.localeId}).`);
 

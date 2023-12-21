@@ -24,7 +24,10 @@ const defaults: Schema = {
         )
           throw new Error(customTypeErrorMessage('structure._', meta));
 
-        const prompts = await SurveySchemePrompt.findAll({ where: except });
+        const prompts = await SurveySchemePrompt.findAll({
+          attributes: ['id', 'prompt'],
+          where: except,
+        });
         const match = prompts.find((p) => p.prompt.id === value.id);
         if (match) throw new Error(`Scheme prompt ID (${value.id}) already used.`);
       },

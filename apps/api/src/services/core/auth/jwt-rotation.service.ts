@@ -62,7 +62,9 @@ const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
   const verify = async (token: string): Promise<boolean> => {
     const { jti } = decode(token);
 
-    const refreshToken = await RefreshToken.findByPk(jti);
+    const refreshToken = await RefreshToken.findByPk(jti, {
+      attributes: ['id', 'expiresAt', 'revoked'],
+    });
 
     if (!refreshToken) {
       logger.debug('Refresh token not found.');

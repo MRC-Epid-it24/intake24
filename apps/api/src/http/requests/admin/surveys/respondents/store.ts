@@ -24,7 +24,10 @@ export default validate(
         options: async (value, meta): Promise<void> => {
           const { surveyId } = (meta.req as Request).params;
 
-          const entry = await UserSurveyAlias.findOne({ where: { surveyId, username: value } });
+          const entry = await UserSurveyAlias.findOne({
+            attributes: ['id'],
+            where: { surveyId, username: value },
+          });
           if (entry) throw new Error(customTypeErrorMessage('unique._', meta));
         },
       },

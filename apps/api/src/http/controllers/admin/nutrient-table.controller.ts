@@ -100,7 +100,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
     } = req;
     const { id: userId } = req.user as User;
 
-    const nutrientTable = await NutrientTable.findByPk(nutrientTableId);
+    const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
     if (!nutrientTable) throw new NotFoundError();
 
     const params = { ...pickJobParams(req.body.params, type), nutrientTableId };

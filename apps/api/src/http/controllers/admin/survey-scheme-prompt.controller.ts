@@ -82,7 +82,9 @@ const SurveySchemePromptController = () => {
   ): Promise<void> => {
     const { surveySchemePromptId } = req.params;
 
-    const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
+    const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
+      attributes: ['id'],
+    });
     if (!schemePrompt) throw new NotFoundError();
 
     await schemePrompt.destroy();
@@ -110,10 +112,12 @@ const SurveySchemePromptController = () => {
     } = req;
     const section = req.body.section as SurveyPromptSection | MealSection;
 
-    const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId);
+    const schemePrompt = await SurveySchemePrompt.findByPk(surveySchemePromptId, {
+      attributes: ['id'],
+    });
     if (!schemePrompt) throw new NotFoundError();
 
-    const scheme = await SurveyScheme.findByPk(surveySchemeId);
+    const scheme = await SurveyScheme.findByPk(surveySchemeId, { attributes: ['id', 'prompts'] });
     if (!scheme) throw new NotFoundError();
 
     const { prompts } = scheme;

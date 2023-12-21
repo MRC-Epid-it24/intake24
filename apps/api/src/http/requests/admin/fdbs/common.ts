@@ -204,7 +204,7 @@ export const associatedFoods: Schema = {
         if (value) {
           if (associatedFoodCode) throw new Error('Either category or food code can be defined.');
 
-          const category = await Category.findOne({ where: { code: value } });
+          const category = await Category.findByPk(value, { attributes: ['code'] });
           if (!category)
             throw new Error(
               customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })
@@ -230,7 +230,7 @@ export const associatedFoods: Schema = {
           if (associatedCategoryCode)
             throw new Error('Either category or food code can be defined.');
 
-          const food = await Food.findOne({ where: { code: value } });
+          const food = await Food.findByPk(value, { attributes: ['code'] });
           if (!food)
             throw new Error(
               customTypeErrorMessage('exists._', meta, { attributePath: 'main.code' })

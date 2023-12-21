@@ -247,7 +247,8 @@ const dataExportService = ({
     const { surveyId } = input;
 
     const survey = await Survey.findByPk(surveyId, {
-      include: [{ association: 'surveyScheme', required: true }],
+      attributes: ['id', 'slug'],
+      include: [{ association: 'surveyScheme', attributes: ['dataExport'], required: true }],
     });
     if (!survey || !survey.surveyScheme) throw new NotFoundError();
 

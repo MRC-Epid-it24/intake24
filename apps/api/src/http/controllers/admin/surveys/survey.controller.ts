@@ -39,6 +39,7 @@ const adminSurveyController = (ioc: IoC) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['slug', 'name'],
       order: [[fn('lower', col('Survey.name')), 'ASC']],
+      attributes: ['id', 'localeId', 'name', 'slug', 'state', 'surveySchemeId'],
       include: [
         { association: 'locale', attributes: ['code'] },
         { association: 'surveyScheme', attributes: ['name'] },

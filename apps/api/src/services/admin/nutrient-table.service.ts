@@ -240,7 +240,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    * @returns {Promise<void>}
    */
   const deleteTable = async (nutrientTableId: string): Promise<void> => {
-    const nutrientTable = await NutrientTable.findByPk(nutrientTableId);
+    const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
     if (!nutrientTable) throw new NotFoundError();
 
     await nutrientTable.destroy();

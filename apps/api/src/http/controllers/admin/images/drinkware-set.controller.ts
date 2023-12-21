@@ -85,7 +85,7 @@ const drinkwareSetController = ({
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
+    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId, { attributes: ['id'] });
     if (!drinkwareSet) throw new NotFoundError();
 
     await drinkwareSet.destroy();

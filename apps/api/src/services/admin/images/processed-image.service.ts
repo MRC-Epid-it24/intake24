@@ -21,7 +21,7 @@ const processedImageService = ({
   const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
   const resolveSourceImage = async (sourceImageId: string): Promise<SourceImage> => {
-    const sourceImage = await SourceImage.findByPk(sourceImageId);
+    const sourceImage = await SourceImage.findByPk(sourceImageId, { attributes: ['id', 'path'] });
     if (!sourceImage) {
       logger.warn(
         `resolveSourceImage: Source image (${sourceImageId}) for selection image not found.`
@@ -140,7 +140,9 @@ const processedImageService = ({
   };
 
   const destroy = async (imageId: string, options: DestroyOptions = {}): Promise<void> => {
-    const processedImage = await ProcessedImage.findByPk(imageId);
+    const processedImage = await ProcessedImage.findByPk(imageId, {
+      attributes: ['id', 'path', 'sourceId'],
+    });
     if (!processedImage) {
       logger.warn(`destroy: processed image not found. (ID: ${imageId})`);
       return;

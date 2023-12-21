@@ -45,6 +45,7 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     const { id: userId } = req.user as User;
 
     const job = await Job.findOne({
+      attributes: ['id', 'downloadUrl'],
       where: {
         id,
         userId,

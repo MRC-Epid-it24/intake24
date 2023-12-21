@@ -76,7 +76,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   ): Promise<void> => {
     const { taskId } = req.params;
 
-    const task = await Task.findByPk(taskId);
+    const task = await Task.findByPk(taskId, { attributes: ['id'] });
     if (!task) throw new NotFoundError();
 
     await task.destroy();
@@ -92,7 +92,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const { taskId } = req.params;
     const { id: userId } = req.user as User;
 
-    const task = await Task.findByPk(taskId);
+    const task = await Task.findByPk(taskId, { attributes: ['id', 'job', 'params'] });
     if (!task) throw new NotFoundError();
 
     const { job, params } = task;

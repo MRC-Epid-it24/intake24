@@ -61,7 +61,7 @@ export default class UserPasswordResetNotification extends BaseJob<'UserPassword
     const { email } = this.params;
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
-    return User.findOne({ where: { email: { [op]: email } } });
+    return User.findOne({ attributes: ['id', 'name'], where: { email: { [op]: email } } });
   }
 
   private async sendEmail(user: User) {

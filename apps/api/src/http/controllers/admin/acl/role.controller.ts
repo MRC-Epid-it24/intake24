@@ -96,7 +96,7 @@ const roleController = ({
   ): Promise<void> => {
     const { roleId } = req.params;
 
-    const role = await Role.findByPk(roleId);
+    const role = await Role.findByPk(roleId, { attributes: ['id'] });
     if (!role) throw new NotFoundError();
 
     await role.destroy();
@@ -115,7 +115,7 @@ const roleController = ({
   ): Promise<void> => {
     const { roleId } = req.params;
 
-    const role = await Role.findByPk(roleId);
+    const role = await Role.findByPk(roleId, { attributes: ['id'] });
     if (!role) throw new NotFoundError();
 
     const permissions = await Permission.paginate({
@@ -134,7 +134,7 @@ const roleController = ({
   ): Promise<void> => {
     const { roleId } = req.params;
 
-    const role = await Role.findByPk(roleId);
+    const role = await Role.findByPk(roleId, { attributes: ['id'] });
     if (!role) throw new NotFoundError();
 
     const users = await User.paginate({

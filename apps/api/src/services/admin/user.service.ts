@@ -277,7 +277,7 @@ const adminUserService = ({
    * @returns {Promise<void>}
    */
   const destroy = async (userId: string): Promise<void> => {
-    const user = await User.scope('submissions').findByPk(userId);
+    const user = await User.scope('submissions').findByPk(userId, { attributes: ['id'] });
     if (!user) throw new NotFoundError();
 
     if (user.submissions?.length)
@@ -293,10 +293,14 @@ const adminUserService = ({
    * @param {(string | string[])} permissionName
    */
   const addPermissionByName = async (userId: string | User, permissionName: string | string[]) => {
-    const user = typeof userId === 'string' ? await User.findByPk(userId) : userId;
+    const user =
+      typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
     if (!user) throw new NotFoundError();
 
-    const permission = await Permission.findOne({ where: { name: permissionName } });
+    const permission = await Permission.findOne({
+      attributes: ['id'],
+      where: { name: permissionName },
+    });
     if (!permission) throw new NotFoundError();
 
     await Promise.all([user.$add('permissions', permission), flushACLCacheByUserId(user.id)]);
@@ -312,10 +316,14 @@ const adminUserService = ({
     userId: string | User,
     permissionName: string | string[]
   ) => {
-    const user = typeof userId === 'string' ? await User.findByPk(userId) : userId;
+    const user =
+      typeof userId === 'string' ? await User.findByPk(userId, { attributes: ['id'] }) : userId;
     if (!user) throw new NotFoundError();
 
-    const permission = await Permission.findOne({ where: { name: permissionName } });
+    const permission = await Permission.findOne({
+      attributes: ['id'],
+      where: { name: permissionName },
+    });
     if (!permission) throw new NotFoundError();
 
     await Promise.all([user.$remove('permissions', permission), flushACLCacheByUserId(user.id)]);

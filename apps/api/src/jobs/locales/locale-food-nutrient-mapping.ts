@@ -50,7 +50,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
   private async prepareExportInfo() {
     const { localeId } = this.params;
-    const locale = await SystemLocale.findByPk(localeId);
+    const locale = await SystemLocale.findByPk(localeId, { attributes: ['code'] });
     if (!locale) throw new NotFoundError(`Job ${this.name}: Locale not found (${localeId}).`);
 
     const { code: localeCode } = locale;
@@ -59,7 +59,11 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
     const filename = `intake24-${this.name}-${localeCode}-${timestamp}.csv`;
 
     const [nutrients, total] = await Promise.all([
-      FoodsNutrientType.findAll({ include: [{ association: 'unit' }], order: [['id', 'asc']] }),
+      FoodsNutrientType.findAll({
+        attributes: ['id', 'description'],
+        include: [{ association: 'unit', attributes: ['symbol'] }],
+        order: [['id', 'asc']],
+      }),
       FoodLocal.count({ where: { localeId: localeCode }, include: [{ association: 'main' }] }),
     ]);
 

@@ -401,14 +401,14 @@ const surveySubmissionService = ({
 
     const [survey, submission] = await Promise.all([
       Survey.findOne({
+        attributes: ['id', 'submissionNotificationUrl'],
         where: { id: surveyId },
         include: [
-          { association: 'locale', required: true },
-          { association: 'surveyScheme', required: true },
-          { association: 'feedbackScheme' },
+          { association: 'locale', attributes: ['id', 'code'], required: true },
+          { association: 'surveyScheme', attributes: ['id', 'prompts'], required: true },
         ],
       }),
-      SurveySubmission.findOne({ where: { surveyId, userId, uxSessionId } }),
+      SurveySubmission.findOne({ attributes: ['id'], where: { surveyId, userId, uxSessionId } }),
     ]);
     if (!survey || !survey.locale || !survey.surveyScheme) throw new NotFoundError();
 

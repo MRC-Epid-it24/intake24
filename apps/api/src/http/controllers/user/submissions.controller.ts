@@ -19,8 +19,8 @@ const userSubmissionsController = ({
     const { id: userId } = req.user as User;
 
     const survey = await (typeof slug === 'string'
-      ? Survey.findBySlug(slug)
-      : Survey.findOne({ where: { slug } }));
+      ? Survey.findBySlug(slug, { attributes: ['id'] })
+      : Survey.findOne({ attributes: ['id'], where: { slug } }));
     if (!survey) throw new NotFoundError();
 
     const data = await cache.remember(`user-submissions:${userId}`, cacheConfig.ttl, async () =>

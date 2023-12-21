@@ -10,7 +10,7 @@ import { CategoryLocal, FoodLocal, Op, StandardUnit, SystemLocale } from '@intak
 const getLocaleMap = async (code: string[]) => {
   if (!code.length) return {};
 
-  const locales = await SystemLocale.findAll({ where: { code } });
+  const locales = await SystemLocale.findAll({ attributes: ['id', 'code'], where: { code } });
   return locales.reduce<Record<string, string>>((acc, locale) => {
     acc[locale.code] = locale.id;
     return acc;
@@ -118,7 +118,7 @@ const standardUnitController = () => {
   ): Promise<void> => {
     const { standardUnitId } = req.params;
 
-    const standardUnit = await StandardUnit.findByPk(standardUnitId);
+    const standardUnit = await StandardUnit.findByPk(standardUnitId, { attributes: ['id'] });
     if (!standardUnit) throw new NotFoundError();
 
     const categories = await CategoryLocal.paginate({
@@ -165,7 +165,7 @@ const standardUnitController = () => {
   ): Promise<void> => {
     const { standardUnitId } = req.params;
 
-    const standardUnit = await StandardUnit.findByPk(standardUnitId);
+    const standardUnit = await StandardUnit.findByPk(standardUnitId, { attributes: ['id'] });
     if (!standardUnit) throw new NotFoundError();
 
     const foods = await FoodLocal.paginate({

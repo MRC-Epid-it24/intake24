@@ -46,7 +46,9 @@ export default class SurveySubmissionNotification extends BaseJob<'SurveySubmiss
   private async sendSubmissionNotification(): Promise<void> {
     const { surveyId, submissionId } = this.params;
 
-    const survey = await Survey.findByPk(surveyId);
+    const survey = await Survey.findByPk(surveyId, {
+      attributes: ['id', 'submissionNotificationUrl', 'genUserKey'],
+    });
     if (!survey) throw new NotFoundError('Survey not found');
 
     const { submissionNotificationUrl, genUserKey } = survey;

@@ -54,7 +54,7 @@ export default validate(
       optional: { options: { nullable: true } },
       custom: {
         options: async (value, meta): Promise<void> => {
-          const level = await PhysicalActivityLevel.findOne({ where: { id: value } });
+          const level = await PhysicalActivityLevel.findByPk(value, { attributes: ['id'] });
           if (!level) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },

@@ -43,7 +43,7 @@ const signInLogController = () => {
   ): Promise<void> => {
     const { signInLogId } = req.params;
 
-    const signInLog = await SignInLog.findByPk(signInLogId);
+    const signInLog = await SignInLog.findByPk(signInLogId, { attributes: ['id'] });
     if (!signInLog) throw new NotFoundError();
 
     await signInLog.destroy();

@@ -81,7 +81,7 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
   ): Promise<void> => {
     const { permissionId } = req.params;
 
-    const permission = await Permission.findByPk(permissionId);
+    const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
     if (!permission) throw new NotFoundError();
 
     await permission.destroy();
@@ -98,7 +98,7 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
   ): Promise<void> => {
     const { permissionId } = req.params;
 
-    const permission = await Permission.findByPk(permissionId);
+    const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
     if (!permission) throw new NotFoundError();
 
     const roles = await Role.paginate({
@@ -119,7 +119,7 @@ const permissionController = ({ adminUserService }: Pick<IoC, 'adminUserService'
   ): Promise<void> => {
     const { permissionId } = req.params;
 
-    const permission = await Permission.findByPk(permissionId);
+    const permission = await Permission.findByPk(permissionId, { attributes: ['id'] });
     if (!permission) throw new NotFoundError();
 
     const users = await User.paginate({

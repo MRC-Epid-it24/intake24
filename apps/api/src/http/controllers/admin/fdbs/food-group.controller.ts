@@ -71,7 +71,8 @@ const adminFoodGroupController = () => {
     const { foodGroupId } = req.params;
 
     const foodGroup = await FoodGroup.findByPk(foodGroupId, {
-      include: [{ association: 'foods' }],
+      attributes: ['id'],
+      include: [{ association: 'foods', attributes: ['code'] }],
     });
     if (!foodGroup) throw new NotFoundError();
 

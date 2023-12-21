@@ -43,20 +43,20 @@ const languageService = ({
   const languageForInitialization = async (
     languageId: string
   ): Promise<Record<Application, LocaleMessages>> => {
-    const language = await Language.findByPk(languageId);
-    if (language?.code) {
-      // 1.: check if the exact match for the language exists in the code (without the dialect)
-      if (i18nStore.hasExactLanguage(language.code.toLowerCase()))
-        return createMessages(language.code);
+    const language = await Language.findByPk(languageId, { attributes: ['id', 'code'] });
+    if (!language) return defaultI18nMessages;
 
-      const [languageCode] = language.code.toLowerCase().split(/[-_]/);
-      // 2.: check if the language exists in the code (without the dialect)
-      if (i18nStore.hasExactLanguage(languageCode)) return createMessages(languageCode);
+    // 1.: check if the exact match for the language exists in the code (without the dialect)
+    if (i18nStore.hasExactLanguage(language.code.toLowerCase()))
+      return createMessages(language.code);
 
-      // 3.: check if the language exists in the code (with some other dialect). Picking the first one
-      const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
-      if (languageWithDialect) return createMessages(languageWithDialect);
-    }
+    const [languageCode] = language.code.toLowerCase().split(/[-_]/);
+    // 2.: check if the language exists in the code (without the dialect)
+    if (i18nStore.hasExactLanguage(languageCode)) return createMessages(languageCode);
+
+    // 3.: check if the language exists in the code (with some other dialect). Picking the first one
+    const languageWithDialect = i18nStore.hasLanguageWithSomeDialect(languageCode);
+    if (languageWithDialect) return createMessages(languageWithDialect);
 
     return defaultI18nMessages;
   };
@@ -173,7 +173,9 @@ const languageService = ({
    * @returns {Promise<void>}
    */
   const deleteLanguage = async (languageId: string): Promise<void> => {
-    const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId);
+    const language = await Language.scope(['adminLocales', 'surveyLocales']).findByPk(languageId, {
+      attributes: ['id'],
+    });
     if (!language || !language.adminLocales || !language.surveyLocales) throw new NotFoundError();
 
     if (language.adminLocales.length || language.surveyLocales.length)

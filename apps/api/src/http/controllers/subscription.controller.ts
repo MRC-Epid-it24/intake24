@@ -23,6 +23,7 @@ const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
     const type = 'web-push';
 
     const subscriptions = await UserSubscription.findAll({
+      attributes: ['id'],
       where: { userId, type, subscription: JSON.stringify(subscription) },
     });
 

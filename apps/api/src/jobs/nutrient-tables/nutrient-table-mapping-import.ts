@@ -45,7 +45,9 @@ export default class NutrientTableMappingImport extends StreamLockJob<'NutrientT
     const fileExists = await fs.pathExists(this.file);
     if (!fileExists) throw new Error(`Missing file (${this.file}).`);
 
-    const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId);
+    const nutrientTable = await NutrientTable.findByPk(this.params.nutrientTableId, {
+      attributes: ['id'],
+    });
     if (!nutrientTable) throw new Error(`Nutrient table record not found.`);
 
     await this.validate();

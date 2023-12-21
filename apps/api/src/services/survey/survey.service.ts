@@ -281,7 +281,7 @@ const surveyService = ({
     if (identifier)
       include.push({ association: 'customFields', where: { name: identifier }, required: false });
 
-    const user = await User.findByPk(userId, { include });
+    const user = await User.findByPk(userId, { attributes: ['id'], include });
 
     if (!user) throw new NotFoundError();
     const { aliases = [], customFields = [] } = user;

@@ -16,7 +16,10 @@ export default validate(
       optional: { options: { nullable: true } },
       custom: {
         options: async (value, meta): Promise<void> => {
-          const user = User.findOne({ where: { id: value, email: { [Op.ne]: null } } });
+          const user = User.findOne({
+            attributes: ['id'],
+            where: { id: value, email: { [Op.ne]: null } },
+          });
           if (!user) throw new Error(customTypeErrorMessage('exists._', meta));
         },
       },

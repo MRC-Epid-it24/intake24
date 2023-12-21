@@ -31,6 +31,7 @@ const passwordController = ({
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
 
     const passwordReset = await UserPasswordReset.findOne({
+      attributes: ['id', 'userId'],
       where: { token, createdAt: { [Op.gt]: expiredAt } },
       include: [{ association: 'user', where: { email: { [op]: email } } }],
     });
