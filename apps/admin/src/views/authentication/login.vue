@@ -2,7 +2,6 @@
   <app-entry-screen
     :subtitle="$t('common.login.subtitle').toString()"
     :title="$t('common._').toString()"
-    width="30rem"
   >
     <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
       <v-card-text>

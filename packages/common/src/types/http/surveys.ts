@@ -28,6 +28,7 @@ export type PublicSurveyEntry = {
   originatingUrl: string | null;
   supportEmail: string;
   openAccess: boolean;
+  authCaptcha: boolean;
 };
 
 export type SchemeEntryResponse = Pick<SurveySchemeAttributes, 'id' | 'type' | 'meals' | 'prompts'>;

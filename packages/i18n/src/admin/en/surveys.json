@@ -19,11 +19,12 @@
   "startDate": "Start date",
   "endDate": "End date",
   "supportEmail": "Support Email",
-  "authUrl": {
-    "_": "Authentication URL settings",
-    "domainOverride": "Domain override",
-    "tokenCharset": "Token character set",
-    "tokenLength": "Token length"
+  "auth": {
+    "_": "Authentication settings",
+    "captcha": "Captcha verification",
+    "urlDomainOverride": "URL Domain override",
+    "urlTokenCharset": "URL Token character set",
+    "urlTokenLength": "URL Token length"
   },
   "externalComm": {
     "_": "External communication",

@@ -23,9 +23,13 @@ export default () => {
 
   it('Valid refresh token should return 200, access token & refresh cookie', async () => {
     const loginRes = await request(suite.app)
-      .post('/api/auth/login')
+      .post('/api/auth/login/alias')
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+      .send({
+        username: 'testRespondent',
+        password: 'testRespondentPassword',
+        survey: 'test-survey',
+      });
 
     const refreshToken = loginRes
       .get('Set-Cookie')[0]

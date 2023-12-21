@@ -13,10 +13,10 @@
     "back": "Kembali ke log masuk",
 
     "err": {
-      "invalidCredentials": "Nama pengguna & kata laluan yang diberikan adalah tidak sah.",
-      "invalidToken": "Token akses yang diberikan adalah tidak sah.",
-      "invalidSurvey": "Survei ini ({surveyId}) tidak kelihatan seperti URL log masuk survei yang sah.",
-      "checkCredentials": "Semak kelayakan log masuk anda seperti yang disediakan."
+      "captcha": "Invalid captcha challenge response.",
+      "credentials": "Nama pengguna & kata laluan yang diberikan adalah tidak sah.",
+      "token": "Token akses yang diberikan adalah tidak sah.",
+      "survey": "Survei ini ({surveyId}) tidak kelihatan seperti URL log masuk survei yang sah."
     }
   },
   "logout": {

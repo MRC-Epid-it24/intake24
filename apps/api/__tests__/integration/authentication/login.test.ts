@@ -11,14 +11,14 @@ export default () => {
 
     expect(status).toBe(400);
     expect(body).toContainAllKeys(['errors', 'message']);
-    expect(body.errors).toContainAllKeys(['email', 'password']);
+    expect(body.errors).toContainAllKeys(['email', 'password', 'survey']);
   });
 
   it('Invalid credentials should return 401', async () => {
     const { status } = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'invalidPassword' });
+      .send({ email: 'testUser@example.com', password: 'invalidPassword', survey: 'test-survey' });
 
     expect(status).toBe(401);
   });
@@ -27,7 +27,7 @@ export default () => {
     const res = await request(suite.app)
       .post(url)
       .set('Accept', 'application/json')
-      .send({ email: 'testUser@example.com', password: 'testUserPassword' });
+      .send({ email: 'testUser@example.com', password: 'testUserPassword', survey: 'test-survey' });
 
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);

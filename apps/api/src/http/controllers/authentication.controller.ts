@@ -2,7 +2,11 @@ import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Tokens } from '@intake24/api/services/core/auth';
-import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http';
+import type {
+  ChallengeResponse,
+  LoginResponse,
+  RefreshResponse,
+} from '@intake24/common/types/http';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 
 const authenticationController = ({
@@ -27,30 +31,57 @@ const authenticationController = ({
       .json({ accessToken });
   };
 
-  const emailLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { email, password } = req.body;
+  const emailLogin = async (
+    req: Request,
+    res: Response<LoginResponse | ChallengeResponse>
+  ): Promise<void> => {
+    const { email, password, survey, captcha } = req.body;
 
-    const result = await authenticationService.emailLogin({ email, password }, { req });
+    const result = await authenticationService.emailLogin(
+      { email, password, survey, captcha },
+      { req }
+    );
+    if ('provider' in result) {
+      res.json(result);
+      return;
+    }
 
     sendTokenResponse(result, res);
   };
 
-  const aliasLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { username, password, survey } = req.body;
+  const aliasLogin = async (
+    req: Request,
+    res: Response<LoginResponse | ChallengeResponse>
+  ): Promise<void> => {
+    const { username, password, survey, captcha } = req.body;
 
-    const tokens = await authenticationService.aliasLogin({ username, password, survey }, { req });
+    const result = await authenticationService.aliasLogin(
+      { username, password, survey, captcha },
+      { req }
+    );
+    if ('provider' in result) {
+      res.json(result);
+      return;
+    }
 
-    sendTokenResponse(tokens, res);
+    sendTokenResponse(result, res);
   };
 
-  const tokenLogin = async (req: Request, res: Response<LoginResponse>): Promise<void> => {
-    const { token } = req.body;
+  const tokenLogin = async (
+    req: Request,
+    res: Response<LoginResponse | ChallengeResponse>
+  ): Promise<void> => {
+    const { token, captcha } = req.body;
 
     if (typeof token !== 'string' || !token) throw new UnauthorizedError();
 
-    const tokens = await authenticationService.tokenLogin({ token }, { req });
+    const result = await authenticationService.tokenLogin({ token, captcha }, { req });
+    if ('provider' in result) {
+      res.json(result);
+      return;
+    }
 
-    sendTokenResponse(tokens, res);
+    sendTokenResponse(result, res);
   };
 
   const refresh = async (req: Request, res: Response<RefreshResponse>): Promise<void> => {

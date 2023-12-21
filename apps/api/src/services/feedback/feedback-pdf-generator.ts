@@ -1,15 +1,19 @@
+import type { Protocol } from 'puppeteer';
 import puppeteer from 'puppeteer';
 
 export default class FeedbackPdfGenerator {
   readonly url: string;
+  readonly refreshCookie: Protocol.Network.CookieParam;
 
-  constructor(url: string) {
+  constructor(url: string, cookie: Protocol.Network.CookieParam) {
     this.url = url;
+    this.refreshCookie = cookie;
   }
 
   async loadFeedback() {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+    await page.setCookie(this.refreshCookie);
     await page.emulateMediaType('print');
     await page.goto(this.url, { waitUntil: 'networkidle0' });
 

@@ -50,7 +50,7 @@
                       {{ $t('recall.finishedAt', { finishedAt: endTime?.toLocaleString() }) }}
                     </v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action v-if="!isMobile">
+                  <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp">
                     <v-btn
                       block
                       color="info"
@@ -64,9 +64,8 @@
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
-                <v-list-item v-if="isMobile">
+                <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-end">
                   <v-btn
-                    block
                     color="info"
                     large
                     outlined
@@ -89,7 +88,7 @@
                       {{ $t('recall.startedAt', { startedAt: startTime?.toLocaleString() }) }}
                     </v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action v-if="!isMobile" class="align-stretch">
+                  <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp" class="align-stretch">
                     <v-btn
                       class="mb-2"
                       color="info"
@@ -122,7 +121,7 @@
                     </confirm-dialog>
                   </v-list-item-action>
                 </v-list-item>
-                <v-list-item v-if="isMobile">
+                <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-sm-end">
                   <confirm-dialog
                     :label="$t('recall.abort.label').toString()"
                     @confirm="cancelRecall"
@@ -130,8 +129,8 @@
                     <template #activator="{ on, attrs }">
                       <v-btn
                         v-bind="attrs"
-                        class="flex-grow-1 mr-2"
-                        color="primary"
+                        class="flex-grow-1 flex-sm-grow-0 mr-2"
+                        color="error"
                         large
                         outlined
                         rounded
@@ -145,7 +144,7 @@
                     {{ $t('recall.abort.confirm') }}
                   </confirm-dialog>
                   <v-btn
-                    class="flex-grow-1"
+                    class="flex-grow-1 flex-sm-grow-0"
                     color="info"
                     large
                     outlined
@@ -166,7 +165,7 @@
                   <v-list-item-content>
                     <v-list-item-title>{{ $t('recall.none') }}</v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action v-if="!isMobile">
+                  <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp">
                     <v-btn
                       color="info"
                       outlined
@@ -179,9 +178,8 @@
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
-                <v-list-item v-if="isMobile">
+                <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-end">
                   <v-btn
-                    block
                     color="info"
                     large
                     outlined
@@ -209,7 +207,7 @@
                   <v-list-item-content>
                     <v-list-item-title>{{ $t('feedback.status.available') }}</v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action v-if="!isMobile">
+                  <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp">
                     <v-btn
                       color="info"
                       outlined
@@ -221,9 +219,8 @@
                     </v-btn>
                   </v-list-item-action>
                 </v-list-item>
-                <v-list-item v-if="isMobile">
+                <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-end">
                   <v-btn
-                    block
                     color="info"
                     large
                     outlined

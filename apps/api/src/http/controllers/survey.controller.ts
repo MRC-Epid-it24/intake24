@@ -14,6 +14,17 @@ import { publicSurveyEntryResponse } from '../responses';
 const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   const browse = async (req: Request, res: Response<PublicSurveyEntry[]>): Promise<void> => {
     const surveys = await Survey.findAll({
+      attributes: [
+        'id',
+        'slug',
+        'name',
+        'localeId',
+        'originatingUrl',
+        'supportEmail',
+        'genUserKey',
+        'allowGenUsers',
+        'authCaptcha',
+      ],
       where: { allowGenUsers: true, genUserKey: null },
       order: [['name', 'ASC']],
     });
@@ -27,7 +38,19 @@ const surveyController = ({ surveyService }: Pick<IoC, 'surveyService'>) => {
   ): Promise<void> => {
     const { slug } = req.params;
 
-    const survey = await Survey.findBySlug(slug);
+    const survey = await Survey.findBySlug(slug, {
+      attributes: [
+        'id',
+        'slug',
+        'name',
+        'localeId',
+        'originatingUrl',
+        'supportEmail',
+        'genUserKey',
+        'allowGenUsers',
+        'authCaptcha',
+      ],
+    });
     if (!survey) throw new NotFoundError();
 
     res.json(publicSurveyEntryResponse(survey));

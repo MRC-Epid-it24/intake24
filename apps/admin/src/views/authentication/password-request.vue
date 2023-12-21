@@ -2,7 +2,6 @@
   <app-entry-screen
     :subtitle="$t('common.password.request.subtitle').toString()"
     :title="$t('common.password.request._').toString()"
-    width="30rem"
   >
     <v-card-text v-if="submitted" class="pa-6">
       <p class="text-h5 ma-4">{{ $t('common.password.request.sent') }}</p>
@@ -34,7 +33,7 @@
           </v-row>
         </v-container>
       </v-card-text>
-      <captcha ref="captcha" @expired="expired" @verified="verified"></captcha>
+      <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>
     </v-form>
     <v-card-actions>
       <v-btn color="info" exact text :to="{ name: 'login' }">
@@ -63,14 +62,14 @@ export default defineComponent({
   components: { AppEntryScreen, Captcha },
 
   setup() {
-    const captcha = ref<InstanceType<typeof Captcha>>();
+    const captchaEl = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
       form: createForm<PasswordRequestForm>({
         email: null,
         captcha: null,
       }),
-      captcha,
+      captchaEl,
       submitted: false,
     });
   },
@@ -78,7 +77,7 @@ export default defineComponent({
   methods: {
     resetCaptcha() {
       this.form.captcha = null;
-      this.captcha?.reset();
+      this.captchaEl?.reset();
     },
 
     async verified(token: string) {
@@ -105,8 +104,8 @@ export default defineComponent({
     },
 
     async submit() {
-      if (this.captcha) {
-        this.captcha.executeIfCan();
+      if (this.captchaEl) {
+        this.captchaEl.executeIfCan();
         return;
       }
 

@@ -1,14 +1,14 @@
 <template>
   <app-entry-screen
+    max-width="800px"
     :subtitle="$t('common.signup.subtitle').toString()"
     :title="$t('common.signup._').toString()"
-    width="800px"
   >
     <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.name"
                 autocomplete="name"
@@ -21,7 +21,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.phone"
                 autocomplete="tel"
@@ -34,7 +34,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.email"
                 autocomplete="email"
@@ -47,7 +47,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.emailConfirm"
                 autocomplete="email"
@@ -60,7 +60,7 @@
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.password"
                 :append-icon="show.password ? 'fas fa-eye' : 'fas fa-eye-slash'"
@@ -76,7 +76,7 @@
                 @click:append="show.password = !show.password"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.passwordConfirm"
                 :append-icon="show.passwordConfirm ? 'fas fa-eye' : 'fas fa-eye-slash'"
@@ -127,7 +127,7 @@
           </v-row>
         </v-container>
       </v-card-text>
-      <captcha ref="captcha" @expired="expired" @verified="verified"></captcha>
+      <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>
     </v-form>
     <v-card-actions>
       <v-btn color="info" exact text :to="{ name: 'login' }">
@@ -163,7 +163,7 @@ export default defineComponent({
   components: { AppEntryScreen, Captcha },
 
   setup() {
-    const captcha = ref<InstanceType<typeof Captcha>>();
+    const captchaEl = ref<InstanceType<typeof Captcha>>();
 
     return reactive({
       form: createForm<SignUpForm>({
@@ -180,14 +180,14 @@ export default defineComponent({
         password: false,
         passwordConfirm: false,
       },
-      captcha,
+      captchaEl,
     });
   },
 
   methods: {
     resetCaptcha() {
       this.form.captcha = null;
-      this.captcha?.reset();
+      this.captchaEl?.reset();
     },
 
     async verified(token: string) {
@@ -217,8 +217,8 @@ export default defineComponent({
     },
 
     async submit() {
-      if (this.captcha) {
-        this.captcha.executeIfCan();
+      if (this.captchaEl) {
+        this.captchaEl.executeIfCan();
         return;
       }
 

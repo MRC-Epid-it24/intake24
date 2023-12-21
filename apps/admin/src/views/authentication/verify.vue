@@ -2,7 +2,6 @@
   <app-entry-screen
     :subtitle="$t('common.verify.subtitle').toString()"
     :title="$t('common.verify._').toString()"
-    width="30rem"
   >
     <v-card-text class="px-6">
       <p class="text-subtitle-2">{{ $t('common.spam') }}</p>

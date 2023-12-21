@@ -7,23 +7,37 @@ import type { MFAAuthChallenge, MFAProvider } from '@intake24/common/security';
 
 import type { MFADeviceEntry } from './admin/mfa-devices';
 
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
 export type EmailLoginRequest = {
   email: string;
   password: string;
+  survey: string;
+  captcha?: string;
 };
 
 export type AliasLoginRequest = {
   username: string;
   password: string;
   survey: string;
+  captcha?: string;
 };
 
 export type TokenLoginRequest = {
   token: string;
+  captcha?: string;
 };
 
 export type LoginResponse = {
   accessToken: string;
+};
+
+export type ChallengeResponse = {
+  surveyId: string;
+  provider: 'captcha';
 };
 
 export type MFAAuthResponse = {
@@ -31,7 +45,8 @@ export type MFAAuthResponse = {
   devices: MFADeviceEntry[];
 };
 
-export type AuthResponse = LoginResponse | MFAAuthResponse;
+export type AdminAuthResponse = LoginResponse | MFAAuthResponse;
+export type SurveyAuthResponse = LoginResponse | ChallengeResponse;
 
 export type OTPAuthenticationVerificationRequest = {
   challengeId: string;

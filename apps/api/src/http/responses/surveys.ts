@@ -2,8 +2,17 @@ import type { PublicSurveyEntry } from '@intake24/common/types/http';
 import type { Survey } from '@intake24/db';
 
 export const publicSurveyEntryResponse = (survey: Survey): PublicSurveyEntry => {
-  const { id, slug, name, localeId, originatingUrl, supportEmail, genUserKey, allowGenUsers } =
-    survey;
+  const {
+    id,
+    slug,
+    name,
+    localeId,
+    originatingUrl,
+    supportEmail,
+    genUserKey,
+    allowGenUsers,
+    authCaptcha,
+  } = survey;
 
   return {
     id,
@@ -13,5 +22,6 @@ export const publicSurveyEntryResponse = (survey: Survey): PublicSurveyEntry => 
     originatingUrl,
     supportEmail,
     openAccess: allowGenUsers && !genUserKey,
+    authCaptcha,
   };
 };

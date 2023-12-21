@@ -61,13 +61,15 @@
           <td>{{ entry.numberOfSubmissionsForFeedback }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.authUrl.domainOverride') }}</th>
-          <td colspan="3">{{ entry.authUrlDomainOverride }}</td>
+          <th>{{ $t('surveys.auth.captcha') }}</th>
+          <td>{{ $t(`common.${entry.authCaptcha}`) }}</td>
+          <th>{{ $t('surveys.auth.urlDomainOverride') }}</th>
+          <td>{{ entry.authUrlDomainOverride }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.authUrl.tokenCharset') }}</th>
+          <th>{{ $t('surveys.auth.urlTokenCharset') }}</th>
           <td>{{ entry.authUrlTokenCharset }}</td>
-          <th>{{ $t('surveys.authUrl.tokenLength') }}</th>
+          <th>{{ $t('surveys.auth.urlTokenLength') }}</th>
           <td>{{ entry.authUrlTokenLength }}</td>
         </tr>
         <tr>

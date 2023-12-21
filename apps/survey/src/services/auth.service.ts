@@ -1,30 +1,33 @@
-import type { AliasLoginRequest, TokenLoginRequest } from '@intake24/common/types/http';
+import type {
+  AliasLoginRequest,
+  LoginResponse,
+  SurveyAuthResponse,
+  TokenLoginRequest,
+} from '@intake24/common/types/http';
 
 import http from './http.service';
 
-export type AuthResponse = { accessToken: string };
-
 export default {
-  async login(request: AliasLoginRequest): Promise<string> {
-    const {
-      data: { accessToken },
-    } = await http.post<AuthResponse>('auth/login/alias', request, { withCredentials: true });
+  async login(request: AliasLoginRequest): Promise<SurveyAuthResponse> {
+    const { data } = await http.post<SurveyAuthResponse>('auth/login/alias', request, {
+      withCredentials: true,
+    });
 
-    return accessToken;
+    return data;
   },
 
-  async token(request: TokenLoginRequest): Promise<string> {
-    const {
-      data: { accessToken },
-    } = await http.post<AuthResponse>(`auth/login/token`, request, { withCredentials: true });
+  async token(request: TokenLoginRequest): Promise<SurveyAuthResponse> {
+    const { data } = await http.post<SurveyAuthResponse>(`auth/login/token`, request, {
+      withCredentials: true,
+    });
 
-    return accessToken;
+    return data;
   },
 
   async refresh(): Promise<string> {
     const {
       data: { accessToken },
-    } = await http.post<AuthResponse>('auth/refresh', null, { withCredentials: true });
+    } = await http.post<LoginResponse>('auth/refresh', null, { withCredentials: true });
 
     return accessToken;
   },

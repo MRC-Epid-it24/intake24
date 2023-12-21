@@ -2,10 +2,9 @@ import type { Secret, SignOptions } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { SignPayload, Subject, TokenPayload } from '@intake24/common/security';
+import type { SignPayload, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import { InternalServerError } from '@intake24/api/http/errors';
-import { btoa } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 
 export type Tokens = {
@@ -151,21 +150,38 @@ const jwtService = ({
    * Issue JWT tokens and log for rotation
    *
    * @param {SignPayload} payload
-   * @param {(Subject | string)} subject
    * @param {FrontEnd} frontEnd
+   * @param {SignOptions} [options={}]
    * @returns {Promise<Tokens>}
    */
   const issueTokens = async (
     payload: SignPayload,
-    subject: Subject | string,
-    frontEnd: FrontEnd
+    frontEnd: FrontEnd,
+    options: SignOptions = {}
   ): Promise<Tokens> => {
-    const { accessToken, refreshToken } = await signTokens(payload, frontEnd, {
-      subject: typeof subject === 'string' ? subject : btoa(subject),
-    });
+    const { accessToken, refreshToken } = await signTokens(payload, frontEnd, options);
     await jwtRotationService.store(refreshToken, payload.userId);
 
     return { accessToken, refreshToken };
+  };
+
+  /**
+   * Issue refresh token and log for rotation
+   *
+   * @param {SignPayload} payload
+   * @param {FrontEnd} frontEnd
+   * @param {SignOptions} [options={}]
+   * @returns {Promise<string>}
+   */
+  const issueRefreshToken = async (
+    payload: SignPayload,
+    frontEnd: FrontEnd,
+    options: SignOptions = {}
+  ): Promise<string> => {
+    const refreshToken = await signRefreshToken(payload, frontEnd, options);
+    await jwtRotationService.store(refreshToken, payload.userId);
+
+    return refreshToken;
   };
 
   return {
@@ -176,6 +192,7 @@ const jwtService = ({
     signTokens,
     decodeToken,
     verifyRefreshToken,
+    issueRefreshToken,
     issueTokens,
   };
 };

@@ -32,6 +32,11 @@ export default defineComponent({
           value: 'id',
         },
         {
+          text: this.$t('users.id'),
+          sortable: true,
+          value: 'userId',
+        },
+        {
           text: this.$t('sign-in-logs.provider'),
           sortable: true,
           value: 'provider',

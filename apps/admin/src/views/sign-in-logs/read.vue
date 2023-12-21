@@ -5,11 +5,13 @@
         <tr>
           <th>{{ $t('common.id') }}</th>
           <td>{{ entry.id }}</td>
-          <th>{{ $t('sign-in-logs.successful') }}</th>
-          <td>
-            <v-icon v-if="entry.successful" color="success">$check</v-icon>
-            <v-icon v-else color="error">$times</v-icon>
+          <th>{{ $t('users.id') }}</th>
+          <td v-if="can('users|read') && entry.userId">
+            <router-link :to="{ name: 'users-read', params: { id: entry.userId } }">
+              {{ entry.userId }}
+            </router-link>
           </td>
+          <td v-else>{{ entry.userId }}</td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.provider') }}</th>
@@ -19,7 +21,12 @@
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.remoteAddress') }}</th>
-          <td colspan="3">{{ entry.remoteAddress }}</td>
+          <td>{{ entry.remoteAddress }}</td>
+          <th>{{ $t('sign-in-logs.successful') }}</th>
+          <td>
+            <v-icon v-if="entry.successful" color="success">$check</v-icon>
+            <v-icon v-else color="error">$times</v-icon>
+          </td>
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.userAgent') }}</th>

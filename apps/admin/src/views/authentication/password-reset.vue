@@ -2,7 +2,6 @@
   <app-entry-screen
     :subtitle="$t('common.password.reset.subtitle').toString()"
     :title="$t('common.password.reset._').toString()"
-    width="30rem"
   >
     <v-form @keydown.native="form.errors.clear($event.target.name)" @submit.prevent="submit">
       <v-card-text>

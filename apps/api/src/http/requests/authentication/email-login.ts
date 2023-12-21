@@ -20,5 +20,17 @@ export default validate(
       isString: true,
       isEmpty: { negated: true },
     },
+    survey: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string._'),
+      isString: true,
+      isEmpty: { negated: true },
+    },
+    captcha: {
+      in: ['body'],
+      errorMessage: typeErrorMessage('string._'),
+      isString: true,
+      optional: true,
+    },
   })
 );

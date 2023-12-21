@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 import type {
-  EmailLoginRequest,
+  LoginRequest,
   MFAAuthenticationVerificationRequest,
   MFAAuthResponse,
 } from '@intake24/common/types/http';
@@ -42,7 +42,7 @@ export const useAuth = defineStore('auth', {
       this.mfa = challenge;
     },
 
-    async login(payload: EmailLoginRequest) {
+    async login(payload: LoginRequest) {
       const data = await authService.login(payload);
 
       if ('accessToken' in data) await this.successfulLogin(data.accessToken);

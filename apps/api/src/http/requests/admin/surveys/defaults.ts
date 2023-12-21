@@ -108,6 +108,12 @@ export const defaults: Schema = {
     errorMessage: typeErrorMessage('boolean._'),
     isBoolean: { options: { strict: true } },
   },
+  authCaptcha: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
+    optional: true,
+  },
   genUserKey: {
     in: ['body'],
     errorMessage: typeErrorMessage('string._'),

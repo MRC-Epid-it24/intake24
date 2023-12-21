@@ -12,7 +12,7 @@ import type {
 import http from './http.service';
 
 export type GenerateUserPayload = {
-  captcha: string | null;
+  captcha?: string;
 };
 
 export default {

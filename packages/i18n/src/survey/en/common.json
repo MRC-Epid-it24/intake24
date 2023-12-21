@@ -10,13 +10,14 @@
   "login": {
     "_": "Sign in",
     "subtitle": "Sign in with your username & password",
+    "captcha": "Complete the captcha challenge",
     "back": "Back to login",
 
     "err": {
-      "invalidCredentials": "Invalid username & password credentials provided.",
-      "invalidToken": "Invalid access token provided.",
-      "invalidSurvey": "This survey ({surveyId}) doesn't look like to be a valid survey login URL.",
-      "checkCredentials": "Check your provided login credentials."
+      "captcha": "Invalid captcha challenge response.",
+      "credentials": "Invalid username & password credentials provided.",
+      "token": "Invalid access token provided.",
+      "survey": "This survey ({surveyId}) doesn't look like to be a valid survey login URL."
     }
   },
   "logout": {

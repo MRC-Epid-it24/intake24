@@ -89,9 +89,22 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
     await auth.logout(true);
     await auth.token({ token });
 
-    const surveyId = useUser().profile?.surveyId;
+    if (auth.loggedIn) {
+      const surveyId = useUser().profile?.surveyId;
+      next(surveyId ? { name: 'survey-home', params: { surveyId } } : { name: 'home' });
+      return;
+    }
 
-    next(surveyId ? { name: 'survey-home', params: { surveyId } } : { name: 'home' });
+    if (auth.challenge) {
+      next({
+        name: 'survey-challenge',
+        params: { surveyId: auth.challenge.surveyId },
+        query: { auth: token },
+      });
+      return;
+    }
+
+    throw new Error();
   } catch {
     next({ name: 'home' });
   }
@@ -136,15 +149,26 @@ export const globalGuard: NavigationGuard = async (to, from, next) => {
   }
 
   // Try logging-in if we have authentication token
-  if (typeof token === 'string' && token && !auth.loggedIn) {
+  if (typeof token === 'string' && token && !auth.loggedIn && !auth.challenge) {
     try {
       await auth.logout(true);
       await auth.token({ token });
 
-      surveyId = useUser().profile?.surveyId ?? surveyId;
+      if (auth.loggedIn) {
+        surveyId = useUser().profile?.surveyId ?? surveyId;
+        next({ name: to.name ?? 'survey-home', params: { surveyId }, query });
+        return;
+      }
 
-      next({ name: to.name ?? 'survey-home', params: { surveyId }, query });
-      return;
+      if (auth.challenge) {
+        next({
+          name: 'survey-challenge',
+          //@ts-expect-error TS doesn't narrow type based on store change
+          params: { surveyId: auth.challenge.surveyId },
+          query: { auth: token },
+        });
+        return;
+      }
     } catch {
       next({ name: surveyId ? 'survey-login' : 'home', params: { surveyId } });
       return;

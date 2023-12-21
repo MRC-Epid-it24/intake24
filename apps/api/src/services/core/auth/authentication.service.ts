@@ -6,12 +6,16 @@ import type { Subject } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import type {
   AliasLoginRequest,
+  ChallengeResponse,
   EmailLoginRequest,
+  LoginRequest,
   MFAAuthResponse,
   TokenLoginRequest,
 } from '@intake24/common/types/http';
-import type { UserPassword } from '@intake24/db';
+import type { SurveyAttributes, UserPassword } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
+import { captcha as captchaCheck } from '@intake24/api/http/rules';
+import { btoa } from '@intake24/api/util';
 import { surveyRespondent } from '@intake24/common/security';
 import { supportedAlgorithms } from '@intake24/common-backend';
 import { MFADevice, Op, Survey, User } from '@intake24/db';
@@ -21,8 +25,10 @@ import type { Tokens } from '.';
 export type LoginCredentials<T extends FrontEnd = FrontEnd> = {
   user: User | null;
   password: string;
+  captcha?: string;
   subject: Subject;
   frontEnd: T;
+  survey?: Pick<SurveyAttributes, 'slug' | 'authCaptcha'>;
 };
 
 export type LoginMeta = {
@@ -55,6 +61,7 @@ const authenticationService = ({
   duoProvider,
   otpProvider,
   fidoProvider,
+  servicesConfig,
 }: Pick<
   IoC,
   | 'jwtRotationService'
@@ -64,6 +71,7 @@ const authenticationService = ({
   | 'duoProvider'
   | 'otpProvider'
   | 'fidoProvider'
+  | 'servicesConfig'
 >) => {
   const logger = globalLogger.child({ service: 'AuthenticationService' });
 
@@ -156,8 +164,8 @@ const authenticationService = ({
   const processLogin = async <T extends FrontEnd>(
     credentials: LoginCredentials<T>,
     meta: LoginMeta
-  ): Promise<T extends 'survey' ? Tokens : MFAAuthResponse | Tokens> => {
-    const { user, password, subject, frontEnd } = credentials;
+  ): Promise<T extends 'survey' ? ChallengeResponse | Tokens : MFAAuthResponse | Tokens> => {
+    const { user, password, captcha, subject, frontEnd, survey } = credentials;
     const {
       ip: remoteAddress,
       headers: { 'user-agent': userAgent },
@@ -186,8 +194,30 @@ const authenticationService = ({
       throw new UnauthorizedError('Provided credentials do not match our records.');
     }
 
-    const { id: userId, email, aliases } = user;
-    const surveyId = aliases?.[0]?.survey?.slug;
+    const { id: userId, email } = user;
+    const surveyId = survey?.slug;
+    const authCaptcha = survey?.authCaptcha;
+
+    if (frontEnd === 'survey') {
+      if (!surveyId || authCaptcha === undefined) {
+        await signInService.log({
+          ...signInAttempt,
+          message: 'Invalid survey for provided credentials.',
+        });
+        throw new UnauthorizedError('Provided credentials do not match our records.');
+      }
+
+      if (authCaptcha) {
+        try {
+          if (typeof captcha === 'undefined')
+            //@ts-expect-error fix type
+            return { surveyId, provider: 'captcha' };
+          else await captchaCheck(captcha, servicesConfig.captcha);
+        } catch (err) {
+          throw new UnauthorizedError('Invalid CAPTCHA challenge.');
+        }
+      }
+    }
 
     if (frontEnd === 'admin' && user.multiFactorAuthentication && email)
       //@ts-expect-error fix type
@@ -195,18 +225,18 @@ const authenticationService = ({
 
     await signInService.log({ ...signInAttempt, successful: true });
 
-    return jwtService.issueTokens({ surveyId, userId }, subject, frontEnd);
+    return jwtService.issueTokens({ surveyId, userId }, frontEnd, { subject: btoa(subject) });
   };
 
   /**
    * Email login to admin application
    *
-   * @param {EmailLoginRequest} credentials
+   * @param {LoginRequest} credentials
    * @param {LoginMeta} meta
    * @returns {(Promise<Tokens | MFAAuthResponse>)}
    */
   const adminLogin = async (
-    credentials: EmailLoginRequest,
+    credentials: LoginRequest,
     meta: LoginMeta
   ): Promise<Tokens | MFAAuthResponse> => {
     const { email, password } = credentials;
@@ -227,20 +257,37 @@ const authenticationService = ({
    *
    * @param {EmailLoginRequest} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<Tokens>}
+   * @returns {Promise<ChallengeResponse | Tokens>}
    */
-  const emailLogin = async (credentials: EmailLoginRequest, meta: LoginMeta): Promise<Tokens> => {
-    const { email, password } = credentials;
+  const emailLogin = async (
+    credentials: EmailLoginRequest,
+    meta: LoginMeta
+  ): Promise<ChallengeResponse | Tokens> => {
+    const { email, password, survey: slug, captcha } = credentials;
 
     const op = User.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.eq;
-    const user = await User.findOne({
-      where: { email: { [op]: email } },
-      include: [{ association: 'password', required: true }],
-    });
+    const [user, survey] = await Promise.all([
+      User.findOne({
+        where: { email: { [op]: email } },
+        include: [
+          {
+            association: 'permissions',
+            attributes: ['name'],
+            through: { attributes: [] },
+            where: { name: surveyRespondent(slug) },
+          },
+          { association: 'password', required: true },
+        ],
+      }),
+      Survey.findBySlug(slug, { attributes: ['authCaptcha', 'slug'] }),
+    ]);
 
-    const subject: Subject = { provider: 'email', providerKey: email };
+    const subject: Subject = { provider: 'email', providerKey: `${slug}#${email}` };
 
-    return processLogin({ user, password, subject, frontEnd: 'survey' }, meta);
+    return processLogin(
+      { user, password, captcha, subject, frontEnd: 'survey', survey: survey ?? undefined },
+      meta
+    );
   };
 
   /**
@@ -248,29 +295,40 @@ const authenticationService = ({
    *
    * @param {AliasLoginRequest} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<Tokens>}
+   * @returns {Promise<ChallengeResponse | Tokens>}
    */
-  const aliasLogin = async (credentials: AliasLoginRequest, meta: LoginMeta): Promise<Tokens> => {
-    const { username, password, survey: slug } = credentials;
-
-    const survey = await Survey.findBySlug(slug);
-    if (!survey) throw new UnauthorizedError('Invalid survey for provided credentials.');
+  const aliasLogin = async (
+    credentials: AliasLoginRequest,
+    meta: LoginMeta
+  ): Promise<ChallengeResponse | Tokens> => {
+    const { username, password, survey: slug, captcha } = credentials;
 
     const user = await User.findOne({
+      subQuery: false,
       include: [
-        { association: 'permissions', where: { name: surveyRespondent(slug) } },
+        {
+          association: 'permissions',
+          attributes: ['name'],
+          through: { attributes: [] },
+          where: { name: surveyRespondent(slug) },
+        },
         { association: 'password' },
         {
           association: 'aliases',
-          where: { username, surveyId: survey.id },
-          include: [{ association: 'survey', attributes: ['slug'] }],
+          where: { username },
+          include: [
+            { association: 'survey', attributes: ['authCaptcha', 'slug'], where: { slug } },
+          ],
         },
       ],
     });
 
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
 
-    return processLogin({ user, password, subject, frontEnd: 'survey' }, meta);
+    return processLogin(
+      { user, password, captcha, subject, frontEnd: 'survey', survey: user?.aliases?.[0]?.survey },
+      meta
+    );
   };
 
   /**
@@ -278,15 +336,19 @@ const authenticationService = ({
    *
    * @param {TokenLoginRequest} credentials
    * @param {LoginMeta} meta
-   * @returns {Promise<Tokens>}
+   * @returns {Promise<ChallengeResponse | Tokens>}
    */
-  const tokenLogin = async ({ token }: TokenLoginRequest, meta: LoginMeta): Promise<Tokens> => {
+  const tokenLogin = async (
+    { token, captcha }: TokenLoginRequest,
+    meta: LoginMeta
+  ): Promise<ChallengeResponse | Tokens> => {
     const user = await User.findOne({
+      subQuery: false,
       include: [
         {
           association: 'aliases',
           where: { urlAuthToken: token },
-          include: [{ association: 'survey', attributes: ['slug'] }],
+          include: [{ association: 'survey', attributes: ['authCaptcha', 'slug'], required: true }],
         },
         { association: 'password' },
       ],
@@ -294,7 +356,17 @@ const authenticationService = ({
 
     const subject: Subject = { provider: 'URLToken', providerKey: token };
 
-    return processLogin({ user, password: '', subject, frontEnd: 'survey' }, meta);
+    return processLogin(
+      {
+        user,
+        password: '',
+        captcha,
+        subject,
+        frontEnd: 'survey',
+        survey: user?.aliases?.[0]?.survey,
+      },
+      meta
+    );
   };
 
   /**
@@ -313,13 +385,13 @@ const authenticationService = ({
         surveyId,
       } = await jwtService.verifyRefreshToken(token, frontEnd);
 
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(userId, { attributes: ['id'] });
       if (!user) throw new UnauthorizedError();
 
       const valid = await jwtRotationService.verifyAndRevoke(token);
       if (!valid) throw new UnauthorizedError();
 
-      return await jwtService.issueTokens({ surveyId, userId }, subject, frontEnd);
+      return await jwtService.issueTokens({ surveyId, userId }, frontEnd, { subject });
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
@@ -389,7 +461,9 @@ const authenticationService = ({
       });
 
       const [tokens] = await Promise.all([
-        jwtService.issueTokens({ userId }, { provider: 'email', providerKey: email }, 'admin'),
+        jwtService.issueTokens({ userId }, 'admin', {
+          subject: btoa({ provider: 'email', providerKey: email }),
+        }),
         signInService.log({ ...signInAttempt, successful: true }),
       ]);
 

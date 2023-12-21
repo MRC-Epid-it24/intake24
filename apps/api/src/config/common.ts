@@ -1,4 +1,4 @@
-export type SameSiteCookieOptions = boolean | 'lax' | 'strict' | 'none';
+export type SameSiteCookieOptions = 'strict' | 'lax' | 'none';
 
 export type CookieSettings = {
   name: string;

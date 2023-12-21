@@ -3,7 +3,6 @@
     <app-entry-screen
       :subtitle="$t('common.welcome.subtitle').toString()"
       :title="$t('common._').toString()"
-      width="30rem"
     >
       <v-divider class="mt-4"></v-divider>
       <v-card-title class="font-weight-medium">

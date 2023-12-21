@@ -80,6 +80,7 @@
                   class="px-10"
                   color="primary"
                   outlined
+                  rounded
                   x-large
                   v-on="on"
                 >

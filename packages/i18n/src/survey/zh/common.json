@@ -13,10 +13,10 @@
     "back": "返回登录",
 
     "err": {
-      "invalidCredentials": "提供的用户名和密码凭据无效。",
-      "invalidToken": "提供的访问令牌无效。",
-      "invalidSurvey": "此调查（{surveyId}）看起来不是有效的调查登录 URL。",
-      "checkCredentials": "请检查您提供的登录凭据。"
+      "captcha": "Invalid captcha challenge response.",
+      "credentials": "提供的用户名和密码凭据无效。",
+      "token": "提供的访问令牌无效。",
+      "survey": "此调查（{surveyId}）看起来不是有效的调查登录 URL。"
     }
   },
   "logout": {

@@ -1,6 +1,6 @@
 import type {
-  AuthResponse,
-  EmailLoginRequest,
+  AdminAuthResponse,
+  LoginRequest,
   LoginResponse,
   MFAAuthenticationVerificationRequest,
 } from '@intake24/common/types/http';
@@ -11,11 +11,11 @@ export default {
   /**
    * Login the user and store the access token to token service.
    *
-   * @param {EmailLoginRequest} request
-   * @returns {Promise<AuthResponse>}
+   * @param {LoginRequest} request
+   * @returns {Promise<AdminAuthResponse>}
    */
-  async login(request: EmailLoginRequest): Promise<AuthResponse> {
-    const { data } = await http.post<AuthResponse>('admin/auth/login', request, {
+  async login(request: LoginRequest): Promise<AdminAuthResponse> {
+    const { data } = await http.post<AdminAuthResponse>('admin/auth/login', request, {
       withLoading: true,
     });
 

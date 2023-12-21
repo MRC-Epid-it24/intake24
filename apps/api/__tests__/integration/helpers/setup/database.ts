@@ -203,17 +203,18 @@ export const initDatabase = async (): Promise<MockData> => {
 
   const role = await Role.create({ name: 'test-role', displayName: 'Test Role' });
 
+  const respondent = await ioc.cradle.adminSurveyService.createRespondent(survey, {
+    username: 'testRespondent',
+    password: 'testRespondentPassword',
+  });
+
+  const permission = await ioc.cradle.adminSurveyService.getSurveyRespondentPermission(survey.slug);
   const user = await ioc.cradle.adminUserService.create({
     email: 'testUser@example.com',
     password: 'testUserPassword',
     verifiedAt: new Date(),
-    permissions: [],
+    permissions: [permission.id],
     roles: [role.id],
-  });
-
-  const respondent = await ioc.cradle.adminSurveyService.createRespondent(survey, {
-    username: 'testRespondent',
-    password: 'testRespondentPassword',
   });
 
   return {

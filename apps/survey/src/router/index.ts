@@ -36,6 +36,13 @@ const routes: RouteConfig[] = [
     props: true,
   },
   {
+    path: '/:surveyId/challenge',
+    name: 'survey-challenge',
+    component: views.survey.challenge,
+    meta: { module: 'login', title: 'common.login._' },
+    props: true,
+  },
+  {
     path: '/:surveyId/generate-user',
     name: 'survey-generate-user',
     component: views.survey.generateUser,

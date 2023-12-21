@@ -147,6 +147,13 @@ export default class Survey extends BaseModel<
   declare authUrlTokenLength: CreationOptional<number | null>;
 
   @Column({
+    allowNull: false,
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare authCaptcha: CreationOptional<boolean>;
+
+  @Column({
     allowNull: true,
     type: DataType.STRING(512),
   })
@@ -371,6 +378,7 @@ export const updateSurveyFields = [
   'submissionNotificationUrl',
   'storeUserSessionOnServer',
   'numberOfSubmissionsForFeedback',
+  'authCaptcha',
   'authUrlDomainOverride',
   'authUrlTokenCharset',
   'authUrlTokenLength',
@@ -387,20 +395,6 @@ export type UpdateSurveyField = (typeof updateSurveyFields)[number];
 export const createSurveyFields = ['slug', ...updateSurveyFields] as const;
 
 export type CreateSurveyField = (typeof createSurveyFields)[number];
-
-/* export const staffUpdateSurveyFields = [
-  'name',
-  'state',
-  'startDate',
-  'endDate',
-  'localeId',
-  'surveySchemeId',
-  'feedbackSchemeId',
-  'supportEmail',
-  'suspensionReason',
-] as const;
-
-export type StaffUpdateSurveyFields = typeof staffUpdateSurveyFields[number]; */
 
 export const overridesFields = ['surveySchemeOverrides'] as const;
 

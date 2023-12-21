@@ -3,9 +3,8 @@
     <app-entry-screen
       :subtitle="$t('common.login.subtitle').toString()"
       :title="$t('common._').toString()"
-      width="30rem"
     >
-      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
+      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="submit">
         <v-card-text>
           <v-container>
             <v-row>
@@ -49,9 +48,15 @@
             </v-row>
           </v-container>
         </v-card-text>
+        <captcha
+          v-if="survey?.authCaptcha"
+          ref="captchaEl"
+          @expired="expired"
+          @verified="verified"
+        ></captcha>
       </v-form>
       <template v-if="isOpenAccess">
-        <v-divider class="mx-6"></v-divider>
+        <v-divider></v-divider>
         <v-card-title class="text-h3 font-weight-medium justify-center">
           {{ `No account?` }}
         </v-card-title>
@@ -86,14 +91,14 @@ import { defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
 import { useAuth } from '@intake24/survey/stores';
-import { AppEntryScreen } from '@intake24/ui';
+import { AppEntryScreen, Captcha } from '@intake24/ui';
 
 import { useLogin } from './use-login';
 
 export default defineComponent({
   name: 'SurveyLogin',
 
-  components: { AppEntryScreen },
+  components: { AppEntryScreen, Captcha },
 
   props: {
     surveyId: {
@@ -105,16 +110,37 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const {
+      captchaEl,
+      captchaToken,
       errors,
       fetchSurveyPublicInfo,
       isOpenAccess,
       login,
       password,
+      resetCaptcha,
       showPassword,
       status,
       survey,
       username,
     } = useLogin(props);
+
+    const verified = async (token: string) => {
+      captchaToken.value = token;
+      await login('alias');
+    };
+
+    const expired = () => {
+      resetCaptcha();
+    };
+
+    const submit = async () => {
+      if (captchaEl.value) {
+        captchaEl.value.executeIfCan();
+        return;
+      }
+
+      await login('alias');
+    };
 
     onMounted(async () => {
       await fetchSurveyPublicInfo();
@@ -136,15 +162,18 @@ export default defineComponent({
     });
 
     return {
+      captchaEl,
       errors,
+      expired,
       fetchSurveyPublicInfo,
       isOpenAccess,
-      login,
       password,
       showPassword,
       status,
+      submit,
       survey,
       username,
+      verified,
     };
   },
 });

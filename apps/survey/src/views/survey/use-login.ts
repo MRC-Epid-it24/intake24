@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router/composables';
 
 import type { PublicSurveyEntry } from '@intake24/common/types/http';
+import type { Captcha } from '@intake24/ui';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { surveyService } from '@intake24/survey/services';
@@ -19,10 +20,15 @@ export const useLogin = (props: UseLoginProps) => {
 
   const username = ref('');
   const password = ref('');
+  const token = ref('');
+
   const showPassword = ref(false);
   const status = ref<number | null>(null);
   const survey = ref<PublicSurveyEntry | null>(null);
   const errors = ref(new Errors());
+
+  const captchaEl = ref<InstanceType<typeof Captcha>>();
+  const captchaToken = ref<string | undefined>(undefined);
 
   const isOpenAccess = computed(() => !!survey.value?.openAccess);
 
@@ -39,16 +45,32 @@ export const useLogin = (props: UseLoginProps) => {
     }
   };
 
-  const login = async () => {
-    try {
+  const resetCaptcha = () => {
+    captchaToken.value = undefined;
+    captchaEl.value?.reset();
+  };
+
+  const providers = {
+    alias: async () => {
       await auth.login({
         username: username.value,
         password: password.value,
         survey: props.surveyId,
+        captcha: captchaToken.value,
       });
       username.value = '';
       password.value = '';
       await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
+    },
+    token: async () => {
+      await auth.token({ token: token.value, captcha: captchaToken.value });
+      await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
+    },
+  };
+
+  const login = async (provider: 'alias' | 'token') => {
+    try {
+      await providers[provider]();
     } catch (err) {
       if (
         axios.isAxiosError(err) &&
@@ -62,18 +84,24 @@ export const useLogin = (props: UseLoginProps) => {
           errors.value.record(data.errors);
 
         if (statusCode === HttpStatusCode.Unauthorized)
-          useMessages().error(i18n.t('common.login.err.invalidCredentials').toString());
+          useMessages().error(data.message ?? i18n.t('common.login.err.credentials').toString());
 
         return;
       }
 
       throw err;
+    } finally {
+      resetCaptcha();
     }
   };
 
   return {
+    captchaEl,
+    captchaToken,
     username,
     password,
+    token,
+    resetCaptcha,
     showPassword,
     status,
     survey,

@@ -166,13 +166,22 @@
           <v-divider class="my-6"></v-divider>
           <v-row>
             <v-col cols="12" md>
-              <div class="text-h5 mb-4">{{ $t('surveys.authUrl._') }}</div>
+              <div class="text-h5 mb-4">{{ $t('surveys.auth._') }}</div>
+              <v-switch
+                v-model="form.authCaptcha"
+                class="my-6"
+                :error-messages="form.errors.get('authCaptcha')"
+                hide-details="auto"
+                :label="$t('surveys.auth.captcha')"
+                name="authCaptcha"
+                @change="form.errors.clear('authCaptcha')"
+              ></v-switch>
               <v-text-field
                 v-model="form.authUrlTokenCharset"
                 class="mb-4"
                 :error-messages="form.errors.get('authUrlTokenCharset')"
                 hide-details="auto"
-                :label="$t('surveys.authUrl.tokenCharset')"
+                :label="$t('surveys.auth.urlTokenCharset')"
                 name="authUrlTokenCharset"
                 outlined
               ></v-text-field>
@@ -181,7 +190,7 @@
                 class="mb-4"
                 :error-messages="form.errors.get('authUrlTokenLength')"
                 hide-details="auto"
-                :label="$t('surveys.authUrl.tokenLength')"
+                :label="$t('surveys.auth.urlTokenLength')"
                 name="authUrlTokenLength"
                 outlined
               ></v-text-field>
@@ -189,7 +198,7 @@
                 v-model="form.authUrlDomainOverride"
                 :error-messages="form.errors.get('authUrlDomainOverride')"
                 hide-details="auto"
-                :label="$t('surveys.authUrl.domainOverride')"
+                :label="$t('surveys.auth.urlDomainOverride')"
                 name="authUrlDomainOverride"
                 outlined
                 prepend-inner-icon="fas fa-up-right-from-square"
@@ -202,7 +211,7 @@
               <div class="text-h5">{{ $t('surveys.externalComm._') }}</div>
               <v-switch
                 v-model="form.allowGenUsers"
-                class="mt-7 mb-8"
+                class="my-6"
                 :error-messages="form.errors.get('allowGenUsers')"
                 hide-details="auto"
                 :label="$t('surveys.externalComm.allowGenUsers')"
@@ -339,6 +348,7 @@ export type SurveyForm = {
    */
   allowGenUsers: boolean;
   genUserKey: string | null;
+  authCaptcha: boolean;
   authUrlDomainOverride: string | null;
   authUrlTokenCharset: string | null;
   authUrlTokenLength: number | null;
@@ -371,6 +381,7 @@ export const surveyForm: SurveyForm = {
   originatingUrl: null, */
   allowGenUsers: false,
   genUserKey: null,
+  authCaptcha: false,
   authUrlDomainOverride: null,
   authUrlTokenCharset: null,
   authUrlTokenLength: null,

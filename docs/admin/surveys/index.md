@@ -67,13 +67,15 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 
 - `Match score weight` - Match score weight parameter for sorting algorithm
 
-### Authentication URL settings
+### Authentication settings
 
-- `Token character set` - string of characters to be used for authentication tokens (if empty, default set is used)
+- `Captcha verification` - `on` / `off` control captcha verification step during authentication
 
-- `Token length` - Authentication token length (if empty, default length is used)
+- `URL token character set` - string of allowed characters to be used for authentication tokens embedded into the URL(if empty, default set is used)
 
-- `Domain override` - URL used to generate full authentication links in CSV export file. Please note, valid redirect, CNAME or other mechanism to reach the original server needs to be set up.
+- `URL token length` - Authentication token length (if empty, default length is used)
+
+- `URL Domain override` - URL used to generate full authentication links in CSV export file. Please note, valid redirect, CNAME or other mechanism to reach the original server needs to be set up.
 
 ### Submission limits
 

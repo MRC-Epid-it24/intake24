@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Readable } from 'node:stream';
 
-import type { CountOptions, FindOptions } from 'sequelize';
+import type { AbstractDataType, CountOptions, FindOptions } from 'sequelize';
 import { snakeCase } from 'lodash';
-import { col, fn, Op } from 'sequelize';
+import { col, DataTypes, fn, Op } from 'sequelize';
 import { Model as BaseModel } from 'sequelize-typescript';
 
 import type { Dictionary } from '@intake24/common/types';
@@ -105,8 +105,14 @@ export default class Model<
 
     if (sort && typeof sort === 'string') {
       const [column, order] = sort.split('|');
-      if (Object.keys(model.getAttributes()).includes(column))
-        options.order = [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]];
+      const attributes = model.getAttributes();
+      if (Object.keys(attributes).includes(column)) {
+        options.order = [DataTypes.STRING.key, DataTypes.TEXT.key].includes(
+          (attributes[column].type as AbstractDataType).key
+        )
+          ? [[fn('lower', col(`${model.name}.${snakeCase(column)}`)), order]]
+          : [[snakeCase(column), order]];
+      }
     }
 
     const records = await model.findAll(options);

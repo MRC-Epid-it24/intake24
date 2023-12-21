@@ -256,6 +256,7 @@ const survey = (
   const maximumDailySubmissions = faker.number.int({ min: 1, max: 5 });
   const minimumSubmissionInterval = faker.number.int(5);
 
+  const authCaptcha = faker.datatype.boolean();
   const authUrlDomainOverride = faker.internet.url();
   const authUrlTokenCharset = [
     ...new Set(randomString(30, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ').split('')),
@@ -291,6 +292,7 @@ const survey = (
     storeUserSessionOnServer,
     maximumDailySubmissions,
     minimumSubmissionInterval,
+    authCaptcha,
     authUrlDomainOverride,
     authUrlTokenCharset,
     authUrlTokenLength,

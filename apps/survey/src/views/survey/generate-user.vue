@@ -1,6 +1,6 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
-    <app-entry-screen :title="$t('common._').toString()" width="30rem">
+    <app-entry-screen :title="$t('common._').toString()">
       <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
         <v-card-text class="pa-6">
           <p>{{ $t('survey.generateUser.info1') }}</p>
@@ -58,7 +58,12 @@
           </v-btn>
         </v-card-actions>
       </v-form>
-      <captcha ref="captchaRef" @expired="expired" @verified="verified"></captcha>
+      <captcha
+        v-if="survey?.authCaptcha"
+        ref="captchaEl"
+        @expired="expired"
+        @verified="verified"
+      ></captcha>
       <v-card-actions>
         <v-btn color="info" exact text :to="{ name: 'survey-login', params: { surveyId } }">
           <v-icon left>fas fa-angles-left</v-icon>
@@ -94,10 +99,13 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const {
+      captchaEl,
+      captchaToken,
       errors,
       fetchSurveyPublicInfo,
       login,
       password,
+      resetCaptcha,
       showPassword,
       status,
       survey,
@@ -106,11 +114,47 @@ export default defineComponent({
 
     showPassword.value = true;
 
-    const captchaRef = ref<InstanceType<typeof Captcha>>();
-    const captchaToken = ref<string | null>(null);
     const loading = ref(false);
 
     const canContinue = computed(() => status.value === 200);
+
+    const verified = async (token: string) => {
+      captchaToken.value = token;
+      await generateUser();
+    };
+
+    const expired = () => {
+      resetCaptcha();
+    };
+
+    const generateUser = async () => {
+      loading.value = true;
+
+      try {
+        const data = await surveyService.generateUser(props.surveyId, {
+          captcha: captchaToken.value,
+        });
+
+        status.value = 200;
+        username.value = data.username;
+        password.value = data.password;
+      } catch (err) {
+        if (axios.isAxiosError(err)) status.value = err.response?.status ?? 0;
+      } finally {
+        loading.value = false;
+
+        resetCaptcha();
+      }
+    };
+
+    const submit = async () => {
+      if (captchaEl.value) {
+        captchaEl.value.executeIfCan();
+        return;
+      }
+
+      await generateUser();
+    };
 
     onMounted(async () => {
       await fetchSurveyPublicInfo();
@@ -119,65 +163,22 @@ export default defineComponent({
 
     return {
       canContinue,
-      captchaRef,
+      captchaEl,
       captchaToken,
       errors,
+      expired,
       fetchSurveyPublicInfo,
       loading,
       login,
       password,
+      resetCaptcha,
       showPassword,
       status,
+      submit,
       survey,
       username,
+      verified,
     };
-  },
-
-  methods: {
-    resetCaptcha() {
-      this.captchaToken = null;
-      this.captchaRef?.reset();
-    },
-
-    async verified(token: string) {
-      this.captchaToken = token;
-      await this.generateUser();
-    },
-
-    expired() {
-      this.resetCaptcha();
-    },
-
-    async generateUser() {
-      const { captchaToken } = this;
-
-      this.loading = true;
-
-      try {
-        const { username, password } = await surveyService.generateUser(this.surveyId, {
-          captcha: captchaToken,
-        });
-
-        this.status = 200;
-        this.username = username;
-        this.password = password;
-      } catch (err) {
-        if (axios.isAxiosError(err)) this.status = err.response?.status ?? 0;
-      } finally {
-        this.loading = false;
-
-        this.resetCaptcha();
-      }
-    },
-
-    async submit() {
-      if (this.captchaRef) {
-        this.captchaRef.executeIfCan();
-        return;
-      }
-
-      await this.generateUser();
-    },
   },
 });
 </script>

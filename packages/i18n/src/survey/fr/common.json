@@ -12,10 +12,10 @@
     "subtitle": "Connectez-vous avec votre nom d'utilisateur et votre mot de passe",
     "back": "Retour au login",
     "err": {
-      "invalidCredentials": "Les informations d'identification fournies pour le nom d'utilisateur et le mot de passe ne sont pas valides.",
-      "invalidToken": "Le jeton d'accès fourni n'est pas valide.",
-      "invalidSurvey": "Cette enquête ({surveyId}) ne semble pas être une URL de connexion valide.",
-      "checkCredentials": "Vérifiez les identifiants de connexion qui vous ont été fournis."
+      "captcha": "Invalid captcha challenge response.",
+      "credentials": "Les informations d'identification fournies pour le nom d'utilisateur et le mot de passe ne sont pas valides.",
+      "token": "Le jeton d'accès fourni n'est pas valide.",
+      "survey": "Cette enquête ({surveyId}) ne semble pas être une URL de connexion valide."
     }
   },
   "logout": {
