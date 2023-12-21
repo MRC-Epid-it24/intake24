@@ -1,3 +1,3 @@
-import type { EmailLoginRequest } from '@intake24/common/types/http';
+import type { LoginRequest } from '@intake24/common/types/http';
 
-export type { EmailLoginRequest as CredentialsV4 };
+export type { LoginRequest as CredentialsV4 };
