@@ -45,7 +45,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/morgan": "^1.9.9",
     "@types/nunjucks": "^3.2.6",
-    "@types/supertest": "^2.0.16",
+    "@types/supertest": "^6.0.2",
     "@types/webpack-env": "^1.18.4",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "laravel-vite-plugin": "^0.8.1",

@@ -113,7 +113,7 @@
     "@types/passport-jwt": "^3.0.13",
     "@types/pluralize": "^0.0.33",
     "@types/qrcode": "^1.5.5",
-    "@types/supertest": "^2.0.16",
+    "@types/supertest": "^6.0.2",
     "@types/ua-parser-js": "^0.7.39",
     "@types/validator": "^13.11.7",
     "@types/web-push": "^3.6.3",
