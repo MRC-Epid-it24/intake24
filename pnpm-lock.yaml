@@ -304,8 +304,8 @@ importers:
         specifier: ^1.20.2
         version: 1.20.2
       bullmq:
-        specifier: ^4.17.0
-        version: 4.17.0
+        specifier: ^5.1.1
+        version: 5.1.1
       clean-css:
         specifier: ^5.3.3
         version: 5.3.3
@@ -6281,8 +6281,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bullmq@4.17.0:
-    resolution: {integrity: sha512-URnHgB01rlCP8RTpmW3kFnvv3vdd2aI1OcBMYQwnqODxGiJUlz9MibDVXE83mq7ee1eS1IvD9lMQqGszX6E5Pw==}
+  /bullmq@5.1.1:
+    resolution: {integrity: sha512-j3zbNEQWsyHjpqGWiem2XBfmxAjYcArbwsmGlkM1E9MAVcrqB5hQUsXmyy9gEBAdL+PVotMICr7xTquR4Y2sKQ==}
     dependencies:
       cron-parser: 4.9.0
       glob: 8.1.0

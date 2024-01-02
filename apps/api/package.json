@@ -38,7 +38,7 @@
     "awilix": "^9.0.0",
     "axios": "^1.6.2",
     "body-parser": "^1.20.2",
-    "bullmq": "^4.17.0",
+    "bullmq": "^5.1.1",
     "clean-css": "^5.3.3",
     "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
