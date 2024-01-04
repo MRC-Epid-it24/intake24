@@ -22,15 +22,24 @@ import typeConverters from './types/v4-type-conversions';
 export type Logger = typeof logger;
 
 export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const;
+export const importerSpecificModulesExecutionOptions = [
+  'images-as-served',
+  'locales',
+  'all',
+] as const;
 
 export type ConflictResolutionStrategy = (typeof conflictResolutionOptions)[number];
+export type ImporterSpecificModulesExecutionStrategy =
+  (typeof importerSpecificModulesExecutionOptions)[number];
 
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
+  modulesForExecution?: ImporterSpecificModulesExecutionStrategy;
 }
 
 const defaultOptions: ImporterOptions = {
   onConflict: 'abort',
+  modulesForExecution: 'all',
 };
 
 export class ImporterV4 {
@@ -64,6 +73,7 @@ export class ImporterV4 {
     this.inputFilePath = inputFilePath;
     this.options = {
       onConflict: options?.onConflict ?? defaultOptions.onConflict,
+      modulesForExecution: options?.modulesForExecution ?? defaultOptions.modulesForExecution,
     };
   }
 
@@ -180,9 +190,12 @@ export class ImporterV4 {
     if (pkgSet.images.length === 0) {
       logger.warn(`As served set ${setId} has no images, skipping`);
       return;
+    } else {
+      logger.info(`Importing as served set: ${setId}`);
     }
 
     const existingSet = await this.apiClient.portionSize.asServed.get(setId);
+    console.log('Existing set: - ', existingSet);
 
     if (existingSet === null) {
       logger.debug(`Creating new as served set: ${setId}`);
@@ -485,17 +498,44 @@ export class ImporterV4 {
 
   public async import(): Promise<void> {
     await this.unzipPackage();
-    await this.readPackage();
+    await this.apiClient.baseClient.refresh();
 
-    try {
-      await this.importLocales();
-      await this.importNutrientTables();
-      await this.importAsServedSets();
-      await this.importGlobalFoods();
-      await this.importLocalFoods();
-      await this.importEnabledLocalFoods();
-    } finally {
-      await this.cleanUpPackage();
+    if (this.options.modulesForExecution === 'all') {
+      await this.readPackage();
+      try {
+        await this.importLocales();
+        await this.importNutrientTables();
+        await this.importAsServedSets();
+        await this.importGlobalFoods();
+        await this.importLocalFoods();
+        await this.importEnabledLocalFoods();
+      } finally {
+        await this.cleanUpPackage();
+      }
+    } else {
+      switch (this.options.modulesForExecution) {
+        case 'locales':
+          // try {
+          //   await this.readLocales();
+          //   await this.importLocales();
+          // } finally {
+          //   await this.cleanUpPackage();
+          // }
+          logger.info('LOCALES - Not implemented');
+          break;
+        case 'images-as-served':
+          try {
+            await this.readAsServedSets();
+            await this.importAsServedSets();
+          } finally {
+            await this.cleanUpPackage();
+          }
+          break;
+        default:
+          throw new Error(
+            `Unexpected module for execution option: ${this.options.modulesForExecution}`
+          );
+      }
     }
 
     logger.info('Done!');

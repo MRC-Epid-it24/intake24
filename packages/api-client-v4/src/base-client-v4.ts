@@ -10,7 +10,8 @@ import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http
 import type { CredentialsV4 } from './credentials';
 import type { ApiClientOptionsV4 } from './options';
 
-const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
+//TODO: change before pushing to dev: Temp switched to admin cookie - it24a_refresh_token, before was  it24s_refresh_token
+const REFRESH_TOKEN_COOKIE_NAME = 'it24a_refresh_token';
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 const DEFAULT_REQUEST_RATE_LIMIT = 300;
 const DEFAULT_REQUEST_RATE_LIMIT_WINDOW = 5 * 60 * 1000;
@@ -112,11 +113,16 @@ export class BaseClientV4 {
 
       return this.login();
     } else {
-      const response = await this.rawClient.post<RefreshResponse>('/api/auth/refresh', undefined, {
-        headers: {
-          Cookie: serializeCookie(REFRESH_TOKEN_COOKIE_NAME, this.refreshToken ?? ''),
-        },
-      });
+      //TODO: change before pushing to dev: Temp switched to admin route
+      const response = await this.rawClient.post<RefreshResponse>(
+        '/api/admin/auth/refresh',
+        undefined,
+        {
+          headers: {
+            Cookie: serializeCookie(REFRESH_TOKEN_COOKIE_NAME, this.refreshToken ?? ''),
+          },
+        }
+      );
 
       if (response.status === HttpStatusCode.Ok) {
         this.accessToken = response.data.accessToken;
@@ -130,7 +136,7 @@ export class BaseClientV4 {
     }
   }
 
-  private async refresh(): Promise<void> {
+  async refresh(): Promise<void> {
     if (this.refreshRequest === undefined) {
       this.refreshRequest = this.refreshImpl();
       await this.refreshRequest;
@@ -169,9 +175,16 @@ export class BaseClientV4 {
 
     this.logger.debug('Signing in with email and password');
 
-    const response = await this.rawClient.post<LoginResponse>('/api/auth/login', this.credentials, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    //TODO: change before pushing to dev: Temp switched to admin route
+    const response = await this.rawClient.post<LoginResponse>(
+      '/api/admin/auth/login',
+      this.credentials,
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+
+    this.logger.debug(`Login response: ${JSON.stringify(response.data)}`);
 
     switch (response.status) {
       case HttpStatusCode.Ok:
@@ -188,6 +201,7 @@ export class BaseClientV4 {
   }
 
   private async login() {
+    this.logger.info('Trying to logging in');
     if (this.loginRequest === undefined) {
       this.loginRequest = this.loginImpl();
       await this.loginRequest;
