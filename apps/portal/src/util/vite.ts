@@ -26,9 +26,7 @@ export const vite = (asset: string | string[], buildDir = 'build'): string => {
     ].join('');
   }
 
-  const segments = [config.local.public, buildDir, '.vite', 'manifest.json'].filter(
-    Boolean
-  ) as string[];
+  const segments = [config.local.public, buildDir, 'manifest.json'].filter(Boolean) as string[];
 
   const contents = readFileSync(resolve(...segments), { encoding: 'utf8' });
   const manifest = JSON.parse(contents);

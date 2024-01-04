@@ -1,4 +1,4 @@
-import path from 'node:path';
+import { fileURLToPath, URL } from 'node:url';
 
 import laravel from 'laravel-vite-plugin';
 import { defineConfig, loadEnv } from 'vite';
@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
-        '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+        '~bootstrap': fileURLToPath(new URL('./node_modules/bootstrap', import.meta.url)),
       },
     },
     server: {
