@@ -16,9 +16,9 @@
   },
   "scripts": {},
   "dependencies": {
-    "dompurify": "^3.0.6",
+    "dompurify": "^3.0.7",
     "lodash": "^4.17.21",
-    "vue": "^2.7.15",
+    "vue": "^2.7.16",
     "vue-i18n": "^8.28.2"
   },
   "devDependencies": {
