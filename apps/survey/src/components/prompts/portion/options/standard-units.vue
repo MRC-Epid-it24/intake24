@@ -52,7 +52,6 @@ export default defineComponent({
     },
     timer: {
       type: Number,
-      default: 1500,
     },
   },
 
@@ -61,7 +60,7 @@ export default defineComponent({
     const { standardUnitRefs, fetchStandardUnits } = useStandardUnits();
 
     const interval = ref<undefined | number>(undefined);
-    const selectedIndex = ref(0);
+    const selectedIndex = ref<undefined | number>(props.timer ? 0 : undefined);
     const usingStandardTranslations = ref(true);
 
     const translationsLoaded = computed(() => {
@@ -88,10 +87,14 @@ export default defineComponent({
     });
 
     const selectNextStandardUnit = () => {
+      if (typeof selectedIndex.value === 'undefined') return;
+
       selectedIndex.value = (selectedIndex.value + 1) % standardUnits.value.length;
     };
 
     const startTimer = () => {
+      if (!props.timer) return;
+
       interval.value = setInterval(() => {
         selectNextStandardUnit();
       }, props.timer);

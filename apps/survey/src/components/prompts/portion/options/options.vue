@@ -38,7 +38,6 @@ export default defineComponent({
     },
     timer: {
       type: Number,
-      default: 1500,
     },
   },
 
@@ -46,7 +45,7 @@ export default defineComponent({
     const { i18n } = useI18n();
 
     const interval = ref<undefined | number>(undefined);
-    const selected = ref(0);
+    const selected = ref<undefined | number>(props.timer ? 0 : undefined);
     const options = computed<LocaleOptionList<number>>(() => {
       const { method, parameters } = props.method;
       return ((method === 'parent-food-portion'
@@ -58,10 +57,14 @@ export default defineComponent({
     );
 
     const selectNext = () => {
+      if (typeof selected.value === 'undefined') return;
+
       selected.value = selected.value === localeOptions.value.length - 1 ? 0 : selected.value + 1;
     };
 
     const startTimer = () => {
+      if (!props.timer) return;
+
       interval.value = setInterval(() => {
         selectNext();
       }, props.timer);
