@@ -15,31 +15,19 @@ Content-Type: application/json
 
 {
     "email": string,
-    "password": string
+    "password": string,
+    "survey": string,
+    "captcha"?: string
 }
 ```
 
 ### Response
-
-Response can differ based on whether multi-factor authentication is enabled or not.
-
-#### Successful login without MFA challenge
 
 ```json
 200 OK
 
 {
     "accessToken": string
-}
-```
-
-#### Successful login with MFA challenge
-
-```json
-200 OK
-
-{
-    "mfaRequestUrl": string;
 }
 ```
 
@@ -57,7 +45,8 @@ Content-Type: application/json
 {
     "username": string,
     "password": string,
-    "survey": string
+    "survey": string,
+    "captcha"?: string
 }
 ```
 
@@ -83,7 +72,8 @@ POST /api/auth/login/token
 Content-Type: application/json
 
 {
-    "token": string
+    "token": string,
+    "captcha"?: string
 }
 ```
 
