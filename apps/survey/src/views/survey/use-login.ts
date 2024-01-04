@@ -64,6 +64,7 @@ export const useLogin = (props: UseLoginProps) => {
     },
     token: async () => {
       await auth.token({ token: token.value, captcha: captchaToken.value });
+      token.value = '';
       await router.push({ name: 'survey-home', params: { survey: props.surveyId } });
     },
   };

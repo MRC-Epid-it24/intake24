@@ -1,7 +1,7 @@
 <template>
   <v-container :class="{ 'pa-0': isMobile }">
     <app-entry-screen :title="$t('common._').toString()">
-      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login">
+      <v-form @keydown.native="errors.clear($event.target.name)" @submit.prevent="login('alias')">
         <v-card-text class="pa-6">
           <p>{{ $t('survey.generateUser.info1') }}</p>
           <p>{{ $t('survey.generateUser.info2') }}</p>
@@ -58,12 +58,7 @@
           </v-btn>
         </v-card-actions>
       </v-form>
-      <captcha
-        v-if="survey?.authCaptcha"
-        ref="captchaEl"
-        @expired="expired"
-        @verified="verified"
-      ></captcha>
+      <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>
       <v-card-actions>
         <v-btn color="info" exact text :to="{ name: 'survey-login', params: { surveyId } }">
           <v-icon left>fas fa-angles-left</v-icon>
