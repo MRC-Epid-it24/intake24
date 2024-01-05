@@ -1,15 +1,19 @@
 <template>
-  <v-sheet class="d-flex flex-column gr-3 pa-3 portion-options" color="grey lighten-5">
+  <v-sheet class="d-flex flex-column gr-1 px-3 py-2 portion-options" color="grey lighten-5">
     <v-chip
       v-for="option in localeOptions"
       :key="option.value"
       class="d-flex flex-grow-1 px-6"
       color="ternary"
-      :input-value="option.value === localeOptions[selected].value"
+      :input-value="selected !== undefined && option.value === localeOptions[selected].value"
       pill
     >
-      <v-icon color="primary" left>
-        {{ option.value === localeOptions[selected].value ? 'far fa-circle-dot' : 'far fa-circle' }}
+      <v-icon color="primary" left small>
+        {{
+          selected === undefined || option.value !== localeOptions[selected].value
+            ? 'far fa-circle'
+            : 'far fa-circle-dot'
+        }}
       </v-icon>
       <span class="font-weight-medium">{{ option.label }}</span>
     </v-chip>
@@ -30,7 +34,7 @@ export default defineComponent({
   props: {
     max: {
       type: Number,
-      default: 3,
+      default: 4,
     },
     method: {
       type: Object as PropType<UserPortionSizeMethod>,

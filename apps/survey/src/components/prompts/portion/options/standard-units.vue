@@ -1,7 +1,7 @@
 <template>
   <v-sheet
     v-if="translationsLoaded"
-    class="d-flex flex-column gr-3 pa-3 standard-portion"
+    class="d-flex flex-column gr-1 px-3 py-2 standard-portion"
     color="grey lighten-5"
   >
     <v-chip
@@ -12,8 +12,8 @@
       :input-value="index === selectedIndex"
       pill
     >
-      <v-icon color="primary" left>
-        {{ index === selectedIndex ? 'far fa-circle-dot' : 'far fa-circle' }}
+      <v-icon color="primary" left small>
+        {{ index !== selectedIndex ? 'far fa-circle' : 'far fa-circle-dot' }}
       </v-icon>
       <i18n class="font-weight-medium" path="prompts.standardPortion.estimateIn">
         <template #unit>
@@ -44,7 +44,7 @@ export default defineComponent({
   props: {
     max: {
       type: Number,
-      default: 3,
+      default: 4,
     },
     method: {
       type: Object as PropType<UserPortionSizeMethod>,
