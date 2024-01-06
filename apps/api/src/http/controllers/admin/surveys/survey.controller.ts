@@ -4,7 +4,7 @@ import { col, fn, Op } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { SurveyEntry, SurveysResponse } from '@intake24/common/types/http/admin';
-import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
+import type { Job, PaginateOptions, PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { surveyListResponse, surveyResponse } from '@intake24/api/http/responses/admin';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
@@ -20,7 +20,7 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import { getAndCheckAccess, securableController } from '../securable.controller';
+import { securableController } from '../securable.controller';
 
 const actionToFieldsMap: Record<'overrides', readonly string[]> = {
   overrides: overridesFields,
@@ -88,11 +88,17 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
   ): Promise<void> => {
-    const survey = await getAndCheckAccess(Survey, 'read', req, [
-      'locale',
-      'feedbackScheme',
-      'surveyScheme',
-    ]);
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const survey = await aclService.findAndCheckRecordAccess(Survey, 'read', {
+      where: { id: surveyId },
+      include: [
+        { association: 'locale' },
+        { association: 'feedbackScheme' },
+        { association: 'surveyScheme' },
+      ],
+    });
 
     res.json(surveyResponse(survey));
   };
@@ -101,21 +107,33 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
   ): Promise<void> => {
-    const survey = await getAndCheckAccess(Survey, 'edit', req, [
-      'locale',
-      'feedbackScheme',
-      'surveyScheme',
-    ]);
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const survey = await aclService.findAndCheckRecordAccess(Survey, 'edit', {
+      where: { id: surveyId },
+      include: [
+        { association: 'locale' },
+        { association: 'feedbackScheme' },
+        { association: 'surveyScheme' },
+      ],
+    });
 
     res.json(surveyResponse(survey));
   };
 
   const update = async (req: Request<{ surveyId: string }>, res: Response<SurveyEntry>) => {
-    const survey = await getAndCheckAccess(Survey, 'edit', req, [
-      'locale',
-      'feedbackScheme',
-      'surveyScheme',
-    ]);
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const survey = await aclService.findAndCheckRecordAccess(Survey, 'edit', {
+      where: { id: surveyId },
+      include: [
+        { association: 'locale' },
+        { association: 'feedbackScheme' },
+        { association: 'surveyScheme' },
+      ],
+    });
 
     await survey.update(
       pick(req.body, [...updateSurveyFields, ...overridesFields, ...guardedSurveyFields])
@@ -128,13 +146,17 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<SurveyEntry>
   ): Promise<void> => {
+    const { surveyId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const survey = await getAndCheckAccess(Survey, 'edit', req, [
-      'locale',
-      'feedbackScheme',
-      'surveyScheme',
-    ]);
+    const survey = await aclService.findAndCheckRecordAccess(Survey, 'edit', {
+      where: { id: surveyId },
+      include: [
+        { association: 'locale' },
+        { association: 'feedbackScheme' },
+        { association: 'surveyScheme' },
+      ],
+    });
 
     const keysToUpdate: string[] = [];
     const [resourceActions, securableActions] = await Promise.all([
@@ -172,7 +194,14 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<{ surveyId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const survey = await getAndCheckAccess(Survey, 'delete', req, 'submissions');
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const survey = await aclService.findAndCheckRecordAccess(Survey, 'delete', {
+      attributes: ['id'],
+      where: { id: surveyId },
+      include: [{ association: 'submissions', attributes: ['id'] }],
+    });
     const { id: securableId, submissions } = survey;
 
     if (!submissions || submissions.length)
@@ -194,10 +223,14 @@ const adminSurveyController = (ioc: IoC) => {
     const {
       body: { type },
       file,
+      params: { surveyId },
     } = req;
-    const { id: userId } = req.user as User;
+    const { aclService, userId } = req.scope.cradle;
 
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'tasks', req);
+    await aclService.findAndCheckRecordAccess(Survey, 'tasks', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const params = { ...pickJobParams(req.body.params, type), surveyId };
 

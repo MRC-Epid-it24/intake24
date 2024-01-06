@@ -15,8 +15,6 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { categoryContentsResponse } from '@intake24/api/http/responses/admin/categories';
 import { CategoryLocal, SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const adminCategoryController = ({
   adminCategoryService,
   cachedParentCategoriesService,
@@ -25,11 +23,13 @@ const adminCategoryController = ({
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<CategoriesResponse>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(
-      SystemLocale,
-      'food-list',
-      req as Request<{ localeId: string }>
-    );
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categories = await adminCategoryService.browseCategories(
       code,
@@ -54,7 +54,13 @@ const adminCategoryController = ({
     req: Request<{ localeId: string }, any, CategoryInput>,
     res: Response<CategoryLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categoryLocal = await adminCategoryService.createCategory(code, req.body);
 
@@ -65,8 +71,13 @@ const adminCategoryController = ({
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
+    const { categoryId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categoryLocal = await adminCategoryService.getCategory(categoryId, code);
     if (!categoryLocal) throw new NotFoundError();
@@ -78,10 +89,14 @@ const adminCategoryController = ({
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
-
+    const { categoryId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
+
     const { main, ...rest } = req.body;
 
     const canUpdateMain = !!(
@@ -103,8 +118,13 @@ const adminCategoryController = ({
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
+    const { categoryId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categoryLocal = await CategoryLocal.findOne({
       attributes: ['id'],
@@ -121,7 +141,13 @@ const adminCategoryController = ({
     req: Request<{ localeId: string }>,
     res: Response<RootCategoriesResponse>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categories = await adminCategoryService.getRootCategories(code);
 
@@ -132,8 +158,13 @@ const adminCategoryController = ({
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response<CategoryContentsResponse>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
+    const { categoryId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     if (categoryId === 'no-category') {
       const foods = await adminCategoryService.getNoCategoryContents(code);
@@ -156,8 +187,13 @@ const adminCategoryController = ({
     req: Request<{ categoryId: string; localeId: string }>,
     res: Response
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
+    const { categoryId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categoryLocal = await adminCategoryService.copyCategory(categoryId, code, req.body);
 
@@ -168,8 +204,13 @@ const adminCategoryController = ({
     req: Request,
     res: Response<{ categories: string[] }>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { categoryId } = req.params;
+    const { categoryId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const categoryLocal = await CategoryLocal.findOne({
       attributes: ['id', 'categoryCode'],

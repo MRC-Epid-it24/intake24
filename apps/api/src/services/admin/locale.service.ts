@@ -21,7 +21,10 @@ import {
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
-    const locale = typeof localeId === 'string' ? await SystemLocale.findByPk(localeId) : localeId;
+    const locale =
+      typeof localeId === 'string'
+        ? await SystemLocale.findByPk(localeId, { attributes: ['id', 'code'] })
+        : localeId;
     if (!locale) throw new NotFoundError();
 
     return locale;
@@ -175,9 +178,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     localeId: string | SystemLocale,
     recipeFoods: LocaleRecipeFoodsInput[]
   ) => {
-    const { code } = await resolveLocale(localeId);
-    // To distinguish between the locale code and the special food code
-    const localeCode = code;
+    const { code: localeCode } = await resolveLocale(localeId);
 
     const ids = recipeFoods.map(({ id }) => id) as string[];
     await RecipeFoods.destroy({ where: { localeId: localeCode, id: { [Op.notIn]: ids } } });
@@ -222,8 +223,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     recipeFoodId: string,
     recipeFoodSteps: LocaleRecipeFoodStepsInput[]
   ) => {
-    const locale = await resolveLocale(localeId);
-    const localeCode = locale.code;
+    const { code: localeCode } = await resolveLocale(localeId);
     const ids = recipeFoodSteps.map(({ id }) => id) as string[];
     await RecipeFoodsSteps.destroy({
       where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },

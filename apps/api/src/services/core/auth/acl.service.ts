@@ -7,7 +7,7 @@ import type { HasVisibility, ModelStatic, Permission, Role, Securable } from '@i
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
-import { securableScope, User } from '@intake24/db';
+import { securableIncludes, securableScope, User } from '@intake24/db';
 
 export type CheckAccessOptions = {
   params: Dictionary;
@@ -210,7 +210,7 @@ const aclService = ({
   };
 
   /**
-   * Helper for `getAndCheckRecordAccess` and `findAndCheckRecordAccess`
+   * Helper for `findAndCheckRecordAccess`
    *
    * @template T
    * @param {ModelStatic<T>} securable
@@ -234,38 +234,18 @@ const aclService = ({
     return record;
   };
 
-  /**
-   * Route-based record access check
-   *
-   * @template T
-   * @param {ModelStatic<T>} securable
-   * @param {string} action
-   * @param {CheckAccessOptions} options
-   * @returns {Promise<T>}
-   */
-  const getAndCheckRecordAccess = async <T extends Securable>(
-    securable: ModelStatic<T>,
-    action: string,
-    options: CheckAccessOptions
-  ): Promise<T> => {
-    const securableType = securable.name;
-    const paramId = getRequestParamFromSecurable(securableType);
-    const {
-      params: { [paramId]: securableId },
-      scope,
-    } = options;
-
-    const record = await securable.scope(scope).findByPk(securableId, securableScope(userId));
-
-    return checkRecordAccess(securable, action, record);
-  };
-
   const findAndCheckRecordAccess = async <T extends Securable>(
     securable: ModelStatic<T>,
     action: string,
     findOptions: FindOptions<Attributes<T>>
   ): Promise<T> => {
-    const record = await securable.findOne({ ...findOptions, ...securableScope(userId) });
+    const record = await securable.findOne({
+      ...findOptions,
+      include: [
+        ...(Array.isArray(findOptions.include) ? findOptions.include : []),
+        ...securableIncludes(userId),
+      ],
+    });
 
     return checkRecordAccess(securable, action, record);
   };
@@ -284,7 +264,13 @@ const aclService = ({
     action: string,
     findOptions: FindOptions<Attributes<T>>
   ): Promise<T> => {
-    const record = await securable.findOne({ ...findOptions, ...securableScope(userId) });
+    const record = await securable.findOne({
+      ...findOptions,
+      include: [
+        ...(Array.isArray(findOptions.include) ? findOptions.include : []),
+        ...securableIncludes(userId),
+      ],
+    });
 
     if (await hasResourceAccess(securable.name, action)) {
       if (!record) throw new NotFoundError();
@@ -346,7 +332,6 @@ const aclService = ({
     hasRole,
     hasAnyRole,
     checkAccess,
-    getAndCheckRecordAccess,
     findAndCheckRecordAccess,
     findAndCheckVisibility,
     getResourceAccessActions,

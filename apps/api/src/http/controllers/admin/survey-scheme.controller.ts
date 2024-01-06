@@ -26,7 +26,7 @@ import {
   UserSecurable,
 } from '@intake24/db';
 
-import { getAndCheckAccess, securableController } from './securable.controller';
+import { securableController } from './securable.controller';
 
 const surveySchemeController = (ioc: IoC) => {
   const { dataExportFields } = ioc;
@@ -77,7 +77,12 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'read', req);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'read', {
+      where: { id: surveySchemeId },
+    });
 
     res.json(surveySchemeResponse(surveyScheme));
   };
@@ -86,7 +91,12 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'edit', req);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'edit', {
+      where: { id: surveySchemeId },
+    });
 
     res.json(surveySchemeResponse(surveyScheme));
   };
@@ -95,7 +105,12 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'edit', req);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'edit', {
+      where: { id: surveySchemeId },
+    });
 
     await surveyScheme.update(pick(req.body, createSurveySchemeFields));
 
@@ -106,9 +121,12 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
+    const { surveySchemeId } = req.params;
     const { aclService, userId } = req.scope.cradle;
 
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'edit', req);
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'edit', {
+      where: { id: surveySchemeId },
+    });
 
     const keysToUpdate: string[] = [];
     const [resourceActions, securableActions] = await Promise.all([
@@ -143,7 +161,14 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'delete', req, 'surveys');
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'delete', {
+      attributes: ['id'],
+      where: { id: surveySchemeId },
+      include: [{ association: 'surveys', attributes: ['id'] }],
+    });
     const { id: securableId, surveys } = surveyScheme;
 
     if (!surveys || surveys.length)
@@ -161,7 +186,12 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'copy', req);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'copy', {
+      where: { id: surveySchemeId },
+    });
 
     const { name } = req.body;
     const { userId } = req.scope.cradle;
@@ -192,7 +222,13 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }, any, any, PaginateQuery>,
     res: Response<SurveySchemeTemplates>
   ): Promise<void> => {
-    await getAndCheckAccess(SurveyScheme, 'prompts', req as Request<{ surveySchemeId: string }>);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(SurveyScheme, 'prompts', {
+      attributes: ['id'],
+      where: { id: surveySchemeId },
+    });
 
     const surveySchemePrompts = await SurveySchemePrompt.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -208,7 +244,13 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<{ surveySchemeId: string }>,
     res: Response<SurveySchemeExportRefsResponse>
   ): Promise<void> => {
-    const surveyScheme = await getAndCheckAccess(SurveyScheme, 'data-export', req);
+    const { surveySchemeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'data-export', {
+      attributes: ['id', 'prompts'],
+      where: { id: surveySchemeId },
+    });
 
     const fieldMapper = ({ id, label }: ExportField) => ({ id, label });
 

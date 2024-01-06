@@ -4,14 +4,14 @@ import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { LocaleEntry, LocaleRefs, LocalesResponse } from '@intake24/common/types/http/admin';
-import type { Job, PaginateOptions, PaginateQuery, User } from '@intake24/db';
+import type { Job, PaginateOptions, PaginateQuery } from '@intake24/db';
 import languageBackends from '@intake24/api/food-index/language-backends';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { FoodsLocale, Op, securableScope, SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess, securableController } from '../securable.controller';
+import { securableController } from '../securable.controller';
 
 const localeController = (ioc: IoC) => {
   const { localeService } = ioc;
@@ -76,11 +76,17 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'read', req, [
-      'adminLanguage',
-      'respondentLanguage',
-      'parent',
-    ]);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'read', {
+      where: { id: localeId },
+      include: [
+        { association: 'parent' },
+        { association: 'adminLanguage' },
+        { association: 'respondentLanguage' },
+      ],
+    });
 
     res.json(localeResponse(locale));
   };
@@ -102,11 +108,17 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'edit', req, [
-      'adminLanguage',
-      'respondentLanguage',
-      'parent',
-    ]);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'edit', {
+      where: { id: localeId },
+      include: [
+        { association: 'parent' },
+        { association: 'adminLanguage' },
+        { association: 'respondentLanguage' },
+      ],
+    });
 
     res.json(localeResponse(locale));
   };
@@ -115,11 +127,17 @@ const localeController = (ioc: IoC) => {
     req: Request<{ localeId: string }>,
     res: Response<LocaleEntry>
   ): Promise<void> => {
-    const systemLocale = await getAndCheckAccess(SystemLocale, 'edit', req, [
-      'adminLanguage',
-      'respondentLanguage',
-      'parent',
-    ]);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const systemLocale = await aclService.findAndCheckRecordAccess(SystemLocale, 'edit', {
+      where: { id: localeId },
+      include: [
+        { association: 'parent' },
+        { association: 'adminLanguage' },
+        { association: 'respondentLanguage' },
+      ],
+    });
     const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
     if (!foodsLocale) throw new NotFoundError();
 
@@ -145,7 +163,14 @@ const localeController = (ioc: IoC) => {
   const destroy = async (
     req: Request<{ localeId: string }> /* , res: Response<undefined> */
   ): Promise<void> => {
-    const systemLocale = await getAndCheckAccess(SystemLocale, 'delete', req, 'surveys');
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const systemLocale = await aclService.findAndCheckRecordAccess(SystemLocale, 'delete', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+      include: [{ association: 'surveys', attributes: ['id'] }],
+    });
     const foodsLocale = await FoodsLocale.findByPk(systemLocale.code);
     if (!systemLocale.surveys || !foodsLocale) throw new NotFoundError();
 
@@ -177,9 +202,12 @@ const localeController = (ioc: IoC) => {
       file,
       params: { localeId },
     } = req;
-    const { id: userId } = req.user as User;
+    const { aclService, userId } = req.scope.cradle;
 
-    await getAndCheckAccess(SystemLocale, 'tasks', req);
+    await aclService.findAndCheckRecordAccess(SystemLocale, 'tasks', {
+      attributes: ['id'],
+      where: { id: localeId },
+    });
 
     const params = { ...pickJobParams(req.body.params, type), localeId };
     if (jobRequiresFile(type)) {

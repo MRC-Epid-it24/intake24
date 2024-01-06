@@ -18,7 +18,8 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
 
     if (slug) {
       const survey = await Survey.findBySlug(slug, {
-        include: [{ association: 'feedbackScheme' }],
+        attributes: ['id'],
+        include: [{ association: 'feedbackScheme', attributes: ['id'] }],
       });
       if (!survey) throw new NotFoundError();
 
@@ -39,7 +40,8 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
 
     if (slug) {
       const survey = await Survey.findBySlug(slug, {
-        include: [{ association: 'feedbackScheme' }],
+        attributes: ['id'],
+        include: [{ association: 'feedbackScheme', attributes: ['id', 'physicalDataFields'] }],
       });
       if (!survey) throw new NotFoundError();
 

@@ -12,8 +12,6 @@ import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const adminFoodController = ({
   adminFoodService,
   cachedParentCategoriesService,
@@ -22,11 +20,13 @@ const adminFoodController = ({
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(
-      SystemLocale,
-      'food-list',
-      req as Request<{ localeId: string }>
-    );
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const foods = await adminFoodService.browseFoods(
       code,
@@ -37,10 +37,16 @@ const adminFoodController = ({
   };
 
   const store = async (
-    req: Request<{ foodId: string; localeId: string }, any, FoodInput>,
+    req: Request<{ localeId: string }, any, FoodInput>,
     res: Response
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const foodLocal = await adminFoodService.createFood(code, req.body);
 
@@ -51,8 +57,13 @@ const adminFoodController = ({
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { foodId } = req.params;
+    const { foodId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const foodLocal = await adminFoodService.getFood(foodId, code);
     if (!foodLocal) throw new NotFoundError();
@@ -64,10 +75,14 @@ const adminFoodController = ({
     req: Request<{ foodId: string; localeId: string }, any, FoodLocalInput>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { foodId } = req.params;
-
+    const { foodId, localeId } = req.params;
     const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
+
     const { main, ...rest } = req.body;
 
     const canUpdateMain = !!(
@@ -89,8 +104,13 @@ const adminFoodController = ({
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { foodId } = req.params;
+    const { foodId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     await adminFoodService.deleteFood(foodId, code);
 
@@ -101,8 +121,13 @@ const adminFoodController = ({
     req: Request<{ foodId: string; localeId: string }>,
     res: Response<FoodLocalEntry>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { foodId } = req.params;
+    const { foodId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const foodLocal = await adminFoodService.copyFood(foodId, code, req.body);
 
@@ -113,8 +138,13 @@ const adminFoodController = ({
     req: Request,
     res: Response<{ categories: string[] }>
   ): Promise<void> => {
-    const { code } = await getAndCheckAccess(SystemLocale, 'food-list', req);
-    const { foodId } = req.params;
+    const { foodId, localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { code } = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      attributes: ['code'],
+      where: { id: localeId },
+    });
 
     const foodLocal = await FoodLocal.findOne({
       attributes: ['id', 'foodCode'],

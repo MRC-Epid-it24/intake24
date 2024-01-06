@@ -11,21 +11,21 @@ import type { PaginateQuery, SurveySubmissionAttributes, WhereOptions } from '@i
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Op, submissionScope, Survey, SurveySubmission } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
   const browse = async (
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveySubmissionsResponse>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(
-      Survey,
-      'submissions',
-      req as Request<{ surveyId: string }>
-    );
     const {
+      params: { surveyId },
       query: { search },
     } = req;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'submissions', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
@@ -59,8 +59,13 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<SurveySubmissionEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'submissions', req);
-    const { submissionId } = req.params;
+    const { surveyId, submissionId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'submissions', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const scope = submissionScope({ surveyId });
     const submission = await SurveySubmission.findOne({
@@ -76,8 +81,13 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
     req: Request<{ surveyId: string; submissionId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'submissions', req);
-    const { submissionId } = req.params;
+    const { surveyId, submissionId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'submissions', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const submission = await SurveySubmission.findOne({
       attributes: ['id', 'userId'],

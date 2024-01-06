@@ -9,7 +9,7 @@ import { NotFoundError } from '@intake24/api/http/errors';
 import { languageResponse } from '@intake24/api/http/responses/admin';
 import { Language, Op, securableScope } from '@intake24/db';
 
-import { getAndCheckAccess, securableController } from './securable.controller';
+import { securableController } from './securable.controller';
 
 const languageController = (ioc: IoC) => {
   const { languageService } = ioc;
@@ -64,7 +64,12 @@ const languageController = (ioc: IoC) => {
     req: Request<{ languageId: string }>,
     res: Response<LanguageEntry>
   ): Promise<void> => {
-    const language = await getAndCheckAccess(Language, 'read', req);
+    const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const language = await aclService.findAndCheckRecordAccess(Language, 'read', {
+      where: { id: languageId },
+    });
 
     res.json(languageResponse(language));
   };
@@ -73,7 +78,12 @@ const languageController = (ioc: IoC) => {
     req: Request<{ languageId: string }>,
     res: Response<LanguageEntry>
   ): Promise<void> => {
-    const language = await getAndCheckAccess(Language, 'edit', req);
+    const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const language = await aclService.findAndCheckRecordAccess(Language, 'edit', {
+      where: { id: languageId },
+    });
 
     res.json(languageResponse(language));
   };
@@ -82,7 +92,12 @@ const languageController = (ioc: IoC) => {
     req: Request<{ languageId: string }>,
     res: Response<LanguageEntry>
   ): Promise<void> => {
-    const language = await getAndCheckAccess(Language, 'edit', req);
+    const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const language = await aclService.findAndCheckRecordAccess(Language, 'edit', {
+      where: { id: languageId },
+    });
 
     await languageService.updateLanguage(
       language,
@@ -97,8 +112,12 @@ const languageController = (ioc: IoC) => {
     res: Response<undefined>
   ): Promise<void> => {
     const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'delete', req);
+    await aclService.findAndCheckRecordAccess(Language, 'delete', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
     await languageService.deleteLanguage(languageId);
 
     res.status(204).json();

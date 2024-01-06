@@ -4,16 +4,18 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LanguageTranslationsResponse } from '@intake24/common/types/http/admin';
 import { Language } from '@intake24/db';
 
-import { getAndCheckAccess } from './securable.controller';
-
 const languageTranslationController = ({ languageService }: Pick<IoC, 'languageService'>) => {
   const browse = async (
     req: Request<{ languageId: string }>,
     res: Response<LanguageTranslationsResponse>
   ): Promise<void> => {
     const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'translations', req);
+    await aclService.findAndCheckRecordAccess(Language, 'translations', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
 
     const translations = await languageService.getLanguageTranslations(languageId);
 
@@ -24,11 +26,13 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     req: Request<{ languageId: string }>,
     res: Response<LanguageTranslationsResponse>
   ): Promise<void> => {
-    const {
-      params: { languageId },
-    } = req;
+    const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'translations', req);
+    await aclService.findAndCheckRecordAccess(Language, 'translations', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
 
     const translations = await languageService.getOrCreateLanguageTranslations(languageId);
 
@@ -43,8 +47,12 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
       body,
       params: { languageId },
     } = req;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'translations', req);
+    await aclService.findAndCheckRecordAccess(Language, 'translations', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
 
     const translations = await languageService.updateLanguageTranslations(
       languageId,
@@ -59,8 +67,12 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     res: Response<undefined>
   ): Promise<void> => {
     const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'translations', req);
+    await aclService.findAndCheckRecordAccess(Language, 'translations', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
 
     await languageService.deleteLanguageTranslations(languageId);
 
@@ -71,11 +83,13 @@ const languageTranslationController = ({ languageService }: Pick<IoC, 'languageS
     req: Request<{ languageId: string }>,
     res: Response<LanguageTranslationsResponse>
   ): Promise<void> => {
-    const {
-      params: { languageId },
-    } = req;
+    const { languageId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    await getAndCheckAccess(Language, 'translations', req);
+    await aclService.findAndCheckRecordAccess(Language, 'translations', {
+      attributes: ['id'],
+      where: { id: languageId },
+    });
 
     await languageService.syncLanguageTranslations(languageId);
     const translations = await languageService.getLanguageTranslations(languageId);

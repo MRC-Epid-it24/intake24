@@ -4,14 +4,19 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocaleSplitList, LocaleSplitListInput } from '@intake24/common/types/http/admin';
 import { SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const get = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleSplitList[]>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'split-lists', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-lists', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const splitLists = await localeService.getSplitLists(locale);
 
     res.json(splitLists);
@@ -22,8 +27,14 @@ const localeSplitListController = ({ localeService }: Pick<IoC, 'localeService'>
     res: Response<LocaleSplitList[]>
   ): Promise<void> => {
     const { body } = req;
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    const locale = await getAndCheckAccess(SystemLocale, 'split-lists', req);
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'split-lists', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const splitLists = await localeService.setSplitLists(locale, body);
 
     res.json(splitLists);

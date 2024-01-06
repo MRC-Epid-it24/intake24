@@ -12,8 +12,6 @@ import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const adminSurveyRespondentController = ({
   appConfig,
   adminSurveyService,
@@ -24,12 +22,14 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const {
-      id: surveyId,
-      slug,
-      authUrlDomainOverride,
-    } = await getAndCheckAccess(Survey, 'respondents', req);
-    const { userId } = req.params;
+    const { surveyId, userId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
+      Survey,
+      'respondents',
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+    );
 
     const respondent = await UserSurveyAlias.findOne({
       where: { userId, surveyId },
@@ -46,11 +46,14 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }, any, any, PaginateQuery>,
     res: Response<SurveyRespondentsResponse>
   ): Promise<void> => {
-    const {
-      id: surveyId,
-      slug,
-      authUrlDomainOverride,
-    } = await getAndCheckAccess(Survey, 'respondents', req as Request<{ surveyId: string }>);
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
+      Survey,
+      'respondents',
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+    );
 
     const respondentRes = respondentResponse(appConfig.urls, slug, authUrlDomainOverride);
 
@@ -69,11 +72,14 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const {
-      id: surveyId,
-      slug,
-      authUrlDomainOverride,
-    } = await getAndCheckAccess(Survey, 'respondents', req);
+    const { surveyId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
+      Survey,
+      'respondents',
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+    );
 
     const respondent = await adminSurveyService.createRespondent(
       surveyId,
@@ -103,12 +109,14 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<SurveyRespondentEntry>
   ): Promise<void> => {
-    const {
-      id: surveyId,
-      slug,
-      authUrlDomainOverride,
-    } = await getAndCheckAccess(Survey, 'respondents', req);
-    const { userId } = req.params;
+    const { surveyId, userId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const { slug, authUrlDomainOverride } = await aclService.findAndCheckRecordAccess(
+      Survey,
+      'respondents',
+      { attributes: ['id', 'slug', 'authUrlDomainOverride'], where: { id: surveyId } }
+    );
 
     const respondent = await adminSurveyService.updateRespondent(
       surveyId,
@@ -129,8 +137,13 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
-    const { userId } = req.params;
+    const { surveyId, userId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     await adminSurveyService.deleteRespondent(surveyId, userId);
 
@@ -141,10 +154,15 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
+    const { surveyId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const { file } = req;
-    const { id: userId } = req.user as User;
 
     if (!file) throw new ValidationError('File not found.', { path: 'file' });
 
@@ -157,8 +175,13 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string }>,
     res: Response<JobEntry>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
-    const { id: userId } = req.user as User;
+    const { surveyId } = req.params;
+    const { aclService, userId } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const job = await adminSurveyService.exportAuthenticationUrls(surveyId, userId);
 
@@ -169,8 +192,13 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
-    const { userId } = req.params;
+    const { surveyId, userId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
 
     const { pdfStream, filename } = await feedbackService.getFeedbackStream(surveyId, userId);
 
@@ -184,12 +212,17 @@ const adminSurveyRespondentController = ({
     req: Request<{ surveyId: string; userId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: surveyId } = await getAndCheckAccess(Survey, 'respondents', req);
-
     const {
-      params: { userId },
+      params: { surveyId, userId },
       body: { email, copy },
     } = req;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
+      attributes: ['id'],
+      where: { id: surveyId },
+    });
+
     const user = req.user as User;
 
     await scheduler.jobs.addJob({

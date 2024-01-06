@@ -25,18 +25,6 @@ import {
 } from '@intake24/common/util';
 import { Op, User, UserSecurable } from '@intake24/db';
 
-export const getAndCheckAccess = async <T extends Securable>(
-  securable: ModelStatic<T>,
-  action: string,
-  req: Request,
-  scope?: string | string[]
-): Promise<T> => {
-  const { aclService } = req.scope.cradle;
-  const { params } = req;
-
-  return aclService.getAndCheckRecordAccess(securable, action, { params, scope });
-};
-
 export const securableController = ({
   securable,
   ioc: { adminUserService },
@@ -87,9 +75,13 @@ export const securableController = ({
     req: Request<Record<string, string>, any, any, PaginateQuery>,
     res: Response<UsersWithSecurablesResponse>
   ): Promise<void> => {
-    await getAndCheckAccess(securable, 'securables', req as Request);
-
     const { [paramId]: securableId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(securable, 'securables', {
+      attributes: ['id'],
+      where: { id: securableId },
+    });
 
     const users = await User.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -107,12 +99,16 @@ export const securableController = ({
     req: Request<Record<string, string>, any, CreateUserWithSecurables>,
     res: Response<undefined>
   ): Promise<void> => {
-    await getAndCheckAccess(securable, 'securables', req);
-
     const {
       params: { [paramId]: securableId },
       body: { email, name, phone, actions },
     } = req;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(securable, 'securables', {
+      attributes: ['id'],
+      where: { id: securableId },
+    });
 
     const user = await adminUserService.create({
       email,
@@ -144,9 +140,13 @@ export const securableController = ({
       params: { [paramId]: securableId, userId },
       body: { actions },
     } = req;
+    const { aclService } = req.scope.cradle;
 
     const [, user] = await Promise.all([
-      getAndCheckAccess(securable, 'securables', req),
+      aclService.findAndCheckRecordAccess(securable, 'securables', {
+        attributes: ['id'],
+        where: { id: securableId },
+      }),
       User.findOne({
         attributes: ['id'],
         where: { id: userId, email: { [Op.ne]: null } },
@@ -180,9 +180,13 @@ export const securableController = ({
     const {
       params: { [paramId]: securableId, userId },
     } = req;
+    const { aclService } = req.scope.cradle;
 
     const [, user] = await Promise.all([
-      getAndCheckAccess(securable, 'securables', req),
+      aclService.findAndCheckRecordAccess(securable, 'securables', {
+        attributes: ['id'],
+        where: { id: securableId },
+      }),
       User.findOne({ attributes: ['id'], where: { id: userId, email: { [Op.ne]: null } } }),
     ]);
     if (!user) throw new NotFoundError();
@@ -196,12 +200,16 @@ export const securableController = ({
     req: Request<Record<string, string>, any, any, PaginateQuery>,
     res: Response<AvailableUsersWithSecurablesResponse>
   ): Promise<void> => {
-    await getAndCheckAccess(securable, 'securables', req as Request);
-
     const {
       params: { [paramId]: securableId },
       query: { search },
     } = req;
+    const { aclService } = req.scope.cradle;
+
+    await aclService.findAndCheckRecordAccess(securable, 'securables', {
+      attributes: ['id'],
+      where: { id: securableId },
+    });
 
     if (!search) {
       res.json([]);
@@ -240,11 +248,16 @@ export const securableController = ({
     req: Request<Record<string, string>, any, UpdateSecurableOwnerRequest>,
     res: Response<undefined>
   ): Promise<void> => {
-    const securableRecord = await getAndCheckAccess(securable, 'securables', req);
-
     const {
+      params: { [paramId]: securableId },
       body: { userId },
     } = req;
+    const { aclService } = req.scope.cradle;
+
+    const securableRecord = await aclService.findAndCheckRecordAccess(securable, 'securables', {
+      attributes: ['id', 'ownerId'],
+      where: { id: securableId },
+    });
 
     await securableRecord.update({ ownerId: userId });
 

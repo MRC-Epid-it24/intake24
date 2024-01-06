@@ -4,14 +4,19 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocaleSynonymSet, LocaleSynonymSetInput } from '@intake24/common/types/http/admin';
 import { SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const localeSynonymSetController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   const get = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleSynonymSet[]>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'synonym-sets', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'synonym-sets', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const synonymSets = await localeService.getSynonymSets(locale);
 
     res.json(synonymSets);
@@ -22,8 +27,14 @@ const localeSynonymSetController = ({ localeService }: Pick<IoC, 'localeService'
     res: Response<LocaleSynonymSet[]>
   ): Promise<void> => {
     const { body } = req;
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    const locale = await getAndCheckAccess(SystemLocale, 'synonym-sets', req);
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'synonym-sets', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const synonymSets = await localeService.setSynonymSets(locale, body);
 
     res.json(synonymSets);

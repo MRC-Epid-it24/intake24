@@ -16,7 +16,10 @@ const userFeedbackController = ({
     const { survey: slug, submissions } = req.query;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findBySlug(slug, { include: [{ association: 'feedbackScheme' }] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id'],
+      include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
+    });
     if (!survey) throw new NotFoundError();
 
     if (!survey.feedbackScheme?.outputs.includes('download')) throw new ForbiddenError();
@@ -39,7 +42,10 @@ const userFeedbackController = ({
     } = req;
     const { id: userId } = req.user as User;
 
-    const survey = await Survey.findBySlug(slug, { include: [{ association: 'feedbackScheme' }] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id'],
+      include: [{ association: 'feedbackScheme', attributes: ['outputs'] }],
+    });
     if (!survey) throw new NotFoundError();
 
     if (!survey.feedbackScheme?.outputs.includes('email')) throw new ForbiddenError();

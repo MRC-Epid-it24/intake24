@@ -9,15 +9,20 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService'>) => {
   // getting existing recipe foods for the specified Locale ID
   const get = async (
     req: Request<{ localeId: string }>,
     res: Response<LocaleRecipeFoods[]>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'recipe-foods', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const recipeFoods = await localeService.getRecipeFoods(locale);
 
     res.json(recipeFoods);
@@ -29,8 +34,13 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     res: Response<LocaleRecipeFoods[]>
   ): Promise<void> => {
     const { body } = req;
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'recipe-foods', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
     const recipeFoods = await localeService.setRecipeFoods(locale, body);
 
     res.json(recipeFoods);
@@ -41,8 +51,13 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     req: Request<{ localeId: string; recipeFoodId: string }>,
     res: Response<LocaleRecipeFoodSteps[]>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
-    const recipeFoodId = req.params.recipeFoodId;
+    const { localeId, recipeFoodId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'recipe-foods', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
     const recipeFoodSteps = await localeService.getRecipeFoodSteps(locale, recipeFoodId);
 
     res.json(recipeFoodSteps);
@@ -54,9 +69,14 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
     res: Response<LocaleRecipeFoodSteps[]>
   ): Promise<void> => {
     const { body } = req;
+    const { localeId, recipeFoodId } = req.params;
+    const { aclService } = req.scope.cradle;
 
-    const locale = await getAndCheckAccess(SystemLocale, 'recipe-foods', req);
-    const recipeFoodId = req.params.recipeFoodId;
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'recipe-foods', {
+      attributes: ['id', 'code'],
+      where: { id: localeId },
+    });
+
     const recipeFoodSteps = await localeService.setRecipeFoodSteps(locale, recipeFoodId, body);
 
     res.json(recipeFoodSteps);

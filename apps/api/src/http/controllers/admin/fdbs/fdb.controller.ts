@@ -11,8 +11,6 @@ import type { PaginateOptions, PaginateQuery } from '@intake24/db';
 import { localeResponse } from '@intake24/api/http/responses/admin';
 import { NutrientTable, Op, securableScope, SystemLocale } from '@intake24/db';
 
-import { getAndCheckAccess } from '../securable.controller';
-
 const adminFoodDatabaseController = () => {
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
@@ -46,7 +44,12 @@ const adminFoodDatabaseController = () => {
     req: Request<{ localeId: string }>,
     res: Response<FoodDatabaseEntry>
   ): Promise<void> => {
-    const locale = await getAndCheckAccess(SystemLocale, 'food-list', req);
+    const { localeId } = req.params;
+    const { aclService } = req.scope.cradle;
+
+    const locale = await aclService.findAndCheckRecordAccess(SystemLocale, 'food-list', {
+      where: { id: localeId },
+    });
 
     res.json(localeResponse(locale));
   };
