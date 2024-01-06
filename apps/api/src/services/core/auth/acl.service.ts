@@ -239,12 +239,13 @@ const aclService = ({
     action: string,
     findOptions: FindOptions<Attributes<T>>
   ): Promise<T> => {
+    const { attributes, include, ...rest } = findOptions;
+    if (Array.isArray(attributes) && !attributes.includes('ownerId')) attributes.push('ownerId');
+
     const record = await securable.findOne({
-      ...findOptions,
-      include: [
-        ...(Array.isArray(findOptions.include) ? findOptions.include : []),
-        ...securableIncludes(userId),
-      ],
+      ...rest,
+      attributes,
+      include: [...(Array.isArray(include) ? include : []), ...securableIncludes(userId)],
     });
 
     return checkRecordAccess(securable, action, record);
@@ -264,12 +265,17 @@ const aclService = ({
     action: string,
     findOptions: FindOptions<Attributes<T>>
   ): Promise<T> => {
+    const { attributes, include, ...rest } = findOptions;
+    if (Array.isArray(attributes)) {
+      ['ownerId', 'visibility'].forEach((attribute) => {
+        if (!attributes.includes(attribute)) attributes.push(attribute);
+      });
+    }
+
     const record = await securable.findOne({
-      ...findOptions,
-      include: [
-        ...(Array.isArray(findOptions.include) ? findOptions.include : []),
-        ...securableIncludes(userId),
-      ],
+      ...rest,
+      attributes,
+      include: [...(Array.isArray(include) ? include : []), ...securableIncludes(userId)],
     });
 
     if (await hasResourceAccess(securable.name, action)) {

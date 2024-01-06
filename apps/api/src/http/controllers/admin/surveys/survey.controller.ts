@@ -198,7 +198,7 @@ const adminSurveyController = (ioc: IoC) => {
     const { aclService } = req.scope.cradle;
 
     const survey = await aclService.findAndCheckRecordAccess(Survey, 'delete', {
-      attributes: ['id'],
+      attributes: ['id', 'slug'],
       where: { id: surveyId },
       include: [{ association: 'submissions', attributes: ['id'] }],
     });
