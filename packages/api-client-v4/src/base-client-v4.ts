@@ -11,7 +11,7 @@ import type { CredentialsV4 } from './credentials';
 import type { ApiClientOptionsV4 } from './options';
 
 //TODO: change before pushing to dev: Temp switched to admin cookie - it24a_refresh_token, before was  it24s_refresh_token
-const REFRESH_TOKEN_COOKIE_NAME = 'it24a_refresh_token';
+const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 const DEFAULT_REQUEST_RATE_LIMIT = 300;
 const DEFAULT_REQUEST_RATE_LIMIT_WINDOW = 5 * 60 * 1000;
@@ -22,6 +22,7 @@ export class BaseClientV4 {
   private credentials?: CredentialsV4;
   private refreshToken?: string;
   private accessToken?: string;
+  private cookieName: string;
 
   public readonly logger: Logger;
   public readonly rawClient: Axios;
@@ -36,6 +37,7 @@ export class BaseClientV4 {
     this.apiBaseUrl = options.apiBaseUrl;
     this.credentials = options.credentials;
     this.refreshToken = options.refreshToken;
+    this.cookieName = options.cookieName ?? REFRESH_TOKEN_COOKIE_NAME;
 
     this.requestQueue = new pQueue({
       concurrency: options.maxConcurrentRequests ?? DEFAULT_MAX_CONCURRENT_REQUESTS,
@@ -119,7 +121,7 @@ export class BaseClientV4 {
         undefined,
         {
           headers: {
-            Cookie: serializeCookie(REFRESH_TOKEN_COOKIE_NAME, this.refreshToken ?? ''),
+            Cookie: serializeCookie(this.cookieName, this.refreshToken ?? ''),
           },
         }
       );
@@ -155,12 +157,12 @@ export class BaseClientV4 {
       );
 
     const refreshToken = cookies
-      .map((str) => parseCookie(str)[REFRESH_TOKEN_COOKIE_NAME])
+      .map((str) => parseCookie(str)[this.cookieName])
       .find((value) => value !== undefined);
 
     if (refreshToken === undefined)
       throw new Error(
-        `Expected cookie "${REFRESH_TOKEN_COOKIE_NAME}" missing in response: ${response.config.method} ${response.config.url}`
+        `Expected cookie "${this.cookieName}" missing in response: ${response.config.method} ${response.config.url}`
       );
 
     this.refreshToken = refreshToken;
