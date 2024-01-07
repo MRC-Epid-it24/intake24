@@ -10,6 +10,7 @@ export interface ApiClientOptionsV4 {
   requestRateLimit?: number | undefined;
   requestRateLimitWindow?: number | undefined;
   cookieName?: string | undefined;
+  authResponseUrl?: '/api/auth' | '/api/admin/auth';
 }
 
 function getRequiredEnv(key: string): string {
@@ -37,6 +38,8 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
 
   const apiBaseUrl = getRequiredEnv('V4_API_BASE_URL');
   const cookieName = process.env['V4_API_COOKIE_NAME'];
+  const authResponseUrl =
+    process.env['V4_API_AUTH_TYPE'] === 'survey' ? '/api/auth' : '/api/admin/auth';
   const refreshToken = process.env['V4_API_REFRESH_TOKEN'];
 
   const maxConcurrentRequestsEnv = process.env['V4_API_MAX_CONCURRENT_REQUESTS'];
@@ -56,6 +59,7 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
     credentials,
     refreshToken,
     cookieName,
+    authResponseUrl,
     maxConcurrentRequests,
     requestRateLimit,
     requestRateLimitWindow,

@@ -1,3 +1,4 @@
+import { log } from 'node:console';
 import os from 'node:os';
 
 import decompress from 'decompress';
@@ -25,6 +26,10 @@ export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const
 export const importerSpecificModulesExecutionOptions = [
   'images-as-served',
   'locales',
+  'nutrients',
+  'global-foods',
+  'local-foods',
+  'enabled-local-foods',
   'all',
 ] as const;
 
@@ -496,6 +501,40 @@ export class ImporterV4 {
     this.imageDirPath = path.join(this.packageDirPath, PkgConstants.IMAGE_DIRECTORY_NAME);
   }
 
+  /**
+   * Execute the specific module
+   */
+  private async specificModuleExecution(): Promise<void> {
+    switch (this.options.modulesForExecution) {
+      case 'locales':
+        await this.readLocales();
+        await this.importLocales();
+        break;
+      case 'nutrients':
+        await this.readNutrientTables();
+        await this.importNutrientTables();
+        break;
+      case 'images-as-served':
+        await this.readAsServedSets();
+        await this.importAsServedSets();
+        break;
+      case 'global-foods':
+        await this.readGlobalFoods();
+        await this.importGlobalFoods();
+        break;
+      case 'local-foods':
+        await this.readLocalFoods();
+        await this.importLocalFoods();
+        break;
+      case 'enabled-local-foods':
+        await this.readEnabledLocalFoods();
+        await this.importEnabledLocalFoods();
+        break;
+      default:
+        throw new Error(`Unexpected module option: ${this.options.modulesForExecution}`);
+    }
+  }
+
   public async import(): Promise<void> {
     await this.unzipPackage();
     await this.apiClient.baseClient.refresh();
@@ -513,28 +552,10 @@ export class ImporterV4 {
         await this.cleanUpPackage();
       }
     } else {
-      switch (this.options.modulesForExecution) {
-        case 'locales':
-          // try {
-          //   await this.readLocales();
-          //   await this.importLocales();
-          // } finally {
-          //   await this.cleanUpPackage();
-          // }
-          logger.info('LOCALES - Not implemented');
-          break;
-        case 'images-as-served':
-          try {
-            await this.readAsServedSets();
-            await this.importAsServedSets();
-          } finally {
-            await this.cleanUpPackage();
-          }
-          break;
-        default:
-          throw new Error(
-            `Unexpected module for execution option: ${this.options.modulesForExecution}`
-          );
+      try {
+        await this.specificModuleExecution();
+      } finally {
+        await this.cleanUpPackage();
       }
     }
 

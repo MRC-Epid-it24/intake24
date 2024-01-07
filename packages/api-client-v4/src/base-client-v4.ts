@@ -10,8 +10,8 @@ import type { LoginResponse, RefreshResponse } from '@intake24/common/types/http
 import type { CredentialsV4 } from './credentials';
 import type { ApiClientOptionsV4 } from './options';
 
-//TODO: change before pushing to dev: Temp switched to admin cookie - it24a_refresh_token, before was  it24s_refresh_token
-const REFRESH_TOKEN_COOKIE_NAME = 'it24s_refresh_token';
+const DEFAULT_REFRESH_TOKEN_COOKIE_NAME = 'it24a_refresh_token';
+const DEFAULT_API_LOGIN_RESPONSE_URL = '/api/admin/auth';
 const DEFAULT_MAX_CONCURRENT_REQUESTS = 10;
 const DEFAULT_REQUEST_RATE_LIMIT = 300;
 const DEFAULT_REQUEST_RATE_LIMIT_WINDOW = 5 * 60 * 1000;
@@ -23,6 +23,7 @@ export class BaseClientV4 {
   private refreshToken?: string;
   private accessToken?: string;
   private cookieName: string;
+  private authResponseUrl: '/api/auth' | '/api/admin/auth';
 
   public readonly logger: Logger;
   public readonly rawClient: Axios;
@@ -37,7 +38,8 @@ export class BaseClientV4 {
     this.apiBaseUrl = options.apiBaseUrl;
     this.credentials = options.credentials;
     this.refreshToken = options.refreshToken;
-    this.cookieName = options.cookieName ?? REFRESH_TOKEN_COOKIE_NAME;
+    this.cookieName = options.cookieName ?? DEFAULT_REFRESH_TOKEN_COOKIE_NAME;
+    this.authResponseUrl = options.authResponseUrl ?? DEFAULT_API_LOGIN_RESPONSE_URL;
 
     this.requestQueue = new pQueue({
       concurrency: options.maxConcurrentRequests ?? DEFAULT_MAX_CONCURRENT_REQUESTS,
@@ -115,9 +117,8 @@ export class BaseClientV4 {
 
       return this.login();
     } else {
-      //TODO: change before pushing to dev: Temp switched to admin route
       const response = await this.rawClient.post<RefreshResponse>(
-        '/api/admin/auth/refresh',
+        `${this.authResponseUrl}/refresh`,
         undefined,
         {
           headers: {
@@ -177,16 +178,13 @@ export class BaseClientV4 {
 
     this.logger.debug('Signing in with email and password');
 
-    //TODO: change before pushing to dev: Temp switched to admin route
     const response = await this.rawClient.post<LoginResponse>(
-      '/api/admin/auth/login',
+      `${this.authResponseUrl}/login`,
       this.credentials,
       {
         headers: { 'Content-Type': 'application/json' },
       }
     );
-
-    this.logger.debug(`Login response: ${JSON.stringify(response.data)}`);
 
     switch (response.status) {
       case HttpStatusCode.Ok:
