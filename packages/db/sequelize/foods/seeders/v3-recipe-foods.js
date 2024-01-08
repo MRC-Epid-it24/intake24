@@ -12,6 +12,7 @@ const recipeFoods = [
         order: 1,
         repeatable: false,
         category_code: 'SW01',
+        required: true,
       },
       {
         code: 'SND_2',
@@ -20,6 +21,7 @@ const recipeFoods = [
         order: 2,
         repeatable: false,
         category_code: 'SW02',
+        required: false,
       },
       {
         code: 'SND_3',
@@ -29,6 +31,7 @@ const recipeFoods = [
         order: 3,
         repeatable: false,
         category_code: 'SW03',
+        required: false,
       },
       {
         code: 'SND_4',
@@ -37,6 +40,7 @@ const recipeFoods = [
         order: 4,
         repeatable: false,
         category_code: 'SW04',
+        required: false,
       },
       {
         code: 'SND_5',
@@ -45,6 +49,7 @@ const recipeFoods = [
         order: 5,
         repeatable: true,
         category_code: 'SW05',
+        required: false,
       },
       {
         code: 'SND_6',
@@ -53,6 +58,7 @@ const recipeFoods = [
         order: 6,
         repeatable: true,
         category_code: 'SW06',
+        required: false,
       },
     ],
   },
@@ -66,6 +72,7 @@ const recipeFoods = [
         order: 1,
         repeatable: true,
         category_code: 'SLW1',
+        required: true,
       },
       {
         code: 'SLD_2',
@@ -74,6 +81,7 @@ const recipeFoods = [
         order: 2,
         repeatable: true,
         category_code: 'SLW2',
+        required: false,
       },
     ],
   },

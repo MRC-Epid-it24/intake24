@@ -265,6 +265,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
         categoryCode,
         order,
         repeatable,
+        required: false,
       });
       newRecords.push(newRecord);
     }
