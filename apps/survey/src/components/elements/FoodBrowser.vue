@@ -208,6 +208,7 @@ export default defineComponent({
 
         return last.name;
       }
+      //add conditional browse
 
       return {
         ...translatePrompt(
@@ -226,6 +227,7 @@ export default defineComponent({
           {
             back: { category: backCategoryLabel() },
             'missing.irrelevantIngredient': { ingredient: props.stepName },
+            browse: { category: props.stepName },
           }
         ),
       };

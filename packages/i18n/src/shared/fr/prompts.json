@@ -376,7 +376,7 @@
     "name": "{food} créateur de recettes",
     "text": "",
     "description": "Veuillez suivre les étapes ci-dessous pour créer votre propre recette pour {food}.",
-    "browse": "Parcourir tous les aliments",
+    "browse": "Parcourir tous {category}",
     "search": "Recherche d'un aliment",
     "root": "toutes les catégories d'aliments",
     "back": "Retour à '{category}'",

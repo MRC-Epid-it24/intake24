@@ -372,7 +372,7 @@
     "text": "",
     "description": "Please follow the steps below to build your own recipe for {food}.",
     "label": "Add your own {searchTerm}",
-    "browse": "Browse all foods",
+    "browse": "{category} categories",
     "search": "Search for a food",
     "root": "all food categories",
     "back": "Back to '{category}'",
