@@ -9,7 +9,9 @@
   },
   "login": {
     "_": "Daftar masuk",
+    "start": "Let's get started",
     "subtitle": "Daftar masuk dengan nama pengguna & kata laluan anda",
+    "captcha": "Complete the captcha challenge",
     "back": "Kembali ke log masuk",
 
     "err": {

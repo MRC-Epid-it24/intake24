@@ -9,7 +9,9 @@
   },
   "login": {
     "_": "உள்நுழைக",
+    "start": "Let's get started",
     "subtitle": "உங்கள் பயனர்பெயர் மற்றும் கடவுச்சொல்லுடன் உள்நுழையவும்",
+    "captcha": "Complete the captcha challenge",
     "back": "உள்நுழைவுக்குத் திரும்பு",
 
     "err": {

@@ -8,7 +8,7 @@
         <v-card-text class="d-flex flex-column justify-center align-center">
           <v-icon class="pt-8 pb-12" size="96">fas fa-robot</v-icon>
           <v-btn block color="primary" rounded type="submit" x-large>
-            {{ $t('common.login._') }}
+            {{ $t('common.login.start') }}
           </v-btn>
         </v-card-text>
         <captcha ref="captchaEl" @expired="expired" @verified="verified"></captcha>

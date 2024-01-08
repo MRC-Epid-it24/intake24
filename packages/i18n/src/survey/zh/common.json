@@ -9,7 +9,9 @@
   },
   "login": {
     "_": "登录",
+    "start": "Let's get started",
     "subtitle": "使用您的用户名和密码登录",
+    "captcha": "Complete the captcha challenge",
     "back": "返回登录",
 
     "err": {

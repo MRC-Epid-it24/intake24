@@ -9,7 +9,9 @@
   },
   "login": {
     "_": "S'inscrire",
+    "start": "Let's get started",
     "subtitle": "Connectez-vous avec votre nom d'utilisateur et votre mot de passe",
+    "captcha": "Complete the captcha challenge",
     "back": "Retour au login",
     "err": {
       "captcha": "Invalid captcha challenge response.",
