@@ -90,21 +90,16 @@ const surveySubmissionService = ({
   const collectFoodCodes = (foods: FoodState[]) =>
     foods.reduce<FoodCodes>(
       (acc, food) => {
-        if (food.type !== 'encoded-food') {
-          if (food.type === 'free-text')
-            logger.warn(
-              `Submission: ${food.type} food record present in 'collectFoodCodes, skipping...`
-            );
+        const { linkedFoods, type } = food;
+        if (type === 'free-text') {
+          logger.warn(`Submission: ${type} food record present in 'collectFoodCodes, skipping...`);
           return acc;
         }
 
-        const {
-          data: { code, groupCode },
-          linkedFoods,
-        } = food;
-
-        acc.foodCodes.push(code);
-        acc.groupCodes.push(groupCode);
+        if (type === 'encoded-food') {
+          acc.foodCodes.push(food.data.code);
+          acc.groupCodes.push(food.data.groupCode);
+        }
 
         if (linkedFoods.length) {
           const { foodCodes, groupCodes } = collectFoodCodes(linkedFoods);
@@ -153,14 +148,9 @@ const surveySubmissionService = ({
 
       //TODO: RecipeBuilder define the logic
       if (foodState.type === 'recipe-builder') {
-        const { components } = foodState;
-        if (!components) {
-          logger.warn(`Submission: ${foodState.type} without info, skipping...`);
-          return collectedFoods;
-        }
+        const { linkedFoods } = foodState;
 
         collectedFoods.recipeBuilderInputs.push({
-          ...components,
           id: randomUUID(),
           parentId,
           mealId,
@@ -168,7 +158,7 @@ const surveySubmissionService = ({
         });
         collectedFoods.recipeBuilderStates.push(foodState);
 
-        return collectedFoods;
+        return linkedFoods.reduce(collectFoods({ foodGroups, foods, mealId }), collectedFoods);
       }
 
       const {
