@@ -19,7 +19,7 @@
                 v-model="reviewed"
                 class="review-checkbox__checkbox font-weight-medium mt-0"
                 hide-details
-                :label="$t('recall.actions.reviewCheckBox')"
+                :label="$t('recall.actions.reviewed')"
                 :value="meal.id"
               ></v-checkbox>
               <v-hover v-slot="{ hover }">
@@ -40,7 +40,7 @@
               v-model="reviewed"
               class="review-checkbox__checkbox font-weight-medium mt-0"
               hide-details
-              :label="$t('recall.actions.reviewCheckBox')"
+              :label="$t('recall.actions.reviewed')"
             ></v-checkbox>
           </v-card-text>
         </v-list>
