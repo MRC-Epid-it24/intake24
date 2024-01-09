@@ -57,7 +57,7 @@
               </v-select>
               <v-select
                 v-model="form.physicalDataFields"
-                :class="{ 'mb-2': form.physicalDataFields.length }"
+                class="mb-2"
                 :error-messages="form.errors.get('physicalDataFields')"
                 hide-details="auto"
                 :items="physicalDataFields"
@@ -81,7 +81,7 @@
                 <v-alert
                   v-if="!value && form.physicalDataFields.includes(key)"
                   :key="key"
-                  class="text-caption mb-1"
+                  class="text-caption"
                   dense
                   text
                   type="info"
@@ -97,6 +97,7 @@
                 <v-alert
                   v-if="value && !form.physicalDataFields.includes(key)"
                   :key="key"
+                  class="text-caption"
                   dense
                   text
                   type="warning"

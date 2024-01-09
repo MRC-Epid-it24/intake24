@@ -62,7 +62,8 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
-import { downloadFile } from '@intake24/ui/util';
+
+import { useDownloadJob } from './use-download-job';
 
 export default defineComponent({
   name: 'PollsJobList',
@@ -75,21 +76,9 @@ export default defineComponent({
   },
 
   setup() {
-    const downloadUrlAvailable = (job: JobEntry) =>
-      job.downloadUrl &&
-      job.downloadUrlExpiresAt &&
-      new Date(job.downloadUrlExpiresAt).getTime() > Date.now();
+    const { download, downloadUrlAvailable } = useDownloadJob(true);
 
-    return { downloadUrlAvailable };
-  },
-
-  methods: {
-    async download(job: JobEntry) {
-      const res = await this.$http.get(`admin/user/jobs/${job.id}/download`, {
-        responseType: 'blob',
-      });
-      downloadFile(res, job.downloadUrl);
-    },
+    return { download, downloadUrlAvailable };
   },
 });
 </script>

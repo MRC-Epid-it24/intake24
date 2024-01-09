@@ -26,9 +26,22 @@
             {{ [entry.user?.name, entry.user?.email, entry.userId].filter(Boolean).join(', ') }}
           </td>
         </tr>
-        <tr>
+        <tr v-if="entry.downloadUrl && entry.downloadUrlExpiresAt">
           <th>{{ $t('jobs.downloadUrl') }}</th>
-          <td>{{ entry.downloadUrl }}</td>
+          <td>
+            {{ entry.downloadUrl }}
+            <v-btn
+              v-if="downloadUrlAvailable(entry)"
+              class="ml-2"
+              icon
+              large
+              link
+              :title="$t('common.action.download')"
+              @click="download(entry)"
+            >
+              <v-icon color="secondary">$download</v-icon>
+            </v-btn>
+          </td>
           <th>{{ $t('jobs.downloadUrlExpiresAt') }}</th>
           <td>{{ formatDate(entry.downloadUrlExpiresAt) }}</td>
         </tr>
@@ -82,6 +95,7 @@ import { defineComponent } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
+import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { formatsDateTime } from '@intake24/admin/mixins';
 import { ConfirmDialog } from '@intake24/ui/components';
@@ -96,10 +110,10 @@ export default defineComponent({
   setup(props) {
     useEntryFetch(props);
     const { entry, entryLoaded } = useEntry<JobEntry>(props);
-
     const { formatDate } = useDateTime();
+    const { download, downloadUrlAvailable } = useDownloadJob();
 
-    return { entry, entryLoaded, formatDate };
+    return { download, downloadUrlAvailable, entry, entryLoaded, formatDate };
   },
 
   methods: {
