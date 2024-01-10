@@ -32,4 +32,7 @@ export interface SurveySubmissionEntry extends SurveySubmissionAttributes {
 
 export type SurveySubmissions = SurveySubmissionEntry[];
 
-export type UserPhysicalDataResponse = UserPhysicalDataAttributes | null;
+export type UserPhysicalDataResponse = Pick<
+  UserPhysicalDataAttributes,
+  'birthdate' | 'heightCm' | 'physicalActivityLevelId' | 'sex' | 'weightKg' | 'weightTarget'
+> | null;

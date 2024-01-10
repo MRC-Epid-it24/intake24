@@ -125,7 +125,7 @@ import type {
   FeedbackSchemeEntryResponse,
   PhysicalActivityLevel,
 } from '@intake24/common/types/http';
-import type { UserPhysicalDataInput } from '@intake24/survey/services';
+import type { UserPhysicalData } from '@intake24/ui/feedback';
 import { sexes, weightTargets } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
 import { feedbackService, userService } from '@intake24/survey/services';
@@ -137,6 +137,12 @@ export interface NullablePhysicalActivityLevel extends Omit<PhysicalActivityLeve
 
 export default defineComponent({
   name: 'FeedbackPhysicalData',
+
+  beforeRouteEnter({ params }, from, next) {
+    useSurvey().parameters?.feedbackScheme?.physicalDataFields.length
+      ? next()
+      : next({ name: 'feedback-home', params });
+  },
 
   props: {
     surveyId: {
@@ -159,7 +165,7 @@ export default defineComponent({
         weightKg: null,
         physicalActivityLevelId: null,
         weightTarget: null,
-      } as UserPhysicalDataInput,
+      } as UserPhysicalData,
       errors: new Errors(),
       sexes: [
         { text: this.$t('common.not.selected'), value: null, icon: 'fas fa-genderless' },
@@ -202,10 +208,8 @@ export default defineComponent({
         feedbackService.getFeedbackData(),
       ]);
 
-      if (physicalData) {
-        const { userId, ...rest } = physicalData;
-        this.form = { ...rest };
-      }
+      this.form = { ...physicalData };
+
       this.physicalActivityLevels = [
         { id: null, name: this.$t('common.not.selected').toString(), coefficient: 0 },
         ...feedbackData.physicalActivityLevels,

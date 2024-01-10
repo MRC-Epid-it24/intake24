@@ -11,7 +11,7 @@
         <v-col cols="12" lg="7" md="8" xl="6">
           <v-row justify="space-around">
             <feedback-user-info
-              v-if="userDemographic"
+              v-if="userDemographic?.hasData()"
               v-bind="{ surveyId, userDemographic }"
             ></feedback-user-info>
             <feedback-outputs
@@ -191,10 +191,7 @@ export default defineComponent({
       const { cards, demographicGroups: groups, henryCoefficients } = feedbackScheme;
 
       const { physicalData, submissions } = await this.getUserData(surveyId);
-      if (
-        !physicalData ||
-        feedbackScheme.physicalDataFields.some((item) => physicalData[item] === null)
-      ) {
+      if (feedbackScheme.physicalDataFields.some((item) => physicalData[item] === null)) {
         this.$router.push({ name: 'feedback-physical-data', params: { surveyId } });
         return;
       }

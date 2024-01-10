@@ -1,18 +1,27 @@
 import type { SurveySubmissionEntry, UserPhysicalDataResponse } from '@intake24/common/types/http';
+import type { UserPhysicalData } from '@intake24/ui/feedback';
 
 import http from './http.service';
 
-export type UserPhysicalDataInput = Omit<NonNullable<UserPhysicalDataResponse>, 'userId'>;
-
 export default {
-  fetchPhysicalData: async (): Promise<UserPhysicalDataResponse> => {
+  fetchPhysicalData: async (): Promise<UserPhysicalData> => {
     const { data } = await http.get<UserPhysicalDataResponse>(`user/physical-data`);
-    return data;
+
+    return (
+      data ?? {
+        birthdate: null,
+        sex: null,
+        weightKg: null,
+        heightCm: null,
+        physicalActivityLevelId: null,
+        weightTarget: null,
+      }
+    );
   },
 
   savePhysicalData: async (
     survey: string,
-    input: UserPhysicalDataInput
+    input: UserPhysicalData
   ): Promise<UserPhysicalDataResponse> => {
     const { data } = await http.post<UserPhysicalDataResponse>(`user/physical-data`, input, {
       params: { survey },

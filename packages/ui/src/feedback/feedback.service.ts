@@ -25,6 +25,8 @@ export type FeedbackResults = {
   userDemographic: UserDemographic;
 };
 
+export type UserPhysicalData = NonNullable<UserPhysicalDataResponse>;
+
 const createFeedbackService = (httpClient: HttpClient) => {
   let cachedFeedbackData: FeedbackData | null = null;
 
@@ -45,7 +47,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
   const getUserDemographic = (
     feedbackData: FeedbackData,
     henryCoefficients: HenryCoefficient[],
-    physicalData: NonNullable<UserPhysicalDataResponse>
+    physicalData: UserPhysicalData
   ): UserDemographic => {
     const { physicalActivityLevels, weightTargets } = feedbackData;
 
@@ -66,7 +68,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
     cards: Card[];
     groups: FeedbackSchemeDemographicGroup[];
     henryCoefficients: HenryCoefficient[];
-    physicalData: NonNullable<UserPhysicalDataResponse>;
+    physicalData: UserPhysicalData;
     submissions: SurveySubmissionEntry[];
   }): Promise<FeedbackResults> => {
     const { cards, groups, henryCoefficients, physicalData, submissions } = ops;
