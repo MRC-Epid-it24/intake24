@@ -202,6 +202,10 @@ export function directWeightComplete(food: FoodState): boolean {
   return food.portionSize.servingWeight !== null;
 }
 
+export function recipeComplete(food: FoodState): boolean {
+  return food.type === 'recipe-builder';
+}
+
 export const portionSizeCompleteChecks = {
   'as-served': asServedComplete,
   cereal: cerealComplete,
@@ -213,6 +217,7 @@ export const portionSizeCompleteChecks = {
   'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
   'standard-portion': standardPortionComplete,
+  recipe: recipeComplete,
 };
 
 export const portionSizeComplete = (food: FoodState): boolean => {

@@ -198,17 +198,17 @@ const surveyRespondentController = ({
     res: Response<SurveyUserInfoResponse>
   ): Promise<void> => {
     const {
+      body: { submission },
       headers: { 'user-agent': userAgent },
       params: { slug },
       query: { tzOffset },
     } = req;
     const user = req.user as User;
-    const { submission } = req.body;
 
     const followUpInfo = await surveySubmissionService.submit(
       slug,
       user,
-      { ...submission, userAgent },
+      { ...submission, submissionTime: new Date(), userAgent },
       tzOffset
     );
 
