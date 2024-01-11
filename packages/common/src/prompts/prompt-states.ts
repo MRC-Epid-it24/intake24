@@ -38,6 +38,7 @@ export type RecipeBuilderStepState = {
   name: RequiredLocaleTranslation;
   categoryCode: string;
   repeat: boolean;
+  required: boolean;
 };
 
 export type PromptStates = {

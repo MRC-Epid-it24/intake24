@@ -41,6 +41,7 @@ const initialPromptState = (step: RecipeFoodStepsType): RecipeBuilderStepState =
   description: step.description,
   name: step.name,
   categoryCode: step.categoryCode,
+  required: step.required,
 });
 
 export default defineComponent({

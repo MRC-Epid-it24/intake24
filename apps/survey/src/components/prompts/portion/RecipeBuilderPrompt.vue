@@ -55,6 +55,7 @@
                   localeId,
                   searchParameters,
                   stepName: translate(step.name),
+                  requiredToFill: step.required,
                   rootCategory: step.categoryCode,
                   prompt,
                 }"

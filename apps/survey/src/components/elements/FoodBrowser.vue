@@ -100,7 +100,8 @@
           {{ promptI18n['missing.label'] }}
         </v-btn>
         <v-btn
-          v-if="type === 'recipeBuilder'"
+          v-if="type === 'recipeBuilder' && !requiredToFill"
+          class="overflow-button"
           color="primary"
           :disabled="missingDialog"
           large
@@ -190,6 +191,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: '',
+    },
+    requiredToFill: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
 
@@ -481,4 +487,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.overflow-button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+</style>
