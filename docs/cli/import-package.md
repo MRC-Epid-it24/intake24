@@ -20,7 +20,23 @@ This command allows to import a new locale/images/nutrient table from the pre-de
 - `<version>` - Intake24 API version to use. Values: **v3**, **v4**
 - `<package-file>` - Input package file path
 
-## Example
+**Do not use all in combination with other modules**
+
+## Examples
+
+### Executing all modules
+
+```
+pnpm run cli import-package -c overwrite -m all v4 /path/to/the/archived/ARCHIVED_FOLDER.zip
+```
+
+### Executing multiple modules
+
+```
+pnpm run cli import-package -c overwrite -m locales nutrients v4 /path/to/the/archived/ARCHIVED_FOLDER.zip
+```
+
+### Executing one module
 
 ```
 pnpm run cli import-package -c overwrite -m enabled-local-foods v4 /path/to/the/archived/ARCHIVED_FOLDER.zip
