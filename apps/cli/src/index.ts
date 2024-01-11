@@ -105,7 +105,7 @@ const run = async () => {
   ).choices(conflictResolutionOptions);
 
   const specificModulesExecutionOption = new Option(
-    '-m, --modules-for-execution [modules-for-execution-option]',
+    '-m, --modules-for-execution [modules-for-execution-option...]',
     'Specific modules to execute'
   ).choices(importerSpecificModulesExecutionOptions);
 

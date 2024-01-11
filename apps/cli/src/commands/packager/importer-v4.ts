@@ -1,4 +1,3 @@
-import { log } from 'node:console';
 import os from 'node:os';
 
 import decompress from 'decompress';
@@ -39,12 +38,16 @@ export type ImporterSpecificModulesExecutionStrategy =
 
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
-  modulesForExecution?: ImporterSpecificModulesExecutionStrategy;
+  modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
 }
+
+export type availableModules = {
+  [key in ImporterSpecificModulesExecutionStrategy]: () => Promise<void>;
+};
 
 const defaultOptions: ImporterOptions = {
   onConflict: 'abort',
-  modulesForExecution: 'all',
+  modulesForExecution: ['all'],
 };
 
 export class ImporterV4 {
@@ -78,9 +81,51 @@ export class ImporterV4 {
     this.inputFilePath = inputFilePath;
     this.options = {
       onConflict: options?.onConflict ?? defaultOptions.onConflict,
-      modulesForExecution: options?.modulesForExecution ?? defaultOptions.modulesForExecution,
+      modulesForExecution:
+        options &&
+        options.modulesForExecution !== undefined &&
+        options.modulesForExecution.length !== 0
+          ? options.modulesForExecution
+          : defaultOptions.modulesForExecution,
     };
   }
+
+  // LIST of avaialble modules. Keep up to date
+  private availableModules: availableModules = {
+    locales: async () => {
+      await this.readLocales();
+      await this.importLocales();
+    },
+    nutrients: async () => {
+      await this.readNutrientTables();
+      await this.importNutrientTables();
+    },
+    'images-as-served': async () => {
+      await this.readAsServedSets();
+      await this.importAsServedSets();
+    },
+    'global-foods': async () => {
+      await this.readGlobalFoods();
+      await this.importGlobalFoods();
+    },
+    'local-foods': async () => {
+      await this.readLocalFoods();
+      await this.importLocalFoods();
+    },
+    'enabled-local-foods': async () => {
+      await this.readEnabledLocalFoods();
+      await this.importEnabledLocalFoods();
+    },
+    all: async () => {
+      await this.readPackage();
+      await this.importLocales();
+      await this.importNutrientTables();
+      await this.importAsServedSets();
+      await this.importGlobalFoods();
+      await this.importLocalFoods();
+      await this.importEnabledLocalFoods();
+    },
+  };
 
   private async batchImport<T>(
     objects: T[],
@@ -502,36 +547,32 @@ export class ImporterV4 {
   }
 
   /**
-   * Execute the specific module
+   * Execute the specific modules in order
    */
-  private async specificModuleExecution(): Promise<void> {
-    switch (this.options.modulesForExecution) {
-      case 'locales':
-        await this.readLocales();
-        await this.importLocales();
-        break;
-      case 'nutrients':
-        await this.readNutrientTables();
-        await this.importNutrientTables();
-        break;
-      case 'images-as-served':
-        await this.readAsServedSets();
-        await this.importAsServedSets();
-        break;
-      case 'global-foods':
-        await this.readGlobalFoods();
-        await this.importGlobalFoods();
-        break;
-      case 'local-foods':
-        await this.readLocalFoods();
-        await this.importLocalFoods();
-        break;
-      case 'enabled-local-foods':
-        await this.readEnabledLocalFoods();
-        await this.importEnabledLocalFoods();
-        break;
-      default:
-        throw new Error(`Unexpected module option: ${this.options.modulesForExecution}`);
+  private async specificModuleExecution(moduleKeys: ImporterSpecificModulesExecutionStrategy[]) {
+    // If the only option is "all", execute all modules in order
+    if (moduleKeys.length === 1 && moduleKeys[0] === 'all') {
+      moduleKeys = Object.keys(this.availableModules) as ImporterSpecificModulesExecutionStrategy[];
+    } else {
+      // Verify if all the supplied options are valid
+      const invalidKeys = moduleKeys.filter(
+        (key) => !(key in this.availableModules) || key === 'all'
+      );
+
+      if (invalidKeys.length > 0) {
+        console.error(`Invalid steps combination: ${invalidKeys.join(', ')}`);
+        return;
+      }
+    }
+
+    // Execute the modules in order
+    for (const key of moduleKeys) {
+      const module = this.availableModules[key];
+      if (module) {
+        await module();
+      } else {
+        console.error(`No module found for key: ${key}`);
+      }
     }
   }
 
@@ -539,24 +580,16 @@ export class ImporterV4 {
     await this.unzipPackage();
     await this.apiClient.baseClient.refresh();
 
-    if (this.options.modulesForExecution === 'all') {
-      await this.readPackage();
-      try {
-        await this.importLocales();
-        await this.importNutrientTables();
-        await this.importAsServedSets();
-        await this.importGlobalFoods();
-        await this.importLocalFoods();
-        await this.importEnabledLocalFoods();
-      } finally {
-        await this.cleanUpPackage();
-      }
-    } else {
-      try {
-        await this.specificModuleExecution();
-      } finally {
-        await this.cleanUpPackage();
-      }
+    if (
+      this.options.modulesForExecution === undefined ||
+      this.options.modulesForExecution.length === 0
+    ) {
+      this.options.modulesForExecution = ['all'];
+    }
+    try {
+      await this.specificModuleExecution(this.options.modulesForExecution);
+    } finally {
+      await this.cleanUpPackage();
     }
 
     logger.info('Done!');

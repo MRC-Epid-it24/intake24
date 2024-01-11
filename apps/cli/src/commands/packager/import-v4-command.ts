@@ -10,7 +10,7 @@ export interface PackageImportOptions {
   asServed?: string[];
   locale?: string[];
   onConflict?: ConflictResolutionStrategy;
-  modulesForExecution?: ImporterSpecificModulesExecutionStrategy;
+  modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
 }
 
 export default async (
@@ -24,7 +24,10 @@ export default async (
 
   const importer = new ImporterV4(apiClient, logger, inputFilePath, {
     onConflict: options.onConflict,
-    modulesForExecution: options.modulesForExecution,
+    modulesForExecution:
+      options?.modulesForExecution !== undefined
+        ? options.modulesForExecution
+        : (['all'] as ImporterSpecificModulesExecutionStrategy[]),
   });
 
   await importer.import();
