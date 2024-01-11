@@ -1,3 +1,5 @@
+import { log } from 'console';
+
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
@@ -9,6 +11,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
+import { logger } from '@intake24/common-backend/services';
 import {
   Op,
   RecipeFoods,
@@ -224,6 +227,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     recipeFoodSteps: LocaleRecipeFoodStepsInput[]
   ) => {
     const { code: localeCode } = await resolveLocale(localeId);
+    logger.info(`setRecipeFoodSteps: ${localeCode} ${recipeFoodId}`);
+    logger.info(JSON.stringify(recipeFoodSteps));
     const ids = recipeFoodSteps.map(({ id }) => id) as string[];
     await RecipeFoodsSteps.destroy({
       where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },
@@ -238,7 +243,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const newRecords: RecipeFoodsSteps[] = [];
 
     for (const recipeFoodStep of recipeFoodSteps) {
-      const { id, code, name, description, categoryCode, order, repeatable } = recipeFoodStep;
+      const { id, code, name, description, categoryCode, order, repeatable, required } =
+        recipeFoodStep;
 
       if (id) {
         const match = records.find((record) => record.id === id);
@@ -251,6 +257,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
             localeId: localeCode,
             order,
             repeatable,
+            required,
           });
           continue;
         }
