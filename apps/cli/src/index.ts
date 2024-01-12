@@ -16,7 +16,10 @@ import {
   packageExportV3,
   packageImportV4,
 } from './commands';
-import { conflictResolutionOptions } from './commands/packager/importer-v4';
+import {
+  conflictResolutionOptions,
+  importerSpecificModulesExecutionOptions,
+} from './commands/packager/importer-v4';
 
 const run = async () => {
   const program = new Command();
@@ -101,7 +104,13 @@ const run = async () => {
     'Conflict resolution strategy'
   ).choices(conflictResolutionOptions);
 
+  const specificModulesExecutionOption = new Option(
+    '-m, --modules-for-execution [modules-for-execution-option...]',
+    'Specific modules to execute'
+  ).choices(importerSpecificModulesExecutionOptions);
+
   conflictResolutionOption.required = true;
+  specificModulesExecutionOption.required = false;
 
   program
     .command('import-package')
@@ -109,6 +118,7 @@ const run = async () => {
     .addArgument(new Argument('<version>', 'Intake24 API version').choices(['v3', 'v4']))
     .addArgument(new Argument('<package-file>', 'Input package file path'))
     .addOption(conflictResolutionOption)
+    .addOption(specificModulesExecutionOption)
     .action(async (version, inputFilePath, options) => {
       switch (version) {
         case 'v3':
