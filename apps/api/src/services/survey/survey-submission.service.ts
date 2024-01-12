@@ -54,12 +54,9 @@ export type CollectFoodsOps = {
 
 export type CollectedFoods = {
   inputs: SurveySubmissionFoodCreationAttributes[];
-  states: EncodedFood[];
+  states: (EncodedFood | RecipeBuilder)[];
   missingInputs: SurveySubmissionMissingFoodCreationAttributes[];
   missingStates: MissingFood[];
-  //TODO: RecipeBuilder define the logic
-  recipeBuilderInputs: SurveySubmissionMissingFoodCreationAttributes[];
-  recipeBuilderStates: RecipeBuilder[];
 };
 
 export type CollectedNutrientInfo = {
@@ -146,19 +143,48 @@ const surveySubmissionService = ({
         return collectedFoods;
       }
 
-      //TODO: RecipeBuilder define the logic
       if (foodState.type === 'recipe-builder') {
-        const { linkedFoods } = foodState;
+        const { linkedFoods, searchTerm, template } = foodState;
 
-        collectedFoods.recipeBuilderInputs.push({
-          id: randomUUID(),
+        const foodGroupRecord = foodGroups['0'];
+
+        if (!foodGroupRecord) {
+          logger.warn(`Submission: food group '0' not found, skipping...`);
+          return collectedFoods;
+        }
+
+        if (!foodGroupRecord.localGroups)
+          throw new Error('Submission: not loaded foodGroupRecord relationships');
+
+        const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
+        const id = randomUUID();
+
+        collectedFoods.inputs.push({
+          id,
           parentId,
           mealId,
-          index: collectedFoods.inputs.length + collectedFoods.recipeBuilderInputs.length,
+          index: collectedFoods.inputs.length + collectedFoods.missingInputs.length,
+          code: template.code,
+          englishName: template.name,
+          localName: template.name,
+          readyMeal: false,
+          searchTerm: searchTerm ?? '',
+          portionSizeMethodId: 'recipe',
+          reasonableAmount: true,
+          foodGroupId,
+          foodGroupEnglishName,
+          foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
+          brand: null,
+          barcode: null,
+          nutrientTableId: '0',
+          nutrientTableCode: '0',
         });
-        collectedFoods.recipeBuilderStates.push(foodState);
+        collectedFoods.states.push(foodState);
 
-        return linkedFoods.reduce(collectFoods({ foodGroups, foods, mealId }), collectedFoods);
+        return linkedFoods.reduce(
+          collectFoods({ foodGroups, foods, mealId, parentId: id }),
+          collectedFoods
+        );
       }
 
       const {
@@ -183,7 +209,7 @@ const surveySubmissionService = ({
       }
 
       if (!foodRecord.main || !foodRecord.nutrientRecords || !foodGroupRecord.localGroups)
-        throw new Error('Submission: not loaded foodRecord relationships');
+        throw new Error('Submission: not loaded foodRecord/foodGroupRecord relationships');
 
       const {
         nutrientRecords,
@@ -192,19 +218,11 @@ const surveySubmissionService = ({
       } = foodRecord;
       const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;
 
-      if (!nutrientRecords.length) {
-        logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
-        return collectedFoods;
-      }
-
-      const [nutrientTableRecord] = nutrientRecords;
-
       if (!portionSize) {
         logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
         return collectedFoods;
       }
 
-      // TODO: verify
       const portionSizeWeight =
         (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
       const id = randomUUID();
@@ -220,14 +238,14 @@ const surveySubmissionService = ({
         readyMeal: flags.includes('ready-meal'),
         searchTerm: searchTerm ?? '',
         portionSizeMethodId: portionSize.method,
-        reasonableAmount: reasonableAmount >= portionSizeWeight, // TODO: verify
+        reasonableAmount: reasonableAmount >= portionSizeWeight,
         foodGroupId,
         foodGroupEnglishName,
         foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
         brand: null,
         barcode: null,
-        nutrientTableId: nutrientTableRecord.nutrientTableId,
-        nutrientTableCode: nutrientTableRecord.nutrientTableRecordId,
+        nutrientTableId: nutrientRecords[0]?.nutrientTableId ?? '0',
+        nutrientTableCode: nutrientRecords[0]?.nutrientTableRecordId ?? '0',
       });
       collectedFoods.states.push(foodState);
 
@@ -239,17 +257,12 @@ const surveySubmissionService = ({
 
   const collectFoodCompositionData = (
     foodId: string,
-    foodState: FoodState,
+    foodState: EncodedFood | RecipeBuilder,
     foods: FoodLocalMap
   ) => {
     const collectedData: CollectedNutrientInfo = { fields: [], nutrients: [], portionSizes: [] };
 
-    if (foodState.type !== 'encoded-food') {
-      logger.warn(
-        `Submission: ${foodState.type} food record present in 'collectFoodCompositionData', skipping...`
-      );
-      return collectedData;
-    }
+    if (foodState.type === 'recipe-builder') return collectedData;
 
     const {
       portionSize,
@@ -266,21 +279,23 @@ const surveySubmissionService = ({
     if (!foodRecord.main || !foodRecord.nutrientRecords)
       throw new Error('Submission: not loaded foodRecord relationships');
 
+    if (!portionSize) {
+      logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
+      return collectedData;
+    }
+
+    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
+
+    // Collect portion sizes data
+    collectedData.portionSizes = portionSizeMappers[portionSize.method](foodId, portionSize);
+
+    // Bail if no nutrient record links - missing encoded food link
     if (!foodRecord.nutrientRecords.length) {
       logger.warn(`Submission: Missing nutrient mapping for food code (${code}), skipping...`);
       return collectedData;
     }
 
     const [nutrientTableRecord] = foodRecord.nutrientRecords;
-
-    if (!portionSize) {
-      logger.warn(`Submission: Missing portion size data for food code (${code}), skipping...`);
-      return collectedData;
-    }
-
-    // TODO: verify
-    const portionSizeWeight = (portionSize.servingWeight ?? 0) - (portionSize.leftoversWeight ?? 0);
-
     if (!nutrientTableRecord.nutrients || !nutrientTableRecord.fields)
       throw new Error('Submission: not loaded nutrient relationships');
 
@@ -301,9 +316,6 @@ const surveySubmissionService = ({
         amount: (unitsPer100g * portionSizeWeight) / 100.0,
       })
     );
-
-    // Collect portion sizes data
-    collectedData.portionSizes = portionSizeMappers[portionSize.method](foodId, portionSize);
 
     return collectedData;
   };
@@ -432,7 +444,7 @@ const surveySubmissionService = ({
 
     await db.system.transaction(async (transaction) => {
       const { startTime, endTime, userAgent } = state;
-      const submissionTime = new Date();
+      const submissionTime = state.submissionTime ?? new Date();
 
       if (!startTime || !endTime) {
         logger.warn('Submission: missing startTime / endTime on submission state.', {
@@ -484,7 +496,7 @@ const surveySubmissionService = ({
 
           return acc;
         },
-        { foodCodes: [], groupCodes: [] }
+        { foodCodes: [], groupCodes: ['0'] }
       );
 
       // Store survey custom fields & meals
@@ -550,8 +562,6 @@ const surveySubmissionService = ({
             states: [],
             missingInputs: [],
             missingStates: [],
-            recipeBuilderInputs: [],
-            recipeBuilderStates: [],
           }
         );
 
@@ -560,7 +570,6 @@ const surveySubmissionService = ({
           SurveySubmissionMealCustomField.bulkCreate(mealCustomFieldInputs, { transaction }),
           SurveySubmissionFood.bulkCreate(collectedFoods.inputs, { transaction }),
           SurveySubmissionMissingFood.bulkCreate(collectedFoods.missingInputs, { transaction }),
-          // TODO: add recipe builder submission support
         ]);
 
         // Process foods

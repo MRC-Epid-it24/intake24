@@ -255,6 +255,7 @@ export const portionSizeMappers: Record<
   pizza: pizzaPortionMapper,
   'standard-portion': standardPortionMapper,
   'direct-weight': genericMapper,
+  recipe: genericMapper,
 };
 
 export type PortionSizeMappers = typeof portionSizeMappers;
