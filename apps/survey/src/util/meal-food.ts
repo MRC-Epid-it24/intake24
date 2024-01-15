@@ -68,12 +68,19 @@ export function findMeal(meals: MealState[], id: string): MealState {
   return meals[mealIndex];
 }
 
-export const foodPortionSizeComplete = (food: FoodState) =>
-  !!(
-    food.type === 'encoded-food' &&
-    food.portionSize &&
-    food.flags.includes('portion-size-method-complete')
-  );
+export const foodPortionSizeComplete = (food: FoodState) => {
+  switch (food.type) {
+    case 'free-text':
+      return false;
+    case 'encoded-food':
+      return food.portionSize !== null && food.flags.includes('portion-size-method-complete');
+    case 'missing-food':
+      return food.info !== null && food.flags.includes('missing-food-complete');
+    case 'recipe-builder':
+      // FIXME: correct completeness check for recipe builder
+      return food.flags.includes('recipe-builder-complete');
+  }
+};
 
 export function associatedFoodPromptsComplete(food: FoodState) {
   return (
