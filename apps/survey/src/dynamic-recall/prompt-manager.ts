@@ -800,19 +800,16 @@ export default class PromptManager {
     withSelection: Selection | null
   ): Prompt | undefined {
     const state = this.store.$state;
-    const mealState = findMeal(state.data.meals, mealId);
+    const meal = findMeal(state.data.meals, mealId);
 
     // Post foods prompts should only be triggered when all food data is collected
     // TODO: Probably should include food custom prompts as well
-    if (section === 'postFoods') {
-      const meal = findMeal(state.data.meals, mealId);
-      if (!mealComplete(meal)) return undefined;
-    }
+    if (section === 'postFoods' && !mealComplete(meal)) return undefined;
 
     return this.scheme.prompts.meals[section].find(
       (prompt) =>
-        checkMealStandardConditions(state, mealState, withSelection, prompt) &&
-        checkMealCustomConditions(this.store, mealState, prompt)
+        checkMealStandardConditions(state, meal, withSelection, prompt) &&
+        checkMealCustomConditions(this.store, meal, prompt)
     );
   }
 
