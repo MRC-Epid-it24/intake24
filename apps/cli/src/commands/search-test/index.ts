@@ -6,6 +6,6 @@ export default async (): Promise<void> => {
 
   const apiClient = new ApiClientV4(logger, getApiClientV4EnvOptions());
 
-  const result = apiClient.baseClient.get('/api/foods/UK_V3_2023?description=milk');
+  const result = await apiClient.baseClient.get('/api/foods/UK_V3_2023?description=milk');
   console.log(result);
 };
