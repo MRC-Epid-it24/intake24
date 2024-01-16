@@ -9,6 +9,7 @@ export default async (ops: Ops): Promise<void> => {
   // Databases
   ioc.cradle.db.init();
   if (ops.config.app.env === 'test') await ioc.cradle.db.sync(true);
+  ioc.cradle.kyselyDb.init();
 
   // Local filesystem
   await ioc.cradle.filesystem.init();

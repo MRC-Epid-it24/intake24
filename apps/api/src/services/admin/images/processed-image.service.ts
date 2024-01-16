@@ -16,7 +16,8 @@ const processedImageService = ({
   fsConfig,
   logger: globalLogger,
   sourceImageService,
-}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService'>) => {
+  imageProcessorConfig,
+}: Pick<IoC, 'fsConfig' | 'logger' | 'sourceImageService' | 'imageProcessorConfig'>) => {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'ProcessedImageService' });
 
@@ -65,11 +66,11 @@ const processedImageService = ({
 
     await Promise.all([
       sharp(path.join(imagesPath, image.path))
-        .resize(654)
+        .resize(imageProcessorConfig.asServed.width)
         .jpeg({ mozjpeg: true })
         .toFile(path.join(imagesPath, fullPath)),
       sharp(path.join(imagesPath, image.path))
-        .resize(80)
+        .resize(imageProcessorConfig.asServed.thumbnailWidth)
         .jpeg({ mozjpeg: true })
         .toFile(path.join(imagesPath, thumbFullPath)),
     ]);
@@ -102,7 +103,7 @@ const processedImageService = ({
     await fs.ensureDir(path.join(imagesPath, fileDir));
 
     await sharp(path.join(imagesPath, image.path))
-      .resize(1200)
+      .resize(imageProcessorConfig.imageMaps.width)
       .jpeg({ mozjpeg: true })
       .toFile(path.join(imagesPath, fullPath));
 
@@ -128,7 +129,10 @@ const processedImageService = ({
     await fs.ensureDir(path.join(imagesPath, fileDir));
 
     await sharp(path.join(imagesPath, image.path))
-      .resize(300, 200)
+      .resize(
+        imageProcessorConfig.optionSelection.width,
+        imageProcessorConfig.optionSelection.height
+      )
       .jpeg({ mozjpeg: true })
       .toFile(path.join(imagesPath, filePath));
 
@@ -136,6 +140,31 @@ const processedImageService = ({
       path: filePath,
       sourceId: image.id,
       purpose: ProcessedImagePurposes.SelectionImage,
+    });
+  };
+
+  const createDrinkScaleBaseImage = async (
+    drinkwareSetId: string,
+    sourceImage: SourceImage | string
+  ): Promise<ProcessedImage> => {
+    const image =
+      typeof sourceImage === 'string' ? await resolveSourceImage(sourceImage) : sourceImage;
+
+    const fileName = `${randomUUID()}${path.extname(image.path)}`;
+    const fileDir = path.posix.join('drinkware', drinkwareSetId);
+    const fullPath = path.posix.join(fileDir, fileName);
+
+    await fs.ensureDir(path.join(imagesPath, fileDir));
+
+    await sharp(path.join(imagesPath, image.path))
+      .resize(imageProcessorConfig.drinkScale.width)
+      .jpeg({ mozjpeg: true })
+      .toFile(path.join(imagesPath, fullPath));
+
+    return ProcessedImage.create({
+      path: fullPath,
+      sourceId: image.id,
+      purpose: ProcessedImagePurposes.DrinkScaleBaseImage,
     });
   };
 
@@ -170,6 +199,7 @@ const processedImageService = ({
     createAsServedImages,
     createImageMapBaseImage,
     createSelectionImage,
+    createDrinkScaleBaseImage,
     destroy,
   };
 };

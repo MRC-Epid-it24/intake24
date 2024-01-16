@@ -10,8 +10,9 @@ import { SourceImage } from '@intake24/db';
 
 const sourceImageService = ({
   fsConfig,
+  imageProcessorConfig,
   logger: globalLogger,
-}: Pick<IoC, 'fsConfig' | 'logger'>) => {
+}: Pick<IoC, 'fsConfig' | 'logger' | 'imageProcessorConfig'>) => {
   const { images: imagesPath } = fsConfig.local;
   const logger = globalLogger.child({ service: 'SourceImageService' });
 
@@ -36,7 +37,10 @@ const sourceImageService = ({
     await fs.copy(file.path, path.join(imagesPath, sourcePath));
 
     await sharp(path.join(imagesPath, sourcePath))
-      .resize(768, 432)
+      .resize(
+        imageProcessorConfig.source.thumbnailWidth,
+        imageProcessorConfig.source.thumbnailHeight
+      )
       .jpeg({ mozjpeg: true })
       .toFile(path.join(imagesPath, sourceThumbPath));
 

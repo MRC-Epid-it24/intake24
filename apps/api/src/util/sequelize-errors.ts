@@ -3,6 +3,8 @@ import type { ValidationError } from 'express-validator';
 import type { ValidationError as SequelizeValidationError, ValidationErrorItem } from 'sequelize';
 import { HttpStatusCode } from 'axios';
 
+import { ConflictError } from '@intake24/api/http/errors';
+
 function toExpressValidationError(item: ValidationErrorItem): ValidationError {
   return {
     type: 'field',
@@ -41,5 +43,14 @@ export const handleSequelizeErrors: ErrorRequestHandler = (
       break;
     default:
       next(err);
+  }
+};
+
+export const translateSqlErrors = async <T>(action: () => Promise<T>) => {
+  try {
+    return await action();
+  } catch (e: any) {
+    if (e.code === '23505') throw new ConflictError();
+    else throw e;
   }
 };

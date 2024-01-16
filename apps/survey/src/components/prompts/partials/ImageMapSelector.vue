@@ -212,7 +212,7 @@ export default defineComponent({
 
       &.active {
         stroke-width: 8;
-        stroke: $secondary;
+        stroke: $primary;
         stroke-linecap: round;
         stroke-linejoin: round;
         filter: url(#polygon-blur);

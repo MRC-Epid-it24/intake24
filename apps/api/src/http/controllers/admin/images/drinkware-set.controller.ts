@@ -1,61 +1,56 @@
 import type { Request, Response } from 'express';
-import { pick } from 'lodash';
-import { col, fn } from 'sequelize';
+import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { DrinkwareSetEntry, DrinkwareSetsResponse } from '@intake24/common/types/http/admin';
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
+import type {
+  CreateDrinkwareSetInput,
+  DrinkwareSetEntry,
+  DrinkwareSetsResponse,
+  UpdateDrinkwareSetInput,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { DrinkwareSet } from '@intake24/db';
 
 const drinkwareSetController = ({
-  imagesBaseUrl,
-  portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>) => {
-  const responseCollection = imagesResponseCollection(imagesBaseUrl);
-
+  drinkwareSetService,
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) => {
   const entry = async (
     req: Request<{ drinkwareSetId: string }>,
     res: Response<DrinkwareSetEntry>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await portionSizeService.getDrinkwareSet(drinkwareSetId);
+    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
     if (!drinkwareSet) throw new NotFoundError();
 
-    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    res.json(drinkwareSet);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
   ): Promise<void> => {
-    const drinkwareSets = await DrinkwareSet.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'description'],
-      order: [[fn('lower', col('DrinkwareSet.id')), 'ASC']],
-      include: [{ association: 'imageMap', include: [{ association: 'baseImage' }] }],
-      transform: responseCollection.drinkwareListResponse,
-    });
+    const drinkwareSets = await drinkwareSetService.getDrinkwareSets(req.query);
 
     res.json(drinkwareSets);
   };
 
-  const store = async (req: Request, res: Response<DrinkwareSetEntry>): Promise<void> => {
-    const { id, description, imageMapId } = req.body;
+  const store = async (
+    req: Request<CreateDrinkwareSetInput>,
+    res: Response<DrinkwareSetEntry>
+  ): Promise<void> => {
+    await drinkwareSetService.create(req.body);
 
-    await DrinkwareSet.create({ id, description, imageMapId });
+    const drinkwareSetEntry = await drinkwareSetService.getDrinkwareSetOrThrow(req.body.id);
 
-    const drinkwareSet = await portionSizeService.getDrinkwareSet(id);
-    if (!drinkwareSet) throw new NotFoundError();
-
-    res.status(201).json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    res.status(HttpStatusCode.Created).json(drinkwareSetEntry);
   };
 
   const read = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetResponse>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
@@ -64,19 +59,16 @@ const drinkwareSetController = ({
   ): Promise<void> => entry(req, res);
 
   const update = async (
-    req: Request<{ drinkwareSetId: string }>,
+    req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInput>,
     res: Response<DrinkwareSetEntry>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
-    if (!drinkwareSet) throw new NotFoundError();
+    await drinkwareSetService.update(drinkwareSetId, req.body);
 
-    const { description } = req.body;
+    const updated = await drinkwareSetService.getDrinkwareSetOrThrow(drinkwareSetId);
 
-    await drinkwareSet.update({ description });
-
-    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    res.json(updated);
   };
 
   const destroy = async (

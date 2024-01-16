@@ -17,11 +17,14 @@
   "scripts": {
     "db:foods:migrate": "pnpm sequelize db:migrate --options-path sequelize/foods/options.js",
     "db:foods:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/foods/options.js",
+    "db:foods:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_FOODS_URL)\" --camel-case --out-file ./src/kysely/foods.d.ts",
     "db:system:migrate": "pnpm sequelize db:migrate --options-path sequelize/system/options.js",
-    "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.js"
+    "db:system:migrate:undo": "pnpm sequelize db:migrate:undo --options-path sequelize/system/options.js",
+    "db:system:kysely-codegen": "pnpm exec kysely-codegen --dialect postgres --url \"env(DB_DEV_SYSTEM_URL)\" --camel-case --out-file ./src/kysely/system.d.ts"
   },
   "dependencies": {
     "dotenv": "^16.3.2",
+    "kysely": "^0.27.2",
     "lodash": "^4.17.21",
     "mariadb": "^3.2.3",
     "mssql": "^10.0.2",
@@ -38,6 +41,7 @@
     "@types/node": "^20.11.5",
     "@types/pg": "^8.10.9",
     "@types/validator": "^13.11.8",
+    "kysely-codegen": "^0.11.0",
     "sequelize-cli": "^6.6.2",
     "typescript": "^5.3.3"
   },

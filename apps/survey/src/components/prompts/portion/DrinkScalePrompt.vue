@@ -50,7 +50,8 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <drink-scale-panel
+          <component
+            :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
             v-if="scale"
             v-model="portionSize.fillLevel"
             :open="panel === 1"
@@ -58,7 +59,7 @@
             @confirm="confirmQuantity"
             @input="updateQuantity"
           >
-          </drink-scale-panel>
+          </component>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="leftoversEnabled" :disabled="!quantityConfirmed">
@@ -91,7 +92,8 @@
                 <span class="font-weight-medium">{{ foodName }}</span>
               </template>
             </i18n>
-            <drink-scale-panel
+            <component
+              :is="scale.version === 1 ? 'drink-scale-panel' : 'drink-scale-v2-panel'"
               v-if="scale"
               v-model="portionSize.leftoversLevel"
               :max-fill-level="portionSize.fillLevel"
@@ -101,7 +103,7 @@
               @confirm="confirmLeftovers"
               @input="updateLeftovers"
             >
-            </drink-scale-panel>
+            </component>
           </template>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -148,17 +150,14 @@ import { defineComponent } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
 import type { PortionSizeParameters } from '@intake24/common/types';
-import type {
-  DrinkwareSetResponse,
-  DrinkwareVolumeSampleResponse,
-  ImageMapResponse,
-} from '@intake24/common/types/http/foods';
+import type { DrinkwareSetResponse, ImageMapResponse } from '@intake24/common/types/http/foods';
 import { copy } from '@intake24/common/util';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 
 import {
   calculateVolume,
   DrinkScalePanel,
+  DrinkScaleV2Panel,
   ImageMapSelector,
   QuantityBadge,
   QuantitySlider,
@@ -168,7 +167,14 @@ import createBasePortion from './createBasePortion';
 export default defineComponent({
   name: 'DrinkScalePrompt',
 
-  components: { DrinkScalePanel, ImageMapSelector, QuantityBadge, QuantitySlider, YesNoToggle },
+  components: {
+    DrinkScalePanel,
+    DrinkScaleV2Panel,
+    ImageMapSelector,
+    QuantityBadge,
+    QuantitySlider,
+    YesNoToggle,
+  },
 
   mixins: [createBasePortion<'drink-scale-prompt'>()],
 
@@ -214,11 +220,13 @@ export default defineComponent({
       if (!this.labelsEnabled || !this.imageMapData) return [];
 
       return this.imageMapData.objects.map((object) => {
-        const scale = this.drinkwareSetData?.scales.find(({ choiceId }) => choiceId === object.id);
+        const scale = this.drinkwareSetData?.scales.find(
+          ({ choiceId }) => choiceId.toString() === object.id
+        );
 
         if (!scale) return '';
 
-        const volume = scale.volumeSamples[scale.volumeSamples.length - 1].volume;
+        const volume = scale.volumeSamples[scale.volumeSamples.length - 1];
 
         return (
           this.translate(scale.label, { params: { volume } }) ||
@@ -231,14 +239,16 @@ export default defineComponent({
       const { containerId } = this.portionSize;
       if (containerId === undefined) return undefined;
 
-      return this.drinkwareSetData?.scales.find((scale) => scale.choiceId === containerId);
+      return this.drinkwareSetData?.scales.find(
+        (scale) => scale.choiceId.toString() === containerId
+      );
     },
 
     skipFillLevel() {
       return this.parameters['skip-fill-level'];
     },
 
-    volumes(): DrinkwareVolumeSampleResponse[] | undefined {
+    volumes(): number[] | undefined {
       return this.scale?.volumeSamples;
     },
 

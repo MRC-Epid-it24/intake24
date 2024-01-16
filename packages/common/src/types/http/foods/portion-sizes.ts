@@ -1,6 +1,10 @@
 import type {
+  DrinkwareScaleEntry,
+  DrinkwareScaleV2Entry,
+  DrinkwareSetEntry,
+} from '@intake24/common/types/http/admin';
+import type {
   DrinkwareScaleAttributes,
-  DrinkwareSetAttributes,
   DrinkwareVolumeSampleAttributes,
   StandardUnitAttributes,
 } from '@intake24/db';
@@ -47,13 +51,11 @@ export type DrinkwareVolumeSampleResponse = Pick<
   'fill' | 'volume'
 >;
 
-export interface DrinkwareScaleResponse
-  extends Omit<DrinkwareScaleAttributes, 'id' | 'drinkwareSetId'> {
-  volumeSamples: DrinkwareVolumeSampleResponse[];
-}
+// Only send normalised volume samples to survey app
+export type DrinkwareScaleV2Response = Omit<DrinkwareScaleV2Entry, 'volumeSamples'>;
 
-export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'imageMapId'> {
-  scales: DrinkwareScaleResponse[];
+export interface DrinkwareSetResponse extends Omit<DrinkwareSetEntry, 'description' | 'scales'> {
+  scales: (DrinkwareScaleEntry | DrinkwareScaleV2Response)[];
 }
 
 export type StandardUnitResponse = Pick<StandardUnitAttributes, 'id' | 'estimateIn' | 'howMany'>;

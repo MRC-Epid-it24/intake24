@@ -4,6 +4,7 @@
     "min": "\"{attribute}\" must be an array (min: {min}).",
     "max": "\"{attribute}\" must be an array (max: {max}).",
     "minMax": "\"{attribute}\" must be an array (min: {min}, max: {max}).",
+    "even" : "\"{attribute}\" must have an even number of elements.",
     "number": "\"{attribute}\" must be an array of numbers.",
     "string": "\"{attribute}\" must be an array of string.",
     "colors": "\"{attribute}\" must be an array of colors."
@@ -52,6 +53,9 @@
     "min": "\"{attribute}\" must be an integer (min: {min}).",
     "max": "\"{attribute}\" must be an integer (max: {max}).",
     "minMax": "\"{attribute}\" must be an integer (min: {min}, max: {max})."
+  },
+  "json": {
+    "_": "\"{attribute}\" must be a valid JSON object."
   },
   "jwt": {
     "_": "\"{attribute}\" must be a valid JWT."

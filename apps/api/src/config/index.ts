@@ -1,5 +1,7 @@
+import type { ImageProcessorConfig } from '@intake24/api/config/image-processor';
 import type { ACLConfig, LogConfig, MailConfig } from '@intake24/common-backend';
 import type { DatabaseConfig } from '@intake24/db';
+import imageProcessor from '@intake24/api/config/image-processor';
 import { aclConfig as acl, logConfig as log, mailConfig as mail } from '@intake24/common-backend';
 import { databaseConfig as database } from '@intake24/db';
 
@@ -23,6 +25,7 @@ import session from './session';
 export * from './app';
 export * from './cache';
 export * from './filesystem';
+export * from './image-processor';
 export * from './queue';
 export * from './rate-limiter';
 export * from './security';
@@ -42,6 +45,7 @@ export type Config = {
   security: SecurityConfig;
   services: ServicesConfig;
   session: SessionConfig;
+  imageProcessor: ImageProcessorConfig;
 };
 
 const config: Config = {
@@ -57,6 +61,7 @@ const config: Config = {
   security,
   services,
   session,
+  imageProcessor,
 };
 
 export default config;

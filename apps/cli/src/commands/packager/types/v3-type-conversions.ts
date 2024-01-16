@@ -1,4 +1,4 @@
-import { identity } from 'lodash';
+import { identity, mapValues } from 'lodash';
 
 import type {
   AssociatedFoodWithHeaderV3,
@@ -19,7 +19,11 @@ import type {
   PkgGlobalCategory,
   PkgLocalCategory,
 } from '@intake24/cli/commands/packager/types/categories';
-import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
+import type {
+  PkgDrinkScaleV1,
+  PkgDrinkScaleV2,
+  PkgDrinkwareSet,
+} from '@intake24/cli/commands/packager/types/drinkware';
 import type {
   PkgAsServedPsm,
   PkgAssociatedFood,
@@ -343,10 +347,15 @@ function packageGlobalCategory(mainCategory: MainCategoryRecordV3): PkgGlobalCat
 }
 
 function packageDrinkwareSet(drinkwareSet: PortableDrinkwareSetV3): PkgDrinkwareSet {
+  const pkgScales: Record<number, PkgDrinkScaleV1> = mapValues(
+    drinkwareSet.scales,
+    (s) => ({ version: 1, ...s }) as PkgDrinkScaleV1
+  );
+
   return {
     description: drinkwareSet.description,
     selectionImageMapId: drinkwareSet.selectionImageMapId,
-    scales: drinkwareSet.scales,
+    scales: pkgScales,
   };
 }
 

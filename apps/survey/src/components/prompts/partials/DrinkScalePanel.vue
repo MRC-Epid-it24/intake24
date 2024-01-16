@@ -75,7 +75,7 @@ import { useElementSize } from '@vueuse/core';
 import debounce from 'lodash/debounce';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { DrinkwareScaleResponse } from '@intake24/common/types/http';
+import type { DrinkwareScaleEntry } from '@intake24/common/types/http/admin';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
 import { calculateVolume } from './drink-scale';
@@ -95,7 +95,7 @@ export default defineComponent({
       default: false,
     },
     scale: {
-      type: Object as PropType<DrinkwareScaleResponse>,
+      type: Object as PropType<DrinkwareScaleEntry>,
       required: true,
     },
     type: {

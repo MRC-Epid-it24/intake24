@@ -17,6 +17,8 @@ export const csvFile: ParamSchema = {
   },
 };
 
+const allowedImageTypes = ['image/jpeg', 'image/png'] as const;
+
 export const imageFile: ParamSchema = {
   in: ['body'],
   custom: {
@@ -24,8 +26,10 @@ export const imageFile: ParamSchema = {
       const { file } = meta.req;
       if (!file) throw new Error(customTypeErrorMessage('file._', meta));
 
-      if (file.mimetype.toLowerCase() !== 'image/jpeg')
-        throw new Error(customTypeErrorMessage('file.mime', meta, { mime: 'image/jpeg' }));
+      if (file.mimetype.toLowerCase() in allowedImageTypes)
+        throw new Error(
+          customTypeErrorMessage('file.mime', meta, { mime: allowedImageTypes.join(', ') })
+        );
     },
   },
 };

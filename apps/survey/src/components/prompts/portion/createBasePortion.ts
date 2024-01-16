@@ -59,7 +59,12 @@ export default <
 
     setup(props) {
       const { translate } = useI18n();
-      const { foodName } = useFoodUtils(props);
+
+      // InferPropType<T> fails on generic types: https://github.com/vuejs/core/pull/9652
+      const food = props.food as unknown as F;
+      const parentFood = props.parentFood as unknown as PF;
+
+      const { foodName } = useFoodUtils({ food, parentFood });
 
       return { foodName, translate };
     },
