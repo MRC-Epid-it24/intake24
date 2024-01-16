@@ -97,5 +97,8 @@
   },
   "url": {
     "_": "\"{attribute}\" must be a valid URL."
+  },
+  "uuid": {
+    "_": "\"{attribute}\" must be a valid UUID."
   }
 }

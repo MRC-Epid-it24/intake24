@@ -1,13 +1,28 @@
 <template>
   <v-tab-item key="options" value="options">
-    <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
-    <v-card-subtitle>
-      {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
-    </v-card-subtitle>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12" md="6">
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-card-title>
+          <v-icon left>fas fa-start-half-stroke</v-icon>
+          {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
+        </v-card-title>
+        <v-card-text>
+          <v-switch
+            hide-details="auto"
+            :input-value="rating"
+            :label="$t('survey-schemes.prompts.final-prompt.rating._')"
+            @change="update('rating', $event)"
+          ></v-switch>
+        </v-card-text>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
+        <v-card-subtitle>
+          {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
+        </v-card-subtitle>
+        <v-card-text>
           <v-text-field
+            class="mb-4"
             hide-details="auto"
             :hint="$t('survey-schemes.prompts.redirect-prompt.url.hint')"
             :label="$t('survey-schemes.prompts.redirect-prompt.url._')"
@@ -17,9 +32,8 @@
             :value="url"
             @input="update('url', $event)"
           ></v-text-field>
-        </v-col>
-        <v-col cols="12" md="6">
           <v-combobox
+            class="mb-4"
             hide-details="auto"
             :hint="$t('survey-schemes.prompts.redirect-prompt.identifier.hint')"
             :items="identifiers"
@@ -29,13 +43,6 @@
             :value="identifier"
             @change="updateIdentifier"
           ></v-combobox>
-        </v-col>
-      </v-row>
-    </v-card-text>
-    <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.timer.title') }}</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12" md="6">
           <v-text-field
             hide-details="auto"
             :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
@@ -45,9 +52,9 @@
             :value="timer"
             @input="updateTimerValue"
           ></v-text-field>
-        </v-col>
-      </v-row>
-    </v-card-text>
+        </v-card-text>
+      </v-col>
+    </v-row>
   </v-tab-item>
 </template>
 
@@ -76,6 +83,10 @@ export default defineComponent({
     },
     timer: {
       type: Number as PropType<Prompts['redirect-prompt']['timer']>,
+      required: true,
+    },
+    rating: {
+      type: Boolean as PropType<Prompts['redirect-prompt']['rating']>,
       required: true,
     },
   },

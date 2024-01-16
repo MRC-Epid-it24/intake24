@@ -254,7 +254,7 @@ export default defineComponent({
         if (axios.isAxiosError(err)) {
           const { response: { status, headers = {} } = {} } = err;
 
-          if (status === 429)
+          if (status === HttpStatusCode.TooManyRequests)
             this.setFeedbackInterval(parseInt(headers['retry-after']?.toString() ?? '60', 10));
         }
       } finally {
@@ -283,11 +283,17 @@ export default defineComponent({
         if (axios.isAxiosError(err)) {
           const { response: { status, data = {}, headers = {} } = {} } = err;
 
-          if (status === HttpStatusCode.BadRequest && 'errors' in data)
+          if (status === HttpStatusCode.BadRequest && 'errors' in data) {
             this.email.errors.record(data.errors);
+            return;
+          }
 
-          if (status === HttpStatusCode.TooManyRequests)
+          if (status === HttpStatusCode.TooManyRequests) {
             this.setFeedbackInterval(parseInt(headers['retry-after']?.toString() ?? '60', 10));
+            return;
+          }
+
+          throw err;
         }
       } finally {
         loading.removeItem('feedback-email');

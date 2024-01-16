@@ -8,6 +8,7 @@ import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
 import SurveyDataExport from './survey-data-export.vue';
 import SurveyNutrientsRecalculation from './survey-nutrients-recalculation.vue';
+import SurveyRatingsExport from './survey-ratings-export.vue';
 import SurveyRespondentsImport from './survey-respondents-import.vue';
 import SurveySubmissionNotification from './survey-submission-notification.vue';
 
@@ -22,6 +23,7 @@ export default {
   SurveyAuthUrlsExport,
   SurveyDataExport,
   SurveyNutrientsRecalculation,
+  SurveyRatingsExport,
   SurveyRespondentsImport,
   SurveySubmissionNotification,
 };

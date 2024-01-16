@@ -317,7 +317,11 @@
     },
     "final-prompt": {
       "title": "Final",
-      "subtitle": "Final page after submission"
+      "subtitle": "Final page after submission",
+      "rating": {
+        "_": "Enable survey rating collection",
+        "title": "Survey rating"
+      }
     },
     "food-search-prompt": {
       "title": "Food database search",
@@ -356,6 +360,10 @@
     "redirect-prompt": {
       "title": "Redirect",
       "subtitle": "Final page for user redirect to external site",
+      "rating": {
+        "_": "Enable survey rating collection",
+        "title": "Survey rating"
+      },
       "url": {
         "_": "Base URL",
         "title": "URL Options",

@@ -6,7 +6,7 @@ export type FeedbackType = (typeof feedbackTypes)[number];
 export const feedbackOutputs = ['download', 'email', 'print'] as const;
 export type FeedbackOutput = (typeof feedbackOutputs)[number];
 
-export const feedbackSections = ['cards', 'meals', 'topFoods'] as const;
+export const feedbackSections = ['cards', 'meals', 'topFoods', 'rating'] as const;
 export type FeedbackSection = (typeof feedbackSections)[number];
 
 export const feedbackPhysicalDataFields = [

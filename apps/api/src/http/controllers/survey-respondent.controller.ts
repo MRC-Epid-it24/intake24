@@ -6,7 +6,9 @@ import type { SurveyState as SurveyStatus } from '@intake24/common/surveys';
 import type { SurveyState } from '@intake24/common/types';
 import type {
   SurveyEntryResponse,
+  SurveyRatingInput,
   SurveyRequestHelpInput,
+  SurveySubmissionResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
@@ -172,6 +174,21 @@ const surveyRespondentController = ({
     res.json();
   };
 
+  const rating = async (
+    req: Request<{ slug: string }, any, SurveyRatingInput>,
+    res: Response<undefined>
+  ): Promise<void> => {
+    const {
+      body: { comment, rating, submissionId, type },
+      params: { slug },
+    } = req;
+    const { userId } = req.scope.cradle;
+
+    await surveyService.storeRating(slug, userId, { comment, rating, submissionId, type });
+
+    res.json();
+  };
+
   const requestHelp = async (
     req: Request<{ slug: string }, any, SurveyRequestHelpInput>,
     res: Response<undefined>
@@ -195,7 +212,7 @@ const surveyRespondentController = ({
 
   const submission = async (
     req: Request<{ slug: string }, any, { submission: SurveyState }, { tzOffset: number }>,
-    res: Response<SurveyUserInfoResponse>
+    res: Response<SurveySubmissionResponse>
   ): Promise<void> => {
     const {
       body: { submission },
@@ -208,7 +225,7 @@ const surveyRespondentController = ({
     const followUpInfo = await surveySubmissionService.submit(
       slug,
       user,
-      { ...submission, submissionTime: new Date(), userAgent },
+      { ...submission, userAgent },
       tzOffset
     );
 
@@ -221,6 +238,7 @@ const surveyRespondentController = ({
     getSession,
     setSession,
     clearSession,
+    rating,
     requestHelp,
     submission,
   };

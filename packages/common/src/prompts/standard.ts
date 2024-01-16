@@ -28,6 +28,7 @@ export const finalPrompt: Prompts['final-prompt'] = copy({
   type: 'standard',
   id: 'final-prompt',
   name: 'Final prompt',
+  rating: false,
 });
 
 export const foodSearchPrompt: Prompts['food-search-prompt'] = copy({
@@ -97,6 +98,7 @@ export const redirectPrompt: Prompts['redirect-prompt'] = copy({
   type: 'standard',
   id: 'redirect-prompt',
   name: 'Redirect prompt',
+  rating: false,
   url: null,
   identifier: 'username',
   timer: 0,

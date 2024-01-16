@@ -7,6 +7,7 @@
       prompt,
       section,
       surveyId,
+      submissionId,
     }"
     @action="action"
   ></component>
@@ -14,7 +15,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useRoute } from 'vue-router/composables';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -40,21 +42,18 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, { emit }) {
-    const { user } = useSurvey();
+    const survey = useSurvey();
+    const route = useRoute();
 
-    const showFeedback = ref(user?.showFeedback);
+    const showFeedback = computed(() => survey.user?.showFeedback);
+    const submissionId = computed(() => survey.data.id);
+    const surveyId = computed(() => route.params.surveyId);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       emit('action', type, ...args);
     };
 
-    return { action, showFeedback };
-  },
-
-  computed: {
-    surveyId(): string {
-      return this.$route.params.surveyId;
-    },
+    return { action, showFeedback, submissionId, surveyId };
   },
 });
 </script>

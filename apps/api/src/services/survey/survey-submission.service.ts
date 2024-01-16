@@ -11,7 +11,7 @@ import type {
   SurveyState,
   WithKey,
 } from '@intake24/common/types';
-import type { SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type { SurveySubmissionResponse } from '@intake24/common/types/http';
 import type {
   SurveySubmissionFieldCreationAttributes,
   SurveySubmissionFoodCreationAttributes,
@@ -349,27 +349,29 @@ const surveySubmissionService = ({
   };
 
   /**
-   * Process survey state and submit recall
+   * Submit recall
    *
    * @param {string} slug
    * @param {User} user
    * @param {SurveyState} state
    * @param {number} tzOffset
-   * @returns {Promise<SurveyUserInfoResponse>}
+   * @returns {Promise<SurveySubmissionResponse>}
    */
   const submit = async (
     slug: string,
     user: User,
     state: SurveyState,
     tzOffset: number
-  ): Promise<SurveyUserInfoResponse> => {
+  ): Promise<SurveySubmissionResponse> => {
     const survey = await Survey.findBySlug(slug, {
-      include: [{ association: 'surveyScheme', required: true }],
+      attributes: ['id', 'feedbackSchemeId', 'maximumTotalSubmissions', 'maximumDailySubmissions'],
+      include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
     });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId } = survey;
     const { id: userId } = user;
+    const submission = { id: randomUUID(), submissionTime: new Date() };
 
     const [userInfo, followUpUrl] = await Promise.all([
       surveyService.userInfo(survey, user, tzOffset, 1),
@@ -380,10 +382,10 @@ const surveySubmissionService = ({
     await scheduler.jobs.addJob({
       type: 'SurveySubmission',
       userId,
-      params: { surveyId, userId, state },
+      params: { surveyId, userId, state: { ...state, ...submission } },
     });
 
-    return { ...userInfo, followUpUrl };
+    return { ...userInfo, followUpUrl, submission };
   };
 
   /**
@@ -445,6 +447,7 @@ const surveySubmissionService = ({
     await db.system.transaction(async (transaction) => {
       const { startTime, endTime, userAgent } = state;
       const submissionTime = state.submissionTime ?? new Date();
+      const id = state.id ?? randomUUID();
 
       if (!startTime || !endTime) {
         logger.warn('Submission: missing startTime / endTime on submission state.', {
@@ -457,7 +460,7 @@ const surveySubmissionService = ({
       // Survey submission
       const { id: surveySubmissionId } = await SurveySubmission.create(
         {
-          id: randomUUID(),
+          id,
           surveyId,
           userId,
           startTime: startTime ?? submissionTime,

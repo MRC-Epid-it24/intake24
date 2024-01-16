@@ -5,6 +5,7 @@ import http from './http.service';
 export { default as authService } from './auth.service';
 export { default as categoriesService } from './categories.service';
 export { default as foodsService } from './foods.service';
+export * from './http.service';
 export { default as httpService } from './http.service';
 export { default as surveyService } from './survey.service';
 export * from './survey.service';

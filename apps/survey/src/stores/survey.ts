@@ -392,8 +392,10 @@ export const useSurvey = defineStore('survey', {
       this.data.endTime = new Date();
 
       try {
-        this.user = await surveyService.submit(this.parameters.slug, this.data);
-        this.data.submissionTime = new Date();
+        const { submission, ...rest } = await surveyService.submit(this.parameters.slug, this.data);
+        this.user = rest;
+        this.data.id = submission.id;
+        this.data.submissionTime = submission.submissionTime;
         clearPromptStores();
       } finally {
         this.isSubmitting = false;

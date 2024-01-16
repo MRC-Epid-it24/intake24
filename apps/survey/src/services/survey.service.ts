@@ -4,7 +4,9 @@ import type {
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
+  SurveyRatingInput,
   SurveyRequestHelpInput,
+  SurveySubmissionResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
@@ -84,13 +86,12 @@ export default {
     return data;
   },
 
-  clearUserSession: async (surveyId: string): Promise<void> =>
-    http.delete(`surveys/${surveyId}/session`),
+  clearUserSession: async (surveyId: string) => http.delete(`surveys/${surveyId}/session`),
 
-  submit: async (surveyId: string, submission: SurveyState): Promise<SurveyUserInfoResponse> => {
+  submit: async (surveyId: string, submission: SurveyState): Promise<SurveySubmissionResponse> => {
     const tzOffset = new Date().getTimezoneOffset();
 
-    const { data } = await http.post<SurveyUserInfoResponse>(
+    const { data } = await http.post<SurveySubmissionResponse>(
       `surveys/${surveyId}/submission`,
       { submission },
       { params: { tzOffset } }
@@ -99,6 +100,9 @@ export default {
     return data;
   },
 
-  requestHelp: async (surveyId: string, payload: SurveyRequestHelpInput): Promise<void> =>
+  requestHelp: async (surveyId: string, payload: SurveyRequestHelpInput) =>
     http.post(`surveys/${surveyId}/request-help`, payload),
+
+  storeRating: async (surveyId: string, payload: SurveyRatingInput) =>
+    http.post(`surveys/${surveyId}/rating`, payload),
 };

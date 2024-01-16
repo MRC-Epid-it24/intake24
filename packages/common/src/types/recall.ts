@@ -351,6 +351,7 @@ export interface PromptAnswer {
 }
 
 export type SurveyState = {
+  id?: string;
   schemeId: string | null;
   startTime: Date | null;
   endTime: Date | null;

@@ -20,6 +20,8 @@ export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>
     return !!(scheme.value.meals.chart.nutrients.length || scheme.value.meals.table.fields.length);
   });
 
+  const showRating = computed(() => scheme.value?.sections.includes('rating'));
+
   const showTopFoods = computed(() => {
     if (!scheme.value?.sections.includes('topFoods')) return false;
 
@@ -28,5 +30,14 @@ export const useFeedback = (scheme: ComputedRef<FeedbackSchemeEntry | undefined>
 
   const getSectionOrder = (section: FeedbackSection) => scheme.value?.sections.indexOf(section);
 
-  return { feedbackDicts, cards, topFoods, showCards, showMeals, showTopFoods, getSectionOrder };
+  return {
+    feedbackDicts,
+    cards,
+    topFoods,
+    showCards,
+    showMeals,
+    showTopFoods,
+    showRating,
+    getSectionOrder,
+  };
 };

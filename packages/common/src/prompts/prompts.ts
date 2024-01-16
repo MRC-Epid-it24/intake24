@@ -198,7 +198,7 @@ export type Prompts = {
       multiple: boolean;
     };
   'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt'; separateDrinks: boolean };
-  'final-prompt': BasePrompt & { component: 'final-prompt' };
+  'final-prompt': BasePrompt & { component: 'final-prompt'; rating: boolean };
   'food-search-prompt': BasePrompt &
     FoodBrowser & {
       component: 'food-search-prompt';
@@ -226,6 +226,7 @@ export type Prompts = {
   'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
   'redirect-prompt': BasePrompt & {
     component: 'redirect-prompt';
+    rating: boolean;
     url: string | null;
     identifier: 'userId' | 'username' | 'urlAuthToken' | string | null;
     timer: number;

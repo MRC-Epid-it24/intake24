@@ -84,6 +84,7 @@ export default defineComponent({
       SurveyAuthUrlsExport: { surveyId: props.id },
       SurveyDataExport: { surveyId: props.id, startDate: undefined, endDate: undefined },
       SurveyNutrientsRecalculation: { surveyId: props.id },
+      SurveyRatingsExport: { surveyId: props.id },
       SurveyRespondentsImport: { surveyId: props.id, file: '' },
     }));
 
@@ -91,6 +92,7 @@ export default defineComponent({
       SurveyAuthUrlsExport: { surveyId: true },
       SurveyDataExport: { surveyId: true },
       SurveyNutrientsRecalculation: { surveyId: true },
+      SurveyRatingsExport: { surveyId: true },
       SurveyRespondentsImport: { surveyId: true },
     };
 

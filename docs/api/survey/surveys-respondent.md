@@ -165,7 +165,11 @@ Content-Type: application/json
   "showFeedback": boolean,
   "maximumTotalSubmissionsReached": boolean,
   "maximumDailySubmissionsReached": boolean,
-  "followUpUrl": string | null
+  "followUpUrl": string | null,
+  "submission": {
+    "id": string,
+    "submissionTime": Date,
+  }
 }
 ```
 
@@ -187,6 +191,32 @@ Content-Type: application/json
   "phone": string,
   "phoneCountry": string,
   "message": string
+}
+```
+
+### Response
+
+```json
+200 OK
+```
+
+## Send rating
+
+Send a rating for the survey.
+
+### Request
+
+```json
+POST /api/surveys/{survey-slug}/rating
+
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+  "type": "recall" | "feedback",
+  "rating": number,
+  "submissionId"?: string,
+  "comment"?: string | null
 }
 ```
 

@@ -9,6 +9,13 @@
     "daily": "You have reached the daily limit of recalls.",
     "total": "You have reached the total limit of recalls."
   },
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the recall?",
+    "comment": "Tell us more about the rating you gave the recall",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "survey": "Study: {name}",
   "submissions": {
     "_": "Recall day",

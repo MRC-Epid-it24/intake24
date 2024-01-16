@@ -36,4 +36,23 @@ export default class RateLimiter extends HasRedisClient {
       }),
     });
   }
+
+  createGenericMiddleware(type: string, options: Partial<Options> = {}) {
+    return rateLimit({
+      handler: (req, res, next, { message, statusCode }) => {
+        res.status(statusCode).json({ message });
+      },
+      keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
+      skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      legacyHeaders: false,
+      standardHeaders: 'draft-7',
+      ...options,
+
+      store: new RedisStore({
+        // @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
+        sendCommand: (...args: string[]) => this.redis.call(...args),
+        prefix: this.config.keyPrefix,
+      }),
+    });
+  }
 }

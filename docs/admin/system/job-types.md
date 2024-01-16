@@ -19,6 +19,7 @@ Jobs types available in system.
   - [SurveyFeedbackNotification](#surveyfeedbacknotification)
   - [SurveyHelpRequestNotification](#surveyhelprequestnotification)
   - [SurveyNutrientsRecalculation](#surveynutrientsrecalculation)
+  - [SurveyRatingsExport](#surveyratingsexport)
   - [SurveyRespondentsImport](#surveyrespondentsimport)
   - [SurveySchemesSync](#surveyschemessync)
   - [SurveySubmission](#surveysubmission)
@@ -197,6 +198,16 @@ This needs to be run if object structure changes, so all database records are sy
 ## SurveyNutrientsRecalculation
 
 `SurveyNutrientsRecalculation` recalculates survey submission nutrients. This is useful when nutrient table data changes and need to recalculate all survey submissions.
+
+```json
+{
+  "surveyId": string
+}
+```
+
+## SurveyRatingsExport
+
+`SurveyRatingsExport` exports survey ratings data to CSV file.
 
 ```json
 {

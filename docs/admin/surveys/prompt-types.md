@@ -32,6 +32,8 @@ Edit meal prompt allows initial entry of food and drink before portion-size esti
 
 Terminal prompt that is shown at the end of the recall. It offers home button It can offer feedback is applicable (feedback enabled and submission threshold reached).
 
+- `rating` - 5-star rating with optional comment to be submitted after the recall
+
 ### Food search prompt
 
 #### Food browser settings
@@ -84,6 +86,8 @@ Prompt to collect ready meal information. Multi-select list of options, for each
 Prompt to redirect user to external site with optional user identifier embedded into URL.
 
 #### Options
+
+- `rating` - 5-star rating with optional comment to be submitted after the recall
 
 - `url` - URL to redirect to
 

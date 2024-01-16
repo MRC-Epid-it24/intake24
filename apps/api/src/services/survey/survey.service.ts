@@ -6,7 +6,11 @@ import ms from 'ms';
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompts } from '@intake24/common/prompts';
 import type { JobParams, SurveyState } from '@intake24/common/types';
-import type { CreateUserResponse, SurveyUserInfoResponse } from '@intake24/common/types/http';
+import type {
+  CreateUserResponse,
+  SurveyRatingInput,
+  SurveyUserInfoResponse,
+} from '@intake24/common/types/http';
 import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
 import { ApplicationError, ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { jwt } from '@intake24/api/util';
@@ -19,6 +23,7 @@ import {
   SurveySubmission,
   User,
   UserSurveyAlias,
+  UserSurveyRating,
   UserSurveySession,
 } from '@intake24/db';
 
@@ -130,7 +135,18 @@ const surveyService = ({
     tzOffset: number,
     increment = 0
   ): Promise<SurveyUserInfoResponse> => {
-    const survey = typeof slug === 'string' ? await Survey.findBySlug(slug) : slug;
+    const survey =
+      typeof slug === 'string'
+        ? await Survey.findBySlug(slug, {
+            attributes: [
+              'id',
+              'feedbackSchemeId',
+              'maximumTotalSubmissions',
+              'maximumDailySubmissions',
+              'numberOfSubmissionsForFeedback',
+            ],
+          })
+        : slug;
     if (!survey) throw new NotFoundError();
 
     const {
@@ -138,6 +154,7 @@ const surveyService = ({
       feedbackSchemeId,
       maximumTotalSubmissions,
       maximumDailySubmissions,
+      numberOfSubmissionsForFeedback,
     } = survey;
     const { id: userId, name } = user;
 
@@ -164,9 +181,7 @@ const surveyService = ({
       userId,
       name,
       submissions: totalSubmissions,
-      showFeedback: !!(
-        feedbackSchemeId && totalSubmissions >= survey.numberOfSubmissionsForFeedback
-      ),
+      showFeedback: !!(feedbackSchemeId && totalSubmissions >= numberOfSubmissionsForFeedback),
       maximumTotalSubmissionsReached:
         maximumTotalSubmissions !== null && totalSubmissions >= maximumTotalSubmissions,
       maximumDailySubmissionsReached:
@@ -317,9 +332,16 @@ const surveyService = ({
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findBySlug(slug, {
-      include: [{ association: 'surveyScheme', required: true }],
+      attributes: [
+        'id',
+        'feedbackSchemeId',
+        'maximumTotalSubmissions',
+        'maximumDailySubmissions',
+        'numberOfSubmissionsForFeedback',
+      ],
+      include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
     });
-    if (!survey || !survey.surveyScheme) throw new NotFoundError();
+    if (!survey) throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([
       getFollowUpUrl(survey, user.id),
@@ -335,6 +357,13 @@ const surveyService = ({
     await scheduler.jobs.addJob({ type: 'SurveyHelpRequestNotification', userId, params });
   };
 
+  const storeRating = async (slug: string, userId: string, payload: SurveyRatingInput) => {
+    const survey = await Survey.findBySlug(slug, { attributes: ['id'] });
+    if (!survey) throw new NotFoundError();
+
+    return UserSurveyRating.create({ surveyId: survey.id, userId, ...payload });
+  };
+
   return {
     generateRespondent,
     createRespondentWithJWT,
@@ -346,6 +375,7 @@ const surveyService = ({
     getFollowUpUrl,
     followUp,
     requestHelp,
+    storeRating,
   };
 };
 

@@ -96,6 +96,11 @@
         :submissions="submissions"
         :survey-stats="feedbackDicts.surveyStats"
       ></feedback-meals>
+      <survey-rating
+        v-if="showRating"
+        v-bind="{ surveyId, type: 'feedback' }"
+        :class="`feedback-area order-${getSectionOrder('rating')} d-print-none`"
+      ></survey-rating>
     </div>
   </v-container>
 </template>
@@ -104,6 +109,7 @@
 import { computed, defineComponent, ref } from 'vue';
 
 import type { UserDemographic } from '@intake24/ui/feedback';
+import { SurveyRating } from '@intake24/survey/components';
 import { feedbackService, userService } from '@intake24/survey/services';
 import { useLoading, useSurvey } from '@intake24/survey/stores';
 import {
@@ -126,6 +132,7 @@ export default defineComponent({
     FeedbackOutputs,
     FeedbackTopFoods,
     FeedbackUserInfo,
+    SurveyRating,
   },
 
   beforeRouteEnter({ params }, from, next) {
@@ -151,8 +158,16 @@ export default defineComponent({
     const userDemographic = ref<UserDemographic | null>(null);
     const selectedSubmissions = ref<string[]>([]);
 
-    const { cards, feedbackDicts, getSectionOrder, topFoods, showCards, showMeals, showTopFoods } =
-      useFeedback(feedbackScheme);
+    const {
+      cards,
+      feedbackDicts,
+      getSectionOrder,
+      topFoods,
+      showCards,
+      showMeals,
+      showRating,
+      showTopFoods,
+    } = useFeedback(feedbackScheme);
 
     const submissions = computed(() => feedbackDicts.value?.surveyStats.submissions ?? []);
 
@@ -165,6 +180,7 @@ export default defineComponent({
       topFoods,
       showCards,
       showMeals,
+      showRating,
       showTopFoods,
       parameters,
       feedbackScheme,

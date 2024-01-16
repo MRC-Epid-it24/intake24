@@ -82,6 +82,9 @@
       "_": "Survey - Nutrients recalculation",
       "surveyId": "Survey ID"
     },
+    "SurveyRatingsExport": {
+      "_": "Survey - Ratings export"
+    },
     "SurveyRespondentsImport": {
       "_": "Survey - Import respondents",
       "file": "CSV file"

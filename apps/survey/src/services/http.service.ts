@@ -127,3 +127,5 @@ const httpClient: HttpClient = {
 axiosRetry(httpClient.axios, { retries: 5, retryDelay: (retryCount) => retryCount * 400 });
 
 export default httpClient;
+
+export const useHttp = () => httpClient;

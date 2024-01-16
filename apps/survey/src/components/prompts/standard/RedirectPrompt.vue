@@ -1,94 +1,104 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
-    <v-card-text class="pt-2">
-      <v-card v-if="followUpUrl" class="d-flex flex-column align-center" flat tile>
-        <v-progress-circular
-          v-if="prompt.timer"
-          class="mb-6"
-          color="secondary"
-          :rotate="-90"
-          :size="200"
-          :value="timerValue"
-          :width="20"
-        >
-          <div class="d-flex align-center flex-column">
-            <span class="font-weight-bold text-h1">{{ timerSecs }}</span>
-          </div>
-        </v-progress-circular>
+  <div>
+    <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+      <v-card-text class="pt-2">
+        <v-card v-if="followUpUrl" class="d-flex flex-column align-center" flat tile>
+          <v-progress-circular
+            v-if="prompt.timer"
+            class="mb-6"
+            color="secondary"
+            :rotate="-90"
+            :size="200"
+            :value="timerValue"
+            :width="20"
+          >
+            <div class="d-flex align-center flex-column">
+              <span class="font-weight-bold text-h1">{{ timerSecs }}</span>
+            </div>
+          </v-progress-circular>
+          <v-btn
+            :block="isMobile"
+            class="mb-6"
+            :class="{ 'px-10': !isMobile }"
+            color="primary"
+            :title="promptI18n.goTo"
+            x-large
+            @click="redirect"
+          >
+            <v-icon left>$redirect</v-icon>
+            {{ promptI18n.goTo }}
+          </v-btn>
+        </v-card>
+        <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
+          {{ promptI18n.missingUrl }}
+        </v-alert>
+      </v-card-text>
+      <template #actions>
         <v-btn
-          :block="isMobile"
-          class="mb-6"
-          :class="{ 'px-10': !isMobile }"
+          class="px-4"
           color="primary"
-          :title="promptI18n.goTo"
-          x-large
-          @click="redirect"
+          large
+          outlined
+          :to="{ name: 'survey-home', params: { surveyId } }"
         >
-          <v-icon left>$redirect</v-icon>
-          {{ promptI18n.goTo }}
-        </v-btn>
-      </v-card>
-      <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
-        {{ promptI18n.missingUrl }}
-      </v-alert>
-    </v-card-text>
-    <template #actions>
-      <v-btn
-        class="px-4"
-        color="primary"
-        large
-        outlined
-        :to="{ name: 'survey-home', params: { surveyId } }"
-      >
-        <v-icon left>$home</v-icon>
-        {{ $t('common.home') }}
-      </v-btn>
-      <v-btn
-        v-if="showFeedback"
-        class="px-4"
-        color="primary"
-        large
-        outlined
-        :to="{ name: 'feedback-home', params: { surveyId } }"
-      >
-        <v-icon left>$feedback</v-icon>
-        {{ $t('recall.actions.feedback') }}
-      </v-btn>
-    </template>
-    <template #nav-actions>
-      <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
-        <span class="text-overline font-weight-medium">
+          <v-icon left>$home</v-icon>
           {{ $t('common.home') }}
-        </span>
-        <v-icon class="pb-1">$home</v-icon>
-      </v-btn>
-      <v-divider vertical></v-divider>
-      <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.feedback') }}
-        </span>
-        <v-icon class="pb-1">$feedback</v-icon>
-      </v-btn>
-      <v-divider vertical></v-divider>
-      <v-btn :disabled="!followUpUrl" @click="redirect">
-        <span class="text-overline font-weight-medium">
-          {{ $t('recall.actions.nav.redirect') }}
-        </span>
-        <v-icon class="pb-1">$redirect</v-icon>
-      </v-btn>
-    </template>
-  </card-layout>
+        </v-btn>
+        <v-btn
+          v-if="showFeedback"
+          class="px-4"
+          color="primary"
+          large
+          outlined
+          :to="{ name: 'feedback-home', params: { surveyId } }"
+        >
+          <v-icon left>$feedback</v-icon>
+          {{ $t('recall.actions.feedback') }}
+        </v-btn>
+      </template>
+      <template #nav-actions>
+        <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
+          <span class="text-overline font-weight-medium">
+            {{ $t('common.home') }}
+          </span>
+          <v-icon class="pb-1">$home</v-icon>
+        </v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+          <span class="text-overline font-weight-medium">
+            {{ $t('recall.actions.nav.feedback') }}
+          </span>
+          <v-icon class="pb-1">$feedback</v-icon>
+        </v-btn>
+        <v-divider vertical></v-divider>
+        <v-btn :disabled="!followUpUrl" @click="redirect">
+          <span class="text-overline font-weight-medium">
+            {{ $t('recall.actions.nav.redirect') }}
+          </span>
+          <v-icon class="pb-1">$redirect</v-icon>
+        </v-btn>
+      </template>
+    </card-layout>
+    <survey-rating
+      v-if="prompt.rating"
+      v-bind="{ submissionId, surveyId, type: 'recall' }"
+      class="grey lighten-4 pt-6"
+    ></survey-rating>
+  </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 
+import { SurveyRating } from '@intake24/survey/components';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
   name: 'RedirectPrompt',
+
+  components: { SurveyRating },
 
   mixins: [createBasePrompt<'redirect-prompt'>()],
 
@@ -99,6 +109,9 @@ export default defineComponent({
     showFeedback: {
       type: Boolean,
       default: false,
+    },
+    submissionId: {
+      type: String,
     },
     surveyId: {
       type: String,

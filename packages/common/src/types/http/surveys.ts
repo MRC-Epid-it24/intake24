@@ -5,7 +5,7 @@ import type {
   UserSurveySessionAttributes,
 } from '@intake24/db';
 
-import type { SearchSortingAlgorithm, SurveyState } from '../../surveys';
+import type { SearchSortingAlgorithm, SurveyRating, SurveyState } from '../../surveys';
 import type { JobParams } from '../jobs';
 
 export type GenerateUserResponse = {
@@ -61,9 +61,23 @@ export type SurveyUserInfoResponse = {
   followUpUrl?: string | null;
 };
 
+export type SurveySubmissionResponse = SurveyUserInfoResponse & {
+  submission: {
+    id: string;
+    submissionTime: Date;
+  };
+};
+
 export type SurveyUserSessionResponse = UserSurveySessionAttributes;
 
 export type SurveyRequestHelpInput = Pick<
   JobParams['SurveyHelpRequestNotification'],
   'name' | 'email' | 'phone' | 'phoneCountry' | 'message'
 >;
+
+export type SurveyRatingInput = {
+  type: SurveyRating;
+  rating: number;
+  submissionId?: string;
+  comment: string | null;
+};

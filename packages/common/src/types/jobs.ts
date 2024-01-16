@@ -80,6 +80,9 @@ export type JobParams = {
   SurveyNutrientsRecalculation: {
     surveyId: string;
   };
+  SurveyRatingsExport: {
+    surveyId: string;
+  };
   SurveyRespondentsImport: {
     surveyId: string;
     file: string;
@@ -160,6 +163,9 @@ export const defaultJobsParams: JobParams = {
   SurveyNutrientsRecalculation: {
     surveyId: '',
   },
+  SurveyRatingsExport: {
+    surveyId: '',
+  },
   SurveyRespondentsImport: {
     surveyId: '',
     file: '',
@@ -236,6 +242,7 @@ export type SurveyJob = Extract<
   | 'SurveyAuthUrlsExport'
   | 'SurveyDataExport'
   | 'SurveyNutrientsRecalculation'
+  | 'SurveyRatingsExport'
   | 'SurveyRespondentsImport'
 >;
 
@@ -243,5 +250,6 @@ export const surveyJobs = [
   'SurveyAuthUrlsExport',
   'SurveyDataExport',
   'SurveyNutrientsRecalculation',
+  'SurveyRatingsExport',
   'SurveyRespondentsImport',
 ] as unknown as SurveyJob[];

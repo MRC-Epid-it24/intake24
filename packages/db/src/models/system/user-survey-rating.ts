@@ -18,20 +18,20 @@ import {
 } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { Survey, User } from '.';
+import { Survey, SurveySubmission, User } from '.';
 
 @Scopes(() => ({
   user: { include: [{ model: User }] },
 }))
 @Table({
-  modelName: 'UserSurveyAlias',
-  tableName: 'user_survey_aliases',
+  modelName: 'UserSurveyRating',
+  tableName: 'user_survey_ratings',
   freezeTableName: true,
   underscored: true,
 })
-export default class UserSurveyAlias extends BaseModel<
-  InferAttributes<UserSurveyAlias>,
-  InferCreationAttributes<UserSurveyAlias>
+export default class UserSurveyRating extends BaseModel<
+  InferAttributes<UserSurveyRating>,
+  InferCreationAttributes<UserSurveyRating>
 > {
   @Column({
     autoIncrement: true,
@@ -50,24 +50,35 @@ export default class UserSurveyAlias extends BaseModel<
   @Column({
     allowNull: false,
     type: DataType.BIGINT,
-    unique: 'survey_id_username_unique',
   })
   @ForeignKey(() => Survey)
   declare surveyId: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(256),
-    unique: 'survey_id_username_unique',
+    type: DataType.STRING(16),
   })
-  declare username: string;
+  declare type: 'recall' | 'feedback';
+
+  @Column({
+    allowNull: true,
+    type: DataType.UUID,
+    unique: 'user_survey_rating',
+  })
+  @ForeignKey(() => SurveySubmission)
+  declare submissionId: CreationOptional<string | null>;
 
   @Column({
     allowNull: false,
-    unique: true,
-    type: DataType.STRING(128),
+    type: DataType.SMALLINT,
   })
-  declare urlAuthToken: string;
+  declare rating: number;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(512),
+  })
+  declare comment: CreationOptional<string | null>;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;
@@ -80,7 +91,10 @@ export default class UserSurveyAlias extends BaseModel<
 
   @BelongsTo(() => Survey, 'surveyId')
   declare survey?: NonAttribute<Survey>;
+
+  @BelongsTo(() => SurveySubmission, 'submissionId')
+  declare submission?: NonAttribute<SurveySubmission>;
 }
 
-export type UserSurveyAliasAttributes = Attributes<UserSurveyAlias>;
-export type UserSurveyAliasCreationAttributes = CreationAttributes<UserSurveyAlias>;
+export type UserSurveyRatingAttributes = Attributes<UserSurveyRating>;
+export type UserSurveyRatingCreationAttributes = CreationAttributes<UserSurveyRating>;

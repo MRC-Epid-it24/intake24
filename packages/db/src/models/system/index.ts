@@ -43,6 +43,7 @@ import UserPhysicalData from './user-physical-data';
 import UserSecurable from './user-securable';
 import UserSubscription from './user-subscription';
 import UserSurveyAlias from './user-survey-alias';
+import UserSurveyRating from './user-survey-rating';
 import UserSurveySession from './user-survey-session';
 
 export { default as ClientErrorReport } from './client-error-report';
@@ -135,6 +136,8 @@ export { default as UserSubscription } from './user-subscription';
 export * from './user-subscription';
 export { default as UserSurveyAlias } from './user-survey-alias';
 export * from './user-survey-alias';
+export { default as UserSurveyRating } from './user-survey-rating';
+export * from './user-survey-rating';
 export { default as UserSurveySession } from './user-survey-session';
 export * from './user-survey-session';
 
@@ -184,5 +187,6 @@ export const system = {
   UserSecurable,
   UserSubscription,
   UserSurveyAlias,
+  UserSurveyRating,
   UserSurveySession,
 };

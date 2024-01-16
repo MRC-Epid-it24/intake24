@@ -8,13 +8,11 @@
   },
   "title": "Dietary feedback from {name} recalls",
   "missingFoods": "Any foods reported as missing will not be included in dietary feedback",
-
   "physicalData": {
     "title": "About you",
     "subtitle": "So we can present your feedback in the right way, enter the following details.",
     "change": "Change my info",
     "recall": "Record another day",
-
     "sexes": {
       "_": "Sex",
       "m": "Male",
@@ -37,7 +35,6 @@
       "gain_weight": "Gain weight"
     }
   },
-
   "outputs": {
     "title": "Outputs",
     "download": {
@@ -56,17 +53,21 @@
     "retry": "Dietary feedback output has been recently requested, try again in {secs} s.",
     "print": "Print"
   },
-
   "topFoods": {
     "title": "Foods contributing most to your nutrient intakes",
     "chart": "Highest in {nutrient}"
   },
-
   "meals": {
     "title": "Meals per-day breakdown",
     "chart": "{nutrient}"
   },
-
+  "rating": {
+    "_": "Rate your experience",
+    "title": "How would you rate the dietary feedback?",
+    "comment": "Tell us more about the rating you gave the dietary feedback",
+    "send": "Send feedback",
+    "sent": "Feedback sent, thank you!"
+  },
   "intake": {
     "your": "Your {nutrient} intake is {amount}",
     "estimated": "Estimated intake",
@@ -74,7 +75,6 @@
     "tellMeMore": "Tell me more",
     "gotIt": "Got it!"
   },
-
   "unitDescription": {
     "percentage_of_energy": "Dietary feedback is based on the contribution of this nutrient to your energy intake and how it compares with recommendations.",
     "energy_divided_by_bmr": "Dietary feedback is based on your energy intake divided by BMR and how this compares to recommendations.",

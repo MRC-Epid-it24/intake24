@@ -282,5 +282,9 @@
     "constant": "Constant",
     "weightCoefficient": "Weight coefficient",
     "heightCoefficient": "Height coefficient"
+  },
+  "rating": {
+    "_": "Rating",
+    "title": "Rating"
   }
 }
