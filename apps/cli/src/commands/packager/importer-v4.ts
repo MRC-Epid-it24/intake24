@@ -511,6 +511,13 @@ export class ImporterV4 {
     );
   }
 
+  private async readDrinkwareSets(): Promise<void> {
+    logger.info('Loading as served sets');
+    this.asServedSets = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.AS_SERVED_FILE_NAME)
+    );
+  }
+
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),

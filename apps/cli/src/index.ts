@@ -4,6 +4,7 @@ import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
 import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 
 import pkg from '../package.json';
 import {
@@ -147,6 +148,27 @@ const run = async () => {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (options) => {
       await buildFrLocaleCommand(options);
+    });
+
+  program
+    .command('convert-drink-scale')
+    .description('Convert legacy SVG drink scale data to Intake24 package format')
+    .requiredOption('--selection [selection]', 'Selection SVG image map')
+    .requiredOption(
+      '--scale [scale]',
+      'Drink scale SVG',
+      (s, acc) => {
+        const args = s.split('@');
+        if (args.length !== 2)
+          throw new Error('Bad argument for --scale parameter: expected [object id]@[svg path]');
+        return acc.concat([[args[0], args[1]]]);
+      },
+      [] as [string, string][]
+    )
+    .requiredOption('--volume-samples [volume-samples]', 'Output file path')
+    .requiredOption('-o', 'Output file path')
+    .action(async (options) => {
+      await convertDrinkScale(options);
     });
 
   await program.parseAsync(process.argv);
