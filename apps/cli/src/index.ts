@@ -4,6 +4,7 @@ import { Argument, Command, Option } from 'commander';
 import * as process from 'process';
 
 import buildFrLocaleCommand from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
+import convertDrinkScale from '@intake24/cli/commands/svg-converters/convert-drink-scale';
 
 import pkg from '../package.json';
 import {
@@ -147,6 +148,27 @@ const run = async () => {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (options) => {
       await buildFrLocaleCommand(options);
+    });
+
+  program
+    .command('convert-drink-scale')
+    .description('Convert legacy SVG drink scale data to Intake24 package format')
+    .requiredOption('-id, --set-id [set-id]', 'Drinkware set ID')
+    .requiredOption('-d, --description [description]', 'Drinkware set description')
+    .requiredOption('-svg, --selection-svg [selection-svg]', 'Selection image map SVG')
+    .requiredOption(
+      '-img, --selection-base-image [selection-base-image]',
+      'Selection image map base image'
+    )
+    .requiredOption('-s, --scales-csv [scales-csv]', 'Drink scales description CSV')
+    .requiredOption('-o, --output-dir [output-dir]', 'Output package directory')
+    .option(
+      '-ow, --overwrite',
+      'Overwrite existing records in destination package directory',
+      false
+    )
+    .action(async (options) => {
+      await convertDrinkScale(options);
     });
 
   await program.parseAsync(process.argv);

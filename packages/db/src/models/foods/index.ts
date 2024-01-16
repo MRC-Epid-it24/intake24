@@ -10,6 +10,7 @@ import CategoryLocal from './category-local';
 import CategoryPortionSizeMethod from './category-portion-size-method';
 import CategoryPortionSizeMethodParameter from './category-portion-size-method-param';
 import DrinkwareScale from './drinkware-scale';
+import DrinkwareScaleV2 from './drinkware-scale-v2';
 import DrinkwareSet from './drinkware-set';
 import DrinkwareVolumeSample from './drinkware-volume-sample';
 import Food from './food';
@@ -72,6 +73,8 @@ export { default as CategoryPortionSizeMethodParameter } from './category-portio
 export * from './category-portion-size-method-param';
 export { default as DrinkwareScale } from './drinkware-scale';
 export * from './drinkware-scale';
+export { default as DrinkwareScaleV2 } from './drinkware-scale-v2';
+export * from './drinkware-scale-v2';
 export { default as DrinkwareSet } from './drinkware-set';
 export * from './drinkware-set';
 export { default as DrinkwareVolumeSample } from './drinkware-volume-sample';
@@ -160,6 +163,7 @@ export const foods = {
   CategoryPortionSizeMethod,
   CategoryPortionSizeMethodParameter,
   DrinkwareScale,
+  DrinkwareScaleV2,
   DrinkwareSet,
   DrinkwareVolumeSample,
   Food,

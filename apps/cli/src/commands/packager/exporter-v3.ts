@@ -347,9 +347,11 @@ export class ExporterV3 {
   private collectDrinkwareDependencies(drinkwareSets: PkgDrinkwareSet[]): void {
     for (const drinkwareSet of drinkwareSets) {
       this.imageMapIds.add(drinkwareSet.selectionImageMapId);
-      for (const entry of Object.entries(drinkwareSet.scales)) {
-        this.images.add(entry[1].baseImagePath);
-        this.images.add(entry[1].overlayImagePath);
+      for (const [id, scale] of Object.entries(drinkwareSet.scales)) {
+        this.images.add(scale.baseImagePath);
+        if (scale.version === 1) {
+          this.images.add(scale.overlayImagePath);
+        }
       }
     }
   }

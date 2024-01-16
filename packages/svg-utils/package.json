@@ -1,0 +1,18 @@
+{
+  "name": "@intake24/svg-utils",
+  "version": "1.0",
+  "description": "Helper functions to extract outline coordinate data for drink scales and image maps from legacy SVG files",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "svg-parser": "^2.0.4",
+    "svgpath": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/svg-parser": "^2.0.6"
+  }
+}

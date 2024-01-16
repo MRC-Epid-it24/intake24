@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -13,7 +13,7 @@ export default () => {
     imageMapId: 'imageMapForDrinkwareSet',
   };
 
-  let output: DrinkwareSetEntry;
+  let output: DrinkwareSetResponse;
 
   const url = `${baseUrl}/${input.id}`;
   const invalidUrl = `${baseUrl}/999999`;

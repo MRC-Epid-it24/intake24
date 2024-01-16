@@ -1,7 +1,7 @@
 export * from './as-served.service';
 export { default as asServedService } from './as-served.service';
 export * from './drinkware-set.service';
-export { default as drinkwareSetService } from './guide-image.service';
+export { default as drinkwareSetService } from './drinkware-set.service';
 export * from './guide-image.service';
 export { default as guideImageService } from './guide-image.service';
 export * from './image-map.service';

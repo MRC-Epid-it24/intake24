@@ -8,7 +8,7 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import { DrinkwareScale, ImageMap } from '.';
+import { DrinkwareScale, DrinkwareScaleV2, ImageMap } from '.';
 
 @Scopes(() => ({
   scales: { include: [{ model: DrinkwareScale }] },
@@ -48,6 +48,9 @@ export default class DrinkwareSet extends BaseModel<
 
   @HasMany(() => DrinkwareScale, 'drinkwareSetId')
   declare scales?: NonAttribute<DrinkwareScale[]>;
+
+  @HasMany(() => DrinkwareScaleV2, 'drinkwareSetId')
+  declare scalesV2?: NonAttribute<DrinkwareScale[]>;
 }
 
 export type DrinkwareSetAttributes = Attributes<DrinkwareSet>;

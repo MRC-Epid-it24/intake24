@@ -17,6 +17,7 @@ export enum ProcessedImagePurposes {
   SelectionImage = 3,
   ImageMapBaseImage = 4,
   ImageMapOverlay = 5,
+  DrinkScaleBaseImage = 6,
 }
 
 export type ProcessedImagePurpose = ProcessedImagePurposes;

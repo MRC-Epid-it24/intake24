@@ -2,6 +2,7 @@ export { default as AsServedSelector } from './AsServedSelector.vue';
 export { default as AsServedWeightFactor } from './AsServedWeightFactor.vue';
 export * from './drink-scale';
 export { default as DrinkScalePanel } from './DrinkScalePanel.vue';
+export { default as DrinkScaleV2Panel } from './DrinkScaleV2Panel.vue';
 export { default as EditableFoodList } from './EditableFoodList.vue';
 export { default as ImageMapSelector } from './ImageMapSelector.vue';
 export { default as LinkedQuantity } from './LinkedQuantity.vue';
