@@ -1,5 +1,3 @@
-import { log } from 'console';
-
 import type { IoC } from '@intake24/api/ioc';
 import type { QueueJob } from '@intake24/common/types';
 import type {
@@ -11,7 +9,6 @@ import type {
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { addDollarSign } from '@intake24/api/util';
-import { logger } from '@intake24/common-backend/services';
 import {
   Op,
   RecipeFoods,

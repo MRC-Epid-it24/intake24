@@ -213,8 +213,6 @@ export default defineComponent({
           return item;
         });
 
-      console.log(form.items);
-
       const items = await form.post<LocaleRecipeFoodSteps[]>(
         `admin/locales/${props.locale.id}/recipe-foods/${props.activeRecipeFoodId}/steps`
       );

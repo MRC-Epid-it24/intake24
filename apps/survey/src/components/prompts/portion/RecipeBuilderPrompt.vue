@@ -140,12 +140,10 @@ export default defineComponent({
 
   setup() {
     const { translate } = useI18n();
-    const missingAllIngridientsDialog = ref(true);
 
     return {
       isStepValid,
       translate,
-      missingAllIngridientsDialog,
     };
   },
 
