@@ -24,10 +24,14 @@ import type {
   Prompts,
   PromptStates,
   RecipeBuilderStepState,
-  SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, MissingFood, RecipeFoodStepsType } from '@intake24/common/types';
+import type {
+  EncodedFood,
+  FoodFlag,
+  MissingFood,
+  RecipeFoodStepsType,
+} from '@intake24/common/types';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -102,13 +106,15 @@ export default defineComponent({
         };
       } else {
         const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
+        const flags: FoodFlag[] = ['associated-foods-complete'];
+        if (hasOnePortionSizeMethod) flags.push('portion-size-option-complete');
 
         ingredientToAdd = {
           id: data.id,
           type: 'encoded-food',
           data: data.ingredient,
           searchTerm: 'recipe builder prompt',
-          flags: hasOnePortionSizeMethod ? ['portion-size-option-complete'] : [],
+          flags,
           portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
           portionSize: null,
           customPromptAnswers: {},
