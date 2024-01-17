@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { outputFile } from 'fs-extra';
 import { merge } from 'lodash';
 import path from 'path';
 
@@ -58,6 +59,30 @@ export class PackageWriter {
     });
   }
 
+  private async appendJSON(
+    newRecords: Record<string, any>,
+    filePath: string,
+    overwrite: boolean = false
+  ): Promise<void> {
+    // Not great since this introduces a race condition
+    try {
+      await fs.access(filePath, fs.constants.F_OK);
+
+      const records = JSON.parse(await fs.readFile(filePath, 'utf-8')) as Record<string, any>;
+
+      for (const [id, record] of Object.entries(newRecords)) {
+        if (!overwrite && id in records) {
+          throw new Error(`Record ${id} already exists in destination package file ${filePath}`);
+        }
+        records[id] = record;
+      }
+
+      await this.writeJSON(records, filePath);
+    } catch (e) {
+      await this.writeJSON(newRecords, filePath);
+    }
+  }
+
   public async writeGlobalFoods(globalFoods: PkgGlobalFood[]) {
     await this.writeJSON(
       globalFoods,
@@ -105,6 +130,20 @@ export class PackageWriter {
     );
   }
 
+  public async appendDrinkwareSets(
+    newDrinkwareSets: Record<string, PkgDrinkwareSet>,
+    overwrite: boolean = false
+  ) {
+    await this.appendJSON(
+      newDrinkwareSets,
+      path.join(
+        this.outputDir,
+        PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+        PkgConstants.DRINKWARE_FILE_NAME
+      )
+    );
+  }
+
   public async writeGuideImages(guideImages: Record<string, PkgGuideImage>) {
     await this.writeJSON(
       guideImages,
@@ -116,9 +155,20 @@ export class PackageWriter {
     );
   }
 
-  public async writeImageMaps(guideImages: Record<string, PkgImageMap>) {
+  public async writeImageMaps(imageMaps: Record<string, PkgImageMap>) {
     await this.writeJSON(
-      guideImages,
+      imageMaps,
+      path.join(
+        this.outputDir,
+        PkgConstants.PORTION_SIZE_DIRECTORY_NAME,
+        PkgConstants.IMAGE_MAP_FILE_NAME
+      )
+    );
+  }
+
+  public async appendImageMaps(imageMaps: Record<string, PkgImageMap>) {
+    await this.appendJSON(
+      imageMaps,
       path.join(
         this.outputDir,
         PkgConstants.PORTION_SIZE_DIRECTORY_NAME,

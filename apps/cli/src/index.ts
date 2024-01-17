@@ -153,20 +153,20 @@ const run = async () => {
   program
     .command('convert-drink-scale')
     .description('Convert legacy SVG drink scale data to Intake24 package format')
-    .requiredOption('--selection [selection]', 'Selection SVG image map')
+    .requiredOption('-id, --set-id [set-id]', 'Drinkware set ID')
+    .requiredOption('-d, --description [description]', 'Drinkware set description')
+    .requiredOption('-svg, --selection-svg [selection-svg]', 'Selection image map SVG')
     .requiredOption(
-      '--scale [scale]',
-      'Drink scale SVG',
-      (s, acc) => {
-        const args = s.split('@');
-        if (args.length !== 2)
-          throw new Error('Bad argument for --scale parameter: expected [object id]@[svg path]');
-        return acc.concat([[args[0], args[1]]]);
-      },
-      [] as [string, string][]
+      '-img, --selection-base-image [selection-base-image]',
+      'Selection image map base image'
     )
-    .requiredOption('--volume-samples [volume-samples]', 'Output file path')
-    .requiredOption('-o', 'Output file path')
+    .requiredOption('-s, --scales-csv [scales-csv]', 'Drink scales description CSV')
+    .requiredOption('-o, --output-dir [output-dir]', 'Output package directory')
+    .option(
+      '-ow, --overwrite',
+      'Overwrite existing records in destination package directory',
+      false
+    )
     .action(async (options) => {
       await convertDrinkScale(options);
     });
