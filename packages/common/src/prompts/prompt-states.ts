@@ -20,19 +20,27 @@ export type AssociatedFoodPrompt = {
   foods: AssociatedFoodPromptItem[];
 };
 
-export type RecipeBuilderStepIngredientData = { ingredient: UserFoodData; idx: number; id: string };
-
-export type SelectedFoodRecipeBuilderItemState = {
-  code: string;
-  name: string;
+export type MissingFoodRecipeBuilderItemState = {
+  type: 'missing';
   id: string;
-  data: RecipeBuilderStepIngredientData;
+  idx: number;
+  name: string;
 };
+
+export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
+  type: 'selected';
+  id: string;
+  idx: number;
+  ingredient: UserFoodData;
+};
+
+export type FoodRecipeBuilderItemState =
+  | MissingFoodRecipeBuilderItemState
+  | SelectedFoodRecipeBuilderItemState;
 
 export type RecipeBuilderStepState = {
   confirmed?: 'yes' | 'no';
-  type?: 'selected' | 'missing';
-  selectedFoods?: SelectedFoodRecipeBuilderItemState[];
+  foods: FoodRecipeBuilderItemState[];
   order: number;
   description: RequiredLocaleTranslation;
   name: RequiredLocaleTranslation;
@@ -110,7 +118,6 @@ export type PromptStates = {
   'recipe-builder-prompt': {
     recipe: RecipeFood;
     activeStep: number;
-    finishedSteps?: number[];
     recipeSteps: RecipeBuilderStepState[];
   };
   'standard-portion-prompt': {

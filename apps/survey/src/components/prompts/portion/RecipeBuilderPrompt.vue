@@ -17,9 +17,9 @@
           <v-container class="pl-0">
             <p>{{ translate(step.description) }}</p>
             <v-radio-group
-              v-if="step.repeat && step.selectedFoods !== undefined"
+              v-if="step.repeat"
               v-model="step.confirmed"
-              :disabled="!(step.selectedFoods !== undefined && step.selectedFoods.length > 0)"
+              :disabled="!step.foods.length"
               :row="!isMobile"
               @change="onConfirmToggleIngredients(index)"
             >
@@ -39,10 +39,9 @@
           </v-container>
           <v-expand-transition>
             <selected-food-list
-              v-bind="{ index, meal, prompt }"
-              :entries="step"
-              :show="!!step.selectedFoods?.length"
-              @button-click="removeSelectedFood"
+              v-bind="{ index, meal, prompt, step }"
+              :show="!!step.foods.length"
+              @remove="removeFood"
             ></selected-food-list>
           </v-expand-transition>
           <v-expand-transition>
@@ -86,14 +85,16 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref, set } from 'vue';
+import { defineComponent } from 'vue';
 
 import type {
+  MissingFoodRecipeBuilderItemState,
   PromptStates,
   RecipeBuilderStepState,
   SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
 import type { RecipeBuilder } from '@intake24/common/types';
+import type { FoodHeader } from '@intake24/common/types/http';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import {
@@ -159,7 +160,7 @@ export default defineComponent({
     },
 
     atLeastOneFoodSelected(): boolean {
-      return this.recipeSteps.reduce((acc, curr) => acc || !!curr.selectedFoods?.length, false);
+      return this.recipeSteps.reduce((acc, curr) => acc || !!curr.foods.length, false);
     },
 
     isValid(): boolean {
@@ -173,16 +174,10 @@ export default defineComponent({
       //this.updatePanel();
     },
 
-    replaceFoodIndex(index: number) {
-      console.log('Replace Food Index', index);
-      // this.food.link.map(() => undefined as number | undefined);
-    },
+    removeFood({ foodIndex, index }: { foodIndex: number; index: number }) {
+      const foodToRemove = this.recipeSteps[index].foods.splice(foodIndex, 1);
+      if (!this.recipeSteps[index].foods.length) this.recipeSteps[index].confirmed = undefined;
 
-    removeSelectedFood(data: { foodIndex: number; index: number }) {
-      const foodToRemove = this.recipeSteps[data.index].selectedFoods?.splice(data.foodIndex, 1);
-      if (this.recipeSteps[data.index].selectedFoods?.length === 0) {
-        this.recipeSteps[data.index].confirmed = undefined;
-      }
       if (foodToRemove === undefined) return;
       this.update();
     },
@@ -191,74 +186,61 @@ export default defineComponent({
       const state: PromptStates['recipe-builder-prompt'] = {
         recipeSteps: this.recipeSteps,
         activeStep: this.activeStep,
-        finishedSteps: this.finishedSteps,
         recipe: this.recipe,
       };
 
       this.$emit('input', state);
     },
 
-    foodSelected(food: SelectedFoodRecipeBuilderItemState, ingredientIndex: number): void {
-      const selectedFoods = this.recipeSteps[ingredientIndex].selectedFoods;
-      this.onFoodSelected(
-        {
-          ...this.recipeSteps[ingredientIndex],
-          type: 'selected',
-          selectedFoods: selectedFoods ? [...selectedFoods, food] : [food],
-        },
-        ingredientIndex,
-        food
-      );
+    foodSelected(selectedFood: SelectedFoodRecipeBuilderItemState, index: number): void {
+      this.onFoodSelected({ type: 'selected', selectedFood }, index);
     },
 
-    foodMissing(ingredientIndex: number): void {},
+    foodMissing(index: number) {
+      this.onFoodSelected({ type: 'missing' }, index);
+    },
 
     foodSkipped(index: number): void {
-      console.log('Food Skipped', index);
       this.activeStep = index + 1;
       this.recipeSteps[index].confirmed = 'yes';
       this.update();
     },
 
     async onFoodSelected(
-      stepFoods: RecipeBuilderStepState,
-      ingredientIndex: number,
-      foodForSearch: SelectedFoodRecipeBuilderItemState
+      item: { type: 'selected'; selectedFood: FoodHeader } | { type: 'missing' },
+      idx: number
     ): Promise<void> {
-      if (!stepFoods.selectedFoods) return;
-
-      const foodData = await foodsService.getData(this.localeId, foodForSearch.code);
-
-      const step = this.recipeSteps[ingredientIndex];
-      const replaceIndex = this.replaceFoodIndex(ingredientIndex);
+      const step = this.recipeSteps[idx];
       const id = getEntityId();
-      const data = { ingredient: foodData, idx: ingredientIndex, id: id };
 
-      const foods = step.selectedFoods ? step.selectedFoods.slice() : [];
-
-      if (!step.repeat && replaceIndex !== undefined) {
-        foods[replaceIndex] = stepFoods.selectedFoods[replaceIndex];
-        set(this.replaceFoodIndex, ingredientIndex, undefined);
+      let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
+      if (item.type === 'missing') {
+        food = { type: item.type, id, idx, name: `${step.categoryCode}: ${step.name.en}` };
       } else {
-        foods.push({
-          code: data.ingredient.code,
-          name: data.ingredient.localName,
-          id: data.id ?? '',
-          data: data,
-        });
+        const ingredient = await foodsService.getData(this.localeId, item.selectedFood.code);
+        food = {
+          type: item.type,
+          code: ingredient.code,
+          name: ingredient.localName,
+          id,
+          idx,
+          ingredient,
+        };
       }
 
-      const update = {
+      const foods = step.foods.slice();
+      foods.push(food);
+
+      const update: RecipeBuilderStepState = {
         ...step,
-        type: stepFoods.type,
-        confirmed: step.repeat !== true ? 'yes' : ('no' as RecipeBuilderStepState['confirmed']),
-        selectedFoods: foods,
+        confirmed: step.repeat !== true ? 'yes' : 'no',
+        foods,
       };
 
-      this.recipeSteps.splice(ingredientIndex, 1, update);
+      this.recipeSteps.splice(idx, 1, update);
 
-      this.updateActiveStep(ingredientIndex);
-      this.goToNextIfCan(ingredientIndex);
+      this.updateActiveStep(idx);
+      this.goToNextIfCan(idx);
     },
 
     goToNextIfCan(index: number) {
@@ -279,9 +261,7 @@ export default defineComponent({
 
     updateStepsIngredients() {
       console.log('Updating Steps Ingredients');
-      const chosenIngredients = this.recipeSteps.map(
-        (step) => step.selectedFoods?.map((food) => food.data)
-      );
+      const chosenIngredients = this.recipeSteps.map(({ foods }) => foods);
       this.$emit('add-food', chosenIngredients);
     },
 

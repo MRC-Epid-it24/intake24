@@ -20,13 +20,14 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type {
+  FoodRecipeBuilderItemState,
   Prompts,
   PromptStates,
-  RecipeBuilderStepIngredientData,
   RecipeBuilderStepState,
+  SelectedFoodRecipeBuilderItemState,
 } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood, RecipeFoodStepsType } from '@intake24/common/types';
+import type { EncodedFood, MissingFood, RecipeFoodStepsType } from '@intake24/common/types';
 import { RecipeBuilderPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -34,9 +35,9 @@ import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '.
 
 const initialPromptState = (step: RecipeFoodStepsType): RecipeBuilderStepState => ({
   confirmed: undefined,
-  type: undefined,
-  repeat: step.repeatable ? true : false,
-  selectedFoods: [],
+  // type: undefined,
+  repeat: step.repeatable,
+  foods: [],
   order: step.order - 1,
   description: step.description,
   name: step.name,
@@ -73,37 +74,47 @@ export default defineComponent({
     const getInitialState = (): PromptStates['recipe-builder-prompt'] => ({
       recipe: recipeFood,
       activeStep: 0,
-      finishedSteps: [],
       recipeSteps: recipeFood.steps.map((step) => initialPromptState(step)),
     });
 
     const { state, update, clearStoredState } = usePromptHandlerStore(props, ctx, getInitialState);
 
-    const addingIngredientsAsALinkedFood = async (
-      ingredients: RecipeBuilderStepIngredientData[][]
-    ) => {
-      ingredients.forEach(async (stepIngredients) => {
-        stepIngredients.forEach(async (ingredient) => {
-          await addLinkedFood(ingredient);
+    const addingIngredientsAsALinkedFood = async (ingredients: FoodRecipeBuilderItemState[][]) => {
+      ingredients.forEach((stepIngredients) => {
+        stepIngredients.forEach((ingredient) => {
+          addLinkedFood(ingredient);
         });
       });
       commitAnswer();
     };
 
-    const addLinkedFood = async (data: RecipeBuilderStepIngredientData) => {
-      const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
+    const addLinkedFood = async (data: FoodRecipeBuilderItemState) => {
+      let ingredientToAdd: EncodedFood | MissingFood;
+      if (data.type === 'missing') {
+        ingredientToAdd = {
+          id: data.id,
+          type: 'missing-food',
+          info: null,
+          searchTerm: data.name,
+          customPromptAnswers: {},
+          flags: [],
+          linkedFoods: [],
+        };
+      } else {
+        const hasOnePortionSizeMethod = data.ingredient.portionSizeMethods.length === 1;
 
-      const ingredientToAdd: EncodedFood = {
-        id: data.id,
-        type: 'encoded-food',
-        data: data.ingredient,
-        searchTerm: 'recipe builder prompt',
-        flags: ['portion-size-option-complete'],
-        portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
-        portionSize: null,
-        customPromptAnswers: {},
-        linkedFoods: [],
-      };
+        ingredientToAdd = {
+          id: data.id,
+          type: 'encoded-food',
+          data: data.ingredient,
+          searchTerm: 'recipe builder prompt',
+          flags: hasOnePortionSizeMethod ? ['portion-size-option-complete'] : [],
+          portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
+          portionSize: null,
+          customPromptAnswers: {},
+          linkedFoods: [],
+        };
+      }
 
       const newComponents = [];
       const linkedFood = [];
@@ -122,11 +133,8 @@ export default defineComponent({
       }
 
       survey.updateFood({
-        foodId: foodId,
-        update: {
-          linkedFoods: [...linkedFood, ingredientToAdd],
-          components: [...newComponents],
-        },
+        foodId,
+        update: { linkedFoods: [...linkedFood, ingredientToAdd], components: [...newComponents] },
       });
     };
 
