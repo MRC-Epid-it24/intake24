@@ -26,7 +26,16 @@ import RecipeFoods from './recipe-foods';
 
 @Scopes(() => ({
   list: {
-    attributes: ['id', 'recipeFoodsId', 'code', 'order', 'name', 'description', 'repeatable'],
+    attributes: [
+      'id',
+      'recipeFoodsId',
+      'code',
+      'order',
+      'name',
+      'description',
+      'repeatable',
+      'required',
+    ],
     order: [['order', 'ASC']],
   },
 }))
@@ -126,6 +135,13 @@ export default class RecipeFoodsSteps extends BaseModel<
     defaultValue: false,
   })
   declare repeatable: boolean;
+
+  @Column({
+    allowNull: false,
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  declare required: boolean;
 
   @CreatedAt
   declare readonly createdAt: CreationOptional<Date>;

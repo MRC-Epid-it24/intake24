@@ -100,7 +100,8 @@
           {{ promptI18n['missing.label'] }}
         </v-btn>
         <v-btn
-          v-if="type === 'recipeBuilder'"
+          v-if="type === 'recipeBuilder' && !requiredToFill"
+          class="overflow-button"
           color="primary"
           :disabled="missingDialog"
           large
@@ -191,6 +192,11 @@ export default defineComponent({
       required: false,
       default: '',
     },
+    requiredToFill: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   emits: ['food-selected', 'food-missing', 'recipe-builder', 'input', 'food-skipped'],
@@ -208,6 +214,7 @@ export default defineComponent({
 
         return last.name;
       }
+      //add conditional browse
 
       return {
         ...translatePrompt(
@@ -226,6 +233,7 @@ export default defineComponent({
           {
             back: { category: backCategoryLabel() },
             'missing.irrelevantIngredient': { ingredient: props.stepName },
+            browse: { category: props.stepName },
           }
         ),
       };
@@ -479,4 +487,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.overflow-button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+</style>

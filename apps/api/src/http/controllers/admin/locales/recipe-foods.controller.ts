@@ -65,7 +65,11 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
 
   // adding/modifying/deleting new or existing recipe food steps for the specific recipe food for the specified Locale ID
   const setSteps = async (
-    req: Request<{ localeId: string; recipeFoodId: string }, any, LocaleRecipeFoodStepsInput[]>,
+    req: Request<
+      { localeId: string; recipeFoodId: string },
+      any,
+      { items: LocaleRecipeFoodStepsInput[] }
+    >,
     res: Response<LocaleRecipeFoodSteps[]>
   ): Promise<void> => {
     const { body } = req;
@@ -77,7 +81,11 @@ const localeRecipeFoodsController = ({ localeService }: Pick<IoC, 'localeService
       where: { id: localeId },
     });
 
-    const recipeFoodSteps = await localeService.setRecipeFoodSteps(locale, recipeFoodId, body);
+    const recipeFoodSteps = await localeService.setRecipeFoodSteps(
+      locale,
+      recipeFoodId,
+      body.items
+    );
 
     res.json(recipeFoodSteps);
   };

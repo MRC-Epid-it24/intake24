@@ -96,6 +96,12 @@
                     :label="$t('locales.recipe-foods.repeat')"
                     name="repeatable"
                   ></v-switch>
+                  <v-switch
+                    v-model="item.required"
+                    hide-details="auto"
+                    :label="$t('locales.recipe-foods.require')"
+                    name="required"
+                  ></v-switch>
                 </v-col>
                 <v-col cols="12" md="6">
                   <select-resource
@@ -225,6 +231,7 @@ export default defineComponent({
         localeId: props.locale.code,
         categoryCode: '',
         repeatable: false,
+        required: false,
       });
     };
 

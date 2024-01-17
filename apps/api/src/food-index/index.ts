@@ -80,6 +80,7 @@ export default {
               'localeId',
               'categoryCode',
               'repeatable',
+              'required',
             ],
           },
           {

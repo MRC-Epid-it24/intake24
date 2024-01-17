@@ -4,9 +4,9 @@ import { validate } from '@intake24/api/http/requests/util';
 
 export default validate(
   body()
-    .custom((value: any[]) => {
+    .custom((value: { items: any[] }) => {
       if (
-        value.some(
+        value.items.some(
           ({
             id,
             recipeFoodsId,
@@ -17,6 +17,7 @@ export default validate(
             order,
             categoryCode,
             repeatable,
+            required,
           }) =>
             (typeof id !== 'undefined' && typeof id !== 'string') ||
             (typeof recipeFoodsId !== 'number' && typeof recipeFoodsId !== 'string') ||
@@ -26,12 +27,13 @@ export default validate(
             (typeof name !== 'object' && typeof name !== 'string') ||
             (typeof description !== 'object' && typeof description !== 'string') ||
             typeof categoryCode !== 'string' ||
-            typeof repeatable !== 'boolean'
+            typeof repeatable !== 'boolean' ||
+            typeof required !== 'boolean'
         )
       )
         return false;
 
       return true;
     })
-    .withMessage('Invalid Recipe Food Steps object')
+    .withMessage(`Invalid Recipe Food Steps object`)
 );

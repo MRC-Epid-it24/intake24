@@ -238,7 +238,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     const newRecords: RecipeFoodsSteps[] = [];
 
     for (const recipeFoodStep of recipeFoodSteps) {
-      const { id, code, name, description, categoryCode, order, repeatable } = recipeFoodStep;
+      const { id, code, name, description, categoryCode, order, repeatable, required } =
+        recipeFoodStep;
 
       if (id) {
         const match = records.find((record) => record.id === id);
@@ -251,6 +252,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
             localeId: localeCode,
             order,
             repeatable,
+            required,
           });
           continue;
         }
@@ -265,6 +267,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
         categoryCode,
         order,
         repeatable,
+        required: false,
       });
       newRecords.push(newRecord);
     }
