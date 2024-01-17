@@ -68,6 +68,13 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <missing-all-recipe-ingredients
+      v-bind="{
+        value: allConfirmed && !atLeastOneFoodSelected,
+        message: $t('prompts.recipeBuilder.missingAllIngredients'),
+      }"
+      :class="{ 'mt-4': isMobile }"
+    ></missing-all-recipe-ingredients>
     <template #actions>
       <next :disabled="!isValid" @click="updateStepsIngredients"></next>
     </template>
@@ -79,7 +86,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, set } from 'vue';
+import { defineComponent, ref, set } from 'vue';
 
 import type {
   PromptStates,
@@ -92,6 +99,7 @@ import { useI18n } from '@intake24/i18n';
 import {
   ExpansionPanelActions,
   FoodBrowser,
+  MissingAllRecipeIngredients,
   SelectedFoodList,
 } from '@intake24/survey/components/elements';
 import { foodsService } from '@intake24/survey/services';
@@ -109,7 +117,7 @@ const getNextStep = (steps: RecipeBuilderStepState[]) =>
 export default defineComponent({
   name: 'RecipeBuilderPrompt',
 
-  components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList },
+  components: { ExpansionPanelActions, FoodBrowser, SelectedFoodList, MissingAllRecipeIngredients },
 
   mixins: [createBasePrompt<'recipe-builder-prompt', RecipeBuilder>()],
 
@@ -132,10 +140,12 @@ export default defineComponent({
 
   setup() {
     const { translate } = useI18n();
+    const missingAllIngridientsDialog = ref(true);
 
     return {
       isStepValid,
       translate,
+      missingAllIngridientsDialog,
     };
   },
 

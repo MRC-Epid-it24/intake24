@@ -227,8 +227,6 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
     recipeFoodSteps: LocaleRecipeFoodStepsInput[]
   ) => {
     const { code: localeCode } = await resolveLocale(localeId);
-    logger.info(`setRecipeFoodSteps: ${localeCode} ${recipeFoodId}`);
-    logger.info(JSON.stringify(recipeFoodSteps));
     const ids = recipeFoodSteps.map(({ id }) => id) as string[];
     await RecipeFoodsSteps.destroy({
       where: { localeId: localeCode, recipeFoodsId: recipeFoodId, id: { [Op.notIn]: ids } },

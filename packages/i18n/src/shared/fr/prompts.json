@@ -382,6 +382,7 @@
     "back": "Retour à '{category}'",
     "none": "Aucun résultat concernant les aliments. Veuillez affiner votre recherche.",
     "remove": "Retirer",
+    "missingAllIngredients": "Veuillez ajouter au moins un ingrédient pour continuer.",
     "missing": {
       "label": "Je ne trouve pas ma nourriture",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans le champ de recherche ci-dessus et cliquez sur \"Chercher à nouveau\".</p><p>Vous pouvez également cliquer sur \"Parcourir tous les aliments\" et explorer les catégories d'aliments.</p><p>Si vous ne trouvez toujours pas votre aliment, cliquez sur \"Signaler un aliment manquant\".</p>",

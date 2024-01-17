@@ -380,6 +380,7 @@
     "noMore": "No more ingredients",
     "none": "No food results. Please try refining your search.",
     "remove": "Remove",
+    "missingAllIngredients": "Sila tambah sekurang-kurangnya satu bahan untuk meneruskan.",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>Please try browsing the food categories listed above to find your food.</p><p>If you still can't find it, please click the button below to report a missing food.</p>",
