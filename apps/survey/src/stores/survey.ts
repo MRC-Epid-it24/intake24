@@ -751,6 +751,10 @@ export const useSurvey = defineStore('survey', {
           foodIndex.linkedFoodIndex,
           1
         );
+
+        const parentFood = this.data.meals[foodIndex.mealIndex].foods[foodIndex.foodIndex];
+        if (parentFood.type === 'recipe-builder' && !parentFood.linkedFoods.length)
+          this.data.meals[foodIndex.mealIndex].foods.splice(foodIndex.foodIndex, 1);
       }
 
       // FIXME: update selection
