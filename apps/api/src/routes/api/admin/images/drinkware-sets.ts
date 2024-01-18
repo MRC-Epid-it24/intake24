@@ -5,6 +5,8 @@ import validation from '@intake24/api/http/requests/admin/images/drinkware-sets'
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 
+import drinkScales from './drink-scales';
+
 export default () => {
   const { drinkwareSetController } = ioc.cradle;
   const router = Router();
@@ -41,6 +43,8 @@ export default () => {
     permission('drinkware-sets|edit'),
     wrapAsync(drinkwareSetController.edit)
   );
+
+  router.use('/:drinkwareSetId/scales', drinkScales());
 
   return router;
 };

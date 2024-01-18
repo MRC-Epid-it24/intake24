@@ -424,7 +424,7 @@ export interface SynonymSets {
   synonyms: string;
 }
 
-export interface DB {
+export interface FoodsDB {
   as_served_images: AsServedImages;
   as_served_sets: AsServedSets;
   associated_foods: AssociatedFoods;

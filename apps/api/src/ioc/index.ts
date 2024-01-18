@@ -64,6 +64,7 @@ import type {
   UserProfileController,
   UserSubmissionsController,
 } from '@intake24/api/http/controllers';
+import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
 import type {
   ACLService,
@@ -123,6 +124,7 @@ import type { Logger, Mailer } from '@intake24/common-backend';
 import type { DatabasesInterface, User } from '@intake24/db';
 import config from '@intake24/api/config';
 import { Database, models } from '@intake24/db';
+import { KyselyDatabases } from '@intake24/db/kysely-database';
 
 import controllers from './controllers';
 import jobs from './jobs';
@@ -199,6 +201,7 @@ export interface IoC extends Jobs {
   asServedSetController: AsServedSetController;
   asServedImageController: AsServedImageController;
   drinkwareSetController: DrinkwareSetController;
+  drinkScaleController: DrinkScaleController;
   guideImageController: GuideImageController;
   imageMapController: ImageMapController;
 
@@ -237,6 +240,7 @@ export interface IoC extends Jobs {
 
   // System services
   db: DatabasesInterface;
+  kyselyDb: KyselyDatabases;
   models: typeof models;
   cache: Cache;
   filesystem: Filesystem;
@@ -342,6 +346,7 @@ const configureContainer = () => {
     imagesBaseUrl: asValue(config.app.urls.images),
 
     db: asClass(Database).singleton(),
+    kyselyDb: asClass(KyselyDatabases).singleton(),
     models: asValue(models),
   });
 

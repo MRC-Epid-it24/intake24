@@ -551,7 +551,7 @@ export interface UxEvents {
   user_id: Int8;
 }
 
-export interface DB {
+export interface SystemDB {
   client_error_reports: ClientErrorReports;
   external_test_users: ExternalTestUsers;
   feedback_schemes: FeedbackSchemes;
