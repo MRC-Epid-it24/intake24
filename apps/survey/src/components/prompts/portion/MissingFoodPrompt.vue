@@ -91,14 +91,13 @@ export default defineComponent({
 
   data() {
     return {
-      ...copy(this.value),
-      fields: [
-        // 'name',
-        // 'brand',
-        'description',
-        'portionSize',
-        // 'leftovers',
-      ] as (keyof MissingFood['info'])[],
+      ...copy({
+        ...this.value,
+        homemadePrompt:
+          !this.value.info.description && !this.value.info.brand
+            ? undefined
+            : !!this.value.info.description,
+      }),
     };
   },
 
