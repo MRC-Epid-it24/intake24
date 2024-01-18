@@ -17,7 +17,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "html-to-text": "^9.0.5",
-    "jsdom": "^23.0.1",
+    "jsdom": "^23.2.0",
     "nodemailer": "^6.9.8",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"

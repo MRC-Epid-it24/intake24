@@ -36,7 +36,7 @@ export default () => {
       .set('Accept', 'application/json')
       .send({ email, captcha: 'captchaToken' });
 
-    await sleep(1000); // TODO: this should wait until the job is done
+    await sleep(2000); // TODO: this should wait until the job is done
     const reset = await UserPasswordReset.findOne({ where: { userId } });
     if (!reset) throw Error('Password reset not created.');
 

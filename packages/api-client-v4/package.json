@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "main": "src/index.ts",
   "dependencies": {
-    "axios": "^1.6.4",
+    "axios": "^1.6.5",
     "cookie": "^0.6.0",
     "formdata-node": "4.4.1",
     "mime-types": "^2.1.35",
