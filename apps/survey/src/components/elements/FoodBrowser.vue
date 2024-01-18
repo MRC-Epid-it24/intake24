@@ -383,9 +383,9 @@ export default defineComponent({
       ctx.emit('food-selected', food);
     };
 
-    const foodMissing = (food: FoodHeader) => {
+    const foodMissing = () => {
       closeInDialog();
-      ctx.emit('food-missing', food);
+      ctx.emit('food-missing', searchTerm.value);
     };
 
     const skipTheStep = () => {

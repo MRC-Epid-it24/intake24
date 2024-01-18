@@ -58,8 +58,8 @@
                   rootCategory: step.categoryCode,
                   prompt,
                 }"
-                @food-missing="foodMissing(index)"
-                @food-selected="(food) => foodSelected(food, index)"
+                @food-missing="(searchTerm) => foodMissing(index, searchTerm)"
+                @food-selected="(food) => foodSelected(index, food)"
                 @food-skipped="foodSkipped(index)"
               ></food-browser>
             </v-card>
@@ -192,12 +192,12 @@ export default defineComponent({
       this.$emit('input', state);
     },
 
-    foodSelected(selectedFood: SelectedFoodRecipeBuilderItemState, index: number): void {
+    foodSelected(index: number, selectedFood: SelectedFoodRecipeBuilderItemState): void {
       this.onFoodSelected({ type: 'selected', selectedFood }, index);
     },
 
-    foodMissing(index: number) {
-      this.onFoodSelected({ type: 'missing' }, index);
+    foodMissing(index: number, searchTerm?: string | null) {
+      this.onFoodSelected({ type: 'missing', searchTerm }, index);
     },
 
     foodSkipped(index: number): void {
@@ -207,7 +207,9 @@ export default defineComponent({
     },
 
     async onFoodSelected(
-      item: { type: 'selected'; selectedFood: FoodHeader } | { type: 'missing' },
+      item:
+        | { type: 'selected'; selectedFood: FoodHeader }
+        | { type: 'missing'; searchTerm?: string | null },
       idx: number
     ): Promise<void> {
       const step = this.recipeSteps[idx];
@@ -215,7 +217,12 @@ export default defineComponent({
 
       let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
       if (item.type === 'missing') {
-        food = { type: item.type, id, idx, name: `${step.categoryCode}: ${step.name.en}` };
+        food = {
+          type: item.type,
+          id,
+          idx,
+          name: `${step.categoryCode}: ${item.searchTerm ? item.searchTerm : step.name.en}`,
+        };
       } else {
         const ingredient = await foodsService.getData(this.localeId, item.selectedFood.code);
         food = {

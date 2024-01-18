@@ -75,8 +75,8 @@ export default defineComponent({
       ctx.emit('food-selected', foodData);
     };
 
-    const foodMissing = () => {
-      ctx.emit('food-missing');
+    const foodMissing = (searchTerm?: string | null) => {
+      ctx.emit('food-missing', searchTerm);
     };
 
     const recipeBuilder = (recipeFood: RecipeFood) => {
