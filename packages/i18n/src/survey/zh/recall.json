@@ -39,15 +39,25 @@
       "deleteConfirm": "Do you want to delete {item}?",
       "edit": "Change food",
       "editPortionSize": "Edit portion size",
-      "encoded": "该食物已与我们数据库中的食物匹配。",
-      "missing": "This food has been marked as missing in our database.",
-      "notMatched": "该食物尚未与我们数据库中的食物匹配。",
-      "portionSizeComplete": "该食物的份量估计已完成。",
-      "portionSizeIncomplete": "该食物的份量尚未确定。",
-      "missingInfoComplete": "Missing information for this food is complete.",
-      "missingInfoIncomplete": "Missing information for this food is not yet known.",
-      "recipeFoodStepsComplete": "Recipe Steps for this food are complete.",
-      "recipeFoodStepsIncomplete": "Recipe Steps for this food are not yet finished."
+      "free-text": {
+        "_": "该食物尚未与我们数据库中的食物匹配。",
+        "incomplete": "该食物的份量尚未确定。"
+      },
+      "encoded-food": {
+        "_": "该食物已与我们数据库中的食物匹配。",
+        "complete": "该食物的份量估计已完成。",
+        "incomplete": "该食物的份量尚未确定。"
+      },
+      "missing-food": {
+        "_": "This food has been marked as missing in our database.",
+        "complete": "Missing information for this food is complete.",
+        "incomplete": "Missing information for this food is not yet known."
+      },
+      "recipe-builder": {
+        "_": "This food has been matched with a recipe from our database.",
+        "complete": "Recipe Steps for this food are complete.",
+        "incomplete": "Recipe Steps for this food are not yet finished."
+      }
     },
     "meal": {
       "add": "Add meal",

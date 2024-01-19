@@ -11,29 +11,25 @@
     >
       <v-list-item-title class="text-wrap">{{ foodName }}</v-list-item-title>
       <v-list-item-action class="d-flex flex-row">
-        <v-tooltip v-if="food.type === 'free-text'" bottom>
+        <v-tooltip bottom>
           <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" class="mr-1" color="grey" small v-on="on">$question</v-icon>
-          </template>
-          <span>{{ $t('recall.menu.food.notMatched') }}</span>
-        </v-tooltip>
-        <v-tooltip v-if="food.type === 'encoded-food' || food.type === 'recipe-builder'" bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
+            <v-icon
+              v-if="food.type === 'free-text'"
+              v-bind="attrs"
+              class="mr-1"
+              color="grey"
+              small
+              v-on="on"
+            >
+              $question
+            </v-icon>
+            <v-icon v-else v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
               $ok
             </v-icon>
           </template>
-          <span>{{ $t('recall.menu.food.encoded') }}</span>
+          <span>{{ $t(`recall.menu.food.${food.type}._`) }}</span>
         </v-tooltip>
-        <v-tooltip v-if="food.type === 'missing-food'" bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" class="mr-1" color="green darken-2" small v-on="on">
-              $ok
-            </v-icon>
-          </template>
-          <span>{{ $t('recall.menu.food.missing') }}</span>
-        </v-tooltip>
-        <v-tooltip v-if="food.type === 'encoded-food'" bottom>
+        <v-tooltip bottom>
           <template #activator="{ on, attrs }">
             <v-icon
               v-bind="attrs"
@@ -47,64 +43,10 @@
           <span>
             {{
               $t(
-                `recall.menu.food.${
-                  isPortionSizeComplete ? 'portionSizeComplete' : 'portionSizeIncomplete'
-                }`
+                `recall.menu.food.${food.type}.${isPortionSizeComplete ? 'complete' : 'incomplete'}`
               )
             }}
           </span>
-        </v-tooltip>
-        <v-tooltip v-else-if="food.type === 'missing-food'" bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon
-              v-bind="attrs"
-              :color="isMissingFoodComplete ? 'green darken-2' : undefined"
-              small
-              v-on="on"
-            >
-              {{ isMissingFoodComplete ? '$ok' : '$question' }}
-            </v-icon>
-          </template>
-          <span>
-            {{
-              $t(
-                `recall.menu.food.${
-                  isMissingFoodComplete ? 'missingInfoComplete' : 'missingInfoIncomplete'
-                }`
-              )
-            }}
-          </span>
-        </v-tooltip>
-        <v-tooltip v-else-if="food.type === 'recipe-builder'" bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon
-              v-bind="attrs"
-              :color="
-                food.components.length === food.template.steps.length ? 'green darken-2' : undefined
-              "
-              small
-              v-on="on"
-            >
-              {{ food.components.length === food.template.steps.length ? '$ok' : '$question' }}
-            </v-icon>
-          </template>
-          <span>
-            {{
-              $t(
-                `recall.menu.food.${
-                  food.components.length === food.template.steps.length
-                    ? 'recipeFoodStepsComplete'
-                    : 'recipeFoodStepsIncomplete'
-                }`
-              )
-            }}
-          </span>
-        </v-tooltip>
-        <v-tooltip v-else bottom>
-          <template #activator="{ on, attrs }">
-            <v-icon v-bind="attrs" color="grey" small v-on="on">$question</v-icon>
-          </template>
-          <span>{{ $t('recall.menu.food.portionSizeIncomplete') }}</span>
         </v-tooltip>
       </v-list-item-action>
     </v-list-item>
@@ -156,10 +98,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    const { action, foodName, isMissingFoodComplete, isPortionSizeComplete, menu } = useFoodItem(
-      props,
-      ctx
-    );
+    const { action, foodName, isPortionSizeComplete, menu } = useFoodItem(props, ctx);
 
     const updateContextId = (id: string) => {
       ctx.emit('update:context-id', id);
@@ -168,7 +107,6 @@ export default defineComponent({
     return {
       action,
       foodName,
-      isMissingFoodComplete,
       isPortionSizeComplete,
       menu,
       updateContextId,
