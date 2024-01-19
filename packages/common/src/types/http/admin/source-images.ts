@@ -1,4 +1,4 @@
-export type SourceImageType = 'image_maps' | 'as_served';
+export type SourceImageType = 'image_maps' | 'as_served' | 'drink_scale';
 
 export type SourceFileInput = {
   originalname: string;

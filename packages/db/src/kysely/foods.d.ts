@@ -118,11 +118,11 @@ export interface DrinkwareScalesV2 {
   id: Generated<Int8>;
   label: string | null;
   outline_coordinates: string;
+  volume_samples: string;
 }
 
 export interface DrinkwareSets {
   description: string;
-  drink_scale_version: Generated<number>;
   id: string;
   image_map_id: string;
 }
@@ -424,7 +424,7 @@ export interface SynonymSets {
   synonyms: string;
 }
 
-export interface FoodsDB {
+export interface DB {
   as_served_images: AsServedImages;
   as_served_sets: AsServedSets;
   associated_foods: AssociatedFoods;

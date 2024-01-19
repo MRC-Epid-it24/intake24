@@ -144,6 +144,7 @@ export interface IoC extends Jobs {
   securityConfig: Config['security'];
   servicesConfig: Config['services'];
   sessionConfig: Config['session'];
+  imageProcessorConfig: Config['imageProcessor'];
   // Expose some config settings directly to avoid pulling in the whole config when it doesn't
   // make sense, e.g. for testing
   environment: Environment;
@@ -344,6 +345,7 @@ const configureContainer = () => {
     sessionConfig: asValue(config.session),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
+    imageProcessorConfig: asValue(config.imageProcessor),
 
     db: asClass(Database).singleton(),
     kyselyDb: asClass(KyselyDatabases).singleton(),

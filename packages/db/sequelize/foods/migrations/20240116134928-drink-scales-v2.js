@@ -4,17 +4,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.addColumn(
-        'drinkware_sets',
-        'drink_scale_version',
-        {
-          type: Sequelize.SMALLINT,
-          allowNull: false,
-          defaultValue: 1,
-        },
-        { transaction }
-      );
-
       await queryInterface.createTable(
         'drinkware_scales_v2',
         {
@@ -46,21 +35,30 @@ module.exports = {
             unique: false,
             type: Sequelize.STRING(128),
           },
-          outline_path: {
+          outline_coordinates: {
+            allowNull: false,
+            unique: false,
+            type: Sequelize.TEXT,
+          },
+          volume_samples: {
             allowNull: false,
             unique: false,
             type: Sequelize.TEXT,
           },
         },
-        { transaction }
+        {
+          transaction,
+          uniqueKeys: {
+            drinkware_set_choice_unique: { fields: ['drinkware_set_id', 'choice_id'] },
+          },
+        }
       );
     });
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.dropTable('drinkware_sets_v2', { transaction });
-      await queryInterface.removeColumn('drinkware_sets', 'drink_scale_version', { transaction });
+      await queryInterface.dropTable('drinkware_scales_v2', { transaction });
     });
   },
 };

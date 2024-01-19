@@ -5,8 +5,7 @@ import { Pool } from 'pg';
 
 import type { Logger } from '@intake24/common-backend';
 import type { DatabaseOptions } from '@intake24/db/database';
-import type { FoodsDB } from '@intake24/db/kysely/foods';
-import type { SystemDB } from '@intake24/db/kysely/system';
+import type { FoodsDB, SystemDB } from '@intake24/db/kysely';
 
 import type { DatabaseType } from './config';
 
@@ -65,7 +64,7 @@ export class KyselyDatabases {
               this.config[this.env][database].debugQueryLimit
             );
             databaseLogQuery(
-              `Parameters: ${event.query.parameters.join(', ')}`,
+              `└ Parameters: ${event.query.parameters.join(', ')}`,
               this.dbLogger,
               this.config[this.env][database].debugQueryLimit
             );

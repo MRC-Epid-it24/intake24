@@ -5,12 +5,12 @@ import type { ApiClientOptionsV4 } from './options';
 import { AsServedApiV4 } from './as-served';
 import { BaseClientV4 } from './base-client-v4';
 import { CategoriesApiV4 } from './categories';
+import { DrinkwareApiV4 } from './drinkware';
 import { FoodsApiV4 } from './foods';
 import { ImageMapApiV4 } from './image-maps';
 import { LocalesApiV4 } from './locales';
 import { NutrientTablesApiV4 } from './nutrient-tables';
 import { getApiClientV4EnvOptions } from './options';
-import { PortionSizeApiV4 } from './portion-size';
 
 export type { ApiClientOptionsV4, CredentialsV4 };
 
@@ -25,6 +25,7 @@ export class ApiClientV4 {
   public readonly portionSize: {
     readonly asServed: AsServedApiV4;
     readonly imageMaps: ImageMapApiV4;
+    readonly drinkware: DrinkwareApiV4;
   };
 
   public constructor(logger: Logger, options: ApiClientOptionsV4) {
@@ -36,6 +37,7 @@ export class ApiClientV4 {
     this.portionSize = {
       imageMaps: new ImageMapApiV4(this.baseClient),
       asServed: new AsServedApiV4(this.baseClient),
+      drinkware: new DrinkwareApiV4(this.baseClient),
     };
   }
 }
