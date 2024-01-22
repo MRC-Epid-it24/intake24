@@ -29,12 +29,12 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
   const menu = computed(() =>
     [
       {
-        name: i18n.t('recall.menu.food.edit').toString(),
+        name: i18n.t('recall.menu.food.change').toString(),
         action: 'changeFood',
         icon: '$meal',
       },
       {
-        name: i18n.t('recall.menu.food.editPortionSize').toString(),
+        name: i18n.t(`recall.menu.food.${props.food.type}.edit`).toString(),
         action: 'editFood',
         icon: '$food',
         if: (food: FoodState) => foodComplete(food),

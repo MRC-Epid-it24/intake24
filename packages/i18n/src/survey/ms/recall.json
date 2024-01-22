@@ -37,26 +37,29 @@
     "food": {
       "delete": "Delete food",
       "deleteConfirm": "Do you want to delete {item}?",
-      "edit": "Change food",
-      "editPortionSize": "Edit portion size",
+      "change": "Change food",
       "free-text": {
         "_": "Makanan ini masih belum dipadankan dengan makanan daripada pangkalan data kami.",
-        "incomplete": "Saiz porsi untuk makanan ini belum diketahui."
+        "incomplete": "Saiz porsi untuk makanan ini belum diketahui.",
+        "edit": "Edit search"
       },
       "encoded-food": {
         "_": "Makanan ini telah dipadankan dengan makanan daripada pangkalan data kami.",
         "complete": "Anggaran saiz porsi untuk makanan ini sudah lengkap.",
-        "incomplete": "Saiz porsi untuk makanan ini belum diketahui."
+        "incomplete": "Saiz porsi untuk makanan ini belum diketahui.",
+        "edit": "Edit portion size"
       },
       "missing-food": {
         "_": "This food has been marked as missing in our database.",
         "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known."
+        "incomplete": "Missing information for this food is not yet known.",
+        "edit": "Edit missing food"
       },
       "recipe-builder": {
         "_": "This food has been matched with a recipe from our database.",
         "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished."
+        "incomplete": "Recipe Steps for this food are not yet finished.",
+        "edit": "Edit ingredients"
       }
     },
     "meal": {

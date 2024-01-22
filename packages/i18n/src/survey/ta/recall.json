@@ -37,26 +37,29 @@
     "food": {
       "delete": "Delete food",
       "deleteConfirm": "Do you want to delete {item}?",
-      "edit": "Change food",
-      "editPortionSize": "Edit portion size",
+      "change": "Change food",
       "free-text": {
         "_": "இந்த உணவு எங்கள் தரவுத்தளத்தில் உள்ள உணவுடன் இன்னும் பொருந்தவில்லை.",
-        "incomplete": "இந்த உணவின் அளவு இன்னும் அறியப்படவில்லை."
+        "incomplete": "இந்த உணவின் அளவு இன்னும் அறியப்படவில்லை.",
+        "edit": "Edit search"
       },
       "encoded-food": {
         "_": "இந்த உணவு எங்கள் தரவுத்தளத்தில் உள்ள உணவுடன் பொருத்தப்பட்டது.",
         "complete": "இந்த உணவுக்கான பகுதி அளவு மதிப்பீடு முடிந்தது.",
-        "incomplete": "இந்த உணவின் அளவு இன்னும் அறியப்படவில்லை."
+        "incomplete": "இந்த உணவின் அளவு இன்னும் அறியப்படவில்லை.",
+        "edit": "Edit portion size"
       },
       "missing-food": {
         "_": "This food has been marked as missing in our database.",
         "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known."
+        "incomplete": "Missing information for this food is not yet known.",
+        "edit": "Edit missing food"
       },
       "recipe-builder": {
         "_": "This food has been matched with a recipe from our database.",
         "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished."
+        "incomplete": "Recipe Steps for this food are not yet finished.",
+        "edit": "Edit ingredients"
       }
     },
     "meal": {

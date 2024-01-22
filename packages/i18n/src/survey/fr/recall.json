@@ -37,26 +37,29 @@
     "food": {
       "delete": "Supprimer la nourriture",
       "deleteConfirm": "Voulez-vous supprimer {item}?",
-      "edit": "Changer l'alimentation",
-      "editPortionSize": "Modifier la taille des portions",
+      "change": "Changer l'alimentation",
       "free-text": {
         "_": "Cet aliment n'a pas encore été associé à un aliment de notre base de données.",
-        "incomplete": "La taille des portions de cet aliment n'est pas encore connue."
+        "incomplete": "La taille des portions de cet aliment n'est pas encore connue.",
+        "edit": "Edit search"
       },
       "encoded-food": {
         "_": "Cet aliment a été associé à un aliment de notre base de données.",
         "complete": "L'estimation de la taille des portions pour cet aliment est terminée.",
-        "incomplete": "La taille des portions de cet aliment n'est pas encore connue."
+        "incomplete": "La taille des portions de cet aliment n'est pas encore connue.",
+        "edit": "Modifier la taille des portions"
       },
       "missing-food": {
         "_": "Cet aliment a été marqué comme manquant dans notre base de données.",
         "complete": "Les informations manquantes pour cette denrée alimentaire sont complètes.",
-        "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues."
+        "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues.",
+        "edit": "Edit missing food"
       },
       "recipe-builder": {
         "_": "This food has been matched with a recipe from our database.",
         "complete": "Les étapes de la recette pour cet aliment sont terminées.",
-        "incomplete": "Les étapes de la recette pour cet aliment ne sont pas encore terminées."
+        "incomplete": "Les étapes de la recette pour cet aliment ne sont pas encore terminées.",
+        "edit": "Edit ingredients"
       }
     },
     "meal": {

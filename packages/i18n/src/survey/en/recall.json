@@ -44,26 +44,29 @@
     "food": {
       "delete": "Delete food",
       "deleteConfirm": "Do you want to delete {item}?",
-      "edit": "Change food",
-      "editPortionSize": "Edit portion size",
+      "change": "Change food",
       "free-text": {
         "_": "This food has not yet been matched with a food from our database.",
-        "incomplete": "Portion size for this food is not yet known."
+        "incomplete": "Portion size for this food is not yet known.",
+        "edit": "Edit search"
       },
       "encoded-food": {
         "_": "This food has been matched with a food from our database.",
         "complete": "Portion size estimation for this food is complete.",
-        "incomplete": "Portion size for this food is not yet known."
+        "incomplete": "Portion size for this food is not yet known.",
+        "edit": "Edit portion size"
       },
       "missing-food": {
         "_": "This food has been marked as missing in our database.",
         "complete": "Missing information for this food is complete.",
-        "incomplete": "Missing information for this food is not yet known."
+        "incomplete": "Missing information for this food is not yet known.",
+        "edit": "Edit missing food"
       },
       "recipe-builder": {
         "_": "This food has been matched with a recipe from our database.",
         "complete": "Recipe Steps for this food are complete.",
-        "incomplete": "Recipe Steps for this food are not yet finished."
+        "incomplete": "Recipe Steps for this food are not yet finished.",
+        "edit": "Edit ingredients"
       }
     },
     "meal": {
