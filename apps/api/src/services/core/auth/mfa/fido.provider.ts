@@ -1,9 +1,6 @@
 import url from 'node:url';
 
-import type {
-  AuthenticationResponseJSON,
-  RegistrationResponseJSON,
-} from '@simplewebauthn/typescript-types';
+import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,

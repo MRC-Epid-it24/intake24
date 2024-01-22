@@ -1,4 +1,4 @@
-import type { AuthenticationResponseJSON } from '@simplewebauthn/typescript-types';
+import type { AuthenticationResponseJSON } from '@simplewebauthn/types';
 import type { Request } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';

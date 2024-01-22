@@ -1,7 +1,4 @@
-import type {
-  AuthenticatorTransportFuture,
-  CredentialDeviceType,
-} from '@simplewebauthn/typescript-types';
+import type { AuthenticatorTransportFuture, CredentialDeviceType } from '@simplewebauthn/types';
 import type {
   Attributes,
   CreationAttributes,

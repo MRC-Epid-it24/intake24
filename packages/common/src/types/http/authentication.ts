@@ -1,7 +1,7 @@
 import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/typescript-types';
+} from '@simplewebauthn/types';
 
 import type { MFAAuthChallenge, MFAProvider } from '@intake24/common/security';
 

@@ -1,7 +1,7 @@
 import type {
   PublicKeyCredentialCreationOptionsJSON,
   RegistrationResponseJSON,
-} from '@simplewebauthn/typescript-types';
+} from '@simplewebauthn/types';
 
 import type { MFADeviceAttributes } from '@intake24/db';
 
