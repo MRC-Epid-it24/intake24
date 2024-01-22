@@ -289,8 +289,8 @@ importers:
         specifier: ^7.0.4
         version: 7.0.4
       '@simplewebauthn/server':
-        specifier: ^8.3.6
-        version: 8.3.6
+        specifier: ^9.0.0
+        version: 9.0.0
       awesome-phonenumber:
         specifier: ^6.4.0
         version: 6.4.0
@@ -4327,8 +4327,8 @@ packages:
       '@simplewebauthn/typescript-types': 8.3.4
     dev: false
 
-  /@simplewebauthn/server@8.3.6:
-    resolution: {integrity: sha512-6dNfV2cJX4q5RKeg5Fetn3NzQuym0sOT4lEcejyw+Qs7qYEgGwSctehvS7m/gRgOm3otVvO+g1OcyEQRTWXREw==}
+  /@simplewebauthn/server@9.0.0:
+    resolution: {integrity: sha512-pm3UWhZrneBoSDQmtYTScZeOhcKbPch/zmMgfJZJY3sE1l0VAQsAKlIjoLGRrw2vXYSL7Eslhh0Qdb301IPxTQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@hexagon/base64': 1.1.28
@@ -4337,11 +4337,15 @@ packages:
       '@peculiar/asn1-rsa': 2.3.8
       '@peculiar/asn1-schema': 2.3.8
       '@peculiar/asn1-x509': 2.3.8
-      '@simplewebauthn/typescript-types': 8.3.4
+      '@simplewebauthn/types': 9.0.0
       cbor-x: 1.5.8
       cross-fetch: 4.0.0
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@simplewebauthn/types@9.0.0:
+    resolution: {integrity: sha512-Lo6LLNQee66D//KueYy9AyX7oiQ7BBKJgdLzP3l0HJDrV4GRSzSAii8AtigBGOeNc8hOQsF/D8itItyuZX9djA==}
     dev: false
 
   /@simplewebauthn/typescript-types@8.3.4:
@@ -4807,7 +4811,7 @@ packages:
   /@types/sax@1.2.7:
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 20.11.5
     dev: false
 
   /@types/semver@7.5.6:
