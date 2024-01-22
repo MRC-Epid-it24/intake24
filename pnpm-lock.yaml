@@ -114,8 +114,8 @@ importers:
         specifier: ^6.5.1
         version: 6.5.1
       '@simplewebauthn/browser':
-        specifier: ^8.3.4
-        version: 8.3.4
+        specifier: ^9.0.0
+        version: 9.0.0
       '@tinymce/tinymce-vue':
         specifier: ^3.2.8
         version: 3.2.8(vue@2.7.16)
@@ -4321,10 +4321,10 @@ packages:
       selderee: 0.11.0
     dev: false
 
-  /@simplewebauthn/browser@8.3.4:
-    resolution: {integrity: sha512-rO0hZ0ESD28bZl6Qe8k7RUuYvDLbsS6oPezkMMTtZ5vC80U07j4qBELKBzojDD6BsdL3dIJ9SExVp8E7pqQ5fA==}
+  /@simplewebauthn/browser@9.0.0:
+    resolution: {integrity: sha512-8eukKf8ZuZUUTSwp97VRYJqv1t7Vg2LKKfGY5Ir8EtXOZhUbGCAFmL4mxSatb5gj0ARqmcGjyUXM6s6nYJxDsQ==}
     dependencies:
-      '@simplewebauthn/typescript-types': 8.3.4
+      '@simplewebauthn/types': 9.0.0
     dev: false
 
   /@simplewebauthn/server@8.3.6:
@@ -4342,6 +4342,10 @@ packages:
       cross-fetch: 4.0.0
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@simplewebauthn/types@9.0.0:
+    resolution: {integrity: sha512-Lo6LLNQee66D//KueYy9AyX7oiQ7BBKJgdLzP3l0HJDrV4GRSzSAii8AtigBGOeNc8hOQsF/D8itItyuZX9djA==}
     dev: false
 
   /@simplewebauthn/typescript-types@8.3.4:
