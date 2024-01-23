@@ -1,10 +1,11 @@
+import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   DrinkwareScaleAttributes,
-  DrinkwareScaleV2Attributes,
+  DrinkwareScalesColumns,
   DrinkwareSetAttributes,
+  DrinkwareSetsColumns,
   Pagination,
 } from '@intake24/db';
-import { DrinkwareVolumeSample } from '@intake24/db';
 
 export type DrinkwareScaleInputObjects = Pick<DrinkwareScaleAttributes, 'id' | 'label'>[];
 
@@ -23,32 +24,24 @@ export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id'
   imageUrl: string;
 }
 
-export type DrinkwareSetsResponse = Pagination<DrinkwareSetListEntry>;
-
-export interface DrinkwareSetEntry extends DrinkwareSetAttributes {
-  imageUrl: string;
-  scales: DrinkwareScaleAttributes[];
-}
-
-export interface DrinkScaleEntry
-  extends Pick<
-    DrinkwareScaleAttributes,
-    'id' | 'width' | 'height' | 'emptyLevel' | 'fullLevel' | 'choiceId' | 'label'
-  > {
+export interface DrinkwareScaleEntry
+  extends Omit<DrinkwareScalesColumns, 'id' | 'drinkwareSetId' | 'label' | 'choiceId'> {
   version: 1;
+  choiceId: number;
+  label: LocaleTranslation;
   volumeSamples: number[];
-  overlayImageUrl: string;
-  baseImageUrl: string;
 }
-
-export type DrinkScalesResponse = Pagination<DrinkScaleEntry>;
-
-export interface DrinkScaleV2Entry
-  extends Pick<DrinkwareScaleV2Attributes, 'id' | 'choiceId' | 'label'> {
+export interface DrinkwareScaleV2Entry {
   version: 2;
+  choiceId: number;
+  label: LocaleTranslation;
   outlineCoordinates: number[];
   volumeSamples: number[];
   baseImageUrl: string;
 }
 
-export type DrinkScalesV2Response = Pagination<DrinkScaleV2Entry>;
+export interface DrinkwareSetEntry extends DrinkwareSetsColumns {
+  scales: (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[];
+}
+
+export type DrinkwareSetsResponse = Pagination<DrinkwareSetListEntry>;

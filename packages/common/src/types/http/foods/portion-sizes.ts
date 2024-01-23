@@ -1,6 +1,6 @@
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
 import type {
   DrinkwareScaleAttributes,
-  DrinkwareSetAttributes,
   DrinkwareVolumeSampleAttributes,
   StandardUnitAttributes,
 } from '@intake24/db';
@@ -52,9 +52,7 @@ export interface DrinkwareScaleResponse
   volumeSamples: DrinkwareVolumeSampleResponse[];
 }
 
-export interface DrinkwareSetResponse extends Pick<DrinkwareSetAttributes, 'id' | 'imageMapId'> {
-  scales: DrinkwareScaleResponse[];
-}
+export type DrinkwareSetResponse = Omit<DrinkwareSetEntry, 'description'>;
 
 export type StandardUnitResponse = Pick<StandardUnitAttributes, 'id' | 'estimateIn' | 'howMany'>;
 
