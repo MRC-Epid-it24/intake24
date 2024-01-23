@@ -3,8 +3,6 @@ import type {
   AsServedImageEntry,
   AsServedSetEntry,
   AsServedSetListEntry,
-  DrinkwareSetEntry,
-  DrinkwareSetListEntry,
   GuideImageEntry,
   GuideImageEntryObject,
   GuideImageListEntry,
@@ -15,7 +13,6 @@ import type {
 import type {
   AsServedImage,
   AsServedSet,
-  DrinkwareSet,
   GuideImage,
   ImageMap,
   ImageMapObject,
@@ -87,44 +84,6 @@ const imageResponseCollection = (baseUrl: string) => {
       description,
       selectionImageUrl: `${baseUrl}/${selectionImage.path}`,
       images: images.map(asServedImageEntryResponse),
-    };
-  };
-
-  /**
-   * Drinkware set list entry
-   *
-   * @param {GuideImage} item
-   * @returns {DrinkwareSetListEntry}
-   */
-  const drinkwareListResponse = (item: DrinkwareSet): DrinkwareSetListEntry => {
-    const { id, description, imageMap } = item;
-
-    if (!imageMap || !imageMap.baseImage)
-      throw new InternalServerError(
-        'ImageResponseCollection|drinkwareListResponse: not loaded relationships.'
-      );
-
-    return {
-      id,
-      description,
-      imageUrl: `${baseUrl}/${imageMap.baseImage.path}`,
-    };
-  };
-
-  const drinkwareEntryResponse = (item: DrinkwareSet): DrinkwareSetEntry => {
-    const { id, description, imageMapId, imageMap, scales } = item;
-
-    if (!imageMap || !imageMap.baseImage || !scales)
-      throw new InternalServerError(
-        'ImageResponseCollection|drinkwareListResponse: not loaded relationships.'
-      );
-
-    return {
-      id,
-      description,
-      imageMapId,
-      imageUrl: `${baseUrl}/${imageMap.baseImage.path}`,
-      scales,
     };
   };
 
@@ -265,8 +224,6 @@ const imageResponseCollection = (baseUrl: string) => {
     asServedImageEntryResponse,
     asServedSetListResponse,
     asServedSetEntryResponse,
-    drinkwareListResponse,
-    drinkwareEntryResponse,
     guideListResponse,
     guideEntryResponse,
     mapListResponse,

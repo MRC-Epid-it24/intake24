@@ -1,6 +1,6 @@
 import type { Dialect, Logger as KyselyLogFunc } from 'kysely';
 import type { LogEvent } from 'kysely/dist/cjs/util/log';
-import { Kysely, PostgresDialect } from 'kysely';
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 
 import type { Logger } from '@intake24/common-backend';
@@ -90,10 +90,12 @@ export class KyselyDatabases {
     this.foods = new Kysely<FoodsDB>({
       dialect: this.configKyselyDialect('foods'),
       log: this.configLogger('foods'),
+      plugins: [new CamelCasePlugin()],
     });
     this.system = new Kysely<SystemDB>({
       dialect: this.configKyselyDialect('system'),
       log: this.configLogger('system'),
+      plugins: [new CamelCasePlugin()],
     });
   }
 

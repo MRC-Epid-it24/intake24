@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { HttpStatusCode } from 'axios';
 import { pick } from 'lodash';
 import { col, fn, literal } from 'sequelize';
 
@@ -79,6 +80,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
   ): Promise<void> => {
+    /*
     const tasks = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
@@ -87,7 +89,9 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       transform: responseCollection.drinkwareListResponse,
     });
 
-    res.json(tasks);
+    res.json(tasks);*/
+
+    res.status(HttpStatusCode.ImATeapot).end();
   };
 
   const feedbackSchemes = async (

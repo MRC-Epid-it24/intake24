@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import type { DrinkwareSetEntry, DrinkwareSetsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -12,32 +13,27 @@ import { DrinkwareSet } from '@intake24/db';
 const drinkwareSetController = ({
   imagesBaseUrl,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>) => {
+  drinkwareSetService,
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) => {
   const responseCollection = imagesResponseCollection(imagesBaseUrl);
 
   const entry = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetResponse>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await portionSizeService.getDrinkwareSet(drinkwareSetId);
+    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
     if (!drinkwareSet) throw new NotFoundError();
 
-    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    res.json(drinkwareSet);
   };
 
   const browse = async (
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
   ): Promise<void> => {
-    const drinkwareSets = await DrinkwareSet.paginate({
-      query: pick(req.query, ['page', 'limit', 'sort', 'search']),
-      columns: ['id', 'description'],
-      order: [[fn('lower', col('DrinkwareSet.id')), 'ASC']],
-      include: [{ association: 'imageMap', include: [{ association: 'baseImage' }] }],
-      transform: responseCollection.drinkwareListResponse,
-    });
+    const drinkwareSets = await drinkwareSetService.getDrinkwareSets(req.query);
 
     res.json(drinkwareSets);
   };
@@ -47,25 +43,25 @@ const drinkwareSetController = ({
 
     await DrinkwareSet.create({ id, description, imageMapId });
 
-    const drinkwareSet = await portionSizeService.getDrinkwareSet(id);
+    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(id);
     if (!drinkwareSet) throw new NotFoundError();
 
-    res.status(201).json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    res.status(201).json(drinkwareSet);
   };
 
   const read = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetResponse>
   ): Promise<void> => entry(req, res);
 
   const edit = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetResponse>
   ): Promise<void> => entry(req, res);
 
   const update = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetEntry>
+    res: Response<DrinkwareSetResponse>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
@@ -76,7 +72,11 @@ const drinkwareSetController = ({
 
     await drinkwareSet.update({ description });
 
-    res.json(responseCollection.drinkwareEntryResponse(drinkwareSet));
+    // Temp hack
+    const drinkwareSet2 = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
+    if (!drinkwareSet2) throw new NotFoundError();
+
+    res.json(drinkwareSet2);
   };
 
   const destroy = async (

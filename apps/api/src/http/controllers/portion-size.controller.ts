@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { omit } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -9,16 +10,13 @@ import type {
   StandardUnitResponse,
   WeightResponse,
 } from '@intake24/common/types/http';
-import {
-  asServedResponse,
-  drinkwareResponse,
-  imageMapsResponse,
-} from '@intake24/api/http/responses/foods';
+import { asServedResponse, imageMapsResponse } from '@intake24/api/http/responses/foods';
 
 const portionSizeController = ({
   imagesBaseUrl,
   portionSizeService,
-}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService'>) => {
+  drinkwareSetService,
+}: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) => {
   const asServedSet = async (req: Request, res: Response<AsServedSetResponse>): Promise<void> => {
     const { id } = req.params;
 
@@ -41,9 +39,9 @@ const portionSizeController = ({
   const drinkwareSet = async (req: Request, res: Response<DrinkwareSetResponse>): Promise<void> => {
     const { id } = req.params;
 
-    const record = await portionSizeService.getDrinkwareSet(id);
+    const drinkwareSet = omit(await drinkwareSetService.getDrinkwareSet(id), 'description');
 
-    res.json(drinkwareResponse(imagesBaseUrl).setResponse(record));
+    res.json(drinkwareSet);
   };
 
   const drinkwareSets = async (
@@ -52,9 +50,8 @@ const portionSizeController = ({
   ): Promise<void> => {
     const id = req.query.id as string | string[];
 
-    const records = await portionSizeService.getDrinkwareSets(id);
-
-    res.json(records.map(drinkwareResponse(imagesBaseUrl).setResponse));
+    // Is this used anywhere?
+    throw new Error('Not implemented');
   };
 
   const guideImage = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {

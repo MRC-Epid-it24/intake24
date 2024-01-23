@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import request from 'supertest';
 
-import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
     imageMapId: 'imageMapForDrinkwareSet',
   };
 
-  let output: Omit<DrinkwareSetEntry, 'imageUrl'>;
+  let output: Omit<DrinkwareSetResponse, 'imageUrl'>;
 
   beforeAll(async () => {
     await request(suite.app)

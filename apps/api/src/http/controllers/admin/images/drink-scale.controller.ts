@@ -1,16 +1,14 @@
 import type { Request, Response } from 'express';
-import { json } from 'body-parser';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { DrinkScaleEntry, DrinkScaleV2Entry } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, Pagination, User } from '@intake24/db';
+import type { DrinkwareScaleEntry, DrinkwareScaleV2Entry } from '@intake24/common/types/http/admin';
+import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import { AsServedImage } from '@intake24/db';
 
 const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetService'>) => {
   const browse = async (
     req: Request<{ drinkwareSetId: string }, any, any, PaginateQuery>,
-    res: Response<(DrinkScaleEntry | DrinkScaleV2Entry)[]>
+    res: Response<(DrinkwareScaleEntry | DrinkwareScaleV2Entry)[]>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
@@ -21,7 +19,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
 
   const read = async (
     req: Request<{ drinkwareSetId: string; choiceId: string }>,
-    res: Response<DrinkScaleEntry | DrinkScaleV2Entry>
+    res: Response<DrinkwareScaleEntry | DrinkwareScaleV2Entry>
   ): Promise<void> => {
     const { drinkwareSetId, choiceId } = req.params;
 
@@ -32,7 +30,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
 
   const store = async (
     req: Request<{ drinkwareSetId: string; choiceId: string }, any, any, { update: string }>,
-    res: Response<DrinkScaleV2Entry>
+    res: Response<DrinkwareScaleV2Entry>
   ): Promise<void> => {
     const {
       file,

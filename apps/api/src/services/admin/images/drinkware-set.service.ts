@@ -5,12 +5,16 @@ import type { IoC } from '@intake24/api/ioc';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   CreateDrinkwareSetInput,
-  DrinkScaleEntry,
-  DrinkScaleV2Entry,
+  DrinkwareScaleEntry,
+  DrinkwareScaleV2Entry,
+  DrinkwareSetEntry,
+  DrinkwareSetsResponse,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import { ConflictError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
-import { DrinkwareSet, ImageMap, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
+import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
+import { DrinkwareSet, ImageMap } from '@intake24/db';
+import { executeWithPagination } from '@intake24/db/kysely/utils';
 
 const drinkwareSetService = ({
   portionSizeService,
@@ -64,9 +68,9 @@ const drinkwareSetService = ({
 
   async function checkSetId(setId: string): Promise<void> {
     const records = await kyselyDb.foods
-      .selectFrom('drinkware_sets')
-      .select('drinkware_sets.id')
-      .where('drinkware_sets.id', '=', setId)
+      .selectFrom('drinkwareSets')
+      .select('drinkwareSets.id')
+      .where('drinkwareSets.id', '=', setId)
       .execute();
 
     if (records.length === 0) throw new NotFoundError(`Drinkware set "${setId}" not found`);
@@ -138,30 +142,30 @@ const drinkwareSetService = ({
 
   const fetchDrinkScaleRecords = async (drinkwareSetId: string, choiceId?: string) => {
     const scaleRecords = await kyselyDb.foods
-      .selectFrom('drinkware_scales')
+      .selectFrom('drinkwareScales')
       .select([
         'id',
         'width',
         'height',
-        'empty_level',
-        'full_level',
-        'choice_id',
-        'base_image_url',
-        'overlay_image_url',
+        'emptyLevel',
+        'fullLevel',
+        'choiceId',
+        'baseImageUrl',
+        'overlayImageUrl',
         'label',
       ])
       .where((eb) => {
         const terms: Expression<SqlBool>[] = [];
 
-        terms.push(eb('drinkware_set_id', '=', drinkwareSetId));
+        terms.push(eb('drinkwareSetId', '=', drinkwareSetId));
 
         if (choiceId !== undefined) {
-          terms.push(eb('choice_id', '=', choiceId));
+          terms.push(eb('choiceId', '=', choiceId));
         }
 
         return eb.and(terms);
       })
-      .orderBy('choice_id')
+      .orderBy('choiceId')
       .execute();
 
     return scaleRecords;
@@ -169,16 +173,16 @@ const drinkwareSetService = ({
 
   const fetchVolumeSampleRecords = async (scaleId: string[]) => {
     return await kyselyDb.foods
-      .selectFrom('drinkware_volume_samples')
-      .select(['drinkware_scale_id', 'fill', 'volume'])
-      .where('drinkware_scale_id', 'in', scaleId)
+      .selectFrom('drinkwareVolumeSamples')
+      .select(['drinkwareScaleId', 'fill', 'volume'])
+      .where('drinkwareScaleId', 'in', scaleId)
       .execute();
   };
 
   const getDrinkScaleV1 = async (
     drinkwareSetId: string,
     choiceId: string
-  ): Promise<DrinkScaleEntry | undefined> => {
+  ): Promise<DrinkwareScaleEntry | undefined> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleRecords(drinkwareSetId, choiceId);
@@ -192,20 +196,19 @@ const drinkwareSetService = ({
 
     return {
       version: 1,
-      id: record.id,
       label: parseLocaleTranslation(record.label),
-      choiceId: record.choice_id,
+      choiceId: parseInt(record.choiceId),
       width: record.width,
       height: record.height,
-      fullLevel: record.full_level,
-      emptyLevel: record.empty_level,
+      fullLevel: record.fullLevel,
+      emptyLevel: record.emptyLevel,
       volumeSamples,
-      baseImageUrl: getImageUrl(record.base_image_url),
-      overlayImageUrl: getImageUrl(record.overlay_image_url),
+      baseImageUrl: getImageUrl(record.baseImageUrl),
+      overlayImageUrl: getImageUrl(record.overlayImageUrl),
     };
   };
 
-  const getDrinkScalesV1 = async (drinkwareSetId: string): Promise<DrinkScaleEntry[]> => {
+  const getDrinkScalesV1 = async (drinkwareSetId: string): Promise<DrinkwareScaleEntry[]> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleRecords(drinkwareSetId);
@@ -215,22 +218,21 @@ const drinkwareSetService = ({
     // where the numbers are a flattened list of (fill, volume) pairs
 
     const volumeSamples = mapValues(
-      groupBy(volumeSampleRecords, (r) => r.drinkware_scale_id),
+      groupBy(volumeSampleRecords, (r) => r.drinkwareScaleId),
       (grouped) => grouped.flatMap((r) => [r.fill, r.volume])
     );
 
     return records.map((record) => ({
       version: 1,
-      id: record.id,
       label: parseLocaleTranslation(record.label),
-      choiceId: record.choice_id,
+      choiceId: parseInt(record.choiceId),
       width: record.width,
       height: record.height,
-      fullLevel: record.full_level,
-      emptyLevel: record.empty_level,
+      fullLevel: record.fullLevel,
+      emptyLevel: record.emptyLevel,
       volumeSamples: volumeSamples[record.id],
-      baseImageUrl: getImageUrl(record.base_image_url),
-      overlayImageUrl: getImageUrl(record.overlay_image_url),
+      baseImageUrl: getImageUrl(record.baseImageUrl),
+      overlayImageUrl: getImageUrl(record.overlayImageUrl),
     }));
   };
 
@@ -240,65 +242,64 @@ const drinkwareSetService = ({
 
   const fetchDrinkScaleV2Records = async (drinkwareSetId: string, choiceId?: string) => {
     const scaleRecords = await kyselyDb.foods
-      .selectFrom('drinkware_scales_v2')
-      .leftJoin('processed_images', 'processed_images.id', 'drinkware_scales_v2.base_image_id')
+      .selectFrom('drinkwareScalesV2')
+      .leftJoin('processedImages', 'processedImages.id', 'drinkwareScalesV2.baseImageId')
       .select([
-        'drinkware_scales_v2.id as id',
-        'choice_id',
-        'outline_coordinates',
-        'volume_samples',
-        'base_image_id',
-        'processed_images.path as base_image_path',
-        'drinkware_scales_v2.label',
+        'drinkwareScalesV2.id as id',
+        'choiceId',
+        'outlineCoordinates',
+        'volumeSamples',
+        'baseImageId',
+        'processedImages.path as baseImagePath',
+        'drinkwareScalesV2.label',
       ])
       .where((eb) => {
         const terms: Expression<SqlBool>[] = [];
 
-        terms.push(eb('drinkware_set_id', '=', drinkwareSetId));
+        terms.push(eb('drinkwareSetId', '=', drinkwareSetId));
 
         if (choiceId !== undefined) {
-          terms.push(eb('choice_id', '=', choiceId));
+          terms.push(eb('choiceId', '=', choiceId));
         }
 
         return eb.and(terms);
       })
-      .orderBy('choice_id')
+      .orderBy('choiceId')
       .execute();
 
     return scaleRecords;
   };
 
   type DrinkScaleV2Record = {
-    choice_id: string;
-    base_image_id: string;
-    outline_coordinates: string;
-    volume_samples: string;
+    choiceId: string;
+    baseImageId: string;
+    outlineCoordinates: string;
+    volumeSamples: string;
     label: string | null;
     id: string;
-    base_image_path: string | null;
+    baseImagePath: string | null;
   };
 
   function formatDrinkScaleV2(
     drinkwareSetId: string,
     record: DrinkScaleV2Record
-  ): DrinkScaleV2Entry {
-    if (record.base_image_path === null)
+  ): DrinkwareScaleV2Entry {
+    if (record.baseImagePath === null)
       throw new Error(
-        `Drink scale image missing for drinkware set ${drinkwareSetId}, object id ${record.choice_id}, image id ${record.base_image_id}`
+        `Drink scale image missing for drinkware set ${drinkwareSetId}, object id ${record.choiceId}, image id ${record.baseImageId}`
       );
 
     return {
       version: 2,
-      id: record.id,
-      choiceId: record.choice_id,
+      choiceId: parseInt(record.choiceId),
       label: parseLocaleTranslation(record.label),
-      outlineCoordinates: parseFloatArray(record.outline_coordinates, 'outline_coordinates'),
-      volumeSamples: parseFloatArray(record.volume_samples, 'volume_samples'),
-      baseImageUrl: getImageUrl(record.base_image_path),
+      outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
+      volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
+      baseImageUrl: getImageUrl(record.baseImagePath),
     };
   }
 
-  const getDrinkScalesV2 = async (drinkwareSetId: string): Promise<DrinkScaleV2Entry[]> => {
+  const getDrinkScalesV2 = async (drinkwareSetId: string): Promise<DrinkwareScaleV2Entry[]> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleV2Records(drinkwareSetId);
@@ -309,7 +310,7 @@ const drinkwareSetService = ({
   const getDrinkScaleV2 = async (
     drinkwareSetId: string,
     choiceId: string
-  ): Promise<DrinkScaleV2Entry | undefined> => {
+  ): Promise<DrinkwareScaleV2Entry | undefined> => {
     await checkSetId(drinkwareSetId);
 
     const records = await fetchDrinkScaleV2Records(drinkwareSetId, choiceId);
@@ -324,7 +325,7 @@ const drinkwareSetService = ({
   const getDrinkScale = async (
     drinkwareSetId: string,
     choiceId: string
-  ): Promise<DrinkScaleEntry | DrinkScaleV2Entry> => {
+  ): Promise<DrinkwareScaleEntry | DrinkwareScaleV2Entry> => {
     await checkSetId(drinkwareSetId);
 
     const recordV2 = await getDrinkScaleV2(drinkwareSetId, choiceId);
@@ -342,7 +343,7 @@ const drinkwareSetService = ({
 
   const getDrinkScales = async (
     drinkwareSetId: string
-  ): Promise<(DrinkScaleEntry | DrinkScaleV2Entry)[]> => {
+  ): Promise<(DrinkwareScaleEntry | DrinkwareScaleV2Entry)[]> => {
     await checkSetId(drinkwareSetId);
 
     const recordsV2 = await getDrinkScalesV2(drinkwareSetId);
@@ -378,22 +379,22 @@ const drinkwareSetService = ({
     await kyselyDb.foods.transaction().execute(async (tx) => {
       if (update) {
         await kyselyDb.foods
-          .deleteFrom('drinkware_scales_v2')
-          .where('drinkware_set_id', '=', drinkwareSetId)
-          .where('choice_id', '=', choiceId)
+          .deleteFrom('drinkwareScalesV2')
+          .where('drinkwareSetId', '=', drinkwareSetId)
+          .where('choiceId', '=', choiceId)
           .execute();
       }
 
       try {
         await kyselyDb.foods
-          .insertInto('drinkware_scales_v2')
+          .insertInto('drinkwareScalesV2')
           .values({
             label: labelJson,
-            choice_id: choiceId,
-            drinkware_set_id: drinkwareSetId,
-            base_image_id: processedImage.id,
-            outline_coordinates: outlineCoordinatesJson,
-            volume_samples: volumeSamplesJson,
+            choiceId,
+            drinkwareSetId,
+            baseImageId: processedImage.id,
+            outlineCoordinates: outlineCoordinatesJson,
+            volumeSamples: volumeSamplesJson,
           })
           .execute();
       } catch (e: any) {
@@ -406,17 +407,73 @@ const drinkwareSetService = ({
     });
   };
 
+  const getDrinkwareSet = async (
+    drinkwareSetId: string
+  ): Promise<DrinkwareSetEntry | undefined> => {
+    const sets = await kyselyDb.foods
+      .selectFrom('drinkwareSets')
+      .select(['id', 'description', 'imageMapId'])
+      .where('drinkwareSets.id', '=', drinkwareSetId)
+      .execute();
+
+    if (sets.length === 0) return undefined;
+
+    const recordsV2 = await getDrinkScalesV2(drinkwareSetId);
+    const recordsV1 = await getDrinkScalesV1(drinkwareSetId);
+
+    return {
+      id: sets[0].id,
+      description: sets[0].description,
+      imageMapId: sets[0].imageMapId,
+      scales: [...recordsV2, ...recordsV1],
+    };
+  };
+
+  const getDrinkwareSets = async (pagination: PaginateQuery): Promise<DrinkwareSetsResponse> => {
+    const query = kyselyDb.foods
+      .selectFrom('drinkwareSets')
+      .leftJoin('imageMaps', 'imageMaps.id', 'drinkwareSets.imageMapId')
+      .leftJoin('processedImages', 'processedImages.id', 'imageMaps.baseImageId')
+      .select([
+        'drinkwareSets.id',
+        'drinkwareSets.description',
+        'processedImages.path as imagePath',
+      ]);
+
+    const { data, meta } = await executeWithPagination(
+      query,
+      ['drinkwareSets.description', 'drinkwareSets.id'],
+      ['drinkwareSets.description'],
+      pagination
+    );
+
+    return {
+      meta,
+      data: data.map((record) => {
+        if (record.imagePath === null)
+          throw new Error(
+            `Drinkware set ${record.id} is broken: either the image map id is invalid, or the base image is missing`
+          );
+        return {
+          id: record.id,
+          description: record.description,
+          imageUrl: getImageUrl(record.imagePath),
+        };
+      }),
+    };
+  };
+
   const destroyDrinkScale = async (drinkwareSetId: string, choiceId: string) => {
     const deleteResultV1 = await kyselyDb.foods
-      .deleteFrom('drinkware_scales')
-      .where('drinkware_set_id', '=', drinkwareSetId)
-      .where('choice_id', '=', choiceId)
+      .deleteFrom('drinkwareScales')
+      .where('drinkwareSetId', '=', drinkwareSetId)
+      .where('choiceId', '=', choiceId)
       .executeTakeFirst();
 
     const deleteResultV2 = await kyselyDb.foods
-      .deleteFrom('drinkware_scales_v2')
-      .where('drinkware_set_id', '=', drinkwareSetId)
-      .where('choice_id', '=', choiceId)
+      .deleteFrom('drinkwareScalesV2')
+      .where('drinkwareSetId', '=', drinkwareSetId)
+      .where('choiceId', '=', choiceId)
       .executeTakeFirst();
 
     return deleteResultV1.numDeletedRows + deleteResultV2.numDeletedRows;
@@ -424,13 +481,13 @@ const drinkwareSetService = ({
 
   const destroyAllDrinkScales = async (drinkwareSetId: string) => {
     const deleteResultV1 = await kyselyDb.foods
-      .deleteFrom('drinkware_scales')
-      .where('drinkware_set_id', '=', drinkwareSetId)
+      .deleteFrom('drinkwareScales')
+      .where('drinkwareSetId', '=', drinkwareSetId)
       .executeTakeFirst();
 
     const deleteResultV2 = await kyselyDb.foods
-      .deleteFrom('drinkware_scales_v2')
-      .where('drinkware_set_id', '=', drinkwareSetId)
+      .deleteFrom('drinkwareScalesV2')
+      .where('drinkwareSetId', '=', drinkwareSetId)
       .executeTakeFirst();
 
     return deleteResultV1.numDeletedRows + deleteResultV2.numDeletedRows;
@@ -443,6 +500,8 @@ const drinkwareSetService = ({
     getDrinkScalesV2,
     getDrinkScale,
     getDrinkScales,
+    getDrinkwareSet,
+    getDrinkwareSets,
     createDrinkScale,
     destroyDrinkScale,
     destroyAllDrinkScales,
