@@ -53,6 +53,10 @@ export default {
     indexWorker.postMessage({ exit: true });
   },
 
+  async rebuild() {
+    indexWorker.postMessage({ rebuild: true });
+  },
+
   /**
    * get recipe food and its steps by given locale and code
    * @param localeId - locale Code of the food index

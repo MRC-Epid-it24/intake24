@@ -62,6 +62,11 @@ const foodSearchController = ({
     };
   }
 
+  const rebuildFoodIndex = async (req: Request, res: Response): Promise<void> => {
+    await foodIndex.rebuild();
+    res.json({ success: true });
+  };
+
   const search = async (
     req: Request<SearchParams, unknown, unknown, SearchQuery>,
     res: Response
@@ -118,6 +123,7 @@ const foodSearchController = ({
     category,
     splitDescription, */
     recipeFood,
+    rebuildFoodIndex,
   };
 };
 

@@ -76,6 +76,7 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
  * @param {string} localeId - food Locale
  * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
  */
+//some additional text
 async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
   const recipeFoods = await RecipeFoods.findAll({
     attributes: ['code', 'name', 'recipeWord'],
@@ -389,6 +390,14 @@ async function buildIndex() {
       await cleanUpIndexBuilder();
       logger.debug('Closing index builder');
       process.exit(0);
+    }
+
+    //rebuild index
+    if (msg.rebuild) {
+      logger.debug('Rebuilding index');
+      await buildIndex();
+      parentPort.postMessage('ready');
+      return;
     }
 
     try {

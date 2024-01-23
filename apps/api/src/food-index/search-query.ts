@@ -11,4 +11,5 @@ export interface SearchQuery {
   includeHidden: boolean;
   limitToCategory?: string;
   exit?: boolean;
+  rebuild?: boolean;
 }
