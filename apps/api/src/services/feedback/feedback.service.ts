@@ -19,7 +19,6 @@ export type CreateRefreshCookie = {
   slug: string;
   username: string;
   userId: string;
-  url: string;
 };
 
 const feedbackService = ({
@@ -79,9 +78,10 @@ const feedbackService = ({
   const createRefreshCookie = async (
     options: CreateRefreshCookie
   ): Promise<Protocol.Network.CookieParam> => {
-    const { slug, username, url, userId } = options;
+    const { slug, username, userId } = options;
     const { name, httpOnly, path, secure, sameSite } = securityConfig.jwt.survey.cookie;
     const subject: Subject = { provider: 'surveyAlias', providerKey: `${slug}#${username}` };
+    const domain = new URL(appConfig.urls.base).host;
 
     const refreshToken = await jwtService.issueRefreshToken({ surveyId: slug, userId }, 'survey', {
       subject: btoa(subject),
@@ -91,7 +91,7 @@ const feedbackService = ({
     return {
       name,
       value: refreshToken,
-      domain: new URL(url).host,
+      domain,
       httpOnly,
       path,
       sameSite: sameSite as Protocol.Network.CookieSameSite,
@@ -105,7 +105,7 @@ const feedbackService = ({
     submissions: string[] = []
   ) => {
     const { url, filename, slug, username } = await getFeedbackLinks(surveyId, userId, submissions);
-    const cookie = await createRefreshCookie({ slug, username, userId, url });
+    const cookie = await createRefreshCookie({ slug, username, userId });
 
     const pdfStream = await new FeedbackPdfGenerator(url, cookie).getPdfStream();
 
@@ -114,7 +114,7 @@ const feedbackService = ({
 
   const getFeedbackFile = async (surveyId: string, userId: string, submissions: string[] = []) => {
     const { url, filename, slug, username } = await getFeedbackLinks(surveyId, userId, submissions);
-    const cookie = await createRefreshCookie({ slug, username, userId, url });
+    const cookie = await createRefreshCookie({ slug, username, userId });
 
     const path = resolve(fsConfig.local.downloads, filename);
 
