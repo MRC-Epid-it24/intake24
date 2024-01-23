@@ -98,6 +98,7 @@ export type PortionSizeParameters = {
       'units-count': string;
     };
   'direct-weight': never;
+  recipe: never;
 };
 
 // Portion size states

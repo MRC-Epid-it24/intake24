@@ -218,16 +218,17 @@ export default defineComponent({
       let food: MissingFoodRecipeBuilderItemState | SelectedFoodRecipeBuilderItemState;
       if (item.type === 'missing') {
         food = {
-          type: item.type,
+          ...item,
           id,
           idx,
           name: `${step.categoryCode}: ${item.searchTerm ? item.searchTerm : step.name.en}`,
         };
       } else {
-        const ingredient = await foodsService.getData(this.localeId, item.selectedFood.code);
+        const { selectedFood, type } = item;
+        const ingredient = await foodsService.getData(this.localeId, selectedFood.code);
         food = {
-          type: item.type,
-          code: ingredient.code,
+          type,
+          ...selectedFood,
           name: ingredient.localName,
           id,
           idx,

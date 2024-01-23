@@ -229,7 +229,7 @@ export default defineComponent({
           linkedFoods: [],
           customPromptAnswers: {},
           data,
-          searchTerm: 'associated food prompt',
+          searchTerm: newFoods[index].header.searchTerm ?? null,
           portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
           portionSize: null,
         };

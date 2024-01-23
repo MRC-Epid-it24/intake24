@@ -380,7 +380,7 @@ export default defineComponent({
 
     const foodSelected = (food: FoodHeader) => {
       closeInDialog();
-      ctx.emit('food-selected', food);
+      ctx.emit('food-selected', { ...food, searchTerm: searchTerm.value });
     };
 
     const foodMissing = () => {

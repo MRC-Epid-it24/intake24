@@ -39,7 +39,6 @@ import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '.
 
 const initialPromptState = (step: RecipeFoodStepsType): RecipeBuilderStepState => ({
   confirmed: undefined,
-  // type: undefined,
   repeat: step.repeatable,
   foods: [],
   order: step.order - 1,
@@ -113,7 +112,7 @@ export default defineComponent({
           id: data.id,
           type: 'encoded-food',
           data: data.ingredient,
-          searchTerm: 'recipe builder prompt',
+          searchTerm: data.searchTerm ?? null,
           flags,
           portionSizeMethodIndex: hasOnePortionSizeMethod ? 0 : null,
           portionSize: null,

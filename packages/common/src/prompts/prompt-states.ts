@@ -25,6 +25,7 @@ export type MissingFoodRecipeBuilderItemState = {
   id: string;
   idx: number;
   name: string;
+  searchTerm?: string | null;
 };
 
 export type SelectedFoodRecipeBuilderItemState = FoodHeader & {
