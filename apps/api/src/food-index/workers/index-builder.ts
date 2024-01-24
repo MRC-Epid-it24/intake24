@@ -43,6 +43,14 @@ interface FoodIndex {
   [key: string]: LocalFoodIndex;
 }
 
+type IndexCommand = {
+  buildId: any;
+  type: 'command';
+  exit?: boolean;
+  rebuild?: boolean;
+  locale?: string;
+};
+
 const foodIndex: FoodIndex = {};
 
 let globalCategoryData: GlobalCategoryData;
@@ -71,37 +79,37 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
   );
 }
 
-/**
- * Build special foods list for a given locale
- * @param {string} localeId - food Locale
- * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
- */
-//some additional text
-async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
-  const recipeFoods = await RecipeFoods.findAll({
-    attributes: ['code', 'name', 'recipeWord'],
-    where: { localeId },
-    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
-  });
+// /**
+//  * Build special foods list for a given locale
+//  * @param {string} localeId - food Locale
+//  * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
+//  */
+// //some additional text
+// async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
+//   const recipeFoods = await RecipeFoods.findAll({
+//     attributes: ['code', 'name', 'recipeWord'],
+//     where: { localeId },
+//     include: [{ model: SynonymSet, attributes: ['synonyms'] }],
+//   });
 
-  const recipeFoodsList: RecipeFoodTuple[] = [];
-  recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
-    recipeFoodsList.push([
-      recipeFoodEntry.name.toLowerCase(),
-      {
-        code: recipeFoodEntry.code,
-        name: recipeFoodEntry.name.toLowerCase(),
-        recipeWord: recipeFoodEntry.recipeWord,
-        synonyms: parseSynonymSet(
-          recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
-        ),
-        // TODO: add Localised description to special foods
-        description: recipeFoodEntry.name.toLocaleLowerCase(),
-      },
-    ])
-  );
-  return recipeFoodsList;
-}
+//   const recipeFoodsList: RecipeFoodTuple[] = [];
+//   recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
+//     recipeFoodsList.push([
+//       recipeFoodEntry.name.toLowerCase(),
+//       {
+//         code: recipeFoodEntry.code,
+//         name: recipeFoodEntry.name.toLowerCase(),
+//         recipeWord: recipeFoodEntry.recipeWord,
+//         synonyms: parseSynonymSet(
+//           recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
+//         ),
+//         // TODO: add Localised description to special foods
+//         description: recipeFoodEntry.name.toLocaleLowerCase(),
+//       },
+//     ])
+//   );
+//   return recipeFoodsList;
+// }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
   const row = await FoodsLocale.findOne({
@@ -377,43 +385,78 @@ async function buildIndex() {
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 
+  if (Object.keys(foodIndex).length !== 0 && enabledLocales.length !== 0) {
+    logger.debug(`\n\nCleaning previous index: ${Object.keys(foodIndex)} \n\n`);
+    Object.keys(foodIndex).forEach((key) => {
+      delete foodIndex[key];
+    });
+  }
+
   // Ideally this needs to be done on parallel threads, not sure if worth it in node.js
   for (const localeId of enabledLocales) {
-    logger.debug(`Indexing ${localeId}`);
+    logger.debug(`\n\nIndexing ${localeId}`);
     foodIndex[localeId] = await buildIndexForLocale(localeId);
   }
 
   parentPort.postMessage('ready');
 
-  parentPort.on('message', async (msg: SearchQuery) => {
-    if (msg.exit) {
-      await cleanUpIndexBuilder();
-      logger.debug('Closing index builder');
-      process.exit(0);
-    }
+  parentPort.on('message', async (msg: SearchQuery | IndexCommand) => {
+    if (msg.type === 'command') {
+      if (msg.exit) {
+        await cleanUpIndexBuilder();
+        logger.debug('Closing index builder');
+        process.exit(0);
+      }
 
-    //rebuild index
-    if (msg.rebuild) {
-      logger.debug('Rebuilding index');
-      await buildIndex();
-      parentPort.postMessage('ready');
-      return;
-    }
+      //rebuild index
+      if (msg.rebuild) {
+        try {
+          if (msg.locale) {
+            logger.debug(`Rebuilding index for ${msg.locale} locale`);
+            foodIndex[msg.locale] = await buildIndexForLocale(msg.locale);
+          } else {
+            logger.debug('Rebuilding All indexs');
+            for (const localeId of enabledLocales) {
+              logger.debug(`\n\nRebuilding All Indexes including: ${localeId}`);
+              foodIndex[localeId] = await buildIndexForLocale(localeId);
+            }
+          }
+          parentPort.postMessage({
+            type: 'command',
+            buildId: msg.buildId,
+            success: true,
+            rebuild: false,
+          });
+        } catch (err) {
+          parentPort.postMessage({
+            type: 'command',
+            queryId: msg.buildId,
+            success: false,
+            error: err,
+            rebuild: false,
+          });
+        }
+      }
+    } else if (msg.type === 'query') {
+      try {
+        const results = await queryIndex(msg);
 
-    try {
-      const results = await queryIndex(msg);
-
-      parentPort.postMessage({
-        queryId: msg.queryId,
-        success: true,
-        results,
-      });
-    } catch (err) {
-      parentPort.postMessage({
-        queryId: msg.queryId,
-        success: false,
-        error: err,
-      });
+        parentPort.postMessage({
+          type: 'query',
+          queryId: msg.queryId,
+          success: true,
+          results,
+        });
+      } catch (err) {
+        parentPort.postMessage({
+          type: 'query',
+          queryId: msg.queryId,
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      logger.error(`Unknown message type: ${JSON.stringify(msg)}`);
     }
   });
 }
