@@ -21,17 +21,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
+import { useClipboard } from '../composables';
 import { useApp, useMessages } from '../stores';
 
 export default defineComponent({
   name: 'AppInfo',
 
-  data() {
-    return {
-      app: useApp().app,
-    };
+  setup() {
+    const app = computed(() => useApp().app);
+    const { toClipboard } = useClipboard();
+
+    return { app, toClipboard };
   },
 
   computed: {
@@ -45,8 +47,7 @@ export default defineComponent({
       if (!this.clipboardAvailable) return;
 
       const { version, revision } = this.app.build;
-      await navigator.clipboard.writeText(`${version} (${revision})`);
-      useMessages().info(this.$t('common.clipboard.copied').toString());
+      await this.toClipboard(`${version} (${revision})`);
     },
   },
 });

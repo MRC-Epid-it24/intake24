@@ -9,16 +9,45 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense nav>
-        <v-list-item-group>
-          <v-list-item link :to="{ name: 'dashboard' }">
-            <v-list-item-action>
-              <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
+        <v-list-group color="grey lighten-1" prepend-icon="fas fa-fw fa-user" value="true">
+          <template #activator>
+            <v-list-item-title>{{ $t('user._') }}</v-list-item-title>
+          </template>
+          <v-list-item-group>
+            <v-list-item link :to="{ name: 'dashboard' }">
+              <v-list-item-action>
+                <v-icon>fas fa-fw fa-tachometer-alt</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('dashboard._') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item link :to="{ name: 'user' }">
+              <v-list-item-action>
+                <v-icon>fas fa-circle-user</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('user.profile') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item link :to="{ name: 'user-personal-access-tokens' }">
+              <v-list-item-action>
+                <v-icon>fas fa-key</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('user.personalAccessTokens.title') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item link :to="{ name: 'user-jobs' }">
+              <v-list-item-action>
+                <v-icon>$jobs</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('user.jobs.title') }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list-group>
       </v-list>
       <menu-tree
         v-if="
@@ -72,7 +101,7 @@
       <v-app-bar-nav-icon :disabled="!isVerified" @click.stop="toggleSidebar"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-btn v-if="isVerified" text :to="{ name: 'user' }">
-        <span class="mr-2">{{ $t('user._') }}</span>
+        <span class="mr-2">{{ $t('user.profile') }}</span>
         <v-icon>$user</v-icon>
       </v-btn>
       <confirm-dialog :label="$t('common.logout._').toString()" @confirm="logout">

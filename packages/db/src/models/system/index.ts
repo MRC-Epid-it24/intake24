@@ -16,6 +16,7 @@ import PAOccurrenceTransactionCount from './pairwise-associations-occurrences-tr
 import Permission from './permission';
 import PermissionRole from './permission-role';
 import PermissionUser from './permission-user';
+import PersonalAccessToken from './personal-access-token';
 import PopularityCounter from './popularity-counter';
 import RefreshToken from './refresh-token';
 import Role from './role';
@@ -82,6 +83,8 @@ export { default as PermissionRole } from './permission-role';
 export * from './permission-role';
 export { default as PermissionUser } from './permission-user';
 export * from './permission-user';
+export { default as PersonalAccessToken } from './personal-access-token';
+export * from './personal-access-token';
 export { default as PopularityCounter } from './popularity-counter';
 export * from './popularity-counter';
 export { default as RefreshToken } from './refresh-token';
@@ -160,6 +163,7 @@ export const system = {
   Permission,
   PermissionRole,
   PermissionUser,
+  PersonalAccessToken,
   PopularityCounter,
   RefreshToken,
   Role,

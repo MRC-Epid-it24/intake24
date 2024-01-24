@@ -1,6 +1,6 @@
 # Authentication
 
-Survey frontend authentication endpoints.
+Survey frontend authentication endpoints allow to authenticate respondents based on their authentication method of choice.
 
 ## Login with email
 

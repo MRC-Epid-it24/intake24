@@ -23,8 +23,10 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
 
     const jobs = await Job.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
+      columns: ['type'],
       where,
       order: [['startedAt', 'DESC']],
+      attributes: ['id', 'type', 'userId', 'startedAt', 'completedAt', 'successful'],
     });
 
     res.json(jobs);
