@@ -10,6 +10,11 @@ import type {
   PkgAsServedImage,
   PkgAsServedSet,
 } from '@intake24/cli/commands/packager/types/as-served';
+import type {
+  PkgDrinkScale,
+  PkgDrinkScaleV1,
+  PkgDrinkwareSet,
+} from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgImageMap } from '@intake24/cli/commands/packager/types/image-map';
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
@@ -24,6 +29,7 @@ export type Logger = typeof logger;
 export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const;
 export const importerSpecificModulesExecutionOptions = [
   'images-as-served',
+  'drinkware-sets',
   'locales',
   'nutrients',
   'global-foods',
@@ -68,6 +74,7 @@ export class ImporterV4 {
   private enabledLocalFoods: Record<string, string[]> | undefined;
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
+  private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
 
   constructor(
@@ -116,11 +123,16 @@ export class ImporterV4 {
       await this.readEnabledLocalFoods();
       await this.importEnabledLocalFoods();
     },
+    'drinkware-sets': async () => {
+      await this.readDrinkwareSets();
+      await this.importDrinkwareSets();
+    },
     all: async () => {
       await this.readPackage();
       await this.importLocales();
       await this.importNutrientTables();
       await this.importAsServedSets();
+      await this.importDrinkwareSets();
       await this.importGlobalFoods();
       await this.importLocalFoods();
       await this.importEnabledLocalFoods();
@@ -142,6 +154,33 @@ export class ImporterV4 {
     for (let i = 0; i < objectCount; i += batchSize) {
       const batch = objects.slice(i, i + batchSize);
       const ops = batch.map((obj) => importFn(obj));
+
+      await Promise.all(ops);
+
+      importedCount += batch.length;
+
+      if (importedCount < objectCount) logger.info(`  ${importedCount}/${objectCount} imported...`);
+    }
+
+    logger.info(`Finished importing ${objectName}(s).`);
+  }
+
+  private async batchImportRecord<T>(
+    objects: Record<string, T>,
+    objectName: string,
+    batchSize: number,
+    importFn: (id: string, object: T) => Promise<void>
+  ) {
+    const entries = Object.entries(objects);
+    const objectCount = entries.length;
+
+    logger.info(`Importing ${objectCount} ${objectName}(s)...`);
+
+    let importedCount = 0;
+
+    for (let i = 0; i < objectCount; i += batchSize) {
+      const batch = entries.slice(i, i + batchSize);
+      const ops = batch.map(([id, obj]) => importFn(id, obj));
 
       await Promise.all(ops);
 
@@ -286,10 +325,98 @@ export class ImporterV4 {
     await this.updateAsServedSetImages(setId, pkgSet.images);
   }
 
+  private async updateDrinkwareScales(
+    setId: string,
+    scales: Record<number, PkgDrinkScale>
+  ): Promise<void> {
+    logger.debug(`Updating sliding scales for drinkware set ${setId}`);
+
+    logger.debug('Deleting existing sliding scales');
+    await this.apiClient.portionSize.drinkware.deleteAllScales(setId);
+
+    const entries = Object.entries(scales);
+
+    logger.debug(`Uploading ${entries.length} new sliding scales`);
+
+    const ops = entries.map(([choiceId, scale]) => {
+      switch (scale.version) {
+        case 1:
+          return this.apiClient.portionSize.drinkware.createScaleV1(
+            setId,
+            choiceId,
+            scale.width,
+            scale.height,
+            scale.emptyLevel,
+            scale.fullLevel,
+            path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, scale.baseImagePath),
+            path.join(
+              this.packageDirPath!,
+              PkgConstants.IMAGE_DIRECTORY_NAME,
+              scale.overlayImagePath
+            ),
+            scale.label,
+            scale.volumeSamples
+          );
+        case 2:
+          return this.apiClient.portionSize.drinkware.createScaleV2(
+            setId,
+            choiceId,
+            path.join(this.packageDirPath!, PkgConstants.IMAGE_DIRECTORY_NAME, scale.baseImagePath),
+            scale.label,
+            scale.outlineCoordinates,
+            scale.volumeSamples
+          );
+      }
+    });
+
+    await Promise.all(ops);
+  }
+
+  private async importDrinkwareSet(setId: string, pkgSet: PkgDrinkwareSet): Promise<void> {
+    logger.info(`Importing drinkware set "${setId}"`);
+
+    const createResult = await this.apiClient.portionSize.drinkware.create({
+      id: setId,
+      imageMapId: pkgSet.selectionImageMapId,
+      description: pkgSet.description,
+    });
+
+    if (createResult.type === 'conflict') {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.debug(`Drinkware set already exists, skipping: ${setId}`);
+          return Promise.resolve();
+        case 'abort': {
+          const message = `Drinkware set already exists: ${setId}`;
+          logger.error(message);
+          return Promise.reject(new Error(message));
+        }
+        case 'overwrite': {
+          logger.debug(`Updating existing drinkware set: ${setId}`);
+          await this.apiClient.portionSize.drinkware.update(setId, {
+            imageMapId: pkgSet.selectionImageMapId,
+            description: pkgSet.description,
+          });
+          break;
+        }
+      }
+    }
+
+    await this.updateDrinkwareScales(setId, pkgSet.scales);
+  }
+
   private async importAsServedSets(): Promise<void> {
     if (this.asServedSets !== undefined) {
       await this.batchImport(this.asServedSets, 'as served image set', 10, (obj) =>
         this.importAsServedSet(obj)
+      );
+    }
+  }
+
+  private async importDrinkwareSets(): Promise<void> {
+    if (this.drinkwareSets !== undefined) {
+      await this.batchImportRecord(this.drinkwareSets, 'drinkware set', 10, (id, obj) =>
+        this.importDrinkwareSet(id, obj)
       );
     }
   }
@@ -512,9 +639,9 @@ export class ImporterV4 {
   }
 
   private async readDrinkwareSets(): Promise<void> {
-    logger.info('Loading as served sets');
-    this.asServedSets = await this.readJSON(
-      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.AS_SERVED_FILE_NAME)
+    logger.info('Loading drinkware sets');
+    this.drinkwareSets = await this.readJSON(
+      path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.DRINKWARE_FILE_NAME)
     );
   }
 
@@ -527,6 +654,7 @@ export class ImporterV4 {
       this.readNutrientTables(),
       this.readImageMaps(),
       this.readAsServedSets(),
+      this.readDrinkwareSets(),
     ]);
   }
 

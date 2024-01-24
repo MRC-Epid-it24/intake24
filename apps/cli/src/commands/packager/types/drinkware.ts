@@ -1,5 +1,8 @@
+import type { LocaleTranslation } from '@intake24/common/types';
+
 export interface PkgDrinkScaleV1 {
   version: 1;
+  label: string;
   width: number;
   height: number;
   emptyLevel: number;
@@ -11,6 +14,7 @@ export interface PkgDrinkScaleV1 {
 
 export interface PkgDrinkScaleV2 {
   version: 2;
+  label: LocaleTranslation;
   baseImagePath: string;
   outlineCoordinates: number[];
   volumeSamples: number[];

@@ -133,6 +133,7 @@ async function convertDrinkScale(
 
   return {
     version: 2,
+    label: { en: drinkScaleDef.description },
     baseImagePath: pkgBaseImagePath,
     volumeSamples,
     outlineCoordinates,
@@ -174,7 +175,7 @@ export default async (options: ConvertDrinkScaleOptions): Promise<void> => {
 
   const svgImageMapData = await getImageMapData(options.selectionSvg);
 
-  const setImageDir = PkgConstants.IMAGE_DIRECTORY_NAME + '/drinkware/' + options.setId;
+  const setImageDir = 'drinkware/' + options.setId;
 
   const pkgDrinkScales: Record<number, PkgDrinkScaleV2> = {};
 
