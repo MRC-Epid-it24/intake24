@@ -26,6 +26,10 @@ User can change their password by entering the current password and the new pass
 
 Multi-factor authentication can be set up by adding at least one authentication method and then enabling the multi-factor authentication toggle.
 
+To set up your multi-factor authentication, please log into the admin tool, then click on `Profile` at the top right of the screen. Scroll down to the `Multi-factor authentication` section then click on `Add Device`. From there you can select and set up your preferred method.
+
+Once you have set up your device, you will be able to select the ‘Enable multi-factor authentication’ setting under your Profile page.”
+
 ### One-time password (OTP)
 
 One-time password (OTP) authentication method can be set up by installing an authenticator app (e.g. Google Authenticator, MS Authenticator, etc) and scanning the QR code or entering the secret key manually.
