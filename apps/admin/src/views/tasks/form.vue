@@ -58,7 +58,7 @@
             <v-col v-if="form.active" cols="12" md="6">
               <div class="d-flex align-center" style="height: 100%">
                 <span v-if="entry.bullJob" class="subtitle-1">
-                  {{ $t('tasks.run.next') }}: {{ formatDate(new Date(entry.bullJob.next)) }}
+                  {{ $t('tasks.run.next') }}: {{ formatDateTime(new Date(entry.bullJob.next)) }}
                 </span>
               </div>
             </v-col>
@@ -136,7 +136,7 @@ export default defineComponent({
       return { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
     };
 
-    const { formatDate } = useDateTime();
+    const { formatDateTime } = useDateTime();
 
     const { entry, entryLoaded, isCreate, isEdit } = useEntry<TaskEntry>(props);
     useEntryFetch(props);
@@ -164,7 +164,7 @@ export default defineComponent({
       defaultJobsParams,
       entry,
       entryLoaded,
-      formatDate,
+      formatDateTime,
       isCreate,
       isEdit,
       jobs,

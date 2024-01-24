@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <th>{{ $t('sign-in-logs.date') }}</th>
-          <td colspan="3">{{ formatDate(entry.date) }}</td>
+          <td colspan="3">{{ formatDateTime(entry.date) }}</td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -60,9 +60,9 @@ export default defineComponent({
   setup(props) {
     useEntryFetch(props);
     const { entry, entryLoaded } = useEntry<SignInLogEntry>(props);
-    const { formatDate } = useDateTime();
+    const { formatDateTime } = useDateTime();
 
-    return { entry, entryLoaded, formatDate };
+    return { entry, entryLoaded, formatDateTime };
   },
 });
 </script>

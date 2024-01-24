@@ -38,7 +38,7 @@
         </tr>
         <tr v-if="entry.bullJob">
           <th>{{ $t('tasks.run.next') }}</th>
-          <td>{{ formatDate(new Date(entry.bullJob.next)) }}</td>
+          <td>{{ formatDateTime(new Date(entry.bullJob.next)) }}</td>
         </tr>
         <tr>
           <th>{{ $t('common.description') }}</th>
@@ -68,9 +68,9 @@ export default defineComponent({
   setup(props) {
     useEntryFetch(props);
     const { entry, entryLoaded } = useEntry<TaskEntry>(props);
-    const { formatDate } = useDateTime();
+    const { formatDateTime } = useDateTime();
 
-    return { entry, entryLoaded, formatDate };
+    return { entry, entryLoaded, formatDateTime };
   },
 
   computed: {

@@ -1,5 +1,4 @@
 export { default as auth } from './auth';
-export { default as formatsDateTime } from './formats-date-time';
 export { default as handlesLoading } from './handles-loading';
 export { default as isMobile } from './is-mobile';
 export { default as loading } from './loading';

@@ -8,7 +8,7 @@
       <v-icon v-else color="error">$times</v-icon>
     </template>
     <template #[`item.startedAt`]="{ item }">
-      {{ formatDate(item.startedAt) }}
+      {{ formatDateTime(item.startedAt) }}
     </template>
   </data-table>
 </template>
@@ -17,14 +17,20 @@
 import { defineComponent } from 'vue';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
-import { formatsDateTime } from '@intake24/admin/mixins';
+import { useDateTime } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'JobList',
 
   components: { DataTable },
 
-  mixins: [formatsDateTime],
+  setup() {
+    const { formatDateTime } = useDateTime();
+
+    return {
+      formatDateTime,
+    };
+  },
 
   data() {
     return {

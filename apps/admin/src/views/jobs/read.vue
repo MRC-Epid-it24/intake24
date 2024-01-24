@@ -43,7 +43,7 @@
             </v-btn>
           </td>
           <th>{{ $t('jobs.downloadUrlExpiresAt') }}</th>
-          <td>{{ formatDate(entry.downloadUrlExpiresAt) }}</td>
+          <td>{{ formatDateTime(entry.downloadUrlExpiresAt) }}</td>
         </tr>
         <tr>
           <th>{{ $t('jobs.progress') }}</th>
@@ -69,15 +69,15 @@
         </tr>
         <tr>
           <th>{{ $t('common.startedAt') }}</th>
-          <td>{{ formatDate(entry.startedAt) }}</td>
+          <td>{{ formatDateTime(entry.startedAt) }}</td>
           <th>{{ $t('common.completedAt') }}</th>
-          <td>{{ formatDate(entry.completedAt) }}</td>
+          <td>{{ formatDateTime(entry.completedAt) }}</td>
         </tr>
         <tr>
           <th>{{ $t('common.createdAt') }}</th>
-          <td>{{ formatDate(entry.createdAt) }}</td>
+          <td>{{ formatDateTime(entry.createdAt) }}</td>
           <th>{{ $t('common.updatedAt') }}</th>
-          <td>{{ formatDate(entry.updatedAt) }}</td>
+          <td>{{ formatDateTime(entry.updatedAt) }}</td>
         </tr>
         <tr>
           <th>{{ $t('jobs.params') }}</th>
@@ -97,7 +97,6 @@ import type { JobEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
-import { formatsDateTime } from '@intake24/admin/mixins';
 import { ConfirmDialog } from '@intake24/ui/components';
 
 export default defineComponent({
@@ -105,15 +104,15 @@ export default defineComponent({
 
   components: { ConfirmDialog },
 
-  mixins: [formatsDateTime, detailMixin],
+  mixins: [detailMixin],
 
   setup(props) {
     useEntryFetch(props);
     const { entry, entryLoaded } = useEntry<JobEntry>(props);
-    const { formatDate } = useDateTime();
+    const { formatDateTime } = useDateTime();
     const { download, downloadUrlAvailable } = useDownloadJob();
 
-    return { download, downloadUrlAvailable, entry, entryLoaded, formatDate };
+    return { download, downloadUrlAvailable, entry, entryLoaded, formatDateTime };
   },
 
   methods: {

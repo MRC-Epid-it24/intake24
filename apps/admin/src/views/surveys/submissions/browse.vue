@@ -2,10 +2,10 @@
   <layout v-if="entryLoaded" v-bind="{ id, entry }">
     <embedded-data-table ref="table" :api-url="baseAPI" :headers="headers">
       <template #[`item.startTime`]="{ item }">
-        {{ formatDate(item.startTime) }}
+        {{ formatDateTime(item.startTime) }}
       </template>
       <template #[`item.endTime`]="{ item }">
-        {{ formatDate(item.endTime) }}
+        {{ formatDateTime(item.endTime) }}
       </template>
       <template #[`item.action`]="{ item }">
         <v-btn
@@ -63,7 +63,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { formatDate } = useDateTime();
+    const { formatDateTime } = useDateTime();
 
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
     useEntryFetch(props);
@@ -71,7 +71,7 @@ export default defineComponent({
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
     return {
-      formatDate,
+      formatDateTime,
       entry,
       entryLoaded,
       table,

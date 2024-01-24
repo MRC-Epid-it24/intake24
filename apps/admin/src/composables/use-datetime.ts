@@ -1,8 +1,11 @@
-import { formatDate as formatDateTime } from '@intake24/admin/util';
+import { formatDate as formatDT } from '@intake24/admin/util';
 
 export const useDateTime = () => {
-  const formatDate = (date: Date | string | null, format?: string) =>
-    date ? formatDateTime(date, format) : date;
+  const formatDate = (date: Date | string | null, format: string = 'dd/MM/yyyy') =>
+    date ? formatDT(date, format) : date;
 
-  return { formatDate };
+  const formatDateTime = (date: Date | string | null, format: string = 'dd/MM/yyyy HH:mm:ss') =>
+    date ? formatDT(date, format) : date;
+
+  return { formatDate, formatDateTime };
 };

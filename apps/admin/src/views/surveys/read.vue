@@ -16,9 +16,9 @@
         </tr>
         <tr>
           <th>{{ $t('surveys.startDate') }}</th>
-          <td>{{ entry.startDate }}</td>
+          <td>{{ formatDate(entry.startDate) }}</td>
           <th>{{ $t('surveys.endDate') }}</th>
-          <td>{{ entry.endDate }}</td>
+          <td>{{ formatDate(entry.endDate) }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.supportEmail') }}</th>
@@ -88,7 +88,7 @@ import { defineComponent } from 'vue';
 
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
-import { useEntry, useEntryFetch } from '@intake24/admin/composables';
+import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SurveyDetail',
@@ -97,9 +97,10 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
+    const { formatDate } = useDateTime();
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);
 
-    return { entry, entryLoaded };
+    return { entry, entryLoaded, formatDate };
   },
 });
 </script>

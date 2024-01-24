@@ -16,14 +16,11 @@
 import { defineComponent } from 'vue';
 
 import { DataTable } from '@intake24/admin/components/data-tables';
-import { formatsDateTime } from '@intake24/admin/mixins';
 
 export default defineComponent({
   name: 'FoodDbList',
 
   components: { DataTable },
-
-  mixins: [formatsDateTime],
 
   data() {
     return {
