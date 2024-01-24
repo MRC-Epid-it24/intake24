@@ -4,12 +4,12 @@ import { sql } from 'kysely';
 
 import type { PaginateQuery, Pagination, PaginationMeta } from '@intake24/db';
 
-export async function executeWithPagination<DB, TB extends keyof DB, O>(
+export const executeWithPagination = async <DB, TB extends keyof DB, O>(
   query: SelectQueryBuilder<DB, TB, O>,
   searchColumns: StringReference<DB, TB>[],
   sortColumns: StringReference<DB, TB>[],
   paginateQuery: PaginateQuery
-): Promise<Pagination<Simplify<O>>> {
+): Promise<Pagination<Simplify<O>>> => {
   const { page = 1, limit = 50, sort, search } = paginateQuery;
 
   const offset = limit * (page - 1);
@@ -57,4 +57,4 @@ export async function executeWithPagination<DB, TB extends keyof DB, O>(
     data,
     meta,
   };
-}
+};

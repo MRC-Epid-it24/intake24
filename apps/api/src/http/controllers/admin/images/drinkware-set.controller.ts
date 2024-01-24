@@ -4,7 +4,11 @@ import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
-import type { DrinkwareSetEntry, DrinkwareSetsResponse } from '@intake24/common/types/http/admin';
+import type {
+  CreateDrinkwareSetInput,
+  DrinkwareSetEntry,
+  DrinkwareSetsResponse,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
@@ -38,13 +42,13 @@ const drinkwareSetController = ({
     res.json(drinkwareSets);
   };
 
-  const store = async (req: Request, res: Response<DrinkwareSetEntry>): Promise<void> => {
-    const { id, description, imageMapId } = req.body;
+  const store = async (
+    req: Request<CreateDrinkwareSetInput>,
+    res: Response<DrinkwareSetEntry>
+  ): Promise<void> => {
+    await drinkwareSetService.create(req.body);
 
-    await DrinkwareSet.create({ id, description, imageMapId });
-
-    const drinkwareSet = await drinkwareSetService.getDrinkwareSet(id);
-    if (!drinkwareSet) throw new NotFoundError();
+    const drinkwareSet = await drinkwareSetService.getDrinkwareSetOrThrow(req.body.id);
 
     res.status(201).json(drinkwareSet);
   };

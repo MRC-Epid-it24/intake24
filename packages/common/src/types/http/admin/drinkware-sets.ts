@@ -7,8 +7,6 @@ import type {
   Pagination,
 } from '@intake24/db';
 
-export type DrinkwareScaleInputObjects = Pick<DrinkwareScaleAttributes, 'id' | 'label'>[];
-
 export type CreateDrinkwareSetInput = {
   id: string;
   description: string;
@@ -17,7 +15,7 @@ export type CreateDrinkwareSetInput = {
 
 export type UpdateDrinkwareSetInput = {
   description: string;
-  scales: DrinkwareScaleInputObjects;
+  imageMapId: string;
 };
 
 export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id' | 'description'> {

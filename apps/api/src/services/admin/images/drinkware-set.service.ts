@@ -11,10 +11,13 @@ import type {
   DrinkwareSetsResponse,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { PaginateQuery, ProcessedImage } from '@intake24/db';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
-import { DrinkwareSet, ImageMap } from '@intake24/db';
+import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
+import { DrinkwareSet, DrinkwareVolumeSample, ImageMap } from '@intake24/db';
 import { executeWithPagination } from '@intake24/db/kysely/utils';
+
+import ApplicationError from '../../../http/errors/application.error';
 
 const drinkwareSetService = ({
   portionSizeService,
@@ -76,59 +79,39 @@ const drinkwareSetService = ({
     if (records.length === 0) throw new NotFoundError(`Drinkware set "${setId}" not found`);
   }
 
-  const create = async (input: CreateDrinkwareSetInput): Promise<DrinkwareSet> => {
-    const { id, description, imageMapId } = input;
+  const create = async (input: CreateDrinkwareSetInput): Promise<void> => {
+    await kyselyDb.foods
+      .selectFrom('imageMaps')
+      .where('id', '=', input.imageMapId)
+      .executeTakeFirstOrThrow(
+        (_) => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
+      );
 
-    const imageMap = await ImageMap.findByPk(imageMapId, { include: ['baseImage'] });
-    if (!imageMap || !imageMap.baseImage) throw new NotFoundError();
-
-    const drinkwareSet = await DrinkwareSet.create({ id, description, imageMapId });
-
-    /* const imageMapObjects = await ImageMapObject.findAll({
-      where: { imageMapId },
-      order: [['id', 'ASC']],
-    });
-
-    const drinkwareScales = imageMapObjects.map((object) => ({
-      drinkwareSetId: drinkwareSet.id,
-      choiceId: object.id,
-      label: object.label,
-      height: 0,
-      width: 0,
-      emptyLevel: 0,
-      fullLevel: 0,
-    }));
-
-    await DrinkwareScale.bulkCreate(drinkwareScales); */
-
-    return drinkwareSet;
+    await translateSqlErrors(() =>
+      kyselyDb.foods.insertInto('drinkwareSets').values(input).execute()
+    );
   };
 
   const update = async (
     drinkwareSetId: string,
     input: UpdateDrinkwareSetInput
-  ): Promise<DrinkwareSet> => {
-    const { description, scales } = input;
+  ): Promise<DrinkwareSetEntry> => {
+    await kyselyDb.foods
+      .selectFrom('imageMaps')
+      .where('id', '=', input.imageMapId)
+      .executeTakeFirstOrThrow(
+        (_) => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
+      );
 
-    const drinkwareSet = await portionSizeService.getDrinkwareSet(drinkwareSetId);
-    if (!drinkwareSet.scales) throw new NotFoundError();
+    const { numUpdatedRows } = await kyselyDb.foods
+      .updateTable('drinkwareSets')
+      .set(input)
+      .where('drinkwareSets.id', '=', drinkwareSetId)
+      .executeTakeFirst();
 
-    await drinkwareSet.update({ description });
+    if (numUpdatedRows !== 1n) throw new NotFoundError();
 
-    for (const scale of scales) {
-      const { id, label } = scale;
-      const match = drinkwareSet.scales.find((scale) => scale.drinkwareSetId === id);
-
-      if (!match) {
-        // TODO
-        // await DrinkwareScale.create({ drinkwareSetId, label });
-        continue;
-      }
-
-      await match.update({ label });
-    }
-
-    return portionSizeService.getDrinkwareSet(drinkwareSetId);
+    return await getDrinkwareSetOrThrow(drinkwareSetId);
   };
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
@@ -172,6 +155,8 @@ const drinkwareSetService = ({
   };
 
   const fetchVolumeSampleRecords = async (scaleId: string[]) => {
+    if (scaleId.length === 0) return [];
+
     return await kyselyDb.foods
       .selectFrom('drinkwareVolumeSamples')
       .select(['drinkwareScaleId', 'fill', 'volume'])
@@ -352,7 +337,26 @@ const drinkwareSetService = ({
     return [...recordsV2, ...recordsV1];
   };
 
-  const createDrinkScale = async (
+  const processDrinkScaleImage = async (
+    id: string,
+    uploader: string,
+    file: Express.Multer.File
+  ): Promise<ProcessedImage> => {
+    const sourceImage = await sourceImageService.uploadSourceImage(
+      {
+        id,
+        file,
+        uploader,
+      },
+      'drink_scale'
+    );
+
+    const processedImage = await processedImageService.createDrinkScaleBaseImage(id, sourceImage);
+
+    return processedImage;
+  };
+
+  const createDrinkScaleV2 = async (
     drinkwareSetId: string,
     choiceId: string,
     uploaderId: string,
@@ -360,33 +364,21 @@ const drinkwareSetService = ({
     labelJson: string,
     outlineCoordinatesJson: string,
     volumeSamplesJson: string,
-    update: boolean
+    updateOnConflict: boolean
   ) => {
-    const sourceImage = await sourceImageService.uploadSourceImage(
-      {
-        id: drinkwareSetId,
-        file: baseImageFile,
-        uploader: uploaderId,
-      },
-      'drink_scale'
-    );
+    const processedImage = await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile);
 
-    const processedImage = await processedImageService.createDrinkScaleBaseImage(
-      drinkwareSetId,
-      sourceImage
-    );
+    await translateSqlErrors(() =>
+      kyselyDb.foods.transaction().execute(async (tx) => {
+        if (updateOnConflict) {
+          await tx
+            .deleteFrom('drinkwareScalesV2')
+            .where('drinkwareSetId', '=', drinkwareSetId)
+            .where('choiceId', '=', choiceId)
+            .execute();
+        }
 
-    await kyselyDb.foods.transaction().execute(async (tx) => {
-      if (update) {
-        await kyselyDb.foods
-          .deleteFrom('drinkwareScalesV2')
-          .where('drinkwareSetId', '=', drinkwareSetId)
-          .where('choiceId', '=', choiceId)
-          .execute();
-      }
-
-      try {
-        await kyselyDb.foods
+        await tx
           .insertInto('drinkwareScalesV2')
           .values({
             label: labelJson,
@@ -397,14 +389,80 @@ const drinkwareSetService = ({
             volumeSamples: volumeSamplesJson,
           })
           .execute();
-      } catch (e: any) {
-        if (e.code === '23505')
-          throw new ConflictError(
-            `Drink scale for set "${drinkwareSetId}", object ${choiceId} already exists`
-          );
-        else throw e;
-      }
-    });
+      })
+    );
+  };
+
+  const createDrinkScaleV1 = async (
+    drinkwareSetId: string,
+    choiceId: string,
+    uploaderId: string,
+    baseImageFile: Express.Multer.File,
+    overlayImageFile: Express.Multer.File,
+    labelJson: string,
+    width: string,
+    height: string,
+    fullLevel: string,
+    emptyLevel: string,
+    volumeSamplesJson: string,
+    update: boolean
+  ) => {
+    // Hacky but an easy way to handle legacy unprocessed drink scale images
+
+    const baseImage = await sourceImageService.uploadSourceImage(
+      {
+        id: drinkwareSetId,
+        file: baseImageFile,
+        uploader: uploaderId,
+      },
+      'drink_scale'
+    );
+
+    const overlayImage = await sourceImageService.uploadSourceImage(
+      {
+        id: drinkwareSetId,
+        file: overlayImageFile,
+        uploader: uploaderId,
+      },
+      'drink_scale'
+    );
+
+    const volumeSamples = JSON.parse(volumeSamplesJson) as { fill: number; volume: number }[];
+
+    await translateSqlErrors(() =>
+      kyselyDb.foods.transaction().execute(async (tx) => {
+        if (update) {
+          await tx
+            .deleteFrom('drinkwareScales')
+            .where('drinkwareSetId', '=', drinkwareSetId)
+            .where('choiceId', '=', choiceId)
+            .execute();
+        }
+
+        const { id } = await tx
+          .insertInto('drinkwareScales')
+          .values({
+            label: labelJson,
+            choiceId,
+            drinkwareSetId,
+            width: parseInt(width),
+            height: parseInt(height),
+            emptyLevel: parseInt(emptyLevel),
+            fullLevel: parseInt(fullLevel),
+            baseImageUrl: baseImage.path,
+            overlayImageUrl: overlayImage.path,
+          })
+          .returning('id')
+          .executeTakeFirstOrThrow();
+
+        const volumeSamplesRows = volumeSamples.map((sample) => ({
+          drinkwareScaleId: id,
+          ...sample,
+        }));
+
+        await tx.insertInto('drinkwareVolumeSamples').values(volumeSamplesRows).execute();
+      })
+    );
   };
 
   const getDrinkwareSet = async (
@@ -427,6 +485,17 @@ const drinkwareSetService = ({
       imageMapId: sets[0].imageMapId,
       scales: [...recordsV2, ...recordsV1],
     };
+  };
+
+  const getDrinkwareSetOrThrow = async (drinkwareSetId: string): Promise<DrinkwareSetEntry> => {
+    const set = await getDrinkwareSet(drinkwareSetId);
+
+    if (set === undefined)
+      throw new Error(
+        `Couldn't find drinkware set "${drinkwareSetId}" which was unexpected at this point`
+      );
+
+    return set;
   };
 
   const getDrinkwareSets = async (pagination: PaginateQuery): Promise<DrinkwareSetsResponse> => {
@@ -501,8 +570,10 @@ const drinkwareSetService = ({
     getDrinkScale,
     getDrinkScales,
     getDrinkwareSet,
+    getDrinkwareSetOrThrow,
     getDrinkwareSets,
-    createDrinkScale,
+    createDrinkScaleV1,
+    createDrinkScaleV2,
     destroyDrinkScale,
     destroyAllDrinkScales,
     create,

@@ -19,14 +19,26 @@ export default () => {
   router
     .route('/:choiceId')
     .get(permission('drinkware-sets|read'), validation.read, wrapAsync(drinkScaleController.read))
+    .delete(permission('drinkware-sets|delete'), wrapAsync(drinkScaleController.destroy));
+
+  router.route('/:choiceId/v1').post(
+    permission('drinkware-sets|create'),
+    upload.fields([
+      { name: 'baseImage', maxCount: 1 },
+      { name: 'overlayImage', maxCount: 1 },
+    ]),
+    validation.storeV1,
+    wrapAsync(drinkScaleController.storeV1)
+  );
+
+  router
+    .route('/:choiceId/v2')
     .post(
       permission('drinkware-sets|create'),
       upload.single('image'),
-      validation.store,
-      wrapAsync(drinkScaleController.store)
-    )
-
-    .delete(permission('drinkware-sets|delete'), wrapAsync(drinkScaleController.destroy));
+      validation.storeV2,
+      wrapAsync(drinkScaleController.storeV2)
+    );
 
   return router;
 };
