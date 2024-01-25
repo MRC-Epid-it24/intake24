@@ -396,6 +396,11 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
         ),
       ];
 
+      if (sourceFoodLocal.main?.locales?.length) {
+        const locales = sourceFoodLocal.main.locales.map(({ id }) => id);
+        promises.push(food.$set('locales', locales, { transaction }));
+      }
+
       if (sourceFoodLocal.main?.parentCategories?.length) {
         const categories = sourceFoodLocal.main.parentCategories.map(({ code }) => code);
         promises.push(food.$set('parentCategories', categories, { transaction }));
