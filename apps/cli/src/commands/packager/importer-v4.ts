@@ -28,7 +28,8 @@ export type Logger = typeof logger;
 
 export const conflictResolutionOptions = ['skip', 'overwrite', 'abort'] as const;
 export const importerSpecificModulesExecutionOptions = [
-  'images-as-served',
+  'as-served-images',
+  'image-maps',
   'drinkware-sets',
   'locales',
   'nutrients',
@@ -107,9 +108,13 @@ export class ImporterV4 {
       await this.readNutrientTables();
       await this.importNutrientTables();
     },
-    'images-as-served': async () => {
+    'as-served-images': async () => {
       await this.readAsServedSets();
       await this.importAsServedSets();
+    },
+    'image-maps': async () => {
+      await this.readImageMaps();
+      await this.importImageMaps();
     },
     'global-foods': async () => {
       await this.readGlobalFoods();
@@ -132,6 +137,7 @@ export class ImporterV4 {
       await this.importLocales();
       await this.importNutrientTables();
       await this.importAsServedSets();
+      await this.importImageMaps();
       await this.importDrinkwareSets();
       await this.importGlobalFoods();
       await this.importLocalFoods();
@@ -238,19 +244,9 @@ export class ImporterV4 {
 
   private async importImageMaps(): Promise<void> {
     if (this.imageMaps !== undefined) {
-      logger.info(`Importing ${Object.keys(this.imageMaps).length} image map(s)`);
-
-      /*
-      const [imageMapId, imageMap] = Object.entries(this.imageMaps)[0];
-
-      await this.importImageMap(imageMapId, imageMap);
-
-      const createOps = Object.entries(imageMaps).map(([imageMapId, imageMap]) =>
-        this.apiClient.imageMaps.create()),
-        })
+      await this.batchImportRecord(this.imageMaps, 'image map', 10, (id, obj) =>
+        this.importImageMap(id, obj)
       );
-
-      await Promise.all(createOps);*/
     }
   }
 

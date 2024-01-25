@@ -149,16 +149,19 @@ function convertSelectionImageMap(
 ): PkgImageMap {
   const pkgBaseImagePath = setImageDir + '/selection/' + path.basename(baseImagePath);
 
-  const imageMapObjects: PkgImageMapObject[] = svgData.objects.map((svgObj) => ({
-    description: scaleDefs.find((scale) => scale.id === svgObj.objectId)!.description,
-    outlineCoordinates: svgObj.coords,
-    navigationIndex: svgData.navigation.indexOf(svgObj.objectId),
-  }));
+  const imageMapObjects: [string, PkgImageMapObject][] = svgData.objects.map((svgObj) => [
+    svgObj.objectId,
+    {
+      description: scaleDefs.find((scale) => scale.id === svgObj.objectId)!.description,
+      outlineCoordinates: svgObj.coords,
+      navigationIndex: svgData.navigation.indexOf(svgObj.objectId),
+    },
+  ]);
 
   return {
     baseImagePath: pkgBaseImagePath,
     description: `Selection for drinkware set ${setId}`,
-    objects: imageMapObjects,
+    objects: Object.fromEntries(imageMapObjects),
   };
 }
 

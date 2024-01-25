@@ -28,7 +28,8 @@ function getTransform(node: ElementNode): string | undefined {
 
 function convertToNormalisedCoordinates(
   viewBox: number[],
-  pathWithTx: PathWithTransform
+  pathWithTx: PathWithTransform,
+  useWidthForBothAxes: boolean = false
 ): number[] {
   const [minX, minY, width, height] = viewBox;
 
@@ -45,7 +46,8 @@ function convertToNormalisedCoordinates(
       throw new Error(`SVG path segment type ${segment[0]} is not supported`);
 
     // Coordinate at index 0 is initial 0, 0
-    if (index > 0) coords.push((x - minX) / width, (y - minY) / height);
+    if (index > 0)
+      coords.push((x - minX) / width, (y - minY) / (useWidthForBothAxes ? width : height));
   });
 
   return coords;
@@ -202,7 +204,7 @@ export async function getImageMapData(svgPath: string): Promise<ImageMapData> {
 
   const objects: ImageMapObject[] = objectPaths.map((objectPath) => ({
     objectId: objectPath.id.substring(5), // drop "area_"
-    coords: convertToNormalisedCoordinates(viewBox, objectPath),
+    coords: convertToNormalisedCoordinates(viewBox, objectPath, true),
   }));
 
   return {
