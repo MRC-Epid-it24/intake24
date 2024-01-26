@@ -12,15 +12,13 @@ import type {
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, ProcessedImage } from '@intake24/db';
-import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
-import { DrinkwareSet, DrinkwareVolumeSample, ImageMap } from '@intake24/db';
-import { executeWithPagination } from '@intake24/db/kysely/utils';
+import { DrinkwareSet, executeWithPagination } from '@intake24/db';
 
 import ApplicationError from '../../../http/errors/application.error';
 
 const drinkwareSetService = ({
-  portionSizeService,
   kyselyDb,
   imagesBaseUrl,
   logger,
@@ -28,12 +26,7 @@ const drinkwareSetService = ({
   processedImageService,
 }: Pick<
   IoC,
-  | 'kyselyDb'
-  | 'imagesBaseUrl'
-  | 'logger'
-  | 'portionSizeService'
-  | 'sourceImageService'
-  | 'processedImageService'
+  'kyselyDb' | 'imagesBaseUrl' | 'logger' | 'sourceImageService' | 'processedImageService'
 >) => {
   function getImageUrl(relativeUrl: string): string {
     return `${imagesBaseUrl}/${relativeUrl}`;
