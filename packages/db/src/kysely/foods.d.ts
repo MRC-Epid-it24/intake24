@@ -120,6 +120,7 @@ export interface DrinkwareScalesV2 {
   label: string | null;
   outlineCoordinates: string;
   volumeSamples: string;
+  volumeSamplesNormalised: string;
 }
 
 export interface DrinkwareSets {
@@ -368,6 +369,7 @@ export interface RecipeFoodsSteps {
   order: number;
   recipeFoodsId: Int8;
   repeatable: Generated<boolean>;
+  required: Generated<boolean>;
   updatedAt: Timestamp;
 }
 

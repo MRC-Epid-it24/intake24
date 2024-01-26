@@ -45,6 +45,11 @@ module.exports = {
             unique: false,
             type: Sequelize.TEXT,
           },
+          volume_samples_normalised: {
+            allowNull: false,
+            unique: false,
+            type: Sequelize.TEXT,
+          },
         },
         {
           transaction,

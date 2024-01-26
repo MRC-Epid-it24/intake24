@@ -5,7 +5,7 @@ import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/images/drinkware-sets';
+  const url = '/api/admin/images/drinkware-sets?return=true';
   const permissions = ['drinkware-sets', 'drinkware-sets|create'];
 
   const input = {
@@ -59,8 +59,8 @@ export default () => {
       await suite.sharedTests.assertRecordInserted('post', url, output, { input });
     });
 
-    it('should return 400 for duplicate id', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['id'], { input });
+    it('should return 409 for duplicate id', async () => {
+      await suite.sharedTests.assertConflict('post', url, { input });
     });
   });
 };

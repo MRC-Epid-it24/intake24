@@ -119,27 +119,3 @@ export const toSvgPolygonPoints = (
   }
   return pointsStr;
 };
-
-export const normaliseVolumeSamples = (volumeSamples: number[]): number[] => {
-  const sampleCount = Math.floor(volumeSamples.length / 2);
-
-  let maxFillLevel = 0;
-
-  for (let i = 0; i < sampleCount; i++) {
-    if (volumeSamples[i * 2] > maxFillLevel) maxFillLevel = volumeSamples[i * 2];
-  }
-
-  if (maxFillLevel === 0) {
-    console.warn(`Volume samples max fill level is 0. Check the drink scale data. `);
-    return volumeSamples;
-  }
-
-  const normalised: number[] = [];
-
-  for (let i = 0; i < sampleCount; i++) {
-    normalised[i * 2] = volumeSamples[i * 2] / maxFillLevel;
-    normalised[i * 2 + 1] = volumeSamples[i * 2 + 1];
-  }
-
-  return normalised;
-};

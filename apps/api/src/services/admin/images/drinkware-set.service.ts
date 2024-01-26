@@ -80,6 +80,8 @@ const drinkwareSetService = ({
   }
 
   const create = async (input: CreateDrinkwareSetInput): Promise<void> => {
+    // This is wasteful and incorrect (race condition)
+    // Should handle the SQL foreign key error code instead
     await kyselyDb.foods
       .selectFrom('imageMaps')
       .where('id', '=', input.imageMapId)
@@ -92,10 +94,7 @@ const drinkwareSetService = ({
     );
   };
 
-  const update = async (
-    drinkwareSetId: string,
-    input: UpdateDrinkwareSetInput
-  ): Promise<DrinkwareSetEntry> => {
+  const update = async (drinkwareSetId: string, input: UpdateDrinkwareSetInput): Promise<void> => {
     await kyselyDb.foods
       .selectFrom('imageMaps')
       .where('id', '=', input.imageMapId)
@@ -110,8 +109,6 @@ const drinkwareSetService = ({
       .executeTakeFirst();
 
     if (numUpdatedRows !== 1n) throw new NotFoundError();
-
-    return await getDrinkwareSetOrThrow(drinkwareSetId);
   };
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
@@ -234,6 +231,7 @@ const drinkwareSetService = ({
         'choiceId',
         'outlineCoordinates',
         'volumeSamples',
+        'volumeSamplesNormalised',
         'baseImageId',
         'processedImages.path as baseImagePath',
         'drinkwareScalesV2.label',
@@ -260,6 +258,7 @@ const drinkwareSetService = ({
     baseImageId: string;
     outlineCoordinates: string;
     volumeSamples: string;
+    volumeSamplesNormalised: string;
     label: string | null;
     id: string;
     baseImagePath: string | null;
@@ -280,6 +279,10 @@ const drinkwareSetService = ({
       label: parseLocaleTranslation(record.label),
       outlineCoordinates: parseFloatArray(record.outlineCoordinates, 'outline_coordinates'),
       volumeSamples: parseFloatArray(record.volumeSamples, 'volume_samples'),
+      volumeSamplesNormalised: parseFloatArray(
+        record.volumeSamplesNormalised,
+        'volume_samples_normalised'
+      ),
       baseImageUrl: getImageUrl(record.baseImagePath),
     };
   }
@@ -356,6 +359,30 @@ const drinkwareSetService = ({
     return processedImage;
   };
 
+  const normaliseVolumeSamples = (volumeSamples: number[]): number[] => {
+    const sampleCount = Math.floor(volumeSamples.length / 2);
+
+    let maxFillLevel = 0;
+
+    for (let i = 0; i < sampleCount; i++) {
+      if (volumeSamples[i * 2] > maxFillLevel) maxFillLevel = volumeSamples[i * 2];
+    }
+
+    if (maxFillLevel === 0) {
+      console.warn(`Volume samples max fill level is 0. Check the drink scale data. `);
+      return volumeSamples;
+    }
+
+    const normalised: number[] = [];
+
+    for (let i = 0; i < sampleCount; i++) {
+      normalised[i * 2] = volumeSamples[i * 2] / maxFillLevel;
+      normalised[i * 2 + 1] = volumeSamples[i * 2 + 1];
+    }
+
+    return normalised;
+  };
+
   const createDrinkScaleV2 = async (
     drinkwareSetId: string,
     choiceId: string,
@@ -367,6 +394,9 @@ const drinkwareSetService = ({
     updateOnConflict: boolean
   ) => {
     const processedImage = await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile);
+    const normalisedVolumeSamplesJson = JSON.stringify(
+      normaliseVolumeSamples(JSON.parse(volumeSamplesJson))
+    );
 
     await translateSqlErrors(() =>
       kyselyDb.foods.transaction().execute(async (tx) => {
@@ -387,6 +417,7 @@ const drinkwareSetService = ({
             baseImageId: processedImage.id,
             outlineCoordinates: outlineCoordinatesJson,
             volumeSamples: volumeSamplesJson,
+            volumeSamplesNormalised: normalisedVolumeSamplesJson,
           })
           .execute();
       })

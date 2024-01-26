@@ -63,7 +63,7 @@
           color="primary"
           :disabled="sliderValue == 0"
           outlined
-          @click="updateSlider(-0.2)"
+          @click="moveSliderRelative(-0.2)"
         >
           <v-icon left>fas fa-circle-down</v-icon>
           {{ $t(`prompts.drinkScale.${type}.less`) }}
@@ -75,7 +75,7 @@
           color="primary"
           :disabled="sliderValue == 1"
           outlined
-          @click="updateSlider(0.2)"
+          @click="moveSliderRelative(0.2)"
         >
           <v-icon left>fas fa-circle-up</v-icon>
           {{ $t(`prompts.drinkScale.${type}.more`) }}
@@ -97,15 +97,10 @@ import type { VImg } from 'vuetify/lib';
 import { useElementSize } from '@vueuse/core';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { DrinkwareScaleV2Entry } from '@intake24/common/types/http/admin';
+import type { DrinkwareScaleV2Response } from '@intake24/common/types/http';
 import { ImagePlaceholder } from '@intake24/survey/components/elements';
 
-import {
-  calculateVolume,
-  getScaleBounds,
-  normaliseVolumeSamples,
-  toSvgPolygonPoints,
-} from './drink-scale';
+import { calculateVolume, getScaleBounds, toSvgPolygonPoints } from './drink-scale';
 
 export default defineComponent({
   name: 'DrinkScaleV2Panel',
@@ -122,7 +117,7 @@ export default defineComponent({
       default: false,
     },
     scale: {
-      type: Object as PropType<DrinkwareScaleV2Entry>,
+      type: Object as PropType<DrinkwareScaleV2Response>,
       required: true,
     },
     type: {
@@ -148,6 +143,7 @@ export default defineComponent({
       toSvgPolygonPoints(props.scale.outlineCoordinates, width.value, height.value)
     );
 
+    // The bounding box of the sliding scale (full region not accounting for maxFillLevel)
     const scaleBoundsPx = computed(() => {
       const bounds = getScaleBounds(props.scale.outlineCoordinates);
       const w = width.value;
@@ -160,17 +156,19 @@ export default defineComponent({
       };
     });
 
-    // Height of the accessible sliding scale region in pixels with max fill limit applied.
+    // Height of the usable sliding scale region in pixels with max fill limit applied.
     const scaleHeightPx = computed(
       () => (scaleBoundsPx.value.bottom - scaleBoundsPx.value.top) * props.maxFillLevel
     );
 
-    // Vertical offset to the current slider position in pixels. Slider range is fixed to [0, 1].
+    // Vertical offset to the current slider position in pixels. Slider range is fixed to [0, 1]
+    // regardless of component properties.
     const sliderPosPx = computed(
       () => scaleBoundsPx.value.bottom - scaleHeightPx.value * sliderValue.value
     );
 
     // Vertical offset from the bottom of the image to the start of the sliding scale region in pixels.
+    // Used to position the slider element.
     const sliderBottomOffset = computed(() => `${height.value - scaleBoundsPx.value.bottom}px`);
 
     const sliderValue = ref(props.value);
@@ -184,10 +182,12 @@ export default defineComponent({
     const cursorInScale = ref(false);
 
     // Move the slider by delta % (can be negative). Used by the 'I had more'/'I had less' buttons.
-    const updateSlider = (delta: number) => {
+    const moveSliderRelative = (delta: number) => {
       sliderValue.value = Math.min(1, Math.max(0, sliderValue.value + delta));
     };
 
+    // Move the slider to a specific position. Used by onClick/onMove events to allow moving the slider
+    // by interacting with the image (outside of the slider).
     const moveSlider = (y: number) => {
       const yRel = scaleBoundsPx.value.bottom - y;
       const clamped = Math.max(0, Math.min(scaleHeightPx.value, yRel));
@@ -210,6 +210,8 @@ export default defineComponent({
         const offsetX = event.targetTouches[0].clientX - clientRect.x;
         const offsetY = event.targetTouches[0].clientY - clientRect.y;
 
+        // If the touch is inside the sliding scale region, move the slider instead of scrolling.
+        // Usability is questionable, but seems to feel OK on an actual touch device. Needs wider testing.
         if (isInScale(offsetX, offsetY)) {
           moveSlider(offsetY);
           event.preventDefault();
@@ -224,13 +226,8 @@ export default defineComponent({
 
     const fillLevel = computed(() => sliderValue.value * props.maxFillLevel);
 
-    // Volume samples remapped into (0, 1) range. Incoming fill level data is in mm.
-    const normalisedVolumeSamples = computed(() =>
-      normaliseVolumeSamples(props.scale.volumeSamples)
-    );
-
     const fillVolume = computed(() =>
-      Math.round(calculateVolume(normalisedVolumeSamples.value, fillLevel.value))
+      Math.round(calculateVolume(props.scale.volumeSamplesNormalised, fillLevel.value))
     );
 
     const label = computed(() => `${fillVolume.value} ml`);
@@ -258,7 +255,6 @@ export default defineComponent({
       height,
       width,
       confirm,
-      //imgScale,
       isInScale,
       cursorInScale,
       sliderValue,
@@ -266,7 +262,7 @@ export default defineComponent({
       scaleHeightPx,
       sliderPosPx,
       sliderBottomOffset,
-      updateSlider,
+      moveSliderRelative,
       onMouseDown,
       onMouseMove,
       onTouchMove,

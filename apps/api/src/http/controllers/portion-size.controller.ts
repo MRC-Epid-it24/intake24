@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
-import { omit } from 'lodash';
+import { HttpStatusCode } from 'axios';
+import { omit, result } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -10,6 +11,8 @@ import type {
   StandardUnitResponse,
   WeightResponse,
 } from '@intake24/common/types/http';
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import { NotFoundError } from '@intake24/api/http/errors';
 import { asServedResponse, imageMapsResponse } from '@intake24/api/http/responses/foods';
 
 const portionSizeController = ({
@@ -36,22 +39,63 @@ const portionSizeController = ({
     res.json(records.map(asServedResponse(imagesBaseUrl).setResponse));
   };
 
+  // Omit fields unnecessary for the survey app
+  const toSurveyRepsonse = (entry: DrinkwareSetEntry): DrinkwareSetResponse => {
+    return {
+      // description intentionally omitted
+      id: entry.id,
+      imageMapId: entry.imageMapId,
+      scales: entry.scales.map((scale) => {
+        switch (scale.version) {
+          case 1:
+            return scale;
+          case 2:
+            return omit(scale, 'volumeSamples');
+        }
+      }),
+    };
+  };
+
   const drinkwareSet = async (req: Request, res: Response<DrinkwareSetResponse>): Promise<void> => {
     const { id } = req.params;
 
-    const drinkwareSet = omit(await drinkwareSetService.getDrinkwareSet(id), 'description');
+    const drinkwareSetEntry = await drinkwareSetService.getDrinkwareSet(id);
 
-    res.json(drinkwareSet);
+    if (drinkwareSetEntry === undefined) throw new NotFoundError();
+
+    res.json(toSurveyRepsonse(drinkwareSetEntry));
   };
 
+  // This is implemented to make the tests pass, but it doesn't look like this function
+  // is used anywhere so the implementation is inefficient
   const drinkwareSets = async (
     req: Request,
     res: Response<DrinkwareSetResponse[]>
   ): Promise<void> => {
     const id = req.query.id as string | string[];
 
-    // Is this used anywhere?
-    throw new Error('Not implemented');
+    switch (typeof id) {
+      case 'string': {
+        const drinkwareSetEntry = await drinkwareSetService.getDrinkwareSet(id);
+        if (drinkwareSetEntry === undefined) throw new NotFoundError();
+        res.json([toSurveyRepsonse(drinkwareSetEntry)]);
+        return;
+      }
+      case 'object':
+        if (Array.isArray(id)) {
+          const lookupResults = await Promise.all(
+            id.map((setId) => drinkwareSetService.getDrinkwareSet(setId))
+          );
+          const successfulResults = lookupResults.filter(
+            (entry): entry is DrinkwareSetEntry => entry !== undefined
+          );
+          res.json(successfulResults.map(toSurveyRepsonse));
+          return;
+        }
+        break;
+    }
+
+    res.json([]);
   };
 
   const guideImage = async (req: Request, res: Response<GuideImageResponse>): Promise<void> => {

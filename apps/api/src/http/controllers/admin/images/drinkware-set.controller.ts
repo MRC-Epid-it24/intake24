@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
-import { pick } from 'lodash';
-import { col, fn } from 'sequelize';
+import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
@@ -8,22 +7,18 @@ import type {
   CreateDrinkwareSetInput,
   DrinkwareSetEntry,
   DrinkwareSetsResponse,
+  UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { DrinkwareSet } from '@intake24/db';
 
 const drinkwareSetController = ({
-  imagesBaseUrl,
-  portionSizeService,
   drinkwareSetService,
 }: Pick<IoC, 'imagesBaseUrl' | 'portionSizeService' | 'drinkwareSetService'>) => {
-  const responseCollection = imagesResponseCollection(imagesBaseUrl);
-
   const entry = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetResponse>
+    res: Response<DrinkwareSetEntry>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
@@ -48,9 +43,9 @@ const drinkwareSetController = ({
   ): Promise<void> => {
     await drinkwareSetService.create(req.body);
 
-    const drinkwareSet = await drinkwareSetService.getDrinkwareSetOrThrow(req.body.id);
+    const drinkwareSetEntry = await drinkwareSetService.getDrinkwareSetOrThrow(req.body.id);
 
-    res.status(201).json(drinkwareSet);
+    res.status(HttpStatusCode.Created).json(drinkwareSetEntry);
   };
 
   const read = async (
@@ -60,27 +55,20 @@ const drinkwareSetController = ({
 
   const edit = async (
     req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetResponse>
+    res: Response<DrinkwareSetEntry>
   ): Promise<void> => entry(req, res);
 
   const update = async (
-    req: Request<{ drinkwareSetId: string }>,
-    res: Response<DrinkwareSetResponse>
+    req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInput>,
+    res: Response<DrinkwareSetEntry>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
 
-    const drinkwareSet = await DrinkwareSet.findByPk(drinkwareSetId);
-    if (!drinkwareSet) throw new NotFoundError();
+    await drinkwareSetService.update(drinkwareSetId, req.body);
 
-    const { description } = req.body;
+    const updated = await drinkwareSetService.getDrinkwareSetOrThrow(drinkwareSetId);
 
-    await drinkwareSet.update({ description });
-
-    // Temp hack
-    const drinkwareSet2 = await drinkwareSetService.getDrinkwareSet(drinkwareSetId);
-    if (!drinkwareSet2) throw new NotFoundError();
-
-    res.json(drinkwareSet2);
+    res.json(updated);
   };
 
   const destroy = async (

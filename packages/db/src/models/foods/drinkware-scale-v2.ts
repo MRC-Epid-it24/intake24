@@ -6,16 +6,15 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Scopes, Table } from 'sequelize-typescript';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 
 import BaseModel from '../model';
-import { DrinkwareSet, DrinkwareVolumeSample, ProcessedImage } from '.';
+import { DrinkwareSet, ProcessedImage } from '.';
 
 @Scopes(() => ({
   drinkwareSet: { include: [{ model: DrinkwareSet }] },
-  volumeSamples: { include: [{ model: DrinkwareVolumeSample }] },
 }))
 @Table({
   modelName: 'DrinkwareScaleV2',
@@ -76,11 +75,20 @@ export default class DrinkwareScaleV2 extends BaseModel<
   })
   declare outlineCoordinates: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT,
+  })
+  declare volumeSamples: string;
+
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT,
+  })
+  declare volumeSamplesNormalised: string;
+
   @BelongsTo(() => DrinkwareSet, 'drinkwareSetId')
   declare drinkwareSet?: NonAttribute<DrinkwareSet>;
-
-  @HasMany(() => DrinkwareVolumeSample, 'drinkwareScaleId')
-  declare volumeSamples?: NonAttribute<DrinkwareVolumeSample[]>;
 }
 
 export type DrinkwareScaleV2Attributes = Attributes<DrinkwareScaleV2>;

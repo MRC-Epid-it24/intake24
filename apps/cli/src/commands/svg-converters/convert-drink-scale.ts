@@ -72,18 +72,6 @@ function parseDrinkScaleCsv(path: string): Promise<DrinkScaleDef[]> {
   });
 }
 
-function normaliseVolumeSamples(volumeSamples: [number, number][]): number[] {
-  const maxFillLevel = maxBy(volumeSamples, (sample) => sample[0])![0];
-
-  const normalised: number[] = [];
-
-  for (const [fillLevel, volume] of volumeSamples) {
-    normalised.push(fillLevel / maxFillLevel, volume);
-  }
-
-  return normalised;
-}
-
 async function copyDependencies(
   selectionImagePath: string,
   drinkScaleDefs: DrinkScaleDef[],
@@ -129,13 +117,12 @@ async function convertDrinkScale(
   logger.debug(`Extracting drink scale outline from ${scaleSvgPath}`);
 
   const outlineCoordinates = await getDrinkScaleOutline(scaleSvgPath);
-  const volumeSamples = normaliseVolumeSamples(drinkScaleDef.volumeSamples);
 
   return {
     version: 2,
     label: { en: drinkScaleDef.description },
     baseImagePath: pkgBaseImagePath,
-    volumeSamples,
+    volumeSamples: drinkScaleDef.volumeSamples.flat(),
     outlineCoordinates,
   };
 }

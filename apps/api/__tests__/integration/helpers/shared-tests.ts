@@ -56,6 +56,17 @@ const sharedTests = (suite: typeof Suite) => {
     }
   };
 
+  const assertConflict = async (method: Method, url: string, ops?: Options) => {
+    const { bearer, code = 409, input } = { ...defaultOptions, ...ops };
+
+    const call = request(suite.app)[method](url).set('Accept', 'application/json');
+
+    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    const { status, body } = await call.send(input);
+
+    expect(status).toBe(code);
+  };
+
   const assertInvalidInput = async (
     method: Method,
     url: string,
@@ -202,6 +213,7 @@ const sharedTests = (suite: typeof Suite) => {
     assertMissingAuthentication,
     assertMissingAuthorization,
     assert401and403,
+    assertConflict,
     assertInvalidInput,
     assertMissingRecord,
     assertPaginatedResult,

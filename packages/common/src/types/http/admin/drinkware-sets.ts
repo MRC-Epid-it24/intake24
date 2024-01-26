@@ -35,6 +35,7 @@ export interface DrinkwareScaleV2Entry {
   label: LocaleTranslation;
   outlineCoordinates: number[];
   volumeSamples: number[];
+  volumeSamplesNormalised: number[];
   baseImageUrl: string;
 }
 

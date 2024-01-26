@@ -80,7 +80,6 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<DrinkwareSetsResponse>
   ): Promise<void> => {
-    /*
     const tasks = await DrinkwareSet.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['id', 'description'],
@@ -89,9 +88,7 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
       transform: responseCollection.drinkwareListResponse,
     });
 
-    res.json(tasks);*/
-
-    res.status(HttpStatusCode.ImATeapot).end();
+    res.json(tasks);
   };
 
   const feedbackSchemes = async (

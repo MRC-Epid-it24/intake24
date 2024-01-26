@@ -2,6 +2,7 @@ import type { Express } from 'express';
 import type { Server } from 'http';
 import fs from 'fs-extra';
 
+import type { KyselyDatabases } from '@intake24/db/kysely-database';
 import app from '@intake24/api/app';
 import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
@@ -15,7 +16,7 @@ import util from './util';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
-const { config, logger, db, cache, rateLimiter, scheduler, session } = ioc.cradle;
+const { config, logger, db, kyselyDb, cache, rateLimiter, scheduler, session } = ioc.cradle;
 
 class IntegrationSuite {
   public config;
@@ -23,6 +24,8 @@ class IntegrationSuite {
   public logger;
 
   public db;
+
+  public kyselyDb: KyselyDatabases;
 
   public cache;
 
@@ -48,6 +51,7 @@ class IntegrationSuite {
     this.config = config;
     this.logger = logger;
     this.db = db;
+    this.kyselyDb = kyselyDb;
     this.cache = cache;
     this.rateLimiter = rateLimiter;
     this.scheduler = scheduler;
@@ -131,6 +135,8 @@ class IntegrationSuite {
 
     // Close database connections
     await this.db.close();
+
+    await this.kyselyDb.close();
 
     // Close worker threads
     foodIndex.close();
