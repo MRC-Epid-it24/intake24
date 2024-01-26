@@ -45,6 +45,7 @@ import type {
   OTPDeviceController,
   PasswordController,
   PermissionController,
+  PersonalAccessTokenController,
   PortionSizeController,
   ReferenceController,
   RoleController,
@@ -180,6 +181,7 @@ export interface IoC extends Jobs {
   adminSignupController: AdminSignupController;
   adminUserProfileController: AdminUserProfileController;
   adminUserJobController: AdminUserJobController;
+  personalAccessTokenController: PersonalAccessTokenController;
 
   mfaDeviceController: MFADeviceController;
   duoDeviceController: DuoDeviceController;

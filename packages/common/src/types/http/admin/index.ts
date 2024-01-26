@@ -14,6 +14,7 @@ export * from './nutrient-tables';
 export * from './nutrient-types';
 export * from './nutrient-units';
 export * from './permissions';
+export * from './personal-access-tokens';
 export * from './references';
 export * from './roles';
 export * from './securables';

@@ -352,8 +352,9 @@ async function findPortionSizeImages(
           const targetWeight = (config.energyValueKcal * 100.0) / energyKcalRecord.unitsPer100g;
 
           if (psm.method === 'as-served') {
-            const asServedSetId = psm.parameters?.find((p) => p.name === 'serving-image-set')
-              ?.value;
+            const asServedSetId = psm.parameters?.find(
+              (p) => p.name === 'serving-image-set'
+            )?.value;
 
             if (!asServedSetId) {
               console.log(

@@ -94,6 +94,7 @@
 
   "date": "Date",
   "expiredAt": "Expired at",
+  "expiresAt": "Expires at",
   "startedAt": "Started at",
   "completedAt": "Completed at",
   "createdAt": "Created at",
@@ -153,6 +154,7 @@
       "msg": "You're about leave the page with unsaved changes. Do you want to continue?",
       "delete": "You're about to delete {name}.",
       "remove": "You're about to remove {name}.",
+      "revoke": "You're about to revoke {name}.",
       "multi": {
         "delete": "Do you want to delete selected items: {count}"
       },
@@ -164,6 +166,7 @@
     "created": "Record ({name}) has been created.",
     "updated": "Record ({name}) has been updated.",
     "deleted": "Record ({name}) has been deleted.",
+    "revoked": "Record ({name}) has been revoked.",
     "multi": {
       "deleted": "Selected items were deleted ({count})."
     },

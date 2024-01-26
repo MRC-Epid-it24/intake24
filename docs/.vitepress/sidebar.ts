@@ -193,6 +193,10 @@ export const sidebar = {
           link: '/api/admin/user/jobs',
         },
         {
+          text: 'Personal access tokens',
+          link: '/api/admin/user/personal-access-tokens',
+        },
+        {
           text: 'Food databases',
           link: '/api/admin/fdbs',
         },
@@ -352,7 +356,11 @@ export const sidebar = {
         },
         {
           text: 'Profile',
-          link: '/admin/profile',
+          link: '/admin/user/profile',
+        },
+        {
+          text: 'Personal access tokens',
+          link: '/admin/user/personal-access-tokens',
         },
       ],
     },

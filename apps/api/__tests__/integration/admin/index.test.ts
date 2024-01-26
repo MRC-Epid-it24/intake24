@@ -20,7 +20,7 @@ import surveySchemePrompts from './survey-scheme-prompts/index.test';
 import surveySchemes from './survey-schemes/index.test';
 import surveys from './surveys/index.test';
 import tasks from './tasks/index.test';
-import user from './user/profile.test';
+import user from './user/index.test';
 import users from './users/index.test';
 
 export default () => {

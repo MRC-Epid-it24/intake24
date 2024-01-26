@@ -2,7 +2,15 @@
 
 Looking to integrate with Intake24? Here's how to do it.
 
-Intake24 provides access to [REST API](/api/), consumed by 1st party applications, [admin tool](/admin/) and [survey app](/survey/). Nevertheless it can be used to integrate with any other 3rd party system.
+Intake24 provides access to [REST API](/api/), consumed by 1st party applications, [admin tool](/admin/) and [survey app](/survey/).
+
+[REST API](/api/) can be used to integrate with any other 3rd party system. For machine-to-machine communication, [personal access tokens](/admin/user/personal-access-tokens) can be used rather than primary user credentials.
+
+While REST API is a generic interface to be used per-use case basis. There are few features that can be used to integrate 3rd party survey flow with the Intake24 in a more seamless way, like:
+
+- Respondent account creation
+- Survey completion notifications
+- Redirecting to 3rd party system.
 
 ## Respondent account creation
 

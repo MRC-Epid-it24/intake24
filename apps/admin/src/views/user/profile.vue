@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-4">{{ $t('user._') }}</h2>
+    <h2 class="mb-4">{{ $t('user.profile') }}</h2>
     <v-card v-if="profile" :flat="isMobile" :outlined="!isMobile" :tile="isMobile">
       <v-list subheader two-line>
         <v-subheader>{{ $t('user.info') }}</v-subheader>

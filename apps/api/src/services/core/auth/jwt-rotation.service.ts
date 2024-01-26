@@ -1,8 +1,9 @@
+import { subDays } from 'date-fns';
 import jwt from 'jsonwebtoken';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { TokenPayload } from '@intake24/common/security';
-import { Op, RefreshToken } from '@intake24/db';
+import { Op, PersonalAccessToken, RefreshToken } from '@intake24/db';
 
 export const decode = (token: string): TokenPayload => jwt.decode(token) as TokenPayload;
 
@@ -102,10 +103,25 @@ const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
    *
    * @returns {Promise<number>}
    */
-  const purge = async (): Promise<number> => {
-    const rows = await RefreshToken.destroy({ where: { expiresAt: { [Op.lte]: new Date() } } });
-
+  const purgeRefreshTokens = async (): Promise<number> => {
+    const rows = await RefreshToken.destroy({
+      where: { expiresAt: { [Op.lte]: subDays(new Date(), 1) } },
+    });
     logger.debug(`Expired refresh tokens (${rows}) have been purged.`);
+
+    return rows;
+  };
+
+  /**
+   * Clean expired personal access tokens
+   *
+   * @returns {Promise<number>}
+   */
+  const purgePersonalAccessTokens = async (): Promise<number> => {
+    const rows = await PersonalAccessToken.destroy({
+      where: { expiresAt: { [Op.lte]: subDays(new Date(), 1) } },
+    });
+    logger.debug(`Expired personal access tokens (${rows}) have been purged.`);
 
     return rows;
   };
@@ -116,7 +132,8 @@ const jwtRotationService = (ops: Pick<IoC, 'logger'>) => {
     revokeByUser,
     verify,
     verifyAndRevoke,
-    purge,
+    purgeRefreshTokens,
+    purgePersonalAccessTokens,
   };
 };
 

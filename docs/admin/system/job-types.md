@@ -13,7 +13,7 @@ Jobs types available in system.
   - [NutrientTableDataImport](#nutrienttabledataimport)
   - [NutrientTableMappingImport](#nutrienttablemappingimport)
   - [PopularitySearchUpdateCounters](#popularitysearchupdatecounters)
-  - [PurgeRefreshTokens](#purgerefreshtokens)
+  - [PurgeExpiredTokens](#purgeexpiredtokens)
   - [SurveyAuthUrlsExport](#surveyauthurlsexport)
   - [SurveyDataExport](#surveydataexport)
   - [SurveyFeedbackNotification](#surveyfeedbacknotification)
@@ -132,9 +132,9 @@ This needs to be run if object structure changes, so all database records are sy
 }
 ```
 
-## PurgeRefreshTokens
+## PurgeExpiredTokens
 
-`PurgeRefreshTokens` cleans expired refresh tokens, that don't need to be hold in database store anymore.
+`PurgeExpiredTokens` cleans expired `personal access` and `refresh` tokens, that don't need to be hold in database store anymore.
 
 ```json
 {}

@@ -4,8 +4,16 @@
 @import "fontawesome";
 @import "flags";
 
+.list-bordered {
+  >:not(:last-child) {
+    border-bottom: 1px solid map-get($grey, 'lighten-3');
+  }
+}
+
 .list-item-border {
-  border-bottom: 1px solid map-get($grey, 'lighten-3');
+  &:not(:last-child) {
+    border-bottom: 1px solid map-get($grey, 'lighten-3');
+  }
 }
 
 // Drag & drop lists

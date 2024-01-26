@@ -5,6 +5,7 @@ import type { CredentialsV4 } from './credentials';
 export interface ApiClientOptionsV4 {
   apiBaseUrl: string;
   credentials?: CredentialsV4 | undefined;
+  accessToken?: string | undefined;
   refreshToken?: string | undefined;
   maxConcurrentRequests?: number | undefined;
   requestRateLimit?: number | undefined;
@@ -40,6 +41,7 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
   const cookieName = process.env['V4_API_COOKIE_NAME'];
   const authResponseUrl =
     process.env['V4_API_AUTH_TYPE'] === 'survey' ? '/api/auth' : '/api/admin/auth';
+  const accessToken = process.env['V4_API_ACCESS_TOKEN'];
   const refreshToken = process.env['V4_API_REFRESH_TOKEN'];
 
   const maxConcurrentRequestsEnv = process.env['V4_API_MAX_CONCURRENT_REQUESTS'];
@@ -57,6 +59,7 @@ export function getApiClientV4EnvOptions(): ApiClientOptionsV4 {
   return {
     apiBaseUrl,
     credentials,
+    accessToken,
     refreshToken,
     cookieName,
     authResponseUrl,

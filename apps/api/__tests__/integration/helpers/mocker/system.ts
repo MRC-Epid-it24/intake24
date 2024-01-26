@@ -207,6 +207,16 @@ const locale = (
   };
 };
 
+const personalAccessToken = () => {
+  const name = faker.word.words(3);
+  const expiresAt = faker.date.future({ years: 1 });
+
+  return {
+    name,
+    expiresAt,
+  };
+};
+
 const surveyScheme = (): SurveySchemeCreationAttributes => {
   const name = faker.word.words(3);
   const type = 'default';
@@ -338,6 +348,7 @@ export default {
   feedbackScheme,
   language,
   locale,
+  personalAccessToken,
   permission,
   role,
   surveyScheme,

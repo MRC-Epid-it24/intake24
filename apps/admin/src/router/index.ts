@@ -130,7 +130,25 @@ const routes: RouteConfig[] = [
     path: '/user',
     name: 'user',
     component: views.user.profile,
-    meta: { module: { current: 'user' }, title: 'user._' },
+    meta: { module: { current: 'user' }, title: 'user.profile' },
+  },
+  {
+    path: '/user/jobs',
+    name: 'user-jobs',
+    component: views.user.jobs.browse,
+    meta: { module: { current: 'user' }, title: 'user.jobs._' },
+  },
+  {
+    path: '/user/jobs/:jobId',
+    name: 'user-jobs-read',
+    component: views.user.jobs.read,
+    meta: { module: { current: 'user' }, title: 'user.jobs._' },
+  },
+  {
+    path: '/user/personal-access-tokens',
+    name: 'user-personal-access-tokens',
+    component: views.user.personalAccessTokens.browse,
+    meta: { module: { current: 'user' }, title: 'user.personalAccessTokens._' },
   },
   // Food databases explorer
   {

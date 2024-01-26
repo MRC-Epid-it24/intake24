@@ -183,7 +183,7 @@ import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
 import { useI18n } from '@intake24/i18n';
-import { ConfirmDialog } from '@intake24/ui';
+import { ConfirmDialog, useClipboard } from '@intake24/ui';
 import { useMessages } from '@intake24/ui/stores';
 
 import RespondentFeedback from './respondent-feedback.vue';
@@ -218,6 +218,14 @@ export default defineComponent({
     const loading = ref(false);
 
     const { i18n } = useI18n();
+    const clipboard = useClipboard();
+
+    async function toClipboard(data: string) {
+      await clipboard.toClipboard(
+        data,
+        i18n.t('surveys.respondents.authUrls.copiedToClipboard').toString()
+      );
+    }
 
     const headers = [
       {
@@ -268,7 +276,7 @@ export default defineComponent({
     });
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();
 
-    return { dialog, headers, loading, entry, entryLoaded, table, form, clearError };
+    return { dialog, headers, loading, entry, entryLoaded, table, form, clearError, toClipboard };
   },
 
   computed: {
@@ -336,11 +344,6 @@ export default defineComponent({
       useMessages().success(this.$t('common.msg.deleted', { name }).toString());
 
       await this.updateTable();
-    },
-
-    async toClipboard(data: string) {
-      await navigator.clipboard.writeText(data);
-      useMessages().info(this.$t('surveys.respondents.authUrls.copiedToClipboard').toString());
     },
   },
 });

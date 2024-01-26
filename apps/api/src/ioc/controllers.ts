@@ -30,8 +30,10 @@ export default (container: AwilixContainer): void => {
 
     adminAuthenticationController: asFunction(controllers.admin.authentication),
     adminSignupController: asFunction(controllers.admin.signup),
-    adminUserProfileController: asFunction(controllers.admin.user.profile),
     adminUserJobController: asFunction(controllers.admin.user.job),
+    adminUserProfileController: asFunction(controllers.admin.user.profile),
+    personalAccessTokenController: asFunction(controllers.admin.user.personalAccessToken),
+
     mfaDeviceController: asFunction(controllers.admin.user.mfa.device),
     fidoDeviceController: asFunction(controllers.admin.user.mfa.fido),
     duoDeviceController: asFunction(controllers.admin.user.mfa.duo),

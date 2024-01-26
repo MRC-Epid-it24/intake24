@@ -27,8 +27,8 @@ Deployable applications are in `apps` folder. Shared components are in `packages
 ├─ docker - Docker files for development
 ├─ docs -> Documentation
 └─ packages
-   ├─ api-client-v3 -> API Client (Intake23 V3)
-   ├─ api-client-v4 -> API Client (Intake23 V4 - current)
+   ├─ api-client-v3 -> API Client (Intake24 V3)
+   ├─ api-client-v4 -> API Client (Intake24 V4 - current)
    ├─ common -> repository-wide shared code
    ├─ common-backend -> backend shared code, e.g. services
    ├─ db -> database layer (models, migrations, etc.)

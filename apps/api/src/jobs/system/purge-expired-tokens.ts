@@ -4,8 +4,8 @@ import type { IoC } from '@intake24/api/ioc';
 
 import BaseJob from '../job';
 
-export default class PurgeRefreshTokens extends BaseJob<'PurgeRefreshTokens'> {
-  readonly name = 'PurgeRefreshTokens';
+export default class PurgeExpiredTokens extends BaseJob<'PurgeExpiredTokens'> {
+  readonly name = 'PurgeExpiredTokens';
 
   private readonly jwtRotationService;
 
@@ -20,7 +20,7 @@ export default class PurgeRefreshTokens extends BaseJob<'PurgeRefreshTokens'> {
    *
    * @param {Job} job
    * @returns {Promise<void>}
-   * @memberof PurgeRefreshTokens
+   * @memberof PurgeExpiredTokens
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
@@ -37,9 +37,12 @@ export default class PurgeRefreshTokens extends BaseJob<'PurgeRefreshTokens'> {
    *
    * @private
    * @returns {Promise<void>}
-   * @memberof PurgeRefreshTokens
+   * @memberof PurgeExpiredTokens
    */
   private async purgeTokens(): Promise<void> {
-    await this.jwtRotationService.purge();
+    await Promise.all([
+      this.jwtRotationService.purgeRefreshTokens(),
+      this.jwtRotationService.purgePersonalAccessTokens(),
+    ]);
   }
 }

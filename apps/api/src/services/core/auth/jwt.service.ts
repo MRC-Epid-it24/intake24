@@ -1,11 +1,12 @@
-import type { Secret, SignOptions } from 'jsonwebtoken';
-import jwt from 'jsonwebtoken';
+import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { SignPayload, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
-import { InternalServerError } from '@intake24/api/http/errors';
+import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
 import { randomString } from '@intake24/common/util';
+import { PersonalAccessToken } from '@intake24/db';
 
 export type Tokens = {
   accessToken: string;
@@ -184,6 +185,34 @@ const jwtService = ({
     return refreshToken;
   };
 
+  const issuePersonalAccessToken = async ({
+    name,
+    expiresAt,
+    userId,
+  }: {
+    name: string;
+    expiresAt: Date;
+    userId: string;
+  }) => {
+    const jwt = await signAccessToken({ userId }, 'admin', {
+      audience: ['access', 'admin', 'personal'],
+      expiresIn: Math.trunc((expiresAt.getTime() - Date.now()) / 1000),
+    });
+    const { jti } = decode(jwt) as JwtPayload;
+    if (!jti) throw new InternalServerError();
+
+    const token = await PersonalAccessToken.create({ userId, name, token: jti, expiresAt });
+
+    return { jwt, token };
+  };
+
+  const revokePersonalAccessToken = async (id: string, userId: string) => {
+    const token = await PersonalAccessToken.findOne({ where: { id, userId } });
+    if (!token) throw new NotFoundError();
+
+    await token.update({ revoked: true });
+  };
+
   return {
     sign,
     verify,
@@ -194,6 +223,8 @@ const jwtService = ({
     verifyRefreshToken,
     issueRefreshToken,
     issueTokens,
+    issuePersonalAccessToken,
+    revokePersonalAccessToken,
   };
 };
 

@@ -29,8 +29,8 @@
     "CleanStorageFiles": {
       "_": "Clean storage files"
     },
-    "PurgeRefreshTokens": {
-      "_": "Purge expired refresh tokens"
+    "PurgeExpiredTokens": {
+      "_": "Purge expired access/refresh tokens"
     },
     "LanguageTranslationsSync": {
       "_": "Language - Synchronize translations"

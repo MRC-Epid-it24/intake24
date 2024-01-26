@@ -27,6 +27,7 @@ import {
   MFADevice,
   Permission,
   PermissionUser,
+  PersonalAccessToken,
   RefreshToken,
   Role,
   RoleUser,
@@ -170,8 +171,14 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
   @HasMany(() => PermissionUser, 'userId')
   declare permissionLinks?: NonAttribute<PermissionUser[]>;
 
+  @HasMany(() => PersonalAccessToken, 'userId')
+  declare personalAccessTokens?: NonAttribute<PersonalAccessToken[]>;
+
   @HasOne(() => UserPhysicalData)
   declare physicalData?: NonAttribute<UserPhysicalData>;
+
+  @HasMany(() => RefreshToken, 'userId')
+  declare refreshTokens?: NonAttribute<RefreshToken[]>;
 
   @BelongsToMany(() => Role, () => RoleUser)
   declare roles?: NonAttribute<Role[]>;
@@ -190,9 +197,6 @@ export default class User extends BaseModel<InferAttributes<User>, InferCreation
 
   @HasMany(() => UserSubscription, 'userId')
   declare subscription?: NonAttribute<UserSubscription[]>;
-
-  @HasMany(() => RefreshToken, 'userId')
-  declare tokens?: NonAttribute<RefreshToken[]>;
 
   @BelongsToMany(() => FeedbackScheme, {
     through: {

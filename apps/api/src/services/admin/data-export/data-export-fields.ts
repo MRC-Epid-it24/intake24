@@ -397,8 +397,9 @@ const dataExportFields = () => {
       value: ({ food }: ExportRow) => {
         if (!('portionSizes' in food)) return undefined;
 
-        const servingWeightVal = food.portionSizes?.find((item) => item.name === 'servingWeight')
-          ?.value;
+        const servingWeightVal = food.portionSizes?.find(
+          (item) => item.name === 'servingWeight'
+        )?.value;
         const leftoversWeightVal = food.portionSizes?.find(
           (item) => item.name === 'leftoversWeight'
         )?.value;

@@ -49,7 +49,7 @@ export type JobParams = {
     localeCode: string;
     foodCodes: string[];
   };
-  PurgeRefreshTokens: EmptyJobParams;
+  PurgeExpiredTokens: EmptyJobParams;
   SurveyAuthUrlsExport: {
     surveyId: string;
   };
@@ -149,7 +149,7 @@ export const defaultJobsParams: JobParams = {
     localeCode: '',
     foodCodes: [],
   },
-  PurgeRefreshTokens: {},
+  PurgeExpiredTokens: {},
   SurveyAuthUrlsExport: {
     surveyId: '',
   },

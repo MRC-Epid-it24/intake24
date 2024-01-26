@@ -37,6 +37,7 @@ export class BaseClientV4 {
   public constructor(logger: Logger, options: ApiClientOptionsV4) {
     this.apiBaseUrl = options.apiBaseUrl;
     this.credentials = options.credentials;
+    this.accessToken = options.accessToken;
     this.refreshToken = options.refreshToken;
     this.cookieName = options.cookieName ?? DEFAULT_REFRESH_TOKEN_COOKIE_NAME;
     this.authResponseUrl = options.authResponseUrl ?? DEFAULT_API_LOGIN_RESPONSE_URL;

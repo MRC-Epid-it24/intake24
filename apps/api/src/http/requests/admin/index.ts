@@ -10,6 +10,7 @@ import nutrientTables from './nutrient-tables';
 import nutrientTypes from './nutrient-types';
 import nutrientUnits from './nutrient-units';
 import permissions from './permissions';
+import personalAccessTokens from './personal-access-tokens';
 import references from './references';
 import roles from './roles';
 import securables from './securables';
@@ -35,6 +36,7 @@ export default {
   nutrientTypes,
   nutrientUnits,
   permissions,
+  personalAccessTokens,
   references,
   roles,
   securables,

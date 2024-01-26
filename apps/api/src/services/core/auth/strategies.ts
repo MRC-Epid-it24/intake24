@@ -1,6 +1,7 @@
 import type { PassportStatic } from 'passport';
 import type { StrategyOptions } from 'passport-jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Op } from 'sequelize';
 
 import type { FrontEnd } from '@intake24/common/types';
 import security from '@intake24/api/config/security';
@@ -24,9 +25,42 @@ export const opts: Record<FrontEnd, StrategyOptions> = {
 };
 
 export const buildJwtStrategy = (frontEnd: FrontEnd): Strategy =>
-  new Strategy(opts[frontEnd], async ({ userId }, done) => {
+  new Strategy(opts[frontEnd], async ({ userId, jti, aud }, done) => {
     try {
-      const user = await User.findByPk(userId);
+      if (!Array.isArray(aud) || !aud.includes('personal')) {
+        const user = await User.findByPk(userId, {
+          attributes: [
+            'id',
+            'email',
+            'name',
+            'multiFactorAuthentication',
+            'disabledAt',
+            'verifiedAt',
+          ],
+        });
+
+        done(null, user ?? false);
+        return;
+      }
+
+      const user = await User.findByPk(userId, {
+        attributes: [
+          'id',
+          'email',
+          'name',
+          'multiFactorAuthentication',
+          'disabledAt',
+          'verifiedAt',
+        ],
+        include: [
+          {
+            association: 'personalAccessTokens',
+            attributes: ['token', 'revoked'],
+            where: { token: jti, revoked: false, expiresAt: { [Op.gt]: new Date() } },
+          },
+        ],
+      });
+
       done(null, user ?? false);
     } catch (err) {
       done(err, false);
