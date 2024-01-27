@@ -4,8 +4,8 @@ import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 
 import type { Logger } from '@intake24/common-backend';
+import type { FoodsDB, SystemDB } from '@intake24/db';
 import type { DatabaseOptions } from '@intake24/db/database';
-import type { FoodsDB, SystemDB } from '@intake24/db/kysely';
 
 import type { DatabaseType } from './config';
 
