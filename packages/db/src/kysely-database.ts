@@ -1,11 +1,9 @@
-import type { Dialect, Logger as KyselyLogFunc } from 'kysely';
-import type { LogEvent } from 'kysely/dist/cjs/util/log';
+import type { Dialect, LogEvent, Logger as KyselyLogFunc } from 'kysely';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 
 import type { Logger } from '@intake24/common-backend';
-import type { FoodsDB, SystemDB } from '@intake24/db';
-import type { DatabaseOptions } from '@intake24/db/database';
+import type { DatabaseOptions, FoodsDB, SystemDB } from '@intake24/db';
 
 import type { DatabaseType } from './config';
 
@@ -16,6 +14,7 @@ function databaseLogQuery(sql: string, logger: Logger, limit: number) {
     logger.debug(sql);
   }
 }
+
 export class KyselyDatabases {
   private readonly config;
 

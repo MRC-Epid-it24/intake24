@@ -2,7 +2,7 @@ import type { Express } from 'express';
 import type { Server } from 'http';
 import fs from 'fs-extra';
 
-import type { KyselyDatabases } from '@intake24/db/kysely-database';
+import type { KyselyDatabases } from '@intake24/db';
 import app from '@intake24/api/app';
 import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
