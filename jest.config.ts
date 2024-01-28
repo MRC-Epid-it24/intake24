@@ -13,7 +13,6 @@ const config: Config.InitialOptions = {
     '^@intake24/survey/(.*?)$': '<rootDir>/apps/survey/src/$1',
     '^@intake24/common/(.*?)$': '<rootDir>/packages/common/src/$1',
     '^@intake24/common-backend/(.*?)$': '<rootDir>/packages/common-backend/src/$1',
-    '^@intake24/db/(.*?)$': '<rootDir>/packages/db/src/$1',
     '^@intake24/(.*?)$': '<rootDir>/packages/$1/src',
   },
   rootDir: '.',

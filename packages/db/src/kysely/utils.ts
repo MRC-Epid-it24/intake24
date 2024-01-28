@@ -1,5 +1,4 @@
-import type { SelectQueryBuilder, Simplify } from 'kysely';
-import type { StringReference } from 'kysely/dist/cjs/parser/reference-parser';
+import type { SelectQueryBuilder, Simplify, StringReference } from 'kysely';
 import { sql } from 'kysely';
 
 import type { PaginateQuery, Pagination, PaginationMeta } from '@intake24/db';

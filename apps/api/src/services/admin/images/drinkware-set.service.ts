@@ -12,11 +12,9 @@ import type {
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery, ProcessedImage } from '@intake24/db';
-import { NotFoundError } from '@intake24/api/http/errors';
+import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
-
-import ApplicationError from '../../../http/errors/application.error';
 
 const drinkwareSetService = ({
   kyselyDb,

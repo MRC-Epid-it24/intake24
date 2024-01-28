@@ -123,8 +123,7 @@ import type { Environment } from '@intake24/common/types';
 import type { Logger, Mailer } from '@intake24/common-backend';
 import type { DatabasesInterface, User } from '@intake24/db';
 import config from '@intake24/api/config';
-import { Database, models } from '@intake24/db';
-import { KyselyDatabases } from '@intake24/db/kysely-database';
+import { Database, KyselyDatabases, models } from '@intake24/db';
 
 import controllers from './controllers';
 import jobs from './jobs';
