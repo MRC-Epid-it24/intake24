@@ -364,7 +364,13 @@ const surveySubmissionService = ({
     tzOffset: number
   ): Promise<SurveySubmissionResponse> => {
     const survey = await Survey.findBySlug(slug, {
-      attributes: ['id', 'feedbackSchemeId', 'maximumTotalSubmissions', 'maximumDailySubmissions'],
+      attributes: [
+        'id',
+        'feedbackSchemeId',
+        'maximumTotalSubmissions',
+        'maximumDailySubmissions',
+        'numberOfSubmissionsForFeedback',
+      ],
       include: [{ association: 'surveyScheme', attributes: ['prompts'], required: true }],
     });
     if (!survey) throw new NotFoundError();
