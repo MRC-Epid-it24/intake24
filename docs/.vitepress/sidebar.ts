@@ -95,6 +95,10 @@ export const sidebar = {
           link: '/config/api/filesystem',
         },
         {
+          text: 'Image processing',
+          link: '/config/api/images',
+        },
+        {
           text: 'Logging',
           link: '/config/api/log',
         },
