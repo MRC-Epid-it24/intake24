@@ -709,7 +709,6 @@ export class ImporterV4 {
 
   public async import(): Promise<void> {
     await this.unzipPackage();
-    await this.apiClient.baseClient.refresh();
 
     if (
       this.options.modulesForExecution === undefined ||
