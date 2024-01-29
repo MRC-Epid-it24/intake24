@@ -45,6 +45,7 @@ export class KyselyDatabases {
         host: this.config[this.env][database].host,
         port: this.config[this.env][database].port,
         user: this.config[this.env][database].username,
+        connectionString: this.config[this.env][database].url,
         password: this.config[this.env][database].password,
         max: 10,
         log: (...messages: any[]) => this.poolLogger.debug(messages.join('; ')),
