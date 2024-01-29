@@ -9,6 +9,7 @@ Configuration is structured to following sections:
 - [Cache](/config/api/cache)
 - [Database](/config/api/database)
 - [Filesystem](/config/api/filesystem)
+- [Image processing](/config/api/images)
 - [Logging](/config/api/log)
 - [Mail](/config/api/mail)
 - [Queue](/config/api/queue)
