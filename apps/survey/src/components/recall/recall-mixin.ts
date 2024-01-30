@@ -196,7 +196,8 @@ export default defineComponent({
 
       const prompt = this.recallController?.promptManager.findMealPromptOfType(
         promptType,
-        promptSection
+        promptSection,
+        mealId
       );
 
       if (!prompt)
@@ -210,10 +211,7 @@ export default defineComponent({
     showFoodPrompt(foodId: string, promptSection: MealSection, promptType: ComponentType) {
       this.setSelection({ element: { type: 'food', foodId }, mode: 'manual' });
 
-      const prompt = this.recallController?.promptManager.findMealPromptOfType(
-        promptType,
-        promptSection
-      );
+      const prompt = this.recallController?.promptManager.findFoodPromptOfType(promptType, foodId);
 
       if (!prompt)
         throw new Error(`Survey scheme is missing required food prompt of type ${promptType}`);

@@ -1,3 +1,4 @@
+import type { LocaleMessageObject } from 'vue-i18n';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
@@ -20,9 +21,22 @@ export const loadAppLanguage = async (app: Application, lang: string) => {
     if (app.status !== 'fulfilled' || shared.status !== 'fulfilled') return;
 
     i18n.setLocaleMessage(lang, { ...app.value.default, ...shared.value.default });
+    defaultMessages.setMessages(lang, { ...app.value.default, ...shared.value.default });
   });
 };
 
 export const loadAdminLanguage = async (lang: string) => loadAppLanguage('admin', lang);
 
 export const loadSurveyLanguage = async (lang: string) => loadAppLanguage('survey', lang);
+
+export const defaultMessages = {
+  messages: {} as Record<string, LocaleMessageObject>,
+
+  getMessages(locale: string) {
+    return this.messages[locale] || {};
+  },
+
+  setMessages(locale: string, newMessages: LocaleMessageObject) {
+    this.messages[locale] = newMessages;
+  },
+};

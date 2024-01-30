@@ -778,12 +778,36 @@ export default class PromptManager {
     return null;
   }
 
-  findMealPromptOfType(type: ComponentType, section: MealSection): Prompt | undefined {
-    return this.scheme.prompts.meals[section].find((prompt) => prompt.component === type);
+  findFoodPromptOfType(type: ComponentType, foodId: string): Prompt | undefined {
+    const state = this.store.$state;
+    const foodIndex = getFoodIndexRequired(state.data.meals, foodId);
+    const foodState = getFoodByIndex(state.data.meals, foodIndex);
+    const mealState = state.data.meals[foodIndex.mealIndex];
+
+    return this.scheme.prompts.meals.foods.find(
+      (prompt) =>
+        prompt.component === type &&
+        checkFoodCustomConditions(this.store, mealState, foodState, prompt)
+    );
+  }
+
+  findMealPromptOfType(
+    type: ComponentType,
+    section: MealSection,
+    mealId: string
+  ): Prompt | undefined {
+    const state = this.store.$state;
+    const meal = findMeal(state.data.meals, mealId);
+
+    return this.scheme.prompts.meals[section].find(
+      (prompt) => prompt.component === type && checkMealCustomConditions(this.store, meal, prompt)
+    );
   }
 
   findSurveyPromptOfType(type: ComponentType, section: SurveyPromptSection): Prompt | undefined {
-    return this.scheme.prompts[section].find((prompt) => prompt.component === type);
+    return this.scheme.prompts[section].find(
+      (prompt) => prompt.component === type && checkSurveyCustomConditions(this.store, prompt)
+    );
   }
 
   nextSurveySectionPrompt(section: SurveyPromptSection): Prompt | undefined {
