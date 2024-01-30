@@ -1,4 +1,5 @@
 import type { PropType } from 'vue';
+import get from 'lodash/get';
 import set from 'lodash/set';
 import { computed, defineComponent, onBeforeMount } from 'vue';
 
@@ -41,7 +42,7 @@ export default defineComponent({
   emits: ['action'],
 
   setup(props, ctx) {
-    const { i18n, translate, translatePath } = useI18n();
+    const { defaultMessages, i18n, translate, translatePath } = useI18n();
     const { action, params, type } = usePromptUtils(props, ctx);
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
@@ -57,15 +58,15 @@ export default defineComponent({
     });
 
     const loadPromptTranslations = () => {
-      if (!Object.keys(props.prompt.i18n).length) return;
-
       const locale = i18n.locale;
       const messages = i18n.getLocaleMessage(locale);
+      const defaultPromptMessages = get(
+        defaultMessages.getMessages(locale),
+        `prompts.${type.value}`
+      );
 
-      Object.entries(props.prompt.i18n).forEach(([key, value]) => {
-        if (!value[locale]) return;
-
-        set(messages, `prompts.${type.value}.${key}`, value[locale]);
+      Object.entries(defaultPromptMessages).forEach(([key, value]) => {
+        set(messages, `prompts.${type.value}.${key}`, props.prompt.i18n[key]?.[locale] ?? value);
       });
 
       i18n.setLocaleMessage(locale, messages);

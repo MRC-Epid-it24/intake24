@@ -1,4 +1,4 @@
-import { i18n } from './i18n';
+import { defaultMessages, i18n } from './i18n';
 import { translate, translatePath } from './util';
 
 export { default as admin } from './admin';
@@ -9,4 +9,4 @@ export { default as survey } from './survey';
 export * from './util';
 export type { LocaleMessageObject, LocaleMessages } from 'vue-i18n';
 
-export const useI18n = () => ({ i18n, translate, translatePath });
+export const useI18n = () => ({ defaultMessages, i18n, translate, translatePath });
