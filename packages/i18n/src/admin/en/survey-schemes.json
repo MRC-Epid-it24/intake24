@@ -63,6 +63,7 @@
       "review": "Review",
       "addFood": "Add food",
       "addMeal": "Add meal",
+      "changeFood": "Change food",
       "deleteFood": "Delete food",
       "deleteMeal": "Delete meal",
       "editFood": "Edit food",
@@ -262,6 +263,7 @@
       "labels": "Show labels",
       "pinchZoom": "Show PinchZoom for mobile UI"
     },
+    "multiple": "Allow multiple items to be selected",
     "label": "Options list label",
     "leftovers": "Allow leftovers",
     "linkedQuantityCategories": "Linked quantity categories",
@@ -273,9 +275,19 @@
     },
     "slider": {
       "_": "Slider settings",
-      "initial": "Initial value",
-      "min": "Minimum value",
-      "max": "Maximum value",
+      "current": {
+        "label": "Current label",
+        "value": "Current value",
+        "size": "Label size"
+      },
+      "min": {
+        "label": "Minimum label",
+        "value": "Minimum value"
+      },
+      "max": {
+        "label": "Maximum label",
+        "value": "Maximum value"
+      },
       "step": "Step increment"
     },
     "timePicker": {
@@ -336,11 +348,7 @@
     },
     "meal-duration-prompt": {
       "title": "Meal duration",
-      "subtitle": "Ask about meal duration",
-      "initial": "Initial meal duration",
-      "min": "Minimum meal duration",
-      "max": "Maximum meal duration",
-      "step": "Meal duration step"
+      "subtitle": "Ask about meal duration"
     },
     "meal-gap-prompt": {
       "title": "Meal time gap",
@@ -434,6 +442,14 @@
     "radio-list-prompt": {
       "title": "Single choice",
       "subtitle": "Ask to choose one item from a list"
+    },
+    "select-prompt": {
+      "title": "Select",
+      "subtitle": "Ask to choose value from select box"
+    },
+    "slider-prompt": {
+      "title": "Slider",
+      "subtitle": "Ask to choose value on slider"
     },
     "textarea-prompt": {
       "title": "Free text",

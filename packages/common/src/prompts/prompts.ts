@@ -28,6 +28,8 @@ export const customComponentTypes = [
   'checkbox-list-prompt',
   'no-more-information-prompt',
   'radio-list-prompt',
+  'select-prompt',
+  'slider-prompt',
   'textarea-prompt',
   'yes-no-prompt',
 ] as const;
@@ -56,13 +58,11 @@ export type StandardComponentType = (typeof standardComponentTypes)[number];
 export type PortionSizeComponentType =
   | `${PortionSizeMethodId}-prompt`
   | 'missing-food-prompt'
-  | 'recipe-builder-prompt'
   | 'portion-size-option-prompt';
 
 export const portionSizeComponentTypes = [
   ...portionSizeMethods,
   'missing-food',
-  'recipe-builder-prompt',
   'portion-size-option',
 ].map((type) => `${type}-prompt`) as PortionSizeComponentType[];
 
@@ -110,10 +110,15 @@ export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as con
 
 export type ReviewOptions = (typeof reviewOptions)[number];
 
+export type SliderValue = {
+  value: number | null;
+  label: false | LocaleTranslation;
+};
+
 export type Slider = {
-  initial: number;
-  min: number;
-  max: number;
+  current: SliderValue & { size: number };
+  min: SliderValue;
+  max: SliderValue;
   step: number;
 };
 
@@ -138,6 +143,12 @@ export type Prompts = {
     orientation: RadioOrientation;
     other: boolean;
   };
+  'select-prompt': ValidatedPrompt & {
+    component: 'select-prompt';
+    options: LocaleOptionList;
+    multiple: boolean;
+  };
+  'slider-prompt': BasePrompt & { component: 'slider-prompt'; slider: Slider };
   'textarea-prompt': ValidatedPrompt & { component: 'textarea-prompt' };
   'time-picker-prompt': ValidatedPrompt &
     TimePicker & {
@@ -159,7 +170,7 @@ export type Prompts = {
     component: 'drink-scale-prompt';
     imageMap: ImageMap;
     leftovers: boolean;
-    multiple: boolean | Slider;
+    multiple: false | Slider;
   };
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
@@ -209,10 +220,10 @@ export type Prompts = {
     component: 'meal-add-prompt';
     custom: boolean;
   };
-  'meal-duration-prompt': BasePrompt &
-    Slider & {
-      component: 'meal-duration-prompt';
-    };
+  'meal-duration-prompt': BasePrompt & {
+    component: 'meal-duration-prompt';
+    slider: Slider;
+  };
   'meal-gap-prompt': BasePrompt & {
     component: 'meal-gap-prompt';
     gap: number;

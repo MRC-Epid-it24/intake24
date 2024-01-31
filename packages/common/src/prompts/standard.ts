@@ -57,10 +57,22 @@ export const mealDurationPrompt: Prompts['meal-duration-prompt'] = copy({
   type: 'standard',
   id: 'meal-duration-prompt',
   name: 'Meal Duration prompt',
-  initial: 30,
-  min: 5,
-  max: 120,
-  step: 5,
+  slider: {
+    current: {
+      value: 30,
+      label: { en: 'minutes' },
+      size: 75,
+    },
+    min: {
+      value: 5,
+      label: false,
+    },
+    max: {
+      value: 120,
+      label: false,
+    },
+    step: 5,
+  },
 });
 
 export const mealGapPrompt: Prompts['meal-gap-prompt'] = copy({

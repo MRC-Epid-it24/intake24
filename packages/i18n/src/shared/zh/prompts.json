@@ -27,6 +27,17 @@
     "text": "",
     "description": "<p>我们目前已经获取了关于您的 <strong>{item}</strong> 所有需要的信息。</p><p>为了继续进行调查， 请单击下面的“ 继续” 按钮， 我们将自动选择我们仍需要有关其它食物或餐点的信息。</p><p>或者，如果您想专注于某个项目，请单击左侧的餐点或食物。</p>"
   },
+  "select": {
+    "name": "Select value from list",
+    "text": "",
+    "description": "",
+    "label": "Select option"
+  },
+  "slider": {
+    "name": "Select value on slider",
+    "text": "",
+    "description": ""
+  },
   "radioList": {
     "name": "单选列表",
     "text": "",

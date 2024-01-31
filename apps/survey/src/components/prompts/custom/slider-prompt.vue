@@ -12,9 +12,10 @@
           :style="{ 'padding-top': `${prompt.slider.current.size + 10}px` }"
           :thumb-label="prompt.slider.current ? `always` : false"
           :thumb-size="prompt.slider.current.size"
+          @start="initialize"
         >
           <template #thumb-label="{ value }">
-            <div class="d-flex flex-column align-center">
+            <div v-if="isInitialized" class="d-flex flex-column align-center">
               <span class="text-h5 font-weight-bold">{{ value }}</span>
               <span v-if="prompt.slider.current.label" class="text-h6 font-weight-bold">
                 {{ translate(prompt.slider.current.label) }}
@@ -22,31 +23,29 @@
             </div>
           </template>
           <template #prepend>
-            <span v-if="prompt.slider.min.label" class="text-h6 font-weight-bold">
-              {{
-                translate(prompt.slider.min.label, { params: { value: prompt.slider.min.value } })
-              }}
-            </span>
+            <div v-if="prompt.slider.min.label" class="d-flex flex-column align-center">
+              <span class="text-h5 font-weight-bold">{{ prompt.slider.min.value }}</span>
+              <span class="text-h6 font-weight-bold">
+                {{ translate(prompt.slider.min.label) }}
+              </span>
+            </div>
           </template>
           <template #append>
-            <span v-if="prompt.slider.max.label" class="text-h6 font-weight-bold">
-              {{
-                translate(prompt.slider.max.label, { params: { value: prompt.slider.max.value } })
-              }}
-            </span>
+            <div v-if="prompt.slider.max.label" class="d-flex flex-column align-center">
+              <span class="text-h5 font-weight-bold">{{ prompt.slider.max.value }}</span>
+              <span class="text-h6 font-weight-bold">
+                {{ translate(prompt.slider.max.label) }}
+              </span>
+            </div>
           </template>
         </v-slider>
       </v-form>
     </v-card-text>
     <template #actions>
-      <next :disabled="!isValid" @click="action('next')">
-        {{ promptI18n.confirm }}
-      </next>
+      <next :disabled="!isValid" @click="action('next')"></next>
     </template>
     <template #nav-actions>
-      <next-mobile :disabled="!isValid" @click="action('next')">
-        {{ promptI18n.confirm }}
-      </next-mobile>
+      <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
   </card-layout>
 </template>
@@ -55,24 +54,19 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, onMounted } from 'vue';
 
-import type { MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { usePromptUtils } from '@intake24/survey/composables';
 
 import createBasePrompt from '../createBasePrompt';
 
 export default defineComponent({
-  name: 'MealDurationPrompt',
+  name: 'SliderPrompt',
 
-  mixins: [createBasePrompt<'meal-duration-prompt'>()],
+  mixins: [createBasePrompt<'slider-prompt'>()],
 
   props: {
-    meal: {
-      type: Object as PropType<MealState>,
-      required: true,
-    },
     value: {
-      type: Number,
+      type: Number as PropType<number | null>,
     },
   },
 
@@ -80,25 +74,34 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { translate } = useI18n();
-    const { action, translatePrompt } = usePromptUtils(props, ctx);
+    const { action } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
         return props.value;
       },
       set(value) {
-        ctx.emit('input', value);
+        ctx.emit('input', typeof value === 'undefined' || value === null ? undefined : value);
       },
     });
 
-    const isValid = computed(() => state.value !== null);
-    const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
+    const isInitialized = computed(
+      () => typeof state.value !== 'undefined' && state.value !== null
+    );
+
+    const initialize = (value: number) => {
+      if (isInitialized.value) return;
+
+      state.value = value;
+    };
+
+    const isValid = computed(() => typeof props.value !== 'undefined');
 
     onMounted(() => {
       if (typeof props.value === 'undefined') state.value = props.prompt.slider.current.value;
     });
 
-    return { action, isValid, promptI18n, state, translate };
+    return { action, initialize, isInitialized, isValid, state, translate };
   },
 });
 </script>

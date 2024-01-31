@@ -54,10 +54,27 @@ Prompt to add new meals. Multi-select list of options predefined in the scheme m
 
 Prompt to collect meal duration in minutes.
 
-- `initial` - initial duration in minutes
+:::tip
+Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slider-prompt), but it is more constrained, keep in mind that:
+
+- meal duration is always in minutes
+- labels should reflect the minutes unit
+
+:::
+
+#### Slider options
+
+- `current` - current duration in minutes
+  - `label` - label to be displayed
+  - `value` - current value
+  - `size` - droplet size (in `px`) of the label
 - `min` - minimum duration in minutes
+  - `label` - label to be displayed at the start of the slider (min value) (use `{value}` to insert variable value into the label)
+  - `value` - minimum value
 - `max` - maximum duration in minutes
-- `step` - step in minutes
+  - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
+  - `value` - maximum value
+- `step` - step size in minutes
 
 ### Meal time prompt
 
@@ -166,17 +183,33 @@ Prompts for food portion-size estimation. Only one can be used per scheme and fu
 
 - `leftovers` - show leftovers option
 
-- `multiple` - allow multiple item to be selected. When enabled, additional slider options are available:
-
-  - `initial` - initial value
-  - `min` - minimum value
-  - `max` - maximum value
-  - `step` step increment
-
 - `image map settings` - image map settings
 
   - `image map labels` - show image map labels
   - `image map pinchZoom` - show PinchZoom control for mobile UI labels
+
+- `multiple` - allow multiple item to be selected. When enabled, additional slider options are available:
+
+#### Slider options
+
+- `current` - current value settings
+  - `label` - label to be displayed
+  - `value` - current value
+  - `size` - droplet size (in `px`) of the label
+- `min` - minimum value settings
+  - `label` - label to be displayed at the start of the slider (min value) (use `{value}` to insert variable value into the label)
+  - `value` - minimum value
+- `max` - maximum value settings
+  - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
+  - `value` - maximum value
+
+:::tip
+Prompt uses slider component as [slider-prompt](/admin/surveys/prompt-types#slider-prompt), but it is more constrained, keep in mind that:
+
+- slider has decrement/increment buttons, so `min` and `max` labels won't be displayed
+- consider settings in context of `multiple` option that prompt is collecting - number if items related to selected food
+
+:::
 
 ### Guide image prompt
 
@@ -263,6 +296,37 @@ Informational prompt for acknowledging displayed information.
 ### No more information prompt
 
 Terminal prompt for `food` or `meal` when no more information is required. It should be placed in `foods` and `postFoods` sections respectively.
+
+### Select prompt
+
+Prompt to collect single or multiple option(s) from a list of options using select box.
+
+#### Options
+
+- `multiple` - `true` or `false` whether to allow multiple options to be selected
+
+- `options` - locale-specific list of options with properties:
+
+  - `label` (user-facing displayed value)
+  - `value` (value stored in database) can be specified
+
+### Slider prompt
+
+Prompt to collect numeric information using slider.
+
+#### Slider options
+
+- `current` - current value settings
+  - `label` - label to be displayed
+  - `value` - current value
+  - `size` - droplet size (in `px`) of the label
+- `min` - minimum value settings
+  - `label` - label to be displayed at the start of the slider (min value) (use `{value}` to insert variable value into the label)
+  - `value` - minimum value
+- `max` - maximum value settings
+  - `label` - label to be displayed at the end of the slider (max value) (use `{value}` to insert variable value into the label)
+  - `value` - maximum value
+- `step` - step size
 
 ### Radio list prompt
 

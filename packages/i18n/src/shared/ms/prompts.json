@@ -27,6 +27,17 @@
     "text": "Tiada lagi maklumat yang diperlukan",
     "description": "<p>Kami mempunyai semua maklumat yang diperlukan mengenai <strong>{item}</strong> anda pada masa ini.</p><p>Untuk meneruskan survei, klik butang \"Teruskan\" di bawah dan secara automatik kami akan memilih makanan atau hidangan seterusnya yang masih memerlukan sedikit maklumat.</p><p>Sebagai alternatif, klik pada hidangan atau makanan di sebelah kiri jika anda ingin menumpu pada item tertentu.</p>"
   },
+  "select": {
+    "name": "Select value from list",
+    "text": "",
+    "description": "",
+    "label": "Select option"
+  },
+  "slider": {
+    "name": "Select value on slider",
+    "text": "",
+    "description": ""
+  },
   "radioList": {
     "name": "Senarai pilihan tunggal",
     "text": "",

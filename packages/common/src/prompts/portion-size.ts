@@ -35,7 +35,12 @@ export const drinkScalePrompt: Prompts['drink-scale-prompt'] = copy({
   name: 'Drink Scale',
   imageMap,
   leftovers: false,
-  multiple: false,
+  multiple: {
+    min: { value: 1, label: false },
+    max: { value: 10, label: false },
+    current: { value: 1, label: false, size: 50 },
+    step: 1,
+  },
 });
 
 export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({

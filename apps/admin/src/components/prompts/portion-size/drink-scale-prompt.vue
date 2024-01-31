@@ -24,10 +24,10 @@
         >
         </v-switch>
         <slider-settings
-          v-if="typeof multiple !== 'boolean'"
+          v-if="multiple"
           class="mt-4"
-          :slider="multiple"
-          @update:slider="update('multiple', $event)"
+          :model-value="multiple"
+          @update:model-value="update('multiple', $event)"
         >
         </slider-settings>
       </v-col>
@@ -44,6 +44,7 @@ import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
+import { drinkScalePrompt } from '@intake24/common/prompts';
 
 import { basePrompt, ImageMapSettings, SliderSettings } from '../partials';
 
@@ -73,9 +74,13 @@ export default defineComponent({
     },
   },
 
+  setup() {
+    return { drinkScalePrompt };
+  },
+
   methods: {
     updateMultiple(value: boolean) {
-      this.update('multiple', value ? { min: 1, max: 10, step: 1, initial: 1 } : false);
+      this.update('multiple', value ? this.drinkScalePrompt.multiple : false);
     },
   },
 });

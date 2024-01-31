@@ -22,7 +22,7 @@ import type { Prompts } from '@intake24/common/prompts';
 import { basePrompt, SliderSettings } from '../partials';
 
 export default defineComponent({
-  name: 'MealDurationPrompt',
+  name: 'SliderPrompt',
 
   components: { SliderSettings },
 
@@ -30,7 +30,7 @@ export default defineComponent({
 
   props: {
     slider: {
-      type: Object as PropType<Prompts['meal-duration-prompt']['slider']>,
+      type: Object as PropType<Prompts['slider-prompt']['slider']>,
       required: true,
     },
   },

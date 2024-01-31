@@ -10,10 +10,6 @@ export const checkboxListPrompt: Prompts['checkbox-list-prompt'] = copy({
   type: 'custom',
   id: 'checkbox-list-prompt',
   name: 'Checkbox List Prompt',
-  i18n: {
-    ...basePrompt.i18n,
-    label: {},
-  },
   options: { en: [] },
   other: false,
 });
@@ -51,13 +47,34 @@ export const radioListPrompt: Prompts['radio-list-prompt'] = copy({
   type: 'custom',
   id: 'radio-list-prompt',
   name: 'Radio List Prompt',
-  i18n: {
-    ...basePrompt.i18n,
-    label: {},
-  },
   options: { en: [] },
   orientation: 'column',
   other: false,
+});
+
+export const selectPrompt: Prompts['select-prompt'] = copy({
+  ...basePrompt,
+  ...promptValidation,
+  component: 'select-prompt',
+  type: 'custom',
+  id: 'select-prompt',
+  name: 'Select prompt',
+  multiple: false,
+  options: { en: [] },
+});
+
+export const sliderPrompt: Prompts['slider-prompt'] = copy({
+  ...basePrompt,
+  component: 'slider-prompt',
+  type: 'custom',
+  id: 'slider-prompt',
+  name: 'Slider prompt',
+  slider: {
+    current: { value: 50, label: false, size: 75 },
+    min: { value: 0, label: false },
+    max: { value: 100, label: false },
+    step: 1,
+  },
 });
 
 export const textareaPrompt: Prompts['textarea-prompt'] = copy({
@@ -67,11 +84,6 @@ export const textareaPrompt: Prompts['textarea-prompt'] = copy({
   type: 'custom',
   id: 'textarea-prompt',
   name: 'Textarea prompt',
-  i18n: {
-    ...basePrompt.i18n,
-    label: {},
-    hint: {},
-  },
 });
 
 export const timePickerPrompt: Prompts['time-picker-prompt'] = copy({
@@ -98,6 +110,8 @@ export const customPrompts: Prompt[] = [
   datePickerPrompt,
   infoPrompt,
   noMoreInformationPrompt,
+  selectPrompt,
+  sliderPrompt,
   radioListPrompt,
   textareaPrompt,
   timePickerPrompt,

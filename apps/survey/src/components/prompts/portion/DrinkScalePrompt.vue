@@ -125,8 +125,8 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <quantity-slider
-            v-bind="prompt.multiple"
             v-model="portionSize.count"
+            :slider="prompt.multiple"
             @confirm="confirmCount"
             @input="updateCount"
           ></quantity-slider>
@@ -198,8 +198,8 @@ export default defineComponent({
   },
 
   computed: {
-    multipleEnabled() {
-      return this.prompt.multiple && this.parameters['multiple'];
+    multipleEnabled(): boolean {
+      return !!this.prompt.multiple && !!this.parameters['multiple'];
     },
 
     leftoversEnabled() {

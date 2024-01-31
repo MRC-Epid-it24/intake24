@@ -281,7 +281,7 @@ export default defineComponent({
 
         .v-slider__track-container {
           cursor: pointer;
-          width: 10px;
+          width: 12px;
 
           .v-slider__track-background {
             border-top-left-radius: 10px;

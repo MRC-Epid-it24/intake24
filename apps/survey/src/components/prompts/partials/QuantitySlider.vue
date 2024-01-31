@@ -1,29 +1,28 @@
 <template>
   <div>
     <v-slider
-      class="drink-scale-count-slider align-center mb-4 px-2 px-sm-4"
-      color="grey darken-1"
+      class="quantity-slider__slider align-center mb-4 px-2 px-sm-4"
+      color="secondary"
       hide-details
       :label="$t('prompts.quantity._')"
-      thumb-label="always"
-      :thumb-size="50"
-      v-bind="{
-        max,
-        min,
-        step,
-        value,
-      }"
+      :max="slider.max.value"
+      :min="slider.min.value"
+      :step="slider.step"
+      :style="{ 'padding-top': `${slider.current.size + 10}px` }"
+      :thumb-label="slider.current ? `always` : false"
+      :thumb-size="slider.current.size"
+      :value="value"
       @input="updateValue($event)"
     >
       <template #prepend>
-        <v-icon large :title="$t('prompts.quantity.less')" @click="decrement"
-          >fas fa-circle-minus</v-icon
-        >
+        <v-icon color="secondary" large :title="$t('prompts.quantity.less')" @click="decrement">
+          fas fa-circle-minus
+        </v-icon>
       </template>
       <template #append>
-        <v-icon large :title="$t('prompts.quantity.more')" @click="increment"
-          >fas fa-circle-plus</v-icon
-        >
+        <v-icon color="secondary" large :title="$t('prompts.quantity.more')" @click="increment">
+          fas fa-circle-plus
+        </v-icon>
       </template>
       <template #thumb-label="{ value: thumbValue }">
         <div class="d-flex flex-column align-center">
@@ -42,23 +41,18 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
+import type { Slider } from '@intake24/common/prompts';
 
 export default defineComponent({
   name: 'QuantitySlider',
 
   props: {
-    min: {
-      type: Number,
-      default: 1,
-    },
-    max: {
-      type: Number,
-      default: 10,
-    },
-    step: {
-      type: Number,
-      default: 1,
+    slider: {
+      type: Object as PropType<Slider>,
+      required: true,
     },
     value: {
       type: Number,
@@ -78,11 +72,11 @@ export default defineComponent({
     };
 
     const decrement = () => {
-      updateValue(props.value - props.step);
+      updateValue(props.value - props.slider.step);
     };
 
     const increment = () => {
-      updateValue(props.value + props.step);
+      updateValue(props.value + props.slider.step);
     };
 
     return {
@@ -95,13 +89,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.drink-scale-count-slider {
-  padding-top: 85px;
-
-  // Only for WCAG - vuetify should be able to do this
-  label {
-    display: none;
-  }
-}
-</style>
+<style lang="scss"></style>

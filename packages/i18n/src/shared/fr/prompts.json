@@ -27,6 +27,17 @@
     "text": "",
     "description": "<p>Nous disposons de toutes les informations nécessaires concernant votre <strong>{item}</strong> pour l'instant.</p><p>Pour poursuivre l'enquête, cliquez sur le bouton \"Continuer\" ci-dessous et nous sélectionnerons automatiquement l'aliment ou le repas suivant pour lequel nous avons encore besoin d'informations.</p><p>Vous pouvez également sélectionner un repas ou une denrée alimentaire sur la gauche si vous souhaitez vous concentrer sur un élément particulier.</p>"
   },
+  "select": {
+    "name": "Select value from list",
+    "text": "",
+    "description": "",
+    "label": "Select option"
+  },
+  "slider": {
+    "name": "Select value on slider",
+    "text": "",
+    "description": ""
+  },
   "radioList": {
     "name": "Liste à choix unique",
     "text": "",

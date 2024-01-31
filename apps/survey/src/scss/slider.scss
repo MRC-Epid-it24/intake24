@@ -1,0 +1,29 @@
+.quantity-slider__slider {
+  // Only for WCAG - vuetify should be able to do this
+  label {
+    display: none;
+  }
+
+  .v-slider {
+    .v-slider__track-container {
+      cursor: pointer;
+      height: 12px;
+
+      .v-slider__track-background {
+        border-radius: 10px;
+      }
+      .v-slider__track-fill {
+        border-radius: 10px;
+      }
+    }
+
+    .v-slider__thumb-container {
+      cursor: pointer;
+
+      .v-slider__thumb {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+}

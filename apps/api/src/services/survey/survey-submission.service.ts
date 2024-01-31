@@ -169,7 +169,7 @@ const surveySubmissionService = ({
           localName: template.name,
           readyMeal: false,
           searchTerm: (searchTerm ?? '').slice(0, 256),
-          portionSizeMethodId: 'recipe',
+          portionSizeMethodId: 'recipe-builder',
           reasonableAmount: true,
           foodGroupId,
           foodGroupEnglishName,

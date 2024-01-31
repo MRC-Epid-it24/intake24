@@ -216,7 +216,7 @@ export type PortionSizeStates = {
     linkedQuantity: number;
   };
   'direct-weight': PortionSizeStateBase & { method: 'direct-weight' };
-  recipe: PortionSizeStateBase & { method: 'recipe' };
+  'recipe-builder': PortionSizeStateBase & { method: 'recipe-builder' };
 };
 
 export type PortionSizeMethodId = keyof PortionSizeStates;
@@ -244,7 +244,7 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
   'pizza',
   'milk-in-a-hot-drink',
   'direct-weight',
-  'recipe',
+  'recipe-builder',
 ];
 
 export interface AbstractFoodState {

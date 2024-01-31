@@ -53,6 +53,14 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: [...foodsAndMeals],
   },
+  'select-prompt': {
+    tabs: [...tabsWithValidation],
+    sections: [...promptSectionsExceptSubmission],
+  },
+  'slider-prompt': {
+    tabs: [...tabs],
+    sections: [...promptSectionsExceptSubmission],
+  },
   'radio-list-prompt': {
     tabs: [...tabsWithValidation],
     sections: [...promptSectionsExceptSubmission],
