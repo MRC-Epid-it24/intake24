@@ -18,7 +18,6 @@ import type {
   SurveySubmissionMissingFoodCreationAttributes,
   SurveySubmissionNutrientCreationAttributes,
   SurveySubmissionPortionSizeFieldCreationAttributes,
-  User,
 } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
@@ -352,14 +351,14 @@ const surveySubmissionService = ({
    * Submit recall
    *
    * @param {string} slug
-   * @param {User} user
+   * @param {string} userId
    * @param {SurveyState} state
    * @param {number} tzOffset
    * @returns {Promise<SurveySubmissionResponse>}
    */
   const submit = async (
     slug: string,
-    user: User,
+    userId: string,
     state: SurveyState,
     tzOffset: number
   ): Promise<SurveySubmissionResponse> => {
@@ -376,11 +375,10 @@ const surveySubmissionService = ({
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId } = survey;
-    const { id: userId } = user;
     const submission = { id: randomUUID(), submissionTime: new Date() };
 
     const [userInfo, followUpUrl] = await Promise.all([
-      surveyService.userInfo(survey, user, tzOffset, 1),
+      surveyService.userInfo(survey, userId, tzOffset, 1),
       surveyService.getFollowUpUrl(survey, userId),
       surveyService.clearSession(slug, userId),
     ]);

@@ -67,6 +67,7 @@ import type {
 import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
 import type {
+  ACLCache,
   ACLService,
   AdminCategoryService,
   AdminFoodService,
@@ -119,9 +120,10 @@ import type {
 import type { JobsQueueHandler, TasksQueueHandler } from '@intake24/api/services/core/queues';
 import type { CachedParentCategoriesService } from '@intake24/api/services/foods/cached-parent-categories-service';
 import type { InheritableAttributesService } from '@intake24/api/services/foods/inheritable-attributes-service';
+import type { TokenPayload } from '@intake24/common/security';
 import type { Environment } from '@intake24/common/types';
 import type { Logger, Mailer } from '@intake24/common-backend';
-import type { DatabasesInterface, User } from '@intake24/db';
+import type { DatabasesInterface } from '@intake24/db';
 import config from '@intake24/api/config';
 import { Database, KyselyDatabases, models } from '@intake24/db';
 
@@ -150,8 +152,7 @@ export interface IoC extends Jobs {
   imagesBaseUrl: string;
 
   // Authenticated / scoped user vars
-  // currentUser: User;
-  // userId: string;
+  // user: TokenPayload;
 
   // Controllers
   authenticationController: AuthenticationController;
@@ -258,6 +259,7 @@ export interface IoC extends Jobs {
   tasksQueueHandler: TasksQueueHandler;
 
   // Authentication
+  aclCache: ACLCache;
   authenticationService: AuthenticationService;
   jwtService: JwtService;
   jwtRotationService: JwtRotationService;
@@ -319,8 +321,7 @@ export interface IoC extends Jobs {
 }
 
 export interface RequestIoC extends IoC {
-  currentUser: User;
-  userId: string;
+  user: TokenPayload;
   aclService: ACLService;
   clientLanguages: string[];
 }

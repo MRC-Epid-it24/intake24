@@ -12,7 +12,7 @@ import type {
   NutrientTablesResponse,
   UpdateNutrientTableRecordsRequest,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { jobRequiresFile, pickJobParams } from '@intake24/common/types';
 import { FoodsNutrientType, NutrientTable } from '@intake24/db';
@@ -98,7 +98,7 @@ const nutrientTableController = ({ nutrientTableService }: Pick<IoC, 'nutrientTa
       params: { nutrientTableId },
       body: { type },
     } = req;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const nutrientTable = await NutrientTable.findByPk(nutrientTableId, { attributes: ['id'] });
     if (!nutrientTable) throw new NotFoundError();

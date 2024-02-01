@@ -210,10 +210,14 @@ const locale = (
 const personalAccessToken = () => {
   const name = faker.word.words(3);
   const expiresAt = faker.date.future({ years: 1 });
+  const verified = true;
+  const aal = 'aal1' as const;
 
   return {
     name,
     expiresAt,
+    verified,
+    aal,
   };
 };
 

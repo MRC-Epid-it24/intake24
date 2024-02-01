@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { AsServedImageEntry, AsServedImagesResponse } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { AsServedImage, AsServedSet } from '@intake24/db';
@@ -57,7 +57,7 @@ const asServedImageController = ({
       body: { weight },
       params: { asServedSetId },
     } = req;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (!file) throw new ValidationError('File not found.', { path: 'image' });
 
@@ -67,7 +67,7 @@ const asServedImageController = ({
     let asServedImage = await asServedService.createImage({
       id: asServedSetId,
       file,
-      uploader: user.id,
+      uploader: userId,
       weight,
     });
     asServedImage = await portionSizeService.getAsServedImage(asServedSetId, asServedImage.id);

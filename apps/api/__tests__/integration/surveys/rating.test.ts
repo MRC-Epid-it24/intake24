@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 
 import type { SurveyRatingInput } from '@intake24/common/types/http';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
-import { SurveySubmission } from '@intake24/db/models';
+import { SurveySubmission } from '@intake24/db';
 
 export default () => {
   let url: string;

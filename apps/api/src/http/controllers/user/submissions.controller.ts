@@ -2,7 +2,6 @@ import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { SurveySubmissionEntry } from '@intake24/common/types/http';
-import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Survey } from '@intake24/db';
 
@@ -16,7 +15,7 @@ const userSubmissionsController = ({
     res: Response<SurveySubmissionEntry[]>
   ): Promise<void> => {
     const { survey: slug } = req.query;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const survey = await (typeof slug === 'string'
       ? Survey.findBySlug(slug, { attributes: ['id'] })

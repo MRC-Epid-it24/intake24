@@ -3,89 +3,36 @@ import type { Attributes, FindOptions } from 'sequelize';
 
 import type { RequestIoC } from '@intake24/api/ioc';
 import type { Dictionary } from '@intake24/common/types';
-import type { HasVisibility, ModelStatic, Permission, Role, Securable } from '@intake24/db';
+import type { HasVisibility, ModelStatic, Securable } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { getRequestParamFromSecurable, getResourceFromSecurable } from '@intake24/common/util';
-import { securableIncludes, securableScope, User } from '@intake24/db';
+import { securableIncludes, securableScope } from '@intake24/db';
 
 export type CheckAccessOptions = {
   params: Dictionary;
   scope?: string | string[];
 };
 
-const aclService = ({
-  aclConfig,
-  cache,
-  currentUser,
-}: Pick<RequestIoC, 'aclConfig' | 'cache' | 'currentUser'>) => {
-  const { enabled, ttl } = aclConfig.cache;
-  const { id: userId } = currentUser;
-
-  let cachedPermissions: Permission[] | null = null;
-  let cachedRoles: Role[] | null = null;
+const aclService = ({ aclCache, user }: Pick<RequestIoC, 'aclCache' | 'aclConfig' | 'user'>) => {
+  const { userId } = user;
 
   /**
-   * Fetch user's permissions from database
+   * Get authenticated user permissions
+   * - checks token payload if available
+   * - otherwise fetches data from cache / database
    *
-   * @returns {Promise<Permission[]>}
+   * @returns {Promise<string[]>}
    */
-  const fetchPermissions = async (): Promise<Permission[]> => {
-    const user = await User.scope(['permissions', 'rolesPerms']).findByPk(userId);
-    if (!user) return [];
-
-    return user.allPermissions();
-  };
+  const getPermissions = async (): Promise<string[]> =>
+    user.permissions ?? aclCache.getPermissions(userId);
 
   /**
-   * Fetch user's roles from database
+   * Get authenticated user roles
+   * - fetches data from database
    *
-   * @returns {Promise<Role[]>}
+   * @returns {Promise<string[]>}
    */
-  const fetchRoles = async (): Promise<Role[]> => {
-    const user = await User.scope('roles').findByPk(userId);
-    if (!user) return [];
-
-    return user.allRoles();
-  };
-
-  /**
-   * Get user's permissions
-   * - tries to fetch cached data if available and enabled
-   * - then fetches data from database
-   *
-   * @returns {Promise<Permission[]>}
-   */
-  const getPermissions = async (): Promise<Permission[]> => {
-    if (!enabled) return fetchPermissions();
-
-    if (cachedPermissions) return cachedPermissions;
-
-    cachedPermissions = await cache.remember<Permission[]>(
-      `${ACL_PERMISSIONS_KEY}:${userId}`,
-      ttl,
-      fetchPermissions
-    );
-
-    return cachedPermissions;
-  };
-
-  /**
-   * Get user's roles
-   * - tries to fetch cached data if available and enabled
-   * - then fetches data from database
-   *
-   * @returns {Promise<Role[]>}
-   */
-  const getRoles = async (): Promise<Role[]> => {
-    if (!enabled) return fetchRoles();
-
-    if (cachedRoles) return cachedRoles;
-
-    cachedRoles = await cache.remember<Role[]>(`${ACL_ROLES_KEY}:${userId}`, ttl, fetchRoles);
-
-    return cachedRoles;
-  };
+  const getRoles = async (): Promise<string[]> => aclCache.getPermissions(userId);
 
   /**
    * Check is user has provided permission or each permission in provided list
@@ -97,12 +44,10 @@ const aclService = ({
     const currentPermissions = await getPermissions();
     if (!currentPermissions.length) return false;
 
-    if (Array.isArray(permission)) {
-      const currentPermissionNames = currentPermissions.map(({ name }) => name);
-      return permission.every((item) => currentPermissionNames.includes(item));
-    }
+    if (Array.isArray(permission))
+      return permission.every((item) => currentPermissions.includes(item));
 
-    return !!currentPermissions.find(({ name }) => name === permission);
+    return !!currentPermissions.find((name) => name === permission);
   };
 
   /**
@@ -115,7 +60,7 @@ const aclService = ({
     const currentPermissions = await getPermissions();
     if (!currentPermissions.length) return false;
 
-    return currentPermissions.some((item) => permissions.includes(item.name));
+    return currentPermissions.some((item) => permissions.includes(item));
   };
 
   /**
@@ -128,12 +73,9 @@ const aclService = ({
     const currentRoles = await getRoles();
     if (!currentRoles.length) return false;
 
-    if (Array.isArray(role)) {
-      const currentRoleNames = currentRoles.map(({ name }) => name);
-      return role.every((name) => currentRoleNames.includes(name));
-    }
+    if (Array.isArray(role)) return role.every((name) => currentRoles.includes(name));
 
-    return !!currentRoles.find(({ name }) => name === role);
+    return !!currentRoles.find((name) => name === role);
   };
 
   /**
@@ -146,7 +88,7 @@ const aclService = ({
     const currentRoles = await getRoles();
     if (!currentRoles.length) return false;
 
-    return currentRoles.some((item) => roles.includes(item.name));
+    return currentRoles.some((item) => roles.includes(item));
   };
 
   /**
@@ -298,10 +240,9 @@ const aclService = ({
    */
   const getResourceAccessActions = async (resource: string): Promise<string[]> =>
     (await getPermissions())
-      .filter((permission) => permission.name.startsWith(`${resource}|`))
+      .filter((permission) => permission.startsWith(`${resource}|`))
       .map((permission) => {
-        const { name } = permission;
-        const [, action] = name.split('|');
+        const [, action] = permission.split('|');
         return action;
       });
 

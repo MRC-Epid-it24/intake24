@@ -16,7 +16,10 @@ const adminFoodDatabaseController = () => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),

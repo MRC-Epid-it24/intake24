@@ -6,7 +6,7 @@ import {
   validate,
 } from '@intake24/api/http/requests/util';
 import { surveyRatings } from '@intake24/common/surveys';
-import { SurveySubmission } from '@intake24/db/models';
+import { SurveySubmission } from '@intake24/db';
 
 export default validate(
   checkSchema({

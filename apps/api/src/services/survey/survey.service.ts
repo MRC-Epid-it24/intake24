@@ -147,14 +147,14 @@ const surveyService = ({
    * User information for survey
    *
    * @param {(string | Survey)} slug
-   * @param {User} user
+   * @param {string} userId
    * @param {number} tzOffset
    * @param {number} [increment=0] (increment submission count, e.g. during queued submission, thus not included in stats)
    * @returns {Promise<SurveyUserInfoResponse>}
    */
   const userInfo = async (
     slug: string | Survey,
-    user: User,
+    userId: string,
     tzOffset: number,
     increment = 0
   ): Promise<SurveyUserInfoResponse> => {
@@ -179,7 +179,10 @@ const surveyService = ({
       maximumDailySubmissions,
       numberOfSubmissionsForFeedback,
     } = survey;
-    const { id: userId, name } = user;
+
+    const user = await User.findByPk(userId, { attributes: ['id', 'name'] });
+    if (!user) throw new NotFoundError();
+    const { name } = user;
 
     const clientStartOfDay = addMinutes(startOfDay(new Date()), tzOffset * -1);
     const clientEndOfDay = addDays(clientStartOfDay, 1);
@@ -320,10 +323,9 @@ const surveyService = ({
       include.push({ association: 'customFields', where: { name: identifier }, required: false });
 
     const user = await User.findByPk(userId, { attributes: ['id'], include });
-
     if (!user) throw new NotFoundError();
-    const { aliases = [], customFields = [] } = user;
 
+    const { aliases = [], customFields = [] } = user;
     let identifierValue: string | null;
 
     switch (identifier) {
@@ -351,7 +353,7 @@ const surveyService = ({
 
   const followUp = async (
     slug: string,
-    user: User,
+    userId: string,
     tzOffset: number
   ): Promise<SurveyUserInfoResponse> => {
     const survey = await Survey.findBySlug(slug, {
@@ -367,8 +369,8 @@ const surveyService = ({
     if (!survey) throw new NotFoundError();
 
     const [followUpUrl, showFeedback] = await Promise.all([
-      getFollowUpUrl(survey, user.id),
-      userInfo(survey, user, tzOffset),
+      getFollowUpUrl(survey, userId),
+      userInfo(survey, userId, tzOffset),
     ]);
 
     return { ...showFeedback, followUpUrl };

@@ -35,7 +35,10 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemesResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -63,7 +66,7 @@ const surveySchemeController = (ioc: IoC) => {
     req: Request<any, any, SurveySchemeCreationAttributes>,
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const surveyScheme = await SurveyScheme.create({
       ...pick(req.body, createSurveySchemeFields),
@@ -122,7 +125,10 @@ const surveySchemeController = (ioc: IoC) => {
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'edit', {
       where: { id: surveySchemeId },
@@ -187,14 +193,16 @@ const surveySchemeController = (ioc: IoC) => {
     res: Response<SurveySchemeEntry>
   ): Promise<void> => {
     const { surveySchemeId } = req.params;
-    const { aclService } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const surveyScheme = await aclService.findAndCheckRecordAccess(SurveyScheme, 'copy', {
       where: { id: surveySchemeId },
     });
 
     const { name } = req.body;
-    const { userId } = req.scope.cradle;
     const { type, visibility, prompts, meals, dataExport } = surveyScheme;
 
     const surveySchemeCopy = await SurveyScheme.create({

@@ -1,10 +1,6 @@
 import { checkSchema } from 'express-validator';
 
-import {
-  customTypeErrorMessage,
-  typeErrorMessage,
-  validate,
-} from '@intake24/api/http/requests/util';
+import { typeErrorMessage, validate } from '@intake24/api/http/requests/util';
 import { identifierSafeChars, unique } from '@intake24/api/http/rules';
 import { AsServedSet } from '@intake24/db';
 
@@ -25,7 +21,7 @@ export default validate(
         errorMessage: typeErrorMessage('safeChars._'),
       },
       custom: {
-        options: async (value, meta): Promise<void> => {
+        options: async (value): Promise<void> => {
           if (!(await unique({ model: AsServedSet, condition: { field: 'id', value } })))
             throw new Error('$unique');
         },

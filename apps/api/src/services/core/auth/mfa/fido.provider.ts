@@ -1,4 +1,4 @@
-import url from 'node:url';
+import { URL } from 'node:url';
 
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
 import {
@@ -11,6 +11,7 @@ import {
 import type { IoC } from '@intake24/api/ioc';
 import type { FIDOAuthChallenge } from '@intake24/common/security';
 import { ValidationError } from '@intake24/api/http/errors';
+import { getFrontEndUrl } from '@intake24/api/util';
 import { randomString } from '@intake24/common/util';
 import { MFAAuthenticator, MFADevice } from '@intake24/db';
 
@@ -34,7 +35,7 @@ const fidoProvider = ({
 }: Pick<IoC, 'db' | 'appConfig' | 'securityConfig'>) => {
   const provider = 'fido';
   const { issuer } = securityConfig.mfa.providers[provider];
-  const rpID = url.parse(appConfig.urls.admin).hostname ?? 'localhost';
+  const rpID = new URL(getFrontEndUrl(appConfig.urls.base, appConfig.urls.admin)).hostname;
   if (!rpID) throw new Error('Cannot resolve admin domain from URL');
 
   const origin = appConfig.urls.admin;

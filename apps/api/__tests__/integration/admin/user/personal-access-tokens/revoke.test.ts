@@ -10,15 +10,21 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: { name: string; expiresAt: Date };
+  let input: { name: string; expiresAt: Date; verified: boolean; aal: 'aal1' | 'aal2' };
   let pat: { jwt: string; token: PersonalAccessToken };
 
   beforeAll(async () => {
     input = mocker.system.personalAccessToken();
-    pat = await ioc.cradle.jwtService.issuePersonalAccessToken({
-      userId: suite.data.system.user.id,
-      ...input,
-    });
+    const { name, expiresAt, ...rest } = input;
+
+    pat = await ioc.cradle.jwtService.issuePersonalAccessToken(
+      name,
+      {
+        userId: suite.data.system.user.id,
+        ...rest,
+      },
+      expiresAt
+    );
 
     url = `${baseUrl}/${pat.token.id}`;
     invalidUrl = `${baseUrl}/999999`;

@@ -95,7 +95,10 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemeReferences>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions<FeedbackScheme> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -180,7 +183,10 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LanguageReferences>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions<Language> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -208,7 +214,10 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SystemLocaleReferences>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions<SystemLocale> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -333,7 +342,10 @@ const referenceController = ({ imagesBaseUrl }: Pick<IoC, 'imagesBaseUrl'>) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveySchemeReferences>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions<SurveyScheme> = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),

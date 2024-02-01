@@ -1,3 +1,5 @@
+export * from './acl.cache';
+export { default as aclCache } from './acl.cache';
 export * from './acl.service';
 export { default as aclService } from './acl.service';
 export * from './authentication.service';

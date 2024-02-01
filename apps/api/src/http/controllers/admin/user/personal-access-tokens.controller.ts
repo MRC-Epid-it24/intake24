@@ -14,7 +14,7 @@ const personalAccessTokenController = ({ jwtService }: Pick<IoC, 'jwtService'>) 
     req: Request<any, any, any, PaginateQuery>,
     res: Response<PersonalAccessTokensResponse>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const tokens = await PersonalAccessToken.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -32,9 +32,13 @@ const personalAccessTokenController = ({ jwtService }: Pick<IoC, 'jwtService'>) 
     res: Response<PersonalAccessTokenEntry>
   ): Promise<void> => {
     const { name, expiresAt } = req.body;
-    const { userId } = req.scope.cradle;
+    const { aal, verified, userId } = req.scope.cradle.user;
 
-    const { jwt, token } = await jwtService.issuePersonalAccessToken({ userId, name, expiresAt });
+    const { jwt, token } = await jwtService.issuePersonalAccessToken(
+      name,
+      { aal, verified, userId },
+      expiresAt
+    );
 
     res.status(201).json({ jwt, token });
   };
@@ -44,7 +48,7 @@ const personalAccessTokenController = ({ jwtService }: Pick<IoC, 'jwtService'>) 
     res: Response<undefined>
   ): Promise<void> => {
     const { tokenId } = req.params;
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     await jwtService.revokePersonalAccessToken(tokenId, userId);
 

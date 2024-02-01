@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { User } from '@intake24/db';
 import { UserPassword } from '@intake24/db';
 
 import { ValidationError } from '../../errors';
@@ -11,10 +10,10 @@ const userProfileController = ({
   authenticationService,
 }: Pick<IoC, 'adminUserService' | 'authenticationService'>) => {
   const updatePassword = async (req: Request, res: Response<undefined>): Promise<void> => {
-    const { id } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { passwordCurrent, password } = req.body;
 
-    const userPassword = await UserPassword.findByPk(id);
+    const userPassword = await UserPassword.findByPk(userId);
 
     if (
       !userPassword ||
@@ -22,7 +21,7 @@ const userProfileController = ({
     )
       throw new ValidationError('Enter your current valid password.', { path: 'passwordCurrent' });
 
-    await adminUserService.updatePassword(id, password);
+    await adminUserService.updatePassword(userId, password);
 
     res.json();
   };

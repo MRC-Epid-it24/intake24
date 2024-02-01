@@ -4,7 +4,7 @@ import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { ImageMapEntry, ImageMapsResponse } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { ImageMap } from '@intake24/db';
@@ -48,7 +48,7 @@ const imageMapController = ({
       file,
       body: { id, description, objects },
     } = req;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
 
@@ -57,7 +57,7 @@ const imageMapController = ({
       description,
       objects: objects === undefined ? [] : JSON.parse(objects),
       baseImage: file,
-      uploader: user.id,
+      uploader: userId,
     });
 
     imageMap = await portionSizeService.getImageMap(imageMap.id);
@@ -93,11 +93,11 @@ const imageMapController = ({
   ): Promise<void> => {
     const { file } = req;
     const { imageMapId } = req.params;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (!file) throw new ValidationError('File not found.', { path: 'baseImage' });
 
-    await imageMapService.updateImage(imageMapId, file, user.id);
+    await imageMapService.updateImage(imageMapId, file, userId);
 
     const imageMap = await portionSizeService.getImageMap(imageMapId);
 

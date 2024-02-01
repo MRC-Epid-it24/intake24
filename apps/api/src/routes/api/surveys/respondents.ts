@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import ms from 'ms';
 
-import type { User } from '@intake24/db/models';
+import type { TokenPayload } from '@intake24/common/security';
 import { authenticate, isSurveyRespondent } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/surveys';
 import ioc from '@intake24/api/ioc';
@@ -37,7 +37,7 @@ export default () => {
     message: 'You have recently sent feedback.',
     skipFailedRequests: true,
     keyGenerator: (req) => {
-      const identifier = (req.user as User | undefined)?.id ?? req.ip;
+      const identifier = (req.user as TokenPayload | undefined)?.userId ?? req.ip;
       const type = typeof req.body.type === 'string' ? `rating-${req.body.type}` : 'rating';
       return `${type}:${identifier}`;
     },

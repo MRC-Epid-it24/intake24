@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { User } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { Survey } from '@intake24/db';
 
@@ -14,7 +13,7 @@ const userFeedbackController = ({
     res: Response<Buffer>
   ): Promise<void> => {
     const { survey: slug, submissions } = req.query;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const survey = await Survey.findBySlug(slug, {
       attributes: ['id'],
@@ -40,7 +39,7 @@ const userFeedbackController = ({
       body: { email: to },
       query: { survey: slug, submissions },
     } = req;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const survey = await Survey.findBySlug(slug, {
       attributes: ['id'],

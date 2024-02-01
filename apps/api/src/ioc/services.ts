@@ -2,6 +2,7 @@ import type { AwilixContainer } from 'awilix';
 import { asClass, asFunction, asValue } from 'awilix';
 
 import {
+  aclCache,
   aclService,
   adminCategoryService,
   adminFoodService,
@@ -59,6 +60,7 @@ import { logger, Mailer } from '@intake24/common-backend';
 export default (container: AwilixContainer): void => {
   container.register({
     authenticationService: asFunction(authenticationService),
+    aclCache: asFunction(aclCache),
     aclService: asFunction(aclService).scoped(),
 
     duoProvider: asFunction(duoProvider),

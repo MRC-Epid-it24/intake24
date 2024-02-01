@@ -12,7 +12,6 @@ import type {
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
-import type { User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { flattenSchemeWithSection, isMealSection } from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
@@ -130,9 +129,9 @@ const surveyRespondentController = ({
       params: { slug },
       query: { tzOffset },
     } = req;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
-    const userResponse = await surveyService.userInfo(slug, user, tzOffset);
+    const userResponse = await surveyService.userInfo(slug, userId, tzOffset);
 
     res.json(userResponse);
   };
@@ -141,7 +140,7 @@ const surveyRespondentController = ({
     req: Request<{ slug: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { slug } = req.params;
 
     const session = await surveyService.getSession(slug, userId);
@@ -153,7 +152,7 @@ const surveyRespondentController = ({
     req: Request<{ slug: string }>,
     res: Response<SurveyUserSessionResponse>
   ): Promise<void> => {
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { slug } = req.params;
     const { sessionData } = req.body;
 
@@ -166,7 +165,7 @@ const surveyRespondentController = ({
     req: Request<{ slug: string }>,
     res: Response<void>
   ): Promise<void> => {
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { slug } = req.params;
 
     await surveyService.clearSession(slug, userId);
@@ -182,7 +181,7 @@ const surveyRespondentController = ({
       body: { comment, rating, submissionId, type },
       params: { slug },
     } = req;
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     await surveyService.storeRating(slug, userId, { comment, rating, submissionId, type });
 
@@ -193,7 +192,7 @@ const surveyRespondentController = ({
     req: Request<{ slug: string }, any, SurveyRequestHelpInput>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { slug: surveySlug } = req.params;
     const { name, email, phone, phoneCountry, message } = req.body;
 
@@ -220,11 +219,11 @@ const surveyRespondentController = ({
       params: { slug },
       query: { tzOffset },
     } = req;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const followUpInfo = await surveySubmissionService.submit(
       slug,
-      user,
+      userId,
       { ...submission, userAgent },
       tzOffset
     );
