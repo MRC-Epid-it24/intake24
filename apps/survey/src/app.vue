@@ -73,12 +73,14 @@
               <span class="font-weight-medium">{{ surveyName }}</span>
             </template>
           </i18n>
-          <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical></v-divider>
-          <i18n path="recall.submissions.count" tag="span">
-            <template #count>
-              <span class="font-weight-medium">{{ recallNumber }}</span>
-            </template>
-          </i18n>
+          <template v-if="recallAllowed">
+            <v-divider v-if="$vuetify.breakpoint.smAndUp" class="grey mx-4" vertical></v-divider>
+            <i18n path="recall.submissions.count" tag="span">
+              <template #count>
+                <span class="font-weight-medium">{{ recallNumber }}</span>
+              </template>
+            </i18n>
+          </template>
         </div>
         <v-spacer v-if="$vuetify.breakpoint.smAndUp"></v-spacer>
         <v-btn
