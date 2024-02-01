@@ -46,7 +46,19 @@ const surveyService = ({
    * @returns {Promise<RespondentWithPassword>}
    */
   const generateRespondent = async (slug: string): Promise<RespondentWithPassword> => {
-    const survey = await Survey.findBySlug(slug, { include: [{ association: 'counter' }] });
+    const survey = await Survey.findBySlug(slug, {
+      attributes: [
+        'id',
+        'slug',
+        'allowGenUsers',
+        'genUserKey',
+        'authUrlTokenCharset',
+        'authUrlTokenLength',
+        'userCustomFields',
+        'userPersonalIdentifiers',
+      ],
+      include: [{ association: 'counter' }],
+    });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;
@@ -76,7 +88,18 @@ const surveyService = ({
     slug: string,
     token: string
   ): Promise<CreateUserResponse> => {
-    const survey = await Survey.findBySlug(slug);
+    const survey = await Survey.findBySlug(slug, {
+      attributes: [
+        'id',
+        'slug',
+        'allowGenUsers',
+        'genUserKey',
+        'authUrlTokenCharset',
+        'authUrlTokenLength',
+        'userCustomFields',
+        'userPersonalIdentifiers',
+      ],
+    });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, allowGenUsers, genUserKey } = survey;

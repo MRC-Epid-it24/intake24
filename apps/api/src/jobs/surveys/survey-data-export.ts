@@ -68,8 +68,8 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
     this.initProgress(total);
 
     let counter = 0;
-    const progressInterval = setInterval(() => {
-      this.setProgress(counter);
+    const progressInterval = setInterval(async () => {
+      await this.setProgress(counter);
     }, 1000);
 
     return new Promise((resolve, reject) => {

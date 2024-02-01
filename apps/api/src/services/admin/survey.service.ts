@@ -66,7 +66,19 @@ const adminSurveyService = ({
     survey: Survey | string,
     input: CreateRespondentInput
   ): Promise<UserSurveyAlias> => {
-    const surveyEntry = typeof survey === 'string' ? await Survey.findByPk(survey) : survey;
+    const surveyEntry =
+      typeof survey === 'string'
+        ? await Survey.findByPk(survey, {
+            attributes: [
+              'id',
+              'slug',
+              'authUrlTokenCharset',
+              'authUrlTokenLength',
+              'userCustomFields',
+              'userPersonalIdentifiers',
+            ],
+          })
+        : survey;
     if (!surveyEntry) throw new NotFoundError();
 
     const {
@@ -209,8 +221,11 @@ const adminSurveyService = ({
       Survey.findByPk(surveyId, {
         attributes: ['id', 'userCustomFields', 'userPersonalIdentifiers'],
       }),
-      User.scope('customFields').findOne({
-        include: [{ association: 'aliases', where: { userId, surveyId } }],
+      User.findOne({
+        include: [
+          { association: 'aliases', where: { userId, surveyId } },
+          { association: 'customFields' },
+        ],
       }),
     ]);
 
@@ -252,9 +267,10 @@ const adminSurveyService = ({
   const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
     const [survey, user] = await Promise.all([
       Survey.findByPk(surveyId, { attributes: ['id', 'slug'] }),
-      User.scope('submissions').findOne({
+      User.findOne({
+        attributes: ['id', 'email'],
         where: { id: userId },
-        include: [{ association: 'aliases', where: { surveyId } }],
+        include: [{ association: 'aliases', where: { surveyId } }, { association: 'submissions' }],
       }),
     ]);
 

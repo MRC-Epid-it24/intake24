@@ -176,8 +176,8 @@ const surveySubmissionService = ({
           foodGroupLocalName: localGroups[0]?.name ?? foodGroupEnglishName,
           brand: null,
           barcode: null,
-          nutrientTableId: '0',
-          nutrientTableCode: '0',
+          nutrientTableId: '',
+          nutrientTableCode: '',
         });
         collectedFoods.states.push(foodState);
 
