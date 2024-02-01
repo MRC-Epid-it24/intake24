@@ -21,6 +21,7 @@
                 {{ translate(prompt.slider.current.label) }}
               </span>
             </div>
+            <v-icon v-else class="fa-beat" color="white">fas fa-circle</v-icon>
           </template>
           <template #prepend>
             <div v-if="prompt.slider.min.label" class="d-flex flex-column align-center">
