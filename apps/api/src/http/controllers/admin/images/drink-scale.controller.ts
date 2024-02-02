@@ -39,7 +39,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     >,
     res: Response<DrinkwareScaleEntry | undefined>
   ): Promise<void> => {
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const { drinkwareSetId, choiceId } = req.params;
     const updateOnConflict = req.query.updateOnConflict === 'true';
@@ -57,7 +57,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     await drinkwareSetService.createDrinkScaleV1(
       drinkwareSetId,
       choiceId,
-      user.id,
+      userId,
       baseImage[0],
       overlayImage[0],
       label,
@@ -88,7 +88,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     >,
     res: Response<DrinkwareScaleV2Entry | undefined>
   ): Promise<void> => {
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const { drinkwareSetId, choiceId } = req.params;
     const updateOnConflict = req.query.updateOnConflict === 'true';
@@ -101,7 +101,7 @@ const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetSe
     await drinkwareSetService.createDrinkScaleV2(
       drinkwareSetId,
       choiceId,
-      user.id,
+      userId,
       file,
       label,
       outlineCoordinates,
