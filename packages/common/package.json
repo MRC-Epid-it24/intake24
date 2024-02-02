@@ -28,7 +28,7 @@
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
-    "@simplewebauthn/types": "^9.0.0",
+    "@simplewebauthn/types": "^9.0.1",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.14.202",
     "@types/pluralize": "^0.0.33",

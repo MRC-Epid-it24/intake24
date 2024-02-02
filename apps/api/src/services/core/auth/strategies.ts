@@ -1,5 +1,5 @@
 import type { PassportStatic } from 'passport';
-import type { StrategyOptions } from 'passport-jwt';
+import type { StrategyOptions, StrategyOptionsWithoutRequest } from 'passport-jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Op } from 'sequelize';
 
@@ -10,7 +10,7 @@ import { User } from '@intake24/db';
 
 const { issuer, secret } = security.jwt;
 
-export const opts: Record<FrontEnd, StrategyOptions> = {
+export const opts: Record<FrontEnd, StrategyOptionsWithoutRequest> = {
   admin: {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secret,
