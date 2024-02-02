@@ -14,14 +14,14 @@ export const imageMapsResponse = (baseUrl: string) => {
    * @returns {ImageMapObjectResponse}
    */
   const objectResponse = (item: ImageMapObject): ImageMapObjectResponse => {
-    const { id, description, label, navigationIndex, outlineCoordinates: outline } = item;
+    const { id, description, label, navigationIndex, outlineCoordinates } = item;
 
     return {
       id,
       description,
       label,
       navigationIndex,
-      outline,
+      outlineCoordinates,
     };
   };
 

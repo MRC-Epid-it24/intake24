@@ -1,4 +1,4 @@
-import type { LocaleTranslation } from '@intake24/common/types';
+import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
 import type {
   DrinkwareScaleAttributes,
   DrinkwareScalesColumns,
@@ -13,9 +13,16 @@ export type CreateDrinkwareSetInput = {
   imageMapId: string;
 };
 
+export type UpdateDrinkwareScaleInput = {
+  label?: LocaleTranslation;
+  outlineCoordinates?: number[];
+  volumeSamples?: number[];
+};
+
 export type UpdateDrinkwareSetInput = {
   description: string;
   imageMapId: string;
+  scales: Dictionary<UpdateDrinkwareScaleInput>;
 };
 
 export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id' | 'description'> {

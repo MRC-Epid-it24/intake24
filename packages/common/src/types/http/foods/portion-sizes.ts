@@ -29,7 +29,7 @@ export type ImageMapObjectResponse = {
   description: string;
   label: LocaleTranslation;
   navigationIndex: number;
-  outline: number[];
+  outlineCoordinates: number[];
 };
 
 export type ImageMapResponse = {
