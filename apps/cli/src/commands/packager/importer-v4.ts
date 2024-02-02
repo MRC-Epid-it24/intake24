@@ -389,9 +389,11 @@ export class ImporterV4 {
         }
         case 'overwrite': {
           logger.debug(`Updating existing drinkware set: ${setId}`);
+          logger.warn(`Importing sliding scales is not implemented`);
           await this.apiClient.portionSize.drinkware.update(setId, {
             imageMapId: pkgSet.selectionImageMapId,
             description: pkgSet.description,
+            scales: {},
           });
           break;
         }

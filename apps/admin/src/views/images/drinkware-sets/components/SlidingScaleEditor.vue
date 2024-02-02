@@ -1,0 +1,407 @@
+<template>
+  <v-card flat>
+    <v-card-title>{{ $t('drinkware-sets.slidingScale.title') }}</v-card-title>
+    <v-card-text>
+      <!-- Legacy sliding scale version, cannot be edited unless converted to v2 -->
+      <v-card v-if="scale.version !== 2" flat>
+        <v-card-title
+          ><v-icon class="mx-2">fas fa-exclamation-circle</v-icon>
+          {{ $t('drinkware-sets.slidingScale.obsolete') }}</v-card-title
+        >
+        <v-card-text>
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p1')"></p>
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p2')"></p>
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p3')"></p>
+          <p v-html="$t('drinkware-sets.slidingScale.legacy.p4')"></p>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="primary" @click="onConvertScaleVersion"
+            ><v-icon class="mx-2">fas fa-rotate</v-icon>
+            {{ $t('drinkware-sets.slidingScale.legacy.convert') }}</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+      <v-card v-if="scale.version === 2" flat>
+        <v-card-subtitle class="pa-0">
+          <v-alert class="pa-2" color="#ddd" dense icon="fas fa-info-circle"
+            ><span v-html="$t('drinkware-sets.slidingScale.editInstructions')"></span> </v-alert
+        ></v-card-subtitle>
+        <v-switch
+          v-if="overlayImageUrl"
+          v-model="showOverlayImage"
+          dense
+          :label="$t('drinkware-sets.slidingScale.fillableAreaToggle')"
+        ></v-switch>
+        <v-card-actions class="wrap-actions">
+          <v-btn :disabled="selectedVertexIndex == -1" @click="deleteSelected"
+            ><v-icon class="mr-2">fas fa-trash</v-icon
+            >{{ $t('drinkware-sets.slidingScale.deleteSelected') }}</v-btn
+          >
+          <v-spacer></v-spacer>
+          <v-dialog v-model="clearScaleDialog" width="500px">
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                color="error"
+                :disabled="outlineCoordinates.length === 0"
+                v-on="on"
+                ><v-icon class="mr-2">fas fa-x</v-icon
+                >{{ $t('drinkware-sets.slidingScale.deleteAll') }}</v-btn
+              >
+            </template>
+
+            <template #default>
+              <v-card>
+                <v-card-title class="h2 justify-center">
+                  {{ $t('drinkware-sets.clearScaleDialog.title') }}
+                </v-card-title>
+                <v-card-text class="px-6 py-4 d-flex justify-center">
+                  <div class="subtitle-1">
+                    {{ $t('drinkware-sets.clearScaleDialog.msg') }}
+                  </div>
+                </v-card-text>
+                <v-container class="pa-6">
+                  <v-btn
+                    block
+                    class="mb-2"
+                    color="warning"
+                    dark
+                    large
+                    :title="$t('common.action.delete')"
+                    @click="clearScale()"
+                  >
+                    {{ $t('common.action.delete') }}
+                  </v-btn>
+                  <v-btn
+                    block
+                    color="warning"
+                    large
+                    outlined
+                    :title="$t('common.action.cancel')"
+                    @click="clearScaleDialog = false"
+                  >
+                    {{ $t('common.action.cancel') }}
+                  </v-btn>
+                </v-container>
+              </v-card>
+            </template>
+          </v-dialog>
+        </v-card-actions>
+
+        <div class="sliding-scale">
+          <v-img ref="img" :src="scale.baseImageUrl">
+            <template #placeholder>
+              <image-placeholder></image-placeholder>
+            </template>
+          </v-img>
+          <v-img
+            v-if="showOverlayImage && overlayImageUrl"
+            class="fill-area-image"
+            :src="overlayImageUrl"
+          >
+            <template #placeholder>
+              <image-placeholder></image-placeholder>
+            </template>
+          </v-img>
+
+          <svg
+            ref="svg"
+            @dblclick.stop="createVertex"
+            @mouseleave="endVertexDrag"
+            @mousemove="onScaleMouseMove"
+            @mouseup="endVertexDrag"
+          >
+            <polygon class="sliding-scale-polygon" :points="svgPolygonPoints"></polygon>
+            <!-- ESLint complains about key not coming from the v-for iterator" -->
+            <!-- eslint-disable vue/valid-v-for -->
+            <circle
+              v-for="(vertex, index) in outlineCoordinates"
+              :key="uniqueId()"
+              class="sliding-scale-vertex"
+              :class="{ selected: index == selectedVertexIndex }"
+              :cx="vertex[0] * width"
+              :cy="vertex[1] * height"
+              r="8"
+              @mousedown="onVertexMouseDown(index)"
+            ></circle>
+          </svg>
+        </div>
+      </v-card>
+    </v-card-text>
+
+    <v-expansion-panels v-if="scale.version === 2" flat>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          {{ $t('drinkware-sets.slidingScale.replaceBaseImage') }}</v-expansion-panel-header
+        >
+        <v-expansion-panel-content>
+          <v-file-input
+            v-model="newBaseImageFile"
+            hide-details="auto"
+            :label="$t('image-maps.baseImage')"
+            name="baseImage"
+            outlined
+            prepend-icon=""
+            prepend-inner-icon="fas fa-paperclip"
+          ></v-file-input>
+          <v-btn class="mt-4" :disabled="!newBaseImageFile" @click="replaceBaseImage"
+            ><v-icon class="mr-2">fas fa-rotate</v-icon>
+            {{ $t('drinkware-sets.slidingScale.replaceButtonLabel') }}</v-btn
+          >
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </v-card>
+</template>
+
+<script lang="ts">
+import type { VImg } from 'vuetify/lib';
+import { useElementSize } from '@vueuse/core';
+import { flatten, uniqueId } from 'lodash';
+import chunk from 'lodash/chunk';
+import Vue, { computed, defineComponent, onMounted, ref, toRef, watch } from 'vue';
+
+import type { DrinkwareSetEntry } from '@intake24/common/types/http/admin';
+import { useEntry as useStoreEntry } from '@intake24/admin/stores';
+
+import ImagePlaceholder from '../../../../components/util/ImagePlaceholder.vue';
+import { closestSegmentIndex, closestVertexIndex } from '../../math-helpers';
+
+export default defineComponent({
+  name: 'SlidingScaleEditor',
+
+  components: { ImagePlaceholder },
+
+  props: {
+    scaleIndex: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  emits: ['baseImageChanged'],
+
+  setup(props, { emit }) {
+    const img = ref<InstanceType<typeof VImg>>();
+    const svg = ref<SVGElement>();
+
+    //@ts-expect-error should allow vue instance?
+    const { height, width } = useElementSize(img);
+
+    const screenHeight = ref(0);
+    const screenWidth = ref(0);
+
+    const getScreenDimensions = () => {
+      screenHeight.value = window.screen.height;
+      screenWidth.value = window.screen.width;
+    };
+
+    const entryStore = useStoreEntry();
+
+    const clearScaleDialog = ref(false);
+
+    const entry = entryStore.getEntry as DrinkwareSetEntry;
+
+    const scaleIndex = toRef(props, 'scaleIndex');
+
+    const selectedVertexIndex = ref(-1);
+
+    const overlayImageUrl = ref<string | undefined>(undefined);
+
+    const newBaseImageFile = ref<File | undefined>(undefined);
+
+    const newBaseImagePreviewUrl = ref<string | undefined>(undefined);
+
+    const showOverlayImage = ref(true);
+
+    const scale = computed(() => {
+      return entry.scales[scaleIndex.value];
+    });
+
+    const outlineCoordinates = ref<[number, number][]>(
+      scale.value.version == 2
+        ? (chunk(scale.value.outlineCoordinates, 2) as [number, number][])
+        : []
+    );
+
+    const svgPolygonPoints = computed(() => {
+      return outlineCoordinates.value
+        .map(([x, y]) => `${x * width.value}, ${y * height.value}`)
+        .join(' ');
+    });
+
+    const onConvertScaleVersion = () => {
+      const v1 = entry.scales[scaleIndex.value];
+
+      if (v1.version !== 1) {
+        console.warn(
+          `Attempted to convert a scale of version ${v1.version}: can only convert version 1`
+        );
+        return;
+      }
+
+      overlayImageUrl.value = v1.overlayImageUrl;
+
+      Vue.set(entry.scales, scaleIndex.value, {
+        version: 2,
+        choiceId: v1.choiceId,
+        label: v1.label,
+        volumeSamples: v1.volumeSamples,
+        volumeSamplesNormalised: v1.volumeSamples,
+        baseImageUrl: v1.baseImageUrl,
+        outlineCoordinates: [],
+      });
+
+      outlineCoordinates.value = [];
+    };
+
+    const createVertex = (e: MouseEvent) => {
+      const p = [e.offsetX / width.value, e.offsetY / height.value] as [number, number];
+      const coords = outlineCoordinates.value;
+      const closestIndex = closestSegmentIndex(coords, p);
+      const insertAt = (closestIndex + 1) % coords.length;
+      coords.splice(insertAt, 0, p);
+      selectedVertexIndex.value = insertAt;
+    };
+
+    const deleteSelected = () => {
+      const coords = outlineCoordinates.value;
+      const deletedPos = coords[selectedVertexIndex.value];
+      coords.splice(selectedVertexIndex.value, 1);
+      selectedVertexIndex.value = closestVertexIndex(coords, deletedPos);
+    };
+
+    const clearScale = () => {
+      outlineCoordinates.value = [];
+      clearScaleDialog.value = false;
+      selectedVertexIndex.value = -1;
+    };
+
+    onMounted(() => {
+      getScreenDimensions();
+    });
+
+    let dragging = false;
+
+    const onVertexMouseDown = (index: number) => {
+      selectedVertexIndex.value = index;
+      dragging = true;
+    };
+
+    const endVertexDrag = () => {
+      dragging = false;
+    };
+
+    const onScaleMouseMove = (e: MouseEvent) => {
+      if (dragging) {
+        Vue.set(outlineCoordinates.value, selectedVertexIndex.value, [
+          e.offsetX / width.value,
+          e.offsetY / height.value,
+        ]);
+      }
+    };
+
+    const replaceBaseImage = () => {
+      if (newBaseImageFile.value) {
+        scale.value.baseImageUrl = URL.createObjectURL(newBaseImageFile.value);
+        emit('baseImageChanged', scale.value.choiceId, newBaseImageFile.value);
+      }
+    };
+
+    watch(
+      outlineCoordinates,
+      (newValue) => {
+        if (scale.value.version === 2) {
+          scale.value.outlineCoordinates = flatten(newValue);
+        }
+      },
+      { deep: true }
+    );
+
+    watch(scale, (newValue) => {
+      outlineCoordinates.value =
+        newValue.version == 2 ? (chunk(newValue.outlineCoordinates, 2) as [number, number][]) : [];
+    });
+
+    return {
+      height,
+      width,
+      confirm,
+      img,
+      svg,
+      screenHeight,
+      screenWidth,
+      scale,
+      onConvertScaleVersion,
+      createVertex,
+      outlineCoordinates,
+      svgPolygonPoints,
+      onVertexMouseDown,
+      endVertexDrag,
+      onScaleMouseMove,
+      selectedVertexIndex,
+      deleteSelected,
+      clearScale,
+      clearScaleDialog,
+      showOverlayImage,
+      overlayImageUrl,
+      newBaseImageFile,
+      newBaseImagePreviewUrl,
+      replaceBaseImage,
+    };
+  },
+  methods: { uniqueId },
+});
+</script>
+
+<style lang="scss">
+@import '../../../../scss/variables';
+
+.wrap-actions {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-left: 0;
+}
+
+.sliding-scale {
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+
+    .sliding-scale-polygon {
+      stroke: black;
+      stroke-width: 2px;
+      fill: $sliding_scale_color;
+      fill-opacity: 0.4;
+    }
+
+    .sliding-scale-vertex {
+      cursor: pointer;
+      fill: black;
+      fill-opacity: 0.5;
+      stroke: black;
+      stroke-width: 2px;
+
+      &.selected {
+        fill: $primary;
+      }
+    }
+  }
+}
+
+.fill-area-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+</style>

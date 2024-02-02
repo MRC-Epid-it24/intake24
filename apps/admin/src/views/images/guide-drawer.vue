@@ -144,6 +144,7 @@ import type {
   ImageMapEntryObject,
 } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { closestSegmentIndex } from '@intake24/admin/views/images/math-helpers';
 import { ConfirmDialog } from '@intake24/ui';
 
 interface Objects extends Omit<GuideImageEntryObject, 'id' | 'outlineCoordinates'> {
@@ -316,15 +317,13 @@ export default defineComponent({
 
       const { width } = this;
       const { offsetX, offsetY } = event;
+      const p: [number, number] = [offsetX / width, offsetY / width];
 
-      const closest = this.getClosestPointIndex(
-        [offsetX, offsetY],
-        this.scaled[selectedObjectIdx].coords
-      );
-      this.coords[selectedObjectIdx].splice(closest + 1 ?? 0, 0, [
-        offsetX / width,
-        offsetY / width,
-      ]);
+      const coords = this.coords[selectedObjectIdx] as [number, number][];
+
+      const closestIndex = closestSegmentIndex(coords, p);
+      const insertAt = (closestIndex + 1) % coords.length;
+      coords.splice(insertAt, 0, p);
     },
 
     updateNode(objIdx: number, nodeIdx: number, [x, y]: number[]) {
@@ -402,7 +401,7 @@ export default defineComponent({
     .guides-drawer-node {
       fill: rgba(0, 0, 0);
       fill-opacity: 0.8;
-      r: 5;
+      r: 5px;
     }
   }
 }

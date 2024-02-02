@@ -1,5 +1,6 @@
-import type { Expression, SqlBool } from 'kysely';
+import type { Expression, Kysely, SqlBool } from 'kysely';
 import { groupBy, mapValues } from 'lodash';
+import prompts from 'prompts';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { LocaleTranslation } from '@intake24/common/types';
@@ -11,10 +12,14 @@ import type {
   DrinkwareSetsResponse,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, ProcessedImage } from '@intake24/db';
+import type { FoodsDB, PaginateQuery, ProcessedImage } from '@intake24/db';
 import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
+import number = prompts.prompts.number;
+import path from 'node:path';
+
+import type { UpdateDrinkwareSetInputWithFiles } from '@intake24/api/http/controllers';
 
 const drinkwareSetService = ({
   kyselyDb,
@@ -22,10 +27,18 @@ const drinkwareSetService = ({
   logger,
   sourceImageService,
   processedImageService,
+  fsConfig,
 }: Pick<
   IoC,
-  'kyselyDb' | 'imagesBaseUrl' | 'logger' | 'sourceImageService' | 'processedImageService'
+  | 'kyselyDb'
+  | 'imagesBaseUrl'
+  | 'logger'
+  | 'sourceImageService'
+  | 'processedImageService'
+  | 'fsConfig'
 >) => {
+  const { images: imagesPath } = fsConfig.local;
+
   function getImageUrl(relativeUrl: string): string {
     return `${imagesBaseUrl}/${relativeUrl}`;
   }
@@ -60,8 +73,8 @@ const drinkwareSetService = ({
     return jsonObject as number[];
   }
 
-  async function checkSetId(setId: string): Promise<void> {
-    const records = await kyselyDb.foods
+  async function checkSetId(setId: string, transaction?: Kysely<FoodsDB>): Promise<void> {
+    const records = await (transaction ?? kyselyDb.foods)
       .selectFrom('drinkwareSets')
       .select('drinkwareSets.id')
       .where('drinkwareSets.id', '=', setId)
@@ -85,21 +98,115 @@ const drinkwareSetService = ({
     );
   };
 
-  const update = async (drinkwareSetId: string, input: UpdateDrinkwareSetInput): Promise<void> => {
-    await kyselyDb.foods
-      .selectFrom('imageMaps')
-      .where('id', '=', input.imageMapId)
-      .executeTakeFirstOrThrow(
-        (_) => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
-      );
+  async function convertV1BaseImage(
+    drinkwareSetId: string,
+    imageUploaderId: string,
+    imagePath: string
+  ): Promise<string> {
+    const image = await processDrinkScaleImage(
+      drinkwareSetId,
+      imageUploaderId,
+      path.join(imagesPath, imagePath)
+    );
+    return image.id;
+  }
 
-    const { numUpdatedRows } = await kyselyDb.foods
-      .updateTable('drinkwareSets')
-      .set(input)
-      .where('drinkwareSets.id', '=', drinkwareSetId)
-      .executeTakeFirst();
+  /*
+  This is probably more complicated than it needs to be...
 
-    if (numUpdatedRows !== 1n) throw new NotFoundError();
+  This function handles the following cases:
+
+  1) Update existing scale data (optionally including uploading new base image)
+
+  2) Create new scale data record
+
+  3) Convert legacy data to the new format, including processing the old base image
+     using the standard image processing pipeline.
+   */
+  const update = async (
+    drinkwareSetId: string,
+    imageUploaderId: string,
+    input: UpdateDrinkwareSetInputWithFiles
+  ): Promise<void> => {
+    await kyselyDb.foods.transaction().execute(async (tx) => {
+      // Update the drinkware set record
+      await tx
+        .selectFrom('imageMaps')
+        .where('id', '=', input.imageMapId)
+        .executeTakeFirstOrThrow(
+          () => new ApplicationError(`Image map ${input.imageMapId} does not exist.`)
+        );
+
+      const { numUpdatedRows } = await tx
+        .updateTable('drinkwareSets')
+        .set({
+          description: input.description,
+          imageMapId: input.imageMapId,
+        })
+        .where('drinkwareSets.id', '=', drinkwareSetId)
+        .executeTakeFirst();
+
+      if (numUpdatedRows !== 1n)
+        throw new NotFoundError(`Drinkware set ${drinkwareSetId} not found`);
+
+      // Update the sliding scales
+
+      const scaleChoiceIds = Object.keys(input.scales);
+
+      if (scaleChoiceIds.length > 0) {
+        const legacyScales = await getDrinkScalesV1(drinkwareSetId, true, tx);
+        const existingScalesV2 = await getDrinkScaleV2ChoiceIds(drinkwareSetId, tx);
+
+        for (const choiceId of scaleChoiceIds) {
+          const scaleInput = input.scales[choiceId];
+
+          if (existingScalesV2.includes(choiceId)) {
+            await updateDrinkScaleV2(
+              drinkwareSetId,
+              choiceId,
+              imageUploaderId,
+              input.baseImageFiles[choiceId],
+              scaleInput.label,
+              scaleInput.outlineCoordinates,
+              scaleInput.volumeSamples,
+              tx
+            );
+          } else {
+            // If V1 scale exists, use its values as defaults
+            const v1 = legacyScales.find((scale) => scale.choiceId.toString() === choiceId);
+
+            // If new base image was not uploaded, run the legacy base image through the standard
+            // image processing pipeline
+            const baseImage =
+              input.baseImageFiles[choiceId] ??
+              (v1
+                ? await convertV1BaseImage(drinkwareSetId, imageUploaderId, v1.baseImageUrl)
+                : undefined);
+
+            if (baseImage === undefined)
+              throw new ApplicationError(
+                `Drink scale for choice id ${choiceId} does not exist; an image is required to create a new scale record and it is missing from input.`
+              );
+
+            const volumeSamples = scaleInput.volumeSamples ?? (v1 ? v1.volumeSamples : []);
+
+            const label = scaleInput.label ?? (v1 ? v1.label : {});
+
+            await createDrinkScaleV2(
+              drinkwareSetId,
+              choiceId,
+              imageUploaderId,
+              baseImage,
+              label,
+              scaleInput.outlineCoordinates || [], // V1 does not store outline coordinates, so default to empty
+              volumeSamples,
+              false,
+              tx
+            );
+          }
+        }
+      }
+    });
   };
 
   const destroy = async (drinkwareSetId: string): Promise<void> => {
@@ -111,8 +218,14 @@ const drinkwareSetService = ({
 
   //#region Legacy drink scale format with pre-rendered overlays
 
-  const fetchDrinkScaleRecords = async (drinkwareSetId: string, choiceId?: string) => {
-    const scaleRecords = await kyselyDb.foods
+  const fetchDrinkScaleRecords = async (
+    drinkwareSetId: string,
+    choiceId?: string,
+    transaction?: Kysely<FoodsDB>
+  ) => {
+    const db = transaction ?? kyselyDb.foods;
+
+    const scaleRecords = await db
       .selectFrom('drinkwareScales')
       .select([
         'id',
@@ -142,10 +255,10 @@ const drinkwareSetService = ({
     return scaleRecords;
   };
 
-  const fetchVolumeSampleRecords = async (scaleId: string[]) => {
+  const fetchVolumeSampleRecords = async (scaleId: string[], transaction?: Kysely<FoodsDB>) => {
     if (scaleId.length === 0) return [];
 
-    return await kyselyDb.foods
+    return await (transaction ?? kyselyDb.foods)
       .selectFrom('drinkwareVolumeSamples')
       .select(['drinkwareScaleId', 'fill', 'volume'])
       .where('drinkwareScaleId', 'in', scaleId)
@@ -181,11 +294,18 @@ const drinkwareSetService = ({
     };
   };
 
-  const getDrinkScalesV1 = async (drinkwareSetId: string): Promise<DrinkwareScaleEntry[]> => {
-    await checkSetId(drinkwareSetId);
+  const getDrinkScalesV1 = async (
+    drinkwareSetId: string,
+    getRelativePaths: boolean = false,
+    transaction?: Kysely<FoodsDB>
+  ): Promise<DrinkwareScaleEntry[]> => {
+    await checkSetId(drinkwareSetId, transaction);
 
-    const records = await fetchDrinkScaleRecords(drinkwareSetId);
-    const volumeSampleRecords = await fetchVolumeSampleRecords(records.map((r) => r.id));
+    const records = await fetchDrinkScaleRecords(drinkwareSetId, undefined, transaction);
+    const volumeSampleRecords = await fetchVolumeSampleRecords(
+      records.map((r) => r.id),
+      transaction
+    );
 
     // Convert from a list of records (scale_id, fill, volume) to a map scale_id -> number[],
     // where the numbers are a flattened list of (fill, volume) pairs
@@ -204,8 +324,8 @@ const drinkwareSetService = ({
       fullLevel: record.fullLevel,
       emptyLevel: record.emptyLevel,
       volumeSamples: volumeSamples[record.id],
-      baseImageUrl: getImageUrl(record.baseImageUrl),
-      overlayImageUrl: getImageUrl(record.overlayImageUrl),
+      baseImageUrl: getRelativePaths ? record.baseImageUrl : getImageUrl(record.baseImageUrl),
+      overlayImageUrl: getRelativePaths ? record.baseImageUrl : getImageUrl(record.overlayImageUrl),
     }));
   };
 
@@ -278,6 +398,21 @@ const drinkwareSetService = ({
     };
   }
 
+  const getDrinkScaleV2ChoiceIds = async (
+    drinkwareSetId: string,
+    transaction?: Kysely<FoodsDB>
+  ): Promise<string[]> => {
+    const db = transaction || kyselyDb.foods;
+
+    const rows = await db
+      .selectFrom('drinkwareScalesV2')
+      .select('choiceId')
+      .where('drinkwareSetId', '=', drinkwareSetId)
+      .execute();
+
+    return rows.map((row) => row.choiceId);
+  };
+
   const getDrinkScalesV2 = async (drinkwareSetId: string): Promise<DrinkwareScaleV2Entry[]> => {
     await checkSetId(drinkwareSetId);
 
@@ -334,12 +469,18 @@ const drinkwareSetService = ({
   const processDrinkScaleImage = async (
     id: string,
     uploader: string,
-    file: Express.Multer.File
+    fileOrPath: Express.Multer.File | string
   ): Promise<ProcessedImage> => {
     const sourceImage = await sourceImageService.uploadSourceImage(
       {
         id,
-        file,
+        file:
+          typeof fileOrPath === 'string'
+            ? {
+                path: fileOrPath,
+                originalname: path.basename(fileOrPath),
+              }
+            : fileOrPath,
         uploader,
       },
       'drink_scale'
@@ -378,41 +519,97 @@ const drinkwareSetService = ({
     drinkwareSetId: string,
     choiceId: string,
     uploaderId: string,
-    baseImageFile: Express.Multer.File,
-    labelJson: string,
-    outlineCoordinatesJson: string,
-    volumeSamplesJson: string,
-    updateOnConflict: boolean
+    baseImageFile: Express.Multer.File | string,
+    label: LocaleTranslation,
+    outlineCoordinates: number[],
+    volumeSamples: number[],
+    updateOnConflict: boolean,
+    transaction?: Kysely<FoodsDB>
   ) => {
-    const processedImage = await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile);
-    const normalisedVolumeSamplesJson = JSON.stringify(
-      normaliseVolumeSamples(JSON.parse(volumeSamplesJson))
-    );
+    const processedImageId =
+      typeof baseImageFile === 'string'
+        ? baseImageFile
+        : (await processDrinkScaleImage(drinkwareSetId, uploaderId, baseImageFile)).id;
 
-    await translateSqlErrors(() =>
-      kyselyDb.foods.transaction().execute(async (tx) => {
-        if (updateOnConflict) {
-          await tx
-            .deleteFrom('drinkwareScalesV2')
-            .where('drinkwareSetId', '=', drinkwareSetId)
-            .where('choiceId', '=', choiceId)
-            .execute();
-        }
+    const labelJson = JSON.stringify(label);
+    const outlineCoordinatesJson = JSON.stringify(outlineCoordinates);
+    const volumeSamplesJson = JSON.stringify(volumeSamples);
+    const normalisedVolumeSamplesJson = JSON.stringify(normaliseVolumeSamples(volumeSamples));
 
-        await tx
-          .insertInto('drinkwareScalesV2')
-          .values({
-            label: labelJson,
-            choiceId,
-            drinkwareSetId,
-            baseImageId: processedImage.id,
-            outlineCoordinates: outlineCoordinatesJson,
-            volumeSamples: volumeSamplesJson,
-            volumeSamplesNormalised: normalisedVolumeSamplesJson,
-          })
+    async function executeQueries(db: Kysely<FoodsDB>): Promise<void> {
+      if (updateOnConflict) {
+        await db
+          .deleteFrom('drinkwareScalesV2')
+          .where('drinkwareSetId', '=', drinkwareSetId)
+          .where('choiceId', '=', choiceId)
           .execute();
-      })
-    );
+      }
+
+      await db
+        .insertInto('drinkwareScalesV2')
+        .values({
+          label: labelJson,
+          choiceId,
+          drinkwareSetId,
+          baseImageId: processedImageId,
+          outlineCoordinates: outlineCoordinatesJson,
+          volumeSamples: volumeSamplesJson,
+          volumeSamplesNormalised: normalisedVolumeSamplesJson,
+        })
+        .execute();
+    }
+
+    await translateSqlErrors(async () => {
+      if (transaction) await executeQueries(transaction);
+      else await kyselyDb.foods.transaction().execute(async (tx) => executeQueries(tx));
+    });
+  };
+
+  const updateDrinkScaleV2 = async (
+    drinkwareSetId: string,
+    choiceId: string,
+    imageUploaderId: string,
+    baseImageFile?: Express.Multer.File,
+    label?: LocaleTranslation,
+    outlineCoordinates?: number[],
+    volumeSamples?: number[],
+    transaction?: Kysely<FoodsDB>
+  ) => {
+    const db = transaction || kyselyDb.foods;
+
+    let query = db
+      .updateTable('drinkwareScalesV2')
+      .where('drinkwareSetId', '=', drinkwareSetId)
+      .where('choiceId', '=', choiceId);
+
+    if (baseImageFile) {
+      const processedImage = await processDrinkScaleImage(
+        drinkwareSetId,
+        imageUploaderId,
+        baseImageFile
+      );
+      query = query.set('baseImageId', processedImage.id);
+    }
+
+    if (volumeSamples !== undefined) {
+      const normalisedVolumeSamplesJson = JSON.stringify(normaliseVolumeSamples(volumeSamples));
+      query = query
+        .set('volumeSamples', JSON.stringify(volumeSamples))
+        .set('volumeSamplesNormalised', normalisedVolumeSamplesJson);
+    }
+
+    if (label !== undefined) {
+      const labelJson = JSON.stringify(label);
+      query = query.set('label', labelJson);
+    }
+
+    if (outlineCoordinates !== undefined) {
+      const outlineCoordinatesJson = JSON.stringify(outlineCoordinates);
+      query = query.set('outlineCoordinates', outlineCoordinatesJson);
+    }
+
+    const updateResult = await query.executeTakeFirstOrThrow();
+    if (updateResult.numUpdatedRows === 0n) throw new NotFoundError();
   };
 
   const createDrinkScaleV1 = async (
@@ -490,6 +687,20 @@ const drinkwareSetService = ({
   const getDrinkwareSet = async (
     drinkwareSetId: string
   ): Promise<DrinkwareSetEntry | undefined> => {
+    // Only return V1 scale if V2 scale does not exist for the same object
+    function mergeScales(
+      scalesV1: DrinkwareScaleEntry[],
+      scalesV2: DrinkwareScaleV2Entry[]
+    ): (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] {
+      const merged: (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[] = [...scalesV2];
+      for (const scale of scalesV1) {
+        if (merged.find((s) => s.choiceId === scale.choiceId) === undefined) {
+          merged.push(scale);
+        }
+      }
+      return merged;
+    }
+
     const sets = await kyselyDb.foods
       .selectFrom('drinkwareSets')
       .select(['id', 'description', 'imageMapId'])
@@ -505,7 +716,7 @@ const drinkwareSetService = ({
       id: sets[0].id,
       description: sets[0].description,
       imageMapId: sets[0].imageMapId,
-      scales: [...recordsV2, ...recordsV1],
+      scales: mergeScales(recordsV1, recordsV2),
     };
   };
 
@@ -596,6 +807,8 @@ const drinkwareSetService = ({
     getDrinkwareSets,
     createDrinkScaleV1,
     createDrinkScaleV2,
+    getDrinkScaleV2ChoiceIds,
+    updateDrinkScaleV2,
     destroyDrinkScale,
     destroyAllDrinkScales,
     create,

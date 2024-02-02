@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { Dictionary } from '@intake24/common/types';
 import type { DrinkwareSetResponse } from '@intake24/common/types/http';
 import type {
   CreateDrinkwareSetInput,
@@ -9,9 +10,13 @@ import type {
   DrinkwareSetsResponse,
   UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery } from '@intake24/db';
+import type { PaginateQuery, User } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { DrinkwareSet } from '@intake24/db';
+
+export type UpdateDrinkwareSetInputWithFiles = UpdateDrinkwareSetInput & {
+  baseImageFiles: Dictionary<Express.Multer.File>;
+};
 
 const drinkwareSetController = ({
   drinkwareSetService,
@@ -59,12 +64,13 @@ const drinkwareSetController = ({
   ): Promise<void> => entry(req, res);
 
   const update = async (
-    req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInput>,
+    req: Request<{ drinkwareSetId: string }, any, UpdateDrinkwareSetInputWithFiles>,
     res: Response<DrinkwareSetEntry>
   ): Promise<void> => {
     const { drinkwareSetId } = req.params;
+    const user = req.user as User;
 
-    await drinkwareSetService.update(drinkwareSetId, req.body);
+    await drinkwareSetService.update(drinkwareSetId, user.id, req.body);
 
     const updated = await drinkwareSetService.getDrinkwareSetOrThrow(drinkwareSetId);
 
