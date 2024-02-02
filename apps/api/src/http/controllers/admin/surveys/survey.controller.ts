@@ -33,7 +33,10 @@ const adminSurveyController = (ioc: IoC) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<SurveysResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -68,7 +71,7 @@ const adminSurveyController = (ioc: IoC) => {
   };
 
   const store = async (req: Request, res: Response<SurveyEntry>): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     let survey: Survey | null = await Survey.create({
       ...pick(req.body, createSurveyFields),
@@ -147,7 +150,10 @@ const adminSurveyController = (ioc: IoC) => {
     res: Response<SurveyEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const survey = await aclService.findAndCheckRecordAccess(Survey, 'edit', {
       where: { id: surveyId },
@@ -225,7 +231,10 @@ const adminSurveyController = (ioc: IoC) => {
       file,
       params: { surveyId },
     } = req;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     await aclService.findAndCheckRecordAccess(Survey, 'tasks', {
       attributes: ['id'],

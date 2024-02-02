@@ -11,7 +11,6 @@ const config: Config.InitialOptions = {
     // Packages not importing to top-level
     '^@intake24/common/(.*)$': '<rootDir>/../../packages/common/src/$1',
     '^@intake24/common-backend/(.*)$': '<rootDir>/../../packages/common-backend/src/$1',
-    '^@intake24/db/(.*)$': '<rootDir>/../../packages/db/src/$1',
     // Rest of the packages importing to top-level
     '^@intake24/(.*?)$': '<rootDir>/../../packages/$1/src',
   },

@@ -1,8 +1,8 @@
-import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+import type { Secret, SignOptions } from 'jsonwebtoken';
 import jwt, { decode } from 'jsonwebtoken';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { SignPayload, TokenPayload } from '@intake24/common/security';
+import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
 import { randomString } from '@intake24/common/util';
@@ -26,7 +26,7 @@ const jwtService = ({
    * @returns {Promise<string>}
    */
   const sign = async (
-    payload: string | Buffer | object,
+    payload: object,
     secret: Secret,
     options: SignOptions = {}
   ): Promise<string> =>
@@ -84,7 +84,7 @@ const jwtService = ({
 
     if (!secret) throw new InternalServerError('No access token secret defined.');
 
-    return sign(payload, secret, { audience, expiresIn: lifetime, ...options });
+    return sign({ aal: 'aal1', ...payload }, secret, { audience, expiresIn: lifetime, ...options });
   };
 
   /**
@@ -120,9 +120,11 @@ const jwtService = ({
     frontEnd: FrontEnd,
     options: SignOptions = {}
   ): Promise<Tokens> => {
+    const { permissions, verified, ...refreshPayload } = payload;
+
     const [accessToken, refreshToken] = await Promise.all([
       signAccessToken(payload, frontEnd, options),
-      signRefreshToken(payload, frontEnd, options),
+      signRefreshToken(refreshPayload, frontEnd, options),
     ]);
 
     return { accessToken, refreshToken };
@@ -185,21 +187,19 @@ const jwtService = ({
     return refreshToken;
   };
 
-  const issuePersonalAccessToken = async ({
-    name,
-    expiresAt,
-    userId,
-  }: {
-    name: string;
-    expiresAt: Date;
-    userId: string;
-  }) => {
-    const jwt = await signAccessToken({ userId }, 'admin', {
+  const issuePersonalAccessToken = async (
+    name: string,
+    payload: AdminSignPayload,
+    expiresAt: Date
+  ) => {
+    const { userId } = payload;
+
+    const jwt = await signAccessToken(payload, 'admin', {
       audience: ['access', 'admin', 'personal'],
       expiresIn: Math.trunc((expiresAt.getTime() - Date.now()) / 1000),
+      subject: userId,
     });
-    const { jti } = decode(jwt) as JwtPayload;
-    if (!jti) throw new InternalServerError();
+    const { jti } = decode(jwt) as TokenPayload;
 
     const token = await PersonalAccessToken.create({ userId, name, token: jti, expiresAt });
 

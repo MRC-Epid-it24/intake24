@@ -4,10 +4,10 @@
     "baseUrl": ".",
     "paths": {
       "@intake24/common/*": ["../common/src/*"],
-      "@intake24/db/*": ["src/*"],
-      "@intake24/*": ["../*/src"]
-    }
+      "@intake24/common-backend/*": ["../common-backend/src/*"],
+      "@intake24/*": ["../*/src"],
+    },
   },
   "include": ["src/**/*.ts", "__tests__/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

@@ -7,33 +7,33 @@ export type Subject = {
   providerKey: string;
 };
 
-export type AdminSignPayload = {
+export type BaseSignPayload = {
   userId: string;
+  verified?: boolean;
+  permissions?: string[];
+  aal?: 'aal1' | 'aal2';
 };
 
-export type SurveySignPayload = {
+export type AdminSignPayload = BaseSignPayload;
+
+export type SurveySignPayload = BaseSignPayload & {
   surveyId: string;
-  userId: string;
 };
 
 export type SignPayload = AdminSignPayload | SurveySignPayload;
 
-export type AdminTokenPayload = AdminSignPayload & {
+export type BaseSignedPayload = {
   sub: string;
   jti: string;
   aud: string[];
   iss: string;
   iat: number;
   exp: number;
+  aal: 'aal1' | 'aal2';
 };
 
-export type SurveyTokenPayload = SurveySignPayload & {
-  sub: string;
-  jti: string;
-  aud: string[];
-  iss: string;
-  iat: number;
-  exp: number;
-};
+export type AdminTokenPayload = BaseSignedPayload & AdminSignPayload;
+
+export type SurveyTokenPayload = BaseSignedPayload & SurveySignPayload;
 
 export type TokenPayload = AdminTokenPayload | SurveyTokenPayload;

@@ -6,7 +6,7 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
-import type { JobAttributes, PaginateQuery, User, WhereOptions } from '@intake24/db';
+import type { JobAttributes, PaginateQuery, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Job, Op } from '@intake24/db';
 
@@ -15,10 +15,10 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     req: Request<any, any, any, PaginateQuery & { type?: string }>,
     res: Response<JobsResponse>
   ): Promise<void> => {
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { type } = req.query;
 
-    const where: WhereOptions<JobAttributes> = { userId: user.id };
+    const where: WhereOptions<JobAttributes> = { userId };
     if (type) where.type = type;
 
     const jobs = await Job.paginate({
@@ -33,7 +33,7 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
 
   const read = async (req: Request, res: Response<JobEntry>): Promise<void> => {
     const { jobId: id } = req.params;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const job = await Job.findOne({ where: { id, userId } });
     if (!job) throw new NotFoundError();
@@ -43,7 +43,7 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
 
   const download = async (req: Request, res: Response<Buffer>): Promise<void> => {
     const { jobId: id } = req.params;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const job = await Job.findOne({
       attributes: ['id', 'downloadUrl'],

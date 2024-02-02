@@ -1,14 +1,13 @@
 import type { Request, Response } from 'express';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { User } from '@intake24/db';
 import { UserSubscription } from '@intake24/db';
 
 const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
   const push = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
-    await pusher.webPush(id, {
+    await pusher.webPush(userId, {
       title: '🚀 Push notification!',
       body: `We'll keep you updated whenever your tasks are finished.`,
     });
@@ -17,7 +16,7 @@ const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
   };
 
   const subscribe = async (req: Request, res: Response): Promise<void> => {
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
     const { subscription } = req.body;
 
     const type = 'web-push';
@@ -33,9 +32,9 @@ const subscriptionController = ({ pusher }: Pick<IoC, 'pusher'>) => {
   };
 
   const unsubscribe = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
-    await UserSubscription.destroy({ where: { userId: id, type: 'web-push' } });
+    await UserSubscription.destroy({ where: { userId, type: 'web-push' } });
 
     res.status(204).json();
   };

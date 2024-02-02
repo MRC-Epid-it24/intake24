@@ -3,7 +3,7 @@ import { Worker } from 'node:worker_threads';
 import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
-import { RecipeFoods } from '@intake24/db/models';
+import { RecipeFoods } from '@intake24/db';
 
 let indexReady = false;
 let queryIdCounter = 0;

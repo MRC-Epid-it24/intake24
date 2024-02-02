@@ -3,7 +3,7 @@ import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { User } from '@intake24/db';
+import type { TokenPayload } from '@intake24/common/security';
 
 import HasRedisClient from './redis-store';
 
@@ -22,7 +22,7 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res.status(statusCode).json({ message });
       },
-      keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
+      keyGenerator: (req) => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
       skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
@@ -42,7 +42,7 @@ export default class RateLimiter extends HasRedisClient {
       handler: (req, res, next, { message, statusCode }) => {
         res.status(statusCode).json({ message });
       },
-      keyGenerator: (req) => `${type}:${(req.user as User | undefined)?.id ?? req.ip}`,
+      keyGenerator: (req) => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
       skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
       legacyHeaders: false,
       standardHeaders: 'draft-7',

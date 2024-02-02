@@ -5,6 +5,8 @@ import uaParser from 'ua-parser-js';
 import validator from 'validator';
 
 export const btoa = (object: any): string => Buffer.from(JSON.stringify(object)).toString('base64');
+export const atob = <T>(object: string): T =>
+  JSON.parse(Buffer.from(object, 'base64').toString('utf-8'));
 
 /**
  * Convention helper for user simple name

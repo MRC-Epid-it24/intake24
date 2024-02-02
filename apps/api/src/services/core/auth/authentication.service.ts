@@ -54,6 +54,7 @@ export type MFVerification = {
 };
 
 const authenticationService = ({
+  aclCache,
   jwtRotationService,
   jwtService,
   logger: globalLogger,
@@ -64,6 +65,7 @@ const authenticationService = ({
   servicesConfig,
 }: Pick<
   IoC,
+  | 'aclCache'
   | 'jwtRotationService'
   | 'jwtService'
   | 'logger'
@@ -194,9 +196,10 @@ const authenticationService = ({
       throw new UnauthorizedError('Provided credentials do not match our records.');
     }
 
-    const { id: userId, email } = user;
+    const { id: userId, email, verifiedAt } = user;
     const surveyId = survey?.slug;
     const authCaptcha = survey?.authCaptcha;
+    const permissions = user.permissions?.map(({ name }) => name);
 
     if (frontEnd === 'survey') {
       if (!surveyId || authCaptcha === undefined) {
@@ -206,6 +209,9 @@ const authenticationService = ({
         });
         throw new UnauthorizedError('Provided credentials do not match our records.');
       }
+
+      if (!permissions?.includes(surveyRespondent(surveyId)))
+        throw new UnauthorizedError('Provided credentials do not match our records.');
 
       if (authCaptcha) {
         try {
@@ -225,7 +231,11 @@ const authenticationService = ({
 
     await signInService.log({ ...signInAttempt, successful: true });
 
-    return jwtService.issueTokens({ surveyId, userId }, frontEnd, { subject: btoa(subject) });
+    return jwtService.issueTokens(
+      { surveyId, userId, verified: !!verifiedAt, permissions },
+      frontEnd,
+      { subject: btoa(subject) }
+    );
   };
 
   /**
@@ -270,19 +280,19 @@ const authenticationService = ({
       User.findOne({
         where: { email: { [op]: email } },
         include: [
+          { association: 'password', required: true },
           {
             association: 'permissions',
             attributes: ['name'],
             through: { attributes: [] },
             where: { name: surveyRespondent(slug) },
           },
-          { association: 'password', required: true },
         ],
       }),
       Survey.findBySlug(slug, { attributes: ['authCaptcha', 'slug'] }),
     ]);
 
-    const subject: Subject = { provider: 'email', providerKey: `${slug}#${email}` };
+    const subject: Subject = { provider: 'email', providerKey: email };
 
     return processLogin(
       { user, password, captcha, subject, frontEnd: 'survey', survey: survey ?? undefined },
@@ -307,18 +317,18 @@ const authenticationService = ({
       subQuery: false,
       include: [
         {
-          association: 'permissions',
-          attributes: ['name'],
-          through: { attributes: [] },
-          where: { name: surveyRespondent(slug) },
-        },
-        { association: 'password' },
-        {
           association: 'aliases',
           where: { username },
           include: [
             { association: 'survey', attributes: ['authCaptcha', 'slug'], where: { slug } },
           ],
+        },
+        { association: 'password' },
+        {
+          association: 'permissions',
+          attributes: ['name'],
+          through: { attributes: [] },
+          where: { name: surveyRespondent(slug) },
         },
       ],
     });
@@ -351,6 +361,11 @@ const authenticationService = ({
           include: [{ association: 'survey', attributes: ['authCaptcha', 'slug'], required: true }],
         },
         { association: 'password' },
+        {
+          association: 'permissions',
+          attributes: ['name'],
+          through: { attributes: [] },
+        },
       ],
     });
 
@@ -383,15 +398,26 @@ const authenticationService = ({
         sub: subject,
         // @ts-expect-error - TS does not narrow down surveyId based on above condition
         surveyId,
+        aal,
       } = await jwtService.verifyRefreshToken(token, frontEnd);
 
-      const user = await User.findByPk(userId, { attributes: ['id'] });
+      const user = await User.findOne({
+        attributes: ['id', 'verifiedAt'],
+        where: { id: userId, disabledAt: null },
+      });
       if (!user) throw new UnauthorizedError();
 
       const valid = await jwtRotationService.verifyAndRevoke(token);
       if (!valid) throw new UnauthorizedError();
 
-      return await jwtService.issueTokens({ surveyId, userId }, frontEnd, { subject });
+      // Packing only permissions for survey front-end -> extend to admin (consider jwt payload size)
+      const permissions = frontEnd === 'survey' ? await aclCache.getPermissions(userId) : undefined;
+
+      return await jwtService.issueTokens(
+        { surveyId, userId, verified: !!user.verifiedAt, permissions, aal },
+        frontEnd,
+        { subject }
+      );
     } catch (err) {
       if (err instanceof Error) {
         const { message, name, stack } = err;
@@ -431,7 +457,10 @@ const authenticationService = ({
       const device = await MFADevice.findOne({
         attributes: ['id', 'secret'],
         where: { id: deviceId, provider, userId },
-        include: [{ association: 'user', required: true }, { association: 'authenticator' }],
+        include: [
+          { association: 'user', attributes: ['id', 'email', 'verifiedAt'], required: true },
+          { association: 'authenticator' },
+        ],
       });
 
       if (!device || !device.user?.email || (provider === 'fido' && !device.authenticator)) {
@@ -444,7 +473,7 @@ const authenticationService = ({
 
       const {
         authenticator,
-        user: { email },
+        user: { email, verifiedAt },
         secret,
       } = device;
 
@@ -461,7 +490,7 @@ const authenticationService = ({
       });
 
       const [tokens] = await Promise.all([
-        jwtService.issueTokens({ userId }, 'admin', {
+        jwtService.issueTokens({ userId, verified: !!verifiedAt, aal: 'aal2' }, 'admin', {
           subject: btoa({ provider: 'email', providerKey: email }),
         }),
         signInService.log({ ...signInAttempt, successful: true }),

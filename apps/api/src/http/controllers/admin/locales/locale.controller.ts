@@ -20,7 +20,10 @@ const localeController = (ioc: IoC) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LocalesResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -45,7 +48,7 @@ const localeController = (ioc: IoC) => {
   };
 
   const store = async (req: Request, res: Response<LocaleEntry>): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const input = pick(req.body, [
       'code',
@@ -202,7 +205,10 @@ const localeController = (ioc: IoC) => {
       file,
       params: { localeId },
     } = req;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     await aclService.findAndCheckRecordAccess(SystemLocale, 'tasks', {
       attributes: ['id'],

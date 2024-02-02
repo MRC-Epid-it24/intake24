@@ -2,14 +2,16 @@ import type { Request, Response } from 'express';
 import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
+import type { Subject } from '@intake24/common/security';
 import type {
   JobEntry,
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { respondentResponse } from '@intake24/api/http/responses/admin';
+import { atob } from '@intake24/api/util';
 import { Survey, UserSurveyAlias } from '@intake24/db';
 
 const adminSurveyRespondentController = ({
@@ -155,7 +157,10 @@ const adminSurveyRespondentController = ({
     res: Response<JobEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
       attributes: ['id'],
@@ -176,7 +181,10 @@ const adminSurveyRespondentController = ({
     res: Response<JobEntry>
   ): Promise<void> => {
     const { surveyId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     await aclService.findAndCheckRecordAccess(Survey, 'respondents', {
       attributes: ['id'],
@@ -223,7 +231,8 @@ const adminSurveyRespondentController = ({
       where: { id: surveyId },
     });
 
-    const user = req.user as User;
+    const subject = atob<Subject>(req.scope.cradle.user.sub);
+    const userEmail = subject.provider === 'email' ? subject.providerKey : undefined;
 
     await scheduler.jobs.addJob({
       type: 'SurveyFeedbackNotification',
@@ -232,8 +241,8 @@ const adminSurveyRespondentController = ({
         surveyId,
         userId,
         to: email,
-        cc: copy === 'cc' && user.email ? user.email : undefined,
-        bcc: copy === 'bcc' && user.email ? user.email : undefined,
+        cc: copy === 'cc' && userEmail ? userEmail : undefined,
+        bcc: copy === 'bcc' && userEmail ? userEmail : undefined,
       },
     });
 

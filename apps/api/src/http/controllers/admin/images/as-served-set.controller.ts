@@ -4,7 +4,7 @@ import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { AsServedSetEntry, AsServedSetsResponse } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import imagesResponseCollection from '@intake24/api/http/responses/admin/images';
 import { AsServedSet } from '@intake24/db';
@@ -48,11 +48,11 @@ const asServedSetController = ({
       file,
       body: { id, description },
     } = req;
-    const user = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (!file) throw new ValidationError('File not found.', { path: 'image' });
 
-    let asServedSet = await asServedService.createSet({ id, description, file, uploader: user.id });
+    let asServedSet = await asServedService.createSet({ id, description, file, uploader: userId });
     asServedSet = await portionSizeService.getAsServedSet(asServedSet.id);
 
     res.status(201).json(responseCollection.asServedSetEntryResponse(asServedSet));

@@ -35,7 +35,10 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<FeedbackSchemesResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -63,7 +66,7 @@ const feedbackSchemeController = (ioc: IoC) => {
     req: Request<any, any, FeedbackSchemeCreationAttributes>,
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const feedbackScheme = await FeedbackScheme.create({
       ...pick(req.body, createFeedbackSchemeFields),
@@ -122,7 +125,10 @@ const feedbackSchemeController = (ioc: IoC) => {
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'edit', {
       where: { id: feedbackSchemeId },
@@ -190,14 +196,16 @@ const feedbackSchemeController = (ioc: IoC) => {
     res: Response<FeedbackSchemeEntry>
   ): Promise<void> => {
     const { feedbackSchemeId } = req.params;
-    const { aclService } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const feedbackScheme = await aclService.findAndCheckRecordAccess(FeedbackScheme, 'copy', {
       where: { id: feedbackSchemeId },
     });
 
     const { name } = req.body;
-    const { userId } = req.scope.cradle;
     const {
       type,
       visibility,

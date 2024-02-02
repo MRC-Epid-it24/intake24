@@ -4,7 +4,6 @@ import { pick } from 'lodash';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { UserPhysicalDataResponse } from '@intake24/common/types/http';
-import type { User } from '@intake24/db';
 import { ForbiddenError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
 import { Survey } from '@intake24/db';
 
@@ -14,7 +13,7 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
     res: Response<UserPhysicalDataResponse>
   ): Promise<void> => {
     const { survey: slug } = req.query;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (slug) {
       const survey = await Survey.findBySlug(slug, {
@@ -36,7 +35,7 @@ const userPhysicalDataController = ({ userService }: Pick<IoC, 'userService'>) =
     res: Response<UserPhysicalDataResponse>
   ): Promise<void> => {
     const { survey: slug } = req.query;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     if (slug) {
       const survey = await Survey.findBySlug(slug, {

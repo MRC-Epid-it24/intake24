@@ -11,7 +11,7 @@ const mfaDeviceController = () => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
     const { status } = req.body;
 
     const devices = await MFADevice.findAll({ attributes: ['id'], where: { userId } });
@@ -26,7 +26,7 @@ const mfaDeviceController = () => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<MFADevicesResponse>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const user = await User.findByPk(userId, {
       include: [{ association: 'mfaDevices', where: { userId }, required: false }],
@@ -44,7 +44,7 @@ const mfaDeviceController = () => {
     req: Request<{ deviceId: string }>,
     res: Response<MFADeviceEntry>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
     const { deviceId } = req.params;
 
     const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
@@ -57,7 +57,7 @@ const mfaDeviceController = () => {
     req: Request<{ deviceId: string }, any, { preferred: boolean }>,
     res: Response<MFADeviceEntry>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
     const { deviceId } = req.params;
 
     const device = await MFADevice.findOne({ where: { id: deviceId, userId } });
@@ -78,7 +78,7 @@ const mfaDeviceController = () => {
     req: Request<{ deviceId: string }>,
     res: Response<undefined>
   ): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
     const { deviceId } = req.params;
 
     const device = await MFADevice.findOne({ attributes: ['id'], where: { id: deviceId, userId } });

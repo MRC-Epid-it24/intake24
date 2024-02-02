@@ -4,7 +4,7 @@ import { col, fn } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry, TaskEntry, TasksResponse } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
+import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Task } from '@intake24/db';
 
@@ -90,7 +90,7 @@ const taskController = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
 
   const run = async (req: Request<{ taskId: string }>, res: Response<JobEntry>): Promise<void> => {
     const { taskId } = req.params;
-    const { id: userId } = req.user as User;
+    const { userId } = req.scope.cradle.user;
 
     const task = await Task.findByPk(taskId, { attributes: ['id', 'job', 'params'] });
     if (!task) throw new NotFoundError();

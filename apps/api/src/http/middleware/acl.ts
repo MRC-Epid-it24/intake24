@@ -3,23 +3,10 @@ import type { NextFunction, Request, Response, Router } from 'express';
 import { asValue } from 'awilix';
 import passport from 'passport';
 
+import type { TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
-import type { User } from '@intake24/db';
 import { ForbiddenError } from '@intake24/api/http/errors';
 import { surveyRespondent } from '@intake24/common/security';
-
-/**
- * Check if account is disabled
- *
- * @param {Request} req
- * @param {Response} res
- * @param {NextFunction} next
- */
-export const isAccountDisabled = (req: Request, res: Response, next: NextFunction): void => {
-  const user = req.user as User;
-
-  user.isDisabled() ? next(new ForbiddenError('Account is disabled')) : next();
-};
 
 /**
  * Verify authenticated user has verified the email address
@@ -29,9 +16,7 @@ export const isAccountDisabled = (req: Request, res: Response, next: NextFunctio
  * @param {NextFunction} next
  */
 export const isAccountVerified = (req: Request, res: Response, next: NextFunction): void => {
-  const user = req.user as User;
-
-  user.isVerified() ? next() : next(new ForbiddenError('Email not verified'));
+  (req.user as TokenPayload).verified ? next() : next(new ForbiddenError('Account not verified'));
 };
 
 /*
@@ -39,12 +24,7 @@ export const isAccountVerified = (req: Request, res: Response, next: NextFunctio
  * It assumes successfully authenticated user on request scope hence the assertion to User
  */
 export const registerACLScope = (req: Request, res: Response, next: NextFunction): void => {
-  const user = req.user as User;
-
-  req.scope.register({
-    currentUser: asValue(user),
-    userId: asValue(user.id),
-  });
+  req.scope.register({ user: asValue(req.user as TokenPayload) });
 
   next();
 };
@@ -54,7 +34,6 @@ export const registerACLScope = (req: Request, res: Response, next: NextFunction
  */
 export const authenticate = (app: Router, type: FrontEnd): void => {
   app.use(passport.authenticate(type, { session: false }));
-  app.use(isAccountDisabled);
 
   app.use(registerACLScope);
 };

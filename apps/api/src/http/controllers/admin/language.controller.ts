@@ -18,7 +18,10 @@ const languageController = (ioc: IoC) => {
     req: Request<any, any, any, PaginateQuery>,
     res: Response<LanguagesResponse>
   ): Promise<void> => {
-    const { aclService, userId } = req.scope.cradle;
+    const {
+      aclService,
+      user: { userId },
+    } = req.scope.cradle;
 
     const paginateOptions: PaginateOptions = {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
@@ -43,7 +46,7 @@ const languageController = (ioc: IoC) => {
   };
 
   const store = async (req: Request, res: Response<LanguageEntry>): Promise<void> => {
-    const { userId } = req.scope.cradle;
+    const { userId } = req.scope.cradle.user;
 
     const language = await languageService.createLanguage({
       ...pick(req.body, [
