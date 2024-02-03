@@ -11,6 +11,7 @@ export interface PackageImportOptions {
   locale?: string[];
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
+  type: 'package' | 'csv';
 }
 
 export default async (
@@ -28,6 +29,7 @@ export default async (
       options?.modulesForExecution !== undefined
         ? options.modulesForExecution
         : (['all'] as ImporterSpecificModulesExecutionStrategy[]),
+    type: options?.type !== undefined ? options.type : 'package',
   });
 
   await importer.import();
