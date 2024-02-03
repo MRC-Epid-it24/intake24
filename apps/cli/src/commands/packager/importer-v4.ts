@@ -44,6 +44,8 @@ export const importerSpecificModulesExecutionOptions = [
   'all',
 ] as const;
 
+export const importerTypeOptions = ['package', 'csv'] as const;
+
 export type ConflictResolutionStrategy = (typeof conflictResolutionOptions)[number];
 export type ImporterSpecificModulesExecutionStrategy =
   (typeof importerSpecificModulesExecutionOptions)[number];
@@ -51,6 +53,7 @@ export type ImporterSpecificModulesExecutionStrategy =
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
+  type: 'package' | 'csv';
 }
 
 export type availableModules = {
@@ -60,6 +63,7 @@ export type availableModules = {
 const defaultOptions: ImporterOptions = {
   onConflict: 'abort',
   modulesForExecution: ['all'],
+  type: 'package',
 };
 
 export class ImporterV4 {
@@ -102,6 +106,7 @@ export class ImporterV4 {
         && options.modulesForExecution.length !== 0
           ? options.modulesForExecution
           : defaultOptions.modulesForExecution,
+      type: options?.type ?? defaultOptions.type,
     };
   }
 
