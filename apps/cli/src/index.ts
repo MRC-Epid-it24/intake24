@@ -19,6 +19,7 @@ import {
 import {
   conflictResolutionOptions,
   importerSpecificModulesExecutionOptions,
+  importerTypeOptions,
 } from './commands/packager/importer-v4';
 
 const run = async () => {
@@ -112,6 +113,10 @@ const run = async () => {
   conflictResolutionOption.required = true;
   specificModulesExecutionOption.required = false;
 
+  const importTypeOption = new Option('-t, --type [type]', 'Import type').choices(
+    importerTypeOptions
+  );
+
   program
     .command('import-package')
     .description('Import food data from a portable format')
@@ -119,6 +124,7 @@ const run = async () => {
     .addArgument(new Argument('<package-file>', 'Input package file path'))
     .addOption(conflictResolutionOption)
     .addOption(specificModulesExecutionOption)
+    .addOption(importTypeOption)
     .action(async (version, inputFilePath, options) => {
       switch (version) {
         case 'v3':
