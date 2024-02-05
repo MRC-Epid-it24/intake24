@@ -27,6 +27,8 @@ import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image
 import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
 
+import type { CsvColumnStructure } from './types/csv-import';
+import { processCSVImport } from './importer-csv';
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;
@@ -91,6 +93,7 @@ export class ImporterV4 {
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
+  private csvStructure: CsvColumnStructure | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
   private guideImages: Record<string, PkgGuideImage> | undefined;
 
@@ -908,6 +911,11 @@ export class ImporterV4 {
     );
   }
 
+  private async readCSVStructure(): Promise<void> {
+    logger.info('Loading CSV structure');
+    this.csvStructure = await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME);
+  }
+
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),
@@ -974,6 +982,18 @@ export class ImporterV4 {
       else
         console.error(`No module found for key: ${key}`);
     }
+  }
+
+  // Import from the CSV file with the structure defined in JSON file
+  private async importFromCSV(): Promise<void> {
+    await this.readCSVStructure();
+    const result = await processCSVImport({
+      structure: this.csvStructure,
+      importedFile: this.packageDirPath
+        ? path.join(this.packageDirPath, PkgConstants.CSV_FOOD_RECORDS_FILE_NAME)
+        : '',
+    });
+    console.log('Result: - ', result);
   }
 
   public async import(): Promise<void> {
