@@ -42,6 +42,7 @@ import {
   processedImageService,
   Pusher,
   RateLimiter,
+  RedisStream,
   Scheduler,
   Session,
   signInService,
@@ -120,6 +121,7 @@ export default (container: AwilixContainer): void => {
     mailer: asClass(Mailer).singleton(),
     pusher: asClass(Pusher).singleton(),
     rateLimiter: asClass(RateLimiter).singleton(),
+    redisStreamService: asClass(RedisStream).singleton(),
     scheduler: asClass(Scheduler).singleton(),
     session: asClass(Session).singleton(),
 
