@@ -28,6 +28,9 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
     this.init(job);
 
     this.logger.debug('Job started.');
+
+    //Connect to the redis stream to read the messages with the locale ids
+
     this.logger.debug('Starting Rebuildng Specified Indexes...');
     if (this.localeIds && this.localeIds.length > 0) {
       await this.localeIndexBuildService.rebuildFoodIndexJob(this.localeIds);

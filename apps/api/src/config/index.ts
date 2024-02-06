@@ -23,6 +23,7 @@ import rateLimiter from './rate-limiter';
 import security from './security';
 import services from './services';
 import session from './session';
+import stream from './stream';
 
 export * from './app';
 export * from './cache';
