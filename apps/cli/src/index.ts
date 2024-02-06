@@ -16,6 +16,7 @@ import {
   hashPassword,
   packageExportV3,
   packageImportV4,
+  searchTest,
 } from './commands';
 import {
   conflictResolutionOptions,
@@ -139,6 +140,13 @@ const run = async () => {
     .requiredOption('-o, --output-path [output path]', 'Output file path')
     .action(async (localeId, options) => {
       await extractCategories(localeId, options);
+    });
+
+  program
+    .command('search-test')
+    .description('Test search quality of the system')
+    .action(async () => {
+      await searchTest();
     });
 
   program
