@@ -3,7 +3,7 @@ import { Worker } from 'node:worker_threads';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
 import { logger } from '@intake24/common-backend/services';
-import { FoodsLocale, RecipeFoods } from '@intake24/db';
+import { FoodLocal, RecipeFoods } from '@intake24/db';
 
 let indexReady = false;
 let queryIdCounter = 0;
@@ -79,11 +79,11 @@ export default {
   async rebuildSpecificLocales(locales: string[]) {
     const uniqueLocales = Array.from(new Set(locales));
 
-    const localeIds = await FoodsLocale.findAll({ where: { id: uniqueLocales } });
+    const localeIds = await FoodLocal.findAll({ where: { id: uniqueLocales } });
 
     if (localeIds.length !== uniqueLocales.length) {
       const missingLocales = uniqueLocales.filter(
-        (locale) => !localeIds.find((localeId) => localeId.id === locale)
+        (locale) => !localeIds.find((localeId: FoodLocal) => localeId.id === locale)
       );
       logger.error(`Locales ${missingLocales.join(', ')} not found`);
     }
@@ -111,7 +111,7 @@ export default {
       indexWorker.postMessage({
         type: 'command',
         rebuild: true,
-        locales: localeIds.map((locale) => locale.id),
+        locales: localeIds.map((locale: FoodLocal) => locale.id),
       });
     }
   },
