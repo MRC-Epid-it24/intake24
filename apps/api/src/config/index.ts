@@ -14,6 +14,7 @@ import type { RateLimiterConfig } from './rate-limiter';
 import type { SecurityConfig } from './security';
 import type { ServicesConfig } from './services';
 import type { SessionConfig } from './session';
+import type { SetConfig } from './set';
 import app from './app';
 import cache from './cache';
 import filesystem from './filesystem';
@@ -23,7 +24,7 @@ import rateLimiter from './rate-limiter';
 import security from './security';
 import services from './services';
 import session from './session';
-import stream from './stream';
+import set from './set';
 
 export * from './app';
 export * from './cache';
@@ -51,6 +52,7 @@ export type Config = {
   imageProcessor: ImageProcessorConfig;
   publisher: PublisherConfig;
   subscriber: SubscriberConfig;
+  set: SetConfig;
 };
 
 const config: Config = {
@@ -69,6 +71,7 @@ const config: Config = {
   imageProcessor,
   publisher,
   subscriber,
+  set,
 };
 
 export default config;

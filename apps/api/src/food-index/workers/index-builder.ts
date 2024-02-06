@@ -380,8 +380,9 @@ async function buildIndex() {
       if (msg.rebuild) {
         try {
           if (msg.locales && msg.locales.length > 0) {
-            logger.debug(`Rebuilding index for ${msg.locales} locales`);
-            for (const localeId of msg.locales) {
+            const setLocales = new Set(msg.locales);
+            logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
+            for (const localeId of setLocales) {
               foodIndex[localeId] = await buildIndexForLocale(localeId);
             }
             //foodIndex[msg.locales] = await buildIndexForLocale(msg.locales);

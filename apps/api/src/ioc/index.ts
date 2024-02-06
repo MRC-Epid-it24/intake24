@@ -109,7 +109,7 @@ import type {
   ProcessedImageService,
   Pusher,
   RateLimiter,
-  RedisStream,
+  RedisSet,
   Scheduler,
   Session,
   SignInService,
@@ -128,7 +128,6 @@ import type { DatabasesInterface } from '@intake24/db';
 import config from '@intake24/api/config';
 import { Database, KyselyDatabases, models } from '@intake24/db';
 
-import streamConfig from '../config/stream';
 import controllers from './controllers';
 import jobs from './jobs';
 import services from './services';
@@ -145,6 +144,7 @@ export interface IoC extends Jobs {
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
   publisherConfig: Config['publisher'];
+  setConfig: Config['set'];
   subscriberConfig: Config['subscriber'];
   securityConfig: Config['security'];
   servicesConfig: Config['services'];
@@ -255,7 +255,7 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   rateLimiter: RateLimiter;
-  redisStreamService: RedisStream;
+  redisSetService: RedisSet;
   scheduler: Scheduler;
   session: Session;
 
@@ -348,7 +348,7 @@ const configureContainer = () => {
     securityConfig: asValue(config.security),
     servicesConfig: asValue(config.services),
     sessionConfig: asValue(config.session),
-    streamConfig: asValue(streamConfig),
+    setConfig: asValue(config.set),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),
