@@ -22,8 +22,8 @@ export default class RedisStream extends HasRedisClient {
    * Read all messages from the stream
    * @returns {Promise<void>}
    * */
-  async read(): Promise<any> {
-    const localesIds = [];
+  async read(): Promise<string[]> {
+    const localesIds: string[] = [];
     let lastId = '0-0';
 
     let continueReading = true;
@@ -44,5 +44,6 @@ export default class RedisStream extends HasRedisClient {
         continueReading = false;
       }
     }
+    return localesIds;
   }
 }
