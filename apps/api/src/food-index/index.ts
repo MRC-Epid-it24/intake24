@@ -76,13 +76,44 @@ export default {
     }
   },
 
-  async rebuildSpecificLocale(locale: string) {
-    // find the locale in the list of locales
-    const localeId = await FoodsLocale.findOne({ where: { id: locale } });
-    if (!localeId) {
-      throw new Error(`Locale ${locale} not found`);
+  async rebuildSpecificLocales(locales: string[]) {
+    const uniqueLocales = Array.from(new Set(locales));
+
+    const localeIds = await FoodsLocale.findAll({ where: { id: uniqueLocales } });
+
+    if (localeIds.length !== uniqueLocales.length) {
+      const missingLocales = uniqueLocales.filter(
+        (locale) => !localeIds.find((localeId) => localeId.id === locale)
+      );
+      logger.error(`Locales ${missingLocales.join(', ')} not found`);
     }
-    indexWorker.postMessage({ type: 'command', rebuild: true, locale: localeId.id });
+
+    if (indexReady) {
+      buildCounter++;
+      const buildId = buildCounter;
+
+      const rebuildListener = (msg: RebuildResponse) => {
+        if (msg.buildCommandId === buildId) {
+          indexWorker.removeListener('message', rebuildListener);
+
+          if (msg.success) {
+            indexReady = true;
+          } else {
+            //TODO: should we throw an error here?
+            indexReady = false;
+            logger.error(msg.error);
+          }
+        }
+      };
+
+      indexWorker.on('message', rebuildListener);
+      // Post a message for indexWorker to rebuild the set of locales
+      indexWorker.postMessage({
+        type: 'command',
+        rebuild: true,
+        locales: localeIds.map((locale) => locale.id),
+      });
+    }
   },
 
   /**

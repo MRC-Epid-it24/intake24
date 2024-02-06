@@ -44,11 +44,11 @@ interface FoodIndex {
 }
 
 type IndexCommand = {
+  locales?: string[];
   buildId: any;
   type: 'command';
   exit?: boolean;
   rebuild?: boolean;
-  locale?: string;
 };
 
 const foodIndex: FoodIndex = {};
@@ -78,38 +78,6 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
     )
   );
 }
-
-// /**
-//  * Build special foods list for a given locale
-//  * @param {string} localeId - food Locale
-//  * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
-//  */
-// //some additional text
-// async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
-//   const recipeFoods = await RecipeFoods.findAll({
-//     attributes: ['code', 'name', 'recipeWord'],
-//     where: { localeId },
-//     include: [{ model: SynonymSet, attributes: ['synonyms'] }],
-//   });
-
-//   const recipeFoodsList: RecipeFoodTuple[] = [];
-//   recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
-//     recipeFoodsList.push([
-//       recipeFoodEntry.name.toLowerCase(),
-//       {
-//         code: recipeFoodEntry.code,
-//         name: recipeFoodEntry.name.toLowerCase(),
-//         recipeWord: recipeFoodEntry.recipeWord,
-//         synonyms: parseSynonymSet(
-//           recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
-//         ),
-//         // TODO: add Localised description to special foods
-//         description: recipeFoodEntry.name.toLocaleLowerCase(),
-//       },
-//     ])
-//   );
-//   return recipeFoodsList;
-// }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
   const row = await FoodsLocale.findOne({
@@ -411,9 +379,12 @@ async function buildIndex() {
       //rebuild index
       if (msg.rebuild) {
         try {
-          if (msg.locale) {
-            logger.debug(`Rebuilding index for ${msg.locale} locale`);
-            foodIndex[msg.locale] = await buildIndexForLocale(msg.locale);
+          if (msg.locales && msg.locales.length > 0) {
+            logger.debug(`Rebuilding index for ${msg.locales} locales`);
+            for (const localeId of msg.locales) {
+              foodIndex[localeId] = await buildIndexForLocale(localeId);
+            }
+            //foodIndex[msg.locales] = await buildIndexForLocale(msg.locales);
           } else {
             logger.debug('Rebuilding All indexs');
             for (const localeId of enabledLocales) {

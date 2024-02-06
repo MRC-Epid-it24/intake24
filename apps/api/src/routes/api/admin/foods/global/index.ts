@@ -5,7 +5,7 @@ import { wrapAsync } from '@intake24/api/util';
 import { handleSequelizeErrors } from '@intake24/api/util/sequelize-errors';
 
 export default () => {
-  const { adminGlobalFoodsController, foodSearchController } = ioc.cradle;
+  const { adminGlobalFoodsController } = ioc.cradle;
   const router = Router();
 
   router.route('').post(wrapAsync(adminGlobalFoodsController.store), handleSequelizeErrors);
@@ -15,9 +15,10 @@ export default () => {
     .get(wrapAsync(adminGlobalFoodsController.read))
     .put(wrapAsync(adminGlobalFoodsController.update));
 
-  router
-    .route('/rebuild')
-    .post(wrapAsync(foodSearchController.rebuildFoodIndex), handleSequelizeErrors);
+  // TODO: V4-1016 DELETE ONCE DONE
+  // router
+  //   .route('/rebuild')
+  //   .post(wrapAsync(foodSearchController.rebuildFoodIndex), handleSequelizeErrors);
 
   return router;
 };

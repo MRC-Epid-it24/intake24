@@ -142,6 +142,8 @@ export interface IoC extends Jobs {
   mailConfig: Config['mail'];
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
+  publisherConfig: Config['publisher'];
+  subscriberConfig: Config['subscriber'];
   securityConfig: Config['security'];
   servicesConfig: Config['services'];
   sessionConfig: Config['session'];

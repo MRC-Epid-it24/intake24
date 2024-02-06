@@ -10,12 +10,10 @@
   "message": "Message",
   "params": "Job parameters",
   "stackTrace": "Error message",
-
   "repeat": {
     "_": "Repeat job",
     "confirm": "Push the job to the queue"
   },
-
   "types": {
     "_": "Job types",
     "CleanRedisStore": {
@@ -51,6 +49,12 @@
       "_": "Locale - Copy popularity search",
       "localeId": "Locale ID",
       "sourceLocaleId": "Source Locale ID"
+    },
+    "LocaleAllIndexBuild": {
+      "_": "Locale - Rebuild All Food Indexes"
+    },
+    "LocaleSpecificIndexBuild": {
+      "_": "Locale - Rebuild Food Indexes for modified locale"
     },
     "NutrientTableMappingImport": {
       "_": "Nutrient table - Import NDB mapping",

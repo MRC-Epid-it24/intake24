@@ -62,14 +62,24 @@ const foodSearchController = ({
     };
   }
 
+  // API endpoint for rebuilding the food index
   const rebuildFoodIndex = async (req: Request, res: Response): Promise<void> => {
     logger.debug(`\n\n\nRebuilding ${JSON.stringify(req.body)} food index\n\n\n`);
-    if (!req.body || !req.body.locale) {
+    if (!req.body || !req.body.locales) {
       await foodIndex.rebuild();
     } else {
-      await foodIndex.rebuildSpecificLocale(req.body.locale);
+      await foodIndex.rebuildSpecificLocales(req.body.locales);
     }
     res.json({ success: true });
+  };
+
+  // REDIS JOB endpoint for rebuilding the food index
+  const rebuildFoodIndexJob = async (locales?: string[]): Promise<void> => {
+    if (locales && locales.length > 0) {
+      await foodIndex.rebuildSpecificLocales(locales);
+    } else {
+      await foodIndex.rebuild();
+    }
   };
 
   const search = async (
@@ -124,11 +134,9 @@ const foodSearchController = ({
 
   return {
     search,
-    /* recipe,
-    category,
-    splitDescription, */
     recipeFood,
     rebuildFoodIndex,
+    rebuildFoodIndexJob,
   };
 };
 
