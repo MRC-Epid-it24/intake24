@@ -8,6 +8,7 @@ import type {
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
+import ioc from '@intake24/api/ioc';
 import { addDollarSign } from '@intake24/api/util';
 import {
   Op,
@@ -18,6 +19,15 @@ import {
   SynonymSet,
   SystemLocale,
 } from '@intake24/db';
+
+// Add a value to the redisSetService if needed IndexRebuilding
+const addToRedisSet = async (value: string) => {
+  const redisSetService = ioc.cradle.redisSetService;
+  // TODO: Is it necessary to call init() and close() or shall we share the connection?
+  redisSetService.init();
+  await redisSetService.addToSet(value);
+  redisSetService.close();
+};
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
@@ -140,6 +150,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
+    addToRedisSet(code);
+
     return [...records, ...newRecords];
   };
 
@@ -213,6 +225,8 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       });
       newRecords.push(newRecord);
     }
+
+    addToRedisSet(localeCode);
 
     return [...records, ...newRecords];
   };

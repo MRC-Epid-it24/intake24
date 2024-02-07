@@ -37,24 +37,21 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
     this.logger.debug('Job started.');
 
     if ((await this.redisSetService.getSetSize()) === 0) {
-      this.logger.debug('No locales specified. No Rebuilding is necessary');
+      this.logger.info('No locales specified. No Rebuilding is necessary');
       this.redisSetService.close();
       return;
     }
 
-    this.logger.debug('\nReading Locale Ids from Redis Stream...');
+    this.logger.info('\nReading Locale Ids from Redis Set...');
     const localeIds = await this.redisSetService.readSet();
     this.logger.debug('\n\nLocale Ids:', localeIds);
 
-    this.logger.debug('Starting Rebuildng Specified Indexes...');
-    if (localeIds && localeIds.length > 0) {
-      await this.localeIndexBuildService.rebuildFoodIndexJob(localeIds);
-    } else {
-      this.logger.debug('No locales specified. No Rebuilding is necessary');
-    }
+    await this.redisSetService.removeSet();
+    this.redisSetService.close();
 
-    //Need to close the connection to the Redis Stream
-    //await this.redisSetService.close();
+    this.logger.debug('Starting Rebuildng Specified Indexes...');
+    await this.localeIndexBuildService.rebuildFoodIndexJob(localeIds);
+
     this.logger.debug('Job finished.');
   }
 }
