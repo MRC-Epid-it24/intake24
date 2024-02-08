@@ -11,18 +11,6 @@ import logger from '@intake24/common-backend/services/logger/logger';
 
 import type { CsvColumnStructure, CsvResultStructure } from './types/csv-import';
 
-// Read and parse the JSON structure file
-// const readStructureFile = async (filePath: string): Promise<CsvColumnStructure | undefined> => {
-//   try {
-//     await fs.access(filePath);
-//   } catch (e) {
-//     logger.debug(`File ${filePath} does not exist or is not accessible, skipping`);
-//     return undefined;
-//   }
-//   const structure = await fs.readFile(filePath, 'utf-8');
-//   return JSON.parse(structure);
-// };
-
 // Validate CSV structure against JSON structure (TODO: move to the DB service)
 const validateCsvStructure = (headers: string[], structure: CsvColumnStructure): boolean => {
   const structureKeys = Object.keys(structure);
