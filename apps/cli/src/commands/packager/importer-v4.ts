@@ -993,7 +993,9 @@ export class ImporterV4 {
         ? path.join(this.packageDirPath, PkgConstants.CSV_FOOD_RECORDS_FILE_NAME)
         : '',
     });
-    console.log('Result: - ', result);
+    if (result && result.length > 0) {
+      logger.info('CSV parsing completed');
+    }
   }
 
   public async import(): Promise<void> {
