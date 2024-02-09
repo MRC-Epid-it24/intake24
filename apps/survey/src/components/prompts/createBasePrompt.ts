@@ -6,14 +6,14 @@ import type { PromptSection } from '@intake24/common/surveys';
 import type { EncodedFood, FoodState, MealState } from '@intake24/common/types';
 
 import { Next, NextMobile } from './actions';
-import { BaseLayout, CardLayout } from './layouts';
+import { BaseLayout, CardLayout, PanelLayout } from './layouts';
 
 // use prompt macros in vue3
 export default <P extends keyof Prompts, F extends FoodState = EncodedFood>() =>
   defineComponent({
     name: 'BasePrompt',
 
-    components: { Next, NextMobile, BaseLayout, CardLayout },
+    components: { Next, NextMobile, BaseLayout, CardLayout, PanelLayout },
 
     props: {
       food: {

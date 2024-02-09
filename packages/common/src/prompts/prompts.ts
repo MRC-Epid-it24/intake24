@@ -26,6 +26,7 @@ export const customComponentTypes = [
   'date-picker-prompt',
   'time-picker-prompt',
   'checkbox-list-prompt',
+  'multi-prompt',
   'no-more-information-prompt',
   'radio-list-prompt',
   'select-prompt',
@@ -78,7 +79,6 @@ export type PromptValidationProps = {
 export type BasePrompt = {
   id: string;
   name: string;
-  type: PromptType;
   i18n: Record<string, LocaleTranslation>;
   actions?: Actions;
   conditions: Condition[];
@@ -86,7 +86,9 @@ export type BasePrompt = {
 
 export type ValidatedPrompt = BasePrompt & PromptValidationProps;
 
-export type BasePortionPrompt = BasePrompt & { badges: boolean };
+export type BaseCustomPrompt = BasePrompt & { type: 'custom'; group?: string | null };
+export type BasePortionPrompt = BasePrompt & { type: 'portion-size'; badges: boolean };
+export type BaseStandardPrompt = BasePrompt & { type: 'standard' };
 
 export interface PromptWithSection extends BasePrompt {
   section: PromptSection;
@@ -129,32 +131,49 @@ export type TimePicker = {
 
 export type Prompts = {
   // Custom
-  'checkbox-list-prompt': ValidatedPrompt & {
-    component: 'checkbox-list-prompt';
-    options: LocaleOptionList;
-    other: boolean;
+  'checkbox-list-prompt': BaseCustomPrompt &
+    PromptValidationProps & {
+      component: 'checkbox-list-prompt';
+      options: LocaleOptionList;
+      other: boolean;
+    };
+  'date-picker-prompt': BaseCustomPrompt &
+    PromptValidationProps & {
+      component: 'date-picker-prompt';
+      futureDates: boolean;
+    };
+  'info-prompt': BaseCustomPrompt & { component: 'info-prompt' };
+  'multi-prompt': BaseCustomPrompt & {
+    component: 'multi-prompt';
+    prompts: Prompt[];
   };
-  'date-picker-prompt': ValidatedPrompt & { component: 'date-picker-prompt'; futureDates: boolean };
-  'info-prompt': BasePrompt & { component: 'info-prompt' };
-  'no-more-information-prompt': BasePrompt & { component: 'no-more-information-prompt' };
-  'radio-list-prompt': ValidatedPrompt & {
-    component: 'radio-list-prompt';
-    options: LocaleOptionList;
-    orientation: RadioOrientation;
-    other: boolean;
+  'no-more-information-prompt': BaseCustomPrompt & {
+    component: 'no-more-information-prompt';
   };
-  'select-prompt': ValidatedPrompt & {
-    component: 'select-prompt';
-    options: LocaleOptionList;
-    multiple: boolean;
+  'radio-list-prompt': BaseCustomPrompt &
+    PromptValidationProps & {
+      component: 'radio-list-prompt';
+      options: LocaleOptionList;
+      orientation: RadioOrientation;
+      other: boolean;
+    };
+  'select-prompt': BaseCustomPrompt &
+    PromptValidationProps & {
+      component: 'select-prompt';
+      options: LocaleOptionList;
+      multiple: boolean;
+    };
+  'slider-prompt': BaseCustomPrompt & {
+    component: 'slider-prompt';
+    slider: Slider;
   };
-  'slider-prompt': BasePrompt & { component: 'slider-prompt'; slider: Slider };
-  'textarea-prompt': ValidatedPrompt & { component: 'textarea-prompt' };
-  'time-picker-prompt': ValidatedPrompt &
+  'textarea-prompt': BaseCustomPrompt & PromptValidationProps & { component: 'textarea-prompt' };
+  'time-picker-prompt': BaseCustomPrompt &
+    PromptValidationProps &
     TimePicker & {
       component: 'time-picker-prompt';
     };
-  'yes-no-prompt': BasePrompt & { component: 'yes-no-prompt' };
+  'yes-no-prompt': BaseCustomPrompt & { component: 'yes-no-prompt' };
   // Portion size
   'as-served-prompt': BasePortionPrompt & {
     component: 'as-served-prompt';
@@ -201,51 +220,59 @@ export type Prompts = {
     FoodBrowser & {
       component: 'recipe-builder-prompt';
     };
-  'standard-portion-prompt': BasePortionPrompt & { component: 'standard-portion-prompt' };
+  'standard-portion-prompt': BasePortionPrompt & {
+    component: 'standard-portion-prompt';
+  };
   // Standard
-  'associated-foods-prompt': BasePrompt &
+  'associated-foods-prompt': BaseStandardPrompt &
     FoodBrowser & {
       component: 'associated-foods-prompt';
       multiple: boolean;
     };
-  'edit-meal-prompt': BasePrompt & { component: 'edit-meal-prompt'; separateDrinks: boolean };
-  'final-prompt': BasePrompt & { component: 'final-prompt'; rating: boolean };
-  'food-search-prompt': BasePrompt &
+  'edit-meal-prompt': BaseStandardPrompt & {
+    component: 'edit-meal-prompt';
+    separateDrinks: boolean;
+  };
+  'final-prompt': BaseStandardPrompt & {
+    component: 'final-prompt';
+    rating: boolean;
+  };
+  'food-search-prompt': BaseStandardPrompt &
     FoodBrowser & {
       component: 'food-search-prompt';
       allowBrowsing: boolean;
       dualLanguage: boolean;
     };
-  'meal-add-prompt': BasePrompt & {
+  'meal-add-prompt': BaseStandardPrompt & {
     component: 'meal-add-prompt';
     custom: boolean;
   };
-  'meal-duration-prompt': BasePrompt & {
+  'meal-duration-prompt': BaseStandardPrompt & {
     component: 'meal-duration-prompt';
     slider: Slider;
   };
-  'meal-gap-prompt': BasePrompt & {
+  'meal-gap-prompt': BaseStandardPrompt & {
     component: 'meal-gap-prompt';
     gap: number;
     startTime: string;
     endTime: string;
   };
-  'meal-time-prompt': BasePrompt &
+  'meal-time-prompt': BaseStandardPrompt &
     TimePicker & {
       component: 'meal-time-prompt';
     };
-  'ready-meal-prompt': BasePrompt & { component: 'ready-meal-prompt' };
-  'redirect-prompt': BasePrompt & {
+  'ready-meal-prompt': BaseStandardPrompt & { component: 'ready-meal-prompt' };
+  'redirect-prompt': BaseStandardPrompt & {
     component: 'redirect-prompt';
     rating: boolean;
     url: string | null;
     identifier: 'userId' | 'username' | 'urlAuthToken' | string | null;
     timer: number;
   };
-  'review-confirm-prompt': BasePrompt & { component: 'review-confirm-prompt' };
-  'same-as-before-prompt': BasePrompt & { component: 'same-as-before-prompt' };
-  'split-food-prompt': BasePrompt & { component: 'split-food-prompt' };
-  'submit-prompt': BasePrompt & {
+  'review-confirm-prompt': BaseStandardPrompt & { component: 'review-confirm-prompt' };
+  'same-as-before-prompt': BaseStandardPrompt & { component: 'same-as-before-prompt' };
+  'split-food-prompt': BaseStandardPrompt & { component: 'split-food-prompt' };
+  'submit-prompt': BaseStandardPrompt & {
     component: 'submit-prompt';
     review: Record<PromptLayout, ReviewOptions>;
   };

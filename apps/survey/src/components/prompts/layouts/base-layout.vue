@@ -10,7 +10,7 @@
       </slot>
     </v-card>
     <slot name="prompt-description">
-      <v-card v-if="i18n.description" class="mb-4" :tile="isMobile">
+      <v-card v-if="!isInMultiPrompt && i18n.description" class="mb-4" :tile="isMobile">
         <div class="pa-4" v-html="i18n.description"></div>
       </v-card>
     </slot>
@@ -77,10 +77,8 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { EncodedFood, MissingFood } from '@intake24/common/types';
 import { MealListMobile } from '@intake24/survey/components/layouts/meal-list';
 
 import layoutMixin from './layout-mixin';
@@ -91,13 +89,6 @@ export default defineComponent({
   components: { MealListMobile },
 
   mixins: [layoutMixin],
-
-  props: {
-    food: {
-      type: Object as PropType<EncodedFood | MissingFood>,
-      required: true,
-    },
-  },
 });
 </script>
 

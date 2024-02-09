@@ -43,11 +43,12 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { defaultMessages, i18n, translate, translatePath } = useI18n();
-    const { action, params, type } = usePromptUtils(props, ctx);
+    const { action, isInMultiPrompt, params, type } = usePromptUtils(props, ctx);
     const { foodName } = useFoodUtils(props);
     const { mealName, mealTime, mealNameWithTime } = useMealUtils(props);
     const survey = useSurvey();
 
+    const meals = computed(() => survey.data.meals);
     const showSummary = computed(() => {
       if (props.prompt.component === 'submit-prompt' && props.prompt.review['mobile'] !== false)
         return false;
@@ -81,13 +82,14 @@ export default defineComponent({
       foodName,
       translate,
       translatePath,
+      isInMultiPrompt,
       mealName,
       mealTime,
       mealNameWithTime,
       params,
       showSummary,
       type,
-      meals: survey.data.meals,
+      meals,
     };
   },
 
@@ -117,10 +119,30 @@ export default defineComponent({
     },
 
     i18n() {
+      /*
+       * Workaround for multi-prompt i18n
+       * - at the moment scheme prompt i18n is merged into the vue-i18n instance messages, so it can be used directly
+       * - this approach allows use of vue-i18n component to interpolate the i18n strings
+       * - however multi-prompt is displaying multiple prompts at once, so same prompt types override each other
+       * - TODO: implement own vue-i18n component and merge the i18n outside of the vue-i18n instance?
+       */
       return {
-        name: this.$t(`prompts.${this.type}.name`, this.params),
+        /* name: this.$t(`prompts.${this.type}.name`, this.params),
         text: this.$t(`prompts.${this.type}.text`, this.params),
-        description: this.translatePath(`prompts.${this.type}.description`, this.params, true),
+        description: this.translatePath(`prompts.${this.type}.description`, this.params, true), */
+        name: this.translate(this.prompt.i18n.name, {
+          params: this.params,
+          path: `prompts.${this.type}.name`,
+        }),
+        text: this.translate(this.prompt.i18n.text, {
+          params: this.params,
+          path: `prompts.${this.type}.text`,
+        }),
+        description: this.translate(this.prompt.i18n.description, {
+          params: this.params,
+          path: `prompts.${this.type}.description`,
+          sanitize: true,
+        }),
       };
     },
   },

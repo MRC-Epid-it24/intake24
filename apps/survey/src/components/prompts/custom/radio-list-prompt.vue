@@ -1,5 +1,9 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <component
+    :is="customPromptLayout"
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="action"
+  >
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-radio-group
@@ -39,7 +43,7 @@
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
-  </card-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -89,7 +93,11 @@ export default defineComponent({
       return false;
     };
 
-    const { action, clearErrors, errors, hasErrors, type } = usePromptUtils(props, ctx, confirm);
+    const { action, clearErrors, customPromptLayout, errors, hasErrors, type } = usePromptUtils(
+      props,
+      ctx,
+      confirm
+    );
 
     const update = () => {
       clearErrors();
@@ -99,6 +107,7 @@ export default defineComponent({
 
     return {
       action,
+      customPromptLayout,
       errors,
       hasErrors,
       isValid,

@@ -13,7 +13,11 @@ import type {
   SurveyUserSessionResponse,
 } from '@intake24/common/types/http';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { flattenSchemeWithSection, isMealSection } from '@intake24/common/surveys';
+import {
+  flattenSchemeWithSection,
+  groupSchemeMultiPrompts,
+  isMealSection,
+} from '@intake24/common/surveys';
 import { merge } from '@intake24/common/util';
 import { Survey } from '@intake24/db';
 
@@ -67,8 +71,7 @@ const surveyRespondentController = ({
       searchMatchScoreWeight,
     } = survey;
 
-    let { meals } = surveyScheme;
-    const { prompts } = surveyScheme;
+    let { meals, prompts } = surveyScheme;
 
     let state: SurveyStatus;
     const today = new Date();
@@ -82,7 +85,7 @@ const surveyRespondentController = ({
 
     // 2) Prompts - merge by Prompt ID & Prompt Name
     if (surveySchemeOverrides.prompts.length) {
-      const flattenScheme = flattenSchemeWithSection(surveyScheme.prompts);
+      const flattenScheme = flattenSchemeWithSection(prompts);
       for (const prompt of surveySchemeOverrides.prompts) {
         const match = flattenScheme.find(
           (item) => item.id === prompt.id && item.name === prompt.name
@@ -104,6 +107,9 @@ const surveyRespondentController = ({
         }
       }
     }
+
+    // 3) Crate multi-prompt groups
+    prompts = groupSchemeMultiPrompts(prompts);
 
     res.json({
       id,

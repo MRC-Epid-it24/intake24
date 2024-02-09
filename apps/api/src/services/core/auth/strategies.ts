@@ -1,5 +1,5 @@
 import type { PassportStatic } from 'passport';
-import type { StrategyOptions, StrategyOptionsWithoutRequest } from 'passport-jwt';
+import type { StrategyOptionsWithoutRequest } from 'passport-jwt';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Op } from 'sequelize';
 

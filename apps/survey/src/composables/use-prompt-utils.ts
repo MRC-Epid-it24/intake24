@@ -40,9 +40,11 @@ export const usePromptUtils = <
   const { foodName } = useFoodUtils(props);
 
   const isFood = computed(() => !!props.food && !!props.meal);
-
   const isMeal = computed(() => !!props.meal && !props.food);
-
+  const isInMultiPrompt = computed(() => !!(props.prompt.type === 'custom' && props.prompt.group));
+  const customPromptLayout = computed(() =>
+    isInMultiPrompt.value ? 'panel-layout' : 'card-layout'
+  );
   const foodOrMealName = computed(() => foodName.value ?? mealName.value ?? '');
 
   const errors = ref<string[]>([]);
@@ -112,12 +114,14 @@ export const usePromptUtils = <
   return {
     action,
     clearErrors,
+    customPromptLayout,
     errors,
     foodName,
     foodOrMealName,
     hasErrors,
     isFood,
     isMeal,
+    isInMultiPrompt,
     mealName,
     params,
     recipeBuilderEnabled,

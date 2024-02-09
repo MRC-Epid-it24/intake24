@@ -70,6 +70,16 @@
                             outlined
                           ></v-text-field>
                         </v-col>
+                        <v-col v-if="dialog.prompt.type === 'custom'" cols="12" md="6">
+                          <v-text-field
+                            v-model="dialog.prompt.group"
+                            :disabled="isOverrideMode"
+                            hide-details="auto"
+                            :label="$t('survey-schemes.prompts.internal.group._')"
+                            :messages="$t('survey-schemes.prompts.internal.group.hint')"
+                            outlined
+                          ></v-text-field>
+                        </v-col>
                       </v-row>
                     </v-container>
                   </v-card>
@@ -117,7 +127,10 @@
             <prompt-actions :actions.sync="dialog.prompt.actions"></prompt-actions>
             <prompt-conditions :conditions.sync="dialog.prompt.conditions"></prompt-conditions>
             <prompt-validation
-              v-if="promptSettings[dialog.prompt.component].tabs.includes('validation')"
+              v-if="
+                'validation' in dialog.prompt &&
+                promptSettings[dialog.prompt.component].tabs.includes('validation')
+              "
               v-bind.sync="dialog.prompt.validation"
             ></prompt-validation>
             <component

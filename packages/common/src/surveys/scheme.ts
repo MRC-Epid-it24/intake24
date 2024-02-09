@@ -1,4 +1,4 @@
-import type { Prompt, PromptWithSection } from '../prompts';
+import type { Condition, Prompt, PromptWithSection } from '../prompts';
 import type { Meal } from '../types';
 
 export const schemeTypes = ['default'] as const;
@@ -45,6 +45,56 @@ export const flattenSchemeWithSection = (scheme: RecallPrompts): PromptWithSecti
     acc.push(...items);
     return acc;
   }, []);
+
+export const groupMultiPrompts = (prompts: Prompt[]) => {
+  const grouped = prompts.reduce<
+    Record<string, { idx: number; prompts: Prompt[]; conditions: Condition[]; inserted: boolean }>
+  >((acc, item, idx) => {
+    if (item.type !== 'custom' || !item.group) return acc;
+
+    if (!acc[item.group]) acc[item.group] = { idx, prompts: [], conditions: [], inserted: false };
+    acc[item.group].prompts.push(item);
+    acc[item.group].conditions.push(...item.conditions);
+
+    return acc;
+  }, {});
+
+  if (!Object.keys(grouped).length) return prompts;
+
+  return prompts.reduce<Prompt[]>((acc, item) => {
+    if (item.type !== 'custom' || !item.group) {
+      acc.push(item);
+      return acc;
+    }
+
+    if (!grouped[item.group].inserted) {
+      acc.push({
+        id: `multiple-prompt-${item.group}`,
+        type: 'custom',
+        name: `multiple-prompt-${item.group}`,
+        component: 'multi-prompt',
+        prompts: grouped[item.group].prompts,
+        i18n: {},
+        conditions: grouped[item.group].conditions,
+      });
+      grouped[item.group].inserted = true;
+    }
+    return acc;
+  }, []);
+};
+
+export const groupSchemeMultiPrompts = (scheme: RecallPrompts): RecallPrompts => {
+  return {
+    preMeals: groupMultiPrompts(scheme.preMeals),
+    meals: {
+      preFoods: groupMultiPrompts(scheme.meals.preFoods),
+      foods: groupMultiPrompts(scheme.meals.foods),
+      postFoods: groupMultiPrompts(scheme.meals.postFoods),
+    },
+    postMeals: groupMultiPrompts(scheme.postMeals),
+    submission: groupMultiPrompts(scheme.submission),
+  };
+};
 
 export const defaultMeals: Meal[] = [
   { name: { en: 'Breakfast' }, time: '8:00' },

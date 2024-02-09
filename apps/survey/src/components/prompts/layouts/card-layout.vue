@@ -45,7 +45,7 @@
           <slot name="actions"></slot>
         </template>
       </v-card-actions>
-      <div v-if="isMobile" id="actions" class="bottom-navigation">
+      <div v-if="!isInMultiPrompt && isMobile" id="actions" class="bottom-navigation">
         <div v-if="showSummary" class="bottom-navigation__summary">
           <meal-list-mobile v-bind="{ meals }" @action="action"></meal-list-mobile>
         </div>

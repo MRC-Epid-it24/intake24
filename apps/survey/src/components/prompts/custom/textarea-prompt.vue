@@ -1,5 +1,9 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <component
+    :is="customPromptLayout"
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="action"
+  >
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-textarea
@@ -18,7 +22,7 @@
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
-  </card-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -64,7 +68,7 @@ export default defineComponent({
       return isValid;
     };
 
-    const { action, type } = usePromptUtils(props, ctx, confirm);
+    const { action, customPromptLayout, type } = usePromptUtils(props, ctx, confirm);
 
     const rules = computed(() =>
       props.prompt.validation.required
@@ -77,7 +81,7 @@ export default defineComponent({
         : []
     );
 
-    return { action, form, isValid, rules, state, translate };
+    return { action, customPromptLayout, form, isValid, rules, state, translate };
   },
 });
 </script>

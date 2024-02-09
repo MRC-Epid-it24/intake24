@@ -1,5 +1,9 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <component
+    :is="customPromptLayout"
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="action"
+  >
     <template #actions>
       <yes-no-toggle v-model="state"></yes-no-toggle>
     </template>
@@ -18,7 +22,7 @@
         <v-icon class="pb-1">$yes</v-icon>
       </v-btn>
     </template>
-  </card-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -46,7 +50,7 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
+    const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
     const isValid = computed(() => props.value !== undefined);
     const state = computed({
@@ -62,6 +66,7 @@ export default defineComponent({
 
     return {
       action,
+      customPromptLayout,
       isValid,
       state,
     };

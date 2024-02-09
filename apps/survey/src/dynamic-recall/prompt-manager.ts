@@ -104,6 +104,8 @@ const checkSurveyStandardConditions = (state: SurveyState, prompt: Prompt): bool
       recallLog().promptCheck(component, false, 'No meal gap');
       return false;
     }
+    case 'multi-prompt':
+      return prompt.prompts.some((item) => checkSurveyStandardConditions(state, item));
     case 'review-confirm-prompt':
       return false;
     default:
@@ -197,6 +199,10 @@ const checkMealStandardConditions = (
 
       recallLog().promptCheck('meal-time-prompt', false, 'time is defined');
       return false;
+    case 'multi-prompt':
+      return prompt.prompts.some((item) =>
+        checkMealStandardConditions(surveyState, mealState, withSelection, item)
+      );
     case 'no-more-information-prompt':
       if (selection.mode === 'manual') {
         recallLog().promptCheck(
@@ -642,6 +648,11 @@ const checkFoodStandardConditions = (
       recallLog().promptCheck(component, true, `Missing food info not entered yet..`);
       return true;
     }
+
+    case 'multi-prompt':
+      return prompt.prompts.some((item) =>
+        checkFoodStandardConditions(surveyState, foodState, withSelection, item)
+      );
 
     case 'recipe-builder-prompt': {
       if (foodState.type !== 'recipe-builder') return false;

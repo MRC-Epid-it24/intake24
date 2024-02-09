@@ -1,5 +1,9 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
+  <component
+    :is="customPromptLayout"
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="action"
+  >
     <v-card-text>
       <v-form ref="form" @submit.prevent="action('next')">
         <v-row>
@@ -24,7 +28,7 @@
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="action('next')"></next-mobile>
     </template>
-  </card-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -51,7 +55,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const { i18n, translate } = useI18n();
-    const { action, type } = usePromptUtils(props, ctx);
+    const { action, customPromptLayout, type } = usePromptUtils(props, ctx);
 
     const state = computed({
       get() {
@@ -77,7 +81,7 @@ export default defineComponent({
       () => props.prompt.options[i18n.locale] ?? props.prompt.options.en
     );
 
-    return { action, isValid, localeOptions, promptI18n, state, translate };
+    return { action, customPromptLayout, isValid, localeOptions, promptI18n, state, translate };
   },
 });
 </script>

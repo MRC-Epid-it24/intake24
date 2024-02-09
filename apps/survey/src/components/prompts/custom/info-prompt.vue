@@ -1,12 +1,16 @@
 <template>
-  <card-layout v-bind="{ food, meal, prompt, section, isValid }" @action="updateAndAction">
+  <component
+    :is="customPromptLayout"
+    v-bind="{ food, meal, prompt, section, isValid }"
+    @action="updateAndAction"
+  >
     <template #actions>
       <next :disabled="!isValid" @click="updateAndAction('next')"></next>
     </template>
     <template #nav-actions>
       <next-mobile :disabled="!isValid" @click="updateAndAction('next')"></next-mobile>
     </template>
-  </card-layout>
+  </component>
 </template>
 
 <script lang="ts">
@@ -31,7 +35,7 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props, ctx) {
-    const { action } = usePromptUtils(props, ctx);
+    const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
     const isValid = true;
     const state = computed({
@@ -49,6 +53,7 @@ export default defineComponent({
     };
 
     return {
+      customPromptLayout,
       isValid,
       state,
       updateAndAction,

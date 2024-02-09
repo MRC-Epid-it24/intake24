@@ -23,7 +23,7 @@ import type { CustomPromptAnswer } from '@intake24/common/types';
 import { customPrompts } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
-import { useFoodPromptUtils, useMealPromptUtils } from './mixins';
+import { useCustomPromptHandler } from '../mixins';
 
 const infoPrompts = ['info-prompt'];
 
@@ -44,12 +44,10 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { foodOptional } = useFoodPromptUtils();
-    const { mealOptional } = useMealPromptUtils();
+    const { commitPromptAnswer, foodOptional, mealOptional } = useCustomPromptHandler(props);
     const survey = useSurvey();
 
     const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
-
     const state = ref<CustomPromptAnswer | undefined>(isInfoPrompt.value ? 'next' : undefined);
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
@@ -70,45 +68,7 @@ export default defineComponent({
         survey.setSelection(newSelection);
       }
 
-      const promptId = props.prompt.id;
-
-      if (survey.selection.element) {
-        switch (survey.selection.element.type) {
-          case 'food': {
-            const food = foodOptional.value;
-            if (!food) {
-              console.warn('Expected meal to be defined');
-              return;
-            }
-
-            if (!isInfoPrompt.value || state.value !== 'next')
-              survey.setFoodCustomPromptAnswer({ foodId: food.id, promptId, answer: state.value });
-
-            if (isInfoPrompt.value) survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
-
-            break;
-          }
-          case 'meal': {
-            const meal = mealOptional.value;
-            if (!meal) {
-              console.warn('Expected meal to be defined');
-              return;
-            }
-
-            if (!isInfoPrompt.value || state.value !== 'next')
-              survey.setMealCustomPromptAnswer({ mealId: meal.id, promptId, answer: state.value });
-
-            if (isInfoPrompt.value) survey.addMealFlag(meal.id, `${promptId}-acknowledged`);
-
-            break;
-          }
-        }
-      } else {
-        if (!isInfoPrompt.value || state.value !== 'next')
-          survey.setCustomPromptAnswer({ promptId, answer: state.value });
-
-        if (isInfoPrompt.value) survey.addFlag(`${promptId}-acknowledged`);
-      }
+      commitPromptAnswer(props.prompt, state.value);
     };
 
     return {

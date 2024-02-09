@@ -216,8 +216,12 @@
         "hint": "Internal unique identifier, used e.g. in data-exports as header"
       },
       "name": {
-        "_": "Prompt Name",
-        "hint": "Internal descriptive name for better orientation "
+        "_": "Prompt name",
+        "hint": "Internal descriptive name for better orientation"
+      },
+      "group": {
+        "_": "Prompt group",
+        "hint": "Group ID to collate prompts together"
       }
     },
     "type": "Prompt type",

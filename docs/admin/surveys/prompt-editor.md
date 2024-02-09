@@ -33,12 +33,17 @@ General tab defines administrative fields
 
 - `Name` - User friendly name for easier orientation (for internal use only).
 
+- `Group` - Group identifier for grouping prompts in the scheme section together.
+  - available for [custom prompts only](/admin/surveys/prompt-types#custom-prompts)
+  - prompts with the same group are displayed together on same screen collapsed in expansion panels
+  - prompts conditions are merged together and evaluated as one condition list for the whole group
+
 ## Content
 
 Content tab defines respondent facing content text fields and their localized versions.
 
 - `Name` - Short prompt name displayed in top breadcrumbs component
-- `Text` - Text displayed in the header component (usually defaults to meal name for meal-level prompts and to food name for food-level prompts)
+- `Text` - Text displayed in the header component just below the breadcrumb (usually defaults to blank)
 - `Description` - Main body of prompt details, which allows to embed `rich-text` content
 
 All fields can be localized to [languages](/admin/localization/languages) set up in the database.

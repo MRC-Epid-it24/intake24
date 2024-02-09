@@ -14,7 +14,7 @@ import type { PromptInstance } from '@intake24/survey/dynamic-recall/dynamic-rec
 import { isSelectionEqual } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import {
-  CustomPromptHandler,
+  customHandlers,
   portionSizeHandlers,
   standardHandlers,
 } from '@intake24/survey/components/handlers';
@@ -28,8 +28,8 @@ export default defineComponent({
   name: 'RecallMixin',
 
   components: {
-    CustomPromptHandler,
     InfoAlert,
+    ...customHandlers,
     ...standardHandlers,
     ...portionSizeHandlers,
   },
@@ -67,7 +67,9 @@ export default defineComponent({
 
       switch (prompt.type) {
         case 'custom':
-          return 'custom-prompt-handler';
+          return prompt.component === 'multi-prompt'
+            ? 'multi-custom-prompt-handler'
+            : 'custom-prompt-handler';
         case 'standard':
         case 'portion-size':
           return `${prompt.component}-handler`;
