@@ -1,9 +1,9 @@
-.v-btn {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0 1em;
+.overflow-button {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 1em;
 
   span {
     display: block;

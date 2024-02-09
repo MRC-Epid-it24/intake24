@@ -76,7 +76,7 @@
       </v-tabs-items>
       <div
         v-if="type === 'foodSearch' || dialog || !showInDialog"
-        class="d-flex flex-column flex-sm-row pa-4 ga-2"
+        class="d-flex flex-column flex-md-row pa-4 ga-2"
       >
         <v-btn
           v-if="type === 'foodSearch' && tab === 1"
@@ -90,6 +90,7 @@
           {{ promptI18n.browse }}
         </v-btn>
         <v-btn
+          class="overflow-button"
           color="primary"
           :disabled="missingDialog"
           large
@@ -101,6 +102,7 @@
         </v-btn>
         <v-btn
           v-if="type === 'recipeBuilder' && !requiredToFill"
+          class="overflow-button"
           color="primary"
           :disabled="missingDialog"
           large
