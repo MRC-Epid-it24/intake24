@@ -1,11 +1,10 @@
-.overflow-button {
+.btn-truncate {
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-left: 1em;
 
-  span {
+  .v-btn__content {
     display: block;
     white-space: nowrap;
     overflow: hidden;

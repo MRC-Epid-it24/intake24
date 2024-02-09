@@ -90,7 +90,7 @@
           {{ promptI18n.browse }}
         </v-btn>
         <v-btn
-          class="overflow-button"
+          class="btn-truncate"
           color="primary"
           :disabled="missingDialog"
           large
@@ -102,7 +102,7 @@
         </v-btn>
         <v-btn
           v-if="type === 'recipeBuilder' && !requiredToFill"
-          class="overflow-button"
+          class="btn-truncate"
           color="primary"
           :disabled="missingDialog"
           large
@@ -110,7 +110,7 @@
           :title="promptI18n['missing.irrelevantIngredient']"
           @click.stop="skipTheStep"
         >
-          <span>{{ promptI18n['missing.irrelevantIngredient'] }}</span>
+          {{ promptI18n['missing.irrelevantIngredient'] }}
         </v-btn>
       </div>
     </component>

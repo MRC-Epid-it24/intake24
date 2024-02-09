@@ -15,7 +15,7 @@
             </template>
             <template #append>
               <v-btn
-                class="overflow-button"
+                class="btn-truncate"
                 color="primary lighten-1"
                 depressed
                 :title="'Change/Delete'"
