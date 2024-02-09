@@ -101,7 +101,6 @@
         </v-btn>
         <v-btn
           v-if="type === 'recipeBuilder' && !requiredToFill"
-          class="overflow-button"
           color="primary"
           :disabled="missingDialog"
           large
@@ -109,7 +108,7 @@
           :title="promptI18n['missing.irrelevantIngredient']"
           @click.stop="skipTheStep"
         >
-          {{ promptI18n['missing.irrelevantIngredient'] }}
+          <span>{{ promptI18n['missing.irrelevantIngredient'] }}</span>
         </v-btn>
       </div>
     </component>
@@ -487,11 +486,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.overflow-button {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-</style>
+<style lang="scss"></style>
