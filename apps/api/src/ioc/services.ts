@@ -43,6 +43,7 @@ import {
   Pusher,
   RateLimiter,
   RedisIndexingProcess,
+  RedisSubscriber,
   Scheduler,
   Session,
   signInService,
@@ -122,6 +123,7 @@ export default (container: AwilixContainer): void => {
     pusher: asClass(Pusher).singleton(),
     rateLimiter: asClass(RateLimiter).singleton(),
     redisIndexingProcessService: asClass(RedisIndexingProcess).singleton(),
+    redisIndexingSubscriberService: asClass(RedisSubscriber).singleton(),
     scheduler: asClass(Scheduler).singleton(),
     session: asClass(Session).singleton(),
 

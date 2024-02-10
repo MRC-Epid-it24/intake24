@@ -110,6 +110,7 @@ import type {
   Pusher,
   RateLimiter,
   RedisIndexingProcess,
+  RedisSubscriber,
   Scheduler,
   Session,
   SignInService,
@@ -256,6 +257,7 @@ export interface IoC extends Jobs {
   pusher: Pusher;
   rateLimiter: RateLimiter;
   redisIndexingProcessService: RedisIndexingProcess;
+  redisIndexingSubscriberService: RedisSubscriber;
   scheduler: Scheduler;
   session: Session;
 
@@ -349,6 +351,8 @@ const configureContainer = () => {
     servicesConfig: asValue(config.services),
     sessionConfig: asValue(config.session),
     setConfig: asValue(config.set),
+    publisherConfig: asValue(config.publisher),
+    subscriberConfig: asValue(config.subscriber),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),

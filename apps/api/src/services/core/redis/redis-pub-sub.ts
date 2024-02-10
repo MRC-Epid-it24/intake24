@@ -1,3 +1,5 @@
+import Redis from 'ioredis';
+
 import type { IoC } from '@intake24/api/ioc';
 
 import HasRedisClient from './redis-store';
@@ -23,11 +25,16 @@ export class RedisSubscriber extends HasRedisClient {
   constructor({ subscriberConfig, logger }: Pick<IoC, 'subscriberConfig' | 'logger'>) {
     super({ config: subscriberConfig.redis, logger: logger.child({ service: 'Redis-Publisher' }) });
     this.channelName = subscriberConfig.channel;
-    this.redis.on('message', this.onMessageReceive.bind(this));
+    this.init();
+    this.redis.on('message', (channel, message) => {
+      if (channel === this.channelName) {
+        this.onMessageReceive(message);
+      }
+    });
   }
 
   // Subscribe to a channel
-  async subscribe() {
+  async subscribeToChannel() {
     return this.redis.subscribe(this.channelName, (error, count) => {
       if (error) {
         // Handle subscription error
@@ -35,17 +42,17 @@ export class RedisSubscriber extends HasRedisClient {
         return;
       }
       this.logger.info(
-        `Subscribed to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.`
+        `\n\n\nSUBSCRIBED to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.\n\n\n\n`
       );
     });
   }
 
-  private async onMessageReceive(message: string): Promise<string[]> {
+  public async onMessageReceive(message: string): Promise<string[]> {
     this.logger.debug(`Received a message from '${this.channelName}' channel.`);
     // Deserialize the message back into an array of strings
     const messagesArray: string[] = JSON.parse(message);
     // Process the array as needed
-    this.logger.info('Received array:', messagesArray);
+    this.logger.info('\n\n\n\nReceived array:', messagesArray);
     return messagesArray;
   }
 }

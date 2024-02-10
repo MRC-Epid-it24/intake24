@@ -50,6 +50,7 @@ export default {
 
   close() {
     indexWorker.postMessage({ type: 'command', exit: true });
+    // redisIndexingSubscriberService.close();
   },
 
   async rebuild() {

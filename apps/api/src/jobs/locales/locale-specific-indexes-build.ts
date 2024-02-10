@@ -13,7 +13,6 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
 
   constructor({
     logger,
-    foodSearchController,
     redisIndexingProcessService,
   }: Pick<IoC, 'logger' | 'foodSearchController' | 'redisIndexingProcessService'>) {
     super({ logger });
