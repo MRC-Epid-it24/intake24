@@ -15,7 +15,7 @@ export const publisherConfig: PublisherConfig = {
     host: process.env.PUBLISHER_REDIS_HOST || 'localhost',
     port: parseInt(process.env.PUBLISHER_REDIS_PORT || '6379', 10),
   },
-  channel: process.env.PUBLISHER_CHANNEL_NAME || 'index-builder',
+  channel: process.env.PUB_SUB_CHANNEL_NAME || 'index-builder',
 };
 
 export const subscriberConfig: SubscriberConfig = {
@@ -23,5 +23,5 @@ export const subscriberConfig: SubscriberConfig = {
     host: process.env.SUBSCRIBER_REDIS_HOST || 'localhost',
     port: parseInt(process.env.SUBSCRIBER_REDIS_PORT || '6379', 10),
   },
-  channel: process.env.SUBSCRIBER_CHANNEL_NAME || 'index-builder',
+  channel: process.env.PUB_SUB_CHANNEL_NAME || 'index-builder',
 };

@@ -22,11 +22,11 @@ import {
 
 // Add a value to the redisSetService if needed IndexRebuilding
 const addToRedisSet = async (value: string) => {
-  const redisSetService = ioc.cradle.redisSetService;
+  const redisIndexingProcessService = ioc.cradle.redisIndexingProcessService;
   // TODO: Is it necessary to call init() and close() or shall we share the connection?
-  redisSetService.init();
-  await redisSetService.addToSet(value);
-  redisSetService.close();
+  redisIndexingProcessService.init();
+  await redisIndexingProcessService.addToSet(value);
+  redisIndexingProcessService.close();
 };
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {

@@ -7,19 +7,19 @@ import BaseJob from '../job';
 export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificIndexBuild'> {
   readonly name = 'LocaleSpecificIndexBuild';
 
-  private readonly localeIndexBuildService;
-  private readonly redisSetService;
+  // private readonly localeIndexBuildService;
+  private readonly redisIndexingProcessService;
   private localeIds: string[] | undefined;
 
   constructor({
     logger,
     foodSearchController,
-    redisSetService,
-  }: Pick<IoC, 'logger' | 'foodSearchController' | 'redisSetService'>) {
+    redisIndexingProcessService,
+  }: Pick<IoC, 'logger' | 'foodSearchController' | 'redisIndexingProcessService'>) {
     super({ logger });
 
-    this.localeIndexBuildService = foodSearchController;
-    this.redisSetService = redisSetService;
+    // this.localeIndexBuildService = foodSearchController;
+    this.redisIndexingProcessService = redisIndexingProcessService;
   }
 
   /**
@@ -32,26 +32,28 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
    */
   public async run(job: Job): Promise<void> {
     this.init(job);
-    this.redisSetService.init();
+    this.redisIndexingProcessService.init();
 
     this.logger.debug('Job started.');
 
-    if ((await this.redisSetService.getSetSize()) === 0) {
+    if ((await this.redisIndexingProcessService.getSetSize()) === 0) {
       this.logger.info('No locales specified. No Rebuilding is necessary');
-      this.redisSetService.close();
+      this.redisIndexingProcessService.close();
       return;
     }
 
     this.logger.info('\nReading Locale Ids from Redis Set...');
-    const localeIds = await this.redisSetService.readSet();
+    const localeIds = await this.redisIndexingProcessService.readSet();
     this.logger.debug('\n\nLocale Ids:', localeIds);
 
-    await this.redisSetService.removeSet();
-    this.redisSetService.close();
+    await this.redisIndexingProcessService.removeSet();
 
-    this.logger.debug('Starting Rebuildng Specified Indexes...');
-    await this.localeIndexBuildService.rebuildFoodIndexJob(localeIds);
-
+    this.logger.debug(`\nPublish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
+    const resultPub = await this.redisIndexingProcessService.publish(localeIds);
+    this.logger.debug('\n\nPublish Result:', resultPub);
+    // this.logger.debug('Starting Rebuildng Specified Indexes...');
+    // await this.localeIndexBuildService.rebuildFoodIndexJob(localeIds);
+    this.redisIndexingProcessService.close();
     this.logger.debug('Job finished.');
   }
 }

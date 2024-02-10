@@ -109,7 +109,7 @@ import type {
   ProcessedImageService,
   Pusher,
   RateLimiter,
-  RedisSet,
+  RedisIndexingProcess,
   Scheduler,
   Session,
   SignInService,
@@ -255,7 +255,7 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   rateLimiter: RateLimiter;
-  redisSetService: RedisSet;
+  redisIndexingProcessService: RedisIndexingProcess;
   scheduler: Scheduler;
   session: Session;
 

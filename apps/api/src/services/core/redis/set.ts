@@ -2,11 +2,14 @@ import type { IoC } from '@intake24/api/ioc';
 
 import HasRedisClient from './redis-store';
 
-export default class RedisSet extends HasRedisClient {
+export default class RedisIndexingProcess extends HasRedisClient {
   private readonly setName: string;
-  constructor({ setConfig: setConfig, logger }: Pick<IoC, 'setConfig' | 'logger'>) {
-    super({ config: setConfig.redis, logger: logger.child({ service: 'Redis-Set' }) });
+  private readonly channelName: string;
+
+  constructor({ setConfig, logger }: Pick<IoC, 'setConfig' | 'logger'>) {
+    super({ config: setConfig.redis, logger: logger.child({ service: 'Redis-Indexing-Process' }) });
     this.setName = setConfig.setName;
+    this.channelName = 'index-builder';
   }
 
   // Add a value to the set
@@ -37,5 +40,13 @@ export default class RedisSet extends HasRedisClient {
   // Remove the set
   async removeSet() {
     return this.redis.del(this.setName);
+  }
+
+  // Publish a message to a channel
+  async publish(messagesArray: string[]): Promise<number> {
+    this.logger.debug(
+      `\nREDIS-SET: Publishing to the '${this.channelName}' channel, messages: ${messagesArray}...`
+    );
+    return this.redis.publish(this.channelName, JSON.stringify(messagesArray));
   }
 }
