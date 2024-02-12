@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex" :class="categoriesFirst ? 'flex-column' : 'flex-column-reverse'">
-    <v-list v-if="contents.subcategories.length" class="list__no-wrap py-0">
+    <v-list v-if="contents.subcategories.length" class="list__no-wrap pa-0">
       <v-list-item
         v-for="category in contents.subcategories"
         :key="category.code"
@@ -17,7 +17,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <v-list v-if="contents.foods.length" class="list__no-wrap py-0">
+    <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item
         v-for="food in contents.foods"
         :key="food.code"
@@ -32,7 +32,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <div v-if="contents.subcategories.length == 0 && contents.foods.length == 0" class="pa-4">
+    <div v-if="contents.subcategories.length == 0 && contents.foods.length == 0" class="py-4">
       <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
         {{ i18n.none }}
       </v-alert>

@@ -137,14 +137,14 @@
           <!-- Database lookup -->
           <v-expand-transition>
             <v-card v-if="showFoodChooser(index)" flat>
-              <v-card-title>
+              <v-card-title class="px-0">
                 {{
                   availableFoods[index].length
                     ? promptI18n.databaseLookupWithExisting
                     : promptI18n.databaseLookupTitle
                 }}
               </v-card-title>
-              <v-card-text>
+              <v-card-text class="px-0">
                 <food-browser
                   v-bind="{
                     localeId,

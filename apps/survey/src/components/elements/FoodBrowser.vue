@@ -20,21 +20,19 @@
           @focus="openInDialog"
         ></v-text-field>
       </div>
-      <v-card v-if="recipeBuilderToggle" flat>
-        <v-card-text>
-          <v-btn
-            :block="isMobile"
-            color="primary"
-            :disabled="!recipeBuilderToggle"
-            large
-            outlined
-            :v-model="recipeBuilderFood?.name"
-            @click.stop="recipeBuilder"
-          >
-            {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
-          </v-btn>
-        </v-card-text>
-      </v-card>
+      <div v-if="recipeBuilderToggle" :class="isMobile ? 'pa-4' : 'py-2'">
+        <v-btn
+          :block="isMobile"
+          color="primary"
+          :disabled="!recipeBuilderToggle"
+          large
+          outlined
+          :v-model="recipeBuilderFood?.name"
+          @click.stop="recipeBuilder"
+        >
+          {{ $t(`prompts.recipeBuilder.label`, { searchTerm: recipeBuilderFood?.name }) }}
+        </v-btn>
+      </div>
       <v-tabs-items v-show="type === 'foodSearch' || dialog || !showInDialog" v-model="tab">
         <v-tab-item key="browse">
           <v-card v-if="requestFailed" flat>
@@ -76,7 +74,8 @@
       </v-tabs-items>
       <div
         v-if="type === 'foodSearch' || dialog || !showInDialog"
-        class="d-flex flex-column flex-md-row pa-4 ga-2"
+        class="d-flex flex-column flex-md-row py-4 ga-2"
+        :class="{ 'px-4': dialog }"
       >
         <v-btn
           v-if="type === 'foodSearch' && tab === 1"
