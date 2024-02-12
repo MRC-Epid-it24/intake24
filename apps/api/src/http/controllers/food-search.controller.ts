@@ -39,7 +39,10 @@ const foodSearchController = ({
   redisSubscriber.subscribeToChannel();
   redisSubscriber.onMessageReceive = async (message): Promise<string[]> => {
     const localeIds = JSON.parse(message);
-    if (localeIds.length > 0) {
+    if (localeIds.length === 0) return localeIds;
+    if (localeIds.includes('all')) {
+      await foodIndex.rebuild();
+    } else {
       await foodIndex.rebuildSpecificLocales(localeIds);
     }
     return localeIds;

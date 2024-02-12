@@ -2,10 +2,9 @@ import '@intake24/api/bootstrap';
 
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
-import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
+import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
-import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';

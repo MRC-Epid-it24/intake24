@@ -9,12 +9,11 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
 
   // private readonly localeIndexBuildService;
   private readonly redisIndexingProcessService;
-  private localeIds: string[] | undefined;
 
   constructor({
     logger,
     redisIndexingProcessService,
-  }: Pick<IoC, 'logger' | 'foodSearchController' | 'redisIndexingProcessService'>) {
+  }: Pick<IoC, 'logger' | 'redisIndexingProcessService'>) {
     super({ logger });
 
     // this.localeIndexBuildService = foodSearchController;
@@ -50,8 +49,7 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
     this.logger.debug(`\nPublish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
     const resultPub = await this.redisIndexingProcessService.publish(localeIds);
     this.logger.debug('\n\nPublish Result:', resultPub);
-    // this.logger.debug('Starting Rebuildng Specified Indexes...');
-    // await this.localeIndexBuildService.rebuildFoodIndexJob(localeIds);
+
     this.redisIndexingProcessService.close();
     this.logger.debug('Job finished.');
   }
