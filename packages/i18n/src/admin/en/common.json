@@ -109,6 +109,7 @@
 
   "clipboard": {
     "_": "Copy to clipboard",
+    "na": "Clipboard API not available",
     "copied": "Data copied to clipboard"
   },
 

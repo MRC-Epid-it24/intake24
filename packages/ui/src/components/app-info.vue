@@ -24,31 +24,21 @@
 import { computed, defineComponent } from 'vue';
 
 import { useClipboard } from '../composables';
-import { useApp, useMessages } from '../stores';
+import { useApp } from '../stores';
 
 export default defineComponent({
   name: 'AppInfo',
 
   setup() {
     const app = computed(() => useApp().app);
-    const { toClipboard } = useClipboard();
+    const { toClipboard, clipboardAvailable } = useClipboard();
 
-    return { app, toClipboard };
-  },
+    const copyInfoToClipboard = async () => {
+      const { version, revision } = app.value.build;
+      await toClipboard(`${version} (${revision})`);
+    };
 
-  computed: {
-    clipboardAvailable() {
-      return !!navigator.clipboard;
-    },
-  },
-
-  methods: {
-    async copyInfoToClipboard() {
-      if (!this.clipboardAvailable) return;
-
-      const { version, revision } = this.app.build;
-      await this.toClipboard(`${version} (${revision})`);
-    },
+    return { app, clipboardAvailable, copyInfoToClipboard };
   },
 });
 </script>
