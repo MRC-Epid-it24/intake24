@@ -135,8 +135,8 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.3
+        version: 11.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -325,8 +325,8 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.3
+        version: 11.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -596,8 +596,8 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.3
+        version: 11.0.3
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
@@ -705,8 +705,8 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.3
+        version: 11.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -823,8 +823,8 @@ importers:
         specifier: ^16.4.1
         version: 16.4.1
       dotenv-expand:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.0.3
+        version: 11.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -7555,9 +7555,11 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /dotenv-expand@10.0.0:
-    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+  /dotenv-expand@11.0.3:
+    resolution: {integrity: sha512-qkK+MLTvZ86oq4sjMqGpUN/38SQ/J37mny88CsEUFFjb2MBVz06a809ri0QeVDXpxkvZkXzqjGUb0M1R6n3OGw==}
     engines: {node: '>=12'}
+    dependencies:
+      dotenv: 16.4.1
     dev: false
 
   /dotenv-expand@8.0.3:
@@ -15239,6 +15241,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0
