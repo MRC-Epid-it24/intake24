@@ -110,6 +110,7 @@ import type {
   Pusher,
   RateLimiter,
   RedisIndexingProcess,
+  RedisPublisher,
   RedisSubscriber,
   Scheduler,
   Session,
@@ -258,6 +259,7 @@ export interface IoC extends Jobs {
   rateLimiter: RateLimiter;
   redisIndexingProcessService: RedisIndexingProcess;
   redisIndexingSubscriberService: RedisSubscriber;
+  redisIndexingPublisherService: RedisPublisher;
   scheduler: Scheduler;
   session: Session;
 

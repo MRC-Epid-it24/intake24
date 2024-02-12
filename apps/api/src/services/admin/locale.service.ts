@@ -8,8 +8,7 @@ import type {
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import ioc from '@intake24/api/ioc';
-import { addDollarSign } from '@intake24/api/util';
+import { addDollarSign, addToRedisSet } from '@intake24/api/util';
 import {
   Op,
   RecipeFoods,
@@ -19,15 +18,6 @@ import {
   SynonymSet,
   SystemLocale,
 } from '@intake24/db';
-
-// Add a value to the redisSetService if needed IndexRebuilding
-const addToRedisSet = async (value: string) => {
-  const redisIndexingProcessService = ioc.cradle.redisIndexingProcessService;
-  // TODO: Is it necessary to call init() and close() or shall we share the connection?
-  redisIndexingProcessService.init();
-  await redisIndexingProcessService.addToSet(value);
-  redisIndexingProcessService.close();
-};
 
 const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
@@ -150,7 +140,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    addToRedisSet(code);
+    await addToRedisSet(code);
 
     return [...records, ...newRecords];
   };
@@ -226,7 +216,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    addToRedisSet(localeCode);
+    await addToRedisSet(localeCode);
 
     return [...records, ...newRecords];
   };
