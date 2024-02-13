@@ -21,11 +21,16 @@ import { computed, defineComponent } from 'vue';
 
 import type { Prompts, PromptStates } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
-import type { EncodedFood } from '@intake24/common/types';
+import type { EncodedFood, PortionSizeMethodId } from '@intake24/common/types';
 import { PortionSizeOptionPrompt } from '@intake24/survey/components/prompts';
 import { useSurvey } from '@intake24/survey/stores';
 
 import { useFoodPromptUtils, useMealPromptUtils, usePromptHandlerStore } from '../mixins';
+
+const parentFoodRequiredPSMs: PortionSizeMethodId[] = [
+  'milk-in-a-hot-drink',
+  'parent-food-portion',
+];
 
 export default defineComponent({
   name: 'PortionSizeOptionPromptHandler',
@@ -83,8 +88,10 @@ export default defineComponent({
     const survey = useSurvey();
 
     const availableMethods = computed(() =>
-      food.data.portionSizeMethods.filter((item) =>
-        survey.registeredPortionSizeMethods.includes(item.method)
+      food.data.portionSizeMethods.filter(
+        (item) =>
+          survey.registeredPortionSizeMethods.includes(item.method) &&
+          (!parentFoodRequiredPSMs.includes(item.method) || parentFood.value)
       )
     );
 
