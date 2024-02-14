@@ -5,7 +5,7 @@
 Steps to getting a local instance running
 
 - Run Dev VM (download from S3 bucket - contact the Intake24 team), which maps out the database on 192.168.56.10:5432 (PostgreSQL). Start this VM.
-- Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
+- Alternatively, obtain database snapshots from the intake24 team and import them into a database (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/).
 - Local servers need to be run for `api`, `admin` and `survey` from each respective folder:
 - To start `api` / `admin` / `survey`: `pnpm dev` for live reloads
 
@@ -27,7 +27,7 @@ Follow the readme instructions in the root of the repository.
 ## Databases
 
 Please contact the intake24 team for the latest development virtual machine. [Please also check the guidance on using the development virtual machine](https://docs.intake24.org/developer/vm.html).
-Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). If using the database snapshots, you need to set up your own Redis instance.
+Alternatively, obtain database snapshots from the intake24 team and import them into a database browser (e.g. DBeaver). Please check the guidance on [importing database snapshots with DBeaver](https://dbeaver.com/docs/wiki/Backup-Restore/). While using the database snapshots, don't forget to set up your own Redis instance.
 
 ## API server
 
@@ -56,5 +56,6 @@ Add `DB_DEV_SYSTEM_DEBUG_QUERY_LIMIT=500` and `DB_DEV_FOODS_DEBUG_QUERY_LIMIT=50
 
 ## API access
 
-Please add your email in DBeaver `users` tables, then go to `apps/cli`, and run `pnpm cli:dev hash-password yourNewPassword`.
+If you had your account already created in the databse snapshot you are using, please add your email in DBeaver `users` tables, then go to `apps/cli`, and run `pnpm cli:dev hash-password yourNewPassword`.
 Grab the hash and put it manually into the `password_hash` column of the `user_passwords` table for your user record (find you user_id in users).
+There will be a cli command available to create a whole new account without this manual hassle.
