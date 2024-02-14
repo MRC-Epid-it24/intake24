@@ -40,15 +40,15 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
       return;
     }
 
-    this.logger.info('\nReading Locale Ids from Redis Set...');
+    this.logger.info('Reading Locale Ids from Redis Set...');
     const localeIds = await this.redisIndexingProcessService.readSet();
-    this.logger.debug('\n\nLocale Ids:', localeIds);
+    this.logger.debug('Locale Ids:', localeIds);
 
     await this.redisIndexingProcessService.removeSet();
 
-    this.logger.debug(`\nPublish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
+    this.logger.debug(`Publish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
     const resultPub = await this.redisIndexingProcessService.publish(localeIds);
-    this.logger.debug('\n\nPublish Result:', resultPub);
+    this.logger.debug('Publish Result:', resultPub);
 
     this.redisIndexingProcessService.close();
     this.logger.debug('Job finished.');

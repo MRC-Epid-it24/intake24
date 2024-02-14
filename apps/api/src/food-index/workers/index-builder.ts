@@ -353,7 +353,7 @@ async function buildIndex() {
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 
   if (Object.keys(foodIndex).length !== 0 && enabledLocales.length !== 0) {
-    logger.debug(`\n\nCleaning previous index: ${Object.keys(foodIndex)} \n\n`);
+    logger.debug(`Cleaning previous index: ${Object.keys(foodIndex)}`);
     Object.keys(foodIndex).forEach((key) => {
       delete foodIndex[key];
     });
@@ -361,7 +361,7 @@ async function buildIndex() {
 
   // Ideally this needs to be done on parallel threads, not sure if worth it in node.js
   for (const localeId of enabledLocales) {
-    logger.debug(`\n\nIndexing ${localeId}`);
+    logger.debug(`Indexing ${localeId}`);
     foodIndex[localeId] = await buildIndexForLocale(localeId);
   }
 
@@ -388,7 +388,7 @@ async function buildIndex() {
           } else {
             logger.debug('Rebuilding All indexs');
             for (const localeId of enabledLocales) {
-              logger.debug(`\n\nRebuilding All Indexes including: ${localeId}`);
+              logger.debug(`Rebuilding All Indexes including: ${localeId}`);
               foodIndex[localeId] = await buildIndexForLocale(localeId);
             }
           }

@@ -44,9 +44,6 @@ export default class RedisIndexingProcess extends HasRedisClient {
 
   // Publish a message to a channel
   async publish(messagesArray: string[]): Promise<number> {
-    this.logger.debug(
-      `\nREDIS-SET: Publishing to the '${this.channelName}' channel, messages: ${messagesArray}...`
-    );
     return this.redis.publish(this.channelName, JSON.stringify(messagesArray));
   }
 }

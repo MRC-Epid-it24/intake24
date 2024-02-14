@@ -34,7 +34,7 @@ export default class LocaleAllIndexBuild extends BaseJob<'LocaleAllIndexBuild'> 
     this.logger.debug('Starting Rebuildng Indexes...');
 
     const resultPub = await this.redisIndexingPublisherService.publish(['all']);
-    this.logger.debug('\n\nPublish Result:', resultPub);
+    this.logger.debug('Publish Result:', resultPub);
 
     this.redisIndexingPublisherService.close();
     this.logger.debug('Job finished.');

@@ -79,7 +79,7 @@ const foodSearchController = ({
 
   // API endpoint for rebuilding the food index
   const rebuildFoodIndex = async (req: Request, res: Response): Promise<void> => {
-    logger.debug(`\n\n\nRebuilding ${JSON.stringify(req.body)} food index\n\n\n`);
+    logger.debug(`Rebuilding ${JSON.stringify(req.body)} food index`);
     if (!req.body || !req.body.locales) {
       await foodIndex.rebuild();
     } else {

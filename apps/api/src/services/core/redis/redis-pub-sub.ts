@@ -42,7 +42,7 @@ export class RedisSubscriber extends HasRedisClient {
         return;
       }
       this.logger.info(
-        `\n\n\nSUBSCRIBED to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.\n\n\n\n`
+        `Subscribed to ${count} channel(s). Waiting for updates on the '${this.channelName}' channel.`
       );
     });
   }
@@ -52,7 +52,7 @@ export class RedisSubscriber extends HasRedisClient {
     // Deserialize the message back into an array of strings
     const messagesArray: string[] = JSON.parse(message);
     // Process the array as needed
-    this.logger.info('\n\n\n\nReceived array:', messagesArray);
+    this.logger.info('Received array:', messagesArray);
     return messagesArray;
   }
 }
