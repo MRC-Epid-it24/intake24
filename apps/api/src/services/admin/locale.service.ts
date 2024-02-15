@@ -19,7 +19,7 @@ import {
   SystemLocale,
 } from '@intake24/db';
 
-const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
+const localeService = ({ scheduler, cache }: Pick<IoC, 'scheduler' | 'cache'>) => {
   const resolveLocale = async (localeId: string | SystemLocale): Promise<SystemLocale> => {
     const locale =
       typeof localeId === 'string'
@@ -140,7 +140,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    await addToRedisIndexingKeyCache(code);
+    await addToRedisIndexingKeyCache(code, { cache });
 
     return [...records, ...newRecords];
   };
@@ -216,7 +216,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    await addToRedisIndexingKeyCache(localeCode);
+    await addToRedisIndexingKeyCache(localeCode, { cache });
 
     return [...records, ...newRecords];
   };
