@@ -1,6 +1,6 @@
 import type { Express } from 'express';
+import type { Server } from 'http';
 import fs from 'fs-extra';
-import { Server } from 'http';
 
 import type { KyselyDatabases } from '@intake24/db';
 import app from '@intake24/api/app';
@@ -140,11 +140,6 @@ class IntegrationSuite {
 
     // Close worker threads
     foodIndex.close();
-
-    // Close express server
-    if (this.app instanceof Server) {
-      this.app.close();
-    }
 
     const { downloads, uploads, images } = this.config.filesystem.local;
     await Promise.all(
