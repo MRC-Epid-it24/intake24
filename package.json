@@ -91,7 +91,7 @@
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.1",
-    "vitepress": "1.0.0-rc.41"
+    "vitepress": "1.0.0-rc.42"
   },
   "pnpm": {
     "peerDependencyRules": {

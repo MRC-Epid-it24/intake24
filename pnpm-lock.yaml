@@ -102,8 +102,8 @@ importers:
         specifier: ^5.1.1
         version: 5.1.1(@types/node@20.11.17)(sass@1.32.13)(terser@5.27.0)
       vitepress:
-        specifier: 1.0.0-rc.41
-        version: 1.0.0-rc.41(@types/node@20.11.17)(search-insights@2.13.0)(typescript@5.3.3)
+        specifier: 1.0.0-rc.42
+        version: 1.0.0-rc.42(@types/node@20.11.17)(search-insights@2.13.0)(typescript@5.3.3)
 
   apps/admin:
     dependencies:
@@ -4828,7 +4828,7 @@ packages:
   /@types/sax@1.2.7:
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 20.11.17
     dev: false
 
   /@types/semver@7.5.7:
@@ -14670,12 +14670,12 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitepress@1.0.0-rc.41(@types/node@20.11.17)(search-insights@2.13.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-PAEoIIc9J//k/Wg39C6k86hZpXPmLZjRiTBwieDNeYGdevD7xr5Ve8o1W/w+e9dtyQMkuvzgianEamXDX3aj7g==}
+  /vitepress@1.0.0-rc.42(@types/node@20.11.17)(search-insights@2.13.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-VeiVVXFblt/sjruFSJBNChMWwlztMrRMe8UXdNpf4e05mKtTYEY38MF5qoP90KxPTCfMQiKqwEGwXAGuOTK8HQ==}
     hasBin: true
     peerDependencies:
       markdown-it-mathjax3: ^4.3.2
-      postcss: ^8.4.33
+      postcss: ^8.4.34
     peerDependenciesMeta:
       markdown-it-mathjax3:
         optional: true

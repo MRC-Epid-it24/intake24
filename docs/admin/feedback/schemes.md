@@ -46,6 +46,8 @@ Edit tab allows modification of selected feedback scheme.
 
     - `meals` – shows information on e.g. contribution to total energy intake from meals
 
+    - `rating` - 5-star rating with optional comment to be submitted by user
+
 ## Top foods
 
 Settings to populate top foods feedback section. It controls top foods lists and nutrient composition pie charts.
