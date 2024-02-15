@@ -8,7 +8,7 @@ import type {
   LocaleSynonymSetInput,
 } from '@intake24/common/types/http/admin';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { addDollarSign, addToRedisSet } from '@intake24/api/util';
+import { addDollarSign, addToRedisIndexingKeyCache } from '@intake24/api/util';
 import {
   Op,
   RecipeFoods,
@@ -140,7 +140,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    await addToRedisSet(code);
+    await addToRedisIndexingKeyCache(code);
 
     return [...records, ...newRecords];
   };
@@ -216,7 +216,7 @@ const localeService = ({ scheduler }: Pick<IoC, 'scheduler'>) => {
       newRecords.push(newRecord);
     }
 
-    await addToRedisSet(localeCode);
+    await addToRedisIndexingKeyCache(localeCode);
 
     return [...records, ...newRecords];
   };

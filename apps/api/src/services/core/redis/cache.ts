@@ -22,8 +22,9 @@ export type CacheKeyDoublePrefix = 'food-entry';
 export type CacheKey =
   | `${CacheKeyPrefix}:${string}`
   | `${CacheKeyPrefix}:${string}:${string}`
-  | 'feedback-data';
-export type CacheValue = string | number | unknown[] | null | boolean | object;
+  | 'feedback-data'
+  | 'indexing-locales';
+export type CacheValue = string | number | unknown[] | string[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {
   constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
