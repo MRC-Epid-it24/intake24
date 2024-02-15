@@ -25,8 +25,17 @@ export class RedisSubscriber extends HasRedisClient {
   constructor({ subscriberConfig, logger }: Pick<IoC, 'subscriberConfig' | 'logger'>) {
     super({ config: subscriberConfig.redis, logger: logger.child({ service: 'Redis-Publisher' }) });
     this.channelName = subscriberConfig.channel;
-    this.init();
-    this.redis.on('message', (channel, message) => {
+    // this.redis.on('message', (channel, message) => {
+    //   if (channel === this.channelName) {
+    //     this.onMessageReceive(message);
+    //   }
+    // });
+  }
+
+  // Initialize the subscriber & Overwrite the init method
+  init() {
+    this.redis = super.init();
+    return this.redis.on('message', (channel, message) => {
       if (channel === this.channelName) {
         this.onMessageReceive(message);
       }

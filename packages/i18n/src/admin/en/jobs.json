@@ -50,9 +50,6 @@
       "localeId": "Locale ID",
       "sourceLocaleId": "Source Locale ID"
     },
-    "LocaleAllIndexBuild": {
-      "_": "Locale - Rebuild All Food Indexes"
-    },
     "LocaleSpecificIndexBuild": {
       "_": "Locale - Rebuild Food Indexes for modified locale"
     },

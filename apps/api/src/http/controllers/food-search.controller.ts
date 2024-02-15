@@ -36,6 +36,7 @@ const foodSearchController = ({
   logger,
 }: Pick<IoC, 'cachedInheritableAttributesService' | 'subscriberConfig' | 'logger'>) => {
   const redisSubscriber = new RedisSubscriber({ subscriberConfig, logger });
+  redisSubscriber.init();
   redisSubscriber.subscribeToChannel();
   redisSubscriber.onMessageReceive = async (message): Promise<string[]> => {
     const localeIds = JSON.parse(message);
