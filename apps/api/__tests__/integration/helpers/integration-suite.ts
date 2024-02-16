@@ -16,7 +16,18 @@ import util from './util';
 
 export type Bearers = Record<'superuser' | 'user' | 'respondent', string>;
 
-const { config, logger, db, kyselyDb, cache, rateLimiter, scheduler, session } = ioc.cradle;
+const {
+  config,
+  logger,
+  db,
+  kyselyDb,
+  cache,
+  rateLimiter,
+  scheduler,
+  session,
+  reindexingPublisherService,
+  reindexingSubscriberService,
+} = ioc.cradle;
 
 class IntegrationSuite {
   public config;
@@ -28,6 +39,10 @@ class IntegrationSuite {
   public kyselyDb: KyselyDatabases;
 
   public cache;
+
+  public reindexingPublisherService;
+
+  public reindexingSubscriberService;
 
   public rateLimiter;
 
@@ -56,6 +71,8 @@ class IntegrationSuite {
     this.rateLimiter = rateLimiter;
     this.scheduler = scheduler;
     this.session = session;
+    this.reindexingPublisherService = reindexingPublisherService;
+    this.reindexingSubscriberService = reindexingSubscriberService;
   }
 
   /**
@@ -128,7 +145,13 @@ class IntegrationSuite {
    */
   public async close() {
     // Close redis store connections
-    await Promise.all([this.cache.close(), this.rateLimiter.close(), this.session.close()]);
+    await Promise.all([
+      this.cache.close(),
+      this.rateLimiter.close(),
+      this.session.close(),
+      this.reindexingPublisherService.close(),
+      this.reindexingSubscriberService.close(),
+    ]);
 
     // Close redis queue connections
     await Promise.all([this.scheduler.close()]);

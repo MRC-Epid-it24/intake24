@@ -4,7 +4,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import foodIndex from '@intake24/api/food-index';
-import { Subscriber } from '@intake24/api/services';
 
 interface SearchParams {
   localeId: string;
@@ -32,13 +31,11 @@ const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
 const foodSearchController = ({
   cachedInheritableAttributesService,
-  subscriberConfig,
   logger,
-}: Pick<IoC, 'cachedInheritableAttributesService' | 'subscriberConfig' | 'logger'>) => {
-  const redisSubscriber = new Subscriber({ subscriberConfig, logger });
-  redisSubscriber.init();
-  redisSubscriber.subscribeToChannel();
-  redisSubscriber.onMessageReceive = async (message): Promise<string[]> => {
+  reindexingSubscriberService,
+}: Pick<IoC, 'cachedInheritableAttributesService' | 'logger' | 'reindexingSubscriberService'>) => {
+  reindexingSubscriberService.subscribeToChannel();
+  reindexingSubscriberService.onMessageReceive = async (message): Promise<string[]> => {
     const localeIds = JSON.parse(message);
     if (localeIds.length === 0) return localeIds;
     if (localeIds.includes('all')) {
