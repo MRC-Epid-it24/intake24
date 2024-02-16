@@ -4,23 +4,22 @@ import type { IoC } from '@intake24/api/ioc';
 
 import BaseJob from '../job';
 
-export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificIndexBuild'> {
-  readonly name = 'LocaleSpecificIndexBuild';
+export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
+  readonly name = 'LocaleIndexBuild';
   private readonly cacheKey = 'indexing-locales';
 
-  // private readonly localeIndexBuildService;
-  private readonly redisIndexingProcessService;
-  private readonly redisIndexingPublisherService;
+  private readonly reindexingProcessService;
+  private readonly reindexingPublisherService;
 
   constructor({
     cache,
     logger,
-    redisIndexingPublisherService,
-  }: Pick<IoC, 'cache' | 'logger' | 'redisIndexingPublisherService'>) {
+    reindexingPublisherService: reindexingPublisherService,
+  }: Pick<IoC, 'cache' | 'logger' | 'reindexingPublisherService'>) {
     super({ logger });
 
-    this.redisIndexingProcessService = cache;
-    this.redisIndexingPublisherService = redisIndexingPublisherService;
+    this.reindexingProcessService = cache;
+    this.reindexingPublisherService = reindexingPublisherService;
   }
 
   /**
@@ -40,20 +39,20 @@ export default class LocaleSpecificIndexBuild extends BaseJob<'LocaleSpecificInd
     //   this.logger.info('No indexing key presented. No Rebuilding is necessary');
     //   return;
     // }
-    const localeIds = await this.redisIndexingProcessService.get<string[]>('indexing-locales');
+    const localeIds = await this.reindexingProcessService.get<string[]>('indexing-locales');
     if (!localeIds || localeIds.length === 0) {
       this.logger.info('No locales specified. No Rebuilding is necessary');
       return;
     }
     this.logger.debug('Locale Ids for rebuilding:', localeIds);
-    this.redisIndexingProcessService.forget(this.cacheKey);
+    this.reindexingProcessService.forget(this.cacheKey);
 
-    this.redisIndexingPublisherService.init();
+    this.reindexingPublisherService.init();
 
     this.logger.debug(`Publish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
-    await this.redisIndexingPublisherService.publish(localeIds);
+    await this.reindexingPublisherService.publish(localeIds);
 
-    this.redisIndexingPublisherService.close();
+    this.reindexingPublisherService.close();
     this.logger.debug('Job finished.');
   }
 }

@@ -4,7 +4,7 @@ import type { IoC } from '@intake24/api/ioc';
 
 import HasRedisClient from './redis-store';
 
-export class RedisPublisher extends HasRedisClient {
+export class Publisher extends HasRedisClient {
   private readonly channelName: string;
 
   constructor({ publisherConfig, logger }: Pick<IoC, 'publisherConfig' | 'logger'>) {
@@ -19,7 +19,7 @@ export class RedisPublisher extends HasRedisClient {
   }
 }
 
-export class RedisSubscriber extends HasRedisClient {
+export class Subscriber extends HasRedisClient {
   private readonly channelName: string;
 
   constructor({ subscriberConfig, logger }: Pick<IoC, 'subscriberConfig' | 'logger'>) {

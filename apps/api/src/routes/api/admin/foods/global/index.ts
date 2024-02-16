@@ -15,10 +15,5 @@ export default () => {
     .get(wrapAsync(adminGlobalFoodsController.read))
     .put(wrapAsync(adminGlobalFoodsController.update));
 
-  // TODO: V4-1016 DELETE ONCE DONE
-  // router
-  //   .route('/rebuild')
-  //   .post(wrapAsync(foodSearchController.rebuildFoodIndex), handleSequelizeErrors);
-
   return router;
 };

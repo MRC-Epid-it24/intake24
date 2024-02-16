@@ -50,8 +50,8 @@
       "localeId": "Locale ID",
       "sourceLocaleId": "Source Locale ID"
     },
-    "LocaleSpecificIndexBuild": {
-      "_": "Locale - Rebuild Food Indexes for modified locale"
+    "LocaleIndexBuild": {
+      "_": "Locale - Rebuild Food Indexes for modified locales"
     },
     "NutrientTableMappingImport": {
       "_": "Nutrient table - Import NDB mapping",
