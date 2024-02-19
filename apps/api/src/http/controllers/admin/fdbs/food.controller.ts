@@ -10,12 +10,14 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
+import { addToRedisIndexingKeyCache, resolveLocale } from '@intake24/api/util';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
 const adminFoodController = ({
   adminFoodService,
   cachedParentCategoriesService,
-}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService'>) => {
+  cache,
+}: Pick<IoC, 'adminFoodService' | 'cachedParentCategoriesService' | 'cache'>) => {
   const browse = async (
     req: Request<{ localeId: string }, any, any, PaginateQuery>,
     res: Response<FoodsResponse>
@@ -48,7 +50,10 @@ const adminFoodController = ({
       where: { id: localeId },
     });
 
+    const { code: localeCode } = await resolveLocale(localeId);
+
     const foodLocal = await adminFoodService.createFood(code, req.body);
+    await addToRedisIndexingKeyCache(localeCode, { cache });
 
     res.json(foodLocal);
   };
@@ -96,6 +101,9 @@ const adminFoodController = ({
       code,
       canUpdateMain ? req.body : rest
     );
+
+    const { code: localeCode } = await resolveLocale(localeId);
+    await addToRedisIndexingKeyCache(localeCode, { cache });
 
     res.json(foodLocal);
   };
