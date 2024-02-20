@@ -3,7 +3,6 @@ import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
-import { resolveLocale } from '@intake24/api/util';
 
 const localFoodsController = ({
   localFoodsService,
@@ -28,9 +27,7 @@ const localFoodsController = ({
     res.status(created ? HttpStatusCode.Created : HttpStatusCode.Ok);
 
     if (_return) {
-      const { code: localeCode } = await resolveLocale(localeId);
-      await cache.push('indexing-locales', localeCode);
-
+      await cache.push('indexing-locales', localeId);
       const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
     } else {

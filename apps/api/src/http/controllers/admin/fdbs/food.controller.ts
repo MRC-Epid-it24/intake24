@@ -10,7 +10,6 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { resolveLocale } from '@intake24/api/util';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
 const adminFoodController = ({
@@ -50,10 +49,8 @@ const adminFoodController = ({
       where: { id: localeId },
     });
 
-    const { code: localeCode } = await resolveLocale(localeId);
-
     const foodLocal = await adminFoodService.createFood(code, req.body);
-    await cache.push('indexing-locales', localeCode);
+    await cache.push('indexing-locales', localeId);
 
     res.json(foodLocal);
   };
@@ -102,8 +99,7 @@ const adminFoodController = ({
       canUpdateMain ? req.body : rest
     );
 
-    const { code: localeCode } = await resolveLocale(localeId);
-    await cache.push('indexing-locales', localeCode);
+    await cache.push('indexing-locales', localeId);
 
     res.json(foodLocal);
   };

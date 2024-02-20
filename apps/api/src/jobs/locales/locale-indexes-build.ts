@@ -1,6 +1,8 @@
 import type { Job } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
+import { NotFoundError } from '@intake24/api/http/errors';
+import { SystemLocale } from '@intake24/db';
 
 import BaseJob from '../job';
 
@@ -20,6 +22,20 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
 
     this.reindexingProcessService = cache;
     this.reindexingPublisherService = reindexingPublisherService;
+  }
+
+  private isLocaleIdOrCode(value: string): boolean {
+    return !isNaN(Number(value));
+  }
+
+  private async resolveLocale(localeId: string): Promise<string> {
+    const locale =
+      typeof localeId === 'string'
+        ? await SystemLocale.findByPk(localeId, { attributes: ['code'] })
+        : localeId;
+    if (!locale) throw new NotFoundError();
+
+    return locale.code;
   }
 
   /**
@@ -44,9 +60,21 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
     this.reindexingProcessService.forget(this.cacheKey);
 
     this.reindexingPublisherService.init();
+    let locales = localeIds;
 
-    this.logger.debug(`Publish Information for the Rebuildng Specified Indexes: ${localeIds}...`);
-    await this.reindexingPublisherService.publish(localeIds);
+    if (!locales.includes('all')) {
+      locales = await Promise.all(
+        locales.map((locale) => {
+          if (this.isLocaleIdOrCode(locale)) {
+            return this.resolveLocale(locale);
+          }
+          return locale;
+        })
+      );
+    }
+
+    this.logger.debug(`Publish Information for the Rebuildng Specified Indexes: ${locales}...`);
+    await this.reindexingPublisherService.publish(locales);
 
     this.reindexingPublisherService.close();
     this.logger.debug('Job finished.');
