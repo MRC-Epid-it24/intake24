@@ -98,6 +98,23 @@ export default class Cache extends HasRedisClient {
   }
 
   /**
+   * Store an array of items in the cache, for a given key
+   * @param {CacheKey} key
+   * @param {CacheValue} value
+   * @returns {Promise<boolean>}
+   * @memberof Cache
+   */
+  async push(key: CacheKey, value: CacheValue): Promise<boolean> {
+    const newValues: CacheValue[] = [value];
+    if (value !== 'all') {
+      const existingValues = await this.get<CacheValue[]>(key);
+      if (existingValues && existingValues.length > 0) newValues.push(...existingValues);
+    }
+    const result = await this.set(key, newValues);
+    return result;
+  }
+
+  /**
    * Store multiple items atomically.
    *
    * Uses Redis' mset feature unless an expiration time is provided, in which case

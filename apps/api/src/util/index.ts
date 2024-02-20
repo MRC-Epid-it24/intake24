@@ -3,5 +3,4 @@ export * from './db_resolver';
 export * from './express';
 export * as jwt from './jwt';
 export * from './memory';
-export * from './redis-indexing';
 export * from './strings';

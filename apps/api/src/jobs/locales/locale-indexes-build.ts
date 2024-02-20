@@ -35,10 +35,6 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
 
     this.logger.debug('Job started.');
 
-    // if ((await this.redisIndexingProcessService.has(this.cacheKey)) === false) {
-    //   this.logger.info('No indexing key presented. No Rebuilding is necessary');
-    //   return;
-    // }
     const localeIds = await this.reindexingProcessService.get<string[]>('indexing-locales');
     if (!localeIds || localeIds.length === 0) {
       this.logger.info('No locales specified. No Rebuilding is necessary');

@@ -10,7 +10,7 @@ import type {
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
-import { addToRedisIndexingKeyCache, resolveLocale } from '@intake24/api/util';
+import { resolveLocale } from '@intake24/api/util';
 import { FoodLocal, SystemLocale } from '@intake24/db';
 
 const adminFoodController = ({
@@ -53,7 +53,7 @@ const adminFoodController = ({
     const { code: localeCode } = await resolveLocale(localeId);
 
     const foodLocal = await adminFoodService.createFood(code, req.body);
-    await addToRedisIndexingKeyCache(localeCode, { cache });
+    await cache.push('indexing-locales', localeCode);
 
     res.json(foodLocal);
   };
@@ -103,7 +103,7 @@ const adminFoodController = ({
     );
 
     const { code: localeCode } = await resolveLocale(localeId);
-    await addToRedisIndexingKeyCache(localeCode, { cache });
+    await cache.push('indexing-locales', localeCode);
 
     res.json(foodLocal);
   };

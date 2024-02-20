@@ -3,7 +3,7 @@ import { HttpStatusCode } from 'axios';
 
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
-import { addToRedisIndexingKeyCache, resolveLocale } from '@intake24/api/util';
+import { resolveLocale } from '@intake24/api/util';
 
 const localFoodsController = ({
   localFoodsService,
@@ -29,7 +29,7 @@ const localFoodsController = ({
 
     if (_return) {
       const { code: localeCode } = await resolveLocale(localeId);
-      await addToRedisIndexingKeyCache(localeCode, { cache });
+      await cache.push('indexing-locales', localeCode);
 
       const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
@@ -56,7 +56,7 @@ const localFoodsController = ({
 
     if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
     await localFoodsService.updateEnabledFoods(req.params.localeId, req.body.enabledFoods);
-    await addToRedisIndexingKeyCache(req.params.localeId, { cache });
+    await cache.push('indexing-locales', req.params.localeId);
     res.status(HttpStatusCode.Ok);
     res.end();
   };
