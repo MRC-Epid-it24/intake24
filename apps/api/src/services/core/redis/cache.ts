@@ -22,8 +22,9 @@ export type CacheKeyDoublePrefix = 'food-entry';
 export type CacheKey =
   | `${CacheKeyPrefix}:${string}`
   | `${CacheKeyPrefix}:${string}:${string}`
-  | 'feedback-data';
-export type CacheValue = string | number | unknown[] | null | boolean | object;
+  | 'feedback-data'
+  | 'indexing-locales';
+export type CacheValue = string | number | unknown[] | string[] | null | boolean | object;
 
 export default class Cache extends HasRedisClient {
   constructor({ cacheConfig, logger }: Pick<IoC, 'cacheConfig' | 'logger'>) {
@@ -94,6 +95,23 @@ export default class Cache extends HasRedisClient {
     );
 
     return !!result;
+  }
+
+  /**
+   * Store an array of items in the cache, for a given key
+   * @param {CacheKey} key
+   * @param {CacheValue} value
+   * @returns {Promise<boolean>}
+   * @memberof Cache
+   */
+  async push(key: CacheKey, value: CacheValue): Promise<boolean> {
+    const newValues: CacheValue[] = [value];
+    if (value !== 'all') {
+      const existingValues = await this.get<CacheValue[]>(key);
+      if (existingValues && existingValues.length > 0) newValues.push(...existingValues);
+    }
+    const result = await this.set(key, newValues);
+    return result;
   }
 
   /**

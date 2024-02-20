@@ -1,6 +1,7 @@
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 
 export interface SearchQuery {
+  type: 'query';
   queryId: number;
   localeId: string;
   description: string;
@@ -11,4 +12,5 @@ export interface SearchQuery {
   includeHidden: boolean;
   limitToCategory?: string;
   exit?: boolean;
+  rebuild?: boolean;
 }

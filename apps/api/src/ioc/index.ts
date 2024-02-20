@@ -107,12 +107,14 @@ import type {
   PortionSizeMethodsService,
   PortionSizeService,
   ProcessedImageService,
+  Publisher,
   Pusher,
   RateLimiter,
   Scheduler,
   Session,
   SignInService,
   SourceImageService,
+  Subscriber,
   SurveyService,
   SurveySubmissionService,
   UserService,
@@ -142,6 +144,8 @@ export interface IoC extends Jobs {
   mailConfig: Config['mail'];
   queueConfig: Config['queue'];
   rateLimiterConfig: Config['rateLimiter'];
+  publisherConfig: Config['publisher'];
+  subscriberConfig: Config['subscriber'];
   securityConfig: Config['security'];
   servicesConfig: Config['services'];
   sessionConfig: Config['session'];
@@ -251,6 +255,8 @@ export interface IoC extends Jobs {
   mailer: Mailer;
   pusher: Pusher;
   rateLimiter: RateLimiter;
+  reindexingSubscriberService: Subscriber;
+  reindexingPublisherService: Publisher;
   scheduler: Scheduler;
   session: Session;
 
@@ -343,10 +349,11 @@ const configureContainer = () => {
     securityConfig: asValue(config.security),
     servicesConfig: asValue(config.services),
     sessionConfig: asValue(config.session),
+    publisherConfig: asValue(config.publisher),
+    subscriberConfig: asValue(config.subscriber),
     environment: asValue(config.app.env),
     imagesBaseUrl: asValue(config.app.urls.images),
     imageProcessorConfig: asValue(config.imageProcessor),
-
     db: asClass(Database).singleton(),
     kyselyDb: asClass(KyselyDatabases).singleton(),
     models: asValue(models),

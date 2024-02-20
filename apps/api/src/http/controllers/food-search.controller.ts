@@ -4,7 +4,6 @@ import type { IoC } from '@intake24/api/ioc';
 import type { SearchSortingAlgorithm } from '@intake24/common/surveys';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import foodIndex from '@intake24/api/food-index';
-import { logger } from '@intake24/common-backend/services';
 
 interface SearchParams {
   localeId: string;
@@ -32,7 +31,21 @@ const ATTR_AS_RECIPE_INGREDIENT_ONLY = 2;
 
 const foodSearchController = ({
   cachedInheritableAttributesService,
-}: Pick<IoC, 'cachedInheritableAttributesService'>) => {
+  logger,
+  reindexingSubscriberService,
+}: Pick<IoC, 'cachedInheritableAttributesService' | 'logger' | 'reindexingSubscriberService'>) => {
+  reindexingSubscriberService.subscribeToChannel();
+  reindexingSubscriberService.onMessageReceive = async (message): Promise<string[]> => {
+    const localeIds = JSON.parse(message);
+    if (localeIds.length === 0) return localeIds;
+    if (localeIds.includes('all')) {
+      await foodIndex.rebuild();
+    } else {
+      await foodIndex.rebuildSpecificLocales(localeIds);
+    }
+    return localeIds;
+  };
+
   function acceptForQuery(recipe: boolean, attrOpt?: number): boolean {
     const attr = attrOpt ?? ATTR_AS_REGULAR_FOOD_ONLY;
 
@@ -61,6 +74,26 @@ const foodSearchController = ({
       categories: items.categories,
     };
   }
+
+  // API endpoint for rebuilding the food index
+  const rebuildFoodIndex = async (req: Request, res: Response): Promise<void> => {
+    logger.debug(`Rebuilding ${JSON.stringify(req.body)} food index`);
+    if (!req.body || !req.body.locales) {
+      await foodIndex.rebuild();
+    } else {
+      await foodIndex.rebuildSpecificLocales(req.body.locales);
+    }
+    res.json({ success: true });
+  };
+
+  // REDIS JOB endpoint for rebuilding the food index
+  const rebuildFoodIndexJob = async (locales?: string[]): Promise<void> => {
+    if (locales && locales.length > 0) {
+      await foodIndex.rebuildSpecificLocales(locales);
+    } else {
+      await foodIndex.rebuild();
+    }
+  };
 
   const search = async (
     req: Request<SearchParams, unknown, unknown, SearchQuery>,
@@ -114,10 +147,9 @@ const foodSearchController = ({
 
   return {
     search,
-    /* recipe,
-    category,
-    splitDescription, */
     recipeFood,
+    rebuildFoodIndex,
+    rebuildFoodIndexJob,
   };
 };
 

@@ -4,7 +4,10 @@ import { HttpStatusCode } from 'axios';
 import type { IoC } from '@intake24/api/ioc';
 import { ForbiddenError } from '@intake24/api/http/errors';
 
-const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsService'>) => {
+const localFoodsController = ({
+  localFoodsService,
+  cache,
+}: Pick<IoC, 'localFoodsService' | 'cache'>) => {
   const store = async (req: Request, res: Response): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
@@ -24,6 +27,7 @@ const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsServic
     res.status(created ? HttpStatusCode.Created : HttpStatusCode.Ok);
 
     if (_return) {
+      await cache.push('indexing-locales', localeId);
       const instance = await localFoodsService.read(localeId, req.body.code);
       res.json(instance);
     } else {
@@ -48,8 +52,8 @@ const localFoodsController = ({ localFoodsService }: Pick<IoC, 'localFoodsServic
     const { aclService } = req.scope.cradle;
 
     if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
-
     await localFoodsService.updateEnabledFoods(req.params.localeId, req.body.enabledFoods);
+    await cache.push('indexing-locales', req.params.localeId);
     res.status(HttpStatusCode.Ok);
     res.end();
   };

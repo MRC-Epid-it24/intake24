@@ -31,4 +31,8 @@ export default async (ops: Ops): Promise<void> => {
 
   // i18n translations
   await ioc.cradle.i18nStore.init();
+
+  // Redis indexing
+  ioc.cradle.reindexingPublisherService.init();
+  ioc.cradle.reindexingSubscriberService.init();
 };

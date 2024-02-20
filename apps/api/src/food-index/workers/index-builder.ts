@@ -2,10 +2,9 @@ import '@intake24/api/bootstrap';
 
 import { parentPort as parentPortNullable, workerData } from 'node:worker_threads';
 
-import type { PhraseWithKey, RecipeFoodTuple } from '@intake24/api/food-index/phrase-index';
+import type { PhraseWithKey } from '@intake24/api/food-index/phrase-index';
 import type { SearchQuery } from '@intake24/api/food-index/search-query';
 import type { FoodHeader, FoodSearchResponse } from '@intake24/common/types/http';
-import config from '@intake24/api/config/app';
 import LanguageBackends from '@intake24/api/food-index/language-backends';
 import { PhraseIndex } from '@intake24/api/food-index/phrase-index';
 import { rankCategoryResults, rankFoodResults } from '@intake24/api/food-index/ranking/ranking';
@@ -43,6 +42,14 @@ interface FoodIndex {
   [key: string]: LocalFoodIndex;
 }
 
+type IndexCommand = {
+  locales?: string[];
+  buildId: any;
+  type: 'command';
+  exit?: boolean;
+  rebuild?: boolean;
+};
+
 const foodIndex: FoodIndex = {};
 
 let globalCategoryData: GlobalCategoryData;
@@ -69,37 +76,6 @@ async function getRecipeFoodsSynomSets(localeId: string): Promise<Set<string>[]>
       recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
     )
   );
-}
-
-/**
- * Build special foods list for a given locale
- * @param {string} localeId - food Locale
- * @returns {Promise<Map<string, RecipeFood>[]>} special foods list
- */
-async function getRecipeFoodsList(localeId: string): Promise<RecipeFoodTuple[]> {
-  const recipeFoods = await RecipeFoods.findAll({
-    attributes: ['code', 'name', 'recipeWord'],
-    where: { localeId },
-    include: [{ model: SynonymSet, attributes: ['synonyms'] }],
-  });
-
-  const recipeFoodsList: RecipeFoodTuple[] = [];
-  recipeFoods.map((recipeFoodEntry: RecipeFoods) =>
-    recipeFoodsList.push([
-      recipeFoodEntry.name.toLowerCase(),
-      {
-        code: recipeFoodEntry.code,
-        name: recipeFoodEntry.name.toLowerCase(),
-        recipeWord: recipeFoodEntry.recipeWord,
-        synonyms: parseSynonymSet(
-          recipeFoodEntry.recipeWord.concat(' ', recipeFoodEntry.synonyms?.synonyms ?? '')
-        ),
-        // TODO: add Localised description to special foods
-        description: recipeFoodEntry.name.toLocaleLowerCase(),
-      },
-    ])
-  );
-  return recipeFoodsList;
 }
 
 async function getLanguageBackendId(localeId: string): Promise<string> {
@@ -376,6 +352,13 @@ async function buildIndex() {
 
   logger.debug(`Enabled locales: ${JSON.stringify(enabledLocales)}`);
 
+  if (Object.keys(foodIndex).length !== 0 && enabledLocales.length !== 0) {
+    logger.debug(`Cleaning previous index: ${Object.keys(foodIndex)}`);
+    Object.keys(foodIndex).forEach((key) => {
+      delete foodIndex[key];
+    });
+  }
+
   // Ideally this needs to be done on parallel threads, not sure if worth it in node.js
   for (const localeId of enabledLocales) {
     logger.debug(`Indexing ${localeId}`);
@@ -384,27 +367,67 @@ async function buildIndex() {
 
   parentPort.postMessage('ready');
 
-  parentPort.on('message', async (msg: SearchQuery) => {
-    if (msg.exit) {
-      await cleanUpIndexBuilder();
-      logger.debug('Closing index builder');
-      process.exit(0);
-    }
+  parentPort.on('message', async (msg: SearchQuery | IndexCommand) => {
+    if (msg.type === 'command') {
+      if (msg.exit) {
+        await cleanUpIndexBuilder();
+        logger.debug('Closing index builder');
+        process.exit(0);
+      }
 
-    try {
-      const results = await queryIndex(msg);
+      //rebuild index
+      if (msg.rebuild) {
+        try {
+          if (msg.locales && msg.locales.length > 0) {
+            const setLocales = new Set(msg.locales);
+            logger.debug(`Rebuilding index for ${msg.locales.length} locales`);
+            for (const localeId of setLocales) {
+              foodIndex[localeId] = await buildIndexForLocale(localeId);
+            }
+            //foodIndex[msg.locales] = await buildIndexForLocale(msg.locales);
+          } else {
+            logger.debug('Rebuilding All indexs');
+            for (const localeId of enabledLocales) {
+              logger.debug(`Rebuilding All Indexes including: ${localeId}`);
+              foodIndex[localeId] = await buildIndexForLocale(localeId);
+            }
+          }
+          parentPort.postMessage({
+            type: 'command',
+            buildId: msg.buildId,
+            success: true,
+            rebuild: false,
+          });
+        } catch (err) {
+          parentPort.postMessage({
+            type: 'command',
+            queryId: msg.buildId,
+            success: false,
+            error: err,
+            rebuild: false,
+          });
+        }
+      }
+    } else if (msg.type === 'query') {
+      try {
+        const results = await queryIndex(msg);
 
-      parentPort.postMessage({
-        queryId: msg.queryId,
-        success: true,
-        results,
-      });
-    } catch (err) {
-      parentPort.postMessage({
-        queryId: msg.queryId,
-        success: false,
-        error: err,
-      });
+        parentPort.postMessage({
+          type: 'query',
+          queryId: msg.queryId,
+          success: true,
+          results,
+        });
+      } catch (err) {
+        parentPort.postMessage({
+          type: 'query',
+          queryId: msg.queryId,
+          success: false,
+          error: err,
+        });
+      }
+    } else {
+      logger.error(`Unknown message type: ${JSON.stringify(msg)}`);
     }
   });
 }

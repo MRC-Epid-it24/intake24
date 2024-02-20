@@ -1,13 +1,13 @@
 import { Worker } from 'node:worker_threads';
 
-import type { RecipeFood } from '@intake24/common/types/foods';
 import type { FoodSearchResponse } from '@intake24/common/types/http';
 import config from '@intake24/api/config';
-import { RecipeFoods } from '@intake24/db';
+import { logger } from '@intake24/common-backend/services';
+import { FoodsLocale, RecipeFoods } from '@intake24/db';
 
 let indexReady = false;
 let queryIdCounter = 0;
-let specialQueryIdCounter = 0;
+let buildCounter = 0;
 let indexWorker: Worker;
 
 export class IndexNotReadyError extends Error {}
@@ -19,10 +19,9 @@ interface SearchResponse {
   error: Error;
 }
 
-interface RecipeFoodResponse {
-  specialQueryId: number;
+interface RebuildResponse {
+  buildCommandId: number;
   success: boolean;
-  result: RecipeFood;
   error: Error;
 }
 
@@ -50,7 +49,70 @@ export default {
   },
 
   close() {
-    indexWorker.postMessage({ exit: true });
+    indexWorker.postMessage({ type: 'command', exit: true });
+  },
+
+  async rebuild() {
+    if (indexReady) {
+      buildCounter++;
+      const buildId = buildCounter;
+
+      const rebuildListener = (msg: RebuildResponse) => {
+        if (msg.buildCommandId === buildId) {
+          indexWorker.removeListener('message', rebuildListener);
+
+          if (msg.success) {
+            indexReady = true;
+          } else {
+            //TODO: should we throw an error here?
+            indexReady = false;
+            logger.error(msg.error);
+          }
+        }
+      };
+
+      indexWorker.on('message', rebuildListener);
+      indexWorker.postMessage({ type: 'command', buildId, rebuild: true });
+    }
+  },
+
+  async rebuildSpecificLocales(locales: string[]) {
+    const uniqueLocales = Array.from(new Set(locales));
+
+    const localesInDb = await FoodsLocale.findAll({ where: { id: uniqueLocales } });
+    if (localesInDb.length !== uniqueLocales.length) {
+      const missingLocales = uniqueLocales.filter(
+        (locale) => !localesInDb.find((localeInDb: FoodsLocale) => localeInDb.id === locale)
+      );
+      logger.error(`Locales ${missingLocales.join(', ')} not found`);
+    }
+
+    if (indexReady) {
+      buildCounter++;
+      const buildId = buildCounter;
+
+      const rebuildListener = (msg: RebuildResponse) => {
+        if (msg.buildCommandId === buildId) {
+          indexWorker.removeListener('message', rebuildListener);
+
+          if (msg.success) {
+            indexReady = true;
+          } else {
+            //TODO: should we throw an error here?
+            indexReady = false;
+            logger.error(msg.error);
+          }
+        }
+      };
+
+      indexWorker.on('message', rebuildListener);
+      // Post a message for indexWorker to rebuild the set of locales
+      indexWorker.postMessage({
+        type: 'command',
+        rebuild: true,
+        locales: localesInDb.map((locale: FoodsLocale) => locale.id),
+      });
+    }
   },
 
   /**
@@ -62,8 +124,6 @@ export default {
   // TODO: shouldn't be here in index.ts
   async getRecipeFood(localeId: string, code: string): Promise<RecipeFoods> {
     if (indexReady) {
-      specialQueryIdCounter++;
-
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
       const result = await RecipeFoods.findOne({
         where: { localeId, code },
@@ -130,6 +190,7 @@ export default {
         indexWorker.on('message', listener);
 
         indexWorker.postMessage({
+          type: 'query',
           queryId,
           description,
           localeId,
