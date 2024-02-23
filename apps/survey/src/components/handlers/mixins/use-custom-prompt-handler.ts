@@ -34,10 +34,8 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
             return;
           }
 
-          if (isValidAnswer) {
+          if (isValidAnswer)
             survey.setFoodCustomPromptAnswer({ foodId: food.id, promptId, answer });
-            return;
-          }
 
           if (isInfo) survey.addFoodFlag(food.id, `${promptId}-acknowledged`);
 
@@ -50,10 +48,8 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
             return;
           }
 
-          if (isValidAnswer) {
+          if (isValidAnswer)
             survey.setMealCustomPromptAnswer({ mealId: meal.id, promptId, answer });
-            return;
-          }
 
           if (isInfo) survey.addMealFlag(meal.id, `${promptId}-acknowledged`);
 
@@ -61,10 +57,7 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
         }
       }
     } else {
-      if (isValidAnswer) {
-        survey.setCustomPromptAnswer({ promptId, answer });
-        return;
-      }
+      if (isValidAnswer) survey.setCustomPromptAnswer({ promptId, answer });
 
       if (isInfo) survey.addFlag(`${promptId}-acknowledged`);
     }
