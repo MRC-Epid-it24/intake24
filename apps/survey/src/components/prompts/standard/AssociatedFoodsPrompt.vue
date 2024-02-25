@@ -32,6 +32,7 @@
           <v-expand-transition>
             <div
               v-if="
+                !associatedFoodPrompts[index].foodCode &&
                 assocPrompt.mainFoodConfirmed &&
                 assocPrompt.foods.length > 0 &&
                 !showFoodChooser(index)
@@ -361,9 +362,11 @@ export default defineComponent({
     },
 
     showMoreFoodsQuestion(promptIndex: number): boolean {
+      const associatedPrompt = this.associatedFoodPrompts[promptIndex];
       const prompt = this.prompts[promptIndex];
 
       return !!(
+        !associatedPrompt.foodCode &&
         this.allowMultiple &&
         this.associatedFoodPrompts[promptIndex].multiple &&
         prompt.mainFoodConfirmed &&
@@ -443,6 +446,15 @@ export default defineComponent({
     },
 
     onConfirmStateChanged(index: number) {
+      const assocPrompt = this.associatedFoodPrompts[index];
+      const prompt = this.prompts[index];
+      if (prompt.mainFoodConfirmed && assocPrompt.foodCode && !prompt.foods.length) {
+        this.foodSelected(
+          { code: assocPrompt.foodCode, name: this.translate(assocPrompt.genericName) },
+          index
+        );
+      }
+
       this.goToNextIfCan(index);
     },
 
