@@ -1,5 +1,6 @@
 <template>
   <ready-meal-prompt
+    v-if="state.length"
     v-model="state"
     v-bind="{ meal, prompt, section }"
     @action="action"
@@ -8,7 +9,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -62,7 +63,9 @@ export default defineComponent({
 
     const { state, action } = usePromptHandlerNoStore(ctx, getInitialState, commitAnswer);
 
-    if (!state.value.length) action('next');
+    onMounted(() => {
+      if (!state.value.length) action('next');
+    });
 
     return { meal, state, action };
   },
