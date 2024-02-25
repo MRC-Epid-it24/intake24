@@ -39,7 +39,9 @@ export default defineComponent({
     const { meal } = useMealPromptUtils();
     const survey = useSurvey();
 
-    const getInitialState = computed(() => props.prompt.initial);
+    const getInitialState = computed(
+      () => props.prompt.slider.current.value || props.prompt.slider.min.value || 0
+    );
 
     const commitAnswer = () => {
       survey.setMealDuration(meal.value.id, state.value);

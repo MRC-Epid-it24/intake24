@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { mapActions } from 'pinia';
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
@@ -80,24 +79,22 @@ export default defineComponent({
       emit('action', 'next');
     };
 
+    const splitActions = { single, separate };
+
+    const action = (type: string, ...args: [id?: string, params?: object]) => {
+      if (['single', 'separate'].includes(type)) {
+        splitActions[type as 'single' | 'separate']();
+        return;
+      }
+
+      emit('action', type, ...args);
+    };
+
     onMounted(() => {
       if (suggestions.value.length === 1) single();
     });
 
-    return { freeTextFood, meal, separate, single, suggestions };
-  },
-
-  methods: {
-    ...mapActions(useSurvey, ['setFoods']),
-
-    action(type: string, ...args: [id?: string, params?: object]) {
-      if (['single', 'separate'].includes(type)) {
-        this[type as 'single' | 'separate']();
-        return;
-      }
-
-      this.$emit('action', type, ...args);
-    },
+    return { action, freeTextFood, meal, separate, single, suggestions };
   },
 });
 </script>

@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { Prompts } from '@intake24/common/prompts';
 import type { PromptSection } from '@intake24/common/surveys';
@@ -37,13 +37,15 @@ export default defineComponent({
   setup(props, { emit }) {
     const survey = useSurvey();
 
+    const meals = computed(() => survey.meals);
+
     const action = async (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next') await survey.submitRecall();
 
       emit('action', type, ...args);
     };
 
-    return { action, meals: survey.meals };
+    return { action, meals };
   },
 });
 </script>
