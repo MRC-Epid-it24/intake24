@@ -63,7 +63,7 @@ export type JobParams = {
   };
   SurveyFeedbackNotification: {
     surveyId: string;
-    userId: string;
+    username: string;
     submissions?: string[];
     to: string;
     cc?: string;
@@ -183,7 +183,7 @@ export const defaultJobsParams: JobParams = {
   },
   SurveyFeedbackNotification: {
     surveyId: '',
-    userId: '',
+    username: '',
     to: '',
   },
   SurveySchemesSync: {},

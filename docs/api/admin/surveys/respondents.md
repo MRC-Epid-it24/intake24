@@ -88,7 +88,7 @@ Get survey respondent record
 ### Request
 
 ```json
-GET /api/admin/surveys/:surveyId/respondents/:userId
+GET /api/admin/surveys/:surveyId/respondents/:username
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -123,7 +123,7 @@ Update survey respondent
 ### Request
 
 ```json
-PATCH /api/admin/surveys/:surveyId/respondents/:userId
+PATCH /api/admin/surveys/:surveyId/respondents/:username
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -166,7 +166,7 @@ Delete respondent
 ### Request
 
 ```json
-DELETE /api/admin/surveys/:surveyId/respondents/:userId
+DELETE /api/admin/surveys/:surveyId/respondents/:username
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -185,7 +185,7 @@ Download feedback as PDF. Returns stream as `application/pdf`.
 ### Request
 
 ```json
-GET /api/admin/surveys/:surveyId/respondents/:userId/feedback
+GET /api/admin/surveys/:surveyId/respondents/:username/feedback
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json
@@ -204,7 +204,7 @@ Email feedback as PDF attachment.
 ### Request
 
 ```json
-POST /api/admin/surveys/:surveyId/respondents/:userId/feedback
+POST /api/admin/surveys/:surveyId/respondents/:username/feedback
 
 Authorization: Bearer {accessToken}
 Content-Type: application/json

@@ -70,8 +70,8 @@ export default () => {
 
     respondent = await ioc.cradle.adminSurveyService.createRespondent(survey.id, input);
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.userId}/edit`;
-    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.userId}/edit`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}/edit`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}/edit`;
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999/edit`;
   });
 

@@ -286,9 +286,9 @@ export default defineComponent({
   },
 
   methods: {
-    async fetchUser(userId: string) {
+    async fetchUser(username: string) {
       const { data } = await this.$http.get<SurveyRespondentEntry>(
-        `admin/surveys/${this.id}/respondents/${userId}`
+        `admin/surveys/${this.id}/respondents/${username}`
       );
 
       return data;
@@ -304,7 +304,7 @@ export default defineComponent({
       this.dialog = true;
 
       try {
-        const user = await this.fetchUser(item.userId);
+        const user = await this.fetchUser(item.username);
         this.form.load(user);
       } finally {
         this.loading = false;
@@ -323,7 +323,7 @@ export default defineComponent({
     async save() {
       if (this.form.userId) {
         const { username: name } = await this.form.patch<SurveyRespondentEntry>(
-          `admin/surveys/${this.id}/respondents/${this.form.userId}`
+          `admin/surveys/${this.id}/respondents/${this.form.username}`
         );
 
         useMessages().success(this.$t('common.msg.updated', { name }).toString());
@@ -339,8 +339,8 @@ export default defineComponent({
       await this.updateTable();
     },
 
-    async remove({ username: name, userId }: SurveyRespondentListEntry) {
-      await this.$http.delete(`admin/surveys/${this.id}/respondents/${userId}`);
+    async remove({ username: name }: SurveyRespondentListEntry) {
+      await this.$http.delete(`admin/surveys/${this.id}/respondents/${name}`);
       useMessages().success(this.$t('common.msg.deleted', { name }).toString());
 
       await this.updateTable();

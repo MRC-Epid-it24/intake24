@@ -171,7 +171,7 @@ This needs to be run if object structure changes, so all database records are sy
 ```json
 {
   "surveyId": string,
-  "userId": string,
+  "username": string,
   "submissions"?: string[],
   "to": string,
   "cc"?: string,

@@ -208,28 +208,30 @@ const adminSurveyService = ({
    * Update respondent record
    *
    * @param {string} surveyId
-   * @param {string} userId
+   * @param {string} username
    * @param {UpdateRespondentInput} input
    * @returns {Promise<UserSurveyAlias>}
    */
   const updateRespondent = async (
     surveyId: string,
-    userId: string,
+    username: string,
     input: UpdateRespondentInput
   ): Promise<UserSurveyAlias> => {
-    const [survey, user] = await Promise.all([
+    const [survey, alias] = await Promise.all([
       Survey.findByPk(surveyId, {
         attributes: ['id', 'userCustomFields', 'userPersonalIdentifiers'],
       }),
-      User.findOne({
+      UserSurveyAlias.findOne({
+        where: { surveyId, username },
         include: [
-          { association: 'aliases', where: { userId, surveyId } },
-          { association: 'customFields' },
+          { association: 'user', required: true, include: [{ association: 'customFields' }] },
         ],
       }),
     ]);
 
-    if (!survey || !user?.aliases) throw new NotFoundError();
+    if (!survey || !alias?.user) throw new NotFoundError();
+
+    const { user, userId } = alias;
 
     await db.system.transaction(async (transaction) => {
       const { userCustomFields, userPersonalIdentifiers } = survey;
@@ -240,7 +242,7 @@ const adminSurveyService = ({
           userPersonalIdentifiers
             ? user.update({ name, email, phone, simpleName: toSimpleName(name) }, { transaction })
             : null,
-          password ? adminUserService.updatePassword(user.id, password, transaction) : null,
+          password ? adminUserService.updatePassword(userId, password, transaction) : null,
           userCustomFields && customFields && user.customFields
             ? adminUserService.updateUserCustomFields(
                 userId,
@@ -249,32 +251,40 @@ const adminSurveyService = ({
                 transaction
               )
             : null,
-          adminUserService.flushACLCacheByUserId(user.id),
+          adminUserService.flushACLCacheByUserId(userId),
         ].filter(Boolean)
       );
     });
 
-    return user.aliases[0];
+    return alias;
   };
 
   /**
    * Delete respondent record
    *
    * @param {string} surveyId
-   * @param {(string | number)} userId
+   * @param {string} username
    * @returns {Promise<void>}
    */
-  const deleteRespondent = async (surveyId: string, userId: string | number): Promise<void> => {
-    const [survey, user] = await Promise.all([
+  const deleteRespondent = async (surveyId: string, username: string): Promise<void> => {
+    const [survey, alias] = await Promise.all([
       Survey.findByPk(surveyId, { attributes: ['id', 'slug'] }),
-      User.findOne({
-        attributes: ['id', 'email'],
-        where: { id: userId },
-        include: [{ association: 'aliases', where: { surveyId } }, { association: 'submissions' }],
+      UserSurveyAlias.findOne({
+        where: { surveyId, username },
+        include: [
+          {
+            association: 'user',
+            attributes: ['id', 'email'],
+            required: true,
+            include: [{ association: 'submissions', attributes: ['id'] }],
+          },
+        ],
       }),
     ]);
 
-    if (!survey || !user) throw new NotFoundError();
+    if (!survey || !alias?.user) throw new NotFoundError();
+
+    const { user, userId } = alias;
 
     if (!user.submissions || user.submissions.length)
       throw new ForbiddenError('User cannot be deleted. It already contains submission data.');

@@ -74,10 +74,12 @@
       "surveyId": "Survey ID"
     },
     "SurveyFeedbackNotification": {
-      "_": "Survey - Send respondent feedback"
+      "_": "Survey - Send respondent feedback",
+      "surveyId": "Survey ID"
     },
     "SurveyHelpRequestNotification": {
-      "_": "Survey - Help Request Notification "
+      "_": "Survey - Help Request Notification",
+      "surveyId": "Survey ID"
     },
     "SurveyNutrientsRecalculation": {
       "_": "Survey - Nutrients recalculation",

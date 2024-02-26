@@ -30,8 +30,8 @@ export default () => {
       mocker.system.respondent()
     );
 
-    url = `${baseUrl}/${survey.id}/respondents/${respondent.userId}`;
-    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.userId}`;
+    url = `${baseUrl}/${survey.id}/respondents/${respondent.username}`;
+    invalidSurveyUrl = `${baseUrl}/999999/respondents/${respondent.username}`;
     invalidRespondentUrl = `${baseUrl}/${survey.id}/respondents/999999`;
   });
 
@@ -65,11 +65,11 @@ export default () => {
     it('should return 204 and no content when securable set', async () => {
       await suite.util.setSecurable({ ...securable, action: ['respondents'] });
 
-      const { userId } = await ioc.cradle.adminSurveyService.createRespondent(
+      const { username } = await ioc.cradle.adminSurveyService.createRespondent(
         survey.id,
         mocker.system.respondent()
       );
-      const url2 = `${baseUrl}/${survey.id}/respondents/${userId}`;
+      const url2 = `${baseUrl}/${survey.id}/respondents/${username}`;
 
       await suite.sharedTests.assertRecordDeleted('delete', url2);
     });
@@ -78,11 +78,11 @@ export default () => {
       await suite.util.setSecurable(securable);
       await survey.update({ ownerId: suite.data.system.user.id });
 
-      const { userId } = await ioc.cradle.adminSurveyService.createRespondent(
+      const { username } = await ioc.cradle.adminSurveyService.createRespondent(
         survey.id,
         mocker.system.respondent()
       );
-      const url3 = `${baseUrl}/${survey.id}/respondents/${userId}`;
+      const url3 = `${baseUrl}/${survey.id}/respondents/${username}`;
 
       await suite.sharedTests.assertRecordDeleted('delete', url3);
     });

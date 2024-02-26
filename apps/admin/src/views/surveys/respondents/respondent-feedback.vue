@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" :fullscreen="$vuetify.breakpoint.smAndDown" max-width="600px">
     <template #activator="{ attrs, on }">
-      <v-list-item key="respondentsUpload" v-bind="attrs" link v-on="on">
+      <v-list-item key="respondentsFeedback" v-bind="attrs" link v-on="on">
         <v-list-item-title>
           <v-icon left>fas fa-comments</v-icon>
           {{ $t('surveys.respondents.feedback._') }}
@@ -134,7 +134,7 @@ export default defineComponent({
 
   data() {
     return {
-      apiUrl: `admin/surveys/${this.surveyId}/respondents/${this.user.userId}/feedback`,
+      apiUrl: `admin/surveys/${this.surveyId}/respondents/${this.user.username}/feedback`,
       dialog: false,
       form: createForm<RespondentFeedback>({ email: null, copy: 'none' }),
     };

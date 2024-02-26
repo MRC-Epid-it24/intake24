@@ -23,18 +23,16 @@ export default () => {
   );
   router.post('/export-auth-urls', wrapAsync(adminSurveyRespondentController.exportAuthUrls));
 
-  router.use('/:userId', validation.entry('userId'));
-
   router
-    .route('/:userId')
+    .route('/:username')
     .get(wrapAsync(adminSurveyRespondentController.read))
     .patch(validation.update, wrapAsync(adminSurveyRespondentController.update))
     .delete(wrapAsync(adminSurveyRespondentController.destroy));
 
-  router.get('/:userId/edit', wrapAsync(adminSurveyRespondentController.edit));
+  router.get('/:username/edit', wrapAsync(adminSurveyRespondentController.edit));
 
   router
-    .route('/:userId/feedback')
+    .route('/:username/feedback')
     .get(wrapAsync(adminSurveyRespondentController.downloadFeedback))
     .post(validation.emailFeedback, wrapAsync(adminSurveyRespondentController.emailFeedback));
 

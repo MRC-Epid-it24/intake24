@@ -49,16 +49,20 @@ const feedbackService = ({
 
   const getWeightTargets = async (): Promise<WeightTargetCoefficient[]> => weightTargetsData;
 
-  const getFeedbackLinks = async (surveyId: string, userId: string, submissions: string[] = []) => {
+  const getFeedbackLinks = async (
+    surveyId: string,
+    username: string,
+    submissions: string[] = []
+  ) => {
     const alias = await UserSurveyAlias.findOne({
-      where: { surveyId, userId },
+      where: { surveyId, username },
       include: [{ association: 'survey', attributes: ['id', 'slug'] }],
     });
     if (!alias || !alias.survey) throw new NotFoundError();
 
     const {
-      username,
       survey: { slug },
+      userId,
     } = alias;
 
     const { base, survey } = appConfig.urls;
@@ -72,7 +76,7 @@ const feedbackService = ({
       .toISOString()
       .substring(0, 10)}.pdf`;
 
-    return { url, filename, slug, username };
+    return { url, filename, slug, userId };
   };
 
   const createRefreshCookie = async (
@@ -101,10 +105,10 @@ const feedbackService = ({
 
   const getFeedbackStream = async (
     surveyId: string,
-    userId: string,
+    username: string,
     submissions: string[] = []
   ) => {
-    const { url, filename, slug, username } = await getFeedbackLinks(surveyId, userId, submissions);
+    const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
     const cookie = await createRefreshCookie({ slug, username, userId });
 
     const pdfStream = await new FeedbackPdfGenerator(url, cookie).getPdfStream();
@@ -112,8 +116,12 @@ const feedbackService = ({
     return { pdfStream, filename, url };
   };
 
-  const getFeedbackFile = async (surveyId: string, userId: string, submissions: string[] = []) => {
-    const { url, filename, slug, username } = await getFeedbackLinks(surveyId, userId, submissions);
+  const getFeedbackFile = async (
+    surveyId: string,
+    username: string,
+    submissions: string[] = []
+  ) => {
+    const { url, filename, slug, userId } = await getFeedbackLinks(surveyId, username, submissions);
     const cookie = await createRefreshCookie({ slug, username, userId });
 
     const path = resolve(fsConfig.local.downloads, filename);
