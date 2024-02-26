@@ -37,9 +37,9 @@
         {{ i18n.none }}
       </v-alert>
     </div>
-    <div v-if="contents.foods.length >= 50" class="py-4">
+    <div v-if="contents.foods.length >= 24" class="py-4">
       <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
-        {{ 'Our search has found a lot of results. Try refining your search term.' }}
+        {{ i18n.refine }}
       </v-alert>
     </div>
   </div>
