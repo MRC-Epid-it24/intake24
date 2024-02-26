@@ -121,7 +121,6 @@
     "root": "all food categories",
     "back": "Back to '{category}'",
     "none": "No food results. Please try refining your search.",
-    "refine": "Our search has found a lot of results. Try refining your search term.",
     "missing": {
       "label": "I can't find my food",
       "description": "<p>If you can't find your food in the list, try rephrasing your description in the search text box above.</p><p>Or select 'Browse all foods' and explore the food categories.</p><p>If you still can't find your food select 'Report a missing food'.</p>",
