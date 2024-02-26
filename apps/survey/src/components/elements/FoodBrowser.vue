@@ -224,7 +224,6 @@ export default defineComponent({
             'root',
             'back',
             'none',
-            'refine',
             'missing.label',
             'missing.description',
             'missing.report',
