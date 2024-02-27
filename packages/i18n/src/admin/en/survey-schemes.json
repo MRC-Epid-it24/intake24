@@ -270,7 +270,12 @@
     "multiple": "Allow multiple items to be selected",
     "label": "Options list label",
     "leftovers": "Allow leftovers",
-    "linkedQuantityCategories": "Linked quantity categories",
+    "linkedQuantity": {
+      "title": "Linked quantity settings",
+      "subtitle": "Allows to trigger quantity prompt for linked parent food",
+      "parent": "Parent categories to link",
+      "source": "Source categories to trigger"
+    },
     "other": "Allow custom other option",
     "orientation": {
       "_": "Orientation",

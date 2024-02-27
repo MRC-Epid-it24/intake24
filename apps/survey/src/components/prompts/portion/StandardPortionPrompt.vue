@@ -67,8 +67,8 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
-        v-if="linkedQuantity"
-        v-bind="{ disabled: !quantityValid, food, linkedQuantity, prompt }"
+        v-if="linkedParent"
+        v-bind="{ disabled: !quantityValid, food, linkedParent, prompt }"
         v-model="portionSize.linkedQuantity"
         :confirm.sync="linkedQuantityConfirmed"
         @input="selectLinkedQuantity"
@@ -94,7 +94,7 @@ import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
 
-import type { LinkedQuantityFood } from '../partials';
+import type { LinkedParent } from '../partials';
 import { LinkedQuantity, QuantityBadge, QuantityCard, useStandardUnits } from '../partials';
 import createBasePortion from './createBasePortion';
 
@@ -110,8 +110,8 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    linkedQuantity: {
-      type: Object as PropType<LinkedQuantityFood>,
+    linkedParent: {
+      type: Object as PropType<LinkedParent>,
     },
     parameters: {
       type: Object as PropType<PortionSizeParameters['standard-portion']>,
@@ -173,7 +173,7 @@ export default defineComponent({
     validConditions(): boolean[] {
       const conditions = [this.unitValid, this.quantityValid];
 
-      if (this.linkedQuantity?.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedParent?.categories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },

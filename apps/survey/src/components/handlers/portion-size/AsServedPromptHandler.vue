@@ -3,7 +3,7 @@
     v-model="state"
     v-bind="{
       food: food(),
-      linkedQuantity,
+      linkedParent,
       meal,
       parentFood,
       parameters,
@@ -47,7 +47,7 @@ export default defineComponent({
     const {
       encodedFood: food,
       encodedFoodPortionSizeData,
-      linkedQuantity,
+      linkedParent,
       parameters,
       parentFoodOptional: parentFood,
       portionSize,
@@ -78,7 +78,7 @@ export default defineComponent({
 
     return {
       food,
-      linkedQuantity,
+      linkedParent,
       meal,
       parameters,
       parentFood,

@@ -54,6 +54,7 @@
                 class="mb-6"
                 :errors="form.errors"
                 :locale-id="localeId"
+                outlined
               ></category-list>
             </v-col>
           </v-row>

@@ -67,11 +67,11 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <linked-quantity
-        v-if="linkedQuantity"
+        v-if="linkedParent"
         v-bind="{
           disabled: leftoversEnabled ? !leftoversValid : !servingValid,
           food,
-          linkedQuantity,
+          linkedParent,
           prompt,
         }"
         v-model="portionSize.linkedQuantity"
@@ -100,7 +100,7 @@ import { useI18n } from '@intake24/i18n';
 import { YesNoToggle } from '@intake24/survey/components/elements';
 import { useFoodUtils } from '@intake24/survey/composables';
 
-import type { LinkedQuantityFood } from '../partials';
+import type { LinkedParent } from '../partials';
 import { AsServedSelector, LinkedQuantity, QuantityBadge } from '../partials';
 import createBasePortion from './createBasePortion';
 
@@ -112,8 +112,8 @@ export default defineComponent({
   mixins: [createBasePortion<'as-served-prompt'>()],
 
   props: {
-    linkedQuantity: {
-      type: Object as PropType<LinkedQuantityFood>,
+    linkedParent: {
+      type: Object as PropType<LinkedParent>,
     },
     parameters: {
       type: Object as PropType<PortionSizeParameters['as-served']>,
@@ -158,7 +158,7 @@ export default defineComponent({
       if (this.leftoversEnabled)
         conditions.push(this.leftoversPrompt === false || this.leftoversValid);
 
-      if (this.linkedQuantity?.categories.length) conditions.push(this.linkedQuantityConfirmed);
+      if (this.linkedParent?.categories.length) conditions.push(this.linkedQuantityConfirmed);
 
       return conditions;
     },

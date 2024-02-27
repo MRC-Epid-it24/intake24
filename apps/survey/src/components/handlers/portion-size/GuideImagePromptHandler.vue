@@ -4,7 +4,7 @@
     v-bind="{
       conversionFactor,
       food: food(),
-      linkedQuantity,
+      linkedParent,
       meal,
       parameters,
       parentFood,
@@ -50,7 +50,7 @@ export default defineComponent({
       conversionFactor,
       encodedFood: food,
       encodedFoodPortionSizeData,
-      linkedQuantity,
+      linkedParent,
       parameters,
       parentFoodOptional: parentFood,
     } = useFoodPromptUtils<'guide-image'>();
@@ -84,7 +84,7 @@ export default defineComponent({
     return {
       conversionFactor,
       food,
-      linkedQuantity,
+      linkedParent,
       meal,
       parameters,
       parentFood,

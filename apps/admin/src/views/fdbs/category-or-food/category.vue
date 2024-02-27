@@ -80,6 +80,7 @@
           :disabled="!globalEdit"
           :errors="form.errors"
           :locale-id="id"
+          outlined
         ></category-list>
         <portion-size-method-list
           v-model="form.portionSizeMethods"

@@ -50,7 +50,10 @@ export const guideImagePrompt: Prompts['guide-image-prompt'] = copy({
   id: 'guide-image-prompt',
   name: 'Guide image',
   imageMap,
-  linkedQuantityCategories: [{ code: 'BRED' }],
+  linkedQuantity: {
+    parent: [{ code: 'BRED' }],
+    source: ['BTTR'],
+  },
 });
 
 export const milkInAHotDrinkPrompt: Prompts['milk-in-a-hot-drink-prompt'] = copy({

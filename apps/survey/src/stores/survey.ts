@@ -4,11 +4,7 @@ import { defineStore } from 'pinia';
 import { v4 } from 'uuid';
 import Vue from 'vue';
 
-import type {
-  LinkedQuantityCategory,
-  PortionSizeComponentType,
-  Prompts,
-} from '@intake24/common/prompts';
+import type { LinkedQuantity, PortionSizeComponentType, Prompts } from '@intake24/common/prompts';
 import type {
   CustomPromptAnswer,
   EncodedFood,
@@ -175,12 +171,12 @@ export const useSurvey = defineStore('survey', {
           .map((item) => item.component.replace('-prompt', '')) ?? []
       );
     },
-    linkedQuantityCategories(): LinkedQuantityCategory[] {
+    linkedQuantity(): LinkedQuantity | undefined {
       const prompt = this.surveySchemeFoodPrompts.find(
         (prompt) => prompt.component === 'guide-image-prompt'
       ) as Prompts['guide-image-prompt'] | undefined;
 
-      return prompt?.linkedQuantityCategories ?? [];
+      return prompt?.linkedQuantity;
     },
     sameAsBeforeAllowed(): boolean {
       return !!this.surveySchemeFoodPrompts.find(

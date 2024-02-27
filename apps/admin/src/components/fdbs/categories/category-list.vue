@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-card v-bind="{ flat, outlined, tile }">
     <v-toolbar color="grey lighten-4" flat>
       <v-toolbar-title class="font-weight-medium">
         <slot name="title">
@@ -52,7 +52,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { useVModel } from '@vueuse/core';
+import { defineComponent } from 'vue';
 
 import { Errors } from '@intake24/common/util';
 import { ConfirmDialog } from '@intake24/ui';
@@ -74,8 +75,17 @@ export default defineComponent({
       type: Object as PropType<Errors>,
       default: () => new Errors(),
     },
+    flat: {
+      type: Boolean,
+    },
     localeId: {
       type: String,
+    },
+    outlined: {
+      type: Boolean,
+    },
+    tile: {
+      type: Boolean,
     },
     value: {
       type: Array as PropType<CategoryListItem[]>,
@@ -86,13 +96,10 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props, { emit }) {
-    const items = computed({
-      get() {
-        return props.value;
-      },
-      set(val) {
-        emit('input', val);
-      },
+    const items = useVModel(props, 'value', emit, {
+      eventName: 'input',
+      passive: true,
+      deep: true,
     });
 
     const add = (categories: CategoryListItem[]) => {

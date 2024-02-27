@@ -108,6 +108,11 @@ export type LinkedQuantityCategory = {
   unit?: string;
 };
 
+export type LinkedQuantity = {
+  parent: LinkedQuantityCategory[];
+  source: string[];
+};
+
 export const reviewOptions = [false, 'scroll', 'checkbox', 'onecheckbox'] as const;
 
 export type ReviewOptions = (typeof reviewOptions)[number];
@@ -194,7 +199,7 @@ export type Prompts = {
   'guide-image-prompt': BasePortionPrompt & {
     component: 'guide-image-prompt';
     imageMap: ImageMap;
-    linkedQuantityCategories: LinkedQuantityCategory[];
+    linkedQuantity: LinkedQuantity;
   };
   'milk-in-a-hot-drink-prompt': BasePortionPrompt & {
     component: 'milk-in-a-hot-drink-prompt';

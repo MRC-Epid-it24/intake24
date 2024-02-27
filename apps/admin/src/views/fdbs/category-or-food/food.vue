@@ -87,6 +87,7 @@
           :disabled="!globalEdit"
           :errors="form.errors"
           :locale-id="id"
+          outlined
         ></category-list>
         <nutrient-list
           v-model="form.nutrientRecords"

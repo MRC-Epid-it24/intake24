@@ -124,9 +124,14 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
   );
 
   const linkedQuantityCategories = (data: UserFoodData) =>
-    survey.linkedQuantityCategories.filter((cat) => data.categories.includes(cat.code));
+    survey.linkedQuantity?.parent.filter((cat) => data.categories.includes(cat.code)) ?? [];
 
-  const linkedQuantity = computed(() => {
+  const linkedParent = computed(() => {
+    const source = encodedFood().data.categories.find((cat) =>
+      survey.linkedQuantity?.source.includes(cat)
+    );
+    if (!source) return undefined;
+
     if (
       parentFoodOptional.value?.type === 'encoded-food' &&
       parentFoodOptional.value.portionSize?.method === 'guide-image' &&
@@ -159,7 +164,7 @@ export const useFoodPromptUtils = <T extends PortionSizeMethodId>() => {
     food,
     foodIndex,
     foodOptional,
-    linkedQuantity,
+    linkedParent,
     localeId,
     meals,
     parentEncodedFood,
