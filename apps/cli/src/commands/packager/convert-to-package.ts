@@ -11,6 +11,53 @@ import logger from '@intake24/common-backend/services/logger/logger';
 
 import type { CsvColumnStructure, CsvResultStructure } from './types/csv-import';
 
+export type Logger = typeof logger;
+
+export const convertorTypeOptions = ['package', 'csv'] as const;
+
+export interface ConvertorOptions {
+  type: 'package' | 'csv';
+}
+
+const defaultOptions: ConvertorOptions = {
+  type: 'csv',
+};
+
+export class ConvertorToPackage {
+  private readonly inputFilePath: string;
+  private readonly outputFilePath: string;
+  private readonly logger: Logger;
+  private readonly options: ConvertorOptions;
+
+  constructor(
+    inputFilePath: string,
+    outputFilePath: string,
+    logger: Logger,
+    options: Partial<ConvertorOptions> = defaultOptions
+  ) {
+    this.inputFilePath = inputFilePath;
+    this.outputFilePath = outputFilePath;
+    this.logger = logger;
+    this.options = {
+      ...defaultOptions,
+      ...options,
+    };
+  }
+
+  async convert() {
+    this.logger.debug('Converting to package');
+    const fileExtension = path.extname(this.inputFilePath);
+    if (fileExtension === '.csv') {
+      this.logger.debug('Converting to package from CSV');
+
+      // await this.convertFromCsv();
+    } else {
+      this.logger.debug('Converting to package from unspecified file type');
+      throw new Error('Unsupported file type');
+    }
+  }
+}
+
 // Validate CSV structure against JSON structure (TODO: move to the DB service)
 const validateCsvStructure = (headers: string[], structure: CsvColumnStructure): boolean => {
   const structureKeys = Object.keys(structure);
