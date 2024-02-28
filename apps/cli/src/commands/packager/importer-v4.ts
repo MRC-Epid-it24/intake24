@@ -27,8 +27,8 @@ import { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image
 import { Dictionary } from '@intake24/common/types';
 import logger from '@intake24/common-backend/services/logger/logger';
 
-import type { CsvColumnStructure } from './types/csv-import';
-import { processCSVImport } from './importer-csv';
+// import type { CsvColumnStructure } from './types/csv-import';
+// import { processCSVImport } from './convert-to-package';
 import typeConverters from './types/v4-type-conversions';
 
 export type Logger = typeof logger;
@@ -50,8 +50,6 @@ export const importerSpecificModulesExecutionOptions = [
   'all',
 ] as const;
 
-export const importerTypeOptions = ['package', 'csv'] as const;
-
 export type ConflictResolutionStrategy = (typeof conflictResolutionOptions)[number];
 export type ImporterSpecificModulesExecutionStrategy =
   (typeof importerSpecificModulesExecutionOptions)[number];
@@ -59,7 +57,6 @@ export type ImporterSpecificModulesExecutionStrategy =
 export interface ImporterOptions {
   onConflict?: ConflictResolutionStrategy;
   modulesForExecution?: ImporterSpecificModulesExecutionStrategy[];
-  type: 'package' | 'csv';
 }
 
 export type availableModules = {
@@ -69,7 +66,6 @@ export type availableModules = {
 const defaultOptions: ImporterOptions = {
   onConflict: 'abort',
   modulesForExecution: ['all'],
-  type: 'package',
 };
 
 export class ImporterV4 {
@@ -93,7 +89,7 @@ export class ImporterV4 {
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
-  private csvStructure: CsvColumnStructure | undefined;
+  // private csvStructure: CsvColumnStructure | undefined;
   private imageMaps: Record<string, PkgImageMap> | undefined;
   private guideImages: Record<string, PkgGuideImage> | undefined;
 
@@ -114,7 +110,6 @@ export class ImporterV4 {
         && options.modulesForExecution.length !== 0
           ? options.modulesForExecution
           : defaultOptions.modulesForExecution,
-      type: options?.type ?? defaultOptions.type,
     };
   }
 
@@ -910,11 +905,10 @@ export class ImporterV4 {
       path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.GUIDE_IMAGE_FILE_NAME),
     );
   }
-
-  private async readCSVStructure(): Promise<void> {
-    logger.info('Loading CSV structure');
-    this.csvStructure = await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME);
-  }
+  // private async readCSVStructure(): Promise<void> {
+  //   logger.info('Loading CSV structure');
+  //   this.csvStructure = await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME);
+  // }
 
   public async readPackage(): Promise<void> {
     await Promise.all([
@@ -984,32 +978,46 @@ export class ImporterV4 {
     }
   }
 
-  // Import from the CSV file with the structure defined in JSON file
-  private async importFromCSV(): Promise<void> {
-    await this.readCSVStructure();
-    const result = await processCSVImport({
-      structure: this.csvStructure,
-      importedFile: this.packageDirPath
-        ? path.join(this.packageDirPath, PkgConstants.CSV_FOOD_RECORDS_FILE_NAME)
-        : '',
-    });
-    if (result && result.length > 0) {
-      logger.info('CSV parsing completed');
-    }
-  }
+  // //Import from the CSV file with the structure defined in JSON file
+  // private async importFromCSV(): Promise<void> {
+  //   await this.readCSVStructure();
+  //   const result = await processCSVImport({
+  //     structure: this.csvStructure,
+  //     importedFile: this.packageDirPath
+  //       ? path.join(this.packageDirPath, PkgConstants.CSV_FOOD_RECORDS_FILE_NAME)
+  //       : '',
+  //   });
+  //   if (result && result.length > 0) {
+  //     logger.debug('CSV parsing completed');
+  //     result.forEach((record) => {
+  //       logger.debug('\nParsed record: ');
+  //       logger.debug(JSON.stringify(record));
+  //     });
+  //   }
+  // }
 
   public async import(): Promise<void> {
     await this.unzipPackage();
-
+    // if (this.options.type === 'csv') {
+    //   try {
+    //     await this.importFromCSV();
+    //   } catch (e) {
+    //     logger.error('Import failed', e);
+    //   } finally {
+    //     await this.cleanUpPackage();
+    //   }
+    // }
     if (
       this.options.modulesForExecution === undefined
       || this.options.modulesForExecution.length === 0
     ) {
       this.options.modulesForExecution = ['all'];
     }
-
     try {
       await this.specificModuleExecution(this.options.modulesForExecution);
+    }
+    catch (e) {
+      logger.error('Import failed', e);
     }
     finally {
       await this.cleanUpPackage();

@@ -5,6 +5,7 @@ export { default as generateEnv } from './generate-env';
 export { default as generateKey } from './generate-key';
 export { default as generateVapidKeys } from './generate-vapid-keys';
 export { default as hashPassword } from './hash-password';
+export { default as convertToPackage } from './packager/convert-to-package-command';
 export { default as packageExportV3 } from './packager/export-v3-command';
 export { default as packageImportV4 } from './packager/import-v4-command';
 export { default as searchTest } from './search-test';
