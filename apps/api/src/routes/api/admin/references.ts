@@ -102,7 +102,7 @@ export default () => {
 
   router.get(
     '/standard-units',
-    anyPermission(['survey-schemes']),
+    anyPermission(['locales', 'survey-schemes']),
     validation.browse,
     wrapAsync(referenceController.standardUnits)
   );
