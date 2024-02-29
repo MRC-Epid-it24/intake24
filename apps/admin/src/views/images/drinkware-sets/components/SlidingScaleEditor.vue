@@ -304,6 +304,9 @@ export default defineComponent({
 
     const replaceBaseImage = () => {
       if (newBaseImageFile.value) {
+        // revokeObjectURL seems to fail silently if the string is not a valid object URL
+        // so there is no need to track allocated URLs separately
+        URL.revokeObjectURL(scale.value.baseImageUrl);
         scale.value.baseImageUrl = URL.createObjectURL(newBaseImageFile.value);
         emit('baseImageChanged', scale.value.choiceId, newBaseImageFile.value);
       }
