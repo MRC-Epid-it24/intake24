@@ -164,7 +164,7 @@
 
 <script lang="ts">
 import { map, mapValues } from 'lodash';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 
 import type { LocaleTranslation } from '@intake24/common/types';
 import type { ImageMapResponse } from '@intake24/common/types/http';
@@ -247,10 +247,27 @@ export default defineComponent({
 
     const baseImageFiles = ref<Record<string, File>>({});
 
-    const baseImagePreviewUrls = computed(() => {
-      return mapValues(baseImageFiles.value, (file) => {
-        return file ? URL.createObjectURL(file) : undefined;
+    const baseImagePreviewUrls = ref<Record<string, string>>({});
+
+    function releasePreviewObjectURLs() {
+      for (const url of Object.values(baseImagePreviewUrls.value)) {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    watch(baseImageFiles.value, (newValue) => {
+      releasePreviewObjectURLs();
+      baseImagePreviewUrls.value = mapValues(newValue, (file) => {
+        return URL.createObjectURL(file);
       });
+    });
+
+    onUnmounted(() => {
+      releasePreviewObjectURLs();
+
+      for (const scale of entry.value.scales) {
+        URL.revokeObjectURL(scale.baseImageUrl);
+      }
     });
 
     let loadedImageMapId: string | undefined;
