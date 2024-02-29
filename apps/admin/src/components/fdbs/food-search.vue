@@ -87,8 +87,8 @@ const items = ref<FoodSearchItem[]>([]);
 const headers = [
   { text: '', value: 'resource', sortable: false },
   { text: i18n.t('fdbs.foods.global.code'), value: 'code' },
-  { text: i18n.t('fdbs.foods.global.name'), value: 'name' },
-  { text: i18n.t('fdbs.foods.local.name'), value: 'englishName' },
+  { text: i18n.t('fdbs.foods.global.name'), value: 'englishName' },
+  { text: i18n.t('fdbs.foods.local.name'), value: 'name' },
 ];
 
 const clear = async () => {
