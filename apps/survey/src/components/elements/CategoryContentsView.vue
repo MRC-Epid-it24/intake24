@@ -40,13 +40,7 @@
     <div
       v-if="contents.foods.length >= 50"
       class="py-4"
-      style="
-        categoriesFirst ? {
-          order: -1;
-        }
-        : {
-        }
-      "
+      :class="categoriesFirst ? 'order-first' : 'order-last'"
     >
       <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
         {{ i18n.refine }}
