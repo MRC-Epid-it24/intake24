@@ -1,5 +1,5 @@
-import type { ConnectionOptions, JobsOptions } from 'bullmq';
-import { Job as BullJob, Queue, QueueEvents, Worker } from 'bullmq';
+import type { ConnectionOptions, Job as BullJob, JobsOptions } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
@@ -32,8 +32,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   private readonly pusher;
 
   queue!: Queue<JobData>;
-
-  queueEvents!: QueueEvents;
 
   workers: Worker<JobData>[] = [];
 
@@ -74,21 +72,43 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
       this.logEventError(err);
     });
 
-    this.queueEvents = new QueueEvents(this.name, { connection });
-    this.queueEvents.on('error', (err) => {
-      this.logEventError(err);
-    });
-
-    this.registerQueueEvents();
-
     for (let i = 0; i < this.config.workers; i++) {
       const worker = new Worker(this.name, this.processor, { connection });
 
       worker
-        .on('completed', (job) => {
-          this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
+        .on('progress', async (job, progress: number | object) => {
+          this.logger.debug(`${this.name}: ${job.name} | ${job.id} progress has been updated.`);
+
+          const dbId = job.id?.replace('db-', '');
+          if (!dbId) {
+            this.logger.error(`${this.name}: ${job.name} | Missing queue job ID.`);
+            return;
+          }
+
+          if (typeof progress === 'number' && progress < 1)
+            await DbJob.update({ progress }, { where: { id: dbId } });
         })
-        .on('failed', (job, err) => {
+        .on('completed', async (job) => {
+          this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
+
+          const dbId = job.id?.replace('db-', '');
+          if (!dbId) {
+            this.logger.error(`${this.name}: ${job.name} | Missing queue job ID.`);
+            return;
+          }
+
+          const dbJob = await DbJob.findByPk(dbId);
+          if (!dbJob) {
+            this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
+            return;
+          }
+
+          await Promise.all([
+            dbJob.update({ completedAt: new Date(), progress: 1, successful: true }),
+            this.notify(dbJob.userId, { jobId: dbId, status: 'success' }),
+          ]);
+        })
+        .on('failed', async (job, err) => {
           const { message, name, stack } = err;
           const jobInfo = job ? `${job.name} | ${job.id}` : `"Removed job"`;
 
@@ -97,6 +117,33 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
             name,
             stack,
           });
+
+          const dbId = job?.id?.replace('db-', '');
+          if (!job || !dbId) {
+            this.logger.error(`${this.name}: ${job?.name} | Missing queue job ID.`);
+            return;
+          }
+
+          const dbJob = await DbJob.findByPk(dbId);
+          if (!dbJob) {
+            this.logger.error(`${this.name}: ${job.name} | ${job.id} not found.`);
+            return;
+          }
+
+          await Promise.all([
+            dbJob.update({
+              completedAt: new Date(),
+              progress: 1,
+              successful: false,
+              message: job.failedReason,
+              stackTrace: job.stacktrace,
+            }),
+            this.notify(dbJob.userId, {
+              jobId: dbId,
+              status: 'error',
+              message: job.failedReason,
+            }),
+          ]);
         })
         .on('error', (err) => {
           this.logEventError(err);
@@ -121,75 +168,6 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
   public async close(): Promise<void> {
     await this.closeWorkers();
     await this.queue.close();
-    await this.queueEvents.close();
-  }
-
-  /**
-   * Register event listeners to handle successful/failed jobs
-   * - look up corresponding database record
-   * - update status / messages
-   * - notify users using registered channels
-   *
-   * @private
-   * @memberof JobsQueueHandler
-   */
-  private registerQueueEvents(): void {
-    this.queueEvents
-      .on('progress', async ({ jobId, data }) => {
-        const dbId = jobId.replace('db-', '');
-
-        const job = await DbJob.findByPk(dbId);
-        if (!job) {
-          this.logger.error(`QueueEvent progress: Job entry not found (${dbId}).`);
-          return;
-        }
-
-        if (typeof data === 'number' && data < 1) await job.update({ progress: data });
-      })
-      .on('completed', async ({ jobId }) => {
-        const dbId = jobId.replace('db-', '');
-
-        const job = await DbJob.findByPk(dbId);
-        if (!job) {
-          this.logger.error(`QueueEvent completed: Job entry not found (${dbId}).`);
-          return;
-        }
-
-        await job.update({ completedAt: new Date(), progress: 1, successful: true });
-
-        await this.notify(job.userId, { jobId: dbId, status: 'success' });
-      })
-      .on('failed', async ({ jobId, failedReason }) => {
-        const dbId = jobId.replace('db-', '');
-
-        const bullJob: BullJob<JobData> | undefined = await BullJob.fromId(this.queue, jobId);
-        if (!bullJob) {
-          this.logger.error(`QueueEvent failed: BullJob (${jobId}) not found.`);
-          return;
-        }
-
-        const { name, stacktrace } = bullJob;
-
-        this.logger.error(
-          `QueueEvent failed: Job ${name} | ${jobId} has failed.\n ${stacktrace.join('\n')}`
-        );
-
-        const job = await DbJob.findByPk(dbId);
-        if (!job) {
-          this.logger.error(`QueueEvent failed: Job entry not found (${dbId}).`);
-          return;
-        }
-
-        await job.update({
-          completedAt: new Date(),
-          progress: 1,
-          successful: false,
-          message: failedReason,
-          stackTrace: stacktrace,
-        });
-
-        await this.notify(job.userId, { jobId: dbId, status: 'error', message: failedReason });
-      });
   }
 
   /**
