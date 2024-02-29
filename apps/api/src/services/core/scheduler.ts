@@ -47,4 +47,16 @@ export default class Scheduler {
 
     this.logger.info(`Scheduler has closed all connections.`);
   }
+
+  /**
+   * Close all workers before shutdown
+   *
+   * @returns {Promise<void>}
+   * @memberof Scheduler
+   */
+  public async closeWorkers(): Promise<void> {
+    await Promise.all([this.jobs.closeWorkers(), this.tasks.closeWorkers()]);
+
+    this.logger.info('Scheduler workers were shutdown.');
+  }
 }

@@ -2,6 +2,16 @@ import type { Ops } from '@intake24/api/app';
 import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
 
+async function exitSignalHandler() {
+  /*
+   * Gracefully shut down workers
+   * https://docs.bullmq.io/guide/going-to-production#gracefully-shut-down-workers
+   */
+  await ioc.cradle.scheduler.closeWorkers();
+
+  process.exit();
+}
+
 export default async (ops: Ops): Promise<void> => {
   // Cache
   ioc.cradle.cache.init();
@@ -35,4 +45,9 @@ export default async (ops: Ops): Promise<void> => {
   // Redis indexing
   ioc.cradle.reindexingPublisherService.init();
   ioc.cradle.reindexingSubscriberService.init();
+
+  // Exit signal handlers
+  process.on('SIGINT', exitSignalHandler);
+  process.on('SIGTERM', exitSignalHandler);
+  process.on('SIGQUIT', exitSignalHandler);
 };

@@ -80,6 +80,10 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
     this.logger.info(`${this.name} has been loaded.`);
   }
 
+  public async closeWorkers(force = false): Promise<void> {
+    await Promise.all(this.workers.map((worker) => worker.close(force)));
+  }
+
   /**
    * Close queue connections
    *
@@ -87,10 +91,7 @@ export default class TasksQueueHandler implements QueueHandler<JobData> {
    * @memberof TasksQueueHandler
    */
   public async close(): Promise<void> {
-    for (const worker of this.workers) {
-      await worker.close();
-    }
-
+    await this.closeWorkers();
     await this.queue.close();
   }
 
