@@ -2,6 +2,7 @@ import { URL } from 'node:url';
 
 import { addDays, addMinutes, startOfDay } from 'date-fns';
 import ms from 'ms';
+import { z, ZodError } from 'zod';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { Prompts } from '@intake24/common/prompts';
@@ -107,40 +108,35 @@ const surveyService = ({
     if (!allowGenUsers || !genUserKey)
       throw new ForbiddenError(`Survey doesn't support user generation`);
 
-    let decoded;
-
     try {
-      decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
-    } catch (err) {
-      throw new ForbiddenError(err instanceof Error ? err.message : undefined);
-    }
+      const decoded = await jwt.verify(token, genUserKey, { algorithms: ['HS256', 'HS512'] });
+      const { name, password, username, redirectUrl } = z
+        .object({
+          username: z.string().max(256),
+          password: z.string().max(256).optional().default(randomString(12)),
+          redirectUrl: z.string().url().optional(),
+          name: z.string().max(512).optional(),
+        })
+        .parse(decoded);
 
-    if (!decoded || Object.prototype.toString.call(decoded) !== '[object Object]')
-      throw new ApplicationError('Malformed token payload');
+      const alias = await UserSurveyAlias.findOne({ where: { surveyId, username } });
+      if (alias) {
+        const { userId, urlAuthToken: authToken } = alias;
 
-    const { username, password, redirectUrl } = decoded;
-    if (!username || typeof username !== 'string')
-      throw new ApplicationError('Invalid claim: missing username');
+        return { userId, username, authToken, redirectUrl };
+      }
 
-    if (typeof password !== 'undefined' && typeof password !== 'string')
-      throw new ApplicationError('Invalid claim: password must a string');
-
-    if (typeof redirectUrl !== 'undefined' && typeof redirectUrl !== 'string')
-      throw new ApplicationError('Invalid claim: redirectUrl must a string');
-
-    const alias = await UserSurveyAlias.findOne({ where: { surveyId, username } });
-    if (alias) {
-      const { userId, urlAuthToken: authToken } = alias;
+      const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(
+        survey,
+        { username, password, name }
+      );
 
       return { userId, username, authToken, redirectUrl };
+    } catch (err) {
+      if (err instanceof ZodError) throw new ApplicationError('Malformed token payload');
+
+      throw new ForbiddenError(err instanceof Error ? err.message : undefined);
     }
-
-    const { userId, urlAuthToken: authToken } = await adminSurveyService.createRespondent(survey, {
-      username,
-      password: password || randomString(12),
-    });
-
-    return { userId, username, authToken, redirectUrl };
   };
 
   /**

@@ -103,9 +103,10 @@ Content-Type: application/json
 
 ## Create user
 
-Publicly accessible API end-point.
+Publicly accessible endpoint for survey respondent creation.
 
-Create a new user account with a specific user name and a redirect URL if allowed by the survey settings. User generation must be allowed in survey settings and JWT secret must be set.
+- use must be allowed in [survey settings](/admin/surveys/#external-communication)
+- payload must be a valid JWT token signed with secret set up in survey settings
 
 :::warning
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
@@ -131,6 +132,7 @@ Content-Type: application/json
   - `username` - Unique respondent username within the survey
   - `password` (optional) - password for username:password login
   - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
+  - `name` (optional) - user's name for personalisation
 
 #### JWT payload
 
@@ -139,6 +141,7 @@ Content-Type: application/json
   "username": string,
   "password"?: string
   "redirectUrl"?: string
+  "name"?: string
 }
 ```
 
