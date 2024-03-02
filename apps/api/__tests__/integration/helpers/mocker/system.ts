@@ -26,7 +26,7 @@ import {
   feedbackSections as defaultFeedbackSections,
 } from '@intake24/common/feedback';
 import { customPrompts } from '@intake24/common/prompts';
-import { recordVisibilities } from '@intake24/common/security';
+import { createAmrMethod, recordVisibilities } from '@intake24/common/security';
 import {
   defaultExport,
   defaultMeals,
@@ -212,12 +212,14 @@ const personalAccessToken = () => {
   const expiresAt = faker.date.future({ years: 1 });
   const verified = true;
   const aal = 'aal1' as const;
+  const amr = [createAmrMethod('pwd')];
 
   return {
     name,
     expiresAt,
     verified,
     aal,
+    amr,
   };
 };
 

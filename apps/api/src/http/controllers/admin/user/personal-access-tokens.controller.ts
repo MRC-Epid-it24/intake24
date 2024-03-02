@@ -32,11 +32,11 @@ const personalAccessTokenController = ({ jwtService }: Pick<IoC, 'jwtService'>) 
     res: Response<PersonalAccessTokenEntry>
   ): Promise<void> => {
     const { name, expiresAt } = req.body;
-    const { aal, verified, userId } = req.scope.cradle.user;
+    const { aal, amr, verified, userId } = req.scope.cradle.user;
 
     const { jwt, token } = await jwtService.issuePersonalAccessToken(
       name,
-      { aal, verified, userId },
+      { aal, amr, verified, userId },
       expiresAt
     );
 

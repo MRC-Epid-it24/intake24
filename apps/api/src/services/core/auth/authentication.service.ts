@@ -16,7 +16,7 @@ import type { SurveyAttributes, UserPassword } from '@intake24/db';
 import { UnauthorizedError } from '@intake24/api/http/errors';
 import { captcha as captchaCheck } from '@intake24/api/http/rules';
 import { btoa } from '@intake24/api/util';
-import { surveyRespondent } from '@intake24/common/security';
+import { createAmrMethod, surveyRespondent } from '@intake24/common/security';
 import { supportedAlgorithms } from '@intake24/common-backend';
 import { MFADevice, Op, Survey, User } from '@intake24/db';
 
@@ -149,7 +149,13 @@ const authenticationService = ({
     const challenge = await providers[provider].authenticationChallenge(device);
 
     const { challengeId } = challenge;
-    meta.req.session.mfaAuthChallenge = { challengeId, deviceId, provider, userId };
+    meta.req.session.mfaAuthChallenge = {
+      challengeId,
+      deviceId,
+      provider,
+      userId,
+      amr: [createAmrMethod('pwd')],
+    };
 
     await signInService.log({ ...signInAttempt, successful: true });
 
@@ -399,6 +405,7 @@ const authenticationService = ({
         // @ts-expect-error - TS does not narrow down surveyId based on above condition
         surveyId,
         aal,
+        amr,
       } = await jwtService.verifyRefreshToken(token, frontEnd);
 
       const user = await User.findOne({
@@ -414,7 +421,7 @@ const authenticationService = ({
       const permissions = frontEnd === 'survey' ? await aclCache.getPermissions(userId) : undefined;
 
       return await jwtService.issueTokens(
-        { surveyId, userId, verified: !!user.verifiedAt, permissions, aal },
+        { surveyId, userId, verified: !!user.verifiedAt, permissions, aal, amr },
         frontEnd,
         { subject }
       );
@@ -428,6 +435,13 @@ const authenticationService = ({
     }
   };
 
+  /**
+   * Verify MFA authentication response
+   *
+   * @param {MFVerification} { response, token }
+   * @param {LoginMeta} meta
+   * @returns {Promise<Tokens>}
+   */
   const verify = async ({ response, token }: MFVerification, meta: LoginMeta): Promise<Tokens> => {
     const {
       ip: remoteAddress,
@@ -489,8 +503,10 @@ const authenticationService = ({
         secret,
       });
 
+      const amr = [...mfaAuthChallenge.amr, createAmrMethod(provider)];
+
       const [tokens] = await Promise.all([
-        jwtService.issueTokens({ userId, verified: !!verifiedAt, aal: 'aal2' }, 'admin', {
+        jwtService.issueTokens({ userId, verified: !!verifiedAt, aal: 'aal2', amr }, 'admin', {
           subject: btoa({ provider: 'email', providerKey: email }),
         }),
         signInService.log({ ...signInAttempt, successful: true }),

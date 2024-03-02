@@ -2,9 +2,14 @@ import type { Secret, SignOptions } from 'jsonwebtoken';
 import jwt, { decode } from 'jsonwebtoken';
 
 import type { IoC } from '@intake24/api/ioc';
-import type { AdminSignPayload, SignPayload, TokenPayload } from '@intake24/common/security';
 import type { FrontEnd } from '@intake24/common/types';
 import { InternalServerError, NotFoundError } from '@intake24/api/http/errors';
+import {
+  type AdminSignPayload,
+  createAmrMethod,
+  type SignPayload,
+  type TokenPayload,
+} from '@intake24/common/security';
 import { randomString } from '@intake24/common/util';
 import { PersonalAccessToken } from '@intake24/db';
 
@@ -84,7 +89,7 @@ const jwtService = ({
 
     if (!secret) throw new InternalServerError('No access token secret defined.');
 
-    return sign({ aal: 'aal1', ...payload }, secret, { audience, expiresIn: lifetime, ...options });
+    return sign(payload, secret, { audience, expiresIn: lifetime, ...options });
   };
 
   /**
@@ -105,29 +110,6 @@ const jwtService = ({
     if (!secret) throw new InternalServerError('No refresh token secret defined.');
 
     return sign(payload, secret, { audience, expiresIn: lifetime, ...options });
-  };
-
-  /**
-   * Sign both access and refresh tokens
-   *
-   * @param {SignPayload} payload
-   * @param {FrontEnd} frontEnd
-   * @param {SignOptions} [options={}]
-   * @returns {Promise<Tokens>}
-   */
-  const signTokens = async (
-    payload: SignPayload,
-    frontEnd: FrontEnd,
-    options: SignOptions = {}
-  ): Promise<Tokens> => {
-    const { permissions, verified, ...refreshPayload } = payload;
-
-    const [accessToken, refreshToken] = await Promise.all([
-      signAccessToken(payload, frontEnd, options),
-      signRefreshToken(refreshPayload, frontEnd, options),
-    ]);
-
-    return { accessToken, refreshToken };
   };
 
   /**
@@ -162,7 +144,16 @@ const jwtService = ({
     frontEnd: FrontEnd,
     options: SignOptions = {}
   ): Promise<Tokens> => {
-    const { accessToken, refreshToken } = await signTokens(payload, frontEnd, options);
+    const { permissions, verified, ...refreshPayload } = payload;
+
+    const aal = 'aal1';
+    const amr = [createAmrMethod('pwd')];
+
+    const [accessToken, refreshToken] = await Promise.all([
+      signAccessToken({ aal, amr, ...payload }, frontEnd, options),
+      signRefreshToken({ aal, amr, ...refreshPayload }, frontEnd, options),
+    ]);
+
     await jwtRotationService.store(refreshToken, payload.userId);
 
     return { accessToken, refreshToken };
@@ -218,7 +209,6 @@ const jwtService = ({
     verify,
     signAccessToken,
     signRefreshToken,
-    signTokens,
     decodeToken,
     verifyRefreshToken,
     issueRefreshToken,

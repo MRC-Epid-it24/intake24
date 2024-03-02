@@ -1,5 +1,6 @@
 import request from 'supertest';
 
+import type { AmrMethod } from '@intake24/common/security';
 import type { PersonalAccessToken } from '@intake24/db';
 import ioc from '@intake24/api/ioc';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
@@ -10,7 +11,13 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: { name: string; expiresAt: Date; verified: boolean; aal: 'aal1' | 'aal2' };
+  let input: {
+    name: string;
+    expiresAt: Date;
+    verified: boolean;
+    aal: 'aal1' | 'aal2';
+    amr: AmrMethod[];
+  };
   let pat: { jwt: string; token: PersonalAccessToken };
 
   beforeAll(async () => {

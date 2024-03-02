@@ -1,7 +1,7 @@
 import type { AwilixContainer } from 'awilix';
 
 import type { RequestIoC } from '@intake24/api/ioc';
-import type { MFAProvider } from '@intake24/common/security';
+import type { AmrMethod, MFAProvider } from '@intake24/common/security';
 
 declare global {
   namespace Express {
@@ -18,6 +18,7 @@ declare module 'express-session' {
       deviceId: string;
       provider: MFAProvider;
       userId: string;
+      amr: AmrMethod[];
     };
     duoRegChallenge: {
       challengeId: string;

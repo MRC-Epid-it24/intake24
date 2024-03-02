@@ -7,11 +7,19 @@ export type Subject = {
   providerKey: string;
 };
 
+export type Amr = 'pwd' | MFAProvider;
+export type AmrMethod = { method: Amr; timestamp: number };
+
+export function createAmrMethod(amr: Amr): AmrMethod {
+  return { method: amr, timestamp: Math.round(Date.now() / 1000) };
+}
+
 export type BaseSignPayload = {
   userId: string;
   verified?: boolean;
   permissions?: string[];
   aal?: 'aal1' | 'aal2';
+  amr?: AmrMethod[];
 };
 
 export type AdminSignPayload = BaseSignPayload;
