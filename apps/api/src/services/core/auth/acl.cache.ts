@@ -1,9 +1,9 @@
-import type { RequestIoC } from '@intake24/api/ioc';
+import type { IoC } from '@intake24/api/ioc';
 import type { Permission, Role } from '@intake24/db';
 import { ACL_PERMISSIONS_KEY, ACL_ROLES_KEY } from '@intake24/common/security';
 import { User } from '@intake24/db';
 
-const aclCache = ({ aclConfig, cache }: Pick<RequestIoC, 'aclConfig' | 'cache' | 'user'>) => {
+const aclCache = ({ aclConfig, cache }: Pick<IoC, 'aclConfig' | 'cache'>) => {
   const { enabled, ttl } = aclConfig.cache;
 
   /**

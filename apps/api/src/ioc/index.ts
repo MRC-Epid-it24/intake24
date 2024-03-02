@@ -333,7 +333,7 @@ export interface RequestIoC extends IoC {
 }
 
 const configureContainer = () => {
-  const container = createContainer<IoC>();
+  const container = createContainer<IoC>({ strict: true });
 
   container.register({
     config: asValue(config),
