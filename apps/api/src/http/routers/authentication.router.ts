@@ -1,4 +1,4 @@
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import { initServer } from '@ts-rest/express';
 
 import type { CookieSettings } from '@intake24/api/config/common';
@@ -9,7 +9,7 @@ import { contract } from '@intake24/common/contracts';
 
 export const authentication = () => {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
-    message: 'Too many failed login attempts, please try again later.',
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });
 

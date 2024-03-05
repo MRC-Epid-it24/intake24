@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
 
 import ioc from '@intake24/api/ioc';
@@ -8,7 +9,7 @@ import { ForbiddenError, NotFoundError } from '../../errors';
 
 export const feedback = () => {
   const feedbackRateLimiter = ioc.cradle.rateLimiter.createMiddleware('feedback', {
-    message: 'You have recently requested the feedback output, please try again later.',
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.feedback'),
     skipFailedRequests: true,
   });
 

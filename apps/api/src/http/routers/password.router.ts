@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
 import ms from 'ms';
 
@@ -13,7 +14,7 @@ export const password = () => {
     request: {
       middleware: [
         ioc.cradle.rateLimiter.createMiddleware('password', {
-          message: 'Password reset link has been recently requested, please try again later.',
+          message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.password'),
           skipFailedRequests: true,
         }),
       ],

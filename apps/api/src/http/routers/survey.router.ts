@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import { initServer } from '@ts-rest/express';
 
 import ioc from '@intake24/api/ioc';
@@ -10,7 +11,7 @@ import { captchaCheck } from '../rules';
 
 export const survey = () => {
   const generateUserLimiter = ioc.cradle.rateLimiter.createMiddleware('generateUser', {
-    message: 'New user has just been generated, please try again later.',
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generateUser'),
     skipFailedRequests: true,
   });
   const captchaConfig = ioc.cradle.servicesConfig.captcha;

@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import type { Options } from 'express-rate-limit';
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
@@ -20,10 +21,13 @@ export default class RateLimiter extends HasRedisClient {
   createMiddleware(type: keyof typeof this.rateLimiters, options: Partial<Options> = {}) {
     return rateLimit({
       handler: (req, res, next, { message, statusCode }) => {
-        res.status(statusCode).json({ message });
+        res
+          .status(statusCode)
+          .json({ message: typeof message === 'function' ? message(req, res) : message });
       },
       keyGenerator: (req) => `${type}:${(req.user as TokenPayload | undefined)?.userId ?? req.ip}`,
       skip: (req) => ['127.0.0.1', '::1'].includes(req.ip ?? ''),
+      message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.generic'),
       legacyHeaders: false,
       standardHeaders: 'draft-7',
       ...this.rateLimiters[type],

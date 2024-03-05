@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import { Router } from 'express';
 
 import validation from '@intake24/api/http/requests/admin/authentication';
@@ -11,7 +12,7 @@ export default () => {
 
   const loginRateLimiter = rateLimiter.createMiddleware('login', {
     keyGenerator: (req) => `login:${req.body.email ?? req.ip}`,
-    message: 'Too many failed login attempts, please try again later.',
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.login'),
     skipSuccessfulRequests: true,
   });
 

@@ -1,3 +1,4 @@
+import type { Request } from 'express';
 import { Router } from 'express';
 
 import ioc from '@intake24/api/ioc';
@@ -8,8 +9,8 @@ export default () => {
 
   const { adminUserProfileController, rateLimiter } = ioc.cradle;
 
-  const verifyRateLimiter = rateLimiter.createMiddleware('password', {
-    message: 'Email verification link has been recently requested, please try again later.',
+  const verifyRateLimiter = rateLimiter.createMiddleware('verify', {
+    message: (req: Request) => req.scope.cradle.i18nService.translate('rateLimit.verify'),
     skipFailedRequests: true,
   });
 
