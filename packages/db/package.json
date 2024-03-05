@@ -38,8 +38,8 @@
   "devDependencies": {
     "@simplewebauthn/types": "^9.0.1",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20.11.20",
-    "@types/pg": "^8.11.1",
+    "@types/node": "^20.11.24",
+    "@types/pg": "^8.11.2",
     "@types/validator": "^13.11.9",
     "kysely-codegen": "^0.11.0",
     "sequelize-cli": "^6.6.2",
