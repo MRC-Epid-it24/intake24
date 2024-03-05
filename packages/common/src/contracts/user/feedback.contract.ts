@@ -1,4 +1,5 @@
 import { initContract } from '@ts-rest/core';
+import { Readable } from 'stream';
 import { z } from 'zod';
 
 export const feedback = initContract().router({
@@ -10,9 +11,9 @@ export const feedback = initContract().router({
       submissions: z.array(z.string()).optional(),
     }),
     responses: {
-      200: z.undefined(),
+      200: z.instanceof(Readable),
     },
-    summary: 'Download user feedback as PDF',
+    summary: 'Download user feedback as PDF file',
   },
   email: {
     method: 'POST',
@@ -21,12 +22,18 @@ export const feedback = initContract().router({
       survey: z.string(),
       submissions: z.array(z.string()).optional(),
     }),
-    body: z.object({
-      email: z.string().email(),
-    }),
+    body: z
+      .object({
+        email: z.string().email().toLowerCase(),
+        emailConfirm: z.string().email().toLowerCase(),
+      })
+      .refine((data) => data.email === data.emailConfirm, {
+        path: ['emailConfirm'],
+        message: 'Emails do not match',
+      }),
     responses: {
       200: z.undefined(),
     },
-    summary: 'Email user feedback as PDF attachment',
+    summary: 'Email user feedback as PDF file attachment',
   },
 });
