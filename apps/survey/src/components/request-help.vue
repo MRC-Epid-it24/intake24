@@ -125,7 +125,7 @@ import { getCountryCodeForRegionCode, getSupportedRegionCodes } from 'awesome-ph
 import axios, { HttpStatusCode } from 'axios';
 import { defineComponent, ref } from 'vue';
 
-import type { SurveyRequestHelpInput } from '@intake24/common/types/http';
+import type { SurveyHelpRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
@@ -164,7 +164,7 @@ export default defineComponent({
     const dialog = ref(false);
     const errors = ref(new Errors());
 
-    const createForm = (): SurveyRequestHelpInput => ({
+    const createForm = (): SurveyHelpRequest => ({
       name: '',
       email: '',
       phone: '',

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const frontEnds = ['admin', 'survey'] as const;
 
 export type FrontEnd = (typeof frontEnds)[number];
@@ -41,14 +43,16 @@ export type EmailCopy = (typeof emailCopy)[number];
 
 export type Environment = 'development' | 'test' | 'production';
 
-export type LocaleTranslation = {
-  [locale: string]: string;
-};
+export const localeTranslation = z.record(z.string().nullable());
 
-export type RequiredLocaleTranslation = {
-  en: string;
-  [locale: string]: string | null;
-};
+export type LocaleTranslation = z.infer<typeof localeTranslation>;
+
+export const requiredLocaleTranslation = z.intersection(
+  z.object({ en: z.string() }),
+  z.record(z.string().nullable())
+);
+
+export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];

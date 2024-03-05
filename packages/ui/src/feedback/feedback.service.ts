@@ -4,7 +4,7 @@ import type {
   HenryCoefficient,
 } from '@intake24/common/feedback';
 import type {
-  FeedbackData,
+  FeedbackDataResponse,
   SurveySubmissionEntry,
   UserPhysicalDataResponse,
 } from '@intake24/common/types/http';
@@ -14,7 +14,7 @@ import type { CardWithCharRules } from './cards-builder';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
 
 export type FeedbackDictionaries = {
-  feedbackData: FeedbackData;
+  feedbackData: FeedbackDataResponse;
   cards: CardWithCharRules[];
   demographicGroups: DemographicGroup[];
   surveyStats: SurveyStats;
@@ -28,14 +28,14 @@ export type FeedbackResults = {
 export type UserPhysicalData = NonNullable<UserPhysicalDataResponse>;
 
 const createFeedbackService = (httpClient: HttpClient) => {
-  let cachedFeedbackData: FeedbackData | null = null;
+  let cachedFeedbackData: FeedbackDataResponse | null = null;
 
-  const fetchFeedbackData = async (): Promise<FeedbackData> => {
-    const { data } = await httpClient.get<FeedbackData>('feedback');
+  const fetchFeedbackData = async (): Promise<FeedbackDataResponse> => {
+    const { data } = await httpClient.get<FeedbackDataResponse>('feedback');
     return data;
   };
 
-  const getFeedbackData = async (): Promise<FeedbackData> => {
+  const getFeedbackData = async (): Promise<FeedbackDataResponse> => {
     if (cachedFeedbackData) return cachedFeedbackData;
 
     const data = await fetchFeedbackData();
@@ -45,7 +45,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
   };
 
   const getUserDemographic = (
-    feedbackData: FeedbackData,
+    feedbackData: FeedbackDataResponse,
     henryCoefficients: HenryCoefficient[],
     physicalData: UserPhysicalData
   ): UserDemographic => {

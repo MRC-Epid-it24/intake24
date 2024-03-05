@@ -121,10 +121,7 @@ import { mapState } from 'pinia';
 import { defineComponent } from 'vue';
 
 import type { FeedbackPhysicalDataField, Sex } from '@intake24/common/feedback';
-import type {
-  FeedbackSchemeEntryResponse,
-  PhysicalActivityLevel,
-} from '@intake24/common/types/http';
+import type { PhysicalActivityLevel } from '@intake24/common/types/http';
 import type { UserPhysicalData } from '@intake24/ui/feedback';
 import { sexes, weightTargets } from '@intake24/common/feedback';
 import { Errors } from '@intake24/common/util';
@@ -191,7 +188,7 @@ export default defineComponent({
   computed: {
     ...mapState(useSurvey, ['parameters']),
 
-    feedbackScheme(): FeedbackSchemeEntryResponse | undefined {
+    feedbackScheme() {
       return this.parameters?.feedbackScheme;
     },
   },

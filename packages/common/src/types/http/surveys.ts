@@ -1,83 +1,143 @@
-import type {
-  FeedbackSchemeAttributes,
-  SurveySchemeAttributes,
-  SystemLocaleAttributes,
-  UserSurveySessionAttributes,
-} from '@intake24/db';
+import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
+import { isIn } from 'validator';
+import { z } from 'zod';
 
-import type { SearchSortingAlgorithm, SurveyRating, SurveyState } from '../../surveys';
-import type { JobParams } from '../jobs';
+import type { SurveySchemeAttributes } from '@intake24/db';
+import {
+  schemeTypes,
+  searchSortingAlgorithms,
+  surveyRatings,
+  surveyStates,
+} from '@intake24/common/surveys';
 
-export type GenerateUserResponse = {
-  username: string;
-  password: string;
-};
+import { feedbackSchemeSchema } from '../../schemas';
+import { meal } from '../meals';
 
-export type CreateUserResponse = {
-  userId: string;
-  username: string;
-  authToken: string;
-  redirectUrl?: string;
-};
+export const generateUserResponse = z.object({
+  username: z.string(),
+  password: z.string(),
+});
 
-export type PublicSurveyEntry = {
-  id: string;
-  slug: string;
-  name: string;
-  localeId: string;
-  originatingUrl: string | null;
-  supportEmail: string;
-  openAccess: boolean;
-  authCaptcha: boolean;
-};
+export type GenerateUserResponse = z.infer<typeof generateUserResponse>;
+
+export const createUserResponse = z.object({
+  userId: z.string(),
+  username: z.string(),
+  authToken: z.string(),
+  redirectUrl: z.string().optional(),
+});
+
+export type CreateUserResponse = z.infer<typeof createUserResponse>;
+
+export const publicSurveyEntry = z.object({
+  id: z.string(),
+  slug: z.string(),
+  name: z.string(),
+  localeId: z.string(),
+  originatingUrl: z.string().nullable(),
+  supportEmail: z.string(),
+  openAccess: z.boolean(),
+  authCaptcha: z.boolean(),
+});
+
+export type PublicSurveyEntry = z.infer<typeof publicSurveyEntry>;
 
 export type SchemeEntryResponse = Pick<SurveySchemeAttributes, 'id' | 'type' | 'meals' | 'prompts'>;
-export type FeedbackSchemeEntryResponse = FeedbackSchemeAttributes;
 
-export type LocaleEntryResponse = Pick<SystemLocaleAttributes, 'id' | 'code'>;
+export const surveyEntryResponse = z.object({
+  id: z.string(),
+  slug: z.string(),
+  name: z.string(),
+  state: z.enum(surveyStates),
+  locale: z.object({ id: z.string(), code: z.string() }),
+  surveyScheme: z.object({
+    id: z.string(),
+    type: z.enum(schemeTypes),
+    meals: meal.array(),
+    // TODO: validate meals and prompts
+    prompts: z.any(),
+  }),
+  feedbackScheme: feedbackSchemeSchema.optional(),
+  numberOfSubmissionsForFeedback: z.number(),
+  storeUserSessionOnServer: z.boolean(),
+  suspensionReason: z.string().nullable(),
+  searchSortingAlgorithm: z.enum(searchSortingAlgorithms),
+  searchMatchScoreWeight: z.number(),
+});
 
-export type SurveyEntryResponse = {
-  id: string;
-  slug: string;
-  name: string;
-  state: SurveyState;
-  locale: LocaleEntryResponse;
-  surveyScheme: SchemeEntryResponse;
-  feedbackScheme?: FeedbackSchemeEntryResponse;
-  numberOfSubmissionsForFeedback: number;
-  storeUserSessionOnServer: boolean;
-  suspensionReason: string | null;
-  searchSortingAlgorithm: SearchSortingAlgorithm;
-  searchMatchScoreWeight: number;
-};
+// TODO: write zod prompts schema
+export type SurveyEntryResponse = z.infer<typeof surveyEntryResponse>;
 
-export type SurveyUserInfoResponse = {
-  userId: string;
-  name: string | null;
-  submissions: number;
-  showFeedback: boolean;
-  maximumTotalSubmissionsReached: boolean;
-  maximumDailySubmissionsReached: boolean;
-  followUpUrl?: string | null;
-};
+export const surveyUserInfoResponse = z.object({
+  userId: z.string(),
+  name: z.string().nullable(),
+  submissions: z.number(),
+  showFeedback: z.boolean(),
+  maximumTotalSubmissionsReached: z.boolean(),
+  maximumDailySubmissionsReached: z.boolean(),
+  followUpUrl: z.string().nullish(),
+});
 
-export type SurveySubmissionResponse = SurveyUserInfoResponse & {
-  submission: {
-    id: string;
-    submissionTime: Date;
-  };
-};
+export type SurveyUserInfoResponse = z.infer<typeof surveyUserInfoResponse>;
 
-export type SurveyUserSessionResponse = UserSurveySessionAttributes;
+export const surveySubmissionResponse = surveyUserInfoResponse.extend({
+  submission: z.object({ id: z.string(), submissionTime: z.date() }),
+});
 
-export type SurveyRequestHelpInput = Pick<
-  JobParams['SurveyHelpRequestNotification'],
-  'name' | 'email' | 'phone' | 'phoneCountry' | 'message'
->;
+export type SurveySubmissionResponse = z.infer<typeof surveySubmissionResponse>;
 
-export type SurveyRatingInput = {
-  type: SurveyRating;
-  rating: number;
-  submissionId?: string;
-  comment: string | null;
-};
+export const surveyUserSessionResponse = z.object({
+  userId: z.string(),
+  surveyId: z.string(),
+  sessionData: z.any(),
+});
+
+export type SurveyUserSessionResponse = z.infer<typeof surveyUserSessionResponse>;
+
+export const surveyHelpRequest = z
+  .object({
+    name: z.string(),
+    email: z.string().email().toLowerCase().nullish(),
+    phone: z.string().nullish(),
+    phoneCountry: z
+      .string()
+      .nullish()
+      .refine((value) => (value ? isIn(value, getSupportedRegionCodes()) : true)),
+    message: z.string().max(500),
+  })
+  .refine(
+    (data) => {
+      if (!data.email && !data.phone) return false;
+
+      if (data.phone) {
+        if (!data.phoneCountry) return false;
+
+        if (!parsePhoneNumber(data.phone, { regionCode: data.phoneCountry }).valid) return false;
+      }
+
+      return true;
+    },
+    {
+      message: 'Valid email or phone is required',
+      path: ['email'],
+    }
+  )
+  .transform((data) => {
+    if (!data.phone || !data.phoneCountry) return data;
+
+    const phoneNumber = parsePhoneNumber(data.phone, { regionCode: data.phoneCountry });
+    if (!phoneNumber.valid) return data;
+
+    return { ...data, phone: phoneNumber.number.international };
+  });
+
+export type SurveyHelpRequest = z.infer<typeof surveyHelpRequest>;
+
+export const surveyRatingRequest = z.object({
+  type: z.enum(surveyRatings),
+  rating: z.number().min(1).max(5),
+  submissionId: z.string().uuid().optional(),
+  comment: z.string().max(500).nullish(),
+});
+
+export type SurveyRatingRequest = z.infer<typeof surveyRatingRequest>;

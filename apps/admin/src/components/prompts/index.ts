@@ -77,6 +77,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
+  'multi-prompt': {
+    tabs: [],
+    sections: [],
+  },
   // Standard
   'associated-foods-prompt': {
     tabs: [...tabs],

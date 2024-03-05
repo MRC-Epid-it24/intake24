@@ -29,6 +29,7 @@ export default () => {
         username: 'testRespondent',
         password: 'testRespondentPassword',
         survey: 'test-survey',
+        captcha: 'test-captcha',
       });
 
     const refreshToken = loginRes

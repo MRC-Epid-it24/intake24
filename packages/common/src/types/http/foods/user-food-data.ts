@@ -1,40 +1,47 @@
-import type { LocaleTranslation, PortionSizeMethodId } from '../..';
+import { z } from 'zod';
 
-// TODO: generic mapping from DB -> should use union of methods?
-export interface UserPortionSizeMethodParameters {
-  [name: string]: string;
-}
+import { localeTranslation, portionSizeMethods } from '@intake24/common/types';
 
-export interface UserPortionSizeMethod {
-  method: PortionSizeMethodId;
-  description: string;
-  imageUrl: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-  orderBy: string;
-  parameters: UserPortionSizeMethodParameters;
-}
+export const userPortionSizeMethodParameters = z.record(z.string());
 
-export type UserAssociatedFoodPrompt = {
-  foodCode?: string;
-  categoryCode?: string;
-  promptText: LocaleTranslation;
-  linkAsMain: boolean;
-  genericName: LocaleTranslation;
-  multiple: boolean;
-};
+export type UserPortionSizeMethodParameters = z.infer<typeof userPortionSizeMethodParameters>;
 
-export interface UserFoodData {
-  code: string;
-  englishName: string;
-  localName: string;
-  groupCode: string;
-  kcalPer100g: number;
-  reasonableAmount: number;
-  readyMealOption: boolean;
-  sameAsBeforeOption: boolean;
-  portionSizeMethods: UserPortionSizeMethod[];
-  associatedFoodPrompts: UserAssociatedFoodPrompt[];
-  brandNames: string[];
-  categories: string[];
-}
+export const userPortionSizeMethod = z.object({
+  method: z.enum(portionSizeMethods),
+  description: z.string(),
+  imageUrl: z.string(),
+  useForRecipes: z.boolean(),
+  conversionFactor: z.number(),
+  orderBy: z.string(),
+  parameters: userPortionSizeMethodParameters,
+});
+
+export type UserPortionSizeMethod = z.infer<typeof userPortionSizeMethod>;
+
+export const userAssociatedFoodPrompt = z.object({
+  foodCode: z.string().optional(),
+  categoryCode: z.string().optional(),
+  promptText: localeTranslation,
+  linkAsMain: z.boolean(),
+  genericName: localeTranslation,
+  multiple: z.boolean(),
+});
+
+export type UserAssociatedFoodPrompt = z.infer<typeof userAssociatedFoodPrompt>;
+
+export const userFoodData = z.object({
+  code: z.string(),
+  englishName: z.string(),
+  localName: z.string(),
+  groupCode: z.string(),
+  kcalPer100g: z.number(),
+  reasonableAmount: z.number(),
+  readyMealOption: z.boolean(),
+  sameAsBeforeOption: z.boolean(),
+  portionSizeMethods: userPortionSizeMethod.array(),
+  associatedFoodPrompts: userAssociatedFoodPrompt.array(),
+  brandNames: z.array(z.string()),
+  categories: z.array(z.string()),
+});
+
+export type UserFoodData = z.infer<typeof userFoodData>;

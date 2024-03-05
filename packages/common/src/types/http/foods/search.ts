@@ -1,12 +1,80 @@
-import type { CategoryHeader } from '@intake24/common/types/http';
+import { z } from 'zod';
 
-export interface FoodHeader {
-  code: string;
-  name: string;
-  searchTerm?: string | null;
-}
+import { searchSortingAlgorithms } from '@intake24/common/surveys';
+import { localeTranslation } from '@intake24/common/types';
 
-export interface FoodSearchResponse {
-  foods: FoodHeader[];
-  categories: CategoryHeader[];
-}
+import { paginationMeta } from '../generic';
+
+export const categoryHeader = z.object({
+  code: z.string(),
+  name: z.string(),
+});
+
+export type CategoryHeader = z.infer<typeof categoryHeader>;
+
+export const foodHeader = z.object({
+  code: z.string(),
+  name: z.string(),
+  searchTerm: z.string().nullish(),
+});
+
+export type FoodHeader = z.infer<typeof foodHeader>;
+
+export const foodSearchResponse = z.object({
+  foods: foodHeader.array(),
+  categories: categoryHeader.array(),
+});
+
+export type FoodSearchResponse = z.infer<typeof foodSearchResponse>;
+
+export const categoryContents = z.object({
+  header: categoryHeader,
+  foods: foodHeader.array(),
+  subcategories: categoryHeader.array(),
+});
+
+export type CategoryContents = z.infer<typeof categoryContents>;
+
+export const categorySearch = z.object({
+  data: foodHeader.array(),
+  meta: paginationMeta,
+});
+
+export type CategorySearch = z.infer<typeof categorySearch>;
+
+export const foodSearchQuery = z.object({
+  description: z.string().max(120),
+  previous: z.string().array().optional(),
+  limit: z.coerce.number().int().optional(),
+  rankingAlgorithm: z.enum(searchSortingAlgorithms).optional(),
+  matchScoreWeight: z.coerce.number().int().min(0).max(100).optional(),
+  recipe: z.string().optional(),
+  category: z.string().optional(),
+  hidden: z.string().optional(),
+});
+
+export type FoodSearchQuery = z.infer<typeof foodSearchQuery>;
+
+export const recipeFoodResponse = z.object({
+  code: z.string(),
+  name: z.string(),
+  localeId: z.string(),
+  recipeWord: z.string(),
+  synonyms: z.object({ synonyms: z.string() }).optional(),
+  steps: z
+    .array(
+      z.object({
+        code: z.string(),
+        name: localeTranslation,
+        description: localeTranslation,
+        order: z.number(),
+        localeId: z.string(),
+        categoryCode: z.string(),
+        repeatable: z.boolean(),
+        required: z.boolean(),
+      })
+    )
+    .optional(),
+});
+
+export type RecipeFoodResponse = z.infer<typeof recipeFoodResponse>;

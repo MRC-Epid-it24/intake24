@@ -33,6 +33,7 @@ describe('API', () => {
         survey: 'test-survey',
         username: 'testRespondent',
         password: 'testRespondentPassword',
+        captcha: 'test-captcha',
       }),
     ]);
 

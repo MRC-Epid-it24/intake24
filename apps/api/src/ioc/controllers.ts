@@ -5,26 +5,6 @@ import controllers from '@intake24/api/http/controllers';
 
 export default (container: AwilixContainer): void => {
   container.register({
-    authenticationController: asFunction(controllers.authentication),
-    passwordController: asFunction(controllers.password),
-    subscriptionController: asFunction(controllers.subscription),
-
-    userFeedbackController: asFunction(controllers.user.feedback),
-    userI18nController: asFunction(controllers.i18n),
-    userProfileController: asFunction(controllers.user.profile),
-    userPhysicalDataController: asFunction(controllers.user.physicalData),
-    userSubmissionsController: asFunction(controllers.user.submissions),
-
-    foodController: asFunction(controllers.food),
-    foodSearchController: asFunction(controllers.foodSearch),
-    portionSizeController: asFunction(controllers.portionSize),
-    categoriesController: asFunction(controllers.categories),
-    surveyController: asFunction(controllers.survey),
-    surveyRespondentController: asFunction(controllers.surveyRespondent),
-
-    // Feedback
-    feedbackController: asFunction(controllers.feedback),
-
     // Admin
     referenceController: asFunction(controllers.admin.reference),
 

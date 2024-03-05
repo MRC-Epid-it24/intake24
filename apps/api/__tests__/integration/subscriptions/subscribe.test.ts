@@ -6,7 +6,7 @@ export default () => {
   const url = '/api/subscriptions';
 
   it('should return 401 when no / invalid token', async () => {
-    await suite.sharedTests.assertMissingAuthentication('get', url);
+    await suite.sharedTests.assertMissingAuthentication('post', url);
   });
 
   it('should return 400 for missing input data', async () => {
@@ -33,7 +33,7 @@ export default () => {
 
     expect(status).toBe(400);
     expect(body).toContainAllKeys(['errors', 'message']);
-    expect(body.errors).toContainAllKeys(['subscription']);
+    expect(body.errors).toContainAllKeys(['subscription.expirationTime', 'subscription.keys']);
   });
 
   it('should return 201 and no content', async () => {
@@ -44,6 +44,7 @@ export default () => {
       .send({
         subscription: {
           endpoint: 'endpoint',
+          expirationTime: null,
           keys: {
             p256dh: 'p256dh',
             auth: 'auth',

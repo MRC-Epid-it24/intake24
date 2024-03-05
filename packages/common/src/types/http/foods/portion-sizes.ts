@@ -1,70 +1,93 @@
-import type {
-  DrinkwareScaleEntry,
-  DrinkwareScaleV2Entry,
-  DrinkwareSetEntry,
+import { z } from 'zod';
+
+import {
+  drinkwareScaleEntry,
+  drinkwareScaleV2Entry,
+  drinkwareSetEntry,
 } from '@intake24/common/types/http/admin';
-import type {
-  DrinkwareScaleAttributes,
-  DrinkwareVolumeSampleAttributes,
-  StandardUnitAttributes,
-} from '@intake24/db';
 
-import type { Dictionary, LocaleTranslation } from '../..';
+import { requiredLocaleTranslation } from '../..';
 
-export type AsServedImageResponse = {
-  mainImageUrl: string;
-  thumbnailUrl: string;
-  weight: number;
-};
+export const asServedImageResponse = z.object({
+  mainImageUrl: z.string(),
+  thumbnailUrl: z.string(),
+  weight: z.number(),
+});
 
-export type AsServedSetResponse = {
-  id: string;
-  description: string;
-  selectionImageUrl: string;
-  images: AsServedImageResponse[];
-};
+export type AsServedImageResponse = z.infer<typeof asServedImageResponse>;
 
-export type ImageMapObjectResponse = {
-  id: string;
-  description: string;
-  label: LocaleTranslation;
-  navigationIndex: number;
-  outlineCoordinates: number[];
-};
+export const asServedSetResponse = z.object({
+  id: z.string(),
+  description: z.string(),
+  selectionImageUrl: z.string(),
+  images: z.array(asServedImageResponse),
+});
 
-export type ImageMapResponse = {
-  id: string;
-  description: string;
-  baseImageUrl: string;
-  objects: ImageMapObjectResponse[];
-};
+export type AsServedSetResponse = z.infer<typeof asServedSetResponse>;
 
-export type GuideImageResponse = {
-  id: string;
-  description: string;
-  imageMap: ImageMapResponse;
-  objects: { [index: string]: { label: LocaleTranslation; weight: number } };
-};
+export const imageMapObjectResponse = z.object({
+  id: z.string(),
+  description: z.string(),
+  label: z.record(z.string().nullable()),
+  navigationIndex: z.number(),
+  outlineCoordinates: z.array(z.number()),
+});
 
-export type DrinkwareVolumeSampleResponse = Pick<
-  DrinkwareVolumeSampleAttributes,
-  'fill' | 'volume'
->;
+export type ImageMapObjectResponse = z.infer<typeof imageMapObjectResponse>;
+
+export const imageMapResponse = z.object({
+  id: z.string(),
+  description: z.string(),
+  baseImageUrl: z.string(),
+  objects: imageMapObjectResponse.array(),
+});
+
+export type ImageMapResponse = z.infer<typeof imageMapResponse>;
+
+export const guideImageResponse = z.object({
+  id: z.string(),
+  description: z.string(),
+  imageMap: imageMapResponse,
+  objects: z.record(z.object({ label: z.record(z.string().nullable()), weight: z.number() })),
+});
+
+export type GuideImageResponse = z.infer<typeof guideImageResponse>;
+
+export const drinkwareVolumeSampleResponse = z.object({
+  fill: z.number(),
+  volume: z.number(),
+});
+
+export type DrinkwareVolumeSampleResponse = z.infer<typeof drinkwareVolumeSampleResponse>;
 
 // Only send normalised volume samples to survey app
-export type DrinkwareScaleV2Response = Omit<DrinkwareScaleV2Entry, 'volumeSamples'>;
+export const drinkwareScaleV2Response = drinkwareScaleV2Entry.omit({ volumeSamples: true });
+export type DrinkwareScaleV2Response = z.infer<typeof drinkwareScaleV2Response>;
 
-export interface DrinkwareSetResponse extends Omit<DrinkwareSetEntry, 'description' | 'scales'> {
-  scales: (DrinkwareScaleEntry | DrinkwareScaleV2Response)[];
-}
+export const drinkwareSetResponse = drinkwareSetEntry
+  .omit({ description: true, scales: true })
+  .extend({
+    scales: z.union([drinkwareScaleEntry, drinkwareScaleV2Response]).array(),
+  });
 
-export type StandardUnitResponse = Pick<StandardUnitAttributes, 'id' | 'estimateIn' | 'howMany'>;
+export type DrinkwareSetResponse = z.infer<typeof drinkwareSetResponse>;
 
-export type WeightResponse = {
-  method: string;
-  description: string;
-  parameters: Dictionary;
-  imageUrl: string;
-  useForRecipes: boolean;
-  conversionFactor: number;
-};
+export const standardUnitResponse = z.object({
+  id: z.string(),
+  name: z.string(),
+  estimateIn: requiredLocaleTranslation,
+  howMany: requiredLocaleTranslation,
+});
+
+export type StandardUnitResponse = z.infer<typeof standardUnitResponse>;
+
+export const weightResponse = z.object({
+  method: z.literal('weight'),
+  description: z.string(),
+  parameters: z.record(z.any()),
+  imageUrl: z.string(),
+  useForRecipes: z.boolean(),
+  conversionFactor: z.number(),
+});
+
+export type WeightResponse = z.infer<typeof weightResponse>;

@@ -1,11 +1,7 @@
-import type { Dictionary, LocaleTranslation } from '@intake24/common/types';
-import type {
-  DrinkwareScaleAttributes,
-  DrinkwareScalesColumns,
-  DrinkwareSetAttributes,
-  DrinkwareSetsColumns,
-  Pagination,
-} from '@intake24/db';
+import { z } from 'zod';
+
+import type { DrinkwareSetAttributes, Pagination } from '@intake24/db';
+import { type Dictionary, type LocaleTranslation, localeTranslation } from '@intake24/common/types';
 
 export type CreateDrinkwareSetInput = {
   id: string;
@@ -29,25 +25,40 @@ export interface DrinkwareSetListEntry extends Pick<DrinkwareSetAttributes, 'id'
   imageUrl: string;
 }
 
-export interface DrinkwareScaleEntry
-  extends Omit<DrinkwareScalesColumns, 'id' | 'drinkwareSetId' | 'label' | 'choiceId'> {
-  version: 1;
-  choiceId: number;
-  label: LocaleTranslation;
-  volumeSamples: number[];
-}
-export interface DrinkwareScaleV2Entry {
-  version: 2;
-  choiceId: number;
-  label: LocaleTranslation;
-  outlineCoordinates: number[];
-  volumeSamples: number[];
-  volumeSamplesNormalised: number[];
-  baseImageUrl: string;
-}
+export const drinkwareScaleEntry = z.object({
+  baseImageUrl: z.string(),
+  emptyLevel: z.number(),
+  fullLevel: z.number(),
+  height: z.number(),
+  overlayImageUrl: z.string(),
+  width: z.number(),
+  version: z.literal(1),
+  choiceId: z.number(),
+  label: localeTranslation,
+  volumeSamples: z.array(z.number()),
+});
 
-export interface DrinkwareSetEntry extends DrinkwareSetsColumns {
-  scales: (DrinkwareScaleEntry | DrinkwareScaleV2Entry)[];
-}
+export type DrinkwareScaleEntry = z.infer<typeof drinkwareScaleEntry>;
+
+export const drinkwareScaleV2Entry = z.object({
+  version: z.literal(2),
+  choiceId: z.number(),
+  label: localeTranslation,
+  outlineCoordinates: z.array(z.number()),
+  volumeSamples: z.array(z.number()),
+  volumeSamplesNormalised: z.array(z.number()),
+  baseImageUrl: z.string(),
+});
+
+export type DrinkwareScaleV2Entry = z.infer<typeof drinkwareScaleV2Entry>;
+
+export const drinkwareSetEntry = z.object({
+  id: z.string(),
+  description: z.string(),
+  imageMapId: z.string(),
+  scales: z.union([drinkwareScaleEntry, drinkwareScaleV2Entry]).array(),
+});
+
+export type DrinkwareSetEntry = z.infer<typeof drinkwareSetEntry>;
 
 export type DrinkwareSetsResponse = Pagination<DrinkwareSetListEntry>;

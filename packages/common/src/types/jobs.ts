@@ -73,9 +73,9 @@ export type JobParams = {
     surveySlug: string;
     userId: string;
     name: string;
-    email: string;
-    phone: string;
-    phoneCountry: string;
+    email?: string | null;
+    phone?: string | null;
+    phoneCountry?: string | null;
     message: string;
   };
   SurveyNutrientsRecalculation: {

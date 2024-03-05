@@ -1,18 +1,53 @@
-import type { RequiredLocaleTranslation } from '../types';
-import type { Nutrient } from './shared';
+import { z } from 'zod';
+
 import { colors } from '../theme';
+import { requiredLocaleTranslation } from '../types';
+import { nutrient } from './shared';
 
-export type FeedbackMealChart = {
-  colors: string[];
-  nutrients: Nutrient[];
-};
+export const feedbackMealChart = z.object({
+  colors: z.array(z.string()),
+  nutrients: nutrient.array(),
+});
 
-export type BaseMealTableField = {
-  header: RequiredLocaleTranslation;
-  value: RequiredLocaleTranslation;
-};
+export type FeedbackMealChart = z.infer<typeof feedbackMealChart>;
 
-export type MealTableFields = {
+export const mealTableFieldTypes = ['standard', 'custom', 'nutrient'] as const;
+export type MealTableFieldType = (typeof mealTableFieldTypes)[number];
+export const mealTableFieldStandardIds = ['name', 'hours', 'minutes', 'time', 'duration'] as const;
+export type MealTableFieldId = (typeof mealTableFieldStandardIds)[number];
+
+export const baseMealTableField = z.object({
+  header: requiredLocaleTranslation,
+  value: requiredLocaleTranslation,
+});
+
+export type BaseMealTableField = z.infer<typeof baseMealTableField>;
+
+export const standardMealTableField = baseMealTableField.extend({
+  type: z.literal('standard'),
+  fieldId: z.enum(['name', 'hours', 'minutes', 'time', 'duration']),
+});
+
+export const customMealTableField = baseMealTableField.extend({
+  type: z.literal('custom'),
+  fieldId: z.string(),
+});
+
+export const nutrientMealTableField = baseMealTableField.extend({
+  type: z.literal('nutrient'),
+  fieldId: z.string(),
+  types: z.array(z.string()),
+});
+
+export const mealTableField = z.discriminatedUnion('type', [
+  standardMealTableField,
+  customMealTableField,
+  nutrientMealTableField,
+]);
+
+export type MealTableField = z.infer<typeof mealTableField>;
+
+/* export type MealTableFields = {
   standard: BaseMealTableField & {
     type: 'standard';
     fieldId: 'name' | 'hours' | 'minutes' | 'time' | 'duration';
@@ -25,27 +60,20 @@ export type MealTableFields = {
   };
 };
 
-export type MealTableField = MealTableFields[keyof MealTableFields];
-export type MealTableFieldType = MealTableFields[keyof MealTableFields]['type'];
-export type MealTableFieldId = MealTableFields[keyof MealTableFields]['fieldId'];
+export type MealTableField = MealTableFields[keyof MealTableFields]; */
 
-export const mealTableFieldTypes: MealTableFieldType[] = ['standard', 'custom', 'nutrient'];
-export const mealTableFieldStandardIds: MealTableFieldId[] = [
-  'name',
-  'hours',
-  'minutes',
-  'time',
-  'duration',
-];
+export const feedbackMealTable = z.object({
+  fields: z.array(mealTableField),
+});
 
-export type FeedbackMealTable = {
-  fields: MealTableField[];
-};
+export type FeedbackMealTable = z.infer<typeof feedbackMealTable>;
 
-export type FeedbackMeals = {
-  chart: FeedbackMealChart;
-  table: FeedbackMealTable;
-};
+export const feedbackMeals = z.object({
+  chart: feedbackMealChart,
+  table: feedbackMealTable,
+});
+
+export type FeedbackMeals = z.infer<typeof feedbackMeals>;
 
 export const defaultMeals: FeedbackMeals = {
   chart: {

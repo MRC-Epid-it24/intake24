@@ -1,4 +1,6 @@
-import type { RequiredLocaleTranslation } from '../types';
+import { z } from 'zod';
+
+import { localeTranslation } from '../types';
 
 export const feedbackTypes = ['default', 'playful'] as const;
 export type FeedbackType = (typeof feedbackTypes)[number];
@@ -27,10 +29,12 @@ export const nutrientRuleTypes = [
 ] as const;
 export type NutrientRuleType = (typeof nutrientRuleTypes)[number];
 
-export type Range = {
-  start: number;
-  end: number;
-};
+export const range = z.object({
+  start: z.number(),
+  end: z.number(),
+});
+
+export type Range = z.infer<typeof range>;
 
 export const sentiments = [
   'too_low',
@@ -50,11 +54,13 @@ export type Sex = (typeof sexes)[number];
 export const weightTargets = ['keep_weight', 'lose_weight', 'gain_weight'] as const;
 export type WeightTarget = (typeof weightTargets)[number];
 
-export type WeightTargetCoefficient = {
-  id: string;
-  name: string;
-  coefficient: number;
-};
+export const weightTargetCoefficients = z.object({
+  id: z.string(),
+  name: z.string(),
+  coefficient: z.number(),
+});
+
+export type WeightTargetCoefficient = z.infer<typeof weightTargetCoefficients>;
 
 export const weightTargetsData: WeightTargetCoefficient[] = [
   { id: 'keep_weight', name: 'Keep weight', coefficient: 0 },
@@ -62,7 +68,9 @@ export const weightTargetsData: WeightTargetCoefficient[] = [
   { id: 'gain_weight', name: 'Gain weight', coefficient: 500 },
 ];
 
-export type Nutrient = {
-  id: string[];
-  name: RequiredLocaleTranslation;
-};
+export const nutrient = z.object({
+  id: z.array(z.string()),
+  name: localeTranslation,
+});
+
+export type Nutrient = z.infer<typeof nutrient>;

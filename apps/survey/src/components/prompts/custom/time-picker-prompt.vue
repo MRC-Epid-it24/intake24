@@ -7,10 +7,10 @@
     <v-card-text class="pt-2 time-picker-prompt">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-time-picker
+          v-model="state"
           :format="prompt.format"
           full-width
           :landscape="$vuetify.breakpoint.smAndUp"
-          v-bind="state"
         ></v-time-picker>
         <v-messages v-show="hasErrors" v-model="errors" class="mt-3" color="error"></v-messages>
       </v-form>

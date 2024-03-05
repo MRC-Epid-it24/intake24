@@ -2,7 +2,7 @@ import { checkSchema } from 'express-validator';
 
 import { paginate } from '@intake24/api/http/requests/admin/generic';
 import { customTypeErrorMessage, validate } from '@intake24/api/http/requests/util';
-import { jobExists } from '@intake24/api/http/rules';
+import { isValidJob } from '@intake24/common/types';
 
 export default validate(
   checkSchema({
@@ -12,9 +12,9 @@ export default validate(
       optional: { options: { nullable: true } },
       custom: {
         options: async (value, meta): Promise<void> => {
-          if (typeof value === 'string' && jobExists(value)) return;
+          if (typeof value === 'string' && isValidJob(value)) return;
 
-          if (Array.isArray(value) && value.every((item) => jobExists(item))) return;
+          if (Array.isArray(value) && value.every((item) => isValidJob(item))) return;
 
           throw new Error(customTypeErrorMessage('exists._', meta));
         },

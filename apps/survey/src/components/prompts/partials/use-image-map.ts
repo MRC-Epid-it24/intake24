@@ -17,7 +17,7 @@ export const useImageMap = (props: UseImageMapProps, width: Ref<number>) => {
     props.imageMapData.objects.map((object) => ({
       id: object.id,
       polygon: chunk(
-        object.outline.map((coord) => coord * width.value),
+        object.outlineCoordinates.map((coord) => coord * width.value),
         2
       )
         .map((node) => node.join(','))

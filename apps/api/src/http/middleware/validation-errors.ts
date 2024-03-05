@@ -1,16 +1,22 @@
-import type { FieldValidationError, ValidationError } from 'express-validator';
+import type { RequestValidationError } from '@ts-rest/express';
+import type { NextFunction, Request, Response } from 'express';
 import type {
   AlternativeValidationError,
+  FieldValidationError,
   GroupedAlternativeValidationError,
   UnknownFieldsError,
-} from 'express-validator/src/base';
+  ValidationError,
+} from 'express-validator';
+import type { ZodError, ZodIssueCode } from 'zod';
+import type { ValidationError as ZodValidationError, ZodIssue } from 'zod-validation-error';
+import { fromZodError } from 'zod-validation-error';
 
 import type { I18nService } from '@intake24/api/services';
 import type { I18nParams } from '@intake24/i18n';
 
 export const standardErrorCodes = ['$unique', '$exists', '$restricted'] as const;
 
-export type StandardErrorCode = (typeof standardErrorCodes)[number];
+export type StandardErrorCode = (typeof standardErrorCodes)[number] | ZodIssueCode;
 
 export interface ExtendedFieldValidationError extends FieldValidationError {
   code: StandardErrorCode | null;
@@ -84,3 +90,51 @@ export function createExtendedValidationError(
       return error;
   }
 }
+
+export function formatZodIssueMessage(issue: ZodIssue, i18nService: I18nService) {
+  switch (issue.code) {
+    case 'invalid_type':
+      return i18nService.translate(`validation.types.${issue.expected}._`, {
+        attribute: i18nService.translate(`validation.attributes.${issue.path.join('.')}`),
+      });
+    default:
+      return issue.message;
+  }
+}
+
+export const requestValidationErrorHandler = (
+  err: RequestValidationError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { i18nService } = req.scope.cradle;
+  const errors: Record<string, ExtendedValidationError> = {};
+
+  let firstError: ZodValidationError;
+  ['pathParams', 'headers', 'query', 'body'].forEach((key) => {
+    const zKey = key as keyof typeof err;
+    if (!err[zKey]) return;
+
+    const error = fromZodError(err[zKey] as ZodError);
+    if (!firstError) firstError = error;
+
+    error.details.forEach((issue) => {
+      const path = issue.path.join('.');
+      errors[path] = {
+        type: 'field',
+        location: key as any,
+        code: issue.code,
+        msg: formatZodIssueMessage(issue, i18nService),
+        path,
+        value: null,
+      };
+    });
+  });
+
+  return res.status(400).json({
+    // name: firstError!.name,
+    message: firstError!.message,
+    errors,
+  });
+};

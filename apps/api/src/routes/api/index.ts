@@ -2,44 +2,22 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 
 import { registerI18nScope, registerIoC } from '@intake24/api/http/middleware';
+import { registerRouters } from '@intake24/api/http/routers';
 import ioc from '@intake24/api/ioc';
 
 import admin from './admin';
-import authentication from './authentication';
-import categories from './categories';
-import feedback from './feedback';
-import foods from './foods';
-import i18n from './i18n';
-import password from './password';
-import portionSizes from './portion-sizes';
-import subscriptions from './subscriptions';
-import surveys from './surveys';
-import user from './user';
 
 export default () => {
   const router = Router();
 
   router.use(registerIoC);
   router.use(registerI18nScope);
-
   router.use(ioc.cradle.rateLimiter.createMiddleware('generic'));
 
-  // Unauthenticated
-  router.use('/auth', authentication());
-  router.use('/password', password());
-  router.use('/i18n', i18n());
+  registerRouters(router);
 
   // Admin
   router.use('/admin', admin());
-
-  // Survey / User
-  router.use('/feedback', feedback());
-  router.use('/foods', foods());
-  router.use('/categories', categories());
-  router.use('/portion-sizes', portionSizes());
-  router.use('/subscriptions', subscriptions());
-  router.use('/surveys', surveys());
-  router.use('/user', user());
 
   router.all('*', (req: Request, res: Response): void => {
     res.status(404).json('Invalid route');

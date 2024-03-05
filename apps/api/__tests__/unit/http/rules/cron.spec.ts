@@ -1,4 +1,4 @@
-import { cron } from '@intake24/api/http/rules';
+import { cron } from '@intake24/common/rules';
 
 describe('cron rule', () => {
   it('should return true for valid cron', () => {

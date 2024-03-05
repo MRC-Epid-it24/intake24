@@ -4,8 +4,8 @@ import type {
   GenerateUserResponse,
   PublicSurveyEntry,
   SurveyEntryResponse,
-  SurveyRatingInput,
-  SurveyRequestHelpInput,
+  SurveyHelpRequest,
+  SurveyRatingRequest,
   SurveySubmissionResponse,
   SurveyUserInfoResponse,
   SurveyUserSessionResponse,
@@ -100,9 +100,9 @@ export default {
     return data;
   },
 
-  requestHelp: async (surveyId: string, payload: SurveyRequestHelpInput) =>
+  requestHelp: async (surveyId: string, payload: SurveyHelpRequest) =>
     http.post(`surveys/${surveyId}/request-help`, payload),
 
-  storeRating: async (surveyId: string, payload: SurveyRatingInput) =>
+  storeRating: async (surveyId: string, payload: SurveyRatingRequest) =>
     http.post(`surveys/${surveyId}/rating`, payload),
 };

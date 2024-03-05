@@ -9,7 +9,7 @@ import type { Prompts } from '@intake24/common/prompts';
 import type { JobParams, SurveyState } from '@intake24/common/types';
 import type {
   CreateUserResponse,
-  SurveyRatingInput,
+  SurveyRatingRequest,
   SurveyUserInfoResponse,
 } from '@intake24/common/types/http';
 import type { FindOptions, Includeable, SubmissionScope } from '@intake24/db';
@@ -378,7 +378,7 @@ const surveyService = ({
     await scheduler.jobs.addJob({ type: 'SurveyHelpRequestNotification', userId, params });
   };
 
-  const storeRating = async (slug: string, userId: string, payload: SurveyRatingInput) => {
+  const storeRating = async (slug: string, userId: string, payload: SurveyRatingRequest) => {
     const survey = await Survey.findBySlug(slug, { attributes: ['id'] });
     if (!survey) throw new NotFoundError();
 

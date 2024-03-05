@@ -6,7 +6,7 @@ export default () => {
   const url = '/api/password';
 
   it('should return 400 for missing input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['email', 'captcha'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['email'], {
       bearer: undefined,
     });
   });

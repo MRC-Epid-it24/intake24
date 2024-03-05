@@ -5,6 +5,8 @@ import axios from 'axios';
 import type { Captcha } from '@intake24/api/config';
 import type { CaptchaProvider } from '@intake24/common/security';
 
+import { ValidationError } from '../errors';
+
 export type CaptchaResponse = {
   success: boolean;
   // eslint-disable-next-line camelcase
@@ -48,7 +50,7 @@ const captchaProviders: Record<CaptchaProvider, CaptchaCallback> = {
   're-captcha': reCaptcha,
 };
 
-export default async (response: any, options: Captcha): Promise<void> => {
+export const captcha = async (response: string | undefined, options: Captcha): Promise<void> => {
   const { provider, secret } = options;
   if (!provider) return;
 
@@ -56,4 +58,16 @@ export default async (response: any, options: Captcha): Promise<void> => {
     throw new Error('Missing reCAPTCHA challenge response token.');
 
   await captchaProviders[provider](secret, response);
+};
+
+export default captcha;
+
+export const captchaCheck = async (token: string | undefined, options: Captcha) => {
+  try {
+    await captcha(token, options);
+  } catch (err) {
+    throw new ValidationError(err instanceof Error ? err.message : 'Invalid reCAPTCHA', {
+      path: 'captcha',
+    });
+  }
 };

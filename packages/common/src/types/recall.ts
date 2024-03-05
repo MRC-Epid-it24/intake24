@@ -98,7 +98,7 @@ export type PortionSizeParameters = {
       'units-count': string;
     };
   'direct-weight': never;
-  recipe: never;
+  'recipe-builder': never;
 };
 
 // Portion size states
@@ -233,7 +233,7 @@ export type RecipeBuilderLinkedFood = {
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
 
-export const portionSizeMethods: PortionSizeMethodId[] = [
+export const portionSizeMethods = [
   'as-served',
   'guide-image',
   'drink-scale',
@@ -245,7 +245,7 @@ export const portionSizeMethods: PortionSizeMethodId[] = [
   'milk-in-a-hot-drink',
   'direct-weight',
   'recipe-builder',
-];
+] as const;
 
 export interface AbstractFoodState {
   id: string;

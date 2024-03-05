@@ -90,7 +90,7 @@ import axios, { HttpStatusCode } from 'axios';
 import { defineComponent, ref, watch } from 'vue';
 
 import type { SurveyRating } from '@intake24/common/surveys';
-import type { SurveyRatingInput } from '@intake24/common/types/http';
+import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { Errors } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 
@@ -121,7 +121,7 @@ export default defineComponent({
     const errors = ref(new Errors());
     const sent = ref(false);
 
-    const createForm = (): SurveyRatingInput => ({
+    const createForm = (): SurveyRatingRequest => ({
       type: props.type,
       submissionId: props.submissionId,
       rating: 0,

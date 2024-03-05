@@ -1,11 +1,11 @@
-import type { SurveyRequestHelpInput } from '@intake24/common/types/http';
+import type { SurveyHelpRequest } from '@intake24/common/types/http';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRequestHelpInput;
+  let input: SurveyHelpRequest;
 
   beforeAll(async () => {
     url = `/api/surveys/${suite.data.system.survey.slug}/request-help`;
@@ -31,15 +31,15 @@ export default () => {
   });
 
   it('should return 400 for missing input data', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'message'], {
       bearer: 'respondent',
     });
   });
 
   it('should return 400 when both email and phone empty', async () => {
-    await suite.sharedTests.assertInvalidInput('post', url, ['name', 'email', 'phone'], {
+    await suite.sharedTests.assertInvalidInput('post', url, ['email'], {
       bearer: 'respondent',
-      input: { email: null, phone: null },
+      input: { name: 'John', message: 'Hello', email: null, phone: null },
     });
   });
 
@@ -47,7 +47,7 @@ export default () => {
     await suite.sharedTests.assertInvalidInput(
       'post',
       url,
-      ['name', 'email', 'phone', 'phoneCountry'],
+      ['name', 'message', 'email', 'phoneCountry'],
       {
         bearer: 'respondent',
         input: {

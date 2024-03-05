@@ -19,6 +19,7 @@ export default () => {
       username: 'testRespondent',
       password: 'invalidPassword',
       survey: 'test-survey',
+      captcha: 'test-captcha',
     });
 
     expect(status).toBe(401);
@@ -29,6 +30,7 @@ export default () => {
       username: 'testRespondent',
       password: 'testRespondentPassword',
       survey: 'test-survey',
+      captcha: 'test-captcha',
     });
 
     expect(res.status).toBe(200);

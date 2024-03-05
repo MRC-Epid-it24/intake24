@@ -238,6 +238,7 @@ export default class FeedbackScheme
 }
 
 export type FeedbackSchemeAttributes = Attributes<FeedbackScheme>;
+
 export type FeedbackSchemeCreationAttributes = CreationAttributes<FeedbackScheme>;
 
 export const updateFeedbackSchemeFields = [

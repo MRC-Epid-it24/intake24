@@ -6,7 +6,8 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { identifierSafeChars, unique } from '@intake24/api/http/rules';
+import { unique } from '@intake24/api/http/rules';
+import { identifierSafeChars } from '@intake24/common/rules';
 import { Survey } from '@intake24/db';
 
 import { defaults, surveySchemeOverrides } from './defaults';

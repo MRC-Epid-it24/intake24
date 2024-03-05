@@ -6,7 +6,7 @@ export default () => {
   const url = '/api/subscriptions';
 
   it('should return 401 when no / invalid token', async () => {
-    await suite.sharedTests.assertMissingAuthentication('get', url);
+    await suite.sharedTests.assertMissingAuthentication('delete', url);
   });
 
   it('should return 204 and no content', async () => {

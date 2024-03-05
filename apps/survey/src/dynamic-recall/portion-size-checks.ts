@@ -217,7 +217,7 @@ export const portionSizeCompleteChecks = {
   'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
   'standard-portion': standardPortionComplete,
-  recipe: recipeComplete,
+  'recipe-builder': recipeComplete,
 };
 
 export const portionSizeComplete = (food: FoodState): boolean => {

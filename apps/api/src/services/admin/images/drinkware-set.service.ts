@@ -1,7 +1,9 @@
+import path from 'node:path';
+
 import type { Expression, Kysely, SqlBool } from 'kysely';
 import { groupBy, mapValues } from 'lodash';
-import prompts from 'prompts';
 
+import type { UpdateDrinkwareSetInputWithFiles } from '@intake24/api/http/controllers';
 import type { IoC } from '@intake24/api/ioc';
 import type { LocaleTranslation } from '@intake24/common/types';
 import type {
@@ -10,16 +12,11 @@ import type {
   DrinkwareScaleV2Entry,
   DrinkwareSetEntry,
   DrinkwareSetsResponse,
-  UpdateDrinkwareSetInput,
 } from '@intake24/common/types/http/admin';
 import type { FoodsDB, PaginateQuery, ProcessedImage } from '@intake24/db';
 import { ApplicationError, NotFoundError } from '@intake24/api/http/errors';
 import { translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 import { DrinkwareSet, executeWithPagination } from '@intake24/db';
-import number = prompts.prompts.number;
-import path from 'node:path';
-
-import type { UpdateDrinkwareSetInputWithFiles } from '@intake24/api/http/controllers';
 
 const drinkwareSetService = ({
   kyselyDb,

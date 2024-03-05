@@ -19,15 +19,10 @@ import type {
   AdminUserProfileController,
   AsServedImageController,
   AsServedSetController,
-  AuthenticationController,
-  CategoriesController,
   DrinkwareSetController,
   DuoDeviceController,
-  FeedbackController,
   FeedbackSchemeController,
   FIDODeviceController,
-  FoodController,
-  FoodSearchController,
   GuideImageController,
   ImageMapController,
   JobController,
@@ -43,26 +38,15 @@ import type {
   NutrientTypeController,
   NutrientUnitController,
   OTPDeviceController,
-  PasswordController,
   PermissionController,
   PersonalAccessTokenController,
-  PortionSizeController,
   ReferenceController,
   RoleController,
   SignInLogController,
   StandardUnitController,
-  SubscriptionController,
-  SurveyController,
-  SurveyRespondentController,
   SurveySchemeController,
   SurveySchemePromptController,
   TaskController,
-  // User
-  UserFeedbackController,
-  UserI18nController,
-  UserPhysicalDataController,
-  UserProfileController,
-  UserSubmissionsController,
 } from '@intake24/api/http/controllers';
 import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
@@ -157,29 +141,6 @@ export interface IoC extends Jobs {
 
   // Authenticated / scoped user vars
   // user: TokenPayload;
-
-  // Controllers
-  authenticationController: AuthenticationController;
-  passwordController: PasswordController;
-  subscriptionController: SubscriptionController;
-
-  // User
-  userFeedbackController: UserFeedbackController;
-  userI18nController: UserI18nController;
-  userProfileController: UserProfileController;
-  userPhysicalDataController: UserPhysicalDataController;
-  userSubmissionsController: UserSubmissionsController;
-
-  // Survey controllers
-  foodController: FoodController;
-  categoriesController: CategoriesController;
-  foodSearchController: FoodSearchController;
-  portionSizeController: PortionSizeController;
-  surveyController: SurveyController;
-  surveyRespondentController: SurveyRespondentController;
-
-  // Feedback controllers
-  feedbackController: FeedbackController;
 
   // Admin controllers
   referenceController: ReferenceController;

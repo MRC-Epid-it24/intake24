@@ -1,6 +1,4 @@
-import { randomUUID } from 'crypto';
-
-import type { SurveyRatingInput } from '@intake24/common/types/http';
+import type { SurveyRatingRequest } from '@intake24/common/types/http';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { SurveySubmission } from '@intake24/db';
 
@@ -8,7 +6,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: SurveyRatingInput;
+  let input: SurveyRatingRequest;
 
   beforeAll(async () => {
     url = `/api/surveys/${suite.data.system.survey.slug}/rating`;
@@ -54,7 +52,7 @@ export default () => {
         input: {
           type: 'invalidType',
           rating: 'five',
-          submissionId: randomUUID(),
+          submissionId: 'not-an-uuid',
           comment: ['comment'],
         },
       }

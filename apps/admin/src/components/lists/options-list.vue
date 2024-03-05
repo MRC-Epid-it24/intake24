@@ -97,7 +97,7 @@ export default defineComponent({
   },
 
   computed: {
-    outputOptions(): ListOption[] {
+    outputOptions(): ListOption<string | number>[] {
       return this.currentOptions.map(({ label, value }) => ({ label, value }));
     },
     optionValueRules(): RuleCallback[] {

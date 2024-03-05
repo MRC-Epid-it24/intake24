@@ -3,8 +3,8 @@ import { body, query } from 'express-validator';
 
 import type { Ops } from '@intake24/api/app';
 import { errors } from '@intake24/api/http/middleware';
-import { createSanitizer } from '@intake24/api/http/rules';
 import routes from '@intake24/api/routes';
+import { createSanitizer } from '@intake24/common/rules';
 
 import authentication from './authentication';
 

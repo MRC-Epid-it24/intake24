@@ -1,4 +1,4 @@
-import { trimStrings } from '@intake24/api/http/rules';
+import { trimStrings } from '@intake24/common/rules';
 
 describe('Input trim string middleware', () => {
   it('should trim string and replace empty with nulls', () => {

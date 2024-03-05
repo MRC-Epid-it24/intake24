@@ -1,10 +1,14 @@
-import type { Nutrient } from './shared';
+import { z } from 'zod';
 
-export type TopFoods = {
-  max: number;
-  colors: string[];
-  nutrientTypes: Nutrient[];
-};
+import { nutrient } from './shared';
+
+export const topFoods = z.object({
+  max: z.number(),
+  colors: z.array(z.string()),
+  nutrientTypes: nutrient.array(),
+});
+
+export type TopFoods = z.infer<typeof topFoods>;
 
 export const defaultTopFoods: TopFoods = {
   max: 5,

@@ -21,7 +21,7 @@ describe('Captcha middleware', () => {
     expect.assertions(1);
 
     try {
-      await captcha(['not a string'], config);
+      await captcha(undefined, config);
     } catch (err) {
       expect(err).toBeInstanceOf(Error);
     }

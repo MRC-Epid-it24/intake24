@@ -95,7 +95,8 @@ export default defineComponent({
     const promptI18n = computed(() => translatePrompt(['minutes', 'confirm']));
 
     onMounted(() => {
-      if (typeof props.value === 'undefined') state.value = props.prompt.slider.current.value;
+      if (typeof props.value === 'undefined')
+        state.value = props.prompt.slider.current.value ?? props.prompt.slider.min.value ?? 0;
     });
 
     return { action, isValid, promptI18n, state, translate };

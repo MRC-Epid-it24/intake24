@@ -5,7 +5,8 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { identifierSafeChars, unique } from '@intake24/api/http/rules';
+import { unique } from '@intake24/api/http/rules';
+import { identifierSafeChars } from '@intake24/common/rules';
 import { DrinkwareSet, ImageMap } from '@intake24/db';
 
 import defaults from './defaults';

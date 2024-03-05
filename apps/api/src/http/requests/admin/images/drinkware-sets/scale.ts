@@ -7,7 +7,7 @@ import {
   typeErrorMessage,
   validate,
 } from '@intake24/api/http/requests/util';
-import { identifierSafeChars } from '@intake24/api/http/rules';
+import { identifierSafeChars } from '@intake24/common/rules';
 
 const validateJSON =
   (next: (value: any, meta: Meta) => boolean) =>

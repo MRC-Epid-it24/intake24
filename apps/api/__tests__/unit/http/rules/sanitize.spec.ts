@@ -1,4 +1,4 @@
-import { createSanitizer } from '@intake24/api/http/rules';
+import { createSanitizer } from '@intake24/common/rules';
 
 describe('Input sanitation middleware', () => {
   it('should sanitize/trim input, no HTML by default', () => {
