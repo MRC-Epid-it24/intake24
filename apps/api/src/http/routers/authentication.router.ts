@@ -7,14 +7,11 @@ import { UnauthorizedError } from '@intake24/api/http/errors';
 import ioc from '@intake24/api/ioc';
 import { contract } from '@intake24/common/contracts';
 
-import { captchaCheck } from '../rules';
-
 export const authentication = () => {
   const loginRateLimiter = ioc.cradle.rateLimiter.createMiddleware('login', {
     message: 'Too many failed login attempts, please try again later.',
     skipSuccessfulRequests: true,
   });
-  const captchaConfig = ioc.cradle.servicesConfig.captcha;
 
   const attachRefreshToken = (tokens: Tokens, res: Response, cookie: CookieSettings) => {
     const { refreshToken } = tokens;
@@ -28,7 +25,6 @@ export const authentication = () => {
       middleware: [loginRateLimiter],
       handler: async ({ body, req, res }) => {
         const { email, password, survey, captcha } = body;
-        await captchaCheck(captcha, captchaConfig);
 
         const result = await req.scope.cradle.authenticationService.emailLogin(
           { email, password, survey, captcha },
@@ -44,7 +40,6 @@ export const authentication = () => {
       middleware: [loginRateLimiter],
       handler: async ({ body, req, res }) => {
         const { username, password, survey, captcha } = body;
-        await captchaCheck(captcha, captchaConfig);
 
         const result = await req.scope.cradle.authenticationService.aliasLogin(
           { username, password, survey, captcha },
@@ -60,9 +55,6 @@ export const authentication = () => {
       middleware: [loginRateLimiter],
       handler: async ({ body, req, res }) => {
         const { token, captcha } = body;
-        await captchaCheck(captcha, captchaConfig);
-
-        // if (typeof token !== 'string' || !token) throw new UnauthorizedError();
 
         const result = await req.scope.cradle.authenticationService.tokenLogin(
           { token, captcha },
