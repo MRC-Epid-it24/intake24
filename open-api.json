@@ -1,0 +1,4258 @@
+{
+  "openapi": "3.0.2",
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Survey login with email and password",
+        "tags": [
+          "default",
+          "public",
+          "authentication"
+        ],
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "survey": {
+                    "type": "string"
+                  },
+                  "captcha": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "survey"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "accessToken"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "surveyId": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "captcha"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "surveyId",
+                        "provider"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login/alias": {
+      "post": {
+        "summary": "Survey login with alias and password",
+        "tags": [
+          "default",
+          "public",
+          "authentication"
+        ],
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "survey": {
+                    "type": "string"
+                  },
+                  "captcha": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password",
+                  "survey"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "accessToken"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "surveyId": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "captcha"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "surveyId",
+                        "provider"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login/token": {
+      "post": {
+        "summary": "Survey login with token",
+        "tags": [
+          "default",
+          "public",
+          "authentication"
+        ],
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "captcha": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "accessToken"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "surveyId": {
+                          "type": "string"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "captcha"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "surveyId",
+                        "provider"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "summary": "Refresh survey token",
+        "tags": [
+          "default",
+          "public",
+          "authentication"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "accessToken"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout from survey",
+        "tags": [
+          "default",
+          "public",
+          "authentication"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/i18n": {
+      "get": {
+        "summary": "Browse languages",
+        "tags": [
+          "default",
+          "public",
+          "i18n"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "englishName": {
+                        "type": "string"
+                      },
+                      "localName": {
+                        "type": "string"
+                      },
+                      "countryFlagCode": {
+                        "type": "string"
+                      },
+                      "textDirection": {
+                        "type": "string",
+                        "enum": [
+                          "ltr",
+                          "rtl"
+                        ]
+                      },
+                      "messages": {
+                        "type": "object",
+                        "properties": {}
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "englishName",
+                      "localName",
+                      "countryFlagCode",
+                      "textDirection"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/i18n/{languageId}": {
+      "get": {
+        "summary": "Get a language by id",
+        "tags": [
+          "default",
+          "public",
+          "i18n"
+        ],
+        "parameters": [
+          {
+            "name": "languageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "app",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "admin",
+                "survey"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "englishName": {
+                      "type": "string"
+                    },
+                    "localName": {
+                      "type": "string"
+                    },
+                    "countryFlagCode": {
+                      "type": "string"
+                    },
+                    "textDirection": {
+                      "type": "string",
+                      "enum": [
+                        "ltr",
+                        "rtl"
+                      ]
+                    },
+                    "messages": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "englishName",
+                    "localName",
+                    "countryFlagCode",
+                    "textDirection"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password": {
+      "post": {
+        "summary": "Request a password reset",
+        "tags": [
+          "default",
+          "public",
+          "password"
+        ],
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "captcha": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password/reset": {
+      "post": {
+        "summary": "Reset a password",
+        "tags": [
+          "default",
+          "public",
+          "password"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "passwordConfirm": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "token": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "password",
+                  "passwordConfirm",
+                  "email",
+                  "token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys": {
+      "get": {
+        "summary": "Browse public surveys",
+        "tags": [
+          "default",
+          "public",
+          "survey"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "localeId": {
+                        "type": "string"
+                      },
+                      "originatingUrl": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "supportEmail": {
+                        "type": "string"
+                      },
+                      "openAccess": {
+                        "type": "boolean"
+                      },
+                      "authCaptcha": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "slug",
+                      "name",
+                      "localeId",
+                      "originatingUrl",
+                      "supportEmail",
+                      "openAccess",
+                      "authCaptcha"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}": {
+      "get": {
+        "summary": "Get survey entry",
+        "tags": [
+          "default",
+          "public",
+          "survey"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "survey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "localeId": {
+                      "type": "string"
+                    },
+                    "originatingUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "supportEmail": {
+                      "type": "string"
+                    },
+                    "openAccess": {
+                      "type": "boolean"
+                    },
+                    "authCaptcha": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "slug",
+                    "name",
+                    "localeId",
+                    "originatingUrl",
+                    "supportEmail",
+                    "openAccess",
+                    "authCaptcha"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/generate-user": {
+      "post": {
+        "summary": "Generate user for survey public survey",
+        "tags": [
+          "default",
+          "public",
+          "survey"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "captcha": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "username",
+                    "password"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/create-user": {
+      "post": {
+        "summary": "Create user for survey survey using JWT encoded parameters",
+        "tags": [
+          "default",
+          "public",
+          "survey"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "token"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "authToken": {
+                      "type": "string"
+                    },
+                    "redirectUrl": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "username",
+                    "authToken"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "get": {
+        "summary": "Feedback data",
+        "tags": [
+          "default",
+          "feedback"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nutrientTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "unit": {
+                            "type": "string"
+                          },
+                          "kcalPerUnit": {
+                            "type": "number",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "unit",
+                          "kcalPerUnit"
+                        ]
+                      }
+                    },
+                    "physicalActivityLevels": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "coefficient": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "coefficient"
+                        ]
+                      }
+                    },
+                    "weightTargets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "coefficient": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "coefficient"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "nutrientTypes",
+                    "physicalActivityLevels",
+                    "weightTargets"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{localeId}": {
+      "get": {
+        "summary": "Root category contents",
+        "tags": [
+          "default",
+          "category"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "header": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "name"
+                      ]
+                    },
+                    "foods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "subcategories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "header",
+                    "foods",
+                    "subcategories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{localeId}/{code}": {
+      "get": {
+        "summary": "Category contents",
+        "tags": [
+          "default",
+          "category"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "header": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "name"
+                      ]
+                    },
+                    "foods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "subcategories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "header",
+                    "foods",
+                    "subcategories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{localeId}/{code}/{search}": {
+      "get": {
+        "summary": "Browse category contents",
+        "tags": [
+          "default",
+          "category"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 128
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number"
+                        },
+                        "lastPage": {
+                          "type": "number"
+                        },
+                        "page": {
+                          "type": "number"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "limit": {
+                          "type": "number"
+                        },
+                        "to": {
+                          "type": "number"
+                        },
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "from",
+                        "lastPage",
+                        "page",
+                        "path",
+                        "limit",
+                        "to",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/foods/{localeId}": {
+      "get": {
+        "summary": "Food search",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 120
+            }
+          },
+          {
+            "name": "previous",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          },
+          {
+            "name": "rankingAlgorithm",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "popularity",
+                "globalPop",
+                "fixed"
+              ]
+            }
+          },
+          {
+            "name": "matchScoreWeight",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "nullable": true
+            }
+          },
+          {
+            "name": "recipe",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hidden",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "foods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "searchTerm": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "foods",
+                    "categories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/foods/{localeId}/recipe-food": {
+      "get": {
+        "summary": "Recipe food",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "localeId": {
+                      "type": "string"
+                    },
+                    "recipeWord": {
+                      "type": "string"
+                    },
+                    "synonyms": {
+                      "type": "object",
+                      "properties": {
+                        "synonyms": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "synonyms"
+                      ]
+                    },
+                    "steps": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "description": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "order": {
+                            "type": "number"
+                          },
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "categoryCode": {
+                            "type": "string"
+                          },
+                          "repeatable": {
+                            "type": "boolean"
+                          },
+                          "required": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name",
+                          "description",
+                          "order",
+                          "localeId",
+                          "categoryCode",
+                          "repeatable",
+                          "required"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "localeId",
+                    "recipeWord"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/foods/{localeId}/{code}": {
+      "get": {
+        "summary": "Food entry",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "englishName": {
+                      "type": "string"
+                    },
+                    "localName": {
+                      "type": "string"
+                    },
+                    "groupCode": {
+                      "type": "string"
+                    },
+                    "kcalPer100g": {
+                      "type": "number"
+                    },
+                    "reasonableAmount": {
+                      "type": "number"
+                    },
+                    "readyMealOption": {
+                      "type": "boolean"
+                    },
+                    "sameAsBeforeOption": {
+                      "type": "boolean"
+                    },
+                    "portionSizeMethods": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "type": "string",
+                            "enum": [
+                              "as-served",
+                              "guide-image",
+                              "drink-scale",
+                              "standard-portion",
+                              "cereal",
+                              "milk-on-cereal",
+                              "parent-food-portion",
+                              "pizza",
+                              "milk-in-a-hot-drink",
+                              "direct-weight",
+                              "recipe-builder"
+                            ]
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          },
+                          "useForRecipes": {
+                            "type": "boolean"
+                          },
+                          "conversionFactor": {
+                            "type": "number"
+                          },
+                          "orderBy": {
+                            "type": "string"
+                          },
+                          "parameters": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "description",
+                          "imageUrl",
+                          "useForRecipes",
+                          "conversionFactor",
+                          "orderBy",
+                          "parameters"
+                        ]
+                      }
+                    },
+                    "associatedFoodPrompts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "foodCode": {
+                            "type": "string"
+                          },
+                          "categoryCode": {
+                            "type": "string"
+                          },
+                          "promptText": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "linkAsMain": {
+                            "type": "boolean"
+                          },
+                          "genericName": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "multiple": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "promptText",
+                          "linkAsMain",
+                          "genericName",
+                          "multiple"
+                        ]
+                      }
+                    },
+                    "brandNames": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "englishName",
+                    "localName",
+                    "groupCode",
+                    "kcalPer100g",
+                    "reasonableAmount",
+                    "readyMealOption",
+                    "sameAsBeforeOption",
+                    "portionSizeMethods",
+                    "associatedFoodPrompts",
+                    "brandNames",
+                    "categories"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/foods/{localeId}/{code}/categories": {
+      "get": {
+        "summary": "Food categories",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions": {
+      "post": {
+        "summary": "Subscribe to push notification",
+        "tags": [
+          "default",
+          "subscription"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "subscription": {
+                    "type": "object",
+                    "properties": {
+                      "endpoint": {
+                        "type": "string"
+                      },
+                      "expirationTime": {
+                        "oneOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          {
+                            "type": "string",
+                            "format": "null",
+                            "nullable": true
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "keys": {
+                        "type": "object",
+                        "properties": {
+                          "p256dh": {
+                            "type": "string"
+                          },
+                          "auth": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "p256dh",
+                          "auth"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "endpoint",
+                      "expirationTime",
+                      "keys"
+                    ]
+                  }
+                },
+                "required": [
+                  "subscription"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Unsubscribe from push notification",
+        "tags": [
+          "default",
+          "subscription"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/push": {
+      "post": {
+        "summary": "Trigger push notification",
+        "tags": [
+          "default",
+          "subscription"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/feedback": {
+      "get": {
+        "summary": "Download user feedback as PDF file",
+        "tags": [
+          "default",
+          "user",
+          "feedback"
+        ],
+        "parameters": [
+          {
+            "name": "survey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissions",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Email user feedback as PDF file attachment",
+        "tags": [
+          "default",
+          "user",
+          "feedback"
+        ],
+        "parameters": [
+          {
+            "name": "survey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissions",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "emailConfirm": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": [
+                  "email",
+                  "emailConfirm"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/password": {
+      "post": {
+        "summary": "Update user password",
+        "tags": [
+          "default",
+          "user",
+          "profile"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "passwordConfirm": {
+                    "type": "string"
+                  },
+                  "passwordCurrent": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "password",
+                  "passwordConfirm",
+                  "passwordCurrent"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/physical-data": {
+      "get": {
+        "summary": "Get user physical data",
+        "tags": [
+          "default",
+          "user",
+          "profile"
+        ],
+        "parameters": [
+          {
+            "name": "survey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "enum": [
+                        "f",
+                        "m"
+                      ],
+                      "nullable": true
+                    },
+                    "weightKg": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 300,
+                      "nullable": true
+                    },
+                    "heightCm": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 300,
+                      "nullable": true
+                    },
+                    "birthdate": {
+                      "type": "number",
+                      "minimum": 1874,
+                      "maximum": 2024,
+                      "nullable": true
+                    },
+                    "physicalActivityLevelId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "weightTarget": {
+                      "type": "string",
+                      "enum": [
+                        "keep_weight",
+                        "lose_weight",
+                        "gain_weight"
+                      ],
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "sex",
+                    "weightKg",
+                    "heightCm",
+                    "birthdate",
+                    "physicalActivityLevelId",
+                    "weightTarget"
+                  ],
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Set user physical data",
+        "tags": [
+          "default",
+          "user",
+          "profile"
+        ],
+        "parameters": [
+          {
+            "name": "survey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sex": {
+                    "type": "string",
+                    "enum": [
+                      "f",
+                      "m"
+                    ],
+                    "nullable": true
+                  },
+                  "weightKg": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 300,
+                    "nullable": true
+                  },
+                  "heightCm": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 300,
+                    "nullable": true
+                  },
+                  "birthdate": {
+                    "type": "number",
+                    "minimum": 1874,
+                    "maximum": 2024,
+                    "nullable": true
+                  },
+                  "physicalActivityLevelId": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "weightTarget": {
+                    "type": "string",
+                    "enum": [
+                      "keep_weight",
+                      "lose_weight",
+                      "gain_weight"
+                    ],
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "sex",
+                  "weightKg",
+                  "heightCm",
+                  "birthdate",
+                  "physicalActivityLevelId",
+                  "weightTarget"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "sex": {
+                      "type": "string",
+                      "enum": [
+                        "f",
+                        "m"
+                      ],
+                      "nullable": true
+                    },
+                    "weightKg": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 300,
+                      "nullable": true
+                    },
+                    "heightCm": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 300,
+                      "nullable": true
+                    },
+                    "birthdate": {
+                      "type": "number",
+                      "minimum": 1874,
+                      "maximum": 2024,
+                      "nullable": true
+                    },
+                    "physicalActivityLevelId": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "weightTarget": {
+                      "type": "string",
+                      "enum": [
+                        "keep_weight",
+                        "lose_weight",
+                        "gain_weight"
+                      ],
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "sex",
+                    "weightKg",
+                    "heightCm",
+                    "birthdate",
+                    "physicalActivityLevelId",
+                    "weightTarget"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/submissions": {
+      "get": {
+        "summary": "Get user submissions",
+        "tags": [
+          "default",
+          "user",
+          "profile"
+        ],
+        "parameters": [
+          {
+            "name": "survey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/as-served-sets": {
+      "get": {
+        "summary": "Get multiple as served sets",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "selectionImageUrl": {
+                        "type": "string"
+                      },
+                      "images": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "mainImageUrl": {
+                              "type": "string"
+                            },
+                            "thumbnailUrl": {
+                              "type": "string"
+                            },
+                            "weight": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "mainImageUrl",
+                            "thumbnailUrl",
+                            "weight"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "description",
+                      "selectionImageUrl",
+                      "images"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/as-served-sets/{id}": {
+      "get": {
+        "summary": "Get single as served set",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "selectionImageUrl": {
+                      "type": "string"
+                    },
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "mainImageUrl": {
+                            "type": "string"
+                          },
+                          "thumbnailUrl": {
+                            "type": "string"
+                          },
+                          "weight": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "mainImageUrl",
+                          "thumbnailUrl",
+                          "weight"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "selectionImageUrl",
+                    "images"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/drinkware-sets": {
+      "get": {
+        "summary": "Get multiple drinkware sets",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "imageMapId": {
+                        "type": "string"
+                      },
+                      "scales": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "baseImageUrl": {
+                                  "type": "string"
+                                },
+                                "emptyLevel": {
+                                  "type": "number"
+                                },
+                                "fullLevel": {
+                                  "type": "number"
+                                },
+                                "height": {
+                                  "type": "number"
+                                },
+                                "overlayImageUrl": {
+                                  "type": "string"
+                                },
+                                "width": {
+                                  "type": "number"
+                                },
+                                "version": {
+                                  "type": "number",
+                                  "enum": [
+                                    1
+                                  ]
+                                },
+                                "choiceId": {
+                                  "type": "number"
+                                },
+                                "label": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "volumeSamples": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "baseImageUrl",
+                                "emptyLevel",
+                                "fullLevel",
+                                "height",
+                                "overlayImageUrl",
+                                "width",
+                                "version",
+                                "choiceId",
+                                "label",
+                                "volumeSamples"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "version": {
+                                  "type": "number",
+                                  "enum": [
+                                    2
+                                  ]
+                                },
+                                "choiceId": {
+                                  "type": "number"
+                                },
+                                "label": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "outlineCoordinates": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                },
+                                "volumeSamplesNormalised": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                },
+                                "baseImageUrl": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "version",
+                                "choiceId",
+                                "label",
+                                "outlineCoordinates",
+                                "volumeSamplesNormalised",
+                                "baseImageUrl"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "imageMapId",
+                      "scales"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/drinkware-sets/{id}": {
+      "get": {
+        "summary": "Get single drinkware set",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "imageMapId": {
+                      "type": "string"
+                    },
+                    "scales": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "baseImageUrl": {
+                                "type": "string"
+                              },
+                              "emptyLevel": {
+                                "type": "number"
+                              },
+                              "fullLevel": {
+                                "type": "number"
+                              },
+                              "height": {
+                                "type": "number"
+                              },
+                              "overlayImageUrl": {
+                                "type": "string"
+                              },
+                              "width": {
+                                "type": "number"
+                              },
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  1
+                                ]
+                              },
+                              "choiceId": {
+                                "type": "number"
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "volumeSamples": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "required": [
+                              "baseImageUrl",
+                              "emptyLevel",
+                              "fullLevel",
+                              "height",
+                              "overlayImageUrl",
+                              "width",
+                              "version",
+                              "choiceId",
+                              "label",
+                              "volumeSamples"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "type": "number",
+                                "enum": [
+                                  2
+                                ]
+                              },
+                              "choiceId": {
+                                "type": "number"
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "outlineCoordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              },
+                              "volumeSamplesNormalised": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              },
+                              "baseImageUrl": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "choiceId",
+                              "label",
+                              "outlineCoordinates",
+                              "volumeSamplesNormalised",
+                              "baseImageUrl"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "imageMapId",
+                    "scales"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/guide-images": {
+      "get": {
+        "summary": "Get multiple guide images",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "imageMap": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "baseImageUrl": {
+                            "type": "string"
+                          },
+                          "objects": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "navigationIndex": {
+                                  "type": "number"
+                                },
+                                "outlineCoordinates": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "description",
+                                "label",
+                                "navigationIndex",
+                                "outlineCoordinates"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "baseImageUrl",
+                          "objects"
+                        ]
+                      },
+                      "objects": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "object",
+                          "properties": {
+                            "label": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "weight": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "label",
+                            "weight"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "description",
+                      "imageMap",
+                      "objects"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/guide-images/{id}": {
+      "get": {
+        "summary": "Get single guide image",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "imageMap": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "baseImageUrl": {
+                          "type": "string"
+                        },
+                        "objects": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "navigationIndex": {
+                                "type": "number"
+                              },
+                              "outlineCoordinates": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "description",
+                              "label",
+                              "navigationIndex",
+                              "outlineCoordinates"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "description",
+                        "baseImageUrl",
+                        "objects"
+                      ]
+                    },
+                    "objects": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "weight": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "label",
+                          "weight"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "imageMap",
+                    "objects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/image-maps": {
+      "get": {
+        "summary": "Get multiple image maps",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "baseImageUrl": {
+                        "type": "string"
+                      },
+                      "objects": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "navigationIndex": {
+                              "type": "number"
+                            },
+                            "outlineCoordinates": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "description",
+                            "label",
+                            "navigationIndex",
+                            "outlineCoordinates"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "description",
+                      "baseImageUrl",
+                      "objects"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/image-maps/{id}": {
+      "get": {
+        "summary": "Get single image map",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "baseImageUrl": {
+                      "type": "string"
+                    },
+                    "objects": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "navigationIndex": {
+                            "type": "number"
+                          },
+                          "outlineCoordinates": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "label",
+                          "navigationIndex",
+                          "outlineCoordinates"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "description",
+                    "baseImageUrl",
+                    "objects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/standard-units": {
+      "get": {
+        "summary": "Get multiple standard units",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "estimateIn": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
+                      },
+                      "howMany": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "en": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "en"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "estimateIn",
+                      "howMany"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/standard-units/{id}": {
+      "get": {
+        "summary": "Get single standard unit",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "estimateIn": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "en": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "en"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      ]
+                    },
+                    "howMany": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "en": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "en"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "estimateIn",
+                    "howMany"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portion-sizes/weight": {
+      "get": {
+        "summary": "Get weight",
+        "tags": [
+          "default",
+          "portionSize"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "enum": [
+                        "weight"
+                      ]
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "nullable": true
+                      }
+                    },
+                    "imageUrl": {
+                      "type": "string"
+                    },
+                    "useForRecipes": {
+                      "type": "boolean"
+                    },
+                    "conversionFactor": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "method",
+                    "description",
+                    "parameters",
+                    "imageUrl",
+                    "useForRecipes",
+                    "conversionFactor"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/parameters": {
+      "get": {
+        "summary": "Get survey parameters",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string",
+                      "enum": [
+                        "notStarted",
+                        "active",
+                        "suspended",
+                        "completed"
+                      ]
+                    },
+                    "locale": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "code"
+                      ]
+                    },
+                    "surveyScheme": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default"
+                          ]
+                        },
+                        "meals": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "allOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "en": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "en"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                ]
+                              },
+                              "time": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "time"
+                            ]
+                          }
+                        },
+                        "prompts": {
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "meals"
+                      ]
+                    },
+                    "feedbackScheme": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "default",
+                            "playful"
+                          ]
+                        },
+                        "sections": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "cards",
+                              "meals",
+                              "topFoods",
+                              "rating"
+                            ]
+                          }
+                        },
+                        "outputs": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "download",
+                              "email",
+                              "print"
+                            ]
+                          }
+                        },
+                        "physicalDataFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "sex",
+                              "weightKg",
+                              "heightCm",
+                              "physicalActivityLevelId",
+                              "birthdate",
+                              "weightTarget"
+                            ]
+                          }
+                        },
+                        "visibility": {
+                          "type": "string"
+                        },
+                        "topFoods": {
+                          "type": "object",
+                          "properties": {
+                            "max": {
+                              "type": "number"
+                            },
+                            "colors": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "nutrientTypes": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "name": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "max",
+                            "colors",
+                            "nutrientTypes"
+                          ]
+                        },
+                        "meals": {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        "cards": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        },
+                        "demographicGroups": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        },
+                        "henryCoefficients": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "sex": {
+                                "type": "string",
+                                "enum": [
+                                  "f",
+                                  "m"
+                                ]
+                              },
+                              "age": {
+                                "type": "object",
+                                "properties": {
+                                  "start": {
+                                    "type": "number"
+                                  },
+                                  "end": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "start",
+                                  "end"
+                                ]
+                              },
+                              "weightCoefficient": {
+                                "type": "number"
+                              },
+                              "heightCoefficient": {
+                                "type": "number"
+                              },
+                              "constant": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "sex",
+                              "age",
+                              "weightCoefficient",
+                              "heightCoefficient",
+                              "constant"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "type",
+                        "sections",
+                        "outputs",
+                        "physicalDataFields",
+                        "visibility",
+                        "topFoods",
+                        "meals",
+                        "cards",
+                        "demographicGroups",
+                        "henryCoefficients"
+                      ]
+                    },
+                    "numberOfSubmissionsForFeedback": {
+                      "type": "number"
+                    },
+                    "storeUserSessionOnServer": {
+                      "type": "boolean"
+                    },
+                    "suspensionReason": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "searchSortingAlgorithm": {
+                      "type": "string",
+                      "enum": [
+                        "popularity",
+                        "globalPop",
+                        "fixed"
+                      ]
+                    },
+                    "searchMatchScoreWeight": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "slug",
+                    "name",
+                    "state",
+                    "locale",
+                    "surveyScheme",
+                    "numberOfSubmissionsForFeedback",
+                    "storeUserSessionOnServer",
+                    "suspensionReason",
+                    "searchSortingAlgorithm",
+                    "searchMatchScoreWeight"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/user-info": {
+      "get": {
+        "summary": "Get user info for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tzOffset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "submissions": {
+                      "type": "number"
+                    },
+                    "showFeedback": {
+                      "type": "boolean"
+                    },
+                    "maximumTotalSubmissionsReached": {
+                      "type": "boolean"
+                    },
+                    "maximumDailySubmissionsReached": {
+                      "type": "boolean"
+                    },
+                    "followUpUrl": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "name",
+                    "submissions",
+                    "showFeedback",
+                    "maximumTotalSubmissionsReached",
+                    "maximumDailySubmissionsReached"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/session": {
+      "get": {
+        "summary": "Get user session for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "surveyId": {
+                      "type": "string"
+                    },
+                    "sessionData": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "surveyId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Set user session for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sessionData": {}
+                },
+                "required": [
+                  "sessionData"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "surveyId": {
+                      "type": "string"
+                    },
+                    "sessionData": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "surveyId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Clear user session for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/request-help": {
+      "post": {
+        "summary": "Request help for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "nullable": true
+                  },
+                  "phone": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "phoneCountry": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "message": {
+                    "type": "string",
+                    "maxLength": 500
+                  }
+                },
+                "required": [
+                  "name",
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/rating": {
+      "post": {
+        "summary": "Send rating for survey",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "recall",
+                      "feedback"
+                    ]
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "submissionId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "type",
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/surveys/{slug}/submission": {
+      "post": {
+        "summary": "Submit survey recall",
+        "tags": [
+          "default",
+          "surveyRespondent"
+        ],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tzOffset",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "submission": {}
+                },
+                "required": [
+                  "submission"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "submissions": {
+                      "type": "number"
+                    },
+                    "showFeedback": {
+                      "type": "boolean"
+                    },
+                    "maximumTotalSubmissionsReached": {
+                      "type": "boolean"
+                    },
+                    "maximumDailySubmissionsReached": {
+                      "type": "boolean"
+                    },
+                    "followUpUrl": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "submission": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "submissionTime": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "submissionTime"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "userId",
+                    "name",
+                    "submissions",
+                    "showFeedback",
+                    "maximumTotalSubmissionsReached",
+                    "maximumDailySubmissionsReached",
+                    "submission"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "Intake24 API Reference",
+    "description": "Dietary recall system",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://opensource.org/license/apache-2-0"
+    },
+    "version": "2024.1.0"
+  }
+}
