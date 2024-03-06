@@ -29,3 +29,5 @@ export const contract = c.router({
   portionSize,
   surveyRespondent,
 });
+
+export default contract;

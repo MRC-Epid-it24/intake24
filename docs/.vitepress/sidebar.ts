@@ -159,6 +159,11 @@ export const sidebar = {
           link: '/api/',
         },
         {
+          text: 'API Reference',
+          link: '/open-api.html',
+          target: '_blank',
+        },
+        {
           text: 'Authentication',
           link: '/api/authentication',
         },

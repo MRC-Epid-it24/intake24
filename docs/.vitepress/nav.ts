@@ -12,7 +12,7 @@ export const nav = [
       { text: 'Survey App', link: '/survey/' },
       { text: 'CLI', link: '/cli/' },
       // { text: 'Portal', link: '/portal/' },
-      { text: 'Data Dictionary', link: '/data-dictionary/' },
+      // { text: 'Data Dictionary', link: '/data-dictionary/' },
     ],
   },
   {
