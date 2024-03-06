@@ -23,7 +23,7 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
   const commitPromptAnswer = (prompt: Prompt, answer?: CustomPromptAnswer) => {
     const promptId = prompt.id;
     const isInfo = isInfoPrompt(prompt);
-    const isValidAnswer = answer && (!isInfo || answer !== 'next');
+    const isValidAnswer = answer !== undefined && (!isInfo || answer !== 'next');
 
     if (survey.selection.element) {
       switch (survey.selection.element.type) {
