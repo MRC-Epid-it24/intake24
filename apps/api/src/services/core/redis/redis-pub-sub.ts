@@ -1,5 +1,3 @@
-import Redis from 'ioredis';
-
 import type { IoC } from '@intake24/api/ioc';
 
 import HasRedisClient from './redis-store';

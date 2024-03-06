@@ -62,7 +62,7 @@ const sharedTests = (suite: typeof Suite) => {
     const call = request(suite.app)[method](url).set('Accept', 'application/json');
 
     if (bearer) call.set('Authorization', suite.bearer[bearer]);
-    const { status, body } = await call.send(input);
+    const { status } = await call.send(input);
 
     expect(status).toBe(code);
   };

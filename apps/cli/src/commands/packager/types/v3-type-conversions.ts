@@ -21,7 +21,6 @@ import type {
 } from '@intake24/cli/commands/packager/types/categories';
 import type {
   PkgDrinkScaleV1,
-  PkgDrinkScaleV2,
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
 import type {

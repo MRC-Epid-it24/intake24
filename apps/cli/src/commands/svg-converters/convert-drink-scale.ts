@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import parseCsv from 'csv-parser';
 import fs from 'fs/promises';
-import { groupBy, keys, maxBy } from 'lodash';
+import { groupBy } from 'lodash';
 
 import type { PkgDrinkScaleV2 } from '@intake24/cli/commands/packager/types/drinkware';
 import type {
@@ -12,7 +12,6 @@ import type {
   PkgImageMapObject,
 } from '@intake24/cli/commands/packager/types/image-map';
 import type { ImageMapData } from '@intake24/svg-utils';
-import { PkgConstants } from '@intake24/cli/commands/packager/constants';
 import { PackageWriter } from '@intake24/cli/commands/packager/package-writer';
 import { logger as mainLogger } from '@intake24/common-backend/services/logger';
 import { getDrinkScaleOutline, getImageMapData } from '@intake24/svg-utils';

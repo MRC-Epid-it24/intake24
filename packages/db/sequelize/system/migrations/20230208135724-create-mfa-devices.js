@@ -127,7 +127,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.dropTable('mfa_authenticators', { transaction });
       await queryInterface.dropTable('mfa_devices', { transaction });

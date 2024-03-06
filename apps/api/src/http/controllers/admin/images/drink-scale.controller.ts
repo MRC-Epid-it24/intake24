@@ -1,12 +1,10 @@
 import type { Request, Response } from 'express';
 import { HttpStatusCode } from 'axios';
-import { format } from 'date-fns';
-import { body } from 'express-validator';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { DrinkwareScaleEntry, DrinkwareScaleV2Entry } from '@intake24/common/types/http/admin';
-import type { PaginateQuery, User } from '@intake24/db';
-import { ApplicationError, NotFoundError, ValidationError } from '@intake24/api/http/errors';
+import type { PaginateQuery } from '@intake24/db';
+import { NotFoundError, ValidationError } from '@intake24/api/http/errors';
 
 const drinkScaleController = ({ drinkwareSetService }: Pick<IoC, 'drinkwareSetService'>) => {
   const browse = async (

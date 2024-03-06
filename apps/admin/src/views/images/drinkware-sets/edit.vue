@@ -163,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import { map, mapValues } from 'lodash';
+import { mapValues } from 'lodash';
 import { computed, defineComponent, onUnmounted, ref, watch } from 'vue';
 
 import type { LocaleTranslation } from '@intake24/common/types';

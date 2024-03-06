@@ -1,9 +1,7 @@
 import fs from 'fs/promises';
-import { outputFile } from 'fs-extra';
 import { merge } from 'lodash';
 import path from 'path';
 
-import type { ApiClientV3 } from '@intake24/api-client-v3';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type { PkgGlobalCategory } from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';

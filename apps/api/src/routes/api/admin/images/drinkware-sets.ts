@@ -4,7 +4,6 @@ import multer from 'multer';
 import { permission } from '@intake24/api/http/middleware';
 import validation from '@intake24/api/http/requests/admin/images/drinkware-sets';
 import parseBaseImages from '@intake24/api/http/requests/admin/images/drinkware-sets/parse-base-images';
-import upload from '@intake24/api/http/requests/admin/surveys/respondents/upload';
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
 import bodyJsonField from '@intake24/api/util/body-json-field';

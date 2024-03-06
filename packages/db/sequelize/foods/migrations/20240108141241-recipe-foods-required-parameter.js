@@ -9,7 +9,7 @@ module.exports = {
       );
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeColumn('recipe_foods_steps', 'required', { transaction });
     }),

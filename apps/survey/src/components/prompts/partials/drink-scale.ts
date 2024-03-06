@@ -1,5 +1,3 @@
-import { maxBy } from 'lodash';
-
 /**
  * Liquid volume estimation using linear interpolation between two nearest volume samples.
  *

@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       const { QueryTypes } = queryInterface.sequelize;
 

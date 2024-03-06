@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.sequelize.query(
         `update permissions set "name" = replace("name", '-list', '-browse'), display_name = replace(display_name, 'List', 'Browse')

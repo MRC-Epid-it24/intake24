@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { HttpStatusCode } from 'axios';
 import { pick } from 'lodash';
 import { col, fn, literal } from 'sequelize';
 

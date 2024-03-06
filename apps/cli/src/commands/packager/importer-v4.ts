@@ -12,7 +12,6 @@ import type {
 } from '@intake24/cli/commands/packager/types/as-served';
 import type {
   PkgDrinkScale,
-  PkgDrinkScaleV1,
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';

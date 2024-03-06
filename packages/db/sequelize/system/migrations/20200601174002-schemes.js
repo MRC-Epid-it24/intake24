@@ -73,7 +73,7 @@ module.exports = {
       });
     }),
 
-  down: (queryInterface, Sequelize) =>
+  down: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       await queryInterface.removeConstraint('surveys', 'surveys_scheme_id_schemes_fk', {
         transaction,

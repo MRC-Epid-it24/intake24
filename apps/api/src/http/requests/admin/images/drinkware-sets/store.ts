@@ -25,7 +25,7 @@ export default validate(
         errorMessage: typeErrorMessage('safeChars._'),
       },
       custom: {
-        options: async (value, meta): Promise<void> => {
+        options: async (value): Promise<void> => {
           if (!(await unique({ model: DrinkwareSet, condition: { field: 'id', value } })))
             throw new Error('$unique');
         },

@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: (queryInterface) =>
     queryInterface.sequelize.transaction(async (transaction) => {
       queryInterface.sequelize.query(
         `UPDATE permissions SET name = 'survey-schemes|prompts', display_name = 'Survey scheme prompts' WHERE name = 'survey-schemes|questions';`,

@@ -9,7 +9,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.removeColumn('locales', 'food_index_language_backend_id');
   },
 };
