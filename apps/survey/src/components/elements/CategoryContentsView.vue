@@ -42,7 +42,13 @@
       class="py-4"
       :class="categoriesFirst ? 'order-first' : 'order-last'"
     >
-      <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
+      <v-alert
+        border="left"
+        class="smaller-padding"
+        color="primary lighten-4 mb-0"
+        icon="fas fa-bell"
+        rounded="lg"
+      >
         {{ i18n.refine }}
       </v-alert>
     </div>
@@ -86,3 +92,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.smaller-padding {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+</style>
