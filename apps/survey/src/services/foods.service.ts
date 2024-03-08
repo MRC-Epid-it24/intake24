@@ -30,9 +30,7 @@ export default {
   },
 
   getRecipeFood: async (localeId: string, code: string): Promise<RecipeFood> => {
-    const { data } = await http.get<RecipeFood>(`foods/${localeId}/recipe-food`, {
-      params: { code },
-    });
+    const { data } = await http.get<RecipeFood>(`foods/${localeId}/${code}/recipe-food`);
     return data;
   },
 };

@@ -18,17 +18,6 @@ export const food = initContract().router({
     },
     summary: 'Food search',
   },
-  recipeFood: {
-    method: 'GET',
-    path: '/foods/:localeId/recipe-food',
-    query: z.object({
-      code: z.string(),
-    }),
-    responses: {
-      200: recipeFoodResponse,
-    },
-    summary: 'Recipe food',
-  },
   entry: {
     method: 'GET',
     path: '/foods/:localeId/:code',
@@ -36,6 +25,14 @@ export const food = initContract().router({
       200: userFoodData,
     },
     summary: 'Food entry',
+  },
+  recipeFood: {
+    method: 'GET',
+    path: '/foods/:localeId/:code/recipe-food',
+    responses: {
+      200: recipeFoodResponse,
+    },
+    summary: 'Recipe food',
   },
   categories: {
     method: 'GET',

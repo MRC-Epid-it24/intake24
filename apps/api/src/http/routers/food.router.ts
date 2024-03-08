@@ -85,9 +85,8 @@ export const food = () => {
 
       return { status: 200, body: withFilteredIngredients };
     },
-    recipeFood: async ({ params, query }) => {
-      const { localeId } = params;
-      const { code } = query;
+    recipeFood: async ({ params }) => {
+      const { code, localeId } = params;
       // TODO: implement via the food index by adding a new query type and a message handling/switching between message types
       const result = await foodIndex.getRecipeFood(localeId, code);
 
