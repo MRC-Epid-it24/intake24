@@ -3,7 +3,8 @@
   "paths": {
     "/auth/login": {
       "post": {
-        "summary": "Survey login with email and password",
+        "description": "Survey participant login with email and password.",
+        "summary": "Email & password login",
         "tags": [
           "default",
           "public",
@@ -35,7 +36,8 @@
                     "type": "string"
                   },
                   "captcha": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Captcha token if enabled on system and survey level"
                   }
                 },
                 "required": [
@@ -93,7 +95,8 @@
     },
     "/auth/login/alias": {
       "post": {
-        "summary": "Survey login with alias and password",
+        "description": "Survey participant login with alias and password.",
+        "summary": "Alias & password login",
         "tags": [
           "default",
           "public",
@@ -125,7 +128,8 @@
                     "type": "string"
                   },
                   "captcha": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Captcha token if enabled on system and survey level"
                   }
                 },
                 "required": [
@@ -183,7 +187,8 @@
     },
     "/auth/login/token": {
       "post": {
-        "summary": "Survey login with token",
+        "description": "Survey participant login with unique URL token.",
+        "summary": "URL Token login",
         "tags": [
           "default",
           "public",
@@ -209,7 +214,8 @@
                     "type": "string"
                   },
                   "captcha": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Captcha token if enabled on system and survey level"
                   }
                 },
                 "required": [
@@ -265,7 +271,8 @@
     },
     "/auth/refresh": {
       "post": {
-        "summary": "Refresh survey token",
+        "description": "Refresh access token using refresh token. API server expects refresh token sent as cookie. Cookie name can differ based on API server configuration.",
+        "summary": "Refresh access token",
         "tags": [
           "default",
           "public",
@@ -296,6 +303,7 @@
     },
     "/auth/logout": {
       "post": {
+        "description": "Clears cookie which stores refresh token and revokes refresh token.",
         "summary": "Logout from survey",
         "tags": [
           "default",
@@ -317,6 +325,7 @@
     },
     "/i18n": {
       "get": {
+        "description": "Fetch list of available languages for front-ends.",
         "summary": "Browse languages",
         "tags": [
           "default",
@@ -375,7 +384,8 @@
     },
     "/i18n/{languageId}": {
       "get": {
-        "summary": "Get a language by id",
+        "description": "Get language entry and available translations.",
+        "summary": "Get language entry",
         "tags": [
           "default",
           "public",
@@ -451,7 +461,8 @@
     },
     "/password": {
       "post": {
-        "summary": "Request a password reset",
+        "description": "Request a password reset token to be sent by email. If captcha-protection activated, a captcha token has to be sent to validate the request.",
+        "summary": "Password request",
         "tags": [
           "default",
           "public",
@@ -478,7 +489,8 @@
                     "format": "email"
                   },
                   "captcha": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Captcha token if enabled on system level"
                   }
                 },
                 "required": [
@@ -502,7 +514,8 @@
     },
     "/password/reset": {
       "post": {
-        "summary": "Reset a password",
+        "description": "Reset password using a token sent by email.",
+        "summary": "Password reset",
         "tags": [
           "default",
           "public",
@@ -554,7 +567,8 @@
     },
     "/surveys": {
       "get": {
-        "summary": "Browse public surveys",
+        "description": "Publicly accessible survey list. Returns list of public surveys.",
+        "summary": "Browse surveys",
         "tags": [
           "default",
           "public",
@@ -617,6 +631,7 @@
     },
     "/surveys/{slug}": {
       "get": {
+        "description": "Returns survey parameters necessary to render the survey login page such as the language settings and the support e-mail.",
         "summary": "Get survey entry",
         "tags": [
           "default",
@@ -693,7 +708,8 @@
     },
     "/surveys/{slug}/generate-user": {
       "post": {
-        "summary": "Generate user for survey public survey",
+        "description": "Generate user for survey public survey. Automatically create a new user account with a respondent role and random credentials if allowed by the survey settings.",
+        "summary": "Generate user",
         "tags": [
           "default",
           "public",
@@ -717,7 +733,8 @@
                 "type": "object",
                 "properties": {
                   "captcha": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Captcha token if enabled on system level"
                   }
                 }
               }
@@ -752,7 +769,8 @@
     },
     "/surveys/{slug}/create-user": {
       "post": {
-        "summary": "Create user for survey survey using JWT encoded parameters",
+        "description": "Create user for survey survey using JWT encoded parameters. Payload must be a valid JWT token signed with secret set up in survey settings.",
+        "summary": "Create user",
         "tags": [
           "default",
           "public",
@@ -821,6 +839,7 @@
     },
     "/feedback": {
       "get": {
+        "description": "Get reference data for feedback.",
         "summary": "Feedback data",
         "tags": [
           "default",
@@ -921,6 +940,7 @@
     },
     "/categories/{localeId}": {
       "get": {
+        "description": "Get the list of root categories & foods for the \"browse all foods\" options.",
         "summary": "Root category contents",
         "tags": [
           "default",
@@ -1014,6 +1034,7 @@
     },
     "/categories/{localeId}/{code}": {
       "get": {
+        "description": "Get the category contents, i.e. foods and subcategories listed under the given category.",
         "summary": "Category contents",
         "tags": [
           "default",
@@ -1115,6 +1136,7 @@
     },
     "/categories/{localeId}/{code}/{search}": {
       "get": {
+        "description": "Browse and search category contents for foods and subcategories listed under the given category.",
         "summary": "Browse category contents",
         "tags": [
           "default",
@@ -1261,6 +1283,7 @@
     },
     "/foods/{localeId}": {
       "get": {
+        "description": "Returns a list of foods from the food database that match the description.",
         "summary": "Food search",
         "tags": [
           "default",
@@ -1406,128 +1429,9 @@
         }
       }
     },
-    "/foods/{localeId}/recipe-food": {
-      "get": {
-        "summary": "Recipe food",
-        "tags": [
-          "default",
-          "food"
-        ],
-        "parameters": [
-          {
-            "name": "localeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "code",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "localeId": {
-                      "type": "string"
-                    },
-                    "recipeWord": {
-                      "type": "string"
-                    },
-                    "synonyms": {
-                      "type": "object",
-                      "properties": {
-                        "synonyms": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "synonyms"
-                      ]
-                    },
-                    "steps": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "code": {
-                            "type": "string"
-                          },
-                          "name": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "description": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "string",
-                              "nullable": true
-                            }
-                          },
-                          "order": {
-                            "type": "number"
-                          },
-                          "localeId": {
-                            "type": "string"
-                          },
-                          "categoryCode": {
-                            "type": "string"
-                          },
-                          "repeatable": {
-                            "type": "boolean"
-                          },
-                          "required": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": [
-                          "code",
-                          "name",
-                          "description",
-                          "order",
-                          "localeId",
-                          "categoryCode",
-                          "repeatable",
-                          "required"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "name",
-                    "localeId",
-                    "recipeWord"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/foods/{localeId}/{code}": {
       "get": {
+        "description": "Get portion size estimation options, associated foods and related data for a food from the database.",
         "summary": "Food entry",
         "tags": [
           "default",
@@ -1711,8 +1615,130 @@
         }
       }
     },
+    "/foods/{localeId}/{code}/recipe-food": {
+      "get": {
+        "description": "Get the recipe food data for a food if any.",
+        "summary": "Recipe food",
+        "tags": [
+          "default",
+          "food"
+        ],
+        "parameters": [
+          {
+            "name": "localeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "localeId": {
+                      "type": "string"
+                    },
+                    "recipeWord": {
+                      "type": "string"
+                    },
+                    "synonyms": {
+                      "type": "object",
+                      "properties": {
+                        "synonyms": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "synonyms"
+                      ]
+                    },
+                    "steps": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "description": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "order": {
+                            "type": "number"
+                          },
+                          "localeId": {
+                            "type": "string"
+                          },
+                          "categoryCode": {
+                            "type": "string"
+                          },
+                          "repeatable": {
+                            "type": "boolean"
+                          },
+                          "required": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "name",
+                          "description",
+                          "order",
+                          "localeId",
+                          "categoryCode",
+                          "repeatable",
+                          "required"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "name",
+                    "localeId",
+                    "recipeWord"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/foods/{localeId}/{code}/categories": {
       "get": {
+        "description": "Get the list of categories for a food.",
         "summary": "Food categories",
         "tags": [
           "default",
@@ -1755,6 +1781,7 @@
     },
     "/subscriptions": {
       "post": {
+        "description": "Subscribe user to receive web-push notifications. It expects the subscription object produced by Web API PushManager",
         "summary": "Subscribe to push notification",
         "tags": [
           "default",
@@ -1833,6 +1860,7 @@
         }
       },
       "delete": {
+        "description": "Unsubscribe user from receiving web-push notifications.",
         "summary": "Unsubscribe from push notification",
         "tags": [
           "default",
@@ -1853,7 +1881,8 @@
     },
     "/subscriptions/push": {
       "post": {
-        "summary": "Trigger push notification",
+        "description": "Send test push notification to user.",
+        "summary": "Ping push",
         "tags": [
           "default",
           "subscription"
@@ -1873,7 +1902,8 @@
     },
     "/user/feedback": {
       "get": {
-        "summary": "Download user feedback as PDF file",
+        "description": "Download feedback as PDF. Returns stream as application/pdf.",
+        "summary": "Download feedback",
         "tags": [
           "default",
           "user",
@@ -1913,7 +1943,8 @@
         }
       },
       "post": {
-        "summary": "Email user feedback as PDF file attachment",
+        "description": "Email user feedback as PDF file attachment",
+        "summary": "Email feedback",
         "tags": [
           "default",
           "user",
@@ -1977,7 +2008,8 @@
     },
     "/user/password": {
       "post": {
-        "summary": "Update user password",
+        "description": "Update user password",
+        "summary": "Update password",
         "tags": [
           "default",
           "user",
@@ -2024,7 +2056,8 @@
     },
     "/user/physical-data": {
       "get": {
-        "summary": "Get user physical data",
+        "description": "Get user physical data for feedback and survey recall calculations.",
+        "summary": "Get physical data",
         "tags": [
           "default",
           "user",
@@ -2107,7 +2140,8 @@
         }
       },
       "post": {
-        "summary": "Set user physical data",
+        "description": "Set user physical data for feedback and survey recall calculations.",
+        "summary": "Set physical data",
         "tags": [
           "default",
           "user",
@@ -2250,7 +2284,8 @@
     },
     "/user/submissions": {
       "get": {
-        "summary": "Get user submissions",
+        "description": "Get user submissions for selected surveys.",
+        "summary": "User submissions",
         "tags": [
           "default",
           "user",
@@ -2293,7 +2328,8 @@
     },
     "/portion-sizes/as-served-sets": {
       "get": {
-        "summary": "Get multiple as served sets",
+        "description": "Get as served image definitions for the given as served sets.",
+        "summary": "Multiple as served sets",
         "tags": [
           "default",
           "portionSize"
@@ -2376,7 +2412,8 @@
     },
     "/portion-sizes/as-served-sets/{id}": {
       "get": {
-        "summary": "Get single as served set",
+        "description": "Get as served image definitions for the given as served set.",
+        "summary": "Single as served set",
         "tags": [
           "default",
           "portionSize"
@@ -2446,7 +2483,8 @@
     },
     "/portion-sizes/drinkware-sets": {
       "get": {
-        "summary": "Get multiple drinkware sets",
+        "description": "Get the definition of \"sliding scale\" which is the portion size estimation for hot and cold drinks.",
+        "summary": "Multiple drinkware sets",
         "tags": [
           "default",
           "portionSize"
@@ -2611,7 +2649,8 @@
     },
     "/portion-sizes/drinkware-sets/{id}": {
       "get": {
-        "summary": "Get single drinkware set",
+        "description": "Get the definition of \"sliding scale\" which is the portion size estimation for hot and cold drinks.",
+        "summary": "Single drinkware set",
         "tags": [
           "default",
           "portionSize"
@@ -2763,7 +2802,8 @@
     },
     "/portion-sizes/guide-images": {
       "get": {
-        "summary": "Get multiple guide images",
+        "description": "Get definition of an image map which is an image of multiple objects from which one can be selected. Every object has an associated weight that is used for portion size weight calculations.",
+        "summary": "Multiple guide images",
         "tags": [
           "default",
           "portionSize"
@@ -2900,7 +2940,8 @@
     },
     "/portion-sizes/guide-images/{id}": {
       "get": {
-        "summary": "Get single guide image",
+        "description": "Get definition of an image map which is an image of multiple objects from which one can be selected. Every object has an associated weight that is used for portion size weight calculations.",
+        "summary": "Single guide image",
         "tags": [
           "default",
           "portionSize"
@@ -3024,7 +3065,8 @@
     },
     "/portion-sizes/image-maps": {
       "get": {
-        "summary": "Get multiple image maps",
+        "description": "Returns an image map definition similar to guide images, but without the associated weights. Used for selecting objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes whose final weight also depends on pizza thickness and type.",
+        "summary": "Multiple image maps",
         "tags": [
           "default",
           "portionSize"
@@ -3122,7 +3164,8 @@
     },
     "/portion-sizes/image-maps/{id}": {
       "get": {
-        "summary": "Get single image map",
+        "description": "Returns an image map definition similar to guide images, but without the associated weights. Used for selecting objects from images where the object is not directly associated with a weight, e.g. selecting pizza slice sizes whose final weight also depends on pizza thickness and type.",
+        "summary": "Single image map",
         "tags": [
           "default",
           "portionSize"
@@ -3207,7 +3250,8 @@
     },
     "/portion-sizes/standard-units": {
       "get": {
-        "summary": "Get multiple standard units",
+        "description": "Get definitions for the given standard units.",
+        "summary": "Multiple standard units",
         "tags": [
           "default",
           "portionSize"
@@ -3309,7 +3353,8 @@
     },
     "/portion-sizes/standard-units/{id}": {
       "get": {
-        "summary": "Get single standard unit",
+        "description": "Get definitions for the given standard units.",
+        "summary": "Single standard unit",
         "tags": [
           "default",
           "portionSize"
@@ -3398,6 +3443,7 @@
     },
     "/portion-sizes/weight": {
       "get": {
+        "description": "Dummy endpoint for manual weight entry estimation method. The method has no parameters and this request is needed to get the image URL for the portion size option selection screen.",
         "summary": "Get weight",
         "tags": [
           "default",
@@ -3454,7 +3500,8 @@
     },
     "/surveys/{slug}/parameters": {
       "get": {
-        "summary": "Get survey parameters",
+        "description": "Returns survey parameters such as the scheme ID, current status, custom HTML content etc.",
+        "summary": "Survey parameters",
         "tags": [
           "default",
           "surveyRespondent"
@@ -3797,7 +3844,8 @@
     },
     "/surveys/{slug}/user-info": {
       "get": {
-        "summary": "Get user info for survey",
+        "description": "Returns a subset of personal data for the current user that is relevant to the recall application.",
+        "summary": "User info",
         "tags": [
           "default",
           "surveyRespondent"
@@ -3814,6 +3862,7 @@
           {
             "name": "tzOffset",
             "in": "query",
+            "description": "Timezone offset in minutes",
             "required": true,
             "schema": {
               "type": "number",
@@ -3830,27 +3879,34 @@
                   "type": "object",
                   "properties": {
                     "userId": {
-                      "type": "string"
+                      "type": "string",
+                      "title": "Internal (numerical) Intake24 user ID"
                     },
                     "name": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "title": "Optional user name for personalization"
                     },
                     "submissions": {
-                      "type": "number"
+                      "type": "number",
+                      "description": "Number of collected submissions"
                     },
                     "showFeedback": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether to show feedback"
                     },
                     "maximumTotalSubmissionsReached": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the user has reached the maximum number of submissions"
                     },
                     "maximumDailySubmissionsReached": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the user has reached the maximum number of submissions per day"
                     },
                     "followUpUrl": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Optional follow-up URL for user redirect"
                     }
                   },
                   "required": [
@@ -3870,7 +3926,8 @@
     },
     "/surveys/{slug}/session": {
       "get": {
-        "summary": "Get user session for survey",
+        "description": "Get survey user session (current recall state), if any. Functionality is controlled by survey settings.",
+        "summary": "Get user session",
         "tags": [
           "default",
           "surveyRespondent"
@@ -3914,7 +3971,8 @@
         }
       },
       "post": {
-        "summary": "Set user session for survey",
+        "description": "Save survey user session (current recall state) on server. Functionality is controlled by survey settings.",
+        "summary": "Set user session",
         "tags": [
           "default",
           "surveyRespondent"
@@ -3974,7 +4032,8 @@
         }
       },
       "delete": {
-        "summary": "Clear user session for survey",
+        "description": "Clear survey user session (current recall state) on server. Functionality is controlled by survey settings.",
+        "summary": "Clear user session",
         "tags": [
           "default",
           "surveyRespondent"
@@ -4003,7 +4062,8 @@
     },
     "/surveys/{slug}/request-help": {
       "post": {
-        "summary": "Request help for survey",
+        "description": "Notify people having survey support role or survey support email to give the respondent a call to help them complete their recall.",
+        "summary": "Request help",
         "tags": [
           "default",
           "surveyRespondent"
@@ -4068,7 +4128,8 @@
     },
     "/surveys/{slug}/rating": {
       "post": {
-        "summary": "Send rating for survey",
+        "description": "Submit 5-start rating about the survey recall experience.",
+        "summary": "Send rating",
         "tags": [
           "default",
           "surveyRespondent"
@@ -4134,7 +4195,8 @@
     },
     "/surveys/{slug}/submission": {
       "post": {
-        "summary": "Submit survey recall",
+        "description": "Submit recall data to the server.",
+        "summary": "Submit recall",
         "tags": [
           "default",
           "surveyRespondent"
@@ -4158,6 +4220,7 @@
           {
             "name": "tzOffset",
             "in": "query",
+            "description": "Timezone offset in minutes",
             "required": true,
             "schema": {
               "type": "number",
@@ -4190,27 +4253,34 @@
                   "type": "object",
                   "properties": {
                     "userId": {
-                      "type": "string"
+                      "type": "string",
+                      "title": "Internal (numerical) Intake24 user ID"
                     },
                     "name": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "title": "Optional user name for personalization"
                     },
                     "submissions": {
-                      "type": "number"
+                      "type": "number",
+                      "description": "Number of collected submissions"
                     },
                     "showFeedback": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether to show feedback"
                     },
                     "maximumTotalSubmissionsReached": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the user has reached the maximum number of submissions"
                     },
                     "maximumDailySubmissionsReached": {
-                      "type": "boolean"
+                      "type": "boolean",
+                      "description": "Whether the user has reached the maximum number of submissions per day"
                     },
                     "followUpUrl": {
                       "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "description": "Optional follow-up URL for user redirect"
                     },
                     "submission": {
                       "type": "object",
