@@ -1,5 +1,6 @@
 import type { Protocol } from 'puppeteer';
 import puppeteer from 'puppeteer';
+import { Readable } from 'stream';
 
 export default class FeedbackPdfGenerator {
   readonly url: string;
@@ -49,11 +50,13 @@ export default class FeedbackPdfGenerator {
   async getPdfStream() {
     const { browser, page } = await this.loadFeedback();
 
-    const pdfBuffer = await page.createPDFStream({
+    const pdfWebStream = await page.createPDFStream({
       format: 'a4',
       displayHeaderFooter: true,
       printBackground: true,
     });
+    //@ts-expect-error types
+    const pdfBuffer = Readable.fromWeb(pdfWebStream);
 
     pdfBuffer
       .on('end', async () => {

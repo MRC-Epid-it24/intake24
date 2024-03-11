@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "kysely": "^0.27.2",
+    "kysely": "^0.27.3",
     "lodash": "^4.17.21",
     "mariadb": "^3.2.3",
     "mssql": "^10.0.2",
@@ -38,12 +38,12 @@
   "devDependencies": {
     "@simplewebauthn/types": "^9.0.1",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.11.25",
     "@types/pg": "^8.11.2",
     "@types/validator": "^13.11.9",
-    "kysely-codegen": "^0.11.0",
+    "kysely-codegen": "^0.13.1",
     "sequelize-cli": "^6.6.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   },
   "bundledDependencies": [
     "@intake24/api",
