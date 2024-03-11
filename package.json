@@ -69,7 +69,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "@vue/eslint-config-prettier": "^9.0.0",
-    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
     "calver": "^22.9.1",
     "conventional-changelog-cli": "^4.1.0",
     "eslint": "^8.57.0",
