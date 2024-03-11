@@ -17,6 +17,7 @@ export const food = initContract().router({
       200: foodSearchResponse,
     },
     summary: 'Food search',
+    description: 'Returns a list of foods from the food database that match the description.',
   },
   entry: {
     method: 'GET',
@@ -25,6 +26,8 @@ export const food = initContract().router({
       200: userFoodData,
     },
     summary: 'Food entry',
+    description:
+      'Get portion size estimation options, associated foods and related data for a food from the database.',
   },
   recipeFood: {
     method: 'GET',
@@ -33,6 +36,7 @@ export const food = initContract().router({
       200: recipeFoodResponse,
     },
     summary: 'Recipe food',
+    description: 'Get the recipe food data for a food if any.',
   },
   categories: {
     method: 'GET',
@@ -41,5 +45,6 @@ export const food = initContract().router({
       200: z.array(z.string()),
     },
     summary: 'Food categories',
+    description: 'Get the list of categories for a food.',
   },
 });

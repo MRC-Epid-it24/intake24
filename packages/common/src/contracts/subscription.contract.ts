@@ -21,6 +21,8 @@ export const subscription = initContract().router({
       200: z.undefined(),
     },
     summary: 'Subscribe to push notification',
+    description:
+      'Subscribe user to receive web-push notifications. It expects the subscription object produced by Web API PushManager',
   },
   unsubscribe: {
     method: 'DELETE',
@@ -30,6 +32,7 @@ export const subscription = initContract().router({
       200: z.undefined(),
     },
     summary: 'Unsubscribe from push notification',
+    description: 'Unsubscribe user from receiving web-push notifications.',
   },
   push: {
     method: 'POST',
@@ -38,6 +41,7 @@ export const subscription = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Trigger push notification',
+    summary: 'Ping push',
+    description: 'Send test push notification to user.',
   },
 });

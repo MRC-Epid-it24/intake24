@@ -1,8 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { isJWT } from 'validator';
-import { z } from 'zod';
 
 import { createUserResponse, generateUserResponse, publicSurveyEntry } from '../types/http';
+import { z } from '../util';
 
 export const survey = initContract().router({
   browse: {
@@ -11,7 +11,8 @@ export const survey = initContract().router({
     responses: {
       200: publicSurveyEntry.array(),
     },
-    summary: 'Browse public surveys',
+    summary: 'Browse surveys',
+    description: 'Publicly accessible survey list. Returns list of public surveys.',
   },
   entry: {
     method: 'GET',
@@ -23,17 +24,24 @@ export const survey = initContract().router({
       200: publicSurveyEntry,
     },
     summary: 'Get survey entry',
+    description:
+      'Returns survey parameters necessary to render the survey login page such as the language settings and the support e-mail.',
   },
   generateUser: {
     method: 'POST',
     path: '/surveys/:slug/generate-user',
     body: z.object({
-      captcha: z.string().optional(),
+      captcha: z
+        .string()
+        .optional()
+        .openapi({ description: 'Captcha token if enabled on system level' }),
     }),
     responses: {
       200: generateUserResponse,
     },
-    summary: 'Generate user for survey public survey',
+    summary: 'Generate user',
+    description:
+      'Generate user for survey public survey. Automatically create a new user account with a respondent role and random credentials if allowed by the survey settings.',
   },
   createUser: {
     method: 'POST',
@@ -44,6 +52,8 @@ export const survey = initContract().router({
     responses: {
       200: createUserResponse,
     },
-    summary: 'Create user for survey survey using JWT encoded parameters',
+    summary: 'Create user',
+    description:
+      'Create user for survey survey using JWT encoded parameters. Payload must be a valid JWT token signed with secret set up in survey settings.',
   },
 });

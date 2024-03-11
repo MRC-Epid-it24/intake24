@@ -10,5 +10,6 @@ export const feedback = initContract().router({
       200: feedbackDataResponse,
     },
     summary: 'Feedback data',
+    description: 'Get reference data for feedback.',
   },
 });

@@ -13,7 +13,8 @@ export const feedback = initContract().router({
     responses: {
       200: z.instanceof(Readable),
     },
-    summary: 'Download user feedback as PDF file',
+    summary: 'Download feedback',
+    description: 'Download feedback as PDF. Returns stream as application/pdf.',
   },
   email: {
     method: 'POST',
@@ -34,6 +35,7 @@ export const feedback = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Email user feedback as PDF file attachment',
+    summary: 'Email feedback',
+    description: 'Email user feedback as PDF file attachment',
   },
 });

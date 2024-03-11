@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
 
 import { createSanitizer } from '../rules';
+import { z } from '../util';
 
 const loginResponse = z.union([
   z.object({ accessToken: z.string() }),
@@ -19,12 +19,16 @@ export const authentication = initContract().router({
       email: z.string().toLowerCase(),
       password: z.string(),
       survey: z.string(),
-      captcha: z.string().optional(),
+      captcha: z
+        .string()
+        .optional()
+        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
       200: loginResponse,
     },
-    summary: 'Survey login with email and password',
+    summary: 'Email & password login',
+    description: 'Survey participant login with email and password.',
   },
   aliasLogin: {
     method: 'POST',
@@ -36,12 +40,16 @@ export const authentication = initContract().router({
       username: z.string(),
       password: z.string(),
       survey: z.string(),
-      captcha: z.string().optional(),
+      captcha: z
+        .string()
+        .optional()
+        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
       200: loginResponse,
     },
-    summary: 'Survey login with alias and password',
+    summary: 'Alias & password login',
+    description: 'Survey participant login with alias and password.',
   },
   tokenLogin: {
     method: 'POST',
@@ -51,12 +59,16 @@ export const authentication = initContract().router({
     }),
     body: z.object({
       token: z.string(),
-      captcha: z.string().optional(),
+      captcha: z
+        .string()
+        .optional()
+        .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
       200: loginResponse,
     },
-    summary: 'Survey login with token',
+    summary: 'URL Token login',
+    description: 'Survey participant login with unique URL token.',
   },
   refresh: {
     method: 'POST',
@@ -65,7 +77,9 @@ export const authentication = initContract().router({
     responses: {
       200: z.object({ accessToken: z.string() }),
     },
-    summary: 'Refresh survey token',
+    summary: 'Refresh access token',
+    description:
+      'Refresh access token using refresh token. API server expects refresh token sent as cookie. Cookie name can differ based on API server configuration.',
   },
   logout: {
     method: 'POST',
@@ -75,5 +89,6 @@ export const authentication = initContract().router({
       200: z.undefined(),
     },
     summary: 'Logout from survey',
+    description: 'Clears cookie which stores refresh token and revokes refresh token.',
   },
 });

@@ -19,6 +19,7 @@
     "validators": "node scripts/validators.js"
   },
   "dependencies": {
+    "@anatine/zod-openapi": "^2.2.3",
     "@ts-rest/core": "^3.33.0",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",

@@ -7,7 +7,7 @@ Authentication system for SPA applications is based on JWT tokens, combination o
 SPA-application-specific auth routes:
 
 - Admin tool [admin endpoints](/api/admin/authentication)
-- Survey / Feedback frontend [survey endpoints](/api/survey/authentication)
+- Survey / Feedback frontend [survey endpoints](/open-api.html){target="blank"}
 
 Login endpoints issue JWT `access tokens` in response body. `Access token` is short-lived JWT and has to be included in `Authorization` header for specific endpoint.
 

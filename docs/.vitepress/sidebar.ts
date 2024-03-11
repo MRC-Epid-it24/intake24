@@ -167,18 +167,6 @@ export const sidebar = {
           text: 'Authentication',
           link: '/api/authentication',
         },
-        {
-          text: 'Password recovery',
-          link: '/api/password',
-        },
-        {
-          text: 'Internationalization',
-          link: '/api/i18n',
-        },
-        {
-          text: 'Subscriptions',
-          link: '/api/subscriptions',
-        },
       ],
     },
     {
@@ -312,44 +300,6 @@ export const sidebar = {
         {
           text: 'Users',
           link: '/api/admin/users',
-        },
-      ],
-    },
-    {
-      text: 'Survey',
-      collapsable: false,
-      items: [
-        {
-          text: 'Authentication',
-          link: '/api/survey/authentication',
-        },
-        {
-          text: 'Surveys - public',
-          link: '/api/survey/surveys-public',
-        },
-        {
-          text: 'Surveys - respondent',
-          link: '/api/survey/surveys-respondent',
-        },
-        {
-          text: 'Food database lookup',
-          link: '/api/survey/food-lookup',
-        },
-        {
-          text: 'Food data',
-          link: '/api/survey/food-data',
-        },
-        {
-          text: 'Portion size data',
-          link: '/api/survey/portion-sizes',
-        },
-        {
-          text: 'Feedback',
-          link: '/api/survey/feedback',
-        },
-        {
-          text: 'User',
-          link: '/api/survey/user',
         },
       ],
     },

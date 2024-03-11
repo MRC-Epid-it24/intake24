@@ -10,6 +10,7 @@ export const category = initContract().router({
       200: categoryContents,
     },
     summary: 'Root category contents',
+    description: 'Get the list of root categories & foods for the "browse all foods" options.',
   },
   contents: {
     method: 'GET',
@@ -18,6 +19,8 @@ export const category = initContract().router({
       200: categoryContents,
     },
     summary: 'Category contents',
+    description:
+      'Get the category contents, i.e. foods and subcategories listed under the given category.',
   },
   browse: {
     method: 'GET',
@@ -27,5 +30,7 @@ export const category = initContract().router({
       200: categorySearch,
     },
     summary: 'Browse category contents',
+    description:
+      'Browse and search category contents for foods and subcategories listed under the given category.',
   },
 });

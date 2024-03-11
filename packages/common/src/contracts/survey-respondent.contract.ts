@@ -1,5 +1,4 @@
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
 
 import { createSanitizer } from '../rules';
 import {
@@ -11,6 +10,7 @@ import {
   surveyUserInfoResponse,
   surveyUserSessionResponse,
 } from '../types/http';
+import { z } from '../util';
 
 export const surveyRespondent = initContract().router({
   parameters: {
@@ -19,18 +19,22 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: surveyEntryResponse,
     },
-    summary: 'Get survey parameters',
+    summary: 'Survey parameters',
+    description:
+      'Returns survey parameters such as the scheme ID, current status, custom HTML content etc.',
   },
   userInfo: {
     method: 'GET',
     path: '/surveys/:slug/user-info',
     query: z.object({
-      tzOffset: z.coerce.number(),
+      tzOffset: z.coerce.number().openapi({ description: 'Timezone offset in minutes' }),
     }),
     responses: {
       200: surveyUserInfoResponse,
     },
-    summary: 'Get user info for survey',
+    summary: 'User info',
+    description:
+      'Returns a subset of personal data for the current user that is relevant to the recall application.',
   },
   getSession: {
     method: 'GET',
@@ -38,7 +42,9 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: surveyUserSessionResponse,
     },
-    summary: 'Get user session for survey',
+    summary: 'Get user session',
+    description:
+      'Get survey user session (current recall state), if any. Functionality is controlled by survey settings.',
   },
   setSession: {
     method: 'POST',
@@ -49,7 +55,9 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: surveyUserSessionResponse,
     },
-    summary: 'Set user session for survey',
+    summary: 'Set user session',
+    description:
+      'Save survey user session (current recall state) on server. Functionality is controlled by survey settings.',
   },
   clearSession: {
     method: 'DELETE',
@@ -58,7 +66,9 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Clear user session for survey',
+    summary: 'Clear user session',
+    description:
+      'Clear survey user session (current recall state) on server. Functionality is controlled by survey settings.',
   },
   requestHelp: {
     method: 'POST',
@@ -67,7 +77,9 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Request help for survey',
+    summary: 'Request help',
+    description:
+      'Notify people having survey support role or survey support email to give the respondent a call to help them complete their recall.',
   },
   rating: {
     method: 'POST',
@@ -76,7 +88,8 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Send rating for survey',
+    summary: 'Send rating',
+    description: 'Submit 5-start rating about the survey recall experience.',
   },
   submission: {
     method: 'POST',
@@ -85,7 +98,7 @@ export const surveyRespondent = initContract().router({
       'user-agent': z.string().optional().transform(createSanitizer()),
     }),
     query: z.object({
-      tzOffset: z.coerce.number(),
+      tzOffset: z.coerce.number().openapi({ description: 'Timezone offset in minutes' }),
     }),
     body: z.object({
       // TODO: Define submission schema
@@ -94,6 +107,7 @@ export const surveyRespondent = initContract().router({
     responses: {
       200: surveySubmissionResponse,
     },
-    summary: 'Submit survey recall',
+    summary: 'Submit recall',
+    description: 'Submit recall data to the server.',
   },
 });

@@ -16,7 +16,8 @@ export const profile = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Update user password',
+    summary: 'Update password',
+    description: 'Update user password',
   },
   getPhysicalData: {
     method: 'GET',
@@ -27,7 +28,8 @@ export const profile = initContract().router({
     responses: {
       200: userPhysicalDataScheme.nullable(),
     },
-    summary: 'Get user physical data',
+    summary: 'Get physical data',
+    description: 'Get user physical data for feedback and survey recall calculations.',
   },
   setPhysicalData: {
     method: 'POST',
@@ -39,7 +41,8 @@ export const profile = initContract().router({
     responses: {
       200: userPhysicalDataScheme,
     },
-    summary: 'Set user physical data',
+    summary: 'Set physical data',
+    description: 'Set user physical data for feedback and survey recall calculations.',
   },
   submissions: {
     method: 'GET',
@@ -51,6 +54,7 @@ export const profile = initContract().router({
       // TODO: Add response schema
       200: z.object({}),
     },
-    summary: 'Get user submissions',
+    summary: 'User submissions',
+    description: 'Get user submissions for selected surveys.',
   },
 });

@@ -1,8 +1,8 @@
 import { initContract } from '@ts-rest/core';
-import { z } from 'zod';
 
 import { createSanitizer } from '../rules';
 import { strongPassword } from '../schemas';
+import { z } from '../util';
 
 export const password = initContract().router({
   request: {
@@ -13,12 +13,17 @@ export const password = initContract().router({
     }),
     body: z.object({
       email: z.string().email().toLowerCase(),
-      captcha: z.string().optional(),
+      captcha: z
+        .string()
+        .optional()
+        .openapi({ description: 'Captcha token if enabled on system level' }),
     }),
     responses: {
       200: z.undefined(),
     },
-    summary: 'Request a password reset',
+    summary: 'Password request',
+    description:
+      'Request a password reset token to be sent by email. If captcha-protection activated, a captcha token has to be sent to validate the request.',
   },
   reset: {
     method: 'POST',
@@ -32,6 +37,7 @@ export const password = initContract().router({
     responses: {
       200: z.undefined(),
     },
-    summary: 'Reset a password',
+    summary: 'Password reset',
+    description: 'Reset password using a token sent by email.',
   },
 });

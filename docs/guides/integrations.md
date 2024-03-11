@@ -29,12 +29,34 @@ Survey can be enabled with respondent account generation using shared secret. To
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
-Once enabled, two options listed below can be used to create respondent accounts. Regardless of the option, [JWT token](/api/survey/surveys-public.html#create-user) with payload must be created.
+Once enabled, two options listed below can be used to create respondent accounts. Regardless of the option, [JWT token](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
 
 #### A) API endpoint
 
-- use [create user API endpoint](/api/survey/surveys-public.html#create-user)
+- use [create user API endpoint](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"}
 - create JWT token with desired payload according the specification
+
+#### Specifications of `token`
+
+- `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings).
+- `HS256` and `HS512` algorithms are supported.
+- expected claims / payload shape:
+  - `username` - Unique respondent username within the survey
+  - `password` (optional) - password for username:password login
+  - `redirectUrl` (optional) - redirect URL for user redirection after recall completion
+  - `name` (optional) - user's name for personalisation
+
+#### JWT payload
+
+```json
+{
+  "username": string,
+  "password"?: string
+  "redirectUrl"?: string
+  "name"?: string
+}
+```
+
 - form authentication URL with response details [authentication URL patterns](/admin/surveys/#authentication-urls)
 - redirect respondent to the URL
 
@@ -68,4 +90,4 @@ Intake24 can redirect respondent to 3rd party system upon survey recall completi
 
 Please note options described above are not exhaustive. It is a list of most used methods, for more details consult [API documentation](/api/).
 
-Not found integration you're looking for? We appreciate that every system is a bit different and we're happy to help with integration and extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/MRC-Epid-it24/intake24/issues) and we will try to help.
+Not found the integration you're looking for? We appreciate that every system is a bit different, so we're happy to advise and where possible extend Intake24 to allow for seamless integration and wider adoption. Open an issue on [GitHub](https://github.com/MRC-Epid-it24/intake24/issues) and we will try to help.

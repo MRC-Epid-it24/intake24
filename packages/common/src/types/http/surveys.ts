@@ -1,6 +1,5 @@
 import { getSupportedRegionCodes, parsePhoneNumber } from 'awesome-phonenumber';
 import { isIn } from 'validator';
-import { z } from 'zod';
 
 import type { SurveySchemeAttributes } from '@intake24/db';
 import {
@@ -11,6 +10,7 @@ import {
 } from '@intake24/common/surveys';
 
 import { feedbackSchemeSchema } from '../../schemas';
+import { z } from '../../util';
 import { meal } from '../meals';
 
 export const generateUserResponse = z.object({
@@ -69,13 +69,22 @@ export const surveyEntryResponse = z.object({
 export type SurveyEntryResponse = z.infer<typeof surveyEntryResponse>;
 
 export const surveyUserInfoResponse = z.object({
-  userId: z.string(),
-  name: z.string().nullable(),
-  submissions: z.number(),
-  showFeedback: z.boolean(),
-  maximumTotalSubmissionsReached: z.boolean(),
-  maximumDailySubmissionsReached: z.boolean(),
-  followUpUrl: z.string().nullish(),
+  userId: z.string().openapi({ title: 'Internal (numerical) Intake24 user ID' }),
+  name: z.string().nullable().openapi({
+    title: 'Optional user name for personalization',
+  }),
+  submissions: z.number().openapi({ description: 'Number of collected submissions' }),
+  showFeedback: z.boolean().openapi({ description: 'Whether to show feedback' }),
+  maximumTotalSubmissionsReached: z.boolean().openapi({
+    description: 'Whether the user has reached the maximum number of submissions',
+  }),
+  maximumDailySubmissionsReached: z.boolean().openapi({
+    description: 'Whether the user has reached the maximum number of submissions per day',
+  }),
+  followUpUrl: z
+    .string()
+    .nullish()
+    .openapi({ description: 'Optional follow-up URL for user redirect' }),
 });
 
 export type SurveyUserInfoResponse = z.infer<typeof surveyUserInfoResponse>;

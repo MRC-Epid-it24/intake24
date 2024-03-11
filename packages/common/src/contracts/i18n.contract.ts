@@ -21,6 +21,7 @@ export const i18n = initContract().router({
       200: languageResponse.array(),
     },
     summary: 'Browse languages',
+    description: 'Fetch list of available languages for front-ends.',
   },
   getLanguage: {
     method: 'GET',
@@ -34,6 +35,7 @@ export const i18n = initContract().router({
     responses: {
       200: languageResponse,
     },
-    summary: 'Get a language by id',
+    summary: 'Get language entry',
+    description: 'Get language entry and available translations.',
   },
 });

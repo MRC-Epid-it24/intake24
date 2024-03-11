@@ -36,6 +36,7 @@ export default defineConfig({
     ],
   },
 
+  cleanUrls: true,
   sitemap: {
     hostname: 'https://docs.intake24.org'
   }
