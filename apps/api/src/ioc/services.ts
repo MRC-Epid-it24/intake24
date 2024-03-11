@@ -1,6 +1,7 @@
 import type { AwilixContainer } from 'awilix';
 import { asClass, asFunction, asValue } from 'awilix';
 
+import foodIndex from '@intake24/api/food-index';
 import {
   aclCache,
   aclService,
@@ -82,6 +83,7 @@ export default (container: AwilixContainer): void => {
 
     feedbackService: asFunction(feedbackService).singleton(),
     foodDataService: asFunction(foodDataService).singleton(),
+    foodIndex: asValue(foodIndex),
     portionSizeMethodsService: asFunction(portionSizeMethodsService).singleton(),
     portionSizeService: asFunction(portionSizeService).singleton(),
     categoryContentsService: asFunction(categoryContentsService).singleton(),

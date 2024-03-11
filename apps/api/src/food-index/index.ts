@@ -25,7 +25,7 @@ interface RebuildResponse {
   error: Error;
 }
 
-export default {
+const foodIndex = {
   async init(): Promise<void> {
     // eslint-disable-next-line no-new
     indexWorker = new Worker('./dist/foodIndexBuilder.js', {
@@ -205,3 +205,7 @@ export default {
     return Promise.reject(new IndexNotReadyError());
   },
 };
+
+export default foodIndex;
+
+export type FoodIndex = typeof foodIndex;

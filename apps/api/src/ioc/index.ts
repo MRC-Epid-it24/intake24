@@ -1,6 +1,7 @@
 import { asClass, asValue, createContainer } from 'awilix';
 
 import type { Config } from '@intake24/api/config';
+import type { FoodIndex } from '@intake24/api/food-index';
 import type {
   // Admin
   AdminAuthenticationController,
@@ -256,6 +257,7 @@ export interface IoC extends Jobs {
 
   // Foods
   foodDataService: FoodDataService;
+  foodIndex: FoodIndex;
   portionSizeMethodsService: PortionSizeMethodsService;
   portionSizeService: PortionSizeService;
   inheritableAttributesService: InheritableAttributesService;

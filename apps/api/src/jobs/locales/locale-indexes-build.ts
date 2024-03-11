@@ -59,7 +59,6 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
     this.logger.debug('Locale Ids for rebuilding:', localeIds);
     this.reindexingProcessService.forget(this.cacheKey);
 
-    this.reindexingPublisherService.init();
     let locales = localeIds;
 
     if (!locales.includes('all')) {
@@ -73,10 +72,9 @@ export default class LocaleIndexBuild extends BaseJob<'LocaleIndexBuild'> {
       );
     }
 
-    this.logger.debug(`Publish Information for the Rebuildng Specified Indexes: ${locales}...`);
+    this.logger.debug(`Publish Information for the Rebuilding Specified Indexes: ${locales}...`);
     await this.reindexingPublisherService.publish(locales);
 
-    this.reindexingPublisherService.close();
     this.logger.debug('Job finished.');
   }
 }

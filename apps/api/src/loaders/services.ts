@@ -1,5 +1,4 @@
 import type { Ops } from '@intake24/api/app';
-import foodIndex from '@intake24/api/food-index';
 import ioc from '@intake24/api/ioc';
 
 async function exitSignalHandler() {
@@ -37,7 +36,7 @@ export default async (ops: Ops): Promise<void> => {
   await ioc.cradle.scheduler.init();
 
   // Food indexing and searching
-  await foodIndex.init();
+  await ioc.cradle.foodIndex.init();
 
   // i18n translations
   await ioc.cradle.i18nStore.init();
@@ -45,6 +44,7 @@ export default async (ops: Ops): Promise<void> => {
   // Redis indexing
   ioc.cradle.reindexingPublisherService.init();
   ioc.cradle.reindexingSubscriberService.init();
+  await ioc.cradle.reindexingSubscriberService.subscribeToChannel();
 
   // Exit signal handlers
   process.on('SIGINT', exitSignalHandler);
