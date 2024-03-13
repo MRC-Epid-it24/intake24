@@ -136,6 +136,7 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
         scaleSectors: [
           {
             name: { en: 'Total fat' },
+            summary: { en: 'Total fat' },
             description: {
               en: '<p>It is recommended that the energy (or calories)...</p>',
             },

@@ -22,6 +22,7 @@ export type JobParams = {
     store: 'cache' | 'session';
   };
   CleanStorageFiles: EmptyJobParams;
+  FeedbackSchemesSync: EmptyJobParams;
   LanguageTranslationsSync: EmptyJobParams;
   LocaleIndexBuild: EmptyJobParams;
   LocaleFoods: {
@@ -123,6 +124,7 @@ export type QueueJob = {
 export const defaultJobsParams: JobParams = {
   CleanRedisStore: { store: 'cache' },
   CleanStorageFiles: {},
+  FeedbackSchemesSync: {},
   LanguageTranslationsSync: {},
   LocaleIndexBuild: {},
   LocaleFoods: {

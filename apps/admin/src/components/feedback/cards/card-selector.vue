@@ -85,11 +85,32 @@
                         </v-toolbar-title>
                       </v-toolbar>
                       <v-card-text>
-                        <v-switch
-                          v-model="dialog.card.showRecommendations"
-                          hide-details="auto"
-                          :label="$t('feedback-schemes.cards.showRecommendations')"
-                        ></v-switch>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" md="6">
+                              <v-expansion-panels>
+                                <v-expansion-panel key="color">
+                                  <v-expansion-panel-header>
+                                    {{ $t(`feedback-schemes.cards.color`) }}
+                                  </v-expansion-panel-header>
+                                  <v-expansion-panel-content>
+                                    <v-color-picker
+                                      v-model="dialog.card.color"
+                                      show-swatches
+                                    ></v-color-picker>
+                                  </v-expansion-panel-content>
+                                </v-expansion-panel>
+                              </v-expansion-panels>
+                            </v-col>
+                            <v-col cols="12" md="6">
+                              <v-switch
+                                v-model="dialog.card.showRecommendations"
+                                hide-details="auto"
+                                :label="$t('feedback-schemes.cards.showRecommendations')"
+                              ></v-switch>
+                            </v-col>
+                          </v-row>
+                        </v-container>
                       </v-card-text>
                     </v-card>
                   </v-col>
@@ -123,9 +144,10 @@ import { defineComponent, ref } from 'vue';
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
+import { cardDefaults } from '@intake24/common/feedback';
 import { copy, merge, randomString } from '@intake24/common/util';
 
-import { cardDefaults, cardSettings } from './card';
+import { cardSettings } from './card';
 import cardTypes from './card-types';
 
 export type CardDialog = {

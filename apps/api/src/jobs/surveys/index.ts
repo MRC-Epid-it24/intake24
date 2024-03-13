@@ -5,7 +5,6 @@ import SurveyHelpRequestNotification from './survey-help-request-notification';
 import SurveyNutrientsRecalculation from './survey-nutrients-recalculation';
 import SurveyRatingsExport from './survey-ratings-export';
 import SurveyRespondentsImport from './survey-respondents-import';
-import SurveySchemesSync from './survey-schemes-sync';
 import SurveySubmission from './survey-submission';
 import SurveySubmissionNotification from './survey-submission-notification';
 
@@ -17,7 +16,6 @@ export default {
   SurveyNutrientsRecalculation,
   SurveyRatingsExport,
   SurveyRespondentsImport,
-  SurveySchemesSync,
   SurveySubmission,
   SurveySubmissionNotification,
 };

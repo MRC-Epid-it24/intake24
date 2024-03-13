@@ -13,7 +13,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
 
   private readonly models;
 
-  constructor({ models, logger }: Pick<IoC, 'db' | 'models' | 'fsConfig' | 'logger'>) {
+  constructor({ models, logger }: Pick<IoC, 'models' | 'logger'>) {
     super({ logger });
 
     this.models = models;
@@ -43,7 +43,7 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
   }
 
   private async synchronizeSchemes(): Promise<void> {
-    this.logger.debug(`Synchronization of schemes started.`);
+    this.logger.debug(`Synchronization of survey schemes started.`);
 
     const promptMap = this.getPromptMap();
 
@@ -69,6 +69,6 @@ export default class SurveySchemesSync extends BaseJob<'SurveySchemesSync'> {
       await scheme.update({ prompts });
     }
 
-    this.logger.debug(`Synchronization of schemes finished.`);
+    this.logger.debug(`Synchronization of survey schemes finished.`);
   }
 }

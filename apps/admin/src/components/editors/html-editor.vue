@@ -21,6 +21,7 @@ import 'tinymce/plugins/media';
 import 'tinymce/plugins/preview';
 import 'tinymce/plugins/table';
 
+import type { PropType } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
 import trimEnd from 'lodash/trimEnd';
 import { defineComponent } from 'vue';
@@ -39,7 +40,7 @@ export default defineComponent({
       default: () => [],
     },
     value: {
-      type: String,
+      type: String as PropType<string | null>,
       default: '',
     },
   },

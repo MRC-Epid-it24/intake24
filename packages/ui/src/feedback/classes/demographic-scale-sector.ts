@@ -5,20 +5,20 @@ import DemographicRange from './demographic-range';
 
 export default class DemographicScaleSector {
   readonly name: RequiredLocaleTranslation;
-
+  readonly summary: LocaleTranslation;
   readonly description: LocaleTranslation;
-
   readonly sentiment: Sentiment;
-
   readonly range: DemographicRange;
 
   constructor(
     name: RequiredLocaleTranslation,
+    summary: LocaleTranslation,
     description: LocaleTranslation,
     range: DemographicRange,
     sentiment: Sentiment
   ) {
     this.name = name;
+    this.summary = summary;
     this.description = description;
     this.range = range;
     this.sentiment = sentiment;
@@ -27,6 +27,7 @@ export default class DemographicScaleSector {
   static fromJson(sector: DemographicGroupScaleSector): DemographicScaleSector {
     return new DemographicScaleSector(
       sector.name,
+      sector.summary,
       sector.description,
       DemographicRange.fromJson(sector.range.start, sector.range.end) as DemographicRange,
       sector.sentiment
@@ -34,6 +35,12 @@ export default class DemographicScaleSector {
   }
 
   clone(): DemographicScaleSector {
-    return new DemographicScaleSector(this.name, this.description, this.range, this.sentiment);
+    return new DemographicScaleSector(
+      this.name,
+      this.summary,
+      this.description,
+      this.range,
+      this.sentiment
+    );
   }
 }

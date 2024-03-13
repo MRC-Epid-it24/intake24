@@ -18,6 +18,7 @@ export type CharacterParameters = {
   readonly characterType: CharacterType;
   readonly sentiment: CharacterSentiment | null;
   readonly results: DemographicResult[];
+  readonly color: string;
   readonly showRecommendations: boolean;
 };
 
@@ -32,18 +33,21 @@ export class CharacterRules implements Character {
 
   readonly sentiments: CharacterSentiment[];
 
+  readonly color: string;
+
   readonly showRecommendations: boolean;
 
   readonly demographicGroups: DemographicGroup[];
 
   constructor(
-    { id, characterType, nutrientTypeIds, sentiments, showRecommendations }: Character,
+    { id, characterType, nutrientTypeIds, sentiments, color, showRecommendations }: Character,
     demographicGroups: DemographicGroup[]
   ) {
     this.id = id;
     this.characterType = characterType;
     this.nutrientTypeIds = nutrientTypeIds;
     this.sentiments = sentiments;
+    this.color = color;
     this.showRecommendations = showRecommendations;
 
     this.demographicGroups = demographicGroups;
@@ -53,7 +57,7 @@ export class CharacterRules implements Character {
     userDemographic: UserDemographic,
     foods: AggregateFoodStats[]
   ): CharacterParameters | null {
-    const { characterType, id, showRecommendations } = this;
+    const { characterType, id, color, showRecommendations } = this;
 
     const results = this.getDemographicsGroups(userDemographic, foods);
 
@@ -65,7 +69,7 @@ export class CharacterRules implements Character {
 
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
-    return { id, type: 'character', characterType, results, sentiment, showRecommendations };
+    return { id, type: 'character', characterType, results, sentiment, color, showRecommendations };
   }
 
   private getDemographicsGroups(

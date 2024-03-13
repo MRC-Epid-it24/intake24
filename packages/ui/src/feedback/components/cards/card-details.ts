@@ -10,12 +10,14 @@ import { DemographicRange } from '@intake24/ui/feedback';
 
 export type FeedbackDetails = {
   readonly name: string;
+  readonly summary: string | null;
   readonly description: string | null;
   readonly intake: number;
   readonly recommendedIntake: DemographicRange | null;
   readonly unit: string;
   readonly unitDescription: string | null;
   readonly sentiment: Sentiment | null;
+  readonly color: string;
   readonly textClass?: string;
   readonly iconClass: string;
   readonly warning?: string | null;
@@ -70,7 +72,7 @@ export const formatOutput = (value: number | string, unit: string): string => `$
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
   const { translate, i18n } = useI18n();
 
-  const { sentiment: charSentiment, results, showRecommendations } = parameters;
+  const { sentiment: charSentiment, results, color, showRecommendations } = parameters;
 
   const details = results.map((result) => {
     const {
@@ -78,10 +80,11 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
       resultedDemographicGroup: { nutrientRuleType, nutrient, scaleSectors },
     } = result;
 
-    const { name, description, range, sentiment } = scaleSectors[0];
+    const { name, summary, description, range, sentiment } = scaleSectors[0];
 
     return {
       name: translate(name),
+      summary: translate(summary),
       description: translate(description),
       intake: round(intake),
       recommendedIntake: showRecommendations
@@ -90,6 +93,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
       unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
       unitDescription: i18n.t(`feedback.unitDescription.${nutrientRuleType}`).toString(),
       sentiment,
+      color,
       textClass: getTextClass(charSentiment ? sentiment : null),
       iconClass: getIconClass(charSentiment ? sentiment : null),
     };
@@ -101,11 +105,13 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
 const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { translate } = useI18n();
 
-  const { name, description, low, high, unit, portions, showRecommendations } = parameters;
+  const { name, summary, description, low, high, unit, portions, color, showRecommendations } =
+    parameters;
   const sentiment = null;
 
   return {
     name: translate(name),
+    summary: translate(summary),
     description: translate(description),
     intake: portions,
     recommendedIntake: showRecommendations
@@ -114,6 +120,7 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
     unit: translate(unit.name),
     unitDescription: translate(unit.description),
     sentiment,
+    color,
     iconClass: getIconClass(sentiment),
     warning: low && portions < low.threshold ? translate(low.message) : undefined,
   };
@@ -122,8 +129,18 @@ const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
 const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDetails => {
   const { translate } = useI18n();
 
-  const { name, description, low, high, unit, intake, recommendedIntake, showRecommendations } =
-    parameters;
+  const {
+    name,
+    summary,
+    description,
+    low,
+    high,
+    unit,
+    intake,
+    recommendedIntake,
+    color,
+    showRecommendations,
+  } = parameters;
   const sentiment = null;
 
   let warning;
@@ -133,6 +150,7 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
 
   return {
     name: translate(name),
+    summary: translate(summary),
     description: translate(description),
     intake: round(intake),
     recommendedIntake: showRecommendations
@@ -141,6 +159,7 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
     unit: translate(unit.name),
     unitDescription: translate(unit.description),
     sentiment,
+    color,
     iconClass: getIconClass(sentiment),
     warning,
   };

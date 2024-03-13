@@ -18,6 +18,19 @@
       </template>
     </language-selector>
     <language-selector
+      :label="$t('feedback-schemes.cards.summary').toString()"
+      :value="summary"
+      @input="update('summary', $event)"
+    >
+      <template v-for="lang in Object.keys(summary)" #[`lang.${lang}`]>
+        <html-editor
+          :key="lang"
+          :value="summary[lang]"
+          @input="updateLanguage('summary', lang, $event)"
+        ></html-editor>
+      </template>
+    </language-selector>
+    <language-selector
       :label="$t('feedback-schemes.cards.description').toString()"
       :value="description"
       @input="update('description', $event)"
@@ -42,7 +55,7 @@ import type { CustomCard } from '@intake24/common/feedback';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 
-export type LocaleTranslationKeys = 'name' | 'description';
+export type LocaleTranslationKeys = 'name' | 'description' | 'summary';
 
 export default defineComponent({
   name: 'CardContent',
@@ -57,6 +70,10 @@ export default defineComponent({
     nameRequired: {
       type: Boolean,
       default: true,
+    },
+    summary: {
+      type: Object as PropType<CustomCard['summary']>,
+      required: true,
     },
     description: {
       type: Object as PropType<CustomCard['description']>,

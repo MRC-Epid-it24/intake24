@@ -27,6 +27,9 @@
     "CleanStorageFiles": {
       "_": "Clean storage files"
     },
+    "FeedbackSchemesSync": {
+      "_": "Feedback schemes - Synchronize schemes"
+    },
     "PurgeExpiredTokens": {
       "_": "Purge expired access/refresh tokens"
     },

@@ -1,22 +1,32 @@
 <template>
-  <v-card class="d-flex flex-column" height="100%" min-width="320px">
+  <v-card
+    class="card-screen d-flex flex-column"
+    :color="detail.color"
+    height="100%"
+    min-width="320px"
+  >
     <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
-    <v-card-subtitle class="font-weight-medium">
+    <v-card-subtitle class="font-weight-medium" :class="textColor">
       <i18n class="mb-2" path="feedback.intake.your" tag="div">
         <template #nutrient>
           <span>{{ detail.name.toLowerCase() }}</span>
         </template>
         <template #amount>
-          <span :class="detail.textClass">{{ formatOutput(detail.intake, detail.unit) }}</span>
+          <span :class="textColor ?? detail.textClass">
+            {{ formatOutput(detail.intake, detail.unit) }}
+          </span>
         </template>
       </i18n>
-      <div v-if="detail.recommendedIntake" :class="detail.textClass">
+      <div v-if="detail.recommendedIntake" :class="textColor ?? detail.textClass">
         <v-icon left>{{ detail.iconClass }}</v-icon>
         <span>{{ formatOutput(detail.recommendedIntake.toString(), detail.unit) }}</span>
       </div>
     </v-card-subtitle>
-    <tell-me-more v-bind="{ detail }" class="mt-auto"></tell-me-more>
+    <v-card-text class="flex-grow-1" :class="textColor">
+      <div class="card-screen__summary" v-html="detail.summary"></div>
+    </v-card-text>
+    <tell-me-more v-bind="{ detail, textColor }"></tell-me-more>
   </v-card>
 </template>
 
@@ -24,9 +34,10 @@
 /* import type { GaugeInstance } from 'svg-gauge';
 import SvgGauge from 'svg-gauge'; */
 import type { PropType } from 'vue';
-import { computed, defineComponent, toRefs } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
+import { getContrastYIQ } from '@intake24/ui/util';
 
 import { formatOutput, getDetails } from './card-details';
 import { getBackgroundImage } from './card-images';
@@ -45,14 +56,16 @@ export default defineComponent({
   },
 
   setup(props) {
-    const { parameters } = toRefs(props);
-
     /* const gaugeRef = ref<InstanceType<typeof Element>>();
     const gaugeInstance = ref<GaugeInstance>(); */
 
-    const detail = computed(() => getDetails[parameters.value.type](parameters.value));
+    const detail = computed(() => getDetails[props.parameters.type](props.parameters));
     const backgroundImage = computed(() =>
-      getBackgroundImage[parameters.value.type](parameters.value)
+      getBackgroundImage[props.parameters.type](props.parameters)
+    );
+
+    const textColor = computed(() =>
+      getContrastYIQ(detail.value.color) < 128 ? 'white--text' : undefined
     );
 
     const colorMap = computed(() => [
@@ -64,7 +77,7 @@ export default defineComponent({
       '#43A047',
     ]);
 
-    const isFiveADay = parameters.value.type === 'five-a-day';
+    const isFiveADay = props.parameters.type === 'five-a-day';
 
     return {
       backgroundImage,
@@ -73,6 +86,7 @@ export default defineComponent({
       formatOutput,
       /* gaugeRef,
       gaugeInstance, */
+      textColor,
       isFiveADay,
     };
   },
@@ -113,7 +127,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.gauge-container {
+.card-screen {
+  .card-screen__summary p {
+    margin-bottom: 4px !important;
+  }
+}
+
+/* .gauge-container {
   width: 100%;
   position: absolute;
   top: 0;
@@ -131,5 +151,5 @@ export default defineComponent({
       fill: rgba(0, 0, 0, 0);
     }
   }
-}
+} */
 </style>

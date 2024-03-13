@@ -1,6 +1,14 @@
 <template>
   <div>
-    <v-btn block class="button-bottom" large @click.stop="open">
+    <v-btn
+      block
+      class="button-bottom"
+      :class="textColor"
+      :color="detail.color"
+      elevation="0"
+      large
+      @click.stop="open"
+    >
       {{ $t('feedback.intake.tellMeMore') }}
     </v-btn>
     <v-dialog
@@ -57,7 +65,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import type { FeedbackDetails } from './card-details';
 
@@ -69,20 +77,23 @@ export default defineComponent({
       type: Object as PropType<FeedbackDetails>,
       required: true,
     },
+    textColor: {
+      type: String,
+    },
   },
 
-  data() {
-    return { dialog: false };
-  },
+  setup() {
+    const dialog = ref(false);
 
-  methods: {
-    open() {
-      this.dialog = true;
-    },
+    const open = () => {
+      dialog.value = true;
+    };
 
-    close() {
-      this.dialog = false;
-    },
+    const close = () => {
+      dialog.value = false;
+    };
+
+    return { dialog, open, close };
   },
 });
 </script>
@@ -95,5 +106,15 @@ export default defineComponent({
 .button-bottom {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.075);
+  }
 }
 </style>

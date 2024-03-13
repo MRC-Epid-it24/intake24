@@ -1,9 +1,10 @@
 <template>
   <div>
     <card-content
-      v-bind="{ name, description }"
+      v-bind="{ description, name, summary }"
       @update:description="update('description', $event)"
       @update:name="update('name', $event)"
+      @update:summary="update('summary', $event)"
     ></card-content>
     <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
     <card-thresholds
@@ -34,6 +35,10 @@ export default defineComponent({
     },
     description: {
       type: Object as PropType<FiveADayCard['description']>,
+      required: true,
+    },
+    summary: {
+      type: Object as PropType<FiveADayCard['summary']>,
       required: true,
     },
     high: {

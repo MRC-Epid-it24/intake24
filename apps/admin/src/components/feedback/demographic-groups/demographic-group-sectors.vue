@@ -49,13 +49,16 @@
               </div>
             </v-col>
             <v-col cols="12">
-              <language-selector v-model="sector.name" :label="$t('common.name').toString()">
+              <language-selector
+                v-model="sector.name"
+                :label="$t('feedback-schemes.cards.name').toString()"
+              >
                 <template v-for="lang in Object.keys(sector.name)" #[`lang.${lang}`]>
                   <v-text-field
                     :key="lang"
                     v-model="sector.name[lang]"
                     hide-details="auto"
-                    :label="$t('common.name')"
+                    :label="$t('feedback-schemes.cards.name')"
                     outlined
                     :rules="nameRules"
                   ></v-text-field>
@@ -64,14 +67,25 @@
             </v-col>
             <v-col cols="12">
               <language-selector
+                v-model="sector.summary"
+                :label="$t('feedback-schemes.cards.summary').toString()"
+              >
+                <template v-for="lang in Object.keys(sector.summary)" #[`lang.${lang}`]>
+                  <html-editor :key="lang" v-model="sector.summary[lang]"></html-editor>
+                </template>
+              </language-selector>
+            </v-col>
+            <v-col cols="12">
+              <language-selector
                 v-model="sector.description"
-                :label="$t('common.description').toString()"
+                :label="$t('feedback-schemes.cards.description').toString()"
               >
                 <template v-for="lang in Object.keys(sector.description)" #[`lang.${lang}`]>
                   <html-editor :key="lang" v-model="sector.description[lang]"></html-editor>
                 </template>
               </language-selector>
             </v-col>
+
             <v-col cols="12">
               <v-btn
                 block
@@ -100,10 +114,8 @@ import type { RuleCallback } from '@intake24/admin/types';
 import type { DemographicGroupScaleSector } from '@intake24/common/feedback';
 import { HtmlEditor } from '@intake24/admin/components/editors';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { sentiments } from '@intake24/common/feedback';
+import { demographicGroupScaleSectorDefaults, sentiments } from '@intake24/common/feedback';
 import { copy } from '@intake24/common/util';
-
-import { demographicGroupScaleSectorDefaults } from './demographic-group';
 
 export default defineComponent({
   name: 'DemographicGroupSectors',

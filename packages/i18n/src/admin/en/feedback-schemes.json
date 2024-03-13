@@ -208,9 +208,11 @@
     "remove": "Remove card",
     "type": "Card type",
     "options": "Card options",
+    "color": "Card color",
     "name": "Card name",
     "required": "Card name is required.",
-    "description": "Description",
+    "summary": "Card summary",
+    "description": "Card description",
     "showRecommendations": "Show feedback recommendations",
 
     "tabs": {
