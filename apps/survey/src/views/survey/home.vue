@@ -4,6 +4,11 @@
       <v-col cols="12" lg="9">
         <v-card :tile="isMobile">
           <!-- Survey info -->
+          <v-card-title class="text-h5 font-weight-medium mb-2">
+            {{ $t('survey.welcome._') }}
+          </v-card-title>
+          <v-card-subtitle>{{ $t('survey.welcome.subtitle') }}</v-card-subtitle>
+          <v-divider></v-divider>
           <v-list class="list-no-wrap" subheader two-line>
             <v-subheader>{{ $t('survey.info') }}</v-subheader>
             <v-list-item>
@@ -53,7 +58,7 @@
                   <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp">
                     <v-btn
                       block
-                      color="info"
+                      color="primary"
                       outlined
                       rounded
                       :title="$t('recall.start.another')"
@@ -66,7 +71,7 @@
                 </v-list-item>
                 <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-end">
                   <v-btn
-                    color="info"
+                    color="primary"
                     large
                     outlined
                     rounded
@@ -167,7 +172,7 @@
                   </v-list-item-content>
                   <v-list-item-action v-if="$vuetify.breakpoint.mdAndUp">
                     <v-btn
-                      color="info"
+                      color="primary"
                       outlined
                       rounded
                       :title="$t('recall.start._')"
@@ -180,7 +185,7 @@
                 </v-list-item>
                 <v-list-item v-if="$vuetify.breakpoint.smAndDown" class="justify-end">
                   <v-btn
-                    color="info"
+                    color="primary"
                     large
                     outlined
                     rounded

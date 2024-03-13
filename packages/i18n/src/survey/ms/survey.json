@@ -1,5 +1,9 @@
 {
   "_": "Survei",
+  "welcome": {
+    "_": "Welcome to Intake24",
+    "subtitle": "Intake24 is used in research studies to collect information about what people eat and drink."
+  },
   "info": "Maklumat survei",
   "states": {
     "_": "Status",
