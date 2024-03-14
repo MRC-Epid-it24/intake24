@@ -6,7 +6,7 @@ Browse paginated locale list
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new locale entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales
 
 Authorization: Bearer {accessToken}
@@ -70,7 +70,7 @@ Get locale entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -93,7 +93,7 @@ Update locale entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -129,7 +129,7 @@ Delete locale entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/locales/:localeId
 
 Authorization: Bearer {accessToken}
@@ -150,7 +150,7 @@ Specific jobs can be submitted to the queue. Each job type has its own parameter
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/tasks
 
 Authorization: Bearer {accessToken}
@@ -182,7 +182,7 @@ Get locale references
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/refs
 
 Authorization: Bearer {accessToken}
@@ -212,7 +212,7 @@ Get split lists entries
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId/split-lists
 
 Authorization: Bearer {accessToken}
@@ -241,7 +241,7 @@ Set split lists entries
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/split-lists
 
 Authorization: Bearer {accessToken}
@@ -281,7 +281,7 @@ Get split words entries
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId/split-words
 
 Authorization: Bearer {accessToken}
@@ -309,7 +309,7 @@ Set split words entries
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/split-words
 
 Authorization: Bearer {accessToken}
@@ -347,7 +347,7 @@ Get recipe foods entries
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId/recipe-foods
 
 Authorization: Bearer {accessToken}
@@ -390,7 +390,7 @@ Set recipe foods entries
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/recipe-foods
 
 Authorization: Bearer {accessToken}
@@ -458,7 +458,7 @@ Get recipe food steps entries
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId/recipe-foods/:recipeFoodId/steps
 
 Authorization: Bearer {accessToken}
@@ -491,7 +491,7 @@ Set recipe foods entries
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/recipe-foods/:recipeFoodId/steps
 
 Authorization: Bearer {accessToken}
@@ -539,7 +539,7 @@ Get synonym sets entries
 
 ### Request
 
-```json
+```http
 GET /api/admin/locales/:localeId/synonym-sets
 
 Authorization: Bearer {accessToken}
@@ -567,7 +567,7 @@ Set synonym sets entries
 
 ### Request
 
-```json
+```http
 POST /api/admin/locales/:localeId/synonym-sets
 
 Authorization: Bearer {accessToken}

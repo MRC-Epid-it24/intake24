@@ -6,7 +6,7 @@ Paginated `as served set` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/as-served-sets
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Paginated `category` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/categories
     ?search={searchText}
     &page={page}
@@ -60,7 +60,7 @@ Paginated `dinkware set` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/drinkware-sets
     ?search={searchText}
     &page={page}
@@ -87,7 +87,7 @@ Paginated `feedback scheme` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/feedback-schemes
     ?search={searchText}
     &page={page}
@@ -114,7 +114,7 @@ Paginated `food` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/foods
     ?search={searchText}
     &page={page}
@@ -141,7 +141,7 @@ Paginated `guide image` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/guide-images
     ?search={searchText}
     &page={page}
@@ -168,7 +168,7 @@ Paginated `image map` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/image-maps
     ?search={searchText}
     &page={page}
@@ -195,7 +195,7 @@ Paginated `language` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/languages
     ?search={searchText}
     &page={page}
@@ -222,7 +222,7 @@ Paginated `locale` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/locales
     ?search={searchText}
     &page={page}
@@ -249,7 +249,7 @@ Paginated `nutrient table` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/nutrient-tables
     ?search={searchText}
     &page={page}
@@ -276,7 +276,7 @@ Paginated `nutrient table record` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/nutrient-tables/:nutrientTableId/records
     ?search={searchText}
     &page={page}
@@ -294,7 +294,7 @@ Paginated `nutrient types` reference list.
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/nutrient-types?nutrientTableId={nutrientTableId}
     ?search={searchText}
     &page={page}
@@ -332,7 +332,7 @@ Paginated `survey scheme` reference list
 
 ### Request
 
-```json
+```http
 GET /api/admin/references/survey-schemes
     ?search={searchText}
     &page={page}

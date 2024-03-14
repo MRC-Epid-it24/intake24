@@ -6,7 +6,7 @@ Browse paginated survey scheme list
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-schemes
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new survey scheme entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/survey-schemes
 
 Authorization: Bearer {accessToken}
@@ -65,7 +65,7 @@ Get survey scheme entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-schemes/:surveySchemeId
 
 Authorization: Bearer {accessToken}
@@ -88,7 +88,7 @@ Update survey scheme entry
 
 ### Request
 
-```json
+```http
 PATCH /api/admin/survey-schemes/:surveySchemeId
 
 Authorization: Bearer {accessToken}
@@ -120,7 +120,7 @@ Delete survey scheme entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/survey-schemes/:surveySchemeId
 
 Authorization: Bearer {accessToken}
@@ -139,7 +139,7 @@ Create a new copy of specified source survey scheme
 
 ### Request
 
-```json
+```http
 POST /api/admin/survey-schemes/:surveySchemeId/copy
 
 Authorization: Bearer {accessToken}
@@ -166,7 +166,7 @@ Get survey scheme references
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-schemes/refs
 
 Authorization: Bearer {accessToken}
@@ -189,7 +189,7 @@ Available fields for data export
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-schemes/:surveySchemeId/data-export
 
 Authorization: Bearer {accessToken}
@@ -228,7 +228,7 @@ Browse available prompt templates for scheme
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-schemes/:surveySchemeId/templates
     ?search={searchText}
     &limit={limit}

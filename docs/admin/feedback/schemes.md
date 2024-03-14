@@ -115,18 +115,40 @@ List of cards (selected nutrients, foods, energy) to be included in feedback.
 
 There are couple of feedback card types that can be used:
 
-- `Character` – Assigns a nutrient type, which needs to be matched with nutrient type in `demographic groups` to display in feedback.
+### Character
 
-  - `Content` – `Character type` selects image that displays in feedback, `Nutrient type` selects nutrient, food or energy variable
+Character card assigns a nutrient type, which needs to be matched with nutrient type in `demographic groups` to display in feedback.
 
-- `Nutrient group` - Allows grouping of nutrients (e.g. fatty acids or sugar types) & thresholds to provide aggregated intake.
+- `Content` – `Character type` selects image that displays in feedback, `Nutrient type` selects nutrient, food or energy variable
 
-  - `Content` allows editing of card name and ‘Tell me more’ text to be entered.
-  - `Unit` enter measure such as ‘grams’, ‘mg’ etc.
-  - `Thresholds` sets lower or upper limits, with message
-  - `Nutrients` groups variables together for feedback
+### Nutrient group
 
-- `Five a day` - Defines `five-a-day` feedback for fruit & vegetables.
+Nutrient group allows grouping of nutrients (e.g. fatty acids or sugar types) & thresholds to provide aggregated intake.
+
+- `Content` allows editing of card name / summary / `Tell me more` texts.
+
+  - `Name` - card name
+  - `Summary` - summary text displayed in card body
+  - `Description` - detailed text displayed in `Tell me more` dialog
+
+- `Unit` enter measure such as ‘grams’, ‘mg’ etc.
+- `Thresholds` sets lower or upper limits, with message
+- `Nutrients` groups variables together for feedback
+
+### Five a day
+
+Five a day defines `five-a-day` feedback for fruit & vegetables.
+
+- `Content` allows editing of card name / summary / `Tell me more` texts.
+  - `Name` - card name
+  - `Summary` - summary text displayed in card body
+  - `Description` - detailed text displayed in `Tell me more` dialog
+
+### Common options
+
+- `Show recommendations` - tick to show recommendations for selected nutrient type
+
+- `Color` - preferred background color for card
 
 ## Demographic groups
 

@@ -8,7 +8,7 @@ Create new admin account.
 
 ### Request
 
-```json
+```http
 POST /api/admin/signup
 
 Content-Type: application/json
@@ -41,7 +41,7 @@ Verify email account
 
 ### Request
 
-```json
+```http
 POST /api/admin/signup/verify
 
 Content-Type: application/json

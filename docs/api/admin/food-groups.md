@@ -6,7 +6,7 @@ Browse paginated food groups list
 
 ### Request
 
-```json
+```http
 GET /api/admin/food-groups
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new food group entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/food-groups
 
 Authorization: Bearer {accessToken}
@@ -61,7 +61,7 @@ Get food group entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/food-groups/:foodGroupId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update food group entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/food-groups/:foodGroupId
 
 Authorization: Bearer {accessToken}
@@ -113,7 +113,7 @@ Delete food group entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/food-groups/:foodGroupId
 
 Authorization: Bearer {accessToken}

@@ -6,7 +6,7 @@ Browse paginated survey list
 
 ### Request
 
-```json
+```http
 GET /api/admin/surveys
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new survey entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/surveys
 
 Authorization: Bearer {accessToken}
@@ -84,7 +84,7 @@ Get survey entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -107,7 +107,7 @@ Update survey entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -157,7 +157,7 @@ Update survey entry - patch / partial update
 
 ### Request
 
-```json
+```http
 PATCH /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -207,7 +207,7 @@ Delete survey entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/surveys/:surveyId
 
 Authorization: Bearer {accessToken}
@@ -228,7 +228,7 @@ Specific jobs can be submitted to the queue. Each job type has its own parameter
 
 ### Request
 
-```json
+```http
 POST /api/admin/surveys/:surveyId/tasks
 
 Authorization: Bearer {accessToken}

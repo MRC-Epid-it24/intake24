@@ -6,7 +6,7 @@ Browse paginated drinkware set list
 
 ### Request
 
-```json
+```http
 GET /api/admin/images/drinkware-sets
     ?search={searchText}
     &page={page}
@@ -40,7 +40,7 @@ Create new drinkware set entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/images/drinkware-sets
 
 Authorization: Bearer {accessToken}
@@ -86,7 +86,7 @@ Get drinkware set entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/images/drinkware-sets/:drinkwareSetId
 
 Authorization: Bearer {accessToken}
@@ -126,7 +126,7 @@ Update drinkware set entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/images/drinkware-sets/:drinkwareSetId
 
 Authorization: Bearer {accessToken}
@@ -171,7 +171,7 @@ Delete drinkware set entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/images/drinkware-sets/:drinkwareSetId
 
 Authorization: Bearer {accessToken}

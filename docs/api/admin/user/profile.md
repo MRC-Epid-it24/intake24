@@ -6,7 +6,7 @@ Get logged-in user profile data
 
 ### Request
 
-```json
+```http
 GET /api/admin/user
 
 Authorization: Bearer {accessToken}
@@ -35,7 +35,7 @@ Request new account verification link
 
 ### Request
 
-```json
+```http
 POST /api/admin/user/verify
 
 Authorization: Bearer {accessToken}

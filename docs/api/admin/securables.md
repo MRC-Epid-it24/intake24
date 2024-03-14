@@ -14,7 +14,7 @@ Browse paginated list of users with any permission for particular record
 
 ### Request
 
-```json
+```http
 GET /api/admin/{securableType}/{securableId}/securables
     ?search={searchText}
     &page={page}
@@ -41,7 +41,7 @@ Create new user with `securable` actions.
 
 ### Request
 
-```json
+```http
 POST /api/admin/{securableType}/{securableId}/securables
 
 Authorization: Bearer {accessToken}
@@ -67,7 +67,7 @@ Update existing user with `securable` actions.
 
 ### Request
 
-```json
+```http
 PATCH /api/admin/{securableType}/{securableId}/securables/{userId}
 
 Authorization: Bearer {accessToken}
@@ -94,7 +94,7 @@ It does not remove user account.
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/{securableType}/{securableId}/securables/{userId}
 
 Authorization: Bearer {accessToken}
@@ -113,7 +113,7 @@ Search for available users within the system to assign securables.
 
 ### Request
 
-```json
+```http
 GET /api/admin/{securableType}/{securableId}/securables/users
     ?search={searchText}
 
@@ -142,7 +142,7 @@ Update `securable` record's ownership.
 
 ### Request
 
-```json
+```http
 POST /api/admin/{securableType}/{securableId}/securables/owner
 
 Authorization: Bearer {accessToken}

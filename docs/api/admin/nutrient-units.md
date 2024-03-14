@@ -6,7 +6,7 @@ Browse paginated nutrient unit list
 
 ### Request
 
-```json
+```http
 GET /api/admin/nutrient-units
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new nutrient unit entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/nutrient-units
 
 Authorization: Bearer {accessToken}
@@ -62,7 +62,7 @@ Get nutrient unit entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/nutrient-units/:nutrientUnitId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update nutrient unit entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/nutrient-units/:nutrientUnitId
 
 Authorization: Bearer {accessToken}
@@ -113,7 +113,7 @@ Delete nutrient unit entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/nutrient-units/:nutrientUnitId
 
 Authorization: Bearer {accessToken}

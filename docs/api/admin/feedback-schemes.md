@@ -6,7 +6,7 @@ Browse paginated feedback scheme list
 
 ### Request
 
-```json
+```http
 GET /api/admin/feedback-schemes
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new feedback scheme entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/feedback-schemes
 
 Authorization: Bearer {accessToken}
@@ -74,7 +74,7 @@ Get feedback scheme entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/feedback-schemes/:feedbackSchemeId
 
 Authorization: Bearer {accessToken}
@@ -97,7 +97,7 @@ Update feedback scheme entry
 
 ### Request
 
-```json
+```http
 PATCH /api/admin/feedback-schemes/:feedbackSchemeId
 
 Authorization: Bearer {accessToken}
@@ -138,7 +138,7 @@ Delete feedback scheme entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/feedback-schemes/:feedbackSchemeId
 
 Authorization: Bearer {accessToken}
@@ -157,7 +157,7 @@ Create a new copy of specified source feedback scheme
 
 ### Request
 
-```json
+```http
 POST /api/admin/feedback-schemes/:feedbackSchemeId/copy
 
 Authorization: Bearer {accessToken}
@@ -184,7 +184,7 @@ Get feedback scheme references
 
 ### Request
 
-```json
+```http
 GET /api/admin/feedback-schemes/refs
 
 Authorization: Bearer {accessToken}

@@ -8,7 +8,7 @@ Browse paginated survey scheme prompts list
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-scheme-prompts
     ?search={searchText}
     &page={page}
@@ -35,7 +35,7 @@ Create new survey scheme prompt entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/survey-scheme-prompts
 
 Authorization: Bearer {accessToken}
@@ -62,7 +62,7 @@ Get survey scheme prompt entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update survey scheme prompt entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
@@ -112,7 +112,7 @@ Delete survey scheme prompt entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/survey-scheme-prompts/:surveySchemePromptId
 
 Authorization: Bearer {accessToken}
@@ -131,7 +131,7 @@ Get survey scheme prompt references
 
 ### Request
 
-```json
+```http
 GET /api/admin/survey-scheme-prompts/refs
 
 Authorization: Bearer {accessToken}
@@ -155,7 +155,7 @@ Synchronize scheme prompt template with specific prompt in scheme section
 
 ### Request
 
-```json
+```http
 POST /api/admin/survey-scheme-prompts/:surveySchemePromptId/sync
 
 Authorization: Bearer {accessToken}

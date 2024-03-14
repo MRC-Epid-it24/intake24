@@ -40,7 +40,7 @@ Both applications have identical build toolchain pipeline and can be deployed to
 
 1. Same domain site as API Server - if relative path is configured, API server automatically registers the routes to serve the application within its context. Please see [Configuration](/config/) section for more details.
 2. Applications can be served directly by web server (Nginx, Apache). Or there are simple http server scripts to serve the applications. For different domain sites, CORS needs to be configured properly.
-3. 3rd party providers like e.g. AWS S3, Heroku, Netlify etc.
+3. 3<sup>rd</sup> party providers like e.g. AWS S3, Heroku, Netlify etc.
 
 :::tip
 Please see [Vite](https://vitejs.dev) docs for more details how to deploy Vue.js applications.

@@ -6,7 +6,7 @@ Browse paginated permission list
 
 ### Request
 
-```json
+```http
 GET /api/admin/permissions
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new permission entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/permissions
 
 Authorization: Bearer {accessToken}
@@ -62,7 +62,7 @@ Get permission entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update permission entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
@@ -114,7 +114,7 @@ Delete permission entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/permissions/:permissionId
 
 Authorization: Bearer {accessToken}
@@ -133,7 +133,7 @@ Get roles associated with permission
 
 ### Request
 
-```json
+```http
 GET /api/admin/permissions/:permissionId/roles
     ?search={searchText}
     &page={page}
@@ -160,7 +160,7 @@ Get users associated with permission
 
 ### Request
 
-```json
+```http
 GET /api/admin/permissions/:permissionId/users
     ?search={searchText}
     &page={page}

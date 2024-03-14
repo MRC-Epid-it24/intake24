@@ -6,7 +6,7 @@ Get list of survey submissions.
 
 ### Request
 
-```json
+```http
 GET /api/admin/surveys/:surveyId/submissions
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Get survey submission entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/surveys/:surveyId/submissions/:submissionId
 
 Authorization: Bearer {accessToken}
@@ -114,7 +114,7 @@ Delete survey submission records
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/surveys/:surveyId/submissions/:submissionId
 
 Authorization: Bearer {accessToken}

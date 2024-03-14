@@ -5,6 +5,7 @@ Jobs types available in system.
 - [Job types](#job-types)
   - [CleanRedisStore](#cleanredisstore)
   - [CleanStorageFiles](#cleanstoragefiles)
+  - [FeedbackSchemesSync](#feedbackschemessync)
   - [LanguageTranslationsSync](#languagetranslationssync)
   - [LocaleFoods](#localefoods)
   - [LocaleFoodNutrientMapping](#localefoodnutrientmapping)
@@ -40,6 +41,18 @@ Jobs types available in system.
 ## CleanStorageFiles
 
 `CleanStorageFiles` wipes temporary storage files, e.g. `downloads` and `uploads` folders.
+
+```json
+{}
+```
+
+## FeedbackSchemesSync
+
+`FeedbackSchemesSync` synchronizes existing feedback schemes with default values.
+
+:::tip
+This needs to be run if feedback scheme structure changes, e.g. new non-optional properties are added, so all database records are synced to use same structure.
+:::
 
 ```json
 {}
@@ -243,10 +256,10 @@ Any additional column not listed above, will get stored as `UserCustomField` rec
 
 ## SurveySchemesSync
 
-`SurveySchemesSync` synchronizes existing survey scheme prompts with default values.
+`SurveySchemesSync` synchronizes existing survey schemes with default values.
 
 :::tip
-This needs to be run if prompt object structure changes, e.g. new non-optional properties are added, so all database records are synced to use same structure.
+This needs to be run if survey schemes structure changes, e.g. new non-optional properties are added, so all database records are synced to use same structure.
 :::
 
 ```json
@@ -282,7 +295,7 @@ If [survey external communication](/admin/surveys/#external-communication) speci
 
 Request
 
-```json
+```http
 POST https://my-submission-notification-url.example.com
 
 Authorization: Bearer {token}

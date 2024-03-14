@@ -2,34 +2,32 @@
 
 Looking to integrate with Intake24? Here's how to do it.
 
-Intake24 provides access to [REST API](/api/), consumed by 1st party applications, [admin tool](/admin/) and [survey app](/survey/).
+Intake24 provides access to [REST API](/api/), consumed by 1<sup>st</sup> party applications, [admin tool](/admin/) and [survey app](/survey/).
 
-[REST API](/api/) can be used to integrate with any other 3rd party system. For machine-to-machine communication, [personal access tokens](/admin/user/personal-access-tokens) can be used rather than primary user credentials.
+[REST API](/api/) can be used to integrate with any other 3<sup>rd</sup> party system. For machine-to-machine communication, [personal access tokens](/admin/user/personal-access-tokens) can be used rather than primary user credentials.
 
-While REST API is a generic interface to be used per-use case basis. There are few features that can be used to integrate 3rd party survey flow with the Intake24 in a more seamless way, like:
+While REST API is a generic interface to be used to implement custom flow, there are few features that can simplify the 3<sup>rd</sup> party integration into survey flow without delving too much into the API details:
 
 - Respondent account creation
+
 - Survey completion notifications
-- Redirecting to 3rd party system.
+
+- Redirecting to 3<sup>rd</sup> party system
 
 ## Respondent account creation
 
-Traditionally, respondent accounts can be created manually in [Admin Tool UI](/admin/surveys/#respondents) either using form UI or [uploading CSV file](/admin/system/job-types.html#surveyimportrespondents) for bulk creation. This is suitable for small scale studies or batch-style data processing where respondent accounts are created in advance.
-
-Respondent accounts can also be created on the fly using [Survey API](#survey-api) or [Admin API](#admin-api). This is suitable for large scale studies, where seamless integration is required for real-time data processing/monitoring and respondent accounts are created on demand and users automatically redirected into the Intake24 system.
-
-### Survey API
+Respondent accounts can be created on the fly using simplified API call with JWT-encoded parameters. This is suitable for studies, where seamless integration is required for real-time data processing/monitoring and respondent accounts are created on demand and respondents automatically redirected into the Intake24 system.
 
 Survey can be enabled with respondent account generation using shared secret. To enable this feature, read [survey user settings](/admin/surveys/#users-settings) section.
 
 - tick `allow user generation`
-- set up `jwt secret` - opaque string to sign JWT for secure communication between Intake24 and 3rd party system
+- set up `jwt secret` - opaque string to sign JWT for secure communication between Intake24 and 3<sup>rd</sup> party system
 
 ::: warning
 JWT secret should be treated as a `shared secret for machine-to-machine communication`. Therefore it should always be securely stored in backend and not embedded in frontend code, where it can be easily extracted and misused.
 :::
 
-Once enabled, two options listed below can be used to create respondent accounts. Regardless of the option, [JWT token](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
+Once enabled, two options listed below can be used to create respondent accounts. Regardless of the selected option, [JWT token](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} with payload must be created.
 
 #### A) API endpoint
 
@@ -38,8 +36,8 @@ Once enabled, two options listed below can be used to create respondent accounts
 
 #### Specifications of `token`
 
-- `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings).
-- `HS256` and `HS512` algorithms are supported.
+- `token` must be a valid JWT token signed with the [`JWT secret`](/admin/surveys/#users-settings)
+- `HS256` and `HS512` algorithms are supported
 - expected claims / payload shape:
   - `username` - Unique respondent username within the survey
   - `password` (optional) - password for username:password login
@@ -69,22 +67,18 @@ Once enabled, two options listed below can be used to create respondent accounts
 Pick suitable option based on integration use case, depending whether you need to process API response (`A`) or not (`B`).
 :::
 
-### Admin API
-
-[Admin API](/api/admin/surveys/respondents) can be used to create respondent accounts. This requires admin access to Intake24 and going through admin authentication flow.
-
 ## Survey completion notifications
 
-Intake24 can notify 3rd party system about survey completion using registered webhook. To enable this feature, read [survey external communication](/admin/surveys/#external-communication) section.
+Intake24 can notify 3<sup>rd</sup> party system about survey completion using registered webhook. To enable this feature, read [survey external communication](/admin/surveys/#external-communication) section.
 
 - set up `webhook url` - URL to be called when survey recall is submitted
 - upon each survey submission, system dispatches [survey submission notification](/admin/system/job-types.html#surveysubmissionnotification) job with described request.
 
-Request payload contains submission data. If `JWT secret` is set in [survey external communication](/admin/surveys/#external-communication) section, Authorization header is attached with signed JWT token.
+Request payload contains submission data. If `JWT secret` is set in [survey external communication](/admin/surveys/#external-communication) section, Authorization header is attached with signed JWT token, which can be used to verify the request.
 
-## Redirecting to 3rd party system
+## Redirection to 3<sup>rd</sup> party system
 
-Intake24 can redirect respondent to 3rd party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. Please see [redirect prompt](/admin/surveys/prompt-types.html#redirect-prompt) for more details.
+Intake24 can redirect respondent to 3<sup>rd</sup> party system upon survey recall completion. To enable this feature, survey scheme needs to set up with terminal `redirect prompt` including desired parameters to form the `redirect URL`. Please see [redirect prompt](/admin/surveys/prompt-types.html#redirect-prompt) for more details.
 
 ## Missing integration?
 

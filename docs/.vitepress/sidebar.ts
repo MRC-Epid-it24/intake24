@@ -163,10 +163,6 @@ export const sidebar = {
           link: '/open-api.html',
           target: '_blank',
         },
-        {
-          text: 'Authentication',
-          link: '/api/authentication',
-        },
       ],
     },
     {

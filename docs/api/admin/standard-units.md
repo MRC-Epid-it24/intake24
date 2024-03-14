@@ -6,7 +6,7 @@ Browse paginated standard standard list
 
 ### Request
 
-```json
+```http
 GET /api/admin/standard-units
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new standard unit entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/standard-units
 
 Authorization: Bearer {accessToken}
@@ -62,7 +62,7 @@ Get standard unit entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/standard-units/:standardUnitId
 
 Authorization: Bearer {accessToken}
@@ -85,7 +85,7 @@ Update standard unit entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/standard-units/:standardUnitId
 
 Authorization: Bearer {accessToken}
@@ -113,7 +113,7 @@ Delete standard unit entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/standard-units/:standardUnitId
 
 Authorization: Bearer {accessToken}
@@ -132,7 +132,7 @@ Get categories associated with standard unit
 
 ### Request
 
-```json
+```http
 GET /api/admin/standard-units/:standardUnitId/foods
     ?search={searchText}
     &page={page}
@@ -159,7 +159,7 @@ Get foods associated with standard unit
 
 ### Request
 
-```json
+```http
 GET /api/admin/standard-units/:standardUnitId/foods
     ?search={searchText}
     &page={page}

@@ -6,7 +6,7 @@ Browse paginated sign-in logs list
 
 ### Request
 
-```json
+```http
 GET /api/admin/sign-in-logs
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Get sign-in log entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/sign-in-logs/:signInLogId
 
 Authorization: Bearer {accessToken}
@@ -56,7 +56,7 @@ Delete sign-in log entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/sign-in-logs/:signInLogId
 
 Authorization: Bearer {accessToken}

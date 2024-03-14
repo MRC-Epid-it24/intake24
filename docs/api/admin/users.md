@@ -6,7 +6,7 @@ Browse paginated user list
 
 ### Request
 
-```json
+```http
 GET /api/admin/users
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new user entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/users
 
 Authorization: Bearer {accessToken}
@@ -76,7 +76,7 @@ Get user entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
@@ -99,7 +99,7 @@ Update user entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
@@ -139,7 +139,7 @@ Delete user entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/users/:userId
 
 Authorization: Bearer {accessToken}
@@ -158,7 +158,7 @@ Get user references
 
 ### Request
 
-```json
+```http
 GET /api/admin/users/refs
 
 Authorization: Bearer {accessToken}
@@ -196,7 +196,7 @@ Get permissions associated with user
 
 ### Request
 
-```json
+```http
 GET /api/admin/users/:userId/permissions
     ?search={searchText}
     &page={page}
@@ -223,7 +223,7 @@ Get roles associated with user
 
 ### Request
 
-```json
+```http
 GET /api/admin/users/:userId/roles
     ?search={searchText}
     &page={page}

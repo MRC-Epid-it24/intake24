@@ -6,7 +6,7 @@ Browse paginated nutrient type list
 
 ### Request
 
-```json
+```http
 GET /api/admin/nutrient-types
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Create new nutrient type entry
 
 ### Request
 
-```json
+```http
 POST /api/admin/nutrient-types
 
 Authorization: Bearer {accessToken}
@@ -63,7 +63,7 @@ Get nutrient type entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/nutrient-types/:nutrientTypeId
 
 Authorization: Bearer {accessToken}
@@ -86,7 +86,7 @@ Update nutrient type entry
 
 ### Request
 
-```json
+```http
 PUT /api/admin/nutrient-types/:nutrientTypeId
 
 Authorization: Bearer {accessToken}
@@ -115,7 +115,7 @@ Delete nutrient type entry
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/nutrient-types/:nutrientTypeId
 
 Authorization: Bearer {accessToken}
@@ -134,7 +134,7 @@ Get nutrient type references
 
 ### Request
 
-```json
+```http
 GET /api/admin/nutrient-types/refs
 
 Authorization: Bearer {accessToken}

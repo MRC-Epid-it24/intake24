@@ -6,7 +6,7 @@ Rebuilding Index for a Specific Locale
 
 ### Request
 
-```json
+```http
 POST /api/admin/foods/global/rebuild
 {
     locale: "LOCALE_ID"
@@ -32,7 +32,7 @@ Rebuilding all Indexes of the all Locales
 
 ### Request
 
-```json
+```http
 POST /api/admin/foods/global/rebuild
 {}
 

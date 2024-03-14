@@ -8,7 +8,7 @@ Browse paginated personal access tokens list
 
 ### Request
 
-```json
+```http
 GET /api/admin/user/personal-access-tokens
     ?search={searchText}
     &page={page}
@@ -35,7 +35,7 @@ Issue new personal access token
 
 ### Request
 
-```json
+```http
 POST /api/admin/user/personal-access-tokens
 
 Authorization: Bearer {accessToken}
@@ -64,7 +64,7 @@ Revoke personal access token
 
 ### Request
 
-```json
+```http
 DELETE /api/admin/user/personal-access-tokens/:tokenId
 
 Authorization: Bearer {accessToken}

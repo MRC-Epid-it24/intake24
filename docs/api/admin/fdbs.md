@@ -6,7 +6,7 @@ Browse paginated food database list (effectively locale list)
 
 ### Request
 
-```json
+```http
 GET /api/admin/fdbs
     ?search={searchText}
     &page={page}
@@ -33,7 +33,7 @@ Get food database entry
 
 ### Request
 
-```json
+```http
 GET /api/admin/fdbs/:localeId
 
 Authorization: Bearer {accessToken}
@@ -56,7 +56,7 @@ Browse paginated category list
 
 ### Request
 
-```json
+```http
 GET /api/admin/fdbs/:localeId/categories
     ?search={searchText}
     &page={page}
@@ -83,7 +83,7 @@ Browse paginated food list
 
 ### Request
 
-```json
+```http
 GET /api/admin/fdbs/:localeId/foods
     ?search={searchText}
     &page={page}

@@ -17,7 +17,7 @@ Both built on same tech stack:
 - [Axios](https://github.com/axios/axios) - HTTP client
 
 ::: tip Vue version
-Currently apps are built using Vue V2. Vue V3 is already released, but some of the 1st/3rd party plugins are still in process to be adopted for V3. Once Vue V3 plugins ecosystem catches up, we'll look into migration to V3.
+Currently apps are built using Vue V2. Vue V3 is already released, but some of the 1<sup>st</sup>/3<sup>rd</sup> party plugins are still in process to be adopted for V3. Once Vue V3 plugins ecosystem catches up, we'll look into migration to V3.
 :::
 
 ## Backend
