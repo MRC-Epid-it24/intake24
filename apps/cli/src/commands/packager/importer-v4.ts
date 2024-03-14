@@ -757,11 +757,6 @@ export class ImporterV4 {
     );
   }
 
-  // private async readCSVStructure(): Promise<void> {
-  //   logger.info('Loading CSV structure');
-  //   this.csvStructure = await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME);
-  // }
-
   public async readPackage(): Promise<void> {
     await Promise.all([
       this.readLocales(),
