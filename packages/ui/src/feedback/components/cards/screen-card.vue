@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    class="card-screen d-flex flex-column"
-    :color="detail.color"
-    height="100%"
-    min-width="320px"
-  >
+  <v-card class="card-screen d-flex flex-column" :color="detail.color" height="100%">
     <v-img :aspect-ratio="16 / 9" :src="backgroundImage"></v-img>
     <!-- <div v-if="isFiveADay" ref="gaugeRef" class="gauge-container"></div> -->
     <v-card-subtitle class="font-weight-medium" :class="textColor">

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0" fluid>
+  <div>
     <v-sheet color="white py-4">
       <h1 v-if="surveyName" class="text-h1 font-weight-medium text-center px-4 pb-4">
         {{ surveyName }}
@@ -7,77 +7,83 @@
       <h2 class="text-h2 font-weight-medium text-center px-4 pb-4">
         {{ $t('feedback.title', { name: userName ? `${userName}'s` : '' }) }}
       </h2>
-      <v-row class="pa-4 d-print-none" justify="center" no-gutters>
-        <v-col cols="12" lg="7" md="8" xl="6">
-          <v-row justify="space-around">
-            <feedback-user-info
-              v-if="userDemographic?.hasData()"
-              v-bind="{ surveyId, userDemographic }"
-            ></feedback-user-info>
-            <feedback-outputs
-              v-if="!!outputs.length"
-              v-bind="{
-                outputs,
-                submissions:
-                  submissions.length !== selectedSubmissions.length
-                    ? selectedSubmissions
-                    : undefined,
-                surveyId,
-              }"
-            ></feedback-outputs>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-row class="pa-4 d-print-none" justify="center" no-gutters>
-        <v-col cols="12" lg="7" md="8" xl="6">
-          <v-expansion-panels focusable>
-            <v-expansion-panel>
-              <v-expansion-panel-header
-                class="text-subtitle-1 font-weight-medium"
-                color="grey lighten-4"
-              >
-                {{ $t('recall.submissions.title') }}
-                ({{
-                  submissions.length === selectedSubmissions.length
-                    ? $t('recall.submissions.all')
-                    : selectedSubmissions.length
-                }})
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-list flat>
-                  <v-list-item-group v-model="selectedSubmissions" multiple @change="buildFeedback">
-                    <v-list-item
-                      v-for="(submission, idx) in submissions"
-                      :key="submission.id"
-                      dense
-                      :value="submission.id"
+      <v-container class="container-max">
+        <v-row class="d-print-none" justify="center">
+          <v-col cols="12" lg="7" md="8" xl="6">
+            <v-row justify="space-around">
+              <feedback-user-info
+                v-if="userDemographic?.hasData()"
+                v-bind="{ surveyId, userDemographic }"
+              ></feedback-user-info>
+              <feedback-outputs
+                v-if="!!outputs.length"
+                v-bind="{
+                  outputs,
+                  submissions:
+                    submissions.length !== selectedSubmissions.length
+                      ? selectedSubmissions
+                      : undefined,
+                  surveyId,
+                }"
+              ></feedback-outputs>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row class="d-print-none" justify="center">
+          <v-col cols="12" lg="7" md="8" xl="6">
+            <v-expansion-panels focusable>
+              <v-expansion-panel>
+                <v-expansion-panel-header
+                  class="text-subtitle-1 font-weight-medium"
+                  color="grey lighten-4"
+                >
+                  {{ $t('recall.submissions.title') }}
+                  ({{
+                    submissions.length === selectedSubmissions.length
+                      ? $t('recall.submissions.all')
+                      : selectedSubmissions.length
+                  }})
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-list flat>
+                    <v-list-item-group
+                      v-model="selectedSubmissions"
+                      multiple
+                      @change="buildFeedback"
                     >
-                      <template #default="{ active }">
-                        <v-list-item-action class="my-0">
-                          <v-checkbox :input-value="active"></v-checkbox>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            {{ `${$t('recall.submissions._')} ${idx + 1}` }} |
-                            {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </template>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-col>
-      </v-row>
-      <v-row class="px-4" justify="center" no-gutters>
-        <v-col cols="12" lg="7" md="8" xl="6">
-          <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
-            {{ $t('feedback.missingFoods') }}
-          </v-alert>
-        </v-col>
-      </v-row>
+                      <v-list-item
+                        v-for="(submission, idx) in submissions"
+                        :key="submission.id"
+                        dense
+                        :value="submission.id"
+                      >
+                        <template #default="{ active }">
+                          <v-list-item-action class="my-0">
+                            <v-checkbox :input-value="active"></v-checkbox>
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>
+                              {{ `${$t('recall.submissions._')} ${idx + 1}` }} |
+                              {{ `${new Date(submission.endTime).toLocaleDateString()}` }}
+                            </v-list-item-title>
+                          </v-list-item-content>
+                        </template>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="12" lg="7" md="8" xl="6">
+            <v-alert class="mb-0" color="info" icon="fas fa-circle-exclamation" text>
+              {{ $t('feedback.missingFoods') }}
+            </v-alert>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-sheet>
     <div v-if="feedbackScheme && feedbackDicts" class="d-flex flex-column">
       <feedback-cards
@@ -102,7 +108,7 @@
         :class="`feedback-area order-${getSectionOrder('rating')} d-print-none`"
       ></survey-rating>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -312,7 +318,8 @@ export default defineComponent({
 
 <style lang="scss">
 .feedback-area {
-  padding: 16px 0 !important;
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
 
   @media print {
     padding: 0 !important;

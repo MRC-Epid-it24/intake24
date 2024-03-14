@@ -3,7 +3,7 @@
     <h2 class="text-h2 font-weight-medium text-center mb-6 chart-print-title">
       {{ $t('feedback.topFoods.title') }}
     </h2>
-    <v-container>
+    <v-container class="container-max">
       <v-row class="d-print-none" justify="center" no-gutters>
         <v-col
           v-for="chart in charts"
@@ -17,7 +17,6 @@
         </v-col>
       </v-row>
     </v-container>
-
     <div class="d-none d-print-block">
       <div v-for="chart in charts" :key="`print-${chart.id}`" class="chart-print-wrapper">
         <chart autoresize class="chart-print" :option="chart"></chart>
