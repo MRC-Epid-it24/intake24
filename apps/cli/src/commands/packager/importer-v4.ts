@@ -905,10 +905,6 @@ export class ImporterV4 {
       path.join(PkgConstants.PORTION_SIZE_DIRECTORY_NAME, PkgConstants.GUIDE_IMAGE_FILE_NAME),
     );
   }
-  // private async readCSVStructure(): Promise<void> {
-  //   logger.info('Loading CSV structure');
-  //   this.csvStructure = await this.readJSON(PkgConstants.CSV_STRUCTURE_FILE_NAME);
-  // }
 
   public async readPackage(): Promise<void> {
     await Promise.all([
