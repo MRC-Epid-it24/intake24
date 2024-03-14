@@ -314,7 +314,7 @@ export const useSurvey = defineStore('survey', {
     },
 
     setUserInfo(user: SurveyUserInfoResponse) {
-      this.user = user;
+      this.user = this.user?.userId === user.userId ? { ...this.user, ...user } : user;
     },
 
     reCreateStoreAfterDeserialization() {
@@ -389,7 +389,7 @@ export const useSurvey = defineStore('survey', {
 
       try {
         const { submission, ...rest } = await surveyService.submit(this.parameters.slug, this.data);
-        this.user = rest;
+        this.setUserInfo(rest);
         this.data.id = submission.id;
         this.data.submissionTime = submission.submissionTime;
         clearPromptStores();

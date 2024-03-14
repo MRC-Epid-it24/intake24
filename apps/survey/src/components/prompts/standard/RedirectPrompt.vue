@@ -129,16 +129,19 @@ export default defineComponent({
     const timerTick = computed(() =>
       props.prompt.timer ? Math.round(100 / props.prompt.timer) : 0
     );
-    const timerSecs = computed(() =>
-      props.prompt.timer ? Math.round((timerValue.value / 100) * props.prompt.timer) : 0
-    );
+    const timerSecs = computed(() => {
+      if (!props.prompt.timer) return 0;
+
+      const timer = Math.round((timerValue.value / 100) * props.prompt.timer);
+      return timer > 0 ? timer : 0;
+    });
 
     const promptI18n = computed(() => translatePrompt(['goTo', 'missingUrl']));
 
     const redirect = () => {
       if (!props.followUpUrl) return;
 
-      window.location.replace(props.followUpUrl);
+      window.open(props.followUpUrl, props.prompt.target);
     };
 
     const startTimer = () => {
@@ -170,6 +173,7 @@ export default defineComponent({
       action,
       isValid,
       promptI18n,
+      timerTick,
       timerSecs,
       timerValue,
       clearTimer,
