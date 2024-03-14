@@ -273,6 +273,7 @@ export type Prompts = {
     url: string | null;
     identifier: 'userId' | 'username' | 'urlAuthToken' | string | null;
     timer: number;
+    target: '_self' | '_blank';
   };
   'review-confirm-prompt': BaseStandardPrompt & { component: 'review-confirm-prompt' };
   'same-as-before-prompt': BaseStandardPrompt & { component: 'same-as-before-prompt' };

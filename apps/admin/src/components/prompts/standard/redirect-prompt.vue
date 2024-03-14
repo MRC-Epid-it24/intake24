@@ -2,20 +2,6 @@
   <v-tab-item key="options" value="options">
     <v-row>
       <v-col cols="12" md="6">
-        <v-card-title>
-          <v-icon left>fas fa-start-half-stroke</v-icon>
-          {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
-        </v-card-title>
-        <v-card-text>
-          <v-switch
-            hide-details="auto"
-            :input-value="rating"
-            :label="$t('survey-schemes.prompts.final-prompt.rating._')"
-            @change="update('rating', $event)"
-          ></v-switch>
-        </v-card-text>
-      </v-col>
-      <v-col cols="12" md="6">
         <v-card-title>{{ $t('survey-schemes.prompts.redirect-prompt.url.title') }}</v-card-title>
         <v-card-subtitle>
           {{ $t('survey-schemes.prompts.redirect-prompt.url.subtitle') }}
@@ -44,6 +30,7 @@
             @change="updateIdentifier"
           ></v-combobox>
           <v-text-field
+            class="mb-4"
             hide-details="auto"
             :label="$t('survey-schemes.prompts.redirect-prompt.timer._')"
             name="timer"
@@ -52,6 +39,29 @@
             :value="timer"
             @input="updateTimerValue"
           ></v-text-field>
+          <v-select
+            :items="targets"
+            :label="$t('survey-schemes.prompts.redirect-prompt.target._')"
+            outlined
+            prepend-inner-icon="fa-solid fa-arrow-up-right-from-square"
+            :value="target"
+            @change="update('target', $event)"
+          >
+          </v-select>
+        </v-card-text>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-card-title>
+          <v-icon left>fas fa-star-half-stroke</v-icon>
+          {{ $t('survey-schemes.prompts.final-prompt.rating.title') }}
+        </v-card-title>
+        <v-card-text>
+          <v-switch
+            hide-details="auto"
+            :input-value="rating"
+            :label="$t('survey-schemes.prompts.final-prompt.rating._')"
+            @change="update('rating', $event)"
+          ></v-switch>
         </v-card-text>
       </v-col>
     </v-row>
@@ -64,6 +74,7 @@ import { defineComponent } from 'vue';
 
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Prompts } from '@intake24/common/prompts';
+import { useI18n } from '@intake24/i18n';
 
 import { basePrompt } from '../partials';
 
@@ -85,19 +96,28 @@ export default defineComponent({
       type: Number as PropType<Prompts['redirect-prompt']['timer']>,
       required: true,
     },
+    target: {
+      type: String as PropType<Prompts['redirect-prompt']['target']>,
+      required: true,
+    },
     rating: {
       type: Boolean as PropType<Prompts['redirect-prompt']['rating']>,
       required: true,
     },
   },
 
-  data() {
-    return {
-      identifiers: ['userId', 'username', 'urlAuthToken'].map((value) => ({
-        text: this.$t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
-        value,
-      })),
-    };
+  setup() {
+    const { i18n } = useI18n();
+    const identifiers = ['userId', 'username', 'urlAuthToken'].map((value) => ({
+      text: i18n.t(`survey-schemes.prompts.redirect-prompt.identifier.options.${value}`),
+      value,
+    }));
+    const targets = ['_self', '_blank'].map((value) => ({
+      text: i18n.t(`survey-schemes.prompts.redirect-prompt.target.${value}`),
+      value,
+    }));
+
+    return { identifiers, targets };
   },
 
   computed: {

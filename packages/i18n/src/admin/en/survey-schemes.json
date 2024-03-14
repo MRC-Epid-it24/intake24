@@ -397,6 +397,12 @@
           "urlAuthToken": "Authentication token"
         }
       },
+      "target": {
+        "_": "Target",
+        "subtitle": "Choose where to open the URL",
+        "_self": "Open in the same window",
+        "_blank": "Open in a new window"
+      },
       "timer": {
         "_": "Number of seconds for redirect",
         "title": "Timer options"

@@ -21,9 +21,10 @@
             class="mb-6"
             :class="{ 'px-10': !isMobile }"
             color="primary"
+            :href="followUpUrl"
+            :target="prompt.target"
             :title="promptI18n.goTo"
             x-large
-            @click="redirect"
           >
             <v-icon left>$redirect</v-icon>
             {{ promptI18n.goTo }}
@@ -71,7 +72,7 @@
           <v-icon class="pb-1">$feedback</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn :disabled="!followUpUrl" @click="redirect">
+        <v-btn :disabled="!followUpUrl" :href="followUpUrl" :target="prompt.target">
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.redirect') }}
           </span>
@@ -146,7 +147,7 @@ export default defineComponent({
       timerInterval.value = setInterval(() => {
         timerValue.value -= timerTick.value;
 
-        if (timerValue.value === 0) {
+        if (timerValue.value <= 0) {
           clearTimer();
           redirect();
         }

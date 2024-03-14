@@ -114,6 +114,7 @@ export const redirectPrompt: Prompts['redirect-prompt'] = copy({
   url: null,
   identifier: 'username',
   timer: 0,
+  target: '_self',
 });
 
 export const reviewConfirmPrompt: Prompts['review-confirm-prompt'] = copy({

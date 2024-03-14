@@ -119,6 +119,11 @@ Prompt to redirect user to external site with optional user identifier embedded 
   - `custom` - custom identifier that can be set through `userCustomField`.
     - Enter a `name` of the custom field to be looked up the `value`.
 
+- `target` - target window for redirection
+
+  - `_blank` - open in a new window
+  - `_self` - open in the same window
+
 - `timer` - optional timer in seconds when automatic redirection should occur
   - disabled if set to `0`
 

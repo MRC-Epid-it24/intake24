@@ -7,9 +7,6 @@
           {{ $t('survey-schemes.prompts.submit-prompt.review.subtitle') }}
         </v-card-subtitle>
         <v-card-text>
-          <v-row>
-            <v-col></v-col>
-          </v-row>
           <v-select
             v-for="key in Object.keys(review)"
             :key="key"
