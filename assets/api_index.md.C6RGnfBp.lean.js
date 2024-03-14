@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as s,a4 as i}from"./chunks/framework.CvR0xHCp.js";const g=JSON.parse('{"title":"Introduction","description":"","frontmatter":{},"headers":[],"relativePath":"api/index.md","filePath":"api/index.md"}'),t={name:"api/index.md"},n=i("",15),o=[n];function l(p,r,c,d,h,u){return s(),a("div",null,o)}const f=e(t,[["render",l]]);export{g as __pageData,f as default};
