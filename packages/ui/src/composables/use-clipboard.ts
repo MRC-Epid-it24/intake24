@@ -13,7 +13,7 @@ export const useClipboard = () => {
   const defaultMsg = i18n.t('common.clipboard.copied').toString();
 
   async function toClipboard(data: string, message?: string) {
-    if (clipboardAvailable.value) {
+    if (!clipboardAvailable.value) {
       messages.warning(i18n.t('common.clipboard.na').toString());
       return;
     }
