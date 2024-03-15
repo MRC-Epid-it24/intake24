@@ -1,22 +1,19 @@
 <template>
-  <div class="d-flex" :class="categoriesFirst ? 'flex-column' : 'flex-column-reverse'">
-    <v-list v-if="contents.subcategories.length" class="list__no-wrap pa-0">
-      <v-list-item
+  <div class="d-flex flex-column">
+    <v-subheader v-if="contents.subcategories.length">Related Categories/Subcategories</v-subheader>
+    <v-chip-group v-if="contents.subcategories.length" active-class="primary--text" column>
+      <v-chip
         v-for="category in contents.subcategories"
         :key="category.code"
-        class="list-item-border"
+        class="my-1"
+        clickable
+        color="primary"
+        outlined
         @click="categorySelected(category)"
       >
-        <v-list-item-icon>
-          <v-icon>$category</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            <span class="font-weight-medium">{{ category.name }}</span>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+        <span class="font-weight-medium">{{ category.name }}</span>
+      </v-chip>
+    </v-chip-group>
     <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item
         v-for="food in contents.foods"
