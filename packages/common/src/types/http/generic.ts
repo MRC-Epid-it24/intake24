@@ -11,8 +11,8 @@ export const jsonSchema: z.ZodType<Json> = z.lazy(() =>
 export const jsonObjectSchema: z.ZodType<Json> = z.lazy(() => z.record(jsonSchema));
 
 export const paginationRequest = z.object({
-  page: z.number().int().min(1).optional(),
-  limit: z.number().int().min(1).max(1000).optional(),
+  page: z.coerce.number().int().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(1000).optional(),
   sort: z.union([z.literal('asc'), z.literal('desc')]).optional(),
   search: z.string().max(128).optional(),
 });

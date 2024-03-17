@@ -9,9 +9,9 @@ const yearMax = year;
 export const userPhysicalDataScheme = z.object({
   userId: z.string(),
   sex: z.enum(sexes).nullable(),
-  weightKg: z.number().min(0).max(300).nullable(),
-  heightCm: z.number().min(0).max(300).nullable(),
-  birthdate: z.number().min(yearMin).max(yearMax).nullable(),
+  weightKg: z.coerce.number().min(0).max(300).nullable(),
+  heightCm: z.coerce.number().min(0).max(300).nullable(),
+  birthdate: z.coerce.number().min(yearMin).max(yearMax).nullable(),
   physicalActivityLevelId: z.string().nullable(),
   weightTarget: z.enum(weightTargets).nullable(),
 });

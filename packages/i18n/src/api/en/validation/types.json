@@ -4,7 +4,7 @@
     "min": "\"{attribute}\" must be an array (min: {min}).",
     "max": "\"{attribute}\" must be an array (max: {max}).",
     "minMax": "\"{attribute}\" must be an array (min: {min}, max: {max}).",
-    "even" : "\"{attribute}\" must have an even number of elements.",
+    "even": "\"{attribute}\" must have an even number of elements.",
     "number": "\"{attribute}\" must be an array of numbers.",
     "string": "\"{attribute}\" must be an array of string.",
     "colors": "\"{attribute}\" must be an array of colors."
@@ -62,6 +62,9 @@
   },
   "locale": {
     "_": "\"{attribute}\" must be a valid locale code."
+  },
+  "number": {
+    "_": "\"{attribute}\" must be a number."
   },
   "match": {
     "_": "\"{attribute}\" must match with {match} value."
