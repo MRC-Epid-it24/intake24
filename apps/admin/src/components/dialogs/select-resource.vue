@@ -97,7 +97,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import type { TranslateResult } from 'vue-i18n';
-import { defineComponent, ref, toRefs } from 'vue';
+import { defineComponent, ref, toRefs, watch } from 'vue';
 
 import type { Dictionary } from '@intake24/common/types';
 import { useFetchList } from '@intake24/admin/composables';
@@ -163,6 +163,15 @@ export default defineComponent({
     );
 
     if (props.initialItem) items.value.push(props.initialItem);
+
+    watch(
+      () => props.value,
+      (val) => {
+        if (val === selectedItemId.value) return;
+
+        selectedItemId.value = null;
+      }
+    );
 
     return {
       dialog,
