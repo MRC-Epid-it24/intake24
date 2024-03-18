@@ -11,25 +11,6 @@ const execa = require('execa');
  */
 
 const validators = [
-  // Feedback schemes
-  {
-    type: 'Cards',
-    srcFile: 'src/feedback/cards.ts',
-    destFile: 'src/validators/feedback-schemes/cards.validator.ts',
-    params: '--useNamedExport',
-  },
-  {
-    type: 'DemographicGroups',
-    srcFile: 'src/feedback/demographic-groups.ts',
-    destFile: 'src/validators/feedback-schemes/demographic-groups.validator.ts',
-    params: '--useNamedExport',
-  },
-  {
-    type: 'HenryCoefficients',
-    srcFile: 'src/feedback/henry-coefficients.ts',
-    destFile: 'src/validators/feedback-schemes/henry-coefficients.validator.ts',
-    params: '--useNamedExport',
-  },
   // Survey schemes
   {
     type: 'Meals',
@@ -74,13 +55,6 @@ const validators = [
     srcFile: 'src/types/http/admin/nutrient-tables.ts',
     destFile: 'src/validators/nutrient-tables/csv-mapping-nutrients.validator.ts',
     params: '--useNamedExport',
-  },
-  // Other
-  {
-    type: 'PushSubscription',
-    srcFile: 'src/types/models/system/user-subscriptions.ts',
-    destFile: 'src/validators/push-subscription.validator.ts',
-    params: '--useNamedExport --noExtraProps',
   },
 ];
 

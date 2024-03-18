@@ -94,9 +94,10 @@
     "too_high": "Too high"
   },
 
-  "characterTypes": {
-    "_": "Character type",
+  "images": {
+    "_": "Image",
     "battery": "Battery",
+    "beef": "Beef",
     "bread": "Bread",
     "candy": "Candy",
     "salmon": "Salmon",
@@ -109,7 +110,8 @@
     "milk": "Milk",
     "iron": "Iron",
     "folate": "Folate",
-    "co2": "CO2"
+    "co2": "CO2",
+    "fruitVeg": "Fruit & Vegetables"
   },
 
   "characterSentimentTypes": {

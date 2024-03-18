@@ -10,12 +10,12 @@ import type {
 } from '@intake24/common/types/http';
 
 import type { HttpClient } from '../types/http';
-import type { CardWithCharRules } from './cards-builder';
+import type { CardWithDemGroups } from './cards-builder';
 import { CharacterRules, DemographicGroup, SurveyStats, UserDemographic } from './classes';
 
 export type FeedbackDictionaries = {
   feedbackData: FeedbackDataResponse;
-  cards: CardWithCharRules[];
+  cards: CardWithDemGroups[];
   demographicGroups: DemographicGroup[];
   surveyStats: SurveyStats;
 };
@@ -80,20 +80,23 @@ const createFeedbackService = (httpClient: HttpClient) => {
     const demographicGroups = groups.reduce<DemographicGroup[]>((acc, item) => {
       const nutrientType = feedbackData.nutrientTypes.find((nt) => nt.id === item.nutrientTypeId);
 
-      if (nutrientType) {
-        const group = DemographicGroup.fromJson(item, nutrientType);
-        acc.push(group);
-      } else console.warn(`NutrientID: ${item.nutrientTypeId} for demographic group not found.`);
+      const group = DemographicGroup.fromJson(item, nutrientType);
+      acc.push(group);
 
       return acc;
     }, []);
 
-    const cardsWithCharacterRules: CardWithCharRules[] = cards.map((card) => {
-      if (card.type !== 'character') return card;
+    const cardWithDemGroups: CardWithDemGroups[] = cards.map((card) => {
+      if (card.type !== 'character')
+        return {
+          ...card,
+          demographicGroups: demographicGroups.filter((group) => group.type === card.type),
+        };
 
       const { nutrientTypeIds } = card;
-      const demGroups = demographicGroups.filter((group) =>
-        nutrientTypeIds.includes(group.nutrient.id)
+      const demGroups = demographicGroups.filter(
+        (group) =>
+          group.type === card.type && group.nutrient && nutrientTypeIds.includes(group.nutrient.id)
       );
 
       return new CharacterRules(card, demGroups);
@@ -101,7 +104,7 @@ const createFeedbackService = (httpClient: HttpClient) => {
 
     const feedbackDicts = {
       feedbackData,
-      cards: cardsWithCharacterRules,
+      cards: cardWithDemGroups,
       demographicGroups,
       surveyStats,
     };

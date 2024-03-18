@@ -134,19 +134,16 @@ export default defineComponent({
 
   methods: {
     getListItemTitle(card: Card): string {
-      if (card.type === 'character') {
-        const { characterType, nutrientTypeIds } = card;
+      const { image } = card;
 
-        const nutrients = this.nutrientTypes
-          .filter(({ id }) => nutrientTypeIds.includes(id))
-          .map((item) => item.description);
+      if (!('nutrientTypeIds' in card))
+        return this.$t(`feedback-schemes.images.${image}`).toString();
 
-        return `${this.$t(`feedback-schemes.characterTypes.${characterType}`)} | ${nutrients.join(
-          ' | '
-        )}`;
-      }
+      const nutrients = this.nutrientTypes
+        .filter(({ id }) => card.nutrientTypeIds.includes(id))
+        .map((item) => item.description);
 
-      return card.name.en;
+      return `${this.$t(`feedback-schemes.images.${image}`)} | ${nutrients.join(' | ')}`;
     },
 
     add() {

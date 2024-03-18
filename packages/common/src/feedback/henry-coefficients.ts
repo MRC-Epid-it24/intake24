@@ -12,6 +12,3 @@ export const henryCoefficient = z.object({
 });
 
 export type HenryCoefficient = z.infer<typeof henryCoefficient>;
-
-// Type for validator
-export type HenryCoefficients = HenryCoefficient[];

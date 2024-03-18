@@ -125,7 +125,7 @@ const feedbackScheme = (): FeedbackSchemeCreationAttributes => {
     demographicGroups: [
       {
         id: 'JzytAW',
-        type: 'demographic-group',
+        type: 'character',
         age: { start: 12, end: 1000 },
         height: null,
         weight: null,

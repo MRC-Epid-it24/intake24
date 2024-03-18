@@ -116,6 +116,16 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6">
+                      <v-select
+                        v-model="dialog.item.type"
+                        hide-details="auto"
+                        :items="cardTypes"
+                        :label="$t('feedback-schemes.cards.type')"
+                        name="type"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="6">
                       <v-autocomplete
                         v-model="dialog.item.nutrientTypeId"
                         hide-details="auto"
@@ -207,7 +217,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { DemographicGroup } from '@intake24/common/feedback';
@@ -217,7 +227,8 @@ import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs'
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { useEntry } from '@intake24/admin/stores';
-import { nutrientRuleTypes, sexes } from '@intake24/common/feedback';
+import { cardTypes as cardTypesRef, nutrientRuleTypes, sexes } from '@intake24/common/feedback';
+import { useI18n } from '@intake24/i18n';
 import { ConfirmDialog } from '@intake24/ui';
 
 import { getDemographicGroupDefaults } from './demographic-group';
@@ -249,12 +260,34 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    const { i18n } = useI18n();
     const { dialog, form, items, newDialog, add, edit, load, remove, reset, save, update } =
       useListWithDialog(props, context, { newItem: getDemographicGroupDefaults });
 
     const tab = ref(0);
 
-    return { dialog, form, items, tab, add, newDialog, edit, load, remove, reset, save, update };
+    const cardTypes = computed(() =>
+      cardTypesRef.map((value) => ({
+        text: i18n.t(`feedback-schemes.cards.${value}.title`).toString(),
+        value,
+      }))
+    );
+
+    return {
+      cardTypes,
+      dialog,
+      form,
+      items,
+      tab,
+      add,
+      newDialog,
+      edit,
+      load,
+      remove,
+      reset,
+      save,
+      update,
+    };
   },
 
   data() {

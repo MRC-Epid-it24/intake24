@@ -9,18 +9,18 @@ import { useI18n } from '@intake24/i18n';
 import { DemographicRange } from '@intake24/ui/feedback';
 
 export type FeedbackDetails = {
-  readonly name: string;
-  readonly summary: string | null;
-  readonly description: string | null;
-  readonly intake: number;
-  readonly recommendedIntake: DemographicRange | null;
-  readonly unit: string;
-  readonly unitDescription: string | null;
-  readonly sentiment: Sentiment | null;
-  readonly color: string;
-  readonly textClass?: string;
-  readonly iconClass: string;
-  readonly warning?: string | null;
+  name: string;
+  summary: string | null;
+  description: string | null;
+  intake: number;
+  recommendedIntake: DemographicRange | null;
+  unit: string;
+  unitDescription: string | null;
+  sentiment: Sentiment | null;
+  color: string;
+  textClass?: string;
+  iconClass: string;
+  warning?: string | null;
 };
 
 export const getTextClass = (sentiment: Sentiment | null): string | undefined => {
@@ -67,8 +67,6 @@ export const getUnitFromNutrientRule = (
   }
 };
 
-export const formatOutput = (value: number | string, unit: string): string => `${value} ${unit}`;
-
 const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails => {
   const { translate, i18n } = useI18n();
 
@@ -90,7 +88,7 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
       recommendedIntake: showRecommendations
         ? new DemographicRange(round(range.start), round(range.end))
         : null,
-      unit: getUnitFromNutrientRule(nutrientRuleType, nutrient.unit),
+      unit: getUnitFromNutrientRule(nutrientRuleType, nutrient!.unit),
       unitDescription: i18n.t(`feedback.unitDescription.${nutrientRuleType}`).toString(),
       sentiment,
       color,
@@ -105,8 +103,15 @@ const getCharacterDetail = (parameters: CharacterParameters): FeedbackDetails =>
 const getFiveADayDetail = (parameters: FiveADayParameters): FeedbackDetails => {
   const { translate } = useI18n();
 
-  const { name, summary, description, low, high, unit, portions, color, showRecommendations } =
-    parameters;
+  const {
+    low,
+    high,
+    unit,
+    portions,
+    color,
+    scaleSector: { name, summary, description },
+    showRecommendations,
+  } = parameters;
   const sentiment = null;
 
   return {
@@ -130,15 +135,13 @@ const getNutrientGroupDetail = (parameters: NutrientGroupParameters): FeedbackDe
   const { translate } = useI18n();
 
   const {
-    name,
-    summary,
-    description,
     low,
     high,
     unit,
     intake,
     recommendedIntake,
     color,
+    scaleSector: { name, summary, description },
     showRecommendations,
   } = parameters;
   const sentiment = null;

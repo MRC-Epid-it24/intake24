@@ -3,24 +3,6 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="6">
-          <v-select
-            hide-details="auto"
-            :items="characterTypes"
-            :label="$t('feedback-schemes.characterTypes._')"
-            name="characterType"
-            outlined
-            :value="characterType"
-            @change="update('characterType', $event)"
-          >
-            <template #item="{ item }">
-              <v-avatar class="mr-4 my-2" tile>
-                <v-img :alt="item.value" :src="characterImageMap[item.value]"></v-img>
-              </v-avatar>
-              {{ $t(`feedback-schemes.characterTypes.${item.value}`) }}
-            </template>
-          </v-select>
-        </v-col>
-        <v-col cols="12" md="6">
           <v-autocomplete
             hide-details="auto"
             item-text="description"
@@ -56,8 +38,6 @@ import { defineComponent } from 'vue';
 import type { Character } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
-import { characterTypes } from '@intake24/common/feedback';
-import { characterImageMap } from '@intake24/ui/feedback';
 
 import { CharacterSentiments } from '../partials';
 
@@ -67,8 +47,8 @@ export default defineComponent({
   components: { CharacterSentiments },
 
   props: {
-    characterType: {
-      type: String as PropType<Character['characterType']>,
+    image: {
+      type: String as PropType<Character['image']>,
       required: true,
     },
     nutrientTypeIds: {
@@ -83,11 +63,6 @@ export default defineComponent({
 
   data() {
     return {
-      characterTypes: characterTypes.map((value) => ({
-        value,
-        text: this.$t(`feedback-schemes.characterTypes.${value}`),
-      })),
-      characterImageMap,
       nutrientTypeIdSearchInput: null as null | string,
     };
   },

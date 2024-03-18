@@ -159,9 +159,13 @@ export const usePortionSizeMethods = () => {
       value,
       text: i18n.t(`prompts.portionSizeOption.selections.${value}`).toString(),
     }))
-    .sort((a, b) => a.text.localeCompare(b.text));
+    .sort((a, b) => a.text.localeCompare(b.text)) as {
+    value: keyof typeof portionSizeSelectionImages;
+    text: string;
+  }[];
 
-  const getImageUrl = (selection: string) => portionSizeSelectionImages[selection];
+  const getImageUrl = (selection: keyof typeof portionSizeSelectionImages) =>
+    portionSizeSelectionImages[selection];
 
   return { estimationMethods, getImageUrl, selections };
 };

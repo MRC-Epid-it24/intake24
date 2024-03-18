@@ -35,12 +35,11 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 
-import { formatOutput, getDetails } from './card-details';
-import { getBackgroundImage } from './card-images';
+import { useCard } from './use-card';
 
 export default defineComponent({
   name: 'PrintCard',
@@ -53,14 +52,11 @@ export default defineComponent({
   },
 
   setup(props) {
-    const detail = computed(() => getDetails[props.parameters.type](props.parameters));
-    const backgroundImage = computed(() =>
-      getBackgroundImage[props.parameters.type](props.parameters)
-    );
+    const { backgroundImage, detail, formatOutput } = useCard(props);
 
     return {
-      detail,
       backgroundImage,
+      detail,
       formatOutput,
     };
   },

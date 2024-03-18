@@ -1,11 +1,5 @@
 <template>
   <div>
-    <card-content
-      v-bind="{ description, name, summary }"
-      @update:description="update('description', $event)"
-      @update:name="update('name', $event)"
-      @update:summary="update('summary', $event)"
-    ></card-content>
     <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
     <card-thresholds
       :thresholds="{ high, low }"
@@ -21,26 +15,14 @@ import { defineComponent } from 'vue';
 
 import type { FiveADayCard } from '@intake24/common/feedback';
 
-import { CardContent, CardThresholds, CardUnit } from '../partials';
+import { CardThresholds, CardUnit } from '../partials';
 
 export default defineComponent({
   name: 'FiveADayCard',
 
-  components: { CardContent, CardThresholds, CardUnit },
+  components: { CardThresholds, CardUnit },
 
   props: {
-    name: {
-      type: Object as PropType<FiveADayCard['name']>,
-      required: true,
-    },
-    description: {
-      type: Object as PropType<FiveADayCard['description']>,
-      required: true,
-    },
-    summary: {
-      type: Object as PropType<FiveADayCard['summary']>,
-      required: true,
-    },
     high: {
       type: Object as PropType<FiveADayCard['high']>,
       default: null,

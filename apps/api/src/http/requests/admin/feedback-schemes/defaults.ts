@@ -2,17 +2,19 @@ import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 import has from 'lodash/has';
 import validator from 'validator';
+import { ZodError } from 'zod';
 
 import type { FeedbackSchemeAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import {
+  demographicGroup,
   feedbackOutputs,
   feedbackPhysicalDataFields,
   feedbackSections,
   feedbackTypes,
+  henryCoefficient,
 } from '@intake24/common/feedback';
-import { validateDemographicGroups, validateHenryCoefficients } from '@intake24/common/validators';
 import { FeedbackScheme, Op } from '@intake24/db';
 
 export const name: ParamSchema = {
@@ -133,10 +135,13 @@ export const defaults: Schema = {
     custom: {
       options: (value): boolean => {
         try {
-          validateHenryCoefficients(value);
+          henryCoefficient.array().parse(value);
           return true;
-        } catch (err: any) {
-          throw new Error(err.message.split('\n')[0]);
+        } catch (err) {
+          if (err instanceof ZodError) {
+            throw err.errors.at(0)?.message;
+          }
+          throw err;
         }
       },
     },
@@ -147,10 +152,13 @@ export const defaults: Schema = {
     custom: {
       options: (value): boolean => {
         try {
-          validateDemographicGroups(value);
+          demographicGroup.array().parse(value);
           return true;
-        } catch (err: any) {
-          throw new Error(err.message.split('\n')[0]);
+        } catch (err) {
+          if (err instanceof ZodError) {
+            throw err.errors.at(0)?.message;
+          }
+          throw err;
         }
       },
     },

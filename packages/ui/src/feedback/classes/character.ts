@@ -15,7 +15,7 @@ import type UserDemographic from './user-demographic';
 export type CharacterParameters = {
   readonly id: string;
   readonly type: 'character';
-  readonly characterType: CharacterType;
+  readonly image: CharacterType;
   readonly sentiment: CharacterSentiment | null;
   readonly results: DemographicResult[];
   readonly color: string;
@@ -27,7 +27,7 @@ export class CharacterRules implements Character {
 
   readonly type = 'character' as const;
 
-  readonly characterType: CharacterType;
+  readonly image: CharacterType;
 
   readonly nutrientTypeIds: string[];
 
@@ -40,11 +40,11 @@ export class CharacterRules implements Character {
   readonly demographicGroups: DemographicGroup[];
 
   constructor(
-    { id, characterType, nutrientTypeIds, sentiments, color, showRecommendations }: Character,
+    { id, image, nutrientTypeIds, sentiments, color, showRecommendations }: Character,
     demographicGroups: DemographicGroup[]
   ) {
     this.id = id;
-    this.characterType = characterType;
+    this.image = image;
     this.nutrientTypeIds = nutrientTypeIds;
     this.sentiments = sentiments;
     this.color = color;
@@ -56,8 +56,8 @@ export class CharacterRules implements Character {
   getSentiment(
     userDemographic: UserDemographic,
     foods: AggregateFoodStats[]
-  ): CharacterParameters | null {
-    const { characterType, id, color, showRecommendations } = this;
+  ): CharacterParameters | undefined {
+    const { image, id, color, showRecommendations } = this;
 
     const results = this.getDemographicsGroups(userDemographic, foods);
 
@@ -65,11 +65,11 @@ export class CharacterRules implements Character {
       .map((dg) => dg.resultedDemographicGroup.scaleSectors)
       .reduce((a, b) => a.slice().concat(b), []);
 
-    if (!scaleSectors.length) return null;
+    if (!scaleSectors.length) return undefined;
 
     const sentiment = this.pickAverageSentiment(scaleSectors);
 
-    return { id, type: 'character', characterType, results, sentiment, color, showRecommendations };
+    return { id, type: 'character', image, results, sentiment, color, showRecommendations };
   }
 
   private getDemographicsGroups(

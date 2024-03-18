@@ -1,11 +1,5 @@
 <template>
   <div>
-    <card-content
-      v-bind="{ description, name, summary }"
-      @update:description="update('description', $event)"
-      @update:name="update('name', $event)"
-      @update:summary="update('summary', $event)"
-    ></card-content>
     <card-unit v-bind="{ unit }" @update:unit="update('unit', $event)"></card-unit>
     <card-thresholds
       :thresholds="{ high, low }"
@@ -98,26 +92,14 @@ import type { NutrientGroupCard } from '@intake24/common/feedback';
 import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 
-import { CardContent, CardThresholds, CardUnit } from '../partials';
+import { CardThresholds, CardUnit } from '../partials';
 
 export default defineComponent({
   name: 'NutrientGroupCard',
 
-  components: { CardContent, CardThresholds, CardUnit },
+  components: { CardThresholds, CardUnit },
 
   props: {
-    name: {
-      type: Object as PropType<NutrientGroupCard['name']>,
-      required: true,
-    },
-    description: {
-      type: Object as PropType<NutrientGroupCard['description']>,
-      required: true,
-    },
-    summary: {
-      type: Object as PropType<NutrientGroupCard['summary']>,
-      required: true,
-    },
     high: {
       type: Object as PropType<NutrientGroupCard['high']>,
       default: null,

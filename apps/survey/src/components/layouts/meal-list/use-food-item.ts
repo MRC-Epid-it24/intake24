@@ -27,25 +27,27 @@ export const useFoodItem = (props: UseFoodItemProps, { emit }: SetupContext) => 
   const isPortionSizeComplete = computed(() => foodPortionSizeComplete(props.food));
 
   const menu = computed(() =>
-    [
-      {
-        name: i18n.t('recall.menu.food.change').toString(),
-        action: 'changeFood',
-        icon: '$meal',
-      },
-      {
-        name: i18n.t(`recall.menu.food.${props.food.type}.edit`).toString(),
-        action: 'editFood',
-        icon: '$food',
-        if: (food: FoodState) => foodComplete(food),
-      },
-      {
-        name: i18n.t('recall.menu.food.delete').toString(),
-        action: 'deleteFood',
-        dialog: true,
-        icon: '$delete',
-      },
-    ].filter((item) => !item.if || item.if(props.food))
+    (
+      [
+        {
+          name: i18n.t('recall.menu.food.change').toString(),
+          action: 'changeFood',
+          icon: '$meal',
+        },
+        {
+          name: i18n.t(`recall.menu.food.${props.food.type}.edit`).toString(),
+          action: 'editFood',
+          icon: '$food',
+          if: (food: FoodState) => foodComplete(food),
+        },
+        {
+          name: i18n.t('recall.menu.food.delete').toString(),
+          action: 'deleteFood',
+          dialog: true,
+          icon: '$delete',
+        },
+      ] satisfies MenuItem[]
+    ).filter((item) => !item.if || item.if(props.food))
   );
 
   const action = (type: FoodActionType | MealActionType, id?: string) => {

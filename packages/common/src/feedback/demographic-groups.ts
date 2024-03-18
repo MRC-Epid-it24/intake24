@@ -1,29 +1,32 @@
-import type { LocaleTranslation, RequiredLocaleTranslation } from '../types';
-import type { NutrientRuleType, Range, Sentiment, Sex } from './shared';
+import { localeTranslation, requiredLocaleTranslation } from '../types';
+import { z } from '../util';
+import { cardTypes } from './cards';
+import { nutrientRuleTypes, range, sentiments, sexes } from './shared';
 
-export type DemographicGroupScaleSector = {
-  name: RequiredLocaleTranslation;
-  summary: LocaleTranslation;
-  description: LocaleTranslation;
-  range: Range;
-  sentiment: Sentiment;
-};
+export const demographicGroupScaleSector = z.object({
+  name: requiredLocaleTranslation,
+  summary: localeTranslation,
+  description: localeTranslation,
+  range: range,
+  sentiment: z.enum(sentiments),
+});
 
-export type DemographicGroup = {
-  id: string;
-  type: 'demographic-group';
-  age: Range | null;
-  height: Range | null;
-  weight: Range | null;
-  nutrientRuleType: NutrientRuleType;
-  nutrientTypeId: string;
-  physicalActivityLevelId: string | null;
-  scaleSectors: DemographicGroupScaleSector[];
-  sex: Sex | null;
-};
+export type DemographicGroupScaleSector = z.infer<typeof demographicGroupScaleSector>;
 
-// Type for validator
-export type DemographicGroups = DemographicGroup[];
+export const demographicGroup = z.object({
+  id: z.string(),
+  type: z.enum(cardTypes),
+  age: range.nullable(),
+  height: range.nullable(),
+  weight: range.nullable(),
+  nutrientRuleType: z.enum(nutrientRuleTypes),
+  nutrientTypeId: z.string().nullable(),
+  physicalActivityLevelId: z.string().nullable(),
+  scaleSectors: z.array(demographicGroupScaleSector),
+  sex: z.enum(sexes).nullable(),
+});
+
+export type DemographicGroup = z.infer<typeof demographicGroup>;
 
 export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = {
   name: { en: 'Energy' },
@@ -35,13 +38,13 @@ export const demographicGroupScaleSectorDefaults: DemographicGroupScaleSector = 
 
 export const demographicGroupDefaults: DemographicGroup = {
   id: 'demographic-group',
-  type: 'demographic-group',
+  type: 'character',
   age: null,
   height: null,
   weight: null,
-  nutrientRuleType: 'energy_divided_by_bmr',
-  nutrientTypeId: '1',
-  physicalActivityLevelId: '1',
+  nutrientRuleType: 'range',
+  nutrientTypeId: null,
+  physicalActivityLevelId: null,
   sex: null,
   scaleSectors: [{ ...demographicGroupScaleSectorDefaults }],
 };

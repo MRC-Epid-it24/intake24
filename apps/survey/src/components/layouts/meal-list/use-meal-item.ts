@@ -6,6 +6,8 @@ import type { MealState } from '@intake24/common/types';
 import { useI18n } from '@intake24/i18n';
 import { useMealUtils } from '@intake24/survey/composables';
 
+import type { MenuItem } from './use-food-item';
+
 export type UseMealItemProps = {
   meal: MealState;
   selectedFoodId?: string;
@@ -20,25 +22,27 @@ export const useMealItem = (props: UseMealItemProps, { emit }: SetupContext) => 
   const isSelected = computed(() => props.selectedMealId === props.meal.id);
 
   const menu = computed(() =>
-    [
-      {
-        name: i18n.t('recall.menu.meal.editFoods').toString(),
-        action: 'editMeal',
-        icon: '$meal',
-        if: (meal: MealState) => meal.flags.includes('free-entry-complete'),
-      },
-      {
-        name: i18n.t('recall.menu.meal.editTime').toString(),
-        action: 'mealTime',
-        icon: '$mealTime',
-      },
-      {
-        name: i18n.t('recall.menu.meal.delete').toString(),
-        action: 'deleteMeal',
-        dialog: true,
-        icon: '$delete',
-      },
-    ].filter((item) => !item.if || item.if(props.meal))
+    (
+      [
+        {
+          name: i18n.t('recall.menu.meal.editFoods').toString(),
+          action: 'editMeal',
+          icon: '$meal',
+          if: (meal: MealState) => meal.flags.includes('free-entry-complete'),
+        },
+        {
+          name: i18n.t('recall.menu.meal.editTime').toString(),
+          action: 'mealTime',
+          icon: '$mealTime',
+        },
+        {
+          name: i18n.t('recall.menu.meal.delete').toString(),
+          action: 'deleteMeal',
+          dialog: true,
+          icon: '$delete',
+        },
+      ] satisfies MenuItem[]
+    ).filter((item) => !item.if || item.if(props.meal))
   );
 
   const action = (type: FoodActionType | MealActionType, id?: string) => {

@@ -1,4 +1,5 @@
 import type {
+  CardType,
   DemographicGroup as FeedbackSchemeDemographicGroup,
   NutrientRuleType,
   Sex,
@@ -14,6 +15,8 @@ import DemographicScaleSector from './demographic-scale-sector';
 export default class DemographicGroup {
   readonly id: string;
 
+  readonly type: CardType;
+
   readonly sex: Sex | null;
 
   readonly age: DemographicRange | null;
@@ -22,7 +25,7 @@ export default class DemographicGroup {
 
   readonly weight: DemographicRange | null;
 
-  readonly nutrient: NutrientType;
+  readonly nutrient?: NutrientType;
 
   readonly nutrientRuleType: NutrientRuleType;
 
@@ -32,31 +35,37 @@ export default class DemographicGroup {
 
   constructor(
     id: string,
+    type: CardType,
     nutrientRuleType: NutrientRuleType,
     scaleSectors: DemographicScaleSector[],
     sex: Sex | null,
     age: DemographicRange | null,
     height: DemographicRange | null,
     weight: DemographicRange | null,
-    nutrient: NutrientType
+    nutrient?: NutrientType
   ) {
     this.id = id;
+    this.type = type;
     this.nutrientRuleType = nutrientRuleType;
     this.scaleSectors = scaleSectors.map((s) => s.clone());
     this.sex = sex;
-    this.age = age ? age.clone() : null;
-    this.height = height ? height.clone() : null;
-    this.weight = weight ? weight.clone() : null;
+    this.age = age?.clone() ?? null;
+    this.height = height?.clone() ?? null;
+    this.weight = weight?.clone() ?? null;
     this.nutrient = nutrient;
 
-    this.nutrientTypeKCalPerUnit = nutrient.kcalPerUnit;
+    this.nutrientTypeKCalPerUnit = nutrient?.kcalPerUnit || null;
   }
 
-  static fromJson(group: FeedbackSchemeDemographicGroup, nutrient: NutrientType): DemographicGroup {
+  static fromJson(
+    group: FeedbackSchemeDemographicGroup,
+    nutrient?: NutrientType
+  ): DemographicGroup {
     const { age, height, weight } = group;
 
     return new DemographicGroup(
       group.id,
+      group.type,
       group.nutrientRuleType,
       group.scaleSectors.map(DemographicScaleSector.fromJson),
       group.sex,
@@ -70,6 +79,7 @@ export default class DemographicGroup {
   clone(): DemographicGroup {
     return new DemographicGroup(
       this.id,
+      this.type,
       this.nutrientRuleType,
       this.scaleSectors,
       this.sex,
@@ -124,8 +134,12 @@ export default class DemographicGroup {
   }
 
   private getConsumption(userDemographic: UserDemographic, foods: AggregateFoodStats[]): number {
+    const { nutrient } = this;
+    if (!nutrient)
+      throw new Error('Demographic group does not have a nutrient type to calculate consumption');
+
     const consumption = foods
-      .map((f) => f.getAverageIntake(this.nutrient.id))
+      .map((f) => f.getAverageIntake(nutrient.id))
       .reduce((a, b) => a + b, 0);
 
     if (this.nutrientRuleType === 'energy_divided_by_bmr')
@@ -134,7 +148,7 @@ export default class DemographicGroup {
     if (this.nutrientRuleType === 'per_unit_of_weight') {
       const { weightKg } = userDemographic.physicalData;
 
-      if (weightKg === null)
+      if (typeof weightKg !== 'number')
         throw new Error(`Cannot calculate 'per_unit_of_weight' nutrient rule type without weight.`);
 
       return consumption / weightKg;
@@ -170,6 +184,7 @@ export default class DemographicGroup {
   private cloneWithCustomScaleSectors(scaleSectors: DemographicScaleSector[]): DemographicGroup {
     return new DemographicGroup(
       this.id,
+      this.type,
       this.nutrientRuleType,
       scaleSectors,
       this.sex,

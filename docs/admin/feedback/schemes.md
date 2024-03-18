@@ -113,42 +113,34 @@ When nutrient field type is selected, fieldId is generated automatically based o
 
 List of cards (selected nutrients, foods, energy) to be included in feedback.
 
+- `image` - image to be displayed in feedback
+- `color` - preferred background color for card
+- `show recommendations` - tick to show recommendations for selected nutrient type
+
 There are couple of feedback card types that can be used:
 
 ### Character
 
 Character card assigns a nutrient type, which needs to be matched with nutrient type in `demographic groups` to display in feedback.
 
-- `Content` – `Character type` selects image that displays in feedback, `Nutrient type` selects nutrient, food or energy variable
+#### Content
+
+- `Nutrient type` - selects nutrient, food or energy variable
+- `Sentiments` - sets feedback based on intake of selected nutrient type
 
 ### Nutrient group
 
 Nutrient group allows grouping of nutrients (e.g. fatty acids or sugar types) & thresholds to provide aggregated intake.
 
-- `Content` allows editing of card name / summary / `Tell me more` texts.
-
-  - `Name` - card name
-  - `Summary` - summary text displayed in card body
-  - `Description` - detailed text displayed in `Tell me more` dialog
-
-- `Unit` enter measure such as ‘grams’, ‘mg’ etc.
-- `Thresholds` sets lower or upper limits, with message
-- `Nutrients` groups variables together for feedback
+- `Unit` & `Unit description` - sets unit of measure for nutrient group
+- `Thresholds` - sets lower or upper limits, with message
+- `Nutrients` - list of nutrients to be included in nutrient group for aggregated intake
 
 ### Five a day
 
 Five a day defines `five-a-day` feedback for fruit & vegetables.
 
-- `Content` allows editing of card name / summary / `Tell me more` texts.
-  - `Name` - card name
-  - `Summary` - summary text displayed in card body
-  - `Description` - detailed text displayed in `Tell me more` dialog
-
-### Common options
-
-- `Show recommendations` - tick to show recommendations for selected nutrient type
-
-- `Color` - preferred background color for card
+- `Unit` & `Unit description` - sets unit of measure for nutrient group
 
 ## Demographic groups
 
@@ -158,6 +150,8 @@ Demographic groups can be edited or new ones created. In `Edit demographic group
 ### General
 
 Allows selection of:
+
+- `Card type` - selects card type to match with card
 
 - `Nutrient type`
 
@@ -171,6 +165,10 @@ Allows selection of:
 - `Sex` allows sex specific content for feedback (e.g. iron recommendations)
 
 - `Age` set age range to align with age specific dietary/nutrient recommendations
+
+- `Height` set height range to align with height specific dietary/nutrient recommendations
+
+- `Weight` set weight range to align with weight specific dietary/nutrient recommendations
 
 ### Scale sectors
 

@@ -54,7 +54,7 @@
                             <v-col v-for="card in cardDefaults" :key="card.type" cols="12" md="3">
                               <v-item v-slot="{ active, toggle }" :value="card.type">
                                 <v-card
-                                  :color="active ? 'secondary' : ''"
+                                  :color="active ? 'primary' : ''"
                                   dark
                                   height="180"
                                   @click.stop="toggle"
@@ -88,6 +88,26 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" md="6">
+                              <v-select
+                                v-model="dialog.card.image"
+                                hide-details="auto"
+                                :items="images"
+                                :label="$t('feedback-schemes.images._')"
+                                name="image"
+                                outlined
+                              >
+                                <template #item="{ item }">
+                                  <v-avatar class="mr-4 my-2" tile>
+                                    <v-img
+                                      :alt="item.value"
+                                      :src="characterImageMap[item.value]"
+                                    ></v-img>
+                                  </v-avatar>
+                                  {{ $t(`feedback-schemes.images.${item.value}`) }}
+                                </template>
+                              </v-select>
+                            </v-col>
+                            <v-col cols="12" md="6">
                               <v-expansion-panels>
                                 <v-expansion-panel key="color">
                                   <v-expansion-panel-header>
@@ -102,6 +122,7 @@
                                 </v-expansion-panel>
                               </v-expansion-panels>
                             </v-col>
+
                             <v-col cols="12" md="6">
                               <v-switch
                                 v-model="dialog.card.showRecommendations"
@@ -144,8 +165,10 @@ import { defineComponent, ref } from 'vue';
 import type { RuleCallback } from '@intake24/admin/types';
 import type { Card } from '@intake24/common/feedback';
 import { LanguageSelector } from '@intake24/admin/components/forms';
-import { cardDefaults } from '@intake24/common/feedback';
+import { cardDefaults, images as characterTypesRef } from '@intake24/common/feedback';
 import { copy, merge, randomString } from '@intake24/common/util';
+import { useI18n } from '@intake24/i18n/index';
+import { characterImageMap } from '@intake24/ui/feedback';
 
 import { cardSettings } from './card';
 import cardTypes from './card-types';
@@ -171,9 +194,15 @@ export default defineComponent({
   emits: ['save'],
 
   setup() {
+    const { i18n } = useI18n();
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-    return { form };
+    const images = characterTypesRef.map((value) => ({
+      value,
+      text: i18n.t(`feedback-schemes.images.${value}`),
+    }));
+
+    return { images, characterImageMap, form };
   },
 
   data() {

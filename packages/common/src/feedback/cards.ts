@@ -1,52 +1,73 @@
-import type { LocaleTranslation, RequiredLocaleTranslation } from '../types';
-import type { Character } from './characters';
+import { localeTranslation, requiredLocaleTranslation } from '../types';
+import { z } from '../util';
+import { characterSentiment, images } from './characters';
 
-export type FoodGroupThreshold = {
-  threshold: number;
-  message: LocaleTranslation;
-};
+export const foodGroupThreshold = z.object({
+  threshold: z.number(),
+  message: localeTranslation,
+});
 
-export type CustomCard = {
-  id: string;
-  name: RequiredLocaleTranslation;
-  summary: LocaleTranslation;
-  description: LocaleTranslation;
-  color: string;
-  high: FoodGroupThreshold | null;
-  low: FoodGroupThreshold | null;
-  unit: {
-    name: RequiredLocaleTranslation;
-    description: LocaleTranslation;
-  };
-  showRecommendations: boolean;
-};
+export type FoodGroupThreshold = z.infer<typeof foodGroupThreshold>;
 
-export interface NutrientGroupCard extends CustomCard {
-  type: 'nutrient-group';
-  nutrientTypes: string[];
-}
+export const baseCard = z.object({
+  id: z.string(),
+  color: z.string(),
+  image: z.enum(images),
+  sentiments: z.array(characterSentiment),
+  showRecommendations: z.boolean(),
+});
 
-export interface FiveADayCard extends CustomCard {
-  type: 'five-a-day';
-}
+export const character = baseCard.extend({
+  type: z.literal('character'),
+  nutrientTypeIds: z.string().array(),
+});
 
-export type Card = Character | NutrientGroupCard | FiveADayCard;
+export type Character = z.infer<typeof character>;
 
-// Type for validator
-export type Cards = Cards[];
+export const nutrientGroupCard = baseCard.extend({
+  type: z.literal('nutrient-group'),
+  nutrientTypes: z.string().array(),
+  high: foodGroupThreshold.nullable(),
+  low: foodGroupThreshold.nullable(),
+  unit: z.object({
+    name: requiredLocaleTranslation,
+    description: localeTranslation,
+  }),
+});
 
-export type CardType = Card['type'];
+export type NutrientGroupCard = z.infer<typeof nutrientGroupCard>;
+
+export const fiveADayCard = baseCard.extend({
+  type: z.literal('five-a-day'),
+  high: foodGroupThreshold.nullable(),
+  low: foodGroupThreshold.nullable(),
+  unit: z.object({
+    name: requiredLocaleTranslation,
+    description: localeTranslation,
+  }),
+});
+
+export type FiveADayCard = z.infer<typeof fiveADayCard>;
+
+export const card = z.discriminatedUnion('type', [character, nutrientGroupCard, fiveADayCard]);
+export const customCard = z.discriminatedUnion('type', [nutrientGroupCard, fiveADayCard]);
+
+export const cardTypes = ['character', 'nutrient-group', 'five-a-day'] as const;
+export type CardType = (typeof cardTypes)[number];
+
+export type Card = z.infer<typeof card>;
+export type CustomCard = z.infer<typeof customCard>;
 
 export const cardDefaults: Card[] = [
   {
     id: 'character',
     type: 'character',
-    characterType: 'battery',
-    nutrientTypeIds: ['1'],
+    image: 'battery',
     color: '#FFFFFFFF',
     showRecommendations: false,
+    nutrientTypeIds: ['1'],
     sentiments: [
-      {
+      /* {
         sentiment: ['too_low', 'low'],
         sentimentType: 'danger',
         name: { en: 'Your battery needs a boost' },
@@ -70,15 +91,16 @@ export const cardDefaults: Card[] = [
         sentiment: ['high', 'too_high'],
         sentimentType: 'danger',
         name: { en: 'Energy overload' },
-      },
+      }, */
     ],
   },
   {
     id: 'nutrient-group',
     type: 'nutrient-group',
-    name: { en: 'Nutrient food group' },
-    summary: { en: '' },
-    description: { en: '' },
+    image: 'battery',
+    color: '#FFFFFFFF',
+    sentiments: [],
+    showRecommendations: false,
     low: {
       threshold: 0,
       message: { en: '' },
@@ -92,15 +114,14 @@ export const cardDefaults: Card[] = [
       description: { en: '' },
     },
     nutrientTypes: [],
-    color: '#FFFFFFFF',
-    showRecommendations: false,
   },
   {
     id: 'five-a-day',
     type: 'five-a-day',
-    name: { en: 'Five a day feedback' },
-    summary: { en: '' },
-    description: { en: '' },
+    image: 'battery',
+    color: '#FFFFFFFF',
+    sentiments: [],
+    showRecommendations: false,
     low: {
       threshold: 0,
       message: { en: '' },
@@ -113,7 +134,5 @@ export const cardDefaults: Card[] = [
       name: { en: '' },
       description: { en: '' },
     },
-    color: '#FFFFFFFF',
-    showRecommendations: false,
   },
 ];

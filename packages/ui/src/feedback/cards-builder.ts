@@ -1,24 +1,40 @@
-import type { CardType, FiveADayCard, NutrientGroupCard } from '@intake24/common/feedback';
+import type {
+  CardType,
+  DemographicGroupScaleSector,
+  FiveADayCard,
+  NutrientGroupCard,
+} from '@intake24/common/feedback';
 import { round } from '@intake24/common/util';
 
 import type {
   AggregateFoodStats,
   CharacterParameters,
   CharacterRules,
+  DemographicGroup,
   FruitAndVegPortions,
   UserDemographic,
 } from './classes';
 import { DemographicRange } from './classes';
 
-export type CardWithCharRules = CharacterRules | FiveADayCard | NutrientGroupCard;
+export type FiveADayCardWithDemGroups = FiveADayCard & { demographicGroups: DemographicGroup[] };
+export type NutrientGroupCardWithDemGroups = NutrientGroupCard & {
+  demographicGroups: DemographicGroup[];
+};
+
+export type CardWithDemGroups =
+  | CharacterRules
+  | FiveADayCardWithDemGroups
+  | NutrientGroupCardWithDemGroups;
 
 export interface FiveADayParameters extends FiveADayCard {
-  readonly portions: number;
+  portions: number;
+  scaleSector: DemographicGroupScaleSector;
 }
 
 export interface NutrientGroupParameters extends NutrientGroupCard {
-  readonly intake: number;
-  readonly recommendedIntake: DemographicRange;
+  intake: number;
+  recommendedIntake: DemographicRange;
+  scaleSector: DemographicGroupScaleSector;
 }
 
 export type FeedbackCardParameters =
@@ -36,15 +52,20 @@ export type BuildCardOps = {
 export const buildCharacterParams = (
   characterRule: CharacterRules,
   { foods, userDemographic }: BuildCardOps
-): FeedbackCardParameters | null => characterRule.getSentiment(userDemographic, foods);
+): FeedbackCardParameters | undefined => characterRule.getSentiment(userDemographic, foods);
 
 export const buildNutrientGroupParams = (
-  foodGroup: NutrientGroupCard,
-  { averageIntake }: BuildCardOps
-): NutrientGroupParameters => {
-  const { low, high } = foodGroup;
+  card: NutrientGroupCardWithDemGroups,
+  { averageIntake, userDemographic }: BuildCardOps
+): NutrientGroupParameters | undefined => {
+  const scaleSector = card.demographicGroups
+    .filter((dg) => dg.matchesUserDemographic(userDemographic))
+    .at(0)?.scaleSectors[0];
+  if (!scaleSector) return undefined;
 
-  let intake = foodGroup.nutrientTypes.reduce((total, nutrientTypeId) => {
+  const { low, high } = card;
+
+  let intake = card.nutrientTypes.reduce((total, nutrientTypeId) => {
     const nutrientIntake = averageIntake.get(nutrientTypeId);
     if (nutrientIntake !== undefined) return total + nutrientIntake;
 
@@ -54,17 +75,25 @@ export const buildNutrientGroupParams = (
 
   const recommendedIntake = new DemographicRange(low?.threshold ?? 0, high?.threshold ?? 1000);
 
-  return { ...foodGroup, intake, recommendedIntake };
+  return { ...card, intake, recommendedIntake, scaleSector };
 };
 
 export const buildFiveADayParams = (
-  foodGroup: FiveADayCard,
-  { fruitAndVegPortions }: BuildCardOps
-): FiveADayParameters => ({ ...foodGroup, portions: round(fruitAndVegPortions.total) });
+  card: FiveADayCardWithDemGroups,
+  { fruitAndVegPortions, userDemographic }: BuildCardOps
+): FiveADayParameters | undefined => {
+  const scaleSector = card.demographicGroups
+    .filter((dg) => dg.matchesUserDemographic(userDemographic))
+    .at(0)?.scaleSectors[0];
+
+  if (!scaleSector) return undefined;
+
+  return { ...card, portions: round(fruitAndVegPortions.total), scaleSector };
+};
 
 export const mappers: Record<
   CardType,
-  (card: any, ops: BuildCardOps) => FeedbackCardParameters | null
+  (card: any, ops: BuildCardOps) => FeedbackCardParameters | undefined
 > = {
   character: buildCharacterParams,
   'five-a-day': buildFiveADayParams,
@@ -72,7 +101,7 @@ export const mappers: Record<
 };
 
 export const buildCardParams = (
-  cards: CardWithCharRules[],
+  cards: CardWithDemGroups[],
   ops: BuildCardOps
 ): FeedbackCardParameters[] => {
   const cardParameters = cards.reduce<FeedbackCardParameters[]>((acc, card) => {

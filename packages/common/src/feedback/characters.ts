@@ -1,5 +1,6 @@
-import type { LocaleTranslation } from '../types';
-import type { Sentiment } from './shared';
+import { localeTranslation } from '../types';
+import { z } from '../util';
+import { sentiments } from './shared';
 
 export enum NutrientTypeIdEnum {
   Energy = '1',
@@ -19,8 +20,9 @@ export enum NutrientTypeIdEnum {
   AOACFibre = '242',
 }
 
-export const characterTypes = [
+export const images = [
   'battery',
+  'beef',
   'bread',
   'candy',
   'salmon',
@@ -34,24 +36,17 @@ export const characterTypes = [
   'iron',
   'folate',
   'co2',
+  'fruitVeg',
 ] as const;
-export type CharacterType = (typeof characterTypes)[number];
+export type CharacterType = (typeof images)[number];
 
 export const characterSentimentTypes = ['danger', 'warning', 'happy', 'exciting'] as const;
 export type CharacterSentimentType = (typeof characterSentimentTypes)[number];
 
-export type CharacterSentiment = {
-  sentiment: Sentiment[];
-  sentimentType: CharacterSentimentType;
-  name: LocaleTranslation;
-};
+export const characterSentiment = z.object({
+  sentiment: z.enum(sentiments).array(),
+  sentimentType: z.enum(characterSentimentTypes),
+  name: localeTranslation,
+});
 
-export type Character = {
-  id: string;
-  type: 'character';
-  characterType: CharacterType;
-  nutrientTypeIds: string[];
-  sentiments: CharacterSentiment[];
-  color: string;
-  showRecommendations: boolean;
-};
+export type CharacterSentiment = z.infer<typeof characterSentiment>;

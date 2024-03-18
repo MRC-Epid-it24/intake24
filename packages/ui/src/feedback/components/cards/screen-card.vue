@@ -34,9 +34,8 @@ import { computed, defineComponent } from 'vue';
 import type { FeedbackCardParameters } from '@intake24/ui/feedback';
 import { getContrastYIQ } from '@intake24/ui/util';
 
-import { formatOutput, getDetails } from './card-details';
-import { getBackgroundImage } from './card-images';
 import TellMeMore from './tell-me-more.vue';
+import { useCard } from './use-card';
 
 export default defineComponent({
   name: 'ScreenCard',
@@ -54,16 +53,13 @@ export default defineComponent({
     /* const gaugeRef = ref<InstanceType<typeof Element>>();
     const gaugeInstance = ref<GaugeInstance>(); */
 
-    const detail = computed(() => getDetails[props.parameters.type](props.parameters));
-    const backgroundImage = computed(() =>
-      getBackgroundImage[props.parameters.type](props.parameters)
-    );
+    const { backgroundImage, detail, formatOutput } = useCard(props);
 
     const textColor = computed(() =>
       getContrastYIQ(detail.value.color) < 128 ? 'white--text' : undefined
     );
 
-    const colorMap = computed(() => [
+    /* const colorMap = computed(() => [
       '#E64A19',
       '#E64A19',
       '#EF6C00',
@@ -72,17 +68,13 @@ export default defineComponent({
       '#43A047',
     ]);
 
-    const isFiveADay = props.parameters.type === 'five-a-day';
+    const isFiveADay = props.parameters.type === 'five-a-day'; */
 
     return {
       backgroundImage,
-      colorMap,
       detail,
       formatOutput,
-      /* gaugeRef,
-      gaugeInstance, */
       textColor,
-      isFiveADay,
     };
   },
 

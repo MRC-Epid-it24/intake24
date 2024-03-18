@@ -97,7 +97,7 @@ export default defineComponent({
 
   components: { ImageMapSelector, QuantityBadge },
 
-  mixins: [createBasePortion<'milk-on-cereal-prompt', EncodedFood, EncodedFood>()],
+  mixins: [createBasePortion<'milk-on-cereal-prompt', EncodedFood>()],
 
   props: {
     bowlImageMapId: {
@@ -197,7 +197,11 @@ export default defineComponent({
 
   async mounted() {
     await Promise.all([this.fetchBowlImageMap(), this.fetchMilkLevelImageMap()]);
-    if (this.parentFood?.portionSize?.method !== 'cereal') return;
+    if (
+      this.parentFood?.type !== 'encoded-food' ||
+      this.parentFood?.portionSize?.method !== 'cereal'
+    )
+      return;
 
     const { bowlIndex, bowlId } = this.parentFood.portionSize;
 

@@ -62,5 +62,5 @@ The use of `personal access tokens` is recommended for `machine-to-machine` comm
 Personal access tokens are long-lived JWT tokens, which can be used to authenticate requests. Personal access tokens are bound to specific user. Personal access tokens can be managed in [admin tool](/admin/user/personal-access-tokens).
 
 ::: tip
-Personal access tokens are long lived and should be treated as sensitive data. They has to be stored securely and should never be exposed to public (e.g. embedded into frontend code
+Personal access tokens are long lived and should be treated as sensitive data. They has to be stored securely and should never be exposed to public (e.g. embedded into frontend code).
 :::

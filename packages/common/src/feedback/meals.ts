@@ -47,21 +47,6 @@ export const mealTableField = z.discriminatedUnion('type', [
 
 export type MealTableField = z.infer<typeof mealTableField>;
 
-/* export type MealTableFields = {
-  standard: BaseMealTableField & {
-    type: 'standard';
-    fieldId: 'name' | 'hours' | 'minutes' | 'time' | 'duration';
-  };
-  custom: BaseMealTableField & { type: 'custom'; fieldId: string };
-  nutrient: BaseMealTableField & {
-    type: 'nutrient';
-    fieldId: `nutrient-${string}`;
-    types: string[];
-  };
-};
-
-export type MealTableField = MealTableFields[keyof MealTableFields]; */
-
 export const feedbackMealTable = z.object({
   fields: z.array(mealTableField),
 });

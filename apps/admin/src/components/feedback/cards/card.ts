@@ -1,7 +1,4 @@
-import type { Card, CardType } from '@intake24/common/feedback';
-
-const baseTab = ['general', 'content'];
-const customTab = [...baseTab, 'unit', 'thresholds'];
+import type { CardType } from '@intake24/common/feedback';
 
 export type CardSettingsRecord = {
   tabs: string[];
@@ -11,12 +8,12 @@ export type CardSettings = Record<CardType, CardSettingsRecord>;
 
 export const cardSettings: CardSettings = {
   character: {
-    tabs: [...baseTab],
+    tabs: ['general', 'content'],
   },
   'nutrient-group': {
-    tabs: [...customTab, 'nutrients'],
+    tabs: ['general', 'unit', 'thresholds', 'nutrients'],
   },
   'five-a-day': {
-    tabs: [...customTab],
+    tabs: ['general', 'unit', 'thresholds'],
   },
 };
