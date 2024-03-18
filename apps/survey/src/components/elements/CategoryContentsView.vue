@@ -37,6 +37,21 @@
         {{ i18n.none }}
       </v-alert>
     </div>
+    <div
+      v-if="contents.foods.length >= 50"
+      class="py-4"
+      :class="categoriesFirst ? 'order-first' : 'order-last'"
+    >
+      <v-alert
+        border="left"
+        class="smaller-padding"
+        color="primary lighten-4 mb-0"
+        icon="fas fa-bell"
+        rounded="lg"
+      >
+        {{ i18n.refine }}
+      </v-alert>
+    </div>
   </div>
 </template>
 
@@ -77,3 +92,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.smaller-padding {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+</style>

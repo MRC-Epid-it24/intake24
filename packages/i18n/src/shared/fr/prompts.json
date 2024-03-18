@@ -121,6 +121,7 @@
     "root": "toutes les catégories d'aliments",
     "back": "Retour à '{category}'",
     "none": "Aucun résultat concernant les aliments. Veuillez affiner votre recherche.",
+    "refine": "The search has found a lot of results. Try refining your search.",
     "missing": {
       "label": "Je ne trouve pas ma nourriture",
       "description": "<p>Si vous ne trouvez pas votre aliment dans la liste, essayez de reformuler votre description dans le champ de recherche ci-dessus.</p><p>Ou sélectionnez \"Parcourir tous les aliments\" et explorez les catégories d'aliments.</p><p>Si vous ne trouvez toujours pas votre aliment, sélectionnez \"Signaler un aliment manquant\".</p>",
