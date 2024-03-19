@@ -5,7 +5,7 @@ import type { IoC } from '@intake24/api/ioc';
 import type { Job } from '@intake24/api/jobs';
 import type { JobData, JobParams, JobType } from '@intake24/common/types';
 import ioc from '@intake24/api/ioc';
-import { Job as DbJob } from '@intake24/db';
+import { Job as DbJob, Op } from '@intake24/db';
 
 import type { PushPayload } from '..';
 import type { QueueHandler } from './queue-handler';
@@ -86,7 +86,10 @@ export default class JobsQueueHandler implements QueueHandler<JobData> {
           }
 
           if (typeof progress === 'number' && progress < 1)
-            await DbJob.update({ progress }, { where: { id: dbId } });
+            await DbJob.update(
+              { progress },
+              { where: { id: dbId, progress: { [Op.lt]: progress } } }
+            );
         })
         .on('completed', async (job) => {
           this.logger.info(`${this.name}: ${job.name} | ${job.id} has completed.`);
