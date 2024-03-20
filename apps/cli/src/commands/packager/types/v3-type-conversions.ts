@@ -293,6 +293,7 @@ function packageLocalFood(code: string, localFood: LocalFoodRecordV3): PkgLocalF
     version: localFood.version ?? undefined,
     localDescription:
       localFood.localDescription.length === 1 ? localFood.localDescription[0] : undefined,
+    alternativeNames: {},
     associatedFoods: localFood.associatedFoods.map(packageAssociatedFood),
     brandNames: localFood.brandNames,
     nutrientTableCodes: localFood.nutrientTableCodes,

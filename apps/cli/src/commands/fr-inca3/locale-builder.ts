@@ -7,10 +7,12 @@ import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-
 import type { INCA3EnglishDescription } from '@intake24/cli/commands/fr-inca3/types/english-description';
 import type { INCA3FoodListRow } from '@intake24/cli/commands/fr-inca3/types/food-list';
 import type { INCA3FoodQuantRow } from '@intake24/cli/commands/fr-inca3/types/food-quant';
+import type { INCA3FoodShadowsRow } from '@intake24/cli/commands/fr-inca3/types/food-shadows';
 import type { INCA3FoodStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/food-standard-portions';
 import type { INCA3PortionSizeImage } from '@intake24/cli/commands/fr-inca3/types/portion-size-images';
 import type { INCA3RecipeListRow } from '@intake24/cli/commands/fr-inca3/types/recipe-list';
 import type { INCA3RecipeQuantRow } from '@intake24/cli/commands/fr-inca3/types/recipe-quant';
+import type { INCA3RecipeShadowsRow } from '@intake24/cli/commands/fr-inca3/types/recipe-shadows';
 import type { INCA3RecipeStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/recipe-standard-portions';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
 import type {
@@ -80,11 +82,13 @@ export class FrenchAnsesLocaleBuilder {
   private sourceFoodRecords: INCA3FoodListRow[] | undefined;
   private foodPortionSizeRecords: Record<string, INCA3FoodQuantRow> | undefined;
   private foodEnglishDescriptions: Record<string, string> | undefined;
+  private foodSynonyms: Record<string, string[]> | undefined;
   private foodStandardUnits: Record<string, INCA3FoodStandardUnitRow[]> | undefined;
 
   private sourceRecipeRecords: INCA3RecipeListRow[] | undefined;
   private recipeEnglishDescriptions: Record<string, string> | undefined;
   private recipePortionSizeRecords: Record<string, INCA3RecipeQuantRow> | undefined;
+  private recipeSynonyms: Record<string, string[]> | undefined;
   private recipeStandardUnits: Record<string, INCA3RecipeStandardUnitRow[]> | undefined;
 
   private portionSizeImages: INCA3PortionSizeImage[] | undefined;
@@ -139,11 +143,28 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private async readFoodList(): Promise<void> {
+    function getSynonyms(row: any, prefix: string): string[] {
+      const synonyms: string[] = [];
+      for (let i = 1; i <= 8; i++) {
+        const synonymValue = row[`${prefix}SYNONYME${i}`];
+        if (synonymValue !== undefined) {
+          synonyms.push(capitalize(synonymValue));
+        }
+      }
+      return synonyms;
+    }
+
     this.sourceRecords = await this.readJSON<INCA3FoodListRow[]>('ALIMENTS_FDLIST.json');
     this.sourceFoodRecords = this.sourceRecords.filter((record) => isFoodCode(record.A_CODE));
 
     const englishDescriptionRecords =
       await this.readJSON<INCA3EnglishDescription[]>('EN_DESC.json');
+
+    const foodSynonymRecords = await this.readJSON<INCA3FoodShadowsRow[]>('ALIMENTS_SHADOWS.json');
+
+    this.foodSynonyms = Object.fromEntries(
+      foodSynonymRecords.map((r) => [r.A_CODE, getSynonyms(r, 'A_')]).filter((a) => a[1].length > 0)
+    );
 
     this.foodEnglishDescriptions = Object.fromEntries(
       englishDescriptionRecords.map((r) => [r.code, r.englishDescription])
@@ -153,6 +174,15 @@ export class FrenchAnsesLocaleBuilder {
 
     const recipeDescriptionsRecords =
       await this.readJSON<INCA3EnglishDescription[]>('EN_DESC_RCP.json');
+
+    const recipeSynonymRecords =
+      await this.readJSON<INCA3RecipeShadowsRow[]>('RECETTES_SHADOWS.json');
+
+    this.recipeSynonyms = Object.fromEntries(
+      recipeSynonymRecords
+        .map((r) => [r.R_CODE, getSynonyms(r, 'R_')])
+        .filter((a) => a[1].length > 0)
+    );
 
     this.recipeEnglishDescriptions = Object.fromEntries(
       recipeDescriptionsRecords.map((r) => [r.code, r.englishDescription])
@@ -394,10 +424,14 @@ export class FrenchAnsesLocaleBuilder {
     const localFoods: PkgLocalFood[] = [];
 
     for (const row of this.sourceFoodRecords!) {
+      const foodSynonyms = this.foodSynonyms![row.A_CODE];
+      const alternativeNames = foodSynonyms === undefined ? undefined : { fr: foodSynonyms };
+
       localFoods.push({
         version: randomUUID(),
         code: getIntake24FoodCode(row.A_CODE),
         localDescription: capitalize(row.A_LIBELLE),
+        alternativeNames,
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
         },
@@ -408,10 +442,14 @@ export class FrenchAnsesLocaleBuilder {
     }
 
     for (const row of this.sourceRecipeRecords!) {
+      const recipeSynonyms = this.recipeSynonyms![row.R_CODE];
+      const alternativeNames = recipeSynonyms === undefined ? undefined : { fr: recipeSynonyms };
+
       localFoods.push({
         version: randomUUID(),
         code: getIntake24RecipeCode(row.R_CODE),
         localDescription: capitalize(row.R_LIBELLE),
+        alternativeNames,
         nutrientTableCodes: {
           FR_TEMP: 'FRPH1',
         },
