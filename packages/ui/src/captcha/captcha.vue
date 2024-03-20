@@ -56,7 +56,7 @@ export default defineComponent({
   methods: {
     executeIfCan() {
       if (!this.provider) {
-        this.verified('');
+        this.verified();
         return;
       }
 
@@ -76,7 +76,7 @@ export default defineComponent({
       this.reset();
     },
 
-    verified(token: string /*, eKey: string*/) {
+    verified(token?: string /*, eKey: string*/) {
       this.$emit('verified', token);
     },
   },

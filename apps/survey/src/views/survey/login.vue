@@ -124,7 +124,7 @@ export default defineComponent({
       username,
     } = useLogin(props);
 
-    const verified = async (token: string) => {
+    const verified = async (token?: string) => {
       captchaToken.value = token;
       await login('alias');
     };

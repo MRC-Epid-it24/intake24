@@ -113,7 +113,7 @@ export default defineComponent({
 
     const canContinue = computed(() => status.value === 200);
 
-    const verified = async (token: string) => {
+    const verified = async (token?: string) => {
       captchaToken.value = token;
       await generateUser();
     };

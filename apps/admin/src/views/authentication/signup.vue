@@ -154,7 +154,7 @@ type SignUpForm = {
   password: string | null;
   passwordConfirm: string | null;
   terms: boolean;
-  captcha: string | null;
+  captcha: string | undefined;
 };
 
 export default defineComponent({
@@ -174,7 +174,7 @@ export default defineComponent({
         password: null,
         passwordConfirm: null,
         terms: false,
-        captcha: null,
+        captcha: undefined,
       }),
       show: {
         password: false,
@@ -186,11 +186,11 @@ export default defineComponent({
 
   methods: {
     resetCaptcha() {
-      this.form.captcha = null;
+      this.form.captcha = undefined;
       this.captchaEl?.reset();
     },
 
-    async verified(token: string) {
+    async verified(token?: string) {
       this.form.captcha = token;
       await this.sendRequest();
     },
@@ -209,7 +209,7 @@ export default defineComponent({
       } catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.reset.captcha').toString());
+          useMessages().error(this.$t('common.password.request.captcha').toString());
         } else throw err;
       } finally {
         this.resetCaptcha();

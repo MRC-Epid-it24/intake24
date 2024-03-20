@@ -53,7 +53,7 @@ import { useMessages } from '@intake24/ui/stores';
 
 type PasswordRequestForm = {
   email: string | null;
-  captcha: string | null;
+  captcha: string | undefined;
 };
 
 export default defineComponent({
@@ -67,7 +67,7 @@ export default defineComponent({
     return reactive({
       form: createForm<PasswordRequestForm>({
         email: null,
-        captcha: null,
+        captcha: undefined,
       }),
       captchaEl,
       submitted: false,
@@ -76,7 +76,7 @@ export default defineComponent({
 
   methods: {
     resetCaptcha() {
-      this.form.captcha = null;
+      this.form.captcha = undefined;
       this.captchaEl?.reset();
     },
 
@@ -96,7 +96,7 @@ export default defineComponent({
       } catch (err) {
         if (this.form.errors.has('captcha')) {
           this.form.errors.clear('captcha');
-          useMessages().error(this.$t('common.password.reset.captcha').toString());
+          useMessages().error(this.$t('common.password.request.captcha').toString());
         } else throw err;
       } finally {
         this.resetCaptcha();
