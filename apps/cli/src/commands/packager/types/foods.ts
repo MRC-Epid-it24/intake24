@@ -104,6 +104,7 @@ export interface PkgLocalFood {
   code: string;
   version?: string;
   localDescription?: string;
+  alternativeNames?: Record<string, string[]>;
   nutrientTableCodes: Record<string, string>;
   portionSize: PkgPortionSizeMethod[];
   associatedFoods: PkgAssociatedFood[];
