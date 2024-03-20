@@ -8,6 +8,7 @@ const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|n\.s\.'s/g);
 
 export default {
   name: 'French',
+  languageCode: 'fr',
   indexIgnore: ['de', 'au', 'aux', 'pour'],
   phoneticEncoder: new FrenchPhoneticEncoder(),
 

@@ -1,4 +1,6 @@
+import type { LocaleTranslation } from '@intake24/common/types';
 import type { CategoryHeader } from '@intake24/common/types/http';
+import type { AlternativeFoodNames } from '@intake24/db';
 import { Category, CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';
 
 import type { RecipeFoodTuple } from '../phrase-index';
@@ -6,6 +8,7 @@ import type { RecipeFoodTuple } from '../phrase-index';
 export type LocalFoodData = {
   code: string;
   name: string;
+  altNames: AlternativeFoodNames;
   parentCategories: Set<string>;
 };
 
@@ -45,7 +48,7 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
     include: {
       required: true,
       association: 'foodLocal',
-      attributes: ['name'],
+      attributes: ['name', 'altNames'],
       where: { localeId },
       include: [
         {
@@ -68,6 +71,7 @@ export async function fetchLocalFoods(localeId: string): Promise<LocalFoodData[]
     return {
       code: row.foodCode,
       name: row.foodLocal!.name,
+      altNames: row.foodLocal!.altNames,
       parentCategories,
     };
   });

@@ -187,7 +187,7 @@ const surveySubmissionService = ({
       }
 
       const {
-        data: { code, groupCode, reasonableAmount },
+        data: { code, groupCode, reasonableAmount, localName },
         flags,
         linkedFoods,
         portionSize,
@@ -212,7 +212,6 @@ const surveySubmissionService = ({
 
       const {
         nutrientRecords,
-        name: localName,
         main: { name: englishName },
       } = foodRecord;
       const { id: foodGroupId, name: foodGroupEnglishName, localGroups } = foodGroupRecord;

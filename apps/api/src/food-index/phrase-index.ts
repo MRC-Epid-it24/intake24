@@ -31,6 +31,7 @@ export type RecipeFoodTuple = [key: string, entry: RecipeFoodsHeader];
 
 export interface LanguageBackend {
   name: string;
+  languageCode: string;
   indexIgnore: string[];
   phoneticEncoder: PhoneticEncoder | undefined;
 
