@@ -84,6 +84,7 @@ export default defineComponent({
     const jobTypeList = computed(() =>
       nutrientTableJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
+    const jobQuery = computed(() => ({ nutrientTableId: props.id }));
 
     const defaultJobsParams = computed<Pick<JobParams, NutrientTableJob>>(() => ({
       NutrientTableMappingImport: { nutrientTableId: props.id, file: '' },
@@ -104,7 +105,7 @@ export default defineComponent({
       data: { type: nutrientTableJobs[0], params: defaultJobsParams.value[nutrientTableJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(nutrientTableJobs);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(nutrientTableJobs, jobQuery);
 
     const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
 

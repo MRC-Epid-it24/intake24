@@ -20,5 +20,20 @@ export default validate(
         },
       },
     },
+    localeId: {
+      in: ['query'],
+      optional: true,
+      isInt: true,
+    },
+    nutrientTableId: {
+      in: ['query'],
+      optional: true,
+      isInt: true,
+    },
+    surveyId: {
+      in: ['query'],
+      optional: true,
+      isInt: true,
+    },
   })
 );

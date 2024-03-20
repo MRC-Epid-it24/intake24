@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 
@@ -55,10 +55,11 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const jobType = 'SurveyAuthUrlsExport';
+    const jobQuery = computed(() => ({ surveyId: props.surveyId }));
 
-    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType);
+    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType, jobQuery);
 
     return { dialog, jobs, jobInProgress, startPolling };
   },

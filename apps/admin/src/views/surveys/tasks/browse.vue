@@ -79,6 +79,7 @@ export default defineComponent({
     const jobTypeList = computed(() =>
       surveyJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
+    const jobQuery = computed(() => ({ surveyId: props.id }));
 
     const defaultJobsParams = computed<Pick<JobParams, SurveyJob>>(() => ({
       SurveyAuthUrlsExport: { surveyId: props.id },
@@ -102,7 +103,7 @@ export default defineComponent({
       data: { type: surveyJobs[0], params: defaultJobsParams.value[surveyJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(surveyJobs);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(surveyJobs, jobQuery);
 
     const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
 

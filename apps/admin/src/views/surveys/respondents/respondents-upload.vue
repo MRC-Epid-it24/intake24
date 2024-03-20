@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
@@ -76,11 +76,13 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  setup(props) {
     const jobType = 'SurveyRespondentsImport';
+    const jobQuery = computed(() => ({ surveyId: props.surveyId }));
+
     const form = reactive(createForm<RespondentsUploadForm>({ file: null }, { multipart: true }));
 
-    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType);
+    const { dialog, jobs, jobInProgress, startPolling } = usePollsForJobs(jobType, jobQuery);
 
     return { form, dialog, jobs, jobInProgress, startPolling };
   },

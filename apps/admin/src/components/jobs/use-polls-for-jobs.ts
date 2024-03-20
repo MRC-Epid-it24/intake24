@@ -1,22 +1,26 @@
+import type { ComputedRef } from 'vue';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
 import type { JobEntry } from '@intake24/common/types/http/admin';
 import { useHttp } from '@intake24/admin/services';
 
-export const usePollsForJobs = (jobType: JobType | JobType[]) => {
+export const usePollsForJobs = (
+  jobType: JobType | JobType[],
+  query?: ComputedRef<Record<string, string | number>>
+) => {
   const http = useHttp();
 
   const dialog = ref<boolean>(false);
   const jobs = ref<JobEntry[]>([]);
   const polling = ref<number | null>(null);
 
-  const jobInProgress = computed(() => jobs.value.some((item) => item.progress !== 1));
+  const jobInProgress = computed(() =>
+    jobs.value.some((item) => item.progress !== 1 && item.completedAt === null)
+  );
 
   watch(jobs, (val: JobEntry[]) => {
-    const done = val.every((item) => item.progress === 1);
-
-    if (!val.length || done) stopPolling();
+    if (!val.length || !jobInProgress.value) stopPolling();
   });
 
   watch(dialog, async (val: boolean) => {
@@ -35,7 +39,9 @@ export const usePollsForJobs = (jobType: JobType | JobType[]) => {
   const status = async () => {
     const {
       data: { data },
-    } = await http.get(`admin/user/jobs`, { params: { type: jobType, limit: 5 } });
+    } = await http.get(`admin/user/jobs`, {
+      params: { type: jobType, limit: 5, ...(query ? query.value : {}) },
+    });
 
     jobs.value = [...data];
   };

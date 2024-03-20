@@ -80,6 +80,7 @@ export default defineComponent({
     const jobTypeList = computed(() =>
       localeJobs.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`) }))
     );
+    const jobQuery = computed(() => ({ localeId: props.id }));
 
     const defaultJobsParams = computed<Pick<JobParams, LocaleJob>>(() => ({
       LocaleFoods: { localeId: props.id },
@@ -101,7 +102,7 @@ export default defineComponent({
       data: { type: localeJobs[0], params: defaultJobsParams.value[localeJobs[0]] },
       config: { multipart: true, resetOnSubmit: false },
     });
-    const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs);
+    const { jobs, jobInProgress, startPolling } = usePollsForJobs(localeJobs, jobQuery);
 
     const paramErrors = computed(() => Object.keys(form.params).map((key) => `params.${key}`));
 

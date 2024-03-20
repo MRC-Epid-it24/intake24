@@ -3,10 +3,11 @@ import path from 'node:path';
 import type { Request, Response } from 'express';
 import fs from 'fs-extra';
 import { pick } from 'lodash';
+import { literal, where } from 'sequelize';
 
 import type { IoC } from '@intake24/api/ioc';
 import type { JobEntry, JobsResponse } from '@intake24/common/types/http/admin';
-import type { JobAttributes, PaginateQuery, WhereOptions } from '@intake24/db';
+import type { PaginateQuery, WhereOptions } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { Job, Op } from '@intake24/db';
 
@@ -16,15 +17,21 @@ const adminUserJobController = ({ fsConfig }: Pick<IoC, 'fsConfig'>) => {
     res: Response<JobsResponse>
   ): Promise<void> => {
     const { userId } = req.scope.cradle.user;
-    const { type } = req.query;
+    const { type, ...rest } = req.query;
+    const jsonParams = Object.entries(pick(rest, ['localeId', 'nutrientTableId', 'surveyId'])).map(
+      ([key, value]) => where(literal(`(params::json->>'${key}')::text`), value)
+    );
 
-    const where: WhereOptions<JobAttributes> = { userId };
-    if (type) where.type = type;
+    const whereOp: WhereOptions = {
+      userId,
+      [Op.and]: jsonParams,
+    };
+    if (type) whereOp.type = type;
 
     const jobs = await Job.paginate({
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       columns: ['type'],
-      where,
+      where: whereOp,
       order: [['startedAt', 'DESC']],
     });
 
