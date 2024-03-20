@@ -59,7 +59,7 @@ export const survey = () => {
     generateUser: {
       middleware: [generateUserLimiter],
       handler: async ({ body: { captcha }, params: { slug }, req }) => {
-        await captchaCheck(captcha, captchaConfig);
+        await captchaCheck(captcha ?? undefined, captchaConfig);
 
         const {
           respondent: { username },
