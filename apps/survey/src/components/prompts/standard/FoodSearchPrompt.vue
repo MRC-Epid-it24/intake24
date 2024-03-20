@@ -72,6 +72,10 @@ export default defineComponent({
 
     const foodSelected = async (food: FoodHeader) => {
       const foodData = await foodsService.getData(props.localeId, food.code);
+      // Food data API returns the main local food name.
+      // Override it here with the selected name (which could be one of the
+      // alternative food names or the main name).
+      foodData.localName = food.name;
       ctx.emit('food-selected', foodData);
     };
 

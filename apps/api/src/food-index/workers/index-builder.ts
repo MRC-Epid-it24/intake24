@@ -120,6 +120,12 @@ async function buildIndexForLocale(localeId: string): Promise<LocalFoodIndex> {
     if (!food.name) continue;
 
     foodDescriptions.push({ phrase: food.name, key: food.code });
+
+    const altNames = food.altNames[languageBackend.languageCode];
+
+    if (altNames !== undefined) {
+      for (const name of altNames) foodDescriptions.push({ phrase: name, key: food.code });
+    }
   }
 
   const categoryDescriptions = new Array<PhraseWithKey<string>>();

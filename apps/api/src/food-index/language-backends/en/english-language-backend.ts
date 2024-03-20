@@ -8,6 +8,7 @@ const sanitiseRegexp = new RegExp(/[.`,/\\\-+)(]|e\.g\.|e\.g|'s/g);
 
 export default {
   name: 'English',
+  languageCode: 'en',
   indexIgnore: ['and', 'the', 'with', 'from'],
   phoneticEncoder: new Metaphone3Encoder(),
 

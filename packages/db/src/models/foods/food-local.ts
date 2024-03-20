@@ -16,6 +16,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
+import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   FoodNutrientCreationAttributes,
   FoodPortionSizeMethodCreationAttributes,
@@ -31,6 +32,8 @@ import {
 
 import BaseModel from '../model';
 import NutrientTableRecord from './nutrient-table-record';
+
+export type AlternativeFoodNames = Record<string, string[]>;
 
 @Scopes(() => ({
   food: { include: [{ model: Food }] },
@@ -80,6 +83,19 @@ export default class FoodLocal extends BaseModel<
     type: DataType.STRING(256),
   })
   declare simpleName: string | null;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING(2048),
+    get() {
+      const val = this.getDataValue('altNames') as unknown;
+      return val ? JSON.parse(val as string) : {};
+    },
+    set(value: AlternativeFoodNames) {
+      this.setDataValue('altNames', JSON.stringify(value ?? {}));
+    },
+  })
+  declare altNames: CreationOptional<AlternativeFoodNames>;
 
   @Column({
     allowNull: false,
