@@ -35,6 +35,7 @@ export type UpdateGlobalFoodRequest = Omit<CreateGlobalFoodRequest, 'code'>;
 export type CreateLocalFoodRequest = {
   code: string;
   name: string;
+  altNames?: Record<string, string[]>;
   nutrientTableCodes: Record<string, string>;
   portionSizeMethods: PortionSizeMethod[];
   associatedFoods: AssociatedFood[];

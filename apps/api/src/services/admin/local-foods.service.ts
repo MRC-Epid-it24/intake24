@@ -281,6 +281,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
       if (options.update) {
         instance.name = request.name;
         instance.simpleName = toSimpleName(request.name);
+        instance.altNames = request.altNames ?? {};
         instance.version = randomUUID();
 
         await instance.save({ transaction });
@@ -295,6 +296,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
           localeId,
           foodCode: request.code,
           name: request.name,
+          altNames: request.altNames,
           version: randomUUID(),
           simpleName: toSimpleName(request.name),
         },
