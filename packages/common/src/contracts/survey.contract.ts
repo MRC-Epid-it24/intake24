@@ -33,7 +33,7 @@ export const survey = initContract().router({
     body: z.object({
       captcha: z
         .string()
-        .optional()
+        .nullish()
         .openapi({ description: 'Captcha token if enabled on system level' }),
     }),
     responses: {
