@@ -44,11 +44,14 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { commitPromptAnswer, foodOptional, mealOptional } = useCustomPromptHandler(props);
+    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional } =
+      useCustomPromptHandler(props);
     const survey = useSurvey();
 
     const isInfoPrompt = computed(() => infoPrompts.includes(props.prompt.component));
-    const state = ref<CustomPromptAnswer | undefined>(isInfoPrompt.value ? 'next' : undefined);
+    const state = ref<CustomPromptAnswer | undefined>(
+      isInfoPrompt.value ? 'next' : getPromptAnswer(props.prompt.id)
+    );
 
     const action = (type: string, ...args: [id?: string, params?: object]) => {
       if (type === 'next' || isInfoPrompt.value) commitAnswer();

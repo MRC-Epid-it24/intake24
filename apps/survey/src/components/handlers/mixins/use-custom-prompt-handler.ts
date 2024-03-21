@@ -1,4 +1,5 @@
 import type { Prompt, Prompts } from '@intake24/common/prompts';
+import type { PromptSection } from '@intake24/common/surveys';
 import type { CustomPromptAnswer } from '@intake24/common/types';
 import { useSurvey } from '@intake24/survey/stores';
 
@@ -9,6 +10,7 @@ const infoPrompts = ['info-prompt'];
 
 export type UseCustomPromptHandlerProps<P extends keyof Prompts> = {
   prompt: Prompts[P];
+  section: PromptSection;
 };
 
 export const useCustomPromptHandler = <P extends keyof Prompts>(
@@ -19,6 +21,16 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
   const survey = useSurvey();
 
   const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
+
+  const getPromptAnswer = (id: string) => {
+    if (foodOptional.value && ['foods'].includes(props.section))
+      return foodOptional.value.customPromptAnswers[id];
+
+    if (mealOptional.value && ['preFoods', 'postFoods'].includes(props.section))
+      return mealOptional.value.customPromptAnswers[id];
+
+    return survey.data.customPromptAnswers[id];
+  };
 
   const commitPromptAnswer = (prompt: Prompt, answer?: CustomPromptAnswer) => {
     const promptId = prompt.id;
@@ -65,6 +77,7 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
 
   return {
     commitPromptAnswer,
+    getPromptAnswer,
     foodOptional,
     mealOptional,
   };
