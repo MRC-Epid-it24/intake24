@@ -45,40 +45,38 @@ export default defineComponent({
 
   emits: ['expired', 'verified'],
 
-  setup() {
+  setup(props, { emit }) {
     const captcha = ref<InstanceType<typeof HCaptcha | typeof ReCaptcha>>();
     const provider = ref<CaptchaProvider | null>(import.meta.env.VITE_CAPTCHA_PROVIDER || null);
     const sitekey = ref<string>(import.meta.env.VITE_CAPTCHA_SITEKEY || '');
 
-    return { captcha, provider, sitekey };
-  },
+    const execute = () => {
+      captcha.value?.execute();
+    };
 
-  methods: {
-    executeIfCan() {
-      if (!this.provider) {
-        this.verified();
+    const reset = () => {
+      captcha.value?.reset();
+    };
+
+    const expired = () => {
+      emit('expired');
+      reset();
+    };
+
+    const verified = (token?: string /*, eKey: string*/) => {
+      emit('verified', token);
+    };
+
+    const executeIfCan = () => {
+      if (!provider.value) {
+        verified();
         return;
       }
 
-      this.execute();
-    },
+      execute();
+    };
 
-    execute() {
-      this.captcha?.execute();
-    },
-
-    reset() {
-      this.captcha?.reset();
-    },
-
-    expired() {
-      this.$emit('expired');
-      this.reset();
-    },
-
-    verified(token?: string /*, eKey: string*/) {
-      this.$emit('verified', token);
-    },
+    return { captcha, provider, sitekey, execute, executeIfCan, expired, reset, verified };
   },
 });
 </script>
