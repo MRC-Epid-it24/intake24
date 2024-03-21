@@ -1,6 +1,10 @@
+import { createReadStream } from 'node:fs';
+
+import parseCsv from 'csv-parser';
 import fs from 'fs/promises';
 import { groupBy } from 'lodash';
 import path from 'path';
+import stripBomStream from 'strip-bom-stream';
 import { v4 as randomUUID } from 'uuid';
 
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
@@ -15,6 +19,10 @@ import type { INCA3RecipeQuantRow } from '@intake24/cli/commands/fr-inca3/types/
 import type { INCA3RecipeShadowsRow } from '@intake24/cli/commands/fr-inca3/types/recipe-shadows';
 import type { INCA3RecipeStandardUnitRow } from '@intake24/cli/commands/fr-inca3/types/recipe-standard-portions';
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
+import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
 import type {
   PkgGlobalFood,
   PkgLocalFood,
@@ -84,12 +92,16 @@ export class FrenchAnsesLocaleBuilder {
   private foodEnglishDescriptions: Record<string, string> | undefined;
   private foodSynonyms: Record<string, string[]> | undefined;
   private foodStandardUnits: Record<string, INCA3FoodStandardUnitRow[]> | undefined;
+  private foodCategories: Record<string, string[]> | undefined;
 
   private sourceRecipeRecords: INCA3RecipeListRow[] | undefined;
   private recipeEnglishDescriptions: Record<string, string> | undefined;
   private recipePortionSizeRecords: Record<string, INCA3RecipeQuantRow> | undefined;
   private recipeSynonyms: Record<string, string[]> | undefined;
   private recipeStandardUnits: Record<string, INCA3RecipeStandardUnitRow[]> | undefined;
+  private recipeCategories: Record<string, string[]> | undefined;
+
+  private categoryNames: Record<string, string> | undefined;
 
   private portionSizeImages: INCA3PortionSizeImage[] | undefined;
 
@@ -142,6 +154,68 @@ export class FrenchAnsesLocaleBuilder {
     return description;
   }
 
+  private async readFoodCategories(): Promise<void> {
+    const result: Record<string, string[]> = {};
+
+    return new Promise((resolve) => {
+      createReadStream(path.join(this.sourceDirPath, 'categories', 'foods.csv'))
+        .pipe(stripBomStream())
+        .pipe(parseCsv({ headers: false, skipLines: 1 }))
+        .on('data', (data) => {
+          const a_code = data[6];
+
+          if (a_code) {
+            const cat1 = data[9];
+            const cat2 = data[11];
+            const cat3 = data[13];
+
+            const list = result[a_code] ?? [];
+
+            if (cat1) list.push(cat1);
+            if (cat2) list.push(cat2);
+            if (cat3) list.push(cat3);
+
+            result[a_code] = list;
+          }
+        })
+        .on('end', () => {
+          this.foodCategories = result;
+          resolve();
+        });
+    });
+  }
+
+  private async readRecipeCategories(): Promise<void> {
+    const result: Record<string, string[]> = {};
+
+    return new Promise((resolve) => {
+      createReadStream(path.join(this.sourceDirPath, 'categories', 'recipes.csv'))
+        .pipe(stripBomStream())
+        .pipe(parseCsv({ headers: false, skipLines: 1 }))
+        .on('data', (data) => {
+          const r_code = data[3];
+
+          if (r_code) {
+            const cat1 = data[5];
+            const cat2 = data[7];
+            const cat3 = data[9];
+
+            const list = result[r_code] ?? [];
+
+            if (cat1) list.push(cat1);
+            if (cat2) list.push(cat2);
+            if (cat3) list.push(cat3);
+
+            result[r_code] = list;
+          }
+        })
+        .on('end', () => {
+          this.recipeCategories = result;
+          resolve();
+        });
+    });
+  }
+
   private async readFoodList(): Promise<void> {
     function getSynonyms(row: any, prefix: string): string[] {
       const synonyms: string[] = [];
@@ -189,6 +263,23 @@ export class FrenchAnsesLocaleBuilder {
     );
   }
 
+  private async readCategoryNames(): Promise<void> {
+    const result: Record<string, string> = {};
+
+    return new Promise((resolve) => {
+      createReadStream(path.join(this.sourceDirPath, 'categories', 'names.csv'))
+        .pipe(stripBomStream())
+        .pipe(parseCsv({ headers: false, skipLines: 0 }))
+        .on('data', (data) => {
+          result[data[0]] = data[1];
+        })
+        .on('end', () => {
+          this.categoryNames = result;
+          resolve();
+        });
+    });
+  }
+
   private async readQuantificationData(): Promise<void> {
     const fdQuantRows = await this.readJSON<INCA3FoodQuantRow[]>('ALIMENTS_FDQUANT.json');
 
@@ -221,21 +312,29 @@ export class FrenchAnsesLocaleBuilder {
     const globalFoods: PkgGlobalFood[] = [];
 
     for (const row of this.sourceFoodRecords!) {
+      const categories = this.foodCategories![row.A_CODE];
+
+      if (!categories) console.warn(`Food ${row.A_CODE} is not assigned to any categories`);
+
       globalFoods.push({
         version: randomUUID(),
         code: getIntake24FoodCode(row.A_CODE),
-        parentCategories: this.getIntake24Categories(row.A_GPE, row.A_SGPE, row.AS_SSGPE),
-        attributes: {},
+        parentCategories: categories ?? [],
+        attributes: { readyMealOption: true },
         groupCode: 1,
         englishDescription: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
       });
     }
 
     for (const row of this.sourceRecipeRecords!) {
+      const categories = this.recipeCategories![row.R_CODE];
+
+      if (!categories) console.warn(`Recipe ${row.R_CODE} is not assigned to any categories`);
+
       globalFoods.push({
         version: randomUUID(),
         code: getIntake24RecipeCode(row.R_CODE),
-        parentCategories: this.getRecipeIntake24Categories(row.R_GPE, row.R_SGPE, row.R_groupe),
+        parentCategories: categories ?? [],
         attributes: {},
         groupCode: 1,
         englishDescription: capitalize(this.getRecipeEnglishDescription(row.R_CODE)),
@@ -462,6 +561,91 @@ export class FrenchAnsesLocaleBuilder {
     return localFoods;
   }
 
+  private buildGlobalCategories(): PkgGlobalCategory[] {
+    return [
+      {
+        code: 'FRPEPO',
+        attributes: {},
+        englishDescription: 'Baby food and savoury snacks',
+        parentCategories: ['19TODSFD'],
+        version: '0fd3f027-6f2a-47f3-9838-7bb0037a4fd4',
+        isHidden: false,
+      },
+      {
+        code: 'FRDEIN',
+        attributes: {},
+        englishDescription: 'Baby desserts',
+        parentCategories: ['19TODSFD'],
+        version: '64f6bd7b-0f0b-41b6-ab20-afac96078a28',
+        isHidden: false,
+      },
+      {
+        code: 'FRCEBI',
+        attributes: {},
+        englishDescription: 'Baby cereals and biscuits',
+        parentCategories: ['19TODSFD'],
+        version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
+        isHidden: false,
+      },
+      {
+        code: 'FRLABO',
+        attributes: {},
+        englishDescription: 'Baby milk and drinks',
+        parentCategories: ['19TODSFD'],
+        version: '7e12b7a1-e7e3-4c57-9f2a-ddf5c1c05f3b',
+        isHidden: false,
+      },
+      {
+        code: 'FRLAMA',
+        attributes: {},
+        englishDescription: 'Breast milk',
+        parentCategories: ['FRLBI'],
+        version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
+        isHidden: false,
+      },
+    ];
+  }
+
+  private buildLocalCategories(): PkgLocalCategory[] {
+    const localCategories: PkgLocalCategory[] = [
+      {
+        code: 'FRPEPO',
+        localDescription: 'Petits pots salés & plats infantiles',
+        portionSize: [],
+      },
+      {
+        code: 'FRDEIN',
+        localDescription: 'Desserts infantiles',
+        portionSize: [],
+      },
+      {
+        code: 'FRCEBI',
+        localDescription: 'Céréales & biscuits infantiles',
+        portionSize: [],
+      },
+      {
+        code: 'FRLABO',
+        localDescription: 'Laits & boissons infantiles',
+        portionSize: [],
+      },
+      {
+        code: 'FRLAMA',
+        localDescription: 'Lait maternel',
+        portionSize: [],
+      },
+    ];
+
+    for (const [code, localDescription] of Object.entries(this.categoryNames!)) {
+      localCategories.push({
+        code,
+        localDescription,
+        portionSize: [],
+      });
+    }
+
+    return localCategories;
+  }
+
   private buildAsServed(): PkgAsServedSet[] {
     const imagesById = groupBy(this.portionSizeImages, (record) => record.pictureId);
 
@@ -481,6 +665,9 @@ export class FrenchAnsesLocaleBuilder {
 
   public async buildPackage(): Promise<void> {
     await this.readFoodList();
+    await this.readFoodCategories();
+    await this.readRecipeCategories();
+    await this.readCategoryNames();
     await this.readQuantificationData();
     await this.readPortionSizeImages();
     await this.readFoodStandardUnits();
@@ -488,6 +675,9 @@ export class FrenchAnsesLocaleBuilder {
 
     const globalFoods = this.buildGlobalFoods();
     const localFoods = this.buildLocalFoods();
+
+    const globalCategories = this.buildGlobalCategories();
+    const localCategories = this.buildLocalCategories();
 
     const localFoodsRecord = {
       [locale.id]: localFoods,
@@ -497,6 +687,10 @@ export class FrenchAnsesLocaleBuilder {
       [locale.id]: localFoods.map((f) => f.code),
     };
 
+    const localCategoriesRecord = {
+      [locale.id]: localCategories,
+    };
+
     const asServedSets = this.buildAsServed();
 
     const writer = new PackageWriter(this.logger, this.outputDirPath);
@@ -504,6 +698,8 @@ export class FrenchAnsesLocaleBuilder {
     await writer.writeLocales([locale]);
     await writer.writeGlobalFoods(globalFoods);
     await writer.writeLocalFoods(localFoodsRecord);
+    await writer.writeGlobalCategories(globalCategories);
+    await writer.writeLocalCategories(localCategoriesRecord);
     await writer.writeEnabledLocalFoods(enabledLocalFoods);
     await writer.writeNutrientTables([dummyNutrientTable]);
     await writer.writeAsServedSets(asServedSets);

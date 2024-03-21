@@ -3,7 +3,10 @@ import { merge } from 'lodash';
 import path from 'path';
 
 import type { PkgAsServedSet } from '@intake24/cli/commands/packager/types/as-served';
-import type { PkgGlobalCategory } from '@intake24/cli/commands/packager/types/categories';
+import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
 import type { PkgDrinkwareSet } from '@intake24/cli/commands/packager/types/drinkware';
 import type { PkgGlobalFood, PkgLocalFood } from '@intake24/cli/commands/packager/types/foods';
 import type { PkgGuideImage } from '@intake24/cli/commands/packager/types/guide-image';
@@ -103,7 +106,7 @@ export class PackageWriter {
     await this.writeJSON(localFoods, path.join(this.outputDir, PkgConstants.LOCAL_FOODS_FILE_NAME));
   }
 
-  public async writeLocalCategories(localCategories: Record<string, PkgLocalFood[]>) {
+  public async writeLocalCategories(localCategories: Record<string, PkgLocalCategory[]>) {
     await this.writeJSON(
       localCategories,
       path.join(this.outputDir, PkgConstants.LOCAL_CATEGORIES_FILE_NAME)
