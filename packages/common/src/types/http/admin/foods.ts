@@ -1,6 +1,6 @@
 import type { UseInRecipeType } from '@intake24/common/types';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
-import type { PortionSizeMethod } from '@intake24/common/types/http/admin/portion-size';
+import type { PortionSizeMethod } from '@intake24/common/types/portion-size';
 import type {
   AssociatedFoodCreationAttributes,
   CategoryAttributes,
@@ -9,7 +9,6 @@ import type {
   FoodGroupAttributes,
   FoodLocalAttributes,
   FoodPortionSizeMethodCreationAttributes,
-  FoodPortionSizeMethodParameterCreationAttributes,
   FoodsLocaleAttributes,
   NutrientTableRecordAttributes,
   Pagination,
@@ -63,9 +62,7 @@ export type FoodLocalInput = {
     parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
   nutrientRecords: Pick<NutrientTableRecordAttributes, 'id'>[];
-  portionSizeMethods: (FoodPortionSizeMethodCreationAttributes & {
-    parameters: FoodPortionSizeMethodParameterCreationAttributes[];
-  })[];
+  portionSizeMethods: FoodPortionSizeMethodCreationAttributes[];
   associatedFoods: AssociatedFoodCreationAttributes[];
 };
 

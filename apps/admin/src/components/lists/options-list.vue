@@ -57,12 +57,13 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { ZodNumber, ZodString } from 'zod';
 import { deepEqual } from 'fast-equals';
 import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { RuleCallback } from '@intake24/admin/types';
-import type { ListOption } from '@intake24/common/prompts';
+import type { ListOption } from '@intake24/common/types';
 import { toIndexedList } from '@intake24/admin/util';
 
 export default defineComponent({
@@ -72,7 +73,7 @@ export default defineComponent({
 
   props: {
     options: {
-      type: Array as PropType<ListOption<string | number>[]>,
+      type: Array as PropType<ListOption<ZodString | ZodNumber>[]>,
       required: true,
     },
     rules: {
@@ -97,7 +98,7 @@ export default defineComponent({
   },
 
   computed: {
-    outputOptions(): ListOption<string | number>[] {
+    outputOptions(): ListOption<ZodString | ZodNumber>[] {
       return this.currentOptions.map(({ label, value }) => ({ label, value }));
     },
     optionValueRules(): RuleCallback[] {

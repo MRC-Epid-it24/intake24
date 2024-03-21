@@ -7,11 +7,9 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type { PortionSizeMethodId } from '@intake24/common/types';
-import type { CategoryPortionSizeMethodParameterCreationAttributes } from '@intake24/db';
-import { CategoryPortionSizeMethodParameter } from '@intake24/db';
+import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/types';
 
 import BaseModel from '../model';
 import CategoryLocal from './category-local';
@@ -25,9 +23,7 @@ import CategoryLocal from './category-local';
 })
 export default class CategoryPortionSizeMethod extends BaseModel<
   InferAttributes<CategoryPortionSizeMethod>,
-  InferCreationAttributes<CategoryPortionSizeMethod> & {
-    parameters?: CategoryPortionSizeMethodParameterCreationAttributes[];
-  }
+  InferCreationAttributes<CategoryPortionSizeMethod>
 > {
   @Column({
     autoIncrement: true,
@@ -68,21 +64,31 @@ export default class CategoryPortionSizeMethod extends BaseModel<
 
   @Column({
     allowNull: false,
+    type: DataType.FLOAT(17),
+  })
+  declare conversionFactor: number;
+
+  @Column({
+    allowNull: false,
     type: DataType.BIGINT,
   })
   declare orderBy: string;
 
   @Column({
     allowNull: false,
-    type: DataType.FLOAT(17),
+    type: DataType.TEXT({ length: 'long' }),
   })
-  declare conversionFactor: number;
+  get parameters(): PortionSizeParameter {
+    const val = this.getDataValue('parameters') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set parameters(value: PortionSizeParameter) {
+    this.setDataValue('parameters', JSON.stringify(value ?? {}));
+  }
 
   @BelongsTo(() => CategoryLocal, 'categoryLocalId')
   declare categoryLocal?: NonAttribute<CategoryLocal>;
-
-  @HasMany(() => CategoryPortionSizeMethodParameter, 'portionSizeMethodId')
-  declare parameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
 }
 
 export type CategoryPortionSizeMethodAttributes = Attributes<CategoryPortionSizeMethod>;

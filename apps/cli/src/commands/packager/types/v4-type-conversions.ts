@@ -8,6 +8,7 @@ import type { PkgImageMapObject } from '@intake24/cli/commands/packager/types/im
 import type { PkgLocale } from '@intake24/cli/commands/packager/types/locale';
 import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nutrient-tables';
 import type { UseInRecipeType } from '@intake24/common/types';
+import type { PortionSizeMethod } from '@intake24/common/types/';
 import type {
   CreateGlobalFoodRequest,
   CreateLocalFoodRequest,
@@ -17,7 +18,6 @@ import type {
   NutrientTableRecord,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
-import type { PortionSizeMethod } from '@intake24/common/types/http/admin/portion-size';
 import { useInRecipeTypes } from '@intake24/common/types';
 
 function fromPackageImageMapObjects(
@@ -93,55 +93,70 @@ function fromPackagePortionSizeMethod(psm: PkgPortionSizeMethod): PortionSizeMet
       return {
         ...baseFields,
         method: 'as-served',
-        servingImageSet: psm.servingImageSet,
-        leftoversImageSet: psm.leftoversImageSet,
+        parameters: {
+          servingImageSet: psm.servingImageSet,
+          leftoversImageSet: psm.leftoversImageSet,
+        },
       };
     case 'guide-image':
       return {
         ...baseFields,
         method: 'guide-image',
-        guideImageId: psm.guideImageId,
+        parameters: {
+          guideImageId: psm.guideImageId,
+        },
       };
     case 'drink-scale':
       return {
         ...baseFields,
         method: 'drink-scale',
-        drinkwareId: psm.drinkwareId,
-        skipFillLevel: psm.skipFillLevel,
-        initialFillLevel: psm.initialFillLevel,
+        parameters: {
+          drinkwareId: psm.drinkwareId,
+          skipFillLevel: psm.skipFillLevel,
+          initialFillLevel: psm.initialFillLevel,
+        },
       };
     case 'standard-portion':
       return {
         ...baseFields,
         method: 'standard-portion',
-        units: psm.units.map((pkgUnit) => ({
-          name: pkgUnit.name,
-          weight: pkgUnit.weight,
-          omitFoodDescription: pkgUnit.omitFoodDescription,
-          inlineEstimateIn: pkgUnit.inlineEstimateIn,
-          inlineHowMany: pkgUnit.inlineHowMany,
-        })),
+        parameters: {
+          units: psm.units.map((pkgUnit) => ({
+            name: pkgUnit.name,
+            weight: pkgUnit.weight,
+            omitFoodDescription: pkgUnit.omitFoodDescription,
+            inlineEstimateIn: pkgUnit.inlineEstimateIn,
+            inlineHowMany: pkgUnit.inlineHowMany,
+          })),
+        },
       };
     case 'cereal':
       return {
         ...baseFields,
         method: 'cereal',
-        type: psm.type,
+        parameters: {
+          type: psm.type as 'hoop' | 'flake' | 'rkris',
+        },
       };
     case 'milk-in-a-hot-drink':
       return {
         ...baseFields,
         method: 'milk-in-a-hot-drink',
+        parameters: {
+          options: { en: [] },
+        },
       };
     case 'milk-on-cereal':
       return {
         ...baseFields,
         method: 'milk-on-cereal',
+        parameters: {},
       };
     case 'pizza':
       return {
         ...baseFields,
         method: 'pizza',
+        parameters: {},
       };
   }
 }

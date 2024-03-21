@@ -7,7 +7,7 @@
         outlined
         rounded
         :title="$t('standard-units.add')"
-        @click="addUnit"
+        @click="add"
       >
         <v-icon left>$add</v-icon>
         {{ $t('standard-units.add') }}
@@ -20,39 +20,31 @@
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.omitFoodDescription') }}</th>
             <th></th>
           </tr>
-          <tr v-for="(_, idx) in units" :key="idx">
+          <tr v-for="(unit, idx) in parameters.units" :key="idx">
             <td>
-              <select-resource
-                resource="standard-units"
-                :value="getParameter(`unit${idx}-name`)?.value"
-                @input="setParameter(`unit${idx}-name`, $event)"
-              >
+              <select-resource v-model="unit.name" resource="standard-units">
                 <template #activator="{ attrs, on }">
                   <v-btn v-bind="attrs" text :title="$t('standard-units.add')" v-on="on">
                     <v-icon left>$standard-units</v-icon>
-                    {{ getParameter(`unit${idx}-name`)?.value }}
+                    {{ unit.name }}
                   </v-btn>
                 </template>
               </select-resource>
             </td>
             <td>
               <v-text-field
+                v-model.number="unit.weight"
                 dense
                 hide-details="auto"
                 :name="`unit${idx}-weight`"
                 :rules="weightRules"
-                :value="getParameter(`unit${idx}-weight`)?.value"
-                @input="setParameter(`unit${idx}-weight`, $event)"
               ></v-text-field>
             </td>
             <td>
               <v-switch
+                v-model="unit.omitFoodDescription"
                 class="mt-0"
-                :false-value="false"
                 hide-details="auto"
-                :input-value="getParameter(`unit${idx}-omit-food-description`)?.value === 'true'"
-                :true-value="true"
-                @change="setParameter(`unit${idx}-omit-food-description`, $event)"
               ></v-switch>
             </td>
             <td>
@@ -61,13 +53,9 @@
                 icon
                 icon-left="$delete"
                 :label="$t('standard-units.remove').toString()"
-                @confirm="removeUnit(idx)"
+                @confirm="remove(idx)"
               >
-                {{
-                  $t('common.action.confirm.delete', {
-                    name: getParameter(`unit${idx}-name`)?.value,
-                  })
-                }}
+                {{ $t('common.action.confirm.delete', { name: unit.name }) }}
               </confirm-dialog>
             </td>
           </tr>
@@ -79,12 +67,12 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
-import { computed, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
+import type { PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { ConfirmDialog } from '@intake24/ui';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -94,44 +82,24 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['standard-portion']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { parameters, getParameter, setParameter } = useParameters(props, context);
+    const { parameters } = useParameters<'standard-portion'>(props, context);
 
-    const getUnitIndex = (length: number) => Math.floor(length / 3);
-
-    const units = computed(() => Array(getUnitIndex(parameters.value.length)).fill(0));
-
-    const addUnit = () => {
-      const idx = units.value.length;
-      parameters.value.push(
-        ...[
-          { name: `unit${idx}-name`, value: '' },
-          { name: `unit${idx}-weight`, value: '1' },
-          { name: `unit${idx}-omit-food-description`, value: 'false' },
-        ]
-      );
+    const add = () => {
+      parameters.value.units.push({
+        name: '',
+        weight: 1,
+        omitFoodDescription: false,
+      });
     };
 
-    const removeUnit = (index: number) => {
-      parameters.value = parameters.value
-        .filter(
-          (parameter) =>
-            ![
-              `unit${index}-name`,
-              `unit${index}-weight`,
-              `unit${index}-omit-food-description`,
-            ].includes(parameter.name)
-        )
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((parameter, idx) => ({
-          ...parameter,
-          name: parameter.name.replace(/unit\d+-/, `unit${getUnitIndex(idx)}-`),
-        }));
+    const remove = (index: number) => {
+      parameters.value.units.splice(index, 1);
     };
 
     const weightRules = [
@@ -145,12 +113,9 @@ export default defineComponent({
     ];
 
     return {
-      getParameter,
-      setParameter,
       parameters,
-      units,
-      addUnit,
-      removeUnit,
+      add,
+      remove,
       weightRules,
     };
   },

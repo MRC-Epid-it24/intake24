@@ -15,24 +15,23 @@
             <v-list-item-subtitle>{{ item.name }}</v-list-item-subtitle>
           </template>
         </select-resource>
-        <v-tab v-for="(option, cat) in options" :key="cat">
+        <v-tab v-for="(option, cat) in parameters.options" :key="cat">
           <v-icon left>$categories</v-icon>{{ cat }}
         </v-tab>
-        <v-tab-item v-for="(option, cat) in options" :key="cat" class="pl-3">
+        <v-tab-item v-for="(option, cat) in parameters.options" :key="cat" class="pl-3">
           <div class="d-flex flex-column">
             <language-selector
-              v-model="options[cat]"
+              v-model="parameters.options[cat]"
               :default="[]"
               :label="$t('fdbs.portionSizes.methods.parent-food-portion.options').toString()"
               :required="true"
-              @input="setParameter('options', JSON.stringify(options.value))"
             >
-              <template v-for="lang in Object.keys(options[cat])" #[`lang.${lang}`]>
+              <template v-for="lang in Object.keys(parameters.options[cat])" #[`lang.${lang}`]>
                 <options-list
                   :key="lang"
-                  :options="options[cat][lang]"
+                  :options="parameters.options[cat][lang]"
                   :rules="rules"
-                  @update:options="setOptionParam(cat, lang, $event)"
+                  @update:options="updateOption(cat, lang, $event)"
                 ></options-list>
               </template>
             </language-selector>
@@ -56,12 +55,11 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { CategoryLocaleOptionList, ListOption } from '@intake24/common/prompts';
+import type { ListOption, PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -71,17 +69,13 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['parent-food-portion']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createObjectParameter, setParameter } = useParameters(props, context);
-
-    const options = createObjectParameter<CategoryLocaleOptionList>('options', {
-      _default: { en: [] },
-    });
+    const { parameters } = useParameters<'parent-food-portion'>(props, context);
 
     const rules = [
       (value: any): boolean | string => {
@@ -94,34 +88,31 @@ export default defineComponent({
     ];
 
     const addCategory = (category: string) => {
-      options.value = { ...options.value, [category]: { en: [] } };
+      parameters.value.options = { ...parameters.value.options, [category]: { en: [] } };
     };
 
     const removeCategory = (category: string) => {
       if (category === '_default') return;
 
-      const { [category]: _, ...rest } = options.value;
-      options.value = rest;
+      const { [category]: _, ...rest } = parameters.value.options;
+      parameters.value.options = rest;
     };
 
-    const setOptionParam = (cat: string, lang: string, value: ListOption[]) => {
-      options.value[cat][lang] = [
+    const updateOption = (cat: string, lang: string, value: ListOption[]) => {
+      parameters.value.options[cat][lang] = [
         ...value.map((item) => ({
           ...item,
           value: Number.parseFloat(item.value),
         })),
       ];
-      // TODO: does not run a setter on deep object change
-      setParameter('options', JSON.stringify(options.value));
     };
 
     return {
       addCategory,
-      options,
       removeCategory,
+      parameters,
       rules,
-      setOptionParam,
-      setParameter,
+      updateOption,
     };
   },
 });

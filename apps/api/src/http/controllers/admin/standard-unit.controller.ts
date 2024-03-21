@@ -1,11 +1,18 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import { col, fn } from 'sequelize';
+import { col, fn, literal, where } from 'sequelize';
 
 import type { StandardUnitEntry, StandardUnitsResponse } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
-import { CategoryLocal, FoodLocal, Op, StandardUnit, SystemLocale } from '@intake24/db';
+import {
+  CategoryLocal,
+  CategoryPortionSizeMethod,
+  FoodLocal,
+  FoodPortionSizeMethod,
+  StandardUnit,
+  SystemLocale,
+} from '@intake24/db';
 
 const getLocaleMap = async (code: string[]) => {
   if (!code.length) return {};
@@ -81,24 +88,29 @@ const standardUnitController = () => {
   ): Promise<void> => {
     const { standardUnitId } = req.params;
 
-    const standardUnit = await StandardUnit.findByPk(standardUnitId, {
-      include: [
-        {
-          association: 'categoryPsmParameters',
-          where: { '$categoryPsmParameters.name$': { [Op.endsWith]: '-name' } },
-          required: false,
-        },
-        {
-          association: 'foodPsmParameters',
-          where: { '$foodPsmParameters.name$': { [Op.endsWith]: '-name' } },
-          required: false,
-        },
-      ],
-    });
-    if (!standardUnit || !standardUnit.categoryPsmParameters || !standardUnit.foodPsmParameters)
-      throw new NotFoundError();
+    const standardUnit = await StandardUnit.findByPk(standardUnitId);
+    if (!standardUnit) throw new NotFoundError();
 
-    if (standardUnit.categoryPsmParameters.length || standardUnit.foodPsmParameters.length)
+    const [categoryPsm, foodPsm] = await Promise.all([
+      CategoryPortionSizeMethod.findOne({
+        attributes: ['id'],
+        where: where(
+          literal(`parameters::jsonb`),
+          '@>',
+          `{"units":[{"name": "${standardUnitId}"}]}`
+        ),
+      }),
+      FoodPortionSizeMethod.findOne({
+        attributes: ['id'],
+        where: where(
+          literal(`parameters::jsonb`),
+          '@>',
+          `{"units":[{"name": "${standardUnitId}"}]}`
+        ),
+      }),
+    ]);
+
+    if (categoryPsm || foodPsm)
       throw new ForbiddenError(
         'Standard unit cannot be deleted. There are categories/foods using this standard unit.'
       );
@@ -129,17 +141,11 @@ const standardUnitController = () => {
         {
           association: 'portionSizeMethods',
           attributes: ['id'],
-          include: [
-            {
-              association: 'parameters',
-              attributes: ['name', 'value'],
-              where: {
-                '$portionSizeMethods.parameters.name$': { [Op.endsWith]: '-name' },
-                '$portionSizeMethods.parameters.value$': standardUnit.id,
-              },
-              required: true,
-            },
-          ],
+          where: where(
+            literal(`parameters::jsonb`),
+            '@>',
+            `{"units":[{"name": "${standardUnitId}"}]}`
+          ),
           required: true,
         },
       ],
@@ -176,17 +182,11 @@ const standardUnitController = () => {
         {
           association: 'portionSizeMethods',
           attributes: ['id'],
-          include: [
-            {
-              association: 'parameters',
-              attributes: ['name', 'value'],
-              where: {
-                '$portionSizeMethods.parameters.name$': { [Op.endsWith]: '-name' },
-                '$portionSizeMethods.parameters.value$': standardUnit.id,
-              },
-              required: true,
-            },
-          ],
+          where: where(
+            literal(`parameters::jsonb`),
+            '@>',
+            `{"units":[{"name": "${standardUnitId}"}]}`
+          ),
           required: true,
         },
       ],

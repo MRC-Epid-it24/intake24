@@ -130,7 +130,7 @@ export default defineComponent({
 
   computed: {
     labelsEnabled() {
-      return this.prompt.imageMap.labels && this.parameters['image-map-labels'];
+      return this.prompt.imageMap.labels && !!this.parameters.imageMapLabels;
     },
 
     bowlLabels() {

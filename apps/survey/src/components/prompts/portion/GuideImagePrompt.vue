@@ -123,7 +123,7 @@ export default defineComponent({
 
   data() {
     const state = copy(this.value);
-    state.portionSize.guideImageId = this.parameters['guide-image-id'];
+    state.portionSize.guideImageId = this.parameters.guideImageId;
 
     return {
       guideImageData: null as GuideImageResponse | null,
@@ -133,7 +133,7 @@ export default defineComponent({
 
   computed: {
     labelsEnabled() {
-      return this.prompt.imageMap.labels && this.parameters['image-map-labels'];
+      return this.prompt.imageMap.labels && !!this.parameters.imageMapLabels;
     },
 
     labels() {
@@ -185,7 +185,7 @@ export default defineComponent({
   methods: {
     async fetchGuideImageData() {
       const { data } = await this.$http.get<GuideImageResponse>(
-        `portion-sizes/guide-images/${this.parameters['guide-image-id']}`
+        `portion-sizes/guide-images/${this.parameters.guideImageId}`
       );
 
       this.guideImageData = { ...data };

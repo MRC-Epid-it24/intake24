@@ -9,12 +9,7 @@ import type {
 import { BelongsTo, Column, DataType, HasMany, Scopes, Table } from 'sequelize-typescript';
 
 import BaseModel from '../model';
-import {
-  AsServedImage,
-  CategoryPortionSizeMethodParameter,
-  FoodPortionSizeMethodParameter,
-  ProcessedImage,
-} from '.';
+import { AsServedImage, ProcessedImage } from '.';
 
 @Scopes(() => ({
   selectionImage: { include: [{ model: ProcessedImage }] },
@@ -55,18 +50,6 @@ export default class AsServedSet extends BaseModel<
 
   @HasMany(() => AsServedImage, 'asServedSetId')
   declare asServedImages?: NonAttribute<AsServedImage[]>;
-
-  @HasMany(() => CategoryPortionSizeMethodParameter, {
-    foreignKey: 'value',
-    constraints: false,
-  })
-  declare categoryPsmParameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
-
-  @HasMany(() => FoodPortionSizeMethodParameter, {
-    foreignKey: 'value',
-    constraints: false,
-  })
-  declare foodPsmParameters?: NonAttribute<FoodPortionSizeMethodParameter[]>;
 }
 
 export type AsServedSetAttributes = Attributes<AsServedSet>;

@@ -189,9 +189,9 @@ export default defineComponent({
 
   data() {
     const state = copy(this.value);
-    state.portionSize.drinkwareId = this.parameters['drinkware-id'];
-    state.portionSize.initialFillLevel = this.parameters['initial-fill-level'];
-    state.portionSize.skipFillLevel = this.parameters['skip-fill-level'];
+    state.portionSize.drinkwareId = this.parameters.drinkwareId;
+    state.portionSize.initialFillLevel = this.parameters.initialFillLevel;
+    state.portionSize.skipFillLevel = this.parameters.skipFillLevel;
 
     if (!state.portionSize.fillLevel)
       state.portionSize.fillLevel = state.portionSize.initialFillLevel;
@@ -205,7 +205,7 @@ export default defineComponent({
 
   computed: {
     multipleEnabled(): boolean {
-      return !!this.prompt.multiple && !!this.parameters['multiple'];
+      return !!this.prompt.multiple && !!this.parameters.multiple;
     },
 
     leftoversEnabled() {
@@ -213,7 +213,7 @@ export default defineComponent({
     },
 
     labelsEnabled() {
-      return this.prompt.imageMap.labels && this.parameters['image-map-labels'];
+      return this.prompt.imageMap.labels && !!this.parameters.imageMapLabels;
     },
 
     labels() {
@@ -245,7 +245,7 @@ export default defineComponent({
     },
 
     skipFillLevel() {
-      return this.parameters['skip-fill-level'];
+      return this.parameters.skipFillLevel;
     },
 
     volumes(): number[] | undefined {
@@ -301,7 +301,7 @@ export default defineComponent({
   methods: {
     async fetchDrinkScaleData() {
       const { data: drinkwareSetData } = await this.$http.get<DrinkwareSetResponse>(
-        `portion-sizes/drinkware-sets/${this.parameters['drinkware-id']}`
+        `portion-sizes/drinkware-sets/${this.parameters.drinkwareId}`
       );
 
       this.drinkwareSetData = { ...drinkwareSetData };

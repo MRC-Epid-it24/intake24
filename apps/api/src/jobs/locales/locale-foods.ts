@@ -147,7 +147,6 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
           { association: 'nutrientRecords' },
           {
             association: 'portionSizeMethods',
-            include: [{ association: 'parameters' }],
             separate: true,
           },
         ],
@@ -217,9 +216,7 @@ export default class LocaleFoods extends BaseJob<'LocaleFoods'> {
                 portionSizeMethods: (foodPSMs.length ? foodPSMs : datPSMs)
                   .map(
                     ({ method, conversionFactor, parameters = [] }) =>
-                      `Method: ${method}, conversion: ${conversionFactor}, ${parameters
-                        .map(({ name, value }) => `${name}: ${value}`)
-                        .join(', ')}`
+                      `Method: ${method}, conversion: ${conversionFactor}, ${JSON.stringify(parameters)}`
                   )
                   .join('\n'),
               };

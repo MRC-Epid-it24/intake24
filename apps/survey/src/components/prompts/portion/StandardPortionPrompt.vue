@@ -1,7 +1,7 @@
 <template>
   <base-layout v-bind="{ food, meal, prompt, section, isValid }" @action="action">
     <v-expansion-panels v-if="translationsLoaded" v-model="panel" :tile="isMobile">
-      <v-expansion-panel v-show="standardUnits.length !== 1">
+      <v-expansion-panel v-show="parameters.units.length !== 1">
         <v-expansion-panel-header>
           <i18n :path="`prompts.${type}.label`">
             <template #food>
@@ -14,7 +14,7 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-radio-group v-model="portionSize.unit" @change="selectMethod">
-            <v-radio v-for="unit in standardUnits" :key="unit.name" :value="unit">
+            <v-radio v-for="unit in parameters.units" :key="unit.name" :value="unit">
               <template #label>
                 <i18n :path="`prompts.${type}.estimateIn`">
                   <template #unit>
@@ -89,7 +89,7 @@ import type { PropType } from 'vue';
 import { defineComponent, ref } from 'vue';
 
 import type { PromptStates } from '@intake24/common/prompts';
-import type { PortionSizeParameters, StandardPortionUnit } from '@intake24/common/types';
+import type { PortionSizeParameters } from '@intake24/common/types';
 import { copy } from '@intake24/common/util';
 import { useI18n } from '@intake24/i18n';
 import { useFoodUtils } from '@intake24/survey/composables';
@@ -138,26 +138,6 @@ export default defineComponent({
   },
 
   computed: {
-    standardUnits(): StandardPortionUnit[] {
-      const { parameters } = this;
-
-      const units: StandardPortionUnit[] = [];
-
-      const unitsCount = Object.keys(parameters).filter((item) => item.endsWith('-name')).length;
-
-      for (let i = 0; i < unitsCount; ++i) {
-        units.push({
-          name: parameters[`unit${i}-name`],
-          weight: parameters[`unit${i}-weight`],
-          omitFoodDescription: parameters[`unit${i}-omit-food-description`],
-          inlineHowMany: parameters[`unit${i}-inline-how-many`],
-          inlineEstimateIn: parameters[`unit${i}-inline-estimate-in`],
-        });
-      }
-
-      return units;
-    },
-
     translationsLoaded(): boolean {
       return this.usingStandardTranslations ? Object.keys(this.standardUnitRefs).length > 0 : true;
     },
@@ -180,7 +160,7 @@ export default defineComponent({
   },
 
   async mounted() {
-    const names = this.standardUnits
+    const names = this.parameters.units
       .filter((unit) => unit.inlineHowMany === undefined || unit.inlineEstimateIn === undefined)
       .map(({ name }) => name);
 
@@ -190,8 +170,8 @@ export default defineComponent({
       this.usingStandardTranslations = false;
     }
 
-    if (!this.portionSize.unit && this.standardUnits.length === 1) {
-      this.portionSize.unit = this.standardUnits[0];
+    if (!this.portionSize.unit && this.parameters.units.length === 1) {
+      this.portionSize.unit = this.parameters.units[0];
       this.selectMethod();
     }
   },

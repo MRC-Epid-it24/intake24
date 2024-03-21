@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 
 import { createArrayCsvWriter } from 'csv-writer';
 
-import type { Environment } from '@intake24/common/types';
+import type { Environment, PortionSizeParameters } from '@intake24/common/types';
 import { logger } from '@intake24/common-backend';
 import {
   AsServedImage,
@@ -13,7 +13,6 @@ import {
   FoodLocal,
   FoodNutrient,
   FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
   FoodsNutrientType,
   FoodsNutrientUnit,
   GuideImage,
@@ -284,7 +283,6 @@ async function findPortionSizeImages(
             {
               model: FoodPortionSizeMethod,
               separate: true,
-              include: [FoodPortionSizeMethodParameter],
               required: false,
             },
             {
@@ -352,9 +350,8 @@ async function findPortionSizeImages(
           const targetWeight = (config.energyValueKcal * 100.0) / energyKcalRecord.unitsPer100g;
 
           if (psm.method === 'as-served') {
-            const asServedSetId = psm.parameters?.find(
-              (p) => p.name === 'serving-image-set'
-            )?.value;
+            const asServedSetId = (psm.parameters as PortionSizeParameters['as-served'])
+              .servingImageSet;
 
             if (!asServedSetId) {
               console.log(
@@ -387,7 +384,8 @@ async function findPortionSizeImages(
           }
 
           if (psm.method === 'guide-image') {
-            const guideImageId = psm.parameters?.find((p) => p.name === 'guide-image-id')?.value;
+            const guideImageId = (psm.parameters as PortionSizeParameters['guide-image'])
+              .guideImageId;
 
             if (!guideImageId) {
               console.log(

@@ -21,14 +21,14 @@
         <v-expansion-panel-content>
           <as-served-selector
             v-model="portionSize.serving"
-            :as-served-set-id="parameters['serving-image-set']"
+            :as-served-set-id="parameters.servingImageSet"
             @confirm="confirmServing"
             @input="updateServing"
           ></as-served-selector>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel
-        v-if="leftoversEnabled && parameters['leftovers-image-set']"
+        v-if="leftoversEnabled && parameters.leftoversImageSet"
         :disabled="!servingImageConfirmed"
       >
         <v-expansion-panel-header>
@@ -57,7 +57,7 @@
             </i18n>
             <as-served-selector
               v-model="portionSize.leftovers"
-              :as-served-set-id="parameters['leftovers-image-set']"
+              :as-served-set-id="parameters.leftoversImageSet"
               :max-weight="portionSize.serving?.weight"
               type="leftovers"
               @confirm="confirmLeftovers"
@@ -141,7 +141,7 @@ export default defineComponent({
 
   computed: {
     leftoversEnabled() {
-      return this.prompt.leftovers && !!this.parameters['leftovers-image-set'];
+      return this.prompt.leftovers && !!this.parameters.leftoversImageSet;
     },
 
     servingValid(): boolean {

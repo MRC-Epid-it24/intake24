@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <select-resource
-        v-model="servingSetId"
+        v-model="parameters.servingImageSet"
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.as-served.servingImageSet')"
         name="serving-set-id"
@@ -12,7 +12,7 @@
     </v-col>
     <v-col cols="12">
       <select-resource
-        v-model="leftoverSetId"
+        v-model="parameters.leftoversImageSet"
         clearable
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.as-served.leftoverImageSet')"
@@ -27,9 +27,9 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -39,21 +39,16 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['as-served']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createStringParameter, removeParameter } = useParameters(props, context);
-
-    const servingSetId = createStringParameter('serving-image-set');
-    const leftoverSetId = createStringParameter('leftovers-image-set');
+    const { parameters } = useParameters<'as-served'>(props, context);
 
     return {
-      servingSetId,
-      leftoverSetId,
-      removeParameter,
+      parameters,
     };
   },
 });

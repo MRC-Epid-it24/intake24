@@ -1,13 +1,10 @@
-import type {
-  Dictionary,
-  Optional,
-  RecipeFood,
-  RequiredLocaleTranslation,
-} from '@intake24/common/types';
 import type { SurveySubmissionMissingFoodCreationAttributes } from '@intake24/db';
 
-import type { CategoryLocaleOptionList, ComponentType, LocaleOptionList } from '../prompts';
+import type { ComponentType } from '../prompts';
+import type { Dictionary, Optional, RequiredLocaleTranslation } from './common';
+import type { RecipeFood } from './foods';
 import type { UserFoodData } from './http';
+import type { CerealType, StandardUnit } from './portion-size';
 
 /*
 Not currently used:
@@ -41,68 +38,7 @@ export type FoodFlag =
 
 export type CustomPromptAnswer = string | string[] | number | number[];
 
-// Portion size parameters
-
-export type CerealType = 'hoop' | 'flake' | 'rkris';
-
-export type StandardUnitString = `unit${number}-name`;
-export type StandardUnitNumber = `unit${number}-weight`;
-export type StandardUnitBoolean = `unit${number}-omit-food-description`;
-
-export type StandardUnitInlineTranslation =
-  | `unit${number}-inline-how-many`
-  | `unit${number}-inline-estimate-in`;
-
-export type StandardUnitTexts = Record<StandardUnitBoolean, boolean> &
-  Record<StandardUnitNumber, number> &
-  Record<StandardUnitString, string>;
-
-export type StandardUnitTranslations = {
-  [inlineTranslation in StandardUnitInlineTranslation]?: string;
-};
-
-export type PortionSizeParameters = {
-  'as-served': {
-    'serving-image-set': string;
-    'leftovers-image-set'?: string;
-  };
-  cereal: {
-    type: CerealType;
-    'image-map-labels': boolean;
-  };
-  'drink-scale': {
-    'drinkware-id': string;
-    'initial-fill-level': number;
-    'skip-fill-level': boolean;
-    'image-map-labels': boolean;
-    multiple: boolean;
-  };
-  'guide-image': {
-    'guide-image-id': string;
-    'image-map-labels': boolean;
-  };
-  'milk-in-a-hot-drink': {
-    options: LocaleOptionList<number>;
-  };
-  'milk-on-cereal': {
-    'image-map-labels': boolean;
-  };
-  'parent-food-portion': {
-    options: CategoryLocaleOptionList;
-  };
-  pizza: {
-    'image-map-labels': boolean;
-  };
-  'standard-portion': StandardUnitTexts &
-    StandardUnitTranslations & {
-      'units-count': string;
-    };
-  'direct-weight': never;
-  'recipe-builder': never;
-};
-
 // Portion size states
-
 export interface PortionSizeStateBase {
   servingWeight: number | null;
   leftoversWeight: number | null;
@@ -120,14 +56,6 @@ export interface SelectedGuideImageObject {
   imageUrl: string;
   id: number;
   weight: number;
-}
-
-export interface StandardPortionUnit {
-  name: string;
-  weight: number;
-  omitFoodDescription: boolean;
-  inlineHowMany?: string;
-  inlineEstimateIn?: string;
 }
 
 export type PortionSizeStates = {
@@ -211,7 +139,7 @@ export type PortionSizeStates = {
   };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';
-    unit: StandardPortionUnit | null;
+    unit: StandardUnit | null;
     quantity: number;
     linkedQuantity: number;
   };
@@ -219,7 +147,6 @@ export type PortionSizeStates = {
   'recipe-builder': PortionSizeStateBase & { method: 'recipe-builder' };
 };
 
-export type PortionSizeMethodId = keyof PortionSizeStates;
 export type PortionSizeState = PortionSizeStates[keyof PortionSizeStates];
 export type RecipeBuilderComponent = {
   order: number;
@@ -232,20 +159,6 @@ export type RecipeBuilderLinkedFood = {
 };
 
 export type GetPortionSizeState<P extends keyof PortionSizeStates> = PortionSizeStates[P];
-
-export const portionSizeMethods = [
-  'as-served',
-  'guide-image',
-  'drink-scale',
-  'standard-portion',
-  'cereal',
-  'milk-on-cereal',
-  'parent-food-portion',
-  'pizza',
-  'milk-in-a-hot-drink',
-  'direct-weight',
-  'recipe-builder',
-] as const;
 
 export interface AbstractFoodState {
   id: string;

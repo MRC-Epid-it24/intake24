@@ -3,7 +3,6 @@ import type {
   CategoryAttributes,
   CategoryLocalAttributes,
   CategoryPortionSizeMethodCreationAttributes,
-  CategoryPortionSizeMethodParameterCreationAttributes,
   Pagination,
 } from '@intake24/db';
 
@@ -22,9 +21,7 @@ export type CategoryLocalInput = {
     attributes: CategoryAttributeAttributes;
     parentCategories: Pick<CategoryAttributes, 'code' | 'name'>[];
   };
-  portionSizeMethods: (CategoryPortionSizeMethodCreationAttributes & {
-    parameters: CategoryPortionSizeMethodParameterCreationAttributes[];
-  })[];
+  portionSizeMethods: CategoryPortionSizeMethodCreationAttributes[];
 };
 
 export type CategoryLocalCopyInput = {

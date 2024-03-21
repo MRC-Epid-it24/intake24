@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-switch
-        v-model="imageMapLabels"
+        v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.milk-on-cereal.imageMapLabels')"
       ></v-switch>
@@ -14,7 +14,8 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { PortionSizeMethodParameterItem } from '..';
+import type { PortionSizeParameters } from '@intake24/common/types';
+
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -22,18 +23,16 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['milk-on-cereal']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createBooleanParameter } = useParameters(props, context);
-
-    const imageMapLabels = createBooleanParameter('image-map-labels');
+    const { parameters } = useParameters<'milk-on-cereal'>(props, context);
 
     return {
-      imageMapLabels,
+      parameters,
     };
   },
 });

@@ -7,8 +7,6 @@ import {
 } from '@intake24/api/services/foods/common';
 import { CategoryPortionSizeMethod, FoodLocal } from '@intake24/db';
 
-import { toUserPortionSizeMethod } from './types/portion-size-method-utils';
-
 const portionSizeMethodsService = () => {
   /**
    *
@@ -26,38 +24,10 @@ const portionSizeMethodsService = () => {
         'useForRecipes',
         'conversionFactor',
         'orderBy',
+        'parameters',
       ],
       order: [['orderBy', 'ASC']],
-      include: [
-        { association: 'categoryLocal', where: { localeId, categoryCode } },
-        {
-          association: 'parameters',
-          attributes: ['name', 'value'],
-          include: [
-            {
-              association: 'asServedSet',
-              where: {
-                $method$: 'as-served',
-                '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
-              },
-              required: false,
-              include: [{ association: 'selectionImage', attributes: ['path'] }],
-            },
-            {
-              association: 'guideImage',
-              where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
-              required: false,
-              include: [{ association: 'selectionImage', attributes: ['path'] }],
-            },
-            /* {
-            association: 'standardUnit',
-            attributes: ['id', 'estimateIn', 'howMany'],
-            where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
-            required: false,
-          }, */
-          ],
-        },
-      ],
+      include: [{ association: 'categoryLocal', where: { localeId, categoryCode } }],
     });
 
   const getNearestLocalCategoryPortionSizeMethods = async (
@@ -98,48 +68,9 @@ const portionSizeMethodsService = () => {
             'useForRecipes',
             'conversionFactor',
             'orderBy',
+            'parameters',
           ],
           separate: true,
-          include: [
-            {
-              association: 'parameters',
-              attributes: ['name', 'value'],
-              include: [
-                {
-                  association: 'asServedSet',
-                  where: {
-                    $method$: 'as-served',
-                    '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
-                  },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                {
-                  association: 'drinkwareSet',
-                  where: { $method$: 'drink-scale', '$parameters.name$': ['drinkware-id'] },
-                  required: false,
-                  include: [
-                    {
-                      association: 'imageMap',
-                      include: [{ association: 'baseImage', attributes: ['path'] }],
-                    },
-                  ],
-                },
-                {
-                  association: 'guideImage',
-                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                /* {
-                association: 'standardUnit',
-                attributes: ['id', 'estimateIn', 'howMany'],
-                where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
-                required: false,
-              }, */
-              ],
-            },
-          ],
           order: [['orderBy', 'ASC']],
         },
       ],
@@ -170,8 +101,7 @@ const portionSizeMethodsService = () => {
   const resolveUserPortionSizeMethods = async (
     localeId: string,
     foodCode: string
-  ): Promise<UserPortionSizeMethod[]> =>
-    (await resolvePortionSizeMethods(localeId, foodCode)).map(toUserPortionSizeMethod);
+  ): Promise<UserPortionSizeMethod[]> => await resolvePortionSizeMethods(localeId, foodCode);
 
   return {
     resolvePortionSizeMethods,

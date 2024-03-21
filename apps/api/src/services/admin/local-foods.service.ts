@@ -7,7 +7,7 @@ import type {
   CreateLocalFoodRequest,
   CreateLocalFoodRequestOptions,
 } from '@intake24/common/types/http/admin';
-import type { PortionSizeMethod } from '@intake24/common/types/http/admin/portion-size';
+import type { PortionSizeMethod } from '@intake24/common/types/portion-size';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import {
@@ -17,7 +17,6 @@ import {
   FoodLocalList,
   FoodNutrient,
   FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
   GuideImage,
   ImageMap,
   NutrientTableRecord,
@@ -33,49 +32,51 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   ): Promise<string> {
     switch (psm.method) {
       case 'as-served': {
-        const set = await AsServedSet.findByPk(psm.servingImageSet, {
+        const set = await AsServedSet.findByPk(psm.parameters.servingImageSet, {
           include: [ProcessedImage],
           transaction,
         });
 
-        if (set === null) throw new NotFoundError(`As served set ${psm.servingImageSet} not found`);
+        if (set === null)
+          throw new NotFoundError(`As served set ${psm.parameters.servingImageSet} not found`);
 
         if (set.selectionImage === undefined)
           throw new NotFoundError(
-            `Selection screen image for as served set ${psm.servingImageSet} is undefined`
+            `Selection screen image for as served set ${psm.parameters.servingImageSet} is undefined`
           );
 
         return set.selectionImage.path;
       }
 
       case 'guide-image': {
-        const guideImage = await GuideImage.findByPk(psm.guideImageId, {
+        const guideImage = await GuideImage.findByPk(psm.parameters.guideImageId, {
           include: [ProcessedImage],
           transaction,
         });
 
         if (guideImage === null)
-          throw new NotFoundError(`Guide image ${psm.guideImageId} not found`);
+          throw new NotFoundError(`Guide image ${psm.parameters.guideImageId} not found`);
 
         if (guideImage.selectionImage === undefined)
           throw new NotFoundError(
-            `Selection screen image for guide image ${psm.guideImageId} is undefined`
+            `Selection screen image for guide image ${psm.parameters.guideImageId} is undefined`
           );
 
         return guideImage.selectionImage.path;
       }
 
       case 'drink-scale': {
-        const set = await DrinkwareSet.findByPk(psm.drinkwareId, {
+        const set = await DrinkwareSet.findByPk(psm.parameters.drinkwareId, {
           include: [{ model: ImageMap, include: [ProcessedImage] }],
           transaction,
         });
 
-        if (set === null) throw new NotFoundError(`Drinkware set ${psm.drinkwareId} not found`);
+        if (set === null)
+          throw new NotFoundError(`Drinkware set ${psm.parameters.drinkwareId} not found`);
 
         if (set.imageMap === undefined || set.imageMap.baseImage === undefined)
           throw new NotFoundError(
-            `Drink scale image map for drinkware set ${psm.drinkwareId} is undefined`
+            `Drink scale image map for drinkware set ${psm.parameters.drinkwareId} is undefined`
           );
 
         return set.imageMap.baseImage.path;
@@ -99,84 +100,11 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
     }
   }
 
-  function toPsmParameterAttrs(
-    psm: PortionSizeMethod
-  ): CreationAttributes<FoodPortionSizeMethodParameter>[] {
-    const params: CreationAttributes<FoodPortionSizeMethodParameter>[] = [];
-
-    switch (psm.method) {
-      case 'as-served':
-        params.push({ name: 'serving-image-set', value: psm.servingImageSet });
-        if (psm.leftoversImageSet !== undefined)
-          params.push({ name: 'leftovers-image-set', value: psm.leftoversImageSet });
-        break;
-
-      case 'guide-image':
-        params.push({ name: 'guide-image-id', value: psm.guideImageId });
-        break;
-
-      case 'drink-scale':
-        params.push({ name: 'drinkware-id', value: psm.drinkwareId });
-        params.push({ name: 'initial-fill-level', value: psm.initialFillLevel.toString() });
-        params.push({ name: 'skip-fill-level', value: psm.skipFillLevel.toString() });
-        break;
-
-      case 'standard-portion':
-        params.push({ name: 'units-count', value: psm.units.length.toString() });
-
-        for (let i = 0; i < psm.units.length; ++i) {
-          params.push({ name: `unit${i}-name`, value: psm.units[i].name });
-          params.push({
-            name: `unit${i}-omit-food-description`,
-            value: psm.units[i].omitFoodDescription.toString(),
-          });
-          params.push({ name: `unit${i}-weight`, value: psm.units[i].weight.toString() });
-
-          const inlineEstimateIn = psm.units[i].inlineEstimateIn;
-
-          if (inlineEstimateIn !== undefined) {
-            params.push({ name: `unit${i}-inline-estimate-in`, value: inlineEstimateIn });
-          }
-
-          const inlineHowMany = psm.units[i].inlineHowMany;
-
-          if (inlineHowMany !== undefined) {
-            params.push({ name: `unit${i}-inline-how-many`, value: inlineHowMany });
-          }
-        }
-        break;
-
-      case 'milk-in-a-hot-drink':
-        break;
-
-      case 'pizza':
-        break;
-
-      case 'cereal':
-        params.push({ name: 'type', value: psm.type });
-        break;
-
-      case 'milk-on-cereal':
-        break;
-
-      default:
-        throw new Error(
-          `Unexpected portion size method type: ${(psm as PortionSizeMethod).method}`
-        );
-    }
-
-    return params;
-  }
-
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
     psm: PortionSizeMethod,
     transaction: Transaction
-  ): Promise<
-    CreationAttributes<FoodPortionSizeMethod> & {
-      parameters: CreationAttributes<FoodPortionSizeMethodParameter>[];
-    }
-  > {
+  ): Promise<CreationAttributes<FoodPortionSizeMethod>> {
     const imageUrl = await getPortionSizeImageUrl(psm, transaction);
 
     return {
@@ -187,7 +115,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
       useForRecipes: psm.useForRecipes,
       conversionFactor: psm.conversionFactor,
       orderBy: '1',
-      parameters: toPsmParameterAttrs(psm),
+      parameters: psm.parameters,
     };
   }
 
@@ -202,10 +130,7 @@ const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
 
     await FoodPortionSizeMethod.destroy({ where: { foodLocalId }, transaction });
 
-    await FoodPortionSizeMethod.bulkCreate(creationAttributes, {
-      include: [{ model: FoodPortionSizeMethodParameter, as: 'parameters' }],
-      transaction,
-    });
+    await FoodPortionSizeMethod.bulkCreate(creationAttributes, { transaction });
   }
 
   async function updateNutrientMappingImpl(
