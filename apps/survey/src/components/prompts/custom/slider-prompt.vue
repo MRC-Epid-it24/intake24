@@ -7,7 +7,6 @@
     <v-card-text class="pt-2">
       <v-form ref="form" @submit.prevent="action('next')">
         <v-slider
-          v-model="state"
           class="quantity-slider__slider px-8"
           color="secondary"
           :max="prompt.slider.max.value"
@@ -16,6 +15,8 @@
           :style="{ 'padding-top': `${prompt.slider.current.size + 10}px` }"
           :thumb-label="prompt.slider.current ? `always` : false"
           :thumb-size="prompt.slider.current.size"
+          :value="state"
+          @change="state = $event"
           @start="initialize"
         >
           <template #thumb-label="{ value }">
@@ -71,7 +72,7 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Number as PropType<number | null>,
+      type: Number as PropType<number>,
     },
   },
 
@@ -81,6 +82,10 @@ export default defineComponent({
     const { translate } = useI18n();
     const { action, customPromptLayout } = usePromptUtils(props, ctx);
 
+    /*
+     * State is updated on @change event of the slider
+     * - expansion-header click trigger events on other components, including v-slider causing to emit @input with 0 value
+     */
     const state = computed({
       get() {
         return props.value;
@@ -103,10 +108,19 @@ export default defineComponent({
     const isValid = computed(() => typeof props.value !== 'undefined');
 
     onMounted(() => {
-      if (typeof props.value === 'undefined') state.value = props.prompt.slider.current.value;
+      if (typeof props.value === 'undefined')
+        state.value = props.prompt.slider.current.value ?? undefined;
     });
 
-    return { action, customPromptLayout, initialize, isInitialized, isValid, state, translate };
+    return {
+      action,
+      customPromptLayout,
+      initialize,
+      isInitialized,
+      isValid,
+      state,
+      translate,
+    };
   },
 });
 </script>
