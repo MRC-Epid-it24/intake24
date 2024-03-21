@@ -19,21 +19,14 @@ CAT2 (no portion size methods in en_GB)
 
 import { faker } from '@faker-js/faker';
 
-import type {
-  UserPortionSizeMethod,
-  UserPortionSizeMethodParameters,
-} from '@intake24/common/types/http/foods/user-food-data';
+import type { PortionSizeParameters } from '@intake24/common/types';
+import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
 import type { SequelizeTS } from '@intake24/db';
-import {
-  toDatabasePortionSizeMethod,
-  toDatabasePortionSizeMethodParameters,
-} from '@intake24/api/services/foods/types/portion-size-method-utils';
 import {
   Category,
   CategoryCategory,
   CategoryLocal,
   CategoryPortionSizeMethod,
-  CategoryPortionSizeMethodParameter,
   Food,
   FoodCategory,
   FoodGroup,
@@ -50,9 +43,10 @@ function generateRandomPortionSizeMethods(count: number): UserPortionSizeMethod[
 
   for (let i = 0; i < count; ++i) {
     const paramCount = faker.number.int(5);
-    const parameters: UserPortionSizeMethodParameters = {};
+    const parameters = {} as PortionSizeParameters;
 
     for (let j = 0; j < paramCount; ++j) {
+      //@ts-expect-error proper type for parameters
       parameters[faker.word.words(1)] = faker.word.words(1);
     }
 
@@ -88,19 +82,16 @@ async function createCategoryPortionSizeMethods(
   portionSizeMethods: UserPortionSizeMethod[]
 ): Promise<void> {
   for (let i = 0; i < portionSizeMethods.length; i++) {
-    const catPsm = new CategoryPortionSizeMethod(
-      {
-        categoryLocalId,
-        method: portionSizeMethods[i].method,
-        description: portionSizeMethods[i].description,
-        imageUrl: portionSizeMethods[i].imageUrl,
-        useForRecipes: portionSizeMethods[i].useForRecipes,
-        conversionFactor: portionSizeMethods[i].conversionFactor,
-        parameters: toDatabasePortionSizeMethodParameters(portionSizeMethods[i].parameters),
-        orderBy: i.toString(),
-      },
-      { include: [CategoryPortionSizeMethodParameter] }
-    );
+    const catPsm = new CategoryPortionSizeMethod({
+      categoryLocalId,
+      method: portionSizeMethods[i].method,
+      description: portionSizeMethods[i].description,
+      imageUrl: portionSizeMethods[i].imageUrl,
+      useForRecipes: portionSizeMethods[i].useForRecipes,
+      conversionFactor: portionSizeMethods[i].conversionFactor,
+      parameters: portionSizeMethods[i].parameters,
+      orderBy: i.toString(),
+    });
 
     await catPsm.save();
   }
@@ -240,11 +231,11 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
         name: 'Test food 1',
         simpleName: 'Test food 1',
         version: '00000000-0000-0000-0000-000000000000',
-        portionSizeMethods: generatedPortionSizeMethods[0].map(toDatabasePortionSizeMethod),
+        portionSizeMethods: generatedPortionSizeMethods[0],
       },
       {
         transaction: t,
-        include: [{ association: 'portionSizeMethods', include: [{ association: 'parameters' }] }],
+        include: [{ association: 'portionSizeMethods' }],
       }
     )
   );
@@ -335,11 +326,11 @@ async function createFoods(sequelize: SequelizeTS): Promise<void> {
         name: 'Test food 5 local name',
         simpleName: 'Test food 5 local name',
         version: '00000000-0000-0000-0000-000000000000',
-        portionSizeMethods: generatedPortionSizeMethods[5].map(toDatabasePortionSizeMethod),
+        portionSizeMethods: generatedPortionSizeMethods[5],
       },
       {
         transaction: t,
-        include: [{ association: 'portionSizeMethods', include: [{ association: 'parameters' }] }],
+        include: [{ association: 'portionSizeMethods' }],
       }
     )
   );

@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <select-resource
-        v-model="drinkwareSetId"
+        v-model="parameters.drinkwareId"
         item-name="description"
         :label="$t('fdbs.portionSizes.methods.drink-scale.drinkwareSet')"
         name="drinkwareSetId"
@@ -12,7 +12,7 @@
     </v-col>
     <v-col cols="12"
       ><v-slider
-        v-model="initialFillLevel"
+        v-model="parameters.initialFillLevel"
         class="mt-5"
         :label="$t('fdbs.portionSizes.methods.drink-scale.initialLevel')"
         :max="1"
@@ -23,21 +23,21 @@
     </v-col>
     <v-col cols="12">
       <v-switch
-        v-model="skipFillLevel"
+        v-model="parameters.skipFillLevel"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.skipFillLevelPrompt')"
       ></v-switch>
     </v-col>
     <v-col cols="12">
       <v-switch
-        v-model="imageMapLabels"
+        v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.imageMapLabels')"
       ></v-switch>
     </v-col>
     <v-col cols="12">
       <v-switch
-        v-model="multiple"
+        v-model="parameters.multiple"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.drink-scale.multiple')"
       ></v-switch>
@@ -49,9 +49,9 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -61,29 +61,16 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['drink-scale']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createBooleanParameter, createNumberParameter, createStringParameter } = useParameters(
-      props,
-      context
-    );
-
-    const drinkwareSetId = createStringParameter('drinkware-id');
-    const initialFillLevel = createNumberParameter('initial-fill-level');
-    const skipFillLevel = createBooleanParameter('skip-fill-level');
-    const imageMapLabels = createBooleanParameter('image-map-labels');
-    const multiple = createBooleanParameter('multiple');
+    const { parameters } = useParameters<'drink-scale'>(props, context);
 
     return {
-      drinkwareSetId,
-      initialFillLevel,
-      skipFillLevel,
-      imageMapLabels,
-      multiple,
+      parameters,
     };
   },
 });

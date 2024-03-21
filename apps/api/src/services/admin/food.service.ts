@@ -8,13 +8,7 @@ import type {
   FoodLocalCopyInput,
   FoodLocalInput,
 } from '@intake24/common/types/http/admin';
-import type {
-  FindOptions,
-  FoodLocalAttributes,
-  FoodPortionSizeMethodParameterCreationAttributes,
-  PaginateQuery,
-  Transaction,
-} from '@intake24/db';
+import type { FindOptions, FoodLocalAttributes, PaginateQuery, Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import { foodsResponse } from '@intake24/api/http/responses/admin';
 import { toSimpleName } from '@intake24/api/util';
@@ -25,7 +19,6 @@ import {
   FoodLocal,
   FoodLocalList,
   FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
   Op,
 } from '@intake24/db';
 
@@ -83,88 +76,11 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
         {
           association: 'portionSizeMethods',
           separate: true,
-          include: [
-            {
-              association: 'parameters',
-              include: [
-                {
-                  association: 'asServedSet',
-                  where: {
-                    $method$: 'as-served',
-                    '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
-                  },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                {
-                  association: 'drinkwareSet',
-                  where: { $method$: 'drink-scale', '$parameters.name$': ['drinkware-id'] },
-                  required: false,
-                  include: [
-                    {
-                      association: 'imageMap',
-                      include: [{ association: 'baseImage', attributes: ['path'] }],
-                    },
-                  ],
-                },
-                {
-                  association: 'guideImage',
-                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                /* {
-                  association: 'standardUnit',
-                  attributes: ['id', 'estimateIn', 'howMany'],
-                  where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
-                  required: false,
-                }, */
-              ],
-            },
-          ],
           order: [['orderBy', 'ASC']],
         },
         { association: 'nutrientRecords', through: { attributes: [] } },
       ],
     });
-  };
-
-  const updateParameters = async (
-    portionSizeMethodId: string,
-    parameters: FoodPortionSizeMethodParameter[],
-    inputs: FoodPortionSizeMethodParameterCreationAttributes[],
-    { transaction }: { transaction: Transaction }
-  ) => {
-    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
-
-    await FoodPortionSizeMethodParameter.destroy({
-      where: { portionSizeMethodId, id: { [Op.notIn]: ids } },
-      transaction,
-    });
-
-    if (!inputs.length) return [];
-
-    const newParameters: FoodPortionSizeMethodParameter[] = [];
-
-    for (const input of inputs) {
-      const { id, ...rest } = input;
-
-      if (id) {
-        const match = parameters.find((parameter) => parameter.id === id);
-        if (match) {
-          await match.update(rest, { transaction });
-          continue;
-        }
-      }
-
-      const newParameter = await FoodPortionSizeMethodParameter.create(
-        { ...rest, portionSizeMethodId },
-        { transaction }
-      );
-      newParameters.push(newParameter);
-    }
-
-    return [...parameters, ...newParameters];
   };
 
   const updatePortionSizeMethods = async (
@@ -185,18 +101,12 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     const newMethods: FoodPortionSizeMethod[] = [];
 
     for (const input of inputs) {
-      const { id, parameters, ...rest } = input;
+      const { id, ...rest } = input;
 
       if (id) {
         const match = methods.find((method) => method.id === id);
         if (match) {
-          if (!match.parameters) await match.reload({ include: [{ association: 'parameters' }] });
-          if (!match.parameters) throw new NotFoundError();
-
-          await Promise.all([
-            match.update(rest, { transaction }),
-            updateParameters(match.id, match.parameters, parameters, { transaction }),
-          ]);
+          await match.update(rest, { transaction });
           continue;
         }
       }
@@ -206,11 +116,6 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
         { transaction }
       );
       newMethods.push(newMethod);
-
-      if (parameters.length) {
-        const records = parameters.map((item) => ({ ...item, portionSizeMethodId: newMethod.id }));
-        await FoodPortionSizeMethodParameter.bulkCreate(records, { transaction });
-      }
     }
 
     return [...methods, ...newMethods];
@@ -290,13 +195,7 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     if (!foodLocal) throw new NotFoundError();
 
     const { main, portionSizeMethods, associatedFoods } = foodLocal;
-    if (
-      !main ||
-      !associatedFoods ||
-      !portionSizeMethods ||
-      portionSizeMethods.some((psm) => psm.parameters === undefined)
-    )
-      throw new NotFoundError();
+    if (!main || !associatedFoods || !portionSizeMethods) throw new NotFoundError();
 
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
@@ -429,31 +328,25 @@ const adminFoodService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       }
 
       if (sourceFoodLocal.portionSizeMethods?.length) {
-        for (const psm of sourceFoodLocal.portionSizeMethods) {
-          const method = await FoodPortionSizeMethod.create(
-            {
-              ...pick(psm, [
-                'method',
-                'description',
-                'imageUrl',
-                'useForRecipes',
-                'conversionFactor',
-                'orderBy',
-              ]),
-              foodLocalId: foodLocal.id,
-            },
-            { transaction }
-          );
-
-          if (!psm.parameters?.length) continue;
-
-          const parameters = psm.parameters.map((parameter) => ({
-            ...pick(parameter, ['name', 'value']),
-            portionSizeMethodId: method.id,
-          }));
-
-          promises.push(FoodPortionSizeMethodParameter.bulkCreate(parameters, { transaction }));
-        }
+        promises.push(
+          ...sourceFoodLocal.portionSizeMethods.map((psm) =>
+            FoodPortionSizeMethod.create(
+              {
+                ...pick(psm, [
+                  'method',
+                  'description',
+                  'imageUrl',
+                  'useForRecipes',
+                  'conversionFactor',
+                  'orderBy',
+                  'parameters',
+                ]),
+                foodLocalId: foodLocal.id,
+              },
+              { transaction }
+            )
+          )
+        );
       }
 
       await Promise.all(promises);

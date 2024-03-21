@@ -7,10 +7,10 @@ import type {
   InferCreationAttributes,
   NonAttribute,
 } from 'sequelize';
-import { BelongsTo, Column, DataType, HasMany, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, Table } from 'sequelize-typescript';
 
-import type { PortionSizeMethodId } from '@intake24/common/types';
-import { FoodLocal, FoodPortionSizeMethodParameter } from '@intake24/db';
+import type { PortionSizeMethodId, PortionSizeParameter } from '@intake24/common/types';
+import { FoodLocal } from '@intake24/db';
 
 import BaseModel from '../model';
 
@@ -74,11 +74,21 @@ export default class FoodPortionSizeMethod extends BaseModel<
   })
   declare orderBy: string;
 
+  @Column({
+    allowNull: false,
+    type: DataType.TEXT({ length: 'long' }),
+  })
+  get parameters(): PortionSizeParameter {
+    const val = this.getDataValue('parameters') as unknown;
+    return val ? JSON.parse(val as string) : {};
+  }
+
+  set parameters(value: PortionSizeParameter) {
+    this.setDataValue('parameters', JSON.stringify(value ?? {}));
+  }
+
   @BelongsTo(() => FoodLocal, 'foodLocalId')
   declare foodLocal?: NonAttribute<FoodLocal>;
-
-  @HasMany(() => FoodPortionSizeMethodParameter, 'portionSizeMethodId')
-  declare parameters?: NonAttribute<FoodPortionSizeMethodParameter[]>;
 }
 
 export type FoodPortionSizeMethodAttributes = Attributes<FoodPortionSizeMethod>;

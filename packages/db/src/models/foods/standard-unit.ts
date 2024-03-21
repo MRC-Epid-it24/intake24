@@ -4,13 +4,11 @@ import type {
   CreationOptional,
   InferAttributes,
   InferCreationAttributes,
-  NonAttribute,
 } from 'sequelize';
-import { Column, CreatedAt, DataType, HasMany, Table, UpdatedAt } from 'sequelize-typescript';
+import { Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
 
-import { CategoryPortionSizeMethodParameter, FoodPortionSizeMethodParameter } from '..';
 import BaseModel from '../model';
 
 @Table({
@@ -70,18 +68,6 @@ export default class StandardUnit extends BaseModel<
 
   @UpdatedAt
   declare updatedAt: CreationOptional<Date>;
-
-  @HasMany(() => CategoryPortionSizeMethodParameter, {
-    foreignKey: 'value',
-    constraints: false,
-  })
-  declare categoryPsmParameters?: NonAttribute<CategoryPortionSizeMethodParameter[]>;
-
-  @HasMany(() => FoodPortionSizeMethodParameter, {
-    foreignKey: 'value',
-    constraints: false,
-  })
-  declare foodPsmParameters?: NonAttribute<FoodPortionSizeMethodParameter[]>;
 }
 
 export type StandardUnitAttributes = Attributes<StandardUnit>;

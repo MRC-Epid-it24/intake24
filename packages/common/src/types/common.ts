@@ -54,5 +54,40 @@ export const requiredLocaleTranslation = z.intersection(
 
 export type RequiredLocaleTranslation = z.infer<typeof requiredLocaleTranslation>;
 
+export const listOption = <T extends z.ZodTypeAny = z.ZodString>(schema: T) =>
+  z.object({
+    id: z.number().optional(),
+    label: z.string(),
+    value: schema,
+  });
+
+export type ListOption<T extends z.ZodTypeAny = z.ZodString> = z.infer<
+  ReturnType<typeof listOption<T>>
+>;
+
+export const localeOptionList = <T extends z.ZodTypeAny = z.ZodString>(schema: T) =>
+  z.intersection(
+    z.object({
+      en: z.array(listOption(schema)),
+    }),
+    z.record(z.array(listOption(schema)))
+  );
+
+export type LocaleOptionList<T extends z.ZodTypeAny = z.ZodString> = z.infer<
+  ReturnType<typeof localeOptionList<T>>
+>;
+
+export const categoryLocaleOptionList = <T extends z.ZodTypeAny = z.ZodNumber>(schema: T) =>
+  z.intersection(
+    z.object({
+      _default: localeOptionList(schema),
+    }),
+    z.record(localeOptionList(schema))
+  );
+
+export type CategoryLocaleOptionList<T extends z.ZodTypeAny = z.ZodNumber> = z.infer<
+  ReturnType<typeof categoryLocaleOptionList<T>>
+>;
+
 export const textDirections = ['ltr', 'rtl'] as const;
 export type TextDirection = (typeof textDirections)[number];

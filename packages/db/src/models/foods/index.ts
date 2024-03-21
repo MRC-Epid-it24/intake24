@@ -8,7 +8,6 @@ import CategoryAttribute from './category-attributes';
 import CategoryCategory from './category-category';
 import CategoryLocal from './category-local';
 import CategoryPortionSizeMethod from './category-portion-size-method';
-import CategoryPortionSizeMethodParameter from './category-portion-size-method-param';
 import DrinkwareScale from './drinkware-scale';
 import DrinkwareScaleV2 from './drinkware-scale-v2';
 import DrinkwareSet from './drinkware-set';
@@ -22,7 +21,6 @@ import FoodLocal from './food-local';
 import FoodLocalList from './food-local-list';
 import FoodNutrient from './food-nutrient';
 import FoodPortionSizeMethod from './food-portion-size-method';
-import FoodPortionSizeMethodParameter from './food-portion-size-method-param';
 import GuideImage from './guide-image';
 import GuideImageObject from './guide-image-object';
 import ImageMap from './image-map';
@@ -69,8 +67,6 @@ export { default as CategoryLocal } from './category-local';
 export * from './category-local';
 export { default as CategoryPortionSizeMethod } from './category-portion-size-method';
 export * from './category-portion-size-method';
-export { default as CategoryPortionSizeMethodParameter } from './category-portion-size-method-param';
-export * from './category-portion-size-method-param';
 export { default as DrinkwareScale } from './drinkware-scale';
 export * from './drinkware-scale';
 export { default as DrinkwareScaleV2 } from './drinkware-scale-v2';
@@ -97,8 +93,6 @@ export { default as FoodNutrient } from './food-nutrient';
 export * from './food-nutrient';
 export { default as FoodPortionSizeMethod } from './food-portion-size-method';
 export * from './food-portion-size-method';
-export { default as FoodPortionSizeMethodParameter } from './food-portion-size-method-param';
-export * from './food-portion-size-method-param';
 export { default as GuideImage } from './guide-image';
 export * from './guide-image';
 export { default as GuideImageObject } from './guide-image-object';
@@ -161,7 +155,6 @@ export const foods = {
   CategoryCategory,
   CategoryLocal,
   CategoryPortionSizeMethod,
-  CategoryPortionSizeMethodParameter,
   DrinkwareScale,
   DrinkwareScaleV2,
   DrinkwareSet,
@@ -175,7 +168,6 @@ export const foods = {
   FoodLocalList,
   FoodNutrient,
   FoodPortionSizeMethod,
-  FoodPortionSizeMethodParameter,
   GuideImage,
   GuideImageObject,
   ImageMap,

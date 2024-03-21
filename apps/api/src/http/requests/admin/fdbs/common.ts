@@ -1,9 +1,11 @@
 import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
+import { ZodError } from 'zod';
 
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import {
   portionSizeMethods as portionSizeMethodIds,
+  portionSizeParameter,
   useInRecipeTypes,
 } from '@intake24/common/types';
 import { Category, Food, FoodsLocale, NutrientTableRecord } from '@intake24/db';
@@ -154,27 +156,20 @@ export const portionSizeMethods: Schema = {
   },
   'portionSizeMethods.*.parameters': {
     in: ['body'],
-    errorMessage: typeErrorMessage('array._'),
-    isArray: { bail: true },
-  },
-  'portionSizeMethods.*.parameters.*.id': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string._', { attributePath: 'id' }),
-    isInt: true,
-    optional: true,
-  },
-  'portionSizeMethods.*.parameters.*.name': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 32, attributePath: 'name' }),
-    isString: true,
-    isEmpty: { negated: true },
-    isLength: { bail: true, options: { max: 32 } },
-  },
-  'portionSizeMethods.*.parameters.*.value': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string._'),
-    isString: true,
-    isEmpty: { negated: true },
+    errorMessage: typeErrorMessage('structure._'),
+    custom: {
+      options: (value): boolean => {
+        try {
+          portionSizeParameter.parse(value);
+          return true;
+        } catch (err) {
+          if (err instanceof ZodError) {
+            throw err.errors.at(0)?.message;
+          }
+          throw err;
+        }
+      },
+    },
   },
 };
 

@@ -2,17 +2,17 @@
   <v-row>
     <v-col cols="12">
       <language-selector
-        v-model="options"
+        v-model="parameters.options"
         :default="[]"
         :label="$t('fdbs.portionSizes.methods.parent-food-portion.options').toString()"
         :required="true"
       >
-        <template v-for="lang in Object.keys(options)" #[`lang.${lang}`]>
+        <template v-for="lang in Object.keys(parameters.options)" #[`lang.${lang}`]>
           <options-list
             :key="lang"
-            :options="options[lang]"
+            :options="parameters.options[lang]"
             :rules="rules"
-            @update:options="setOptionParam(lang, $event)"
+            @update:options="updateOption(lang, $event)"
           ></options-list>
         </template>
       </language-selector>
@@ -24,11 +24,10 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { ListOption, LocaleOptionList } from '@intake24/common/prompts';
+import type { ListOption, PortionSizeParameters } from '@intake24/common/types';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { OptionsList } from '@intake24/admin/components/lists';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -38,15 +37,13 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['milk-in-a-hot-drink']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createObjectParameter, setParameter } = useParameters(props, context);
-
-    const options = createObjectParameter<LocaleOptionList<number>>('options', { en: [] });
+    const { parameters } = useParameters<'milk-in-a-hot-drink'>(props, context);
 
     const rules = [
       (value: any): boolean | string => {
@@ -58,19 +55,17 @@ export default defineComponent({
       },
     ];
 
-    const setOptionParam = (lang: string, value: ListOption[]) => {
-      options.value[lang] = value.map((item) => ({
+    const updateOption = (lang: string, value: ListOption[]) => {
+      parameters.value.options[lang] = value.map((item) => ({
         ...item,
         value: Number.parseFloat(item.value),
       }));
-      // TODO: does not run a setter on deep object change
-      setParameter('options', JSON.stringify(options.value));
     };
 
     return {
-      options,
+      parameters,
       rules,
-      setOptionParam,
+      updateOption,
     };
   },
 });

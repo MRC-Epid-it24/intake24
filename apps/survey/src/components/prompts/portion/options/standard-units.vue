@@ -33,11 +33,6 @@ import { useI18n } from '@intake24/i18n';
 
 import { useStandardUnits } from '../../partials';
 
-type UnitData = {
-  name: string;
-  inlineEstimateIn?: string;
-};
-
 export default defineComponent({
   name: 'PortionStandardUnits',
 
@@ -70,20 +65,10 @@ export default defineComponent({
     });
 
     const standardUnits = computed(() => {
-      const units: UnitData[] = [];
-
-      const count = Object.keys(props.method.parameters).filter((item) =>
-        item.endsWith('-name')
-      ).length;
-
-      for (let i = 0; i < count; ++i) {
-        units.push({
-          name: props.method.parameters[`unit${i}-name`],
-          inlineEstimateIn: props.method.parameters[`unit${i}-inline-estimate-in`],
-        });
-      }
-
-      return units.slice(0, props.max);
+      return ('units' in props.method.parameters ? props.method.parameters.units : []).slice(
+        0,
+        props.max
+      );
     });
 
     const selectNextStandardUnit = () => {

@@ -1,20 +1,8 @@
 import type { PromptSection } from '../surveys';
+import type { LocaleOptionList, LocaleTranslation, PortionSizeMethodId } from '../types';
 import type { Actions, PromptLayout } from './actions';
 import type { Condition } from './conditions';
-import { type LocaleTranslation, type PortionSizeMethodId, portionSizeMethods } from '../types';
-
-export type ListOption<T = string> = {
-  id?: number;
-  label: string;
-  value: T;
-};
-
-export type LocaleOptionList<T = string> = {
-  en: ListOption<T>[];
-  [locale: string]: ListOption<T>[];
-};
-
-export type CategoryLocaleOptionList<T = number> = Record<'_default' | string, LocaleOptionList<T>>;
+import { portionSizeMethods } from '../types';
 
 export type RadioOrientation = 'column' | 'row';
 

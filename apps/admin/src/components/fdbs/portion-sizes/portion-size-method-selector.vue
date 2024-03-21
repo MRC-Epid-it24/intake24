@@ -119,7 +119,11 @@ import { defineComponent, ref } from 'vue';
 
 import { copy, merge, randomString } from '@intake24/common/util';
 
-import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
+import type {
+  InternalPortionSizeMethodItem,
+  PortionSizeMethodDialog,
+  PortionSizeSelectionImage,
+} from './portion-sizes';
 import portionSizeParams from './parameters';
 import { portionSizeSelectionImages, psmDefaults, usePortionSizeMethods } from './portion-sizes';
 
@@ -142,7 +146,7 @@ export default defineComponent({
     const dialog = ref(newDialog());
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-    const updateImageUrl = (selection: string) => {
+    const updateImageUrl = (selection: PortionSizeSelectionImage) => {
       dialog.value.item.imageUrl = getImageUrl(selection);
     };
 

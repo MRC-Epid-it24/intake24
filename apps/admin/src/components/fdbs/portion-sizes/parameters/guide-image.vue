@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <select-resource
-        v-model="guideImageId"
+        v-model="parameters.guideImageId"
         item-name="id"
         :label="$t('fdbs.portionSizes.methods.guide-image._')"
         name="guide-image-id"
@@ -12,7 +12,7 @@
     </v-col>
     <v-col cols="12">
       <v-switch
-        v-model="imageMapLabels"
+        v-model="parameters.imageMapLabels"
         hide-details="auto"
         :label="$t('fdbs.portionSizes.methods.guide-image.imageMapLabels')"
       ></v-switch>
@@ -24,9 +24,9 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
+import type { PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
 
-import type { PortionSizeMethodParameterItem } from '..';
 import { useParameters } from './use-parameters';
 
 export default defineComponent({
@@ -36,20 +36,16 @@ export default defineComponent({
 
   props: {
     value: {
-      type: Array as PropType<PortionSizeMethodParameterItem[]>,
+      type: Object as PropType<PortionSizeParameters['guide-image']>,
       required: true,
     },
   },
 
   setup(props, context) {
-    const { createBooleanParameter, createStringParameter } = useParameters(props, context);
-
-    const guideImageId = createStringParameter('guide-image-id');
-    const imageMapLabels = createBooleanParameter('image-map-labels');
+    const { parameters } = useParameters<'guide-image'>(props, context);
 
     return {
-      guideImageId,
-      imageMapLabels,
+      parameters,
     };
   },
 });

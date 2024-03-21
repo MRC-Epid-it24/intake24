@@ -11,7 +11,6 @@ import type {
 import type {
   CategoryAttributes,
   CategoryLocalAttributes,
-  CategoryPortionSizeMethodParameterCreationAttributes,
   FindOptions,
   PaginateQuery,
   Transaction,
@@ -24,7 +23,6 @@ import {
   CategoryAttribute,
   CategoryLocal,
   CategoryPortionSizeMethod,
-  CategoryPortionSizeMethodParameter,
   FoodLocal,
   Op,
   QueryTypes,
@@ -194,87 +192,10 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
         {
           association: 'portionSizeMethods',
           separate: true,
-          include: [
-            {
-              association: 'parameters',
-              include: [
-                {
-                  association: 'asServedSet',
-                  where: {
-                    $method$: 'as-served',
-                    '$parameters.name$': ['serving-image-set', 'leftovers-image-set'],
-                  },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                {
-                  association: 'drinkwareSet',
-                  where: { $method$: 'drink-scale', '$parameters.name$': ['drinkware-id'] },
-                  required: false,
-                  include: [
-                    {
-                      association: 'imageMap',
-                      include: [{ association: 'baseImage', attributes: ['path'] }],
-                    },
-                  ],
-                },
-                {
-                  association: 'guideImage',
-                  where: { $method$: 'guide-image', '$parameters.name$': ['guide-image-id'] },
-                  required: false,
-                  include: [{ association: 'selectionImage', attributes: ['path'] }],
-                },
-                /* {
-                  association: 'standardUnit',
-                  attributes: ['id', 'estimateIn', 'howMany'],
-                  where: { '$parameters.name$': { [Op.endsWith]: '-name' } },
-                  required: false,
-                }, */
-              ],
-            },
-          ],
           order: [['orderBy', 'ASC']],
         },
       ],
     });
-  };
-
-  const updateParameters = async (
-    portionSizeMethodId: string,
-    parameters: CategoryPortionSizeMethodParameter[],
-    inputs: CategoryPortionSizeMethodParameterCreationAttributes[],
-    { transaction }: { transaction: Transaction }
-  ) => {
-    const ids = inputs.map(({ id }) => id).filter(Boolean) as string[];
-
-    await CategoryPortionSizeMethodParameter.destroy({
-      where: { portionSizeMethodId, id: { [Op.notIn]: ids } },
-      transaction,
-    });
-
-    if (!inputs.length) return [];
-
-    const newParameters: CategoryPortionSizeMethodParameter[] = [];
-
-    for (const input of inputs) {
-      const { id, ...rest } = input;
-
-      if (id) {
-        const match = parameters.find((parameter) => parameter.id === id);
-        if (match) {
-          await match.update(rest, { transaction });
-          continue;
-        }
-      }
-
-      const newParameter = await CategoryPortionSizeMethodParameter.create(
-        { ...rest, portionSizeMethodId },
-        { transaction }
-      );
-      newParameters.push(newParameter);
-    }
-
-    return [...parameters, ...newParameters];
   };
 
   const updatePortionSizeMethods = async (
@@ -295,18 +216,12 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     const newMethods: CategoryPortionSizeMethod[] = [];
 
     for (const input of inputs) {
-      const { id, parameters, ...rest } = input;
+      const { id, ...rest } = input;
 
       if (id) {
         const match = methods.find((method) => method.id === id);
         if (match) {
-          if (!match.parameters) await match.reload({ include: [{ association: 'parameters' }] });
-          if (!match.parameters) throw new NotFoundError();
-
-          await Promise.all([
-            match.update(rest, { transaction }),
-            updateParameters(match.id, match.parameters, parameters, { transaction }),
-          ]);
+          await match.update(rest, { transaction });
           continue;
         }
       }
@@ -316,14 +231,6 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
         { transaction }
       );
       newMethods.push(newMethod);
-
-      if (parameters.length) {
-        const records = parameters.map((item) => ({
-          ...item,
-          portionSizeMethodId: newMethod.id,
-        }));
-        await CategoryPortionSizeMethodParameter.bulkCreate(records, { transaction });
-      }
     }
 
     return [...methods, ...newMethods];
@@ -368,12 +275,7 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
     if (!categoryLocal) throw new NotFoundError();
 
     const { main, portionSizeMethods } = categoryLocal;
-    if (
-      !main ||
-      !portionSizeMethods ||
-      portionSizeMethods.some((psm) => psm.parameters === undefined)
-    )
-      throw new NotFoundError();
+    if (!main || !portionSizeMethods) throw new NotFoundError();
 
     const { attributes } = main;
     if (!attributes) throw new NotFoundError();
@@ -462,31 +364,25 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
       }
 
       if (sourceCategoryLocal.portionSizeMethods?.length) {
-        for (const psm of sourceCategoryLocal.portionSizeMethods) {
-          const method = await CategoryPortionSizeMethod.create(
-            {
-              ...pick(psm, [
-                'method',
-                'description',
-                'imageUrl',
-                'useForRecipes',
-                'conversionFactor',
-                'orderBy',
-              ]),
-              categoryLocalId: categoryLocal.id,
-            },
-            { transaction }
-          );
-
-          if (!psm.parameters?.length) continue;
-
-          const parameters = psm.parameters.map((parameter) => ({
-            ...pick(parameter, ['name', 'value']),
-            portionSizeMethodId: method.id,
-          }));
-
-          promises.push(CategoryPortionSizeMethodParameter.bulkCreate(parameters, { transaction }));
-        }
+        promises.push(
+          ...sourceCategoryLocal.portionSizeMethods.map((psm) =>
+            CategoryPortionSizeMethod.create(
+              {
+                ...pick(psm, [
+                  'method',
+                  'description',
+                  'imageUrl',
+                  'useForRecipes',
+                  'conversionFactor',
+                  'orderBy',
+                  'parameters',
+                ]),
+                categoryLocalId: categoryLocal.id,
+              },
+              { transaction }
+            )
+          )
+        );
       }
 
       await Promise.all(promises);

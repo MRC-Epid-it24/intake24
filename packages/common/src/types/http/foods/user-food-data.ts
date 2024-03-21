@@ -1,10 +1,7 @@
 import { z } from 'zod';
 
-import { localeTranslation, portionSizeMethods } from '@intake24/common/types';
-
-export const userPortionSizeMethodParameters = z.record(z.string());
-
-export type UserPortionSizeMethodParameters = z.infer<typeof userPortionSizeMethodParameters>;
+import { localeTranslation } from '../../common';
+import { portionSizeMethods, portionSizeParameter } from '../../portion-size';
 
 export const userPortionSizeMethod = z.object({
   method: z.enum(portionSizeMethods),
@@ -13,7 +10,7 @@ export const userPortionSizeMethod = z.object({
   useForRecipes: z.boolean(),
   conversionFactor: z.number(),
   orderBy: z.string(),
-  parameters: userPortionSizeMethodParameters,
+  parameters: portionSizeParameter,
 });
 
 export type UserPortionSizeMethod = z.infer<typeof userPortionSizeMethod>;
