@@ -13,14 +13,20 @@
         {{ $t('standard-units.add') }}
       </v-btn>
       <v-simple-table>
-        <tbody>
+        <thead>
           <tr>
+            <th></th>
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.unit') }}</th>
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.weight') }}</th>
             <th>{{ $t('fdbs.portionSizes.methods.standard-portion.omitFoodDescription') }}</th>
             <th></th>
           </tr>
-          <tr v-for="(unit, idx) in parameters.units" :key="idx">
+        </thead>
+        <draggable v-model="parameters.units" handle=".drag-and-drop__handle" tag="tbody">
+          <tr v-for="(unit, idx) in parameters.units" :key="unit.name" class="drag-and-drop__item">
+            <td>
+              <v-icon class="drag-and-drop__handle">$handle</v-icon>
+            </td>
             <td>
               <select-resource v-model="unit.name" resource="standard-units">
                 <template #activator="{ attrs, on }">
@@ -59,7 +65,7 @@
               </confirm-dialog>
             </td>
           </tr>
-        </tbody>
+        </draggable>
       </v-simple-table>
     </v-col>
   </v-row>
@@ -68,6 +74,7 @@
 <script lang="ts">
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+import draggable from 'vuedraggable';
 
 import type { PortionSizeParameters } from '@intake24/common/types';
 import { SelectResource } from '@intake24/admin/components/dialogs';
@@ -78,7 +85,7 @@ import { useParameters } from './use-parameters';
 export default defineComponent({
   name: 'StandardPortionParameters',
 
-  components: { ConfirmDialog, SelectResource },
+  components: { ConfirmDialog, draggable, SelectResource },
 
   props: {
     value: {
@@ -92,7 +99,7 @@ export default defineComponent({
 
     const add = () => {
       parameters.value.units.push({
-        name: '',
+        name: `unit-${parameters.value.units.length + 1}`,
         weight: 1,
         omitFoodDescription: false,
       });
