@@ -7,4 +7,5 @@ export interface PkgLocale {
   flagCode: string;
   prototypeLocale: string | null;
   textDirection: 'ltr' | 'rtl';
+  foodIndexLanguageBackendId?: string;
 }

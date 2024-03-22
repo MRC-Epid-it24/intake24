@@ -279,7 +279,6 @@ export class ImporterV4 {
     }
 
     const existingSet = await this.apiClient.portionSize.asServed.get(setId);
-    console.log('Existing set: - ', existingSet);
 
     if (existingSet === null) {
       logger.debug(`Creating new as served set: ${setId}`);

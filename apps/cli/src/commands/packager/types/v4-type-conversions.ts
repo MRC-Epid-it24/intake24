@@ -40,7 +40,7 @@ function fromPackageLocale(locale: PkgLocale): LocaleRequest {
     adminLanguageId: locale.adminLanguage,
     prototypeLocaleId: locale.prototypeLocale,
     countryFlagCode: locale.flagCode,
-    foodIndexLanguageBackendId: 'en',
+    foodIndexLanguageBackendId: locale.foodIndexLanguageBackendId ?? 'en',
     respondentLanguageId: locale.respondentLanguage,
     textDirection: locale.textDirection,
   };

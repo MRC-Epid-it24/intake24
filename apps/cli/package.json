@@ -38,9 +38,9 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.2.1",
+    "remove-bom-stream": "^2.0.0",
     "sequelize": "^6.37.1",
     "sequelize-typescript": "^2.1.6",
-    "strip-bom-stream": "^5.0.0",
     "uuid": "^9.0.1",
     "web-push": "^3.6.7"
   },

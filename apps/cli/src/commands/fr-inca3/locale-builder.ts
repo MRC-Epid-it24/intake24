@@ -1,10 +1,11 @@
 import { createReadStream } from 'node:fs';
 
+import type csvParser from 'csv-parser';
 import parseCsv from 'csv-parser';
 import fs from 'fs/promises';
 import { groupBy } from 'lodash';
 import path from 'path';
-import stripBomStream from 'strip-bom-stream';
+import removeBOM from 'remove-bom-stream';
 import { v4 as randomUUID } from 'uuid';
 
 import type { FrenchLocaleOptions } from '@intake24/cli/commands/fr-inca3/build-fr-locale-command';
@@ -46,6 +47,7 @@ const locale: PkgLocale = {
   respondentLanguage: 'fr',
   flagCode: 'fr',
   adminLanguage: 'fr',
+  foodIndexLanguageBackendId: 'fr',
 };
 
 const dummyNutrientTable: PkgNutrientTable = {
@@ -116,6 +118,24 @@ export class FrenchAnsesLocaleBuilder {
     return JSON.parse(await fs.readFile(filePath, 'utf-8')) as T;
   }
 
+  private async readCSV(
+    relativePath: string,
+    onRowData: (data: any) => void,
+    optionsOrHeaders?: csvParser.Options | ReadonlyArray<string>
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      createReadStream(path.join(this.sourceDirPath, relativePath))
+        .pipe(removeBOM())
+        .pipe(parseCsv(optionsOrHeaders))
+        .on('data', (data: any) => {
+          onRowData(data);
+        })
+        .on('end', () => {
+          resolve();
+        });
+    });
+  }
+
   // eslint-disable @typescript-eslint/no-unused-vars
   private getIntake24Categories(
     gpe: string,
@@ -155,65 +175,63 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private async readFoodCategories(): Promise<void> {
-    const result: Record<string, string[]> = {};
+    this.foodCategories = {};
 
-    return new Promise((resolve) => {
-      createReadStream(path.join(this.sourceDirPath, 'categories', 'foods.csv'))
-        .pipe(stripBomStream())
-        .pipe(parseCsv({ headers: false, skipLines: 1 }))
-        .on('data', (data) => {
-          const a_code = data[6];
+    await this.readCSV(
+      path.join('categories', 'foods.csv'),
+      (data: any) => {
+        const a_code = data[6] as string;
 
-          if (a_code) {
-            const cat1 = data[9];
-            const cat2 = data[11];
-            const cat3 = data[13];
+        if (a_code) {
+          let categories = this.foodCategories![a_code];
 
-            const list = result[a_code] ?? [];
-
-            if (cat1) list.push(cat1);
-            if (cat2) list.push(cat2);
-            if (cat3) list.push(cat3);
-
-            result[a_code] = list;
+          if (categories === undefined) {
+            const newArray: string[] = [];
+            this.foodCategories![a_code] = newArray;
+            categories = newArray;
           }
-        })
-        .on('end', () => {
-          this.foodCategories = result;
-          resolve();
-        });
-    });
+
+          const cat1 = data[9] as string;
+          const cat2 = data[11] as string;
+          const cat3 = data[13] as string;
+
+          if (cat1) categories.push(cat1);
+          if (cat2) categories.push(cat2);
+          if (cat3) categories.push(cat3);
+        }
+      },
+      { headers: false, skipLines: 1 }
+    );
   }
 
   private async readRecipeCategories(): Promise<void> {
-    const result: Record<string, string[]> = {};
+    this.recipeCategories = {};
 
-    return new Promise((resolve) => {
-      createReadStream(path.join(this.sourceDirPath, 'categories', 'recipes.csv'))
-        .pipe(stripBomStream())
-        .pipe(parseCsv({ headers: false, skipLines: 1 }))
-        .on('data', (data) => {
-          const r_code = data[3];
+    await this.readCSV(
+      path.join('categories', 'recipes.csv'),
+      (data) => {
+        const r_code = data[3];
 
-          if (r_code) {
-            const cat1 = data[5];
-            const cat2 = data[7];
-            const cat3 = data[9];
+        if (r_code) {
+          let categories = this.recipeCategories![r_code];
 
-            const list = result[r_code] ?? [];
-
-            if (cat1) list.push(cat1);
-            if (cat2) list.push(cat2);
-            if (cat3) list.push(cat3);
-
-            result[r_code] = list;
+          if (categories === undefined) {
+            const newArray: string[] = [];
+            this.recipeCategories![r_code] = newArray;
+            categories = newArray;
           }
-        })
-        .on('end', () => {
-          this.recipeCategories = result;
-          resolve();
-        });
-    });
+
+          const cat1 = data[5];
+          const cat2 = data[7];
+          const cat3 = data[9];
+
+          if (cat1) categories.push(cat1);
+          if (cat2) categories.push(cat2);
+          if (cat3) categories.push(cat3);
+        }
+      },
+      { headers: false, skipLines: 1 }
+    );
   }
 
   private async readFoodList(): Promise<void> {
@@ -264,20 +282,15 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private async readCategoryNames(): Promise<void> {
-    const result: Record<string, string> = {};
+    this.categoryNames = {};
 
-    return new Promise((resolve) => {
-      createReadStream(path.join(this.sourceDirPath, 'categories', 'names.csv'))
-        .pipe(stripBomStream())
-        .pipe(parseCsv({ headers: false, skipLines: 0 }))
-        .on('data', (data) => {
-          result[data[0]] = data[1];
-        })
-        .on('end', () => {
-          this.categoryNames = result;
-          resolve();
-        });
-    });
+    await this.readCSV(
+      path.join('categories', 'names.csv'),
+      (data) => {
+        this.categoryNames![data[0]] = data[1];
+      },
+      { headers: false, skipLines: 0 }
+    );
   }
 
   private async readQuantificationData(): Promise<void> {
@@ -293,8 +306,30 @@ export class FrenchAnsesLocaleBuilder {
   }
 
   private async readPortionSizeImages(): Promise<void> {
-    this.portionSizeImages = await this.readJSON<INCA3PortionSizeImage[]>(
-      path.join('portion-size', 'images.json')
+    this.portionSizeImages = [];
+
+    await this.readCSV(
+      path.join('portion-size', 'photo_portions.csv'),
+      (data) => {
+        if (data['fileName'] && data['pictureId']) this.portionSizeImages!.push(data);
+      },
+      {
+        headers: [
+          'owner',
+          'copyright',
+          'updateYear',
+          'pictureId',
+          'name',
+          'portionId',
+          'fileName',
+          'rawCooked',
+          'edible',
+          'weight',
+          'edibleWeight',
+          'comment',
+        ],
+        skipLines: 1,
+      }
     );
   }
 
