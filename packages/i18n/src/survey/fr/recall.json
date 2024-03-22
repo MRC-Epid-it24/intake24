@@ -1,110 +1,96 @@
 {
   "_": "Rappel",
-  "info": "Informations sur les rappels",
-  "none": "Aucun rappel n'est en cours pour le moment.",
-  "startedAt": "Le rappel a commencé le : {startedAt}.",
-  "finishedAt": "Le rappel s'est terminé le : {finishedAt}.",
+  "info": "Informations sur le rappel",
+  "none": "Pas de rappel en cours actuellement.",
+  "startedAt": "Rappel commencé à: {startedAt}.",
+  "finishedAt": "Rappel terminé à: {finishedAt}.",
   "submittedAt": "Soumis à",
   "limitReached": {
     "daily": "Vous avez atteint la limite quotidienne de rappels.",
-    "total": "Vous avez atteint la limite totale des rappels."
+    "total": "Vous avez atteint la limite de rappels."
   },
-  "survey": "L'étude : {name}",
+  "survey": "Enquête: {name}",
   "submissions": {
-    "_": "Journée de rappel",
-    "title": "Jours de rappel",
+    "_": "Jour du rappel",
+    "title": "Jours des rappels",
     "all": "tous",
-    "past": "Rappels passés",
-    "none": "Vous n'avez pas encore de rappels antérieurs.",
-    "count": "Numéro de rappel : {count}"
+    "past": "Rappels antérieurs",
+    "none": "Vous n'avez pas encore terminé de rappels.",
+    "count": "Numéro du rappel: {count}"
   },
   "start": {
-    "_": "Début du rappel",
-    "another": "Commencer un autre rappel"
+    "_": "Commencer",
+    "another": "Commencer un nouveau rappel"
   },
   "continue": "Continuer",
   "abort": {
-    "_": "Abandonner",
+    "_": "Annuler",
     "label": "Annuler le rappel",
-    "confirm": "Abandonner le rappel en cours ?"
+    "confirm": "Souhaitez-vous annuler le rappel en cours ?"
   },
   "surveyInfo": {
-    "recall": "Rappel : {number}"
+    "recall": "Rappel: {number}"
   },
   "menu": {
-    "title": "Révision",
-    "mealSuggested": "Ce repas est suggéré par le système mais vous n'avez pas encore confirmé l'avoir consommé.",
+    "title": "Panneau d'avancement",
+    "mealSuggested": "Ce repas est suggéré par le système mais vous n'avez pas encore confirmé que vous l'avez consommé",
     "food": {
-      "delete": "Supprimer la nourriture",
-      "deleteConfirm": "Voulez-vous supprimer {item}?",
-      "change": "Changer l'alimentation",
-      "free-text": {
-        "_": "Cet aliment n'a pas encore été associé à un aliment de notre base de données.",
-        "incomplete": "La taille des portions de cet aliment n'est pas encore connue.",
-        "edit": "Edit search"
-      },
-      "encoded-food": {
-        "_": "Cet aliment a été associé à un aliment de notre base de données.",
-        "complete": "L'estimation de la taille des portions pour cet aliment est terminée.",
-        "incomplete": "La taille des portions de cet aliment n'est pas encore connue.",
-        "edit": "Modifier la taille des portions"
-      },
-      "missing-food": {
-        "_": "Cet aliment a été marqué comme manquant dans notre base de données.",
-        "complete": "Les informations manquantes pour cette denrée alimentaire sont complètes.",
-        "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues.",
-        "edit": "Edit missing food"
-      },
-      "recipe-builder": {
-        "_": "This food has been matched with a recipe from our database.",
-        "complete": "Les étapes de la recette pour cet aliment sont terminées.",
-        "incomplete": "Les étapes de la recette pour cet aliment ne sont pas encore terminées.",
-        "edit": "Edit ingredients"
-      }
+      "delete": "Supprimer l'aliment",
+      "deleteConfirm": "Souhaitez-vous supprimer {item}?",
+      "edit": "Changer l'aliment",
+      "editPortionSize": "Modifier la taille de la portion",
+      "encoded": "Cet aliment correspond à un aliment dans notre base de données.",
+      "missing": "Cet aliment a été signalé comme manquant dans notre base de données.",
+      "notMatched": "Cet aliment ne correspond pas encore à un aliment dans notre base de données.",
+      "portionSizeComplete": "L'estimation de la taille de la portion pour cet aliment est terminée.",
+      "portionSizeIncomplete": "La taille de la portion pour cet aliment n'a pas encore été renseignée.",
+      "missingInfoComplete": "Les informations manquantes pour cet aliment ont été complétées.",
+      "missingInfoIncomplete": "Certaines informations manquantes pour cet aliment n'ont pas encore été renseignées.",
+      "recipeFoodStepsComplete": "Les étapes pour cette recette sont complètes.",
+      "recipeFoodStepsIncomplete": "Les étapes pour cette recette ne sont pas encore complètes."
     },
     "meal": {
       "add": "Ajouter un repas",
-      "delete": "Supprimer le repas",
-      "deleteConfirm": "Vous êtes sur le point de supprimer tout ce que vous aviez sur {item}.",
+      "delete": "Supprimer un repas",
+      "deleteConfirm": "Vous êtes sur le point de supprimer tout ce que vous avez consommé pour {item}.",
       "editFoods": "Modifier / Ajouter des aliments",
-      "editTime": "Temps de changement"
+      "editTime": "Modifier l'horaire"
     }
   },
   "contextMenu": {
     "close": "Fermer",
-    "select": "Poursuivre avec {name}",
-    "editMeal": "Réviser les aliments",
+    "select": "Continuer avec {name}",
+    "editMeal": "Modifier les aliments",
     "delete": "Supprimer {name}",
-    "confirmDeletion": "Êtes-vous sûr de vouloir supprimer '{name}' ?",
+    "confirmDeletion": "Souhaitez-vous vraiment supprimer '{name}'?",
     "confirm": "Confirmer {name}",
-    "changeTime": "Temps de changement"
+    "changeTime": "Modifier l'horaire"
   },
   "actions": {
-    "feedback": "Retour d'information sur l'alimentation",
+    "feedback": "Bilan nutritionnel",
     "next": "Continuer",
     "submit": "Soumettre le rappel",
-    "reviewed": "Examiné",
     "addMeal": "Ajouter un repas",
-    "deleteFood": "Supprimer la nourriture",
-    "deleteMeal": "Supprimer le repas",
-    "editFood": "Modifier l'alimentation",
+    "deleteFood": "Supprimer un aliment",
+    "deleteMeal": "Supprimer un repas",
+    "editFood": "Modifier un aliment",
     "editMeal": "Ajouter des aliments",
-    "mealTime": "Modifier l'heure des repas",
+    "mealTime": "Modifier l'heure du repas",
     "nav": {
-      "cancel": "Annuler",
+      "cancel": "Supprimer",
       "confirm": "Confirmer",
-      "feedback": "Retour d'information sur l'alimentation",
+      "feedback": "Bilan nutritionnel",
       "next": "Continuer",
       "redirect": "Continuer",
-      "remove": "Retirer",
-      "review": "Révision",
+      "remove": "Supprimer",
+      "review": "Vérifier",
       "submit": "Soumettre",
       "addMeal": "Ajouter un repas",
-      "deleteFood": "Supprimer la nourriture",
-      "deleteMeal": "Supprimer le repas",
-      "editFood": "Modifier l'alimentation",
+      "deleteFood": "Supprimer un aliment",
+      "deleteMeal": "Supprimer un repas",
+      "editFood": "Modifier un aliment",
       "editMeal": "Ajouter des aliments",
-      "mealTime": "L'heure du repas"
+      "mealTime": "Heure du repas"
     }
   }
 }

@@ -1,0 +1,201 @@
+{
+  "_": "Outil administrateur Intake24",
+  "title": "Commun",
+  "login": {
+    "_": "Se connecter",
+    "subtitle": "Connexion à un compte de l'outil adminstrateur de Intake24",
+    "back": "Retour à la connexion"
+  },
+  "mfa": {
+    "_": "MFA",
+    "title": "Confirmer la demande d'authentification",
+    "devices": "Autres appareils",
+    "otp": "Entrer le mot de passe temporaire",
+    "error": "Demande d'authentification invalide. Réessayez."
+  },
+  "logout": {
+    "_": "Se déconnecter",
+    "text": "Se déconnecter de l'application"
+  },
+  "signup": {
+    "_": "S'inscrire",
+    "subtitle": "S'inscrire à un nouveau compte de l'outil administrateur d'Intake24'",
+    "noAccount": "Pas encore de compte ?"
+  },
+  "verify": {
+    "_": "Vérification du compte",
+    "subtitle": "Vérifiez votre compte à l'aide du lien envoyé sur votre boîte mail.",
+    "text": "Si vous n'avez pas reçu de mail, vérifiez vos spams ou cliquez sur le bouton ci-dessous pour en recevoir un nouveau.",
+    "resend": "Envoyer à nouveau l'email de vérification",
+    "resent": "Le mail de vérification a été envoyé sur votre boîte mail"
+  },
+  "password": {
+    "_": "Mot de passe",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Confirmer le nouveau mot de passe",
+    "forgot": "Mot de passe oublié ?",
+    "change": "Changer le mot de passe actuel",
+    "changed": "Le mot de passe a été changé.",
+    "request": {
+      "_": "Demander un nouveau mot de passe",
+      "subtitle": "Entrez l'adresse mail associée à votre compte Intake24 et nous vous enverrons des consignes pour changer votre mot de passe.",
+      "captcha": "Captcha invalide",
+      "send": "Envoyer la demande",
+      "sent": "Les consignes pour changer votre mot de passe ont été envoyées sur votre adresse mail."
+    },
+    "reset": {
+      "_": "Réinitialiser le mot de passe",
+      "subtitle": "Entrez votre adresse mail et votre nouveau mot de passe."
+    },
+    "update": "Changer le mot de passe",
+    "updated": "Votre mot de passe a été modifié avec succès."
+  },
+  "email": "Adresse mail",
+  "emailConfirm": "Confirmer l'adresse mail",
+  "phone": "Téléphone",
+  "spam": "Si vous n'avez pas reçu d'email, vérifiez vos spams ou cliquez sur le bouton ci-dessous pour en recevoir un nouveau.",
+  "terms": {
+    "_": "Clauses",
+    "text": "J'accepte les {privacy} et {tos} d'Intake24.",
+    "privacy": "Politique de confidentialité",
+    "tos": "Conditions d'utilisation"
+  },
+
+  "admin": "Administrateur",
+  "fdb": "Base de données alimentaires",
+  "local": "Version régionale",
+  "images": "Photos",
+  "surveyMgmt": "Gestion des enquêtes",
+  "acl": "Contrôle d'accès",
+  "system": "Système",
+
+  "yes": "Oui",
+  "true": "Oui",
+  "no": "Non",
+  "false": "Non",
+  "none": "Aucun",
+  "na": "Non concerné",
+
+  "name": "Nom",
+  "displayName": "Libellé",
+  "description": "Description",
+  "id": "Identifiant",
+  "type": "Type",
+  "status": "Statut",
+  "options": {
+    "_": "Options",
+    "title": "Liste des options",
+    "add": "Nouvelle option",
+    "remove": "Supprimer l'option",
+    "label": "Libellé",
+    "value": "Valeur"
+  },
+
+  "date": "Date",
+  "expiredAt": "Expiré à",
+  "startedAt": "Commencé à",
+  "completedAt": "Complété à",
+  "createdAt": "Créé à",
+  "updatedAt": "Mis à jour à",
+  "deletedAt": "Supprimé à",
+
+  "app": {
+    "_": "Application",
+    "info": "Informations de l'application",
+    "build": "Construire"
+  },
+
+  "clipboard": {
+    "_": "Copier dans le presse-papiers",
+    "copied": "Données copiées dans le presse-papiers"
+  },
+
+  "sw": {
+    "check": "Une mise à jour du contenu est disponible",
+    "update": "Mise à jour"
+  },
+
+  "action": {
+    "_": "Action",
+    "active": "Activer",
+    "add": "Ajouter",
+    "audit": "Audit",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "clear": "Vider",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "create": "Ajouter",
+    "delete": "Supprimer",
+    "destroy": "Supprimer de manière permanente",
+    "read": "Détail",
+    "download": "Télécharger",
+    "edit": "Modifier",
+    "export": "Exporter",
+    "load": "Charger",
+    "ok": "Confirmer",
+    "print": "Imprimer",
+    "remove": "Enlever",
+    "redirect": "Rediriger",
+    "restore": "Restaurer",
+    "reset": "Réinitialiser",
+    "retry": "Rééessayer",
+    "save": "Enregistrer",
+    "securables": "Sécurité",
+    "submit": "Soumettre",
+    "sync": "Synchroniser",
+    "transfer": "Transférer",
+    "upload": "Mettre en ligne",
+    "confirm": {
+      "_": "Confirmer",
+      "title": "Voulez-vous continuer ?",
+      "msg": "Vous allez quitter une page avec des modifications qui n'ont pas été enregistrées. Voulez-vous continuer ?",
+      "delete": "Vous êtes sur le point de supprimer {name}.",
+      "remove": "Vous êtes sur le point d'enlever {name}.",
+      "multi": {
+        "delete": "Voulez-vous supprimer les éléments sélectionnés : {count}"
+      },
+      "typed": "Veuillez saisir {name} pour confirmer."
+    }
+  },
+
+  "msg": {
+    "created": "L'enregistrement ({name}) a été créé.",
+    "updated": "L'enregistrement ({name}) a été mis à jour.",
+    "deleted": "L'enregistrement ({name}) a été supprimé.",
+    "multi": {
+      "deleted": "Les éléments sélectionnés ont été supprimés ({count})."
+    },
+    "sent": "Votre message a été envoyé."
+  },
+
+  "search": {
+    "_": "Chercher",
+    "filter": "Filtre",
+    "clear": "Vider le filtre",
+    "count": "Nombre d'enregistrements",
+    "selected": "Enregistrements sélectionnés",
+    "none": "Aucun enregistrement trouvé"
+  },
+
+  "redirect": "Rediriger vers une autre entrée",
+
+  "selected": "{count} éléments sélectionnés",
+
+  "not": {
+    "assigned": "Non attribué",
+    "found": "Non trouvé",
+    "provided": "Non renseigné",
+    "selected": "Non sélectionné"
+  },
+
+  "json": {
+    "_": "JSON brut",
+    "title": "Editeur de contenu JSON"
+  },
+
+  "file": {
+    "csv": "Fichier CSV à importer"
+  }
+}

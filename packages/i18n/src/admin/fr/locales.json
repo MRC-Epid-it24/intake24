@@ -1,0 +1,81 @@
+{
+  "_": "Versions régionales",
+  "code": "Code régional",
+  "title": "Versions régionales",
+  "all": "Toutes les versions régionales",
+  "read": "Détails sur la version régionale",
+  "create": "Ajouter une version régionale",
+  "edit": "Modifier la version régionale",
+  "delete": "Supprimer la version régionale",
+
+  "prototypeLocaleId": "Version régionale prototypique",
+  "englishName": "Nom anglais",
+  "localName": "Nom régional",
+  "respondentLanguageId": "Langage de l'interface utilisateur du répondant",
+  "adminLanguageId": "Langage de l'interface utilisateur de l'administrateur",
+  "countryFlagCode": "Code du drapeau du pays",
+
+  "split-lists": {
+    "_": "Découper les listes",
+    "title": "Découper les listes",
+    "tab": "Découper les listes",
+    "add": "Ajouter une liste à découper",
+    "remove": "Enlever une liste à découper",
+
+    "firstWord": "Premier mot",
+    "words": "Liste de mots (délimités par des espaces)"
+  },
+
+  "split-words": {
+    "_": "Mots à découper",
+    "title": "Mots à découper",
+    "tab": "Mots à découper",
+    "add": "Ajouter un mot à découper",
+    "remove": "Enlever un mot à découper",
+
+    "words": "Liste de mots (délimités par des espaces)"
+  },
+
+  "synonym-sets": {
+    "_": "Série de synonymes",
+    "title": "Séries de synonymes",
+    "tab": "Séries de synonymes",
+    "add": "Ajouter une série de synonymes",
+    "remove": "Enlever une série de synonymes",
+
+    "synonyms": "Synonymes (délimités par des espaces)"
+  },
+
+  "recipe-foods": {
+    "_": "Séries d'aliments pour des recettes",
+    "title": "Séries d'aliments pour des recettes",
+    "tab": "Ingrédients de la recette",
+    "add": "Ajouter un ingrédient",
+    "remove": "Enlever l'ingrédient",
+    "special": "Mot déclencheur",
+    "code": "Code de l'ingrédient",
+    "step_code": "Code de l'étape (assigné automatiquement)",
+    "synonyms_id": "Synonymes (délimités par des espaces)",
+    "steps": "Etapes de le construction de recettes",
+    "name": "Nom de l'étape",
+    "description": "Description de l'étape",
+    "ingredientsCategory": "Catégorie des ingrédients de l'étape",
+    "order": "Ordre des étapes",
+    "repeat": "Beaucoup d'ingrédients"
+  },
+
+  "food-ranking": {
+    "_": "Classement des aliments",
+    "title": "Classement des aliments",
+    "tab": "Classement des aliments",
+    "delete": "Supprimer",
+    "upload": "Charger le CSV de classement des aliments",
+    "description": "Pour permettre au \"predetermined order\" algorithme de classement des aliments dans les études utilisant cette version régionale, \n' chargez une feuille de calcul de classement des aliments."
+  },
+
+  "tasks": {
+    "_": "Mission régionale",
+    "title": "Missions régionales",
+    "tab": "missions"
+  }
+}

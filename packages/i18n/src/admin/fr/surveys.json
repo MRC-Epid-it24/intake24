@@ -1,0 +1,122 @@
+{
+  "_": "Enquête",
+  "title": "Enquêtes",
+  "all": "Toutes les enquêtes",
+  "read": "Détails sur l'enquête",
+  "create": "Ajouter une enquête",
+  "edit": "Modifier l'enquête",
+  "delete": "Supprimer l'enquête",
+
+  "id": "Identifiant de l'enquête",
+  "name": "Nom de l'enquête",
+  "states": {
+    "_": "État",
+    "notStarted": "Non commencé",
+    "active": "Activé",
+    "suspended": "Suspendu",
+    "completed": "Complété"
+  },
+  "startDate": "Date de début",
+  "endDate": "Date de fin",
+  "supportEmail": "Adresse mail d'aide",
+  "authUrl": {
+    "_": "Paramètres de l'URL d'authentification",
+    "domainOverride": "Modifier le domaine",
+    "tokenCharset": "Jeton série de caractères",
+    "tokenLength": "Longueur du jeton"
+  },
+  "externalComm": {
+    "_": "Communication externe",
+    "allowGenUsers": "Permettre la génération d'utilisateurs",
+    "genUserKey": "Code secret JWT pour la communication M2M",
+    "submissionNotificationUrl": "Soumission de la notification URL"
+  },
+  "users": {
+    "_": "Paramètres des utilisateurs",
+    "personalIdentifiers": "Permettre à l'utilisateur d'avoir des identifiants personnels",
+    "customFields": "Permettre à l'utilisateur de modifier les champs"
+  },
+  "search": {
+    "_": "Options de recherche",
+    "sortingAlgorithm": "Algorithme de tri",
+    "matchScoreWeight": "Poids du score de correspondance",
+    "algorithms": {
+      "paRules": "Associations par paires (machine learning)",
+      "popularity": "Popularité (fréquence de déclaration)",
+      "globalPop": "Popularité globale (fréquence de déclaration)",
+      "fixed": "Ordre prédéterminé"
+    }
+  },
+  "submissionLimits": {
+    "_": "Limites de soumission",
+    "maxDaily": "Nombre maximal de soumissions autorisées par jour calendaire",
+    "maxTotal": "Nombre maximal de soumissions autorisées totales",
+    "minInterval": "Intervalle minimum entre deux soumissions (secondes)"
+  },
+  "suspensionReason": "Raison de la suspension",
+  "storeUserSessionOnServer": "Enregistrer la session de l'utilisateur sur le serveur",
+  "feedback": {
+    "_": "Paramètres du bilan alimentaire",
+    "enabled": "Bilan alimentaire activé",
+    "numberOfSubmissions": "Nombre de soumissions pour recevoir un bilan alimentaire"
+  },
+  "tasks": {
+    "_": "Missions de l'enquête",
+    "title": "Missions de l'enquête",
+    "tab": "missions"
+  },
+  "overrides": {
+    "_": "Déroger à la configuration",
+    "tab": "Déroger",
+    "title": "Dérogations à la configuration"
+  },
+  "respondents": {
+    "_": "Répondant",
+    "tab": "Répondants",
+    "title": "Répondants de l'enquête",
+    "add": "Nouveau répondant",
+    "edit": "Modifier le répondant",
+    "upload": {
+      "_": "Import des répondants",
+      "title": "Import de masse des répondants de l'enquête",
+      "submit": "Import"
+    },
+    "authUrls": {
+      "_": "URL d'authentification",
+      "title": "URL d'authentification des répondants de l'enquête",
+      "submit": "Générer un fichier",
+      "download": "Télécharger",
+      "surveyAuthUrl": "URL de l'enquête",
+      "feedbackAuthUrl": "URL du bilan alimentaire",
+      "copiedToClipboard": "URL copié au presse-papiers."
+    },
+    "feedback": {
+      "_": "Bilan alimentaire",
+      "title": "Bilan alimentaire du répondant",
+      "details": "Détails du répondant",
+      "open": "Ouvrir",
+      "download": "Télécharger",
+      "email": {
+        "title": "Envoyer par mail le bilan alimentaire au répondant",
+        "recipient": "Adresse mail du récipiendaire",
+        "sent": "Envoyer",
+        "copy": {
+          "_": "Copiez moi : ",
+          "cc": "CC",
+          "bcc": "CCI",
+          "none": "Aucun"
+        }
+      }
+    }
+  },
+  "submissions": {
+    "_": "Soumission",
+    "tab": "Soumissions",
+    "title": "Soumissions de l'enquête",
+    "id": "Identifiant de la soumission",
+    "userId": "Identifiant de l'utilisateur",
+    "startTime": "Heure de début",
+    "endTime": "Heure de fin",
+    "submissionTime": "Heure de soumission"
+  }
+}

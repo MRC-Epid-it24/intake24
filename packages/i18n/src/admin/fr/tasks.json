@@ -1,0 +1,20 @@
+{
+  "_": "Mission",
+  "title": "Missions",
+  "read": "Détails de la mission",
+  "create": "Ajouter la mission",
+  "edit": "Modifier la mission",
+  "delete": "Supprimer la mission",
+  "none": "Pas de mission",
+  "cron": "CRON",
+  "invalidCron": "Entrée CRON invalide",
+  "schedule": "Emploi du temps",
+  "job": "Tâche",
+  "run": {
+    "_": "Lancer la tâche",
+    "confirm": "Mettre la tâche dans la file d'attente",
+    "next": "Lancer la tâche suivante"
+  },
+  "bullJob": "Faire avancer la tâche (haut de la file d'attente)",
+  "file": "Localisation du fichier"
+}

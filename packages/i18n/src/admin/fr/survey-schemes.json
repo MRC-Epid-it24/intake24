@@ -1,0 +1,485 @@
+{
+  "_": "Configuration de l'enquête",
+  "title": "Configurations de l'enquête",
+  "all": "Toutes les configurations",
+  "read": "Détails sur la configuration de l'enquête",
+  "create": "Ajouter une configuration d'enquête",
+  "edit": "Modifier la configuration d'enquête",
+  "delete": "Supprimer la configuration d'enquête",
+  "load": "Charger depuis la configuration",
+  "none": "Aucune struture d'enquête trouvée",
+
+  "copy": {
+    "_": "Copier",
+    "title": "Copier la configuration de l'enquête",
+    "name": "Nom de la nouvelle configuration de l'enquête"
+  },
+
+  "types": {
+    "_": "Type",
+    "default": "Défaut"
+  },
+
+  "meals": {
+    "_": "Repas",
+    "title": "Repas par défaut",
+    "create": "Nouveau repas",
+    "edit": "Modifier le repas",
+    "remove": "Enlever le repas",
+    "name": "Nom du repas",
+    "reset": {
+      "_": "Réinitialiser les repas",
+      "text": "Réinitialiser les repas à une liste par défaut"
+    },
+    "validation": {
+      "required": "Le nom du repas doit être renseigné.",
+      "unique": "Le nom du repas existe déjà dans une liste actuelle."
+    }
+  },
+
+  "actions": {
+    "_": "Action",
+    "title": "Actions",
+    "add": "Nouvelle action",
+    "remove": "Supprimer l'action",
+    "enable": "Permettre les actions d'invite personnalisée",
+    "both": "Permettre les deux actions de mise en page dans l'interface utilisateur mobile",
+    "color": "Couleur",
+    "icon": "Icone",
+    "label": "Libellé",
+    "text": "Texte",
+    "layouts": {
+      "_": "Mise en page",
+      "title": "Mises en pages",
+      "desktop": "Bureau",
+      "mobile": "Mobile"
+    },
+    "parameters": "Paramètres",
+    "types": {
+      "_": "Type d'action",
+      "title": "Types d'action",
+      "next": "Suivant",
+      "no-more-information": "Plus d'informations",
+      "review": "Analyse",
+      "addFood": "Ajouter un aliment",
+      "addMeal": "Ajouter un repas",
+      "deleteFood": "Supprimer l'aliment",
+      "deleteMeal": "Supprimer le repas",
+      "editFood": "Modifier l'aliment",
+      "editMeal": "Modifier le repas",
+      "mealTime": "Heure du repas",
+      "selectFood": "Sélectionner un aliment",
+      "selectMeal": "Sélectionner un repas"
+    },
+    "variants": {
+      "_": "Autre action",
+      "title": "Autres actions",
+      "elevated": "Elevé",
+      "outlined": "Esquissé",
+      "text": "Texte"
+    }
+  },
+
+  "conditions": {
+    "_": "Condition",
+    "title": "Conditions",
+    "add": "Nouvelle condition",
+    "remove": "Enlever la condition",
+    "sections": {
+      "_": "Section",
+      "title": "Sections",
+      "food": "Aliment",
+      "meal": "Repas",
+      "survey": "Enquête"
+    },
+    "types": {
+      "_": "Type de condition",
+      "title": "Types de conditions",
+      "drinks": "Boissons",
+      "energy": "Energie",
+      "flag": "Drapeau",
+      "foodCategory": "Catégorie alimentaire",
+      "meals": "Repas",
+      "promptAnswer": "Réponse",
+      "recallNumber": "Numéro du rappel"
+    },
+    "exTypes": {
+      "drinks": "Boissons ({section})",
+      "energy": "Energie ({section})",
+      "flag": "Drapeau ({section})",
+      "foodCategory": "Catégorie alimentaire",
+      "meals": "Repas",
+      "promptAnswer": "Réponse {section}: {promptId}",
+      "recallNumber": "Numéro du rappel"
+    },
+    "ops": {
+      "_": "Opération",
+      "eq": "égal",
+      "ne": "différent",
+      "in": "est inclus dans",
+      "notIn": "n'est pas inclus dans",
+      "gte": "plus grand que ou égal à",
+      "gt": "plus grand que",
+      "lte": "moins que ou égal à",
+      "lt": "moins que"
+    },
+    "value": "Condition sur la valeur",
+    "promptId": "Identifiant de l'invite",
+    "showIf": "Montrer l'invite si: "
+  },
+  "data-export": {
+    "_": "Export de données",
+    "tab": "Export de données",
+    "title": "Champs de l'export de données",
+    "current": "Champs actuels d'export",
+    "available": "Champs disponibles d'export",
+    "edit": "Modifier les champs",
+    "fields": {
+      "_": "Modifier le libellé du champ",
+      "id": "Identifiant du champ",
+      "label": "Libellé du champ"
+    },
+    "sections": {
+      "_": "Sections d'export de données",
+      "user": "Champ d'enregistrement de l'utilisateur",
+      "userCustom": "Champs de personnalisation de l'utilisateur",
+      "survey": "Champs d'enregistrement de l'enquête",
+      "submission": "Champs de soumission",
+      "submissionCustom": "Champs de personnalisation de la soumission",
+      "meal": "Champs d'enregistrement du repas",
+      "mealCustom": "Champs de personnalisation du repas",
+      "food": "Champs d'enregistrement de l'aliment",
+      "foodCustom": "Champs de personnalisation de l'aliment",
+      "foodFields": "Champs de composition de l'aliment",
+      "foodNutrients": "Champs de nutriments de l'aliment",
+      "portionSizes": "Champs de taille de portion"
+    }
+  },
+  "i18n": {
+    "_": "Traduction de l'invite",
+    "title": "Traductions de l'invite",
+    "core": "Traductions par défaut pour le champ '{key}'",
+    "custom": "Modifier les traductions pour le champ '{key}'",
+    "init": "Réinitialiser le champ de traduction",
+    "none": "Pas de traduction"
+  },
+  "overrides": {
+    "_": "IDéroger à la configuration",
+    "meals": {
+      "title": "Ignorer la liste des repas de la configuration",
+      "subtitle": "Ignorer la liste des repas de la configuration. Si laissé vide, la liste de la configuration sera utilisée. Si n'importe quel élément est ajouté, la liste complète sera utilisée."
+    },
+    "prompts": {
+      "title": "Déroger à certaines invites de la configuration",
+      "subtitle": "Déroger à certaines invites spécifiques. Les changements seront fusionnés par identifiant d'invite."
+    }
+  },
+  "prompts": {
+    "_": "Invite de la configuration",
+    "tab": "Invites",
+    "title": "Invites de la configuration",
+    "create": "Nouvelle invite",
+    "edit": "Modifier l'invite",
+    "copy": "Copier l'invite",
+    "move": "Déplacer l'invite",
+    "remove": "Enlever l'invite",
+    "section": "Section des invites",
+    "preMeals": {
+      "title": "Invites pré-rappel",
+      "subtitle": "Invites générales affichées avant le rappel alimentaire, incluant des invites personnelles et les consignes initiales."
+    },
+    "postMeals": {
+      "title": "Invites post-rappel",
+      "subtitle": "Invites générales affichées après le rappel alimentaire."
+    },
+    "submission": {
+      "title": "Invites de soumissions",
+      "subtitle": "Dernières invites avant la soumission."
+    },
+    "preFoods": {
+      "title": "Invites de repas pré-aliments",
+      "subtitle": "Invites au sujet des repas affichées avant que les aliments ne soient renseignés, comme l'heure du repas."
+    },
+    "foods": {
+      "title": "Invites d'aliments",
+      "subtitle": "Invites portant sur les aliments, incluant la recherche dans la base de données alimentaire et la quantification."
+    },
+    "postFoods": {
+      "title": "Invites de repas post-aliments",
+      "subtitle": "Invites au sujet des repas affichées après que l'étape de quantification soit complétée pour tous les aliments du repas."
+    },
+    "internal": {
+      "_": "Identifiants internes",
+      "id": {
+        "_": "Identitifiant de l'invite",
+        "hint": "Identifiant unique interne, utilisé par ex. dans les exports de données en tant que nom de colonne"
+      },
+      "name": {
+        "_": "Nom de l'invite",
+        "hint": "Nom interne descriptif pour faciliter la compréhension "
+      }
+    },
+    "type": "Type d'invite",
+    "component": "Contenu de l'invite",
+    "name": {
+      "_": "Nom de l'invite",
+      "hint": "Nom court de l'invite (par ex. pour les miettes de pain)",
+      "required": "Le nom de l'invite doit être renseigné."
+    },
+    "text": {
+      "_": "Texte de l'invite",
+      "hint": "Texte principal de l'invite",
+      "required": "Le texte de l'invite doit être renseigné."
+    },
+    "description": {
+      "_": "Description de l'invite",
+      "hint": "Informations additionnelles sur l'invite",
+      "required": "La description de l'invite doit être renseignée."
+    },
+    "custom": {
+      "_": "Personnalisation",
+      "noPrompts": "Pas d'invites de personnalisation disponibles pour cette section"
+    },
+    "standard": {
+      "_": "Standard",
+      "noPrompts": "Pas d'invites standards disponibles pour cette section"
+    },
+    "portion-size": {
+      "_": "Taille de portion",
+      "noPrompts": "Pas d'invites de taille de portion disponibles pour cette section"
+    },
+    "badges": "Montrer les badges de quantité",
+    "imageMap": {
+      "_": "Paramètres des photos à curseur",
+      "labels": "Montrer les libellés",
+      "pinchZoom": "Montrer PinchZoom pour mobile UI"
+    },
+    "label": "Libellé de la liste d'options",
+    "leftovers": "Autoriser les restes",
+    "linkedQuantityCategories": "Catégories associées",
+    "other": "Permettre de personnaliser une autre option",
+    "orientation": {
+      "_": "Orientation",
+      "column": "Colonne",
+      "row": "Ligne"
+    },
+    "slider": {
+      "_": "Paramètres du curseur",
+      "initial": "Valeur initiale",
+      "min": "Valeur minimale",
+      "max": "Valeur maximale",
+      "step": "Incrémentation"
+    },
+    "timePicker": {
+      "allowedMinutes": {
+        "_": "Minutes autorisées",
+        "item": "Toutes les {item} minutes"
+      },
+      "format": {
+        "_": "Format de l'heure",
+        "ampm": "AM/PM",
+        "24hr": "24-heures"
+      }
+    },
+    "validation": {
+      "required": "L'invite doit être remplie",
+      "message": "Message d'erreur à afficher"
+    },
+    "templates": {
+      "_": "Modèle d'invite",
+      "title": "Modèles d'invite",
+      "add": "Charger à partir du modèle",
+      "alreadyExists": "L'invite avec l'identifiant '{promptId}' existe déjà dans la configuration",
+      "none": "Aucun modèle d'invite trouvé",
+      "saveAs": {
+        "_": "Sauvegarder en tant que modèle",
+        "title": "Sauvegarder l'invite en tant que modèle"
+      }
+    },
+
+    "associated-foods-prompt": {
+      "title": "Aliments associés",
+      "subtitle": "Suggérer des aliments souvent consommés ensemble",
+      "multiple": "Permettre la sélection de plusieurs aliments"
+    },
+    "edit-meal-prompt": {
+      "title": "Liste d'aliments",
+      "subtitle": "Listez ou modifiez des aliments dans ce repas en tant que champ texte libre",
+      "separateDrinks": "Séparez la liste des boissons"
+    },
+    "final-prompt": {
+      "title": "Dernier",
+      "subtitle": "Dernière page avant soumission"
+    },
+    "food-search-prompt": {
+      "title": "Recherche dans la base de données alimentaire",
+      "subtitle": "Choisissez un aliment dans la base de données qui correspond au mieux à la description",
+      "allowBrowsing": "Permettre aux répondants de chercher leur aliment en naviguant librement dans les catégories alimentaires",
+      "dualLanguage": "Afficher des noms d'aliments supplémentaires dans une autre langue"
+    },
+    "meal-add-prompt": {
+      "title": "Ajouter un repas",
+      "subtitle": "Ajouter un nouveau repas à la liste des repas",
+      "custom": "Autoriser la personnalisation des noms de repas"
+    },
+    "meal-duration-prompt": {
+      "title": "Durée du repas",
+      "subtitle": "Demander la durée du repas",
+      "initial": "Durée du repas initiale",
+      "min": "Durée du repas minimale",
+      "max": "Durée du repas maximale",
+      "step": "Etape durée du repas"
+    },
+    "meal-gap-prompt": {
+      "title": "Intervalle entre deux repas",
+      "subtitle": "Vérifier le temps entre deux repas",
+      "gap": "Temps entre deux repas (minutes)",
+      "startTime": "Heure de début de la journée",
+      "endTime": "Heure de fin de la journée"
+    },
+    "meal-time-prompt": {
+      "title": "Heure du repas",
+      "subtitle": "Confirmer l'heure du repas ou enlever le repas"
+    },
+    "ready-meal-prompt": {
+      "title": "Repas tout-prêt",
+      "subtitle": "Demander pour les repas tout-prêts"
+    },
+    "redirect-prompt": {
+      "title": "Rediriger",
+      "subtitle": "Dernière page pour l'utilisateur redirigeant sur le site externe",
+      "url": {
+        "_": "URL de base",
+        "title": "Options d'URL",
+        "subtitle": "Utilisez '{identifier}' pour indiquer l'endroit où l'identifiant de l'utlisateur devrait être inséré.",
+        "hint": "https://example.com/?arg={identifier}"
+      },
+      "identifier": {
+        "_": "Identifiant de l'utilisateur à intégrer à l'URL",
+        "subtitle": "Spécifiez quel identifiant intégrer à l'URL de redirection",
+        "hint": "Une valeur personnalisée sera cherchée dans 'champs personnalisés de l'utilisateur'",
+        "options": {
+          "userId": "Identifiant de l'utilisateur",
+          "username": "Nom d'utilisateur",
+          "urlAuthToken": "Jeton d'authentification"
+        }
+      },
+      "timer": {
+        "_": "Nombre de secondes avant d'être redirigé",
+        "title": "Options de minuteur"
+      }
+    },
+    "review-confirm-prompt": {
+      "title": "Relire et confirmer",
+      "subtitle": "Relire et confirmer l'avancement du rappel"
+    },
+    "same-as-before-prompt": {
+      "title": "Comme précédemment",
+      "subtitle": "Demander si l'aliment était tel que précédemment"
+    },
+    "split-food-prompt": {
+      "title": "Séparer l'aliment",
+      "subtitle": "Demander la description de la séparation d'aliments"
+    },
+    "submit-prompt": {
+      "title": "Soumettre",
+      "subtitle": "Confirmer et soumettre le rappel",
+      "review": {
+        "title": "Options de dernière relecture",
+        "subtitle": "Choisissez les options que vous voulez voir apparaître pour la dernière relecture.",
+        "false": "Pas de relecture",
+        "scroll": "Scroller jusqu'en bas pour passer la relecture",
+        "checkbox": "Cocher une case pour passer la relecture"
+      }
+    },
+
+    "info-prompt": {
+      "title": "Information",
+      "subtitle": "Afficher un message ou des consignes et demander confirmation"
+    },
+    "no-more-information-prompt": {
+      "title": "Plus d'informations",
+      "subtitle": "Afficher un message stipulant que plus aucune information n'est requise pour la sélection actuelle"
+    },
+    "date-picker-prompt": {
+      "title": "Date",
+      "subtitle": "Demander de choisir une date",
+      "futureDates": "Autoriser des dates dans le futur"
+    },
+    "time-picker-prompt": {
+      "title": "Heure",
+      "subtitle": "Demander de choisir une heure"
+    },
+    "checkbox-list-prompt": {
+      "title": "Choix multiple",
+      "subtitle": "Demander de choisir n'importe quel nombre d'éléments d'une liste"
+    },
+    "radio-list-prompt": {
+      "title": "Choix unique",
+      "subtitle": "Demander de choisir un élément d'une liste"
+    },
+    "textarea-prompt": {
+      "title": "Texte libre",
+      "subtitle": "Demander d'écrire dans un champ de texte libre"
+    },
+    "yes-no-prompt": {
+      "title": "Choix OUI/NON",
+      "subtitle": "Demander de choisir oui ou non"
+    },
+
+    "as-served-prompt": {
+      "title": "Photo de portions",
+      "subtitle": "Choisir la méthode \"as served\" pour estimer la taille de la portion"
+    },
+    "cereal-prompt": {
+      "title": "Céréales",
+      "subtitle": "Choisir la méthode \"cereal\"  pour estimer la taille de la portion"
+    },
+    "direct-weight-prompt": {
+      "title": "Poids mesuré",
+      "subtitle": "Poids mesuré"
+    },
+    "drink-scale-prompt": {
+      "title": "Quantification dans le verre",
+      "subtitle": "Choisir la méthode \"drink scale\" pour estimer la quantité de liquide consommmée",
+      "multiple": "Autoriser de spécifier plusieurs éléments"
+    },
+    "guide-image-prompt": {
+      "title": "Photo étalon",
+      "subtitle": "Choisir la méthode \"guide image\" pour estimer la taille de la portion"
+    },
+    "milk-in-a-hot-drink-prompt": {
+      "title": "Lait dans une boisson chaude",
+      "subtitle": "Choisir la méthode \"milk in a hot drink\" pour estimer la quantité de lait"
+    },
+    "milk-on-cereal-prompt": {
+      "title": "Lait sur des céréales",
+      "subtitle": "Choisir la méthode \"milk on cereal\" pour estimer la taille de la portion"
+    },
+    "missing-food-prompt": {
+      "title": "Aliment manquant",
+      "subtitle": "Collecter des informations sur les aliments manquants"
+    },
+    "pizza-prompt": {
+      "title": "Pizza",
+      "subtitle": "Choisir la méthode \"pizza\" pour estimer la taille de la portion"
+    },
+    "parent-food-portion-prompt": {
+      "title": "Portion d'aliment parent",
+      "subtitle": "Choisir la méthode\"portion of parent food\"  pour estimer la taille de la portion",
+      "portions": "Liste des portions de la catégorie"
+    },
+    "portion-size-option-prompt": {
+      "title": "Méthode d'estimation de la taille de la portion",
+      "subtitle": "Choisir quelle méthode de quantification sélectionner au cas où plus d'une soit disponible pour l'aliment"
+    },
+    "recipe-builder-prompt": {
+      "title": "Construire son propre plat",
+      "subtitle": "Construire son propre plat à partir des ingrédients"
+    },
+    "standard-portion-prompt": {
+      "title": "Portion standard",
+      "subtitle": "Choisir la méthode \"standard portion\" pour estimer la taille de la portion"
+    }
+  }
+}

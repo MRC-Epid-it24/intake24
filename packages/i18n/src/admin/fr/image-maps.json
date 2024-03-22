@@ -1,0 +1,15 @@
+{
+  "_": "Photo à curseur",
+  "title": "Photos à curseur",
+  "read": "Détails de la photo à curseur",
+  "create": "Ajouter une photo à curseur",
+  "edit": "Modifier la photo à curseur",
+  "delete": "Supprimer la photo à curseur",
+
+  "id": "Identifiant de la photo à curseur",
+  "baseImage": "Fichier de la photo à curseur",
+  "objects": {
+    "_": "Objet de la photo à curseur",
+    "delete": "Supprimer l'objet"
+  }
+}

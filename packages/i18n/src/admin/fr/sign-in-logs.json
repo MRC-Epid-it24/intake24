@@ -1,0 +1,13 @@
+{
+  "_": "Registre des connexions",
+  "title": "Registre de connexion",
+  "read": "Détails du registre de connexion",
+  "delete": "Supprimer le registre de connexion",
+  "date": "Essai à",
+  "provider": "Fournisseur",
+  "providerKey": "Identifiant du fournisseur",
+  "successful": "Réussi",
+  "userAgent": "Agent utilisateur",
+  "remoteAddress": "Accès à distance",
+  "message": "Message"
+}

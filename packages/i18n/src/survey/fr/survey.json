@@ -1,34 +1,30 @@
 {
   "_": "Enquête",
-  "welcome": {
-    "_": "Welcome to Intake24",
-    "subtitle": "Intake24 is used in research studies to collect information about what people eat and drink."
-  },
-  "info": "Informations sur l'enquête",
+  "info": "Informations sur l'enquête'",
   "states": {
     "_": "Statut",
-    "notStarted": "La collecte des données n'a pas commencé.",
-    "active": "La collecte des données est en cours.",
-    "suspended": "La collecte des données est suspendue.",
-    "completed": "La collecte des données est terminée."
+    "notStarted": "Le recueil des données n'a pas commencé.",
+    "active": "Le recueil des données est en cours.",
+    "suspended": "Le recueil des données est suspendu.",
+    "completed": "Le recueil des données est terminé."
   },
   "openAccess": {
-    "_": "Études en libre accès",
+    "_": "Etudes en libre accès",
     "none": {
       "_": "Pas d'études en libre accès",
-      "subtitle": "Aucune étude en libre accès n'est disponible pour le moment."
+      "subtitle": "Il n'y a pas d'études en libre accès disponibles pour le moment."
     }
   },
   "generateUser": {
-    "400": "Le captcha fourni n'est pas valide.",
-    "403": "L'enquête {surveyId} ne permet pas de générer des utilisateurs.",
-    "404": "L'enquête {surveyId} n'a pas été reconnue.",
-    "429": "Un nouvel utilisateur vient d'être généré, réessayez plus tard.",
-    "_": "Générer l'accès",
-    "subtitle": "Il s'agit d'une étude en libre accès, vous pouvez y accéder gratuitement.",
+    "_": "Accéder à l'étude",
+    "subtitle": "Ceci est une étude en libre accès, vous pouvez y accéder gratuitement.",
     "link": "lien",
-    "info1": "Sélectionnez \"Générer l'accès\" pour générer de nouvelles informations d'identification. Notez ces informations d'identification si vous souhaitez les reprendre plus tard.",
-    "info2": "Cette enquête prendra environ 20 minutes.",
-    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant ce site {action}."
+    "info1": "Sélectionnez 'Accéder à l'étude' pour générer de nouveaux identifiants. Il vous faudra retenir ces identifiants si vous souhaitez reprendre votre session plus tard.",
+    "info2": "Ce rappel va durer approximativement vingt minutes.",
+    "info3": "Si vous fermez la fenêtre de votre navigateur, vous pouvez revenir en utilisant ce {action}.",
+    "400": "Le captcha est invalide.",
+    "403": "L'étude {surveyId} ne permet pas de générer de nouveaux identifiants.",
+    "404": "L'étude {surveyId} n'a pas été reconnue.",
+    "429": "De nouveaux identifiants viennent d'être générés, rééssayez plus tard."
   }
 }

@@ -1,0 +1,286 @@
+{
+  "_": "Configuration du bilan",
+  "title": "Configurations du bilan",
+  "read": "Détails de la configuration du bilan",
+  "create": "Ajouter une configuration du bilan",
+  "edit": "Modifier la configuration du bilan",
+  "delete": "Supprimer la configuration du bilan",
+  "load": "Charger à partir de la configuration",
+  "none": "Aucune configuration de bilan trouvée",
+
+  "types": {
+    "_": "Type de bilan",
+    "title": "Types de bilan",
+    "default": "Défaut",
+    "playful": "Joueur"
+  },
+
+  "outputs": {
+    "_": "Sortie",
+    "title": "Sorties",
+    "print": "Imprimer",
+    "email": "Adresse mail",
+    "download": "Télécharger"
+  },
+
+  "physicalDataFields": {
+    "_": "Champs pour les données physiques",
+    "title": "Champs pour les données physiques",
+    "required": "Le champ {field} est nécessaire pour calculer le bilan.",
+    "notRequired": "Le champ {field} n'est pas nécessaire, il peut être supprimé.",
+    "sex": "Sexe",
+    "weightKg": "Poids",
+    "heightCm": "Taille",
+    "physicalActivityLevelId": "Niveau d'activité physique",
+    "birthdate": "Date de naissance",
+    "weightTarget": "Poids cible"
+  },
+
+  "sections": {
+    "_": "Section",
+    "title": "Sections"
+  },
+
+  "copy": {
+    "_": "Copier",
+    "title": "Copier la configuration du bilan",
+    "name": "Nouveau nom de configuration du bilan"
+  },
+
+  "preview": {
+    "_": "Prévisualiser",
+    "title": "Prévisualisation du bilan"
+  },
+
+  "ranges": {
+    "_": "Intervalle",
+    "start": "Début",
+    "end": "Fin"
+  },
+
+  "age": {
+    "_": "Age",
+    "range": "Intervalle d'âge",
+    "start": "Début de l'intervalle d'âge",
+    "end": "Fin de l'intervalle d'âge"
+  },
+
+  "height": {
+    "_": "Hauteur"
+  },
+
+  "weight": {
+    "_": "Poids"
+  },
+
+  "sexes": {
+    "_": "Sexe",
+    "m": "Masculin",
+    "f": "Féminin"
+  },
+
+  "sentiments": {
+    "_": "Appréciation",
+    "title": "Appréciations",
+    "add": "Ajouter une appréciation",
+    "remove": "Enlever une appréciation",
+    "too_low": "Trop bas",
+    "low": "Bas",
+    "bit_low": "Un peu bas",
+    "good": "Bon",
+    "excellent": "Excellent",
+    "high": "Haut",
+    "bit_high": "Un peu haut",
+    "too_high": "Trop haut"
+  },
+
+  "characterTypes": {
+    "_": "Type de caractères",
+    "battery": "Energie",
+    "bread": "Pain",
+    "candy": "Bonbon",
+    "salmon": "Saumon",
+    "sausage": "Saucisse",
+    "egg": "Œuf",
+    "apple": "Pomme",
+    "strawberry": "Fraise",
+    "burger": "Burger",
+    "fries": "Frites",
+    "milk": "Lait",
+    "iron": "Fer",
+    "folate": "Folate",
+    "co2": "CO2"
+  },
+
+  "characterSentimentTypes": {
+    "_": "Type d'appréciation du caractère",
+    "title": "Types d'appréciations du caractère",
+    "danger": "Danger",
+    "warning": "Attention",
+    "happy": "Heureux",
+    "exciting": "Excité"
+  },
+
+  "nutrientRuleTypes": {
+    "_": "Type de règle nutritionnelle",
+    "title": "Types de règles nutritionnelles",
+    "energy_divided_by_bmr": "Energie divisée par le BMR",
+    "percentage_of_energy": "Pourcentage d'énergie",
+    "per_unit_of_weight": "Par unité de poids",
+    "range": "Intervalle"
+  },
+
+  "colors": {
+    "_": "Couleur",
+    "title": "Liste des couleurs",
+    "edit": "Modifier la couleur",
+    "max": {
+      "_": "Nombre de couleurs",
+      "title": "Nombre de couleurs",
+      "required": "La valeur doit être un entier"
+    }
+  },
+
+  "physicalActivityLevels": {
+    "_": "Niveau d'activité physique",
+    "title": "Niveaux d'activité physique"
+  },
+
+  "top-foods": {
+    "_": "Aliments principaux",
+    "title": "Aliments principaux",
+    "tab": "Aliments principaux",
+    "max": {
+      "_": "Nombre d'aliments",
+      "title": "Nombre d'aliments"
+    },
+    "other": "Autre aliment"
+  },
+
+  "meals": {
+    "_": "Repas",
+    "title": "Repas",
+    "tab": "Repas",
+    "chart": "Diagramme de répartition des repas",
+    "table": "Tableau de résumé du repas",
+    "colors": {
+      "_": "Couleur du repas",
+      "title": "Couleurs du repas"
+    },
+    "fields": {
+      "_": "Champ du repas",
+      "title": "Champs du repas",
+      "create": "Ajouter un champ",
+      "edit": "Modifier un champ",
+      "remove": "Enlever un champ",
+      "reset": {
+        "_": "Réinitialiser les champs de repas",
+        "text": "Réinitialiser les champs de repas à la liste par défaut"
+      },
+      "id": "Identifiant du champ",
+      "header": "En-tête du champ",
+      "value": "Valeur du champ",
+      "types": {
+        "_": "Type de champ",
+        "title": "Types de champs",
+        "standard": "Champ standard",
+        "custom": "Modifier l'affichage",
+        "nutrient": "Nutriments",
+        "name": "Nom du repas",
+        "time": "Horaire du repas",
+        "hours": "Heures de repas",
+        "minutes": "Minutes de repas",
+        "duration": "Durée du repas"
+      },
+      "validation": {
+        "required": "Le champ doit être rempli.",
+        "unique": "Le champ existe déjà dans la liste actuelle."
+      }
+    }
+  },
+
+  "cards": {
+    "_": "Carte",
+    "title": "Cartes",
+    "tab": "Cartes",
+    "add": "Ajouter une carte",
+    "edit": "Modifier la carte",
+    "remove": "Enlever la carte",
+    "type": "Type de carte",
+    "options": "Options de carte",
+    "name": "Nom de la carte",
+    "required": "Le nom de la carte est requis.",
+    "description": "Description",
+    "showRecommendations": "Montrer les recommandations du bilan",
+
+    "tabs": {
+      "general": "Général",
+      "content": "Contenu",
+      "unit": "Unité",
+      "thresholds": "Seuils",
+      "nutrients": "Nutriments"
+    },
+
+    "character": {
+      "title": "Lettre",
+      "subtitle": "Lettre / Nutriment"
+    },
+    "nutrient-group": {
+      "title": "Groupe de nutriments",
+      "subtitle": "Retour sur l'apport groupé basé sur la liste de nutriments"
+    },
+    "five-a-day": {
+      "title": "Cinq par jour",
+      "subtitle": "Retour sur les 'cinq par jour'"
+    },
+
+    "thresholds": {
+      "_": "Seuil",
+      "title": "Seuils",
+      "low": "Limite basse du seuil",
+      "high": "Limite haute du seuil",
+      "enabled": "Autoriser  un seuil",
+      "message": "Message d'avertissement"
+    },
+
+    "unit": {
+      "name": "Nom de l'unité",
+      "description": "Description de l'unité",
+      "required": "Le nom de l'unité est requis."
+    }
+  },
+
+  "demographic-groups": {
+    "_": "Groupe démographique",
+    "title": "Groupes démographiques",
+    "tab": "Groupes démographiques",
+    "create": "Nouveau groupe démographique",
+    "edit": "Modifier le groupe démographique",
+    "remove": "Enlever le groupe démographique",
+
+    "tabs": {
+      "general": "Général",
+      "sectors": "Secteurs d'échelonnage"
+    },
+
+    "sectors": {
+      "_": "Secteurs d'échelonnage",
+      "title": "Secteurs d'échelonnage",
+      "add": "Ajouter un secteur d'échelonnage",
+      "remove": "Enlever le secteur d'échelonnage"
+    }
+  },
+
+  "henry-coefficients": {
+    "_": "Coefficient de Henry",
+    "title": "Coefficients de Henry",
+    "tab": "Coefficients de Henry",
+    "create": "Nouveau coefficient de Henry",
+    "edit": "Modifier le coefficient de Henry",
+    "remove": "Enlever le coefficient de Henry",
+
+    "constant": "Constante",
+    "weightCoefficient": "Coefficient de poids",
+    "heightCoefficient": "Coefficient de taille"
+  }
+}

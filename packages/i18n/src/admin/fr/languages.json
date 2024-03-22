@@ -1,0 +1,55 @@
+{
+  "_": "Langues",
+  "code": "Code de la langue",
+  "title": "Langues",
+  "all": "Toutes les langues",
+  "read": "Détails sur la langue",
+  "create": "Ajouter une langue",
+  "edit": "Modifier la langue",
+  "delete": "Supprimer la langue",
+
+  "englishName": "Nom anglais",
+  "localName": "Nom local",
+  "countryFlagCode": "Code du drapeau du pays",
+  "textDirections": {
+    "_": "Direction du texte",
+    "ltr": "Gauche à droite",
+    "rtl": "Droite à gauche"
+  },
+  "foodIndexLanguageBackend": "Langue d'arrière-plan pour l'index alimentaire",
+
+  "translations": {
+    "_": "Traduction",
+    "title": "Traductions",
+    "tab": "Traductions",
+    "create": "Initialiser les traductions",
+    "edit": "Modifier la section",
+    "delete": "Supprimer les traductions linguistiques",
+    "sync": "Synchroniser les traductions linguistiques",
+    "path": "Chemin clé",
+    "applications": {
+      "admin": "Admin",
+      "api": "API",
+      "survey": "Enquête",
+      "shared": "Partagé"
+    },
+    "sections": {
+      "breadcrumbs": "Miettes de pain",
+      "feedback": "Bilan alimentaire",
+      "flags": "Drapeaux",
+      "login": "Connexion",
+      "portion": "Quantification",
+      "profile": "Profil",
+      "prompts": "Invites",
+      "recall": "Rappel",
+      "standard-units": "Unités standards",
+      "survey": "Enquête",
+      "validation": "Validation"
+    },
+
+    "created": "La traduction linguistique ({name}) a été créée.",
+    "updated": "La traduction linguistique ({name}) a été mise à jour.",
+    "deleted": "La traduction linguistique ({name}) a été supprimée.",
+    "synced": "La traduction linguistique ({name}) a été synchronisée."
+  }
+}

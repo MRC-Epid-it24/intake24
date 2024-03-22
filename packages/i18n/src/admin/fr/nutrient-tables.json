@@ -1,0 +1,39 @@
+{
+  "_": "Tableau nutritionnel",
+  "title": "Tableaux nutritionnels",
+  "read": "Détails du tableau nutritionnel",
+  "create": "Ajouter un tableau nutritionnel",
+  "edit": "Modifier le tableau nutritionnel",
+  "delete": "Supprimer le tableau nutritionnel",
+  "id": "Identifiant du tableau nutritionnel",
+
+  "mapping": {
+    "source": {
+      "_": "Mapping du tableau source",
+      "idColumnOffset": "Colonne d'identifiant de l'enregistrement",
+      "descriptionColumnOffset": "Colonne de description",
+      "localDescriptionColumnOffset": "Colonne de description régionale (laisser vide si non concerné)",
+      "rowOffset": "Nombre de lignes à ignorer (par ex. en-tête ou lignes vides)"
+    },
+    "fields": {
+      "_": "Mappings des colonnes de champ",
+      "create": "Ajouter un champ",
+      "delete": "Enlever un champ",
+      "fieldName": "Nom du champ",
+      "columnOffset": "Colonne CSV"
+    },
+    "nutrients": {
+      "_": "Mappings de la colonne de nutriments",
+      "create": "Ajouter un nutriment",
+      "delete": "Enlever un nutriment",
+      "nutrient": "Nutriment",
+      "columnOffset": "Colonne CSV"
+    }
+  },
+
+  "tasks": {
+    "_": "Missions",
+    "title": "Missions sur les tables nutritionnelles",
+    "tab": "Missions"
+  }
+}

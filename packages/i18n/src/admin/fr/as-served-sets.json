@@ -1,0 +1,18 @@
+{
+  "_": "Série de photos de portions",
+  "title": "Photos de portions",
+  "read": "Détails sur les photos de portions",
+  "create": "Ajouter une série de photos de portions",
+  "edit": "Modifier la série de photos de portions",
+  "delete": "Supprimer la série de photos de portions",
+
+  "id": "Identifiant de la série de photos de portions",
+  "selectionImage": "Photo sélectionnée",
+  "images": {
+    "_": "Photo de portion",
+    "title": "Photos de portion",
+    "add": "Ajouter une photo de portion",
+    "delete": "Supprimer la photo de portion"
+  },
+  "weight": "Poids"
+}

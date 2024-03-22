@@ -1,0 +1,27 @@
+{
+  "_": "Autorisation",
+  "title": "Autorisations",
+  "all": "Toutes les autorisations",
+  "read": "Détails de l'autorisation",
+  "create": "Ajouter une autorisation",
+  "edit": "Modifier l'autorisation",
+  "delete": "Supprimer l'autorisation",
+
+  "groups": {
+    "global": "Global",
+    "resources": "Ressources",
+    "surveys": "Enquêtes",
+    "fdbs": "Bases de données alimentaires"
+  },
+
+  "roles": {
+    "_": "Rôle",
+    "title": "Rôles",
+    "tab": "Rôles"
+  },
+  "users": {
+    "_": "Utilisateur",
+    "title": "Utilisateurs",
+    "tab": "Utilisateurs"
+  }
+}

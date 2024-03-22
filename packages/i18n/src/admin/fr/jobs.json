@@ -1,0 +1,105 @@
+{
+  "_": "Tâche",
+  "title": "Tâches",
+  "read": "Détails de la tâche",
+  "delete": "Supprimer la tâche",
+  "downloadUrl": "Télechargement de l'URL",
+  "downloadUrlExpiresAt": "Le téléchargement de l'URL expire à",
+  "progress": "Progrès",
+  "successful": "Réussi",
+  "message": "Message",
+  "params": "Paramètres de la tâche",
+  "stackTrace": "Message d'erreur",
+
+  "repeat": {
+    "_": "Répéter la tâche",
+    "confirm": "Placer la tâche dans la file d'attente"
+  },
+
+  "types": {
+    "_": "Types de tâches",
+    "CleanRedisStore": {
+      "_": "Nettoyer le magasin Redis",
+      "stores": {
+        "_": "Magasin Redis",
+        "cache": "Cache",
+        "session": "Session"
+      }
+    },
+    "CleanStorageFiles": {
+      "_": "Nettoyer les fichiers de stockage"
+    },
+    "PurgeRefreshTokens": {
+      "_": "Supprimer les jetons de rafraîchissement expirés"
+    },
+    "LanguageTranslationsSync": {
+      "_": "Langue - Synchroniser les traductions"
+    },
+    "LocaleFoodNutrientMapping": {
+      "_": "Régional - Exporter le mapping des nutriments",
+      "localeId": "Identifiant régional"
+    },
+    "LocaleFoodRankingUpload": {
+      "_": "Régional - téléchargement du CSV de classement d'aliments",
+      "file": "fichier CSV"
+    },
+    "LocaleFoods": {
+      "_": "Régional - Exporter les aliments",
+      "localeId": "Identifiant régional"
+    },
+    "LocalePopularitySearchCopy": {
+      "_": "Régional - Copier les recherches populaires",
+      "localeId": "Identifiant régional",
+      "sourceLocaleId": "Identifiant régional source"
+    },
+    "NutrientTableMappingImport": {
+      "_": "Tableau des nutriments - Importer le mapping de la BDD nutritionnelle",
+      "file": "fichier CSV"
+    },
+    "NutrientTableDataImport": {
+      "_": "Tableau des nutriments - Importer les données de la BDD nutritionnelle",
+      "file": "fichier CSV"
+    },
+    "PopularitySearchUpdateCounters": {
+      "_": "Chercher - Mettre à jour les compteurs de popularité",
+      "foodCodes": "Codes des aliments"
+    },
+    "SurveyAuthUrlsExport": {
+      "_": "Enquête - Exporter les URL d'identification",
+      "surveyId": "Identifiant de l'enquête"
+    },
+    "SurveyDataExport": {
+      "_": "Enquête - Soumission de l'export de données",
+      "surveyId": "Identifiant de l'enquête"
+    },
+    "SurveyFeedbackNotification": {
+      "_": "Enquête - Envoyer le bilan du répondant"
+    },
+    "SurveyHelpRequestNotification": {
+      "_": "Enquête - Notification de demande d'assistance "
+    },
+    "SurveyNutrientsRecalculation": {
+      "_": "Enquête - Carculer à nouveau les nutriments",
+      "surveyId": "Identifiant de l'enquête"
+    },
+    "SurveyRespondentsImport": {
+      "_": "Enquête - Importer les répondants",
+      "file": "fichier CSV"
+    },
+    "SurveySubmission": {
+      "_": "Enquête - Traiter la soumission"
+    },
+    "SurveySchemesSync": {
+      "_": "Enquête - Synchroniser les schémas"
+    },
+    "SurveySubmissionNotification": {
+      "_": "Enquête - Notification de soumission"
+    },
+    "UserEmailVerificationNotification": {
+      "_": "Utilisateur - Notification de vérification de l'adresse mail"
+    },
+    "UserPasswordResetNotification": {
+      "_": "Utilisateur - Envoyer la réinitialisation du mot de passe"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "_": "Profil",
+  "title": "Profil",
+  "info": "Informations",
+  "access": "Accès",
+  "settings": "Paramètres",
+
+  "name": "Nom",
+  "email": "Adresse mail",
+  "phone": "Téléphone",
+  "permissions": "Autorisations attribuées",
+  "roles": "Rôles attribués",
+
+  "languages": {
+    "_": "Langue",
+    "title": "Langues"
+  },
+
+  "mfa": {
+    "_": "MFA",
+    "title": "Authentification à facteurs multiples",
+    "enable": "Permettre l'authentification multifacteurs",
+    "disable": "Desactiver l'authentification multifacteurs",
+    "disabled": "L'authentification multifacteurs est desactivée, veuillez ajouter un appareil pour l'activer.",
+    "devices": {
+      "_": "Appareil",
+      "title": "Appareils",
+      "add": "Ajouter un appareil",
+      "remove": "Enlever un appareil",
+      "none": "Aucun appareil enregistré pour l'authentification multifacteurs.",
+      "name": {
+        "_": "Nom de l'appareil",
+        "title": "Entrez le nom de l'appareil"
+      },
+      "preferred": {
+        "_": "Preféré",
+        "promote": "Faire passer au statut préféré ?",
+        "promoteConfirm": "Faire passer {name} au statut préféré ?"
+      },
+      "init": {
+        "_": "Initialiser",
+        "title": "Initialiser l'appareil"
+      },
+      "qr": {
+        "title": "Scanner le QR code et vérifier",
+        "text": "Scanner le QR code with avec votre application de génération de mots de passe et entrez le code ci-dessous."
+      },
+      "registered": "Appareil enregistré avec succès",
+      "verify": "Vérifier l'appareil"
+    },
+    "providers": {
+      "_": "Fournisseur",
+      "title": "Fournisseurs",
+      "otp": {
+        "_": "OTP",
+        "title": "Mot de passe à usage unique",
+        "description": "Mots de passe temporaires générés par des applications de génération de mots de passe. Applications gérées: Google Authenticator, Microsoft Authenticator, Authy, Duo Security etc."
+      },
+      "fido": {
+        "_": "FIDO",
+        "title": "FIDO / WebAuthn",
+        "description": "Appareils conformes à WebAuthn / FIDO2. Appareils gérés: hardware keys, Windows Hello, Face ID etc."
+      },
+      "duo": {
+        "_": "Duo",
+        "title": "Duo Security",
+        "description": "Duo Security est un fournisseur d'authentification multifacteurs associé au cloud. Assurez-vous que votre compte (mail) est inscrit à Duo Security avant d'ajouter cet appareil."
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "_": "Rôle",
+  "title": "Rôles",
+  "all": "Tous les rôles",
+  "read": "Détails du rôle",
+  "create": "Ajouter un rôle",
+  "edit": "Modifier le rôle",
+  "delete": "Supprimer le rôle",
+
+  "permissions": {
+    "_": "Autorisation",
+    "title": "Autorisations",
+    "tab": "Autorisations"
+  },
+  "users": {
+    "_": "Utilisateur",
+    "title": "Utilisateurs",
+    "tab": "Utilisateurs"
+  }
+}

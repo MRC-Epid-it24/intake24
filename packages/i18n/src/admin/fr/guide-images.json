@@ -1,0 +1,21 @@
+{
+  "_": "Photo",
+  "title": "Photos étalon",
+  "read": "Détails de la photo étalon",
+  "create": "Ajouter une photo étalon",
+  "edit": "Modifier la photo étalon",
+  "delete": "Supprimer la photo étalon",
+
+  "id": "Identifiant de la photo étalon",
+  "objects": {
+    "_": "Objet de la photo étalon",
+    "id": "Identifiant de l'objet",
+    "add": "Ajouter une photo étalon",
+    "delete": "Supprimer l'objet",
+    "label": {
+      "_": "Légende",
+      "hint": "Utiliser la variable '{weight}' pour inclure le poids de l'objet."
+    },
+    "weight": "Poids"
+  }
+}

@@ -1,77 +1,84 @@
 {
-  "_": "Retour d'information sur l'alimentation",
-  "info": "Informations sur le retour d'information diététique",
+  "_": "Bilan nutritionnel",
+  "info": "Informations sur le bilan nutritionnel",
   "status": {
-    "available": "Un retour d'information diététique est disponible",
-    "lowRecalls": "Le retour d'information diététique sera disponible une fois que vous aurez soumis au moins {minRecalls} recalls.",
-    "notAvailable": "Le retour d'information sur l'alimentation n'est pas disponible pour cette enquête."
+    "available": "Le bilan nutritionnel est disponible.",
+    "lowRecalls": "Le bilan nutritionnel sera disponible quand vous aurez soumis au moins {minRecalls} rappels.",
+    "notAvailable": "Le bilan nutritionnel n'est pas disponible pour cette enquête."
   },
-  "title": "Retour d'information sur l'alimentation à partir de {name} recalls",
-  "missingFoods": "Tout aliment signalé comme manquant ne sera pas pris en compte dans le retour d'information sur l'alimentation.",
+  "title": "Bilan nutritionnel des rappels de {name} ",
+  "missingFoods": "Tous les aliments signalés comme manquants ne seront pas inclus dans le bilan nutritionnel",
+
   "physicalData": {
-    "title": "À propos de vous",
-    "subtitle": "Afin que nous puissions présenter vos commentaires de manière appropriée, veuillez saisir les informations suivantes.",
+    "title": "A propos de vous",
+    "subtitle": "Afin que nous puissions vous communiquer les résultats de ce bilan, veuillez renseigner les informations suivantes.",
     "change": "Modifier mes informations",
     "recall": "Enregistrer un autre jour",
+
     "sexes": {
-      "_": "Le sexe",
-      "m": "Homme",
-      "f": "Femme"
+      "_": "Sexe",
+      "m": "Masculin",
+      "f": "Féminin"
     },
-    "sex": "Le sexe : {sex}",
-    "age": "L'âge : {age}",
+    "sex": "Sexe: {sex}",
+    "age": "Age: {age}",
     "birthdate": "Année de naissance",
-    "height": "Hauteur : {height} cm",
+    "height": "Taille: {height} cm",
     "heightCm": "Taille en centimètres",
-    "weight": "Poids : {weight} kg",
+    "weight": "Poids: {weight} kg",
     "weightKg": "Poids en kilogrammes",
-    "physicalActivityLevelId": "Niveau d'activité physique",
-    "weightTarget": "Cible : {target}",
+    "physicalActivityLevelId": "Niveau d'Activité Physique",
+    "weightTarget": "Cible: {target}",
     "weightTargets": {
-      "_": "Objectif de poids",
-      "title": "Objectifs de poids",
-      "keep_weight": "Maintenir le poids",
+      "_": "Poids cible",
+      "title": "Objectif pondéral",
+      "keep_weight": "Maintenir son poids",
       "lose_weight": "Perdre du poids",
       "gain_weight": "Prendre du poids"
     }
   },
+
   "outputs": {
-    "title": "Sorties",
+    "title": "Résultats",
     "download": {
       "_": "Télécharger",
-      "title": "Télécharger en PDF",
-      "subtitle": "Téléchargez une copie de vos commentaires alimentaires sous forme de fichier PDF. Cela prendra quelques secondes, soyez patients.",
-      "send": "Soumettre une demande",
-      "sent": "Le fichier PDF du feedback diététique a été sauvegardé."
+      "title": "Télécharger en tant que PDF",
+      "subtitle": "Téléchargez une copie de votre bilan nutritionnel sous format PDF. Cela peut prendre quelques secondes, veuillez patienter.",
+      "send": "Soumettre la demande",
+      "sent": "Les fichiers PDF de bilan nutritionnel ont été sauvegardés."
     },
     "email": {
-      "_": "Courriel",
-      "title": "Envoyer par courriel",
-      "send": "Soumettre une demande",
-      "sent": "Nous avons envoyé vos commentaires sur l'alimentation à l'adresse électronique fournie."
+      "_": "Adresse mail",
+      "title": "Envoyer sur une adresse mail",
+      "send": "Soumettre la demande",
+      "sent": "Nous avons envoyé votre bilan nutritionnel à l'adresse mail renseignée."
     },
-    "retry": "La sortie du retour d'information diététique a été récemment demandée, réessayez dans {secs} s.",
+    "retry": "Le bilan nutritionnel a déjà été demandé récemment, réessayez dans {secs} s.",
     "print": "Imprimer"
   },
+
   "topFoods": {
-    "title": "Aliments contribuant le plus à vos apports en nutriments",
-    "chart": "Le plus élevé en {nutrient}"
+    "title": "Aliments contribuant le plus à vos apports nutritionnels",
+    "chart": "Le plus riche en {nutrient}"
   },
+
   "meals": {
-    "title": "Répartition des repas par jour",
+    "title": "Détail des repas quotidiens",
     "chart": "{nutrient}"
   },
+
   "intake": {
-    "your": "Votre consommation {nutrient} est {amount}",
-    "estimated": "Estimation de la consommation",
-    "recommended": "Apports recommandés",
-    "tellMeMore": "En savoir plus",
-    "gotIt": "Je l'ai !"
+    "your": "Votre apport en {nutrient} est de {amount}",
+    "estimated": "Apport estimé",
+    "recommended": "Apport recommandé",
+    "tellMeMore": "Dites m'en plus",
+    "gotIt": "J'ai compris !"
   },
+
   "unitDescription": {
-    "percentage_of_energy": "Le retour d'information sur l'alimentation est basé sur la contribution de ce nutriment à votre apport énergétique et sur la comparaison avec les recommandations.",
-    "energy_divided_by_bmr": "Le retour d'information sur l'alimentation est basé sur l'apport énergétique divisé par le BMR et sur la comparaison avec les recommandations.",
-    "per_unit_of_weight": "Le retour d'information sur l'alimentation est basé sur l'apport de ce nutriment par kg de poids corporel et sur la comparaison avec les recommandations.",
-    "range": "Le retour d'information sur l'alimentation est basé sur votre consommation de ce nutriment et sur sa comparaison avec les recommandations."
+    "percentage_of_energy": "Le bilan nutritionnel est calculé à partir de la contribution de ce nutriment à votre apport énergétique et de la comparaison avec les recommandations nutritionnelles.",
+    "energy_divided_by_bmr": "Le bilan nutritionnel est calculé à partir de votre apport énergétique divisé par votre besoin métabolique de repos et de la comparaison avec les recommandations nutritionnelles.",
+    "per_unit_of_weight": "Le bilan nutritionnel est calculé à partir de votre apport en ce nutriment par kg de poids corporel et de la comparaison avec les recommandations nutritionnelles.",
+    "range": "Le bilan nutritionnel est calculé à partir de votre apport en ce nutriment et de la comparaison avec les recommandations nutritionnelles."
   }
 }

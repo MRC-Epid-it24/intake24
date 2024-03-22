@@ -1,0 +1,21 @@
+{
+  "_": "Affichage de la configuration",
+  "id": "Identifiant de la configuration",
+  "title": "Invites de la configuration",
+  "read": "Détails de l'invite de la configuration",
+  "create": "Ajouter une invite dans la configuration",
+  "edit": "Modifier l'invite de la configuration",
+  "delete": "Supprimer l'invite de la configuration",
+
+  "editTemplate": "Modifier l'invite de la configuration",
+  "sync": {
+    "_": "Synchronisation",
+    "tab": "Synchronisation",
+    "synchronize": "Synchroniser",
+    "confirm": "Synchroniser le modèle avec la configuration",
+    "title": "Liste de configurations contenant une invite avec l'identifiant : {id}",
+    "true": "L'invite est synchronisée",
+    "false": "L'invite n'est pas synchronisée",
+    "noSchemes": "Aucune configuration ne contient encore ce modèle."
+  }
+}

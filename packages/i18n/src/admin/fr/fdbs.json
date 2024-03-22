@@ -1,0 +1,169 @@
+{
+  "_": "Base de données d'aliments",
+  "id": "Identifiant de la base de données d'aliments",
+  "title": "Bases de données d'aliments",
+  "read": "Détails sur la base de données",
+  "create": "Ajouter une base de données",
+  "edit": "Modifier la base de données",
+  "delete": "Supprimer la base de données",
+
+  "showGlobalName": "Afficher le nom global",
+
+  "search": {
+    "_": "Chercher",
+    "title": "Chercher des catégories et des aliments"
+  },
+
+  "categories": {
+    "_": "Catégorie",
+    "title": "Catégories",
+    "add": "Ajouter une catégorie",
+    "remove": "Enlever une catégorie",
+    "noCategory": "Non catégorisé",
+    "alreadyIncluded": "La catégorie '{code}' est déjà présente dans la liste actuelle.",
+    "none": "Pas de catégorie trouvée pour cette recherche.",
+    "global": {
+      "_": "Paramètre des catégories globales",
+      "code": "Code de la catégorie",
+      "name": "Nom anglais",
+      "isHidden": "Est caché"
+    },
+    "local": {
+      "_": "Paramètres des catégories régionales",
+      "id": "Code de la catégorie régionale",
+      "name": "Nom régional"
+    },
+    "attributes": {
+      "_": "Attributs de la catégorie"
+    },
+    "parentCategories": {
+      "_": "Catégories parent"
+    }
+  },
+
+  "foods": {
+    "_": "Aliment",
+    "title": "Aliments",
+    "global": {
+      "_": "Paramètres pour les aliments globaux",
+      "code": "Code de l'aliment",
+      "name": "Nom anglais",
+      "foodGroup": "Groupe alimentaire"
+    },
+    "local": {
+      "_": "Paramètres pour les aliments régionaux",
+      "id": "Identifiant régional de l'aliment",
+      "name": "Nom régional"
+    },
+    "attributes": {
+      "_": "Attributs des aliments"
+    },
+    "parentCategories": {
+      "_": "Catégories parent"
+    }
+  },
+
+  "attributes": {
+    "_": "Attributs",
+    "title": "Attributs",
+    "inherit": "Affecter",
+    "override": "Ignorer",
+    "sameAsBeforeOption": "Option comme précédemment",
+    "readyMealOption": "Etait-ce un repas tout fait ou un plat préparé ?",
+    "reasonableAmount": "Quantité raisonnable (g/ml)",
+    "useInRecipes": {
+      "_": "Utiliser pour les recettes",
+      "0": "Utiliser partout",
+      "1": "Utiliser seulement comme aliment",
+      "2": "Utiliser seulement comme ingrédient d'une recette"
+    }
+  },
+
+  "nutrients": {
+    "_": "Enregistrement de la table nutritionnelle",
+    "title": "Enregistrements de la table nutritionnelle",
+    "add": "Ajouter une table nutritionnelle",
+    "remove": "Enlever la table nutritionnelle",
+    "alreadyIncluded": "L'enregistrement de la table nutritionnelle '{id}' est déjà inclus dans la liste actuelle.",
+    "none": "Aucun enregistrement de table nutritionnelle n'a été trouvé pour cette recherche."
+  },
+
+  "associatedFoods": {
+    "_": "Aliment associé",
+    "title": "Aliments associés",
+    "add": "Ajouter un aliment associé",
+    "edit": "Modifier un aliment associé",
+    "remove": "Enlever un aliment associé",
+
+    "association": "Association",
+    "genericName": "Nom générique",
+    "text": "Texte",
+    "linkAsMain": "Lier à l'aliment principal",
+    "multiple": "Autoriser plusieurs aliments"
+  },
+
+  "portionSizes": {
+    "_": "Méthode de quantification",
+    "title": "Méthodes de quantification",
+    "add": "Ajouter une méthode de quantification",
+    "edit": "Modifier la méthode de quantification",
+    "remove": "Enlever la méthode de quantification",
+
+    "parameters": "Paramètres",
+    "noParameters": "La méthode ne présente pas plus de paramètres.",
+    "description": "Description",
+    "imageUrl": "URL de l'image",
+    "useForRecipes": "Utiliser pour les recettes",
+    "conversionFactor": "Facteur de conversion",
+
+    "methods": {
+      "_": "Méthode de quantification",
+      "as-served": {
+        "_": "Photos de portions",
+        "servingImageSet": "Série de photos de portions",
+        "leftoverImageSet": "Série de photos de restes",
+        "removeLeftoverImageSet": "Enlever la série de photos de restes"
+      },
+      "cereal": {
+        "_": "Céréales"
+      },
+      "direct-weight": {
+        "_": "Poids"
+      },
+      "drink-scale": {
+        "_": "Quantification dans le verre",
+        "drinkwareSet": "Série de verres",
+        "initialLevel": "Initialiser la hauteur de remplissage",
+        "skipFillLevelPrompt": "Passer l'affichage du niveau de remplissage",
+        "imageMapLabels": "Libellés de la photo à curseur",
+        "multiple": "Permettre la spécification de plusieurs éléments"
+      },
+      "guide-image": {
+        "_": "Photo étalon",
+        "imageMapLabels": "Libellés de la photo étalon"
+      },
+      "milk-in-a-hot-drink": {
+        "_": "Lait dans une boisson chaude"
+      },
+      "milk-on-cereal": {
+        "_": "Lait sur des céréales",
+        "imageMapLabels": "Libellés de la photo à curseur",
+        "options": "Options de portion"
+      },
+      "parent-food-portion": {
+        "_": "Portion d'aliment parent",
+        "options": "Options de portion"
+      },
+      "pizza": {
+        "_": "Pizza",
+        "imageMapLabels": "Libellés de l'image à curseur"
+      },
+      "standard-portion": {
+        "_": "Portion standard",
+        "unit": "Unité",
+        "weight": "Poids (g)",
+        "omitFoodDescription": "Passer la description de l'aliment"
+      }
+    }
+  }
+}

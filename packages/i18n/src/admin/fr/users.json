@@ -1,0 +1,52 @@
+{
+  "_": "Utilisateur",
+  "title": "Utilisateurs",
+  "all": "Tous les utilisateurs",
+  "read": "Détails sur l'utilisateur",
+  "create": "Ajouter un utilisateur",
+  "edit": "Modifier l'utilisateur",
+  "delete": "Supprimer l'utilisateur",
+
+  "id": "Identifiant de l'utilisateur",
+  "name": "Nom",
+  "simpleName": "Nom simple",
+  "username": "Nom d'utilisateur",
+  "verified": "Verifié",
+  "disabled": "Desactivé",
+  "aliases": {
+    "_": "Alias de l'utilisateur",
+    "title": "Alias de l'utilisateur",
+    "surveyId": "Identifiant de l'enquête",
+    "username": "Nom d'utilisateur",
+    "urlAuthToken": "Jeton d'identification URL",
+    "none": "Pas d'alias de l'enquête défini"
+  },
+  "customFields": {
+    "_": "Champ modifiable",
+    "title": "Champs modifiables",
+    "name": "Champ du nom",
+    "value": "Champ de la valeur",
+    "none": "Pas de champ modifiable défini"
+  },
+  "permissions": {
+    "_": "Autorisation",
+    "title": "Autorisations",
+    "tab": "Autorisations",
+    "hint": "De préférence, choisissez l'autorisation via le rôle plutôt que l'autorisation directe."
+  },
+  "roles": {
+    "_": "Rôle",
+    "title": "Rôles",
+    "tab": "Rôles"
+  },
+
+  "mfa": {
+    "_": "Authentification multi-facteurs",
+    "abbr": "2FA"
+  },
+
+  "notifications": {
+    "email": "Notifications mail",
+    "sms": "Notifications SMS"
+  }
+}

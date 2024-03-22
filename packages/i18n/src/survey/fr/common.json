@@ -2,78 +2,84 @@
   "_": "Intake24",
   "home": "Accueil",
   "dashboard": "Tableau de bord",
-  "navigation": "Navigation",
   "welcome": {
-    "_": "Bienvenue à Intake24",
-    "subtitle": "Intake24 est un système informatisé de rappel alimentaire à code source ouvert, basé sur un rappel de 24 heures à passages multiples."
+    "_": "Bienvenue dans Intake24",
+    "subtitle": "Intake24 est un logiciel libre d'accès d'enregistrement de rappels alimentaires en ligne.  Il permet la passation de plusieurs rappels autoadministrés de 24 h."
   },
   "login": {
-    "_": "S'inscrire",
-    "start": "Let's get started",
-    "subtitle": "Connectez-vous avec votre nom d'utilisateur et votre mot de passe",
-    "captcha": "Complete the captcha challenge",
-    "back": "Retour au login",
+    "_": "Se connecter",
+    "subtitle": "Se connecter avec votre nom d'utilisateur et votre mot de passe",
+    "back": "Retour à la connexion",
+
     "err": {
-      "captcha": "Invalid captcha challenge response.",
-      "credentials": "Les informations d'identification fournies pour le nom d'utilisateur et le mot de passe ne sont pas valides.",
-      "token": "Le jeton d'accès fourni n'est pas valide.",
-      "survey": "Cette enquête ({surveyId}) ne semble pas être une URL de connexion valide."
+      "invalidCredentials": "Le nom d'utilisateur et le mot de passe renseignés sont invalides.",
+      "invalidToken": "Le jeton d'accès fourni est invalide",
+      "invalidSurvey": "Cette enquête ({surveyId}) ne semble pas correspondre à une URL de connexion valide.",
+      "checkCredentials": "Vérifiez les codes d'accès qui vous ont été fournis."
     }
   },
   "logout": {
-    "_": "S'inscrire",
+    "_": "Se déconnecter",
     "text": "Se déconnecter de l'application"
   },
+
   "username": "Nom d'utilisateur",
   "name": "Nom",
-  "email": "Courriel",
-  "emailConfirm": "Confirmer l'email",
+  "email": "Adresse mail",
+  "emailConfirm": "Confirmez l'adresse mail",
   "password": "Mot de passe",
   "phone": "Téléphone",
   "message": "Message",
   "continue": "Continuer",
+
   "help": {
     "_": "Aide",
-    "title": "Demande d'aide",
-    "text": "Veuillez remplir le formulaire ci-dessous et l'un de nos collaborateurs vous contactera dès que possible.",
+    "title": "Demander de l'aide",
+    "text": "Veuillez compléter le formulaire ci-dessous et une de nos équipes d'appui vous contactera dès que possible.",
     "sent": "Votre demande d'aide a été envoyée."
   },
+
   "app": {
     "_": "Application",
-    "info": "Informations sur la demande",
+    "info": "Informations de l'application",
     "build": "Construire"
   },
+
   "clipboard": {
     "_": "Copier dans le presse-papiers",
     "copied": "Données copiées dans le presse-papiers"
   },
+
   "sw": {
-    "check": "La mise à jour du contenu est disponible",
-    "update": "Mise à jour"
+    "check": "Une mise à jour du contenu est disponible.",
+    "update": "Mettre à jour"
   },
+
   "action": {
     "cancel": "Annuler",
     "close": "Fermer",
     "continue": "Continuer",
     "confirm": {
       "_": "Confirmer",
-      "title": "Voulez-vous continuer ?",
-      "delete": "Voulez-vous supprimer {name}?"
+      "title": "Souhaitez-vous continuer ?",
+      "delete": "Souhaitez-vous supprimer {name} ?"
     },
     "ok": "OK",
-    "reload": "Recharge",
-    "remove": "Retirer",
-    "reset": "Remise à zéro",
-    "start": "Démarrage",
+    "reload": "Recharger",
+    "remove": "Supprimer",
+    "reset": "Réinitialiser",
+    "start": "Commencer",
     "submit": "Soumettre",
     "yes": "Oui",
     "no": "Non"
   },
+
   "not": {
-    "provided": "Non communiqué",
+    "provided": "Non renseigné",
     "selected": "Non sélectionné"
   },
+
   "errors": {
-    "expansionIncomplete": "Remplir toutes les sections marquées d'un astérisque !"
+    "expansionIncomplete": "Veuillez compléter toutes les sections avec un point d'exclamation."
   }
 }
