@@ -4,16 +4,16 @@ import { categoryLocaleOptionList, localeOptionList } from './common';
 
 export const portionSizeMethods = [
   'as-served',
-  'guide-image',
-  'drink-scale',
-  'standard-portion',
   'cereal',
+  'direct-weight',
+  'drink-scale',
+  'guide-image',
+  'milk-in-a-hot-drink',
   'milk-on-cereal',
   'parent-food-portion',
   'pizza',
-  'milk-in-a-hot-drink',
-  'direct-weight',
   'recipe-builder',
+  'standard-portion',
 ] as const;
 
 export type PortionSizeMethodId = (typeof portionSizeMethods)[number];
@@ -141,14 +141,13 @@ export interface GuideImagePsm extends PortionSizeMethodBase {
   parameters: PortionSizeParameters['guide-image'];
 }
 
-export interface MilkOnCerealPsm extends PortionSizeMethodBase {
-  method: 'milk-on-cereal';
-  parameters: PortionSizeParameters['milk-on-cereal'];
-}
-
 export interface MilkInHotDrinkPsm extends PortionSizeMethodBase {
   method: 'milk-in-a-hot-drink';
   parameters: PortionSizeParameters['milk-in-a-hot-drink'];
+}
+export interface MilkOnCerealPsm extends PortionSizeMethodBase {
+  method: 'milk-on-cereal';
+  parameters: PortionSizeParameters['milk-on-cereal'];
 }
 
 export interface ParentFoodPsm extends PortionSizeMethodBase {
@@ -159,6 +158,11 @@ export interface ParentFoodPsm extends PortionSizeMethodBase {
 export interface PizzaPsm extends PortionSizeMethodBase {
   method: 'pizza';
   parameters: PortionSizeParameters['pizza'];
+}
+
+export interface RecipeBuilderPsm extends PortionSizeMethodBase {
+  method: 'recipe-builder';
+  parameters: PortionSizeParameters['recipe-builder'];
 }
 
 export interface StandardPortionPsm extends PortionSizeMethodBase {
@@ -176,4 +180,5 @@ export type PortionSizeMethod =
   | MilkOnCerealPsm
   | ParentFoodPsm
   | PizzaPsm
+  | RecipeBuilderPsm
   | StandardPortionPsm;
