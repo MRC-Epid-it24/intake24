@@ -8,104 +8,26 @@ import type {
   CreateLocalFoodRequestOptions,
 } from '@intake24/common/types/http/admin';
 import type { PortionSizeMethod } from '@intake24/common/types/portion-size';
-import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
+import { ConflictError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 import {
-  AsServedSet,
-  DrinkwareSet,
   FoodLocal,
   FoodLocalList,
   FoodNutrient,
   FoodPortionSizeMethod,
-  GuideImage,
-  ImageMap,
   NutrientTableRecord,
-  ProcessedImage,
 } from '@intake24/db';
 
-const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
-  // TODO: This should be done when getting portion size methods data instead and the image_url
-  // field in food_portion_size_methods should be dropped
-  async function getPortionSizeImageUrl(
-    psm: PortionSizeMethod,
-    transaction: Transaction
-  ): Promise<string> {
-    switch (psm.method) {
-      case 'as-served': {
-        const set = await AsServedSet.findByPk(psm.parameters.servingImageSet, {
-          include: [ProcessedImage],
-          transaction,
-        });
-
-        if (set === null)
-          throw new NotFoundError(`As served set ${psm.parameters.servingImageSet} not found`);
-
-        if (set.selectionImage === undefined)
-          throw new NotFoundError(
-            `Selection screen image for as served set ${psm.parameters.servingImageSet} is undefined`
-          );
-
-        return set.selectionImage.path;
-      }
-
-      case 'guide-image': {
-        const guideImage = await GuideImage.findByPk(psm.parameters.guideImageId, {
-          include: [ProcessedImage],
-          transaction,
-        });
-
-        if (guideImage === null)
-          throw new NotFoundError(`Guide image ${psm.parameters.guideImageId} not found`);
-
-        if (guideImage.selectionImage === undefined)
-          throw new NotFoundError(
-            `Selection screen image for guide image ${psm.parameters.guideImageId} is undefined`
-          );
-
-        return guideImage.selectionImage.path;
-      }
-
-      case 'drink-scale': {
-        const set = await DrinkwareSet.findByPk(psm.parameters.drinkwareId, {
-          include: [{ model: ImageMap, include: [ProcessedImage] }],
-          transaction,
-        });
-
-        if (set === null)
-          throw new NotFoundError(`Drinkware set ${psm.parameters.drinkwareId} not found`);
-
-        if (set.imageMap === undefined || set.imageMap.baseImage === undefined)
-          throw new NotFoundError(
-            `Drink scale image map for drinkware set ${psm.parameters.drinkwareId} is undefined`
-          );
-
-        return set.imageMap.baseImage.path;
-      }
-
-      case 'standard-portion':
-      case 'milk-in-a-hot-drink':
-        return 'portion/standard-portion.jpg';
-
-      case 'pizza':
-        return 'portion/pizza.jpg';
-
-      case 'cereal':
-      case 'milk-on-cereal':
-        return 'portion/cereal.jpg';
-
-      default:
-        throw new Error(
-          `Unexpected portion size method type: ${(psm as PortionSizeMethod).method}`
-        );
-    }
-  }
-
+const localFoodsService = ({
+  db,
+  portionSizeMethodsService,
+}: Pick<IoC, 'db' | 'portionSizeMethodsService'>) => {
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
     psm: PortionSizeMethod,
     transaction: Transaction
   ): Promise<CreationAttributes<FoodPortionSizeMethod>> {
-    const imageUrl = await getPortionSizeImageUrl(psm, transaction);
+    const imageUrl = await portionSizeMethodsService.getPortionSizeImageUrl(psm, transaction);
 
     return {
       foodLocalId,
