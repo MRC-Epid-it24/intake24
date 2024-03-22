@@ -86,7 +86,6 @@ async function createCategoryPortionSizeMethods(
       categoryLocalId,
       method: portionSizeMethods[i].method,
       description: portionSizeMethods[i].description,
-      imageUrl: portionSizeMethods[i].imageUrl,
       useForRecipes: portionSizeMethods[i].useForRecipes,
       conversionFactor: portionSizeMethods[i].conversionFactor,
       parameters: portionSizeMethods[i].parameters,

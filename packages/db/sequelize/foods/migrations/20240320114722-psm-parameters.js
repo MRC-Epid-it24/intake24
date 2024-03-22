@@ -95,8 +95,7 @@ module.exports = {
       await queryInterface.dropTable('food_portion_size_method_params', { transaction });
     }),
 
-  down: (queryInterface) =>
-    queryInterface.sequelize.transaction(async () => {
-      throw new Error('Down migration not implemented');
-    }),
+  down: () => {
+    throw new Error('This migration cannot be undone');
+  },
 };

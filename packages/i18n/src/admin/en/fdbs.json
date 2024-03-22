@@ -129,7 +129,6 @@
     "parameters": "parameters",
     "noParameters": "Method does not have any further parameters.",
     "description": "Description",
-    "imageUrl": "Image URL",
     "useForRecipes": "Use for recipes",
     "conversionFactor": "Conversion factor",
 

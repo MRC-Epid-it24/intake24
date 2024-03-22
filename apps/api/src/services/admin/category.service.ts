@@ -371,7 +371,6 @@ const adminCategoryService = ({ cache, db }: Pick<IoC, 'cache' | 'db'>) => {
                 ...pick(psm, [
                   'method',
                   'description',
-                  'imageUrl',
                   'useForRecipes',
                   'conversionFactor',
                   'orderBy',

@@ -131,13 +131,6 @@ export const portionSizeMethods: Schema = {
     isEmpty: { negated: true },
     isLength: { bail: true, options: { max: 256 } },
   },
-  'portionSizeMethods.*.imageUrl': {
-    in: ['body'],
-    errorMessage: typeErrorMessage('string.max', { max: 512, attributePath: 'imageUrl' }),
-    isString: true,
-    isEmpty: { negated: true },
-    isLength: { bail: true, options: { max: 512 } },
-  },
   'portionSizeMethods.*.useForRecipes': {
     in: ['body'],
     errorMessage: typeErrorMessage('boolean._', { attributePath: 'useForRecipes' }),

@@ -18,22 +18,15 @@ import {
   NutrientTableRecord,
 } from '@intake24/db';
 
-const localFoodsService = ({
-  db,
-  portionSizeMethodsService,
-}: Pick<IoC, 'db' | 'portionSizeMethodsService'>) => {
+const localFoodsService = ({ db }: Pick<IoC, 'db'>) => {
   async function toPortionSizeMethodAttrs(
     foodLocalId: string,
-    psm: PortionSizeMethod,
-    transaction: Transaction
+    psm: PortionSizeMethod
   ): Promise<CreationAttributes<FoodPortionSizeMethod>> {
-    const imageUrl = await portionSizeMethodsService.getPortionSizeImageUrl(psm, transaction);
-
     return {
       foodLocalId,
       method: psm.method,
       description: psm.description,
-      imageUrl,
       useForRecipes: psm.useForRecipes,
       conversionFactor: psm.conversionFactor,
       orderBy: '1',
@@ -47,7 +40,7 @@ const localFoodsService = ({
     transaction: Transaction
   ) {
     const creationAttributes = await Promise.all(
-      methods.map((psm) => toPortionSizeMethodAttrs(foodLocalId, psm, transaction))
+      methods.map((psm) => toPortionSizeMethodAttrs(foodLocalId, psm))
     );
 
     await FoodPortionSizeMethod.destroy({ where: { foodLocalId }, transaction });

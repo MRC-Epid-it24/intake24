@@ -1,4 +1,3 @@
-import type { PortionSizeMethod } from '@intake24/common/types';
 import type { FoodPortionSizeMethodCreationAttributes } from '@intake24/db';
 import { useI18n } from '@intake24/i18n';
 
@@ -21,7 +20,6 @@ export type PortionSizeMethodDialog = {
 
 export const psmDefaultAttributes: Omit<PortionSizeMethodItem, 'id' | 'method'> = {
   description: '',
-  imageUrl: '',
   useForRecipes: false,
   conversionFactor: 1,
   orderBy: '0',
@@ -79,26 +77,23 @@ export const portionSizeSelectionImages = {
 
 export type PortionSizeSelectionImage = keyof typeof portionSizeSelectionImages;
 
-export const psmDefaults: PortionSizeMethod[] = [
+export const psmDefaults: PortionSizeMethodItem[] = [
   {
     method: 'as-served',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    imageUrl: portionSizeSelectionImages.use_an_image,
     parameters: { servingImageSet: '' },
   },
   {
     method: 'cereal',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    imageUrl: portionSizeSelectionImages.use_an_image,
     parameters: { type: 'hoop', imageMapLabels: false },
   },
   {
     method: 'drink-scale',
     ...psmDefaultAttributes,
     description: 'in_a_mug',
-    imageUrl: portionSizeSelectionImages.in_a_mug,
     parameters: {
       drinkwareId: '',
       initialFillLevel: 0.9,
@@ -111,49 +106,42 @@ export const psmDefaults: PortionSizeMethod[] = [
     method: 'guide-image',
     ...psmDefaultAttributes,
     description: 'in_a_can',
-    imageUrl: portionSizeSelectionImages.in_a_can,
     parameters: { guideImageId: '', imageMapLabels: false },
   },
   {
     method: 'milk-in-a-hot-drink',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
-    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
     parameters: { options: { en: [] } },
   },
   {
     method: 'milk-on-cereal',
     ...psmDefaultAttributes,
     description: 'in_a_bowl',
-    imageUrl: portionSizeSelectionImages.in_a_bowl,
     parameters: { imageMapLabels: false },
   },
   {
     method: 'standard-portion',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
-    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
     parameters: { units: [] },
   },
   {
     method: 'parent-food-portion',
     ...psmDefaultAttributes,
     description: 'use_a_standard_portion',
-    imageUrl: portionSizeSelectionImages.use_a_standard_portion,
     parameters: { options: { _default: { en: [] } } },
   },
   {
     method: 'pizza',
     ...psmDefaultAttributes,
     description: 'use_an_image',
-    imageUrl: portionSizeSelectionImages.use_an_image,
     parameters: { imageMapLabels: false },
   },
   {
     method: 'direct-weight',
     ...psmDefaultAttributes,
     description: 'weight',
-    imageUrl: portionSizeSelectionImages.weight,
     parameters: {},
   },
 ];
@@ -176,8 +164,5 @@ export const usePortionSizeMethods = () => {
     text: string;
   }[];
 
-  const getImageUrl = (selection: PortionSizeSelectionImage) =>
-    portionSizeSelectionImages[selection];
-
-  return { estimationMethods, getImageUrl, selections };
+  return { estimationMethods, selections };
 };

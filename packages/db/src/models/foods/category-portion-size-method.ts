@@ -52,12 +52,6 @@ export default class CategoryPortionSizeMethod extends BaseModel<
 
   @Column({
     allowNull: false,
-    type: DataType.STRING(512),
-  })
-  declare imageUrl: string;
-
-  @Column({
-    allowNull: false,
     type: DataType.BOOLEAN,
   })
   declare useForRecipes: boolean;

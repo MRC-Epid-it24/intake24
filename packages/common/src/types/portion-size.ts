@@ -111,7 +111,6 @@ export type PortionSizeParameters = z.infer<typeof portionSizeParameters>;
 
 export interface PortionSizeMethodBase {
   description: string;
-  imageUrl?: string;
   useForRecipes: boolean;
   conversionFactor: number;
 }

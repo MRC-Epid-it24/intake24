@@ -49,20 +49,8 @@
                     :label="$t('fdbs.portionSizes.description')"
                     name="description"
                     outlined
-                    @change="updateImageUrl"
                   >
                   </v-select>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="dialog.item.imageUrl"
-                    clearable
-                    hide-details="auto"
-                    :label="$t('fdbs.portionSizes.imageUrl')"
-                    name="imageUrl"
-                    outlined
-                  >
-                  </v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-switch
@@ -119,13 +107,9 @@ import { defineComponent, ref } from 'vue';
 
 import { copy, merge, randomString } from '@intake24/common/util';
 
-import type {
-  InternalPortionSizeMethodItem,
-  PortionSizeMethodDialog,
-  PortionSizeSelectionImage,
-} from './portion-sizes';
+import type { InternalPortionSizeMethodItem, PortionSizeMethodDialog } from './portion-sizes';
 import portionSizeParams from './parameters';
-import { portionSizeSelectionImages, psmDefaults, usePortionSizeMethods } from './portion-sizes';
+import { psmDefaults, usePortionSizeMethods } from './portion-sizes';
 
 export default defineComponent({
   name: 'PortionSizeMethodSelector',
@@ -135,7 +119,7 @@ export default defineComponent({
   emits: ['save'],
 
   setup() {
-    const { estimationMethods, selections, getImageUrl } = usePortionSizeMethods();
+    const { estimationMethods, selections } = usePortionSizeMethods();
 
     const newDialog = (show = false): PortionSizeMethodDialog => ({
       show,
@@ -146,10 +130,6 @@ export default defineComponent({
     const dialog = ref(newDialog());
     const form = ref<InstanceType<typeof HTMLFormElement>>();
 
-    const updateImageUrl = (selection: PortionSizeSelectionImage) => {
-      dialog.value.item.imageUrl = getImageUrl(selection);
-    };
-
     return {
       dialog,
       newDialog,
@@ -157,8 +137,6 @@ export default defineComponent({
       selections,
       estimationMethods,
       psmDefaults,
-      portionSizeSelectionImages,
-      updateImageUrl,
     };
   },
 

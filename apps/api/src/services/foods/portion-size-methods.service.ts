@@ -1,6 +1,6 @@
 import type { PortionSizeMethod } from '@intake24/common/types';
 import type { UserPortionSizeMethod } from '@intake24/common/types/http/foods/user-food-data';
-import type { FoodPortionSizeMethod, Transaction } from '@intake24/db';
+import type { FoodPortionSizeMethod } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
 import {
   getCategoryParentCategories,
@@ -28,7 +28,6 @@ const portionSizeMethodsService = () => {
       attributes: [
         'method',
         'description',
-        'imageUrl',
         'useForRecipes',
         'conversionFactor',
         'orderBy',
@@ -72,7 +71,6 @@ const portionSizeMethodsService = () => {
           attributes: [
             'method',
             'description',
-            'imageUrl',
             'useForRecipes',
             'conversionFactor',
             'orderBy',
@@ -106,18 +104,12 @@ const portionSizeMethodsService = () => {
     return prototypeLocale ? resolvePortionSizeMethods(prototypeLocale.id, foodCode) : [];
   };
 
-  // TODO: This should be done when getting portion size methods data instead and the image_url
-  // field in food_portion_size_methods should be dropped
-  async function getPortionSizeImageUrl(
-    psm: PortionSizeMethod,
-    transaction?: Transaction
-  ): Promise<string> {
+  async function getPortionSizeImageUrl(psm: PortionSizeMethod): Promise<string> {
     switch (psm.method) {
       case 'as-served': {
         const set = await AsServedSet.findByPk(psm.parameters.servingImageSet, {
           attributes: ['id'],
           include: [{ association: 'selectionImage', attributes: ['path'] }],
-          transaction,
         });
 
         if (!set)
@@ -135,7 +127,6 @@ const portionSizeMethodsService = () => {
         const guideImage = await GuideImage.findByPk(psm.parameters.guideImageId, {
           attributes: ['id'],
           include: [{ association: 'selectionImage', attributes: ['path'] }],
-          transaction,
         });
 
         if (!guideImage)
@@ -159,7 +150,6 @@ const portionSizeMethodsService = () => {
               include: [{ association: 'baseImage', attributes: ['path'] }],
             },
           ],
-          transaction,
         });
 
         if (!set) throw new NotFoundError(`Drinkware set ${psm.parameters.drinkwareId} not found`);
@@ -200,15 +190,10 @@ const portionSizeMethodsService = () => {
     const psms = await resolvePortionSizeMethods(localeId, foodCode);
 
     return Promise.all(
-      psms.map(async (psm) => {
-        try {
-          psm.imageUrl = await getPortionSizeImageUrl(psm as PortionSizeMethod);
-        } catch {
-          //
-        }
-
-        return psm;
-      })
+      psms.map(async (psm) => ({
+        ...psm.get(),
+        imageUrl: await getPortionSizeImageUrl(psm as PortionSizeMethod),
+      }))
     );
   };
 
