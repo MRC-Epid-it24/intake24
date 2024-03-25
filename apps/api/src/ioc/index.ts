@@ -4,29 +4,22 @@ import type { Config } from '@intake24/api/config';
 import type { FoodIndex } from '@intake24/api/food-index';
 import type {
   // Admin
-  AdminAuthenticationController,
   AdminCategoryController,
   AdminFoodController,
   AdminFoodDatabaseController,
   AdminFoodGroupController,
   AdminGlobalFoodsController,
   AdminLocalFoodsController,
-  AdminSignupController,
   AdminSurveyController,
   AdminSurveyRespondentController,
   AdminSurveySubmissionController,
   AdminUserController,
-  AdminUserJobController,
-  AdminUserProfileController,
   AsServedImageController,
   AsServedSetController,
   DrinkwareSetController,
-  DuoDeviceController,
   FeedbackSchemeController,
-  FIDODeviceController,
   GuideImageController,
   ImageMapController,
-  JobController,
   LanguageController,
   LanguageTranslationController,
   LocaleController,
@@ -34,20 +27,11 @@ import type {
   LocaleSplitListController,
   LocaleSplitWordController,
   LocaleSynonymSetController,
-  MFADeviceController,
-  NutrientTableController,
-  NutrientTypeController,
-  NutrientUnitController,
-  OTPDeviceController,
   PermissionController,
-  PersonalAccessTokenController,
   ReferenceController,
   RoleController,
-  SignInLogController,
-  StandardUnitController,
   SurveySchemeController,
   SurveySchemePromptController,
-  TaskController,
 } from '@intake24/api/http/controllers';
 import type { DrinkScaleController } from '@intake24/api/http/controllers/admin/images/drink-scale.controller';
 import type { Jobs } from '@intake24/api/jobs';
@@ -146,17 +130,6 @@ export interface IoC extends Jobs {
   // Admin controllers
   referenceController: ReferenceController;
 
-  adminAuthenticationController: AdminAuthenticationController;
-  adminSignupController: AdminSignupController;
-  adminUserProfileController: AdminUserProfileController;
-  adminUserJobController: AdminUserJobController;
-  personalAccessTokenController: PersonalAccessTokenController;
-
-  mfaDeviceController: MFADeviceController;
-  duoDeviceController: DuoDeviceController;
-  fidoDeviceController: FIDODeviceController;
-  otpDeviceController: OTPDeviceController;
-
   adminFoodDatabaseController: AdminFoodDatabaseController;
   adminCategoryController: AdminCategoryController;
   adminFoodController: AdminFoodController;
@@ -180,10 +153,6 @@ export interface IoC extends Jobs {
   localeSplitListController: LocaleSplitListController;
   localeSplitWordController: LocaleSplitWordController;
   localeSynonymSetController: LocaleSynonymSetController;
-  nutrientTableController: NutrientTableController;
-  nutrientTypeController: NutrientTypeController;
-  nutrientUnitController: NutrientUnitController;
-  standardUnitController: StandardUnitController;
 
   // Schemes
   feedbackSchemeController: FeedbackSchemeController;
@@ -194,11 +163,6 @@ export interface IoC extends Jobs {
   adminSurveyController: AdminSurveyController;
   adminSurveyRespondentController: AdminSurveyRespondentController;
   adminSurveySubmissionController: AdminSurveySubmissionController;
-
-  // System controllers
-  jobController: JobController;
-  signInLogController: SignInLogController;
-  taskController: TaskController;
 
   // ACL controllers
   permissionController: PermissionController;

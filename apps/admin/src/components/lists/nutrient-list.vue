@@ -136,7 +136,7 @@ import { defineComponent } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Nutrient } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
 
@@ -149,7 +149,7 @@ export default defineComponent({
 
   props: {
     nutrientTypes: {
-      type: Array as PropType<NutrientTypeEntry[]>,
+      type: Array as PropType<NutrientTypeResponse[]>,
       required: true,
     },
     defaults: {

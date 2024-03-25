@@ -55,7 +55,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
 
 import type { GetJobParams, JobParams, LocaleJob } from '@intake24/common/types';
-import type { JobEntry, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
+import type { JobAttributes, LocaleEntry, LocaleRefs } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams, PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { useEntry, useEntryFetch, useForm } from '@intake24/admin/composables';
@@ -118,7 +118,7 @@ export default defineComponent({
     const submit = async () => {
       if (jobInProgress.value) return;
 
-      const job = await form.post<JobEntry>(`admin/locales/${props.id}/tasks`);
+      const job = await form.post<JobAttributes>(`admin/locales/${props.id}/tasks`);
 
       jobs.value.unshift(job);
       await startPolling();

@@ -147,7 +147,7 @@ import { addYears } from 'date-fns';
 import { defineComponent, onMounted, ref, watch } from 'vue';
 
 import type {
-  PersonalAccessTokenEntry,
+  PersonalAccessTokenResponse,
   PersonalAccessTokensResponse,
 } from '@intake24/common/types/http/admin';
 import { useDateTime, useForm } from '@intake24/admin/composables';
@@ -170,7 +170,7 @@ export default defineComponent({
     const { toClipboard } = useClipboard();
 
     const jwt = ref('');
-    const tokens = ref<PersonalAccessTokenEntry['token'][]>([]);
+    const tokens = ref<PersonalAccessTokenResponse[]>([]);
     const dialog = ref(false);
     const datePicker = ref(false);
 
@@ -183,7 +183,9 @@ export default defineComponent({
     };
 
     const submit = async () => {
-      const data = await form.post<PersonalAccessTokenEntry>('admin/user/personal-access-tokens');
+      const data = await form.post<{ jwt: string; token: PersonalAccessTokenResponse }>(
+        'admin/user/personal-access-tokens'
+      );
       jwt.value = data.jwt;
       tokens.value.unshift(data.token);
     };

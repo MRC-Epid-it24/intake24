@@ -48,10 +48,21 @@ export type MFALoginCredentials = {
   device: MFADevice;
 };
 
-export type MFVerification = {
-  response: AuthenticationResponseJSON;
+export type DuoVerification = {
+  provider: 'duo';
   token: string;
 };
+export type FIDOVerification = {
+  provider: 'fido';
+  response: AuthenticationResponseJSON;
+};
+
+export type OTPVerification = {
+  provider: 'otp';
+  token: string;
+};
+
+export type MFAVerification = DuoVerification | FIDOVerification | OTPVerification;
 
 const authenticationService = ({
   aclCache,
@@ -438,11 +449,11 @@ const authenticationService = ({
   /**
    * Verify MFA authentication response
    *
-   * @param {MFVerification} { response, token }
+   * @param {MFAVerification} verification
    * @param {LoginMeta} meta
    * @returns {Promise<Tokens>}
    */
-  const verify = async ({ response, token }: MFVerification, meta: LoginMeta): Promise<Tokens> => {
+  const verify = async (verification: MFAVerification, meta: LoginMeta): Promise<Tokens> => {
     const {
       ip: remoteAddress,
       headers: { 'user-agent': userAgent },
@@ -452,7 +463,7 @@ const authenticationService = ({
 
     const signInAttempt: SignInAttempt = {
       provider: mfaAuthChallenge?.provider ?? body.provider,
-      providerKey: token ?? response?.id,
+      providerKey: verification.provider === 'fido' ? verification.response.id : verification.token,
       userId: mfaAuthChallenge?.userId,
       remoteAddress,
       userAgent,
@@ -465,7 +476,17 @@ const authenticationService = ({
         throw new UnauthorizedError();
       }
 
-      const { challengeId, deviceId, provider, userId } = mfaAuthChallenge;
+      const { provider } = verification;
+
+      if (provider !== mfaAuthChallenge.provider) {
+        await signInService.log({
+          ...signInAttempt,
+          message: 'MFA: Provider mismatch in challenge and response.',
+        });
+        throw new UnauthorizedError();
+      }
+
+      const { challengeId, deviceId, userId } = mfaAuthChallenge;
       signInAttempt.userId = userId;
 
       const device = await MFADevice.findOne({
@@ -491,17 +512,29 @@ const authenticationService = ({
         secret,
       } = device;
 
-      const providers = { duo: duoProvider, otp: otpProvider, fido: fidoProvider };
+      switch (provider) {
+        case 'duo':
+          await duoProvider.authenticationVerification({ email, token: verification.token });
+          break;
+        case 'fido':
+          if (!authenticator) throw new UnauthorizedError();
 
-      await providers[provider].authenticationVerification({
-        // @ts-expect-error - TS does not narrow down authenticator based on above condition
-        authenticator,
-        email,
-        token,
-        challengeId,
-        response,
-        secret,
-      });
+          await fidoProvider.authenticationVerification({
+            authenticator,
+            challengeId,
+            response: verification.response,
+          });
+          break;
+        case 'otp':
+          await otpProvider.authenticationVerification({
+            email,
+            token: verification.token,
+            secret,
+          });
+          break;
+        default:
+          throw new UnauthorizedError();
+      }
 
       const amr = [...mfaAuthChallenge.amr, createAmrMethod(provider)];
 

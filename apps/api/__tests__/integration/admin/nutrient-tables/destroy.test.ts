@@ -1,4 +1,4 @@
-import type { NutrientTableInput } from '@intake24/common/types/http/admin';
+import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { NutrientTable } from '@intake24/db';
 
@@ -9,7 +9,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: NutrientTableInput;
+  let input: NutrientTableRequest;
   let nutrientTable: NutrientTable;
 
   beforeAll(async () => {

@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NutrientUnitEntry } from '@intake24/common/types/http/admin';
+import type { NutrientUnitAttributes } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
@@ -65,11 +65,11 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, isEdit } = useEntry<NutrientUnitEntry>(props);
+    const { entry, entryLoaded, isEdit } = useEntry<NutrientUnitAttributes>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
       NutrientUnitForm,
-      NutrientUnitEntry
+      NutrientUnitAttributes
     >(props, {
       data: { id: null, description: null, symbol: null },
     });

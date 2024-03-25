@@ -56,7 +56,7 @@ import { computed, defineComponent, onMounted } from 'vue';
 
 import type { GetJobParams, JobParams, NutrientTableJob } from '@intake24/common/types';
 import type {
-  JobEntry,
+  JobAttributes,
   NutrientTableEntry,
   NutrientTableRefs,
 } from '@intake24/common/types/http/admin';
@@ -121,7 +121,7 @@ export default defineComponent({
     const submit = async () => {
       if (jobInProgress.value) return;
 
-      const job = await form.post<JobEntry>(`admin/nutrient-tables/${props.id}/tasks`);
+      const job = await form.post<JobAttributes>(`admin/nutrient-tables/${props.id}/tasks`);
 
       jobs.value.unshift(job);
       await startPolling();

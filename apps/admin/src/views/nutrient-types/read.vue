@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
@@ -37,7 +37,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded, refs, refsLoaded } = useEntry<NutrientTypeEntry>(props);
+    const { entry, entryLoaded, refs, refsLoaded } = useEntry<NutrientTypeResponse>(props);
 
     return { entry, entryLoaded, refs, refsLoaded };
   },

@@ -89,7 +89,7 @@ import { watchDebounced } from '@vueuse/core';
 import { computed, defineComponent, ref, watch } from 'vue';
 
 import type { NutrientGroupCard } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { useEntry } from '@intake24/admin/stores';
 
 import { CardThresholds, CardUnit } from '../partials';
@@ -121,10 +121,10 @@ export default defineComponent({
   setup(props) {
     const currentNutrientTypeIds = ref([...props.nutrientTypes]);
     const search = ref<string | null>(null);
-    const filteredNutrientTypes = ref<NutrientTypeEntry[]>([]);
-    const visibleNutrientTypes = ref<NutrientTypeEntry[]>([]);
+    const filteredNutrientTypes = ref<NutrientTypeResponse[]>([]);
+    const visibleNutrientTypes = ref<NutrientTypeResponse[]>([]);
 
-    const allNutrientTypes = computed<NutrientTypeEntry[]>(
+    const allNutrientTypes = computed<NutrientTypeResponse[]>(
       () => useEntry().refs.nutrientTypes ?? []
     );
 

@@ -14,7 +14,11 @@ export const paginationRequest = z.object({
   page: z.coerce.number().int().min(1).optional(),
   limit: z.coerce.number().int().min(1).max(1000).optional(),
   sort: z.union([z.literal('asc'), z.literal('desc')]).optional(),
-  search: z.string().max(128).optional(),
+  search: z
+    .string()
+    .max(128)
+    .nullish()
+    .transform((val) => val || undefined),
 });
 
 export const paginationMeta = z.object({
@@ -25,4 +29,15 @@ export const paginationMeta = z.object({
   limit: z.number(),
   to: z.number(),
   total: z.number(),
+});
+
+export const multerFile = z.object({
+  fieldname: z.string(),
+  originalname: z.string(),
+  encoding: z.string(),
+  mimetype: z.string(),
+  size: z.number(),
+  destination: z.string(),
+  filename: z.string(),
+  path: z.string(),
 });

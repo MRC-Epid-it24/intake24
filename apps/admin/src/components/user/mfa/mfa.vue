@@ -124,7 +124,7 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { defineComponent, ref } from 'vue';
 
-import type { MFADeviceEntry, MFADevicesResponse } from '@intake24/common/types/http/admin';
+import type { MFADeviceResponse, MFADevicesResponse } from '@intake24/common/types/http/admin';
 import { useMessages } from '@intake24/admin/stores';
 import { mfaProviders } from '@intake24/common/security';
 import { ConfirmDialog } from '@intake24/ui';
@@ -149,7 +149,7 @@ export default defineComponent({
       dialog: false,
       tab: mfaProviders[0],
       status: false,
-      devices: [] as MFADeviceEntry[],
+      devices: [] as MFADeviceResponse[],
       providers: mfaProviders,
     };
   },
@@ -193,7 +193,7 @@ export default defineComponent({
     },
 
     async promote(id: string, idx: number) {
-      const { data } = await this.$http.patch<MFADeviceEntry>(`admin/user/mfa/${id}`, {
+      const { data } = await this.$http.patch<MFADeviceResponse>(`admin/user/mfa/devices/${id}`, {
         preferred: true,
       });
       this.devices[0].preferred = false;
@@ -201,17 +201,17 @@ export default defineComponent({
       this.devices.splice(0, 0, data);
     },
 
-    add(device: MFADeviceEntry) {
+    add(device: MFADeviceResponse) {
       this.devices.push(device);
     },
 
     async remove(deviceId: string) {
-      await this.$http.delete(`admin/user/mfa/${deviceId}`);
+      await this.$http.delete(`admin/user/mfa/devices/${deviceId}`);
       this.devices = this.devices.filter((device) => device.id !== deviceId);
       if (!this.devices.length || this.devices.find((device) => device.preferred)) return;
 
-      const { data } = await this.$http.patch<MFADeviceEntry>(
-        `admin/user/mfa/${this.devices[0].id}`,
+      const { data } = await this.$http.patch<MFADeviceResponse>(
+        `admin/user/mfa/devices/${this.devices[0].id}`,
         { preferred: true }
       );
       this.devices.splice(0, 1, data);

@@ -77,7 +77,7 @@ import { defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { Card } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { OptionsMenu, SelectResource } from '@intake24/admin/components/dialogs';
 import { JsonEditorDialog } from '@intake24/admin/components/editors';
 import { ConfirmDialog } from '@intake24/ui';
@@ -103,7 +103,7 @@ export default defineComponent({
 
   props: {
     nutrientTypes: {
-      type: Array as PropType<NutrientTypeEntry[]>,
+      type: Array as PropType<NutrientTypeResponse[]>,
       default: () => [],
     },
     value: {

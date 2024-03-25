@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
-import { strongPassword } from '../schemas';
+import { strongPasswordWithConfirm } from '../schemas';
 import { z } from '../util';
 
 export const password = initContract().router({
@@ -15,7 +15,7 @@ export const password = initContract().router({
       email: z.string().email().toLowerCase(),
       captcha: z
         .string()
-        .optional()
+        .nullish()
         .openapi({ description: 'Captcha token if enabled on system level' }),
     }),
     responses: {
@@ -28,7 +28,7 @@ export const password = initContract().router({
   reset: {
     method: 'POST',
     path: '/password/reset',
-    body: strongPassword
+    body: strongPasswordWithConfirm
       .extend({ email: z.string().email().toLowerCase(), token: z.string() })
       .refine((data) => data.password === data.passwordConfirm, {
         message: "Passwords don't match",

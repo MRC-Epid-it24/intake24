@@ -1,0 +1,84 @@
+import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
+
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import {
+  jobAttributes,
+  taskAttributes,
+  taskRequest,
+  taskResponse,
+} from '@intake24/common/types/http/admin';
+
+export const task = initContract().router({
+  browse: {
+    method: 'GET',
+    path: '/admin/tasks',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: taskAttributes.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse tasks',
+    description: 'Browse tasks (paginated list)',
+  },
+  store: {
+    method: 'POST',
+    path: '/admin/tasks',
+    body: taskRequest,
+    responses: {
+      201: taskAttributes,
+    },
+    summary: 'Create task',
+    description: 'Create new task',
+  },
+  read: {
+    method: 'GET',
+    path: '/admin/tasks/:taskId',
+    responses: {
+      200: taskResponse,
+    },
+    summary: 'Get task',
+    description: 'Get task by id',
+  },
+  edit: {
+    method: 'GET',
+    path: '/admin/tasks/:taskId/edit',
+    responses: {
+      200: taskResponse,
+    },
+    summary: 'Get task for edit',
+    description: 'Get task by id for edit',
+  },
+  update: {
+    method: 'PUT',
+    path: '/admin/tasks/:taskId',
+    body: taskRequest,
+    responses: {
+      200: taskResponse,
+    },
+    summary: 'Update task',
+    description: 'Update task by id',
+  },
+  destroy: {
+    method: 'DELETE',
+    path: '/admin/tasks/:taskId',
+    body: null,
+    responses: {
+      204: z.undefined(),
+    },
+    summary: 'Delete task',
+    description: 'Delete task by id',
+  },
+  run: {
+    method: 'POST',
+    path: '/admin/tasks/:taskId/run',
+    body: null,
+    responses: {
+      200: jobAttributes,
+    },
+    summary: 'Run task',
+    description: 'Trigger task pushing into the job queue',
+  },
+});

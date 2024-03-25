@@ -1,13 +1,13 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
-import { strongPassword, userPhysicalDataScheme } from '../../schemas';
+import { strongPasswordWithConfirm, userPhysicalDataScheme } from '../../schemas';
 
 export const profile = initContract().router({
   updatePassword: {
     method: 'POST',
     path: '/user/password',
-    body: strongPassword
+    body: strongPasswordWithConfirm
       .extend({ passwordCurrent: z.string() })
       .refine((data) => data.password === data.passwordConfirm, {
         message: "Passwords don't match",

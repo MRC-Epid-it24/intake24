@@ -38,10 +38,10 @@ export const authenticate = (app: Router, type: FrontEnd): void => {
   app.use(registerACLScope);
 };
 
-export const permission = (permission: string | string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+export const permission = (...args: string[]) => {
+  return (req: Request<any, any, any, any, any>, res: Response, next: NextFunction): void => {
     req.scope.cradle.aclService
-      .hasPermission(permission)
+      .hasPermission(args)
       .then((result) => (result ? next() : next(new ForbiddenError())))
       .catch((err) => next(err));
   };

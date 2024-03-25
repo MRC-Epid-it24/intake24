@@ -1,7 +1,4 @@
-import type {
-  NutrientUnitRequest,
-  UpdateNutrientUnitRequest,
-} from '@intake24/common/types/http/admin';
+import type { NutrientUnitRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { FoodsNutrientUnit, SystemNutrientUnit } from '@intake24/db';
 
@@ -39,9 +36,13 @@ const nutrientUnitService = () => {
    * Update nutrient unit
    *
    * @param {string} nutrientUnitId
-   * @param {UpdateNutrientUnitRequest} input
+   * @param {Omit<NutrientUnitRequest, 'id'>} input
+   * @returns
    */
-  const updateNutrientUnit = async (nutrientUnitId: string, input: UpdateNutrientUnitRequest) => {
+  const updateNutrientUnit = async (
+    nutrientUnitId: string,
+    input: Omit<NutrientUnitRequest, 'id'>
+  ) => {
     const [foodsNutrientUnit, systemNutrientUnit] = await Promise.all([
       FoodsNutrientUnit.findByPk(nutrientUnitId),
       SystemNutrientUnit.findByPk(nutrientUnitId),

@@ -1,3 +1,5 @@
+import type { AppRoute, AppRouter } from '@ts-rest/core';
+import type { TsRestRequest } from '@ts-rest/express';
 import type { RequestHandler } from 'express';
 import type { CustomValidator, Meta, ValidationChain } from 'express-validator';
 
@@ -6,6 +8,11 @@ import { validation } from '@intake24/api/http/middleware';
 import { FoodsLocale } from '@intake24/db';
 
 export type ValidationMiddleware = RequestHandler | ValidationChain;
+
+type TsMeta<T extends AppRoute | AppRouter> = {
+  req: TsRestRequest<T>;
+  path: string;
+};
 
 export const validate = (
   rules: ValidationMiddleware | ValidationMiddleware[]
@@ -53,6 +60,30 @@ export const typeErrorMessage =
 export const customTypeErrorMessage = (
   type: string,
   { path, req }: Meta,
+  params: I18nParams = {}
+) => {
+  const { i18nService } = req.scope.cradle;
+  const { attributePath = path } = params;
+
+  return i18nService.translate(`validation.types.${type}`, {
+    attribute: i18nService.translate(`validation.attributes.${attributePath}`),
+    ...params,
+  });
+};
+
+/* export const customValidationMessage = <T extends AppRoute | AppRouter>(
+  key: string,
+  req: TsMeta<T>,
+  params: I18nParams = {}
+) => {
+  const { i18nService } = req.scope.cradle;
+
+  return i18nService.translate(key, { ...params });
+}; */
+
+export const customTypeValidationMessage = <T extends AppRoute | AppRouter>(
+  type: string,
+  { path, req }: TsMeta<T>,
   params: I18nParams = {}
 ) => {
   const { i18nService } = req.scope.cradle;

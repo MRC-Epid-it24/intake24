@@ -221,7 +221,7 @@ import { computed, defineComponent, ref } from 'vue';
 import draggable from 'vuedraggable';
 
 import type { MealTableField } from '@intake24/common/feedback';
-import type { NutrientTypeEntry } from '@intake24/common/types/http/admin';
+import type { NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useListWithDialog } from '@intake24/admin/composables';
 import { mealTableFieldStandardIds, mealTableFieldTypes } from '@intake24/common/feedback';
@@ -237,7 +237,7 @@ export default defineComponent({
 
   props: {
     nutrientTypes: {
-      type: Array as PropType<NutrientTypeEntry[]>,
+      type: Array as PropType<NutrientTypeResponse[]>,
       default: () => [],
     },
     defaults: {

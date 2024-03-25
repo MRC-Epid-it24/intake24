@@ -46,7 +46,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { DuoRegistrationChallenge, MFADeviceEntry } from '@intake24/common/types/http/admin';
+import type {
+  DuoRegistrationChallenge,
+  MFADeviceResponse,
+} from '@intake24/common/types/http/admin';
 import { createForm } from '@intake24/admin/util';
 
 export default defineComponent({
@@ -54,7 +57,7 @@ export default defineComponent({
 
   data() {
     return {
-      url: 'admin/user/mfa/duo',
+      url: 'admin/user/mfa/providers/duo',
       progress: 1,
       form: createForm({ challengeId: '', name: 'My Duo Device', token: '' }),
     };
@@ -88,7 +91,7 @@ export default defineComponent({
     },
 
     async verify() {
-      const device = await this.form.post<MFADeviceEntry>(this.url);
+      const device = await this.form.post<MFADeviceResponse>(this.url);
 
       this.$emit('registered', device);
       this.$router.replace({ query: {} });

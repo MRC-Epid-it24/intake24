@@ -2,10 +2,11 @@ import type {
   AuthenticationResponseJSON,
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
+import { z } from 'zod';
 
 import type { MFAAuthChallenge, MFAProvider } from '@intake24/common/security';
 
-import type { MFADeviceEntry } from './admin/mfa-devices';
+import type { MFADeviceResponse } from './admin/mfa-devices';
 
 export type LoginRequest = {
   email: string;
@@ -31,18 +32,14 @@ export type TokenLoginRequest = {
   captcha?: string;
 };
 
-export type LoginResponse = {
-  accessToken: string;
-};
-
-export type ChallengeResponse = {
-  surveyId: string;
-  provider: 'captcha';
-};
+export const loginResponse = z.object({ accessToken: z.string() });
+export type LoginResponse = z.infer<typeof loginResponse>;
+export const challengeResponse = z.object({ surveyId: z.string(), provider: z.literal('captcha') });
+export type ChallengeResponse = z.infer<typeof challengeResponse>;
 
 export type MFAAuthResponse = {
   challenge?: MFAAuthChallenge;
-  devices: MFADeviceEntry[];
+  devices: MFADeviceResponse[];
 };
 
 export type AdminAuthResponse = LoginResponse | MFAAuthResponse;

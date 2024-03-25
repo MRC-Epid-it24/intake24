@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
@@ -9,7 +9,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let job: JobEntry;
+  let job: JobAttributes;
 
   beforeAll(async () => {
     const { startDate, endDate } = suite.data.system.survey;

@@ -1,24 +1,42 @@
-import type {
-  NutrientTypeInKcalAttributes,
-  Pagination,
-  SystemNutrientTypeAttributes,
-  SystemNutrientUnitAttributes,
-} from '@intake24/db';
+import { z } from 'zod';
 
-export interface NutrientTypeRequest extends SystemNutrientTypeAttributes {
-  kcalPerUnit?: number | null;
-}
+import type { Pagination } from '@intake24/db/';
 
-export type UpdateNutrientTypeRequest = Partial<Omit<NutrientTypeRequest, 'id'>>;
+import { nutrientUnitAttributes } from './nutrient-units';
 
-export type NutrientTypesResponse = Pagination<SystemNutrientTypeAttributes>;
+export const nutrientTypeAttributes = z.object({
+  id: z.string(),
+  unitId: z.string(),
+  description: z.string(),
+});
 
-export interface NutrientTypeEntry
-  extends SystemNutrientTypeAttributes,
-    Partial<Pick<NutrientTypeInKcalAttributes, 'kcalPerUnit'>> {
-  unit?: SystemNutrientUnitAttributes;
-}
+export type NutrientTypeAttributes = z.infer<typeof nutrientTypeAttributes>;
 
-export type NutrientTypeRefs = {
-  units: SystemNutrientUnitAttributes[];
-};
+export const nutrientTypeResponse = nutrientTypeAttributes.extend({
+  kcalPerUnit: z.number().optional(),
+  unit: z
+    .object({
+      id: z.string(),
+      description: z.string(),
+    })
+    .optional(),
+});
+
+export type NutrientTypeResponse = z.infer<typeof nutrientTypeResponse>;
+
+export const nutrientTypeRequest = z.object({
+  id: z.coerce.number().transform(String),
+  unitId: z.string(),
+  description: z.string().max(512),
+  kcalPerUnit: z.coerce.number().nullish(),
+});
+
+export type NutrientTypeRequest = z.infer<typeof nutrientTypeRequest>;
+
+export type NutrientTypesResponse = Pagination<NutrientTypeAttributes>;
+
+export const nutrientTypeRefs = z.object({
+  units: nutrientUnitAttributes.array(),
+});
+
+export type NutrientTypeRefs = z.infer<typeof nutrientTypeRefs>;

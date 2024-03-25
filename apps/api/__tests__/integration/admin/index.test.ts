@@ -25,7 +25,7 @@ import users from './users/index.test';
 
 export default () => {
   describe('/api/admin/auth', authentication);
-  describe('/api/admin/signup', signup);
+  describe('/api/admin/sign-up', signup);
   describe('/api/admin/categories', categories);
   describe('/api/admin/fdbs', fdbs);
   describe('/api/admin/feedback-schemes', feedbackSchemes);

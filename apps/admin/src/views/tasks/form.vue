@@ -19,7 +19,6 @@
             <v-col cols="12" md="6">
               <v-text-field
                 v-model="form.name"
-                :disabled="isEdit"
                 :error-messages="form.errors.get('name')"
                 hide-details="auto"
                 :label="$t('common.name')"
@@ -103,7 +102,7 @@ import cronstrue from 'cronstrue';
 import { computed, defineComponent } from 'vue';
 
 import type { JobType, JobTypeParams } from '@intake24/common/types';
-import type { TaskEntry } from '@intake24/common/types/http/admin';
+import type { TaskResponse } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { jobParams } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -131,21 +130,21 @@ export default defineComponent({
   setup(props) {
     const { i18n } = useI18n();
 
-    const loadCallback = (data: TaskEntry) => {
+    const loadCallback = (data: TaskResponse) => {
       const { params, ...rest } = data;
       return { ...rest, params: { ...defaultJobsParams[rest.job], ...params } };
     };
 
     const { formatDateTime } = useDateTime();
 
-    const { entry, entryLoaded, isCreate, isEdit } = useEntry<TaskEntry>(props);
+    const { entry, entryLoaded, isCreate, isEdit } = useEntry<TaskResponse>(props);
     useEntryFetch(props);
 
     const jobs = computed(() =>
       jobTypes.map((value) => ({ value, text: i18n.t(`jobs.types.${value}._`).toString() }))
     );
 
-    const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskEntry>(props, {
+    const { clearError, form, routeLeave, submit } = useEntryForm<TaskForm, TaskResponse>(props, {
       data: {
         id: null,
         name: null,

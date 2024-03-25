@@ -1,0 +1,119 @@
+import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
+
+import {
+  NutrientTableDataImport,
+  nutrientTableJobs,
+  NutrientTableMappingImport,
+} from '@intake24/common/types';
+import { paginationMeta, paginationRequest } from '@intake24/common/types/http';
+import {
+  jobAttributes,
+  nutrientTableRecord,
+  nutrientTableRefs,
+  nutrientTableRequest,
+  nutrientTableResponse,
+} from '@intake24/common/types/http/admin';
+
+export const nutrientTable = initContract().router({
+  browse: {
+    method: 'GET',
+    path: '/admin/nutrient-tables',
+    query: paginationRequest,
+    responses: {
+      200: z.object({
+        data: nutrientTableResponse.array(),
+        meta: paginationMeta,
+      }),
+    },
+    summary: 'Browse nutrient tables',
+    description: 'Browse nutrient tables (paginated list)',
+  },
+  store: {
+    method: 'POST',
+    path: '/admin/nutrient-tables',
+    body: nutrientTableRequest,
+    responses: {
+      201: nutrientTableResponse,
+    },
+    summary: 'Create nutrient table',
+    description: 'Create new nutrient table',
+  },
+  refs: {
+    method: 'GET',
+    path: '/admin/nutrient-tables/refs',
+    responses: {
+      200: nutrientTableRefs,
+    },
+    summary: 'nutrient table references',
+    description: 'Get references for nutrient tables',
+  },
+  read: {
+    method: 'GET',
+    path: '/admin/nutrient-tables/:nutrientTableId',
+    responses: {
+      200: nutrientTableResponse,
+    },
+    summary: 'Get nutrient table',
+    description: 'Get nutrient table by id',
+  },
+  edit: {
+    method: 'GET',
+    path: '/admin/nutrient-tables/:nutrientTableId/edit',
+    responses: {
+      200: nutrientTableResponse,
+    },
+    summary: 'Get nutrient table for edit',
+    description: 'Get nutrient table by id for edit',
+  },
+  update: {
+    method: 'PUT',
+    path: '/admin/nutrient-tables/:nutrientTableId',
+    body: nutrientTableRequest.omit({ id: true }),
+    responses: {
+      200: nutrientTableResponse,
+    },
+    summary: 'Update nutrient table',
+    description: 'Update nutrient table by id',
+  },
+  destroy: {
+    method: 'DELETE',
+    path: '/admin/nutrient-tables/:nutrientTableId',
+    body: null,
+    responses: {
+      204: z.undefined(),
+    },
+    summary: 'Delete nutrient table',
+    description: 'Delete nutrient table by id',
+  },
+  tasks: {
+    method: 'POST',
+    contentType: 'multipart/form-data',
+    path: '/admin/nutrient-tables/:nutrientTableId/tasks',
+    body: z.object({
+      type: z.enum(nutrientTableJobs),
+      params: z.union([
+        NutrientTableDataImport.omit({ file: true }),
+        NutrientTableMappingImport.omit({ file: true }),
+      ]),
+    }),
+    responses: {
+      200: jobAttributes,
+    },
+    summary: 'Queue nutrient table task',
+    description:
+      'Submits job to the queue.\nSpecific jobs can be submitted to the queue. Each job type has its own parameters. See job types for more information.',
+  },
+  records: {
+    method: 'PUT',
+    path: '/admin/nutrient-tables/:nutrientTableId/records',
+    body: z.object({
+      records: nutrientTableRecord.array(),
+    }),
+    responses: {
+      200: z.undefined(),
+    },
+    summary: 'Update nutrient table records',
+    description: 'Update nutrient table records by id',
+  },
+});

@@ -70,7 +70,7 @@ export default defineComponent({
 
     async verify(token: string) {
       try {
-        await this.$http.post('admin/signup/verify', { token }, { withLoading: true });
+        await this.$http.post('admin/sign-up/verify', { token }, { withLoading: true });
 
         if (useAuth().loggedIn) {
           await this.user.request();

@@ -1,8 +1,9 @@
+import { z } from 'zod';
+
 import type {
   Pagination,
   PermissionAttributes,
   RoleAttributes,
-  UserAttributes,
   UserCustomFieldAttributes,
   UserSurveyAliasAttributes,
 } from '@intake24/db';
@@ -45,6 +46,23 @@ export interface UpdateUserInput extends UserInput {
 export interface UpdateUserRequest extends UpdateUserInput {
   passwordConfirm?: string;
 } */
+
+export const userAttributes = z.object({
+  createdAt: z.date(),
+  disabledAt: z.date().nullable(),
+  email: z.string().nullable(),
+  emailNotifications: z.boolean(),
+  id: z.string(),
+  multiFactorAuthentication: z.boolean(),
+  name: z.string().nullable(),
+  phone: z.string().nullable(),
+  simpleName: z.string().nullable(),
+  smsNotifications: z.boolean(),
+  updatedAt: z.date(),
+  verifiedAt: z.date().nullable(),
+});
+
+export type UserAttributes = z.infer<typeof userAttributes>;
 
 export type UsersResponse = Pagination<UserAttributes>;
 

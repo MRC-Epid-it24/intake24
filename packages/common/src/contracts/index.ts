@@ -1,5 +1,6 @@
 import { initContract } from '@ts-rest/core';
 
+import admin from './admin';
 import { authentication } from './authentication.contract';
 import { category } from './category.contract';
 import { feedback } from './feedback.contract';
@@ -28,6 +29,7 @@ export const contract = c.router({
   user,
   portionSize,
   surveyRespondent,
+  admin,
 });
 
 export default contract;

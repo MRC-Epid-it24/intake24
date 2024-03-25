@@ -1,5 +1,6 @@
 import { customAlphabet, nanoid } from 'nanoid';
 import { plural } from 'pluralize';
+import slugify from 'slugify';
 
 import { isSecurableType } from '../security';
 
@@ -73,3 +74,12 @@ export const excelColumnToOffset = (column: string): number => {
 
   return result - 1;
 };
+
+/**
+ * Convention helper for standard unit id
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+export const toStandardUnitId = (name: string): string =>
+  slugify(name, { replacement: '_', lower: true, strict: true });

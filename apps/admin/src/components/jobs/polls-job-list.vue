@@ -61,7 +61,7 @@
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
 
-import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 
 import { useDownloadJob } from './use-download-job';
 
@@ -70,7 +70,7 @@ export default defineComponent({
 
   props: {
     jobs: {
-      type: Array as PropType<JobEntry[]>,
+      type: Array as PropType<JobAttributes[]>,
       default: () => [],
     },
   },

@@ -35,11 +35,17 @@ export default () => {
           input: {
             id: 'not-a-number',
             description: false,
-            unitId: '9999',
+            unitId: ['1'],
             kcalPerUnit: 'not-a-number',
           },
         }
       );
+    });
+
+    it('should return 400 for invalid input data (unitId)', async () => {
+      await suite.sharedTests.assertInvalidInput('post', url, ['unitId'], {
+        input: { ...input, unitId: '9999' },
+      });
     });
 
     it('should return 201 and new resource', async () => {

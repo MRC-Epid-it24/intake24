@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NutrientUnitEntry } from '@intake24/common/types/http/admin';
+import type { NutrientUnitAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
@@ -33,7 +33,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded } = useEntry<NutrientUnitEntry>(props);
+    const { entry, entryLoaded } = useEntry<NutrientUnitAttributes>(props);
 
     return { entry, entryLoaded };
   },

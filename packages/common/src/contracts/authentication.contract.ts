@@ -1,12 +1,8 @@
 import { initContract } from '@ts-rest/core';
 
 import { createSanitizer } from '../rules';
+import { challengeResponse, loginResponse } from '../types/http';
 import { z } from '../util';
-
-const loginResponse = z.union([
-  z.object({ accessToken: z.string() }),
-  z.object({ surveyId: z.string(), provider: z.literal('captcha') }),
-]);
 
 export const authentication = initContract().router({
   emailLogin: {
@@ -21,11 +17,11 @@ export const authentication = initContract().router({
       survey: z.string(),
       captcha: z
         .string()
-        .optional()
+        .nullish()
         .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
-      200: loginResponse,
+      200: z.union([loginResponse, challengeResponse]),
     },
     summary: 'Email & password login',
     description: 'Survey participant login with email and password.',
@@ -42,11 +38,11 @@ export const authentication = initContract().router({
       survey: z.string(),
       captcha: z
         .string()
-        .optional()
+        .nullish()
         .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
-      200: loginResponse,
+      200: z.union([loginResponse, challengeResponse]),
     },
     summary: 'Alias & password login',
     description: 'Survey participant login with alias and password.',
@@ -61,11 +57,11 @@ export const authentication = initContract().router({
       token: z.string(),
       captcha: z
         .string()
-        .optional()
+        .nullish()
         .openapi({ description: 'Captcha token if enabled on system and survey level' }),
     }),
     responses: {
-      200: loginResponse,
+      200: z.union([loginResponse, challengeResponse]),
     },
     summary: 'URL Token login',
     description: 'Survey participant login with unique URL token.',

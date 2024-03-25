@@ -58,7 +58,7 @@ import type { PropType } from 'vue';
 import { defineComponent, reactive } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
-import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { PollsJobList, usePollsForJobs } from '@intake24/admin/components/jobs';
 import { createForm } from '@intake24/admin/util';
 
@@ -106,7 +106,7 @@ export default defineComponent({
     async submit() {
       if (this.jobInProgress) return;
 
-      const job = await this.form.post<JobEntry>(this.endpoint);
+      const job = await this.form.post<JobAttributes>(this.endpoint);
 
       this.jobs.unshift(job);
       await this.startPolling();

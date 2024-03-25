@@ -5,7 +5,7 @@ import ioc from '@intake24/api/ioc';
 import { suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
-  const url = '/api/admin/signup';
+  const url = '/api/admin/sign-up';
 
   const input = {
     name: 'A Researcher',
@@ -15,6 +15,7 @@ export default () => {
     password: 'newPassword123',
     passwordConfirm: 'newPassword123',
     terms: true,
+    captcha: 'test-captcha',
   };
 
   it('should return 400 for missing input data', async () => {
@@ -32,10 +33,10 @@ export default () => {
     const invalidInput = {
       name: ['name should be string'],
       phone: { value: 'phone should be string' },
-      email: 'thisIsNotAnEmailAddress',
-      emailConfirm: 'notMatching@email.com',
+      email: 'notAnEmail',
+      emailConfirm: '',
       password: 'tooSimple',
-      passwordConfirm: 'notMatchingTooSimple',
+      passwordConfirm: ['notMatchingTooSimple'],
       terms: false,
     };
 
@@ -45,6 +46,22 @@ export default () => {
       ['name', 'phone', 'email', 'emailConfirm', 'password', 'passwordConfirm', 'terms'],
       { input: invalidInput }
     );
+  });
+
+  it('should return 400 for invalid input data', async () => {
+    const invalidInput = {
+      name: 'name',
+      phone: '123456789',
+      email: 'matching@email.com',
+      emailConfirm: 'notMatching@email.com',
+      password: 'FB37rg2hj7kd&sfd',
+      passwordConfirm: 'FN8934r3yg8hf70ukj2sdf',
+      terms: true,
+    };
+
+    await suite.sharedTests.assertInvalidInput('post', url, ['emailConfirm', 'passwordConfirm'], {
+      input: invalidInput,
+    });
   });
 
   it('should return 403 when sign-ups disabled', async () => {

@@ -48,7 +48,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { SignInLogEntry } from '@intake24/common/types/http/admin';
+import type { SignInLogAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 
@@ -59,7 +59,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded } = useEntry<SignInLogEntry>(props);
+    const { entry, entryLoaded } = useEntry<SignInLogAttributes>(props);
     const { formatDateTime } = useDateTime();
 
     return { entry, entryLoaded, formatDateTime };

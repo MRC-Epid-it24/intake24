@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
+import type { StandardUnitAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
@@ -37,7 +37,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded } = useEntry<StandardUnitEntry>(props);
+    const { entry, entryLoaded } = useEntry<StandardUnitAttributes>(props);
 
     return { entry, entryLoaded };
   },

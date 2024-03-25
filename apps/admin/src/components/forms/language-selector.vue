@@ -51,10 +51,14 @@
 
 <script lang="ts">
 import type { PropType } from 'vue';
+import type { ZodNumber, ZodString } from 'zod';
 import { computed, defineComponent, ref, watch } from 'vue';
 
-import type { LocaleOptionList } from '@intake24/common/prompts';
-import type { LocaleTranslation, RequiredLocaleTranslation } from '@intake24/common/types';
+import type {
+  LocaleOptionList,
+  LocaleTranslation,
+  RequiredLocaleTranslation,
+} from '@intake24/common/types';
 import { useApp } from '@intake24/admin/stores';
 
 const english = { code: 'en', englishName: 'English', localName: 'English', countryFlagCode: 'gb' };
@@ -69,7 +73,7 @@ export default defineComponent({
     },
     value: {
       type: Object as PropType<
-        LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList<string | number>
+        LocaleTranslation | RequiredLocaleTranslation | LocaleOptionList<ZodString | ZodNumber>
       >,
       required: true,
     },

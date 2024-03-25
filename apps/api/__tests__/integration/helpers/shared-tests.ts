@@ -165,6 +165,18 @@ const sharedTests = (suite: typeof Suite) => {
     expect(status).toBe(code);
   };
 
+  const assertInstanceOf = async (method: Method, url: string, instance: any, ops?: Options) => {
+    const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
+
+    const call = request(suite.app)[method](url).set('Accept', 'application/json');
+
+    if (bearer) call.set('Authorization', suite.bearer[bearer]);
+    const { body, status } = await call.send(input);
+
+    expect(body).toBeInstanceOf(instance);
+    expect(status).toBe(code);
+  };
+
   const assertRecord = async (method: Method, url: string, output: any, ops?: Options) => {
     const { bearer, code = 200, input } = { ...defaultOptions, ...ops };
 
@@ -220,6 +232,7 @@ const sharedTests = (suite: typeof Suite) => {
     assertReferencesResult,
     assertAcknowledged,
     assertBuffer,
+    assertInstanceOf,
     assertRecord,
     assertRecordInserted,
     assertRecordUpdated,

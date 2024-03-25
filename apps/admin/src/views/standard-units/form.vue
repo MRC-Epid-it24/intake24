@@ -76,7 +76,7 @@
 import { defineComponent } from 'vue';
 
 import type { RequiredLocaleTranslation } from '@intake24/common/types';
-import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
+import type { StandardUnitAttributes } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { LanguageSelector } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -96,11 +96,11 @@ export default defineComponent({
   mixins: [formMixin],
 
   setup(props) {
-    const { entry, entryLoaded, isEdit } = useEntry<StandardUnitEntry>(props);
+    const { entry, entryLoaded, isEdit } = useEntry<StandardUnitAttributes>(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
       StandardUnitForm,
-      StandardUnitEntry
+      StandardUnitAttributes
     >(props, {
       data: { id: null, name: null, estimateIn: { en: '' }, howMany: { en: '' } },
     });

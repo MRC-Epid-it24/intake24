@@ -1,19 +1,15 @@
 import { pick } from 'lodash';
 import request from 'supertest';
 
-import type {
-  NutrientTableCsvMappingFieldInput,
-  NutrientTableCsvMappingNutrientInput,
-  NutrientTableInput,
-} from '@intake24/common/types/http/admin';
+import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 
 export default () => {
   const url = '/api/admin/nutrient-tables';
   const permissions = ['nutrient-tables', 'nutrient-tables|create'];
 
-  let input: NutrientTableInput;
-  let output: NutrientTableInput;
+  let input: NutrientTableRequest;
+  let output: NutrientTableRequest;
 
   beforeAll(async () => {
     input = mocker.foods.nutrientTable();
@@ -33,9 +29,7 @@ export default () => {
       await suite.sharedTests.assertInvalidInput('post', url, [
         'id',
         'description',
-        'csvMapping.rowOffset',
-        'csvMapping.idColumnOffset',
-        'csvMapping.descriptionColumnOffset',
+        'csvMapping',
         'csvMappingFields',
         'csvMappingNutrients',
       ]);
@@ -51,8 +45,10 @@ export default () => {
           'csvMapping.rowOffset',
           'csvMapping.idColumnOffset',
           'csvMapping.descriptionColumnOffset',
-          'csvMappingFields',
-          'csvMappingNutrients',
+          'csvMappingFields.0.fieldName',
+          'csvMappingFields.0.columnOffset',
+          'csvMappingNutrients.0.nutrientTypeId',
+          'csvMappingNutrients.0.columnOffset',
         ],
         {
           input: {
@@ -94,8 +90,8 @@ export default () => {
 
       // 2) non-order specific comparison
       if (outputCsvMappingFields) {
-        const fields: NutrientTableCsvMappingFieldInput[] = resCsvMappingFields.map(
-          ({ fieldName, columnOffset }: NutrientTableCsvMappingFieldInput) => ({
+        const fields: NutrientTableRequest['csvMappingFields'] = resCsvMappingFields.map(
+          ({ fieldName, columnOffset }: NutrientTableRequest['csvMappingFields'][number]) => ({
             fieldName,
             columnOffset,
           })
@@ -104,8 +100,11 @@ export default () => {
       }
 
       if (outputCsvMappingNutrients) {
-        const nutrients: NutrientTableCsvMappingNutrientInput[] = resCsvMappingNutrients.map(
-          ({ nutrientTypeId, columnOffset }: NutrientTableCsvMappingNutrientInput) => ({
+        const nutrients: NutrientTableRequest['csvMappingNutrients'] = resCsvMappingNutrients.map(
+          ({
+            nutrientTypeId,
+            columnOffset,
+          }: NutrientTableRequest['csvMappingNutrients'][number]) => ({
             nutrientTypeId,
             columnOffset,
           })

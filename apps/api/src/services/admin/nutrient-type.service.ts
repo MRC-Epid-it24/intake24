@@ -1,7 +1,4 @@
-import type {
-  NutrientTypeRequest,
-  UpdateNutrientTypeRequest,
-} from '@intake24/common/types/http/admin';
+import type { NutrientTypeRequest } from '@intake24/common/types/http/admin';
 import { ForbiddenError, NotFoundError } from '@intake24/api/http/errors';
 import { FoodsNutrientType, NutrientTypeInKcal, SystemNutrientType } from '@intake24/db';
 
@@ -49,9 +46,13 @@ const nutrientTypeService = () => {
    * Update nutrient type
    *
    * @param {string} nutrientTypeId
-   * @param {UpdateNutrientTypeRequest} input
+   * @param {Omit<NutrientTypeRequest, 'id'>} input
+   * @returns
    */
-  const updateNutrientType = async (nutrientTypeId: string, input: UpdateNutrientTypeRequest) => {
+  const updateNutrientType = async (
+    nutrientTypeId: string,
+    input: Omit<NutrientTypeRequest, 'id'>
+  ) => {
     const { kcalPerUnit, ...rest } = input;
 
     const [foodsNutrientType, systemNutrientType] = await Promise.all([
@@ -88,7 +89,7 @@ const nutrientTypeService = () => {
     if (!foodsNutrientType || !systemNutrientType) throw new NotFoundError();
 
     throw new ForbiddenError('Nutrient type cannot be deleted.');
-    // TODO: Revive all foreign keys, some are not on cascade, laos nutrient types are in both databases
+    // TODO: Revive all foreign keys, some are not on cascade, also nutrient types are in both databases
     // await Promise.all([foodsNutrientType.destroy(), systemNutrientType.destroy()]);
   };
 

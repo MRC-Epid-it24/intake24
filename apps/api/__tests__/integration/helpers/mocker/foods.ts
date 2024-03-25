@@ -6,13 +6,12 @@ import slugify from 'slugify';
 import type {
   CreateAsServedSetInput,
   // CreateLocaleRequest,
-  NutrientTableInput,
+  NutrientTableRequest,
   NutrientTypeRequest,
   NutrientUnitRequest,
 } from '@intake24/common/types/http/admin';
 import type { StandardUnitCreationAttributes } from '@intake24/db';
-import { toStandardUnitId } from '@intake24/api/util';
-import { randomString } from '@intake24/common/util';
+import { randomString, toStandardUnitId } from '@intake24/common/util';
 
 import { downloadImage } from '../util';
 
@@ -75,7 +74,7 @@ const asServedSet = async (asServedSetId?: string): Promise<CreateAsServedSetInp
   };
 }; */
 
-const nutrientTable = (): NutrientTableInput => {
+const nutrientTable = (): NutrientTableRequest => {
   return {
     id: slugify(randomString(16), { strict: true }),
     description: faker.word.words(5),

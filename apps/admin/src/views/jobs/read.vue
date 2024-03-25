@@ -93,7 +93,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDownloadJob } from '@intake24/admin/components/jobs';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
@@ -108,7 +108,7 @@ export default defineComponent({
 
   setup(props) {
     useEntryFetch(props);
-    const { entry, entryLoaded } = useEntry<JobEntry>(props);
+    const { entry, entryLoaded } = useEntry<JobAttributes>(props);
     const { formatDateTime } = useDateTime();
     const { download, downloadUrlAvailable } = useDownloadJob();
 

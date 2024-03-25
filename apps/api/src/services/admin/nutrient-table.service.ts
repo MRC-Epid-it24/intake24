@@ -3,11 +3,9 @@ import type { CreationAttributes } from 'sequelize';
 import type { IoC } from '@intake24/api/ioc';
 import type { JobType, QueueJob } from '@intake24/common/types';
 import type {
-  NutrientTableCsvMappingFieldInput,
-  NutrientTableCsvMappingNutrientInput,
   NutrientTableEntry,
-  NutrientTableInput,
   NutrientTableRecord as ApiNutrientTableRecord,
+  NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { Transaction } from '@intake24/db';
 import { NotFoundError } from '@intake24/api/http/errors';
@@ -63,10 +61,10 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
   /**
    * Create new nutrient table with all CSV mappings
    *
-   * @param {NutrientTableInput} input
+   * @param {NutrientTableRequest} input
    * @returns {Promise<NutrientTableEntry>}
    */
-  const createTable = async (input: NutrientTableInput): Promise<NutrientTableEntry> => {
+  const createTable = async (input: NutrientTableRequest): Promise<NutrientTableEntry> => {
     const { id, description } = input;
 
     return db.foods.transaction<NutrientTableEntry>(async (transaction) => {
@@ -102,7 +100,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
   const updateCsvMappingFields = async (
     nutrientTableId: string,
-    fields: NutrientTableCsvMappingFieldInput[],
+    fields: NutrientTableRequest['csvMappingFields'],
     transaction?: Transaction
   ): Promise<NutrientTableCsvMappingField[]> => {
     const fieldNames = fields.map((field) => field.fieldName);
@@ -145,7 +143,7 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
 
   const updateCsvMappingNutrients = async (
     nutrientTableId: string,
-    nutrients: NutrientTableCsvMappingNutrientInput[],
+    nutrients: NutrientTableRequest['csvMappingNutrients'],
     transaction?: Transaction
   ): Promise<NutrientTableCsvMappingNutrient[]> => {
     const nutrientTypes = nutrients.map((nutrient) => nutrient.nutrientTypeId);
@@ -192,12 +190,12 @@ const nutrientTableService = ({ db, scheduler }: Pick<IoC, 'db' | 'scheduler'>) 
    * Update new nutrient table with all CSV mappings
    *
    * @param {string} nutrientTableId
-   * @param {NutrientTableInput} input
+   * @param {NutrientTableRequest} input
    * @returns {Promise<NutrientTableEntry>}
    */
   const updateTable = async (
     nutrientTableId: string,
-    input: NutrientTableInput
+    input: Omit<NutrientTableRequest, 'id'>
   ): Promise<NutrientTableEntry> => {
     const { description } = input;
 

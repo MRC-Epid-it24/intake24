@@ -1,8 +1,24 @@
-import type { Pagination, PersonalAccessTokenAttributes } from '@intake24/db';
+import { z } from 'zod';
 
-export type PersonalAccessTokensResponse = Pagination<Omit<PersonalAccessTokenAttributes, 'token'>>;
+import type { Pagination } from '@intake24/db';
 
-export type PersonalAccessTokenEntry = {
-  jwt: string;
-  token: Omit<PersonalAccessTokenAttributes, 'token'>;
-};
+export const personalAccessTokenAttributes = z.object({
+  id: z.string(),
+  userId: z.string(),
+  name: z.string().max(128),
+  token: z.string().max(64),
+  scopes: z.array(z.string()).nullable(),
+  revoked: z.boolean(),
+  usedAt: z.date().nullable(),
+  expiresAt: z.date().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type PersonalAccessTokenAttributes = z.infer<typeof personalAccessTokenAttributes>;
+
+export const personalAccessTokenResponse = personalAccessTokenAttributes.omit({ token: true });
+
+export type PersonalAccessTokenResponse = z.infer<typeof personalAccessTokenResponse>;
+
+export type PersonalAccessTokensResponse = Pagination<PersonalAccessTokenResponse>;

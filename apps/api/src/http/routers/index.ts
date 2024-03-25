@@ -4,7 +4,13 @@ import passport from 'passport';
 
 import { contract } from '@intake24/common/contracts';
 
-import { isSurveyRespondent, registerACLScope, requestValidationErrorHandler } from '../middleware';
+import {
+  isAccountVerified,
+  isSurveyRespondent,
+  registerACLScope,
+  requestValidationErrorHandler,
+} from '../middleware';
+import admin from './admin';
 import { authentication } from './authentication.router';
 import { category } from './category.router';
 import { feedback } from './feedback.router';
@@ -31,10 +37,7 @@ export const registerRouters = (express: Router) => {
       survey: survey(),
     }),
     express,
-    {
-      responseValidation,
-      requestValidationErrorHandler,
-    }
+    { responseValidation, requestValidationErrorHandler }
   );
   // Authenticated endpoints
   const authContract = {
@@ -77,6 +80,87 @@ export const registerRouters = (express: Router) => {
         passport.authenticate('survey', { session: false }),
         registerACLScope,
         isSurveyRespondent(),
+      ],
+    }
+  );
+
+  // Admin endpoints - public
+  const adminPublicContract = {
+    authentication: contract.admin.authentication,
+    signUp: contract.admin.signUp,
+  };
+
+  createExpressEndpoints(
+    adminPublicContract,
+    server.router(adminPublicContract, {
+      authentication: admin.authentication(),
+      signUp: admin.signUp(),
+    }),
+    express,
+    { responseValidation, requestValidationErrorHandler }
+  );
+
+  // Admin endpoints - authenticated
+  const adminAuthContract = {
+    job: contract.admin.user.job,
+    profile: contract.admin.user.profile,
+  };
+
+  createExpressEndpoints(
+    adminAuthContract,
+    server.router(adminAuthContract, {
+      job: admin.user.job(),
+      profile: admin.user.profile(),
+    }),
+    express,
+    {
+      responseValidation,
+      requestValidationErrorHandler,
+      globalMiddleware: [passport.authenticate('admin', { session: false }), registerACLScope],
+    }
+  );
+
+  // Admin endpoints - authenticated & verified
+  const adminAuthVerifiedContract = {
+    job: contract.admin.job,
+    signInLog: contract.admin.signInLog,
+    nutrientTable: contract.admin.nutrientTable,
+    nutrientType: contract.admin.nutrientType,
+    nutrientUnit: contract.admin.nutrientUnit,
+    standardUnit: contract.admin.standardUnit,
+    task: contract.admin.task,
+    personalAccessToken: contract.admin.user.personalAccessToken,
+    device: contract.admin.user.mfa.device,
+    duo: contract.admin.user.mfa.duo,
+    fido: contract.admin.user.mfa.fido,
+    otp: contract.admin.user.mfa.otp,
+  };
+
+  createExpressEndpoints(
+    adminAuthVerifiedContract,
+    server.router(adminAuthVerifiedContract, {
+      job: admin.job(),
+      signInLog: admin.signInLog(),
+      nutrientTable: admin.nutrientTable(),
+      nutrientType: admin.nutrientType(),
+      nutrientUnit: admin.nutrientUnit(),
+      standardUnit: admin.standardUnit(),
+      task: admin.task(),
+      personalAccessToken: admin.user.personalAccessToken(),
+      device: admin.user.mfa.device(),
+      duo: admin.user.mfa.duo(),
+      fido: admin.user.mfa.fido(),
+      otp: admin.user.mfa.otp(),
+    }),
+    express,
+    {
+      responseValidation,
+      //@ts-expect-error fix types
+      requestValidationErrorHandler,
+      globalMiddleware: [
+        passport.authenticate('admin', { session: false }),
+        registerACLScope,
+        isAccountVerified,
       ],
     }
   );

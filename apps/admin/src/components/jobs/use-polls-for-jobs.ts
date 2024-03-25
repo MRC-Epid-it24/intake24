@@ -2,7 +2,7 @@ import type { ComputedRef } from 'vue';
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 
 import type { JobType } from '@intake24/common/types';
-import type { JobEntry } from '@intake24/common/types/http/admin';
+import type { JobAttributes } from '@intake24/common/types/http/admin';
 import { useHttp } from '@intake24/admin/services';
 
 export const usePollsForJobs = (
@@ -12,14 +12,14 @@ export const usePollsForJobs = (
   const http = useHttp();
 
   const dialog = ref<boolean>(false);
-  const jobs = ref<JobEntry[]>([]);
+  const jobs = ref<JobAttributes[]>([]);
   const polling = ref<number | null>(null);
 
   const jobInProgress = computed(() =>
     jobs.value.some((item) => item.progress !== 1 && item.completedAt === null)
   );
 
-  watch(jobs, (val: JobEntry[]) => {
+  watch(jobs, (val: JobAttributes[]) => {
     if (!val.length || !jobInProgress.value) stopPolling();
   });
 

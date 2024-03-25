@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import type { StandardUnitEntry } from '@intake24/common/types/http/admin';
+import type { StandardUnitAttributes } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
 import { Read } from '@intake24/admin/components/data-tables/action-bar';
 import { detailMixin } from '@intake24/admin/components/entry';
@@ -34,7 +34,7 @@ export default defineComponent({
   mixins: [detailMixin],
 
   setup(props) {
-    const { entry, entryLoaded } = useEntry<StandardUnitEntry>(props);
+    const { entry, entryLoaded } = useEntry<StandardUnitAttributes>(props);
     useEntryFetch(props);
 
     const table = ref<InstanceType<typeof EmbeddedDataTable>>();

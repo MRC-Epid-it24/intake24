@@ -65,7 +65,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import type { NutrientTypeEntry, NutrientTypeRefs } from '@intake24/common/types/http/admin';
+import type { NutrientTypeRefs, NutrientTypeResponse } from '@intake24/common/types/http/admin';
 import { formMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
 
@@ -83,13 +83,13 @@ export default defineComponent({
 
   setup(props) {
     const { entry, entryLoaded, isEdit, refs, refsLoaded } = useEntry<
-      NutrientTypeEntry,
+      NutrientTypeResponse,
       NutrientTypeRefs
     >(props);
     useEntryFetch(props);
     const { clearError, form, routeLeave, submit } = useEntryForm<
       NutrientTypeForm,
-      NutrientTypeEntry
+      NutrientTypeResponse
     >(props, {
       data: { id: null, description: null, unitId: null, kcalPerUnit: null },
     });

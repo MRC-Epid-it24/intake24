@@ -9,7 +9,7 @@ export default () => {
   const { roleController } = ioc.cradle;
   const router = Router();
 
-  router.use(permission(['acl', 'roles']));
+  router.use(permission('acl', 'roles'));
 
   router
     .route('')

@@ -88,7 +88,6 @@ export default class Job extends BaseModel<InferAttributes<Job>, InferCreationAt
   }
 
   set params(value: JobTypeParams) {
-    // @ts-expect-error: Sequelize/TS issue for setting custom values
     this.setDataValue('params', JSON.stringify(value ?? {}));
   }
 

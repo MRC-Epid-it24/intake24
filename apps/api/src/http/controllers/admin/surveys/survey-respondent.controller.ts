@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 import type { IoC } from '@intake24/api/ioc';
 import type { Subject } from '@intake24/common/security';
 import type {
-  JobEntry,
+  JobAttributes,
   SurveyRespondentEntry,
   SurveyRespondentsResponse,
 } from '@intake24/common/types/http/admin';
@@ -154,7 +154,7 @@ const adminSurveyRespondentController = ({
 
   const upload = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobEntry>
+    res: Response<JobAttributes>
   ): Promise<void> => {
     const { surveyId } = req.params;
     const {
@@ -178,7 +178,7 @@ const adminSurveyRespondentController = ({
 
   const exportAuthUrls = async (
     req: Request<{ surveyId: string }>,
-    res: Response<JobEntry>
+    res: Response<JobAttributes>
   ): Promise<void> => {
     const { surveyId } = req.params;
     const {

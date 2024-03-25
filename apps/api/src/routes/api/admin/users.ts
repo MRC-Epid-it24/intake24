@@ -9,7 +9,7 @@ export default () => {
   const { adminUserController } = ioc.cradle;
   const router = Router();
 
-  router.use(permission(['acl', 'users']));
+  router.use(permission('acl', 'users'));
 
   router
     .route('')

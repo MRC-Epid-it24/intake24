@@ -58,7 +58,7 @@ import { defineComponent } from 'vue';
 import type {
   FIDORegistrationChallenge,
   FIDORegistrationVerificationRequest,
-  MFADeviceEntry,
+  MFADeviceResponse,
 } from '@intake24/common/types/http/admin';
 import { createForm } from '@intake24/admin/util';
 
@@ -71,7 +71,7 @@ export default defineComponent({
 
   data() {
     return {
-      url: 'admin/user/mfa/fido',
+      url: 'admin/user/mfa/providers/fido',
       progress: 1,
       form: createForm<FIDOForm>({
         challengeId: '',
@@ -110,7 +110,7 @@ export default defineComponent({
     },
 
     async verify() {
-      const device = await this.form.post<MFADeviceEntry>(this.url);
+      const device = await this.form.post<MFADeviceResponse>(this.url);
       this.$emit('registered', device);
 
       this.progress = 3;

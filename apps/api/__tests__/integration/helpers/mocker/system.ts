@@ -8,10 +8,10 @@ import type {
   CreateLocaleRequest,
   CreateRespondentRequest,
   CreateSurveyRequest,
-  CreateTaskRequest,
   CreateUserRequest,
   PermissionRequest,
   RoleRequest,
+  TaskRequest,
 } from '@intake24/common/types/http/admin';
 import type {
   FeedbackSchemeCreationAttributes,
@@ -333,7 +333,7 @@ const submission = (surveyId: string, userId: string) => {
   };
 };
 
-const task = (): CreateTaskRequest => {
+const task = (): TaskRequest => {
   const name = faker.word.words(3);
   const job = jobTypes[0];
   const cron = '0 * * * *';

@@ -8,17 +8,6 @@ export default (container: AwilixContainer): void => {
     // Admin
     referenceController: asFunction(controllers.admin.reference),
 
-    adminAuthenticationController: asFunction(controllers.admin.authentication),
-    adminSignupController: asFunction(controllers.admin.signup),
-    adminUserJobController: asFunction(controllers.admin.user.job),
-    adminUserProfileController: asFunction(controllers.admin.user.profile),
-    personalAccessTokenController: asFunction(controllers.admin.user.personalAccessToken),
-
-    mfaDeviceController: asFunction(controllers.admin.user.mfa.device),
-    fidoDeviceController: asFunction(controllers.admin.user.mfa.fido),
-    duoDeviceController: asFunction(controllers.admin.user.mfa.duo),
-    otpDeviceController: asFunction(controllers.admin.user.mfa.otp),
-
     adminFoodDatabaseController: asFunction(controllers.admin.fdbs.fdb),
     adminCategoryController: asFunction(controllers.admin.fdbs.category),
     adminFoodController: asFunction(controllers.admin.fdbs.food),
@@ -44,10 +33,6 @@ export default (container: AwilixContainer): void => {
     localeSplitListController: asFunction(controllers.admin.locales.splitList),
     localeSplitWordController: asFunction(controllers.admin.locales.splitWord),
     localeSynonymSetController: asFunction(controllers.admin.locales.synonymSet),
-    nutrientTableController: asFunction(controllers.admin.nutrientTable),
-    nutrientTypeController: asFunction(controllers.admin.nutrientType),
-    nutrientUnitController: asFunction(controllers.admin.nutrientUnit),
-    standardUnitController: asFunction(controllers.admin.standardUnit),
 
     // Schemes
     feedbackSchemeController: asFunction(controllers.admin.feedbackScheme),
@@ -58,11 +43,6 @@ export default (container: AwilixContainer): void => {
     adminSurveyController: asFunction(controllers.admin.surveys.survey),
     adminSurveyRespondentController: asFunction(controllers.admin.surveys.respondent),
     adminSurveySubmissionController: asFunction(controllers.admin.surveys.submission),
-
-    // System
-    jobController: asFunction(controllers.admin.job),
-    signInLogController: asFunction(controllers.admin.signInLog),
-    taskController: asFunction(controllers.admin.task),
 
     // ACL
     permissionController: asFunction(controllers.admin.acl.permission),

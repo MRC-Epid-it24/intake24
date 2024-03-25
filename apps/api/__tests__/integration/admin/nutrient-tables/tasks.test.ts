@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 import request from 'supertest';
 
-import type { NutrientTableInput } from '@intake24/common/types/http/admin';
+import type { NutrientTableRequest } from '@intake24/common/types/http/admin';
 import { mocker, suite } from '@intake24/api-tests/integration/helpers';
 import { NutrientTable } from '@intake24/db';
 
@@ -13,7 +13,7 @@ export default () => {
   let url: string;
   let invalidUrl: string;
 
-  let input: NutrientTableInput;
+  let input: NutrientTableRequest;
   let nutrientTable: NutrientTable;
 
   const fileName = 'importNutrientTable.csv';
@@ -55,19 +55,8 @@ export default () => {
       await suite.util.setPermission(permissions);
     });
 
-    it(`should return 404 when record doesn't exist`, async () => {
-      const { status } = await request(suite.app)
-        .post(invalidUrl)
-        .set('Accept', 'application/json')
-        .set('Authorization', suite.bearer.user)
-        .field('type', 'NutrientTableMappingImport')
-        .attach('params[file]', fs.createReadStream(filePath), fileName);
-
-      expect(status).toBe(404);
-    });
-
     it('should return 400 for missing input data', async () => {
-      await suite.sharedTests.assertInvalidInput('post', url, ['type']);
+      await suite.sharedTests.assertInvalidInput('post', url, ['type', 'params']);
     });
 
     it('should return 400 for invalid input data', async () => {
@@ -76,11 +65,24 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('type', 'NutrientTableMappingImport')
+        .field('params[nutrientTableId]', false)
         .field('params[file]', '../../invalid_001');
 
       expect(status).toBe(400);
       expect(body).toContainAllKeys(['errors', 'message']);
       expect(body.errors).toContainAllKeys(['params.file']);
+    });
+
+    it(`should return 404 when record doesn't exist`, async () => {
+      const { status } = await request(suite.app)
+        .post(invalidUrl)
+        .set('Accept', 'application/json')
+        .set('Authorization', suite.bearer.user)
+        .field('type', 'NutrientTableMappingImport')
+        .field('params[nutrientTableId]', nutrientTable.id)
+        .attach('params[file]', fs.createReadStream(filePath), fileName);
+
+      expect(status).toBe(404);
     });
 
     it('should return 200 and job resource', async () => {
@@ -89,6 +91,7 @@ export default () => {
         .set('Accept', 'application/json')
         .set('Authorization', suite.bearer.user)
         .field('type', 'NutrientTableMappingImport')
+        .field('params[nutrientTableId]', nutrientTable.id)
         .attach('params[file]', fs.createReadStream(filePath), fileName);
 
       expect(status).toBe(200);

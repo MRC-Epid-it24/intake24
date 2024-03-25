@@ -5,7 +5,7 @@ import type {
   UserSecurable,
 } from '@intake24/db';
 
-import type { NutrientTypeEntry } from './nutrient-types';
+import type { NutrientTypeResponse } from './nutrient-types';
 import type { Owner } from './users';
 
 /* export type FeedbackSchemeRequest = FeedbackSchemeCreationAttributes;
@@ -26,6 +26,6 @@ export interface FeedbackSchemeEntry extends FeedbackSchemeAttributes {
 export type FeedbackSchemeListEntry = Pick<FeedbackSchemeAttributes, 'id' | 'name'>;
 
 export type FeedbackSchemeRefs = {
-  nutrientTypes: NutrientTypeEntry[];
+  nutrientTypes: NutrientTypeResponse[];
   physicalActivityLevels: PhysicalActivityLevelAttributes[];
 };
