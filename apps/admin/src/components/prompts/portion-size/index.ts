@@ -7,6 +7,7 @@ import MilkOnCerealPrompt from './milk-on-cereal-prompt.vue';
 import MissingFoodPrompt from './missing-food-prompt.vue';
 import ParentFoodPortionPrompt from './parent-food-portion-prompt.vue';
 import PizzaPrompt from './pizza-prompt.vue';
+import PizzaV2Prompt from './pizza-v2-prompt.vue';
 import PortionSizeOptionPrompt from './portion-size-option-prompt.vue';
 import RecipeBuilderPrompt from './recipe-builder-prompt.vue';
 import StandardPortionPrompt from './standard-portion-prompt.vue';
@@ -21,6 +22,7 @@ export default {
   MissingFoodPrompt,
   ParentFoodPortionPrompt,
   PizzaPrompt,
+  PizzaV2Prompt,
   PortionSizeOptionPrompt,
   RecipeBuilderPrompt,
   StandardPortionPrompt,

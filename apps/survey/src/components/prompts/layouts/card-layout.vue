@@ -22,7 +22,7 @@
       <v-card-actions
         v-if="!isMobile || prompt.actions?.both"
         id="actions"
-        class="pa-4 d-flex flex-column-reverse flex-md-row align-stretch ga-3"
+        class="px-4 pt-0 pb-4 d-flex flex-column-reverse flex-md-row align-stretch ga-3"
       >
         <template v-if="desktopActions.length">
           <v-btn
