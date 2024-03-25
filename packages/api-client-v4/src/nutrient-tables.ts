@@ -1,4 +1,4 @@
-import type { NutrientTableInput, NutrientTableRecord } from '@intake24/common/types/http/admin';
+import type { NutrientTableRecord, NutrientTableRequest } from '@intake24/common/types/http/admin';
 
 import type { BaseClientV4 } from './base-client-v4';
 
@@ -15,11 +15,11 @@ export class NutrientTablesApiV4 {
     return await this.baseClient.getOptional(`${NutrientTablesApiV4.apiPath}/${nutrientTableId}`);
   }
 
-  async create(nutrientTableData: NutrientTableInput) {
+  async create(nutrientTableData: NutrientTableRequest) {
     await this.baseClient.post(NutrientTablesApiV4.apiPath, nutrientTableData);
   }
 
-  async update(nutrientTableId: string, nutrientTableData: NutrientTableInput) {
+  async update(nutrientTableId: string, nutrientTableData: NutrientTableRequest) {
     await this.baseClient.put(
       `${NutrientTablesApiV4.apiPath}/${nutrientTableId}`,
       nutrientTableData

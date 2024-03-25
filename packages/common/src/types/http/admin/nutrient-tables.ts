@@ -97,7 +97,7 @@ export type NutrientTableRefs = z.infer<typeof nutrientTableRefs>;
 export const nutrientTableRecord = z.object({
   recordId: z.string(),
   name: z.string(),
-  localName: z.string().nullable(),
+  localName: z.string().optional(),
   nutrients: z.array(z.tuple([z.string(), z.number()])),
   fields: z.array(z.tuple([z.string(), z.string()])),
 });

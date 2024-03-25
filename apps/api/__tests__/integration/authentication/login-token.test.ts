@@ -32,11 +32,11 @@ export default () => {
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);
 
-    expect(res.get('Set-Cookie').length).toBeGreaterThanOrEqual(1);
+    expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
-      res
-        .get('Set-Cookie')
-        .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name)
+      (res.get('Set-Cookie') ?? []).some(
+        (cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name
+      )
     ).toBeTrue();
   });
 };

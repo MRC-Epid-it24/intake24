@@ -28,8 +28,9 @@ export default () => {
       .send({ email: 'testUser@example.com', password: 'testUserPassword' });
 
     const refreshToken = loginRes
-      .get('Set-Cookie')[0]
-      .split(';')[0]
+      .get('Set-Cookie')
+      ?.at(0)
+      ?.split(';')[0]
       .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     const res = await request(suite.app)
@@ -38,8 +39,9 @@ export default () => {
       .set('Cookie', [`${securityConfig.jwt.admin.cookie.name}=${refreshToken}`]);
 
     const newRefreshToken = res
-      .get('Set-Cookie')[0]
-      .split(';')[0]
+      .get('Set-Cookie')
+      ?.at(0)
+      ?.split(';')[0]
       .replace(`${securityConfig.jwt.admin.cookie.name}=`, '');
 
     expect(refreshToken).not.toBe(newRefreshToken);
@@ -47,11 +49,11 @@ export default () => {
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);
 
-    expect(res.get('Set-Cookie').length).toBeGreaterThanOrEqual(1);
+    expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
-      res
-        .get('Set-Cookie')
-        .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name)
+      (res.get('Set-Cookie') ?? []).some(
+        (cookie) => cookie.split('=')[0] === securityConfig.jwt.admin.cookie.name
+      )
     ).toBeTrue();
   });
 };

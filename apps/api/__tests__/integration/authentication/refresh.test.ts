@@ -33,8 +33,9 @@ export default () => {
       });
 
     const refreshToken = loginRes
-      .get('Set-Cookie')[0]
-      .split(';')[0]
+      .get('Set-Cookie')
+      ?.at(0)
+      ?.split(';')[0]
       .replace(`${securityConfig.jwt.survey.cookie.name}=`, '');
 
     const res = await request(suite.app)
@@ -43,8 +44,9 @@ export default () => {
       .set('Cookie', [`${securityConfig.jwt.survey.cookie.name}=${refreshToken}`]);
 
     const newRefreshToken = res
-      .get('Set-Cookie')[0]
-      .split(';')[0]
+      .get('Set-Cookie')
+      ?.at(0)
+      ?.split(';')[0]
       .replace(`${securityConfig.jwt.survey.cookie.name}=`, '');
 
     expect(refreshToken).not.toBe(newRefreshToken);
@@ -52,11 +54,11 @@ export default () => {
     expect(res.status).toBe(200);
     expect(res.body).toContainAllKeys(['accessToken']);
 
-    expect(res.get('Set-Cookie').length).toBeGreaterThanOrEqual(1);
+    expect(res.get('Set-Cookie')?.length).toBeGreaterThanOrEqual(1);
     expect(
-      res
-        .get('Set-Cookie')
-        .some((cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name)
+      (res.get('Set-Cookie') ?? []).some(
+        (cookie) => cookie.split('=')[0] === securityConfig.jwt.survey.cookie.name
+      )
     ).toBeTrue();
   });
 };

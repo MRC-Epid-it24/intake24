@@ -14,8 +14,8 @@ import type {
   CreateLocalFoodRequest,
   ImageMapEntryObject,
   LocaleRequest,
-  NutrientTableInput,
   NutrientTableRecord,
+  NutrientTableRequest,
 } from '@intake24/common/types/http/admin';
 import type { AssociatedFood } from '@intake24/common/types/http/admin/associated-food';
 import { useInRecipeTypes } from '@intake24/common/types';
@@ -172,7 +172,7 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
   };
 }
 
-function fromPackageNutrientTable(nutrientTable: PkgNutrientTable): NutrientTableInput {
+function fromPackageNutrientTable(nutrientTable: PkgNutrientTable): NutrientTableRequest {
   return {
     id: nutrientTable.id,
     description: nutrientTable.description,
