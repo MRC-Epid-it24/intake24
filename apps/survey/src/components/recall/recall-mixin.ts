@@ -145,6 +145,8 @@ export default defineComponent({
 
   methods: {
     onPopState(event: PopStateEvent) {
+      if (this.hasFinished) return;
+
       function isValidSelection(meals: MealState[], selection: Selection): boolean {
         if (
           selection.element &&
