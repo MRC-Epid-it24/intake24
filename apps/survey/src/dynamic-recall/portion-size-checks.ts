@@ -166,6 +166,24 @@ export function pizzaComplete(food: FoodState): boolean {
   return food.portionSize.servingWeight !== null;
 }
 
+export function pizzaV2Complete(food: FoodState): boolean {
+  if (
+    food.type !== 'encoded-food' ||
+    !food.portionSize ||
+    !food.flags.includes('portion-size-method-complete')
+  )
+    return false;
+
+  if (food.portionSize.method !== 'pizza-v2') {
+    console.warn(
+      `Selected portion size method is "pizza-v2" but portion size data is for ${food.portionSize.method}`
+    );
+    return false;
+  }
+
+  return food.portionSize.servingWeight !== null;
+}
+
 export function standardPortionComplete(food: FoodState): boolean {
   if (
     food.type !== 'encoded-food' ||
@@ -216,6 +234,7 @@ export const portionSizeCompleteChecks = {
   'milk-on-cereal': milkOnCerealComplete,
   'parent-food-portion': parentFoodPortionComplete,
   pizza: pizzaComplete,
+  'pizza-v2': pizzaV2Complete,
   'standard-portion': standardPortionComplete,
   'recipe-builder': recipeComplete,
 };

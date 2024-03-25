@@ -208,6 +208,10 @@ export type Prompts = {
     component: 'pizza-prompt';
     imageMap: ImageMap;
   };
+  'pizza-v2-prompt': BasePortionPrompt & {
+    component: 'pizza-v2-prompt';
+    imageMap: ImageMap;
+  };
   'portion-size-option-prompt': BasePortionPrompt & { component: 'portion-size-option-prompt' };
   'recipe-builder-prompt': BasePortionPrompt &
     FoodBrowser & {

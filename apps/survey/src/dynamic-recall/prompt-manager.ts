@@ -28,6 +28,7 @@ import {
   milkOnCerealComplete,
   parentFoodPortionComplete,
   pizzaComplete,
+  pizzaV2Complete,
   portionSizeMethodSelected,
   recipeBuilderComplete,
   standardPortionComplete,
@@ -573,6 +574,25 @@ const checkFoodStandardConditions = (
         portionSizeMethodSelected(foodState, 'pizza')
           ? 'Pizza estimation already complete'
           : 'Pizza estimation not selected'
+      );
+      return false;
+    }
+
+    case 'pizza-v2-prompt': {
+      if (portionSizeMethodSelected(foodState, 'pizza-v2') && !pizzaV2Complete(foodState)) {
+        recallLog().promptCheck(
+          component,
+          true,
+          'Pizza V2 selected but estimation not yet complete'
+        );
+        return true;
+      }
+      recallLog().promptCheck(
+        component,
+        false,
+        portionSizeMethodSelected(foodState, 'pizza-v2')
+          ? 'Pizza V2 estimation already complete'
+          : 'Pizza V2 estimation not selected'
       );
       return false;
     }

@@ -1,5 +1,5 @@
 <template>
-  <v-row class="pt-2" justify="center" :no-gutters="isMobile">
+  <v-row justify="center" :no-gutters="isMobile">
     <v-slide-x-transition mode="out-in">
       <v-col v-if="showMealList" cols="3">
         <meal-list v-bind="{ meals }" @action="action"></meal-list>
