@@ -7,17 +7,17 @@ export interface CreateSuccess<T> {
   data: T;
 }
 
-export interface CreateConflict {
+export interface CreateConflict<T> {
   type: 'conflict';
-  details: any;
+  details: T;
 }
 
-export type CreateResult<T> = CreateSuccess<T> | CreateConflict;
+export type CreateResult<T, CT = any> = CreateSuccess<T> | CreateConflict<CT>;
 
-export function parseCreateResponse<T>(
+export function parseCreateResponse<T, CT = any>(
   response: AxiosResponse<T>,
   logger: winston.Logger
-): CreateResult<T> {
+): CreateResult<T, CT> {
   if (response.status === HttpStatusCode.Ok || response.status === HttpStatusCode.Created) {
     return {
       type: 'success',
@@ -26,7 +26,7 @@ export function parseCreateResponse<T>(
   } else if (response.status === HttpStatusCode.Conflict) {
     return {
       type: 'conflict',
-      details: response.data,
+      details: response.data as unknown as CT,
     };
   } else {
     {

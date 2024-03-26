@@ -283,14 +283,36 @@ export class FrenchAnsesLocaleBuilder {
 
   private async readCategoryNames(): Promise<void> {
     this.categoryNames = {};
+    const missingTranslations: string[] = [];
 
     await this.readCSV(
       path.join('categories', 'names.csv'),
       (data) => {
-        this.categoryNames![data[0]] = data[1];
+        const trCol1 = data[1];
+        const trCol2 = data[3];
+        const trCol3 = data[5];
+        const catCode = data[7];
+
+        if (catCode) {
+          const translatedName = trCol1 || trCol2 || trCol3;
+
+          if (translatedName) {
+            this.categoryNames![catCode] = translatedName;
+          } else {
+            missingTranslations.push(catCode);
+          }
+        }
       },
-      { headers: false, skipLines: 0 }
+      { headers: false, skipLines: 1 }
     );
+
+    if (missingTranslations.length > 0) {
+      this.logger.warn(
+        'Translations are missing for the following category codes (likely intentional because these categories are not used in the ANSES locale)'
+      );
+
+      this.logger.warn(`${missingTranslations.join(', ')}`);
+    }
   }
 
   private async readQuantificationData(): Promise<void> {
@@ -634,8 +656,16 @@ export class FrenchAnsesLocaleBuilder {
         code: 'FRLAMA',
         attributes: {},
         englishDescription: 'Breast milk',
-        parentCategories: ['FRLBI'],
+        parentCategories: ['FRLABO'],
         version: 'e309274c-12be-49d0-88e2-26744ce7f3c1',
+        isHidden: false,
+      },
+      {
+        code: 'FRCIT',
+        attributes: {},
+        englishDescription: 'Lemon juice for cooking',
+        parentCategories: ['COND'],
+        version: '0555155a-8073-4a00-b30c-26691082b7d1',
         isHidden: false,
       },
     ];
@@ -666,6 +696,11 @@ export class FrenchAnsesLocaleBuilder {
       {
         code: 'FRLAMA',
         localDescription: 'Lait maternel',
+        portionSize: [],
+      },
+      {
+        code: 'FRCIT',
+        localDescription: 'Jus de citron',
         portionSize: [],
       },
     ];

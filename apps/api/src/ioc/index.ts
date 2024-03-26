@@ -8,7 +8,9 @@ import type {
   AdminFoodController,
   AdminFoodDatabaseController,
   AdminFoodGroupController,
+  AdminGlobalCategoriesController,
   AdminGlobalFoodsController,
+  AdminLocalCategoriesController,
   AdminLocalFoodsController,
   AdminSurveyController,
   AdminSurveyRespondentController,
@@ -57,6 +59,7 @@ import type {
   FIDOProvider,
   Filesystem,
   FoodDataService,
+  GlobalCategoriesService,
   GlobalFoodsService,
   GuideImageService,
   I18nService,
@@ -65,6 +68,7 @@ import type {
   JwtRotationService,
   JwtService,
   LanguageService,
+  LocalCategoriesService,
   LocaleService,
   LocalFoodsService,
   NutrientTableService,
@@ -136,6 +140,8 @@ export interface IoC extends Jobs {
   adminFoodGroupController: AdminFoodGroupController;
   adminGlobalFoodsController: AdminGlobalFoodsController;
   adminLocalFoodsController: AdminLocalFoodsController;
+  adminGlobalCategoriesController: AdminGlobalCategoriesController;
+  adminLocalCategoriesController: AdminLocalCategoriesController;
 
   // Images
   asServedSetController: AsServedSetController;
@@ -211,6 +217,8 @@ export interface IoC extends Jobs {
   adminFoodService: AdminFoodService;
   localFoodsService: LocalFoodsService;
   globalFoodsService: GlobalFoodsService;
+  localCategoriesService: LocalCategoriesService;
+  globalCategoriesService: GlobalCategoriesService;
   languageService: LanguageService;
   localeService: LocaleService;
   nutrientTableService: NutrientTableService;

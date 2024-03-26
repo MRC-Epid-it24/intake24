@@ -47,6 +47,34 @@ export type CreateLocalFoodRequestOptions = {
 
 export type UpdateLocalFoodRequest = Omit<CreateLocalFoodRequest, 'code'>;
 
+export type CreateGlobalCategoryRequest = {
+  code: string;
+  version?: string;
+  name: string;
+  isHidden: boolean;
+  attributes: InheritableAttributes;
+  parentCategories?: string[];
+};
+
+export type UpdateGlobalCategoryRequest = Omit<CreateGlobalCategoryRequest, 'code'>;
+
+export type GlobalCategoryEntry = {
+  code: string;
+  version: string;
+  name: string;
+  isHidden: boolean;
+  attributes: InheritableAttributes;
+  parentCategories: string[];
+};
+
+export type CreateLocalCategoryRequest = {
+  code: string;
+  name: string;
+  portionSizeMethods: PortionSizeMethod[];
+};
+
+export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code'>;
+
 export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
   parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];
 };

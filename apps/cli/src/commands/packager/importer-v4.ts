@@ -11,6 +11,10 @@ import type {
   PkgAsServedSet,
 } from '@intake24/cli/commands/packager/types/as-served';
 import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
+import type {
   PkgDrinkScale,
   PkgDrinkwareSet,
 } from '@intake24/cli/commands/packager/types/drinkware';
@@ -34,6 +38,8 @@ export const importerSpecificModulesExecutionOptions = [
   'nutrients',
   'global-foods',
   'local-foods',
+  'global-categories',
+  'local-categories',
   'enabled-local-foods',
   'all',
 ] as const;
@@ -72,6 +78,8 @@ export class ImporterV4 {
   private globalFoods: PkgGlobalFood[] | undefined;
   private localFoods: Record<string, PkgLocalFood[]> | undefined;
   private enabledLocalFoods: Record<string, string[]> | undefined;
+  private globalCategories: PkgGlobalCategory[] | undefined;
+  private localCategories: Record<string, PkgLocalCategory[]> | undefined;
   private nutrientTables: PkgNutrientTable[] | undefined;
   private asServedSets: PkgAsServedSet[] | undefined;
   private drinkwareSets: Record<string, PkgDrinkwareSet> | undefined;
@@ -115,6 +123,14 @@ export class ImporterV4 {
       await this.readImageMaps();
       await this.importImageMaps();
     },
+    'global-categories': async () => {
+      await this.readGlobalCategories();
+      await this.importGlobalCategories();
+    },
+    'local-categories': async () => {
+      await this.readLocalCategories();
+      // await this.importLocalCategories();
+    },
     'global-foods': async () => {
       await this.readGlobalFoods();
       await this.importGlobalFoods();
@@ -138,6 +154,8 @@ export class ImporterV4 {
       await this.importAsServedSets();
       await this.importImageMaps();
       await this.importDrinkwareSets();
+      await this.importGlobalCategories();
+      // await this.importLocalCategories();
       await this.importGlobalFoods();
       await this.importLocalFoods();
       await this.importEnabledLocalFoods();
@@ -454,6 +472,62 @@ export class ImporterV4 {
     }
   }
 
+  private async importGlobalCategory(category: PkgGlobalCategory): Promise<void> {
+    const request = typeConverters.fromPackageGlobalCategory(category);
+
+    const result = await this.apiClient.categories.createCategory(request);
+
+    if (result.type === 'conflict') {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`Skipping category "${category.code}" due to a conflict`);
+          return;
+        case 'abort': {
+          const message = `Failed to import food "${category.code}" due to a conflict`;
+          logger.error(message);
+          logger.error(JSON.stringify(result.details, null, 2));
+          throw new Error(message);
+        }
+        case 'overwrite': {
+          const existing = result.details;
+
+          if (existing !== null) {
+            await this.apiClient.categories.updateCategory(
+              category.code,
+              existing.version,
+              omit(request, 'code')
+            );
+          }
+        }
+      }
+    }
+  }
+
+  private async importGlobalCategories(): Promise<void> {
+    if (this.globalCategories !== undefined) {
+      await this.batchImport(this.globalCategories, 'global category record', 50, (category) =>
+        this.importGlobalCategory(category)
+      );
+    }
+  }
+
+  private async importLocalCategory(localeId: string, category: PkgLocalCategory): Promise<void> {
+    this.logger.warn(
+      `Local category import not implemented: ${category.code} ${category.localDescription}`
+    );
+  }
+
+  private async importLocalCategories(): Promise<void> {
+    if (this.localCategories !== undefined) {
+      for (const [localeId, localCategories] of Object.entries(this.localCategories)) {
+        logger.info(`Importing local category record(s) for locale ${localeId}...`);
+        await this.batchImport(localCategories, 'local category record', 50, (category) =>
+          this.importLocalCategory(localeId, category)
+        );
+      }
+    }
+  }
+
   private async importGlobalFood(food: PkgGlobalFood): Promise<void> {
     const foodEntry = typeConverters.fromPackageGlobalFood(food);
 
@@ -608,6 +682,16 @@ export class ImporterV4 {
   private async readLocalFoods(): Promise<void> {
     logger.info('Loading local foods');
     this.localFoods = await this.readJSON(PkgConstants.LOCAL_FOODS_FILE_NAME);
+  }
+
+  private async readGlobalCategories(): Promise<void> {
+    logger.info('Loading global categories');
+    this.globalCategories = await this.readJSON(PkgConstants.GLOBAL_CATEGORIES_FILE_NAME);
+  }
+
+  private async readLocalCategories(): Promise<void> {
+    logger.info('Loading local categories');
+    this.localCategories = await this.readJSON(PkgConstants.LOCAL_CATEGORIES_FILE_NAME);
   }
 
   private async readEnabledLocalFoods(): Promise<void> {

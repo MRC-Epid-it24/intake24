@@ -1,4 +1,8 @@
 import type {
+  PkgGlobalCategory,
+  PkgLocalCategory,
+} from '@intake24/cli/commands/packager/types/categories';
+import type {
   PkgAssociatedFood,
   PkgGlobalFood,
   PkgLocalFood,
@@ -10,7 +14,9 @@ import type { PkgNutrientTable } from '@intake24/cli/commands/packager/types/nut
 import type { UseInRecipeType } from '@intake24/common/types';
 import type { PortionSizeMethod } from '@intake24/common/types/';
 import type {
+  CreateGlobalCategoryRequest,
   CreateGlobalFoodRequest,
+  CreateLocalCategoryRequest,
   CreateLocalFoodRequest,
   ImageMapEntryObject,
   LocaleRequest,
@@ -64,6 +70,21 @@ function fromPackageGlobalFood(globalFood: PkgGlobalFood): CreateGlobalFoodReque
       reasonableAmount: globalFood.attributes.reasonableAmount,
       sameAsBeforeOption: globalFood.attributes.sameAsBeforeOption,
       useInRecipes: validateUseInRecipes(globalFood.attributes.useInRecipes),
+    },
+  };
+}
+
+function fromPackageGlobalCategory(globalCategory: PkgGlobalCategory): CreateGlobalCategoryRequest {
+  return {
+    code: globalCategory.code,
+    name: globalCategory.englishDescription,
+    parentCategories: globalCategory.parentCategories,
+    isHidden: globalCategory.isHidden,
+    attributes: {
+      readyMealOption: globalCategory.attributes.readyMealOption,
+      reasonableAmount: globalCategory.attributes.reasonableAmount,
+      sameAsBeforeOption: globalCategory.attributes.sameAsBeforeOption,
+      useInRecipes: validateUseInRecipes(globalCategory.attributes.useInRecipes),
     },
   };
 }
@@ -172,6 +193,14 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
   };
 }
 
+function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalCategoryRequest {
+  return {
+    code: localCategory.code,
+    name: localCategory.localDescription,
+    portionSizeMethods: localCategory.portionSize.map((psm) => fromPackagePortionSizeMethod(psm)),
+  };
+}
+
 function fromPackageNutrientTable(nutrientTable: PkgNutrientTable): NutrientTableRequest {
   return {
     id: nutrientTable.id,
@@ -196,6 +225,8 @@ export default {
   fromPackageLocale,
   fromPackageGlobalFood,
   fromPackageLocalFood,
+  fromPackageGlobalCategory,
+  fromPackageLocalCategory,
   fromPackageNutrientTable,
   fromPackageNutrientTableRecords,
 };

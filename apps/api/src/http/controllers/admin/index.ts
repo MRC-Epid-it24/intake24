@@ -12,6 +12,7 @@ import surveySchemePrompt from './survey-scheme-prompt.controller';
 import surveys from './surveys';
 
 export * from './acl';
+export * from './categories';
 export * from './fdbs';
 export * from './feedback-scheme.controller';
 export * from './foods';
@@ -29,6 +30,7 @@ export default {
   acl,
   fdbs,
   foods,
+  categories,
   images,
   surveys,
   feedbackScheme,

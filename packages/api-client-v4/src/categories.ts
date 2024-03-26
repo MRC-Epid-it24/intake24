@@ -1,8 +1,15 @@
 import type { CategoryContents } from '@intake24/common/types/http';
-import type { MainCategoriesResponse } from '@intake24/common/types/http/admin';
+import type {
+  CreateGlobalCategoryRequest,
+  GlobalCategoryEntry,
+  MainCategoriesResponse,
+  UpdateGlobalCategoryRequest,
+} from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 
 import type { BaseClientV4 } from './base-client-v4';
+import type { CreateResult } from './create-response';
+import { parseCreateResponse } from './create-response';
 
 export class CategoriesApiV4 {
   private static readonly adminApiPath = '/api/admin/categories';
@@ -33,5 +40,26 @@ export class CategoriesApiV4 {
     return this.baseClient.get<CategoryContents>(
       `${CategoriesApiV4.apiPath}/${localeId}/${categoryCode}`
     );
+  }
+
+  public async createCategory(
+    request: CreateGlobalCategoryRequest
+  ): Promise<CreateResult<any, GlobalCategoryEntry>> {
+    const response = await this.baseClient.postResponse(
+      `${CategoriesApiV4.adminApiPath}/global`,
+      request
+    );
+
+    return parseCreateResponse(response, this.baseClient.logger);
+  }
+
+  public async updateCategory(
+    categoryCode: string,
+    version: string,
+    request: UpdateGlobalCategoryRequest
+  ): Promise<void> {
+    await this.baseClient.put(`${CategoriesApiV4.adminApiPath}/global/${categoryCode}`, request, {
+      version,
+    });
   }
 }
