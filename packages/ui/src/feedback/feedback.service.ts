@@ -87,19 +87,32 @@ const createFeedbackService = (httpClient: HttpClient) => {
     }, []);
 
     const cardWithDemGroups: CardWithDemGroups[] = cards.map((card) => {
-      if (card.type !== 'character')
-        return {
-          ...card,
-          demographicGroups: demographicGroups.filter((group) => group.type === card.type),
-        };
-
-      const { nutrientTypeIds } = card;
-      const demGroups = demographicGroups.filter(
-        (group) =>
-          group.type === card.type && group.nutrient && nutrientTypeIds.includes(group.nutrient.id)
-      );
-
-      return new CharacterRules(card, demGroups);
+      switch (card.type) {
+        case 'character':
+          return new CharacterRules(
+            card,
+            demographicGroups.filter(
+              (group) =>
+                group.type === card.type &&
+                group.nutrient &&
+                card.nutrientTypeIds.includes(group.nutrient.id)
+            )
+          );
+        case 'nutrient-group':
+          return {
+            ...card,
+            demographicGroups: demographicGroups.filter(
+              (group) =>
+                group.type === card.type &&
+                (!group.nutrient || card.nutrientTypes.includes(group.nutrient.id))
+            ),
+          };
+        default:
+          return {
+            ...card,
+            demographicGroups: demographicGroups.filter((group) => group.type === card.type),
+          };
+      }
     });
 
     const feedbackDicts = {
