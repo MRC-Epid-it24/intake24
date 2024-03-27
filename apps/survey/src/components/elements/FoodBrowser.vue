@@ -54,6 +54,7 @@
           <category-contents-view
             v-if="currentCategoryContents && !requestInProgress"
             :categories-first="prompt.categoriesFirst.browse"
+            :class="{ 'px-4': dialog }"
             :contents="currentCategoryContents"
             :i18n="promptI18n"
             @category-selected="categorySelected"
@@ -65,6 +66,7 @@
           <category-contents-view
             v-if="!requestInProgress"
             :categories-first="prompt.categoriesFirst.search"
+            :class="{ 'px-4': dialog }"
             :contents="searchContents"
             :i18n="promptI18n"
             @category-selected="categorySelected"

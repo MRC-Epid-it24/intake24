@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
     <v-subheader v-if="contents.subcategories.length">Related Categories/Subcategories</v-subheader>
-    <v-chip-group v-if="contents.subcategories.length" active-class="primary--text" column>
+    <v-chip-group v-if="contents.subcategories.length" column>
       <v-chip
-        v-for="category in contents.subcategories"
+        v-for="category in showAll ? contents.subcategories : firstCategories"
         :key="category.code"
         class="my-1"
         clickable
@@ -13,6 +13,16 @@
       >
         <span class="font-weight-medium">{{ category.name }}</span>
       </v-chip>
+      <v-btn
+        v-if="contents.subcategories.length > threshold"
+        class="my-1 mb-2 show-all-toggle-chip"
+        color="info"
+        outlined
+        rounded
+        @click="showAll = !showAll"
+      >
+        {{ showAll ? 'Show Less' : 'Show All Related Categories' }}
+      </v-btn>
     </v-chip-group>
     <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item
@@ -78,6 +88,23 @@ export default defineComponent({
 
   emits: ['food-selected', 'category-selected'],
 
+  data() {
+    return {
+      expanded: false,
+      showAll: false,
+      threshold: 5,
+    };
+  },
+
+  computed: {
+    firstCategories(): CategoryHeader[] {
+      return this.contents.subcategories.slice(0, this.threshold);
+    },
+    remainingCategories(): CategoryHeader[] {
+      return this.contents.subcategories.slice(this.threshold);
+    },
+  },
+
   methods: {
     categorySelected(category: CategoryHeader): void {
       this.$emit('category-selected', category);
@@ -85,6 +112,10 @@ export default defineComponent({
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
+    },
+
+    toggleExpand() {
+      this.expanded = !this.expanded;
     },
   },
 });
