@@ -13,8 +13,7 @@ const localCategoriesController = ({
 
     const { localeId } = req.params;
 
-    // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
 
     try {
       await localCategoriesService.create(localeId, req.body);
@@ -34,8 +33,7 @@ const localCategoriesController = ({
     const { localeId, categoryId } = req.params;
     const { version } = req.query;
 
-    // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
 
     await localCategoriesService.update(
       categoryId,
@@ -51,8 +49,7 @@ const localCategoriesController = ({
   const read = async (req: Request, res: Response<LocalCategoryEntry>): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
 
     const { localeId, categoryId } = req.params;
 

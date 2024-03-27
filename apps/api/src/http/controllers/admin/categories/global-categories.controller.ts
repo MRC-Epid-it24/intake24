@@ -19,8 +19,7 @@ const globalCategoriesController = ({
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
 
     // Doing this operation properly is difficult, see
     // https://stackoverflow.com/questions/34708509/how-to-use-returning-with-on-conflict-in-postgresql
@@ -45,8 +44,7 @@ const globalCategoriesController = ({
   ): Promise<void> => {
     const { aclService } = req.scope.cradle;
 
-    // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|edit'))) throw new ForbiddenError();
 
     const { categoryId } = req.params;
     const { version } = req.query;
@@ -62,7 +60,7 @@ const globalCategoriesController = ({
     const { aclService } = req.scope.cradle;
 
     // FIXME: use correct permission
-    if (!(await aclService.hasPermission('locales|food-list'))) throw new ForbiddenError();
+    if (!(await aclService.hasPermission('fdbs|read'))) throw new ForbiddenError();
 
     const { categoryId } = req.params;
 
