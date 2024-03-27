@@ -8,14 +8,16 @@
   },
   "login": {
     "_": "Se connecter",
+    "start": "Commençons",
     "subtitle": "Se connecter avec votre nom d'utilisateur et votre mot de passe",
     "back": "Retour à la connexion",
+    "captcha": "Remplir le test CAPTCHA",
 
     "err": {
-      "invalidCredentials": "Le nom d'utilisateur et le mot de passe renseignés sont invalides.",
-      "invalidToken": "Le jeton d'accès fourni est invalide",
-      "invalidSurvey": "Cette enquête ({surveyId}) ne semble pas correspondre à une URL de connexion valide.",
-      "checkCredentials": "Vérifiez les codes d'accès qui vous ont été fournis."
+      "captcha": "Réponse invalide au test CAPTCHA.",
+      "credentials": "Le nom d'utilisateur et le mot de passe renseignés sont invalides.",
+      "token": "Le jeton d'accès fourni est invalide.",
+      "survey": "Cette enquête ({surveyId}) ne semble pas correspondre à une URL de connexion valide."
     }
   },
   "logout": {

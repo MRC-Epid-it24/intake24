@@ -41,7 +41,7 @@
       "free-text": {
         "_": "Cet aliment ne correspond pas encore à un aliment dans notre base de données.",
         "incomplete": "La taille de la portion pour cet aliment n'a pas encore été renseignée.",
-        "edit": "Edit search"
+        "edit": "Modifier la recherche"
       },
       "encoded-food": {
         "_": "Cet aliment correspond à un aliment dans notre base de données.",
@@ -53,13 +53,13 @@
         "_": "Cet aliment a été signalé comme manquant dans notre base de données.",
         "complete": "Les informations manquantes pour cette denrée alimentaire sont complètes.",
         "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues.",
-        "edit": "Edit missing food"
+        "edit": "Modifier l’aliment manquant"
       },
       "recipe-builder": {
-        "_": "This food has been matched with a recipe from our database.",
+        "_": "Cet aliment correspond à une recette présente dans notre base de données.",
         "complete": "Les étapes pour cette recette sont complètes.",
         "incomplete": "Les étapes pour cette recette ne sont pas encore complètes.",
-        "edit": "Edit ingredients"
+        "edit": "Modifier les ingrédients"
       }
     },
     "meal": {
