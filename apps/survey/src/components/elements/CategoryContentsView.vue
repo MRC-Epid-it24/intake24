@@ -5,6 +5,17 @@
         {{ i18n.none }}
       </v-alert>
     </div>
+    <div v-if="containsPizza" class="py-4">
+      <v-alert
+        border="left"
+        class="smaller-padding"
+        color="primary lighten-4 mb-0"
+        icon="fas fa-bell"
+        rounded="lg"
+      >
+        {{ i18n.pizza }}
+      </v-alert>
+    </div>
     <div v-if="contents.foods.length >= 50" class="py-4">
       <v-alert
         border="left"
@@ -80,6 +91,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    searchTerm: {
+      type: String as PropType<string>,
+      default: '',
+    },
   },
 
   emits: ['food-selected', 'category-selected'],
@@ -98,6 +113,9 @@ export default defineComponent({
     },
     remainingCategories(): CategoryHeader[] {
       return this.contents.subcategories.slice(this.threshold);
+    },
+    containsPizza(): boolean | null {
+      return this.searchTerm.toLowerCase().includes('pizza');
     },
   },
 

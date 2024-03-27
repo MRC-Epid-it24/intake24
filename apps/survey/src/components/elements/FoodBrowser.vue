@@ -69,6 +69,7 @@
             :class="{ 'px-4': dialog }"
             :contents="searchContents"
             :i18n="promptI18n"
+            :search-term="searchTerm"
             @category-selected="categorySelected"
             @food-selected="foodSelected"
           ></category-contents-view>
@@ -227,6 +228,7 @@ export default defineComponent({
             'back',
             'none',
             'refine',
+            'pizza',
             'missing.label',
             'missing.description',
             'missing.report',
