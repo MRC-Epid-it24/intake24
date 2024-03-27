@@ -9,7 +9,10 @@ export default () => {
 
   router.route('/:localeId').post(wrapAsync(adminLocalCategoriesController.store));
 
-  router.route('/:localeId/:categoryId').put(wrapAsync(adminLocalCategoriesController.update));
+  router
+    .route('/:localeId/:categoryId')
+    .get(wrapAsync(adminLocalCategoriesController.read))
+    .put(wrapAsync(adminLocalCategoriesController.update));
 
   return router;
 };

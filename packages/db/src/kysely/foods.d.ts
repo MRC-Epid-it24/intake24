@@ -81,21 +81,14 @@ export interface CategoryLocals {
   version: string;
 }
 
-export interface CategoryPortionSizeMethodParams {
-  id: Generated<Int8>;
-  name: string;
-  portionSizeMethodId: Int8;
-  value: string;
-}
-
 export interface CategoryPortionSizeMethods {
   categoryLocalId: Int8;
   conversionFactor: number;
   description: string;
   id: Generated<Int8>;
-  imageUrl: string;
   method: string;
   orderBy: Int8;
+  parameters: Generated<string>;
   useForRecipes: boolean;
 }
 
@@ -158,6 +151,7 @@ export interface FoodGroups {
 }
 
 export interface FoodLocals {
+  altNames: Generated<string>;
   foodCode: string;
   id: Generated<Int8>;
   localeId: string;
@@ -166,21 +160,14 @@ export interface FoodLocals {
   version: string;
 }
 
-export interface FoodPortionSizeMethodParams {
-  id: Generated<Int8>;
-  name: string;
-  portionSizeMethodId: Int8;
-  value: string;
-}
-
 export interface FoodPortionSizeMethods {
   conversionFactor: number;
   description: string;
   foodLocalId: Int8;
   id: Generated<Int8>;
-  imageUrl: string;
   method: string;
   orderBy: Int8;
+  parameters: Generated<string>;
   useForRecipes: boolean;
 }
 
@@ -412,15 +399,6 @@ export interface StandardUnits {
   updatedAt: Timestamp;
 }
 
-export interface StandardUnitsBackup {
-  createdAt: Timestamp | null;
-  estimateIn: string | null;
-  howMany: string | null;
-  id: string | null;
-  name: string | null;
-  updatedAt: Timestamp | null;
-}
-
 export interface SynonymSets {
   id: Generated<Int8>;
   localeId: string;
@@ -437,7 +415,6 @@ export interface DB {
   categoriesCategories: CategoriesCategories;
   categoryAttributes: CategoryAttributes;
   categoryLocals: CategoryLocals;
-  categoryPortionSizeMethodParams: CategoryPortionSizeMethodParams;
   categoryPortionSizeMethods: CategoryPortionSizeMethods;
   drinkwareScales: DrinkwareScales;
   drinkwareScalesV2: DrinkwareScalesV2;
@@ -447,7 +424,6 @@ export interface DB {
   foodGroupLocals: FoodGroupLocals;
   foodGroups: FoodGroups;
   foodLocals: FoodLocals;
-  foodPortionSizeMethodParams: FoodPortionSizeMethodParams;
   foodPortionSizeMethods: FoodPortionSizeMethods;
   foods: Foods;
   foodsCategories: FoodsCategories;
@@ -481,6 +457,5 @@ export interface DB {
   splitLists: SplitLists;
   splitWords: SplitWords;
   standardUnits: StandardUnits;
-  standardUnitsBackup: StandardUnitsBackup;
   synonymSets: SynonymSets;
 }

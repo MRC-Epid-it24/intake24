@@ -1,9 +1,11 @@
 import type { CategoryContents } from '@intake24/common/types/http';
 import type {
   CreateGlobalCategoryRequest,
+  CreateLocalCategoryRequest,
   GlobalCategoryEntry,
   MainCategoriesResponse,
   UpdateGlobalCategoryRequest,
+  UpdateLocalCategoryRequest,
 } from '@intake24/common/types/http/admin';
 import type { PaginateQuery } from '@intake24/db';
 
@@ -61,5 +63,32 @@ export class CategoriesApiV4 {
     await this.baseClient.put(`${CategoriesApiV4.adminApiPath}/global/${categoryCode}`, request, {
       version,
     });
+  }
+
+  public async createCategoryLocal(
+    localeId: string,
+    request: CreateLocalCategoryRequest
+  ): Promise<CreateResult<any, GlobalCategoryEntry>> {
+    const response = await this.baseClient.postResponse(
+      `${CategoriesApiV4.adminApiPath}/local/${localeId}`,
+      request
+    );
+
+    return parseCreateResponse(response, this.baseClient.logger);
+  }
+
+  public async updateCategoryLocal(
+    localeId: string,
+    categoryCode: string,
+    version: string,
+    request: UpdateLocalCategoryRequest
+  ): Promise<void> {
+    await this.baseClient.put(
+      `${CategoriesApiV4.adminApiPath}/local/${localeId}/${categoryCode}`,
+      request,
+      {
+        version,
+      }
+    );
   }
 }

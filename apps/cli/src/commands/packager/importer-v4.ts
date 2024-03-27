@@ -129,7 +129,7 @@ export class ImporterV4 {
     },
     'local-categories': async () => {
       await this.readLocalCategories();
-      // await this.importLocalCategories();
+      await this.importLocalCategories();
     },
     'global-foods': async () => {
       await this.readGlobalFoods();
@@ -155,7 +155,7 @@ export class ImporterV4 {
       await this.importImageMaps();
       await this.importDrinkwareSets();
       await this.importGlobalCategories();
-      // await this.importLocalCategories();
+      await this.importLocalCategories();
       await this.importGlobalFoods();
       await this.importLocalFoods();
       await this.importEnabledLocalFoods();
@@ -483,7 +483,7 @@ export class ImporterV4 {
           logger.info(`Skipping category "${category.code}" due to a conflict`);
           return;
         case 'abort': {
-          const message = `Failed to import food "${category.code}" due to a conflict`;
+          const message = `Failed to import global category "${category.code}" due to a conflict`;
           logger.error(message);
           logger.error(JSON.stringify(result.details, null, 2));
           throw new Error(message);
@@ -512,9 +512,35 @@ export class ImporterV4 {
   }
 
   private async importLocalCategory(localeId: string, category: PkgLocalCategory): Promise<void> {
-    this.logger.warn(
-      `Local category import not implemented: ${category.code} ${category.localDescription}`
-    );
+    const request = typeConverters.fromPackageLocalCategory(category);
+
+    const result = await this.apiClient.categories.createCategoryLocal(localeId, request);
+
+    if (result.type === 'conflict') {
+      switch (this.options.onConflict) {
+        case 'skip':
+          logger.info(`Skipping category "${category.code}" due to a conflict`);
+          return;
+        case 'abort': {
+          const message = `Failed to import local category "${category.code}" due to a conflict`;
+          logger.error(message);
+          logger.error(JSON.stringify(result.details, null, 2));
+          throw new Error(message);
+        }
+        case 'overwrite': {
+          const existing = result.details;
+
+          if (existing !== null) {
+            await this.apiClient.categories.updateCategoryLocal(
+              localeId,
+              category.code,
+              existing.version,
+              omit(request, 'code')
+            );
+          }
+        }
+      }
+    }
   }
 
   private async importLocalCategories(): Promise<void> {

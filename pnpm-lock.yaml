@@ -625,6 +625,9 @@ importers:
       reflect-metadata:
         specifier: ^0.2.1
         version: 0.2.1
+      remove-bom-stream:
+        specifier: ^2.0.0
+        version: 2.0.0
       sequelize:
         specifier: ^6.37.1
         version: 6.37.1(mariadb@3.3.0)(pg-hstore@2.3.4)(pg@8.11.3)
@@ -12956,6 +12959,13 @@ packages:
     resolution: {integrity: sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==}
     engines: {node: '>= 0.10'}
     dev: true
+
+  /remove-bom-stream@2.0.0:
+    resolution: {integrity: sha512-tHlDYOrUkBNUjxad4TW/S+w/AmSqt5dqX3mBVwTJgE+tX/9dja/k2CQszem1rmCOxOB6IMc0FhYh/5q/ivm4wA==}
+    engines: {node: '>= 10.13.0'}
+    dependencies:
+      streamx: 2.16.1
+    dev: false
 
   /repeat-string@1.6.1:
     resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}

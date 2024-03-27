@@ -56,7 +56,7 @@ export type CreateGlobalCategoryRequest = {
   parentCategories?: string[];
 };
 
-export type UpdateGlobalCategoryRequest = Omit<CreateGlobalCategoryRequest, 'code'>;
+export type UpdateGlobalCategoryRequest = Omit<CreateGlobalCategoryRequest, 'code' | 'version'>;
 
 export type GlobalCategoryEntry = {
   code: string;
@@ -69,11 +69,21 @@ export type GlobalCategoryEntry = {
 
 export type CreateLocalCategoryRequest = {
   code: string;
+  version?: string;
   name: string;
   portionSizeMethods: PortionSizeMethod[];
 };
 
-export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code'>;
+export type UpdateLocalCategoryRequest = Omit<CreateLocalCategoryRequest, 'code' | 'version'>;
+
+export type LocalCategoryEntry = {
+  id: string;
+  categoryCode: string;
+  localeId: string;
+  version: string;
+  name: string;
+  portionSizeMethods: PortionSizeMethod[];
+};
 
 export type FoodInput = Pick<FoodAttributes, 'code' | 'name' | 'foodGroupId'> & {
   parentCategories?: Pick<CategoryAttributes, 'code' | 'name'>[];

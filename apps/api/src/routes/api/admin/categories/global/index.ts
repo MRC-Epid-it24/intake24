@@ -10,9 +10,10 @@ export default () => {
 
   router.route('').post(wrapAsync(adminGlobalCategoriesController.store));
 
-  router.route('/:categoryId').put(wrapAsync(adminGlobalCategoriesController.update));
-
-  router.route('/:categoryId').get(wrapAsync(adminGlobalCategoriesController.read));
+  router
+    .route('/:categoryId')
+    .get(wrapAsync(adminGlobalCategoriesController.read))
+    .put(wrapAsync(adminGlobalCategoriesController.update));
 
   return router;
 };

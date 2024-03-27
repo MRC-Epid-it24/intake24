@@ -1,4 +1,5 @@
 import acl from './acl';
+import categories from './categories';
 import fdbs from './fdbs';
 import feedbackScheme from './feedback-scheme.controller';
 import foods from './foods';

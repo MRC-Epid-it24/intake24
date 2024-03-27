@@ -196,7 +196,8 @@ function fromPackageLocalFood(localFood: PkgLocalFood): CreateLocalFoodRequest {
 function fromPackageLocalCategory(localCategory: PkgLocalCategory): CreateLocalCategoryRequest {
   return {
     code: localCategory.code,
-    name: localCategory.localDescription,
+    version: localCategory.version,
+    name: localCategory.localDescription ?? 'Missing description!',
     portionSizeMethods: localCategory.portionSize.map((psm) => fromPackagePortionSizeMethod(psm)),
   };
 }
