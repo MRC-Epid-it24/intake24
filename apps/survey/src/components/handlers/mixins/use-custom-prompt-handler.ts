@@ -20,6 +20,8 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
   const { mealOptional } = useMealPromptUtils();
   const survey = useSurvey();
 
+  const isAnswerRequired = (prompt: Prompt) =>
+    !('validation' in prompt) || prompt.validation.required;
   const isInfoPrompt = (prompt: Prompt) => infoPrompts.includes(prompt.component);
 
   const getPromptAnswer = (id: string) => {
@@ -32,9 +34,16 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
     return survey.data.customPromptAnswers[id];
   };
 
-  const commitPromptAnswer = (prompt: Prompt, answer?: CustomPromptAnswer) => {
+  const commitPromptAnswer = (prompt: Prompt, promptAnswer?: CustomPromptAnswer) => {
     const promptId = prompt.id;
     const isInfo = isInfoPrompt(prompt);
+
+    if (promptAnswer === undefined && isAnswerRequired(props.prompt)) {
+      console.warn('Did not expect answer to be undefined', props.prompt);
+      return;
+    }
+
+    const answer = promptAnswer ?? null;
     const isValidAnswer = answer !== undefined && (!isInfo || answer !== 'next');
 
     if (survey.selection.element) {
@@ -79,6 +88,7 @@ export const useCustomPromptHandler = <P extends keyof Prompts>(
     commitPromptAnswer,
     getPromptAnswer,
     foodOptional,
+    isAnswerRequired,
     mealOptional,
   };
 };

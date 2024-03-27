@@ -15,7 +15,7 @@
           prompt: item,
           section,
         }"
-        @action="updatePanel"
+        @action="updatePanel(item, idx)"
       ></component>
     </v-expansion-panels>
     <template #actions>
@@ -31,6 +31,7 @@
 import type { PropType } from 'vue';
 import { computed, defineComponent, ref } from 'vue';
 
+import type { Prompt } from '@intake24/common/prompts';
 import type { CustomPromptAnswer, FoodState } from '@intake24/common/types';
 import { usePromptUtils } from '@intake24/survey/composables';
 
@@ -54,7 +55,15 @@ export default defineComponent({
   emits: ['input'],
 
   setup(props, ctx) {
-    const isValid = computed(() => props.value.every((answer) => answer !== undefined));
+    const isAnswerRequired = (prompt: Prompt) =>
+      !('validation' in prompt) || prompt.validation.required;
+
+    const isValid = computed(
+      () =>
+        !props.value.some(
+          (answer, idx) => answer === undefined && isAnswerRequired(props.prompt.prompts[idx])
+        )
+    );
     const panel = ref<number | undefined>(0);
 
     const state = computed({
@@ -68,7 +77,9 @@ export default defineComponent({
       return false;
     };
 
-    const updatePanel = () => {
+    const updatePanel = (prompt: Prompt, idx: number) => {
+      if (state.value[idx] === undefined && !isAnswerRequired(prompt)) state.value[idx] = null;
+
       for (const [index, answer] of Object.entries(props.value)) {
         if (answer === undefined) {
           panel.value = Number.parseInt(index);

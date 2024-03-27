@@ -60,11 +60,6 @@ export default defineComponent({
     };
 
     const commitAnswer = () => {
-      if (state.value === undefined) {
-        console.warn('Did not expect answer to be undefined');
-        return;
-      }
-
       if (props.prompt.component === 'no-more-information-prompt') {
         const newSelection = survey.selection;
         newSelection.mode = 'auto';

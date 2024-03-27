@@ -42,7 +42,7 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const { commitPromptAnswer, foodOptional, getPromptAnswer, mealOptional } =
+    const { commitPromptAnswer, getPromptAnswer, foodOptional, mealOptional } =
       useCustomPromptHandler(props);
     const survey = useSurvey();
 
@@ -60,11 +60,6 @@ export default defineComponent({
     };
 
     const commitAnswer = () => {
-      if (state.value.some((answer) => answer === undefined)) {
-        console.warn('Did not expect answer to be undefined');
-        return;
-      }
-
       props.prompt.prompts.forEach((prompt, idx) => {
         commitPromptAnswer(prompt, state.value[idx]);
       });

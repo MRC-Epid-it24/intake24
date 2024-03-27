@@ -36,7 +36,7 @@ export type FoodFlag =
   | 'associated-foods-complete'
   | `${string}-acknowledged`;
 
-export type CustomPromptAnswer = string | string[] | number | number[];
+export type CustomPromptAnswer = string | string[] | number | number[] | null;
 
 // Portion size states
 export interface PortionSizeStateBase {

@@ -42,7 +42,6 @@ export default defineComponent({
   props: {
     value: {
       type: String,
-      default: null,
     },
   },
 
