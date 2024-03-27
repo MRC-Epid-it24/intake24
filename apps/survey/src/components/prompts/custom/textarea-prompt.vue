@@ -64,7 +64,7 @@ export default defineComponent({
 
     const confirm = () => {
       //@ts-expect-error - not typed vuetify component
-      const isValid = this.form?.validate();
+      const isValid = form.value?.validate();
       return isValid;
     };
 
