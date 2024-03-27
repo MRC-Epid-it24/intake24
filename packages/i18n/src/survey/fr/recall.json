@@ -37,17 +37,30 @@
     "food": {
       "delete": "Supprimer l'aliment",
       "deleteConfirm": "Souhaitez-vous supprimer {item}?",
-      "edit": "Changer l'aliment",
-      "editPortionSize": "Modifier la taille de la portion",
-      "encoded": "Cet aliment correspond à un aliment dans notre base de données.",
-      "missing": "Cet aliment a été signalé comme manquant dans notre base de données.",
-      "notMatched": "Cet aliment ne correspond pas encore à un aliment dans notre base de données.",
-      "portionSizeComplete": "L'estimation de la taille de la portion pour cet aliment est terminée.",
-      "portionSizeIncomplete": "La taille de la portion pour cet aliment n'a pas encore été renseignée.",
-      "missingInfoComplete": "Les informations manquantes pour cet aliment ont été complétées.",
-      "missingInfoIncomplete": "Certaines informations manquantes pour cet aliment n'ont pas encore été renseignées.",
-      "recipeFoodStepsComplete": "Les étapes pour cette recette sont complètes.",
-      "recipeFoodStepsIncomplete": "Les étapes pour cette recette ne sont pas encore complètes."
+      "change": "Changer l'aliment",
+      "free-text": {
+        "_": "Cet aliment ne correspond pas encore à un aliment dans notre base de données.",
+        "incomplete": "La taille de la portion pour cet aliment n'a pas encore été renseignée.",
+        "edit": "Edit search"
+      },
+      "encoded-food": {
+        "_": "Cet aliment correspond à un aliment dans notre base de données.",
+        "complete": "L'estimation de la taille de la portion pour cet aliment est terminée.",
+        "incomplete": "La taille de la portion pour cet aliment n'a pas encore été renseignée.",
+        "edit": "Modifier la taille des portions"
+      },
+      "missing-food": {
+        "_": "Cet aliment a été signalé comme manquant dans notre base de données.",
+        "complete": "Les informations manquantes pour cette denrée alimentaire sont complètes.",
+        "incomplete": "Les informations manquantes pour cet aliment ne sont pas encore connues.",
+        "edit": "Edit missing food"
+      },
+      "recipe-builder": {
+        "_": "This food has been matched with a recipe from our database.",
+        "complete": "Les étapes pour cette recette sont complètes.",
+        "incomplete": "Les étapes pour cette recette ne sont pas encore complètes.",
+        "edit": "Edit ingredients"
+      }
     },
     "meal": {
       "add": "Ajouter un repas",
