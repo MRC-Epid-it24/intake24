@@ -2,8 +2,9 @@
   "_": "Intake24",
   "home": "Accueil",
   "dashboard": "Tableau de bord",
+  "navigation": "Navigation",
   "welcome": {
-    "_": "Bienvenue dans Intake24",
+    "_": "Bienvenue à Intake24",
     "subtitle": "Intake24 est un logiciel libre d'accès d'enregistrement de rappels alimentaires en ligne.  Il permet la passation de plusieurs rappels autoadministrés de 24 h."
   },
   "login": {

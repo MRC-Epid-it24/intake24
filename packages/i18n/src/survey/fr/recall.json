@@ -9,6 +9,13 @@
     "daily": "Vous avez atteint la limite quotidienne de rappels.",
     "total": "Vous avez atteint la limite de rappels."
   },
+  "rating": {
+    "_": "Évaluez votre expérience",
+    "comment": "Dites-nous en plus sur la note que vous avez attribuée au rappel",
+    "send": "Envoyer des commentaires",
+    "sent": "Commentaires envoyés, merci !",
+    "title": "Comment évalueriez-vous le rappel ?"
+  },
   "survey": "Enquête: {name}",
   "submissions": {
     "_": "Jour du rappel",
@@ -83,6 +90,7 @@
     "feedback": "Bilan nutritionnel",
     "next": "Continuer",
     "submit": "Soumettre le rappel",
+    "reviewed": "Revu",
     "addMeal": "Ajouter un repas",
     "deleteFood": "Supprimer un aliment",
     "deleteMeal": "Supprimer un repas",
