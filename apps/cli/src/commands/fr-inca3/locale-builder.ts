@@ -377,7 +377,7 @@ export class FrenchAnsesLocaleBuilder {
         version: randomUUID(),
         code: getIntake24FoodCode(row.A_CODE),
         parentCategories: categories ?? [],
-        attributes: { readyMealOption: true },
+        attributes: { sameAsBeforeOption: true },
         groupCode: 1,
         englishDescription: capitalize(this.getFoodEnglishDescription(row.A_CODE)),
       });
