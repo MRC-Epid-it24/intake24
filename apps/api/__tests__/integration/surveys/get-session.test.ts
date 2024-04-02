@@ -51,8 +51,10 @@ export default () => {
     it('should return 200 and survey session data', async () => {
       const { userId } = suite.data.system.respondent;
       const surveyId = suite.data.system.survey.id;
+      const id = randomUUID();
 
       const input: UserSurveySessionCreationAttributes = {
+        id,
         userId,
         surveyId,
         sessionData: {
@@ -60,7 +62,7 @@ export default () => {
           startTime: new Date(),
           endTime: new Date(),
           submissionTime: null,
-          uxSessionId: randomUUID(),
+          uxSessionId: id,
           flags: [],
           meals: [],
           customPromptAnswers: {},

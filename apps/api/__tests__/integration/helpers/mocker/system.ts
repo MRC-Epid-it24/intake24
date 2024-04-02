@@ -268,6 +268,7 @@ const survey = (
   const suspensionReason = faker.word.words(10);
 
   const numberOfSubmissionsForFeedback = faker.number.int(10);
+  const sessionLifetime = '12h';
   const storeUserSessionOnServer = faker.datatype.boolean();
 
   const maximumDailySubmissions = faker.number.int({ min: 1, max: 5 });
@@ -280,10 +281,10 @@ const survey = (
   ].join('');
   const authUrlTokenLength = faker.number.int({ min: 10, max: 100 });
 
+  const searchCollectData = faker.datatype.boolean();
+  const searchMatchScoreWeight = faker.number.int({ min: 0, max: 100 });
   const searchSortingAlgorithm =
     searchSortingAlgorithms[faker.number.int({ min: 0, max: searchSortingAlgorithms.length - 1 })];
-
-  const searchMatchScoreWeight = faker.number.int({ min: 0, max: 100 });
 
   const surveySchemeOverrides = {
     meals: [{ name: { en: faker.word.words(3) }, time: '8:00' }],
@@ -302,10 +303,12 @@ const survey = (
     surveySchemeId,
     localeId,
     allowGenUsers,
+    notifications: [],
     supportEmail,
     suspensionReason,
     feedbackSchemeId,
     numberOfSubmissionsForFeedback,
+    sessionLifetime,
     storeUserSessionOnServer,
     maximumDailySubmissions,
     minimumSubmissionInterval,
@@ -313,8 +316,9 @@ const survey = (
     authUrlDomainOverride,
     authUrlTokenCharset,
     authUrlTokenLength,
-    searchSortingAlgorithm,
+    searchCollectData,
     searchMatchScoreWeight,
+    searchSortingAlgorithm,
     surveySchemeOverrides,
     userPersonalIdentifiers,
     userCustomFields,
@@ -329,7 +333,7 @@ const submission = (surveyId: string, userId: string) => {
     startTime: new Date(),
     endTime: faker.date.soon({ days: 1 }),
     submissionTime: faker.date.soon({ days: 1 }),
-    uxSessionId: randomUUID(),
+    sessionId: randomUUID(),
   };
 };
 

@@ -72,6 +72,9 @@
       "_": "Enquête - Soumission de l'export de données",
       "surveyId": "Identifiant de l'enquête"
     },
+    "SurveyEventNotification": {
+      "_": "Survey - Event notification"
+    },
     "SurveyFeedbackNotification": {
       "_": "Enquête - Envoyer le bilan du répondant"
     },
@@ -86,14 +89,15 @@
       "_": "Enquête - Importer les répondants",
       "file": "fichier CSV"
     },
-    "SurveySubmission": {
-      "_": "Enquête - Traiter la soumission"
-    },
     "SurveySchemesSync": {
       "_": "Enquête - Synchroniser les schémas"
     },
-    "SurveySubmissionNotification": {
-      "_": "Enquête - Notification de soumission"
+    "SurveySessionsExport": {
+      "_": "Survey - Export sessions",
+      "surveyId": "Survey ID"
+    },
+    "SurveySubmission": {
+      "_": "Enquête - Traiter la soumission"
     },
     "UserEmailVerificationNotification": {
       "_": "Utilisateur - Notification de vérification de l'adresse mail"

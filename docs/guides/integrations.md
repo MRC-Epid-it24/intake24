@@ -67,14 +67,9 @@ Once enabled, two options listed below can be used to create respondent accounts
 Pick suitable option based on integration use case, depending whether you need to process API response (`A`) or not (`B`).
 :::
 
-## Survey completion notifications
+## Survey notifications
 
-Intake24 can notify 3<sup>rd</sup> party system about survey completion using registered webhook. To enable this feature, read [survey external communication](/admin/surveys/#external-communication) section.
-
-- set up `webhook url` - URL to be called when survey recall is submitted
-- upon each survey submission, system dispatches [survey submission notification](/admin/system/job-types.html#surveysubmissionnotification) job with described request.
-
-Request payload contains submission data. If `JWT secret` is set in [survey external communication](/admin/surveys/#external-communication) section, Authorization header is attached with signed JWT token, which can be used to verify the request.
+Intake24 can notify 3<sup>rd</sup> party system about survey progression using registered notifications. To enable this feature, read [survey notifications](/admin/surveys/#notifications) section.
 
 ## Redirection to 3<sup>rd</sup> party system
 

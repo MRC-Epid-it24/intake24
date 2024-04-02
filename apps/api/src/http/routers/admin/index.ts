@@ -6,6 +6,7 @@ import { nutrientUnit } from './nutrient-unit.router';
 import { signInLog } from './sign-in-log.router';
 import { signUp } from './sign-up.router';
 import { standardUnit } from './standard-unit.router';
+import survey from './survey';
 import { task } from './task.router';
 import user from './user';
 
@@ -18,6 +19,7 @@ export default {
   signInLog,
   signUp,
   standardUnit,
+  survey,
   task,
   user,
 };

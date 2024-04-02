@@ -59,6 +59,7 @@ export const surveyEntryResponse = z.object({
   }),
   feedbackScheme: feedbackSchemeSchema.optional(),
   numberOfSubmissionsForFeedback: z.number(),
+  sessionLifetime: z.number(),
   storeUserSessionOnServer: z.boolean(),
   suspensionReason: z.string().nullable(),
   searchSortingAlgorithm: z.enum(searchSortingAlgorithms),

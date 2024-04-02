@@ -39,10 +39,10 @@
           <td>{{ $t(`common.${entry.userCustomFields}`) }}</td>
         </tr>
         <tr>
-          <th>{{ $t('surveys.externalComm.submissionNotificationUrl') }}</th>
-          <td>{{ entry.submissionNotificationUrl }}</td>
-          <th>{{ $t('surveys.storeUserSessionOnServer') }}</th>
+          <th>{{ $t('surveys.session.storeOnServer') }}</th>
           <td>{{ $t(`common.${entry.storeUserSessionOnServer}`) }}</td>
+          <th>{{ $t('surveys.session.lifetime._') }}</th>
+          <td>{{ entry.sessionLifetime }}</td>
         </tr>
         <tr>
           <th>{{ $t('surveys.submissionLimits.maxDaily') }}</th>

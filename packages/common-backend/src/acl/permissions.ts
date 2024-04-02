@@ -154,6 +154,7 @@ export const permissions = [
   { name: 'surveys|delete', displayName: 'Delete surveys' },
   { name: 'surveys|overrides', displayName: 'Survey scheme overrides' },
   { name: 'surveys|respondents', displayName: 'Survey respondents' },
+  { name: 'surveys|sessions', displayName: 'Survey sessions' },
   { name: 'surveys|submissions', displayName: 'Survey submissions' },
   { name: 'surveys|securables', displayName: 'Surveys security' },
   { name: 'surveys|tasks', displayName: 'Surveys tasks' },

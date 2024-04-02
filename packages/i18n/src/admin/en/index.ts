@@ -12,6 +12,7 @@ import imageMaps from './image-maps.json';
 import jobs from './jobs.json';
 import languages from './languages.json';
 import locales from './locales.json';
+import notifications from './notifications.json';
 import nutrientTables from './nutrient-tables.json';
 import nutrientTypes from './nutrient-types.json';
 import nutrientUnits from './nutrient-units.json';
@@ -40,6 +41,7 @@ const messages: LocaleMessages = {
   jobs,
   languages,
   locales,
+  notifications,
   'nutrient-tables': nutrientTables,
   'nutrient-types': nutrientTypes,
   'nutrient-units': nutrientUnits,

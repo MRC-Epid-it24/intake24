@@ -182,6 +182,7 @@ export const initDatabase = async (): Promise<MockData> => {
     surveySchemeId: surveyScheme.id,
     localeId: systemLocale.id,
     allowGenUsers: false,
+    notifications: [],
     supportEmail: 'testSupportEmail@example.com',
     storeUserSessionOnServer: false,
     surveySchemeOverrides: { meals: [], prompts: [] },

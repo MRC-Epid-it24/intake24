@@ -426,7 +426,7 @@ export interface SurveySubmissions {
   updatedAt: Timestamp;
   userAgent: string | null;
   userId: Int8;
-  uxSessionId: string;
+  sessionId: string;
 }
 
 export interface SurveysUxEventsSettings {

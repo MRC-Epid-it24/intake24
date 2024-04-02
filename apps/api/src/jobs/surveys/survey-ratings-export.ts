@@ -107,7 +107,7 @@ export default class SurveyRatingsExport extends BaseJob<'SurveyRatingsExport'> 
         { objectMode: true }
       );
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
-        encoding: 'utf8',
+        encoding: 'utf-8',
         flags: 'w+',
       });
 

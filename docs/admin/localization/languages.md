@@ -101,7 +101,7 @@ When source code translation files gets updates, structure can be changed when a
 
 In `translations` section, there is a `synchronization` button on top of the list of translations, which triggers the synchronization for particular file.
 
-Also there a system-level job `SyncLanguageTranslations` that can be triggered to update all language translations to up-to-date structure.
+Also there a system-level job `LanguageTranslationsSync` that can be triggered to update all language translations to up-to-date structure.
 
 :::warning Built-in translations updates
 

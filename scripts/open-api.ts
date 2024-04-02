@@ -18,6 +18,22 @@ const main = async () => {
       },
       version: pkg.version,
     },
+    servers: [
+      {
+        url: 'https://api.example.com',
+        description: 'Intake24 API instance',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerHttpAuthentication: {
+          description: 'Bearer token using a JWT',
+          type: 'http',
+          scheme: 'Bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   });
 
   writeFileSync(

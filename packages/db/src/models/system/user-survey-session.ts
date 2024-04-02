@@ -11,7 +11,7 @@ import { BelongsTo, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequel
 import type { SurveyState } from '@intake24/common/types';
 
 import BaseModel from '../model';
-import { Survey, User } from '.';
+import { Survey, User, UserSurveyAlias } from '.';
 
 @Table({
   modelName: 'UserSurveySession',
@@ -24,9 +24,16 @@ export default class UserSurveySession extends BaseModel<
   InferCreationAttributes<UserSurveySession>
 > {
   @Column({
+    primaryKey: true,
+    type: DataType.UUID,
+  })
+  declare id: string;
+
+  @Column({
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
+    unique: 'user_survey_sessions_unique',
   })
   declare userId: string;
 
@@ -34,6 +41,7 @@ export default class UserSurveySession extends BaseModel<
     allowNull: false,
     primaryKey: true,
     type: DataType.BIGINT,
+    unique: 'user_survey_sessions_unique',
   })
   declare surveyId: string;
 
@@ -62,6 +70,9 @@ export default class UserSurveySession extends BaseModel<
 
   @BelongsTo(() => User, 'userId')
   declare user?: NonAttribute<User>;
+
+  @BelongsTo(() => UserSurveyAlias, { foreignKey: 'userId', targetKey: 'userId' })
+  declare alias?: NonAttribute<UserSurveyAlias>;
 }
 
 export type UserSurveySessionAttributes = Attributes<UserSurveySession>;

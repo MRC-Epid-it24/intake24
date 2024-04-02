@@ -40,6 +40,7 @@ export const securableDefs = {
     ...standardSecurableActions,
     'overrides',
     'respondents',
+    'sessions',
     'submissions',
     'support',
     'tasks',

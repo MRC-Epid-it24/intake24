@@ -90,7 +90,7 @@ export const surveyInitialState = (): CurrentSurveyState => ({
 });
 
 const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryResponse) => {
-  if (parameters && !parameters.storeUserSessionOnServer) return false;
+  if (!parameters?.storeUserSessionOnServer) return false;
 
   const { startTime, submissionTime } = state;
   if (!startTime) return false;
@@ -100,10 +100,11 @@ const canUseUserSession = (state: CurrentSurveyState, parameters?: SurveyEntryRe
   const now = new Date();
   const startDt = new Date(startTime);
 
-  const timeDifference = (now.getTime() - startDt.getTime()) / 1000 / 60 / 60;
+  const timeDifference = (now.getTime() - startDt.getTime()) / 1000;
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
 
-  if (timeDifference > 12 || startDt.getTime() < startOfDay.getTime()) return false;
+  if (timeDifference > parameters.sessionLifetime || startDt.getTime() < startOfDay.getTime())
+    return false;
 
   return true;
 };
@@ -251,7 +252,7 @@ export const useSurvey = defineStore('survey', {
       }
     },
 
-    startRecall(force = false) {
+    async startRecall(force = false) {
       if (!this.parameters) {
         console.warn('Survey parameters are not loaded');
         return;
@@ -262,7 +263,9 @@ export const useSurvey = defineStore('survey', {
         return;
       }
 
+      const isSubmitted = !!this.data.submissionTime;
       this.clearState();
+      if (isSubmitted) await this.clearUserSession();
 
       const initialState: CurrentSurveyState = {
         ...surveyInitialState(),
@@ -285,7 +288,6 @@ export const useSurvey = defineStore('survey', {
 
     async cancelRecall() {
       this.clearState();
-
       await this.clearUserSession();
     },
 

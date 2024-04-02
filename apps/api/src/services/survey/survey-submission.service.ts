@@ -379,7 +379,6 @@ const surveySubmissionService = ({
     const [userInfo, followUpUrl] = await Promise.all([
       surveyService.userInfo(survey, userId, tzOffset, 1),
       surveyService.getFollowUpUrl(survey, userId),
-      surveyService.clearSession(slug, userId),
     ]);
 
     await scheduler.jobs.addJob({
@@ -404,24 +403,24 @@ const surveySubmissionService = ({
     userId: string,
     state: SurveyState
   ): Promise<void> => {
-    const { uxSessionId } = state;
+    const { uxSessionId: sessionId } = state;
 
     const [survey, submission] = await Promise.all([
       Survey.findOne({
-        attributes: ['id', 'submissionNotificationUrl'],
+        attributes: ['id', 'notifications', 'searchCollectData'],
         where: { id: surveyId },
         include: [
           { association: 'locale', attributes: ['id', 'code'], required: true },
           { association: 'surveyScheme', attributes: ['id', 'prompts'], required: true },
         ],
       }),
-      SurveySubmission.findOne({ attributes: ['id'], where: { surveyId, userId, uxSessionId } }),
+      SurveySubmission.findOne({ attributes: ['id'], where: { surveyId, userId, sessionId } }),
     ]);
     if (!survey || !survey.locale || !survey.surveyScheme) throw new NotFoundError();
 
     if (submission) {
       throw new Error(
-        `Duplicate submission for surveyId: ${surveyId}, userId: ${userId}, uxSessionId: ${uxSessionId}`
+        `Duplicate submission for surveyId: ${surveyId}, userId: ${userId}, sessionId: ${sessionId}`
       );
     }
 
@@ -434,7 +433,8 @@ const surveySubmissionService = ({
           meals: { foods, preFoods, postFoods },
         },
       },
-      submissionNotificationUrl,
+      notifications,
+      searchCollectData,
     } = survey;
 
     const submissionCustomPrompts = [...preMeals, ...postMeals]
@@ -469,7 +469,7 @@ const surveySubmissionService = ({
           startTime: startTime ?? submissionTime,
           endTime: endTime ?? submissionTime,
           submissionTime,
-          uxSessionId,
+          sessionId,
           userAgent,
         },
         { transaction }
@@ -506,15 +506,19 @@ const surveySubmissionService = ({
       );
 
       // Store survey custom fields & meals
-      await Promise.all([
-        scheduler.jobs.addJob({
-          type: 'PopularitySearchUpdateCounters',
-          userId,
-          params: { localeCode, foodCodes },
-        }),
-        SurveySubmissionCustomField.bulkCreate(submissionCustomFieldInputs, { transaction }),
-        SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
-      ]);
+      await Promise.all(
+        [
+          SurveySubmissionCustomField.bulkCreate(submissionCustomFieldInputs, { transaction }),
+          SurveySubmissionMeal.bulkCreate(mealInputs, { transaction }),
+          searchCollectData
+            ? scheduler.jobs.addJob({
+                type: 'PopularitySearchUpdateCounters',
+                userId,
+                params: { localeCode, foodCodes },
+              })
+            : null,
+        ].filter(Boolean)
+      );
 
       // Fetch food & group records
       // TODO: if food record not found, look for prototype?
@@ -615,15 +619,25 @@ const surveySubmissionService = ({
         }
       }
 
-      // Clean user submissions cache and dispatch submission webhook if any
+      const hasNotifications =
+        survey.notifications.length &&
+        survey.notifications.some(({ type }) => type === 'survey.session.submitted');
+
+      // Clean user submissions cache and dispatch submission notification if any
       await Promise.all(
         [
           cache.forget(`user-submissions:${userId}`),
-          submissionNotificationUrl
+          hasNotifications
             ? scheduler.jobs.addJob({
-                type: 'SurveySubmissionNotification',
+                type: 'SurveyEventNotification',
                 userId,
-                params: { surveyId, submissionId: surveySubmissionId },
+                params: {
+                  type: 'survey.session.submitted',
+                  sessionId,
+                  surveyId,
+                  submissionId: surveySubmissionId,
+                  userId,
+                },
               })
             : null,
         ].filter(Boolean)

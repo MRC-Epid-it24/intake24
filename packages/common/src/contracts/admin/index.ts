@@ -6,6 +6,7 @@ import { nutrientUnit } from './nutrient-unit.contract';
 import { signInLog } from './sign-in-log.contract';
 import { signUp } from './sign-up.contract';
 import { standardUnit } from './standard-unit.contract';
+import survey from './survey';
 import { task } from './task.contract';
 import user from './user';
 
@@ -18,6 +19,7 @@ export default {
   signInLog,
   signUp,
   standardUnit,
+  survey,
   task,
   user,
 };

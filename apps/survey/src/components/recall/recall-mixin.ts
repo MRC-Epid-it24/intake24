@@ -124,14 +124,14 @@ export default defineComponent({
     },
   },
 
-  created() {
+  async created() {
     if (!this.surveyScheme) {
       console.error('Survey scheme must be known at this point');
       return;
     }
 
     this.recallController = new DynamicRecall(this.surveyScheme, this.survey);
-    this.survey.startRecall();
+    await this.survey.startRecall();
   },
 
   async mounted() {

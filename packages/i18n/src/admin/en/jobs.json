@@ -76,6 +76,9 @@
       "_": "Survey - Submission data export",
       "surveyId": "Survey ID"
     },
+    "SurveyEventNotification": {
+      "_": "Survey - Event notification"
+    },
     "SurveyFeedbackNotification": {
       "_": "Survey - Send respondent feedback",
       "surveyId": "Survey ID"
@@ -95,14 +98,15 @@
       "_": "Survey - Import respondents",
       "file": "CSV file"
     },
-    "SurveySubmission": {
-      "_": "Survey - Process submission"
-    },
     "SurveySchemesSync": {
       "_": "Survey - Synchronize schemes"
     },
-    "SurveySubmissionNotification": {
-      "_": "Survey - Submission notification"
+    "SurveySessionsExport": {
+      "_": "Survey - Export sessions",
+      "surveyId": "Survey ID"
+    },
+    "SurveySubmission": {
+      "_": "Survey - Process submission"
     },
     "UserEmailVerificationNotification": {
       "_": "User - EmailVerificationNotification"

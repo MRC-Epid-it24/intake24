@@ -350,7 +350,7 @@ export default defineComponent({
 
   methods: {
     async startRecall() {
-      this.survey.startRecall(true);
+      await this.survey.startRecall(true);
       await this.$router.push({ name: 'survey-recall', params: { surveyId: this.surveyId } });
     },
 

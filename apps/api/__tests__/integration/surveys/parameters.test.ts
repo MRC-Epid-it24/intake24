@@ -37,6 +37,7 @@ export default () => {
       'surveyScheme',
       'feedbackScheme',
       'numberOfSubmissionsForFeedback',
+      'sessionLifetime',
       'storeUserSessionOnServer',
       'suspensionReason',
       'searchSortingAlgorithm',

@@ -62,6 +62,25 @@ export const SurveyDataExport = z.object({
   endDate: z.date().optional(),
   userId: z.string().optional(),
 });
+
+const baseSurveyEventNotification = z.object({
+  surveyId: z.string(),
+  userId: z.string(),
+  sessionId: z.string(),
+});
+
+export const SurveyEventNotification = z.discriminatedUnion('type', [
+  baseSurveyEventNotification.extend({
+    type: z.literal('survey.session.started'),
+  }),
+  baseSurveyEventNotification.extend({
+    type: z.literal('survey.session.cancelled'),
+  }),
+  baseSurveyEventNotification.extend({
+    type: z.literal('survey.session.submitted'),
+    submissionId: z.string(),
+  }),
+]);
 export const SurveyFeedbackNotification = z.object({
   surveyId: z.string(),
   username: z.string(),
@@ -90,15 +109,14 @@ export const SurveyRespondentsImport = z.object({
   file: z.string(),
 });
 export const SurveySchemesSync = z.object({});
+export const SurveySessionsExport = z.object({
+  surveyId: z.string(),
+});
 export const SurveySubmission = z.object({
   surveyId: z.string(),
   userId: z.string(),
   // TODO: Fix this
   state: z.any(),
-});
-export const SurveySubmissionNotification = z.object({
-  surveyId: z.string(),
-  submissionId: z.string(),
 });
 export const UserEmailVerificationNotification = z.object({
   email: z.string(),
@@ -110,101 +128,35 @@ export const UserPasswordResetNotification = z.object({
 });
 
 export const jobParams = z.object({
-  CleanRedisStore: z.object({
-    store: z.union([z.literal('cache'), z.literal('session')]),
-  }),
-  CleanStorageFiles: z.object({}),
-  FeedbackSchemesSync: z.object({}),
-  LanguageTranslationsSync: z.object({}),
-  LocaleIndexBuild: z.object({}),
-  LocaleFoods: z.object({
-    localeId: z.string(),
-  }),
-  LocaleFoodNutrientMapping: z.object({
-    localeId: z.string(),
-  }),
-  LocaleFoodRankingUpload: z.object({
-    localeId: z.string(),
-    file: z.string(),
-  }),
-  NutrientTableDataImport: z.object({
-    nutrientTableId: z.string(),
-    file: z.string(),
-  }),
-  NutrientTableMappingImport: z.object({
-    nutrientTableId: z.string(),
-    file: z.string(),
-  }),
-  LocalePopularitySearchCopy: z.object({
-    localeId: z.string(),
-    sourceLocaleId: z.string(),
-  }),
-  PopularitySearchUpdateCounters: z.object({
-    localeCode: z.string(),
-    foodCodes: z.array(z.string()),
-  }),
-  PurgeExpiredTokens: z.object({}),
-  SurveyAuthUrlsExport: z.object({
-    surveyId: z.string(),
-  }),
-  SurveyDataExport: z.object({
-    id: z.union([z.string(), z.array(z.string())]).optional(),
-    surveyId: z.string(),
-    startDate: z.date().optional(),
-    endDate: z.date().optional(),
-    userId: z.string().optional(),
-  }),
-  SurveyFeedbackNotification: z.object({
-    surveyId: z.string(),
-    username: z.string(),
-    submissions: z.array(z.string()).optional(),
-    to: z.string(),
-    cc: z.string().optional(),
-    bcc: z.string().optional(),
-  }),
-  SurveyHelpRequestNotification: z.object({
-    surveySlug: z.string(),
-    userId: z.string(),
-    name: z.string(),
-    email: z.string().nullish(),
-    phone: z.string().nullish(),
-    phoneCountry: z.string().nullish(),
-    message: z.string(),
-  }),
-  SurveyNutrientsRecalculation: z.object({
-    surveyId: z.string(),
-  }),
-  SurveyRatingsExport: z.object({
-    surveyId: z.string(),
-  }),
-  SurveyRespondentsImport: z.object({
-    surveyId: z.string(),
-    file: z.string(),
-  }),
-  SurveySchemesSync: z.object({}),
-  SurveySubmission: z.object({
-    surveyId: z.string(),
-    userId: z.string(),
-    // TODO: Fix this
-    state: z.any(),
-  }),
-  SurveySubmissionNotification: z.object({
-    surveyId: z.string(),
-    submissionId: z.string(),
-  }),
-  UserEmailVerificationNotification: z.object({
-    email: z.string(),
-    userAgent: z.string().optional(),
-  }),
-  UserPasswordResetNotification: z.object({
-    email: z.string(),
-    userAgent: z.string().optional(),
-  }),
+  CleanRedisStore,
+  CleanStorageFiles,
+  FeedbackSchemesSync,
+  LanguageTranslationsSync,
+  LocaleIndexBuild,
+  LocaleFoods,
+  LocaleFoodNutrientMapping,
+  LocaleFoodRankingUpload,
+  NutrientTableDataImport,
+  NutrientTableMappingImport,
+  LocalePopularitySearchCopy,
+  PopularitySearchUpdateCounters,
+  PurgeExpiredTokens,
+  SurveyAuthUrlsExport,
+  SurveyDataExport,
+  SurveyEventNotification,
+  SurveyFeedbackNotification,
+  SurveyHelpRequestNotification,
+  SurveyNutrientsRecalculation,
+  SurveyRatingsExport,
+  SurveyRespondentsImport,
+  SurveySchemesSync,
+  SurveySessionsExport,
+  SurveySubmission,
+  UserEmailVerificationNotification,
+  UserPasswordResetNotification,
 });
 
 export type JobParams = z.infer<typeof jobParams>;
-
-export type JobType = keyof JobParams;
 
 export const jobTypeParams = z.union([
   CleanRedisStore,
@@ -222,28 +174,42 @@ export const jobTypeParams = z.union([
   PurgeExpiredTokens,
   SurveyAuthUrlsExport,
   SurveyDataExport,
+  SurveyEventNotification,
   SurveyFeedbackNotification,
   SurveyHelpRequestNotification,
   SurveyNutrientsRecalculation,
   SurveyRatingsExport,
   SurveyRespondentsImport,
   SurveySchemesSync,
+  SurveySessionsExport,
   SurveySubmission,
-  SurveySubmissionNotification,
   UserEmailVerificationNotification,
   UserPasswordResetNotification,
 ]);
 
-export const nutrientTableJobTypeParams = z.union([
-  NutrientTableDataImport,
-  NutrientTableMappingImport,
-]);
+export const localeJobs = [
+  'LocaleFoods',
+  'LocaleFoodNutrientMapping',
+  'LocaleFoodRankingUpload',
+  'LocalePopularitySearchCopy',
+] as const;
+
+export type LocaleJob = (typeof localeJobs)[number];
 
 export const nutrientTableJobs = ['NutrientTableMappingImport', 'NutrientTableDataImport'] as const;
 
 export type NutrientTableJob = (typeof nutrientTableJobs)[number];
 
-export type NutrientTableJobParams = (typeof nutrientTableJobs)[number];
+export const surveyJobs = [
+  'SurveyAuthUrlsExport',
+  'SurveyDataExport',
+  'SurveyNutrientsRecalculation',
+  'SurveyRatingsExport',
+  'SurveyRespondentsImport',
+  'SurveySessionsExport',
+] as const;
+
+export type SurveyJob = (typeof surveyJobs)[number];
 
 export const jobTypes = [
   'CleanRedisStore',
@@ -251,26 +217,22 @@ export const jobTypes = [
   'FeedbackSchemesSync',
   'LanguageTranslationsSync',
   'LocaleIndexBuild',
-  'LocaleFoods',
-  'LocaleFoodNutrientMapping',
-  'LocaleFoodRankingUpload',
-  'LocalePopularitySearchCopy',
   'PopularitySearchUpdateCounters',
   'PurgeExpiredTokens',
-  'SurveyAuthUrlsExport',
-  'SurveyDataExport',
+  'SurveyEventNotification',
   'SurveyFeedbackNotification',
   'SurveyHelpRequestNotification',
-  'SurveyNutrientsRecalculation',
-  'SurveyRatingsExport',
   'SurveyRespondentsImport',
   'SurveySchemesSync',
   'SurveySubmission',
-  'SurveySubmissionNotification',
   'UserEmailVerificationNotification',
   'UserPasswordResetNotification',
+  ...localeJobs,
   ...nutrientTableJobs,
+  ...surveyJobs,
 ] as const;
+
+export type JobType = keyof JobParams & (typeof jobTypes)[number];
 
 export type JobTypeParams = z.infer<typeof jobTypeParams>;
 
@@ -325,6 +287,12 @@ export const defaultJobsParams: JobParams = {
     endDate: undefined,
     userId: undefined,
   },
+  SurveyEventNotification: {
+    type: 'survey.session.started',
+    surveyId: '',
+    sessionId: '',
+    userId: '',
+  },
   SurveyNutrientsRecalculation: {
     surveyId: '',
   },
@@ -350,14 +318,13 @@ export const defaultJobsParams: JobParams = {
     to: '',
   },
   SurveySchemesSync: {},
+  SurveySessionsExport: {
+    surveyId: '',
+  },
   SurveySubmission: {
     surveyId: '',
     userId: '',
     state: {} as SurveyState,
-  },
-  SurveySubmissionNotification: {
-    surveyId: '',
-    submissionId: '',
   },
   UserEmailVerificationNotification: {
     email: '',
@@ -374,35 +341,3 @@ export const pickJobParams = <T extends keyof JobParams>(object: object, job: T)
 
 export const jobRequiresFile = <T extends keyof JobParams>(job: T) =>
   Object.keys(defaultJobsParams[job]).includes('file');
-
-export type LocaleJob = Extract<
-  JobType,
-  | 'LocaleFoods'
-  | 'LocaleFoodNutrientMapping'
-  | 'LocaleFoodRankingUpload'
-  | 'LocalePopularitySearchCopy'
->;
-
-export const localeJobs = [
-  'LocaleFoods',
-  'LocaleFoodNutrientMapping',
-  'LocaleFoodRankingUpload',
-  'LocalePopularitySearchCopy',
-] as unknown as LocaleJob[];
-
-export type SurveyJob = Extract<
-  JobType,
-  | 'SurveyAuthUrlsExport'
-  | 'SurveyDataExport'
-  | 'SurveyNutrientsRecalculation'
-  | 'SurveyRatingsExport'
-  | 'SurveyRespondentsImport'
->;
-
-export const surveyJobs = [
-  'SurveyAuthUrlsExport',
-  'SurveyDataExport',
-  'SurveyNutrientsRecalculation',
-  'SurveyRatingsExport',
-  'SurveyRespondentsImport',
-] as unknown as SurveyJob[];

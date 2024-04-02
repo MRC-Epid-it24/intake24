@@ -19,7 +19,8 @@
     "_": "\"{attribute}\" must be a date.",
     "after": "\"{attribute}\" must be a date after {after}.",
     "before": "\"{attribute}\" must be a date before {before}.",
-    "between": "\"{attribute}\" must be a date between {after} and {before}."
+    "between": "\"{attribute}\" must be a date between {after} and {before}.",
+    "ms": "\"{attribute}\" must be a duration format (30m, 1h, 2d)."
   },
   "duplicate": {
     "_": "\"{attribute}\" can't have duplicate items."

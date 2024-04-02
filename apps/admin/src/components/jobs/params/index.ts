@@ -7,10 +7,11 @@ import NutrientTableDataImport from './nutrient-table-data-import.vue';
 import NutrientTableMappingImport from './nutrient-table-mapping-import.vue';
 import SurveyAuthUrlsExport from './survey-auth-urls-export.vue';
 import SurveyDataExport from './survey-data-export.vue';
+import SurveyEventNotification from './survey-event-notification.vue';
 import SurveyNutrientsRecalculation from './survey-nutrients-recalculation.vue';
 import SurveyRatingsExport from './survey-ratings-export.vue';
 import SurveyRespondentsImport from './survey-respondents-import.vue';
-import SurveySubmissionNotification from './survey-submission-notification.vue';
+import SurveySessionsExport from './survey-sessions-export.vue';
 
 export default {
   CleanRedisStore,
@@ -22,8 +23,9 @@ export default {
   NutrientTableMappingImport,
   SurveyAuthUrlsExport,
   SurveyDataExport,
+  SurveyEventNotification,
   SurveyNutrientsRecalculation,
   SurveyRatingsExport,
   SurveyRespondentsImport,
-  SurveySubmissionNotification,
+  SurveySessionsExport,
 };

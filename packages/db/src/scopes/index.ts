@@ -3,19 +3,21 @@ import type { FindOptions, WhereOptions } from 'sequelize';
 import type { SurveySubmissionAttributes } from '../models/system';
 
 export type SubmissionScope = {
+  sessionId?: string | string[];
   surveyId?: string | string[];
   userId?: string | string[];
 };
 
 export const submissionScope = (
-  scopeOps: SubmissionScope,
+  scopeOps: SubmissionScope = {},
   ops: FindOptions<SurveySubmissionAttributes> = {}
 ): FindOptions<SurveySubmissionAttributes> => {
-  const { surveyId, userId } = scopeOps;
+  const { sessionId, surveyId, userId } = scopeOps;
   const where: WhereOptions<SurveySubmissionAttributes> = {};
 
   if (surveyId) where.surveyId = surveyId;
   if (userId) where.userId = userId;
+  if (sessionId) where.sessionId = sessionId;
 
   return {
     where,

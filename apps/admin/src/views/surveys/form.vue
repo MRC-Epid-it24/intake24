@@ -101,22 +101,20 @@
                 outlined
               ></v-text-field>
             </v-col>
-            <v-col align-self="center" cols="12" md="6">
-              <v-switch
-                v-model="form.storeUserSessionOnServer"
-                class="mt-0"
-                :error-messages="form.errors.get('storeUserSessionOnServer')"
-                hide-details="auto"
-                :label="$t('surveys.storeUserSessionOnServer')"
-                name="storeUserSessionOnServer"
-                @change="form.errors.clear('storeUserSessionOnServer')"
-              ></v-switch>
-            </v-col>
           </v-row>
           <v-divider class="my-6"></v-divider>
           <v-row>
             <v-col cols="12" md>
               <div class="text-h5 mb-4">{{ $t('surveys.search._') }}</div>
+              <v-switch
+                v-model="form.searchCollectData"
+                class="my-6"
+                :error-messages="form.errors.get('searchCollectData')"
+                hide-details="auto"
+                :label="$t('surveys.search.collectData')"
+                name="searchCollectData"
+                @change="form.errors.clear('searchCollectData')"
+              ></v-switch>
               <v-select
                 v-model="form.searchSortingAlgorithm"
                 :error-messages="form.errors.get('searchSortingAlgorithm')"
@@ -184,6 +182,7 @@
                 :label="$t('surveys.auth.urlTokenCharset')"
                 name="authUrlTokenCharset"
                 outlined
+                prepend-inner-icon="fas fa-font"
               ></v-text-field>
               <v-text-field
                 v-model.number="form.authUrlTokenLength"
@@ -193,6 +192,7 @@
                 :label="$t('surveys.auth.urlTokenLength')"
                 name="authUrlTokenLength"
                 outlined
+                prepend-inner-icon="fas fa-ruler-horizontal"
               ></v-text-field>
               <v-text-field
                 v-model="form.authUrlDomainOverride"
@@ -207,6 +207,38 @@
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
               <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
             </v-col>
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
+              <v-text-field
+                v-model.number="form.maximumDailySubmissions"
+                class="mb-4"
+                :error-messages="form.errors.get('maximumDailySubmissions')"
+                hide-details="auto"
+                :label="$t('surveys.submissionLimits.maxDaily')"
+                name="maximumDailySubmissions"
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model.number="form.maximumTotalSubmissions"
+                class="mb-4"
+                :error-messages="form.errors.get('maximumTotalSubmissions')"
+                hide-details="auto"
+                :label="$t('surveys.submissionLimits.maxTotal')"
+                name="maximumTotalSubmissions"
+                outlined
+              ></v-text-field>
+              <v-text-field
+                v-model.number="form.minimumSubmissionInterval"
+                :error-messages="form.errors.get('minimumSubmissionInterval')"
+                hide-details="auto"
+                :label="$t('surveys.submissionLimits.minInterval')"
+                name="minimumSubmissionInterval"
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-divider class="my-6"></v-divider>
+          <v-row>
             <v-col cols="12" md>
               <div class="text-h5">{{ $t('surveys.externalComm._') }}</div>
               <v-switch
@@ -231,49 +263,36 @@
                 :type="showGenUserKey ? 'text' : 'password'"
                 @click:append="showGenUserKey = !showGenUserKey"
               ></v-text-field>
-              <v-text-field
-                v-model="form.submissionNotificationUrl"
-                autocomplete="off"
-                :error-messages="form.errors.get('submissionNotificationUrl')"
-                hide-details="auto"
-                :label="$t('surveys.externalComm.submissionNotificationUrl')"
-                name="submissionNotificationUrl"
-                outlined
-                prepend-inner-icon="fas fa-up-right-from-square"
-              ></v-text-field>
+              <event-notifications
+                v-model="form.notifications"
+                :error-messages="form.errors.get('notifications')"
+                name="notifications"
+                @input="form.errors.clear('notifications')"
+              ></event-notifications>
             </v-col>
-          </v-row>
-          <v-divider class="my-6"></v-divider>
-          <div class="text-h5 mb-4">{{ $t('surveys.submissionLimits._') }}</div>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.maximumDailySubmissions"
-                :error-messages="form.errors.get('maximumDailySubmissions')"
-                hide-details="auto"
-                :label="$t('surveys.submissionLimits.maxDaily')"
-                name="maximumDailySubmissions"
-                outlined
-              ></v-text-field>
+            <v-col :cols="$vuetify.breakpoint.mdAndUp ? `auto` : '12'">
+              <v-divider :vertical="$vuetify.breakpoint.mdAndUp"></v-divider>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field
-                v-model.number="form.maximumTotalSubmissions"
-                :error-messages="form.errors.get('maximumTotalSubmissions')"
+            <v-col cols="12" md>
+              <div class="text-h5 mb-4">{{ $t('surveys.session._') }}</div>
+              <v-switch
+                v-model="form.storeUserSessionOnServer"
+                class="my-6"
+                :error-messages="form.errors.get('storeUserSessionOnServer')"
                 hide-details="auto"
-                :label="$t('surveys.submissionLimits.maxTotal')"
-                name="maximumTotalSubmissions"
-                outlined
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" md="6">
+                :label="$t('surveys.session.storeOnServer')"
+                name="storeUserSessionOnServer"
+                @change="form.errors.clear('storeUserSessionOnServer')"
+              ></v-switch>
               <v-text-field
-                v-model.number="form.minimumSubmissionInterval"
-                :error-messages="form.errors.get('minimumSubmissionInterval')"
+                v-model="form.sessionLifetime"
+                :error-messages="form.errors.get('sessionLifetime')"
                 hide-details="auto"
-                :label="$t('surveys.submissionLimits.minInterval')"
-                name="minimumSubmissionInterval"
+                :hint="$t('surveys.session.lifetime.hint')"
+                :label="$t('surveys.session.lifetime._')"
+                name="sessionLifetime"
                 outlined
+                prepend-inner-icon="fas fa-stopwatch"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -320,8 +339,9 @@ import type {
   SearchSortingAlgorithm,
   SurveyState,
 } from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
 import type { SurveyEntry } from '@intake24/common/types/http/admin';
-import { SelectResource } from '@intake24/admin/components/dialogs';
+import { EventNotifications, SelectResource } from '@intake24/admin/components/dialogs';
 import { formMixin } from '@intake24/admin/components/entry';
 import { DatePicker } from '@intake24/admin/components/forms';
 import { useEntry, useEntryFetch, useEntryForm } from '@intake24/admin/composables';
@@ -339,9 +359,10 @@ export type SurveyForm = {
   endDate: string | null;
   supportEmail: string | null;
   suspensionReason: string | null;
+  sessionLifetime: string;
   storeUserSessionOnServer: boolean;
   numberOfSubmissionsForFeedback: number;
-  submissionNotificationUrl: string | null;
+  notifications: Notification[];
   /*
   surveyMonkeyUrl: string | null;
   originatingUrl: string | null;
@@ -355,8 +376,9 @@ export type SurveyForm = {
   maximumDailySubmissions: number;
   maximumTotalSubmissions: number | null;
   minimumSubmissionInterval: number;
-  searchSortingAlgorithm: SearchSortingAlgorithm;
+  searchCollectData: boolean;
   searchMatchScoreWeight: number;
+  searchSortingAlgorithm: SearchSortingAlgorithm;
   surveySchemeOverrides: SchemeOverrides;
   userPersonalIdentifiers: boolean;
   userCustomFields: boolean;
@@ -374,9 +396,10 @@ export const surveyForm: SurveyForm = {
   endDate: null,
   supportEmail: null,
   suspensionReason: null,
+  sessionLifetime: '12h',
   storeUserSessionOnServer: false,
   numberOfSubmissionsForFeedback: 1,
-  submissionNotificationUrl: null,
+  notifications: [],
   /* surveyMonkeyUrl: null,
   originatingUrl: null, */
   allowGenUsers: false,
@@ -388,8 +411,9 @@ export const surveyForm: SurveyForm = {
   maximumDailySubmissions: 3,
   maximumTotalSubmissions: null,
   minimumSubmissionInterval: 600,
-  searchSortingAlgorithm: 'popularity',
+  searchCollectData: true,
   searchMatchScoreWeight: 20,
+  searchSortingAlgorithm: 'popularity',
   surveySchemeOverrides: defaultOverrides,
   userPersonalIdentifiers: false,
   userCustomFields: false,
@@ -398,7 +422,7 @@ export const surveyForm: SurveyForm = {
 export default defineComponent({
   name: 'SurveyForm',
 
-  components: { DatePicker, SelectResource },
+  components: { DatePicker, EventNotifications, SelectResource },
 
   mixins: [formMixin],
 

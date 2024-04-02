@@ -29,8 +29,7 @@
   "externalComm": {
     "_": "External communication",
     "allowGenUsers": "Allow user generation",
-    "genUserKey": "JWT secret for M2M communication",
-    "submissionNotificationUrl": "Submission notification URL"
+    "genUserKey": "JWT secret for M2M communication"
   },
   "users": {
     "_": "Users settings",
@@ -39,6 +38,7 @@
   },
   "search": {
     "_": "Search options",
+    "collectData": "Collect search data",
     "sortingAlgorithm": "Sorting algorithm",
     "matchScoreWeight": "Match score weight",
     "algorithms": {
@@ -55,7 +55,14 @@
     "minInterval": "Minimum interval between submissions (seconds)"
   },
   "suspensionReason": "Suspension reason",
-  "storeUserSessionOnServer": "Store user session on server",
+  "session": {
+    "_": "Session settings",
+    "lifetime": {
+      "_": "Session lifetime",
+      "hint": "Specify session lifetime, e.g. 30m, 12h, 2d."
+    },
+    "storeOnServer": "Store user session on server"
+  },
   "feedback": {
     "_": "Feedback settings",
     "enabled": "Feedback enabled",
@@ -109,6 +116,12 @@
         }
       }
     }
+  },
+  "sessions": {
+    "_": "Session",
+    "tab": "Sessions",
+    "title": "Survey sessions",
+    "id": "Session ID"
   },
   "submissions": {
     "_": "Submission",

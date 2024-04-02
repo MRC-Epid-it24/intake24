@@ -4,6 +4,7 @@ import overrides from './overrides';
 import read from './read.vue';
 import respondents from './respondents';
 import securables from './securables';
+import sessions from './sessions';
 import submissions from './submissions';
 import tasks from './tasks';
 
@@ -14,6 +15,7 @@ export default {
   edit: form,
   overrides,
   respondents,
+  sessions,
   submissions,
   securables,
   tasks,

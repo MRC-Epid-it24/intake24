@@ -129,7 +129,15 @@ export const resources: Resource[] = [
     api: 'admin/surveys',
     securable: true,
     generateRoutes: true,
-    routes: [...routes, 'overrides', 'respondents', 'submissions', 'tasks', 'securables'],
+    routes: [
+      ...routes,
+      'overrides',
+      'respondents',
+      'submissions',
+      'sessions',
+      'tasks',
+      'securables',
+    ],
   },
   // Images
   {

@@ -87,6 +87,7 @@ export default defineComponent({
       SurveyNutrientsRecalculation: { surveyId: props.id },
       SurveyRatingsExport: { surveyId: props.id },
       SurveyRespondentsImport: { surveyId: props.id, file: '' },
+      SurveySessionsExport: { surveyId: props.id },
     }));
 
     const disabledJobParams = {
@@ -95,6 +96,7 @@ export default defineComponent({
       SurveyNutrientsRecalculation: { surveyId: true },
       SurveyRatingsExport: { surveyId: true },
       SurveyRespondentsImport: { surveyId: true },
+      SurveySessionsExport: { surveyId: true },
     };
 
     const { entry, entryLoaded } = useEntry<SurveyEntry>(props);

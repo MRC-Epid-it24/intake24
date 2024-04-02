@@ -28,6 +28,7 @@ import type {
   SearchSortingAlgorithm,
   SurveyState,
 } from '@intake24/common/surveys';
+import type { Notification } from '@intake24/common/types';
 import { surveyPermissions } from '@intake24/common/security';
 import { defaultOverrides } from '@intake24/common/surveys';
 
@@ -191,10 +192,26 @@ export default class Survey extends BaseModel<
   declare numberOfSubmissionsForFeedback: CreationOptional<number>;
 
   @Column({
-    allowNull: true,
-    type: DataType.STRING(2048),
+    allowNull: false,
+    defaultValue: '[]',
+    type: DataType.TEXT({ length: 'long' }),
   })
-  declare submissionNotificationUrl: CreationOptional<string | null>;
+  get notifications(): Notification[] {
+    const val = this.getDataValue('notifications') as unknown;
+    return val ? JSON.parse(val as string) : [];
+  }
+
+  set notifications(value: Notification[]) {
+    // @ts-expect-error: Sequelize/TS issue for setting custom values
+    this.setDataValue('notifications', JSON.stringify(value ?? []));
+  }
+
+  @Column({
+    allowNull: false,
+    defaultValue: '12h',
+    type: DataType.STRING(32),
+  })
+  declare sessionLifetime: CreationOptional<string>;
 
   @Column({
     allowNull: false,
@@ -224,10 +241,10 @@ export default class Survey extends BaseModel<
 
   @Column({
     allowNull: false,
-    defaultValue: 'popularity',
-    type: DataType.STRING(32),
+    defaultValue: true,
+    type: DataType.BOOLEAN,
   })
-  declare searchSortingAlgorithm: CreationOptional<SearchSortingAlgorithm>;
+  declare searchCollectData: CreationOptional<boolean>;
 
   @Column({
     allowNull: false,
@@ -235,6 +252,13 @@ export default class Survey extends BaseModel<
     type: DataType.INTEGER,
   })
   declare searchMatchScoreWeight: CreationOptional<number>;
+
+  @Column({
+    allowNull: false,
+    defaultValue: 'popularity',
+    type: DataType.STRING(32),
+  })
+  declare searchSortingAlgorithm: CreationOptional<SearchSortingAlgorithm>;
 
   @Column({
     allowNull: true,
@@ -375,7 +399,8 @@ export const updateSurveyFields = [
   'genUserKey',
   'suspensionReason',
   'supportEmail',
-  'submissionNotificationUrl',
+  'notifications',
+  'sessionLifetime',
   'storeUserSessionOnServer',
   'numberOfSubmissionsForFeedback',
   'authCaptcha',
@@ -385,8 +410,9 @@ export const updateSurveyFields = [
   'maximumDailySubmissions',
   'maximumTotalSubmissions',
   'minimumSubmissionInterval',
-  'searchSortingAlgorithm',
+  'searchCollectData',
   'searchMatchScoreWeight',
+  'searchSortingAlgorithm',
   'surveySchemeOverrides',
 ] as const;
 

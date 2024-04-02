@@ -1,5 +1,7 @@
 import type { Environment } from '@intake24/common/types';
 
+import pkg from '../../package.json';
+
 export type Site = 'base' | 'admin' | 'survey' | 'images' | 'docs';
 export type SiteUrls = Record<Site, string>;
 
@@ -10,6 +12,7 @@ export type AppConfig = {
   icon?: string;
   fullName: string;
   poweredBy?: string;
+  version: string;
 
   host: string;
   port: number;
@@ -38,6 +41,7 @@ const appConfig: AppConfig = {
   icon,
   fullName,
   poweredBy: process.env.APP_POWERED_BY,
+  version: pkg.version,
 
   host: process.env.APP_HOST || host,
   port: process.env.APP_PORT ? parseInt(process.env.APP_PORT, 10) : port,

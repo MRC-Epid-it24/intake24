@@ -219,18 +219,19 @@ const surveyService = ({
    * @returns {Promise<UserSurveySession>}
    */
   const getSession = async (slug: string, userId: string): Promise<UserSurveySession> => {
-    const survey = await Survey.findBySlug(slug);
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id', 'sessionLifetime', 'storeUserSessionOnServer'],
+    });
     if (!survey) throw new NotFoundError();
 
-    const { id: surveyId, storeUserSessionOnServer } = survey;
+    const { id: surveyId, sessionLifetime, storeUserSessionOnServer } = survey;
 
     if (!storeUserSessionOnServer) throw new ForbiddenError();
 
     const session = await UserSurveySession.findOne({ where: { userId, surveyId } });
     if (!session) throw new NotFoundError();
 
-    // TODO: should be configurable in scheme / survey settings
-    const expiredAt = new Date(Date.now() - ms('12h'));
+    const expiredAt = new Date(Date.now() - ms(sessionLifetime));
     if (session.updatedAt < expiredAt) {
       await session.destroy();
       throw new NotFoundError();
@@ -252,7 +253,9 @@ const surveyService = ({
     userId: string,
     sessionData: SurveyState
   ): Promise<UserSurveySession> => {
-    const survey = await Survey.findBySlug(slug);
+    const survey = await Survey.findBySlug(slug, {
+      attributes: ['id', 'notifications', 'storeUserSessionOnServer'],
+    });
     if (!survey) throw new NotFoundError();
 
     const { id: surveyId, storeUserSessionOnServer } = survey;
@@ -260,9 +263,35 @@ const surveyService = ({
     if (!storeUserSessionOnServer) throw new ForbiddenError();
 
     const [session] = await UserSurveySession.upsert(
-      { userId, surveyId, sessionData },
-      { fields: ['sessionData'] }
+      { id: sessionData.uxSessionId, userId, surveyId, sessionData },
+      {
+        fields: ['id', 'sessionData'],
+        //@ts-expect-error sequelize incorrectly handles camelCase vs snake_case
+        conflictFields: ['survey_id', 'user_id'],
+      }
     );
+
+    /*
+     * Sequelize upsert doesn't return info about whether the record was inserted or updated
+     * - second tuple element always returns null
+     * - hackish timestamps comparison to determine if the record was inserted
+     */
+    if (
+      session.createdAt.getTime() === session.updatedAt.getTime() &&
+      survey.notifications.length &&
+      survey.notifications.some(({ type }) => type === 'survey.session.started')
+    ) {
+      await scheduler.jobs.addJob({
+        type: 'SurveyEventNotification',
+        userId,
+        params: {
+          type: 'survey.session.started',
+          sessionId: sessionData.uxSessionId,
+          surveyId,
+          userId,
+        },
+      });
+    }
 
     return session;
   };
@@ -275,10 +304,30 @@ const surveyService = ({
    * @returns {Promise<void>}
    */
   const clearSession = async (slug: string, userId: string): Promise<void> => {
-    const survey = await Survey.findBySlug(slug);
+    const survey = await Survey.findBySlug(slug, { attributes: ['id', 'notifications'] });
     if (!survey) throw new NotFoundError();
 
-    await UserSurveySession.destroy({ where: { surveyId: survey.id, userId } });
+    const session = await UserSurveySession.findOne({ where: { userId, surveyId: survey.id } });
+    if (!session) throw new NotFoundError();
+
+    const {
+      id: sessionId,
+      sessionData: { submissionTime },
+    } = session;
+    await session.destroy();
+
+    if (
+      submissionTime ||
+      !survey.notifications.length ||
+      !survey.notifications.some(({ type }) => type === 'survey.session.cancelled')
+    )
+      return;
+
+    await scheduler.jobs.addJob({
+      type: 'SurveyEventNotification',
+      userId,
+      params: { type: 'survey.session.cancelled', sessionId, surveyId: survey.id, userId },
+    });
   };
 
   /**

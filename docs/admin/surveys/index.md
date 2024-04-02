@@ -21,7 +21,8 @@ Edit tab allows to modify selected survey.
 - `Start date` - Start date of the survey
 
 - `End date` - End date of the survey
-- `Support email` - Email which gets displayed to participant in footer
+
+- `Support email` - Email associated with the survey, `help requests` are sent to this email.
 
 - `State` - Survey state
 
@@ -31,41 +32,19 @@ Edit tab allows to modify selected survey.
 
 - `Suspension reason` - If `Suspended` state is set, additional details can be passed on to respondent using this field..
 
-- `Store user session on server` - If enabled, user partial submission data are sent to server for store and retrieval. If disabled, user partial submission data are only stored locally in client browser,
+### Search options
+
+- `Collect search data` - `on` / `off` control for search data contribution into the locale search index statistics
+
+- `Sorting algorithm` - Sorting algorithm to be used for foods search
+
+- `Match score weight` - Match score weight parameter for sorting algorithm
 
 ### Users settings
 
 - `Allow user personal identifiers` - `on` / `off` control to allow persistance of `email` / `name` / `phone` fields in database for respondent account
 
 - `Allow user custom fields` - `on` / `off` control to allow persistance of `user custom fields`
-
-### External communication
-
-- `Allow user generation` - `on` / `off` control to allow automatic user generation
-
-- `JWT secret for M2M communication` - string to sign JWT token.
-
-- `Submission notification URL` - Webhook to be called when recall data submitted. Internally it dispatches [SurveySubmissionNotification](/admin/system/job-types#surveysubmissionnotification) job.
-
-If automatic user generation is enabled, it provides two ways to generate accounts.
-
-#### `1. JWT secret is left blank`
-
-- Anyone can generate new respondent account using following survey URL: `app.domain.com/:surveyId/generate-user`.
-
-- API endpoint is rate limited and protected by `captcha` to minimize the misuse
-
-- This is useful for `demo-like` surveys to allow open access to anyone
-
-#### `2. JWT secret is set`
-
-- API endpoint can be used to create new respondent accounts. See [API docs](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} for more details.
-
-### Search options
-
-- `Sorting algorithm` - Sorting algorithm to be used for foods search
-
-- `Match score weight` - Match score weight parameter for sorting algorithm
 
 ### Authentication settings
 
@@ -84,6 +63,93 @@ If automatic user generation is enabled, it provides two ways to generate accoun
 - `Maximum allowed total submissions` - maximum total number of recalls allowed within the survey
 
 - `Minimum interval between submissions (seconds)` - the shortest minimal internal between two following submission by same respondent
+
+### External communication
+
+- `Allow user generation` - `on` / `off` control to allow automatic user generation
+
+- `JWT secret for M2M communication` - string to sign JWT token.
+
+If automatic user generation is enabled, it provides two ways to generate accounts.
+
+**1. JWT secret is left blank**
+
+- Anyone can generate new respondent account using following survey URL: `app.domain.com/:surveyId/generate-user`.
+- API endpoint is rate limited and protected by `captcha` to minimize the misuse
+- This is useful for `demo-like` surveys to allow open access to anyone
+
+**2. JWT secret is set**
+
+- API endpoint can be used to create new respondent accounts. See [API docs](/open-api.html#tag/survey/post/surveys/{slug}/create-user){target="blank"} for more details.
+
+### Notifications
+
+Supported events:
+
+- `survey.session.started` - Triggered when new session is started
+- `survey.session.cancelled` - Triggered when session is cancelled by user
+- `survey.session.submitted` - Triggered when session is submitted
+
+Supported notifications:
+
+- `webhook` - Provides URL to be called with payload
+
+```http
+POST https://my-submission-notification-url.example.com
+
+authorization: Bearer {token}
+content-type: application/json
+intake24-version: 1.0.0
+user-agent: intake24
+
+{
+  "type": "survey.session.started" | "survey.session.cancelled",
+  "sessionId": string,
+  "surveyId": string,
+  "userId": string,
+}
+
+|
+
+{
+  "type": "survey.session.submitted",
+  "sessionId": string,
+  "surveyId": string,
+  "userId": string,
+  "submissionId": string,
+  "data": {...}
+}
+```
+
+If JWT secret is set, it is used to sign JWT token (algorithm `HS256`) and attach as Bearer in `Authorization` header to allow verification of the request.
+
+Expected JWT payload with claims:
+
+```json
+{
+  "type": "event-type",
+  "sessionId": "uuid",
+  "surveyId": "1",
+  "submissionId"?: "uuid",
+  "userId": "1",
+  "iat": 1711834245,
+  "exp": 1711834305,
+  "aud": "https://my-submission-notification-url.example.com",
+  "iss": "intake24",
+  "jti": "opaque-string"
+}
+```
+
+- `slack` - to be implemented
+- `email` - to be implemented
+
+[SurveyEventNotification](/admin/system/job-types#surveyeventnotification) job is used to dispatch survey event notifications.
+
+### Session settings
+
+- `Store user session on server` - If enabled, user partial submission data are sent to server for store and retrieval. If disabled, user partial submission data are only stored locally in client browser
+
+- `Session lifetime` - Session duration as `ms-formatted` string, e.g. `30m`, `2h`, `1d` (see [ms](https://github.com/vercel/ms) for more information) or number in milliseconds.
 
 ### Feedback settings
 
@@ -156,7 +222,11 @@ Full URL patterns using `{token}` as `query` parameter can be used in combinatio
 
 ## Submissions
 
-Survey submissions with limited ability to search / view / delete submissions. To be expanded in future.
+Survey submissions with ability to search / view / delete submissions.
+
+## Sessions
+
+Survey sessions with limited ability to search / view / delete partial recall data.
 
 ## Tasks
 
@@ -164,10 +234,14 @@ Tasks section allows to submit resource specific tasks into the job queue with a
 
 Jobs that can be submitted:
 
-- [Export authentication URLs](/admin/system/job-types.html#surveyauthurlsexport)
-
-- [Submission data export](/admin/system/job-types.html#surveydataexport)
+- [Authentication URLs export](/admin/system/job-types.html#surveyauthurlsexport)
 
 - [Nutrient recalculation](/admin/system/job-types.html#surveynutrientsrecalculation)
 
-- [Import respondents](/admin/system/job-types.html#surveyrespondentsimport)
+- [Ratings export](/admin/system/job-types.html#surveyratingsexport)
+
+- [Respondents import](/admin/system/job-types.html#surveyrespondentsimport)
+
+- [Submission data export](/admin/system/job-types.html#surveydataexport)
+
+- [Sessions export](/admin/system/job-types.html#surveysessionsexport)

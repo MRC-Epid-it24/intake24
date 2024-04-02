@@ -23,8 +23,9 @@ Jobs types available in system.
   - [SurveyRatingsExport](#surveyratingsexport)
   - [SurveyRespondentsImport](#surveyrespondentsimport)
   - [SurveySchemesSync](#surveyschemessync)
+  - [SurveySessionsExport](#surveysessionsexport)
   - [SurveySubmission](#surveysubmission)
-  - [SurveySubmissionNotification](#surveysubmissionnotification)
+  - [SurveyEventNotification](#surveyeventnotification)
   - [UserPasswordResetNotification](#userpasswordresetnotification)
   - [UserEmailVerificationNotification](#useremailverificationnotification)
 
@@ -266,6 +267,16 @@ This needs to be run if survey schemes structure changes, e.g. new non-optional 
 {}
 ```
 
+## SurveySessionsExport
+
+`SurveySessionsExport` exports survey sessions - partial recall data to CSV file.
+
+```json
+{
+  "surveyId": string
+}
+```
+
 ## SurveySubmission
 
 `SurveySubmission` processes submission state and saves data.
@@ -278,18 +289,21 @@ This needs to be run if survey schemes structure changes, e.g. new non-optional 
 }
 ```
 
-## SurveySubmissionNotification
+## SurveyEventNotification
 
-`SurveySubmissionNotification` is used with webhook to dispatch survey submission notification.
+`SurveyEventNotification` is used to dispatch survey event notifications.
 
 ```json
 {
+  "type": "survey.sessions.started" | "survey.sessions.cancelled" | "survey.sessions.submitted",
+  "sessionId": string,
   "surveyId": string,
-  "submissionId": string
+  "userId": string,
+  "submissionId?": string
 }
 ```
 
-When valid `Submission notification URL` is set in survey settings, webhook is automatically called with each successful submission. Submission data are attached in request body.
+When valid `notification` is set in survey settings, job is called for corresponding event.
 
 If [survey external communication](/admin/surveys/#external-communication) specifies JWT secret, signed JWT token is attached as Bearer in `Authorization` header of the request.
 

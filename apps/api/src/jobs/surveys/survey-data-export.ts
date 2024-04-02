@@ -74,7 +74,7 @@ export default class SurveyDataExport extends BaseJob<'SurveyDataExport'> {
 
     return new Promise((resolve, reject) => {
       const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-      const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
+      const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
       const foods = this.dataExportService.getSubmissionsWithStream(options);
       const transform = new Transform({ fields, withBOM: true }, {}, { objectMode: true });

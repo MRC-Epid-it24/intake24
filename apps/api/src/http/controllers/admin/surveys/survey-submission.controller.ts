@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { pick } from 'lodash';
-import validator from 'validator';
+import { isUUID } from 'validator';
 
 import type { IoC } from '@intake24/api/ioc';
 import type {
@@ -29,7 +29,7 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
 
     const where: WhereOptions<SurveySubmissionAttributes> = { surveyId };
     if (typeof search === 'string' && search) {
-      if (validator.isUUID(search)) where.id = search;
+      if (isUUID(search)) where.id = search;
       else
         where['$user.aliases.username$'] = {
           [SurveySubmission.sequelize?.getDialect() === 'postgres' ? Op.iLike : Op.substring]:
@@ -41,7 +41,12 @@ const adminSurveySubmissionController = ({ cache }: Pick<IoC, 'cache'>) => {
       query: pick(req.query, ['page', 'limit', 'sort', 'search']),
       where,
       include: [
-        { association: 'user', include: [{ association: 'aliases', where: { surveyId } }] },
+        {
+          association: 'user',
+          attributes: ['id'],
+          include: [{ association: 'aliases', attributes: ['username'], where: { surveyId } }],
+          required: true,
+        },
       ],
       order: [['submissionTime', 'DESC']],
       subQuery: false,

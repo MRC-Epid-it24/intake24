@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import type {
   FeedbackSchemeAttributes,
   Pagination,
@@ -46,3 +48,21 @@ export type SurveyRefs = {
   surveySchemes: SurveySchemeRefEntry[];
   feedbackSchemes: FeedbackSchemeRefEntry[];
 };
+
+export const userSurveySessionAttributes = z.object({
+  id: z.string().uuid(),
+  userId: z.string(),
+  surveyId: z.string(),
+  // TODO: survey state
+  sessionData: z.any(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type UserSurveySessionAttributes = z.infer<typeof userSurveySessionAttributes>;
+
+export const userSurveySessionResponse = userSurveySessionAttributes.extend({
+  id: z.string(),
+});
+
+export type UserSurveySessionResponse = z.infer<typeof userSurveySessionResponse>;

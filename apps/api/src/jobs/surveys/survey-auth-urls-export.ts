@@ -109,7 +109,7 @@ export default class SurveyAuthUrlsExport extends BaseJob<'SurveyAuthUrlsExport'
         { objectMode: true }
       );
       const output = fs.createWriteStream(path.resolve(this.fsConfig.local.downloads, filename), {
-        encoding: 'utf8',
+        encoding: 'utf-8',
         flags: 'w+',
       });
 

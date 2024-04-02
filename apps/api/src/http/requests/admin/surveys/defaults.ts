@@ -1,11 +1,14 @@
 import type { Request } from 'express';
 import type { ParamSchema, Schema } from 'express-validator';
 import { isPlainObject } from 'lodash';
+import ms from 'ms';
+import { ZodError } from 'zod';
 
 import type { SurveyAttributes, WhereOptions } from '@intake24/db';
 import { customTypeErrorMessage, typeErrorMessage } from '@intake24/api/http/requests/util';
 import { unique } from '@intake24/api/http/rules';
 import { searchSortingAlgorithms, surveyStates } from '@intake24/common/surveys';
+import { notification } from '@intake24/common/types';
 import { validateMeals } from '@intake24/common/validators';
 import { FeedbackScheme, Op, Survey, SurveyScheme, SystemLocale } from '@intake24/db';
 
@@ -202,16 +205,33 @@ export const defaults: Schema = {
       },
     },
   },
-  submissionNotificationUrl: {
+  notifications: {
     in: ['body'],
-    errorMessage: typeErrorMessage('url._'),
-    isLength: {
-      bail: true,
-      options: { max: 2048 },
-      errorMessage: typeErrorMessage('string.max', { max: 2048 }),
+    errorMessage: typeErrorMessage('structure._'),
+    custom: {
+      options: (value): boolean => {
+        try {
+          notification.array().parse(value);
+          return true;
+        } catch (err) {
+          if (err instanceof ZodError) {
+            throw err.errors.at(0)?.message;
+          }
+          throw err;
+        }
+      },
     },
-    isURL: { options: { require_tld: false } },
-    optional: { options: { nullable: true } },
+  },
+  sessionLifetime: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('date.ms'),
+    optional: true,
+    custom: {
+      options: (value) => !!ms(value),
+    },
+    customSanitizer: {
+      options: (value) => (Number.isNaN(Number(value)) ? value : ms(Number(value))),
+    },
   },
   storeUserSessionOnServer: {
     in: ['body'],
@@ -240,6 +260,12 @@ export const defaults: Schema = {
     errorMessage: typeErrorMessage('int._'),
     isInt: true,
     toInt: true,
+    optional: true,
+  },
+  searchCollectData: {
+    in: ['body'],
+    errorMessage: typeErrorMessage('boolean._'),
+    isBoolean: { options: { strict: true } },
     optional: true,
   },
   searchSortingAlgorithm: {

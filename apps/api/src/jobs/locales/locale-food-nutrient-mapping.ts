@@ -105,7 +105,7 @@ export default class LocaleFoodNutrientMapping extends BaseJob<'LocaleFoodNutrie
 
     return new Promise((resolve, reject) => {
       const filepath = path.resolve(this.fsConfig.local.downloads, filename);
-      const output = fs.createWriteStream(filepath, { encoding: 'utf8', flags: 'w+' });
+      const output = fs.createWriteStream(filepath, { encoding: 'utf-8', flags: 'w+' });
 
       const foods = FoodLocal.findAllWithStream({
         where: { localeId: localeCode },
