@@ -1,22 +1,56 @@
 <template>
-  <div class="d-flex" :class="categoriesFirst ? 'flex-column' : 'flex-column-reverse'">
-    <v-list v-if="contents.subcategories.length" class="list__no-wrap pa-0">
-      <v-list-item
-        v-for="category in contents.subcategories"
+  <div class="d-flex flex-column">
+    <div v-if="contents.subcategories.length == 0 && contents.foods.length == 0" class="py-4">
+      <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
+        {{ i18n.none }}
+      </v-alert>
+    </div>
+    <div v-if="containsPizza" class="py-4">
+      <v-alert
+        border="left"
+        class="smaller-padding"
+        color="primary lighten-4 mb-0"
+        icon="fas fa-bell"
+        rounded="lg"
+      >
+        {{ i18n.pizza }}
+      </v-alert>
+    </div>
+    <div v-if="contents.foods.length >= 50" class="py-4">
+      <v-alert
+        border="left"
+        class="smaller-padding"
+        color="primary lighten-4 mb-0"
+        icon="fas fa-bell"
+        rounded="lg"
+      >
+        {{ i18n.refine }}
+      </v-alert>
+    </div>
+    <v-subheader v-if="contents.subcategories.length">Related Categories/Subcategories</v-subheader>
+    <v-chip-group v-if="contents.subcategories.length" column>
+      <v-chip
+        v-for="category in showAll ? contents.subcategories : firstCategories"
         :key="category.code"
-        class="list-item-border"
+        class="my-1"
+        clickable
+        color="primary"
+        outlined
         @click="categorySelected(category)"
       >
-        <v-list-item-icon>
-          <v-icon>$category</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            <span class="font-weight-medium">{{ category.name }}</span>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+        <span class="font-weight-medium">{{ category.name }}</span>
+      </v-chip>
+      <v-btn
+        v-if="contents.subcategories.length > threshold"
+        class="my-1 mb-2 show-all-toggle-chip"
+        color="info"
+        outlined
+        rounded
+        @click="showAll = !showAll"
+      >
+        {{ showAll ? 'Show Less' : 'Show All Related Categories' }}
+      </v-btn>
+    </v-chip-group>
     <v-list v-if="contents.foods.length" class="list__no-wrap pa-0">
       <v-list-item
         v-for="food in contents.foods"
@@ -32,26 +66,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <div v-if="contents.subcategories.length == 0 && contents.foods.length == 0" class="py-4">
-      <v-alert color="grey lighten-2 mb-0" icon="fas fa-triangle-exclamation">
-        {{ i18n.none }}
-      </v-alert>
-    </div>
-    <div
-      v-if="contents.foods.length >= 50"
-      class="py-4"
-      :class="categoriesFirst ? 'order-first' : 'order-last'"
-    >
-      <v-alert
-        border="left"
-        class="smaller-padding"
-        color="primary lighten-4 mb-0"
-        icon="fas fa-bell"
-        rounded="lg"
-      >
-        {{ i18n.refine }}
-      </v-alert>
-    </div>
   </div>
 </template>
 
@@ -77,9 +91,33 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    searchTerm: {
+      type: String as PropType<string>,
+      default: '',
+    },
   },
 
   emits: ['food-selected', 'category-selected'],
+
+  data() {
+    return {
+      expanded: false,
+      showAll: false,
+      threshold: 5,
+    };
+  },
+
+  computed: {
+    firstCategories(): CategoryHeader[] {
+      return this.contents.subcategories.slice(0, this.threshold);
+    },
+    remainingCategories(): CategoryHeader[] {
+      return this.contents.subcategories.slice(this.threshold);
+    },
+    containsPizza(): boolean | null {
+      return this.searchTerm.toLowerCase().includes('pizza');
+    },
+  },
 
   methods: {
     categorySelected(category: CategoryHeader): void {
@@ -88,6 +126,10 @@ export default defineComponent({
 
     foodSelected(food: FoodHeader): void {
       this.$emit('food-selected', food);
+    },
+
+    toggleExpand() {
+      this.expanded = !this.expanded;
     },
   },
 });
