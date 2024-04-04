@@ -19,7 +19,7 @@ const createSanitizer = ({ allowHtml, emptyStringToNull }: SanitizeInputOptions 
           ? {
               USE_PROFILES: { html: true },
               ADD_TAGS: ['iframe'],
-              ADD_ATTR: ['allowfullscreen', 'frameborder'],
+              ADD_ATTR: ['allowfullscreen', 'frameborder', 'target'],
             }
           : { USE_PROFILES: { html: false, mathMl: false, svg: false, svgFilters: false } }
       );
