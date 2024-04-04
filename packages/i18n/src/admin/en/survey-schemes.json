@@ -512,6 +512,10 @@
       "title": "Pizza",
       "subtitle": "Use the \"pizza\" method to estimate the portion size"
     },
+    "pizza-v2-prompt": {
+      "title": "Pizza V2",
+      "subtitle": "Use the \"pizza v2\" method to estimate the portion size"
+    },
     "parent-food-portion-prompt": {
       "title": "Portion of parent food",
       "subtitle": "Use the \"portion of parent food\" method to estimate the portion size",

@@ -139,6 +139,13 @@ export const psmDefaults: PortionSizeMethodItem[] = [
     parameters: { imageMapLabels: false },
   },
   {
+    method: 'pizza-v2',
+    ...psmDefaultAttributes,
+    description: 'use_an_image',
+    imageUrl: portionSizeSelectionImages.use_an_image,
+    parameters: { imageMapLabels: false },
+  },
+  {
     method: 'direct-weight',
     ...psmDefaultAttributes,
     description: 'weight',

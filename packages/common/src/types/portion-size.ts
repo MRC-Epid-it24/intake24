@@ -12,6 +12,7 @@ export const portionSizeMethods = [
   'milk-on-cereal',
   'parent-food-portion',
   'pizza',
+  'pizza-v2',
   'recipe-builder',
   'standard-portion',
 ] as const;
@@ -69,6 +70,10 @@ export const pizzaPortionSizeParameters = z.object({
   imageMapLabels: z.boolean().optional(),
 });
 
+export const pizzaV2PortionSizeParameters = z.object({
+  imageMapLabels: z.boolean().optional(),
+});
+
 export const standardPortionSizeParameters = z.object({
   units: standardUnit.array(),
 });
@@ -102,6 +107,7 @@ export const portionSizeParameters = z.object({
   'milk-on-cereal': milkOnCerealPortionSizeParameters,
   'parent-food-portion': parentFoodPortionParameters,
   pizza: pizzaPortionSizeParameters,
+  'pizza-v2': pizzaV2PortionSizeParameters,
   'standard-portion': standardPortionSizeParameters,
   'direct-weight': directWeightPortionSizeParameters,
   'recipe-builder': recipeBuilderPortionSizeParameters,
@@ -159,6 +165,11 @@ export interface PizzaPsm extends PortionSizeMethodBase {
   parameters: PortionSizeParameters['pizza'];
 }
 
+export interface PizzaV2Psm extends PortionSizeMethodBase {
+  method: 'pizza-v2';
+  parameters: PortionSizeParameters['pizza-v2'];
+}
+
 export interface RecipeBuilderPsm extends PortionSizeMethodBase {
   method: 'recipe-builder';
   parameters: PortionSizeParameters['recipe-builder'];
@@ -179,5 +190,6 @@ export type PortionSizeMethod =
   | MilkOnCerealPsm
   | ParentFoodPsm
   | PizzaPsm
+  | PizzaV2Psm
   | RecipeBuilderPsm
   | StandardPortionPsm;

@@ -100,6 +100,15 @@ export const pizzaPrompt: Prompts['pizza-prompt'] = copy({
   imageMap,
 });
 
+export const pizzaV2Prompt: Prompts['pizza-v2-prompt'] = copy({
+  ...basePortionPrompt,
+  component: 'pizza-v2-prompt',
+  type: 'portion-size',
+  id: 'pizza-v2-prompt',
+  name: 'Pizza V2',
+  imageMap,
+});
+
 export const portionSizeOptionPrompt: Prompts['portion-size-option-prompt'] = copy({
   ...basePortionPrompt,
   component: 'portion-size-option-prompt',
@@ -144,6 +153,7 @@ export const portionSizePrompts: Prompt[] = [
   missingFoodPrompt,
   parentFoodPortionPrompt,
   pizzaPrompt,
+  pizzaV2Prompt,
   portionSizeOptionPrompt,
   recipeBuilderPrompt,
   standardPortionPrompt,

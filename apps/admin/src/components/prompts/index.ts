@@ -49,6 +49,10 @@ export const promptSettings: PromptSettings = {
     tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
   },
+  'multi-prompt': {
+    tabs: [],
+    sections: [],
+  },
   'no-more-information-prompt': {
     tabs: [...tabs],
     sections: [...foodsAndMeals],
@@ -76,10 +80,6 @@ export const promptSettings: PromptSettings = {
   'yes-no-prompt': {
     tabs: [...tabs],
     sections: [...promptSectionsExceptSubmission],
-  },
-  'multi-prompt': {
-    tabs: [],
-    sections: [],
   },
   // Standard
   'associated-foods-prompt': {
@@ -176,6 +176,10 @@ export const promptSettings: PromptSettings = {
     sections: ['foods'],
   },
   'pizza-prompt': {
+    tabs: [...tabs],
+    sections: ['foods'],
+  },
+  'pizza-v2-prompt': {
     tabs: [...tabs],
     sections: ['foods'],
   },

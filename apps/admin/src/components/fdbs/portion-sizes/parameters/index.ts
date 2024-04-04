@@ -18,5 +18,6 @@ export default {
   'milk-on-cereal': MilkOnCereal,
   'parent-food-portion': ParentFoodOption,
   pizza: Pizza,
+  'pizza-v2': NoParameters,
   'direct-weight': NoParameters,
 };
