@@ -340,12 +340,24 @@ export class PhraseIndex<K> {
       }
     }
 
+    // V4-1016: stemming algorithm needs to be applied to synonyms, otherwise certain words
+    // will fail to match, e.g. 'sausage' is converted into 'sausag' in the index by the stemming
+    // function and if the synonym is entered as 'sausage' it will fail to match 'sausag' unless
+    // the stemming function is applied to it.
+    function stemWordSets(sets: Array<Set<string>>): Array<Set<string>> {
+      return sets.map((set) => new Set([...set].map((word) => wordOps.stem(word))));
+    }
+
+    const stemmedSynonyms = stemWordSets(synonymSets);
+
+    const stemmedRecipeSynonyms = stemWordSets(recipeFoodsSynonymsSet);
+
     // Creatinf a dictionary for Locale Indexing with all the synonym sets and dictionary words
-    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, synonymSets);
+    this.dictionary = new RichDictionary(dictionaryWords, wordOps.phoneticEncoder, stemmedSynonyms);
 
     //Falten Array of recipe Foods int othe Set of string
     const recipeDictionaryWords = new Set<string>();
-    for (const recipeFoodSet of recipeFoodsSynonymsSet) {
+    for (const recipeFoodSet of stemmedRecipeSynonyms) {
       for (const recipeFood of recipeFoodSet) {
         recipeDictionaryWords.add(recipeFood);
       }
@@ -355,7 +367,7 @@ export class PhraseIndex<K> {
     this.recipeFoodsDictionary = new RichDictionary(
       recipeDictionaryWords,
       wordOps.phoneticEncoder,
-      recipeFoodsSynonymsSet
+      stemmedRecipeSynonyms
     );
   }
 }
