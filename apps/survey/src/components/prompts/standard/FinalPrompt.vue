@@ -13,9 +13,10 @@
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
-          v-if="showFeedback"
+          v-if="feedbackEnabled"
           class="px-4"
           color="primary"
+          :disabled="!feedbackAvailable"
           large
           outlined
           :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -31,8 +32,9 @@
         </v-btn>
         <v-divider vertical></v-divider>
         <v-btn
-          v-if="showFeedback"
+          v-if="feedbackEnabled"
           color="primary"
+          :disabled="!feedbackAvailable"
           text
           :to="{ name: 'feedback-home', params: { surveyId } }"
         >
@@ -67,9 +69,11 @@ export default defineComponent({
   mixins: [createBasePrompt<'final-prompt'>()],
 
   props: {
-    showFeedback: {
+    feedbackAvailable: {
       type: Boolean,
-      default: false,
+    },
+    feedbackEnabled: {
+      type: Boolean,
     },
     submissionId: {
       type: String,

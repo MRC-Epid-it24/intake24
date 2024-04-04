@@ -3,11 +3,12 @@
     :is="prompt.component"
     :key="prompt.id"
     v-bind="{
-      showFeedback,
+      feedbackAvailable,
+      feedbackEnabled,
       prompt,
       section,
-      surveyId,
       submissionId,
+      surveyId,
     }"
     @action="action"
   ></component>
@@ -45,7 +46,8 @@ export default defineComponent({
     const survey = useSurvey();
     const route = useRoute();
 
-    const showFeedback = computed(() => survey.user?.showFeedback);
+    const feedbackAvailable = computed(() => survey.feedbackAvailable);
+    const feedbackEnabled = computed(() => survey.feedbackEnabled);
     const submissionId = computed(() => survey.data.id);
     const surveyId = computed(() => route.params.surveyId);
 
@@ -53,7 +55,7 @@ export default defineComponent({
       emit('action', type, ...args);
     };
 
-    return { action, showFeedback, submissionId, surveyId };
+    return { action, feedbackAvailable, feedbackEnabled, submissionId, surveyId };
   },
 });
 </script>

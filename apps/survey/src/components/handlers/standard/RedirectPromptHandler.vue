@@ -3,8 +3,9 @@
     :is="prompt.component"
     :key="prompt.id"
     v-bind="{
+      feedbackAvailable,
+      feedbackEnabled,
       followUpUrl,
-      showFeedback,
       prompt,
       section,
       submissionId,
@@ -46,8 +47,14 @@ export default defineComponent({
     const survey = useSurvey();
     const route = useRoute();
 
-    const showFeedback = computed(() => survey.user?.showFeedback);
-    const followUpUrl = computed(() => survey.user?.followUpUrl);
+    const feedbackAvailable = computed(() => survey.feedbackAvailable);
+    const feedbackEnabled = computed(() => survey.feedbackEnabled);
+    const followUpUrl = computed(() => {
+      const followUpUrl = survey.user?.followUpUrl ?? undefined;
+      if (!followUpUrl || typeof followUpUrl === 'string') return followUpUrl;
+
+      return followUpUrl[props.prompt.id];
+    });
     const submissionId = computed(() => survey.data.id);
     const surveyId = computed(() => route.params.surveyId);
 
@@ -55,7 +62,7 @@ export default defineComponent({
       emit('action', type, ...args);
     };
 
-    return { action, followUpUrl, showFeedback, submissionId, surveyId };
+    return { action, feedbackAvailable, feedbackEnabled, followUpUrl, submissionId, surveyId };
   },
 });
 </script>

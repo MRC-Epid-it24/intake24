@@ -16,28 +16,12 @@
               <span class="font-weight-bold text-h1">{{ timerSecs }}</span>
             </div>
           </v-progress-circular>
-          <v-btn
-            :block="isMobile"
-            class="mb-6"
-            :class="{ 'px-10': !isMobile }"
-            color="primary"
-            :href="followUpUrl"
-            :target="prompt.target"
-            :title="promptI18n.goTo"
-            x-large
-          >
-            <v-icon left>$redirect</v-icon>
-            {{ promptI18n.goTo }}
-          </v-btn>
         </v-card>
-        <v-alert v-else border="left" icon="fas fa-circle-exclamation" outlined type="warning">
-          {{ promptI18n.missingUrl }}
-        </v-alert>
       </v-card-text>
       <template #actions>
         <v-btn
           class="px-4"
-          color="primary"
+          color="secondary"
           large
           outlined
           :to="{ name: 'survey-home', params: { surveyId } }"
@@ -46,9 +30,10 @@
           {{ $t('common.home') }}
         </v-btn>
         <v-btn
-          v-if="showFeedback"
+          v-if="feedbackEnabled"
           class="px-4"
           color="primary"
+          :disabled="!feedbackAvailable"
           large
           outlined
           :to="{ name: 'feedback-home', params: { surveyId } }"
@@ -56,6 +41,21 @@
           <v-icon left>$feedback</v-icon>
           {{ $t('recall.actions.feedback') }}
         </v-btn>
+        <template v-if="followUpUrl">
+          <v-spacer></v-spacer>
+          <v-btn
+            class="px-4"
+            color="secondary"
+            :href="followUpUrl"
+            large
+            outlined
+            :target="prompt.target"
+            :title="promptI18n.goTo"
+          >
+            <v-icon left>$redirect</v-icon>
+            {{ promptI18n.goTo }}
+          </v-btn>
+        </template>
       </template>
       <template #nav-actions>
         <v-btn :to="{ name: 'survey-home', params: { surveyId } }">
@@ -65,16 +65,22 @@
           <v-icon class="pb-1">$home</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn v-if="showFeedback" :to="{ name: 'feedback-home', params: { surveyId } }">
+        <v-btn
+          v-if="feedbackEnabled"
+          color="primary"
+          :disabled="!feedbackAvailable"
+          text
+          :to="{ name: 'feedback-home', params: { surveyId } }"
+        >
           <span class="text-overline font-weight-medium">
             {{ $t('recall.actions.nav.feedback') }}
           </span>
           <v-icon class="pb-1">$feedback</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-btn :disabled="!followUpUrl" :href="followUpUrl" :target="prompt.target">
+        <v-btn v-if="followUpUrl" :href="followUpUrl" :target="prompt.target">
           <span class="text-overline font-weight-medium">
-            {{ $t('recall.actions.nav.redirect') }}
+            {{ promptI18n.goTo }}
           </span>
           <v-icon class="pb-1">$redirect</v-icon>
         </v-btn>
@@ -104,12 +110,14 @@ export default defineComponent({
   mixins: [createBasePrompt<'redirect-prompt'>()],
 
   props: {
+    feedbackAvailable: {
+      type: Boolean,
+    },
+    feedbackEnabled: {
+      type: Boolean,
+    },
     followUpUrl: {
       type: String,
-    },
-    showFeedback: {
-      type: Boolean,
-      default: false,
     },
     submissionId: {
       type: String,
@@ -145,7 +153,7 @@ export default defineComponent({
     };
 
     const startTimer = () => {
-      if (!timerValue.value) return;
+      if (!timerValue.value || !props.followUpUrl) return;
 
       timerInterval.value = setInterval(() => {
         timerValue.value -= timerTick.value;

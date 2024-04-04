@@ -83,7 +83,7 @@ export const surveyUserInfoResponse = z.object({
     description: 'Whether the user has reached the maximum number of submissions per day',
   }),
   followUpUrl: z
-    .string()
+    .union([z.string(), z.record(z.string())])
     .nullish()
     .openapi({ description: 'Optional follow-up URL for user redirect' }),
 });

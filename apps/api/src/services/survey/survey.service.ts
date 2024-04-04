@@ -348,52 +348,75 @@ const surveyService = ({
    *
    * @param {Survey} survey
    * @param {string} userId
-   * @returns {(Promise<string | null>)}
+   * @returns {(Promise<string | null | Record<string, string>>)}
    */
-  const getFollowUpUrl = async (survey: Survey, userId: string): Promise<string | null> => {
+  const getFollowUpUrl = async (
+    survey: Survey,
+    userId: string
+  ): Promise<string | null | Record<string, string>> => {
     const { id: surveyId, surveyScheme } = survey;
     if (!surveyScheme) throw new NotFoundError();
 
-    const redirectPrompt = surveyScheme.prompts.submission.find(
-      (prompt) => prompt.component === 'redirect-prompt'
+    const redirectPrompts = surveyScheme.prompts.submission.filter(
+      (prompt): prompt is Prompts['redirect-prompt'] => prompt.component === 'redirect-prompt'
     );
-    if (!redirectPrompt) return null;
+    if (!redirectPrompts.length) return null;
 
-    const { identifier, url } = redirectPrompt as Prompts['redirect-prompt'];
+    const identifiers = redirectPrompts.map(({ identifier }) => identifier);
 
     const include: Includeable[] = [
       { association: 'aliases', where: { surveyId }, required: false },
+      { association: 'customFields', where: { name: identifiers }, required: false },
     ];
-    if (identifier)
-      include.push({ association: 'customFields', where: { name: identifier }, required: false });
 
     const user = await User.findByPk(userId, { attributes: ['id'], include });
     if (!user) throw new NotFoundError();
 
     const { aliases = [], customFields = [] } = user;
-    let identifierValue: string | null;
 
-    switch (identifier) {
-      case 'userId':
-        identifierValue = user.id;
-        break;
-      case 'username':
-      case 'urlAuthToken':
-        identifierValue = aliases.length ? aliases[0][identifier] : null;
-        break;
-      default:
-        identifierValue = customFields.length ? customFields[0].value : null;
-        break;
-    }
+    const size = redirectPrompts.length;
+    const urls = redirectPrompts.reduce<string | null | Record<string, string>>(
+      (acc, { id, identifier, url }) => {
+        let identifierValue: string | null;
+        switch (identifier) {
+          case 'userId':
+            identifierValue = user.id;
+            break;
+          case 'username':
+          case 'urlAuthToken':
+            identifierValue = aliases.length ? aliases[0][identifier] : null;
+            break;
+          default:
+            identifierValue = customFields.length ? customFields[0].value : null;
+            break;
+        }
 
-    if (!identifierValue || !url) return null;
+        console.log(`identifier`, identifier);
+        console.log(`identifierValue`, identifierValue);
+        console.log(`url`, url);
 
-    try {
-      return new URL(url.replace('{identifier}', identifierValue)).href;
-    } catch (err) {
-      logger.error('Invalid follow-up URL', { err });
-      return null;
-    }
+        if (!identifierValue || !url) return acc;
+
+        if (size > 1 && acc && typeof acc !== 'string') {
+          try {
+            acc[id] = new URL(url.replace('{identifier}', identifierValue)).href;
+          } catch (err) {
+            logger.error('Invalid follow-up URL', { err });
+          }
+          return acc;
+        } else {
+          try {
+            return new URL(url.replace('{identifier}', identifierValue)).href;
+          } catch (err) {
+            logger.error('Invalid follow-up URL', { err });
+            return null;
+          }
+        }
+      },
+      size === 1 ? null : {}
+    );
+
+    return urls;
   };
 
   const followUp = async (

@@ -66,6 +66,7 @@ export default defineComponent({
           'code',
           'fullscreen',
           'image',
+          'link',
           'lists',
           'media',
           'preview',

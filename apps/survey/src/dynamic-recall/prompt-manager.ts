@@ -63,13 +63,8 @@ const mealDrinks = (count: number, meal: MealState): number => meal.foods.reduce
 
 const surveyDrinks = (count: number, meals: MealState[]): number => meals.reduce(mealDrinks, count);
 
-const checkRecallNumber = (store: SurveyStore, condition: Condition) => {
-  if (!store.user) {
-    console.error('User information should not be null at this point');
-    return false;
-  }
-  return conditionOps[condition.op]({ answer: store.user.submissions + 1, value: condition.value });
-};
+const checkRecallNumber = (store: SurveyStore, condition: Condition) =>
+  conditionOps[condition.op]({ answer: store.recallNumber, value: condition.value });
 
 const showPrompt = (state: SurveyState, prompt: Prompt, component: ComponentType) =>
   prompt.component === component;
