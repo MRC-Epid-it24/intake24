@@ -424,6 +424,34 @@
     },
     "confirm": "I had that many"
   },
+  "pizzaV2": {
+    "name": "Pizza",
+    "text": "",
+    "description": "",
+    "sizes": {
+      "label": "What size pizza did you have?",
+      "personal": "Personal 7\"",
+      "small": "Small 9.5\"",
+      "medium": "Medium 11.5\"",
+      "large": "Large 13.5\"",
+      "xxl": "Extra large 15.5\""
+    },
+    "crusts": {
+      "label": "What type of pizza crust did you have?",
+      "classic": "Classic",
+      "italian-thin": "Italian / Thin",
+      "stuffed": "Stuffed"
+    },
+    "units": {
+      "label": "How do you want to estimate your portion?",
+      "slice": "In slices",
+      "whole": "In whole pizzas"
+    },
+    "quantity": {
+      "slice": "How many slices did you have?",
+      "whole": "How many whole pizzas did you have?"
+    }
+  },
   "standardPortion": {
     "name": "Standard portion",
     "text": "",

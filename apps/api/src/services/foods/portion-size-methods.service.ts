@@ -170,6 +170,7 @@ const portionSizeMethodsService = () => {
         return 'portion/standard-portion.jpg';
 
       case 'pizza':
+      case 'pizza-v2':
         return 'portion/pizza.jpg';
 
       case 'cereal':

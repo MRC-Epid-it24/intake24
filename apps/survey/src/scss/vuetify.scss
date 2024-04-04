@@ -72,5 +72,10 @@ $utilities: (
     property: row-gap,
     class: gr,
     values: $spacers
+  ),
+  "flex-basis": (
+    property: flex-basis,
+    class: flex-basis,
+    values: (auto, 0, 1)
   )
 );

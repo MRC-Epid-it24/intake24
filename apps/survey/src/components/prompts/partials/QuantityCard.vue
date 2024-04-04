@@ -7,24 +7,24 @@
         </div>
         <div class="pa-2 d-flex flex-row">
           <div v-if="whole" class="d-flex flex-column align-center">
-            <v-card class="d-flex flex-column align-center pa-5">
+            <v-card class="d-flex flex-column align-center pa-5 rounded-pill">
               <v-btn
                 color="secondary"
                 :disabled="maxDisabled"
                 icon
-                large
                 :title="$t('prompts.quantity.more')"
+                x-large
                 @click="update(1)"
               >
                 <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
-              <span class="my-4 font-weight-medium text-h5">{{ wholeLabel }}</span>
+              <span class="my-4 font-weight-medium text-h4">{{ wholeLabel }}</span>
               <v-btn
                 color="secondary"
                 :disabled="minDisabled"
                 icon
-                large
                 :title="$t('prompts.quantity.less')"
+                x-large
                 @click="update(-1)"
               >
                 <v-icon aria-hidden="false">$decrement</v-icon>
@@ -35,24 +35,24 @@
             <span class="font-weight-medium">{{ $t('prompts.quantity.and') }}</span>
           </div>
           <div v-if="whole" class="d-flex flex-column align-center">
-            <v-card class="d-flex flex-column align-center pa-5">
+            <v-card class="d-flex flex-column align-center pa-5 rounded-pill">
               <v-btn
                 color="secondary"
                 :disabled="maxDisabled"
                 icon
-                large
                 :title="$t('prompts.quantity.more')"
+                x-large
                 @click="update(0.25)"
               >
                 <v-icon aria-hidden="false">$increment</v-icon>
               </v-btn>
-              <span class="my-4 font-weight-medium text-h5">{{ fractionLabel }}</span>
+              <span class="my-4 font-weight-medium text-h4">{{ fractionLabel }}</span>
               <v-btn
                 color="secondary"
                 :disabled="minDisabled"
                 icon
-                large
                 :title="$t('prompts.quantity.less')"
+                x-large
                 @click="update(-0.25)"
               >
                 <v-icon aria-hidden="false">$decrement</v-icon>

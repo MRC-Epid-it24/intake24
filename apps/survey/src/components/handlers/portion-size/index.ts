@@ -7,6 +7,7 @@ import MilkOnCerealPromptHandler from './MilkOnCerealPromptHandler.vue';
 import MissingFoodPromptHandler from './MissingFoodPromptHandler.vue';
 import ParentFoodPortionPromptHandler from './ParentFoodPortionPromptHandler.vue';
 import PizzaPromptHandler from './PizzaPromptHandler.vue';
+import PizzaV2PromptHandler from './PizzaV2PromptHandler.vue';
 import PortionSizeOptionPromptHandler from './PortionSizeOptionPromptHandler.vue';
 import RecipeBuilderPromptHandler from './RecipeBuilderPromptHandler.vue';
 import StandardPortionPromptHandler from './StandardPortionPromptHandler.vue';
@@ -21,6 +22,7 @@ export default {
   MissingFoodPromptHandler,
   ParentFoodPortionPromptHandler,
   PizzaPromptHandler,
+  PizzaV2PromptHandler,
   PortionSizeOptionPromptHandler,
   RecipeBuilderPromptHandler,
   StandardPortionPromptHandler,

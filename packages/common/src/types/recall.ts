@@ -38,6 +38,14 @@ export type FoodFlag =
 
 export type CustomPromptAnswer = string | string[] | number | number[] | null;
 
+export const pizzaSizes = ['personal', 'small', 'medium', 'large', 'xxl'] as const;
+export type PizzaSize = (typeof pizzaSizes)[number];
+export const pizzaCrusts = ['classic', 'italian-thin', 'stuffed'] as const;
+export type PizzaCrust = (typeof pizzaCrusts)[number];
+
+export const pizzaUnits = ['slice', 'whole'] as const;
+export type PizzaUnit = (typeof pizzaUnits)[number];
+
 // Portion size states
 export interface PortionSizeStateBase {
   servingWeight: number | null;
@@ -136,6 +144,13 @@ export type PortionSizeStates = {
       image: string | null;
       quantity: number;
     };
+  };
+  'pizza-v2': PortionSizeStateBase & {
+    method: 'pizza-v2';
+    size: PizzaSize | null;
+    crust: PizzaCrust | null;
+    unit: PizzaUnit | null;
+    quantity: number;
   };
   'standard-portion': PortionSizeStateBase & {
     method: 'standard-portion';

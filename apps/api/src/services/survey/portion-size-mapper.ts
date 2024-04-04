@@ -253,6 +253,7 @@ export const portionSizeMappers: Record<
   'milk-on-cereal': milkOnCerealMapper,
   'parent-food-portion': parentFoodPortionMapper,
   pizza: pizzaPortionMapper,
+  'pizza-v2': genericMapper,
   'standard-portion': standardPortionMapper,
   'direct-weight': genericMapper,
   'recipe-builder': genericMapper,

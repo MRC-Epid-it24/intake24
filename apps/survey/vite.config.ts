@@ -3,6 +3,8 @@ import { fileURLToPath, URL } from 'node:url';
 
 import viteLegacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue2';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
 import { VuetifyResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig, loadEnv } from 'vite';
@@ -103,9 +105,10 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue(),
       Components({
-        resolvers: [VuetifyResolver()],
+        resolvers: [IconsResolver(), VuetifyResolver()],
         directoryAsNamespace: true,
       }),
+      Icons({ autoInstall: true, compiler: 'vue3' }),
       legacy ? viteLegacy() : undefined,
       https ? mkcert({ savePath: DEV_MKCERT_PATH }) : undefined,
       webfontDownload([

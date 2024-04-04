@@ -113,6 +113,16 @@ export type PromptStates = {
       quantity: boolean;
     };
   };
+  'pizza-v2-prompt': {
+    portionSize: PortionSizeStates['pizza-v2'];
+    panel: number;
+    confirmed: {
+      size: boolean;
+      crust: boolean;
+      unit: boolean;
+      quantity: boolean;
+    };
+  };
   'portion-size-option-prompt': {
     option: number | null;
   };
