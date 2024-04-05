@@ -21,7 +21,7 @@
       </tbody>
     </v-simple-table>
     <v-container fluid>
-      <pre>{{ JSON.stringify(entry.prompt, null, '\t') }}</pre>
+      <json-editor v-bind="{ readOnly: true, value: entry.prompt }"></json-editor>
     </v-container>
   </layout>
 </template>
@@ -30,11 +30,14 @@
 import { defineComponent } from 'vue';
 
 import type { SurveySchemePromptEntry } from '@intake24/common/types/http/admin';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useEntry, useEntryFetch } from '@intake24/admin/composables';
 
 export default defineComponent({
   name: 'SchemePromptDetail',
+
+  components: { JsonEditor },
 
   mixins: [detailMixin],
 

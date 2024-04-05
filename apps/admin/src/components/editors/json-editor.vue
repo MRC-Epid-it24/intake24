@@ -1,5 +1,5 @@
 <template>
-  <json-editor-vue :value="value" @input="input"></json-editor-vue>
+  <json-editor-vue v-bind="{ readOnly, value }" @input="input"></json-editor-vue>
 </template>
 
 <script lang="ts">
@@ -13,6 +13,10 @@ export default defineComponent({
   },
 
   props: {
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
     value: {
       type: [Array, Object],
     },

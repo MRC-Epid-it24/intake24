@@ -38,7 +38,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
-          <pre>{{ JSON.stringify(selected, null, '\t') }}</pre>
+          <json-editor v-bind="{ readOnly: true, value: selected }"></json-editor>
         </v-container>
       </v-card>
     </v-dialog>
@@ -50,6 +50,7 @@ import { defineComponent, ref } from 'vue';
 
 import type { SurveyEntry, SurveySubmissionEntry } from '@intake24/common/types/http/admin';
 import { EmbeddedDataTable } from '@intake24/admin/components/data-tables';
+import { JsonEditor } from '@intake24/admin/components/editors';
 import { detailMixin } from '@intake24/admin/components/entry';
 import { useDateTime, useEntry, useEntryFetch } from '@intake24/admin/composables';
 import { ConfirmDialog } from '@intake24/ui';
@@ -58,7 +59,7 @@ import { useMessages } from '@intake24/ui/stores';
 export default defineComponent({
   name: 'SurveySubmissions',
 
-  components: { ConfirmDialog, EmbeddedDataTable },
+  components: { ConfirmDialog, EmbeddedDataTable, JsonEditor },
 
   mixins: [detailMixin],
 
