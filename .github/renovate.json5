@@ -15,6 +15,7 @@
 
         // Bump after Vue.js v3 upgrade
         '@tinymce/tinymce-vue',
+        '@vue/compiler-sfc',
         'vue',
         'vue-gtag',
         'vue-i18n',

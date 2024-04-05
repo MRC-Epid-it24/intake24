@@ -11,7 +11,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.removeColumn('food_locals', 'alt_names');
   },
 };

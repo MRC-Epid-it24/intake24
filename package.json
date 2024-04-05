@@ -62,12 +62,12 @@
   ],
   "devDependencies": {
     "@jest/types": "^29.6.3",
-    "@ts-rest/open-api": "^3.36.0",
+    "@ts-rest/open-api": "^3.41.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.4",
     "@types/prompts": "^2.4.9",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "~7.3.1",
+    "@typescript-eslint/parser": "~7.3.1",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "calver": "^22.9.1",
@@ -87,13 +87,13 @@
     "prettier": "^3.2.5",
     "prompts": "^2.4.2",
     "rimraf": "^5.0.5",
-    "simple-git-hooks": "^2.11.0",
+    "simple-git-hooks": "^2.11.1",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.6",
-    "vitepress": "1.0.1"
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.4",
+    "vite": "^5.2.8",
+    "vitepress": "^1.0.2"
   },
   "pnpm": {
     "peerDependencyRules": {

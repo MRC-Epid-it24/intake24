@@ -1,4 +1,3 @@
-import type { LocaleTranslation } from '@intake24/common/types';
 import type { CategoryHeader } from '@intake24/common/types/http';
 import type { AlternativeFoodNames } from '@intake24/db';
 import { Category, CategoryLocal, FoodLocalList, RecipeFoods, SynonymSet } from '@intake24/db';

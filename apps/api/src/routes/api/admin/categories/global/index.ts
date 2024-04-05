@@ -2,7 +2,6 @@ import { Router } from 'express';
 
 import ioc from '@intake24/api/ioc';
 import { wrapAsync } from '@intake24/api/util';
-import { handleSequelizeErrors, translateSqlErrors } from '@intake24/api/util/sequelize-errors';
 
 export default () => {
   const { adminGlobalCategoriesController } = ioc.cradle;

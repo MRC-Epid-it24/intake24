@@ -13,7 +13,7 @@ import type { FoodsDB } from '@intake24/db';
 import { ConflictError, NotFoundError } from '@intake24/api/http/errors';
 import { toSimpleName } from '@intake24/api/util';
 
-const localCategoriesService = ({ kyselyDb, logger }: Pick<IoC, 'kyselyDb' | 'logger'>) => {
+const localCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
   async function updatePortionSizeMethods(
     categoryLocalId: string,
     portionSizeMethods: PortionSizeMethod[],

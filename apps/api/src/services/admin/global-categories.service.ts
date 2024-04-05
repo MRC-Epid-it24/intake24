@@ -12,7 +12,7 @@ import type {
 import type { FoodsDB } from '@intake24/db';
 import { ApplicationError, ConflictError, NotFoundError } from '@intake24/api/http/errors';
 
-const globalCategoriesService = ({ kyselyDb, logger }: Pick<IoC, 'kyselyDb' | 'logger'>) => {
+const globalCategoriesService = ({ kyselyDb }: Pick<IoC, 'kyselyDb'>) => {
   async function updateParentCategories(
     categoryCode: string,
     parentCategoryCodes: string[],

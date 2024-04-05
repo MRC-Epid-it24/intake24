@@ -16,7 +16,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import type { LocaleTranslation } from '@intake24/common/types';
 import type {
   FoodNutrientCreationAttributes,
   FoodPortionSizeMethodCreationAttributes,
