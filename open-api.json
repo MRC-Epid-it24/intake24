@@ -1510,6 +1510,7 @@
                               "milk-on-cereal",
                               "parent-food-portion",
                               "pizza",
+                              "pizza-v2",
                               "recipe-builder",
                               "standard-portion"
                             ]
@@ -4255,7 +4256,17 @@
                       "description": "Whether the user has reached the maximum number of submissions per day"
                     },
                     "followUpUrl": {
-                      "type": "string",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      ],
                       "nullable": true,
                       "description": "Optional follow-up URL for user redirect"
                     }
@@ -4629,7 +4640,17 @@
                       "description": "Whether the user has reached the maximum number of submissions per day"
                     },
                     "followUpUrl": {
-                      "type": "string",
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      ],
                       "nullable": true,
                       "description": "Optional follow-up URL for user redirect"
                     },
