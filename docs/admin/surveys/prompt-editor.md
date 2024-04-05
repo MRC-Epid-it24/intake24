@@ -54,7 +54,9 @@ Following variables can be used in the fields:
 - `{mealName}` - Meal name
 - `{mealTime}` - Meal time
 - `{food}` - Food name
-- `{item}` - Food name or Meal name depending on prompt level type
+- `{item}` - Food name or Meal name depending on current selection of prompt level type
+- `{recallNumber}` - Current recall number
+- `{userName}` - User's name (if available)
 
 ## Actions
 
@@ -90,7 +92,8 @@ Conditions tab defines list of conditions that needs to be met to display the pr
 | `Food category` | Whether `food` has the category assigned               |
 | `Meals`         | Number of meals in recall                              |
 | `Prompt answer` | `Food` / `meal` / `survey` prompt answer               |
-| `Recall`        | Current recall number                                  |
+| `Property`      | Property value (e.g. `Recall number` / `User's name`)  |
+| `Recall`        | @deprecated use property, Current recall number        |
 
 ### Operation
 

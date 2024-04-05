@@ -55,6 +55,14 @@ export const useSelects = () => {
       value,
     }))
   );
+
+  const properties = computed(() =>
+    ['recallNumber', 'userName'].map((value) => ({
+      value,
+      text: i18n.t(`survey-schemes.conditions.properties.${value}`).toString(),
+    }))
+  );
+
   const sections = computed(() =>
     ['food', 'meal', 'survey'].map((value) => ({
       value,
@@ -85,6 +93,7 @@ export const useSelects = () => {
     flags,
     layoutList,
     orientations,
+    properties,
     sections,
     textDirectionList,
     visibilityList,

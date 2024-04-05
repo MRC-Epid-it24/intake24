@@ -1,12 +1,12 @@
 import isEqual from 'lodash/isEqual';
 
-export type ConditionInput = number | string | (number | string)[];
+export type ConditionInput = number | string | (number | string)[] | null;
 export type ConditionInputOps = { value: ConditionInput; answer: ConditionInput };
 
 const toNumber = (values: ConditionInput) =>
   (Array.isArray(values) ? values : [values])
     .map((value) => (typeof value === 'string' ? parseFloat(value) : value))
-    .filter((value) => !Number.isNaN(value));
+    .filter((value): value is number => !Number.isNaN(value));
 
 const toString = (values: ConditionInput) =>
   (Array.isArray(values) ? values : [values])
@@ -73,6 +73,7 @@ export const conditionTypes = [
   'foodCategory',
   'meals',
   'promptAnswer',
+  'property',
   'recallNumber',
 ] as const;
 
@@ -116,6 +117,13 @@ export type Conditions = {
       section: ConditionSection;
     };
   };
+  property: BaseCondition & {
+    type: 'property';
+    props: {
+      name: 'recallNumber' | 'userName';
+    };
+  };
+  // @deprecate - use property instead
   recallNumber: BaseCondition & {
     type: 'recallNumber';
     props: {};

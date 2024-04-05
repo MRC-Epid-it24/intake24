@@ -60,7 +60,10 @@ export const usePromptUtils = <
   );
 
   const params = computed(() => {
-    const build: Record<string, string> = {};
+    const build: Record<string, string | number> = {
+      recallNumber: survey.recallNumber,
+      userName: survey.user?.name ?? '',
+    };
 
     if (foodName.value) {
       if (isFood.value) build.item = foodName.value;

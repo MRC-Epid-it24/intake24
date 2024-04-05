@@ -166,6 +166,14 @@ const promptConditions: Condition[] = [
     value: '',
     props: {},
   },
+  {
+    type: 'property',
+    op: 'eq',
+    value: '',
+    props: {
+      name: 'userName',
+    },
+  },
 ];
 
 export default defineComponent({

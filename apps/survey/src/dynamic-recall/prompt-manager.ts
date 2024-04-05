@@ -1,4 +1,4 @@
-import type { ComponentType, Condition, Prompt } from '@intake24/common/prompts';
+import type { ComponentType, Condition, Conditions, Prompt } from '@intake24/common/prompts';
 import type { MealSection, SurveyPromptSection } from '@intake24/common/surveys';
 import type { FoodState, MealState, Selection } from '@intake24/common/types';
 import type { SchemeEntryResponse } from '@intake24/common/types/http';
@@ -62,6 +62,18 @@ const foodDrinks = (count: number, food: FoodState): number =>
 const mealDrinks = (count: number, meal: MealState): number => meal.foods.reduce(foodDrinks, count);
 
 const surveyDrinks = (count: number, meals: MealState[]): number => meals.reduce(mealDrinks, count);
+
+const propertyGetter = (store: SurveyStore, property: 'recallNumber' | 'userName') =>
+  ({
+    recallNumber: store.recallNumber,
+    userName: store.user?.name ?? null,
+  })[property];
+
+const checkProperty = (store: SurveyStore, condition: Conditions['property']) =>
+  conditionOps[condition.op]({
+    answer: propertyGetter(store, condition.props.name),
+    value: condition.value,
+  });
 
 const checkRecallNumber = (store: SurveyStore, condition: Condition) =>
   conditionOps[condition.op]({ answer: store.recallNumber, value: condition.value });
@@ -158,6 +170,8 @@ const checkSurveyCustomConditions = (store: SurveyStore, prompt: Prompt) =>
         console.error(`Unexpected condition: ${type} & ${props.section}`);
         return false;
       }
+      case 'property':
+        return checkProperty(store, condition);
       case 'recallNumber':
         return checkRecallNumber(store, condition);
       default:
@@ -282,6 +296,8 @@ const checkMealCustomConditions = (store: SurveyStore, mealState: MealState, pro
             return false;
         }
       }
+      case 'property':
+        return checkProperty(store, condition);
       case 'recallNumber':
         return checkRecallNumber(store, condition);
       default:
@@ -778,6 +794,8 @@ const checkFoodCustomConditions = (
             return false;
         }
       }
+      case 'property':
+        return checkProperty(store, condition);
       case 'recallNumber':
         return checkRecallNumber(store, condition);
       default:

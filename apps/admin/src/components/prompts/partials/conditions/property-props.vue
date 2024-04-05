@@ -3,11 +3,11 @@
     <v-col cols="12" md="6">
       <v-select
         hide-details="auto"
-        :items="sections"
-        :label="$t('survey-schemes.conditions.sections._')"
+        :items="properties"
+        :label="$t('survey-schemes.conditions.properties._')"
         outlined
-        :value="section"
-        @change="update('section', $event)"
+        :value="name"
+        @change="update('name', $event)"
       ></v-select>
     </v-col>
   </v-row>
@@ -19,23 +19,23 @@ import { defineComponent } from 'vue';
 import { useSelects } from '@intake24/admin/composables';
 
 export default defineComponent({
-  name: 'SectionProps',
+  name: 'PropertyProps',
 
   props: {
-    section: {
+    name: {
       type: String,
       required: true,
     },
   },
 
   setup(props, { emit }) {
-    const { sections } = useSelects();
+    const { properties } = useSelects();
 
     const update = (field: string, value: any) => {
       emit(`update:${field}`, value);
     };
 
-    return { sections, update };
+    return { properties, update };
   },
 });
 </script>

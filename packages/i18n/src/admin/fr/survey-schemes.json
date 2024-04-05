@@ -85,6 +85,12 @@
     "title": "Conditions",
     "add": "Nouvelle condition",
     "remove": "Enlever la condition",
+    "properties": {
+      "_": "Property",
+      "title": "Properties",
+      "recallNumber": "Recall number",
+      "userName": "User's name"
+    },
     "sections": {
       "_": "Section",
       "title": "Sections",
@@ -101,6 +107,7 @@
       "foodCategory": "Catégorie alimentaire",
       "meals": "Repas",
       "promptAnswer": "Réponse",
+      "property": "Property value",
       "recallNumber": "Numéro du rappel"
     },
     "exTypes": {
@@ -110,6 +117,7 @@
       "foodCategory": "Catégorie alimentaire",
       "meals": "Repas",
       "promptAnswer": "Réponse {section}: {promptId}",
+      "property": "Property value {name}",
       "recallNumber": "Numéro du rappel"
     },
     "ops": {

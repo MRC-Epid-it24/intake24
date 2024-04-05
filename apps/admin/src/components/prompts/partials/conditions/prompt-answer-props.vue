@@ -3,7 +3,6 @@
     <v-col cols="12" md="6">
       <v-select
         hide-details="auto"
-        item-value="value"
         :items="sections"
         :label="$t('survey-schemes.conditions.sections._')"
         outlined
