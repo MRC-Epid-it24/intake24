@@ -224,6 +224,22 @@ export const pizzaPortionMapper = (
   ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
 };
 
+export const pizzaV2PortionMapper = (
+  foodId: string,
+  state: PortionSizeStates['pizza-v2']
+): SurveySubmissionPortionSizeFieldCreationAttributes[] => {
+  const { size, crust, unit, quantity, leftoversWeight, servingWeight } = state;
+
+  return [
+    { name: 'size', value: size?.toString() ?? '' },
+    { name: 'crust', value: crust?.toString() ?? '' },
+    { name: 'unit', value: unit?.toString() ?? '' },
+    { name: 'quantity', value: quantity.toString() },
+    { name: 'leftoversWeight', value: leftoversWeight?.toString() ?? '0' },
+    { name: 'servingWeight', value: servingWeight?.toString() ?? '0' },
+  ].map((psm) => ({ ...psm, id: randomUUID(), foodId }));
+};
+
 export const standardPortionMapper = (
   foodId: string,
   state: PortionSizeStates['standard-portion']
@@ -253,7 +269,7 @@ export const portionSizeMappers: Record<
   'milk-on-cereal': milkOnCerealMapper,
   'parent-food-portion': parentFoodPortionMapper,
   pizza: pizzaPortionMapper,
-  'pizza-v2': genericMapper,
+  'pizza-v2': pizzaV2PortionMapper,
   'standard-portion': standardPortionMapper,
   'direct-weight': genericMapper,
   'recipe-builder': genericMapper,
