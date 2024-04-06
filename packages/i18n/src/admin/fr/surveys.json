@@ -127,7 +127,6 @@
     "tab": "Soumissions",
     "title": "Soumissions de l'enquête",
     "id": "Identifiant de la soumission",
-    "userId": "Identifiant de l'utilisateur",
     "startTime": "Heure de début",
     "endTime": "Heure de fin",
     "submissionTime": "Heure de soumission"

@@ -38,7 +38,7 @@
           </v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
-          <json-editor v-bind="{ readOnly: true, value: selected }"></json-editor>
+          <json-editor v-bind="{ readOnly: true, value: selected }" />
         </v-container>
       </v-card>
     </v-dialog>
@@ -83,9 +83,21 @@ export default defineComponent({
     return {
       headers: [
         {
-          text: this.$t('surveys.submissions.id'),
+          text: this.$t('surveys.sessions.id'),
           sortable: true,
           value: 'id',
+          align: 'start',
+        },
+        {
+          text: this.$t('users.id'),
+          sortable: true,
+          value: 'userId',
+          align: 'start',
+        },
+        {
+          text: this.$t('users.aliases.username'),
+          sortable: true,
+          value: 'username',
           align: 'start',
         },
         {
@@ -131,7 +143,7 @@ export default defineComponent({
 
     async detail(submissionId: string) {
       const { data } = await this.$http.get<SurveySubmissionEntry>(
-        `${this.baseAPI}/${submissionId}`
+        `${this.baseAPI}/${submissionId}`,
       );
 
       this.selected = data;
