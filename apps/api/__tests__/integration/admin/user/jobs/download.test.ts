@@ -50,7 +50,9 @@ export default () => {
         job = res.body;
         waiting = false;
       }
-      else { sleep(1000); }
+      else {
+        sleep(1000);
+      }
     }
   });
 

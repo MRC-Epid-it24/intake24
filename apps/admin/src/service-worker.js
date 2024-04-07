@@ -33,7 +33,9 @@ self.addEventListener('notificationclick', async (event) => {
       wClient.navigate(url);
       wClient.focus();
     }
-    else { self.clients.openWindow(url); }
+    else {
+      self.clients.openWindow(url);
+    }
 
     notification.close();
   };

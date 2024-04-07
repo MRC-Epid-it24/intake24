@@ -339,7 +339,9 @@ export default defineComponent({
             this.survey.addMeal({ name, time, flags }, this.$i18n.locale);
             await this.nextPrompt();
           }
-          else { this.showSurveyPrompt('preMeals', 'meal-add-prompt'); }
+          else {
+            this.showSurveyPrompt('preMeals', 'meal-add-prompt');
+          }
           break;
       }
     },

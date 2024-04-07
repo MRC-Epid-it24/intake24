@@ -90,7 +90,9 @@ export class BaseClientV3 {
 
           return response2;
         }
-        else { return response; }
+        else {
+          return response;
+        }
       },
       (error) => {
         throw error;

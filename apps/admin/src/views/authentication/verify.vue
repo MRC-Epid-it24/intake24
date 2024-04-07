@@ -79,7 +79,9 @@ export default defineComponent({
           await this.user.request();
           await this.$router.push({ name: 'dashboard' });
         }
-        else { await this.$router.push({ name: 'login' }); }
+        else {
+          await this.$router.push({ name: 'login' });
+        }
       }
       catch (err) {
         if (axios.isAxiosError(err)) {

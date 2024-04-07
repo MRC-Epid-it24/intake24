@@ -202,7 +202,9 @@ function sharedTests(suite: typeof Suite) {
         expect(body).not.toBeEmpty();
       else expect(body).toBeEmpty();
     }
-    else { expect(pick(body, Object.keys(output))).toEqual(output); }
+    else {
+      expect(pick(body, Object.keys(output))).toEqual(output);
+    }
 
     expect(status).toBe(code);
   };

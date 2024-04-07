@@ -447,7 +447,9 @@ function authenticationService({
         const { message, name, stack } = err;
         logger.error(`${name}: ${message}`, { stack });
       }
-      else { logger.error(err); }
+      else {
+        logger.error(err);
+      }
 
       throw new UnauthorizedError();
     }

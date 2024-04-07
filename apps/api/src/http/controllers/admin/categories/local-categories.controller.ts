@@ -26,7 +26,9 @@ function localCategoriesController({
         const existing = await localCategoriesService.read(localeId, req.body.code);
         res.status(HttpStatusCode.Conflict).json(existing);
       }
-      else { throw e; }
+      else {
+        throw e;
+      }
     }
   };
 

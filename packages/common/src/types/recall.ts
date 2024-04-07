@@ -322,7 +322,11 @@ export function isSelectionEqual(s1: Selection, s2: Selection): boolean {
 
       return false;
     }
-    else { return s2.element === null; }
+    else {
+      return s2.element === null;
+    }
   }
-  else { return false; }
+  else {
+    return false;
+  }
 }

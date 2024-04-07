@@ -188,7 +188,9 @@ export default class Model<
             inputStream.push(transformedItem);
           }
         }
-        else { items.forEach(item => inputStream.push(item)); }
+        else {
+          items.forEach(item => inputStream.push(item));
+        }
       }
 
       inputStream.push(null);

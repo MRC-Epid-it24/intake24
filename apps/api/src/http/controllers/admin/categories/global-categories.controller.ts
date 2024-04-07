@@ -37,7 +37,9 @@ function globalCategoriesController({
         const existing = await globalCategoriesService.read(req.body.code);
         res.status(HttpStatusCode.Conflict).json(existing);
       }
-      else { throw e; }
+      else {
+        throw e;
+      }
     }
   };
 

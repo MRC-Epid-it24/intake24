@@ -36,7 +36,9 @@ export class JobsApiV4 {
           return status;
         else throw new Error(`Job ${jobId} failed: ${status.message}`);
       }
-      else { await delay(100); }
+      else {
+        await delay(100);
+      }
     }
   }
 }

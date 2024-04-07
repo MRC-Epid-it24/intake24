@@ -214,7 +214,9 @@ export default defineComponent({
           this.form.errors.clear('captcha');
           useMessages().error(this.$t('common.password.request.captcha').toString());
         }
-        else { throw err; }
+        else {
+          throw err;
+        }
       }
       finally {
         this.resetCaptcha();

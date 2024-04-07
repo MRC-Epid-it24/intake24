@@ -73,7 +73,9 @@ async function main() {
 
     targetVersion = customVersion;
   }
-  else { targetVersion = calVersion; }
+  else {
+    targetVersion = calVersion;
+  }
 
   if (!targetVersion)
     return;
